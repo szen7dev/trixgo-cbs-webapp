@@ -59,6 +59,7 @@ export interface Contact {
     // * 5. Bằng cấp chứng chỉ
     // * 6. Khác (Bảo hiểm xã hội, tài sản giao nhận, lịch sử tuyển dụng, quá trình làm việc, công tác)
     type?: 1 | 2 | 3 | 4 | 5 | 6;
+    companyID?: string;
     [record: string]: any;
 }
 

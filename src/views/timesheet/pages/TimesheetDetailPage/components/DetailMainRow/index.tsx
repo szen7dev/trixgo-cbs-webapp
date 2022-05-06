@@ -16,6 +16,7 @@ type Props = {
   listTimeSheetChild: TimeSheetChild[];
   onUpdatedTimeSheetChild: (values: any) => void;
   isFetchTimeSheetChild: boolean;
+  hasPermission: boolean;
 };
 
 export const DetailMainRow: FC<Props> = ({
@@ -23,6 +24,7 @@ export const DetailMainRow: FC<Props> = ({
   listTimeSheetChild,
   onUpdatedTimeSheetChild,
   isFetchTimeSheetChild,
+  hasPermission
 }) => {
   // const { closeRightClick, openRightClick } = useRightClickMenu();
 
@@ -131,6 +133,7 @@ export const DetailMainRow: FC<Props> = ({
           collapsed={false}
           rowData={childRow}
           index={index}
+          hasPermission={hasPermission}
           onUpdatedTimeSheetChild={onUpdatedTimeSheetChild}
         />
       ))}

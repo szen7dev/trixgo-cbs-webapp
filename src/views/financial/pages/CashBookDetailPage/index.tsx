@@ -126,7 +126,10 @@ export const CashBookDetailPage: FC = () => {
     hasNextPage: hasNextPageListContract,
     fetchNextPage: fetchNextPageListContract
   } = useContract({
-    params: { keyword: keywordContract },
+    params: {
+      companyID: cashBookInfo?.company as string,
+      keyword: keywordContract
+    },
     isFetch: true
   })
 
@@ -136,7 +139,10 @@ export const CashBookDetailPage: FC = () => {
     hasNextPage: hasNextPageListContact,
     fetchNextPage: fetchNextPageListContact
   } = useContact({
-    params: { keyword: keywordContact },
+    params: {
+      companyID: cashBookInfo?.company as string,
+      keyword: keywordContact
+    },
     isFetchList: true
   })
 
@@ -146,7 +152,10 @@ export const CashBookDetailPage: FC = () => {
     hasNextPage: hasNextPageListAccount,
     fetchNextPage: fetchNextPageListAccount
   } = useAccount({
-    params: { keyword: keywordAccount },
+    params: {
+      companyID: cashBookInfo?.company as string,
+      keyword: keywordAccount
+    },
     isFetchList: true
   })
 

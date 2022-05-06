@@ -1,7 +1,8 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { map as _map } from "lodash";
 import { useDispatch } from "react-redux";
-import { useParams, Redirect } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 import moment from "moment";
 
 /**
@@ -34,12 +35,26 @@ import { User } from "typings/user";
 import { Loader } from "shareComponents/common";
 
 const TimeSheetDetailPage: FC = () => {
+  const history = useHistory();
   const params = useParams<{ id: string }>();
   const timeSheetParentID = params["id"];
+
   const [modalShare, setModalShare] = useState<{ isShow: boolean, users: User[] | undefined, modalType: 'members' | 'admins' }>({
     isShow: false,
     users: [],
     modalType: 'members'
+  });
+
+  const [permissions, setPermissions] = useState<{
+    usersShared: User[];
+    onlyView: boolean;
+    hasPermissionCreateUpdate: boolean;
+    hasPermissionShare: boolean;
+  }>({
+    usersShared: [],
+    onlyView: true,
+    hasPermissionCreateUpdate: false,
+    hasPermissionShare: false,
   });
 
   const { user } = useAuth();
@@ -56,8 +71,45 @@ const TimeSheetDetailPage: FC = () => {
     refetch: onRefreshTimeSheetChild,
   } = useQueryListTimeSheetChild(timeSheetParentID);
 
-  const { onUpdateTimeSheetAsync, onCreateTimeSheetAsync } =
-    useMutationTimeSheetChild();
+  const { onUpdateTimeSheetAsync, onCreateTimeSheetAsync } = useMutationTimeSheetChild();
+
+  useEffect(() => {
+    if(!timeSheetInfo || !user || loading) return;
+
+    const usersShared = [...timeSheetInfo?.admins, ...timeSheetInfo?.members];
+    const adminsID    = timeSheetInfo.admins.map(item => item._id);
+    const membersID   = timeSheetInfo.members.map(item => item._id);
+
+    const usersIDShared = [
+      ...adminsID,
+      ...membersID,
+    ];
+    let authorID = '';
+
+    if(typeof timeSheetInfo.userCreate === 'string') {
+      authorID = timeSheetInfo.userCreate;
+    } else{
+      authorID = timeSheetInfo.userCreate?._id;
+    }
+
+    usersIDShared.push(authorID);
+
+    if(!usersIDShared.includes(user._id)) {
+      toast.warn('Bạn đang không có quyền truy cập');
+      history.push('/timesheet/home');
+    }
+
+    const hasPermissionCreateUpdate = adminsID.includes(user._id) || authorID === user._id;
+    const hasPermissionShare = authorID === user._id;
+    const onlyView = membersID.includes(user._id) && !adminsID.includes(user._id) && authorID !== user._id;
+
+    setPermissions({
+      usersShared,
+      onlyView,
+      hasPermissionCreateUpdate,
+      hasPermissionShare
+    })
+  }, [JSON.stringify(user), JSON.stringify(timeSheetInfo)])
 
   const handleUpdatedTimeSheet = React.useCallback(
     async (values) => {
@@ -115,18 +167,6 @@ const TimeSheetDetailPage: FC = () => {
 
   if(!timeSheetInfo || loading || !user) return <Loader className="border-primary" />
 
-  const usersShared = [...timeSheetInfo.admins, ...timeSheetInfo.members];
-
-  const usersIDShared = [
-    ...timeSheetInfo.admins.map(item => item._id),
-    ...timeSheetInfo.members.map(item => item._id),
-    timeSheetInfo.userCreate?._id
-  ];
-
-  if(!usersIDShared.includes(user._id)) {
-    return <Redirect to='/timesheet/home' />
-  }
-
   return (
     <div className={"financial-planning-detail"}>
       <div
@@ -163,7 +203,7 @@ const TimeSheetDetailPage: FC = () => {
               toggleModalShare('members', timeSheetInfo.members)
             }}
           >Thành viên ({timeSheetInfo.members?.length})</button>
-          <AccessingUsers users={usersShared} />
+          <AccessingUsers users={permissions.usersShared} />
           {/* <ShareButton /> */}
         </div>
       </div>
@@ -264,9 +304,11 @@ const TimeSheetDetailPage: FC = () => {
               listTimeSheetChild={listTimeSheetChild}
               onUpdatedTimeSheetChild={handleUpdatedTimeSheet}
               isFetchTimeSheetChild={isFetchTimeSheetChild}
+              hasPermission={permissions.hasPermissionCreateUpdate}
             />
           )}
-          <CreateRow onInsert={handleCreateTimeSheet} />
+
+          {permissions.hasPermissionCreateUpdate && <CreateRow onInsert={handleCreateTimeSheet} />}
         </div>
       </div>
       <Paginate
@@ -289,6 +331,7 @@ const TimeSheetDetailPage: FC = () => {
           expertTimesheetID={timeSheetParentID}
           users={modalShare.users}
           modalType={modalShare.modalType}
+          hasPermission={permissions.hasPermissionShare}
         />
       </ModalLarge>
     </div>
