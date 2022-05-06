@@ -281,7 +281,10 @@ export const DocumentDetailPage: FC = () => {
       <ModalCreateDocumentChild isShow={isShow} toggle={toggleModalCreateDocumentChild} document={detailDocument} refetchListChild={docChildPayload.refetchListDocumentChild} />
 
       <ModalQRCode
-        value={params.docID}
+        value={{
+          appID: APP_KEY.DOCUMENT,
+          id: params.docID
+        }}
         isToggle={isToggleModalQRCode}
         toggle={toggleModalQRCode}
       />

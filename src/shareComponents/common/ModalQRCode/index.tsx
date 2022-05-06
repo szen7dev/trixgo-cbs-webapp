@@ -13,7 +13,10 @@ import { ModalContainer } from "shareComponents/common";
 type Props = {
   isToggle: boolean;
   toggle: () => void;
-  value: string;
+  value: {
+    appID: string,
+    id: string
+  };
 }
 
 export const ModalQRCode: FC<Props> = ({ isToggle, toggle, value }) => {
@@ -54,7 +57,7 @@ export const ModalQRCode: FC<Props> = ({ isToggle, toggle, value }) => {
               onClick={toggle}
             />
           </header>
-          <QRCode id="qrcode" value={value} size={350} />
+          <QRCode id="qrcode" value={JSON.stringify(value)} size={350} />
 
           <div className="flex justify-end mt-5">
             <div>
