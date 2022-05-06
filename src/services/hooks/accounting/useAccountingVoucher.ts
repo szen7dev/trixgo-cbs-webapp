@@ -27,9 +27,8 @@ export const UseAccountingVoucherList = (pageParam: any, type: number, inputFilt
             return AccountingVoucherRepository.fetchList({
                 limit,
                 lastestID: pageParam || "",
-                keyword: inputFilter.keyword,
                 type,
-                fundaID: inputFilter.fundaID
+                ...inputFilter
             })
         },
         { keepPreviousData: true }
