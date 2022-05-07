@@ -4,6 +4,7 @@ import moment from "moment";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { useUpload } from 'services/hooks/useUpload';
+import { validateFiles } from 'validation/file';
 
 import { APP_KEY } from 'utils/constants';
 import { ModalCreateDocumentChild } from 'views/document/sharedComponents/common';
@@ -87,6 +88,10 @@ export const DocumentDetailPage: FC = () => {
   const handleSetFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
       if (!event.target.files || !event.target.files.length) return;
+
+      const validation = await validateFiles(event.target.files);
+  		if(validation.error) return toast.warn(validation.message);
+
       const arrFileID: Array<string | undefined> = []
 
       // Upload files

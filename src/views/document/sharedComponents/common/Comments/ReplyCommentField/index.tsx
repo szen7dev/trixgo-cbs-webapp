@@ -16,6 +16,7 @@ import { useUpload } from 'services/hooks/useUpload';
 import { CommentContext } from 'views/document/contexts/comment';
 import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
 import { APP_KEY } from 'utils/constants';
+import { validateFiles } from 'validation/file';
 
 interface Props {
 	onTextChange?: (input: React.FormEvent<HTMLSpanElement>) => unknown;
@@ -71,6 +72,9 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 
 	const handleAttachFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (!event.target.files) return;
+
+		const { error, message } = await validateFiles(event.target.files);
+		if(error) return toast.warn(message);
 
 		const [files, images] = modifyUploadedFilesV2({
 			imgLastKey: Object.keys(uploads.images).length || null,

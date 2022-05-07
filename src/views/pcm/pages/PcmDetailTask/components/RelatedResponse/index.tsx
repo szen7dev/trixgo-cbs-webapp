@@ -29,6 +29,7 @@ import { useAuth } from 'services/hooks/auth/useAuth';
 import { useRelatedResponse } from 'services/hooks/useTask';
 import { useUpload } from 'services/hooks/useUpload';
 import useUploadFile, { modifyUploadedFilesV2, QueueUpload } from "services/hooks/useUploadFile";
+import { validateFiles } from 'validation/file';
 import { APP_KEY } from "utils/constants";
 import { APP_ID } from "apis/localdb";
 
@@ -271,6 +272,9 @@ const Response: FC<Props> = ({ task }) => {
 
   const handleSetFiles = async (filesSelected: FileList | null) => {
     if (!filesSelected || !filesSelected.length) return;
+
+    const validation = await validateFiles(filesSelected);
+    if(validation.error) return toast.warn(validation.message);
 
     // Modify file to with key with each file;
     const [files, images] = modifyUploadedFilesV2({

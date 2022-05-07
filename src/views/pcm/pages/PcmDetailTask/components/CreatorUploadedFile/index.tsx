@@ -20,6 +20,7 @@ import { APP_ID } from "apis/localdb";
 import { User } from "typings/user";
 import FileRepository from "apis/upload";
 import { FileUpdatePayload } from "typings/file";
+import { validateFiles } from 'validation/file';
 
 type Props = {
   author: User | null,
@@ -67,6 +68,9 @@ export const CreatorUploadedFile = ({ taskID, companyID, projectID, groupID, aut
       const newFiles: any[] = [];
 
       if(!files || !files.length) return;
+
+      const validation = await validateFiles(files);
+  		if(validation.error) return toast.warn(validation.message);
 
       for (const [, file] of Object.entries(files)) {
         const { _id, nameOrg, path, mimeType, createAt } = await addFileToUpload({

@@ -28,6 +28,7 @@ import { User } from "typings/user";
 import { useUpload } from "services/hooks/useUpload";
 import { APP_ID } from "apis/localdb";
 import { useRelatedResponse } from "services/hooks/useTask";
+import { validateFiles } from 'validation/file';
 
 type Props = {
 	expanded?: boolean;
@@ -53,8 +54,6 @@ export const RelatedResponseItem: FC<Props> = ({
 	projectID,
 	groupID,
 	onClickImage,
-	refetchListResponseMarked,
-	setAmountMarkedResponse
 }) => {
 	const inputRef = React.useRef<HTMLInputElement>(null);
 	const [responseFiles, setResponseFiles] = useState({
@@ -118,6 +117,9 @@ export const RelatedResponseItem: FC<Props> = ({
 			const newImages: any[] = [];
 
 			if(!files || !files.length) return;
+
+			const validation = await validateFiles(files);
+  			if(validation.error) return toast.warn(validation.message);
 
 			for (const [, file] of Object.entries(files)) {
 				const { _id, nameOrg, path, mimeType, createAt } = await addFileToUpload({
@@ -304,7 +306,7 @@ export const RelatedResponseItem: FC<Props> = ({
 											<button className="w-1/3 relative" key={file._id} onClick={() => onClickImage && onClickImage(responseFiles.images || [], index)}>
 												<div className="pb-[100%]">
 													<div className="absolute inset-0">
-														<img src={file.path ? `${process.env.REACT_APP_URL_S3}${file.path}` : TestImage} className="w-full h-full object-cover" alt="test" />
+														<img src={file.path ? `${process.env.REACT_APP_URL_S3}${file.path}` : TestImage} className="w-full h-full object-cover" alt={file.nameOrg} />
 													</div>
 												</div>
 											</button>
@@ -317,7 +319,7 @@ export const RelatedResponseItem: FC<Props> = ({
 												<img
 													src={file.path ? `${process.env.REACT_APP_URL_S3}${file.path}` : TestImage}
 													className="absolute top-0 left-0 w-full h-full z-0 object-cover opacity-40"
-													alt="test"
+													alt={file.nameOrg}
 												/>
 												<div className="relative z-6">
 													<p className="text-4x-large text-white">+{responseFiles.images && responseFiles.images.length - 2}</p>
