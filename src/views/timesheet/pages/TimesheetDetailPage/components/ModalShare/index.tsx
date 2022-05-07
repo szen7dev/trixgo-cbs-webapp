@@ -23,9 +23,10 @@ type Props = {
 	toggle: () => void,
 	refetch?: () => void,
 	users: User[] | undefined,
+	hasPermission: boolean,
 }
 
-export const ModalShare: FC<Props> = ({ expertTimesheetID, users, modalType, refetch, toggle }) => {
+export const ModalShare: FC<Props> = ({ expertTimesheetID, users, modalType, refetch, toggle, hasPermission }) => {
 	const usersID = users?.map(user => user._id.toString()) ?? [];
 	const [hasDefault, setHasDefault] = useState(false);
 	const [isShow, setIsShow] = useState(true);
@@ -75,6 +76,11 @@ export const ModalShare: FC<Props> = ({ expertTimesheetID, users, modalType, ref
 	};
 
 	const handleConfirmShare = async () => {
+        if(!hasPermission) {
+            toggle();
+			return toast.warning('Bạn không có quyền chia sẻ nội dung này');
+        }
+
 		if (!idsChecked || !idsChecked.length) {
 			return toast.warning('Vui lòng chọn user để chia sẻ');
 		}

@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import moment from "moment";
 import toArray from "lodash/toArray";
 import className from "classnames";
+import { toast } from "react-toastify";
 import { APP_KEY } from 'utils/constants';
 
 import { HumanInfoHeader } from "views/human/shareComponents/common";
@@ -21,6 +22,7 @@ import useCustomReducer from "services/hooks/ppt/useCustomReducer";
 import { uploadActions, uploadReducer } from "views/human/Reducers/Upload";
 import { IFile, modifyUploadedFilesV2 } from "views/human/utils";
 import { useUpload } from "services/hooks/useUpload";
+import { validateFiles } from 'validation/file';
 
 import style from 'views/human/styles/style.module.css'
 
@@ -244,6 +246,10 @@ export const WorkExperience: FC<WorkExperienceProps> = (props) => {
     (contactDocumentID: string) =>
       async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files) return;
+
+        const { error, message } = await validateFiles(e.target.files);
+    		if(error) return toast.warn(message);
+
         const files = modifyUploadedFilesV2(e.target.files, contactDocumentID);
         setUploadFile(files);
 

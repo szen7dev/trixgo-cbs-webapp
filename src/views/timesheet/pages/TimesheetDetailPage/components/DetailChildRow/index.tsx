@@ -14,6 +14,7 @@ import type {
   TimeSheetChild,
   UpdateTimeSheetChildPayload,
 } from "typings/time-sheet";
+import { toast } from "react-toastify";
 
 type Props = {
   rowData: TimeSheetChild;
@@ -21,6 +22,7 @@ type Props = {
   isLastRow: boolean;
   index: number;
   onUpdatedTimeSheetChild: (values: UpdateTimeSheetChildPayload) => void;
+  hasPermission: boolean;
 };
 
 export const DetailChildRow: FC<Props> = ({
@@ -28,6 +30,7 @@ export const DetailChildRow: FC<Props> = ({
   collapsed,
   isLastRow,
   index,
+  hasPermission,
   onUpdatedTimeSheetChild,
 }) => {
   // const { closeRightClick, openRightClick } = useRightClickMenu();
@@ -42,6 +45,10 @@ export const DetailChildRow: FC<Props> = ({
 
   const handleClickUpdateTimeSheet = React.useCallback(
     (value) => {
+      if(!hasPermission) {
+        toast.warn('Bạn không có quyền cập nhật nội dung này')
+        return;
+      }
       onUpdatedTimeSheetChild({
         ...rowData,
         ...value,

@@ -12,6 +12,7 @@ import iconEmailSend from 'assets/images/icon-email-send.png';
 import { PostImage, PostFile } from 'shareComponents/common';
 import { nl2p } from 'utils';
 import { APP_KEY } from 'utils/constants';
+import { validateFiles } from 'validation/file';
 
 import CommentContext from 'views/pcm/contexts/comment/comment.context';
 import { FileProps, FilePropsUpload } from 'typings/common';
@@ -141,19 +142,8 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 	const handleSetFiles = async (filesSelected: FileList | null) => {
 		if (!filesSelected) return;
 
-		const regexSpecialCharacter = /[#$%^~{}+|\]\\[]|\\.\\.|^\\.|\\.$/g;
-		let hasSepecialCharacter = false;
-
-		for (const [, file] of Object.entries(filesSelected)) {
-			if(regexSpecialCharacter.test(file.name)) {
-				hasSepecialCharacter = true;
-				break;
-			}
-		}
-
-		if(hasSepecialCharacter) {
-			return toast.warn('Tên file có chứa ký tự đặc biệt #$%^~{}+|');
-		}
+		const { error, message } = await validateFiles(filesSelected);
+		if(error) return toast.warn(message);
 
 		const [files, images] = modifyUploadedFilesV2({
 			imgLastKey: Object.keys(uploads.images).length || null,

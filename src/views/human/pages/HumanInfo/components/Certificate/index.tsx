@@ -3,6 +3,8 @@ import { useTranslation } from "react-i18next";
 import moment from "moment";
 import toArray from "lodash/toArray";
 import className from "classnames";
+import { toast } from "react-toastify";
+
 import { APP_KEY } from 'utils/constants';
 import { HumanInfoHeader } from "views/human/shareComponents/common";
 import ThreeDotIcon from "assets/images/icon-3dots.png";
@@ -27,6 +29,7 @@ import {
 } from "views/human/Reducers/Upload";
 import { IFile, modifyUploadedFilesV2 } from "views/human/utils";
 import { useUpload } from "services/hooks/useUpload";
+import { validateFiles } from 'validation/file';
 
 import type {
   ContactDocument,
@@ -245,7 +248,7 @@ export const Certificate: FC<CertificateProps> = (props) => {
       }
       Promise.all(listFileContractDocumentAsync)
         .then(() => {
-          
+
           removeAllFiles();
           refetchListContactDocument();
         })
@@ -267,6 +270,10 @@ export const Certificate: FC<CertificateProps> = (props) => {
     (contactDocumentID: string) =>
       async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files) return;
+
+        const { error, message } = await validateFiles(e.target.files);
+    		if(error) return toast.warn(message);
+
         const files = modifyUploadedFilesV2(e.target.files, contactDocumentID);
         setUploadFile(files);
 

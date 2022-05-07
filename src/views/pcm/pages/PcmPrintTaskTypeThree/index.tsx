@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -22,14 +22,16 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import { useTask } from "services/hooks/useTask";
 import { usePcmComment } from "services/hooks/pcm/usePcm";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
+import moment from "moment";
 
 const PcmPrintTaskTypeThree: FC = () => {
   const history = useHistory();
   const { id: taskId } = useParams<{ id: string }>();
 
   const { user } = useAuth();
-
   const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
+
+  const [dataListImages, setDataListImages] = useState<any[]>([]);
 
   const { info: taskInfo, isLoadingInfo } = useTask({
     params: {
@@ -39,18 +41,29 @@ const PcmPrintTaskTypeThree: FC = () => {
     isFetchInfo: true
   })
 
-  const { list: listPcmComments } = usePcmComment({
+  const {
+    list: listPcmComments,
+    isLoading: isLoadingPcmComments,
+    fetchNextPage,
+    hasNextPage,
+    totalRecord
+  } = usePcmComment({
     params: {
       taskID: taskId,
       isHaveImage: true,
+      limit: 2,
+      select: '_id content images',
       populates: JSON.stringify({
         path: 'images',
-        select: '_id nameOrg path description'
+        select: '_id nameOrg path description author',
+        populate: {
+          path: 'author',
+          select: '_id bizfullname image'
+        }
       })
     },
     isFetchList: true
   })
-  console.log({ listPcmComments });
 
   useEffect(() => {
     if (!isSuccessApp || !taskInfo || !user || isLoadingInfo) return;
@@ -60,6 +73,20 @@ const PcmPrintTaskTypeThree: FC = () => {
 			return history.push("/");
 		};
   }, [taskInfo, isSuccessApp]);
+
+  useEffect(() => {
+    if(!listPcmComments || !listPcmComments.length || isLoadingPcmComments) return;
+
+    const listDataImages = listPcmComments
+      .map(item => {
+        return item.images.map(image => {
+          image.content = item.content;
+          return image;
+        });
+      }).flat();
+
+    setDataListImages(listDataImages);
+  }, [JSON.stringify(listPcmComments)])
 
   if(isLoadingInfo) return <Loader className="border-primary" />
 
@@ -84,7 +111,28 @@ const PcmPrintTaskTypeThree: FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                  {(dataListImages && dataListImages.length) ? dataListImages.map((image, index) => (
+                    <tr key={image._id}>
+                      <td>{index + 1}</td>
+                      <td>{image.description || image.content}</td>
+                      <td>
+                        <img
+                          src={generateIamgePath(image.path)}
+                          alt={image.nameOrg}
+                          className="cursor-pointer"
+                          onClick={() => {
+                            zoomview({
+                              createAt: moment(image.createAt).format('DD/MM/YYYY'),
+                              index: 0,
+                              mediaID: image._id || '',
+                              images: [image],
+                            });
+                          }}
+                        />
+                      </td>
+                    </tr>
+                  )) : <></>}
+                  {/* <tr>
                     <td>1</td>
                     <td>Thi công khu vực bể bơi tầng hầm 3, nhà tiểu học</td>
                     <td>
@@ -114,20 +162,27 @@ const PcmPrintTaskTypeThree: FC = () => {
                         }}
                       />
                     </td>
-                  </tr>
+                  </tr> */}
                 </tbody>
               </table>
             </section>
-            <div className="text-center">
-              <button className="text-small text-cbs-primary">Xem thêm 134</button>
-            </div>
+
+            {hasNextPage && (
+              <div className="w-full flex justify-center my-5">
+                  <button onClick={fetchNextPage}>
+                      <span className="text-primary">
+                          {`Xem thêm (${totalRecord - listPcmComments.length})`}
+                      </span>
+                  </button>
+              </div>
+            )}
           </main>
           <footer>
             <p>
               <i>
                 In từ nền tảng{" "}
                 <Link className="text-cbs-primary" to="/">
-                  https://app.trixgo.com: 21/04/2022 06:49
+                  https://app.trixgo.com: {moment().format('DD/MM/YYYY HH:mm')}
                 </Link>
               </i>
             </p>

@@ -8,6 +8,7 @@ import iconFace from 'assets/images/icons8-grinning-face-64.png';
 import iconAttach from 'assets/images/icons8-attach-50.png';
 import iconEmailSend from 'assets/images/icon-email-send.png';
 import { PostFile, PostImage } from 'shareComponents/common';
+import { validateFiles } from 'validation/file';
 
 import { FileProps, FilePropsUpload } from 'typings/common';
 import { useUpload } from 'services/hooks/useUpload';
@@ -67,6 +68,9 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 	const handleAttachFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (!event.target.files) return;
 
+    	const { error, message } = await validateFiles(event.target.files);
+		if(error) return toast.warn(message);
+
 		const [files, images] = modifyUploadedFilesV2({
 			imgLastKey: Object.keys(uploads.images).length || null,
 			fileLastKey: Object.keys(uploads.files).length || null,
@@ -106,7 +110,6 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 		toast.info('Tính năng đang phát triển');
 		// Clear text input
 		removeAllFiles();
-
 		refInputComment.current && (refInputComment.current.innerHTML = '');
 
 		// Clear files, images
