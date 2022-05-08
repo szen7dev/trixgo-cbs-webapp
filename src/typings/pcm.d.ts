@@ -206,8 +206,8 @@ export interface PcmComment {
   type: number;
   subType: number;
   official: boolean;
-  files: FileProps;
-  images: FileProps;
+  files: any[];
+  images: any[];
   project: Project | string;
   group: Group | string;
   contract: Contract | string;

@@ -74,12 +74,12 @@ const WorkshopCategory: FC<Props> = (props) => {
         </label>
         <div className="justify-center mt-4">
           {Array.from({ length: 4 }).map((_, index) => (
-            <button key={index} className="hover:bg-cbs-gray rounded-cbs pt-3 pb-2.5 px-3 text-center w-28">
-              <div className="w-[50px] h-[50px] rounded-full overflow-hidden mx-auto">
-                <img src="/images/workshop/workshop.png" className="w-full h-full object-cover" alt="" />
-              </div>
-              <p>Quản lý thanh toán xây dựng</p>
-            </button>
+            // <button key={index} className="hover:bg-cbs-gray rounded-cbs pt-3 pb-2.5 px-3 text-center w-28">
+            //   <div className="w-[50px] h-[50px] rounded-full overflow-hidden mx-auto">
+            //     <img src="/images/workshop/workshop.png" className="w-full h-full object-cover" alt="" />
+            //   </div>
+            //   <p>Quản lý thanh toán xây dựng</p>
+            // </button>
           ))}
         </div>
       </div>

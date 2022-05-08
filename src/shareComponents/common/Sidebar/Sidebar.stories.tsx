@@ -30,26 +30,26 @@ export default {
 const list = [
   {
     path: "/workshop/home",
-    label: "Trang chủ workshop",
+    label: "Trang chủ",
   },
-  {
-    path: "/workshop/list",
-    label: "Workshop yêu thích",
-    isGroup: true,
-    children: [
-      { path: "/workshop/list/category/1", label: "Workshop 1" },
-      { path: "/workshop/list/category/2", label: "Workshop 1" },
-    ],
-  },
-  {
-    path: "/workshop/list",
-    label: "Workshop yêu thích",
-    isGroup: true,
-    children: [
-      { path: "/workshop/list/category/1", label: "Workshop 1" },
-      { path: "/workshop/list/category/2", label: "Workshop 1" },
-    ],
-  },
+  // {
+  //   path: "/workshop/list",
+  //   label: "Workshop yêu thích",
+  //   isGroup: true,
+  //   children: [
+  //     { path: "/workshop/list/category/1", label: "Workshop 1" },
+  //     { path: "/workshop/list/category/2", label: "Workshop 1" },
+  //   ],
+  // },
+  // {
+  //   path: "/workshop/list",
+  //   label: "Workshop yêu thích",
+  //   isGroup: true,
+  //   children: [
+  //     { path: "/workshop/list/category/1", label: "Workshop 1" },
+  //     { path: "/workshop/list/category/2", label: "Workshop 1" },
+  //   ],
+  // },
 ];
 
 export const SidebarList = (): JSX.Element => <SidebarTreeViewList list={list} className="pl-6 pr-2 text-large text-cbs-subtext" />;
