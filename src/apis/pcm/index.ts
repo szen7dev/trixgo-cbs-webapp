@@ -176,6 +176,15 @@ const PcmRepository = {
         return data;
     },
 
+    async fetchAmountTaskMilestone(params?: any) {
+        const { data } = await API.get(`${pcmURL}/pcm_plan_tasks/amount-task-by-milestone`, {
+            params: {
+                ...params
+            }
+        });
+        return data;
+    },
+
     /**
      * PCM COMMENT
      */
