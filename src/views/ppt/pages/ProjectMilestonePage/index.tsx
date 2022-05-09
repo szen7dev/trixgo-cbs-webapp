@@ -12,6 +12,7 @@ import { APP_ID } from "apis/localdb";
 import { useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
+import { PCM_MILESTONE } from "apis/localdb/index";
 
 type Props = {
   type?: number
@@ -140,7 +141,7 @@ export const ProjectMilestonePage: FC<Props> = ({ type = 1 }) => {
                 />
               </svg>
             </button>
-            {/* <p className="text-lg">infoCompany</p> */}
+            &ensp;<p className="text-lg">{PCM_MILESTONE[Number(milestoneID)].text}</p>
             <SearchInput
               classNameWrapper="ml-4"
               classNameInput="outline-none w-[296px]"

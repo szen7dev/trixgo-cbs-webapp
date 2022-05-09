@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { MainSearchDialog, NotificationsMenu, AppsMenu, UserMenu } from "shareComponents/common";
 import SearchIcon from "assets/icons/Search";
-import fakeThumbnail from "assets/images/thumbnail1.jpg";
+import fakeThumbnail from "assets/images/company_default.png";
 // import iconFilter from "assets/images/icons8-filter-96.png";
 import iconChat from "assets/images/chat.png";
 
