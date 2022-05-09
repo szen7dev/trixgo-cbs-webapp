@@ -60,6 +60,7 @@ import {
   ProjectInspectionTab3Page,
   ProjectInspectionDetailPage,
   ProjectDirectoryPage,
+  ProjectMilestonePage
 } from "views/ppt/pages";
 
 import ProjectAdminFunctionalTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminFunctionalTab";
@@ -117,6 +118,7 @@ const PCMRouter: FC = () => {
                 />
                 <Route exact path="/pcm/project/:id/home" component={ProjectHomePage} />
                 <Route exact path="/pcm/project/:id/dashboard" component={ProjectDashboardPage} />
+                <Route exact path="/pcm/project/:id/milestone/:milestoneID" component={ProjectMilestonePage} />
                 <Route exact path="/pcm/project/:id/folder" component={ProjectFolderPage} />
                 <Route exact path="/pcm/project/:id/folder/:groupID" component={ProjectFolderPage} />
                 <Route exact path="/pcm/project/:id/schedule" component={ProjectSchedulePage} />

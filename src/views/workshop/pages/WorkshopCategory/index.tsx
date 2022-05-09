@@ -72,7 +72,7 @@ const WorkshopCategory: FC<Props> = (props) => {
             className="pl-14 pr-6 py-3 w-full focus:outline-none bg-white rounded-full placeholder-cbs-subtext text-large"
           />
         </label>
-        <div className="justify-center mt-4">
+        {/* <div className="justify-center mt-4">
           {Array.from({ length: 4 }).map((_, index) => (
             <button key={index} className="hover:bg-cbs-gray rounded-cbs pt-3 pb-2.5 px-3 text-center w-28">
               <div className="w-[50px] h-[50px] rounded-full overflow-hidden mx-auto">
@@ -81,7 +81,7 @@ const WorkshopCategory: FC<Props> = (props) => {
               <p>Quản lý thanh toán xây dựng</p>
             </button>
           ))}
-        </div>
+        </div> */}
       </div>
       <ContextMenu>
         <ul className="bg-white shadow-cbs-md py-0.5 max-h-32 overflow-auto rounded-cbs border-0.5 border-cbs-border">
