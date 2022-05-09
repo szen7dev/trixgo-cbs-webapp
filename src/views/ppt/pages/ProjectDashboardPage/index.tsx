@@ -127,7 +127,8 @@ const ProjectDashboardPortfolioPage: FC = () => {
 								taskMoreThan7Days,
 								taskAll,
 								taskFinish,
-								isLoading }}/>
+								isLoading,
+								projectID }}/>
 
 							{/* Multiple Chart */}
 							<ReportMultipleChart className='bg-white h-full pl-5 pr-12 pb-3 w-full mt-4' projectInfo={projectInfo}/>
