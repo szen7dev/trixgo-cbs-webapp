@@ -25,6 +25,15 @@ interface useQueryListCompanyOfAssigneeAndAmountTaskResponse {
     isLoading: boolean;
 }
 
+interface useQueryAmountTaskMilestoneResponse {
+    taskOverdueWork: [];
+    taskNextWeekWork: [];
+    taskMoreThan7Days: [];
+    taskAll: [],
+    taskFinish: [],
+    isLoading: boolean;
+}
+
 interface listCompanyOfAssigneeAndAmountTaskPayload {
     projectID: string;
 }
@@ -68,6 +77,29 @@ export const useQueryListCompanyOfAssigneeAndAmountTask = (params: listCompanyOf
         listCompanyAndTaskNextWeekWork: data?.data.listCompanyAndTaskNextWeekWork,
         listCompanyAndTaskMoreThan7Days: data?.data.listCompanyAndTaskMoreThan7Days,
         listCompanyAndTaskFinish: data?.data.listCompanyAndTaskFinish,
+        isLoading,
+    }
+}
+
+/**
+ * Name: Thống kê số task theo milestone trong dự án
+ * Author: Depv
+ */
+export const useQueryAmountTaskMilestone = (params: listCompanyOfAssigneeAndAmountTaskPayload): useQueryAmountTaskMilestoneResponse => {
+    const res = useQuery(
+        ['list_amount_task_milestone', {params}],
+        async () => {
+            return PcmRepository.fetchAmountTaskMilestone(params);
+        }
+    );
+    
+    const { data, isLoading } = res;
+    return {
+        taskOverdueWork: data?.data.taskOverdueWork,
+        taskNextWeekWork: data?.data.taskNextWeekWork,
+        taskMoreThan7Days: data?.data.taskMoreThan7Days,
+        taskAll: data?.data.taskAll,
+        taskFinish: data?.data.taskFinish,
         isLoading,
     }
 }

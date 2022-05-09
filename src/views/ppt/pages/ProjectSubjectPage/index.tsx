@@ -36,7 +36,8 @@ const ProjectSubjectPage: FC = () => {
 	});
 	
 	useEffect(() => {
-		if(listCompany?.length && listCompanyAndTaskOverdueWork?.length && listCompanyAndTaskNextWeekWork?.length && listCompanyAndTaskMoreThan7Days?.length){
+		// if(listCompany?.length && listCompanyAndTaskOverdueWork?.length && listCompanyAndTaskNextWeekWork?.length && listCompanyAndTaskMoreThan7Days?.length){
+		if(listCompany?.length){
 			let totalOverdueWorkAll: any = 0
 			let totalNextWeekWorkAll: any = 0
 			let totalMoreThan7DaysAll: any = 0
@@ -75,6 +76,7 @@ const ProjectSubjectPage: FC = () => {
 			setRotalTaskFinish(totalFinishAll)
 		}
 	}, [listCompany, listCompanyAndTaskOverdueWork, listCompanyAndTaskNextWeekWork, listCompanyAndTaskMoreThan7Days]);
+	console.log({ dataCompany, listCompany, listCompanyAndTaskOverdueWork, listCompanyAndTaskNextWeekWork,listCompanyAndTaskMoreThan7Days   })
 
 	useEffect(() => {
 		document.title = "CHG.THT-Hồ sơ thanh toán"
@@ -88,7 +90,6 @@ const ProjectSubjectPage: FC = () => {
 		// 	status: index,
 		// })));
 	}, []);
-
 	const toggleVisible = () => setVisibleDrawer(!visibleDrawer);
 
 	return (
