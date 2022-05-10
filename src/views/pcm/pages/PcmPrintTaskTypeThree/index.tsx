@@ -171,7 +171,8 @@ const PcmPrintTaskTypeThree: FC = () => {
               <div className="w-full flex justify-center my-5">
                   <button onClick={fetchNextPage}>
                       <span className="text-primary">
-                          {`Xem thêm (${totalRecord - listPcmComments.length})`}
+                        Xem thêm
+                          {/* {`Xem thêm (${totalRecord - listPcmComments.length})`} */}
                       </span>
                   </button>
               </div>
