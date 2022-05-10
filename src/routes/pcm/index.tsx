@@ -376,6 +376,7 @@ const PCMRouter: FC = () => {
                 <Route exact path="/pcm/home" component={PcmHomePage} />
                 <Route exact path="/pcm/assign" component={() => <PcmHomePage type={2} />} />
                 <Route exact path="/pcm/bookmark" component={() => <PcmHomePage type={3} />} />
+                <Route exact path="/pcm/related" component={() => <PcmHomePage type={5} />} />
                 <Route exact path="/pcm/report" component={PcmReportPage} />
                 <Route exact path="/pcm/report/:reportID" component={PcmTasksReportPage} />
                 <Route exact path="/pcm/projects" component={ProjectCategoryPage} />

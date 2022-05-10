@@ -47,6 +47,7 @@ export const Header: FC<Props> = ({ type, viewMode, onChangeMode }) => {
               {type === 1 && 'Việc của tôi'}
               {type === 2 && 'Việc giao người khác'}
               {type === 3 && 'Việc quan tâm'}
+              {type === 5 && 'Việc liên quan'}
             </span>
           </div>
         </button>
