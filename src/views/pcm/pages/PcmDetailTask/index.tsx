@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 // import DownloadIcon from "assets/images/icons8-download-48_2.png";
 // import ShareIcon from "assets/images/icons8-share-rounded-96.svg";
 // import RemoveIcon from "assets/images/icons8-remove.svg";
-// import IconPrint from "assets/images/icons8-print-32.png";
+import IconPrint from "assets/images/icons8-print-32.png";
 import CopyIcon from "assets/images/icons8-copy-96.svg";
 import SendEmailIcon from "assets/images/icons8-send-email-96.svg";
 import IconPencil from "assets/images/icons8-pencil.svg";
@@ -364,8 +364,28 @@ const PcmDetailTaskPage: FC = () => {
           )}
           {/* <button className="mx-3">
             <img className="w-6" src={RemoveIcon} alt="Remove icon" />
-          </button>
-          <button className="mx-3">
+          </button> */}
+          <DropdownOption
+            view={<img className="w-6 opacity-80" src={IconPrint} alt="Print" />}
+            classNameItem="left-1"
+          >
+            <Menu.Item onClick={() => history.push(`/pcm/detail/${taskInfo._id}/print/1`)}>
+              <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+                  <div className={"flex-1 text-left ml-4"}>Loại 1</div>
+              </div>
+            </Menu.Item>
+            <Menu.Item onClick={() => history.push(`/pcm/detail/${taskInfo._id}/print/2`)}>
+              <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+                  <div className={"flex-1 text-left ml-4"}>Loại 2</div>
+              </div>
+            </Menu.Item>
+             <Menu.Item onClick={() => history.push(`/pcm/detail/${taskInfo._id}/print/3`)}>
+              <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+                  <div className={"flex-1 text-left ml-4"}>Loại 3</div>
+              </div>
+            </Menu.Item>
+          </DropdownOption>
+          {/* <button className="mx-3">
             <img className="w-6 opacity-80" src={IconPrint} alt="Print icon" />
           </button> */}
           {permissions.hasPermissionAddRelatedUser && (
