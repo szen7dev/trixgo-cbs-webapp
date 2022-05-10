@@ -17,7 +17,7 @@ const ReportMainWork: React.FC<Props> = ({ data, ...props }) => {
 		taskNextWeekWork,
 		taskMoreThan7Days,
 		taskAll,
-		taskFinish } = data;
+		taskFinish, projectID } = data;
 
 		const PCM_MILESTONE_FORMAT = PCM_MILESTONE.map(milestone => {
 			// if(milestone.value > 0){
@@ -85,7 +85,7 @@ const ReportMainWork: React.FC<Props> = ({ data, ...props }) => {
 								<tr key={milestone?.milestone.value}>
 									<td className="pt-3">
 										<div style={{ maxWidth: "89px" }}>
-											<Link to={`/pcm/project/60a8cb540400462461cbff9f/milestone/${milestone?.milestone?.value}`}>
+											<Link to={`/pcm/project/${projectID}/milestone/${milestone?.milestone?.value}`}>
 												{milestone?.milestone?.text}
 											</Link>
 											<div className={cn(styles.progress, "w-full h-1 mt-1.5")} style={{ '--width': `${
