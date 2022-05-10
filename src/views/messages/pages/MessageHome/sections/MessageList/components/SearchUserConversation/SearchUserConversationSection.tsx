@@ -3,7 +3,6 @@ import IconBackGray from "assets/images/icon-back-gray.svg";
 import {SearchUserAndConversationContext} from "../HeaderMessageList";
 import SearchIcon from "assets/images/icons8-search-120.png";
 
-import {useUser} from "services/hooks/useUser";
 import {map as _map} from "lodash";
 import PlusIcon from "assets/images/icons8-plus-math-96.svg";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
@@ -11,6 +10,7 @@ import {MessageContext, populates} from "../../../../index";
 import {SearchChatItem} from "./SearchChatItem";
 import {useDispatch} from "react-redux";
 import {appendFakeItemListConversation} from "redux/reducer/messages/ListConversation";
+import {useUserSystem} from "services/hooks/users/useUserSystem";
 
 export const SearchUserConversationSection:FC = () => {
     const {setShowSearch, showSearch} = useContext(SearchUserAndConversationContext);
@@ -36,7 +36,7 @@ export const SearchUserConversationSection:FC = () => {
 
     const [searchTerm, setSearchTerm] = useState('');
     const params = {limit: 10, select: 'fullname bizfullname email phone image', populates: '{"path": "company", "select": "name"}', keyword: searchTerm}
-    const { listFriends, nextPageListFriends , hasNextPageListFriends } = useUser(params);
+    const {data, hasNextPage, fetchNextPage} = useUserSystem(params, showSearch);
 
     const paramsListConversation = {limit: 10, keyword: searchTerm};
     const {listConversations, nextPageListConversations, hasListConversationNextPage, createConversation} = UseListConversation(paramsListConversation, showSearch);
@@ -82,7 +82,7 @@ export const SearchUserConversationSection:FC = () => {
                 </div>
                 <div ref={listFriendsRef} className={"flex max-w-full border-t border-gray-100 border-b overflow-auto no-webkit-scrollbar p-[5px]"}>
                     {
-                        _map(listFriends, friend => (
+                        _map(data, friend => (
                             <button
                                 title={friend.bizfullname||friend.fullname}
                                 key={friend._id}
@@ -94,9 +94,9 @@ export const SearchUserConversationSection:FC = () => {
                         ))
                     }
                     {
-                        hasNextPageListFriends &&
+                        hasNextPage &&
                         <button
-                            onClick={() => nextPageListFriends()}
+                            onClick={() => fetchNextPage()}
                             className={"rounded-lg w-[78px] min-w-[78px] flex flex-col items-center py-[15px] px-[10px] justify-center"}>
                             <img src={PlusIcon} className={"w-[24px] h-[24px]"} alt={"==="}/>
                         </button>
