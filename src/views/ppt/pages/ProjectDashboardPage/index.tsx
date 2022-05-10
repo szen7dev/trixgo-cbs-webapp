@@ -76,7 +76,7 @@ const ProjectDashboardPortfolioPage: FC = () => {
         taskFinish,
         isLoading,
 	} = useQueryAmountTaskMilestone({
-		projectID,
+		projectID,  isPassPermision: 1
 	});
 	
 	return (
