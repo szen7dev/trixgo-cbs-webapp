@@ -1,6 +1,7 @@
 import { FC, useContext, useEffect } from "react";
 import SwiperCore, { Navigation } from 'swiper';
 import { useParams } from 'react-router-dom';
+import { useQueryAmountTaskMilestone } from "services/hooks/pcm/useStatistical";
 
 import cn from "classnames";
 import 'chartjs-adapter-moment';
@@ -67,6 +68,17 @@ const ProjectDashboardPortfolioPage: FC = () => {
 		document.title = "CHG.THT-Báo cáo quản trị";
 	}, []);
 
+	const { 
+		taskOverdueWork,
+        taskNextWeekWork,
+        taskMoreThan7Days,
+        taskAll,
+        taskFinish,
+        isLoading,
+	} = useQueryAmountTaskMilestone({
+		projectID,
+	});
+	
 	return (
 		<div className={cn(styles.content, styles.report, styles['bg-gray'], styles['text-normal'])}>
 			<div className={cn(styles['content-container'], styles.scroll, "overflow-y-auto p-4 pt-0 flex-1 h-full")}>
@@ -109,7 +121,14 @@ const ProjectDashboardPortfolioPage: FC = () => {
 					<div className="w-4/12">
 						<div className="w-full flex flex-wrap px-2">
 							{/* Main Work */}
-							<ReportMainWork className={cn(styles['work-wrapper'], 'bg-white h-full pl-6 pr-5 pt-5 pb-7 w-full mt-4')} />
+							<ReportMainWork className={cn(styles['work-wrapper'], 'bg-white h-full pl-6 pr-5 pt-5 pb-7 w-full mt-4')} data={{
+								taskOverdueWork,
+								taskNextWeekWork,
+								taskMoreThan7Days,
+								taskAll,
+								taskFinish,
+								isLoading,
+								projectID }}/>
 
 							{/* Multiple Chart */}
 							<ReportMultipleChart className='bg-white h-full pl-5 pr-12 pb-3 w-full mt-4' projectInfo={projectInfo}/>

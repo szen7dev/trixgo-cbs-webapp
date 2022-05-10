@@ -5,8 +5,8 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 /*=====2.PROVIDERS=====*/
 import AuthProvider from "services/providers/Auth";
 import ModalProvider from "services/providers/Modal";
-import ChatProvider from "services/providers/Chat";
-import DeleteConfirmProvider from "services/providers/DeleteConfirm";
+// import ChatProvider from "services/providers/Chat";
+// import DeleteConfirmProvider from "services/providers/DeleteConfirm";
 import RightClickMenuProvider from "services/providers/RightClickMenu";
 
 /*=====3.LAYOUTS=====*/
@@ -53,10 +53,12 @@ const Routes: FC = () => {
     }, []);
 
     return (
-        <React.Suspense fallback={<div className="fixed inset-0 flex justify-center items-center">
-            <span className="cbs-clock">
-            </span>
-        </div>}>
+        <React.Suspense fallback={
+            <div className="fixed inset-0 flex justify-center items-center">
+                <span className="cbs-clock">
+                </span>
+            </div>
+        }>
             <Router>
                 <AuthProvider>
                     <RightClickMenuProvider>

@@ -32,3 +32,4 @@ export { default as ProjectInspectionTab2Page } from "./ProjectInspectionTab2Pag
 export { default as ProjectInspectionTab3Page } from "./ProjectInspectionTab3Page";
 export { default as ProjectInspectionDetailPage } from "./ProjectInspectionDetailPage";
 export { default as ProjectSubjectCompanyOfAssigneePage } from "./ProjectSubjectCompanyOfAssigneePage";
+export { default as ProjectMilestonePage } from "./ProjectMilestonePage";
