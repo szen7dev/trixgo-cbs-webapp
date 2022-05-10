@@ -115,11 +115,12 @@ export const ModalAddNewTask: FC = () => {
 
   const onSubmitFilterData = async (values: any) => {
     try {
-      const { error, data } = await addTaskAsync(values);
+      console.log({ values });
+      // const { error, data } = await addTaskAsync(values);
 
-      if(error) return toast.warning(data.message);
+      // if(error) return toast.warning(data.message);
 
-      history.push(`/pcm/detail/${data._id}`);
+      // history.push(`/pcm/detail/${data._id}`);
     } catch (error) {
       if (typeof error === "string") {
           toast.error(error);
@@ -204,14 +205,14 @@ export const ModalAddNewTask: FC = () => {
                             setSearchDepartmentValue("");
                             setFieldValue("groupID", "");
                             setFieldValue("assigneeID", "");
-                            setFieldValue("relatedIDs", "");
+                            setFieldValue("relatedIDs", []);
                           }}
                           onClearData={() => {
                             setCompanyID("");
                             setFieldValue("projectID", "");
                             setFieldValue("groupID", "");
                             setFieldValue("assigneeID", "");
-                            setFieldValue("relatedIDs", "");
+                            setFieldValue("relatedIDs", []);
                           }}
                           onSearchInputChange={
                             debounce(
@@ -506,24 +507,14 @@ export const ModalAddNewTask: FC = () => {
                       <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Liên quan</div>
                       <DropdownSearchable
                         onchangeValue={(value: any) => {
-                          // console.log({ value });
-                          setFieldValue("relatedIDs", [...values.relatedIDs, value.id]);
+                          if(!values.relatedIDs.includes(value.id)) {
+                            setFieldValue("relatedIDs", [...values.relatedIDs, value.id]);
+                          }
                           setSearchFriendName("");
-                          // const checkExists = values.relatedIDs?.find?.(item => item === value.id);
-
-                          // if(!checkExists) {
-                          //   setFieldValue("relatedIDs", [...values.relatedIDs, value.id]);
-                          //   setSearchFriendName("");
-                          // }
                         }}
                         onMultipleRemoveValue={(id: any) => {
-                          // console.log({ id });
-                          // const newList = values.relatedIDs?.filter?.(item => item !== id);
-                          // setFieldValue('relatedIDs', newList);
-                          const index = values.relatedIDs.indexOf(`${id}`);
-                          if (index > -1) {
-                            setFieldValue("relatedIDs", values.relatedIDs.splice(index, 1));
-                          }
+                          const newList = values.relatedIDs.filter(item => item !== id);
+                          setFieldValue('relatedIDs', newList);
                         }}
                         onClearData={() => setFieldValue("relatedIDs", [])}
                         onSearchInputChange={debounce(

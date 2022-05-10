@@ -78,7 +78,7 @@ const ReportMainWork: React.FC<Props> = ({ data, ...props }) => {
 			</div>
 			<table className="w-full border-collapse mt-4">
 				<tbody>
-					{
+					{	
 						PCM_MILESTONE_FORMAT.map((milestone: any) => {
 							if(milestone.milestone.value < 1) return;
 							return (

@@ -86,6 +86,10 @@ export const LeftSideBar: FC = () => {
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Việc quan tâm</span>
           </NavLink>
+          <NavLink to={`/pcm/related`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-4 pr-2 text-medium">
+            <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+            <span className="truncate">Việc liên quan</span>
+          </NavLink>
           <NavLink to={`/pcm/dashboard`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-4 pr-2 text-medium">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Báo cáo quản trị</span>
