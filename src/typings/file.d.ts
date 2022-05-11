@@ -38,19 +38,21 @@ export type UploadPayload = {
 }
 
 export type AddFileUploadResponse = {
-  _id: string | undefined;
-  name: string | undefined;
-  nameOrg: string | undefined;
-  path: string | undefined;
-  mimeType: string | undefined;
-  createAt: string | undefined;
+  _id?: string | undefined;
+  name?: string | undefined;
+  nameOrg?: string | undefined;
+  path?: string | undefined;
+  mimeType?: string | undefined;
+  createAt?: string | undefined;
+  error: boolean;
 }
 
 export type FileResponse = APIResponse & {
   data: {
     infoGenerateLink: {
       error: boolean;
-      data: string,
+      data: string;
+      fileName: string;
     },
     infoFileAfterInsert: FileProps
   }

@@ -3,11 +3,9 @@ import moment from "moment";
 import React, { Fragment, useContext, useState } from "react";
 import cn from "classnames";
 import DayPickerInput from "react-day-picker/DayPickerInput";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field } from "formik";
 import uniqBy from "lodash/uniqBy";
 import debounce from "lodash/debounce";
-import { object, string } from "yup";
-import { useModal } from "services/hooks/useModal";
 
 import { ModalContext } from "views/document/contexts/modal";
 import itemTag from "assets/images/icons8-price-tag.svg";
@@ -40,7 +38,7 @@ const fieldInputByRow = [
 		type: "datepicker",
 	},
 	{
-		title: "Mã hiệu (*)",
+		title: "Mã hiệu",
 		name: "sign",
 		type: "text",
 	},
@@ -532,7 +530,7 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 										</div>
 
 										<div className="py-1.5 h-[30px] box-content">
-											<p className="py-1.5">Cơ quan, tổ chức (*)</p>
+											<p className="py-1.5">Cơ quan, tổ chức</p>
 										</div>
 										<div className="py-0.5 h-[30px] box-content px-2">
 											<DropdownSearchable

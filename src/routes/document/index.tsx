@@ -72,7 +72,7 @@ const DocumentRouter: FC = () => {
                 { id: '1', title: 'Danh sách', path: '/document/project/:id/home', navExact: true },
                 { id: '2', title: 'Phân loại', path: '/document/project/:id/home/1' },
                 { id: "3", title: "Danh bạ hệ thống", path: "/document/project/:id/home/2" },
-                { id: '4', title: 'Thư mục', path: '/document/project/:id/home/3' },
+                { id: '4', title: 'Gói thầu', path: '/document/project/:id/home/3' },
                 // { id: '4', title: 'Báo cáo', path: '/ppt/project/:id/document/3' },
                 // { id: '5', title: 'Lịch sử upload file', path: '/ppt/project/:id/document/4' },
             ]}>

@@ -1,7 +1,8 @@
 import API from "../repository";
 
 import {
-  ListTaskPayload,
+  TaskListParams,
+  TaskInfoParams,
   ListTaskResponse,
   ListCheckListPayload,
   ListCheckListResponse,
@@ -15,6 +16,9 @@ import {
   ListResponsePayload,
   SearchResponsePayload,
   AddRelationUserPayload,
+  CopyTaskPayload,
+  MoveTaskToParentPayload,
+  MoveTaskToGroupPayload,
   addTaskPayload,
   addTaskResponse,
   CommentPayload,
@@ -78,7 +82,7 @@ const TaskRepository = {
     return data;
   },
 
-  async listTask(payload: ListTaskPayload): Promise<ListTaskResponse> {
+  async listTask(payload: TaskListParams): Promise<ListTaskResponse> {
     const { data } = await API.get<ListTaskResponse>(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl({
         select: "assignee lastLog checklist description name expiredTime status percentage project actualFinishTime amountChecklist amountFinishedChecklist",
@@ -96,12 +100,12 @@ const TaskRepository = {
     return data;
   },
 
-  async taskInfo(taskID: string): Promise<any> {
+  async taskInfo(payload: TaskInfoParams): Promise<any> {
     const { data } = await API.get<any>(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl({
-        taskID,
-        select: "name description type typeStatus status priority project contract parent checklist createAt field group author assignee related expiredTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures comments amountComment amountResponse amountMarkedResponse startTime subType flags",
+        select: "name description type typeStatus status draft priority project contract parent checklist createAt field group author assignee related expiredTime actualFinishTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures comments amountComment amountResponse amountMarkedResponse startTime subType flags milestone",
         populates: populatesTask,
+        ...payload
       })}`
     );
 
@@ -111,6 +115,30 @@ const TaskRepository = {
   async addRelationUser(payload: AddRelationUserPayload): Promise<any> {
     const { data } = await API.put<any>(
       `${pcmURL}/pcm_plan_tasks`,
+      payload
+    );
+    return data;
+  },
+
+  async copyTask(payload: CopyTaskPayload): Promise<any> {
+    const { data } = await API.post<any>(
+      `${pcmURL}/pcm_plan_tasks/copy-task`,
+      payload
+    );
+    return data;
+  },
+
+  async moveTaskToParent(payload: MoveTaskToParentPayload): Promise<any> {
+    const { data } = await API.post<any>(
+      `${pcmURL}/pcm_plan_tasks/move-task-to-parent`,
+      payload
+    );
+    return data;
+  },
+
+  async moveTaskToGroup(payload: MoveTaskToGroupPayload): Promise<any> {
+    const { data } = await API.post<any>(
+      `${pcmURL}/pcm_plan_tasks/move-task-to-group`,
       payload
     );
     return data;

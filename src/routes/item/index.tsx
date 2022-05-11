@@ -21,7 +21,9 @@ const ItemRouter: FC = () => {
         <ItemLayout>
             <Switch>
                 <ProtectedRoute exact path="/item/contact" component={ItemCustomerPage} />
+                <ProtectedRoute exact path="/item/contact/:parentID" component={ItemCustomerPage} />
                 <ProtectedRoute exact path="/item/storage" component={ItemStoragePage} />
+                <ProtectedRoute exact path="/item/storage/:parentID" component={ItemStoragePage} />
                 <ProtectedRoute
                     exact
                     path="/item/home"

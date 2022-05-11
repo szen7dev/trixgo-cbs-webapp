@@ -28,6 +28,7 @@ import type {
 
 const ITEM_URL = "/api/item";
 const CONTACT_DOCUMENT_URL = "/api/human";
+const BUDGET_WORK_URL = "/api/budget";
 
 async function fetchListHuman<T>(params: HumanPayload): Promise<T> {
     const { data } = await API.get(
@@ -41,6 +42,7 @@ async function fetchListHuman<T>(params: HumanPayload): Promise<T> {
                     "select": "_id name sign members"
                 },
                 type: 1,
+                isMember: 1,
                 ...params,
             },
         }
@@ -51,18 +53,18 @@ async function fetchListHuman<T>(params: HumanPayload): Promise<T> {
 async function fetchListContactDocument<T>(params: ContactDocumentPayload): Promise<T> {
     const { data } = await API.get(
         `${CONTACT_DOCUMENT_URL}/contact_documents`, {
-            params: {
-                populates: {
-                    "path": "company contact files contract position2 educationalBackground2 field2",
-                    "select": "name sign size url userCreate createAt nameOrg path",
-                    "populate": {
-                        "path": "userCreate project",
-                        "select": "fullname bizfullname projectType buildingGrade"
-                    }
-                },
-                ...params,
-            }
+        params: {
+            populates: {
+                "path": "company contact files contract position2 educationalBackground2 field2",
+                "select": "name sign size url userCreate createAt nameOrg path",
+                "populate": {
+                    "path": "userCreate project",
+                    "select": "fullname bizfullname projectType buildingGrade"
+                }
+            },
+            ...params,
         }
+    }
     );
     return data;
 }
@@ -199,6 +201,18 @@ async function fetchListContract(params: any) {
                 path: 'company',
                 select: 'sign name'
             },
+            ...params
+        }
+    }
+    )
+    return data;
+}
+
+async function fetchListBudgetWork(params: any) {
+    const { data } = await API.get(
+        `${BUDGET_WORK_URL}/budget_works`, {
+        params: {
+            select: 'name amount unitPrice quantity',
             ...params
         }
     }
@@ -369,6 +383,8 @@ const HumanRepository = {
         fetchListContact(params),
     fetchListContract: async (params: any): Promise<any> =>
         fetchListContract(params),
+    fetchListBudgetWork: async (params: any): Promise<any> =>
+        fetchListBudgetWork(params),
     fetchListAccount: async (params: any): Promise<any> =>
         fetchListAccount(params),
     fetchListGood: async (params: any): Promise<any> =>

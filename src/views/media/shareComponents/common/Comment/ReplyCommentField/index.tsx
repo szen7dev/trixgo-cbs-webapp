@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useRef, useState, useContext } from 'react';
+import { captureException } from "@sentry/react";
 
 import cn from 'classnames';
 import { toArray } from 'lodash';
@@ -8,6 +9,7 @@ import iconFace from 'assets/images/icons8-grinning-face-64.png';
 import iconAttach from 'assets/images/icons8-attach-50.png';
 import iconEmailSend from 'assets/images/icon-email-send.png';
 import { PostImage, PostFile } from 'shareComponents/common';
+import { validateFiles } from 'validation/file';
 import { APP_KEY } from "utils/constants";
 
 import CommentContext from 'views/media/contexts/comment/comment.context';
@@ -124,6 +126,9 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 	const handleAttachFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (!event.target.files) return;
 
+		const { error, message } = await validateFiles(event.target.files);
+		if(error) return toast.warn(message);
+
 		const [files, images] = modifyUploadedFilesV2({
 			imgLastKey: Object.keys(uploads.images).length || null,
 			fileLastKey: Object.keys(uploads.files).length || null,
@@ -230,6 +235,7 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 				receivers: dataAfterInsertOrUpdate.receivers
 			});
 		} catch (error) {
+			captureException(error);
 			if (typeof error === "string") {
 				toast.error(error);
 			} else if (error instanceof Error) {

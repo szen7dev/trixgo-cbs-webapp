@@ -13,6 +13,7 @@ export type ListContractsPayload = {
   companyID?: string;
   lastestID?: string;
   contractID?: string;
+  expenseID?: any;
 };
 
 // Kiểu dữ liệu của Danh sách/Info

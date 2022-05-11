@@ -1,11 +1,12 @@
 /*=====LIBRARY=====*/
 import { FC } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, matchPath } from "react-router-dom";
 
 /*=====LAYOUTS=====*/
 import { ProtectedRoute } from "routes/components";
 import { LayoutPrimary } from "shareComponents/layouts";
 import { FinancialLayout } from "views/financial/sharedComponents/layouts/FinancialLayout";
+import LayoutSecondary from 'views/ppt/sharedComponents/layouts/LayoutSecondary';
 
 /*=====PAGES=====*/
 import {
@@ -17,6 +18,9 @@ import {
   CashBookDetailPage,
   CashBookReportPage
 } from 'views/financial/pages';
+import FinancialAdminFunctionalTab from "views/financial/pages/FinancialAdminPage/pages/FinancialAdminFunctionalTab";
+import FinancialAdminDetail from "views/financial/pages/FinancialAdminPage/pages/FinancialAdminDetail";
+import FinancialAdminAuthorTab from "views/financial/pages/FinancialAdminPage/pages/FinancialAdminAuthorTab";
 
 const FinancialRouter: FC = () => {
   return (
@@ -41,8 +45,36 @@ const FinancialRouter: FC = () => {
             </LayoutPrimary>
           </Route>
 
-          <Route exact path={"/financial/cashflow"} component={CashFlowPage} />
-          <Route exact path={"/financial/cashflow/:cashFlowId"} component={CashFlowDetailPage} />
+          <Route path="/financial/(cashflow|cashflow-other)">
+            <LayoutPrimary
+              pages={[
+                { id: "1", title: "Kế hoạch tài chính", path: "/financial/cashflow" },
+                { id: "2", title: "Kế hoạch tài chính khác", path: "/financial/cashflow-other" },
+              ]}
+            >
+              <Route exact path={"/financial/cashflow"} component={CashFlowPage} />
+              <Route exact path={"/financial/cashflow/:cashFlowId"} component={CashFlowDetailPage} />
+              <Route exact path={"/financial/cashflow-other"} component={CashFlowPage} />
+            </LayoutPrimary>
+          </Route>
+
+          <Route path="/financial/admin">
+            <LayoutSecondary pages={[
+              { id: '1', title: 'Nhóm chức năng', path: '/financial/admin', navExact: true },
+              {
+                id: '2', title: 'Phân quyền chức năng', path: '/financial/admin/2', location: (location) => {
+                  // Get match params
+                  const match = matchPath<{ id: string }>(location.pathname, { path: '/financial/admin/:id/detail' })
+                  // Push to state
+                  return ({ pathname: '/financial/admin/2', state: match ? match.params.id : null })
+                }
+              }
+            ]}>
+              <Route exact path="/financial/admin" component={FinancialAdminFunctionalTab} />
+              <Route exact path="/financial/admin/:id/detail" component={FinancialAdminDetail} />
+              <Route exact path="/financial/admin/2" component={FinancialAdminAuthorTab} />
+            </LayoutSecondary>
+          </Route>
         </Switch>
       </FinancialLayout>
     </ProtectedRoute>

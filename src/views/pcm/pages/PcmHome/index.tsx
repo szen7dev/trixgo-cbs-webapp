@@ -12,7 +12,7 @@ type Props = {
   type?: number
 }
 
-export const PcmHome: FC<Props> = ({ type = 1 }) => {
+const PcmHome: FC<Props> = ({ type = 1 }) => {
   const [viewMode, setViewMode] = useState("LIST");
   const history = useHistory();
   const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
@@ -120,3 +120,5 @@ export const PcmHome: FC<Props> = ({ type = 1 }) => {
     </>
   );
 };
+
+export default PcmHome;

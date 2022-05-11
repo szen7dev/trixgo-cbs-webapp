@@ -232,10 +232,12 @@ export const ExpenseFormModal: FC<ContractExpenseModalProps> = ({ defaultValues,
     personInCharge: object().required(MESSAGE_ERROR.required),
     real: object().required(MESSAGE_ERROR.required),
     type: object().required(MESSAGE_ERROR.required),
-
+    date: string().required(MESSAGE_ERROR.required),
     name: string().required(MESSAGE_ERROR.required),
     sign: string().required(MESSAGE_ERROR.required),
-  });
+    buyerInfo: string().required(MESSAGE_ERROR.required),
+    sellerInfo: string().required(MESSAGE_ERROR.required),
+  })
 
   return (
     <main className="relative  w-[900px] h-[800px] bg-primary-light income-form-modal">
@@ -550,11 +552,11 @@ export const ExpenseFormModal: FC<ContractExpenseModalProps> = ({ defaultValues,
 
                     <div>
                       <p className="text-xs text-primary-gray mb-2">
-                        Phân loại theo người phụ trách (*)
+                        Phân loại theo phụ trách (*)
                       </p>
                       <DropdownSearchable
                         onchangeValue={(value) => setFieldValue("personInCharge", value)}
-                        placeholder="Phân loại theo người phụ trách..."
+                        placeholder="Phân loại theo phụ trách..."
                         className="w-full pl-0 -mb-1 outline-none"
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
@@ -787,7 +789,7 @@ export const ExpenseFormModal: FC<ContractExpenseModalProps> = ({ defaultValues,
                   </div>
 
                   <div>
-                    <p className="text-primary-gray text-xs mb-2">Bên mua</p>
+                    <p className="text-primary-gray text-xs mb-2">Bên mua (*)</p>
                     <DropdownSearchable
                       onchangeValue={(value: any) => setFieldValue("buyerInfo", value)}
                       placeholder="Bên mua..."
@@ -863,7 +865,7 @@ export const ExpenseFormModal: FC<ContractExpenseModalProps> = ({ defaultValues,
                   </div>
 
                   <div>
-                    <p className="text-primary-gray text-xs mb-2">Bên bán</p>
+                    <p className="text-primary-gray text-xs mb-2">Bên bán (*)</p>
                     <DropdownSearchable
                       onchangeValue={(value: any) => setFieldValue("sellerInfo", value)}
                       placeholder="Bên bán..."

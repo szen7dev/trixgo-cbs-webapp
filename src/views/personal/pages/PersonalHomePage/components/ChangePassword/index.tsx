@@ -1,5 +1,5 @@
 /*=====1.LIBRARY=====*/
-import { FC, FormEvent, useEffect, useState, memo } from "react";
+import { FC, FormEvent, useEffect, useState, memo, ChangeEvent, useMemo } from "react";
 // import { Link } from "react-router-dom";
 // import { useTranslation } from "react-i18next";
 import SwiperCore, { Pagination } from 'swiper';
@@ -15,13 +15,17 @@ import PersonalLogo from "assets/images/personal-logo.svg";
 import CameraIcon from "assets/images/camera-icon.svg";
 import EyeCloseIcon from "assets/images/icon-eye-close.svg";
 import EyeOpenIcon from "assets/images/icon-eye-open.svg";
+
 /*=====4.PAGES/COMPONENTS=====*/
 
 /*=====5.TYPINGS=====*/
 import { UpdatePasswordUser } from 'typings/personal/user';
+
 /*=====6.HOOKS/APIS=====*/
+import { useUpload } from 'services/hooks/useUpload';
 import { useUser } from 'services/hooks/personal/useUser';
 import { useAuth } from "services/hooks/auth/useAuth";
+
 /*=====7.OTHER=====*/
 
 SwiperCore.use([Pagination]);
@@ -38,25 +42,41 @@ export const ChangePassword: FC = () => {
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [avatar, setAvatar] = useState(PersonalLogo);
 	const { dataUserInfo, refetchDataUserInfo } = useAuth();
-    const { updatePasswordUser } = useUser();
+    const { updateUser, updatePasswordUser } = useUser();
     const { user } = useAuth();
-    // Đổi Password
+	const { addFileToUpload } = useUpload({
+		typeUpload: 'user'
+	});
+
 	const handleSubmitUpdatePassword = async (values: UpdatePasswordUser) => {
         await updatePasswordUser(values);
     }
+
+	const handleChangeAvatar = async (event: ChangeEvent<HTMLInputElement>) => {
+		const files = event.target.files;
+		if(!files || !files.length) return;
+
+		const { name } = await addFileToUpload({
+			files: files[0] as any,
+			fileType: 1,
+			useCompress: true
+		});
+
+		await updateUser({ image: name });
+		refetchDataUserInfo();
+	}
+
 	useEffect(() => {
         refetchDataUserInfo()
-        if(dataUserInfo) {
-          if(dataUserInfo?.data?.image) {
-            setAvatar(dataUserInfo.data.image)
-          }
+        if(dataUserInfo && dataUserInfo?.data?.image) {
+			setAvatar(dataUserInfo.data.image)
         }
-      },[dataUserInfo])
+	}, [dataUserInfo])
 
     const Image = memo(function Image() {
         return <img src={`${process.env.REACT_APP_URL_S3_USER}/${avatar}`} alt="Personal" className="w-[110px] h-[110px] rounded-full object-cover" />
-        // return <img src={`${process.env.REACT_APP_URL_S3}/test/${avatar}`} alt="Personal" className="w-[110px] h-[110px] rounded-full object-cover" />
-      });
+	});
+
 	return (
 		<section
 		  className={cn(
@@ -66,7 +86,7 @@ export const ChangePassword: FC = () => {
 		>
 		  <div className="relative flex pt-5 pb-3">
 		  {/* <img src={avatar} alt="Personal" className="w-[110px] h-[110px] rounded-full object-cover" /> */}
-			<Image />
+		  	<Image />
 			<div className="bg-primary-light absolute bottom-4 left-24 h-9 w-9 rounded-full flex items-center justify-center">
 			  <label>
 			  <div className="w-[30px] h-[30px] bg-secondary-gray rounded-full flex items-center justify-center">
@@ -76,24 +96,23 @@ export const ChangePassword: FC = () => {
 				  className="w-[15px] h-[13px]"
 				/>
 
-				<input type="file" name="files" id="file" className="hidden" accept="image/*" multiple />
+				<input type="file" name="files" id="file" className="hidden" accept="image/*" onChange={handleChangeAvatar} />
 			  </div>
 			  </label>
 			</div>
 		  </div>
 		  <div className="mb-8">
-			<p className="text-2xl">{user? user.fullname : null}</p>
-			<p className="text-sm text-primary-gray">{user? user.email : null}</p>
+			<p className="text-2xl">{user ? user.fullname : null}</p>
+			<p className="text-sm text-primary-gray">{user ? user.email : null}</p>
 		  </div>
-  
+
 		  <Formik
 			initialValues={passwordValues}
-			// eslint-disable-next-line no-console
 			onSubmit={handleSubmitUpdatePassword}
 		  >
-			{(formik) => {
-			  const { handleBlur, values, handleChange } = formik;
-  
+			{formik => {
+			  const { handleBlur, handleChange } = formik;
+
 			  return (
 				<Form>
 				  <div className="mb-[30px] relative">
@@ -104,9 +123,7 @@ export const ChangePassword: FC = () => {
 					  placeholder="Nhập mật khẩu hiện tại của bạn"
 					  className="w-full h-9 px-4 border border-primary-border rounded outline-none"
 					  onChange={handleChange}
-					  onBlur={(e: FormEvent<HTMLInputElement>) => {
-						handleBlur(e);
-					  }}
+					  onBlur={handleBlur}
 					/>
 					<img
 					  className="absolute right-4 top-34px cursor-pointer"
@@ -115,7 +132,7 @@ export const ChangePassword: FC = () => {
 					  onClick={() => setShowCurrentPassword(!showCurrentPassword)}
 					/>
 				  </div>
-  
+
 				  <div className="mb-[30px] relative">
 					<p className="text-sm mb-2">Mật khẩu mới</p>
 					<input
@@ -124,9 +141,7 @@ export const ChangePassword: FC = () => {
 					  placeholder="Nhập mật khẩu mới"
 					  className="w-full h-9 px-4 border border-primary-border rounded outline-none"
 					  onChange={handleChange}
-					  onBlur={(e: FormEvent<HTMLInputElement>) => {
-						handleBlur(e);
-					  }}
+					  onBlur={handleBlur}
 					/>
 					<img
 					  className="absolute right-4 top-34px cursor-pointer"
@@ -135,7 +150,7 @@ export const ChangePassword: FC = () => {
 					  onClick={() => setShowNewPassword(!showNewPassword)}
 					/>
 				  </div>
-  
+
 				  <div className="relative mb-[30px]">
 					<p className="text-sm mb-2">Xác nhận mật khẩu mới</p>
 					<input
@@ -144,9 +159,7 @@ export const ChangePassword: FC = () => {
 					  placeholder="Nhập lại mật khẩu mới"
 					  className="w-full h-9 px-4 border border-primary-border rounded outline-none"
 					  onChange={handleChange}
-					  onBlur={(e: FormEvent<HTMLInputElement>) => {
-						handleBlur(e);
-					  }}
+					  onBlur={handleBlur}
 					/>
 					<img
 					  className="absolute right-4 top-34px cursor-pointer"
@@ -155,7 +168,7 @@ export const ChangePassword: FC = () => {
 					  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
 					/>
 				  </div>
-  
+
 				  <div className="float-right">
 					<button
 					  type="submit"

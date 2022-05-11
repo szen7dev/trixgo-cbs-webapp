@@ -13,6 +13,7 @@ const MemoImageUploaded = memo(ImageUploaded, (prevProps, nextProps) => prevProp
 
 export const PostImage: FC<PostImageProps & HTMLAttributes<HTMLDivElement>> = ({ images, onRemove, ...props }) => {
 	if (!images?.length) return <></>;
+
 	const isHide = images.every(image => Object.keys(image).length === 1);
 	if(isHide) return <></>;
 

@@ -2,12 +2,29 @@ import API from "../../repository";
 
 const ITEM_URL = "/api/item";
 
+async function fetchListIsMember<T>(params: any): Promise<T> {
+    const { data } = await API.get(
+        `${ITEM_URL}/list-contract-is-members`,
+        {
+            params: {
+                select: "name date sign expiredAg agValue note personInCharge value vatValue plus vatPlus produce vatProduce plusProduce vatPlusProduce acceptance vatAcceptance plusAcceptance vatPlusAcceptance recommendedPayment advancePaymentPaid amountPaid remainingPayment status createAt dependentUnit",
+                populates: {
+                    "path": "project company personInCharge",
+                    "select": "name sign"
+                },
+                ...params,
+            },
+        }
+    )
+    return data
+}
+
 async function fetchList<T>(params: any): Promise<T> {
     const { data } = await API.get(
         `${ITEM_URL}/contracts`,
         {
             params: {
-                select: "name date sign expiredAg agValue note personInCharge value vatValue plus vatPlus produce vatProduce plusProduce vatPlusProduce acceptance vatAcceptance plusAcceptance vatPlusAcceptance recommendedPayment advancePaymentPaid amountPaid remainingPayment status createAt",
+                select: "name date sign expiredAg agValue note personInCharge value vatValue plus vatPlus produce vatProduce plusProduce vatPlusProduce acceptance vatAcceptance plusAcceptance vatPlusAcceptance recommendedPayment advancePaymentPaid amountPaid remainingPayment status createAt dependentUnit",
                 populates: {
                     "path": "project company personInCharge",
                     "select": "name sign"
@@ -25,7 +42,7 @@ async function fetchDetailContract<T>(params: any): Promise<T> {
         `${ITEM_URL}/contracts?contractID=${params.contactID}`, {
         params: {
             populates: {
-                "path": "project field chair personInCharge debtStatus warehouse buyerInfo sellerInfo",
+                "path": "project field chair personInCharge debtStatus warehouse buyerInfo sellerInfo dependentUnit",
                 "select": "name sign description"
             },
         },
@@ -62,6 +79,7 @@ async function requestDeleteContract(contractID: string): Promise<any> {
 
 const ContractIncomeRepository = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    fetchListIsMember: async (params: any): Promise<any> => fetchListIsMember<any>(params),
     fetchList: async (params: any): Promise<any> => fetchList<any>(params),
     fetchDetailContract: async (params: {
         contactID: string;

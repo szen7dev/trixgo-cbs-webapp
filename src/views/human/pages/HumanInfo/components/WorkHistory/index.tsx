@@ -2,6 +2,7 @@ import { FC, useRef, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
 import className from "classnames";
+import { toast } from "react-toastify";
 import { APP_KEY } from 'utils/constants';
 
 import toArray from "lodash/toArray";
@@ -22,6 +23,8 @@ import useCustomReducer from "services/hooks/ppt/useCustomReducer";
 import { uploadActions, uploadReducer } from "views/human/Reducers/Upload";
 import { ContactFile } from "views/human/shareComponents/common";
 import type { ContactDocument, FileProps, FilePropsUpload } from "typings/human";
+import { validateFiles } from 'validation/file';
+
 interface PropWorkHistory {
 	humanId: string;
 	companyID: any;
@@ -232,6 +235,10 @@ export const WorkHistory: FC<PropWorkHistory> = (props) => {
 		(contactDocumentID: string, companyID: any) =>
 			async (e: React.ChangeEvent<HTMLInputElement>) => {
 				if (!e.target.files) return;
+
+				const { error, message } = await validateFiles(e.target.files);
+				if(error) return toast.warn(message);
+
 				const files = modifyUploadedFilesV2(e.target.files, contactDocumentID);
 				setUploadFile(files, contactDocumentID);
 				handleUploadFile(files, contactDocumentID, companyID);

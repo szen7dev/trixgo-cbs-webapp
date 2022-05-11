@@ -1,33 +1,65 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { map as _map } from "lodash";
 import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 import moment from "moment";
 
+/**
+ * Components, Assets
+ */
 import FileColorIcon from "assets/icons/FileColor";
 import StarIcon from "assets/images/star.svg";
-import Thumbnail from "assets/images/thumbnail2.png";
-
 import { Paginate } from "shareComponents/common/Paginate";
+import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
 import { InputWidthAdjust, ShareButton } from "views/timesheet/shareComponents/common";
 
-import DetailMainRow from "./components/DetailMainRow";
-import AccessingUsers from "./components/AccessingUsers";
+import {
+  DetailMainRow,
+  AccessingUsers,
+  ModalShare
+} from "./components";
 import { CreateRow } from "./components/Form";
 
-import { setMainRowCollapsed } from "redux/reducer/Timesheet";
-
+/**
+ * Hooks, Typings
+ */
 import {
   useQueryDetailTimeSheetParent,
   useQueryListTimeSheetChild,
   useMutationTimeSheetChild,
 } from "services/hooks/useTimeSheet";
+import { useAuth } from "services/hooks/auth/useAuth";
+import { setMainRowCollapsed } from "redux/reducer/Timesheet";
+import { User } from "typings/user";
+import { Loader } from "shareComponents/common";
 
 const TimeSheetDetailPage: FC = () => {
+  const history = useHistory();
   const params = useParams<{ id: string }>();
-  const id = params["id"];
+  const timeSheetParentID = params["id"];
 
-  const { data, refetch } = useQueryDetailTimeSheetParent(id);
+  const [modalShare, setModalShare] = useState<{ isShow: boolean, users: User[] | undefined, modalType: 'members' | 'admins' }>({
+    isShow: false,
+    users: [],
+    modalType: 'members'
+  });
+
+  const [permissions, setPermissions] = useState<{
+    usersShared: User[];
+    onlyView: boolean;
+    hasPermissionCreateUpdate: boolean;
+    hasPermissionShare: boolean;
+  }>({
+    usersShared: [],
+    onlyView: true,
+    hasPermissionCreateUpdate: false,
+    hasPermissionShare: false,
+  });
+
+  const { user } = useAuth();
+
+  const { data: timeSheetInfo, refetch, loading } = useQueryDetailTimeSheetParent(timeSheetParentID);
   const {
     data: listTimeSheetChild,
     loading: isFetchTimeSheetChild,
@@ -37,9 +69,47 @@ const TimeSheetDetailPage: FC = () => {
     fetchNextPage,
     fetchPrevPage,
     refetch: onRefreshTimeSheetChild,
-  } = useQueryListTimeSheetChild(id);
-  const { onUpdateTimeSheetAsync, onCreateTimeSheetAsync } =
-    useMutationTimeSheetChild();
+  } = useQueryListTimeSheetChild(timeSheetParentID);
+
+  const { onUpdateTimeSheetAsync, onCreateTimeSheetAsync } = useMutationTimeSheetChild();
+
+  useEffect(() => {
+    if(!timeSheetInfo || !user || loading) return;
+
+    const usersShared = [...timeSheetInfo?.admins, ...timeSheetInfo?.members];
+    const adminsID    = timeSheetInfo.admins.map(item => item._id);
+    const membersID   = timeSheetInfo.members.map(item => item._id);
+
+    const usersIDShared = [
+      ...adminsID,
+      ...membersID,
+    ];
+    let authorID = '';
+
+    if(typeof timeSheetInfo.userCreate === 'string') {
+      authorID = timeSheetInfo.userCreate;
+    } else{
+      authorID = timeSheetInfo.userCreate?._id;
+    }
+
+    usersIDShared.push(authorID);
+
+    if(!usersIDShared.includes(user._id)) {
+      toast.warn('Bạn đang không có quyền truy cập');
+      history.push('/timesheet/home');
+    }
+
+    const hasPermissionCreateUpdate = adminsID.includes(user._id) || authorID === user._id;
+    const hasPermissionShare = authorID === user._id;
+    const onlyView = membersID.includes(user._id) && !adminsID.includes(user._id) && authorID !== user._id;
+
+    setPermissions({
+      usersShared,
+      onlyView,
+      hasPermissionCreateUpdate,
+      hasPermissionShare
+    })
+  }, [JSON.stringify(user), JSON.stringify(timeSheetInfo)])
 
   const handleUpdatedTimeSheet = React.useCallback(
     async (values) => {
@@ -74,7 +144,7 @@ const TimeSheetDetailPage: FC = () => {
         }
         const isCreated = await onCreateTimeSheetAsync({
           name: values.name,
-          parentID: id,
+          parentID: timeSheetParentID,
         });
         if (!isCreated.error) {
           refetch();
@@ -87,10 +157,15 @@ const TimeSheetDetailPage: FC = () => {
         return false;
       }
     },
-    [id, onCreateTimeSheetAsync, onRefreshTimeSheetChild, refetch]
+    [timeSheetParentID, onCreateTimeSheetAsync, onRefreshTimeSheetChild, refetch]
   );
 
+  const toggleModalShare = (modalType: 'admins' | 'members', users: User[] | undefined) =>
+    setModalShare({ isShow: !modalShare.isShow, users, modalType });
+
   const dispatch = useDispatch();
+
+  if(!timeSheetInfo || loading || !user) return <Loader className="border-primary" />
 
   return (
     <div className={"financial-planning-detail"}>
@@ -104,54 +179,32 @@ const TimeSheetDetailPage: FC = () => {
           <div className={"flex"}>
             <InputWidthAdjust
               className={"text-lg w-auto mr-2"}
-              value={data?.name}
+              value={timeSheetInfo.name}
             />
             <img alt={"star-icon"} src={StarIcon} />
           </div>
           <p className={"text-gray-400"}>
             Chỉnh sửa lần cuối cách đây{" "}
-            {moment(data?.updatedAt).isValid() &&
-              moment(data?.updatedAt).fromNow()}{" "}
-            bởi {data?.userCreate?.fullname}
+            {moment(timeSheetInfo.modifyAt).isValid() &&
+              moment(timeSheetInfo.modifyAt).fromNow()}{" "}
+            bởi {timeSheetInfo.userCreate?.fullname}
           </p>
         </div>
         <div className={"flex-1 flex items-center justify-end"}>
-          <p className={"text-gray-400 mr-2"}>Đang truy cập</p>
-          <AccessingUsers
-            users={[
-              {
-                _id: 1,
-                name: "Trần Thanh Quang",
-                avatar: Thumbnail,
-              },
-              {
-                _id: 2,
-                name: "Trần Thanh Quang 1",
-                avatar: Thumbnail,
-              },
-              {
-                _id: 3,
-                name: "Trần Thanh Quang 2",
-                avatar: Thumbnail,
-              },
-              {
-                _id: 4,
-                name: "Trần Thanh Quang 3",
-                avatar: Thumbnail,
-              },
-              {
-                _id: 5,
-                name: "Trần Thanh Quang 5",
-                avatar: Thumbnail,
-              },
-              {
-                _id: 6,
-                name: "Trần Thanh Quang 5",
-                avatar: Thumbnail,
-              },
-            ]}
-          />
-          <ShareButton />
+          <button
+            className="text-gray-400 mr-2"
+            onClick={() => {
+              toggleModalShare('admins', timeSheetInfo.admins)
+            }}
+          >Admin ({timeSheetInfo.admins?.length})</button> |
+          <button
+            className="text-gray-400 mr-2 ml-2"
+            onClick={() => {
+              toggleModalShare('members', timeSheetInfo.members)
+            }}
+          >Thành viên ({timeSheetInfo.members?.length})</button>
+          <AccessingUsers users={permissions.usersShared} />
+          {/* <ShareButton /> */}
         </div>
       </div>
       <div className={"financial-planning-table"}>
@@ -166,7 +219,7 @@ const TimeSheetDetailPage: FC = () => {
                 <button
                   className={"rounded bg-gray-600 mb-1 block w-5 h-5"}
                   onClick={() =>
-                    dispatch(setMainRowCollapsed({ _id: id, collapsed: true }))
+                    dispatch(setMainRowCollapsed({ _id: timeSheetParentID, collapsed: true }))
                   }
                 >
                   1
@@ -174,7 +227,7 @@ const TimeSheetDetailPage: FC = () => {
                 <button
                   className={"rounded bg-gray-600 mb-1 block w-5 h-5"}
                   onClick={() =>
-                    dispatch(setMainRowCollapsed({ _id: id, collapsed: false }))
+                    dispatch(setMainRowCollapsed({ _id: timeSheetParentID, collapsed: false }))
                   }
                 >
                   2
@@ -245,15 +298,17 @@ const TimeSheetDetailPage: FC = () => {
               Mô tả/ghi chú
             </div>
           </div>
-          {data?._id && Array.isArray(listTimeSheetChild) && (
+          {timeSheetInfo?._id && Array.isArray(listTimeSheetChild) && (
             <DetailMainRow
-              timeSheetParentInfo={data}
+              timeSheetParentInfo={timeSheetInfo}
               listTimeSheetChild={listTimeSheetChild}
               onUpdatedTimeSheetChild={handleUpdatedTimeSheet}
               isFetchTimeSheetChild={isFetchTimeSheetChild}
+              hasPermission={permissions.hasPermissionCreateUpdate}
             />
           )}
-          <CreateRow onInsert={handleCreateTimeSheet} />
+
+          {permissions.hasPermissionCreateUpdate && <CreateRow onInsert={handleCreateTimeSheet} />}
         </div>
       </div>
       <Paginate
@@ -264,6 +319,21 @@ const TimeSheetDetailPage: FC = () => {
         isFetching={isFetchTimeSheetChild}
         hasNextPage={hasNextPage}
       />
+
+      <ModalLarge
+        show={modalShare.isShow}
+        toggle={() => setModalShare(prev => ({ ...prev, isShow: !modalShare.isShow }))}
+        className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[600px] rounded-cbs-md"
+      >
+        <ModalShare
+          toggle={() => setModalShare(prev => ({ ...prev, isShow: !modalShare.isShow }))}
+          refetch={refetch}
+          expertTimesheetID={timeSheetParentID}
+          users={modalShare.users}
+          modalType={modalShare.modalType}
+          hasPermission={permissions.hasPermissionShare}
+        />
+      </ModalLarge>
     </div>
   );
 };

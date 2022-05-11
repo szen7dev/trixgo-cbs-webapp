@@ -77,13 +77,18 @@ interface UseQueryDetailTimeSheetParent {
     error: boolean;
     refetch: () => void;
 }
+
 export const useQueryDetailTimeSheetParent = (expertTimesheetID: string): UseQueryDetailTimeSheetParent => {
-    const result = useQuery(
+    const {
+        isLoading,
+        data,
+        refetch,
+    } = useQuery(
         `time-sheet.parent.${expertTimesheetID}`, async () =>
         TimeSheetParentRepository.fetchDetailTimeSheet({
             populates: {
-                "path": "assignee project userCreate",
-                "select": "fullname bizfullname name"
+                path: "assignee project userCreate members admins",
+                select: "_id fullname bizfullname name sign image"
             },
             expertTimesheetID
         }), {
@@ -93,11 +98,6 @@ export const useQueryDetailTimeSheetParent = (expertTimesheetID: string): UseQue
         refetchOnWindowFocus: false,
         enabled: true,
     });
-    const {
-        isLoading,
-        data,
-        refetch,
-    } = result;
 
     return {
         loading: isLoading,
@@ -189,9 +189,11 @@ interface UseMutationTimeSheetChild {
     onUpdateTimeSheetAsync: (payload: UpdateTimeSheetChildPayload) =>
         Promise<UpdateTimeSheetChildResponse>;
 }
+
 export const useMutationTimeSheetChild = (): UseMutationTimeSheetChild => {
     const insertMutation = useMutation((payload: InsertTimeSheetChildPayload) =>
         TimeSheetChildRepository.insertTimeSheet(payload));
+
     const updateMutation = useMutation((payload: UpdateTimeSheetChildPayload) =>
         TimeSheetChildRepository.updateTimeSheet(payload));
 

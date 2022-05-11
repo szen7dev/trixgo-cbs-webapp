@@ -290,6 +290,12 @@ export const CONTRACT_IPC_TYPES = [
     { value: 2, text: 'Thanh toán' },
 ]
 
+// PHÂN LOẠI CHI PHÍ
+export const CONTRACT_EXPENSE_SUB_TYPES = [
+    { value: 1, text: 'Chi phí trực tiếp' },
+    { value: 2, text: 'Chi phí quản lý' },
+]
+
 // LOẠI HÀNG HÓA, NGUYÊN VẬT LIỆU
 export const GOODS_TYPES = [
     { value: 1, text: 'Nguyên liệu, vật liệu' },
@@ -422,6 +428,18 @@ export const PCM_PROPOSAL_TASK = [
     { value: 9, text: 'Báo cáo', sign: 'Report', key: 'report' },
     { value: 10, text: 'Tiến độ', sign: 'Schedule', key: 'schedule' },
     { value: 11, text: 'Họp', sign: 'MOM', key: 'mom' },
+]
+
+// MỐC TIẾN ĐỘ
+export const PCM_MILESTONE = [
+    { value: 0, text: 'Việc thông thường', sign: 'Tasks', key: 'task' },
+    { value: 1, text: 'Pháp lý', sign: '', key: '' },
+    { value: 2, text: 'Thiết kế', sign: '', key: '' },
+    { value: 3, text: 'Dự toán, ngân sách', sign: '', key: '' },
+    { value: 4, text: 'Lựa chọn nhà thầu', sign: '', key: '' },
+    { value: 5, text: 'Thi công', sign: '', key: '' },
+    { value: 6, text: 'Bàn giao', sign: '', key: '' },
+    { value: 7, text: 'Quyết toán', sign: '', key: '' },
 ]
 
 // LOẠI TÀI LIỆU TẠO DỰNG
@@ -558,6 +576,47 @@ export const PCM_MEMBER_POSITION_TYPE = [
 ]
 
 /**
+ * Phân loại tính chất công việc
+ * 0-Việc thông thường
+ * 1-Yêu cầu thông tin
+ * 2-Yêu cầu phê duyệt
+ * 3-Thanh toán/Chi phí
+ * 4-Đấu thầu
+ * 5-Nghiệm thu chất lượng
+ * 6-Yêu cầu sửa chữa
+ * 7-Yêu cầu thay đổi
+ * 8-Yêu cầu thực hiện
+ * 9-Báo cáo
+ * 10-Tiến độ
+ * 11-Biên bản họp
+ */
+export const PCM_SUBTYPE = [
+    { value: 0, text: 'Việc thông thường' },
+    { value: 1, text: 'Yêu cầu thông tin' },
+    { value: 2, text: 'Yều cầu phê duyệt' },
+    { value: 3, text: 'Thanh toán/Chi phí' },
+    { value: 4, text: 'Đấu thầu' },
+    { value: 5, text: 'Nghiệm thu chất lượng' },
+    { value: 6, text: 'Yều cầu sửa chữa' },
+    { value: 7, text: 'Yều cầu thay đổi' },
+    { value: 8, text: 'Yều cầu thực hiện' },
+    { value: 9, text: 'Báo cáo' },
+    { value: 10, text: 'Tiến độ' },
+    { value: 11, text: 'Biên bản họp' },
+]
+
+export const KEY_ERRORS = {
+    PERMISSION_DENIED   : "permission_denied",
+    INSERT_FAILED       : "insert_failed",
+    UPDATE_FAILED       : "update_failed",
+    DELETE_FAILED       : "delete_failed",
+    GET_INFO_FAILED     : "get_info_failed",
+    GET_LIST_FAILED     : "get_list_failed",
+    PARAMS_INVALID      : "params_invalid",
+    ITEM_EXISTED        : "item_existed",
+}
+
+/**
  * 1. Hình ảnh
  * 2. Video
  * 3. Zip
@@ -624,6 +683,10 @@ export const APP_ID = {
                 id: "623f05f9e998e94feda0cd33",
                 name: "Báo cáo quản trị"
             },
+            subject: {
+                id: "6272ec513cf2ab30141bff14",
+                name: "Công việc"
+            },
             folder: {
                 id: "623f061de998e94feda0cd34",
                 name: "Thư mục dữ liệu"
@@ -661,6 +724,10 @@ export const APP_ID = {
             expense: {
                 id: "623f22dee998e94feda0cd92",
                 name: "Hợp đồng mua vào"
+            },
+            partner: {
+                id: "6272eb0f3cf2ab30141bff10",
+                name: "Hợp đồng đối tác"
             },
             guarantee: {
                 id: "623f22eae998e94feda0cd93",
@@ -719,4 +786,10 @@ export const APP_ID = {
     HUMAN: {
         id: "61e049c9fdebf77b072d1b13",
     },
+    BUDGET: {
+        id: "5fe58c9b95db3c6e1534ec78",
+    },
+    ACCOUNTING: {
+        id: "61e049aefdebf77b072d1b12"
+    }
 };

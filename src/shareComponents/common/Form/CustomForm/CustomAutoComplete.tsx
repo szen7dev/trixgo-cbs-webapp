@@ -65,6 +65,7 @@ function CustomAutoComplete<T extends Record<string, any>>({
   const dataFiltered = server
     ? data
     : data.filter((d) => d[attribute]?.toLowerCase().includes(search.toLowerCase()));
+
   useEffect(() => {
     const handleClickOutSite = (e: Event) => {
       if (ref.current && !ref.current.contains(e.target as Node)) {
@@ -84,12 +85,12 @@ function CustomAutoComplete<T extends Record<string, any>>({
   }, []);
 
   useEffect(() => {
-    setSearch(initialData || "");
+    initialData && setSearch(initialData);
   }, [initialData]);
 
   function handleChange(e: T) {
     setSelected(e);
-    setSearch(e[attribute]);
+    setSearch(renderValue ? renderValue(e) : e[attribute]);
     onChangeValue && onChangeValue(e);
   }
 
@@ -154,6 +155,7 @@ function CustomAutoComplete<T extends Record<string, any>>({
                     <>
                       <span
                         className={`block truncate ${selected ? "font-medium" : "font-normal"}`}
+                        title={renderValue ? renderValue(item) : item[attribute]}
                       >
                         {renderValue ? renderValue(item) : item[attribute]}
                       </span>

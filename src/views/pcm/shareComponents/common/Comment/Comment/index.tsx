@@ -1,5 +1,6 @@
 import { FC, HTMLAttributes, useContext, useEffect, useState } from 'react';
 import { toast } from "react-toastify";
+import { captureException } from "@sentry/react";
 import cn from "classnames";
 import moment from "moment";
 
@@ -84,6 +85,7 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 				payload: { _id: comment?._id, parent: comment?.parent }
 			});
 		} catch (error: unknown) {
+			captureException(error);
 			if (typeof error === "string") {
                 toast.error(error);
             } else if (error instanceof Error) {
@@ -106,6 +108,7 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 				typeReaction: 1
 			})
 		} catch (error) {
+			captureException(error);
 			if (typeof error === "string") {
                 toast.error(error);
             } else if (error instanceof Error) {
@@ -130,7 +133,7 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 
 	return (
 		<>
-			<div {...props} className={cn("flex pb-1.5", props.className)}>
+			<div {...props} className={cn("flex pb-1.5 break-all", props.className)}>
 				{/* Avatar */}
 				<div className="rounded-full overflow-hidden self-start mr-2 min-w-min">
 					<div className="h-9 w-9">
@@ -205,7 +208,7 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 								<div>
 									<span className='align-middle text-secondary-gray mr-0.5'>{amountReaction}</span>
 									<button className='relative z-10 -mr-3' onClick={toggleModalReaction}>
-										<img src={iconLike} alt="Emoji" className="inline w-[20px]" />
+										<img src={iconLike} alt="Like" className="inline w-[20px]" />
 									</button>
 									{/* <span><img src={iconFaceSweet} alt="" className='inline' /></span> */}
 								</div>

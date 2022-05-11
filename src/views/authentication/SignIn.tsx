@@ -42,7 +42,7 @@ const LOCALES: Locale[] = [
 ];
 
 const LoginPage: FC = () => {
-  const { t, i18n } = useTranslation(["signIn"]);
+  const { t } = useTranslation(["signIn"]); // signIn là tên biến được khai báo trong file index (i18n)
   const { isLoading, signIn } = useAuth();
 
   const [selectedLocale, setSelectedLocale] = useState(LOCALES[1].id);
@@ -88,7 +88,8 @@ const LoginPage: FC = () => {
                     </div>
                     <div className="mt-12">
                       <h1 className="font-bold text-4xl">
-                        {t("signIn:title")}
+                        {/* Cú pháp signIn:<tên biến>*/}
+                        {t("signIn:title")}  
                       </h1>
 
                       <p className="text-base text-primary-gray mt-4 mb-8">
@@ -189,7 +190,7 @@ const LoginPage: FC = () => {
                             className="flex items-center cursor-pointer select-none hover:opacity-80"
                             onClick={() => {
                               setSelectedLocale(locale.id);
-                              i18n.changeLanguage(locale.code);
+                              // i18n.changeLanguage(locale.code);
                             }}
                           >
                             {selectedLocale !== locale.id && locale.flag}

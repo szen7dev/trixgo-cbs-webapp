@@ -25,6 +25,24 @@ const modalReducers = (
         isShow: true,
         type: "email",
       };
+    case modalTypes.OPEN_MOVE_TASK_TO_PARENT:
+      return {
+        ...state,
+        isShow: true,
+        type: "move-task-to-parent",
+      };
+    case modalTypes.OPEN_MOVE_TASK_TO_GROUP:
+      return {
+        ...state,
+        isShow: true,
+        type: "move-task-to-group",
+      };
+    case modalTypes.OPEN_UPDATE_MILESTONE:
+      return {
+        ...state,
+        isShow: true,
+        type: "update-milestone",
+      };
     default:
       return state;
   }

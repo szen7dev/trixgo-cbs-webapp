@@ -1,5 +1,6 @@
 import { FC, UIEvent, useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
+import { captureException } from "@sentry/react";
 import { Formik, getIn } from "formik";
 import { object, string, date } from "yup";
 import { toast } from "react-toastify";
@@ -25,7 +26,7 @@ import { CheckList as CheckListType, ChildTask as ChildTaskType, Task, UpdateSta
 import "react-datepicker/dist/react-datepicker.css";
 
 type Props = {
-  componentType: 'CHECKLIST' | 'CHILD_TASK',
+  componentType: 'CHECKLIST' | 'CHILD_TASK' | 'CHECKLIST_PRINT',
   task: Task,
   data: Array<CheckListType | ChildTaskType>;
   totalRecord?: number;
@@ -49,8 +50,10 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
 
   const [listData, setListData] = useState<CheckListType[] | ChildTaskType[]>([]);
   const [currentTab, setCurrentTab] = useState(CheckListTab.ALL);
+
   const { addChecklistAsync, updateStatusChecklistAsync } = useCheckList({ parentID: task?._id });
   const { addChildTaskAsync } = useChildTask({ parentID: task?._id });
+
   const { data: listUsersProject, fetchNextPage } = useUsersProject({
     projectID: task?.project?._id,
     keyword: keywordAssignee
@@ -113,11 +116,12 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
 
       toast.success('Tạo checklist thành công');
     } catch (error: unknown) {
-        if (typeof error === "string") {
-            toast.error(error);
-        } else if (error instanceof Error) {
-            toast.error(error.message);
-        }
+      captureException(error);
+      if (typeof error === "string") {
+          toast.error(error);
+      } else if (error instanceof Error) {
+          toast.error(error.message);
+      }
     }
   }
 
@@ -140,11 +144,12 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
 
       toast.success('Tạo việc con thành công');
     } catch (error: unknown) {
-        if (typeof error === "string") {
-            toast.error(error);
-        } else if (error instanceof Error) {
-            toast.error(error.message);
-        }
+			captureException(error);
+      if (typeof error === "string") {
+          toast.error(error);
+      } else if (error instanceof Error) {
+          toast.error(error.message);
+      }
     }
   }
 
@@ -158,11 +163,12 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
 
       toast.success('Cập nhật checklist thành công');
     } catch (error: unknown) {
-        if (typeof error === "string") {
-            toast.error(error);
-        } else if (error instanceof Error) {
-            toast.error(error.message);
-        }
+			captureException(error);
+      if (typeof error === "string") {
+        toast.error(error);
+      } else if (error instanceof Error) {
+        toast.error(error.message);
+      }
     }
   }
 
@@ -179,7 +185,7 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
 
       const { infoTask, infoCheckList, senderID } = data;
 
-      if(componentType !== 'CHECKLIST') return;
+      if(!componentType.includes('CHECKLIST')) return;
       if(task?._id !== infoTask?._id?.toString()) return;
       if(user?._id === senderID) return;
 
@@ -217,7 +223,10 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
             checked={selectAll}
             onChange={handleSelectAll}
           /> */}
-          {!selectAll && <span className="ml-2 text-x-large">{componentType === 'CHECKLIST' ? 'Checklist' : 'Việc con'}</span>}
+          {componentType !== 'CHECKLIST_PRINT' && (
+            <span className="ml-2 text-x-large">{componentType === 'CHECKLIST' ? 'Checklist' : 'Việc con'}</span>
+          )}
+          {/* {!selectAll && <span className="ml-2 text-x-large">{componentType === 'CHECKLIST' ? 'Checklist' : 'Việc con'}</span>} */}
         </div>
 
         {selectAll ? (
@@ -328,7 +337,7 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
               <Formik
                 initialValues={initialValues}
                 validationSchema={validateSchema}
-                onSubmit={componentType === 'CHECKLIST' ? handleAddChecklist : handleAddChildTask}
+                onSubmit={componentType.includes('CHECKLIST') ? handleAddChecklist : handleAddChildTask}
               >
                 {({
                   values,

@@ -1,4 +1,8 @@
-import { FC, UIEvent, useState, useEffect } from "react";
+import { FC, UIEvent, useState } from "react";
+
+/**
+ * Libraries
+ */
 import { Formik, Form, ErrorMessage } from "formik";
 import { useHistory } from 'react-router-dom';
 import DayPickerInput from "react-day-picker/DayPickerInput";
@@ -6,24 +10,31 @@ import moment from "moment";
 import debounce from "lodash/debounce";
 import { PCM_PROPOSAL_TASK } from "apis/localdb";
 import { object, string } from "yup";
+import { toast } from "react-toastify";
 
+/**
+ * Hooks, Typings
+ */
 import { useQueryListDoctype } from "services/hooks/useHuman";
+import { useDoctype } from "services/hooks/items/useDoctype";
 import { useQueryListGroup } from "services/hooks/usePlanGroup";
 import { useTask } from 'services/hooks/useTask';
 import { useQueryListDepartmentsIsMember } from 'services/hooks/items/useDepartment';
 import { useUserSystem } from "services/hooks/users/useUserSystem";
-
-import { DropdownSearchable } from "shareComponents/common";
+import { useContract } from "services/hooks/items/useContract";
 import { useModal } from "services/hooks/useModal";
 
+/**
+ * Components, Assets
+ */
+import { DropdownSearchable } from "shareComponents/common";
 // import AttachIcon from "assets/images/icons8-attach-50.png";
 import Close from "assets/icons/Close";
 import TagIcon from "assets/images/icons8-price-tag-96.svg";
 import fakeThumbnail from "assets/images/avatar.jpg";
-import { toast } from "react-toastify";
 
 import "react-day-picker/lib/style.css";
-import { useContract } from "services/hooks/items/useContract";
+
 interface InitialValues {
   projectID: string,
   subType: string,
@@ -43,39 +54,17 @@ export const ModalAddNewTask: FC = () => {
   const history = useHistory();
   const { closeModal } = useModal();
 
-  const addTaskSchema = object().shape({
-    projectID: string().required("Vui lòng nhập tên dự án!"),
-    assigneeID: string().required("Vui lòng nhập tên người nhận!"),
-    name: string().required("Vui lòng nhập tiêu đề!"),
-  });
-
-  const { addTaskAsync } = useTask({});
-
-  const onSubmitFilterData = async (values: any) => {
-    try {
-      const { error, message, data } = await addTaskAsync(values);
-
-      if(error) return toast.warning(message);
-
-      history.push(`/pcm/detail/${data._id}`);
-    } catch (error) {
-      if (typeof error === "string") {
-          toast.error(error);
-      } else if (error instanceof Error) {
-          toast.error(error.message);
-      }
-    }
-    closeModal();
-  };
-
   const [searchDepartmentValue, setSearchDepartmentValue] = useState("");
-  const [otherFieldValue, setOtherFieldValue]             = useState("");
+  const [searchOtherField, setSearchOtherField]           = useState("");
   const [searchFriendName, setSearchFriendName]           = useState("");
   const [searchGroupName, setSearchGroupName]             = useState("");
   const [searchContract, setSearchContract]               = useState("");
+  const [companyID, setCompanyID]                         = useState("");
   const [projectID, setProjectID]                         = useState("");
 
-  const { 
+  const { addTaskAsync } = useTask({});
+
+  const {
     data: listDepartments,
     fetchNextPage: fetchNextPageListDepartment,
     hasNextPage: hasNextPageListDepartment
@@ -84,12 +73,17 @@ export const ModalAddNewTask: FC = () => {
     keyword: searchDepartmentValue,
     isFetch: true
   })
-  
-  const { listDoctypes } = useQueryListDoctype({
-    limit: 50,
-    type: 2,
-    keyword: otherFieldValue
-  });
+
+  const {
+    list: listDoctypes
+  } = useDoctype({
+    params: {
+      type: 2,
+      companyID,
+      keyword: searchOtherField
+    },
+    isFetchList: !!companyID
+  })
 
   const {
     data: listGroup,
@@ -114,6 +108,28 @@ export const ModalAddNewTask: FC = () => {
     isFetch: !!projectID
   });
 
+  const { data: listUsersProject } = useUserSystem({
+    projectID,
+    keyword: searchFriendName
+  }, true);
+
+  const onSubmitFilterData = async (values: any) => {
+    try {
+      const { error, data } = await addTaskAsync(values);
+
+      if(error) return toast.warning(data.message);
+
+      history.push(`/pcm/detail/${data._id}`);
+    } catch (error) {
+      if (typeof error === "string") {
+          toast.error(error);
+      } else if (error instanceof Error) {
+          toast.error(error.message);
+      }
+    }
+    closeModal();
+  };
+
   const handleScroll = (e: UIEvent<HTMLDivElement>, type: 'project' | 'group' | 'contract') => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
     const bottom = scrollHeight - scrollTop === clientHeight;
@@ -135,6 +151,12 @@ export const ModalAddNewTask: FC = () => {
     }
   }
 
+  const addTaskSchema = object().shape({
+    projectID: string().required("Vui lòng nhập tên dự án!"),
+    assigneeID: string().required("Vui lòng nhập tên người nhận!"),
+    name: string().required("Vui lòng nhập tiêu đề!"),
+  });
+
   const initialValues: InitialValues = {
     projectID: "",
     groupID: "",
@@ -150,11 +172,6 @@ export const ModalAddNewTask: FC = () => {
     subType: "",
   };
 
-  const { data: listUsersProject, hasNextPage, fetchNextPage, totalRecord } = useUserSystem({
-    projectID,
-    keyword: searchFriendName
-  }, true);
-  
   return (
     <>
       <div className={"flex flex-col"}>
@@ -177,22 +194,24 @@ export const ModalAddNewTask: FC = () => {
                 <div className={"t-add-new-task-dialog-select px-6"}>
                   <div className={"flex pb-1 pt-2 border-b"}>
                     <div className={"w-1/3 flex items-start"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Dự án</div>
+                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Dự án (*)</div>
                       <div className={"w-full flex-1"}>
                         <DropdownSearchable
                           onchangeValue={(value: any) => {
+                            setCompanyID(value.companyId)
                             setFieldValue("projectID", value?.id);
                             setProjectID(`${value?.id}`);
                             setSearchDepartmentValue("");
                             setFieldValue("groupID", "");
                             setFieldValue("assigneeID", "");
-                            setFieldValue("relatedIDs", "");
+                            setFieldValue("relatedIDs", []);
                           }}
                           onClearData={() => {
+                            setCompanyID("");
                             setFieldValue("projectID", "");
                             setFieldValue("groupID", "");
                             setFieldValue("assigneeID", "");
-                            setFieldValue("relatedIDs", "");
+                            setFieldValue("relatedIDs", []);
                           }}
                           onSearchInputChange={
                             debounce(
@@ -229,6 +248,7 @@ export const ModalAddNewTask: FC = () => {
                           data={listDepartments.map((department) => ({
                             label: `${department.sign}.${department.name}`,
                             value: department._id,
+                            companyId: department.company?._id,
                           }))}
                           formatItem={{
                             id: "value",
@@ -244,7 +264,7 @@ export const ModalAddNewTask: FC = () => {
                       </div>
                     </div>
                     <div className={"w-1/3 flex items-start pl-3"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Nhóm</div>
+                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Nhóm (*)</div>
                       <DropdownSearchable
                         disabled={values.projectID.length <= 0}
                         onchangeValue={(item: any) => {
@@ -347,7 +367,7 @@ export const ModalAddNewTask: FC = () => {
                   </div>
                   <div className={"flex pb-1 pt-2 border-b"}>
                     <div className={"w-1/3 flex items-start"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Gửi tới</div>
+                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Gửi tới (*)</div>
                       <div className={"w-full flex-1"}>
                         <DropdownSearchable
                           onchangeValue={(value: any) => {
@@ -405,7 +425,7 @@ export const ModalAddNewTask: FC = () => {
                       </div>
                     </div>
                     <div className={"w-1/3 flex items-start pl-3"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Phân loại</div>
+                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Phân loại (*)</div>
                       <DropdownSearchable
                         onchangeValue={(value: any) =>
                           setFieldValue("subType", value.id)
@@ -436,11 +456,11 @@ export const ModalAddNewTask: FC = () => {
                       <DropdownSearchable
                         onchangeValue={(item: any) => {
                           setFieldValue("fieldID", item.value);
-                          setOtherFieldValue("");
+                          setSearchOtherField("");
                         }}
                         onClearData={() => setFieldValue("fieldID", "")}
                         onSearchInputChange={debounce(
-                          (value) => setOtherFieldValue(value),
+                          (value) => setSearchOtherField(value),
                           500
                         )}
                         className={"w-full flex-1"}
@@ -486,15 +506,14 @@ export const ModalAddNewTask: FC = () => {
                       <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Liên quan</div>
                       <DropdownSearchable
                         onchangeValue={(value: any) => {
+                          if(!values.relatedIDs.includes(value.id)) {
                             setFieldValue("relatedIDs", [...values.relatedIDs, value.id]);
-                            setSearchFriendName("");
                           }
-                        }
+                          setSearchFriendName("");
+                        }}
                         onMultipleRemoveValue={(id: any) => {
-                          const index = values.relatedIDs.indexOf(`${id}`);
-                          if (index > -1) {
-                            setFieldValue("relatedIDs", values.relatedIDs.splice(index, 1));
-                          }
+                          const newList = values.relatedIDs.filter(item => item !== id);
+                          setFieldValue('relatedIDs', newList);
                         }}
                         onClearData={() => setFieldValue("relatedIDs", [])}
                         onSearchInputChange={debounce(
@@ -542,7 +561,7 @@ export const ModalAddNewTask: FC = () => {
                   </div>
                   <div className={"flex pb-1 pt-2 border-b"}>
                     <div className={"w-3/4 flex items-start"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Tiêu đề</div>
+                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Tiêu đề (*)</div>
                       <div className={"w-full flex-1"}>
                         <input
                           placeholder="Tiêu đề"
@@ -558,7 +577,7 @@ export const ModalAddNewTask: FC = () => {
                       </div>
                     </div>
                     <div className={"w-1/4 flex items-start"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Thời hạn</div>
+                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Thời hạn (*)</div>
                       <DayPickerInput
                         value={values.expiredTime && moment(values.expiredTime).format("MM/DD/YYYY")}
                         onDayChange={(day) => setFieldValue("expiredTime", moment(day).format("MM/DD/YYYY"))}

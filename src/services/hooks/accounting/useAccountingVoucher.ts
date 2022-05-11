@@ -13,7 +13,7 @@ type UseAccountingVoucherProp = {
     hasNextPage: boolean | undefined
 };
 
-export const UseAccountingVoucherList = (pageParam = '', type: number, limit = 10): any => {
+export const UseAccountingVoucherList = (pageParam: any, type: number, inputFilter: any = {}, limit = 10): any => {
 
     const {
         status,
@@ -21,18 +21,19 @@ export const UseAccountingVoucherList = (pageParam = '', type: number, limit = 1
         error,
         refetch
     } = useQuery(
-        ["AccountingVoucherList", { pageParam }],
+        ["AccountingVoucherList", { pageParam, inputFilter }],
         async (pageParams: any) => {
             const [, { pageParam }] = pageParams.queryKey;
             return AccountingVoucherRepository.fetchList({
                 limit,
                 lastestID: pageParam || "",
-                type
+                type,
+                ...inputFilter
             })
         },
         { keepPreviousData: true }
     );
-    const listAccountingVoucher = data?.data?.listVoucher
+    const listAccountingVoucher = data?.data?.listRecords
     const totalRecord = data?.data?.totalRecord
     const totalPage = data?.data?.totalPage
     const nextCursor = data?.data?.nextCursor

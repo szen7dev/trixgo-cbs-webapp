@@ -1,21 +1,21 @@
 import API from "../repository";
 import { convertObToUrl } from "utils";
 
-import {
-    AccountInfoParams,
-    AccountListParams,
-    AccountInfoResponse,
-    AccountListResponse,
-} from 'typings/items/account';
+// import {
+//     AccountInfoParams,
+//     AccountListParams,
+//     AccountInfoResponse,
+//     AccountListResponse,
+// } from 'typings/items/account';
 
 const ACCOUNT_URL = "/api/item/accounts";
 
 export const AccountRepository = {
-    fetchList: (params: AccountListParams): Promise<AccountListResponse> => fetchList(params),
-    fetchInfo: (params: AccountInfoParams): Promise<AccountInfoResponse> => fetchInfo(params),
+    fetchList: (params: any): Promise<any> => fetchList(params),
+    fetchInfo: (params: any): Promise<any> => fetchInfo(params),
 };
 
-async function fetchList(params: AccountListParams): Promise<AccountListResponse> {
+async function fetchList(params: any): Promise<any> {
     const { data } = await API.get(
         `${ACCOUNT_URL}?${convertObToUrl({
             populates: JSON.stringify({
@@ -28,7 +28,7 @@ async function fetchList(params: AccountListParams): Promise<AccountListResponse
     return data
 }
 
-async function fetchInfo(params: AccountInfoParams): Promise<AccountInfoResponse> {
+async function fetchInfo(params: any): Promise<any> {
     const { data } = await API.get(
         `${ACCOUNT_URL}?${convertObToUrl(params)}`
     )

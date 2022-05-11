@@ -46,9 +46,7 @@ export const TypeStatusLabel: FC<Props> = ({ expiredTime }) => {
   return (
     <div>
       {label && (
-        <span
-          className={`px-3 py-1 rounded-xl ${label.textColor} ${label.bgColor}`}
-        >
+        <span className={`px-2 py-1 rounded-xl ${label.textColor} ${label.bgColor}`}>
           {label.name}
         </span>
       )}

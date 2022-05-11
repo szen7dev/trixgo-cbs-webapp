@@ -50,11 +50,7 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
 
     const onChangeCallback = useCallback((editorState) => {
         setEditorState(editorState);
-        // console.log(convertToRaw(editorState.getCurrentContent()).blocks)
-        setRealValue(convertToRaw(editorState.getCurrentContent()).blocks.map((block:any) => {
-            if (block.text==='') return '\n';
-            return block.text;
-        }).join(''))
+        setRealValue(convertToRaw(editorState.getCurrentContent()).blocks.map(block => (!block.text.trim() && '\n') || (block.text + '\n')).join(''))
     }, [editorState]);
 
     const value = useMemo(
@@ -197,7 +193,7 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
         for (const file of sendMessage.files) {
             const {_id} = await addFileToUpload({
                 files: file.realFile,
-				fileType: 1,
+				        fileType: 1,
                 progress: percentCompleted => {
                     // console.log(`${percentCompleted}% ${file.file.file.name}`);
                     dispatch(updateFileProgressOnMessage({

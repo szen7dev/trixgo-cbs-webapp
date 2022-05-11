@@ -5,7 +5,7 @@ import moment from "moment";
 
 import {DropdownSearchable} from "shareComponents/common";
 
-import MenuChildRow from "./MenuChildRow";
+// import MenuChildRow from "./MenuChildRow";
 
 // import { useRightClickMenu } from "services/hooks/useRightClickMenu";
 import { useQueryListFriend } from "services/hooks/users/useFriend";
@@ -14,6 +14,7 @@ import type {
   TimeSheetChild,
   UpdateTimeSheetChildPayload,
 } from "typings/time-sheet";
+import { toast } from "react-toastify";
 
 type Props = {
   rowData: TimeSheetChild;
@@ -21,13 +22,15 @@ type Props = {
   isLastRow: boolean;
   index: number;
   onUpdatedTimeSheetChild: (values: UpdateTimeSheetChildPayload) => void;
+  hasPermission: boolean;
 };
 
-const DetailChildRow: FC<Props> = ({
+export const DetailChildRow: FC<Props> = ({
   rowData,
   collapsed,
   isLastRow,
   index,
+  hasPermission,
   onUpdatedTimeSheetChild,
 }) => {
   // const { closeRightClick, openRightClick } = useRightClickMenu();
@@ -42,6 +45,10 @@ const DetailChildRow: FC<Props> = ({
 
   const handleClickUpdateTimeSheet = React.useCallback(
     (value) => {
+      if(!hasPermission) {
+        toast.warn('Bạn không có quyền cập nhật nội dung này')
+        return;
+      }
       onUpdatedTimeSheetChild({
         ...rowData,
         ...value,
@@ -301,5 +308,3 @@ const DetailChildRow: FC<Props> = ({
     </div>
   );
 };
-
-export default DetailChildRow;

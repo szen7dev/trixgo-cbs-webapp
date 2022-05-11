@@ -1,81 +1,29 @@
-import { User } from 'typings/user';
-import type { QueryParam, APIResponse, Company } from '../common';
+import type { QueryParam, APIResponse } from './commons';
 
-/**
- * SCHEMA
- */
-export type Account = {
+export interface Account {
     _id: string;
     name: string;
-    description: string;
-    type: number;
-    level: number;
-    status: number;
-    company: Company;
-    userCreate: User;
+    modifyAt: string,
+    description: string | null;
 }
 
-/**
- * PAYLOAD INSERT
- */
-export type AccountInsertPayload = {
-    name: string;
-    sign?: string;
-    note?: string;
-    openingBalance?: number;
-    arising?: number;
-    closingBalance?: number;
-}
-
-/**
- * PAYLOAD UPDATE
- */
-export type AccountUpdatePayload = {
-    accountID: string;
-    name?: string;
-    description?: string;
-}
-
-/**
- * PAYLOAD DELETE MANY
- */
-export type AccountDeleteManyPayload = {
-    accountsID: string[]
-}
-
-/**
- * PARAMS LIST
- */
-export type AccountListParams = QueryParam & {
-    parentID?: string;
+export type AccountQueryPayload = QueryParam & {
     companyID?: string;
-}
+    parentID?: string;
+    isListParentOfListChilds?: string;
+    accountID?: string;
+};
 
-/**
- * RESPONSE LIST
- */
-export type AccountListResponse = APIResponse & {
+export type AccountQueryResponse = APIResponse & {
     data: {
         listRecords: Account[];
         limit: number;
         totalRecord: number;
-        totalPage: number;
+        totalPages: number;
         nextCursor: string | null;
     }
 }
 
-/**
- * PARAMS INFO
- */
-export type AccountInfoParams = {
-    accountID: string;
-    select?: string;
-    populates?: string;
-}
-
-/**
- * RESPONSE INFO
- */
-export type AccountInfoResponse = APIResponse & {
-    data: Account;
+export type AccountQueryDetailResponse = APIResponse & {
+    data: Account
 }

@@ -74,7 +74,7 @@ export const APP_INFO = new Map([
     /* Ứng dụng Accounting */
     ['61e049aefdebf77b072d1b12', {
         key: "61e049aefdebf77b072d1b12",
-        name: "Kế toán",
+        name: "Kế toán quản trị",
         icon: accountingLogo,
         route: '/accounting/home'
     }],

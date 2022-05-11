@@ -49,14 +49,14 @@ export const useCustomer = ({
         useMutation((ids: Array<string>) =>
             CustomerRepository.deleteCustomer(ids)
         );
-
+    
     // Get info
     const { data: infoCustomer } =
-        useQuery("customer_info", () => CustomerRepository.fetchDetailCustomer(params.contactID || ''), {
+        useQuery("customer_info", () => CustomerRepository.fetchDetailCustomer(params), {
             refetchOnWindowFocus: false,
             enabled: isFetchInfo,
         });
-
+    
     const info = infoCustomer?.data;
 
     // Get List

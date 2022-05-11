@@ -1,5 +1,12 @@
-import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import PcmRepository from "apis/pcm";
+import {
+    FetchNextPageOptions,
+    FetchPreviousPageOptions,
+    useInfiniteQuery,
+    useMutation,
+    useQuery
+} from "react-query";
+
 import {
     AddConditionTaskReportPayload,
     FilesPcmGroupByContract,
@@ -7,8 +14,11 @@ import {
     ListFilesPcmPayload,
     PcmPlanTaskProps,
     PcmReport,
+    PcmFile,
     SendMailTaskPayload,
-    UpdateConditionTaskReportPayload
+    UpdateConditionTaskReportPayload,
+    PcmComment,
+    PcmCommentListParams,
 } from "typings/pcm";
 
 /**
@@ -166,12 +176,15 @@ export const usePcmReport = (params?: any, isFetch?: boolean) : UsePcmReport => 
 interface UsePcmFile{
     filesGroupByDate: FilesPcmGroupByDate[],
     filesGroupByContract: FilesPcmGroupByContract[],
-    listFilesPcm: Array<PcmReport>,
+    listFilesPcm: Array<PcmFile>,
     isLoading: boolean,
     refetch: () => void,
-    fetchNextPage: () => void,
+    fetchNextPage: (options?: FetchNextPageOptions) => void,
+    fetchPreviousPage: (options?: FetchPreviousPageOptions) => void,
+    hasNextPage: boolean | undefined,
     totalRecord: number,
-    hasNextPage: boolean | undefined
+    totalPage: number,
+    nextCursor: string,
 };
 
 type UsePcmFileProps = {
@@ -202,18 +215,15 @@ export const usePcmFile = ({
 
     const {
         isLoading,
-        refetch,
         data,
+        refetch,
         fetchNextPage,
+        fetchPreviousPage,
         hasNextPage
     } =
         useInfiniteQuery(
             ["pcm_files", params],
-            async ({ pageParams }: any) =>
-            PcmRepository.listFilesPcm({
-                lastestID: pageParams ? pageParams : "",
-                ...params
-            }),
+            ({ pageParam }) => PcmRepository.listFilesPcm({ lastestID: pageParam, ...params }),
             {
                 getNextPageParam: ({ data }: any) => {
                     return data?.nextCursor || undefined;
@@ -223,8 +233,10 @@ export const usePcmFile = ({
             }
         );
 
-    const listFilesPcm = [].concat(...(data?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
-    const totalRecord = data?.pages[0]?.data?.totalRecord;
+    const listFilesPcm = (data?.pages || []).flatMap((d: any) => d?.data?.listRecords);
+    const totalRecord = data?.pages && data?.pages[0]?.data?.totalRecord || 0;
+    const totalPage = data?.pages && data?.pages[0]?.data?.totalPage || 0;
+    const nextCursor = data?.pages && data?.pages[0]?.data?.nextCursor;
 
     const filesGroupByDate = dataFilesGroupByDate?.data?.listRecords || [];
     const filesGroupByContract = dataFilesGroupByContract?.data?.listRecords || [];
@@ -236,7 +248,72 @@ export const usePcmFile = ({
         isLoading,
         refetch,
         fetchNextPage,
+        fetchPreviousPage,
         hasNextPage,
         totalRecord,
+        totalPage,
+        nextCursor
+    }
+}
+
+/**
+ * ============================ ******************** ===============================
+ * ============================ 	 PCM COMMENT     ===============================
+ * ============================ ******************** ===============================
+ */
+
+ interface UsePcmComment {
+    list: PcmComment[];
+    isLoading: boolean;
+    totalRecord: number;
+    totalPage: number;
+    hasNextPage: boolean | undefined;
+    refetch: () => void;
+    fetchNextPage: () => void;
+    fetchPreviousPage: () => void;
+}
+
+type UsePcmCommentProps = {
+    params?: PcmCommentListParams,
+    isFetchList?: boolean,
+}
+
+export const usePcmComment = ({ params = {}, isFetchList = false }: UsePcmCommentProps): UsePcmComment => {
+    const {
+        isLoading,
+        data,
+        refetch,
+        fetchNextPage,
+        fetchPreviousPage,
+        hasNextPage
+    } = useInfiniteQuery(
+        ['pcm_comment--list', params],
+        async ({ pageParam }: any) =>
+            PcmRepository.fetchListPcmComments({
+                lastestID: pageParam,
+                ...params,
+            }),
+        {
+            getNextPageParam: ({ data }: any) => {
+                return data?.nextCursor ?? undefined;
+            },
+            refetchOnWindowFocus: false,
+            enabled: isFetchList,
+        }
+    );
+
+    const list = (data?.pages || []).flatMap((d: any) => d?.data?.listRecords);
+    const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
+    const totalPage = data?.pages[0]?.data?.totalPage || 0;
+
+    return {
+        isLoading,
+        list,
+        totalRecord,
+        totalPage,
+        hasNextPage,
+        refetch,
+        fetchNextPage,
+        fetchPreviousPage,
     }
 }

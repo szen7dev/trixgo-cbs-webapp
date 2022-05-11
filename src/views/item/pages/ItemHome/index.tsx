@@ -36,13 +36,19 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
     });
 
     const {
-        deleteDoctypeAsync,
-        listDoctypes,
+        deleteManyAsync,
+        list: listDoctypes,
         hasNextPage: hasNextPageDoctype,
-        refetchListDoctype,
-        fetchNextPageDoctype,
+        refetch: refetchListDoctype,
+        fetchNextPage: fetchNextPageDoctype,
         totalRecord
-    } = useDoctype({ type, keyword: keywordDoctype }, true);
+    } = useDoctype({
+        params: {
+            type,
+            keyword: keywordDoctype
+        },
+        isFetchList: true
+    });
 
     const handleConfirmCreateOrUpdateDoctype = () => refetchListDoctype();
 
@@ -105,7 +111,7 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
     const handleConfirmDelete = async () => {
         try {
             const ids = doctypesChecked.map(item => item._id);
-            const { error, data } = await deleteDoctypeAsync(ids);
+            const { error, data } = await deleteManyAsync(ids);
 
             if (error) {
                 return toast.warn(data?.message);

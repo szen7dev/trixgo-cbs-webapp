@@ -74,7 +74,6 @@ export const CmcIncomePage: FC = () => {
     } else {
       res = await createContractMutateAsync(values);
     }
-
     if (res.code && res.code !== 200) {
       return false;
     }
@@ -105,7 +104,7 @@ export const CmcIncomePage: FC = () => {
           "inline-block w-screen h-screen overflow-hidden transition-all transform flex justify-center bg-transparent shadow-xl rounded absolute left-0 right-0 top-10"
         }
       >
-        <IncomeFormModal onFinish={handleFinishForm} idEdit={itemChecked} isEdit title="Cập nhật" />
+        <IncomeFormModal onFinish={handleFinishForm} idEdit={itemChecked} isEdit title="Cập nhật" outin={1}/>
       </div>
     )
   }
@@ -116,7 +115,7 @@ export const CmcIncomePage: FC = () => {
           "inline-block w-screen h-screen overflow-hidden transition-all transform flex justify-center bg-transparent shadow-xl rounded absolute left-0 right-0 top-10"
         }
       >
-        <IncomeFormModal onFinish={handleFinishForm} title="Tạo mới" />
+        <IncomeFormModal onFinish={handleFinishForm} title="Tạo mới" outin={1}/>
       </div>
     )
   }
@@ -231,12 +230,12 @@ export const CmcIncomePage: FC = () => {
                   </Link>
                 </td>
                 <td className="py-1 px-2"> {moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
-                <td className="py-1 px-2 text-right">{formatNumberMoney((item.value || 0) + (item.vatValue || 0) + (item.plus || 0) + (item.vatPlus || 0))} </td>
-                <td className="py-1 px-2 text-right">{formatNumberMoney(item.produce + item.vatProduce + item.plusProduce + item.vatPlusProduce)}</td>
-                <td className="py-1 px-2 text-right">{formatNumberMoney(item.acceptance + item.vatAcceptance + item.plusAcceptance + item.vatPlusAcceptance)}</td>
+                <td className="py-1 px-2 text-right">{formatNumberMoney((item.value || 0) + (item.vatValue || 0) + (item.plus || 0) + (item.vatPlus || 0) )} </td>
+                <td className="py-1 px-2 text-right">{formatNumberMoney((item.produce || 0) + (item.vatProduce || 0) + (item.plusProduce || 0) + (item.vatPlusProduce || 0))}</td>
+                <td className="py-1 px-2 text-right">{formatNumberMoney((item.acceptance || 0) + (item.vatAcceptance || 0) + (item.plusAcceptance || 0) + (item.vatPlusAcceptance || 0))}</td>
                 <td className="py-1 px-2 text-right">{formatNumberMoney(item.recommendedPayment || 0)}</td>
                 <td className="py-1 px-2 text-right">{formatNumberMoney((item.advancePaymentPaid || 0) + (item.amountPaid || 0))}</td>
-                <td className="py-1 px-2 text-right">{formatNumberMoney(item.remainingPayment || 0)}</td>
+                <td className="py-1 px-2 text-right">{formatNumberMoney(item.remainingPayment | 0)}</td>
                 <td className="py-1 px-2">{getStatusValue(item.status)}</td>
               </tr>
             )

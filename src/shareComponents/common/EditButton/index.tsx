@@ -47,7 +47,7 @@ export const EditButton: FC<Props> = ({ hasPermissionUpdate, hasPermissionDelete
 
 					{hasPermissionDelete ? (
 						<Menu.Item onClick={onDelete}>
-							<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
+							<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left text-red-500">
 								<img src={iconTrash} alt="Icon trash" className="inline-block mr-6" />
 								Xóa
 							</button>

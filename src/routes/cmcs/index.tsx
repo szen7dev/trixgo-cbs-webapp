@@ -14,11 +14,13 @@ import { ProtectedRoute } from "routes/components";
 import {
     CmcHomePage,
     CmcIncomePage,
+    CmcPartnerPage,
     CmcGuaranteePage,
     ContractHome,
     ContractIpc,
     ContractPayment,
     ContractProduce,
+    ContractExpense,
     ContractAdminPage,
     CmcDashboardPage,
     ContractDashBoard,
@@ -27,7 +29,7 @@ import {
     ContractEditor,
     ContractBill,
     ContractBudget,
-    ContractProduct
+    ContractProduct,
 } from "views/cmcs/pages";
 import ErrorPage from "views/authentication/Error";
 import CmcsAdminFunctionalTab from "views/cmcs/pages/CmcAdminPage/pages/CmcsAdminFunctionalTab";
@@ -90,6 +92,15 @@ const CmcsRouter: FC = () => {
             />
             <ProtectedRoute
                 exact
+                path="/cmcs/partner"
+                component={() => (
+                    <CmcsLayout>
+                        <CmcPartnerPage />
+                    </CmcsLayout>
+                )}
+            />
+            <ProtectedRoute
+                exact
                 path="/cmcs/expense"
                 component={() => (
                     <CmcsLayout>
@@ -143,6 +154,18 @@ const CmcsRouter: FC = () => {
                     </CmcsContractLayout>
                 )}
             />
+
+            <ProtectedRoute
+                exact
+                // path="/cmcs/contract/:id/expense"
+                path="/cmcs/contract/:id/spending"
+                component={() => (
+                    <CmcsContractLayout>
+                        <ContractExpense />
+                    </CmcsContractLayout>
+                )}
+            />
+
             <ProtectedRoute
                 exact
                 path="/cmcs/contract/:id/produce"

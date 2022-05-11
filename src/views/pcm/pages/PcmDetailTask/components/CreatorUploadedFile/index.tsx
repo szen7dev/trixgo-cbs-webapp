@@ -1,6 +1,7 @@
 // Library
 import React, { useState } from "react";
 import moment from "moment";
+import { captureException } from "@sentry/react";
 import { debounce } from "lodash";
 import { toast } from "react-toastify";
 import { useMutation } from "react-query";
@@ -19,6 +20,7 @@ import { APP_ID } from "apis/localdb";
 import { User } from "typings/user";
 import FileRepository from "apis/upload";
 import { FileUpdatePayload } from "typings/file";
+import { validateFiles } from 'validation/file';
 
 type Props = {
   author: User | null,
@@ -67,6 +69,9 @@ export const CreatorUploadedFile = ({ taskID, companyID, projectID, groupID, aut
 
       if(!files || !files.length) return;
 
+      const validation = await validateFiles(files);
+  		if(validation.error) return toast.warn(validation.message);
+
       for (const [, file] of Object.entries(files)) {
         const { _id, nameOrg, path, mimeType, createAt } = await addFileToUpload({
           files: file as any,
@@ -102,7 +107,7 @@ export const CreatorUploadedFile = ({ taskID, companyID, projectID, groupID, aut
 
       toast.success('Thêm file thành công');
     } catch (error) {
-      console.error(error);
+			captureException(error);
       if(error instanceof Error) {
         toast.error(error.message)
       }

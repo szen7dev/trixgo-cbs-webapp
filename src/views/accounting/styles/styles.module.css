@@ -60,3 +60,15 @@
 .bgFooterYellow {
   background: #ffffcc;
 }
+.bgWhiteLight {
+  background: #ffffff;
+}
+.labelDateSearch {
+  position: absolute;
+  z-index: 9;
+  top: -10px;
+  left: 10px;
+}
+.datepickerPopper {
+  z-index: 19;
+}

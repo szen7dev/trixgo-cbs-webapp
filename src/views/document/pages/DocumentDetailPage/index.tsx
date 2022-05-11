@@ -4,6 +4,7 @@ import moment from "moment";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { useUpload } from 'services/hooks/useUpload';
+import { validateFiles } from 'validation/file';
 
 import { APP_KEY } from 'utils/constants';
 import { ModalCreateDocumentChild } from 'views/document/sharedComponents/common';
@@ -31,6 +32,7 @@ import { useQueryListDocumentChild } from "services/hooks/document/useDocumentCh
 import { useQueryListDocumentFile } from "services/hooks/document/useDocumentFile";
 
 import { useAuth } from "services/hooks/auth/useAuth";
+import { ModalQRCode } from "shareComponents/common/ModalQRCode";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
 
@@ -41,6 +43,8 @@ export const DocumentDetailPage: FC = () => {
   const { t } = useTranslation(["document"]);
 
   const [isShow, setIsShow] = useState(false);
+  const [isToggleModalQRCode, setIsToggleModalQRCode] = useState(false);
+  const toggleModalQRCode = () => setIsToggleModalQRCode(!isToggleModalQRCode);
   const { onFetchDetailDocumentAsync, detailDocument } =
     useQueryDetailDocument();
 
@@ -66,16 +70,16 @@ export const DocumentDetailPage: FC = () => {
   });
 
   React.useEffect(() => {
-    if(!user || !Object.keys(detailDocument).length) return;
+    if (!user || !Object.keys(detailDocument).length) return;
 
-    if(!detailDocument.package?.members?.includes(user._id)) {
+    if (!detailDocument.package?.members?.includes(user._id)) {
       history.push('/document/home');
       toast.error('Bạn không có quyền truy cập vào hồ sơ này');
     }
   }, [detailDocument])
 
   React.useEffect(() => {
-    if(!params.docID) return;
+    if (!params.docID) return;
     onFetchDetailDocumentAsync(params.docID);
   }, [onFetchDetailDocumentAsync, params.docID]);
 
@@ -83,37 +87,41 @@ export const DocumentDetailPage: FC = () => {
 
   const handleSetFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
-        if (!event.target.files || !event.target.files.length) return;
-        const arrFileID: Array<string | undefined> = []
+      if (!event.target.files || !event.target.files.length) return;
 
-        // Upload files
-        for (const [, file] of Object.entries(event.target.files)) {
-          const { _id } = await addFileToUpload({
-            files: file as any,
-            fileType: 2,
-            useCompress: true
-          })
-          arrFileID.push(_id)
-        }
+      const validation = await validateFiles(event.target.files);
+  		if(validation.error) return toast.warn(validation.message);
 
-        const { error, data } = await createDocumentFileMutateAsync({
-            documentID: params.docID,
-            filesID: arrFileID,
-        });
+      const arrFileID: Array<string | undefined> = []
 
-        if(error) {
-          return toast.warning(data?.message);
-        }
+      // Upload files
+      for (const [, file] of Object.entries(event.target.files)) {
+        const { _id } = await addFileToUpload({
+          files: file as any,
+          fileType: 2,
+          useCompress: true
+        })
+        arrFileID.push(_id)
+      }
 
-        toast.success('Thêm file thành công');
-        refetch();
+      const { error, data } = await createDocumentFileMutateAsync({
+        documentID: params.docID,
+        filesID: arrFileID,
+      });
+
+      if (error) {
+        return toast.warning(data?.message);
+      }
+
+      toast.success('Thêm file thành công');
+      refetch();
     } catch (error) {
       console.log({ error })
-      if(error instanceof Error) {
+      if (error instanceof Error) {
         toast.error(error.message);
       }
     }
-	}
+  }
 
   return (
     <div className="flex flex-col overflow-hidden bg-cbs-gray h-full">
@@ -139,7 +147,7 @@ export const DocumentDetailPage: FC = () => {
           </svg>
         </button>
         {/* <DropdownFilterButton /> */}
-        <GroupActionsPageDetail className="flex items-center flex-1" />
+        <GroupActionsPageDetail className="flex items-center flex-1" onGenerateQRCode={toggleModalQRCode} />
         {/* <ButtonCreate onClick={toggleModal} /> */}
         {/* <ButtonMore /> */}
       </div>
@@ -159,7 +167,7 @@ export const DocumentDetailPage: FC = () => {
                 alt=""
               />
               <span className="mr-2.5">
-              {detailDocument?.project?.sign} {">"} {detailDocument?.package?.name} {">"}  {detailDocument?.parent?.name}
+                {detailDocument?.project?.sign} {">"} {detailDocument?.package?.name} {">"}  {detailDocument?.parent?.name}
               </span>
               <img src={iconMove} className="h-6 w-6 inline" alt="" />
             </div>
@@ -225,9 +233,8 @@ export const DocumentDetailPage: FC = () => {
                 className="text-primary text-[13px]"
                 onClick={() => fetchNextPageDocumentFile()}
               >
-                {`Xem thêm (${
-                  Number(totalDocumentFile) - documentFiles.length
-                })`}
+                {`Xem thêm (${Number(totalDocumentFile) - documentFiles.length
+                  })`}
               </button>
             )}
           </TableFileAttach>
@@ -276,7 +283,16 @@ export const DocumentDetailPage: FC = () => {
           <div className="py-4"></div>
         </div> */}
       </div>
-      <ModalCreateDocumentChild isShow={isShow} toggle={toggleModalCreateDocumentChild} document={detailDocument} refetchListChild = {docChildPayload.refetchListDocumentChild} />
+      <ModalCreateDocumentChild isShow={isShow} toggle={toggleModalCreateDocumentChild} document={detailDocument} refetchListChild={docChildPayload.refetchListDocumentChild} />
+
+      <ModalQRCode
+        value={{
+          appID: APP_KEY.DOCUMENT,
+          id: params.docID
+        }}
+        isToggle={isToggleModalQRCode}
+        toggle={toggleModalQRCode}
+      />
     </div>
   );
 };

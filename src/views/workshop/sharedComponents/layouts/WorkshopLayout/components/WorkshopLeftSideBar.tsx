@@ -7,26 +7,26 @@ import SidebarTreeViewList from "shareComponents/common/Sidebar/SidebarTreeViewL
 export const routes = [
   {
     path: "/workshop/home",
-    label: "Trang chủ workshop",
+    label: "Trang chủ",
   },
-  {
-    path: "/workshop/list",
-    label: "Workshop yêu thích",
-    isGroup: true,
-    children: [
-      { path: "/workshop/list/category/1", label: "Workshop 1" },
-      { path: "/workshop/list/category/2", label: "Workshop 1" },
-    ],
-  },
-  {
-    path: "/workshop/list",
-    label: "Workshop yêu thích",
-    isGroup: true,
-    children: [
-      { path: "/workshop/list/category/1", label: "Workshop 1" },
-      { path: "/workshop/list/category/2", label: "Workshop 1" },
-    ],
-  },
+  // {
+  //   path: "/workshop/list",
+  //   label: "Workshop yêu thích",
+  //   isGroup: true,
+  //   children: [
+  //     { path: "/workshop/list/category/1", label: "Workshop 1" },
+  //     { path: "/workshop/list/category/2", label: "Workshop 1" },
+  //   ],
+  // },
+  // {
+  //   path: "/workshop/list",
+  //   label: "Workshop yêu thích",
+  //   isGroup: true,
+  //   children: [
+  //     { path: "/workshop/list/category/1", label: "Workshop 1" },
+  //     { path: "/workshop/list/category/2", label: "Workshop 1" },
+  //   ],
+  // },
 ];
 
 const WorkshopLeftSideBar: FC = () => {

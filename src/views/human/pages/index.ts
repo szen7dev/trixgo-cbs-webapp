@@ -3,3 +3,4 @@ export * from './HumanExpiredPage';
 export * from './HumanHomePage';
 export * from './HumanOtherFilterPage';
 export * from './HumanInfo';
+export * from './HumanDepartment';

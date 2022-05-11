@@ -1,5 +1,7 @@
 import { FC, useState, useEffect } from "react";
+import { captureException } from "@sentry/react";
 import { useHistory, useParams, Redirect, Link } from "react-router-dom";
+import { Menu } from '@headlessui/react';
 import { useQuery } from "react-query";
 import moment from "moment";
 import parse from "html-react-parser";
@@ -7,53 +9,81 @@ import _truncate from "lodash/truncate";
 import cn from "classnames";
 import { toast } from "react-toastify";
 
+/**
+ * Assets
+ */
 // import DownloadIcon from "assets/images/icons8-download-48_2.png";
 // import ShareIcon from "assets/images/icons8-share-rounded-96.svg";
-// import CopyIcon from "assets/images/icons8-copy-96.svg";
 // import RemoveIcon from "assets/images/icons8-remove.svg";
-// import IconPrint from "assets/images/icons8-print-32.png";
+import IconPrint from "assets/images/icons8-print-32.png";
+import CopyIcon from "assets/images/icons8-copy-96.svg";
 import SendEmailIcon from "assets/images/icons8-send-email-96.svg";
-import DotsVerticalIcon from "assets/icons/DotsVertical";
 import IconPencil from "assets/images/icons8-pencil.svg";
 import SharedFolderIcon from "assets/images/icons8-shared-folder-100_1.svg";
 import StackedOrganizationIcon from "assets/images/icons8-stacked-organizational-chart.svg";
 import MoveStockIcon from "assets/images/icons8-move-stock-96.svg";
 import IconAddUser from "assets/images/icons8-add-user-male-96 1.png";
+import styles from "views/pcm/styles/pcm_task.module.css";
 
-import { SideBar, CheckList, PriceApprovalInfo, RelatedResponse, ModalUpdateTask, ModalUpdateTaskStatus } from "./components";
-import { Loader } from "shareComponents/common";
-import { ReplyCommentField, RootCommentsList } from 'views/pcm/shareComponents/common';
-import { ProviderModalPost } from "views/pcm/contexts/post";
-import CommentProvider from 'views/pcm/contexts/comment/comment.provider';
+/**
+ * Components
+ */
+import {
+  OwnerUploadedFile,
+  CreatorUploadedFile,
+  ModalAddNotificationEmail,
+  ModalAddRelationUser,
+  SideBar,
+  CheckList,
+  // PriceApprovalInfo,
+  RelatedResponse,
+  ModalUpdateTask,
+  ModalUpdateTaskStatus,
+  ModalMoveTaskToParent,
+  ModalMoveTaskToGroup,
+  ModalUpdateMilestone
+} from "./components";
+import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
+import { CommentFull } from "../../shareComponents/common";
+import { Loader, ModalConfirm, DropdownOption } from "shareComponents/common";
 
-import TaskRepository from "apis/task";
+/**
+ * Utils
+ */
+import { APP_ID } from "apis/localdb";
 import { PCM_STATUS_TASK, PCM_PRIORITY_TASK } from 'apis/localdb';
+
+/**
+ * Hooks, Typings
+ */
+import TaskRepository from "apis/task";
+import { useModal } from "services/hooks/useModal";
+import useModalPcm from "views/pcm/hooks/useModal";
 import { useTask, useCheckList, useChildTask, useCommentPcm } from "services/hooks/useTask";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { User } from "typings/user";
-import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
+import { TOAST_DEFAULT_OPTIONS } from "utils/constants";
 
-import { useModal } from "services/hooks/useModal";
-import useModalPcm from "views/pcm/hooks/useModal";
-import { ModalAddNotificationEmail, ModalAddRelationUser } from "./components/Modal";
-import { APP_ID } from "apis/localdb";
-
-import styles from "views/pcm/styles/pcm_task.module.css";
-import { OwnerUploadedFile, CreatorUploadedFile } from "./components";
-
-const PcmDetailTask: FC = () => {
+const PcmDetailTaskPage: FC = () => {
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
-  const { openModal } = useModal();
-  const [{ isShow, type }, { toggleModal, openAddUserRelation, openAddNotificationEmail }] = useModalPcm();
+  const { openModal, closeModal } = useModal();
+  const [{ isShow, type }, {
+    toggleModal,
+    openAddUserRelation,
+    openAddNotificationEmail,
+    openMoveTaskToParent,
+    openMoveTaskToGroup,
+    openUpdateMilestone
+  }] = useModalPcm();
   const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 
   const { user } = useAuth();
-  const { updateTaskAsync } = useTask({});
+  const { updateTaskAsync, copyTaskAsync } = useTask({});
 
   const { data: infoTask, refetch: refetchInfoTask, isLoading } = useQuery(`task_info.${id}`, () =>
-    TaskRepository.taskInfo(id),
+    TaskRepository.taskInfo({ taskID: id }),
     { refetchOnWindowFocus: false }
   );
 
@@ -78,6 +108,7 @@ const PcmDetailTask: FC = () => {
     status: 1,
     priority: 1
   });
+
   const [permissions, setPermissions] = useState({
     hasPermissionUpdateTask: false,
     hasPermissionAddRelatedUser: false,
@@ -91,6 +122,7 @@ const PcmDetailTask: FC = () => {
   const [isMarkInterest, setIsMarkInterest] = useState(infoTask?.data?.flags?.includes(user?._id))
   const [isShowModalUpdateTaskStatus, setIsShowModalUpdateTaskStatus] = useState(false);
   const [isTruncate, setIsTruncate] = useState(true);
+  const [isTempTask, setIsTempTask] = useState(true);
   const [confirmUsers, setConfirmUsers] = useState<Array<{ author: User, createAt: string | Date }>>([]);
 
   const getGroupTitle = (group: any) => {
@@ -105,9 +137,7 @@ const PcmDetailTask: FC = () => {
 
   const toggleModalUpdateTaskStatus = () => setIsShowModalUpdateTaskStatus(!isShowModalUpdateTaskStatus);
 
-  const handleConfirmUpdateTaskStatus = (status: number) => {
-    setTaskData(previous => ({ ...previous, status }));
-  }
+  const handleConfirmUpdateTaskStatus = (status: number) => setTaskData(previous => ({ ...previous, status }));
 
   const handleConfirmUpdateTask = () => refetchInfoTask();
 
@@ -134,14 +164,87 @@ const PcmDetailTask: FC = () => {
 
       setIsMarkInterest(!isMarkInterest);
     } catch (error) {
-      if(error instanceof Error) {
+			captureException(error);
+      if(error instanceof Error)
         toast.error(error.message);
-      }
-      if(typeof error === 'string') {
+      if(typeof error === 'string')
         toast.error(error);
-      }
     }
   }
+
+  const handleMoveToOfficialTask = async () => {
+    try {
+      const { error, data } = await updateTaskAsync({
+        taskID: id,
+        draft: 0
+      })
+
+      if(error) return toast.warn(data?.message);
+
+      setIsTempTask(false);
+      toast.success('Cập nhật thành công', TOAST_DEFAULT_OPTIONS);
+    } catch (error) {
+			captureException(error);
+      if(error instanceof Error)
+        toast.error(error.message);
+      if(typeof error === 'string')
+        toast.error(error);
+    } finally {
+      closeModal();
+    }
+  }
+
+  const toggleModalMoveToOfficialTask = () => {
+    openModal(
+      <div
+        className={
+          "inline-block w-[521px] h-[240px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+        }
+      >
+        <ModalConfirm
+          title="Bạn có muốn chuyển thành việc chính thức không?"
+          description="Khi chuyển thành việc chính thức, bạn sẽ không thể sửa được tên công việc, xóa được người liên quan. Việc chính thức sẽ không chuyển thành việc nháp được"
+          onConfirm={handleMoveToOfficialTask}
+          onCancel={closeModal}
+        />
+      </div>
+    );
+  };
+
+  const handleCopyTask = async () => {
+    try {
+      const { error, data } = await copyTaskAsync({ taskID: id });
+
+      if(error) return toast.warn(data?.message);
+
+      history.push(`/pcm/detail/${data._id}`);
+    } catch (error) {
+			captureException(error);
+      if(error instanceof Error)
+        toast.error(error.message);
+      if(typeof error === 'string')
+        toast.error(error);
+    } finally {
+      closeModal();
+    }
+  }
+
+  const toggleModalCopyTask = () => {
+    openModal(
+      <div
+        className={
+          "inline-block w-[521px] h-[220px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+        }
+      >
+        <ModalConfirm
+          title="Bạn có muốn copy công việc không?"
+          description="Dự án/phòng ban, nhóm dữ liệu, công việc cha, người thực hiện, người liên quán, sẽ được copy và tạo thành việc nháp"
+          onConfirm={handleCopyTask}
+          onCancel={closeModal}
+        />
+      </div>
+    );
+  };
 
   useEffect(() => {
     if (!isSuccessApp || !infoTask) return;
@@ -212,7 +315,7 @@ const PcmDetailTask: FC = () => {
       {/*_____________header______________*/}
       <div className="task-management-header flex items-center justify-between pt-2 pb-2 pl-5 pr-5 border-b border-secondary-light shadow-lg">
         <div className="task-management-header-left-block flex items-center">
-          <button onClick={() => history.goBack()}>
+          <button onClick={history.goBack}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -235,13 +338,13 @@ const PcmDetailTask: FC = () => {
               src={DownloadIcon}
               alt="Download icon"
             />
-          </button>
-          <button className="mx-3">
-            <img className="w-6" src={ShareIcon} alt="Share icon" />
-          </button>
-          <button className="mx-3">
-            <img className="w-6" src={CopyIcon} alt="Copy icon" />
           </button> */}
+          {/* <button className="mx-3">
+            <img className="w-6" src={ShareIcon} alt="Share icon" />
+          </button> */}
+          <button className="mx-3" onClick={toggleModalCopyTask}>
+            <img className="w-6" src={CopyIcon} alt="Copy icon" />
+          </button>
           <button className="mx-3" onClick={openAddNotificationEmail}>
             <img className="w-6" src={SendEmailIcon} alt="Send email icon" />
           </button>
@@ -261,8 +364,28 @@ const PcmDetailTask: FC = () => {
           )}
           {/* <button className="mx-3">
             <img className="w-6" src={RemoveIcon} alt="Remove icon" />
-          </button>
-          <button className="mx-3">
+          </button> */}
+          {/* <DropdownOption
+            view={<img className="w-6 opacity-80" src={IconPrint} alt="Print" />}
+            classNameItem="left-1"
+          >
+            <Menu.Item onClick={() => history.push(`/pcm/detail/${taskInfo._id}/print/1`)}>
+              <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+                  <div className={"flex-1 text-left ml-4"}>Loại 1</div>
+              </div>
+            </Menu.Item>
+            <Menu.Item onClick={() => history.push(`/pcm/detail/${taskInfo._id}/print/2`)}>
+              <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+                  <div className={"flex-1 text-left ml-4"}>Loại 2</div>
+              </div>
+            </Menu.Item>
+             <Menu.Item onClick={() => history.push(`/pcm/detail/${taskInfo._id}/print/3`)}>
+              <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+                  <div className={"flex-1 text-left ml-4"}>Loại 3</div>
+              </div>
+            </Menu.Item>
+          </DropdownOption> */}
+          {/* <button className="mx-3">
             <img className="w-6 opacity-80" src={IconPrint} alt="Print icon" />
           </button> */}
           {permissions.hasPermissionAddRelatedUser && (
@@ -273,9 +396,46 @@ const PcmDetailTask: FC = () => {
         </div>
 
         <div className="task-management-header-right-block flex items-center">
-          <button className="w-10 h-10 flex justify-center items-center bg-lighter-gray rounded-full">
-            <DotsVerticalIcon />
-          </button>
+          <DropdownOption>
+            <Menu.Item onClick={openMoveTaskToParent}>
+              <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+                  <div className={"flex-1 text-left ml-4"}>Di chuyển tới việc cha</div>
+              </div>
+            </Menu.Item>
+            <Menu.Item onClick={openMoveTaskToGroup}>
+              <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+                  <div className={"flex-1 text-left ml-4"}>Di chuyển tới nhóm dữ liệu</div>
+              </div>
+            </Menu.Item>
+            {(taskInfo.draft === 1 && isTempTask) ? (
+              <Menu.Item onClick={toggleModalMoveToOfficialTask}>
+                <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+                    <div className={"flex-1 text-left ml-4"}>Chuyển thành việc chính thức</div>
+                </div>
+              </Menu.Item>
+            ) : ''}
+            <Menu.Item onClick={openUpdateMilestone}>
+              <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+                  <div className={"flex-1 text-left ml-4"}>Gán phân loại cột mốc</div>
+              </div>
+            </Menu.Item>
+            {/* IN ẤN */}
+            <Menu.Item onClick={() => history.push(`/pcm/detail/${taskInfo._id}/print/1`)}>
+              <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+                  <div className={"flex-1 text-left ml-4"}>In ấn mẫu biên bản họp</div>
+              </div>
+            </Menu.Item>
+            <Menu.Item onClick={() => history.push(`/pcm/detail/${taskInfo._id}/print/2`)}>
+              <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+                  <div className={"flex-1 text-left ml-4"}>In ấn mẫu báo cáo</div>
+              </div>
+            </Menu.Item>
+             <Menu.Item onClick={() => history.push(`/pcm/detail/${taskInfo._id}/print/3`)}>
+              <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+                  <div className={"flex-1 text-left ml-4"}>In ấn mẫu phụ lục ảnh</div>
+              </div>
+            </Menu.Item>
+          </DropdownOption>
         </div>
       </div>
 
@@ -342,10 +502,10 @@ const PcmDetailTask: FC = () => {
               <div className="flex justify-between">
                 <div>
                   <span className="text-lg leading-5">
-                    {moment(infoTask?.data?.expiredTime).format("DD/MM/YYYY")}
+                    {moment(infoTask?.data?.actualFinishTime).format("DD/MM/YYYY")}
                   </span>
                   <span className="ml-2 text-[13px] text-primary-gray">
-                    {moment(infoTask?.data?.expiredTime).format("HH:mm")}
+                    {moment(infoTask?.data?.actualFinishTime).format("HH:mm")}
                   </span>
                 </div>
                 <div>
@@ -399,7 +559,7 @@ const PcmDetailTask: FC = () => {
               groupID={taskInfo.group?._id}
               hasPermission={permissions.hasPermissionCreatorAddFile}
             />
-            <div className="">
+            <div>
               <CheckList
                 componentType="CHECKLIST"
                 task={taskInfo}
@@ -419,12 +579,12 @@ const PcmDetailTask: FC = () => {
                 hasPermission={permissions.hasPermissionCreateCheckListAndChildTask}
               />
             </div>
-            <div className="px-5 mt-5">
+            {/* <div className="px-5 mt-5">
               <PriceApprovalInfo
                 timeApproved={taskInfo?.timeApproved}
                 valueApproved={taskInfo?.valueApproved}
               />
-            </div>
+            </div> */}
 						<OwnerUploadedFile
               className="p-5"
               assigneeAttachs={taskInfo?.assigneeAttachs}
@@ -458,7 +618,21 @@ const PcmDetailTask: FC = () => {
         <div className="flex bg-white mt-2" style={{ width: 1100 }}>
           {/* <CommentContainer className="w-[791px]" /> */}
           <div className="w-[791px]">
-            <div className="text-x-large py-3 px-6 font-bold">
+            <CommentFull
+              userId={user?._id}
+              taskInfo={taskInfo}
+              comments={listComments}
+              amountComment={taskData.amountComment}
+              totalRecord={totalRecord}
+              limit={limit}
+              hasPermission={permissions.hasPermissionComment}
+              onConfirm={(method?: string) => {
+                if(method && method === 'INSERT') {
+                  setTaskData(previous => ({ ...previous, amountComment: taskData.amountComment + 1 }))
+                }
+              }}
+            />
+            {/* <div className="text-x-large py-3 px-6 font-bold">
               Bình luận {taskData.amountComment > 0 ? `(${taskData.amountComment})` : ''}
             </div>
             <RootCommentsList
@@ -485,23 +659,58 @@ const PcmDetailTask: FC = () => {
                   }}
                 />
               )}
-            </div>
+            </div> */}
           </div>
+          {/*
+            Modal
+            + Add relation user
+            + Send mail
+            + Move task to parent
+            + Move task to group
+          */}
           <ModalLarge
             show={isShow}
             toggle={toggleModal}
             className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[600px] rounded-cbs-md"
           >
-            {type === 'relation' && <ModalAddRelationUser
-              toggle={toggleModal}
-              taskID={id}
-              projectID={taskInfo?.project?._id || ''}
-              refetch={refetchInfoTask}
-              related={taskInfo?.related}
-              modalType={'ADD_RELATION_USER'}
-            />}
-            {type === 'email' && <ModalAddNotificationEmail toggle={toggleModal} task={taskInfo} />}
+            {type === 'relation' &&
+              <ModalAddRelationUser
+                toggle={toggleModal}
+                taskID={id}
+                projectID={taskInfo?.project?._id || ''}
+                refetch={refetchInfoTask}
+                related={taskInfo?.related}
+                modalType={'ADD_RELATION_USER'}
+              />}
+
+            {type === 'email' &&
+              <ModalAddNotificationEmail
+                toggle={toggleModal}
+                task={taskInfo}
+              />}
+
+            {type === 'move-task-to-parent' &&
+              <ModalMoveTaskToParent
+                taskID={taskInfo._id}
+                projectID={taskInfo.project?._id}
+                toggle={toggleModal}
+              />}
+
+            {type === 'move-task-to-group' &&
+              <ModalMoveTaskToGroup
+                taskID={taskInfo._id}
+                projectID={taskInfo.project?._id}
+                toggle={toggleModal}
+              />}
+
+            {type === 'update-milestone' &&
+              <ModalUpdateMilestone
+                taskID={taskInfo._id}
+                projectID={taskInfo.project?._id}
+                toggle={toggleModal}
+              />}
           </ModalLarge>
+          {/* Modal update status task */}
           <ModalUpdateTaskStatus
             taskID={taskInfo._id}
             status={taskInfo.status}
@@ -515,12 +724,4 @@ const PcmDetailTask: FC = () => {
   );
 };
 
-export const PcmDetailTaskPage: FC = () => {
-  return (
-    <ProviderModalPost>
-      <CommentProvider>
-        <PcmDetailTask />
-      </CommentProvider>
-    </ProviderModalPost>
-  )
-}
+export default PcmDetailTaskPage

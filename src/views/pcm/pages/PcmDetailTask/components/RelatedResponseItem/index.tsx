@@ -2,6 +2,7 @@ import React, { FC, LegacyRef, useCallback, useState } from "react";
 import moment from "moment";
 import classNames from "classnames";
 import _ from "lodash";
+import { captureException } from "@sentry/react";
 import { toast } from "react-toastify";
 import { useMutation } from "react-query";
 
@@ -27,6 +28,7 @@ import { User } from "typings/user";
 import { useUpload } from "services/hooks/useUpload";
 import { APP_ID } from "apis/localdb";
 import { useRelatedResponse } from "services/hooks/useTask";
+import { validateFiles } from 'validation/file';
 
 type Props = {
 	expanded?: boolean;
@@ -52,14 +54,13 @@ export const RelatedResponseItem: FC<Props> = ({
 	projectID,
 	groupID,
 	onClickImage,
-	refetchListResponseMarked,
-	setAmountMarkedResponse
 }) => {
 	const inputRef = React.useRef<HTMLInputElement>(null);
 	const [responseFiles, setResponseFiles] = useState({
 		files: response.files || [],
 		images: response.images || []
 	})
+	const [isExpand, setIsExpand] = useState(false);
 
 	const { addFileToUpload } = useUpload({
 		appID: APP_ID.PCM.id,
@@ -80,21 +81,21 @@ export const RelatedResponseItem: FC<Props> = ({
 			FileRepository.updateFile(payload)
 		);
 
-	const handleMarkChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-		await updateMarkResponseAsync({
-			commentID: response._id,
-			taskID: response.task._id,
-			official: e.target.checked
-		})
+	// const handleMarkChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+	// 	await updateMarkResponseAsync({
+	// 		commentID: response._id,
+	// 		taskID: response.task._id,
+	// 		official: e.target.checked
+	// 	})
 
-		if(e.target.checked) {
-			setAmountMarkedResponse && setAmountMarkedResponse((previousValue: any) => previousValue + 1);
-		} else{
-			setAmountMarkedResponse && setAmountMarkedResponse((previousValue: any) => previousValue - 1);
-		}
+	// 	if(e.target.checked) {
+	// 		setAmountMarkedResponse && setAmountMarkedResponse((previousValue: any) => previousValue + 1);
+	// 	} else{
+	// 		setAmountMarkedResponse && setAmountMarkedResponse((previousValue: any) => previousValue - 1);
+	// 	}
 
-		refetchListResponseMarked && refetchListResponseMarked();
-	}
+	// 	refetchListResponseMarked && refetchListResponseMarked();
+	// }
 
 	const handleUpdateDescriptionFile = _.debounce(async (e: any) => {
 		await updateFileAsync({
@@ -116,6 +117,9 @@ export const RelatedResponseItem: FC<Props> = ({
 			const newImages: any[] = [];
 
 			if(!files || !files.length) return;
+
+			const validation = await validateFiles(files);
+  			if(validation.error) return toast.warn(validation.message);
 
 			for (const [, file] of Object.entries(files)) {
 				const { _id, nameOrg, path, mimeType, createAt } = await addFileToUpload({
@@ -163,12 +167,14 @@ export const RelatedResponseItem: FC<Props> = ({
 
 			toast.success('Thêm file thành công');
 		} catch (error) {
-			console.error(error);
+			captureException(error);
 			if(error instanceof Error) {
 				toast.error(error.message)
 			}
 		}
 	}, [])
+
+	const toggleExpand = () => setIsExpand(!isExpand);
 
 	return (
 		<>
@@ -180,19 +186,19 @@ export const RelatedResponseItem: FC<Props> = ({
 					onChange={handleChangeUpload}
 				/>
 			) : ''}
-				<div className={
+			<div className={
 				classNames("flex",
 					isHighlight
 						? 'bg-blue-500 shadow-lg bg-opacity-50 scale-110 p-3 transition ease-in-out delay-150 duration-300'
 						: 'animate-[wiggle_1s_ease-in-out_infinite]'
 				)
 			} ref={divRef}>
-				<img src={response.author?.image ? `${process.env.REACT_APP_URL_S3_USER}/${response.author?.image}` : HumanAvatar} alt="Avatar" className="w-[44px] h-[44px]" />
+				<img src={response.author?.image ? `${process.env.REACT_APP_URL_S3_USER}/${response.author?.image}` : HumanAvatar} alt="Avatar" className="w-[44px] h-[44px] cursor-pointer" onClick={toggleExpand} />
 				<div className="w-full ml-5">
 					<div className="flex justify-between">
-						<div>
+						<div onClick={toggleExpand} className="cursor-pointer">
 							<p className="text-[14px] font-bold">{response.author?.bizfullname}</p>
-							{expanded && (
+							{(expanded || isExpand) && (
 								<p className="text-[13px] text-primary-gray pb-5">
 									{response.author?.position?.name}
 								</p>
@@ -202,12 +208,12 @@ export const RelatedResponseItem: FC<Props> = ({
 							<span className="text-[13px] text-primary-gray">
 								{moment(response.createAt).format('HH:mm DD/MM/YYYY')} ({moment(response.createAt).fromNow()})
 							</span>
-							<input type="checkbox" className="cbs-checkbox" defaultChecked={response.official} onChange={handleMarkChange} />
+							{/* <input type="checkbox" className="cbs-checkbox" defaultChecked={response.official} onChange={handleMarkChange} /> */}
 							{author?._id === response.author._id ? (
 								<button
-									className={`${expanded ? "h-10 hover:bg-lighter-gray" : "pl-3"
+									className={`${(expanded || isExpand) ? "h-10 hover:bg-lighter-gray" : "pl-3"
 										} text-[13px] w-10 flex justify-center items-center rounded-full`}
-									onClick={e=>inputRef.current?.click()}
+									onClick={() => inputRef.current?.click()}
 								>
 									<img src='/images/common/icon-upload-file.png' alt='Icon upload file' />
 								</button>
@@ -216,7 +222,7 @@ export const RelatedResponseItem: FC<Props> = ({
 					</div>
 
 					{/* Content */}
-					<div className={`${expanded ? "" : "max-w-[632px] truncate"}`}>
+					<div className={`${(expanded || isExpand) ? "" : "max-w-[632px] truncate"}`}>
 						<span
 							className="text-[13px] whitespace-normal break-words"
                             dangerouslySetInnerHTML={{
@@ -226,7 +232,7 @@ export const RelatedResponseItem: FC<Props> = ({
 					</div>
 
 					{/* File */}
-					{expanded && (
+					{(expanded || isExpand) && (
 						<div>
 							{(responseFiles.files && responseFiles.files.length) ? responseFiles.files.map(file => (
 								<div className="flex w-full my-2" key={file._id}>
@@ -300,7 +306,7 @@ export const RelatedResponseItem: FC<Props> = ({
 											<button className="w-1/3 relative" key={file._id} onClick={() => onClickImage && onClickImage(responseFiles.images || [], index)}>
 												<div className="pb-[100%]">
 													<div className="absolute inset-0">
-														<img src={file.path ? `${process.env.REACT_APP_URL_S3}${file.path}` : TestImage} className="w-full h-full object-cover" alt="test" />
+														<img src={file.path ? `${process.env.REACT_APP_URL_S3}${file.path}` : TestImage} className="w-full h-full object-cover" alt={file.nameOrg} />
 													</div>
 												</div>
 											</button>
@@ -313,7 +319,7 @@ export const RelatedResponseItem: FC<Props> = ({
 												<img
 													src={file.path ? `${process.env.REACT_APP_URL_S3}${file.path}` : TestImage}
 													className="absolute top-0 left-0 w-full h-full z-0 object-cover opacity-40"
-													alt="test"
+													alt={file.nameOrg}
 												/>
 												<div className="relative z-6">
 													<p className="text-4x-large text-white">+{responseFiles.images && responseFiles.images.length - 2}</p>

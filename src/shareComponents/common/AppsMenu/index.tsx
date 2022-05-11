@@ -12,11 +12,10 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import { useGetListAppOfUser } from "services/hooks/auth/usePermissions";
 
 export const APP_INFO = AppInfo;
-
 export const AppsMenu: FC = () => {
   const { listAppOfUser, refetchAppUsers } = useGetListAppOfUser();
   const { user } = useAuth();
-
+  
   useEffect(() => {
     if (API.defaults.headers.Authorization) {
       refetchAppUsers();

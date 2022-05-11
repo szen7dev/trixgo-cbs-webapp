@@ -3,7 +3,7 @@ import { UIEvent, FC, useState, useCallback, ChangeEvent, useEffect } from "reac
 import cn from "classnames";
 import debounce from "lodash/debounce";
 import { toast } from "react-toastify";
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useHistory } from 'react-router-dom';
 
 /*=====2.CSS=====*/
 import styles from "views/support/styles/support.module.css";
@@ -12,20 +12,28 @@ import styles from "views/support/styles/support.module.css";
 import DeleteIcon from "assets/images/icons8-remove.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
-import { SearchInput, ModalConfirm } from "shareComponents/common";
+import { SearchInput, ModalConfirm, Loader } from "shareComponents/common";
+import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
+import { AccessingUsers } from "../../sharedComponents/common";
+
 import RowTableInsertInline from "./components/RowTableInsertInline";
 import RowTableUpdateInline from "./components/RowTableUpdateInline";
+import RowTableView from "./components/RowTableView";
+import ModalShare from "./components/ModalShare";
 
 /*=====5.TYPINGS=====*/
 
 /*=====6.HOOKS/APIS=====*/
 import { useModal } from "services/hooks/useModal";
+import { useAuth } from "services/hooks/auth/useAuth";
 import { useContract } from "services/hooks/items/useContract";
 import { useCashFlowPlan } from "services/hooks/financial/useCashFlow";
 import CashFlowPlan from "typings/financial/cashFlowPlan";
+import { User } from "typings/user";
 
 export const CashFlowDetailPage: FC = () => {
-	const { cashFlowId } = useParams<{ cashFlowId: string }>();
+    const history = useHistory();
+    const { cashFlowId } = useParams<{ cashFlowId: string }>();
     const { closeModal, openModal } = useModal();
 
     const [showRowInsert, setShowRowInsert] = useState(true);
@@ -34,19 +42,53 @@ export const CashFlowDetailPage: FC = () => {
     const [itemsChecked, setItemsChecked] = useState<string[]>([]);
     const [dataCashFlow, setDataCashFlow] = useState<CashFlowPlan.CashFlowPlan[]>([]);
 
+    const [permissions, setPermissions] = useState<{
+        usersShared: User[];
+        onlyView: boolean;
+        hasPermissionCreateUpdate: boolean;
+        hasPermissionDelete: boolean;
+        hasPermissionShare: boolean;
+    }>({
+        usersShared: [],
+        onlyView: true,
+        hasPermissionCreateUpdate: false,
+        hasPermissionDelete: false,
+        hasPermissionShare: false,
+    });
+
+    const [modalShare, setModalShare] = useState<{ isShow: boolean, users: User[] | undefined, modalType: 'members' | 'admins' }>({
+        isShow: false,
+        users: [],
+        modalType: 'members'
+    });
+
+    const { user } = useAuth();
+
+    const { info: cashFlowInfo, isLoadingInfo, refetchInfo } = useCashFlowPlan({
+        params: {
+            cashFlowID: cashFlowId,
+            populates: JSON.stringify({
+                path: 'admins members userCreate',
+                select: '_id bizfullname image'
+            })
+        },
+        isFetchInfo: true
+    })
+
     const {
         insertAsync,
         updateAsync,
         deleteManyAsync,
         list: listCashFlowPlans,
+        isLoading: isLoadingCashFlowPlans,
         hasNextPage,
         refetch,
         fetchNextPage,
         totalRecord
     } = useCashFlowPlan({
-        params: { 
+        params: {
             parentID: cashFlowId,
-            keyword, 
+            keyword,
             sortKey: JSON.stringify(['createAt__1', '_id__1'])
         },
         isFetchList: true
@@ -62,10 +104,50 @@ export const CashFlowDetailPage: FC = () => {
     })
 
     useEffect(() => {
-        if(!listCashFlowPlans.length) return;
+        if(!listCashFlowPlans || isLoadingCashFlowPlans) return;
 
         setDataCashFlow(listCashFlowPlans);
-    }, [listCashFlowPlans.length])
+    }, [JSON.stringify(listCashFlowPlans)])
+
+    useEffect(() => {
+        if(!cashFlowInfo || !user || isLoadingInfo) return;
+
+        const usersShared = [...cashFlowInfo?.admins, ...cashFlowInfo?.members];
+        const adminsID    = cashFlowInfo.admins.map(item => item._id);
+        const membersID   = cashFlowInfo.members.map(item => item._id);
+
+        const usersIDShared = [
+            ...adminsID,
+            ...membersID,
+        ];
+        let authorID = '';
+
+        if(typeof cashFlowInfo.userCreate === 'string') {
+            authorID = cashFlowInfo.userCreate;
+        } else{
+            authorID = cashFlowInfo.userCreate?._id;
+        }
+
+        usersIDShared.push(authorID);
+
+        if(!usersIDShared.includes(user._id)) {
+            toast.warn('Bạn đang không có quyền truy cập');
+            history.push('/financial/cashflow');
+        }
+
+        const hasPermissionCreateUpdate = adminsID.includes(user._id) || authorID === user._id;
+        const hasPermissionShare = authorID === user._id;
+        const hasPermissionDelete = authorID === user._id;
+        const onlyView = membersID.includes(user._id) && !adminsID.includes(user._id) && authorID !== user._id;
+
+        setPermissions({
+            usersShared,
+            onlyView,
+            hasPermissionCreateUpdate,
+            hasPermissionDelete,
+            hasPermissionShare
+        })
+    }, [JSON.stringify(user), JSON.stringify(cashFlowInfo)])
 
     const onChangeSearch = debounce((event: ChangeEvent<HTMLInputElement>) => {
         setKeyword(event.target.value);
@@ -131,6 +213,10 @@ export const CashFlowDetailPage: FC = () => {
     }
 
     const handleInsert = async (values: any) => {
+        if(!permissions.hasPermissionCreateUpdate) {
+            return toast.warn('Bạn không có quyền tạo nội dung này');
+        }
+
         try {
             setShowRowInsert(false);
 
@@ -166,6 +252,10 @@ export const CashFlowDetailPage: FC = () => {
     }
 
     const handleUpdate = async (values: any, callback: (response: any) => void) => {
+        if(!permissions.hasPermissionCreateUpdate) {
+            return toast.warn('Bạn không có quyền cập nhật nội dung này');
+        }
+
         try {
             const { error, data } = await updateAsync(values);
 
@@ -187,6 +277,11 @@ export const CashFlowDetailPage: FC = () => {
         }
     }
 
+    const toggleModalShare = (modalType: 'admins' | 'members', users: User[] | undefined) =>
+        setModalShare({ isShow: !modalShare.isShow, users, modalType });
+
+    if(isLoadingCashFlowPlans || isLoadingInfo || !cashFlowInfo || !user) return <Loader className="border-primary" />
+
     return (
         <main className="relative h-full overflow-auto">
             <header className="sticky top-0 bg-primary-light z-10">
@@ -204,7 +299,7 @@ export const CashFlowDetailPage: FC = () => {
                         />
 
                         {/* Xóa 1 hoặc nhiều */}
-                        {itemsChecked.length ? (
+                        {(itemsChecked.length && permissions.hasPermissionDelete) ? (
                             <button
                                 onClick={() =>
                                     openModal(
@@ -221,22 +316,35 @@ export const CashFlowDetailPage: FC = () => {
                             </button>
                         ) : ''}
                     </div>
+                    <div className={"flex-1 flex items-center justify-end"}>
+                        <button
+                            className="text-gray-400 mr-2"
+                            onClick={() => toggleModalShare('admins', cashFlowInfo.admins)}
+                        >Admin ({cashFlowInfo.admins?.length})</button> |
+                        <button
+                            className="text-gray-400 mr-2 ml-2"
+                            onClick={() => toggleModalShare('members', cashFlowInfo.members)}
+                        >Thành viên ({cashFlowInfo.members?.length})</button>
+                        <AccessingUsers users={permissions.usersShared} />
+                    </div>
                 </div>
             </header>
 
             <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
                 <thead className="bg-cbs-table-header h-[38px] border-b border-primary-border">
                     <tr className="text-left text-sm">
-                        <th className={cn("py-1 text-center", styles.theadInput)}>
-                            <div className="border-r-2 border-gray-300 flex items-center justify-center">
-                                <input
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    checked={getStateCheckboxAll()}
-                                    onChange={handleChangeCheckboxAll}
-                                />
-                            </div>
-                        </th>
+                        {!permissions.onlyView ? (
+                            <th className={cn("py-1 text-center", styles.theadInput)}>
+                                <div className="border-r-2 border-gray-300 flex items-center justify-center">
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        checked={getStateCheckboxAll()}
+                                        onChange={handleChangeCheckboxAll}
+                                    />
+                                </div>
+                            </th>
+                        ) : <></>}
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Nội dung
@@ -286,19 +394,26 @@ export const CashFlowDetailPage: FC = () => {
                 </thead>
 
                 <tbody>
-                    {dataCashFlow.length ? dataCashFlow.map(item => (
-                        <RowTableUpdateInline
-                            key={item._id}
-                            contracts={listContracts}
-                            cashFlow={item}
-                            itemsChecked={itemsChecked}
-                            onUpdate={handleUpdate}
-                            onScrollContract={handleScroll}
-                            onChangeCheckbox={handleChangeCheckbox}
-                            onSearchContract={onChangeSearchContract}
-                        />
-                    )) : <></>}
-                    {showRowInsert && <RowTableInsertInline onInsert={handleInsert} />}
+                    {(dataCashFlow && dataCashFlow.length) ? dataCashFlow.map(item => {
+                        if(permissions.onlyView) {
+                            return <RowTableView key={item._id} cashFlow={item} />
+                        }
+
+                        return (
+                            <RowTableUpdateInline
+                                key={item._id}
+                                contracts={listContracts}
+                                cashFlow={item}
+                                itemsChecked={itemsChecked}
+                                onUpdate={handleUpdate}
+                                onScrollContract={handleScroll}
+                                onChangeCheckbox={handleChangeCheckbox}
+                                onSearchContract={onChangeSearchContract}
+                            />
+                        )
+                    }) : <></>}
+
+                    {(showRowInsert && permissions.hasPermissionCreateUpdate) && <RowTableInsertInline onInsert={handleInsert} />}
                 </tbody>
             </table>
 
@@ -311,6 +426,21 @@ export const CashFlowDetailPage: FC = () => {
                     </button>
                 </div>
             )}
+
+            <ModalLarge
+                show={modalShare.isShow}
+                toggle={() => setModalShare(prev => ({ ...prev, isShow: !modalShare.isShow }))}
+                className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[600px] rounded-cbs-md"
+            >
+                <ModalShare
+                    toggle={() => setModalShare(prev => ({ ...prev, isShow: !modalShare.isShow }))}
+                    refetch={refetchInfo}
+                    cashFlowID={cashFlowId}
+                    users={modalShare.users}
+                    modalType={modalShare.modalType}
+                    hasPermission={permissions.hasPermissionShare}
+                />
+            </ModalLarge>
         </main>
     );
 };

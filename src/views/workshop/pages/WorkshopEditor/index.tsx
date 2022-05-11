@@ -1,5 +1,5 @@
 /* eslint-disable no-var */
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";

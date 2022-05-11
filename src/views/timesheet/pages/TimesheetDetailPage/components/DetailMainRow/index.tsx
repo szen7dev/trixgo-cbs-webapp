@@ -1,13 +1,13 @@
-import React, { FC, useRef } from "react";
+import { FC } from "react";
 import { map as _map } from "lodash";
 
 import { Loader } from "shareComponents/common/Loader";
 
 // import { useRightClickMenu } from "services/hooks/useRightClickMenu";
 
-import MenuMainRow from "./MenuMainRow";
+// import MenuMainRow from "./MenuMainRow";
 import { CollapseButton } from "views/timesheet/shareComponents/common";
-import DetailChildRow from "../DetailChildRow";
+import { DetailChildRow } from "../DetailChildRow";
 
 import type { TimeSheetChild, TimeSheetParent } from "typings/time-sheet";
 
@@ -16,13 +16,15 @@ type Props = {
   listTimeSheetChild: TimeSheetChild[];
   onUpdatedTimeSheetChild: (values: any) => void;
   isFetchTimeSheetChild: boolean;
+  hasPermission: boolean;
 };
 
-const DetailMainRow: FC<Props> = ({
+export const DetailMainRow: FC<Props> = ({
   timeSheetParentInfo,
   listTimeSheetChild,
   onUpdatedTimeSheetChild,
   isFetchTimeSheetChild,
+  hasPermission
 }) => {
   // const { closeRightClick, openRightClick } = useRightClickMenu();
 
@@ -131,11 +133,10 @@ const DetailMainRow: FC<Props> = ({
           collapsed={false}
           rowData={childRow}
           index={index}
+          hasPermission={hasPermission}
           onUpdatedTimeSheetChild={onUpdatedTimeSheetChild}
         />
       ))}
     </>
   );
 };
-
-export default DetailMainRow;

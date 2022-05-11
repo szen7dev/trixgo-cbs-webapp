@@ -1,5 +1,7 @@
 import { APIResponse } from "./apis/response";
-import { Company } from "./common";
+import { Company, Group, Contract, FileProps, QueryParams } from "./common";
+import { Project } from "./items/project";
+import { Task } from "./task";
 import { User } from "./user";
 
 /**
@@ -118,12 +120,33 @@ export type listTotalAnalysisResponse = APIResponse & {
  * ============================ ************* ===============================
  */
 
+export type PcmFile = {
+  _id: string,
+  name: string,
+  nameOrg: string,
+  path: string,
+  size: number,
+  description: string,
+  conditionPin: any,
+  company: Company,
+  project: Project,
+  task: Task,
+  author: User,
+  type: number,
+  createAt: string
+}
+
 export type ListFilesPcmPayload = {
+  isFileOfProject?: boolean,
+  isSearchFile?: boolean,
   contractID?: string,
   companyID?: string,
   projectID?: string,
   groupID?: string,
   taskID?: string,
+  authorID?: string,
+  fromDate?: string,
+  toDate?: string,
   type?: number,
   keyword?: string,
   limit?: string,
@@ -169,9 +192,68 @@ export type FilesPcmGroupByContractResponse = {
 }
 
 /**
- * ============================ ********** ===============================
- * ============================ 	 OTHER   ===============================
- * ============================ ********** ===============================
+ * ============================ **************** ===============================
+ * ============================ 	 PCM COMMENT   ===============================
+ * ============================ **************** ===============================
+ */
+
+/**
+ * SCHEMA
+ */
+export interface PcmComment {
+  _id: string;
+  content: string;
+  type: number;
+  subType: number;
+  official: boolean;
+  files: any[];
+  images: any[];
+  project: Project | string;
+  group: Group | string;
+  contract: Contract | string;
+  task: Task | string;
+  parent: PcmComment | string;
+  lastestReplyID: PcmComment | string;
+  author: User | string;
+  userUpdate: User | string;
+  amountCommentReply: number;
+  amountReaction: number;
+  modifyAt: string;
+  createAt: string;
+}
+
+/**
+ * PARAMS LIST
+ */
+export type PcmCommentListParams = QueryParams & {
+  taskID?: string;
+  type?: number;
+  official?: string;
+  parentID?: string;
+  commentID?: string;
+  contractID?: string;
+  projectID?: string;
+  isHaveImage?: boolean;
+  sortKey?: string;
+}
+
+/**
+* RESPONSE LIST
+*/
+export type PcmCommentListResponse = APIResponse & {
+  data: {
+      listRecords: PcmComment[];
+      limit: number;
+      totalRecord: number;
+      totalPage: number;
+      nextCursor: string | null;
+  }
+}
+
+/**
+ * ============================ *********** ===============================
+ * ============================ 	 CUSTOM   ===============================
+ * ============================ *********** ===============================
  */
 
 export type SendMailTaskPayload = {

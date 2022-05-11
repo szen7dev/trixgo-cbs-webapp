@@ -7,7 +7,7 @@ import { Form, Formik, ErrorMessage } from 'formik';
 import { string, object } from 'yup';
 import { toArray } from 'lodash';
 import { toast } from "react-toastify";
-// import { Editor } from '@tinymce/tinymce-react';
+import { captureException } from "@sentry/react";
 import cn from "classnames";
 
 /**
@@ -23,6 +23,7 @@ import {
 } from 'views/media/shareComponents/common';
 import { PostFile, PostImage } from 'shareComponents/common';
 import { typeTextSelected } from 'views/media/utils';
+import { validateFiles } from 'validation/file';
 import { APP_KEY } from 'utils/constants';
 
 import ChevronDownIcon from 'assets/icons/ChevronDown';
@@ -58,7 +59,7 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 			removeUploadedImage,
 			removeUploadedFile,
 		}] = useUploadFile({ files, images });
-	
+
 	const { user } = useAuth();
 	const { refetchListMedias: refetchListMediasCompany } = useMedia({
 		key: `list_medias__company`,
@@ -105,6 +106,9 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 
 	const handleSetFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (!event.target.files || !event.target.files.length) return;
+
+		const { error, message } = await validateFiles(event.target.files);
+		if(error) return toast.warn(message);
 
 		// Modify file to with key with each file;
 		const [files, images] = modifyUploadedFilesV2({
@@ -193,6 +197,7 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 					break;
 			}
 		} catch (error: unknown) {
+			captureException(error);
 			if (typeof error === "string") {
 				toast.error(error);
 			} else if (error instanceof Error) {

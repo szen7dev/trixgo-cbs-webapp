@@ -1,9 +1,10 @@
-import React, { FC, useEffect, useRef, useState, useContext } from 'react';
+import React, { FC, ClipboardEvent, useEffect, useRef, useState, useContext } from 'react';
 
 import Axios from 'axios';
 import classNames from 'classnames';
 import { toArray } from 'lodash';
 import { toast } from "react-toastify";
+import { captureException } from "@sentry/react";
 
 import iconFace from 'assets/images/icons8-grinning-face-64.png';
 import iconAttach from 'assets/images/icons8-attach-50.png';
@@ -11,6 +12,7 @@ import iconEmailSend from 'assets/images/icon-email-send.png';
 import { PostImage, PostFile } from 'shareComponents/common';
 import { nl2p } from 'utils';
 import { APP_KEY } from 'utils/constants';
+import { validateFiles } from 'validation/file';
 
 import CommentContext from 'views/pcm/contexts/comment/comment.context';
 import { FileProps, FilePropsUpload } from 'typings/common';
@@ -137,13 +139,16 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 		return source;
 	}
 
-	const handleAttachFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
-		if (!event.target.files) return;
+	const handleSetFiles = async (filesSelected: FileList | null) => {
+		if (!filesSelected) return;
+
+		const { error, message } = await validateFiles(filesSelected);
+		if(error) return toast.warn(message);
 
 		const [files, images] = modifyUploadedFilesV2({
 			imgLastKey: Object.keys(uploads.images).length || null,
 			fileLastKey: Object.keys(uploads.files).length || null,
-		}, event.target.files);
+		}, filesSelected);
 
 		setUploadImage(images);
 		setUploadFile(files);
@@ -180,6 +185,17 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 		}
 	}
 
+	const handlePasteFile = (event: ClipboardEvent<HTMLTextAreaElement>) => {
+		event.preventDefault();
+
+		if(event.clipboardData?.files?.length) {
+		  return handleSetFiles(event.clipboardData.files)
+		}
+
+		const text = event.clipboardData.getData('text/plain');
+		text && window.document.execCommand('insertText', false, text);
+	}
+
 	const handleSubmit = async () => {
 		let images: string[] = [];
 		let files: string[] = [];
@@ -193,7 +209,7 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 			_id && (files = [...files, _id]);
 		}
 
-		if(!files.length && !images.length && !text || isUploading) return;
+		if((!files.length && !images.length && !text) || isUploading) return;
 
 		const dataInsertOrUpdate: CommentPayload = {
 			taskID,
@@ -209,10 +225,10 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 
 		try {
 			if (defaultValue) {
-				const { error, data, message } = await updateCommentAsync(dataInsertOrUpdate);
+				const { error, data } = await updateCommentAsync(dataInsertOrUpdate);
 
-				if (error) {
-					return toast.warning(message);
+				if(error) {
+					return toast.warn(data?.message || 'Cập nhật bình luận thất bại')
 				}
 
 				method = 'UPDATE';
@@ -226,10 +242,10 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 					}
 				});
 			} else {
-				const { error, data, message } = await createCommentAsync(dataInsertOrUpdate);
+				const { error, data } = await createCommentAsync(dataInsertOrUpdate);
 
-				if (error) {
-					return toast.warning(message);
+				if(error) {
+					return toast.warn(data?.message || 'Thêm bình luận thất bại')
 				}
 
 				method = 'INSERT';
@@ -252,6 +268,7 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 				receivers: dataAfterInsertOrUpdate.receivers
 			});
 		} catch (error) {
+			captureException(error);
 			if (typeof error === "string") {
 				toast.error(error);
 			} else if (error instanceof Error) {
@@ -296,30 +313,70 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 		}
 	}
 
+	useEffect(() => {
+		const dropZone = document.getElementById("input-comment");
+
+		if (dropZone) {
+			dropZone.addEventListener('dragover', function(e) {
+				e.stopPropagation();
+				e.preventDefault();
+			});
+
+		  	// Get file data on drop
+			dropZone.addEventListener('drop', function(e) {
+				e.stopPropagation();
+				e.preventDefault();
+				if (e.dataTransfer) {
+					handleSetFiles(e.dataTransfer.files);
+				}
+			});
+		}
+	}, [])
+
 	return (
 		<div {...props}>
 			<div
 				className={
-					classNames("flex flex-wrap",
+					classNames("flex flex-wrap max-h-44 w-full pr-4 pl-3.5 py-2 custom-scroll overflow-x-hidden overflow-y-auto",
 						fileContainerClassName,
 						(!Object.keys(uploads.images).length && !Object.keys(uploads.files).length) ? "h-0" : "")
 				}
 				ref={refDivFile}
 			>
-				<div className={classNames(Object.keys(uploads.files).length ? "max-h-44 w-full pr-4 pl-3.5 py-2":'hidden','custom-scroll overflow-x-hidden overflow-y-auto')}>
+				<PostFile
+					files={toArray(uploads.files)}
+					onRemove={handleRemoveUpload}
+					className="text-black w-full"
+				/>
+				<PostImage
+					images={toArray(uploads.images)}
+					onRemove={handleRemoveUpload}
+					className="post__files-row pt-5 text-black gap-5 flex-wrap"
+				/>
+				{/* <div className={
+					classNames('custom-scroll overflow-x-hidden overflow-y-auto',
+						Object.keys(uploads.files).length
+						? "max-h-44 w-full pr-4 pl-3.5 py-2"
+						: "hidden",
+				)}>
 					<PostFile
 						files={toArray(uploads.files)}
 						onRemove={handleRemoveUpload}
 						className="text-black w-full"
 					/>
 				</div>
-				<div className={classNames(Object.keys(uploads.images).length ? 'max-h-44 w-full pl-3.5':'hidden','custom-scroll overflow-x-hidden overflow-y-auto pb-2.5')}>
+				<div className={
+					classNames('custom-scroll overflow-x-hidden overflow-y-auto pb-2.5',
+						Object.keys(uploads.images).length
+						? 'max-h-44 w-full pl-3.5'
+						: 'hidden'
+				)}>
 					<PostImage
 						images={toArray(uploads.images)}
 						onRemove={handleRemoveUpload}
 						className="post__files-row pt-5 text-black gap-5 flex-wrap"
 					/>
-				</div>
+				</div> */}
 			</div>
 			<div className={inputContainerClassName}>
 				<div className="flex self-end h-9 w-9">
@@ -328,19 +385,15 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 					</button>
 				</div>
 				<div className="react__replay overflow-hidden flex-1 bg-gray-100 border border-gray-300 rounded-2xl mx-2">
-					<div className="flex px-5 py-1.5 h-full overflow-y-auto">
+					<div className="flex px-5 py-1.5 h-full overflow-y-auto" id='input-comment'>
 						<span
 							contentEditable
 							placeholder='Trả lời...'
 							className="custom-scroll relative block outline-none break-words text-[15px] leading-4 cursor-text flex-grow overflow-x-hidden py-1"
-							onPaste={e => {
-								e.preventDefault();
-								const text = e.clipboardData.getData('text/plain');
-								window.document.execCommand('insertText', false, text);
-							}}
 							ref={refInputComment}
 							style={{ color: 'black' }}
 							suppressContentEditableWarning={true}
+							onPaste={handlePasteFile}
 							onKeyUp={handleKeyUpInput}
 							onInput={e =>
 								onTextChange
@@ -357,16 +410,16 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 								type="file"
 								name="files"
 								id="file"
-								// Validate input file
 								accept="*"
 								multiple
 								className="hidden"
-								onChange={handleAttachFiles} />
+								onChange={e => handleSetFiles(e.target.files)}
+							/>
 						</label>
 					</div>
 				</div>
 				<div className="flex self-end">
-					<button 
+					<button
 						className={classNames('flex items-center justify-center h-9 w-9', {
 							'disabled:opacity-60': isUploading
 						})}

@@ -2,7 +2,7 @@ import { Contract } from 'typings/cmcs';
 import { Account } from 'typings/items/account';
 import { Contact } from 'typings/items/contact';
 import { User } from 'typings/user';
-import type { QueryParam, APIResponse } from '../common';
+import type { QueryParam, APIResponse, Company } from '../common';
 
 /**
  * SCHEMA
@@ -19,9 +19,11 @@ export type CashBook = {
     openingBalance: number;
     arising: number;
     closingBalance: number;
+    company: Company | string;
     contract: Contract;
     customer: Contact;
     account: Account;
+    admins: User[];
     members: User[];
     userCreate: User;
     modifyAt: string;

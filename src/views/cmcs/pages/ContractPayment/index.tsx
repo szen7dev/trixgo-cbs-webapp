@@ -8,7 +8,6 @@ import moment from "moment";
 import { DATE_FORMAT, CONTRACT_IPC_TYPES } from "apis/localdb/index";
 
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
-
 import { SearchInput, Paginate } from "shareComponents/common";
 import { ContractPaymentModal, DropdownFilterButton, ActionMenuTopBar } from "views/cmcs/shareComponents/common";
 import { formatNumberMoney } from "utils/cmcs"

@@ -2,6 +2,7 @@ import { useInfiniteQuery, useMutation } from "react-query";
 
 import { UserSystemRepository } from 'apis/users';
 import type { QueryParam, UserSystemProps, UserSystemPayload, ListUserInProjectPayload } from 'typings/users/userSystem';
+import { User } from "typings/user";
 
 interface UseUserSystem {
     loading: boolean;
@@ -32,7 +33,13 @@ export const useUserSystem = (params?: QueryParam, isFetch?: boolean): UseUserSy
             UserSystemRepository.deleteUserSystem(usersID)
         );
 
-    const result = useInfiniteQuery(
+    const {
+        isLoading,
+        data,
+        refetch,
+        fetchNextPage,
+        hasNextPage
+    } = useInfiniteQuery(
         ['list_users_system', params]
         , async ({ pageParam }: any) =>
         UserSystemRepository.listUsersSystem({
@@ -45,14 +52,6 @@ export const useUserSystem = (params?: QueryParam, isFetch?: boolean): UseUserSy
         refetchOnWindowFocus: false,
         enabled: isFetch ?? false
     });
-
-    const {
-        isLoading,
-        data,
-        refetch,
-        fetchNextPage,
-        hasNextPage
-    } = result;
 
     const listUsers = []
         .concat(...(data?.pages || [])

@@ -1,20 +1,7 @@
 import { APIResponse } from "./apis/response";
 import { User } from "typings/user";
-import type { Company, FileProps } from "typings/common";
+import type { Company, FileProps, QueryParams, Populate } from "typings/common";
 import { Contract } from "./cmcs";
-
-export type ListTaskPayload = {
-  keyword?: string,
-  groupID?:string,
-  lastestID?: string;
-  limit?: number;
-  populates?: string;
-  select?: string;
-  type?: numer;
-  typeStatus?: string;
-  statusNe?: string,
-  status?: string,
-};
 
 export type Assignee = User;
 export type Author = User;
@@ -33,7 +20,8 @@ export type Project = {
   _id: string;
   name: string;
   sign: string;
-  company: string,
+  address: string;
+  company: string | Company,
   startTime: string
 };
 
@@ -41,6 +29,7 @@ export type Group = {
   _id: string;
   name: string;
   sign: string;
+  members: User[];
 };
 
 export type Field = {
@@ -53,6 +42,7 @@ export type Field = {
 export type Task = {
   _id: string;
   name: string;
+  sign: string;
   status: number;
   expiredTime: string;
   typeStatus: number;
@@ -70,16 +60,20 @@ export type Task = {
   subType: number,
   type: number,
   related: Array<User>;
-  signatures: {
-    author: User,
+  signatures: Array<{
+    _id: string;
+    author: User;
     createAt: string
-  };
+  }>;
+  actualStartTime: string;
   actualFinishTime: string;
   amountResponse: number;
   amountMarkedResponse: number;
   amountChecklist: number;
+  amountComment: number;
   amountFinishedChecklist: number;
   createAt: string
+  author: Author,
 };
 
 export interface addTaskPayload {
@@ -103,7 +97,9 @@ export interface updateTaskPayload {
   name?: string;
   status?: number;
   priority?: number;
-  expiredTime?: string;
+  draft?: number;
+  milestone?: number;
+  actualFinishTime?: string;
   isAddSignature?: boolean;
   flags?: Array<string>;
   flagsRemoves?: Array<string>;
@@ -118,6 +114,25 @@ export interface addTaskResponse {
   message: string;
 }
 
+export type TaskListParams = QueryParams & {
+  keyword?: string;
+  typeStatus?: string;
+  statusNe?: string;
+  groupID?: string;
+  companyOfAssignee?: string;
+  isPassPermision?: string;
+  projectID?: string;
+  milestone?: string;
+  type?: number;
+  status?: string;
+}
+
+export type TaskInfoParams = {
+  taskID?: string;
+  select?: string;
+  populates?: Populate | string;
+}
+
 export type ListTaskResponse = APIResponse & {
   data: {
     listRecords: Array<Task>;
@@ -129,8 +144,22 @@ export type ListTaskResponse = APIResponse & {
 };
 
 export type AddRelationUserPayload = {
-  taskID: string,
+  taskID: string;
   related?: Array<string>;
+};
+
+export type CopyTaskPayload = {
+  taskID: string;
+};
+
+export type MoveTaskToParentPayload = {
+  parentID: string;
+  taskID: string;
+};
+
+export type MoveTaskToGroupPayload = {
+  groupID: string;
+  taskID: string;
 };
 
 /**
@@ -330,6 +359,7 @@ export type ListCommentsPayload = {
   companyID?: string;
   contractID?: string;
   parentID?: string;
+  isHaveImage?: boolean;
   select?: string;
   populates?: string;
 };

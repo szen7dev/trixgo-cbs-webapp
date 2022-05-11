@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Context, createContext, Dispatch as ReactDispatch, FC, Reducer, useEffect, useReducer } from 'react';
 
-// Typescript 
 import { Dispatch, Effect, ReducerActionsProps, IR, DispatchProps, ProviderState } from 'typings/ppt/reducer';
 
 function createDataContext<R extends Reducer<any, any>, A extends (dispatch: ReactDispatch<DispatchProps>) => any, S>(
@@ -21,7 +19,6 @@ function createDataContext<R extends Reducer<any, any>, A extends (dispatch: Rea
 
 		useEffect(() => {
 			if (effect) effect(boundActions);
-			// eslint-disable-next-line react-hooks/exhaustive-deps
 		}, []);
 
 		return (

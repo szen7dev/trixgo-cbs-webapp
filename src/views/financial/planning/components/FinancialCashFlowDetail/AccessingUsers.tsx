@@ -17,7 +17,7 @@ const AccessingUsers:FC<Props> = ({users}) => {
         <div className={"flex items-center"}>
             {
                 _map(usersOnTop4, (user) => (
-                    <img key={user._id} src={user.avatar} alt="Thumbnail" className="w-8 h-8 rounded-full border-2 border-pink-600 mr-1" />
+                    <img title="Nguyễn Văn A" key={user._id} src={user.avatar} alt="Thumbnail" className="w-8 h-8 rounded-full border-2 border-pink-600 mr-1" />
                 ))
             }
             {

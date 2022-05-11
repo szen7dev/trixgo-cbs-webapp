@@ -1,8 +1,14 @@
 import { FC, useCallback, useEffect, useState } from "react";
-import ThreeDotsVertical from "assets/images/icon-3dots-vertical.svg";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import ThreeDotsVertical from "assets/images/icon-3dots-vertical.svg";
 import { SearchInput, Paginate } from "shareComponents/common";
-import { CreateNewTicket, DropdownFilterButton, ActionAccountingGroup } from "views/accounting/shareComponents/common";
+import {
+  CreateNewTicket,
+  DropdownFilterButton,
+  ActionAccountingGroup,
+  FilterDateGroup
+} from "views/accounting/shareComponents/common";
 import { formatNumberMoney } from "utils/cmcs"
 import { useModal } from "services/hooks/useModal";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
@@ -15,11 +21,15 @@ import {
   useUpdateAccountingVoucherMutation,
   useDeleteAccountingVoucherMutation,
 } from "services/hooks/accounting/useAccountingVoucher";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import TriangleDown from "assets/icons/TriangleDown";
 
 import { Popover } from "shareComponents/common";
 import useCheckedList from "services/hooks/ppt/useCheckedList";
+import debounce from "lodash/debounce";
+
+import cn from "classnames";
+import styles from 'views/accounting/styles/styles.module.css';
 
 interface AccountingTicketsPageProps {
   type?: number
@@ -27,10 +37,14 @@ interface AccountingTicketsPageProps {
 
 export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1 }) => {
   const { openModal } = useModal();
+  const { fundaID } = useParams<any>();
   const [pageParam, setPageParam] = useState('');
+  const [inputFilter, setInputFilter] = useState({ fundaID, keyword: '', fromDate: new Date(new Date().getFullYear() - 1, 0, 1), toDate: new Date(new Date().getFullYear(), 11, 31) });
   const [prevCursor, setPrevCursor] = useState([null]);
-  const accountingVoucher = UseAccountingVoucherList(pageParam, type);
-	const { assigned, checkboxRef, checked, handleChangeCheckbox, handleCheckAll } = useCheckedList(accountingVoucher?.listAccountingVoucher || []);
+
+  //  keyword, fundaID, fromDate, endDate
+  const accountingVoucher = UseAccountingVoucherList(pageParam, type, inputFilter);
+  const { assigned, checkboxRef, checked, handleChangeCheckbox, handleCheckAll } = useCheckedList(accountingVoucher?.listAccountingVoucher || []);
 
   const { createAccountingVoucherMutateAsync } = useCreateAccountingVoucherMutation();
   const { updateAccountingVoucherMutateAsync } = useUpdateAccountingVoucherMutation();
@@ -124,18 +138,72 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
     // setPageParam({});
   }, []);
 
+  // Xử lý sự kiện tìm kiếm
+  const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputFilter(() => ({ ...inputFilter, keyword: event.target.value }))
+  }, 500);
+
+  const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: toDate
+    if (input) {
+      setInputFilter(() => ({ ...inputFilter, toDate: date }))
+    } else {
+      setInputFilter(() => ({ ...inputFilter, fromDate: date }))
+    }
+
+  }, []);
+
   return (
     <div className={"relative min-h-full"}>
       <div className={"financial-cashflow-listing-heading flex items-center border-b py-2 px-6"}>
         <div className={"flex items-center flex-1"}>
           <div className={"text-lg"}>Danh sách</div>
-          <SearchInput classNameWrapper={"ml-4"} onChange={event => console.log(event.target.value)} />
+          <SearchInput classNameWrapper={"ml-4"} onChange={onChangeSearch} />
 
-          <DropdownFilterButton
+          {/* <DropdownFilterButton
             onSubmit={handleOnFilter}
             onCancel={handleOnCancelFilter}
             initialValues={{}}
-          />
+          /> */}
+
+          <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
+
+          {/* <div className="relative">
+            <span className={cn(
+              "text-sm mb-2",
+              styles.bgWhiteLight, styles.labelDateSearch
+            )} >Từ ngày</span>
+            <DatePicker
+              selected={fromDate}
+              onChange={(date: Date | null) => setFromDate(date)}
+              dateFormat="dd/MM/yyyy"
+              customInput={
+                <input
+                  type="text"
+                  placeholder="Từ ngày"
+                  className="h-[38px] px-2 border border-primary-border rounded"
+                />
+              }
+            />
+          </div>
+
+          <div className="relative">
+            <span className={cn(
+              "text-sm mb-2",
+              styles.bgWhiteLight, styles.labelDateSearch
+            )} >Đến ngày</span>
+            <DatePicker
+              selected={endDate}
+              onChange={(date: Date | null) => setEndDate(date)}
+              dateFormat="dd/MM/yyyy"
+              customInput={
+                <input
+                  type="text"
+                  placeholder="Đến ngày"
+                  className="h-[38px] px-2 border border-primary-border rounded"
+                />
+              }
+            />
+          </div> */}
         </div>
         <button
           onClick={() =>
@@ -152,91 +220,91 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
           <img alt={"Icon"} src={ThreeDotsVertical} />
         </button>
       </div>
-			<table className="text-black text-medium border-separate space-x-0 space-y-0 w-full" style={{ borderSpacing: 0 }}>
-				<thead className="">
-					<tr className="text-primary-gray whitespace-nowrap align-middle text-left relative z-1">
-						<th className="px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border w-1">
-							<input className="cbs-checkbox" type="checkbox" value="" id="flexCheckDefault" onClick={handleCheckAll} ref={checkboxRef} />
-							<button onClick={e => { e.stopPropagation(); }} className="ml-1.5 align-top">
-								<TriangleDown className='inline-block' />
-							</button>
-						</th>
-						<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-							<span className="pl-2 border-l border-cbs-border">
-								Nội dung
-							</span>
-						</th>
-						<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-							<span className="pl-2 border-l border-cbs-border">
-								Ngày chứng từ
-							</span>
-						</th>
-						<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-							<span className="pl-2 border-l border-cbs-border">
-								Loại phiếu
-							</span>
-						</th>
-						<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-							<span className="pl-2 border-l border-cbs-border">
-								Số hiệu
-							</span>
-						</th>
-						<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
-							<span className="pl-2 border-l border-cbs-border">
-								Mã khách
-							</span>
-						</th>
-						<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
-							<span className="pl-2 border-l border-cbs-border">
-								Hợp đồng
-							</span>
-						</th>
-						<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
-							<span className="pl-2 border-l border-cbs-border">
-								Giá trị/Thành tiền
-							</span>
-						</th>
-						<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
-							<span className="pl-2 border-l border-cbs-border">
-								Ghi chú
-							</span>
-						</th>
-						<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border w-min px-2">
-						</th>
-					</tr>
-				</thead>
-				<tbody className="text-small">
-					{
-						accountingVoucher?.listAccountingVoucher?.map((item: any) => {
-							return (
-								<tr key={item._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
-									<td className="pt-2.5 pb-3 px-4 border-b border-cbs-border text-left">
-										<input className="cbs-checkbox" type="checkbox" checked={Boolean(assigned[item._id])} onChange={e => handleChangeCheckbox(e, item)} />
-									</td>
-									<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border" style={{ maxWidth: '250px' }}>
-										<NavLink to={`/accounting/${VOUCHER_TYPES.find(item => item.value === type)?.slug}/${item._id}`}>
-											<Popover onMouseEnterTooltip={false} tooltip={`${item.name}`} classTooltip="w-[336px] whitespace-normal" >
-												<p className="text-2-line-clamp">{`${item.name}`}</p>
-											</Popover>
-										</NavLink>
-										<p className={"mt-1 text-gray-500"}>{item.userCreate.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}</p>
-									</td>
-									<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
-									<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{VOUCHER_TYPES.find(element => element.value === item.type)?.text}</td>
-									<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.sign}</td>
-									<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.customer.name}</td>
-									<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.contract?.name}</td>
-									<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{formatNumberMoney(item.amount)}</td>
-									<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.note}</td>
-									<td className="pt-2.5 pb-3 px-4 border-b border-cbs-border">
-										<ActionAccountingGroup data={item} handleAction={handleAction} />
-									</td>
-								</tr>
-							)
-						})
-					}
-				</tbody>
-			</table>
+      <table className="text-black text-medium border-separate space-x-0 space-y-0 w-full" style={{ borderSpacing: 0 }}>
+        <thead className="">
+          <tr className="text-primary-gray whitespace-nowrap align-middle text-left relative z-1">
+            <th className="px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border w-1">
+              <input className="cbs-checkbox" type="checkbox" value="" id="flexCheckDefault" onClick={handleCheckAll} ref={checkboxRef} />
+              <button onClick={e => { e.stopPropagation(); }} className="ml-1.5 align-top">
+                <TriangleDown className='inline-block' />
+              </button>
+            </th>
+            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+              <span className="pl-2 border-l border-cbs-border">
+                Nội dung
+              </span>
+            </th>
+            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+              <span className="pl-2 border-l border-cbs-border">
+                Ngày hạch toán
+              </span>
+            </th>
+            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+              <span className="pl-2 border-l border-cbs-border">
+                Loại phiếu
+              </span>
+            </th>
+            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+              <span className="pl-2 border-l border-cbs-border">
+                Số hiệu
+              </span>
+            </th>
+            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
+              <span className="pl-2 border-l border-cbs-border">
+                Mã khách
+              </span>
+            </th>
+            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
+              <span className="pl-2 border-l border-cbs-border">
+                Hợp đồng
+              </span>
+            </th>
+            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
+              <span className="pl-2 border-l border-cbs-border">
+                Giá trị/Thành tiền
+              </span>
+            </th>
+            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
+              <span className="pl-2 border-l border-cbs-border">
+                Ghi chú
+              </span>
+            </th>
+            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border w-min px-2">
+            </th>
+          </tr>
+        </thead>
+        <tbody className="text-small">
+          {
+            accountingVoucher?.listAccountingVoucher?.map((item: any) => {
+              return (
+                <tr key={item._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
+                  <td className="pt-2.5 pb-3 px-4 border-b border-cbs-border text-left">
+                    <input className="cbs-checkbox" type="checkbox" checked={Boolean(assigned[item._id])} onChange={e => handleChangeCheckbox(e, item)} />
+                  </td>
+                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-cbs-highlight-color text-medium" style={{ maxWidth: '250px' }}>
+                    <NavLink to={`/accounting/${VOUCHER_TYPES.find(item => item.value === type)?.slug}/${item._id}`}>
+                      <Popover onMouseEnterTooltip={false} tooltip={`${item.name}`} classTooltip="w-[336px] whitespace-normal left-0" >
+                        <p className="text-2-line-clamp">{`${item.name}`}</p>
+                      </Popover>
+                    </NavLink>
+                    <p className={"mt-1 text-gray-500"}>{item.userCreate.bizfullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}</p>
+                  </td>
+                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
+                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{VOUCHER_TYPES.find(element => element.value === item.type)?.text}</td>
+                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.sign}</td>
+                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.customer.name}</td>
+                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.contract?.name}</td>
+                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{formatNumberMoney(item.amount)}</td>
+                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.note}</td>
+                  <td className="pt-2.5 pb-3 pr-2 border-b border-cbs-border">
+                    <ActionAccountingGroup data={item} handleAction={handleAction} />
+                  </td>
+                </tr>
+              )
+            })
+          }
+        </tbody>
+      </table>
       <Paginate
         totalPages={accountingVoucher.totalPage}
         totalRecord={accountingVoucher.totalRecord} hasNextPage

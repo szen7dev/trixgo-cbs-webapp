@@ -1,17 +1,16 @@
 /*=====1.LIBRARY=====*/
 import { FC } from "react";
-import { Redirect, Route, Switch } from "react-router-dom";
+import { Redirect, Route, Switch, matchPath } from "react-router-dom";
 
 /*=====2.PROVIDERS=====*/
 
 /*=====3.LAYOUTS=====*/
 import { ProtectedRoute } from "routes/components";
-
+import LayoutSecondary from "views/ppt/sharedComponents/layouts/LayoutSecondary";
 /*=====4.CONFIG ROUTE=====*/
 
 /*=====5.PAGES/COMPONENTS=====*/
 import ErrorPage from "views/authentication/Error";
-
 import {
   AccountingHomePage,
   AccountingTicketsPage,
@@ -27,8 +26,17 @@ import {
   AccountingVatPage,
   AccountingReportFinancePage,
   AccountingSupportToolsPage,
-  AccountingAdminPage
 } from "views/accounting/pages";
+
+import {
+  ItemAccountPage,
+  ItemFundaPage,
+  ItemWarehousePage,
+  ItemGoodsPage,
+  AccountingAdminAuthorTab,
+  AccountingAdminDetail,
+  AccountingAdminFunctionalTab
+} from "views/accounting/pages/AccountingAdminPage";
 
 const AccountingRouter: FC = () => {
   return (
@@ -44,42 +52,42 @@ const AccountingRouter: FC = () => {
       />
       <ProtectedRoute
         exact
-        path="/accounting/accbill"
+        path="/accounting/:fundaID/accbill"
         component={() => <AccountingTicketsPage type={1} />}
       />
       <ProtectedRoute
         exact
-        path="/accounting/receipt"
+        path="/accounting/:fundaID/receipt"
         component={() => <AccountingTicketsPage type={2} />}
       />
       <ProtectedRoute
         exact
-        path="/accounting/payment"
+        path="/accounting/:fundaID/payment"
         component={() => <AccountingTicketsPage type={3} />}
       />
       <ProtectedRoute
         exact
-        path="/accounting/goods-import"
+        path="/accounting/:fundaID/goods-import"
         component={() => <AccountingTicketsPage type={4} />}
       />
       <ProtectedRoute
         exact
-        path="/accounting/goods-export"
+        path="/accounting/:fundaID/goods-export"
         component={() => <AccountingTicketsPage type={5} />}
       />
       <ProtectedRoute
         exact
-        path="/accounting/invoices"
+        path="/accounting/:fundaID/invoices"
         component={() => <AccountingTicketsPage type={6} />}
       />
       <ProtectedRoute
         exact
-        path="/accounting/debit-note"
+        path="/accounting/:fundaID/debit-note"
         component={() => <AccountingTicketsPage type={7} />}
       />
       <ProtectedRoute
         exact
-        path="/accounting/credit-note"
+        path="/accounting/:fundaID/credit-note"
         component={() => <AccountingTicketsPage type={8} />}
       />
       <ProtectedRoute
@@ -172,15 +180,41 @@ const AccountingRouter: FC = () => {
         path="/accounting/support-tools"
         component={AccountingSupportToolsPage}
       />
-      <ProtectedRoute
-        exact
-        path="/accounting/admin"
-        component={AccountingAdminPage}
-      />
 
+      <Route path="/accounting/admin">
+        <LayoutSecondary
+          pages={[
+            { id: "1", title: "Nhóm chức năng", path: "/accounting/admin", navExact: true },
+            {
+              id: "2", title: 'Phân quyền nhóm chức năng', path: '/accounting/admin/2', location: (location) => {
+                // Get match params
+                const match = matchPath<{ id: string }>(location.pathname, { path: '/accounting/admin/:id/detail' })
+                // Push to state
+                return ({ pathname: '/accounting/admin/2', state: match ? match.params.id : null })
+              }
+            },
+            { id: "3", title: "Cấu hình khác", path: "/accounting/admin/3" },
+            { id: "4", title: "Account", path: "/accounting/admin/account" },
+            { id: "5", title: "Funda", path: "/accounting/admin/funda" },
+            { id: "6", title: "Warehouse", path: "/accounting/admin/warehouse" },
+            { id: "7", title: "Goods", path: "/accounting/admin/goods" },
+          ]}
+        >
+          <Route exact path="/accounting/admin" component={AccountingAdminFunctionalTab} />
+          <Route exact path="/accounting/admin/:id/detail" component={AccountingAdminDetail} />
+          <Route exact path="/accounting/admin/2" component={AccountingAdminAuthorTab} />
+          <Route exact path={`/accounting/admin/account`} component={ItemAccountPage} />
+          <Route exact path={`/accounting/admin/account/:parentID`} component={ItemAccountPage} />
+          <Route exact path={`/accounting/admin/funda`} component={ItemFundaPage} />
+          <Route exact path={`/accounting/admin/funda/:parentID`} component={ItemFundaPage} />
+          <Route exact path={`/accounting/admin/warehouse`} component={ItemWarehousePage} />
+          <Route exact path={`/accounting/admin/warehouse/:parentID`} component={ItemWarehousePage} />
+          <Route exact path={`/accounting/admin/goods`} component={ItemGoodsPage} />
+          <Route exact path={`/accounting/admin/goods/:parentID`} component={ItemGoodsPage} />
+        </LayoutSecondary>
+      </Route>
       <Route path="/accounting/*" component={ErrorPage} />
     </Switch>
-
   )
 }
 export default AccountingRouter
