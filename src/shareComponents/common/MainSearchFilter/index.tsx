@@ -22,6 +22,18 @@ import { useQueryListDoctype } from "services/hooks/useHuman";
 import { useQueryListDepartmentsIsMember } from "services/hooks/items/useDepartment";
 import { useQueryListCompany } from "services/hooks/useCompanies";
 
+interface InitialValues {
+  fromDate: string;
+  toDate: string;
+  assigneesID: string[];
+  companiesOfAssignee: string[];
+  authorsID: string[];
+  projectsID: string[];
+  subtypes: string[];
+  status: string[];
+  fieldsID: string[];
+}
+
 type Props = {
   handleFilterData: (filterData: any) => void,
   toggleSearchFilter: () => void,
@@ -81,10 +93,22 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
     }
   }
 
+  const initialValues: InitialValues = {
+    fromDate: '',
+    toDate: '',
+    assigneesID: [],
+    companiesOfAssignee: [],
+    authorsID: [],
+    projectsID: [],
+    subtypes: [],
+    status: [],
+    fieldsID: [],
+  }
+
   return (
     <>
       <div className="t-main-search-filter-wrapper">
-        <Formik initialValues={{ fromDate: '', toDate: '' }} onSubmit={onSubmitFilterData}>
+        <Formik initialValues={initialValues} onSubmit={onSubmitFilterData}>
           {(formik) => {
             const { setFieldValue, values } = formik;
 
@@ -95,18 +119,23 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
                   <p className={"t-main-search-filter-item-title text-gray-500 mr-2 text-[14px]"}>Người thực hiện</p>
                   <DropdownSearchable
                     onchangeValue={(value) => {
-                        setFieldValue("assigneeID", value?.id);
-                        setSearchUserSystem("");
+                      if(!values.assigneesID?.includes?.(value.id as string)) {
+                        setFieldValue("assigneesID", [...values.assigneesID, value.id]);
                       }
-                    }
-                    onClearData={() => setFieldValue("assigneeID", "")}
+                      setSearchUserSystem('')
+                    }}
+                    onMultipleRemoveValue={(id: any) => {
+                      const newList = values.assigneesID.filter(item => item !== id);
+                      setFieldValue('assigneesID', newList);
+                    }}
+                    onClearData={() => setFieldValue("assigneesID", [])}
                     onSearchInputChange={debounce(
                       (value) => setSearchUserSystem(value),
                       500
                     )}
                     className={"t-main-search-filter-item-dropdown w-full flex-1 border-b border-gray-200"}
                     placeholder="Người thực hiện"
-                    isMultiple={false}
+                    isMultiple={true}
                     allowClearValueSingleInput={true}
                     showTriangle={false}
                     maxWidthInput="max-w-none"
@@ -148,17 +177,23 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
                   <p className={"t-main-search-filter-item-title text-gray-500 mr-2 text-[14px]"}>Đơn vị thực hiện</p>
                   <DropdownSearchable
                     onchangeValue={(value) => {
-                      setFieldValue("companyOfAssignee", value?.id);
-                      setSearchCompanyName("");
+                      if(!values.companiesOfAssignee?.includes?.(value.id as string)) {
+                        setFieldValue("companiesOfAssignee", [...values.companiesOfAssignee, value.id]);
+                      }
+                      setSearchCompanyName("")
                     }}
-                    onClearData={() => setFieldValue("companyOfAssignee", "")}
+                    onMultipleRemoveValue={(id: any) => {
+                      const newList = values.companiesOfAssignee.filter(item => item !== id);
+                      setFieldValue('companiesOfAssignee', newList);
+                    }}
+                    onClearData={() => setFieldValue("companiesOfAssignee", [])}
                     onSearchInputChange={debounce(
                       (value) => setSearchCompanyName(value),
                       500
                     )}
                     className={"t-main-search-filter-item-dropdown w-full flex-1 border-b border-gray-200"}
                     placeholder="Đơn vị thực hiện"
-                    isMultiple={false}
+                    isMultiple={true}
                     allowClearValueSingleInput={true}
                     showTriangle={false}
                     maxWidthInput="max-w-none"
@@ -233,17 +268,23 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
                   <p className={"t-main-search-filter-item-title text-gray-500 mr-2 text-[14px]"}>Người tạo</p>
                   <DropdownSearchable
                     onchangeValue={(value) => {
-                      setFieldValue("authorID", value?.id);
-                      setSearchUserSystem("");
+                      if(!values.authorsID?.includes?.(value.id as string)) {
+                        setFieldValue("authorsID", [...values.authorsID, value.id]);
+                      }
+                      setSearchUserSystem("")
                     }}
-                    onClearData={() => setFieldValue("authorID", "")}
+                    onMultipleRemoveValue={(id: any) => {
+                      const newList = values.authorsID.filter(item => item !== id);
+                      setFieldValue('authorsID', newList);
+                    }}
+                    onClearData={() => setFieldValue("authorsID", [])}
                     onSearchInputChange={debounce(
                       (value) => setSearchUserSystem(value),
                       500
                     )}
                     className={"t-main-search-filter-item-dropdown w-full flex-1 border-b border-gray-200"}
                     placeholder="Người tạo"
-                    isMultiple={false}
+                    isMultiple={true}
                     allowClearValueSingleInput={true}
                     showTriangle={false}
                     maxWidthInput="max-w-none"
@@ -285,17 +326,23 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
                   <p className={"t-main-search-filter-item-title text-gray-500 mr-2 text-[14px]"}>Dự án</p>
                   <DropdownSearchable
                     onchangeValue={(value) => {
-                      setFieldValue("projectID", value?.id);
-                      setSearchDepartmentValue("");
+                      if(!values.projectsID?.includes?.(value.id as string)) {
+                        setFieldValue("projectsID", [...values.projectsID, value.id]);
+                      }
+                      setSearchDepartmentValue("")
                     }}
-                    onClearData={() => setFieldValue("projectID", "")}
+                    onMultipleRemoveValue={(id: any) => {
+                      const newList = values.projectsID.filter(item => item !== id);
+                      setFieldValue('projectsID', newList);
+                    }}
+                    onClearData={() => setFieldValue("projectsID", [])}
                     onSearchInputChange={debounce(
                       (value) => setSearchDepartmentValue(value),
                       500
                     )}
                     className={"t-main-search-filter-item-dropdown w-full flex-1 border-b border-gray-200"}
                     placeholder="Dự án"
-                    isMultiple={false}
+                    isMultiple={true}
                     allowClearValueSingleInput={true}
                     showTriangle={false}
                     maxWidthInput="max-w-none"
@@ -334,14 +381,21 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
                 <div className="t-main-search-filter-item flex items-center mt-4">
                   <p className={"t-main-search-filter-item-title text-gray-500 mr-2 text-[14px]"}>Phân loại</p>
                   <DropdownSearchable
-                    onchangeValue={(value) =>
-                      setFieldValue("subtype", value.id)
-                    }
-                    onClearData={() => setFieldValue("subtype", "")}
+                    onchangeValue={(value) => {
+                      if(!values.subtypes?.includes?.(value.id as string)) {
+                        setFieldValue("subtypes", [...values.subtypes, value.id]);
+                      }
+                    }}
+                    onMultipleRemoveValue={(id: any) => {
+                      const newList = values.subtypes.filter(item => item !== id);
+                      setFieldValue('subtypes', newList);
+                    }}
+                    onClearData={() => setFieldValue("subtypes", [])}
                     placeholder={"Phân loại"}
                     className={"t-main-search-filter-item-dropdown w-full flex-1 border-b border-gray-200"}
                     focusedClass={"border-b border-primary"}
                     maxWidthInput={"max-w-none"}
+                    isMultiple={true}
                     allowClearValueSingleInput={true}
                     renderSelectedItem={item => (
                       <div className={"flex items-center"}>
@@ -397,15 +451,21 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
                 <div className="t-main-search-filter-item flex items-center mt-4">
                   <p className={"t-main-search-filter-item-title text-gray-500 mr-2 text-[14px]"}>Trạng thái</p>
                   <DropdownSearchable
-                    onchangeValue={(value) =>
-                      setFieldValue("status", value.id)
-                    }
-                    onClearData={() => setFieldValue("status", "")}
+                    onchangeValue={(value) => {
+                      if(!values.status?.includes?.(value.id as string)) {
+                        setFieldValue("status", [...values.status, value.id]);
+                      }
+                    }}
+                    onMultipleRemoveValue={(id: any) => {
+                      const newList = values.status.filter(item => item !== id);
+                      setFieldValue('status', newList);
+                    }}
+                    onClearData={() => setFieldValue("status", [])}
                     placeholder={"Trạng thái"}
                     className={"t-main-search-filter-item-dropdown w-full flex-1 border-b border-gray-200"}
                     focusedClass={"border-b border-primary"}
                     maxWidthInput={"max-w-none"}
-                    isMultiple={false}
+                    isMultiple={true}
                     allowClearValueSingleInput={true}
                     renderSelectedItem={item => (
                       <div className={"flex items-center"}>
@@ -425,18 +485,24 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
                 <div className="t-main-search-filter-item flex items-center mt-4">
                   <p className={"t-main-search-filter-item-title text-gray-500 mr-2 text-[14px]"}>Phân loại khác</p>
                   <DropdownSearchable
-                    onchangeValue={(item) => {
-                      setFieldValue("fieldID", item.value);
+                    onchangeValue={(value) => {
+                      if(!values.fieldsID?.includes?.(value.id as string)) {
+                        setFieldValue("fieldsID", [...values.fieldsID, value.id]);
+                      }
                       setOtherFieldValue("");
                     }}
-                    onClearData={() => setFieldValue("fieldID", "")}
+                    onMultipleRemoveValue={(id: any) => {
+                      const newList = values.fieldsID.filter(item => item !== id);
+                      setFieldValue('fieldsID', newList);
+                    }}
+                    onClearData={() => setFieldValue("fieldsID", [])}
                     onSearchInputChange={debounce(
                       (value) => setOtherFieldValue(value),
                       500
                     )}
                     className={"t-main-search-filter-item-dropdown w-full flex-1 border-b border-gray-200"}
                     placeholder="Phân loại khác"
-                    isMultiple={false}
+                    isMultiple={true}
                     allowClearValueSingleInput={true}
                     showTriangle={false}
                     maxWidthInput="max-w-none"
@@ -510,7 +576,6 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
             );
           }}
         </Formik>
-        
       </div>
     </>
   );
