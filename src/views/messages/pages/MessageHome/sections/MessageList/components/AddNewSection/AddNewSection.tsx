@@ -2,10 +2,9 @@ import React, {FC, useContext, useEffect, useState} from "react";
 import IconBackGray from "assets/images/icon-back-gray.svg";
 import {AddNewChatGroupContext} from "../HeaderMessageList";
 
-import {useUser} from "services/hooks/useUser";
 import {map as _map} from "lodash";
 import Close from "assets/icons/Close";
-import {useUserSystem} from "../../../../../../../../services/hooks/users/useUserSystem";
+import {useUserSystem} from "services/hooks/users/useUserSystem";
 
 export const AddNewSection:FC = () => {
     const {setShowAddNew, setParamsConversation, paramsConversation, showAddNew} = useContext(AddNewChatGroupContext);
