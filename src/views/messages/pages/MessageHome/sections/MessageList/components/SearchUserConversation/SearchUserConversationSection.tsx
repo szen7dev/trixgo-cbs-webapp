@@ -80,7 +80,7 @@ export const SearchUserConversationSection:FC = () => {
                         />
                     </div>
                 </div>
-                <div ref={listFriendsRef} className={"flex max-w-full border-t border-gray-100 border-b overflow-auto no-webkit-scrollbar p-[5px]"}>
+                <div ref={listFriendsRef} className={"flex max-w-full border-t border-gray-100 border-b overflow-auto p-[5px]"}>
                     {
                         _map(data, friend => (
                             <button

@@ -36,6 +36,7 @@ interface useQueryAmountTaskMilestoneResponse {
 
 interface listCompanyOfAssigneeAndAmountTaskPayload {
     projectID: string;
+    isPassPermision?: number
 }
 
 export const useQueryListProjectWithListAmountTask = (params: ListProjectWithListAmountTaskPayload): UseQueryListProjectWithListAmountTask => {
