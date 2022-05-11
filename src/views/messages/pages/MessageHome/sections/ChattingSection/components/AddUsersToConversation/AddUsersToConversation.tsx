@@ -9,6 +9,7 @@ import {useUser} from "services/hooks/useUser";
 import {UseConversation} from "services/hooks/messages/useConversation";
 import {toast} from "react-toastify";
 import {populates} from "../../../../index";
+import {useUserSystem} from "../../../../../../../../services/hooks/users/useUserSystem";
 
 type Props = {
     context: any
@@ -26,7 +27,7 @@ export const AddUsersToConversation:FC<Props> = ({context}) => {
 
     const [searchTerm, setSearchTerm] = useState('');
     const params = {limit: 10, select: 'fullname bizfullname email phone image', keyword: searchTerm}
-    const { listFriends, nextPageListFriends , hasNextPageListFriends } = useUser(params);
+    const {data, hasNextPage, fetchNextPage} = useUserSystem(params, isOpenAddUsersToConversation);
     const [selectedFriends, setSelectedFriends] = useState<{[key: string]: any}>({});
 
     const {socketRef} = useContext(context);
@@ -141,7 +142,7 @@ export const AddUsersToConversation:FC<Props> = ({context}) => {
                             <div className={"max-h-[500px] min-h-[500px] mt-[15px] no-webkit-scrollbar overflow-auto"}>
                                 <div className={"px-[5px]"}>
                                     {
-                                        _map((listFriends??[]).filter(friend => !currentMembers().includes(friend._id)), friend => (
+                                        _map((data??[]).filter(friend => !currentMembers().includes(friend._id)), friend => (
                                             <div key={friend._id} className={"flex items-center px-[18px] py-[10px] hover:bg-gray-100 rounded-md"}>
                                                 <label className={"flex-1 flex items-center"} htmlFor={`friend-${friend._id}`}>
                                                     <img className={"w-[44px] h-[44px] rounded-full overflow-hidden"} alt={friend.bizfullname||friend.fullname} src={`${process.env.REACT_APP_URL_S3_USER}/${friend.image}`}/>
@@ -158,10 +159,10 @@ export const AddUsersToConversation:FC<Props> = ({context}) => {
                                         ))
                                     }
                                     {
-                                        hasNextPageListFriends&&
+                                        hasNextPage&&
                                         <div className={"flex items-center justify-center mb-5"}>
                                             <button
-                                                onClick={() => nextPageListFriends()}
+                                                onClick={() => fetchNextPage()}
                                                 className={"text-primary text-center"}
                                             >
                                                 Xem thêm
