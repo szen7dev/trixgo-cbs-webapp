@@ -87,6 +87,7 @@ const mappingData = (data: any, isDataPayLoad = false) => {
     vatProduce: Number(data.vatProduce) || 0,
     plusProduce: Number(data.plusProduce) || 0,
     vatPlusProduce: Number(data.vatPlusProduce) || 0,
+    remainingProduce: Number(data.remainingProduce) || 0,
     acceptance: Number(data.acceptance) || 0,
     vatAcceptance: Number(data.vatAcceptance) || 0,
     plusAcceptance: Number(data.plusAcceptance) || 0,
@@ -1387,6 +1388,32 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         name="vatPlusProduce"
                         className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                         placeholder="Sản lượng phát sinh trước VAT..."
+                        onBlur={(e: FormEvent<HTMLInputElement>) =>
+                          handleBlur(e)
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  <div className="mb-4">
+                    <p className="text-primary-gray text-xs mb-2">
+                      Sản lượng còn lại chưa thực hiện
+                    </p>
+                    <div className="grid grid-cols-2 gap-x-11">
+                      <Field
+                        type="text"
+                        name="remainingProduce"
+                        className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
+                        placeholder="Sản lượng còn lại chưa thực hiện..."
+                        onBlur={(e: FormEvent<HTMLInputElement>) =>
+                          handleBlur(e)
+                        }
+                      />
+                      <Field
+                        type="text"
+                        name="remainingProduce"
+                        className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
+                        placeholder="Sản lượng còn lại chưa thực hiện..."
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
