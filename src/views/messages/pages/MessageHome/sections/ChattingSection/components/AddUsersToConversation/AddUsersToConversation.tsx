@@ -5,11 +5,10 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {dismissAddUserToConversation} from "redux/reducer/messages/AddUserToConversation";
 import {map as _map} from "lodash";
-import {useUser} from "services/hooks/useUser";
 import {UseConversation} from "services/hooks/messages/useConversation";
 import {toast} from "react-toastify";
 import {populates} from "../../../../index";
-import {useUserSystem} from "../../../../../../../../services/hooks/users/useUserSystem";
+import {useUserSystem} from "services/hooks/users/useUserSystem";
 
 type Props = {
     context: any
