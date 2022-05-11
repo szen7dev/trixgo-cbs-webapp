@@ -365,7 +365,7 @@ const PcmDetailTaskPage: FC = () => {
           {/* <button className="mx-3">
             <img className="w-6" src={RemoveIcon} alt="Remove icon" />
           </button> */}
-          <DropdownOption
+          {/* <DropdownOption
             view={<img className="w-6 opacity-80" src={IconPrint} alt="Print" />}
             classNameItem="left-1"
           >
@@ -384,7 +384,7 @@ const PcmDetailTaskPage: FC = () => {
                   <div className={"flex-1 text-left ml-4"}>Loại 3</div>
               </div>
             </Menu.Item>
-          </DropdownOption>
+          </DropdownOption> */}
           {/* <button className="mx-3">
             <img className="w-6 opacity-80" src={IconPrint} alt="Print icon" />
           </button> */}
@@ -414,9 +414,25 @@ const PcmDetailTaskPage: FC = () => {
                 </div>
               </Menu.Item>
             ) : ''}
-             <Menu.Item onClick={openUpdateMilestone}>
+            <Menu.Item onClick={openUpdateMilestone}>
               <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
                   <div className={"flex-1 text-left ml-4"}>Gán phân loại cột mốc</div>
+              </div>
+            </Menu.Item>
+            {/* IN ẤN */}
+            <Menu.Item onClick={() => history.push(`/pcm/detail/${taskInfo._id}/print/1`)}>
+              <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+                  <div className={"flex-1 text-left ml-4"}>In ấn mẫu biên bản họp</div>
+              </div>
+            </Menu.Item>
+            <Menu.Item onClick={() => history.push(`/pcm/detail/${taskInfo._id}/print/2`)}>
+              <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+                  <div className={"flex-1 text-left ml-4"}>In ấn mẫu báo cáo</div>
+              </div>
+            </Menu.Item>
+             <Menu.Item onClick={() => history.push(`/pcm/detail/${taskInfo._id}/print/3`)}>
+              <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+                  <div className={"flex-1 text-left ml-4"}>In ấn mẫu phụ lục ảnh</div>
               </div>
             </Menu.Item>
           </DropdownOption>
