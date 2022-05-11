@@ -2,17 +2,17 @@ import React, {FC, useContext, useEffect, useState} from "react";
 import IconBackGray from "assets/images/icon-back-gray.svg";
 import {AddNewChatGroupContext} from "../HeaderMessageList";
 
-import {useUser} from "services/hooks/useUser";
 import {map as _map} from "lodash";
 import Close from "assets/icons/Close";
+import {useUserSystem} from "services/hooks/users/useUserSystem";
 
 export const AddNewSection:FC = () => {
-    const {setShowAddNew, setParamsConversation, paramsConversation} = useContext(AddNewChatGroupContext);
+    const {setShowAddNew, setParamsConversation, paramsConversation, showAddNew} = useContext(AddNewChatGroupContext);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedFriends, setSelectedFriends] = useState<{[key: string]: any}>({});
 
     const params = {limit: 10, select: 'fullname bizfullname email phone image', populates: '{"path": "company", "select": "name"}', keyword: searchTerm}
-    const { listFriends, nextPageListFriends, hasNextPageListFriends } = useUser(params);
+    const {data, hasNextPage, fetchNextPage} = useUserSystem(params, showAddNew);
 
     useEffect(() => {
         if (Object.values(selectedFriends).length > 1) {
@@ -108,7 +108,7 @@ export const AddNewSection:FC = () => {
                 </div>
             </div>
             {
-                _map(listFriends, friend => (
+                _map(data, friend => (
                     <div key={friend._id} className={"flex items-center py-3 hover:bg-gray-100"}>
                         <input
                             onChange={event => handleAddFriendToConversation(event.target.checked, friend)}
@@ -125,10 +125,10 @@ export const AddNewSection:FC = () => {
                 ))
             }
             {
-                hasNextPageListFriends&&
+                hasNextPage&&
                 <div className={"flex items-center justify-center mb-5"}>
                     <button
-                        onClick={() => nextPageListFriends()}
+                        onClick={() => fetchNextPage()}
                         className={"text-primary text-center"}
                     >
                         Xem thêm

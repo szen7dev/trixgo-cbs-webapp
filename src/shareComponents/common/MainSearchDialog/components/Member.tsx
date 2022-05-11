@@ -122,11 +122,8 @@ const Member: FC<MemberProps> = (props) => {
   const [lastestID, setLastestID] = useState<string>("");
   
   const {
-    searchResultList,
     fetchSearchResultList,
-    totalRecord,
     nextCursor,
-    isLoadingSearchResultList,
   } = UseMainSearch("search_results", {
     keyword: searchText,
     lastestID: !isResultNavigation ? "" : currentID,
