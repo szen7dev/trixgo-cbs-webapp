@@ -116,11 +116,11 @@ export const ModalAddNewTask: FC = () => {
   const onSubmitFilterData = async (values: any) => {
     try {
       console.log({ values });
-      // const { error, data } = await addTaskAsync(values);
+      const { error, data } = await addTaskAsync(values);
 
-      // if(error) return toast.warning(data.message);
+      if(error) return toast.warning(data.message);
 
-      // history.push(`/pcm/detail/${data._id}`);
+      history.push(`/pcm/detail/${data._id}`);
     } catch (error) {
       if (typeof error === "string") {
           toast.error(error);
