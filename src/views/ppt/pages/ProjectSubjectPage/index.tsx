@@ -16,11 +16,12 @@ const ProjectSubjectPage: FC = () => {
 	const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
 	const [data, setData] = useState<{ id: number, [key: string]: any }[]>([])
 	const [dataCompany, setDataCompany] = useState([]);
+	const [companyPopup, setCompanyPopup] = useState();
+	const [typeStatusPopup, setTypeStatusPopup] = useState();
 	const [totalTaskOverdueWork, setTotalTaskOverdueWork] = useState();
 	const [totalTaskNextWeekWork, setTotalTaskNextWeekWork] = useState();
 	const [totalTaskMoreThan7Days, setTotalTaskMoreThan7Days] = useState();
 	const [totalTaskFinish, setRotalTaskFinish] = useState();
-
 	const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data)
 	const { id: projectID } = useParams<{ id: string }>();
 
@@ -76,7 +77,6 @@ const ProjectSubjectPage: FC = () => {
 			setRotalTaskFinish(totalFinishAll)
 		}
 	}, [listCompany, listCompanyAndTaskOverdueWork, listCompanyAndTaskNextWeekWork, listCompanyAndTaskMoreThan7Days]);
-	console.log({ dataCompany, listCompany, listCompanyAndTaskOverdueWork, listCompanyAndTaskNextWeekWork,listCompanyAndTaskMoreThan7Days   })
 
 	useEffect(() => {
 		document.title = "CHG.THT-Hồ sơ thanh toán"
@@ -90,7 +90,11 @@ const ProjectSubjectPage: FC = () => {
 		// 	status: index,
 		// })));
 	}, []);
-	const toggleVisible = () => setVisibleDrawer(!visibleDrawer);
+	const toggleVisible = ({ company, typeStatus }: any) => {
+		setVisibleDrawer(!visibleDrawer)
+		setCompanyPopup(company)
+		setTypeStatusPopup(typeStatus)
+	};
 
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
@@ -194,7 +198,7 @@ const ProjectSubjectPage: FC = () => {
 												<button
 													className="flex items-center justify-center bg-red-500"
 													style={{ width: `${company?.overdueWorkPercent}%` }}
-													onClick={toggleVisible}>
+													onClick={() => toggleVisible({ company: company._id, typeStatus: "1"}) }>
 													<span className="text-white">
 														{company?.totalOverdueWork ||""}
 													</span>
@@ -202,8 +206,7 @@ const ProjectSubjectPage: FC = () => {
 												<button
 													className="flex items-center justify-center bg-yellow-500"
 													style={{ width: `${company?.nextWeekWorkPercent}%` }}
-													onClick={toggleVisible}
-												>
+													onClick={() => toggleVisible({ company: company._id, typeStatus: "2"}) }>
 													<span className="text-white">
 														{company?.totalNextWeekWork ||""}
 													</span>
@@ -211,8 +214,8 @@ const ProjectSubjectPage: FC = () => {
 												<button
 													className="flex items-center justify-center bg-green-500"
 													style={{ width: `${company?.moreThan7DaysPercent}%` }}
-													onClick={toggleVisible}
-												>
+													onClick={() => toggleVisible({ company: company._id, typeStatus: "3"}) }>
+
 													<span className="text-white">
 														{company?.totalMoreThan7Days ||""}
 													</span>
@@ -231,7 +234,7 @@ const ProjectSubjectPage: FC = () => {
 						}
 					</tbody>
 				</table>
-				<ModalInformation open={visibleDrawer} onClose={toggleVisible} />
+				<ModalInformation open={visibleDrawer} onClose={toggleVisible} dataPopup={{ companyPopup, typeStatusPopup, projectID }}/>
 			</div>
 		</div >
 	);

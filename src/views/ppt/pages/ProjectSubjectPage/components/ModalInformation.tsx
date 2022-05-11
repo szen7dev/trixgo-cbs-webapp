@@ -1,7 +1,9 @@
 import { FC, Fragment, useEffect, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
+import moment from "moment";
 
 import useCheckedList from 'services/hooks/ppt/useCheckedList';
+import { useTask } from "services/hooks/useTask";
 
 import XIcon from 'assets/icons/X';
 import CaretDownIcon from "assets/images/icon-caret-down.png";
@@ -9,19 +11,35 @@ import DownloadIcon from "assets/images/icons8-download-48_2.png";
 import SendEmailIcon from "assets/images/icons8-send-email-96.svg";
 import PrintIcon from "assets/images/icons8-print-32.png";
 import HumanAvatar from "assets/images/human-avatar.svg";
+import { Link } from 'react-router-dom';
 
 interface Props {
 	open: boolean,
 	onClose: (open: boolean) => unknown,
+	dataPopup: any,
 }
-const ModalInformation: FC<Props> = ({ open, onClose }) => {
+const ModalInformation: FC<Props> = ({ open, onClose, dataPopup }) => {
 	const [data, setData] = useState<Array<number>>([])
 	const { assigned, checked, checkboxRef, handleChangeCheckbox, handleCheckAll } = useCheckedList(data);
-
+	const { companyPopup, typeStatusPopup, projectID } =dataPopup;
 	useEffect(() => {
 		const _data = Array.from({ length: 10 }).map((_, i) => i);
 		setData(_data);
 	}, [])
+
+	// Việc quá hạn
+	const {
+		listTasks,
+		totalRecord,
+		nextPageListTask: fetchNextPage,
+		refetchListTask,
+        hasNextPage,
+	} = useTask({
+		params: {
+			projectID, companyOfAssignee: companyPopup, isPassPermision: "1", typeStatus: typeStatusPopup, statusNe: "3"
+		},
+		isFetch: true
+	});
 
 	return (
 		<Transition.Root show={open} as={Fragment}>
@@ -112,37 +130,52 @@ const ModalInformation: FC<Props> = ({ open, onClose }) => {
 
 									<div className="px-6 pt-2 relative flex-1 overflow-y-auto">
 										{/* Content */}
-										{data.map((_, index) => {
+										{listTasks?.map((task: any, index) => {
+											let colorActualFinishTime  = `red`;
+											let textActualFinishTime  = `Quá hạn`;
+											if(typeStatusPopup == 2){
+												colorActualFinishTime  = `yellow`;
+												textActualFinishTime  = `Tuần tới`;
+											}
+
+											if(typeStatusPopup == 3){
+												colorActualFinishTime  = `green`;
+												textActualFinishTime  = `>7 ngày`;
+											}
+
 											return (
 												<div key={index} className="my-4 pl-5">
 													<div className="flex">
 														<div>
-															<input type="checkbox" value={_} checked={Boolean(assigned[_])} className='cbs-checkbox block self-start' onChange={handleChangeCheckbox} />
+															<input type="checkbox" value={task} checked={Boolean(assigned[task])} className='cbs-checkbox block self-start' onChange={handleChangeCheckbox} />
 														</div>
 														<div className="pl-2">
-															<span>
-																CHG.THT.Hồ sơ thanh toán đợt 05 gói thầu Tư vấn thiết kế 112
-																- Dự án Xây dựng cụm trường tiểu học và trung học cơ sở Tây
-																Hồ Tây
-															</span>
+															<Link to={`/pcm/detail/${task._id}`}>
+																{ task.project.sign }.{ task.name }
+															</Link>
 															<div className="flex justify-between items-center my-2">
 																<div className="flex items-center">
-																	<img
+																	{/* <img
 																		src={HumanAvatar}
 																		className="w-6 rounded-full"
 																		alt="Avatar"
+																	/> */}
+																	<img
+																		src={`${process.env.REACT_APP_URL_S3_USER}/${task.assignee.image}`}
+																		alt="Thumbnail"
+																		className="w-4 h-4 rounded-full"
 																	/>
 																	<span className="text-primary-gray ml-2">
-																		Hà Tiến Dũng-CHG
+																	{ task.assignee.bizfullname }
 																	</span>
 																</div>
 																<div className="flex items-center">
-																	<div className="bg-red-100 rounded-xl px-2 py-1">
-																		<span className="text-[13px] text-red-500">
-																			Quá hạn
+																	<div className={`bg-${colorActualFinishTime}-100 rounded-xl px-2 py-1`}>
+																		<span className={`text-[13px] text-${colorActualFinishTime}-500`}>
+																			{textActualFinishTime}
 																		</span>
 																	</div>
-																	<span className="text-[13px] ml-2">18/12/21</span>
+																	<span className="text-[13px] ml-2"> {moment(task.actualFinishTime).format("DD/MM/YYYY")}</span>
 																</div>
 															</div>
 														</div>
@@ -152,15 +185,27 @@ const ModalInformation: FC<Props> = ({ open, onClose }) => {
 											)
 										})}
 										{/* /End replace */}
+										{hasNextPage && (
+											<button
+												className="text-primary text-[13px]"
+												onClick={fetchNextPage}
+											>
+												{`Xem thêm (${
+													Number(totalRecord) - listTasks.length
+												})`}
+											</button>
+										)}
 									</div>
 									{/* Footer */}
 									<div>
 									</div>
 								</div>
 							</div>
+							
 						</Transition.Child>
 					</div>
 				</div>
+				
 			</Dialog>
 		</Transition.Root>
 
