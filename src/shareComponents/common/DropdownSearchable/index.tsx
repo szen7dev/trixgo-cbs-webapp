@@ -129,7 +129,7 @@ export const DropdownSearchable: FC<Props> = ({
       if (existThatItem > -1) {
         const oldValues = (values??[]);
         oldValues.splice(existThatItem, 1);
-        setValues(oldValues);
+        setValues([...oldValues]);
       } else {
         setValues((oldValues) => [...(oldValues ?? []), item]);
       }

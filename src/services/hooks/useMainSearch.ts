@@ -22,12 +22,19 @@ export const UseMainSearch = (key?: string, params?: SearchPayload): UseMainSear
         fetchPreviousPage: prevPageSearchResultList,
         hasNextPage: hasNextPage
     } = useInfiniteQuery(
-            key || "search_results",
+            ['search_results', key, params],
             async ({ pageParams }: any) => 
             MainSearchRepository.mainSearch({ 
                 lastestID: pageParams ? pageParams : "",
                 select: "name description amountChecklist amountFinishChecklist assignee actualFinishTime",
-                populates: '{"path": "assignee author project group lastLog", "select": "name fullname image sign content author", "populate": {"path": "author", "select": "fullname image sign"} }',
+                populates: JSON.stringify({
+                    path: "assignee author project group lastLog",
+                    select: "name fullname image sign content author",
+                    populate: {
+                        path: "author",
+                        select: "bizfullname fullname image sign"
+                    }
+                }),
                 ...params,
             }),
             {
@@ -39,7 +46,11 @@ export const UseMainSearch = (key?: string, params?: SearchPayload): UseMainSear
             }
         );
 
-    const searchResultList = [].concat(...(dataSearchResultList?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
+    const searchResultList = []
+        .concat(...(dataSearchResultList?.pages || [])
+        .map((d: any) => d.data?.listRecords))
+        .filter(Boolean);
+
     const totalRecord = dataSearchResultList?.pages[0]?.data?.totalRecord;
     const nextCursor = dataSearchResultList?.pages[0]?.data?.nextCursor || null;
 

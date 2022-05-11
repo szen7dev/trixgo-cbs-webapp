@@ -20,15 +20,12 @@ const ModalAddNotificationEmail: FC<Props> = ({ toggle, task }) => {
 	const { sendMailDetailTaskAsync } = usePcm();
 	const [title, setTitle] = useState('');
 	const [content, setContent] = useState('');
+	const [emails, setEmails] = useState('');
 	const [keyword, setKeyword] = useState('');
 	const { assigned, checked, checkboxRef, handleChangeCheckbox, handleCheckAll } = useCheckedList(data);
 	const {
 		data: listUsersSystem, 
-		hasNextPage, 
-		totalRecord, 
 		refetch: refetchUser,
-		fetchNextPage: fetchNextPageUser,
-		deleteUserSystemAsync,
 	} = useUserSystem({
 		arrayID: JSON.stringify(data.map(item => item._id)),
 		keyword,
@@ -39,7 +36,7 @@ const ModalAddNotificationEmail: FC<Props> = ({ toggle, task }) => {
 	useEffect(()=> {
 		refetchUser()
 	}, [keyword])
-	console.log({ listUsersSystem })
+
 	const handleSubmit = async () => {
 		if(!checked || !checked.length)
 			return toast.warning('Vui lòng chọn người gửi mail');
@@ -55,15 +52,17 @@ const ModalAddNotificationEmail: FC<Props> = ({ toggle, task }) => {
 			taskID: task._id,
 			title,
 			notice: content,
-			members: listReceiversID
-		}
-		
-		const result = await sendMailDetailTaskAsync(body);
-		if(result.error) {
-			return toast.error('Gửi email thất bại');
+			members: listReceiversID,
+			emails
 		}
 
-		toast.success('Gửi email thành công');
+		const result = await sendMailDetailTaskAsync(body);
+		if(result.error) {
+			toast.error('Gửi email thất bại');
+		} else{
+			toast.success('Gửi email thành công');
+		}
+
 		toggle();
 	}
 
@@ -106,6 +105,13 @@ const ModalAddNotificationEmail: FC<Props> = ({ toggle, task }) => {
 					placeholder="Nội dung email"
 					value={content}
 					onChange={e => setContent(e.target.value)}
+				/>
+
+				<textarea
+					className="mt-4 text-black py-1.5 px-3 w-full border-0.5 placeholder-shown:bg-cbs-gray border-cbs-border bg-white focus:bg-white focus:border-cbs-primary focus:outline-none rounded-cbs-sm"
+					placeholder="Email ngoài hệ thống"
+					value={emails}
+					onChange={e => setEmails(e.target.value)}
 				/>
 
 				<div className='relative border-cbs-border border-0.5 flex items-center mt-4'>
