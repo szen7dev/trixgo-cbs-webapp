@@ -36,14 +36,25 @@
 }
 
 .imagesAppendix {
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-color: rgba(204, 204, 204);
+  width: 100%;
 }
 
 .imagesAppendix th,
 .imagesAppendix td {
-  border-color: rgba(204, 204, 204);
-  border-width: 0.5px;
   padding: 10px;
+  border: 0.5px solid rgba(204, 204, 204);
+}
+
+.imagesAppendix td {
+  border-top-width: 0;
+}
+
+.imagesAppendix td:not(:first-child),
+.imagesAppendix th:not(:first-child) {
+  border-left-width: 0;
 }
 
 .imagesAppendix td img {
