@@ -15,7 +15,7 @@ export const Executor: FC<Props> = ({ color, assignee }) => {
         alt="Thumbnail"
         className="w-4 h-4 rounded-full"
       />
-      <span className="text-[13px]">{assignee.fullname}</span>
+      <span className="text-[13px]">{assignee.bizfullname ?? assignee.fullname}</span>
     </div>
   );
 };

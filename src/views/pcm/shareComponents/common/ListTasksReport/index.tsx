@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, memo } from "react";
 import { useHistory } from "react-router-dom";
 import moment from "moment";
 import parse from "html-react-parser";
@@ -14,7 +14,7 @@ type Props = {
     onClickMore: () => void;
 };
 
-export const ListTasksReport: FC<Props> = ({
+export const ListTasksReport: FC<Props> = memo(({
     tasks,
     totalRecord,
     onClickMore,
@@ -127,4 +127,6 @@ export const ListTasksReport: FC<Props> = ({
         {renderSeeMoreButton()}
     </>
   );
-};
+});
+
+ListTasksReport.displayName = 'ListTasksReport';

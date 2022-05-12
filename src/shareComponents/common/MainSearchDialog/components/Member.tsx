@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 // Hook
 import { useContact } from "services/hooks/items/useContact";
 import { useModal } from "services/hooks/useModal";
-import { UseMainSearch } from "services/hooks/useMainSearch";
+import { useMainSearch } from "services/hooks/useMainSearch";
 import moment from "moment";
 
 type MemberProps = {
@@ -124,7 +124,7 @@ const Member: FC<MemberProps> = (props) => {
   const {
     fetchSearchResultList,
     nextCursor,
-  } = UseMainSearch("search_results", {
+  } = useMainSearch("search_results", {
     keyword: searchText,
     lastestID: !isResultNavigation ? "" : currentID,
     ...filterParam,
