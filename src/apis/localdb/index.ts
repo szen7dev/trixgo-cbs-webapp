@@ -264,6 +264,18 @@ export const CONTRACT_LOCK = [
     { value: 2, text: 'Khóa' },
 ]
 
+// CONTRACT ONTIME
+export const CONTRACT_ONTIME = [
+    { value: 1, text: 'Ontime' },
+    { value: 2, text: 'Offtime' },
+]
+
+// CONTRACT ONBUDGET
+export const CONTRACT_ONBUDGET = [
+    { value: 1, text: 'Onbudget' },
+    { value: 2, text: 'Offbudget' },
+]
+
 // HỢP ĐỒNG THỰC/ẢO-GỬI DẤU
 export const CONTRACT_TA = [
     { value: 1, text: 'T' },
