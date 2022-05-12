@@ -1,5 +1,5 @@
 /*=====1.LIBRARY=====*/
-import { FC, FormEvent, useEffect, useState} from "react";
+import { FC, FormEvent, useEffect, useState, memo, ChangeEvent} from "react";
 // import { Link } from "react-router-dom";
 // import { useTranslation } from "react-i18next";
 import SwiperCore, { Pagination } from 'swiper';
@@ -23,6 +23,9 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import { Form, Formik, Field } from "formik";
 import moment from 'moment'
 import DatePicker from "react-datepicker";
+import { toast } from "react-toastify";
+import { useUpload } from 'services/hooks/useUpload';
+
 SwiperCore.use([Pagination]);
 
 const infoValues = {
@@ -33,58 +36,96 @@ const infoValues = {
 	lang: "vn",
 	// signature: "",
 };
+
 export const UpdateInfo: FC = () => {
     const [infoUser, setInfoUser] = useState(infoValues);
 	const { dataUserInfo, refetchDataUserInfo } = useAuth();
     const [avatar, setAvatar] = useState(PersonalLogo);
 	const { updateUser, updateAvatarUser } = useUser();
+    const [signature, setSignature] = useState("signature_default.png");
+    const [signatureName, setSignatureName] = useState("");
+
+	const { addFileToUpload } = useUpload({
+		typeUpload: 'user'
+	});
     // Cập nhật info
 	const handleSubmitUpdateUser = async (values: UpdateUser) => {
-        await updateUser(values);
-      }
+	await updateUser(values);
+	}
     
-      const updateAvatar = async (values: UpdateAvatarUser) => {
-        await updateAvatarUser(values);
-      }
-      useEffect(() => {
-        refetchDataUserInfo()
-        if(dataUserInfo) {
-          setInfoUser(dataUserInfo.data)
-          // Nếu giới tính chưa có
-          if(!dataUserInfo?.data?.gender) {
-            setInfoUser(user => ({
-              ...user,
-              ...{gender: '1'}
-            }));
-          } else { // Nếu có sẽ đổi sang string
-            setInfoUser(user => ({
-              ...user,
-              ...{gender: user.gender.toString()}
-            }));
-          }
-          if(!dataUserInfo?.data?.gender) {
-            setInfoUser(user => ({
-              ...user,
-              ...{lang: 'vn'}
-            }));
-          }
-          if(dataUserInfo?.data?.image) {
-            setAvatar(dataUserInfo.data.image)
-          }
-        } else {
-          setInfoUser(infoValues)
-        }
-      },[dataUserInfo])
+	const updateAvatar = async (values: UpdateAvatarUser) => {
+		await updateAvatarUser(values);
+	}
+	  
+	useEffect(() => {
+	refetchDataUserInfo()
+	if(dataUserInfo) {
+		setInfoUser(dataUserInfo.data)
+		// Nếu giới tính chưa có
+		if(!dataUserInfo?.data?.gender) {
+			setInfoUser(user => ({
+				...user,
+				...{gender: '1'}
+			}));
+		} else { // Nếu có sẽ đổi sang string
+			setInfoUser(user => ({
+				...user,
+				...{gender: user.gender.toString()}
+			}));
+		}
+		if(!dataUserInfo?.data?.gender) {
+			setInfoUser(user => ({
+				...user,
+				...{lang: 'vn'}
+			}));
+		}
+		if(dataUserInfo?.data?.image) {
+			setAvatar(dataUserInfo.data.image)
+		}
 
+		if(dataUserInfo && dataUserInfo?.data?.signature) {
+			setSignature(dataUserInfo.data.signature)
+        }
+	} else {
+		setInfoUser(infoValues)
+	}
+	},[dataUserInfo])
+
+	const handleChangeSignature = async (event: ChangeEvent<HTMLInputElement>) => {
+		const files = event.target.files;
+		if(!files || !files.length) return toast.warning("Vui lòng chọn ảnh chữ ký");
+
+		const { name } = await addFileToUpload({
+			files: files[0] as any,
+			fileType: 1,
+			useCompress: true
+		});
+
+		if(name){
+			setSignatureName(name);
+		}
+	}
+	
+	useEffect(() => {
+        if(signatureName) {
+			updateUser({ signature: signatureName })
+			setTimeout(() => {
+				refetchDataUserInfo();
+			}, 500);
+        }
+	}, [signatureName]);
+
+	const Signature = memo(function Signature() {
+        return <img src={`${process.env.REACT_APP_URL_S3_USER}/${signature}`} alt="Signature" width={200} />
+	});
 	return (
-		<section
-		  className={cn(
-			"w-[840px] h-[738px] bg-primary-light relative",
-			styles.boxShadowBorderRadius
-		  )}
+		<section 
+			className={cn(
+				"w-[840px] h-[738px] bg-primary-light relative",
+				styles.boxShadowBorderRadius
+			)}
 		>
 		  <p className="text-lg p-5">Thông tin tài khoản</p>
-			
 		  <Formik
 			enableReinitialize
 			initialValues={ infoUser }
@@ -183,12 +224,27 @@ export const UpdateInfo: FC = () => {
 				  <div className="mb-6">
 					<div className="flex items-center">
 					  <p className="text-sm">Ảnh chữ ký xác nhận</p>
-					  <div className="w-[30px] h-[30px] bg-secondary-gray rounded-full flex items-center justify-center ml-4">
-						<img src={CameraIcon} alt="Camera" />
-					  </div>
+					  {/* <div className="w-[30px] h-[30px] bg-secondary-gray rounded-full flex items-center justify-center ml-4">
+						<img
+							src={CameraIcon}
+							alt="Camera"
+							className="w-[15px] h-[13px]"
+						/>
+						<input type="file" name="signature" id="signature" className="hidden" accept="image/*" onChange={handleChangeSignature} />
+					  </div> */}
+						<label className="ml-2">
+							<div className="w-[30px] h-[30px] bg-secondary-gray rounded-full flex items-center justify-center">
+								<img
+								src={CameraIcon}
+								alt="Camera"
+								className="w-[15px] h-[13px]"
+								/>
+								<input type="file" name="signature" id="signature" className="hidden" accept="image/*" onChange={handleChangeSignature} />
+							</div>
+						</label>
 					</div>
 					<div>
-					  <img src={SignatureLogo} alt="Signature" />
+					  <Signature/>
 					</div>
 				  </div>
   

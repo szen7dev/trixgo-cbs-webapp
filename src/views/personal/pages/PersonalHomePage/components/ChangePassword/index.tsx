@@ -25,6 +25,7 @@ import { UpdatePasswordUser } from 'typings/personal/user';
 import { useUpload } from 'services/hooks/useUpload';
 import { useUser } from 'services/hooks/personal/useUser';
 import { useAuth } from "services/hooks/auth/useAuth";
+import { toast } from "react-toastify";
 
 /*=====7.OTHER=====*/
 
@@ -41,6 +42,7 @@ export const ChangePassword: FC = () => {
 	const [showNewPassword, setShowNewPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [avatar, setAvatar] = useState(PersonalLogo);
+    const [avatarName, setAvatarName] = useState("");
 	const { dataUserInfo, refetchDataUserInfo } = useAuth();
     const { updateUser, updatePasswordUser } = useUser();
     const { user } = useAuth();
@@ -54,7 +56,7 @@ export const ChangePassword: FC = () => {
 
 	const handleChangeAvatar = async (event: ChangeEvent<HTMLInputElement>) => {
 		const files = event.target.files;
-		if(!files || !files.length) return;
+		if(!files || !files.length) return toast.warning("Vui lòng chọn ảnh đại diện");
 
 		const { name } = await addFileToUpload({
 			files: files[0] as any,
@@ -62,12 +64,21 @@ export const ChangePassword: FC = () => {
 			useCompress: true
 		});
 
-		await updateUser({ image: name });
-		refetchDataUserInfo();
+		if(name){
+			setAvatarName(name);
+		}
 	}
 
 	useEffect(() => {
-        refetchDataUserInfo()
+        if(avatarName) {
+			updateUser({ image: avatarName })
+			setTimeout(() => {
+				refetchDataUserInfo();
+			}, 500);
+        }
+	}, [avatarName])
+
+	useEffect(() => {
         if(dataUserInfo && dataUserInfo?.data?.image) {
 			setAvatar(dataUserInfo.data.image)
         }

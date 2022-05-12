@@ -5,6 +5,7 @@ export type UpdateUser = {
     gender?: string,
     lang?: string,
     image?: string,
+    signature?: string,
     groupDefault?: string
 };
 
