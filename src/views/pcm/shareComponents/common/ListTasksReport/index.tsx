@@ -6,10 +6,10 @@ import cn from "classnames";
 
 import styles from "views/pcm/styles/pcm_task.module.css";
 import { ListProgress, Executor } from "views/pcm/shareComponents/common";
-import { Task } from 'typings/task';
+import { SearchListRecord } from "typings/main-search";
 
 type Props = {
-    tasks: Array<Task>;
+    tasks: Array<SearchListRecord>;
     totalRecord: number | undefined;
     onClickMore: () => void;
 };

@@ -10,33 +10,29 @@ import { toast } from "react-toastify";
  */
 import { ClassifyTable, ListTasksReport } from "views/pcm/shareComponents/common";
 import { Loader } from "shareComponents/common/Loader";
+import { APP_ID } from "apis/localdb";
+// import { SearchInput } from "shareComponents/common";
 
 /**
  * Hooks, Utils
  */
-import { useTask } from "services/hooks/useTask";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
-import { APP_ID } from "apis/localdb";
-// import { SearchInput } from "shareComponents/common";
-// import { debounce } from "lodash";
 import { usePcmReport } from "services/hooks/pcm/usePcm";
+import { UseMainSearch } from "services/hooks/useMainSearch";
 
 const PcmTasksReportPage: FC = () => {
+  const history = useHistory();
   const [params, setParams] = useState({});
   const [viewMode, setViewMode] = useState("LIST");
-  const history = useHistory();
   const { reportID } = useParams<{ reportID: string }>();
   const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 
   const {
-    listTasks,
+    searchResultList: listTasks,
+    fetchSearchResultList: nextPageListTask,
     totalRecord,
-    isLoadingListTask,
-    nextPageListTask,
-  } = useTask({
-    params,
-    isFetch: true
-  });
+    isLoadingSearchResultList: isLoadingListTask,
+  } = UseMainSearch("tasks_reports", params, true);
 
   const { infoReport } = usePcmReport({
     subjectID: reportID
