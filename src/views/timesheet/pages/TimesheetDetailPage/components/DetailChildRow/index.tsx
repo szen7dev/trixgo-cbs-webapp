@@ -12,11 +12,13 @@ import { useQueryListFriend } from "services/hooks/users/useFriend";
 
 import type {
   TimeSheetChild,
+  TimeSheetParent,
   UpdateTimeSheetChildPayload,
 } from "typings/time-sheet";
 import { toast } from "react-toastify";
 
 type Props = {
+  parent?: TimeSheetParent;
   rowData: TimeSheetChild;
   collapsed: boolean;
   isLastRow: boolean;
@@ -26,6 +28,7 @@ type Props = {
 };
 
 export const DetailChildRow: FC<Props> = ({
+  parent,
   rowData,
   collapsed,
   isLastRow,
@@ -268,7 +271,7 @@ export const DetailChildRow: FC<Props> = ({
             </p>
           )}
           data={listFriend}
-          initialValue={rowData?.assignee}
+          initialValue={rowData?.assignee ?? parent?.assignee}
           formatItem={{
             id: "_id",
             text: "fullname",

@@ -1,3 +1,6 @@
+import { Task } from "./task";
+import { User } from "./user";
+
 export type Project = {
   _id: string;
   name: string;
@@ -14,14 +17,8 @@ export type Author = {
 export type Group = {
   _id: string;
   name: string;
-  author: Author;
+  author: User;
   sign: string;
-};
-
-export type Author2 = {
-  _id: string;
-  image: string;
-  fullname: string;
 };
 
 export type Assignee = {
@@ -30,18 +27,19 @@ export type Assignee = {
   fullname: string;
 };
 
-export type SearchListRecord = {
-  _id: string;
-  actualFinishTime: Date;
-  project: Project;
-  group: Group;
-  author: Author2;
-  name: string;
-  description: string;
-  assignee: Assignee;
-  amountChecklist: number;
-  amountFinishChecklist: number;
-};
+export type SearchListRecord = Task;
+// {
+//   _id: string;
+//   actualFinishTime: Date;
+//   project: Project;
+//   group: Group;
+//   author: User;
+//   name: string;
+//   description: string;
+//   assignee: User;
+//   amountChecklist: number;
+//   amountFinishChecklist: number;
+// };
 
 export type Data = {
   listRecords: SearchListRecord[];

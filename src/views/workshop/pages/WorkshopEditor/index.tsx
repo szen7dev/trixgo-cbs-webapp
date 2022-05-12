@@ -3,17 +3,17 @@ import { FC, useEffect, useRef } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import moment from "moment";
 import "moment/locale/vi";
 
 import SubjectRepositories from "apis/training/SubjectRepositories";
 
 import type { Editor as EditorType, EditorEvent } from "tinymce";
-import { User } from "typings/user";
-import { toast } from "react-toastify";
+import type { User } from "typings/user";
 import { useAuth } from "services/hooks/auth/useAuth";
-import { SerialQueue } from "utils/ppt";
 import { useUpload } from "services/hooks/useUpload";
+import { SerialQueue } from "utils/ppt";
 
 const serialQueue = new SerialQueue(1);
 const WorkshopEditor: FC = () => {
@@ -134,6 +134,7 @@ const WorkshopEditor: FC = () => {
             editorRef.current = editor;
             refetch();
           }}
+          disabled={user?.email !== 'contact@trixgo.com'}
           apiKey={process.env.REACT_APP_TINYMCE_API_KEY}
           onSaveContent={handleSave}
           init={{
@@ -158,7 +159,6 @@ const WorkshopEditor: FC = () => {
               table: { title: "Table", items: "inserttable | cell row column | tableprops deletetable" },
               help: { title: "Help", items: "help" },
             },
-            menubar: true,
             plugins: [
               "advlist autolink lists link image charmap print preview anchor",
               "searchreplace code",
@@ -169,11 +169,12 @@ const WorkshopEditor: FC = () => {
             // images_upload_url: "/api/upload/image",
             file_picker_types: "image",
             images_upload_handler: imagesUploadHandler,
-            toolbar:
+            menubar: user?.email === 'contact@trixgo.com',
+            toolbar: user?.email === 'contact@trixgo.com' ?
               "undo redo | formatselect | " +
               "bold italic backcolor | alignleft aligncenter " +
               "alignright alignjustify | bullist numlist outdent indent | " +
-              "removeformat | help | image",
+              "removeformat | help | image" : false,
             content_style: "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
             content_css: "document",
             // save_enablewhendirty: true,

@@ -24,7 +24,7 @@ const ModalAddNotificationEmail: FC<Props> = ({ toggle, task }) => {
 	const [keyword, setKeyword] = useState('');
 	const { assigned, checked, checkboxRef, handleChangeCheckbox, handleCheckAll } = useCheckedList(data);
 	const {
-		data: listUsersSystem, 
+		data: listUsersSystem,
 		refetch: refetchUser,
 	} = useUserSystem({
 		arrayID: JSON.stringify(data.map(item => item._id)),
@@ -38,7 +38,7 @@ const ModalAddNotificationEmail: FC<Props> = ({ toggle, task }) => {
 	}, [keyword])
 
 	const handleSubmit = async () => {
-		if(!checked || !checked.length)
+		if((!checked || !checked.length) && !emails)
 			return toast.warning('Vui lòng chọn người gửi mail');
 
 		if(!title)
@@ -48,22 +48,25 @@ const ModalAddNotificationEmail: FC<Props> = ({ toggle, task }) => {
 			return toast.warning('Vui lòng nhập nội dung');
 
 		const listReceiversID = checked.map(user => user._id);
-		const body = {
+		toggle();
+
+		const result = await sendMailDetailTaskAsync({
 			taskID: task._id,
 			title,
 			notice: content,
 			members: listReceiversID,
 			emails
-		}
+		});
 
-		const result = await sendMailDetailTaskAsync(body);
 		if(result.error) {
-			toast.error('Gửi email thất bại');
-		} else{
-			toast.success('Gửi email thành công');
+			if(result.data?.keyError === 'params_mail_invalid') {
+				return toast.error(result.data?.message);
+			}
+
+			return toast.error('Gửi email thất bại');
 		}
 
-		toggle();
+		toast.success('Gửi email thành công');
 	}
 
 	return (

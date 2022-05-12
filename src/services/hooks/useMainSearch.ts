@@ -13,7 +13,7 @@ type UseMainSearch = {
     hasNextPage: boolean | undefined
 };
 
-export const UseMainSearch = (key?: string, params?: SearchPayload): UseMainSearch => {
+export const UseMainSearch = (key?: string, params?: SearchPayload, isFetch?: boolean): UseMainSearch => {
     const {
         isLoading: isLoadingSearchResultList,
         data: dataSearchResultList,
@@ -26,7 +26,7 @@ export const UseMainSearch = (key?: string, params?: SearchPayload): UseMainSear
             async ({ pageParams }: any) => 
             MainSearchRepository.mainSearch({ 
                 lastestID: pageParams ? pageParams : "",
-                select: "name description amountChecklist amountFinishChecklist assignee actualFinishTime",
+                // select: "name description amountChecklist amountFinishedChecklist assignee actualFinishTime",
                 populates: JSON.stringify({
                     path: "assignee author project group lastLog",
                     select: "name fullname image sign content author",
@@ -42,7 +42,7 @@ export const UseMainSearch = (key?: string, params?: SearchPayload): UseMainSear
                     return nextCursor || undefined;
                 },
                 refetchOnWindowFocus: false,
-                enabled: false
+                enabled: isFetch ?? false
             }
         );
 

@@ -109,7 +109,7 @@ const MainSearchDialog: FC = () => {
             <div className="t-main-search-results-container relative">
               {searchResultList.length ? 
                 searchResultList.map(searchResultItem => {
-                  const progressValue = searchResultItem.amountChecklist ? searchResultItem.amountFinishChecklist/searchResultItem.amountChecklist : 0;
+                  const progressValue = searchResultItem.amountChecklist ? searchResultItem.amountFinishedChecklist/searchResultItem.amountChecklist : 0;
                   return (
                     <Link onClick={() => closeModal()} to={`/pcm/detail/${searchResultItem._id}`}  key={searchResultItem._id} className="t-main-search-result-item flex pl-8 pr-8 mb-5 t-main-search-result-item-good">
                       <input type="checkbox" className="form-check-input mr-5 mt-2 cursor-pointer" />
@@ -134,7 +134,7 @@ const MainSearchDialog: FC = () => {
                             (
                               <div className="w-2/5">
                                 <div className="text-right text-[12px] mb-1">
-                                  {searchResultItem.amountFinishChecklist}/{searchResultItem.amountChecklist}
+                                  {searchResultItem.amountFinishedChecklist}/{searchResultItem.amountChecklist}
                                 </div>
                                 <div className="border border-solid border-primary-border bg-secondary-light rounded">
                                   <div className="bg-green h-1" style={{ width: `${progressValue}%` }}></div>

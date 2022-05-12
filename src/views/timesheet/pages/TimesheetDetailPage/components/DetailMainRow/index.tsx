@@ -132,6 +132,7 @@ export const DetailMainRow: FC<Props> = ({
           isLastRow={false}
           collapsed={false}
           rowData={childRow}
+          parent={timeSheetParentInfo}
           index={index}
           hasPermission={hasPermission}
           onUpdatedTimeSheetChild={onUpdatedTimeSheetChild}
