@@ -16,11 +16,7 @@ import iconThreeDotsVertical from "assets/images/icon-3dots-vertical.svg";
 import iconChevronRight from "assets/images/icon-chevron-right.png";
 import thumbnail from "assets/images/thumbnail2.png";
 
-type WorkProps = {
-  //
-};
-
-const Work: FC<WorkProps> = (props) => {
+const Work: FC = () => {
   const { closeModal } = useModal();
   const [currentID, setCurrentID] = useState("");
   const [filterParam, setFilterParam] = useState({});
@@ -59,6 +55,7 @@ const Work: FC<WorkProps> = (props) => {
   const onHandleFilterData = (filterData: any) => {
     setFilterParam(filterData);
   };
+
   return (
     <Fragment>
       <div className="pt-4 pl-8 pr-8 pb-3 relative">
@@ -123,7 +120,7 @@ const Work: FC<WorkProps> = (props) => {
             {searchResultList.length ? (
               searchResultList.map((searchResultItem) => {
                 const progressValue = searchResultItem.amountChecklist
-                  ? searchResultItem.amountFinishChecklist || 0 / searchResultItem.amountChecklist
+                  ? searchResultItem.amountFinishedChecklist || 0 / searchResultItem.amountChecklist
                   : 0;
 
                 return (
@@ -165,7 +162,7 @@ const Work: FC<WorkProps> = (props) => {
                         {searchResultItem.amountChecklist ? (
                           <div className="w-2/5">
                             <div className="text-right text-[12px] mb-1">
-                              {searchResultItem.amountFinishChecklist || 0}/
+                              {searchResultItem.amountFinishedChecklist || 0}/
                               {searchResultItem.amountChecklist}
                             </div>
                             {/* Progessbar */}

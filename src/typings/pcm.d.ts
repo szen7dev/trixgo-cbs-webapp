@@ -261,6 +261,7 @@ export type SendMailTaskPayload = {
   title: string;
   notice: string;
   members: string[];
+  emails?: string;
 }
 
 

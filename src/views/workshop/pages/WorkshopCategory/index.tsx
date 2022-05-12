@@ -14,15 +14,13 @@ import { CreateSubjectBody, Subject } from "typings/workshop";
 import { FormikHelpers } from "formik";
 import { toast } from "react-toastify";
 import { ContextMenu, useContextMenu } from "shareComponents/common/ContextMenu";
+import { useAuth } from "services/hooks/auth/useAuth";
 
-type Props = {
-  //
-};
-
-const WorkshopCategory: FC<Props> = (props) => {
+const WorkshopCategory: FC = () => {
   const [isShow, setIsShow] = useState(false);
   const [selected, setSelected] = useState<Partial<Subject>>({});
   const { open } = useContextMenu();
+  const { user } = useAuth();
 
   const { data, refetch } = useQuery(["subjects_list"], () => SubjectRepositories.get({ limit: 4 }), {
     refetchOnWindowFocus: false,
@@ -30,7 +28,7 @@ const WorkshopCategory: FC<Props> = (props) => {
     cacheTime: 60_000,
   });
 
-  async function handleSubmit(values: CreateSubjectBody, formikHelpers: FormikHelpers<CreateSubjectBody>) {
+  const handleSubmit = async (values: CreateSubjectBody, formikHelpers: FormikHelpers<CreateSubjectBody>) => {
     try {
       if (selected._id) {
         await SubjectRepositories.update({ subjectID: selected._id, ...values });
@@ -48,12 +46,14 @@ const WorkshopCategory: FC<Props> = (props) => {
     }
   }
 
-  function handleOnContextMenu(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, subject: Subject) {
+  const handleOnContextMenu = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, subject: Subject) => {
     e.preventDefault();
 
     setSelected(subject);
     open({ position: { x: e.clientX, y: e.clientY } });
   }
+
+  const toggleModal = () => setIsShow(!isShow);
 
   return (
     <div className="w-full max-w-[1185px] mx-auto bg-white min-h-full space-y-10 py-9 px-[90px]">
@@ -107,21 +107,24 @@ const WorkshopCategory: FC<Props> = (props) => {
           </li>
         </ul>
       </ContextMenu>
-      {data &&
-        data.data.listRecords.map((subject) => (
-          <SubjectList key={subject._id} subject={subject} onContextMenu={(e) => handleOnContextMenu(e, subject)} />
-        ))}
-      <button
-        className="fixed bottom-5 right-20 bg-cbs-primary rounded-full text-white w-14 h-14 text-3xl font-thin"
-        onClick={() => {
-          setSelected({});
-          setIsShow(true);
-        }}
-      >
-        +
-      </button>
-      <ModalExtraLarge show={isShow}>
-        <ModalCreateContent toggle={() => setIsShow(!isShow)} show={isShow} initialValues={{ ...selected }} onSubmit={handleSubmit} />
+
+      {data ? data.data.listRecords.map((subject) => (
+        <SubjectList key={subject._id} subject={subject} onContextMenu={(e) => handleOnContextMenu(e, subject)} />
+      )) : ''}
+
+      {user?.email === 'contact@trixgo.com' ? (
+        <button
+          className="fixed bottom-5 right-20 bg-cbs-primary rounded-full text-white w-14 h-14 text-3xl font-thin"
+          onClick={() => {
+            setSelected({});
+            setIsShow(true);
+          }}
+        >
+          +
+        </button>
+      ) : ''}
+      <ModalExtraLarge show={isShow} toggle={toggleModal}>
+        <ModalCreateContent toggle={toggleModal} show={isShow} initialValues={{ ...selected }} onSubmit={handleSubmit} />
       </ModalExtraLarge>
     </div>
   );

@@ -29,7 +29,7 @@ export interface Data {
     order: number;
     checklists: any[];
     amountChecklist: number;
-    amountFinishChecklist: number;
+    amountFinishedChecklist: number;
     signatures: any[];
     links: any[];
     authorAttachs: string[];
