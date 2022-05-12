@@ -26,6 +26,7 @@ import { useUpload } from 'services/hooks/useUpload';
 import { useUser } from 'services/hooks/personal/useUser';
 import { useAuth } from "services/hooks/auth/useAuth";
 import { toast } from "react-toastify";
+import { resolve } from "path";
 
 /*=====7.OTHER=====*/
 
@@ -51,7 +52,14 @@ export const ChangePassword: FC = () => {
 	});
 
 	const handleSubmitUpdatePassword = async (values: UpdatePasswordUser) => {
-        await updatePasswordUser(values);
+		const { confirmPass, currentPass, newPass } = values;
+		if(!confirmPass || !currentPass || !newPass)
+			return toast.error("Vui lòng nhập đủ thông tin");
+		if(confirmPass != newPass)
+			return toast.error("Xác nhận mật khẩu mới không khớp");
+
+        const infoAfterUpdatePass = await updatePasswordUser(values);
+		console.log({ infoAfterUpdatePass })
     }
 
 	const handleChangeAvatar = async (event: ChangeEvent<HTMLInputElement>) => {

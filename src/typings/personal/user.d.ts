@@ -7,6 +7,7 @@ export type UpdateUser = {
 };
 
 export type UpdatePasswordUser = {
+    confirmPass: string,
     currentPass: string,
     newPass: string,
 };

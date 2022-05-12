@@ -48,9 +48,7 @@ export const useUser = (params?: any, pageParam = '' ) : UseUser => {
             if (!error) {
                 toast.success('Cập nhật mật khẩu thành công');
             } else {
-                if(data && data[0]) {
-                    toast.error(data[0].message);
-                }
+                toast.error(data.message);
             }
         } catch (error: unknown) {
             if (typeof error === "string") {
