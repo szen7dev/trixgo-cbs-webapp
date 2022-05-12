@@ -70,7 +70,7 @@ const ModalInformation: FC<Props> = ({ open, onClose, dataPopup }) => {
 									</div>
 									{/* Header */}
 									<div className='px-6 pt-2'>
-										<div className="flex mt-4 mb-3 pl-5 justify-between">
+										<div className="flex mt-4 mb-3 pl-5 justify-between items-center">
 											<div className="flex items-center">
 												<input type="checkbox" className='cbs-checkbox' ref={checkboxRef} onClick={handleCheckAll} />
 												<button>

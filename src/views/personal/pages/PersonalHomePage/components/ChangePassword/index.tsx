@@ -25,6 +25,8 @@ import { UpdatePasswordUser } from 'typings/personal/user';
 import { useUpload } from 'services/hooks/useUpload';
 import { useUser } from 'services/hooks/personal/useUser';
 import { useAuth } from "services/hooks/auth/useAuth";
+import { toast } from "react-toastify";
+import { resolve } from "path";
 
 /*=====7.OTHER=====*/
 
@@ -41,6 +43,7 @@ export const ChangePassword: FC = () => {
 	const [showNewPassword, setShowNewPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [avatar, setAvatar] = useState(PersonalLogo);
+    const [avatarName, setAvatarName] = useState("");
 	const { dataUserInfo, refetchDataUserInfo } = useAuth();
     const { updateUser, updatePasswordUser } = useUser();
     const { user } = useAuth();
@@ -49,12 +52,19 @@ export const ChangePassword: FC = () => {
 	});
 
 	const handleSubmitUpdatePassword = async (values: UpdatePasswordUser) => {
-        await updatePasswordUser(values);
+		const { confirmPass, currentPass, newPass } = values;
+		if(!confirmPass || !currentPass || !newPass)
+			return toast.error("Vui lòng nhập đủ thông tin");
+		if(confirmPass != newPass)
+			return toast.error("Xác nhận mật khẩu mới không khớp");
+
+        const infoAfterUpdatePass = await updatePasswordUser(values);
+		console.log({ infoAfterUpdatePass })
     }
 
 	const handleChangeAvatar = async (event: ChangeEvent<HTMLInputElement>) => {
 		const files = event.target.files;
-		if(!files || !files.length) return;
+		if(!files || !files.length) return toast.warning("Vui lòng chọn ảnh đại diện");
 
 		const { name } = await addFileToUpload({
 			files: files[0] as any,
@@ -62,12 +72,21 @@ export const ChangePassword: FC = () => {
 			useCompress: true
 		});
 
-		await updateUser({ image: name });
-		refetchDataUserInfo();
+		if(name){
+			setAvatarName(name);
+		}
 	}
 
 	useEffect(() => {
-        refetchDataUserInfo()
+        if(avatarName) {
+			updateUser({ image: avatarName })
+			setTimeout(() => {
+				refetchDataUserInfo();
+			}, 500);
+        }
+	}, [avatarName])
+
+	useEffect(() => {
         if(dataUserInfo && dataUserInfo?.data?.image) {
 			setAvatar(dataUserInfo.data.image)
         }
