@@ -108,7 +108,7 @@ export const useTask = ({
     async ({ pageParam }: any) => {
       return TaskRepository.listTask({
         lastestID: pageParam || "",
-        ...params
+        ...params,
       });
     },
     {

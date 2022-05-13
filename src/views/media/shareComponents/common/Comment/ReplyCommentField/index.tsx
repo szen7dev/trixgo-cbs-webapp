@@ -77,20 +77,8 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 	const refInputComment = useRef<HTMLSpanElement | null>(null);
 	const refDivFile = useRef<HTMLDivElement | null>(null);
 
-	// const refsImages = useRef<{ [key: string]: NodeJS.Timeout }>({});
-	// const refsFiles = useRef<{ [key: string]: NodeJS.Timeout }>({});
-
-	// const handleCancleUploadFile = (file: FileProps | FilePropsUpload) => {
-	// 	if ('id' in file && refsFiles.current[file.id]) clearInterval(refsFiles.current[file.id])
-	// 	cancelUploadFile(file)
-	// }
-
-	// const handleCancleUploadImage = (file: FileProps | FilePropsUpload) => {
-	// 	if ('id' in file && refsImages.current[file.id]) clearInterval(refsImages.current[file.id])
-	// 	cancelUploadImage(file)
-	// }
-
 	const listenEventAddComment = (result: any) => {
+		console.log({ result, user, mediaID })
 		if(!user || !mediaID) return;
 
 		const { data, error } = result;
@@ -119,8 +107,9 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 	useEffect(() => {
 		if(!socket) return;
 
-		socket.off('COMMENT_SSC_ADD_COMMENT', listenEventAddComment);
 		socket.on('COMMENT_SSC_ADD_COMMENT', listenEventAddComment);
+
+		return () => socket.off('COMMENT_SSC_ADD_COMMENT', listenEventAddComment);
 	}, [socket])
 
 	const handleAttachFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {

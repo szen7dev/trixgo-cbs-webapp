@@ -2,7 +2,7 @@
  * Libraries
  */
 import { FC, useState, useEffect } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams, Redirect } from "react-router-dom";
 import { toast } from "react-toastify";
 
 /**
@@ -18,7 +18,7 @@ import { APP_ID } from "apis/localdb";
  */
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { usePcmReport } from "services/hooks/pcm/usePcm";
-import { UseMainSearch } from "services/hooks/useMainSearch";
+import { useSearchTask } from "services/hooks/useMainSearch";
 
 const PcmTasksReportPage: FC = () => {
   const history = useHistory();
@@ -28,17 +28,18 @@ const PcmTasksReportPage: FC = () => {
   const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 
   const {
-    searchResultList: listTasks,
-    fetchSearchResultList: nextPageListTask,
+    listTasks,
+    nextPageListTask,
     totalRecord,
-    isLoadingSearchResultList: isLoadingListTask,
-  } = UseMainSearch("tasks_reports", params, true);
+    isLoadingListTask
+  } = useSearchTask({
+    params,
+    isFetch: !!Object.keys(params).length
+  })
 
   const { infoReport } = usePcmReport({
     subjectID: reportID
   });
-
-  const handleSeeMore = () => nextPageListTask();
 
   useEffect(() => {
     if (!isSuccessApp) return;
@@ -48,15 +49,19 @@ const PcmTasksReportPage: FC = () => {
 		};
 
     document.title = "Quản lý công việc";
-  }, [isSuccessApp]);
+  }, [isSuccessApp, hasPermission]);
 
   useEffect(() => {
     if(!infoReport || !Object.keys(infoReport).length) return;
     setParams(infoReport.conditionPin);
-  }, [infoReport])
+  }, [JSON.stringify(infoReport)])
 
-  if (isLoadingListTask || !infoReport || !Object.keys(infoReport).length) {
+  if (isLoadingListTask) {
     return <Loader className="border-primary" />;
+  }
+
+  if(!infoReport || !Object.keys(infoReport).length) {
+    return <Redirect to={`/pcm/report`} />;
   }
 
   return (
@@ -85,7 +90,7 @@ const PcmTasksReportPage: FC = () => {
             <ListTasksReport
               tasks={listTasks}
               totalRecord={totalRecord}
-              onClickMore={handleSeeMore}
+              onClickMore={nextPageListTask}
             />
           )}
 

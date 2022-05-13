@@ -33,8 +33,8 @@ export const Dashboard: FC = () => {
 
   const { listMedias: listMediasDigitalConversion, nextPageListMedias, refetchListMedias } = useMedia({
     key: 'list_medias__digital-conversion',
-    params: { 
-      limit: 6, 
+    params: {
+      limit: 6,
       type: 'digital-conversion'
     },
     isFetchMedias: true
@@ -42,20 +42,20 @@ export const Dashboard: FC = () => {
 
   const { listMedias: listMediasCompany } = useMedia({
     key: 'list_medias__company_homepage',
-    params: { 
-      limit: 1, 
+    params: {
+      limit: 1,
       type: 'company',
       companyID: user?.company._id
     },
     isFetchMedias: true
   });
 
-  const { 
-    listNotifications, 
+  const {
+    listNotifications,
     totalRecord,
-    refetchListNotification, 
-    hasNextPage: hasNextPageNotification, 
-    nextPageListNotification 
+    refetchListNotification,
+    hasNextPage: hasNextPageNotification,
+    nextPageListNotification
   } = useNotification({ limit: 5 }, true);
 
   const { data } = useQuery("pcm_plan_tasks/badge", () => PcmRepository.listTotalAnalysis());
@@ -63,11 +63,9 @@ export const Dashboard: FC = () => {
   useEffect(() => {
     if (!socket) return;
 
-		socket.on('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', () => {
-      console.log('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION');
-      // refetchListMedias();
-      refetchListNotification();
-		});
+		socket.on('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', refetchListNotification);
+
+    return () => socket.on('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', refetchListNotification);
   }, [socket])
 
   const settings = {
@@ -157,7 +155,7 @@ export const Dashboard: FC = () => {
             <div className="t-home-slider w-full">
               <Slider {...settings}>
                 {/* outstanding news slider item */}
-                {listMediasDigitalConversion.length ? 
+                {listMediasDigitalConversion.length ?
                   listMediasDigitalConversion.map((media: any) => (
                     <div key={media._id} className="t-home-slider-item w-1/3 pr-2 pl-2">
                       <div className="t-home-slider-item-warpper relative flex items-end p-2">
@@ -168,7 +166,7 @@ export const Dashboard: FC = () => {
                               {media.title?.length > 20 ? `${media.title?.substring(0, 20)}...` : media.title}
                             </p>
                           </Link>
-                          <div 
+                          <div
                             className="text-[14px]"
                             dangerouslySetInnerHTML={{
                               __html: media.content?.length > 50 ? `${media.content?.substring(0, 50)}...` : media.content
@@ -179,7 +177,7 @@ export const Dashboard: FC = () => {
                     </div>
                   ))
                  : ''}
-                
+
                 {/* outstanding news slider item */}
                 {/* <div className="t-home-slider-item w-1/3 pr-2 pl-2">
                   <div className="t-home-slider-item-warpper relative flex items-end p-2">
@@ -209,7 +207,7 @@ export const Dashboard: FC = () => {
                   <Link to={`/media/post/${listMediasCompany[0]._id}`}>
                     <p className="t-home-media-title font-bold"> {listMediasCompany[0].title} </p>
                   </Link>
-                  <div 
+                  <div
                     className="t-home-media-description mb-4"
                     dangerouslySetInnerHTML={{
                       __html: listMediasCompany[0].content?.length > 200 ? `${listMediasCompany[0].content?.substring(0, 200)}...` : listMediasCompany[0].content
@@ -224,7 +222,7 @@ export const Dashboard: FC = () => {
                   </div>
                   <div className="t-home-media-parameter flex justify-between text-primary-gray">
                     <div className="t-home-media-parameter-item flex items-center">
-                      <img className="w-6 h-6 object-contain" src={iconThumbsUp} alt="Like" /> 
+                      <img className="w-6 h-6 object-contain" src={iconThumbsUp} alt="Like" />
                       {abbreviateNumber(listMediasCompany[0].amountReaction)}
                     </div>
                     <div className="t-home-media-parameter-item flex items-center">
@@ -322,7 +320,7 @@ export const Dashboard: FC = () => {
             <div className="t-home-right-block-common-description">Đấu thầu gói thầu quy mô lớn, minh bạch/bảo mật thông tin suốt quá trình</div>
           </div>
         </div>
-				
+
 				<div className="border-cbs-border rounded-[5px] border-cbs-[1px] mb-4">
 					<img src={imgBusiness2} alt="Business"/>
 				</div>
@@ -481,7 +479,7 @@ export const Dashboard: FC = () => {
             </div> */}
           {/* </div> */}
         {/* </div> */}
-        
+
       </div>
     </div>
   );

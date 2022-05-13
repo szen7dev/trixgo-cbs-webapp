@@ -13,7 +13,11 @@ type UseMainSearch = {
     hasNextPage: boolean | undefined
 };
 
-export const UseMainSearch = (key?: string, params?: SearchPayload, isFetch?: boolean): UseMainSearch => {
+/**
+ * @deprecated Use 'useSearchTask' hook instead.
+ * this hook will be refactored in the future;
+ */
+export const useMainSearch = (key?: string, params?: SearchPayload, isFetch?: boolean): UseMainSearch => {
     const {
         isLoading: isLoadingSearchResultList,
         data: dataSearchResultList,
@@ -22,10 +26,10 @@ export const UseMainSearch = (key?: string, params?: SearchPayload, isFetch?: bo
         fetchPreviousPage: prevPageSearchResultList,
         hasNextPage: hasNextPage
     } = useInfiniteQuery(
-            ['search_results', key, params],
-            async ({ pageParams }: any) => 
-            MainSearchRepository.mainSearch({ 
-                lastestID: pageParams ? pageParams : "",
+            [key || 'search_results', params],
+            async ({ pageParam }: any) =>
+            MainSearchRepository.mainSearch({
+                lastestID: pageParam ? pageParam : "",
                 // select: "name description amountChecklist amountFinishedChecklist assignee actualFinishTime",
                 populates: JSON.stringify({
                     path: "assignee author project group lastLog",
@@ -38,8 +42,8 @@ export const UseMainSearch = (key?: string, params?: SearchPayload, isFetch?: bo
                 ...params,
             }),
             {
-                getNextPageParam: ({ nextCursor }: any) => {
-                    return nextCursor || undefined;
+                getNextPageParam: ({ data }: any) => {
+                    return data?.nextCursor ?? undefined;
                 },
                 refetchOnWindowFocus: false,
                 enabled: isFetch ?? false
@@ -63,5 +67,83 @@ export const UseMainSearch = (key?: string, params?: SearchPayload, isFetch?: bo
         totalRecord,
         nextCursor,
         hasNextPage
+    };
+};
+
+/**
+ * ============================ ****************** ===============================
+ * ============================ 	 SEARCH TASK   ===============================
+ * ============================ ****************** ===============================
+ */
+
+type UseSearchTask = {
+    listTasks: Array<SearchListRecord>;
+    isLoadingListTask: boolean;
+    totalRecord: number | undefined;
+    totalPage: number | undefined;
+    hasNextPage: boolean | undefined;
+    refetchListTask: () => void;
+    nextPageListTask: () => void;
+    prevPageListTask: () => void;
+};
+
+type UseSearchTaskProps ={
+    params?: any,
+    isFetch?: boolean;
+}
+
+export const useSearchTask = ({
+    params = {},
+    isFetch = false,
+}: UseSearchTaskProps): UseSearchTask => {
+
+    const {
+        isLoading: isLoadingListTask,
+        data: dataListTask,
+        refetch: refetchListTask,
+        fetchNextPage: nextPageListTask,
+        fetchPreviousPage: prevPageListTask,
+        hasNextPage,
+    } = useInfiniteQuery(
+        ["task--list_by_filter", params],
+        async ({ pageParam }: any) =>
+        MainSearchRepository.mainSearch({
+            lastestID: pageParam || "",
+            populates: JSON.stringify({
+                path: "assignee author project group lastLog",
+                select: "name bizfullname image sign content author",
+                populate: {
+                    path: "author",
+                    select: "bizfullname image sign"
+                }
+            }),
+            ...params,
+        }),
+        {
+            getNextPageParam: ({ data }: any) => {
+                return data?.nextCursor || undefined;
+            },
+            refetchOnWindowFocus: false,
+            enabled: isFetch ?? false,
+        }
+    );
+
+    const listTasks = []
+        .concat(...(dataListTask?.pages || [])
+        .map((d: any) => d.data?.listRecords))
+        .filter(Boolean);
+
+    const totalRecord = dataListTask?.pages[0]?.data?.totalRecord;
+    const totalPage = dataListTask?.pages[0]?.data?.totalPage;
+
+    return {
+        listTasks,
+        isLoadingListTask,
+        totalRecord,
+        hasNextPage,
+        totalPage,
+        refetchListTask,
+        nextPageListTask,
+        prevPageListTask,
     };
 };

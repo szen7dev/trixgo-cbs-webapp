@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 
 import { useModal } from "services/hooks/useModal";
-import { UseMainSearch } from "services/hooks/useMainSearch";
+import { useMainSearch } from "services/hooks/useMainSearch";
 
 // Components
 import { Loader } from "shareComponents/common";
@@ -30,7 +30,7 @@ const Work: FC = () => {
     totalRecord,
     nextCursor,
     isLoadingSearchResultList,
-  } = UseMainSearch("search_results", {
+  } = useMainSearch("search_results", {
     keyword: searchText,
     lastestID: !isResultNavigation ? "" : currentID,
     ...filterParam,

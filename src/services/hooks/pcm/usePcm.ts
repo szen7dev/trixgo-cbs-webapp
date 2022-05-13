@@ -54,7 +54,7 @@ export const usePcm = (params?: any, isFetch?: boolean) : UsePcm => {
         hasNextPage: hasNextPage
     } =
         useInfiniteQuery(
-            "list_tasks",
+            ["list_tasks", params],
             async ({ pageParams }: any) =>
             PcmRepository.listTasks({
                 lastestID: pageParams ? pageParams : "",

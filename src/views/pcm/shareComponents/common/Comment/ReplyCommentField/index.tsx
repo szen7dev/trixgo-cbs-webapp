@@ -90,38 +90,36 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 	const refInputComment = useRef<HTMLSpanElement | null>(null);
 	const refDivFile = useRef<HTMLDivElement | null>(null);
 
-	const listenEventAddComment = (result: any) => {
-		if(!user || !taskID) return;
-
-		const { data, error } = result;
-		if(error) return;
-
-		const { infoObject, infoComment, parentID, method } = data;
-
-		if(infoObject?._id !== taskID) return;
-		if(user._id === infoComment?.author?._id) return;
-		console.log({ result });
-
-		// if(method === 'UPDATE') {
-		// 	return dispatch({
-		// 		type: 'UPDATE_COMMENT',
-		// 		payload: {
-		// 			commentID: infoComment._id,
-		// 			parent: parentID,
-		// 			body: infoComment,
-		// 		}
-		// 	});
-		// }
-
-		// dispatch({ type: 'ADD_COMMENT', payload: infoComment });
-	}
-
 	useEffect(() => {
-		if(!socket) return;
+		const dropZone = document.getElementById("input-comment");
 
-		// socket.off("COMMENT_SSC_ADD_COMMENT", listenEventAddComment);
-		socket.on("COMMENT_SSC_ADD_COMMENT", listenEventAddComment);
-	}, [socket])
+		const handleDragOver = (e: any) => {
+			e.stopPropagation();
+			e.preventDefault();
+		}
+
+		const handleDrop = (e: any) => {
+			e.stopPropagation();
+			e.preventDefault();
+			if (e.dataTransfer) {
+				handleSetFiles(e.dataTransfer.files);
+			}
+		}
+
+		if (dropZone) {
+			dropZone.addEventListener('dragover', handleDragOver);
+
+			// Get file data on drop
+			dropZone.addEventListener('drop', handleDrop);
+		}
+
+		return () => {
+			if(dropZone) {
+				dropZone.removeEventListener('dragover', handleDragOver);
+				dropZone.removeEventListener('drop', handleDrop);
+			}
+		}
+	}, [])
 
 	const getCancelTokenRequest = (key: string, file: any) => {
 		const CancelToken = Axios.CancelToken;
@@ -258,6 +256,7 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 				objectID: taskID,
 				method,
 				parentID,
+				commentType: 'COMMENT',
 				infoComment: dataAfterInsertOrUpdate,
 				populates: JSON.stringify({
 					path: 'project author'
@@ -312,26 +311,6 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 			type === 'IMAGE' ? removeUploadedImage(file._id) : removeUploadedFile(file._id);
 		}
 	}
-
-	useEffect(() => {
-		const dropZone = document.getElementById("input-comment");
-
-		if (dropZone) {
-			dropZone.addEventListener('dragover', function(e) {
-				e.stopPropagation();
-				e.preventDefault();
-			});
-
-		  	// Get file data on drop
-			dropZone.addEventListener('drop', function(e) {
-				e.stopPropagation();
-				e.preventDefault();
-				if (e.dataTransfer) {
-					handleSetFiles(e.dataTransfer.files);
-				}
-			});
-		}
-	}, [])
 
 	return (
 		<div {...props}>
