@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 
 import CommentProvider from 'views/pcm/contexts/comment/comment.provider';
 import { RootCommentsList } from '../RootCommentsList';
@@ -13,14 +13,15 @@ type Props = {
   totalRecord: number;
   limit: number;
   hasPermission: boolean;
-  onConfirm: (method?: string) => void
+  hasLoadProvider?: boolean;
+  onConfirm: (method?: string) => void,
 }
 
-export const CommentFull: FC<Props> = ({
-    userId, taskInfo, comments, amountComment, totalRecord, limit, hasPermission, onConfirm
+const Comment: FC<Props> = ({
+    userId, taskInfo, comments, amountComment, totalRecord, limit, hasPermission = true, onConfirm
 }) => {
     return (
-        <CommentProvider>
+        <React.Fragment>
             <div className="text-x-large py-3 px-6 font-bold">
               Bình luận {amountComment > 0 ? `(${amountComment})` : ''}
             </div>
@@ -45,6 +46,18 @@ export const CommentFull: FC<Props> = ({
                 />
               )}
             </div>
-        </CommentProvider>
+        </React.Fragment>
     )
+}
+
+export const CommentFull: FC<Props> = ({ hasLoadProvider = true, ...props }) => {
+  if(hasLoadProvider) {
+    return (
+      <CommentProvider>
+        <Comment {...props} />
+      </CommentProvider>
+    )
+  }
+
+  return <Comment {...props} />
 }

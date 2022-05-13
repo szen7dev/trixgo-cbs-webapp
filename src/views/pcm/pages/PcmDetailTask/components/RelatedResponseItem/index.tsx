@@ -224,7 +224,7 @@ export const RelatedResponseItem: FC<Props> = ({
 					{/* Content */}
 					<div className={`${(expanded || isExpand) ? "" : "max-w-[632px] truncate"}`}>
 						<span
-							className="text-[13px] whitespace-normal break-words"
+							className="text-[15px] whitespace-normal break-words"
                             dangerouslySetInnerHTML={{
                               __html: nl2p(response.content)
                             }}>
