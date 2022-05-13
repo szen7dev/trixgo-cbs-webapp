@@ -1,7 +1,7 @@
 /**
  * Libraries
  */
-import { FC, ClipboardEvent, useState, useContext, useEffect, useRef, useLayoutEffect } from "react";
+import { FC, ClipboardEvent, useState, useContext, useEffect, useRef } from "react";
 import { captureException } from "@sentry/react";
 import { useLocation } from "react-router-dom";
 import classNames from "classnames";
@@ -11,8 +11,8 @@ import { toArray } from "lodash";
 /**
  * Context
  */
-import CommentProvider from 'views/pcm/contexts/response/comment.provider';
-import CommentContext from 'views/pcm/contexts/response/comment.context';
+// import ResponseProvider from 'views/pcm/contexts/response/comment.provider';
+import ResponseContext from 'views/pcm/contexts/response/comment.context';
 
 /**
  * Assets
@@ -60,7 +60,7 @@ type Props = {
 const queue = new QueueUpload();
 const LIMIT_PER_PAGE_RESPONSE = 5;
 
-const Response: FC<Props> = ({ task }) => {
+export const RelatedResponse: FC<Props> = ({ task }) => {
   const location = useLocation();
   const divRef = useRef<HTMLDivElement>(null);
 
@@ -70,7 +70,7 @@ const Response: FC<Props> = ({ task }) => {
   const [currentTab, setCurrentTab] = useState(RelatedResponseTab.ALL);
 
   const [amountResponse, setAmountResponse] = useState(task.amountResponse ?? 0);
-  const [amountMarkedResponse, setAmountMarkedResponse] = useState(task.amountMarkedResponse ?? 0);
+  const [, setAmountMarkedResponse] = useState(task.amountMarkedResponse ?? 0);
 
   const { user } = useAuth();
   const { addResponseAsync, listResponses, refetchListResponses,  totalRecord: totalRecordResponse } = useRelatedResponse({
@@ -80,7 +80,7 @@ const Response: FC<Props> = ({ task }) => {
     isFetch: true
   });
 
-  const { state, dispatch } = useContext(CommentContext);
+  const { state, dispatch } = useContext(ResponseContext);
   const { addFileToUpload } = useUpload({
     appID: APP_ID.PCM.id,
     companyID: task?.company?._id,
@@ -149,25 +149,36 @@ const Response: FC<Props> = ({ task }) => {
     })();
   }, [location.hash])
 
-  const listenEventAddResponse = (result: any) => {
-    const { data, error } = result;
-
-    if(error || amountCommentBack) return;
-
-    const { infoObject, infoComment } = data;
-
-    if(infoObject?._id !== task._id) return;
-    if(user?._id === infoComment?.author?._id) return;
-
-    dispatch({ type: 'ADD_COMMENT', payload: infoComment });
-  }
-
   useEffect(() => {
-    if(!socket) return;
+    const dropZone = document.getElementById("response-form");
 
-    // socket.off("COMMENT_SSC_ADD_COMMENT", listenEventAddResponse);
-		socket.on("COMMENT_SSC_ADD_COMMENT", listenEventAddResponse);
-  }, [socket])
+    const handleDragOver = (e: any) => {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+
+    const handleDrop = (e: any) => {
+      e.stopPropagation();
+      e.preventDefault();
+      if (e.dataTransfer) {
+          handleSetFiles(e.dataTransfer.files);
+      }
+    }
+
+    if (dropZone) {
+      dropZone.addEventListener('dragover', handleDragOver);
+
+      // Get file data on drop
+      dropZone.addEventListener('drop', handleDrop);
+    }
+
+    return () => {
+      if(dropZone) {
+        dropZone.removeEventListener('dragover', handleDragOver);
+        dropZone.removeEventListener('drop', handleDrop);
+      }
+    }
+  }, [])
 
   const getClassTab = (tab: RelatedResponseTab) => {
     return currentTab === tab
@@ -219,6 +230,7 @@ const Response: FC<Props> = ({ task }) => {
         app: APP_KEY.PCM_PLAN_TASK,
         objectID: task._id,
         infoComment: data,
+        commentType: 'RESPONSE',
         populates: JSON.stringify({
           path: 'project author'
         })
@@ -356,42 +368,11 @@ const Response: FC<Props> = ({ task }) => {
     setAmountCommentBack(0);
   }
 
-  // const onClickTabMarked = () => {
-  //   setCurrentTab(RelatedResponseTab.MARKED);
-  //   dispatch({ type: 'SET_COMMENTS', payload: listResponsesMarked.reverse() });
-  //   refetchListResponseMarked();
-  //   setAmountComment(totalRecordResponseMarked);
-  //   setAmountCommentBack(0);
-  // }
-
-  useEffect(() => {
-    if(!visibleForm) return;
-
-    const dropZone = document.getElementById("response-form");
-
-    if (dropZone) {
-      dropZone.addEventListener('dragover', function(e) {
-        e.stopPropagation();
-        e.preventDefault();
-      });
-
-      // Get file data on drop
-      dropZone.addEventListener('drop', function(e) {
-        e.stopPropagation();
-        e.preventDefault();
-        if (e.dataTransfer) {
-            handleSetFiles(e.dataTransfer.files);
-        }
-      });
-    }
-  }, [visibleForm])
-
   const hashLocation = location.hash.substring(1);
 
   return (
     <>
       <div>
-        {/* Header */}
         <div className="flex justify-between items-center">
           <div className="flex items-end my-5 space-x-8">
             <div>
@@ -465,7 +446,7 @@ const Response: FC<Props> = ({ task }) => {
           <div className="ml-16" id="response-form">
             <div className="w-full border-2 rounded my-2">
               <textarea
-                className="w-full focus: outline-none p-3"
+                className="w-full focus:outline-none p-3"
                 placeholder="Biên soạn nội dung"
                 rows={10}
                 onPaste={handlePasteFile}
@@ -529,15 +510,15 @@ const Response: FC<Props> = ({ task }) => {
           </div>
         )}
       </div>
-      <ModalZoomView isShow={isShow} toggle={()=> setIsShow(!isShow)} initialData={defaultState} />
+      <ModalZoomView isShow={isShow} toggle={() => setIsShow(!isShow)} initialData={defaultState} />
     </>
   );
 };
 
-export const RelatedResponse: FC<Props> = ({ task }) => {
-  return (
-    <CommentProvider>
-      <Response task={task} />
-    </CommentProvider>
-  )
-}
+// export const RelatedResponse: FC<Props> = ({ task }) => {
+//   return (
+//     <CommentProvider>
+//       <Response task={task} />
+//     </CommentProvider>
+//   )
+// }

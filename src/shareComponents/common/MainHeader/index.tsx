@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import { MainSearchDialog, NotificationsMenu, AppsMenu, UserMenu } from "shareComponents/common";
 import SearchIcon from "assets/icons/Search";
 import fakeThumbnail from "assets/images/company_default.png";
-// import iconFilter from "assets/images/icons8-filter-96.png";
 import iconChat from "assets/images/chat.png";
+// import iconFilter from "assets/images/icons8-filter-96.png";
 
 import { useModal } from "services/hooks/useModal";
 import { useSocket } from "services/hooks/useSocket";
@@ -16,20 +16,22 @@ export const MainHeader: FC = () => {
   const { user } = useAuth();
   const { openModal } = useModal();
   const { current: socket }: any = useSocket();
-  const { 
-    listNotifications, 
+  const {
+    listNotifications,
     totalRecordSendSuccess,
-    refetchListNotification, 
-    hasNextPage, 
-    nextPageListNotification 
+    refetchListNotification,
+    hasNextPage,
+    nextPageListNotification
   } = useNotification({}, true);
 
   useEffect(() => {
     if (!socket) return;
 
-		socket.on('NOTIFICATION_SSC_RECEIVE_NEW_NOTIFICATION', () => {
-      refetchListNotification();
-		});
+    // const refetchListNoti = () => refetchListNotification();
+
+		socket.on('NOTIFICATION_SSC_RECEIVE_NEW_NOTIFICATION', refetchListNotification);
+
+    return () => socket.off('NOTIFICATION_SSC_RECEIVE_NEW_NOTIFICATION', refetchListNotification);
 	}, []);
 
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {

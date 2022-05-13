@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect, useContext } from "react";
 import { captureException } from "@sentry/react";
 import { useHistory, useParams, Redirect, Link } from "react-router-dom";
 import { Menu } from '@headlessui/react';
@@ -48,27 +48,37 @@ import { CommentFull } from "../../shareComponents/common";
 import { Loader, ModalConfirm, DropdownOption } from "shareComponents/common";
 
 /**
+ * Context
+ */
+import ResponseProvider from 'views/pcm/contexts/response/comment.provider';
+import CommentProvider from 'views/pcm/contexts/comment/comment.provider';
+import ResponseContext from 'views/pcm/contexts/response/comment.context';
+import CommentContext from 'views/pcm/contexts/comment/comment.context';
+
+/**
  * Utils
  */
-import { APP_ID } from "apis/localdb";
-import { PCM_STATUS_TASK, PCM_PRIORITY_TASK } from 'apis/localdb';
+import { APP_ID, PCM_STATUS_TASK, PCM_PRIORITY_TASK } from 'apis/localdb';
+import { TOAST_DEFAULT_OPTIONS } from "utils/constants";
 
 /**
  * Hooks, Typings
  */
 import TaskRepository from "apis/task";
 import { useModal } from "services/hooks/useModal";
+import { useSocket } from "services/hooks/useSocket";
 import useModalPcm from "views/pcm/hooks/useModal";
 import { useTask, useCheckList, useChildTask, useCommentPcm } from "services/hooks/useTask";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
-import { User } from "typings/user";
-import { TOAST_DEFAULT_OPTIONS } from "utils/constants";
 
-const PcmDetailTaskPage: FC = () => {
+import { User } from "typings/user";
+
+const PcmDetailTask: FC = () => {
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
   const { openModal, closeModal } = useModal();
+
   const [{ isShow, type }, {
     toggleModal,
     openAddUserRelation,
@@ -77,9 +87,14 @@ const PcmDetailTaskPage: FC = () => {
     openMoveTaskToGroup,
     openUpdateMilestone
   }] = useModalPcm();
+
   const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 
   const { user } = useAuth();
+  const { current: socket }: any = useSocket();
+  const { dispatch: responseDispatch } = useContext(ResponseContext);
+  const { dispatch: commentDispatch } = useContext(CommentContext);
+
   const { updateTaskAsync, copyTaskAsync } = useTask({});
 
   const { data: infoTask, refetch: refetchInfoTask, isLoading } = useQuery(`task_info.${id}`, () =>
@@ -246,6 +261,46 @@ const PcmDetailTaskPage: FC = () => {
     );
   };
 
+  const listenEventAddComment = (result: any) => {
+    const { data, error } = result;
+
+    if(error) return;
+
+    const { infoObject, infoComment, parentID, method } = data;
+
+    if(infoObject?._id !== id) return;
+		if(user?._id === infoComment?.author?._id) return;
+
+    switch (data.commentType) {
+      case 'COMMENT': {
+        if(method === 'UPDATE') {
+          return commentDispatch({
+            type: 'UPDATE_COMMENT',
+            payload: {
+              commentID: infoComment._id,
+              parent: parentID,
+              body: infoComment,
+            }
+          });
+        }
+
+        commentDispatch({ type: 'ADD_COMMENT', payload: infoComment });
+        break;
+      }
+      case 'RESPONSE': {
+        responseDispatch({ type: 'ADD_COMMENT', payload: infoComment });
+        break;
+      }
+      default:
+        break;
+    }
+  }
+
+  useEffect(() => {
+		socket?.on("COMMENT_SSC_ADD_COMMENT", listenEventAddComment);
+    return () => socket?.off("COMMENT_SSC_ADD_COMMENT", listenEventAddComment);
+  }, [socket])
+
   useEffect(() => {
     if (!isSuccessApp || !infoTask) return;
     if (isSuccessApp && !hasPermission) {
@@ -298,7 +353,7 @@ const PcmDetailTaskPage: FC = () => {
       });
       setConfirmUsers(confirmUsers);
     }
-  }, [infoTask, isSuccessApp]);
+  }, [infoTask, isSuccessApp, hasPermission]);
 
   if (isLoading) {
     return <Loader className="border-primary" />;
@@ -536,7 +591,7 @@ const PcmDetailTaskPage: FC = () => {
                   {parse(
                     isTruncate
                       ? _truncate(taskInfo?.description || "", { length: 300 })
-                      : taskInfo.description || ""
+                      : taskInfo?.description || ""
                   )}
                 </div>
                 {taskInfo?.description && (
@@ -625,6 +680,7 @@ const PcmDetailTaskPage: FC = () => {
               amountComment={taskData.amountComment}
               totalRecord={totalRecord}
               limit={limit}
+              hasLoadProvider={false}
               hasPermission={permissions.hasPermissionComment}
               onConfirm={(method?: string) => {
                 if(method && method === 'INSERT') {
@@ -723,5 +779,15 @@ const PcmDetailTaskPage: FC = () => {
     </>
   );
 };
+
+const PcmDetailTaskPage: FC = () => {
+  return (
+    <ResponseProvider>
+      <CommentProvider>
+        <PcmDetailTask />
+      </CommentProvider>
+    </ResponseProvider>
+  )
+}
 
 export default PcmDetailTaskPage

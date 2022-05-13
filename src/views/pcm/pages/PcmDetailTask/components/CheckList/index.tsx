@@ -22,17 +22,14 @@ import { useUsersProject } from "services/hooks/users/useUserSystem";
 import { useCheckList, useChildTask } from "services/hooks/useTask";
 import { useSocket } from "services/hooks/useSocket";
 import { useAuth } from "services/hooks/auth/useAuth";
-import { CheckList as CheckListType, ChildTask as ChildTaskType, Task, UpdateStatusCheckListPayload } from "typings/task";
-import "react-datepicker/dist/react-datepicker.css";
+import {
+  CheckList as CheckListType,
+  ChildTask as ChildTaskType,
+  Task,
+  UpdateStatusCheckListPayload
+} from "typings/task";
 
-type Props = {
-  componentType: 'CHECKLIST' | 'CHILD_TASK' | 'CHECKLIST_PRINT',
-  task: Task,
-  data: Array<CheckListType | ChildTaskType>;
-  totalRecord?: number;
-  onSeeMore: () => void;
-  hasPermission: boolean;
-};
+import "react-datepicker/dist/react-datepicker.css";
 
 enum CheckListTab {
   ALL = "ALL",
@@ -42,6 +39,15 @@ enum CheckListTab {
   NEXT_WEEK = "NEXT_WEEK",
   MORE_SEVEN_DAYS = "MORE_SEVEN_DAYS",
 }
+
+type Props = {
+  componentType: 'CHECKLIST' | 'CHILD_TASK' | 'CHECKLIST_PRINT',
+  task: Task,
+  data: Array<CheckListType | ChildTaskType>;
+  totalRecord?: number;
+  onSeeMore: () => void;
+  hasPermission: boolean;
+};
 
 export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, onSeeMore, hasPermission }) => {
   const [keywordAssignee, setKeywordAssignee] = useState('');
@@ -68,11 +74,9 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
     isBottom && fetchNextPage();
   }
 
-  const handleSearchAssignee = debounce((keyword: string) => {
+  const handleSearchAssignee = (keyword: string) => {
     setKeywordAssignee(keyword);
-  }, 600);
-
-  // const handleSelectAll = () => setSelectAll(!selectAll);
+  };
 
   const getClassTab = (tab: CheckListTab) => {
     return currentTab === tab
@@ -179,7 +183,7 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
   useEffect(() => {
     if(!socket) return;
 
-    socket.on('SUBJECT_PCM_SSC_ADD_CHECKLIST', (result: any) => {
+    const onAddCheckList = (result: any) => {
       const { error, data } = result;
       if(error) return;
 
@@ -190,9 +194,9 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
       if(user?._id === senderID) return;
 
       setListData(previousValues => ([infoCheckList, ...previousValues]));
-    })
+    }
 
-    socket.on('SUBJECT_PCM_SSC_ADD_CHILD_TASK', (result: any) => {
+    const onAddChildTask = (result: any) => {
       const { error, data } = result;
       if(error) return;
 
@@ -203,7 +207,15 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
       if(user?._id === senderID) return;
 
       setListData(previousValues => ([infoChildTask, ...previousValues]));
-    })
+    }
+
+    socket.on('SUBJECT_PCM_SSC_ADD_CHECKLIST', onAddCheckList);
+    socket.on('SUBJECT_PCM_SSC_ADD_CHILD_TASK', onAddChildTask);
+
+    return () => {
+      socket.off('SUBJECT_PCM_SSC_ADD_CHECKLIST', onAddCheckList);
+      socket.off('SUBJECT_PCM_SSC_ADD_CHILD_TASK', onAddChildTask);
+    }
   }, [socket]);
 
   return (
@@ -216,7 +228,7 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
           selectAll ? "mb-1" : "mb-5"
         } flex px-5 items-center justify-between`}
       >
-        <div className={`${selectAll ? "" : "w-1/6"} `}>
+        <div className={`${selectAll ? "" : "w-1/6"}`}>
           {/* <input
             type="checkbox"
 						className="cbs-checkbox"
@@ -236,14 +248,14 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
                 <img
                   className="w-6"
                   src={SendEmailIcon}
-                  alt="Send email icon"
+                  alt="Send email"
                 />
               </button>
               <button className="mx-2">
-                <img className="w-6" src={IconPencil} alt="Pencil icon" />
+                <img className="w-6" src={IconPencil} alt="Update" />
               </button>
               <button className="mx-2">
-                <img className="w-6" src={LinkIcon} alt="Link icon" />
+                <img className="w-6" src={LinkIcon} alt="Link" />
               </button>
             </div>
             <button className="text-[13px] w-10 h-10 flex justify-center items-center rounded-full bg-lighter-gray">

@@ -57,6 +57,7 @@ export type SearchResultResponse = {
 
 export type SearchPayload = {
   keyword?: string;
+  limit?: number;
   lastestID?: string;
   select?: string;
   populates?: string;

@@ -11,7 +11,7 @@ import thumbnail from "assets/images/thumbnail2.png";
 import { Loader } from "shareComponents/common/Loader";
 import MainSearchFilter from "./SearchFilter";
 
-import { UseMainSearch } from 'services/hooks/useMainSearch';
+import { useMainSearch } from 'services/hooks/useMainSearch';
 import { useModal } from "services/hooks/useModal";
 
 const MainSearchDialog: FC = () => {
@@ -22,12 +22,12 @@ const MainSearchDialog: FC = () => {
   const [isVisibleSearchFilter, setIsVisibleSearchFilter] = useState(false);
   const [searchText, setSearchText] = useState<string>("");
   const [filterParam, setFilterParam] = useState({});
-  const { searchResultList, 
-          fetchSearchResultList, 
-          totalRecord, 
-          nextCursor, 
-          isLoadingSearchResultList, 
-        } = UseMainSearch('search_results', { keyword: searchText, lastestID: !isResultNavigation ? '' : currentID, ...filterParam });
+  const { searchResultList,
+          fetchSearchResultList,
+          totalRecord,
+          nextCursor,
+          isLoadingSearchResultList,
+        } = useMainSearch('search_results', { keyword: searchText, lastestID: !isResultNavigation ? '' : currentID, ...filterParam });
 
   const toggleSearchFilter = () => {
     setIsVisibleSearchFilter(!isVisibleSearchFilter);
@@ -37,7 +37,7 @@ const MainSearchDialog: FC = () => {
     setSearchText(val);
     setIsResultNavigation(false);
   };
-  
+
   useEffect(() => {
     fetchSearchResultList();
   }, [searchText, currentID, isResultNavigation, filterParam]);
@@ -56,11 +56,11 @@ const MainSearchDialog: FC = () => {
     <div className="t-main-search-wrapper rounded pb-4">
       {/* Search form */}
       <div className="t-main-search-input pt-4 pl-8 pr-8 pb-3 relative">
-        <input 
-          value={searchText} 
+        <input
+          value={searchText}
           onChange={(e) => handleSearchInput(e.target.value)}
-          type="search" 
-          placeholder="Tìm kiếm" 
+          type="search"
+          placeholder="Tìm kiếm"
           className="w-full focus:outline-none h-11 border border-solid border-primary-border pl-3 pr-16 rounded-md" />
         <button
           onClick={toggleSearchFilter}
@@ -86,28 +86,28 @@ const MainSearchDialog: FC = () => {
                 {/* <button className="rounded-full h-10 w-10 flex items-center justify-center hover:bg-gray-100 border border-solid border-transparent hover:border-primary-border">
                     <img alt="Previous" src={iconChevronLeft} className="w-4 filter-primary-gray" />
                 </button> */}
-                {totalRecord && totalRecord > 10 ? 
-                <button 
-                  onClick={handleNextPageButton} 
+                {totalRecord && totalRecord > 10 ?
+                <button
+                  onClick={handleNextPageButton}
                   className="rounded-full h-10 w-10 flex items-center justify-center hover:bg-gray-100 border border-solid border-transparent hover:border-primary-border"
                 >
                     <img alt="Next" src={iconChevronRight} className="w-4 filter-primary-gray" />
                 </button>
                 : ''
                 }
-                
+
               </>
             ) : ''}
           </div>
         </div>
 
         {/* result type: t-main-search-result-item-good, t-main-search-result-item-incoming, t-main-search-result-item-overdue, t-main-search-result-item-normal */}
-        {isLoadingSearchResultList ? 
+        {isLoadingSearchResultList ?
           <Loader absolute={true} className="border-primary" />
           :
           (
             <div className="t-main-search-results-container relative">
-              {searchResultList.length ? 
+              {searchResultList.length ?
                 searchResultList.map(searchResultItem => {
                   const progressValue = searchResultItem.amountChecklist ? searchResultItem.amountFinishedChecklist/searchResultItem.amountChecklist : 0;
                   return (
@@ -130,7 +130,7 @@ const MainSearchDialog: FC = () => {
                               {searchResultItem.assignee?.fullname} {searchResultItem.group?.sign && '|'} {searchResultItem.group?.sign}
                             </span>
                           </div>
-                          {searchResultItem.amountChecklist ? 
+                          {searchResultItem.amountChecklist ?
                             (
                               <div className="w-2/5">
                                 <div className="text-right text-[12px] mb-1">
@@ -142,7 +142,7 @@ const MainSearchDialog: FC = () => {
                               </div>
                             ) : ''
                           }
-                          
+
                         </div>
                       </div>
                     </Link>
@@ -164,7 +164,7 @@ const MainSearchDialog: FC = () => {
           toggleSearchFilter={toggleSearchFilter}
         />
       </div>
-      
+
     </div>
   );
 };
