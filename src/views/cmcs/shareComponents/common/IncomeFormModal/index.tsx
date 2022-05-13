@@ -35,7 +35,7 @@ import {
 
 import {
   CONTRACT_TYPES, CONTRACT_DRAFT, CONTRACT_OUTIN, CONTRACT_SUB_TYPES, CONTRACT_TA,
-  CONTRACT_COME_IN_STATUS, CONTRACT_LOCK, LIMIT_DROPDOWN, DATE_FORMAT
+  CONTRACT_COME_IN_STATUS, CONTRACT_LOCK, LIMIT_DROPDOWN, DATE_FORMAT, CONTRACT_ONTIME, CONTRACT_ONBUDGET
 } from "apis/localdb/index";
 
 interface NewContractIncomeModalProps {
@@ -62,6 +62,8 @@ const mappingData = (data: any, isDataPayLoad = false) => {
     debtStatus: isDataPayLoad ? data?.debtStatus?.value : convertInitialValueDropdown(data?.debtStatus || ''),
     type: isDataPayLoad ? data?.type?.value : convertInitialValueDropdownForLocalDB(CONTRACT_TYPES, data?.type),
     warehouse: isDataPayLoad ? data?.warehouse?.value : convertInitialValueDropdown(data?.warehouse || ''),
+    ontime: isDataPayLoad ? data?.ontime?.value : convertInitialValueDropdownForLocalDB(CONTRACT_ONTIME, data?.ontime),
+    onbudget: isDataPayLoad ? data?.onbudget?.value : convertInitialValueDropdownForLocalDB(CONTRACT_ONBUDGET, data?.onbudget),
 
     name: data.name,
     buyerInfo: isDataPayLoad ? data?.buyerInfo?.value : convertInitialValueDropdown(data?.buyerInfo || ''),
@@ -795,6 +797,92 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         data={listDebtStatus.map((item) => ({
                           label: item.name,
                           value: item._id,
+                        }))}
+                        formatItem={{
+                          id: "value",
+                          text: "label",
+                        }}
+                        inlineSearch={true}
+                      />
+                      <ErrorMessage
+                        name="debtStatus"
+                        component="span"
+                        className="font-normal leading-7 text-sm text-negative"
+                      />
+                    </div>
+
+                    <div>
+                      <p className="text-xs text-primary-gray mb-2">
+                        Ontime
+                      </p>
+                      <DropdownSearchable
+                        onchangeValue={(value) => setFieldValue("ontime", value)}
+                        placeholder="Ontime..."
+                        className="w-full pl-0 -mb-1 outline-none"
+                        classNameInput="border border-primary-border rounded h-[32px]"
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        onClearData={() => setFieldValue("ontime", '')}
+                        showTriangle={true}
+                        maxWidthInput="max-w-none"
+                        disableClass={cn(
+                          "cursor-not-allowed rounded",
+                          styles.disabledBg
+                        )}
+                        renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-fit whitespace-normal" >
+                          <p className="text-1-line-clamp">{`${item.text}`}</p>
+                        </Popover>}
+                        // onSearchInputChange={debounce(
+                        //   (value) => setSearchDebtStatusValue(value),
+                        //   500
+                        // )}
+                        initialValue={initialValues?.ontime}
+                        data={CONTRACT_ONTIME.map(item => ({
+                          value: item.value,
+                          label: item.text
+                        }))}
+                        formatItem={{
+                          id: "value",
+                          text: "label",
+                        }}
+                        inlineSearch={true}
+                      />
+                      <ErrorMessage
+                        name="debtStatus"
+                        component="span"
+                        className="font-normal leading-7 text-sm text-negative"
+                      />
+                    </div>
+
+                    <div>
+                      <p className="text-xs text-primary-gray mb-2">
+                        Onbudget
+                      </p>
+                      <DropdownSearchable
+                        onchangeValue={(value) => setFieldValue("onbudget", value)}
+                        placeholder="Onbudget..."
+                        className="w-full pl-0 -mb-1 outline-none"
+                        classNameInput="border border-primary-border rounded h-[32px]"
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        onClearData={() => setFieldValue("onbudget", '')}
+                        showTriangle={true}
+                        maxWidthInput="max-w-none"
+                        disableClass={cn(
+                          "cursor-not-allowed rounded",
+                          styles.disabledBg
+                        )}
+                        renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-fit whitespace-normal" >
+                          <p className="text-1-line-clamp">{`${item.text}`}</p>
+                        </Popover>}
+                        // onSearchInputChange={debounce(
+                        //   (value) => setSearchDebtStatusValue(value),
+                        //   500
+                        // )}
+                        initialValue={initialValues?.onbudget}
+                        data={CONTRACT_ONBUDGET.map(item => ({
+                          value: item.value,
+                          label: item.text
                         }))}
                         formatItem={{
                           id: "value",

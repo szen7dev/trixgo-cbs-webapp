@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -23,6 +23,8 @@ import { useTask } from "services/hooks/useTask";
 import { usePcmComment } from "services/hooks/pcm/usePcm";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import moment from "moment";
+import usePrintComponent from "services/hooks/ppt/usePrintComponent";
+import ReactToPrint, { useReactToPrint } from "react-to-print";
 
 const PcmPrintTaskTypeThree: FC = () => {
   const history = useHistory();
@@ -36,158 +38,173 @@ const PcmPrintTaskTypeThree: FC = () => {
   const { info: taskInfo, isLoadingInfo } = useTask({
     params: {
       taskID: taskId,
-      select: "_id name sign"
+      select: "_id name sign",
     },
-    isFetchInfo: true
-  })
+    isFetchInfo: true,
+  });
 
   const {
     list: listPcmComments,
     isLoading: isLoadingPcmComments,
     fetchNextPage,
     hasNextPage,
-    totalRecord
+    totalRecord,
   } = usePcmComment({
     params: {
       taskID: taskId,
       isHaveImage: true,
       limit: 2,
-      select: '_id content images',
+      select: "_id content images",
       populates: JSON.stringify({
-        path: 'images',
-        select: '_id nameOrg path description author',
+        path: "images",
+        select: "_id nameOrg path description author",
         populate: {
-          path: 'author',
-          select: '_id bizfullname image'
-        }
-      })
+          path: "author",
+          select: "_id bizfullname image",
+        },
+      }),
     },
-    isFetchList: true
-  })
+    isFetchList: true,
+  });
 
   useEffect(() => {
     if (!isSuccessApp || !taskInfo || !user || isLoadingInfo) return;
 
     if (isSuccessApp && !hasPermission) {
-			toast.error("Bạn không có quyền truy cập tính năng này!");
-			return history.push("/");
-		};
+      toast.error("Bạn không có quyền truy cập tính năng này!");
+      return history.push("/");
+    }
   }, [taskInfo, isSuccessApp]);
 
+  // Unnessessary useEffect, use useMemo instead
   useEffect(() => {
-    if(!listPcmComments || !listPcmComments.length || isLoadingPcmComments) return;
+    if (!listPcmComments || !listPcmComments.length || isLoadingPcmComments) return;
 
     const listDataImages = listPcmComments
-      .map(item => {
-        return item.images.map(image => {
+      .filter(Boolean)
+      .map((item) => {
+        return item.images.map((image) => {
           image.content = item.content;
           return image;
         });
-      }).flat();
+      })
+      .flat();
 
     setDataListImages(listDataImages);
-  }, [JSON.stringify(listPcmComments)])
+  }, [JSON.stringify(listPcmComments)]);
 
-  if(isLoadingInfo) return <Loader className="border-primary" />
+  const componentRef = useRef(null);
+  usePrintComponent({ ref: componentRef });
+
+  if (isLoadingInfo) return <Loader className="border-primary" />;
 
   return (
     <div className="bg-cbs-gray h-full overflow-hidden">
       <div className="h-full overflow-auto py-6">
-        <div className="max-w-[791px] bg-white w-full mx-auto pl-[3.75rem] pr-6 py-6 shadow-cbs-md space-y-5">
-          <header className="mt-3">
-            <p className="font-bold">PHỤ LỤC ẢNH</p>
-            <p>
-              <i>(Đính kèm {taskInfo.name}, số hiệu: {taskInfo.sign})</i>
-            </p>
-          </header>
-          <main className="space-y-5">
-            <section>
-              <table className={styles.imagesAppendix}>
-                <thead>
-                  <tr>
-                    <th>Thứ tự</th>
-                    <th>Mô tả</th>
-                    <th>Hình ảnh</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {(dataListImages && dataListImages.length) ? dataListImages.map((image, index) => (
-                    <tr key={image._id}>
-                      <td>{index + 1}</td>
-                      <td>{image.description || image.content}</td>
-                      <td>
-                        <img
-                          src={generateIamgePath(image.path)}
-                          alt={image.nameOrg}
-                          className="cursor-pointer"
-                          onClick={() => {
-                            zoomview({
-                              createAt: moment(image.createAt).format('DD/MM/YYYY'),
-                              index: 0,
-                              mediaID: image._id || '',
-                              images: [image],
-                            });
-                          }}
-                        />
-                      </td>
-                    </tr>
-                  )) : <></>}
-                  {/* <tr>
-                    <td>1</td>
-                    <td>Thi công khu vực bể bơi tầng hầm 3, nhà tiểu học</td>
-                    <td>
-                      <img
-                        src={generateIamgePath(
-                          "/root/storage/5df4ce16506d9b3c587948ca/5e60dffb2c43a444c5f8e227/Surface Pro 8 - 1.png___48576ba2-e73f-47de-a7c8-cf8908993506___MEDIA.png"
-                        )}
-                        alt="pic"
-                        className="cursor-pointer"
-                        onClick={() => {
-                          zoomview({
-                            createAt: "20/12/12",
-                            index: 0,
-                            mediaID: "62272bd0c4f42f474131f358",
-                            images: [
-                              {
-                                _id: "62272bd0c4f42f474131f358",
-                                type: "123",
-                                name: "Surface Pro 8 - 1.png___48576ba2-e73f-47de-a7c8-cf8908993506___MEDIA.png",
-                                nameOrg: "Surface Pro 8 - 1.png",
-                                path: "/root/storage/5df4ce16506d9b3c587948ca/5e60dffb2c43a444c5f8e227/Surface Pro 8 - 1.png___48576ba2-e73f-47de-a7c8-cf8908993506___MEDIA.png",
-                                size: 85006,
-                                mimeType: "image/png",
-                              },
-                            ],
-                          });
-                        }}
-                      />
-                    </td>
-                  </tr> */}
-                </tbody>
-              </table>
-            </section>
+        <div className="max-w-[791px] bg-white w-full mx-auto pl-[3.75rem] pr-6 py-6 shadow-cbs-md">
+          <table ref={componentRef} className="print_area">
+            <style type="text/css" media="print">
+              {`
+								@media print { 
+									table { page-break-inside:auto }
+									thead { display:table-header-group; }
+									tfoot { display:table-footer-group; }
 
-            {hasNextPage && (
-              <div className="w-full flex justify-center my-5">
-                  <button onClick={fetchNextPage}>
-                      <span className="text-primary">
-                        Xem thêm
-                          {/* {`Xem thêm (${totalRecord - listPcmComments.length})`} */}
-                      </span>
-                  </button>
-              </div>
-            )}
-          </main>
-          <footer>
-            <p>
-              <i>
-                In từ nền tảng{" "}
-                <Link className="text-cbs-primary" to="/">
-                  https://app.trixgo.com: {moment().format('DD/MM/YYYY HH:mm')}
-                </Link>
-              </i>
-            </p>
-          </footer>
+									.print_area{
+										page-break-after:always;
+									}
+									.print_area > tfoot {
+										display: table-footer-group
+									}
+								}
+							`}
+            </style>
+            <tbody>
+              <tr>
+                <td>
+                  <header>
+                    <h2 className="font-bold">PHỤ LỤC ẢNH</h2>
+                    <p>
+                      <i>
+                        (Đính kèm {taskInfo.name}, số hiệu: {taskInfo.sign})
+                      </i>
+                    </p>
+                  </header>
+                </td>
+              </tr>
+              <tr>
+                <td className="pt-5">
+                  <main className="space-y-5">
+                    <section>
+                      <table className={styles.imagesAppendix}>
+                        <thead>
+                          <tr>
+                            <th className="w-1">Thứ tự</th>
+                            <th>Mô tả</th>
+                            <th>Hình ảnh</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {dataListImages && dataListImages.length ? (
+                            dataListImages.map((image, index) => (
+                              <tr key={image._id}>
+                                <td>{index + 1}</td>
+                                <td>{image.description || image.content}</td>
+                                <td>
+                                  <img
+                                    src={generateIamgePath(image.path)}
+                                    alt={image.nameOrg}
+                                    className="cursor-pointer inline-block"
+                                    onClick={() => {
+                                      zoomview({
+                                        createAt: moment(image.createAt).format("DD/MM/YYYY"),
+                                        index: 0,
+                                        mediaID: image._id || "",
+                                        images: [image],
+                                      });
+                                    }}
+                                  />
+                                </td>
+                              </tr>
+                            ))
+                          ) : (
+                            <></>
+                          )}
+                        </tbody>
+                      </table>
+                    </section>
+
+                    {hasNextPage && (
+                      <div className="w-full flex justify-center my-5">
+                        <button onClick={fetchNextPage}>
+                          <span className="text-primary">
+                            Xem thêm
+                            {/* {`Xem thêm (${totalRecord - listPcmComments.length})`} */}
+                          </span>
+                        </button>
+                      </div>
+                    )}
+                  </main>
+                </td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td>
+                  <footer id="pageFooter">
+                    <p>
+                      <i>
+                        In từ nền tảng{" "}
+                        <Link className="text-cbs-primary" to="/">
+                          https://app.trixgo.com: {moment().format("DD/MM/YYYY HH:mm")}
+                        </Link>
+                      </i>
+                    </p>
+                  </footer>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
         </div>
       </div>
       <ZoomViewV2 />
@@ -195,4 +212,4 @@ const PcmPrintTaskTypeThree: FC = () => {
   );
 };
 
-export default PcmPrintTaskTypeThree
+export default PcmPrintTaskTypeThree;
