@@ -22,6 +22,7 @@ type Props<D extends object = {},P extends object = {}> = {
 
 	colSpan?: boolean;
 	props?: P;
+	cellProps?: P;
 }
 type ColSpan = Record<string, number>
 
@@ -45,6 +46,7 @@ function TableWithoutContext<D extends object>({
 
 	colSpan,
 	props,
+	cellProps,
 }: PropsWithChildren<Props<D>>): ReactElement {
 	const colSpanRef = React.useRef<ColSpan>();
 	if (colSpan && colSpanRef.current === undefined) {
@@ -107,7 +109,7 @@ function TableWithoutContext<D extends object>({
 										const { key, ...rest } = cell.getCellProps([cell.column.cellProps || {}, getCellProps(cell)]);
 										if (!colSpan || (colSpanRef.current && colSpanRef.current[cell.column.id]))
 											return <td key={key} {...rest}>
-												{cell.render('Cell')}
+												{cell.render('Cell', cellProps)}
 											</td>
 										else return null
 
@@ -115,7 +117,7 @@ function TableWithoutContext<D extends object>({
 									: row.cells.map((cell, idx) => {
 										const { key, ...rest } = cell.getCellProps([cell.column.subCellProps || {},getCellChildProps(cell)]);
 										return <td key={key} {...rest}>
-											{cell.render(cell.column.SubCell ? 'SubCell' : 'Cell')}
+											{cell.render(cell.column.SubCell ? 'SubCell' : 'Cell', cellProps)}
 										</td>
 									})
 							}

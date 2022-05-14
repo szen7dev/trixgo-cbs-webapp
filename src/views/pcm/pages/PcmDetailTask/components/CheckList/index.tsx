@@ -4,7 +4,6 @@ import { captureException } from "@sentry/react";
 import { Formik, getIn } from "formik";
 import { object, string, date } from "yup";
 import { toast } from "react-toastify";
-import { debounce } from "lodash";
 import moment from "moment";
 import classnames from "classnames";
 
@@ -181,8 +180,6 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
   }, [data.length])
 
   useEffect(() => {
-    if(!socket) return;
-
     const onAddCheckList = (result: any) => {
       const { error, data } = result;
       if(error) return;
@@ -209,12 +206,12 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
       setListData(previousValues => ([infoChildTask, ...previousValues]));
     }
 
-    socket.on('SUBJECT_PCM_SSC_ADD_CHECKLIST', onAddCheckList);
-    socket.on('SUBJECT_PCM_SSC_ADD_CHILD_TASK', onAddChildTask);
+    socket?.on('SUBJECT_PCM_SSC_ADD_CHECKLIST', onAddCheckList);
+    socket?.on('SUBJECT_PCM_SSC_ADD_CHILD_TASK', onAddChildTask);
 
     return () => {
-      socket.off('SUBJECT_PCM_SSC_ADD_CHECKLIST', onAddCheckList);
-      socket.off('SUBJECT_PCM_SSC_ADD_CHILD_TASK', onAddChildTask);
+      socket?.off('SUBJECT_PCM_SSC_ADD_CHECKLIST', onAddCheckList);
+      socket?.off('SUBJECT_PCM_SSC_ADD_CHILD_TASK', onAddChildTask);
     }
   }, [socket]);
 
@@ -225,7 +222,7 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
       {/* Check messageList header */}
       <div
         className={`${
-          selectAll ? "mb-1" : "mb-5"
+          selectAll ? "mb-1" : "mb-2"
         } flex px-5 items-center justify-between`}
       >
         <div className={`${selectAll ? "" : "w-1/6"}`}>
@@ -317,7 +314,6 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
       </div>
 
       <div className="overflow-hidden">
-        {/* Check messageList items */}
         <div className="">
           <div className="w-full divide-y divide-cbs-border pl-5 pr-4">
             {(listData || []).map((item) => (
@@ -342,7 +338,7 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
             </div>
           ) : <></>}
 
-          <div className="w-full h-px bg-gray-200 " />
+          <div className="w-full h-px bg-gray-200" />
 
           {visibleForm && (
             <div className="shadow-cbs-md rounded-cbs-sm p-5">
@@ -480,7 +476,9 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
             </div>
           )}
 
-          <div className="shadow-lg mt-5 pb-5 px-5">
+          <div className={classnames("shadow-lg px-5", {
+            'mt-5 pb-5': hasPermission
+          })}>
             {hasPermission && (
               <button onClick={() => setVisibleForm(true)}>
                 <div className="flex items-center text-green-success font-bold">

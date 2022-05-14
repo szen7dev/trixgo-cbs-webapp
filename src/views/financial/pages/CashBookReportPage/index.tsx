@@ -69,6 +69,13 @@ export const CashBookReportPage: FC = () => {
 
 			amountByProperty.map(item => {
 				if(item?._id?.company === company._id) {
+					// if(item?._id?.company === "6046b089b55525368b1101cb") {
+					// }
+					console.log({
+						account: item?._id?.account?.name,
+						item
+					})
+
 					if(item?._id?.account?.name?.includes('111')) {
 						amountCashCompany += item.income - item.expense;
 					}
@@ -90,6 +97,8 @@ export const CashBookReportPage: FC = () => {
 
 			return { company: infoCompany, cashBooks };
 		})
+		// console.log('=======');
+		// console.log({ dataReport });
 
 		setMoney({ amountCash, amountBankDeposits });
 		setDataReport(dataReport);

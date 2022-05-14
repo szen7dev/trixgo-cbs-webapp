@@ -585,23 +585,27 @@ const PcmDetailTask: FC = () => {
         <div className="flex justify-center bg-white mt-2">
           {/*_____________task content______________*/}
           <div className="w-[791px]">
-            <div className="pl-5 pr-8 pt-5">
-              <div className={cn(styles["dont-break-out"])}>
-                <div className={cn(styles["t-task-detail-content"], "text-[13px]")}>
-                  {parse(
-                    isTruncate
-                      ? _truncate(taskInfo?.description || "", { length: 300 })
-                      : taskInfo?.description || ""
+            <div className={cn("pl-5 pr-8", {
+              'pt-5': permissions.hasPermissionCreatorAddFile || taskInfo.description
+            })}>
+              {taskInfo.description && (
+                <div className={cn(styles["dont-break-out"])}>
+                  <div className={cn(styles["t-task-detail-content"], "text-[13px]")}>
+                    {parse(
+                      isTruncate
+                        ? _truncate(taskInfo.description, { length: 300 })
+                        : taskInfo.description
+                    )}
+                  </div>
+                  {taskInfo.description?.length > 300 && (
+                    <button onClick={() => setIsTruncate(!isTruncate)}>
+                      <p className="text-[13px] text-primary mt-2.5 mb-4">
+                        Xem thêm/Thu gọn
+                      </p>
+                    </button>
                   )}
                 </div>
-                {taskInfo?.description && (
-                  <button onClick={() => setIsTruncate(!isTruncate)}>
-                    <p className="text-[13px] text-primary mt-2.5 mb-4">
-                      Xem thêm/Thu gọn
-                    </p>
-                  </button>
-                )}
-              </div>
+              )}
               {/* <FileAttachment files={taskInfo?.authorAttachs} /> */}
             </div>
 						<CreatorUploadedFile
@@ -624,7 +628,7 @@ const PcmDetailTask: FC = () => {
                 hasPermission={permissions.hasPermissionCreateCheckListAndChildTask}
               />
             </div>
-            <div className="mt-8 pr-3">
+            <div className="mt-5 pr-3">
               <CheckList
                 componentType="CHILD_TASK"
                 task={taskInfo}
@@ -641,7 +645,7 @@ const PcmDetailTask: FC = () => {
               />
             </div> */}
 						<OwnerUploadedFile
-              className="p-5"
+              className="px-5 pt-5 pb-2"
               assigneeAttachs={taskInfo?.assigneeAttachs}
               author={user}
               taskID={taskInfo._id}
@@ -650,7 +654,7 @@ const PcmDetailTask: FC = () => {
               groupID={taskInfo.group?._id}
               hasPermission={permissions.hasPermissionAssigneeAddFile}
             />
-            <div className="px-5 my-5">
+            <div className="px-5 mb-5">
               <RelatedResponse task={taskInfo} />
             </div>
           </div>
