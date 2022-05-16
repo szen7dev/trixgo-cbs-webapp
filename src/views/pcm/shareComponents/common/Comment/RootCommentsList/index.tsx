@@ -63,7 +63,6 @@ export const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = me
 		_comments = (state.commentsReply[statePost.taskID] || []).filter(Boolean);
 	}
 
-	// console.log({ totalRecord, _comments })
 	if(!totalRecord && !_comments?.length) return null;
 
 	return (

@@ -1,13 +1,13 @@
-import React, { FC } from "react";
+import React, { UIEvent, FC, useState } from "react";
 import { Formik, Form, Field } from "formik";
 import debounce from "lodash/debounce";
 
 import Close from "assets/icons/Close";
-import {DropdownSearchable} from "shareComponents/common";
+import { DropdownSearchable } from "shareComponents/common";
 
 import { useModal } from "services/hooks/useModal";
-import { useQueryListFriend } from "services/hooks/users/useFriend";
 import { useQueryListDepartments } from "services/hooks/items/useDepartment";
+import { useUserSystem } from "services/hooks/users/useUserSystem";
 
 import type { InsertTimeSheetParentPayload } from "typings/time-sheet";
 
@@ -35,17 +35,22 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   assigneeName,
   projectName,
 }) => {
-  const [searchhDepartmentStr, setSearchDepartmentSrt] =
-    React.useState(projectName);
-  const [searchAssigneeStr, setSearchAssigneeStr] =
-    React.useState(assigneeName);
+  const [searchhDepartmentStr, setSearchDepartmentSrt] = useState(projectName);
+
+  const [searchAssigneeStr, setSearchAssigneeStr] = useState(assigneeName);
 
   const { closeModal } = useModal();
-  const { data: listFriend } = useQueryListFriend({
-    keyword: searchAssigneeStr,
-  });
+
   const { listDepartments } = useQueryListDepartments({
     keyword: searchhDepartmentStr,
+  }, true);
+
+  const {
+    data: listUsersSystem,
+    hasNextPage: hasNextPageUsersSystem,
+    fetchNextPage: fetchNextPageUsersSystem
+  } = useUserSystem({
+    keyword: searchAssigneeStr
   }, true);
 
   const initialValues = {
@@ -56,6 +61,15 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
     note: "",
     ...defaultValues,
   };
+
+  const handleScrollAssginee = (e: UIEvent<HTMLDivElement>) => {
+    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
+    const bottom = scrollHeight - scrollTop === clientHeight;
+
+    if(bottom && hasNextPageUsersSystem) {
+      fetchNextPageUsersSystem();
+    }
+  }
 
   const handleSubmit = React.useCallback(
     (values) => {
@@ -130,7 +144,8 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                     inlineSearch
                     allowClearValueSingleInput
                     renderSelectedItem={(item) => <span>{item.text}</span>}
-                    data={listFriend}
+                    data={listUsersSystem}
+                    onScroll={handleScrollAssginee}
                     initialValue={defaultValues?.assignee}
                     formatItem={{
                       id: "_id",

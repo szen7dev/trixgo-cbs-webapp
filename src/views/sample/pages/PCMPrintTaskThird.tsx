@@ -32,7 +32,8 @@ const PCMPrintTaskSecond: FC<Props> = (props) => {
       }
     }
     window.addEventListener("keydown", handlePrintFromKeyboard);
-    return;
+
+    return () => window.removeEventListener("keydown", handlePrintFromKeyboard);
   }, [handlePrint]);
 
   return (

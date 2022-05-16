@@ -6,6 +6,7 @@ export * from './ListTasksReport';
 export * from './LoadImage';
 export * from './FileUploadRow';
 export * from './Comment';
+export * from './AccessingUsers';
 
 export * from './ClassifyDrawer';
 export * from './ClassifyProgress';
