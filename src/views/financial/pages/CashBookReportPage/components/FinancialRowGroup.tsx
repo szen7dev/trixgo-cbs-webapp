@@ -26,7 +26,7 @@ interface Props extends Report {
 
 const FinancialRowGroup: FC<Props> = ({ index, company, cashBooks, forceUpdateValue, show }) => {
     const [state, setState] = useState<boolean>(show);
-    const wrapperRef = useRef<HTMLTableSectionElement>(null);
+    // const wrapperRef = useRef<HTMLTableSectionElement>(null);
 
     useEffect(() => {
       setState(show);

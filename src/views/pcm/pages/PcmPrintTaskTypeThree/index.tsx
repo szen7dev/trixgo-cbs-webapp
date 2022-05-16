@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useMemo, useRef } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -33,8 +33,6 @@ const PcmPrintTaskTypeThree: FC = () => {
   const { user } = useAuth();
   const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 
-  const [dataListImages, setDataListImages] = useState<any[]>([]);
-
   const { info: taskInfo, isLoadingInfo } = useTask({
     params: {
       taskID: taskId,
@@ -48,7 +46,6 @@ const PcmPrintTaskTypeThree: FC = () => {
     isLoading: isLoadingPcmComments,
     fetchNextPage,
     hasNextPage,
-    totalRecord,
   } = usePcmComment({
     params: {
       taskID: taskId,
@@ -74,38 +71,30 @@ const PcmPrintTaskTypeThree: FC = () => {
       toast.error("Bạn không có quyền truy cập tính năng này!");
       return history.push("/");
     }
-  }, [taskInfo, isSuccessApp]);
+  }, [taskInfo, isSuccessApp, isLoadingInfo, hasPermission]);
 
-  // Unnessessary useEffect, use useMemo instead
-  useEffect(() => {
-    if (!listPcmComments || !listPcmComments.length || isLoadingPcmComments) return;
-
+  const listImagesComment = useMemo(() => {
     const listDataImages = listPcmComments
       .filter(Boolean)
-      .map((item) => {
-        return item.images.map((image) => {
-          image.content = item.content;
-          return image;
-        });
-      })
+      .map((item) => item.images)
       .flat();
 
-    setDataListImages(listDataImages);
-  }, [JSON.stringify(listPcmComments)]);
+    return listDataImages;
+  }, [listPcmComments])
 
   const componentRef = useRef(null);
   usePrintComponent({ ref: componentRef });
 
-  if (isLoadingInfo) return <Loader className="border-primary" />;
+  if (isLoadingInfo || isLoadingPcmComments) return <Loader className="border-primary" />;
 
   return (
     <div className="bg-cbs-gray h-full overflow-hidden">
       <div className="h-full overflow-auto py-6">
         <div className="max-w-[791px] bg-white w-full mx-auto pl-[3.75rem] pr-6 py-6 shadow-cbs-md">
-          <table ref={componentRef} className="print_area">
+          <table ref={componentRef} className="print_area w-full">
             <style type="text/css" media="print">
               {`
-								@media print { 
+								@media print {
 									table { page-break-inside:auto }
 									thead { display:table-header-group; }
 									tfoot { display:table-footer-group; }
@@ -145,12 +134,12 @@ const PcmPrintTaskTypeThree: FC = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {dataListImages && dataListImages.length ? (
-                            dataListImages.map((image, index) => (
+                          {listImagesComment && listImagesComment.length ? (
+                            listImagesComment.map((image, index) => (
                               <tr key={image._id}>
                                 <td>{index + 1}</td>
-                                <td>{image.description || image.content}</td>
-                                <td>
+                                <td>{image.description}</td>
+                                <td align="center">
                                   <img
                                     src={generateIamgePath(image.path)}
                                     alt={image.nameOrg}
@@ -175,7 +164,7 @@ const PcmPrintTaskTypeThree: FC = () => {
                     </section>
 
                     {hasNextPage && (
-                      <div className="w-full flex justify-center my-5">
+                      <div className="w-full flex justify-center my-5" style={{ marginBottom: '20px' }}>
                         <button onClick={fetchNextPage}>
                           <span className="text-primary">
                             Xem thêm
@@ -191,7 +180,7 @@ const PcmPrintTaskTypeThree: FC = () => {
             <tfoot>
               <tr>
                 <td>
-                  <footer id="pageFooter">
+                  <footer id="pageFooter" style={{ marginTop: '15px' }}>
                     <p>
                       <i>
                         In từ nền tảng{" "}

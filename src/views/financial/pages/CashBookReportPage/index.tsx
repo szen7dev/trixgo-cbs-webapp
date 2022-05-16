@@ -68,12 +68,12 @@ export const CashBookReportPage: FC = () => {
 			let amountBankDepositsCompany = 0;
 
 			amountByProperty.map(item => {
-				if(item?._id?.company === company._id) {
-					if(item?._id?.account?.name?.includes('111')) {
+				if(item._id?.company === company._id) {
+					if(item._id?.account?.name?.includes('111')) {
 						amountCashCompany += item.income - item.expense;
 					}
 
-					if(item?._id?.account?.name?.includes('112')) {
+					if(item._id?.account?.name?.includes('112')) {
 						amountBankDepositsCompany += item.income - item.expense;
 					}
 				}

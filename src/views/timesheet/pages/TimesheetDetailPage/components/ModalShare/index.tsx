@@ -141,27 +141,29 @@ export const ModalShare: FC<Props> = ({ expertTimesheetID, users, modalType, ref
 			<form className='px-[30px] mt-2' onSubmit={e => e.preventDefault()}>
                 <div className='relative border-cbs-border border-0.5 flex items-center'>
                     <SearchIcon className='absolute left-3 w-4 h-4' />
-                    <input 
-                        type="text" 
-                        placeholder='Nhập từ khóa tìm kiếm' 
+                    <input
+                        type="text"
+                        placeholder='Nhập từ khóa tìm kiếm'
                         className='pl-9 py-3 text-medium w-full focus:outline-none bg-cbs-table-header'
                         onChange={debounce((event: any) => setKeyword(event.target.value), 500)}
                     />
                 </div>
-                <div className='relative flex items-center'>
-                    <div className="box-content overflow-auto h-auto w-full p-4 border-4 text-cbs-primary">
-                        {users?.map((item, index) => (index + 1) !== users.length ? `${item.bizfullname} | ` : item.bizfullname)}
+                {(users && users.length) ? (
+                    <div className='relative flex items-center'>
+                        <div className="box-content overflow-auto h-auto w-full p-4 border-4 text-cbs-primary">
+                            {users?.map((item, index) => (index + 1) !== users.length ? `${item.bizfullname} | ` : item.bizfullname)}
+                        </div>
                     </div>
-                </div>
+                ) : ''}
                 <div className='text-small overflow-auto' style={{ height: '470px' }}>
                     <table>
                         <thead>
                             <tr className="sticky top-0 bg-white">
                                 <th className='px-1.5'>
                                     <div className='flex items-center'>
-                                        <input 
-                                            type='checkbox' 
-                                            className='cbs-checkbox inline-block' 
+                                        <input
+                                            type='checkbox'
+                                            className='cbs-checkbox inline-block'
                                             checked={getStateCheckedAll()}
                                             onChange={onClickCheckAll}
                                         />
@@ -178,12 +180,12 @@ export const ModalShare: FC<Props> = ({ expertTimesheetID, users, modalType, ref
                                 (listUsersSystem.length && isShow) ? listUsersSystem.map((user: UserSystemProps) => (
                                     <tr key={user._id}>
                                         <td className='px-1.5 align-middle'>
-                                            <input 
-                                                type='checkbox' 
+                                            <input
+                                                type='checkbox'
                                                 className='cbs-checkbox'
                                                 checked={getStateChecked(user._id)}
                                                 onChange={() => onClickCheckButton(user._id)}
-                                                // checked={Boolean(assigned[user._id]false 
+                                                // checked={Boolean(assigned[user._id]false
                                                 // onChange={e => handleChangeCheckbox(null, user)}
                                             />
                                         </td>
