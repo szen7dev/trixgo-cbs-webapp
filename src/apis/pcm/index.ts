@@ -14,7 +14,7 @@ import {
     ListTasksResponse,
     listTotalAnalysisResponse,
     SendMailTaskPayload,
-    UpdateConditionTaskReportPayload,
+    UpdateTaskReportPayload,
     PcmCommentListParams,
     PcmCommentListResponse,
 } from "typings/pcm";
@@ -36,7 +36,7 @@ const PcmRepository = {
         return data;
     },
 
-    async updateConditionTaskReport(payload: UpdateConditionTaskReportPayload): Promise<any> {
+    async updateTaskReport(payload: UpdateTaskReportPayload): Promise<any> {
         const { data } = await API.put<any>(
             `${pcmURL}/pcm_plan_reports`, payload
         );
@@ -46,9 +46,9 @@ const PcmRepository = {
     async getInfoReports(id: string): Promise<any> {
         const { data } = await API.get<any>(
             `${pcmURL}/pcm_plan_reports?${convertObToUrl({
-                select: "name company description conditionPin author type createAt",
+                select: "name company description conditionPin members author type createAt",
                 populates: JSON.stringify({
-                    path: "company author",
+                    path: "company author members",
                     select: "_id name sign bizfullname image"
                 }),
                 subjectID: id

@@ -98,7 +98,7 @@ const PcmDetailTask: FC = () => {
   const { updateTaskAsync, copyTaskAsync } = useTask({});
 
   const { data: infoTask, refetch: refetchInfoTask, isLoading } = useQuery(`task_info.${id}`, () =>
-    TaskRepository.taskInfo({ taskID: id }),
+    TaskRepository.taskInfo({ taskID: id, }),
     { refetchOnWindowFocus: false }
   );
 
@@ -322,7 +322,7 @@ const PcmDetailTask: FC = () => {
       })) ?? [];
 
       const relatedsID                    = taskInfo.related?.map((user: any) => user._id) ?? [];
-      const groupMembersID                = taskInfo.group?.members?.map((user: any) => user._id) ?? [];
+      const groupMembersID                = taskInfo.group?.members ?? [];
       const authorAndAssigneeID           = [taskInfo.author?._id, taskInfo.assignee?._id].filter(Boolean);
       const authorAndAssigneeAndRelatedID = [...authorAndAssigneeID, ...relatedsID].filter(Boolean);
 

@@ -16,7 +16,7 @@ import {
     PcmReport,
     PcmFile,
     SendMailTaskPayload,
-    UpdateConditionTaskReportPayload,
+    UpdateTaskReportPayload,
     PcmComment,
     PcmCommentListParams,
 } from "typings/pcm";
@@ -94,7 +94,7 @@ export const usePcm = (params?: any, isFetch?: boolean) : UsePcm => {
 
 type UsePcmReport = {
     addConditionTaskReportAsync: (payload: AddConditionTaskReportPayload) => Promise<any>,
-    updateConditionTaskReportAsync: (payload: UpdateConditionTaskReportPayload) => Promise<any>,
+    updateTaskReportAsync: (payload: UpdateTaskReportPayload) => Promise<any>,
     listReports: Array<PcmReport>,
     infoReport: PcmReport,
     refetchInfoReport: () => void,
@@ -112,12 +112,13 @@ export const usePcmReport = (params?: any, isFetch?: boolean) : UsePcmReport => 
             PcmRepository.addConditionTaskReport(payload)
         );
 
-    const { mutateAsync: updateConditionTaskReportAsync } =
-        useMutation((payload: UpdateConditionTaskReportPayload) =>
-            PcmRepository.updateConditionTaskReport(payload)
+    const { mutateAsync: updateTaskReportAsync } =
+        useMutation((payload: UpdateTaskReportPayload) =>
+            PcmRepository.updateTaskReport(payload)
         );
 
-    const { data: dataInfoReport, refetch: refetchInfoReport } = useQuery(`report_info.${params?.subjectID}`,
+    const { data: dataInfoReport, refetch: refetchInfoReport } = useQuery(
+        ['pcm_report--info', params],
 		() => PcmRepository.getInfoReports(params?.subjectID),
 		{
 			enabled: !!params?.subjectID ?? false,
@@ -150,13 +151,13 @@ export const usePcmReport = (params?: any, isFetch?: boolean) : UsePcmReport => 
 
     const listReports = [].concat(...(dataListReports?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
     const totalRecord = dataListReports?.pages[0]?.data?.totalRecord;
-    const infoReport = dataInfoReport?.data;
+    const infoReport = dataInfoReport?.data ?? {};
 
     return {
         infoReport,
         refetchInfoReport,
         addConditionTaskReportAsync,
-        updateConditionTaskReportAsync,
+        updateTaskReportAsync,
         listReports,
         isLoadingListReports,
         refetchListReports,
