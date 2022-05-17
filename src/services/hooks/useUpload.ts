@@ -175,8 +175,9 @@ export const useUpload = ({
                 const newFile: any = blobToFile(blob, files.name);
                 files = newFile;
             }
-
-            const { signedUrl, file, fileName, result } = await generateLinkS3({ file: files, fileType });
+            //QuangTT bổ sung check file type để upload
+            const realFileType = files.type.includes("image/") ? 1 : 2;
+            const { signedUrl, file, fileName, result } = await generateLinkS3({ file: files, fileType: realFileType });
 
             // Handle images
             if (file.type.includes("image/") && useCompress && files.type !== 'image/gif') {
