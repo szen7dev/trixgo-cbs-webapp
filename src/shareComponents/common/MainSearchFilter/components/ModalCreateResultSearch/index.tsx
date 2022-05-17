@@ -14,7 +14,7 @@ export const ModalCreateResultSearch: FC<Props> = ({ condition }) => {
     name: '',
     description: ''
   });
-  const { addConditionTaskReportAsync, updateConditionTaskReportAsync } = usePcmReport();
+  const { addConditionTaskReportAsync, updateTaskReportAsync } = usePcmReport();
 
   const onCreate = async () => {
     if (!formData.name) {
@@ -30,7 +30,7 @@ export const ModalCreateResultSearch: FC<Props> = ({ condition }) => {
       }
 
       // Cập nhật điều kiện cho subject
-      const { error, data } = await updateConditionTaskReportAsync({
+      const { error, data } = await updateTaskReportAsync({
         subjectID: result.data._id,
         conditionPin: condition
       })

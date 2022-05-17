@@ -148,11 +148,13 @@ const ModalShare: FC<Props> = ({ cashbookId, users, modalType, refetch, toggle, 
                         onChange={debounce((event: any) => setKeyword(event.target.value), 500)}
                     />
                 </div>
-                <div className='relative flex items-center'>
-                    <div className="box-content overflow-auto h-auto w-full p-4 border-4 text-cbs-primary">
-                        {users?.map((item, index) => (index + 1) !== users.length ? `${item.bizfullname} | ` : item.bizfullname)}
+                {(users && users.length) ? (
+                    <div className='relative flex items-center'>
+                        <div className="box-content overflow-auto h-auto w-full p-4 border-4 text-cbs-primary">
+                            {users?.map((item, index) => (index + 1) !== users.length ? `${item.bizfullname} | ` : item.bizfullname)}
+                        </div>
                     </div>
-                </div>
+                ) : ''}
                 <div className='text-small overflow-auto' style={{ height: '470px' }}>
                     <table>
                         <thead>

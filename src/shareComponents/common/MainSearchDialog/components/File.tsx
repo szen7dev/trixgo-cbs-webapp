@@ -14,12 +14,14 @@ import iconChevronRight from "assets/images/icon-chevron-right.png";
 /**
  * Hooks, Typings
  */
+import { useModal } from "services/hooks/useModal";
 import { usePcmFile } from "services/hooks/pcm/usePcm";
 import { Project } from "typings/items/project";
 import moment from "moment";
 import { PcmFile } from "typings/pcm";
 import { humanFileSize } from 'utils/converter';
 import { UserSystemProps } from "typings/users/userSystem";
+import { Link } from "react-router-dom";
 
 type FileProps = {
   users: UserSystemProps[];
@@ -90,7 +92,7 @@ function getColumnsFile(): TableOptions<PcmFile>["columns"] {
       cellProps: {
         className: "pt-2.5 pb-3 px-2 border-b border-cbs-border",
       },
-      Cell({ row }) {
+      Cell({ row, closeModal }) {
         const { nameOrg, size, path, project, task, author, createAt } = row.original;
 
         return (
@@ -99,7 +101,9 @@ function getColumnsFile(): TableOptions<PcmFile>["columns"] {
               {nameOrg} ({humanFileSize(size)})
             </a>
             <p className="text-cbs-subtext">
-              {project.sign}.{task.name}
+              <Link to={`/pcm/detail/${task._id}`} onClick={closeModal}>
+                {project.sign}.{task.name}
+              </Link>
             </p>
             <p className="text-cbs-subtext">
               <span>{author.bizfullname}</span>
@@ -158,6 +162,7 @@ const File: FC<FileProps> = ({
     toDate: '',
     lastestID: ''
   });
+  const { closeModal } = useModal();
 
   const { listFilesPcm, isLoading, totalRecord, totalPage, nextCursor } = usePcmFile({
     params: paramsSearch,
@@ -294,7 +299,10 @@ const File: FC<FileProps> = ({
             currentTotalPage: pagesCursor.length,
             totalPage: totalPage,
             fetchNextPage: handleNextPageButton,
-            fetchPreviousPage: handlePrevPageButton
+            fetchPreviousPage: handlePrevPageButton,
+          }}
+          cellProps={{
+            closeModal
           }}
           isLoading={isLoading}
         />

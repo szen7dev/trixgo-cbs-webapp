@@ -15,9 +15,10 @@ export type AddConditionTaskReportPayload = {
   description?: string
 }
 
-export type UpdateConditionTaskReportPayload = {
-  subjectID: string,
-  conditionPin: Partial<{
+export type UpdateTaskReportPayload = {
+  subjectID: string;
+  members?: string[];
+  conditionPin?: Partial<{
     keyword: string,
     assigneeID: string,
     authorID: string,
@@ -49,8 +50,9 @@ export type PcmReport = {
   name: string,
   description: string,
   conditionPin: any,
-  company: Company,
-  author: User,
+  company: Company | string,
+  author: User | string,
+  members: U[], // Fix error: has signatures, but none of those signatures are compatible with each other
   type: number,
   createAt: string
 }
