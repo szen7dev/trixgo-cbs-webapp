@@ -230,6 +230,35 @@ export const CRM_BIDDINGTYPE = [
     { value: 8, text: 'Tham gia thực hiện của cộng đồng', key: 'completed' },
 ]
 
+// LOẠI GÓI THẦU
+export const BIDDING_PLAN_TYPE = [
+    { value: 1, text: 'Xây lắp', key: '' },
+    { value: 2, text: 'Mua sắm thiết bị', key: '' },
+    { value: 3, text: 'Tư vấn', key: '' },
+    { value: 4, text: 'Khác', key: '' },
+]
+
+// TRẠNG THÁI THỰC HIÊN
+export const BIDDING_PLAN_STATUS = [
+    { value: 1, text: 'Chưa thực hiện', key: '' },
+    { value: 2, text: 'Đang triển khai', key: '' },
+    { value: 3, text: 'Đã hoàn thành', key: '' },
+]
+
+// Hình thức lựa chọn nhà thầu
+export const BIDDING_PLAN_FORM = [
+    { value: 1, text: 'Chào giá cạnh tranh', key: '' },
+    { value: 2, text: 'Đấu thầu', key: '' },
+    { value: 3, text: 'Chỉ định thầu', key: '' },
+]
+
+// LOẠI HỢP ĐỒNG
+export const BIDDING_PLAN_CONTRACT_TYPE = [
+    { value: 1, text: 'Đơn giá cố định', key: '' },
+    { value: 2, text: 'Trọn gói', key: '' },
+    { value: 3, text: 'Theo tháng', key: '' },
+]
+
 export const CONTRACT_TYPES = [
     { value: 1, text: 'Hợp đồng trọn gói', key: 'in_progress' },
     { value: 2, text: 'Hợp đồng theo đơn giá cố định', key: 'completed' },
