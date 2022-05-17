@@ -10,7 +10,7 @@ import { ModalZoomView } from "shareComponents/common";
 import { ImageProps } from 'typings/common';
 
 type Props = {
-	comments?: CommentProps[],
+	comments: CommentProps[],
 	userID: string | undefined,
 	taskID?: string,
 	totalRecord?: number,
@@ -35,9 +35,9 @@ export const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = me
 	});
 
 	useEffect(() => {
-		if(!comments || !comments.length) return;
-		dispatch({ type: 'SET_COMMENTS', payload: comments.reverse() });
-	}, [comments?.length])
+		// if(!comments || !comments.length) return;
+		comments && dispatch({ type: 'SET_COMMENTS', payload: comments.reverse() });
+	}, [JSON.stringify(comments)])
 
 	useEffect(() => {
 		if(totalRecord < limit) return;
