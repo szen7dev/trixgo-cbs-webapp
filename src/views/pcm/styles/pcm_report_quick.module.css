@@ -1,0 +1,13 @@
+.comment__wrapper {
+    background-color: #F0F0F0;
+}
+
+.comment__header-main,
+.comment__container {
+    max-width: 680px;
+}
+
+.comment__container {
+    margin: 0 auto;
+    background-color: white;
+}

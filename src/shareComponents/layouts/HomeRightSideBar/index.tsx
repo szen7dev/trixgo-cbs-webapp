@@ -22,7 +22,7 @@ export const HomeRightSideBar: FC = () => {
   const { openModal } = useModal();
 
   return (
-    <div className="tm-right-sidebar transition-all duration-500 ease-out fixed top-16 bottom-0 right-0 border-l border-secondary-light z-5">
+    <div className="tm-right-sidebar transition-all duration-500 ease-out fixed top-16 bottom-0 right-0 border-l border-secondary-light z-50">
       <div className="flex items-center flex-col">
         <button
           onClick={() =>

@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 // import DownloadIcon from "assets/images/icons8-download-48_2.png";
 // import ShareIcon from "assets/images/icons8-share-rounded-96.svg";
 // import RemoveIcon from "assets/images/icons8-remove.svg";
-import IconPrint from "assets/images/icons8-print-32.png";
+// import IconPrint from "assets/images/icons8-print-32.png";
 import CopyIcon from "assets/images/icons8-copy-96.svg";
 import SendEmailIcon from "assets/images/icons8-send-email-96.svg";
 import IconPencil from "assets/images/icons8-pencil.svg";

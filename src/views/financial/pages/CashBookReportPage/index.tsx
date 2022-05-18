@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 
 /**
  * Components, Utils
@@ -14,17 +14,17 @@ import { useCashBookCustom } from "services/hooks/financial/useCashBook";
 import { convertCurrency } from 'utils/converter';
 import { CashBookAmountByProperty } from 'typings/financial/cashBook';
 
-interface Report {
-	company: {
-		_id: string;
-		name: string;
-		sign: string;
-		image: string;
-		amountCashCompany: number;
-		amountBankDepositsCompany: number;
-	};
-	cashBooks: CashBookAmountByProperty[];
-}
+// interface Report {
+// 	company: {
+// 		_id: string;
+// 		name: string;
+// 		sign: string;
+// 		image: string;
+// 		amountCashCompany: number;
+// 		amountBankDepositsCompany: number;
+// 	};
+// 	cashBooks: CashBookAmountByProperty[];
+// }
 
 function useForceUpdate() {
 	const [value, setValue] = useState(0);
@@ -34,12 +34,6 @@ function useForceUpdate() {
 export const CashBookReportPage: FC = () => {
 	const { forceUpdate, value } = useForceUpdate();
 	const [show, setShow] = useState(true);
-	const [money, setMoney] = useState({
-		amountCash: 0,
-		amountBankDeposits: 0
-	});
-
-	const [dataReport, setDataReport] = useState<Report[]>([]);
 
 	const { listCompany, isLoadingListCompany } = useAppMenu({
 		paramsFetchListCompany: {
@@ -56,13 +50,13 @@ export const CashBookReportPage: FC = () => {
 		isFetchAmountByProperty: true
 	})
 
-	useEffect(() => {
+	const dataReports = useMemo(() => {
 		if(!listCompany || !amountByProperty) return;
 
 		let amountCash = 0;
 		let amountBankDeposits = 0;
 
-		const dataReport = listCompany.map(({ _id: { company } }) => {
+		const reports = listCompany.map(({ _id: { company } }) => {
 			const cashBooks = amountByProperty.filter(item => item._id?.company === company?._id);
 			let amountCashCompany = 0;
 			let amountBankDepositsCompany = 0;
@@ -91,8 +85,11 @@ export const CashBookReportPage: FC = () => {
 			return { company: infoCompany, cashBooks };
 		})
 
-		setMoney({ amountCash, amountBankDeposits });
-		setDataReport(dataReport);
+		return {
+			reports,
+			amountCash,
+			amountBankDeposits
+		};
 	}, [listCompany, amountByProperty])
 
 	const handleToggle = (v: boolean) => {
@@ -122,8 +119,8 @@ export const CashBookReportPage: FC = () => {
 						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ minWidth: '122px' }}>Tiền gửi ngân hàng</th>
 					</tr>
 				</thead>
-				{(dataReport && dataReport.length) ?
-					dataReport.map((_item, index) =>
+				{(dataReports?.reports && dataReports?.reports?.length) ?
+					dataReports.reports.map((_item, index) =>
 						<FinancialRowGroup
 							key={index}
 							index={index}
@@ -142,10 +139,10 @@ export const CashBookReportPage: FC = () => {
 						</th>
 						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2 text-left">Tổng</th>
 						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">
-							{convertCurrency(money.amountCash)}
+							{convertCurrency(dataReports?.amountCash)}
 						</th>
 						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">
-							{convertCurrency(money.amountBankDeposits)}
+							{convertCurrency(dataReports?.amountBankDeposits)}
 						</th>
 					</tr>
 				</tfoot>

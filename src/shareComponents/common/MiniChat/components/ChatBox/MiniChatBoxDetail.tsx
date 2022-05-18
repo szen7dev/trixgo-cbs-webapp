@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect, useRef, useState} from "react";
+import React, {FC, useCallback, useContext, useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {UseConversation} from "services/hooks/messages/useConversation";
@@ -31,6 +31,7 @@ export const MiniChatBoxDetail:FC<Props> = ({chat}) => {
     const {getListMessage} = UseConversation();
     const {markReadConversation} = UseListConversation();
     const dispatch = useDispatch();
+    const {isDragOver} = useContext(MiniChatContext);
 
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
@@ -211,6 +212,11 @@ export const MiniChatBoxDetail:FC<Props> = ({chat}) => {
                 <div className={"w-full max-w-full pt-[20px] px-[20px]"}>
                     {memoizedValue()}
                     {memoizedFakeValue()}
+                </div>
+            </div>
+            <div id={"drop-mask"} className={"absolute top-0 w-full h-full flex items-center justify-center bg-white border-primary border border-dashed z-50 border-2 rounded-md bg-opacity-50 backdrop-blur-md " + (!isDragOver ? 'hidden':'block')}>
+                <div className={"text-center flex items-center justify-center text-lg text-primary"}>
+                    Thả file vào đây để gửi...
                 </div>
             </div>
         </>

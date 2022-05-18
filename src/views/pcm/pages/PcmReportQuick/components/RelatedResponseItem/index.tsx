@@ -1,0 +1,322 @@
+import React, { FC, LegacyRef, useCallback, useState } from "react";
+import moment from "moment";
+import classNames from "classnames";
+import _ from "lodash";
+import { captureException } from "@sentry/react";
+import { toast } from "react-toastify";
+import { useMutation } from "react-query";
+
+/**
+ * Assets
+ */
+import HumanAvatar from "assets/images/human-avatar.svg";
+import CopyIcon from "assets/images/icons8-copy-96.svg";
+import IconDownload from "assets/images/icons8-download-48_3.svg";
+import TestImage from "assets/images/home-slide-img1.jpg";
+
+/**
+ * Apis, hooks
+ */
+import { ResponseProps } from "typings/task";
+import { FileProps, FileUpdatePayload } from "typings/file";
+import TaskRepository from "apis/task";
+import FileRepository from "apis/upload";
+import { ImageProps } from "typings/common";
+import { getFileIcon } from 'utils/file';
+import { nl2p } from 'utils';
+import { User } from "typings/user";
+import { useUpload } from "services/hooks/useUpload";
+import { APP_ID } from "apis/localdb";
+import { useRelatedResponse } from "services/hooks/useTask";
+import { validateFiles } from 'validation/file';
+
+type Props = {
+	expanded?: boolean;
+	isHighlight?: boolean;
+	response: ResponseProps;
+	onClickImage?: (images: ImageProps[], index: number) => void;
+	divRef?: LegacyRef<HTMLDivElement> | undefined;
+	refetchListResponseMarked?: () => void;
+	setAmountMarkedResponse?: React.Dispatch<React.SetStateAction<number>>;
+	author: User | null,
+	companyID: string,
+	projectID: string,
+};
+
+export const RelatedResponseItem: FC<Props> = ({
+	expanded,
+	isHighlight,
+	response,
+	divRef,
+	author,
+	companyID,
+	projectID,
+	onClickImage,
+}) => {
+	const inputRef = React.useRef<HTMLInputElement>(null);
+	const [responseFiles, setResponseFiles] = useState({
+		files: response.files || [],
+		images: response.images || []
+	})
+	const [isExpand, setIsExpand] = useState(false);
+
+	const { addFileToUpload } = useUpload({
+		appID: APP_ID.PCM.id,
+		companyID,
+		projectID,
+		typeUpload: 'in-project',
+	});
+
+	const { updateResponseAsync } = useRelatedResponse({ isFetch: false });
+
+	const { mutateAsync: updateFileAsync } =
+		useMutation((payload: FileUpdatePayload) =>
+			FileRepository.updateFile(payload)
+		);
+
+	const handleUpdateDescriptionFile = _.debounce(async (e: any) => {
+		await updateFileAsync({
+			fileID: e.target.dataset.fileid,
+			description: e.target.value
+		});
+
+		toast.success('Cập nhật ghi chú thành công', { autoClose: 1500 });
+	}, 1000)
+
+	const handleChangeUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+		try {
+			const files = e.target.files;
+
+			const filesID: string[] | undefined = [];
+			const imagesID: string[] | undefined = [];
+
+			const newFiles: any[] = [];
+			const newImages: any[] = [];
+
+			if(!files || !files.length) return;
+
+			const validation = await validateFiles(files);
+  			if(validation.error) return toast.warn(validation.message);
+
+			for (const [, file] of Object.entries(files)) {
+				const { _id, nameOrg, path, mimeType, createAt } = await addFileToUpload({
+					files: file as any,
+					fileType: 2
+				});
+				if(!_id) continue;
+
+				const infoFile = {
+					_id,
+					nameOrg,
+					mimeType,
+					path,
+					createAt,
+					author
+				}
+
+				if(mimeType && mimeType.search('image') >= 0) {
+					imagesID[imagesID.length] = _id;
+					newImages[newImages.length] = infoFile;
+				} else{
+					filesID[filesID.length] = _id;
+					newFiles[newFiles.length] = infoFile;
+				}
+			}
+
+			const { error, data } = await updateResponseAsync({
+				projectID: response.project as string,
+				commentID: response._id,
+				switchType: 'PROJECT',
+				files: filesID,
+				images: imagesID
+			})
+
+			if(error) {
+				return toast.warn(data?.message || 'Thêm file thất bại')
+			}
+
+			if(newFiles.length || newImages.length) {
+				setResponseFiles(previous => ({
+					...previous,
+					...newFiles.length && { files: [...previous.files, ...newFiles] },
+					...newImages.length && { images: [...previous.images, ...newImages] }
+				}))
+			}
+
+			toast.success('Thêm file thành công');
+		} catch (error) {
+			captureException(error);
+			if(error instanceof Error) {
+				toast.error(error.message)
+			}
+		}
+	}, [])
+
+	const toggleExpand = () => setIsExpand(!isExpand);
+
+	return (
+		<>
+			{author?._id === response.author._id ? (
+				<input
+					type='file'
+					ref={inputRef}
+					className="hidden"
+					onChange={handleChangeUpload}
+				/>
+			) : ''}
+			<div className={
+				classNames("flex",
+					isHighlight
+						? 'bg-blue-500 shadow-lg bg-opacity-50 scale-110 p-3 transition ease-in-out delay-150 duration-300'
+						: 'animate-[wiggle_1s_ease-in-out_infinite]'
+				)
+			} ref={divRef}>
+				<img src={response.author?.image ? `${process.env.REACT_APP_URL_S3_USER}/${response.author?.image}` : HumanAvatar} alt="Avatar" className="w-[44px] h-[44px] cursor-pointer" onClick={toggleExpand} />
+				<div className="w-full ml-5">
+					<div className="flex justify-between">
+						<div onClick={toggleExpand} className="cursor-pointer">
+							<p className="text-[14px] font-bold">{response.author?.bizfullname}</p>
+							{(expanded || isExpand) && (
+								<p className="text-[13px] text-primary-gray pb-5">
+									{response.author?.position?.name}
+								</p>
+							)}
+						</div>
+						<div className="flex items-center space-x-3">
+							<span className="text-[13px] text-primary-gray">
+								{moment(response.createAt).format('HH:mm DD/MM/YYYY')} ({moment(response.createAt).fromNow()})
+							</span>
+							{/* <input type="checkbox" className="cbs-checkbox" defaultChecked={response.official} onChange={handleMarkChange} /> */}
+							{author?._id === response.author._id ? (
+								<button
+									className={`${(expanded || isExpand) ? "h-10 hover:bg-lighter-gray" : "pl-3"
+										} text-[13px] w-10 flex justify-center items-center rounded-full`}
+									onClick={() => inputRef.current?.click()}
+								>
+									<img src='/images/common/icon-upload-file.png' alt='Icon upload file' />
+								</button>
+							) : ''}
+						</div>
+					</div>
+
+					{/* Content */}
+					<div className={`${(expanded || isExpand) ? "" : "max-w-[632px] truncate"}`}>
+						<span
+							className="text-[15px] whitespace-normal break-words"
+                            dangerouslySetInnerHTML={{
+                              __html: nl2p(response.content)
+                            }}>
+						</span>
+					</div>
+
+					{/* File */}
+					{(expanded || isExpand) && (
+						<div>
+							{(responseFiles.files && responseFiles.files.length) ? responseFiles.files.map(file => (
+								<div className="flex w-full my-2" key={file._id}>
+									<div className="w-full bg-gray-100 p-2 rounded-sm border border-slate-400">
+										<div>
+											<div className="flex">
+												<div>
+													<img src={getFileIcon(file?.mimeType)} className="w-8" alt="PDF" />
+												</div>
+												<div className="ml-3 w-full">
+													<div className="flex">
+														<a
+															href={`${process.env.REACT_APP_URL_S3}${file.path}`} target="__blank"
+															className="w-5/6 break-all text-cbs-highlight-color"
+														>
+															{file.nameOrg}
+														</a>
+														<button
+															className="w-1/6 flex justify-end"
+															onClick={() => {
+																navigator.clipboard.writeText(`${process.env.REACT_APP_URL_S3}${file.path}`);
+																toast.success('Copy link download thành công', { autoClose: 2000 })
+															}}
+														>
+															<img
+																src={CopyIcon}
+																className="w-[24px] h-[24px]"
+																alt="Copy"
+															/>
+														</button>
+													</div>
+
+													<div className="flex w-full mt-2 indeterminate:">
+														<span className="w-[70%] text-[13px] text-primary-gray">
+															{file.author?.bizfullname}
+														</span>
+														<span className="text-right w-[30%] text-[13px] text-primary-gray">
+															{moment(file.createAt).format('HH:mm DD/M/YYYY')}
+														</span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div className="w-2/8 px-3 pt-3">
+										<textarea
+											className="h-full focus:outline-none"
+											placeholder="Nhập nội dung ghi chú cho file"
+											defaultValue={file.description}
+											data-fileid={file._id}
+											onKeyUp={handleUpdateDescriptionFile}
+										/>
+									</div>
+									<div className="w-1/8 flex flex-col items-center justify-between">
+										<input
+											type="checkbox"
+											className="cbs-checkbox-2 w-3.5 h-3.5 checked:bg-cbs-completed checked:border-cbs-completed rounded-[3px] border-[1px] border-primary-border focus:ring-2 focus-visible:outline-none focus:ring-cbs-completed focus:ring-opacity-30" />
+										<div className="rounded-full p-2 border-2">
+											<a href={`${process.env.REACT_APP_URL_S3}${file.path}`} target="__blank">
+												<img src={IconDownload} alt="Avatar" className="w-6" />
+											</a>
+										</div>
+									</div>
+								</div>
+							)) : ''}
+
+							<div className="flex w-full space-x-2 mt-5 mb-2">
+								{(responseFiles.images && responseFiles.images.length) ? responseFiles.images.map((file, index) => {
+									if (index < 2) {
+										return (
+											<button className="w-1/3 relative" key={file._id} onClick={() => onClickImage && onClickImage(responseFiles.images || [], index)}>
+												<div className="pb-[100%]">
+													<div className="absolute inset-0">
+														<img src={file.path ? `${process.env.REACT_APP_URL_S3}${file.path}` : TestImage} className="w-full h-full object-cover" alt={file.nameOrg} />
+													</div>
+												</div>
+											</button>
+										)
+									}
+
+									if (index === 2) {
+										return (
+											<div className="w-1/3 relative bg-black flex items-center justify-center" key={file._id}>
+												<img
+													src={file.path ? `${process.env.REACT_APP_URL_S3}${file.path}` : TestImage}
+													className="absolute top-0 left-0 w-full h-full z-0 object-cover opacity-40"
+													alt={file.nameOrg}
+												/>
+												<div className="relative z-6">
+													<p className="text-4x-large text-white">+{responseFiles.images && responseFiles.images.length - 2}</p>
+												</div>
+											</div>
+										)
+									}
+								}) : ''}
+							</div>
+						</div>
+					)}
+				</div>
+			</div>
+			<div className="w-full h-px mb-5 mt-1 bg-gray-200" />
+		</>
+	);
+};
+
+RelatedResponseItem.defaultProps = {
+	expanded: true,
+	isHighlight: false
+};

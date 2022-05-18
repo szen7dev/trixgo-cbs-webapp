@@ -147,6 +147,7 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 							<p className="font-bold text-medium">{comment.author?.bizfullname}</p>
 							<p
 								className="mt-0.5 text-[15px] leading-4"
+								style={{ wordBreak: 'normal' }}
 								dangerouslySetInnerHTML={{
 									__html: nl2p(comment.content)
 								}}>

@@ -18,7 +18,7 @@ export const MiniChatbox: FC = () => {
     const {isChatboxVisible, conversation} = useSelector((state: RootState) => state.miniChat.data);
 
     return (
-        <div className="t-mini-chat-container fixed bottom-0 flex items-end flex-row-reverse transition-all duration-500 ease-out z-50">
+        <div className="t-mini-chat-container fixed bottom-0 flex items-end flex-row-reverse transition-all duration-500 ease-out z-50" id={"chatting-section"}>
             <MiniListConversation/>
             <NewMiniChatBox/>
             {isChatboxVisible&&conversation&&<MiniChatSection chat={conversation}/>}
