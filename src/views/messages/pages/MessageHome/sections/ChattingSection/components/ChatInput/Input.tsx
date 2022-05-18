@@ -31,13 +31,14 @@ type Props = {
     onPressEnter?: () => void;
     onPasteFiles?: (files: FileList|Blob[]) => void;
     handleUploadFiles: (files: FileList|Blob[]) => void;
-    context: any
+    context: any,
+    currentChat: string
 }
-export const InputForMessage:FC<Props> = ({onPressEnter, onPasteFiles, handleUploadFiles, context }) => {
+export const InputForMessage:FC<Props> = ({onPressEnter, onPasteFiles, handleUploadFiles, context, currentChat }) => {
     const {editorState, onChangeCallback} = useContext(ChattingInputContext);
     const [open, setOpen] = useState(false);
     const editor = useRef<Editor>(null);
-    const {setEditorRef, currentChat} = useContext(context)
+    const {setEditorRef} = useContext(context)
 
     const [searchMember, setSearchMember] = useState("");
     const params = {conversationID: currentChat, populates: JSON.stringify({"path": "addedBy member", "select": "_id bizfullname image"}), keyword: searchMember};

@@ -31,7 +31,7 @@ type Props = {
 export const ChattingInput:FC<Props> = ({chat, context}) => {
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
-    const {socketRef, setShowSearch} = useContext(context);
+    const {socketRef, setShowSearch, isDragOver, setIsDragOver} = useContext(context);
     const dispatch = useDispatch();
     const { addFileToUpload } = useUpload({
         appID: "5dfe4c1b51dc622100bb9d8f",
@@ -254,18 +254,27 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
 
     useEffect(() => {
         const dropZone = document.getElementById("chatting-section");
-        if (dropZone) {
+        const dropMask = document.getElementById("drop-mask");
+        if (dropZone&&dropMask) {
             dropZone.addEventListener('dragover', function(e) {
                 e.stopPropagation();
                 e.preventDefault();
+                setIsDragOver(true);
+            });
+
+            dropMask.addEventListener('dragleave', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                setIsDragOver(false);
             });
 
             // Get file data on drop
-            dropZone.addEventListener('drop', function(e) {
+            dropMask.addEventListener('drop', function(e) {
                 e.stopPropagation();
                 e.preventDefault();
                 if (e.dataTransfer&&chat._id) {
                     handleSetFiles(e.dataTransfer.files);
+                    setIsDragOver(false);
                 }
             });
         }
@@ -282,6 +291,7 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
                         {/*<IconButton/>*/}
                         <ReplyChat replyData={replyData} currentChat={chat._id}/>
                         <InputForMessage
+                            currentChat={chat._id}
                             onPasteFiles={(files) => handleSetFiles(files)}
                             onPressEnter={() => handleSendMessage()}
                             handleUploadFiles={((files) => handleSetFiles(files))}
