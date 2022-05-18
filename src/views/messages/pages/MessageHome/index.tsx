@@ -25,8 +25,8 @@ import {SocketController} from "views/messages/shareComponents/common/SocketCont
 import {UnreadMessageController} from "./sections/UnreadMessages";
 import {FolderAddConversationPopup} from "./sections/MessageList/components/ListFolders/FolderAddConversationPopup";
 import {NotificationMutePopup} from "./sections/SettingMessageDetail/components/Notification/NotificationMutePopup";
-import {ConversationConfig} from "./sections/ChattingSection/components/HeaderConversation/ConversationConfig";
-import {setIsReviewOldMessages} from "../../../../redux/reducer/messages/ListMessage";
+import {ConversationConfig} from "./sections/ChattingSection/components/HeaderConversation";
+import {setIsReviewOldMessages} from "redux/reducer/messages/ListMessage";
 
 export const MessageContext = createContext<{
     currentChat: string;
@@ -38,6 +38,8 @@ export const MessageContext = createContext<{
     setEditorRef: React.Dispatch<React.SetStateAction<any>>;
     showSearch: boolean;
     setShowSearch: React.Dispatch<React.SetStateAction<boolean>>;
+    isDragOver: boolean;
+    setIsDragOver: React.Dispatch<React.SetStateAction<boolean>>;
 }>({
     currentChat: '',
     setCurrentChat: () => undefined,
@@ -47,7 +49,9 @@ export const MessageContext = createContext<{
     editorRef: null,
     setEditorRef: () => undefined,
     showSearch: false,
-    setShowSearch: () => undefined
+    setShowSearch: () => undefined,
+    isDragOver: false,
+    setIsDragOver: () => undefined
 });
 export const populates = JSON.stringify({
     path: 'lastMessage members avatar',
@@ -65,13 +69,14 @@ export const MessagesHome:FC = () => {
     const [currentChat, setCurrentChat] = useState(location.hash.replace("#",""));
     const [showMenu, setShowMenu] = useState(false);
     const [showSearch, setShowSearch] = useState(false);
+    const [isDragOver, setIsDragOver] = useState(false);
     const [editorRef, setEditorRef] = useState<Editor>();
     const socketRef = useSocket();
     const dispatch = useDispatch();
 
     const value = useMemo(
-        () => ({ currentChat, setCurrentChat , showMenu, setShowMenu, socketRef, editorRef, setEditorRef, showSearch, setShowSearch}),
-        [currentChat, showMenu, socketRef, editorRef, showSearch]
+        () => ({ currentChat, setCurrentChat , showMenu, setShowMenu, socketRef, editorRef, setEditorRef, showSearch, setShowSearch, isDragOver, setIsDragOver}),
+        [currentChat, showMenu, socketRef, editorRef, showSearch, isDragOver]
     );
 
     useEffect(() => {
