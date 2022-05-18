@@ -202,10 +202,6 @@ export const CashBookDetailPage: FC = () => {
   }
 
   useEffect(() => {
-    document.title = "Chi tiết sổ quỹ";
-  }, []);
-
-  useEffect(() => {
     if(!amountIncomeExpenseByParent ||
         isLoadingAmountIncomeExpense ||
         !listCashBook
@@ -255,6 +251,10 @@ export const CashBookDetailPage: FC = () => {
     })
   }, [JSON.stringify(user), JSON.stringify(cashBookInfo)])
 
+  useEffect(() => {
+    document.title = "Chi tiết sổ quỹ";
+  }, []);
+
   const toggleVisible = () => setVisibleDrawer(!visibleDrawer);
   const toggleDeleteModal = () => setIsShowDeleteModal(!isShowDeleteModal);
 
@@ -282,7 +282,7 @@ export const CashBookDetailPage: FC = () => {
   // Handle for checkbox all
   const getStateCheckboxAll = useCallback(() => {
     return itemsChecked.length === dataCashBook.length;
-  }, [itemsChecked, dataCashBook]);
+  }, [itemsChecked.length, dataCashBook.length]);
 
   const handleChangeCheckboxAll = (event: ChangeEvent<HTMLInputElement>) => {
     const isChecked = event.target.checked;

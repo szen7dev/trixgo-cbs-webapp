@@ -17,7 +17,7 @@ interface UseProject {
     totalPage: number;
     hasNextPage: boolean | undefined;
     list: Array<Project>;
-    info: Project | undefined;
+    info: Project;
     refetch: () => void;
     fetchNextPage: () => void;
     fetchPreviousPage: () => void;
@@ -34,7 +34,7 @@ type UseProjectProps = {
 export const useProject = ({
     params = {},
     isFetchList = false,
-    isFetchInfo = false 
+    isFetchInfo = false
 }: UseProjectProps): UseProject => {
     const { data: detailData } =
         useQuery("project__info", () => ProjectRepository.fetchInfo(params), {
@@ -42,7 +42,7 @@ export const useProject = ({
             enabled: isFetchInfo,
         });
 
-    const info = detailData?.data;
+    const info = detailData?.data ?? {};
 
     const {
         isLoading,

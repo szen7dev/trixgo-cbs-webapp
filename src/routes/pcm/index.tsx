@@ -75,6 +75,7 @@ const PcmDetailTaskPage           = lazy(() => import('views/pcm/pages/PcmDetail
 const PcmGroupPage                = lazy(() => import('views/pcm/pages/PcmGroup'));
 const PcmTaskGroupPage            = lazy(() => import('views/pcm/pages/PcmTaskGroup'));
 const PcmReportPage               = lazy(() => import('views/pcm/pages/PcmReport'));
+const PcmReportQuickPage          = lazy(() => import('views/pcm/pages/PcmReportQuick'));
 const PcmTasksReportPage          = lazy(() => import('views/pcm/pages/PcmTasksReport'));
 
 const PcmPrintTaskTypeOnePage     = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeOne'));
@@ -118,6 +119,7 @@ const PCMRouter: FC = () => {
                 />
                 <Route exact path="/pcm/project/:id/home" component={ProjectHomePage} />
                 <Route exact path="/pcm/project/:id/dashboard" component={ProjectDashboardPage} />
+                <Route exact path="/pcm/project/:id/responses" component={PcmReportQuickPage} />
                 <Route exact path="/pcm/project/:id/milestone/:milestoneID" component={ProjectMilestonePage} />
                 <Route exact path="/pcm/project/:id/folder" component={ProjectFolderPage} />
                 <Route exact path="/pcm/project/:id/folder/:groupID" component={ProjectFolderPage} />

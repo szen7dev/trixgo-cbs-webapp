@@ -76,9 +76,9 @@ const ProjectDashboardPortfolioPage: FC = () => {
         taskFinish,
         isLoading,
 	} = useQueryAmountTaskMilestone({
-		projectID,  isPassPermision: 1
+		projectID, isPassPermision: 1
 	});
-	
+
 	return (
 		<div className={cn(styles.content, styles.report, styles['bg-gray'], styles['text-normal'])}>
 			<div className={cn(styles['content-container'], styles.scroll, "overflow-y-auto p-4 pt-0 flex-1 h-full")}>
@@ -110,7 +110,7 @@ const ProjectDashboardPortfolioPage: FC = () => {
 								<ReportBudget className={cn(styles['budget-wrapper'], "bg-white flex-auto mx-2 mt-4")} projectInfo={projectInfo} />
 								<div className="flex flex-1">
 									{/* Contractor */}
-									<ReportContractor className={cn(styles['contractor-wrapper'], "bg-white mx-2 flex-1 mt-4")} projectInfo={projectInfo} />
+									<ReportContractor className={cn(styles['contractor-wrapper'], "bg-white mx-2 flex-1 mt-4")} projectID={ projectID} />
 
 									{/* Profile */}
 									<ReportProfile className={cn(styles['profile-wrapper'], "bg-white mx-2 flex-1 mt-4 whitespace-nowrap")} projectInfo={projectInfo} />
@@ -134,10 +134,10 @@ const ProjectDashboardPortfolioPage: FC = () => {
 							<ReportMultipleChart className='bg-white h-full pl-5 pr-12 pb-3 w-full mt-4' projectInfo={projectInfo}/>
 
 							{/* Quick report */}
-							<ReportQuickReport className={cn(styles['quick-report'], 'bg-white h-full pt-4 px-6 pb-6 w-full mt-4')} />
+							<ReportQuickReport className={cn(styles['quick-report'], 'bg-white h-full pt-4 px-6 pb-6 w-full mt-4')} projectID={projectID} />
 
 							{/* Contract status */}
-							<ReportContractStatus className={cn(styles['quick-report'], 'bg-white h-full pt-4 px-6 pb-6 w-full mt-4 overflow-hidden')} />
+							<ReportContractStatus className={cn(styles['quick-report'], 'bg-white h-full pt-4 px-6 pb-6 w-full mt-4 overflow-hidden')} projectID={ projectID} />
 						</div>
 					</div>
 				</div>

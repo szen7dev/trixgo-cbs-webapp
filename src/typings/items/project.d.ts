@@ -10,7 +10,7 @@ export type Project = {
     sign: string;
     description?: string;
     image?: string;
-    company: Company;
+    company: Company | string;
     actualStartTime: string;
     actualFinishTime: string;
     numberFinishOfDocs: number;
@@ -54,6 +54,7 @@ export type Project = {
     numberOfPunchLists: number;
     numberOfPhotos: number;
     numberOfInspections: number;
+    numberOfComment: number;
 }
 
 export type ProjectListPayload = QueryParam & {
