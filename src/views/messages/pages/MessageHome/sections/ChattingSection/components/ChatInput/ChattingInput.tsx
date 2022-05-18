@@ -35,7 +35,7 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
     const dispatch = useDispatch();
     const { addFileToUpload } = useUpload({
         appID: "5dfe4c1b51dc622100bb9d8f",
-		companyID: chat.company,
+        companyID: chat.company,
         conversationID: chat._id
     });
 
@@ -193,7 +193,7 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
         for (const file of sendMessage.files) {
             const {_id} = await addFileToUpload({
                 files: file.realFile,
-				        fileType: 1,
+                fileType: 1,
                 progress: percentCompleted => {
                     // console.log(`${percentCompleted}% ${file.file.file.name}`);
                     dispatch(updateFileProgressOnMessage({
@@ -233,7 +233,7 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
                 socket.emit('CHATTING_CSS_SEND_MESSAGE', willSendFileMessage);
                 setDoneUpload({});
                 setWillSendFileMessage(null);
-            }, 200)
+            }, 500)
         }
     }, [willSendFileMessage, doneUpload])
 

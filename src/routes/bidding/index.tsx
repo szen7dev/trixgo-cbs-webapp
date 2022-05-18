@@ -18,7 +18,10 @@ import {
 	BiddingTechnicalRequirements,
 	BiddingMaterialRequirements,
 	BiddingFinancialProposals,
-	FinancialBiddingDocuments
+	FinancialBiddingDocuments,
+	ProjectBiddingPage,
+	BiddingPlanPage,
+	BiddingPlanPageDoc
 } from "views/bidding/pages";
 import LayoutSecondary from "views/bidding/shareComponents/layouts/LayoutSecondary";
 
@@ -28,6 +31,9 @@ const BiddingRouter: FC = () => {
 			<Switch>
 				<Route exact path="/bidding/home" component={BiddingHomePage} />
 				<Route exact path="/bidding/other" component={BiddingOtherPage} />
+				<Route exact path="/bidding/plan" component={ProjectBiddingPage} />
+				<Route exact path="/bidding/plan/:projectID" component={BiddingPlanPage} />
+				<Route exact path="/bidding/plan/:projectID/:planID" component={BiddingPlanPageDoc} />
 				<Route exact path={["/bidding/:id", '/bidding/:id/(1|2|3)']} >
 					<LayoutSecondary back pages={[
 						{ id: '1', path: '/bidding/:id', navExact: true, title: 'Home' },

@@ -5,3 +5,7 @@ export * from './BiddingTechnicalRequirements';
 export * from './BiddingMaterialRequirements';
 export * from './BiddingFinancialProposals';
 export * from './FinancialBiddingDocuments';
+export * from './FinancialBiddingDocuments';
+export * from './ProjectBiddingPage';
+export * from './BiddingPlanPage';
+export * from './BiddingPlanPageDoc';
