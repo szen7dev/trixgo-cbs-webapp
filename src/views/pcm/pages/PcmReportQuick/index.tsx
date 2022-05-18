@@ -2,7 +2,7 @@
  * Libraries
  */
 import { FC } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 /**
  * Components, Assets
@@ -34,12 +34,29 @@ const PcmReportQuick: FC = () => {
 		<main className="h-full overflow-y-auto comment__wrapper">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
 				<div className="flex items-center">
-					<p className="text-lg">Báo cáo nhanh dự án</p>
+					<Link to={`/pcm/project/${projectID}/dashboard`}>
+						<svg
+						xmlns="http://www.w3.org/2000/svg"
+						className="h-5 w-5"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+						>
+						<path
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							strokeWidth={2}
+							d="M10 19l-7-7m0 0l7-7m-7 7h18"
+						/>
+						</svg>
+					</Link>
+					<p className="text-lg ml-2">Trở lại</p>
 				</div>
 			</header>
 
 			<div className="flex-1 z-0 text-black custom-scroll">
 				<div className="comment__container text-black pt-3">
+					<p className="text-lg px-5">Báo cáo nhanh dự án</p>
 					<RelatedResponse project={projectInfo} />
 				</div>
             </div>
