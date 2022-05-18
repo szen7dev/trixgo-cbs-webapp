@@ -1,6 +1,11 @@
-import React from 'react'
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-const ReportQuickReport: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
+type Props = {
+	projectID: string;
+} & React.HTMLAttributes<HTMLDivElement>
+
+const ReportQuickReport: React.FC<Props> = ({ projectID, ...props }) => {
 	return (
 		<div {...props}>
 			<h3>Báo cáo nhanh về dự án (tình trạng, việc nóng)</h3>
@@ -22,7 +27,9 @@ const ReportQuickReport: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ ...
 					Cần tập trung đẩy nhanh công tác chọn thầu theo đúng kế hoạch các bên đã thống nhất. Xử lý quan hệ với địa phương để đảm...
 				</p>
 			</div>
-			<button className="text-cbs-primary">Xem tất cả</button>
+			<Link to={`/pcm/project/${projectID}/responses`} className="text-cbs-primary">
+				Xem tất cả
+			</Link>
 		</div>
 	)
 }
