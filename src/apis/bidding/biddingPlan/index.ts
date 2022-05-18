@@ -12,6 +12,7 @@ interface BiddingPlanRepository {
     deleteBiddingPlan: (ids: Array<string>) => Promise<any>;
     fetchListBiddingPlan: (params: BiddingPlan.BiddingPlanQueryPayload) => Promise<BiddingPlan.BiddingPlanQueryResponse>;
     fetchDetailBiddingPlan: (params?: BiddingPlan.BiddingPlanQueryPayload) => Promise<BiddingPlan.BiddingPlanQueryDetailResponse>;
+    fetchContractorSelection: (params: any) => Promise<any>;
 }
 
 export const BiddingPlanRepository: BiddingPlanRepository = {
@@ -20,6 +21,7 @@ export const BiddingPlanRepository: BiddingPlanRepository = {
     deleteBiddingPlan: (ids: Array<string>) => deleteBiddingPlan(ids),
     fetchListBiddingPlan: async (params) => fetchListBiddingPlan(params),
     fetchDetailBiddingPlan: async (params) => fetchListBiddingPlan(params),
+    fetchContractorSelection: async (params) => contractorSelection(params),
 }
 
 /*=====APIS=====*/
@@ -63,5 +65,13 @@ async function deleteBiddingPlan(params: any) {
         `${BIDDING_URL}/bidding_plans`, { params }
     );
 
+    return data;
+}
+
+// Báo cáo lựa chọn nhà thầu
+async function contractorSelection(params: any) {
+    const { data } = await API.get(
+        `${BIDDING_URL}/bidding_plans/contractor-selection`, { params }
+    );
     return data;
 }

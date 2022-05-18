@@ -23,18 +23,21 @@ interface UseBiddingPlan {
     refetch: () => void;
     fetchNextPage: () => void;
     fetchPreviousPage: () => void;
+    contractorSelection: any
 }
 
 type UseBiddingPlanProps = {
     params?: BiddingPlanInfoPayload | BiddingPlanQueryPayload,
     isFetchList?: boolean,
     isFetchInfo?: boolean,
+    isFetchContractorSelection?:boolean
 }
 
 export const useBiddingPlan = ({
     params = {},
     isFetchList = false,
-    isFetchInfo = false
+    isFetchInfo = false,
+    isFetchContractorSelection = false,
 }: UseBiddingPlanProps): UseBiddingPlan => {
     const { mutateAsync: insertAsync } =
         useMutation((payload: any) => BiddingPlanRepository.addBiddingPlan(payload)
@@ -87,6 +90,13 @@ export const useBiddingPlan = ({
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPage = data?.pages[0]?.data?.totalPage || 0;
 
+    // Báo cáo lựa chọn nhà thầu
+    const { data: contractorSelection } =
+        useQuery("ContractorSelection", () => BiddingPlanRepository.fetchContractorSelection(params), {
+            refetchOnWindowFocus: false,
+            enabled: isFetchContractorSelection,
+        });
+    const infoContractorSelection = contractorSelection?.data;
     return {
         isLoading,
         insertAsync,
@@ -100,5 +110,6 @@ export const useBiddingPlan = ({
         refetch,
         fetchNextPage,
         fetchPreviousPage,
+        contractorSelection: infoContractorSelection
     }
 }

@@ -19,18 +19,21 @@ interface UseContract {
     contractInfo: Contract;
     refetch: () => void;
     fetchNextPage: () => void;
+    statisticalStatusByOntimeOnbudget?:any;
 }
 
 type Props = {
     params?: any,
     isFetch?: boolean,
-    isFetchInfo?: boolean
+    isFetchInfo?: boolean,
+    isFetchStatisticalStatusByOntimeOnbudget?: boolean
 }
 
 export const useContract = ({
     params = {},
     isFetch = false,
-    isFetchInfo = false
+    isFetchInfo = false,
+    isFetchStatisticalStatusByOntimeOnbudget = false
 }: Props): UseContract => {
     const { data: infoContract } =
         useQuery("contract_info", () => ContractRepository.getInfoContract(params), {
@@ -68,8 +71,15 @@ export const useContract = ({
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPage = data?.pages[0]?.data?.totalPage || 0;
     const nextCursor = data?.pages && data?.pages[0]?.data?.nextCursor;
-
     const contractInfo = infoContract?.data;
+
+    const { data: statisticalStatusByOntimeOnbudget } =
+    useQuery("statisticalStatusByOntimeOnbudget", () => ContractRepository.statisticalStatusByOntimeOnbudget(params), {
+        refetchOnWindowFocus: false,
+        enabled: isFetchStatisticalStatusByOntimeOnbudget,
+    });
+    
+    const statisticalStatusByOntimeOnbudgetInfo = statisticalStatusByOntimeOnbudget?.data;
     return {
         contractInfo,
         listContracts,
@@ -79,7 +89,8 @@ export const useContract = ({
         totalPage,
         hasNextPage,
         refetch,
-        fetchNextPage
+        fetchNextPage,
+        statisticalStatusByOntimeOnbudget: statisticalStatusByOntimeOnbudgetInfo
     }
 }
 

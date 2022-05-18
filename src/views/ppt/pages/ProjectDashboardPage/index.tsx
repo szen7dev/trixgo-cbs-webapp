@@ -137,7 +137,7 @@ const ProjectDashboardPortfolioPage: FC = () => {
 							<ReportQuickReport className={cn(styles['quick-report'], 'bg-white h-full pt-4 px-6 pb-6 w-full mt-4')} />
 
 							{/* Contract status */}
-							<ReportContractStatus className={cn(styles['quick-report'], 'bg-white h-full pt-4 px-6 pb-6 w-full mt-4 overflow-hidden')} />
+							<ReportContractStatus className={cn(styles['quick-report'], 'bg-white h-full pt-4 px-6 pb-6 w-full mt-4 overflow-hidden')} projectID={ projectID} />
 						</div>
 					</div>
 				</div>

@@ -62,6 +62,13 @@ const ContractRepository = {
     const { data } = await API.put<any>('/api/item/contracts', body);
     return data;
   },
+
+  async statisticalStatusByOntimeOnbudget(payload: { projectID: string}): Promise<any> {
+    const { data } = await API.get(
+      `${cmcsURL}/contracts/statistical-status-by-ontime-onbudget?${convertObToUrl(payload)}`
+    );
+    return data;
+  },
 };
 
 export default ContractRepository;
