@@ -143,6 +143,7 @@ module.exports = {
             },
             minWidth: {
                 ...autoGeneratePx,
+                '9/12': '75%',
             },
             maxWidth: {
                 ...autoGeneratePx,
@@ -150,6 +151,7 @@ module.exports = {
             },
             minHeight: {
                 ...autoGeneratePx,
+                '9/12': '75%',
             },
             maxHeight: {
                 ...autoGeneratePx,
