@@ -20,36 +20,25 @@ const ReportMainWork: React.FC<Props> = ({ data, ...props }) => {
 		taskFinish, projectID } = data;
 
 		const PCM_MILESTONE_FORMAT = PCM_MILESTONE.map(milestone => {
-			// if(milestone.value > 0){
-				const taskOmountOverdue = taskOverdueWork?.map((item: any )=> {
-					if(item._id == milestone.value){
-						return item?.count || 0
-					}
-				})
+				const taskOmountOverdue = taskOverdueWork?.find((item: any )=> {
+					return item._id == milestone.value;
+				})?.count || 0;
 
-				const taskOmountNextWeek =taskNextWeekWork?.map((item: any )=> {
-					if(item._id == milestone.value){
-						return item?.count || 0
-					}
-				})
+				const taskOmountNextWeek =taskNextWeekWork?.find((item: any )=> {
+					return item._id == milestone.value;
+				})?.count || 0;
 
-				const taskOmountThan7Days = taskMoreThan7Days?.map((item: any )=> {
-					if(item._id == milestone.value){
-						return item?.count || 0
-					}
-				})
+				const taskOmountThan7Days = taskMoreThan7Days?.find((item: any )=> {
+					return item._id == milestone.value;
+				})?.count || 0;
 
-				const taskOmountFinish = taskFinish?.map((item: any )=> {
-					if(item._id == milestone.value){
-						return item?.count || 0
-					}
-				})
+				const taskOmountFinish = taskFinish?.find((item: any )=> {
+					return item._id == milestone.value;
+				})?.count || 0;
 
-				const taskOmountAll = taskAll?.map((item: any )=> {
-					if(item._id == milestone.value){
-						return item?.count || 0
-					}
-				})
+				const taskOmountAll = taskAll?.find((item: any )=> {
+					return item._id == milestone.value;
+				})?.count || 0;
 
 				const percentConplete = taskOmountFinish/taskOmountAll*100 || 0;
 				return {
@@ -57,6 +46,8 @@ const ReportMainWork: React.FC<Props> = ({ data, ...props }) => {
 				}
 			// }
 		})
+
+		console.log({ PCM_MILESTONE_FORMAT, taskAll });
 	return (
 		<div {...props}>
 			<div className="flex justify-between">
@@ -95,27 +86,27 @@ const ReportMainWork: React.FC<Props> = ({ data, ...props }) => {
 									</td>
 									<td className="w-min whitespace-nowrap px-1.5 pt-3">
 										<div className={cn(styles.circle, styles.rose, "h-2 w-2 rounded-md inline-block mr-1 align-middle")} /> { 
-											milestone?.taskOmountOverdue?.[0] || 0
+											milestone?.taskOmountOverdue
 										}
 									</td>
 									<td className="w-min whitespace-nowrap px-1.5 pt-3">
 										<div className={cn(styles.circle, styles.warn, "h-2 w-2 rounded-md inline-block mr-1 align-middle")} />{ 
-											milestone?.taskOmountNextWeek?.[0] || 0
+											milestone?.taskOmountNextWeek
 										}
 									</td>
 									<td className="whitespace-nowrap px-1.5 pt-3">
 										<div className={cn(styles.circle, styles.success, "h-2 w-2 rounded-md inline-block mr-1 align-middle")} />
 										{ 
-											milestone?.taskOmountThan7Days?.[0] || 0
+											milestone?.taskOmountThan7Days
 										}
 									</td>
 									<td className="pt-3"><span className={styles.success}>
 										{ 
-											milestone?.taskOmountFinish?.[0] || 0
+											milestone?.taskOmountFinish
 										}
 										</span>/
 										{ 
-											milestone?.taskOmountAll?.[0] || 0
+											milestone?.taskOmountAll
 										}
 										</td>
 									{/* <td className="pt-3 px-2 box-content" style={{ width: "24px", paddingBottom: "12px" }}>
