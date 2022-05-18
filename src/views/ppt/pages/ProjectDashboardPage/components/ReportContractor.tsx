@@ -11,20 +11,20 @@ import { forEach } from 'lodash';
 import { convertCurrency } from "utils/converter";
 
 type Props = {
-	projectInfo: Project | undefined
+	projectID: string | undefined
 } & React.HTMLAttributes<HTMLDivElement>
 
-const ReportContractor: React.FC<Props> = ({ projectInfo, ...props }) => {
+const ReportContractor: React.FC<Props> = ({ projectID, ...props }) => {
     const [isFetchContractorSelection, setIsFetchContractorSelection] = useState(false);
 	const { contractorSelection } = useBiddingPlan({ 
-		params: { projectID: projectInfo?._id}, 
+		params: { projectID }, 
 		isFetchContractorSelection 
 	});
-
+	console.log({ contractorSelection, projectID })
 	useEffect(() => {
-		if(!projectInfo) return;
+		if(!projectID) return;
 		setIsFetchContractorSelection(true);
-	}, [projectInfo]);
+	}, [projectID]);
 	
 	const _data: ChartData<"doughnut", number[], unknown> = {
 		datasets: [
@@ -44,7 +44,6 @@ const ReportContractor: React.FC<Props> = ({ projectInfo, ...props }) => {
 		  },
 		],
 	};
-	// if(!projectInfo) return <></>;
 	return (
 		<div {...props}>
 			<h3>Lựa chọn nhà thầu</h3>

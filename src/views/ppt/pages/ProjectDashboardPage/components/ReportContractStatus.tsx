@@ -1,5 +1,4 @@
-import React from 'react'
-
+import React, { useState, useEffect } from 'react'
 import cn from "classnames";
 
 import styles from "../../../style.module.css";
@@ -11,25 +10,32 @@ type Props = {
 } & React.HTMLAttributes<HTMLDivElement>
 
 const ReportContractStatus: React.FC<Props> = ({ projectID, ...props }) => {
+    const [isFetchStatisticalStatusByOntimeOnbudget, SetIsFetchStatisticalStatusByOntimeOnbudget] = useState(false);
+
 	// Danh sách hợp đồng
 	const {
 		statisticalStatusByOntimeOnbudget,
 	} = useContract({
 		params: { projectID },
-		isFetchStatisticalStatusByOntimeOnbudget: true
+		isFetchStatisticalStatusByOntimeOnbudget
 	})
+	
+	useEffect(() => {
+		if(!projectID) return;
+		SetIsFetchStatisticalStatusByOntimeOnbudget(true);
+	}, [projectID]);
 
 	let ontime1_onbudget1 = 0
 	let ontime1_onbudget2 = 0
 	let ontime2_onbudget1 = 0
 	let ontime2_onbudget2 = 0
-	
+
 	if(!statisticalStatusByOntimeOnbudget || !statisticalStatusByOntimeOnbudget.length){
 		ontime1_onbudget1 = 0
 		ontime1_onbudget2 = 0
 		ontime2_onbudget1 = 0
 		ontime2_onbudget2 = 0
-		return <></>
+		// return <></>
 	}
 	
 	statisticalStatusByOntimeOnbudget?.forEach((item: any) => {

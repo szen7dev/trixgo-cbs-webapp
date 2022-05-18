@@ -110,7 +110,7 @@ const ProjectDashboardPortfolioPage: FC = () => {
 								<ReportBudget className={cn(styles['budget-wrapper'], "bg-white flex-auto mx-2 mt-4")} projectInfo={projectInfo} />
 								<div className="flex flex-1">
 									{/* Contractor */}
-									<ReportContractor className={cn(styles['contractor-wrapper'], "bg-white mx-2 flex-1 mt-4")} projectInfo={projectInfo} />
+									<ReportContractor className={cn(styles['contractor-wrapper'], "bg-white mx-2 flex-1 mt-4")} projectID={ projectID} />
 
 									{/* Profile */}
 									<ReportProfile className={cn(styles['profile-wrapper'], "bg-white mx-2 flex-1 mt-4 whitespace-nowrap")} projectInfo={projectInfo} />
