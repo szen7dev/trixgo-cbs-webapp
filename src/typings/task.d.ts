@@ -295,6 +295,7 @@ export type ResponseProps = {
     _id: string,
     name: string
   },
+  project: Project | string,
   content: string,
   files: FileProps[] | undefined,
   images: FileProps[] | undefined,
@@ -305,15 +306,19 @@ export type ResponseProps = {
 }
 
 export type ResponsePayload = {
-  taskID: string,
+  taskID?: string,
+  projectID?: string;
   type: number;
+  switchType?: string;
   content: string;
   files?: Array<string>;
   images?: Array<string>;
 };
 
 export type UpdateResponsePayload = {
-  taskID: string;
+  taskID?: string;
+  projectID?: string;
+  switchType?: string;
   commentID: string;
   files?: string[];
   images?: string[];
@@ -328,7 +333,10 @@ export type ResponseResponse = APIResponse & {
 
 export type ListResponsePayload = {
   taskID?: string;
+  projectID?: string;
   lastestID?: string;
+  switchType?: 'TASK' | 'PROJECT';
+  isGetReaction?: boolean;
   limit?: number;
   official?: boolean;
   populates?: string;
@@ -337,7 +345,9 @@ export type ListResponsePayload = {
 };
 
 export type SearchResponsePayload = {
-  taskID: string;
+  taskID?: string;
+  switchType?: 'TASK' | 'PROJECT',
+  projectID?: string;
   commentID: string;
   select?: string;
   populates?: string;

@@ -167,7 +167,10 @@ type UseRelatedResponse = {
 
 type UseRelatedResponseProps = {
   params?: Partial<{
-    taskID: string
+    taskID: string;
+    projectID: string;
+    switchType: 'TASK' | 'PROJECT';
+    isGetReaction: boolean;
   }>,
   isFetch?: boolean;
 }
