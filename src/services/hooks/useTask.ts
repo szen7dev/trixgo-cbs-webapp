@@ -18,7 +18,8 @@ import {
   CommentProps,
   UpdateResponsePayload,
   MoveTaskToParentPayload,
-  MoveTaskToGroupPayload
+  MoveTaskToGroupPayload,
+  ListResponsePayload
 } from "typings/task";
 
 /**
@@ -166,12 +167,7 @@ type UseRelatedResponse = {
 };
 
 type UseRelatedResponseProps = {
-  params?: Partial<{
-    taskID: string;
-    projectID: string;
-    switchType: 'TASK' | 'PROJECT';
-    isGetReaction: boolean;
-  }>,
+  params?: Partial<ListResponsePayload>,
   isFetch?: boolean;
 }
 

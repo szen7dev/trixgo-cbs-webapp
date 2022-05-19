@@ -125,6 +125,7 @@ export type TaskListParams = QueryParams & {
   milestone?: string;
   type?: number;
   status?: string;
+  sortKey?: string;
 }
 
 export type TaskInfoParams = {

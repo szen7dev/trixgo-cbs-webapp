@@ -13,45 +13,44 @@ type Props = {
 
 const ReportMainWork: React.FC<Props> = ({ data, ...props }) => {
 	const {	
-		taskOverdueWork,
-		taskNextWeekWork,
-		taskMoreThan7Days,
-		taskAll,
-		taskFinish, projectID } = data;
+	taskOverdueWork,
+	taskNextWeekWork,
+	taskMoreThan7Days,
+	taskAll,
+	taskFinish, projectID } = data;
 
-		const PCM_MILESTONE_FORMAT = PCM_MILESTONE.map(milestone => {
-				const taskOmountOverdue = taskOverdueWork?.find((item: any )=> {
-					return item._id == milestone.value;
-				})?.count || 0;
+	const PCM_MILESTONE_FORMAT = PCM_MILESTONE.map(milestone => {
+			const taskOmountOverdue = taskOverdueWork?.find((item: any )=> {
+				return item._id == milestone.value;
+			})?.count || 0;
 
-				const taskOmountNextWeek =taskNextWeekWork?.find((item: any )=> {
-					return item._id == milestone.value;
-				})?.count || 0;
+			const taskOmountNextWeek =taskNextWeekWork?.find((item: any )=> {
+				return item._id == milestone.value;
+			})?.count || 0;
 
-				const taskOmountThan7Days = taskMoreThan7Days?.find((item: any )=> {
-					return item._id == milestone.value;
-				})?.count || 0;
+			const taskOmountThan7Days = taskMoreThan7Days?.find((item: any )=> {
+				return item._id == milestone.value;
+			})?.count || 0;
 
-				const taskOmountFinish = taskFinish?.find((item: any )=> {
-					return item._id == milestone.value;
-				})?.count || 0;
+			const taskOmountFinish = taskFinish?.find((item: any )=> {
+				return item._id == milestone.value;
+			})?.count || 0;
 
-				const taskOmountAll = taskAll?.find((item: any )=> {
-					return item._id == milestone.value;
-				})?.count || 0;
+			const taskOmountAll = taskAll?.find((item: any )=> {
+				return item._id == milestone.value;
+			})?.count || 0;
 
-				const percentConplete = taskOmountFinish/taskOmountAll*100 || 0;
-				return {
-					milestone, taskOmountOverdue, taskOmountNextWeek, taskOmountThan7Days, taskOmountFinish, taskOmountAll, percentConplete
-				}
-			// }
-		})
+			const percentConplete = taskOmountFinish/taskOmountAll*100 || 0;
+			return {
+				milestone, taskOmountOverdue, taskOmountNextWeek, taskOmountThan7Days, taskOmountFinish, taskOmountAll, percentConplete
+			}
+		// }
+	})
 
-		console.log({ PCM_MILESTONE_FORMAT, taskAll });
 	return (
 		<div {...props}>
 			<div className="flex justify-between">
-				<h3>Công tác chính</h3>
+				<h3>Mốc tiến độ</h3>
 				<div>
 					<span className="mr-5">
 						<div className="inline-block h-2.5 w-2.5 mr-1" style={{ backgroundColor: "#F55F5F" }}></div>
