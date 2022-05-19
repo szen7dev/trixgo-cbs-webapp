@@ -29,7 +29,6 @@ import { useRelatedResponse } from 'services/hooks/useTask';
 import { useUpload } from 'services/hooks/useUpload';
 import useUploadFile, { modifyUploadedFilesV2, QueueUpload } from "services/hooks/useUploadFile";
 import { validateFiles } from 'validation/file';
-import { APP_KEY } from "utils/constants";
 import { APP_ID } from "apis/localdb";
 
 /**
@@ -63,15 +62,10 @@ export const RelatedResponse: FC<Props> = ({ project }) => {
   const location = useLocation();
   const divRef = useRef<HTMLDivElement>(null);
 
-  const [isUploading, setIsUploading] = useState(false);
-  const [isShow, setIsShow] = useState(false);
-  const [collapsed] = useState(false);
-  const [currentTab, setCurrentTab] = useState(RelatedResponseTab.ALL);
-
-  const [amountResponse, setAmountResponse] = useState(project.numberOfComment ?? 0);
-
+  const { current: socket }: any = useSocket();
   const { user } = useAuth();
-  const { addResponseAsync, listResponses, refetchListResponses,  totalRecord: totalRecordResponse } = useRelatedResponse({
+
+  const { addResponseAsync, listResponses, totalRecord: totalRecordResponse } = useRelatedResponse({
     params: {
       projectID: project._id,
       switchType: 'PROJECT',
@@ -101,14 +95,15 @@ export const RelatedResponse: FC<Props> = ({ project }) => {
       removeAllFiles,
     }] = useUploadFile();
 
-  const [isExpand, setIsExpand] = useState(true);
-  const [visibleForm, setVisibleForm] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [isShow, setIsShow] = useState(false);
+  const [collapsed] = useState(false);
+  const [amountResponse, setAmountResponse] = useState(project.numberOfComment ?? 0);
+
   const [content, setContent] = useState('');
   const [amountComment, setAmountComment] = useState(totalRecordResponse);
   const [amountCommentBack, setAmountCommentBack] = useState(0);
-  const { current: socket }: any = useSocket();
 
-  // State manage image comments
   const [defaultState, setDefaultState] = useState({
     mediaID: '',
     images: [] as ImageProps[],
@@ -134,7 +129,7 @@ export const RelatedResponse: FC<Props> = ({ project }) => {
       if(prefix !== 'response') return;
 
       const response = await TaskRepository.searchResponseById({
-        taskID: project._id,
+        projectID: project._id,
         switchType: 'PROJECT',
         commentID: commentID
       });
@@ -185,7 +180,6 @@ export const RelatedResponse: FC<Props> = ({ project }) => {
     queue.abord();
     setContent('');
     removeAllFiles();
-    setVisibleForm(false);
   }
 
   const handleAddResponse = async () => {
@@ -257,7 +251,7 @@ export const RelatedResponse: FC<Props> = ({ project }) => {
       switchType: 'PROJECT',
       isGetReaction: false,
       limit: LIMIT_PER_PAGE_RESPONSE,
-      official: currentTab === 'MARKED' ? true : false,
+      official: false,
     });
 
     if (error || !data.listRecords?.length) return;
@@ -468,7 +462,7 @@ export const RelatedResponse: FC<Props> = ({ project }) => {
               author={user}
               companyID={project.company as string}
               projectID={project?._id}
-              expanded={isExpand}
+              expanded={true}
               isHighlight={hashLocation?.split('_')[1] === response._id}
               divRef={hashLocation?.split('_')[1] === response._id ? divRef : null}
               onClickImage={(images, index) => {
