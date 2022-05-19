@@ -33,11 +33,12 @@ export const ProjectMilestonePage: FC<Props> = ({ type = 1 }) => {
     refetchListTask: refetchListTaskOutDate
   } = useTask({
     params: {
-      keyword, projectID, milestone: milestoneID, isPassPermision: "1", typeStatus: "1", statusNe: "3"
+      keyword, projectID, milestone: milestoneID, isPassPermision: "1", typeStatus: "1", statusNe: "3",
+      sortKey: JSON.stringify(['actualFinishTime__1', 'expiredTime__1'])
     },
     isFetch: true
   });
-  
+
   // Việc tuần tới
   const {
     listTasks: tasksNextWeek,
@@ -47,7 +48,8 @@ export const ProjectMilestonePage: FC<Props> = ({ type = 1 }) => {
     refetchListTask: refetchListTaskNextWeek
   } = useTask({
     params: {
-      keyword, projectID, milestone: milestoneID, isPassPermision: "1", typeStatus: "2", statusNe: "3"
+      keyword, projectID, milestone: milestoneID, isPassPermision: "1", typeStatus: "2", statusNe: "3",
+      sortKey: JSON.stringify(['actualFinishTime__1', 'expiredTime__1'])
     },
     isFetch: true
   });
@@ -60,7 +62,8 @@ export const ProjectMilestonePage: FC<Props> = ({ type = 1 }) => {
     refetchListTask: refetchListTaskMore
   } = useTask({
     params: {
-      keyword, projectID, milestone: milestoneID, isPassPermision: "1", typeStatus: "3", statusNe: "3"
+      keyword, projectID, milestone: milestoneID, isPassPermision: "1", typeStatus: "3", statusNe: "3",
+      sortKey: JSON.stringify(['actualFinishTime__1', 'expiredTime__1'])
     },
     isFetch: true
   });
@@ -73,7 +76,8 @@ export const ProjectMilestonePage: FC<Props> = ({ type = 1 }) => {
     refetchListTask: refetchListtasksCompleted
   } = useTask({
     params: {
-      keyword, projectID, milestone: milestoneID, isPassPermision: "1", status: "3"
+      keyword, projectID, milestone: milestoneID, isPassPermision: "1", status: "3",
+      sortKey: JSON.stringify(['actualFinishTime__1', 'expiredTime__1'])
     },
     isFetch: true
   });
@@ -113,7 +117,7 @@ export const ProjectMilestonePage: FC<Props> = ({ type = 1 }) => {
 			history.push("/");
     };
     document.title = "Quản lý công việc";
-  }, [isSuccessApp]);  
+  }, [isSuccessApp]);
 
   if (isLoadingListTask) {
     return <Loader className="border-primary" />;
@@ -123,7 +127,7 @@ export const ProjectMilestonePage: FC<Props> = ({ type = 1 }) => {
     <>
       <div>
         <header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
-           
+
           <div className="flex items-center">
           <button onClick={() => history.goBack()}>
               <svg
@@ -160,18 +164,9 @@ export const ProjectMilestonePage: FC<Props> = ({ type = 1 }) => {
           {viewMode === "LIST" && (
             <ListTable
               outDateData={{ data: tasksOutDate, totalRecord: outDateRecords }}
-              nextWeekData={{
-                data: tasksNextWeek,
-                totalRecord: nextWeekRecords,
-              }}
-              moreThanSevenDayData={{
-                data: tasksMoreThanSevenDay,
-                totalRecord: moreSevenDayRecord,
-              }}
-              taskSuccessData={{
-                data: tasksCompleted,
-                totalRecord: completeRecord,
-              }}
+              nextWeekData={{ data: tasksNextWeek, totalRecord: nextWeekRecords }}
+              moreThanSevenDayData={{ data: tasksMoreThanSevenDay, totalRecord: moreSevenDayRecord }}
+              taskSuccessData={{ data: tasksCompleted, totalRecord: completeRecord }}
               onClickMore={handleSeeMore}
             />
           )}
