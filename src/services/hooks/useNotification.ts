@@ -29,11 +29,11 @@ export const useNotification = (params?: any, isFetch?: boolean) : UseNotificati
         hasNextPage: hasNextPage
     } =
         useInfiniteQuery(
-            ["list_notifications", params],
+            ["notifications--list", params],
             async ({ pageParam }: any) =>
             NotificationRepository.listNotification({
+                lastestID: pageParam,
                 ...params,
-                lastestID: pageParam
             }),
             {
                 getNextPageParam: (params: any) => {

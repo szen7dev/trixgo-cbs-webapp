@@ -24,7 +24,7 @@ type Props = {
   createAt: string;
   related?: Array<User>;
   confirmUsers: Array<{ author: User, createAt: string | Date }>;
-  onConfirmSign?: () => void
+  onConfirmSign?: (taskID: string) => void
 };
 
 export const SideBar: FC<Props> = ({
@@ -43,16 +43,16 @@ export const SideBar: FC<Props> = ({
 
   const handleConfirmSignature = useCallback(async () => {
     try {
-      const { error, message } = await updateTaskAsync({
+      const { error, data } = await updateTaskAsync({
         taskID,
         isAddSignature: true
       })
 
       if(error) {
-        return toast.warning(message);
+        return toast.warning(data.message);
       }
 
-      onConfirmSign && onConfirmSign();
+      onConfirmSign && onConfirmSign(taskID);
     } catch (error) {
 			captureException(error);
       if (typeof error === "string") {

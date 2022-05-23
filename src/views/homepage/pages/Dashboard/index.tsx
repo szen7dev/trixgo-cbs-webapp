@@ -61,11 +61,9 @@ export const Dashboard: FC = () => {
   const { data } = useQuery("pcm_plan_tasks/badge", () => PcmRepository.listTotalAnalysis());
 
   useEffect(() => {
-    if (!socket) return;
+		socket?.on('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', refetchListNotification);
 
-		socket.on('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', refetchListNotification);
-
-    return () => socket.on('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', refetchListNotification);
+    return () => socket?.off('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', refetchListNotification);
   }, [socket])
 
   const settings = {

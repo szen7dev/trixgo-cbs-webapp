@@ -156,7 +156,12 @@ const PcmDetailTask: FC = () => {
 
   const handleConfirmUpdateTask = () => refetchInfoTask();
 
-  const handleConfirmSign = () => {
+  const handleConfirmSign = (taskID: string) => {
+    socket?.emit('SUBJECT_PCM_CSS_ADD_SIGNATURE', {
+      taskID,
+      bizfullname: user?.bizfullname
+    });
+
     setConfirmUsers(previous => ([
       ...previous,
       {
@@ -261,44 +266,54 @@ const PcmDetailTask: FC = () => {
     );
   };
 
-  const listenEventAddComment = (result: any) => {
-    const { data, error } = result;
-
-    if(error) return;
-
-    const { infoObject, infoComment, parentID, method } = data;
-
-    if(infoObject?._id !== id) return;
-		if(user?._id === infoComment?.author?._id) return;
-
-    switch (data.commentType) {
-      case 'COMMENT': {
-        if(method === 'UPDATE') {
-          return commentDispatch({
-            type: 'UPDATE_COMMENT',
-            payload: {
-              commentID: infoComment._id,
-              parent: parentID,
-              body: infoComment,
-            }
-          });
-        }
-
-        commentDispatch({ type: 'ADD_COMMENT', payload: infoComment });
-        break;
-      }
-      case 'RESPONSE': {
-        responseDispatch({ type: 'ADD_COMMENT', payload: infoComment });
-        break;
-      }
-      default:
-        break;
-    }
-  }
-
   useEffect(() => {
-		socket?.on("COMMENT_SSC_ADD_COMMENT", listenEventAddComment);
-    return () => socket?.off("COMMENT_SSC_ADD_COMMENT", listenEventAddComment);
+    const onEventAddComment = (result: any) => {
+      const { data, error } = result;
+
+      if(error) return;
+
+      const { infoObject, infoComment, parentID, method } = data;
+
+      if(infoObject?._id !== id) return;
+      if(user?._id === infoComment?.author?._id) return;
+
+      switch (data.commentType) {
+        case 'COMMENT': {
+          if(method === 'UPDATE') {
+            return commentDispatch({
+              type: 'UPDATE_COMMENT',
+              payload: {
+                commentID: infoComment._id,
+                parent: parentID,
+                body: infoComment,
+              }
+            });
+          }
+
+          commentDispatch({ type: 'ADD_COMMENT', payload: infoComment });
+          break;
+        }
+        case 'RESPONSE': {
+          responseDispatch({ type: 'ADD_COMMENT', payload: infoComment });
+          break;
+        }
+        default:
+          break;
+      }
+    }
+
+    const onEventAddSignature = (result: any) => {
+      const { error, message } = result.data;
+      error && toast.warn(message);
+    }
+
+		socket?.on("COMMENT_SSC_ADD_COMMENT", onEventAddComment);
+		socket?.on("SUBJECT_PCM_SSC_ADD_SIGNATURE", onEventAddSignature);
+
+    return () => {
+      socket?.off("COMMENT_SSC_ADD_COMMENT", onEventAddComment);
+      socket?.off("SUBJECT_PCM_SSC_ADD_SIGNATURE", onEventAddSignature);
+    }
   }, [socket])
 
   useEffect(() => {

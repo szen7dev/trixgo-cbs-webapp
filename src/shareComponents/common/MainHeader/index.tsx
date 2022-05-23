@@ -26,9 +26,6 @@ export const MainHeader: FC = () => {
 
   useEffect(() => {
     if (!socket) return;
-
-    // const refetchListNoti = () => refetchListNotification();
-
 		socket.on('NOTIFICATION_SSC_RECEIVE_NEW_NOTIFICATION', refetchListNotification);
 
     return () => socket.off('NOTIFICATION_SSC_RECEIVE_NEW_NOTIFICATION', refetchListNotification);
