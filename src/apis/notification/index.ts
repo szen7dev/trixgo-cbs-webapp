@@ -16,6 +16,10 @@ const NotificationRepository = {
         );
         return data;
     },
+    async markAllRead(): Promise<any> {
+        const { data } = await API.put<any>(`${notificationURL}/mark-all-read`);
+        return data;
+    },
     async listNotification(payload: ListNotificationPayload): Promise<ListNotificationResponse> {
         const { data } = await API.get<ListNotificationResponse>(
             notificationURL,

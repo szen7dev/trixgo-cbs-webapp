@@ -1,12 +1,9 @@
 import { FC, useCallback, useState } from "react";
-
 import { Link } from "react-router-dom";
-
-// import { useModal } from "services/hooks/useModal";
 import debounce from "lodash/debounce";
-import { SearchInput } from "shareComponents/common";
 import moment from "moment";
 
+import { SearchInput } from "shareComponents/common";
 import FolderIcon from "assets/images/icons8-folder.svg";
 // import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 // import DownloadIcon from "assets/images/icons8-download-96.svg";
@@ -21,8 +18,6 @@ const PcmReportPage: FC = () => {
 	const { listReports, nextPageListReports, hasNextPage, totalRecord } = usePcmReport({
 		keyword
 	}, true);
-
-	// const { openModal } = useModal();
 
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
@@ -197,7 +192,7 @@ const PcmReportPage: FC = () => {
 
 			{hasNextPage && (
 				<div className="w-full flex justify-center my-5">
-					<button onClick={() => nextPageListReports()}>
+					<button onClick={nextPageListReports}>
 						<span className="text-primary">{`Xem thêm (${totalRecord - listReports.length
 							})`}</span>
 					</button>

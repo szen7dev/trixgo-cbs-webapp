@@ -31,7 +31,7 @@ export const Dashboard: FC = () => {
   const { user } = useAuth();
   const { current: socket }: any = useSocket();
 
-  const { listMedias: listMediasDigitalConversion, nextPageListMedias, refetchListMedias } = useMedia({
+  const { listMedias: listMediasDigitalConversion, nextPageListMedias } = useMedia({
     key: 'list_medias__digital-conversion',
     params: {
       limit: 6,
@@ -58,14 +58,12 @@ export const Dashboard: FC = () => {
     nextPageListNotification
   } = useNotification({ limit: 5 }, true);
 
-  const { data } = useQuery("pcm_plan_tasks/badge", () => PcmRepository.listTotalAnalysis());
+  const { data } = useQuery("pcm_plan_tasks--badge", () => PcmRepository.listTotalAnalysis());
 
   useEffect(() => {
-    if (!socket) return;
+		socket?.on('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', refetchListNotification);
 
-		socket.on('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', refetchListNotification);
-
-    return () => socket.on('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', refetchListNotification);
+    return () => socket?.off('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', refetchListNotification);
   }, [socket])
 
   const settings = {
