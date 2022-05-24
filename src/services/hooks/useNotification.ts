@@ -3,22 +3,26 @@ import NotificationRepository from "apis/notification";
 import { NotificationProps, UpdateNotificationPayload } from "typings/notification";
 
 type UseNotification = {
-    updateNotificationAsync: (payload: UpdateNotificationPayload) => Promise<any>,
-    listNotifications: Array<NotificationProps>,
-    isLoadingListNotification: boolean,
-    refetchListNotification: () => void,
-    nextPageListNotification: () => void,
-    prevPageListNotification: () => void,
-    totalRecordSendSuccess: number,
-    totalRecord: number,
-    hasNextPage: boolean | undefined
+    updateNotificationAsync: (payload: UpdateNotificationPayload) => Promise<any>;
+    markAllReadAsync: () => Promise<any>;
+    listNotifications: Array<NotificationProps>;
+    isLoadingListNotification: boolean;
+    refetchListNotification: () => void;
+    nextPageListNotification: () => void;
+    prevPageListNotification: () => void;
+    totalRecordSendSuccess: number;
+    totalRecord: number;
+    hasNextPage: boolean | undefined;
 };
 
 export const useNotification = (params?: any, isFetch?: boolean) : UseNotification => {
-    const { mutateAsync: updateNotificationAsync } =
-        useMutation((payload: UpdateNotificationPayload) =>
-            NotificationRepository.updateNotification(payload)
-        );
+    const { mutateAsync: updateNotificationAsync } = useMutation((payload: UpdateNotificationPayload) =>
+        NotificationRepository.updateNotification(payload)
+    );
+
+    const { mutateAsync: markAllReadAsync } = useMutation(() =>
+        NotificationRepository.markAllRead()
+    );
 
     const {
         isLoading: isLoadingListNotification,
@@ -57,6 +61,7 @@ export const useNotification = (params?: any, isFetch?: boolean) : UseNotificati
 
     return {
         updateNotificationAsync,
+        markAllReadAsync,
         listNotifications,
         isLoadingListNotification,
         refetchListNotification,

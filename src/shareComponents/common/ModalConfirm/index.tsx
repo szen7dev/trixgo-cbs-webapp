@@ -3,20 +3,23 @@ import { FC } from "react";
 type Props = {
     title?: string;
     description?: string;
-    onConfirm: () => void;
+    defaultText?: boolean;
     onCancel?: () => void;
+    onConfirm: () => void;
 }
 
-export const ModalConfirm: FC<Props> = ({ title, description, onConfirm, onCancel }) => {
+export const ModalConfirm: FC<Props> = ({ title, description, defaultText, onConfirm, onCancel }) => {
     return (
         <main className="relative h-full">
             <header className="px-10 py-4">
-                <p className="font-bold text-xl">{title ? title : 'Bạn có muốn xóa không?'}</p>
+                <p className="font-bold text-xl">
+                    {title ? title : 'Bạn có muốn xóa không?'}
+                </p>
             </header>
 
             <section className="px-10 text-primary-gray">
                 <p>
-                    {description ? description : 'Dữ liệu của bạn sẽ bị xóa vĩnh viễn và bạn không thể khôi phục lại dữ liệu này'}
+                    {defaultText ? 'Dữ liệu của bạn sẽ bị xóa vĩnh viễn và bạn không thể khôi phục lại dữ liệu này' : description}
                 </p>
             </section>
 
