@@ -102,8 +102,6 @@ const PcmDetailTask: FC = () => {
     { refetchOnWindowFocus: false }
   );
 
-  console.log("xxaxa", infoTask);
-
   const { listCheckList, totalRecord: totalRecordCheckList, nextPageListCheckList } = useCheckList({
     parentID: id, isFetchChecklist: true
   });
