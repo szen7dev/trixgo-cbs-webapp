@@ -58,6 +58,7 @@ export type Task = {
   field: Field,
   startTime: string,
   subType: number,
+  subtype: number,
   type: number,
   related: Array<User>;
   signatures: Array<{
