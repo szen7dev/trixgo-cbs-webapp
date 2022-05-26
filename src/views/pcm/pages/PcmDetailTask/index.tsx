@@ -1,4 +1,4 @@
-import { FC, useState, useEffect, useContext } from "react";
+import { FC, useState, useEffect, useContext, useCallback } from "react";
 import { captureException } from "@sentry/react";
 import { useHistory, useParams, Redirect, Link } from "react-router-dom";
 import { Menu } from '@headlessui/react';
@@ -154,7 +154,7 @@ const PcmDetailTask: FC = () => {
 
   const handleConfirmUpdateTaskStatus = (status: number) => setTaskData(previous => ({ ...previous, status }));
 
-  const handleConfirmUpdateTask = () => refetchInfoTask();
+  const handleConfirmUpdateTask = useCallback(() => refetchInfoTask(), []);
 
   const handleConfirmSign = (taskID: string) => {
     socket?.emit('SUBJECT_PCM_CSS_ADD_SIGNATURE', {
