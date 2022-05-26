@@ -1,6 +1,7 @@
 import { FC, useState, FormEvent } from "react";
 
 import { useTranslation } from "react-i18next";
+import i18n from 'i18next';
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { object, string } from "yup";
 import { map as _map } from "lodash";
@@ -42,7 +43,7 @@ const LOCALES: Locale[] = [
 ];
 
 const LoginPage: FC = () => {
-  const { t } = useTranslation(["signIn"]); // signIn là tên biến được khai báo trong file index (i18n)
+  const { t } = useTranslation(["signIn"]);
   const { isLoading, signIn } = useAuth();
 
   const [selectedLocale, setSelectedLocale] = useState(LOCALES[1].id);
@@ -190,7 +191,7 @@ const LoginPage: FC = () => {
                             className="flex items-center cursor-pointer select-none hover:opacity-80"
                             onClick={() => {
                               setSelectedLocale(locale.id);
-                              // i18n.changeLanguage(locale.code);
+                              i18n.changeLanguage(locale.code);
                             }}
                           >
                             {selectedLocale !== locale.id && locale.flag}
