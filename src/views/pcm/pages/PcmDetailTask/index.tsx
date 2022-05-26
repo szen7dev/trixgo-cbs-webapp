@@ -102,6 +102,8 @@ const PcmDetailTask: FC = () => {
     { refetchOnWindowFocus: false }
   );
 
+  console.log("xxaxa", infoTask);
+
   const { listCheckList, totalRecord: totalRecordCheckList, nextPageListCheckList } = useCheckList({
     parentID: id, isFetchChecklist: true
   });
@@ -379,7 +381,6 @@ const PcmDetailTask: FC = () => {
   }
 
   const taskInfo = infoTask.data;
-
   return (
     <>
       {/*_____________header______________*/}
@@ -458,7 +459,7 @@ const PcmDetailTask: FC = () => {
           {/* <button className="mx-3">
             <img className="w-6 opacity-80" src={IconPrint} alt="Print icon" />
           </button> */}
-          {permissions.hasPermissionAddRelatedUser && (
+          {permissions.hasPermissionAddRelatedUser && infoTask?.subType != 4 && (
             <button className="mx-3" onClick={openAddUserRelation}>
               <img className="w-6 opacity-80" src={IconAddUser} alt="User add icon" />
             </button>
@@ -685,6 +686,7 @@ const PcmDetailTask: FC = () => {
               related={taskInfo?.related}
               confirmUsers={confirmUsers}
               onConfirmSign={handleConfirmSign}
+              subType={taskInfo?.subType}
             />
           </div>
         </div>
