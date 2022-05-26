@@ -178,9 +178,8 @@ const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
     authorAttachs: [],
     type: task.type,
     relatedIDs: task.related?.map(related => related._id),
-    subType: task.subType,
+    subType: task.subtype,
   };
-  console.log({ task })
 
   return (
     <>

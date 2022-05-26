@@ -379,7 +379,6 @@ const PcmDetailTask: FC = () => {
   }
 
   const taskInfo = infoTask.data;
-
   return (
     <>
       {/*_____________header______________*/}
@@ -458,7 +457,7 @@ const PcmDetailTask: FC = () => {
           {/* <button className="mx-3">
             <img className="w-6 opacity-80" src={IconPrint} alt="Print icon" />
           </button> */}
-          {permissions.hasPermissionAddRelatedUser && (
+          {permissions.hasPermissionAddRelatedUser && infoTask?.subtype != 4 && (
             <button className="mx-3" onClick={openAddUserRelation}>
               <img className="w-6 opacity-80" src={IconAddUser} alt="User add icon" />
             </button>
@@ -685,6 +684,7 @@ const PcmDetailTask: FC = () => {
               related={taskInfo?.related}
               confirmUsers={confirmUsers}
               onConfirmSign={handleConfirmSign}
+              subtype={taskInfo?.subtype}
             />
           </div>
         </div>

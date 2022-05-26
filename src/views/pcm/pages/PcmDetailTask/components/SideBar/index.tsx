@@ -24,7 +24,8 @@ type Props = {
   createAt: string;
   related?: Array<User>;
   confirmUsers: Array<{ author: User, createAt: string | Date }>;
-  onConfirmSign?: (taskID: string) => void
+  onConfirmSign?: (taskID: string) => void,
+  subtype?: number;
 };
 
 export const SideBar: FC<Props> = ({
@@ -36,6 +37,7 @@ export const SideBar: FC<Props> = ({
   related,
   confirmUsers,
   onConfirmSign,
+  subtype
 }) => {
   const [{ isShow }, { toggleModal, openAddUserRelation: openListUserRelation }] = useModal();
   const { updateTaskAsync } = useTask({});
@@ -112,28 +114,30 @@ export const SideBar: FC<Props> = ({
         </span>
       </div>
 
-      <div className="mt-5">
-        <div className="flex justify-between items-end mb-2.5">
-          <span className="font-bold text-[13px] leading-4">
-            Người liên quan
-          </span>
-          <button onClick={openListUserRelation}>
-            <span className="text-primary text-[13px] leading-4">
-              Xem tất cả
+      {subtype != 4 ?
+        <div className="mt-5">
+          <div className="flex justify-between items-end mb-2.5">
+            <span className="font-bold text-[13px] leading-4">
+              Người liên quan
             </span>
-          </button>
-        </div>
-        <div className="flex overflow-hidden space-x-3">
-          {(related || []).map((user, index) => (
-            <img
-              key={user?._id || index}
-              src={`${process.env.REACT_APP_URL_S3_USER}/${user?.image}`}
-              alt="Avatar"
-              className="w-10 h-10 rounded-full object-cover"
-            />
-          ))}
-        </div>
-      </div>
+            <button onClick={openListUserRelation}>
+              <span className="text-primary text-[13px] leading-4">
+                Xem tất cả
+              </span>
+            </button>
+          </div>
+          <div className="flex overflow-hidden space-x-3">
+            {(related || []).map((user, index) => (
+              <img
+                key={user?._id || index}
+                src={`${process.env.REACT_APP_URL_S3_USER}/${user?.image}`}
+                alt="Avatar"
+                className="w-10 h-10 rounded-full object-cover"
+              />
+            ))}
+          </div>
+        </div> : <></>
+      }
 
       <div className="mt-5">
         <div className="flex justify-between items-center mb-2.5">
