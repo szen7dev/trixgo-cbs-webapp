@@ -25,7 +25,7 @@ type Props = {
   related?: Array<User>;
   confirmUsers: Array<{ author: User, createAt: string | Date }>;
   onConfirmSign?: (taskID: string) => void,
-  subType?: number;
+  subtype?: number;
 };
 
 export const SideBar: FC<Props> = ({
@@ -37,7 +37,7 @@ export const SideBar: FC<Props> = ({
   related,
   confirmUsers,
   onConfirmSign,
-  subType
+  subtype
 }) => {
   const [{ isShow }, { toggleModal, openAddUserRelation: openListUserRelation }] = useModal();
   const { updateTaskAsync } = useTask({});
@@ -114,7 +114,7 @@ export const SideBar: FC<Props> = ({
         </span>
       </div>
 
-      {subType != 4 ?
+      {subtype != 4 ?
         <div className="mt-5">
           <div className="flex justify-between items-end mb-2.5">
             <span className="font-bold text-[13px] leading-4">
