@@ -96,6 +96,7 @@ export const CmcExpensePage: FC = () => {
       },
     });
   }
+
   const handleEditAction = () => {
     openModal(
       <div
@@ -107,6 +108,7 @@ export const CmcExpensePage: FC = () => {
       </div>
     )
   }
+  
   const handleAddAction = () => {
     openModal(
       <div

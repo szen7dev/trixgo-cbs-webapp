@@ -21,27 +21,21 @@ interface UseListHistoryTraffic {
     listHistoryTraffic: Array<HistoryTraffic>,
     isLoading: boolean;
 };
-export const useListHistoryTraffic = (params?: ListHistoryTrafficPayload) : UseListHistoryTraffic => {
+export const useListHistoryTraffic = (params?: ListHistoryTrafficPayload) : any => {
     // Get danh sách
     const infinityQuery = useInfiniteQuery(
         ["list_history_traffic", params],
-        async ({ pageParams }: any) =>
+        async ({ pageParam }: any) =>
             SupportRepository.listHistoryTraffic({
-                lastestID: pageParams ? pageParams : "",
-                filter: JSON.stringify({
-                    type: 1,
-                    app: 1,
-                    menu: 1,
-                    companyOfAuthor: 1,
-                    createdAt: 1,
-                    userCreate: 1,
-                }),
+                lastestID: pageParam ? pageParam : "",
                 populates: JSON.stringify({
                     path: "companyOfAuthor userCreate app menu",
                     select: "name sign fullname bizfullname image",
                 }),
+                limit: 15,
                 ...params
             }),
+
         {
             getNextPageParam: ({ data }: any) => {
                 return data?.nextCursor || undefined;
@@ -50,11 +44,29 @@ export const useListHistoryTraffic = (params?: ListHistoryTrafficPayload) : UseL
             enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
         }
     );
-    const { data, isLoading } = infinityQuery;
-    const listHistoryTraffic = [].concat(...(data?.pages || []).map((d: any) => d.data)).filter(Boolean);
+
+    const {  
+        isLoading,
+        data,
+        refetch,
+        fetchNextPage,
+        fetchPreviousPage,
+        hasNextPage, } = infinityQuery;
+
+        const listHistoryTraffic = []
+        .concat(...(data?.pages || [])
+        .map((d: any) => d.data?.listRecords))
+        .filter(Boolean);
+        const totalRecord = data?.pages[0]?.data?.totalRecord;
+        const totalPage = data?.pages[0]?.data?.totalPage;
     return {
         isLoading,
         listHistoryTraffic,
+        fetchNextPage,
+        fetchPreviousPage,
+        hasNextPage,
+        totalRecord,
+        totalPage
     }
 };
 //2. THỐNG KÊ THEO THIẾT BỊ THEO NĂM
@@ -88,15 +100,12 @@ export const useFetchSupport = (params?: ListDevicePayload) : UseSupport => {
 interface UseTypeDeviceAccess {
     listTypeDevice: Array<ListTypeDevice>
 }
-export const useTypeDeviceAccess = (payload?: ListTypeDeviceAccessPayload) : UseTypeDeviceAccess => {
+// export const useTypeDeviceAccess = (params?: ListTypeDeviceAccessPayload) : UseTypeDeviceAccess => {
+export const useTypeDeviceAccess = (params?: any) : UseTypeDeviceAccess => {
     const infinityQuery = useInfiniteQuery(
-        ["list_type_device_access", payload],
+        ["list_type_device_access", params],
         async ({ data }: any) => {
-            return SupportRepository.listTypeDeviceAccess({
-                fromDate: "2022-1-15",
-                toDate: "2022-1-15",
-                year: 2021,
-            })
+            return SupportRepository.listTypeDeviceAccess(params)
         },
         {
             getNextPageParam: ({ data }: any) => {
@@ -121,11 +130,6 @@ export const useListAppAccess = (params?: ListAppAccessPayload) : UselistAppAcce
     const infinityQuery = useInfiniteQuery(
         ["list_app_access", params],
         async ({ pageParam }: any) =>
-            // return SupportRepository.listAppAccess({
-            //     fromDate: "2022-1-15",
-            //     toDate: "2022-1-15",
-            //     year: 2022,
-            // })
             SupportRepository.listAppAccess(
                 params
             )
@@ -149,15 +153,11 @@ export const useListAppAccess = (params?: ListAppAccessPayload) : UselistAppAcce
 interface UselistAppDeviceAccess {
     listAppDeviceAccess: Array<DataListAppDevice>
 }
-export const useListAppDeviceAccess = (payload?: ListAppDeviceAccessPayload) : UselistAppDeviceAccess => {
+export const useListAppDeviceAccess = (params?: any) : UselistAppDeviceAccess => {
     const infinityQuery = useInfiniteQuery(
-        ["list_app_device_access", payload],
+        ["list_app_device_access", params],
         async ({ data }: any) => {
-            return SupportRepository.listAppDeviceAccess({
-                fromDate: "2022-1-15",
-                toDate: "2022-1-15",
-                year: 2021,
-            })
+            return SupportRepository.listAppDeviceAccess(params)
         },
         {
             getNextPageParam: ({ data }: any) => {

@@ -19,10 +19,23 @@ import { APP_ID, PROJECT_STAGE } from 'apis/localdb'
 import { dateLoadedPercentage, formatDate } from "utils/ppt";
 import 'views/document/styles/document.css'
 import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
+import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 
 const { REACT_APP_URL_S3, REACT_APP_URL_S3_PROJECT } = process.env;
 
 const ProjectCategoryPage: FC = () => {
+	//_____Start history traffict
+	const payloadHistoryTraffic: any = {
+		appID: APP_ID.PCM.id,
+		menuID: APP_ID.PCM.menuPcmApp.projects.id,
+		type: "1"
+	  };
+	const { createHistoryTraffics } = useHistoryTraffics();
+	useEffect(() => {
+		createHistoryTraffics({...payloadHistoryTraffic, type: 1});
+	}, []);
+	//_____End history traffict
+
 	const [keyword, setKeyword] = useState('');
 	
 	const { createPermission, updatePermission, deletePermission } = useCheckPerAccessScreen({

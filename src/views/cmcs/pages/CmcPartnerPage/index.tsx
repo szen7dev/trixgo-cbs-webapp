@@ -16,10 +16,10 @@ import { APP_ID } from "apis/localdb";
 import { debounce } from "lodash";
 
 export const CmcPartnerPage: FC = () => {
-  // --------- Check phân quyền
+  // --------- history traffic
   const payload: any = {
     appID: APP_ID.CMCS.id,
-    menuID: APP_ID.CMCS.menuCmcsApp.income.id,
+    menuID: APP_ID.CMCS.menuCmcsApp.partner.id,
     type: "1"
   };
   const { createPermission, updatePermission, deletePermission } = useCheckPerAccessScreen(payload);

@@ -27,7 +27,7 @@ const ReportMainWork: React.FC<Props> = ({ data, ...props }) => {
 			const taskOmountNextWeek =taskNextWeekWork?.find((item: any )=> {
 				return item._id == milestone.value;
 			})?.count || 0;
-
+			
 			const taskOmountThan7Days = taskMoreThan7Days?.find((item: any )=> {
 				return item._id == milestone.value;
 			})?.count || 0;

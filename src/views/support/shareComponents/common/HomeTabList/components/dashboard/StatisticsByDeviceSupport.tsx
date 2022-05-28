@@ -83,12 +83,12 @@ const dataNew = {
   datasets: [
     {
       data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-      backgroundColor: "rgb(234 179 8)",
+      backgroundColor: "#0060E1",
       barThickness: 8,
     },
     {
       data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-      backgroundColor: "#0060E1",
+      backgroundColor: "rgb(234 179 8)",
       barThickness: 8,
     },
     {

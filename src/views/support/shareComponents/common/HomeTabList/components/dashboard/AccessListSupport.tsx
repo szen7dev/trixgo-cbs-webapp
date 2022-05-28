@@ -1,4 +1,4 @@
-import { FC } from "react";
+import React, { FC, useState, useEffect } from "react";
 import moment from "moment";
 import cn from "classnames";
 
@@ -41,13 +41,18 @@ type Props = {
 const AccessList: FC<Props> = (props) => {
   const { timeType } = props;
   const listParam = checkTimeType(timeType);
-  console.log('listParam',listParam)
-  // const listParam : ListHistoryTrafficPayload = { fromDate: '2021-12-20', toDate: '2022-12-30'};
-  const { listHistoryTraffic } = useListHistoryTraffic(listParam);
-  console.log('listHistoryTraffic',listHistoryTraffic)
-  const dataNew : any = listHistoryTraffic[0]?.listRecords;
+  const { 
+    listHistoryTraffic, 
+    fetchNextPage,
+    fetchPreviousPage,
+    hasNextPage,
+    totalRecord,
+    totalPage 
+  } = useListHistoryTraffic({ ...listParam });
+
   return (
-    <section className="bg-primary-light h-[834px] mt-3 border relative">
+    // <section className="bg-primary-light h-[834px] mt-3 border relative">
+    <section className="bg-primary-light mt-3 border relative">
       <div className="flex justify-between items-center py-1 pr-2 pl-4 border-b border-primary-border">
         <div className="flex items-center">
           <p className="text-primary-gray font-bold text-lg">
@@ -123,7 +128,7 @@ const AccessList: FC<Props> = (props) => {
         </thead>
 
         <tbody className="border border-primary-border">
-          {dataNew?.map((item :any) => (
+          {listHistoryTraffic?.map((item :any) => (
             <tr key={item._id} className="border-b border-primary-border h-12">
               <td className="w-1/12 pt-2 pb-2 text-center">
                 <input
@@ -139,16 +144,24 @@ const AccessList: FC<Props> = (props) => {
               <td className="w-3/12 pt-2 pb-2 pl-2">{item.userCreate?.fullname}</td>
               <td className="w-1/12 pt-2 pb-2 pl-2">{item.app?.name}</td>
               <td className="w-2/12 pt-2 pb-2 pl-2">{item.menu?.name}</td>
-              <td className="w-2/12 pt-2 pb-2 pl-2">{item.type === 1 ? 'Mobile' : item.type === 2 ? 'Website' : 'Tablet'}</td>
+              <td className="w-2/12 pt-2 pb-2 pl-2">{item.type === 1 ? 'Website' : item.type === 2 ? 'Mobile' : 'Tablet'}</td>
               <td className="w-1/12 pt-2 pb-2 pl-2 text-primary">
-                {moment(item.createdAt).format("h:mm:ss DD-MM-YYYY")}
+                {moment(item.createAt).fromNow()}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-
-      <Paginate />
+      
+      {hasNextPage && (
+        <div className="w-full flex justify-center my-5">
+            <button onClick={fetchNextPage}>
+                <span className="text-primary">
+                    {`Xem thêm (${totalRecord - listHistoryTraffic.length})`}
+                </span>
+            </button>
+        </div>
+      )}
     </section>
   );
 };
