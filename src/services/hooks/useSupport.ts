@@ -21,25 +21,18 @@ interface UseListHistoryTraffic {
     listHistoryTraffic: Array<HistoryTraffic>,
     isLoading: boolean;
 };
-export const useListHistoryTraffic = (params?: ListHistoryTrafficPayload) : UseListHistoryTraffic => {
+export const useListHistoryTraffic = (params?: ListHistoryTrafficPayload) : any => {
     // Get danh sách
     const infinityQuery = useInfiniteQuery(
         ["list_history_traffic", params],
         async ({ pageParams }: any) =>
             SupportRepository.listHistoryTraffic({
                 lastestID: pageParams ? pageParams : "",
-                filter: JSON.stringify({
-                    type: 1,
-                    app: 1,
-                    menu: 1,
-                    companyOfAuthor: 1,
-                    createdAt: 1,
-                    userCreate: 1,
-                }),
                 populates: JSON.stringify({
                     path: "companyOfAuthor userCreate app menu",
                     select: "name sign fullname bizfullname image",
                 }),
+                limit: 15,
                 ...params
             }),
         {
@@ -50,11 +43,26 @@ export const useListHistoryTraffic = (params?: ListHistoryTrafficPayload) : UseL
             enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
         }
     );
-    const { data, isLoading } = infinityQuery;
-    const listHistoryTraffic = [].concat(...(data?.pages || []).map((d: any) => d.data)).filter(Boolean);
+
+    const {  
+        isLoading,
+        data,
+        refetch,
+        fetchNextPage,
+        fetchPreviousPage,
+        hasNextPage, } = infinityQuery;
+
+        const listHistoryTraffic = [].concat(...(data?.pages || []).map((d: any) => d.data)).filter(Boolean);
+        const totalRecord = data?.pages[0]?.data?.totalRecord;
+        const totalPage = data?.pages[0]?.data?.totalPage;
     return {
         isLoading,
         listHistoryTraffic,
+        fetchNextPage,
+        fetchPreviousPage,
+        hasNextPage,
+        totalRecord,
+        totalPage
     }
 };
 //2. THỐNG KÊ THEO THIẾT BỊ THEO NĂM

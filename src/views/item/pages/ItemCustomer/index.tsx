@@ -182,7 +182,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
             </div>
         )
     }
-  
+    
     return (
         <main className="relative h-full">
             <header className="sticky top-0 bg-primary-light z-10">
