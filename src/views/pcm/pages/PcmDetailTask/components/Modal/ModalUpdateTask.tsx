@@ -1,7 +1,7 @@
 /**
  * Libraries
  */
-import { FC, UIEvent, useState } from "react";
+import { FC, UIEvent, useState, memo } from "react";
 import { Formik, Form, ErrorMessage } from "formik";
 import { captureException } from "@sentry/react";
 import DayPickerInput from "react-day-picker/DayPickerInput";
@@ -18,6 +18,7 @@ import { useQueryListGroup } from "services/hooks/usePlanGroup";
 import { useTask } from 'services/hooks/useTask';
 import { useQueryListDepartmentsIsMember } from 'services/hooks/items/useDepartment';
 import { useUserSystem } from "services/hooks/users/useUserSystem";
+import { useContract } from "services/hooks/items/useContract";
 import { useModal } from "services/hooks/useModal";
 
 /**
@@ -31,7 +32,6 @@ import fakeThumbnail from "assets/images/avatar.jpg";
 import { PCM_PROPOSAL_TASK } from "apis/localdb";
 import { Task } from "typings/task";
 import "react-day-picker/lib/style.css";
-import { useContract } from "services/hooks/items/useContract";
 
 interface InitialValues {
   taskID: string,
@@ -51,8 +51,8 @@ interface InitialValues {
 }
 
 type Props = {
-    task: Task,
-    onConfirm?: () => void
+  task: Task,
+  onConfirm?: () => void
 }
 
 const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
@@ -114,7 +114,7 @@ const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
       contractID: "",
       keyword: searchContract,
       companyID: task.project.company,
-      projectID,
+      projectID
     },
     isFetch: !!projectID
   });
@@ -178,7 +178,7 @@ const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
     authorAttachs: [],
     type: task.type,
     relatedIDs: task.related?.map(related => related._id),
-    subType: task.subType,
+    subType: task.subtype,
   };
 
   return (
@@ -472,12 +472,12 @@ const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
                         data={PCM_PROPOSAL_TASK}
                         formatItem={{
                             id: "value",
-                            text: "text",
+                            text: "label",
                         }}
                         initialValue={{
-                            ...task.subType && {
-                                value: task.subType,
-                                label: PCM_PROPOSAL_TASK[task.subType ?? 0].text
+                            ...task.subtype && {
+                                value: task.subtype,
+                                label: PCM_PROPOSAL_TASK[task.subtype ?? 0].text
                             }
                         }}
                         inlineSearch={true}
@@ -707,4 +707,4 @@ const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
   );
 };
 
-export default ModalUpdateTask;
+export default memo(ModalUpdateTask);
