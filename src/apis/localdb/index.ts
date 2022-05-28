@@ -807,9 +807,9 @@ export const APP_ID = {
                 id: "623f2472e998e94feda0cdab",
                 name: "Theo dõi sổ quỹ"
             },
-            expense: {
+            cashflow: {
                 id: "623f247fe998e94feda0cdac",
-                name: "Kế hoạch tài chính"
+                name: "Kế hoạch dòng tiền"
             },
         },
     },

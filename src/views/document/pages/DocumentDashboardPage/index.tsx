@@ -20,7 +20,8 @@ import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
 import { dateLoadedPercentage, convertToInternationalCurrencySystem } from 'utils/ppt';
 import { formatNumberMoney } from "utils/cmcs"
 import { useQueryListProjectAndAmountDocument } from "services/hooks/document/useStatistical";
-import { Link, generatePath } from "react-router-dom";
+import { Link, generatePath, useLocation } from "react-router-dom";
+import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 
 // interface IData {
 // 	id: number;
@@ -91,12 +92,39 @@ const ButtonDatePicker = forwardRef<HTMLButtonElement, any>(
 ButtonDatePicker.displayName = "ButtonDatePicker";
 
 export const DocumentDashboardPage: FC = () => {
+
+	const location = useLocation();
+	const { pathname: currentPathname } = location;
+	let appID = ""
+	let menuID = ""
+	if(currentPathname == "/document/dashboard"){
+		appID = APP_ID.DOCUMENT.id
+		menuID = APP_ID.DOCUMENT.menuDocumentApp.dashboard.id
+	}
+	
+	if(currentPathname == "/pcm/dashboard-document"){
+		appID = APP_ID.PCM.id
+		menuID = APP_ID.PCM.menuPcmApp.dashboard_document.id
+	}
+	//_____Start history traffict
+	const payloadHistoryTraffic: any = {
+		appID,
+		menuID,
+		type: "1"
+	};
+	const { createHistoryTraffics } = useHistoryTraffics();
+	useEffect(() => {
+		createHistoryTraffics({...payloadHistoryTraffic, type: 1});
+	}, []);
+	//_____End history traffict
+
 	// --------- Check phân quyền
 	useCheckPerAccessScreen({
 		appID: APP_ID.PCM.id,
 		menuID: APP_ID.PCM.menuPcmApp.dashboard_document.id,
 		type: "1"
 	});
+
 	// ---------
 	const [type, setType] = useState<string>("all");
 	const [open, setOpen] = useState<{ show: boolean; mediaId: string }>({

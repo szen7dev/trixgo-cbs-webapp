@@ -1,6 +1,6 @@
 import { FC, useCallback, useState, useEffect } from "react";
 import { RouteComponentProps, useHistory, useLocation, useParams, Link } from "react-router-dom";
-import { PCM_STATUS_TASK } from 'apis/localdb';
+import { APP_ID, PCM_STATUS_TASK } from 'apis/localdb';
 import { useModal } from "services/hooks/useModal";
 
 import iconFile from 'assets/images/icons8-audit-96.png';
@@ -15,6 +15,8 @@ import { usePcmProject } from "services/hooks/pcm/usePcmProject";
 import { useTask } from "services/hooks/useTask";
 import moment from "moment";
 import { useAuth } from "services/hooks/auth/useAuth";
+import { useHistoryTraffics } from "services/hooks/auth/useAuth";
+
 interface IData {
 	id: number,
 	type: string,
@@ -49,6 +51,17 @@ const FolderIcon: FC<{ type: string }> = ({ type }) => {
 }
 
 const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
+	//_____Start history traffict
+	const payloadHistoryTraffic: any = {
+		appID: APP_ID.PCM.id,
+		menuID: APP_ID.PCM.menuPcmProject.folder.id,
+		type: "1"
+	  };
+	const { createHistoryTraffics } = useHistoryTraffics();
+	useEffect(() => {
+	createHistoryTraffics({...payloadHistoryTraffic, type: 1});
+	}, []);
+	//_____End history traffict
 	const location 	= useLocation();
 	const [data, setData] = useState<IData[]>([]);
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);

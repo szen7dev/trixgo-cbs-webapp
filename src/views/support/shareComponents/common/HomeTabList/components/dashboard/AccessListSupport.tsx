@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import React, { FC, useState, useEffect } from "react";
 import moment from "moment";
 import cn from "classnames";
 
@@ -41,19 +41,18 @@ type Props = {
 const AccessList: FC<Props> = (props) => {
   const { timeType } = props;
   const listParam = checkTimeType(timeType);
-  const [lastestID, setLastestID] = useState<string>("");
-  // const listParam : ListHistoryTrafficPayload = { fromDate: '2021-12-20', toDate: '2022-12-30'};
   const { 
     listHistoryTraffic, 
     fetchNextPage,
     fetchPreviousPage,
     hasNextPage,
     totalRecord,
-    totalPage } = useListHistoryTraffic({ ...listParam, lastestID });
-  const dataNew : any = listHistoryTraffic[0]?.listRecords;
+    totalPage 
+  } = useListHistoryTraffic({ ...listParam });
 
   return (
-    <section className="bg-primary-light h-[834px] mt-3 border relative">
+    // <section className="bg-primary-light h-[834px] mt-3 border relative">
+    <section className="bg-primary-light mt-3 border relative">
       <div className="flex justify-between items-center py-1 pr-2 pl-4 border-b border-primary-border">
         <div className="flex items-center">
           <p className="text-primary-gray font-bold text-lg">
@@ -129,7 +128,7 @@ const AccessList: FC<Props> = (props) => {
         </thead>
 
         <tbody className="border border-primary-border">
-          {dataNew?.map((item :any) => (
+          {listHistoryTraffic?.map((item :any) => (
             <tr key={item._id} className="border-b border-primary-border h-12">
               <td className="w-1/12 pt-2 pb-2 text-center">
                 <input
@@ -153,13 +152,16 @@ const AccessList: FC<Props> = (props) => {
           ))}
         </tbody>
       </table>
-      <Paginate
-        totalPages={totalPage}
-        totalRecord={totalRecord}
-        hasNextPage={hasNextPage}
-        prevPageAction={fetchPreviousPage}
-        nextPageAction={fetchNextPage}
-      />
+      
+      {hasNextPage && (
+        <div className="w-full flex justify-center my-5">
+            <button onClick={fetchNextPage}>
+                <span className="text-primary">
+                    {`Xem thêm (${totalRecord - listHistoryTraffic.length})`}
+                </span>
+            </button>
+        </div>
+      )}
     </section>
   );
 };

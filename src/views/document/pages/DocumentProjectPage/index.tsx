@@ -1,8 +1,9 @@
-import React, { FC, Fragment, useContext, useState } from "react";
+import React, { FC, Fragment, useContext, useState, useEffect } from "react";
 import { Link, useParams, useLocation } from "react-router-dom";
 import { Transition } from "@headlessui/react";
 import moment from "moment";
 import debounce from "lodash/debounce";
+import { APP_ID } from 'apis/localdb';
 
 // ========== Context ==========
 import { ModalContext } from "views/document/contexts/modal";
@@ -25,6 +26,7 @@ import {
 } from "services/hooks/ppt/useDocument";
 import { useQueryDetailDepartment } from "services/hooks/items/useDepartment";
 import { useMutationDocumentChild } from "services/hooks/document/useDocumentChild";
+import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 
 // import { IPackage } from "typings/document";
 
@@ -34,6 +36,17 @@ import { useMutationDocumentChild } from "services/hooks/document/useDocumentChi
 // }));
 
 export const DocumentProjectPage: FC = () => {
+  //_____Start history traffict
+	const payloadHistoryTraffic: any = {
+		appID: APP_ID.PCM.id,
+		menuID: APP_ID.PCM.menuPcmProject.document.id,
+		type: "1"
+  };
+	const { createHistoryTraffics } = useHistoryTraffics();
+	useEffect(() => {
+  	createHistoryTraffics({...payloadHistoryTraffic, type: 1});
+	}, []);
+	//_____End history traffict
   const location = useLocation()
   // const [pkg, setPkg] = useState<IPackage>(pkgs[0]);
   const { toggleModal, updateModal } = useContext(ModalContext);

@@ -25,9 +25,9 @@ export const SupportHomeDashboard: FC<Props> = (props) => {
       </div>
 
       <div className="w-1/3 pr-3 pt-3 pb-3">
-        <SortByDeviceSupport />
+        <SortByDeviceSupport  timeType={timeType}/>
 
-        <DetailsByAppDeviceSupport />
+        <DetailsByAppDeviceSupport timeType={timeType}/>
 
         {/*<ByBusinessSupport />*/}
       </div>

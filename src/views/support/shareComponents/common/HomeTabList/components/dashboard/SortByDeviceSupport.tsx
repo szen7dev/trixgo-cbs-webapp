@@ -1,5 +1,6 @@
 import { FC } from "react";
 import _ from "lodash";
+import { checkTimeType } from "utils/app";
 
 import { ChartDoughnutSmall } from "views/support/shareComponents/common";
 import { useTypeDeviceAccess } from 'services/hooks/useSupport';
@@ -9,14 +10,21 @@ const dataNew =  {
   datasets: [
     {
       data: [0, 0, 0],
-      backgroundColor: ["rgb(234 179 8)", "#0060E1", "#10b981"],
+      backgroundColor: ["#0060E1", "rgb(234 179 8)","#10b981"],
       borderWidth: 0,
     },
   ],
 };
 
-const SortByDeviceSupport: FC = () => {
-  const { listTypeDevice } = useTypeDeviceAccess();
+type Props = {
+  timeType: string;
+};
+
+const SortByDeviceSupport: FC<Props> = (props) => {
+  const { timeType } = props;
+  const listParam = checkTimeType(timeType);
+
+  const { listTypeDevice } = useTypeDeviceAccess(listParam);
   let totalList = '';
   let TypeDevice = 0;
   for (const element of listTypeDevice) {

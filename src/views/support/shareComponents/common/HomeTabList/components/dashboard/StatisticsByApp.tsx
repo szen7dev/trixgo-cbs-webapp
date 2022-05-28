@@ -134,21 +134,24 @@ const options = {
     },
   },
 };
+
 type Props = {
   timeType: string;
 };
+
 const StatisticsByApp: FC<Props> = (props) => {
   const { timeType } = props;
   const listParam = checkTimeType(timeType);
   const { listAppAccess } = useListAppAccess(listParam);
   const arrApp = [];
   const arrAmountAccesses = [];
-
+  
   for (const element of listAppAccess) {
-    arrApp.push(element.app.name);
+    arrApp.push(element._id.app.name);
     arrAmountAccesses.push(element.amountAccesses);
-    dataNew.datasets[0].data = arrAmountAccesses.sort()
+    dataNew.datasets[0].data = arrAmountAccesses
   }
+
   dataNew.labels = arrApp;
   const dataNewApp = _.cloneDeep(dataNew);
 

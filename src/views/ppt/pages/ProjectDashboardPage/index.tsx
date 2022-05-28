@@ -12,8 +12,7 @@ import 'moment/locale/vi';
  */
 import { useProject } from 'services/hooks/items/useProject';
 import { useContractPayment } from 'services/hooks/cmcs/useContractPayment';
-// import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
-// import { APP_ID } from "apis/localdb";
+import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 
 import styles from "../../style.module.css";
 import 'swiper/swiper.min.css';
@@ -36,19 +35,25 @@ import ReportMultipleChart from "./components/ReportMultipleChart";
 
 import { ModalZoomView } from "shareComponents/common";
 import { ContextModalPost } from "views/media/contexts/post";
+import { APP_ID } from 'apis/localdb';
 
 SwiperCore.use([Navigation]);
 
 const ProjectDashboardPortfolioPage: FC = () => {
 	const { state, toggleModal } = useContext(ContextModalPost);
 
-	// --------- Check phân quyền
-	// useCheckPerAccessScreen({
-	// 	appID: APP_ID.PCM.id,
-	// 	menuID: APP_ID.PCM.menuPcmProject.dashboard.id,
-	// 	type: "2"
-	// });
-	// ---------
+	//_____Start history traffict
+	const payloadHistoryTraffic: any = {
+		appID: APP_ID.PCM.id,
+		menuID: APP_ID.PCM.menuPcmProject.dashboard.id,
+		type: "1"
+	  };
+	  const { createHistoryTraffics } = useHistoryTraffics();
+	  useEffect(() => {
+		createHistoryTraffics({...payloadHistoryTraffic, type: 1});
+	  }, []);
+	  //_____End history traffict
+
 	const { id: projectID } = useParams<{ id: string }>();
 	const { info: projectInfo } = useProject({
 		params: {

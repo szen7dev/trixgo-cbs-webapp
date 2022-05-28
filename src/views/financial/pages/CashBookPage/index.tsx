@@ -25,8 +25,22 @@ import { TOAST_DEFAULT_OPTIONS } from 'utils/constants';
 import useCheckedList from "services/hooks/ppt/useCheckedList";
 import { useCashBook } from 'services/hooks/financial/useCashBook';
 import { CashBook } from "typings/financial/cashBook";
+import { APP_ID } from 'apis/localdb';
+import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 
 export const CashBookPage: FC = () => {
+  //_____Start history traffict
+	const payloadHistoryTraffic: any = {
+		appID: APP_ID.FINANCIAL.id,
+		menuID: APP_ID.FINANCIAL.menuFinancialApp.cashbook.id,
+		type: "1"
+  };
+	const { createHistoryTraffics } = useHistoryTraffics();
+	useEffect(() => {
+  	createHistoryTraffics({...payloadHistoryTraffic, type: 1});
+	}, []);
+	//_____End history traffict
+
   const [keyword, setKeyword] = useState('');
   const [cashBookIdSelected, setCashBookIdSelected] = useState('');
   const [isShowDeleteModal, setIsShowDeleteModal] = useState(false);
