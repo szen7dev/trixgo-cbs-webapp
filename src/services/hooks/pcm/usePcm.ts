@@ -19,6 +19,7 @@ import {
     UpdateTaskReportPayload,
     PcmComment,
     PcmCommentListParams,
+    PcmExportReportPayload
 } from "typings/pcm";
 
 /**
@@ -165,6 +166,27 @@ export const usePcmReport = (params?: any, isFetch?: boolean) : UsePcmReport => 
         prevPageListReports,
         totalRecord,
         hasNextPage
+    }
+}
+
+type UsePcmReportCustom = {
+    exportReportAsync: (payload: PcmExportReportPayload) => Promise<any>,
+};
+
+type UsePcmReportCustomParams = {
+    params?: any
+}
+
+export const usePcmReportCustom = ({
+    params = {}
+}: UsePcmReportCustomParams) : UsePcmReportCustom => {
+    const { mutateAsync: exportReportAsync } =
+        useMutation((payload: PcmExportReportPayload) =>
+            PcmRepository.exportReport(payload)
+        );
+
+    return {
+        exportReportAsync
     }
 }
 

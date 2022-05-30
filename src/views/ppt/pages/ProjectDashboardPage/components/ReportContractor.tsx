@@ -20,7 +20,6 @@ const ReportContractor: React.FC<Props> = ({ projectID, ...props }) => {
 		params: { projectID }, 
 		isFetchContractorSelection 
 	});
-	console.log({ contractorSelection, projectID })
 	useEffect(() => {
 		if(!projectID) return;
 		setIsFetchContractorSelection(true);
@@ -44,23 +43,40 @@ const ReportContractor: React.FC<Props> = ({ projectID, ...props }) => {
 		  },
 		],
 	};
+	let dataStatus1: any = {};
+	let dataStatus2: any = {};
+	let dataStatus3: any = {};
+	contractorSelection?.forEach((item: any) => {
+		if(item._id.status == 1){
+			dataStatus1 = item;
+		}
+		if(item._id.status == 2){
+			dataStatus2 = item;
+		}
+		if(item._id.status == 3){
+			dataStatus3 = item;
+		}
+	});
+
 	return (
 		<div {...props}>
+			<Link to={`/bidding/plan/${projectID}`}>
 			<h3>Lựa chọn nhà thầu</h3>
 			<div className={cn(styles.chart, "mt-4 mx-auto")}>
 				<ChartDoughnutSmall _data={_data} title="GÓI THẦU" />
 			</div>
 			<div>
 				<div className="mt-6 whitespace-nowrap">
-					<Link to="#"><span className={cn(styles.circle, styles.plum, "inline-block h-2 w-2 rounded-md mr-3")}></span>Chưa thực hiện ({contractorSelection?.[0]?.amount || 0} - {convertCurrency(contractorSelection?.[0]?.amountPackagePrice || 0)})</Link>
+					<Link to="#"><span className={cn(styles.circle, styles.plum, "inline-block h-2 w-2 rounded-md mr-3")}></span>Chưa thực hiện ({dataStatus1?.amount || 0} - {convertCurrency(dataStatus1?.amountPackagePrice || 0)})</Link>
 				</div>
 				<div className="mt-6 whitespace-nowrap">
-					<Link to="#"><span className={cn(styles.circle, styles.info, "inline-block h-2 w-2 rounded-md mr-3")}></span>Đang triển khai ({contractorSelection?.[1]?.amount || 0} - {convertCurrency(contractorSelection?.[1]?.amountPackagePrice || 0)})</Link>
+					<Link to="#"><span className={cn(styles.circle, styles.info, "inline-block h-2 w-2 rounded-md mr-3")}></span>Đang triển khai ({dataStatus2?.amount || 0} - {convertCurrency(dataStatus2?.amountPackagePrice || 0)})</Link>
 				</div>
 				<div className="mt-6 whitespace-nowrap">
-					<Link to="#"><span className={cn(styles.circle, styles.lime, "inline-block h-2 w-2 rounded-md mr-3")}></span>Đã hoàn thành ({contractorSelection?.[2]?.amount || 0} - {convertCurrency(contractorSelection?.[2]?.amountPackagePrice || 0)})</Link>
+					<Link to="#"><span className={cn(styles.circle, styles.lime, "inline-block h-2 w-2 rounded-md mr-3")}></span>Đã hoàn thành ({dataStatus3?.amount || 0} - {convertCurrency(dataStatus3?.amountPackagePrice || 0)})</Link>
 				</div>
 			</div>
+			</Link>
 		</div>
 	)
 }

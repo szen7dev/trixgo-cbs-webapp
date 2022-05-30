@@ -1,5 +1,6 @@
 import { FC, useCallback, useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import debounce from "lodash/debounce";
 import moment from "moment";
 
@@ -10,14 +11,23 @@ import FolderIcon from "assets/images/icons8-folder.svg";
 // import PencilIcon from "assets/images/icons8-pencil-96.svg";
 // import TrashIcon from "assets/images/icons8-remove-96.svg";
 // import { Create, Update, Delete } from "../modal";
-import { usePcmReport } from "services/hooks/pcm/usePcm";
+import { usePcmReport, usePcmReportCustom } from "services/hooks/pcm/usePcm";
+import { createLinkAndClick } from 'utils';
+import { SpinnerLoading } from "shareComponents/common/Loading";
+import classNames from "classnames";
 
 const PcmReportPage: FC = () => {
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
+	const [stateExport, setStateExport] = useState<{ isExporting: boolean, reportId: string }>({
+		isExporting: false,
+		reportId: ''
+	});
 	const [keyword, setKeyword] = useState("");
 	const { listReports, nextPageListReports, hasNextPage, totalRecord } = usePcmReport({
 		keyword
 	}, true);
+
+	const { exportReportAsync } = usePcmReportCustom({});
 
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
@@ -48,6 +58,24 @@ const PcmReportPage: FC = () => {
 			setIdsChecked(idsAll);
 		}
 	};
+
+	const handleExportReport = async (reportId: string) => {
+		try {
+			setStateExport({ reportId, isExporting: true });
+			const { error, data } = await exportReportAsync({ reportID: reportId });
+
+			if(error) {
+				return toast.warn(data.message);
+			}
+
+			createLinkAndClick(data, '_self');
+		} catch (error) {
+			if(error instanceof Error)
+				toast.error(error.message)
+		} finally {
+			setStateExport({ reportId: '', isExporting: false });
+		}
+	}
 
 	return (
 		<main className="h-full overflow-auto">
@@ -154,6 +182,9 @@ const PcmReportPage: FC = () => {
 						<th className="w-1/4 pb-1 pt-1 font-normal">
 							<div className="font-normal pl-2">Ngày tạo</div>
 						</th>
+						<th className="w-1/4 pb-1 pt-1 font-normal">
+							<div className="font-normal pl-2">Tác vụ</div>
+						</th>
 					</tr>
 				</thead>
 
@@ -182,6 +213,18 @@ const PcmReportPage: FC = () => {
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
 									{moment(item.createAt).format("HH:mm DD/MM/YYYY")}
+								</td>
+								<td className="py-1 px-2">
+									<button
+										className={classNames("text-primary underline", {
+											"disabled": stateExport.isExporting
+										})}
+										onClick={handleExportReport.bind(null, item._id)}
+									>
+										{(stateExport.isExporting && stateExport.reportId === item._id)
+											&& <SpinnerLoading />}
+										Export excel
+									</button>
 								</td>
 							</tr>
 						))

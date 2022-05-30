@@ -57,6 +57,10 @@ export type PcmReport = {
   createAt: string
 }
 
+export type PcmExportReportPayload = {
+  reportID: string
+}
+
 /**
  * ============================ ************* ===============================
  * ============================ 	 PCM TASK   ===============================
