@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
 	Chart as ChartJS,
 	CategoryScale,
@@ -35,36 +35,96 @@ type Props = {
 } & React.HTMLAttributes<HTMLDivElement>
 
 const ReportChart: React.FC<Props> = ({ projectInfo, contractValues, ...props }) => {
-	if(!projectInfo) return <></>
+	const [dataSets, setDataSets] = useState<{
+		labels: Array<{ month: number, year: number, yy: string }>,
+		dataDisbursement: string[],
+		dataAccumulated: string[],
+	}>({
+		labels: [],
+		dataDisbursement: [],
+		dataAccumulated: [],
+	});
 
-	// Step 1: Get date range (startTimeProject -> now)
-	const dates = getDates(new Date(projectInfo.startTime || Date.now()), new Date());
+	useEffect(() => {
+		// Step 1: Get date range (startTimeProject -> now)
+		const dates = getDates(new Date(projectInfo?.startTime || Date.now()), new Date());
 
-	// Step 2: Format date range
-	const datesFormat = dates.map(date => ({
-		month: moment(date).get('month') + 1,
-		year: moment(date).get('year'),
-		yy: moment(date).format('MM/YY')
-	}));
+		// Step 2: Format date range
+		const datesFormat = dates.map(date => ({
+			month: moment(date).get('month') + 1,
+			year: moment(date).get('year'),
+			yy: moment(date).format('MM/YY')
+		}));
 
-	// Step 3: Unique date label
-	const labels = _lodash.unionBy(datesFormat, 'yy');
+		// Step 3: Unique date label
+		const labels = _lodash.unionBy(datesFormat, 'yy');
 
-	// Step 4: Set data total files by date label
-	const dataSets = labels.map(date => {
-		let totalContractValues = 0;
-
-		const infoContractValueByDate = contractValues?.find(contractValue =>
-			contractValue?._id?.month == date.month &&
-			contractValue?._id?.year == date.year
-		);
-
-		if(infoContractValueByDate) {
-			totalContractValues = infoContractValueByDate.amount;
+		// Step 4: Set data total files by date label
+		const getAllBefore = (arr: any[], current: string) => {
+			const i = arr.findIndex(item => item.yy === current);
+			return i > -1 ? arr.slice(0, i) : [];
 		}
 
-		return totalContractValues;
-	})
+		const dataDisbursement = labels.map(date => {
+			let totalContractValues = 0;
+
+			const infoContractValueByDate = contractValues?.find(contractValue =>
+				contractValue?._id?.month == date.month &&
+				contractValue?._id?.year == date.year
+			);
+
+			if(infoContractValueByDate) {
+				totalContractValues = infoContractValueByDate.amount;
+			}
+
+			return (totalContractValues / 1_000_000_000).toFixed(2);
+		})
+
+		const dataAccumulated = labels.map((date, index) => {
+			let totalContractValuesCurrentDate = 0;
+			let totalContractValues = 0;
+
+			const infoContractValueByDate = contractValues?.find(contractValue =>
+				contractValue?._id?.month == date.month &&
+				contractValue?._id?.year == date.year
+			);
+
+			if(infoContractValueByDate) {
+				totalContractValuesCurrentDate = infoContractValueByDate.amount;
+			}
+
+			if(index !== 0) {
+				const datePreviousCurrent = getAllBefore(labels, date.yy);
+
+				totalContractValues = datePreviousCurrent.reduce((prev, curr) => {
+					const infoContractValueByDate = contractValues?.find(contractValue =>
+						contractValue?._id?.month == curr.month &&
+						contractValue?._id?.year == curr.year
+					);
+
+					if(infoContractValueByDate) {
+						totalContractValues = infoContractValueByDate.amount;
+					}
+
+					return prev += totalContractValues;
+				}, 0)
+
+				totalContractValues += totalContractValuesCurrentDate;
+			} else{
+				totalContractValues = totalContractValuesCurrentDate;
+			}
+
+			return (totalContractValues / 1_000_000_000).toFixed(2)
+		})
+
+		setDataSets({
+			labels,
+			dataDisbursement,
+			dataAccumulated
+		})
+	}, [JSON.stringify(projectInfo), JSON.stringify(contractValues)])
+
+	if(!projectInfo) return <></>
 
 	return (
 		<div {...props}>
@@ -92,12 +152,14 @@ const ReportChart: React.FC<Props> = ({ projectInfo, contractValues, ...props })
 						y: {
 							ticks: {
 								callback: function (value) {
-									return (isNaN(Number(value)) ? value : Number(value) / 1000000000) + " tỷ";
+									return `${value} tỷ`;
+									// return convertCurrency(+value * 1_000_000_000) + ' tỷ';
+									// return (isNaN(+value) ? value : +value / 1_000_000_000) + " tỷ";
 								},
 							},
 							title: {
 								display: true
-							}
+							},
 						}
 					},
 					plugins: {
@@ -120,15 +182,15 @@ const ReportChart: React.FC<Props> = ({ projectInfo, contractValues, ...props })
 											const meta = chart.getDatasetMeta(i);
 											const style = meta.controller.getStyle(i, true);
 											return {
-												text:
-													data.label + " " +
-													(i % 2 === 1
-														? Math.floor(
-															(chart.data.datasets[i].data[
-																chart.data.datasets[i].data.length - 1
-															]?.y || 0) / 1e8
-														) / 100
-														: ""),
+												text: data.label,
+													// data.label + " " +
+													// (i % 2 === 1
+													// 	? Math.floor(
+													// 		(chart.data.datasets[i].data[
+													// 			chart.data.datasets[i].data.length - 1
+													// 		]?.y || 0) / 1e8
+													// 	) / 100
+													// 	: ""),
 												fillStyle: style.backgroundColor,
 												strokeStyle: style.borderColor,
 												lineWidth: 2,
@@ -146,18 +208,38 @@ const ReportChart: React.FC<Props> = ({ projectInfo, contractValues, ...props })
 						},
 						tooltip: {
 							enabled: true,
+							callbacks: {
+								label: function(context) {
+									let label = context.dataset.label || '';
+									let tooltipValue = context.parsed.y.toString();
+
+									if(tooltipValue) {
+										tooltipValue = tooltipValue.replaceAll('.', ',')
+										label += `: ${tooltipValue}`;
+									}
+
+									return label;
+								}
+							}
 						},
 					}
 				}}
 				data={{
-					labels: labels.map(label => label.yy),
+					labels: dataSets.labels.map(label => label.yy),
 					datasets: [
 						{
 							label: "Giải ngân",
-							data: dataSets,
+							data: dataSets.dataDisbursement,
 							borderWidth: 2,
 							backgroundColor: "transparent",
 							borderColor: "#85B2ED",
+						},
+						{
+							label: "Lũy kế",
+							data: dataSets.dataAccumulated,
+							borderWidth: 2,
+							backgroundColor: "transparent",
+							borderColor: "#FF7979",
 						},
 					]
 				}}
