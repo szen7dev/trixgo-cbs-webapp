@@ -17,6 +17,7 @@ import {
     UpdateTaskReportPayload,
     PcmCommentListParams,
     PcmCommentListResponse,
+    PcmExportReportPayload,
 } from "typings/pcm";
 
 const pcmURL = "/api/subject_pcm";
@@ -67,6 +68,13 @@ const PcmRepository = {
                 }),
                 ...payload
             })}`
+        );
+        return data;
+    },
+
+    async exportReport(payload: PcmExportReportPayload): Promise<any> {
+        const { data } = await API.get<any>(
+            `${pcmURL}/pcm_plan_reports/export-task-report?${convertObToUrl(payload)}`
         );
         return data;
     },
