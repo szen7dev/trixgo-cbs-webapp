@@ -79,6 +79,14 @@ export async function handleException (callback: any, callbackError?: any){
     }
 }
 
+export function createLinkAndClick(link: string, target = '_blank') {
+    const a = document.createElement('a');
+    a.href = link;
+    a.target = target;
+    a.click();
+    a.remove();
+}
+
 export function generateIamgePath(path: string): string {
   return `${process.env.REACT_APP_URL_S3}${path}`;
 }

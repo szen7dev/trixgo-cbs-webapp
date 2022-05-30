@@ -71,10 +71,24 @@ import useModalPcm from "views/pcm/hooks/useModal";
 import { useTask, useCheckList, useChildTask, useCommentPcm } from "services/hooks/useTask";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
+import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 
 import { User } from "typings/user";
+import { nl2p } from "utils";
 
 const PcmDetailTask: FC = () => {
+  //_____Start history traffict
+  const payloadHistoryTraffic: any = {
+    appID: APP_ID.PCM.id,
+    menuID: APP_ID.PCM.menuPcmProject.subject.id,
+    type: "1"
+  };
+  const { createHistoryTraffics } = useHistoryTraffics();
+  useEffect(() => {
+    createHistoryTraffics({...payloadHistoryTraffic, type: 1});
+  }, []);
+  //_____End history traffict
+
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
   const { openModal, closeModal } = useModal();
@@ -607,11 +621,11 @@ const PcmDetailTask: FC = () => {
                   <div className={cn(styles["t-task-detail-content"], "text-[13px]")}>
                     {parse(
                       isTruncate
-                        ? _truncate(taskInfo.description, { length: 300 })
-                        : taskInfo.description
+                        ? _truncate(nl2p(taskInfo.description), { length: 300 })
+                        : nl2p(taskInfo.description)
                     )}
                   </div>
-                  {taskInfo.description?.length > 300 && (
+                  {nl2p(taskInfo.description)?.length > 300 && (
                     <button onClick={() => setIsTruncate(!isTruncate)}>
                       <p className="text-[13px] text-primary mt-2.5 mb-4">
                         Xem thêm/Thu gọn

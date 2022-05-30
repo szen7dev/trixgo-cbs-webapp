@@ -156,8 +156,10 @@ export type ListAppAccessResponse = APIResponse & {
 
 type AppAccess = {
     amountAccesses: number,
-    app: {
-        name: string
+    _id: {
+        app: {
+            name: string
+        }
     }
 };
 
@@ -179,8 +181,10 @@ type DataListAppDeviceAccess = {
 
 type DataListAppDevice = {
     data: DataListAppDeviceAccess[];
-    app: {
-        name: string
+    _id: { 
+        app: {
+            name: string
+        }
     }
 };
 

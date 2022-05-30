@@ -7,7 +7,7 @@
  * ? 5. helpers, util importation
  * ? 6. typings importation
  */
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 
 import StatisticalChart from "./components/StatisticalChart";
 
@@ -16,6 +16,7 @@ import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
 import { useQueryListProjectWithListAmountTask } from "services/hooks/pcm/useStatistical";
 import { Link, generatePath } from 'react-router-dom';
+import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 
 interface IData {
 	id: number,
@@ -53,6 +54,19 @@ export type ItemTaskAmount = {
 }
 
 const ProjectDashboardTaskPage: FC = () => {
+
+	//_____Start history traffict
+	const payloadHistoryTraffic: any = {
+		appID: APP_ID.PCM.id,
+		menuID: APP_ID.PCM.menuPcmApp.dashboard_task.id,
+		type: "1"
+	  };
+	const { createHistoryTraffics } = useHistoryTraffics();
+	useEffect(() => {
+		createHistoryTraffics({...payloadHistoryTraffic, type: 1});
+	}, []);
+	//_____End history traffict
+
 	// --------- Check phân quyền
 	useCheckPerAccessScreen({
 		appID: APP_ID.PCM.id,

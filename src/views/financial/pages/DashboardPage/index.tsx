@@ -1,8 +1,22 @@
-import {FC} from "react";
+import {FC, useEffect} from "react";
 
 import image from "assets/images/cmcs/datahub.jpg";
+import { APP_ID } from 'apis/localdb';
+import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 
 export const DashboardPage: FC = () => {
+   //_____Start history traffict
+	const payloadHistoryTraffic: any = {
+		appID: APP_ID.FINANCIAL.id,
+		menuID: APP_ID.FINANCIAL.menuFinancialApp.dashboard.id,
+		type: "1"
+  };
+	const { createHistoryTraffics } = useHistoryTraffics();
+	useEffect(() => {
+  	createHistoryTraffics({...payloadHistoryTraffic, type: 1});
+	}, []);
+	//_____End history traffict
+
   return (
     <main className="w-full h-full flex flex-col items-center justify-center">
       <div className="text-2xl mb-4">

@@ -31,8 +31,8 @@ const SupportRepository = {
     },
 
     //3. THỐNG KÊ THEO LOẠI THIẾT BỊ(TỪ NGÀY ĐẾN NGÀY)
-    async listTypeDeviceAccess(params: ListTypeDeviceAccessPayload): Promise<ListTypeDeviceAccessResponse> {
-        const { data } = await API.get<ListTypeDeviceAccessResponse>(`${spURL}/statistics_by_device_access`, {params: params});
+    async listTypeDeviceAccess(payload: ListTypeDeviceAccessPayload): Promise<ListTypeDeviceAccessResponse> {
+        const { data } = await API.get<ListTypeDeviceAccessResponse>(`${spURL}/statistics_by_device_access?${convertObToUrl(payload)}`);
         return data;
     },
 
@@ -43,8 +43,8 @@ const SupportRepository = {
     },
 
     //5. THỐNG KÊ TRUY CẬP THEO APP VÀ THIẾT BỊ
-    async listAppDeviceAccess(params: ListAppDeviceAccessPayload): Promise<ListAppDeviceAccessResponse> {
-        const { data } = await API.get<ListAppDeviceAccessResponse>(`${spURL}/statistics_access_by_app_and_device`, {params: params});
+    async listAppDeviceAccess(payload: ListAppDeviceAccessPayload): Promise<ListAppDeviceAccessResponse> {
+        const { data } = await API.get<ListAppDeviceAccessResponse>(`${spURL}/statistics_access_by_app_and_device?${convertObToUrl(payload)}`);
         return data;
     },
     //6. THỐNG KÊ TRUY CẬP THEO CÔNG TY

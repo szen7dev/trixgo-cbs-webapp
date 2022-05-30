@@ -15,7 +15,7 @@ export const Paginate: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 }) => {
     const [currentIndex, setCurrentIndex] = useState(1);
     const totalPagesNumber = totalPages || 0
-
+    
     useEffect(() => {
         if (!isFetching) {
             //TODO

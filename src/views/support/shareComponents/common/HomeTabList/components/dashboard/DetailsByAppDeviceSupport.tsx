@@ -4,6 +4,7 @@ import cn from "classnames";
 
 import styles from 'views/support/styles/support.module.css'
 import { useListAppDeviceAccess } from 'services/hooks/useSupport';
+import { checkTimeType } from "utils/app";
 
 const data = [
   {
@@ -79,23 +80,39 @@ const data = [
     web: 4800,
   },
 ];
-
-const DetailsByAppDeviceSupport: FC = () => {
-  const { listAppDeviceAccess } = useListAppDeviceAccess();
+type Props = {
+  timeType: string;
+};
+const DetailsByAppDeviceSupport:FC<Props> = (props) => {
+  const { timeType } = props;
+  const listParam = checkTimeType(timeType);
+  const { listAppDeviceAccess } = useListAppDeviceAccess(listParam);
   let totalMobile = 0;
   let totalTablet = 0;
   let totalWebsite = 0;
   for (const key in listAppDeviceAccess) {
-    if(listAppDeviceAccess[key].data[0].type === 1) {
-      totalMobile += listAppDeviceAccess[key].data[0].amountAccesses;
-    }
-    if(listAppDeviceAccess[key] && listAppDeviceAccess[key].data[1] && listAppDeviceAccess[key].data[1].type === 2) {
-      totalTablet += listAppDeviceAccess[key].data[1].amountAccesses;
-    }
-    if(listAppDeviceAccess[key] && listAppDeviceAccess[key].data[2] && listAppDeviceAccess[key].data[2].type === 3) {
-      totalWebsite += listAppDeviceAccess[key].data[2].amountAccesses;
-    }
+      listAppDeviceAccess[key].data?.forEach(element => {
+        if(element.type == 1){
+          totalWebsite += element.amountAccesses;
+        }
+        if(element.type == 2){
+          totalMobile += element.amountAccesses;
+        }
+        if(element.type == 3){
+          totalTablet += element.amountAccesses;
+        }
+      });
+    // if(listAppDeviceAccess[key].data[0].type === 1) {
+    //   totalMobile += listAppDeviceAccess[key].data[0].amountAccesses;
+    // }
+    // if(listAppDeviceAccess[key] && listAppDeviceAccess[key].data[1] && listAppDeviceAccess[key].data[1].type === 2) {
+    //   totalTablet += listAppDeviceAccess[key].data[1].amountAccesses;
+    // }
+    // if(listAppDeviceAccess[key] && listAppDeviceAccess[key].data[2] && listAppDeviceAccess[key].data[2].type === 3) {
+    //   totalWebsite += listAppDeviceAccess[key].data[2].amountAccesses;
+    // }
   }
+
   const totalAccess = totalMobile + totalTablet + totalWebsite;
   return (
     <section className="bg-primary-light px-6 py-4 mt-3 h-[620px]">
@@ -143,7 +160,7 @@ const DetailsByAppDeviceSupport: FC = () => {
           {listAppDeviceAccess.map((item, index) => (
             <tr key={index} className="h-10 border-b border-primary-border">
               <td className="border-r border-primary-border text-left px-4">
-                {item.app.name}
+                {item._id.app.name}
               </td>
               <td
                 className={cn(
@@ -165,14 +182,6 @@ const DetailsByAppDeviceSupport: FC = () => {
                   styles.widthFifteenPercent
                 )}
               >
-                { item?.data?.[0] && item.data[0].type === 1 ? item.data[0].amountAccesses : 0 }
-              </td>
-              <td
-                className={cn(
-                  "font-normal border-r border-primary-border",
-                  styles.widthFifteenPercent
-                )}
-              >
                 { item?.data?.[1] && item.data[1].type === 2 ? item.data[1].amountAccesses : 0 }
               </td>
               <td
@@ -182,6 +191,15 @@ const DetailsByAppDeviceSupport: FC = () => {
                 )}
               >
                 { item?.data?.[2] && item.data[2].type === 3 ? item.data[2].amountAccesses : 0 }
+
+              </td>
+              <td
+                className={cn(
+                  "font-normal border-r border-primary-border",
+                  styles.widthFifteenPercent
+                )}
+              >
+                { item?.data?.[0] && item.data[0].type === 1 ? item.data[0].amountAccesses : 0 }
               </td>
             </tr>
           ))}

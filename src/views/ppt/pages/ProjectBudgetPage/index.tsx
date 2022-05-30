@@ -9,8 +9,21 @@ import MenuChildRow from './components/MenuChildRow';
 import BugetRowGroupTemp from "./components/BudgetRowGroupTemp";
 import { useProject } from 'services/hooks/items/useProject';
 import { formatNumberMoney } from "utils/cmcs";
+import { APP_ID } from 'apis/localdb';
+import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 
 const ProjectBudgetPage: FC = () => {
+	 //_____Start history traffict
+	 const payloadHistoryTraffic: any = {
+		appID: APP_ID.PCM.id,
+		menuID: APP_ID.PCM.menuPcmProject.budget.id,
+		type: "1"
+	  };
+	const { createHistoryTraffics } = useHistoryTraffics();
+	useEffect(() => {
+		createHistoryTraffics({...payloadHistoryTraffic, type: 1});
+	}, []);
+	//_____End history traffict
 	const { id: projectID } = useParams<{ id: string }>();
 	const {
 		listPcmProjectBudget,
