@@ -114,7 +114,7 @@ const ProjectPhotoContractPage: FC = () => {
 									<div className="flex cursor-pointer">
 										<img src={`${process.env.REACT_APP_URL_S3_USER}/${comment.author.image}`} alt="" className="w-10 h-10 mr-3.5 object-cover rounded-full" />
 										<div>
-											<Link to={`/pcm/detail/${comment.task?._id}`} target="_blank">
+											<Link to={`/pcm/detail/${comment.task?._id}`}>
 												{/* line-clamp-1  */}
 												<strong
 													className="text-base"
