@@ -74,6 +74,7 @@ import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 
 import { User } from "typings/user";
+import { nl2p } from "utils";
 
 const PcmDetailTask: FC = () => {
   //_____Start history traffict
@@ -620,11 +621,11 @@ const PcmDetailTask: FC = () => {
                   <div className={cn(styles["t-task-detail-content"], "text-[13px]")}>
                     {parse(
                       isTruncate
-                        ? _truncate(taskInfo.description, { length: 300 })
-                        : taskInfo.description
+                        ? _truncate(nl2p(taskInfo.description), { length: 300 })
+                        : nl2p(taskInfo.description)
                     )}
                   </div>
-                  {taskInfo.description?.length > 300 && (
+                  {nl2p(taskInfo.description)?.length > 300 && (
                     <button onClick={() => setIsTruncate(!isTruncate)}>
                       <p className="text-[13px] text-primary mt-2.5 mb-4">
                         Xem thêm/Thu gọn
