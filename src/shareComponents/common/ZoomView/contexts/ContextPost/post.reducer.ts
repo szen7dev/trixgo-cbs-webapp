@@ -10,6 +10,16 @@ const postReducer = (state: PostState, action: DispatchProps): PostState => {
         ...state,
         index: action.payload,
       };
+    case postTypes.SET_INFO_IMAGE: {
+      const { index, info } = action.payload;
+      const images = [...state.images];
+      images[index] = info;
+
+      return {
+        ...state,
+        images,
+      };
+    }
     default:
       return state;
   }

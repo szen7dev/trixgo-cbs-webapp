@@ -10,11 +10,11 @@ import {
 const populatesComment = JSON.stringify({
   path: "author lastestReplyID files images media",
   select:
-    "_id bizfullname image name nameOrg path mimeType size author type parent content files images amountCommentReply amountReaction createAt media",
+    "_id bizfullname image name nameOrg description path mimeType size author type parent content files images amountCommentReply amountReaction createAt media",
   populate: {
     path: "author lastestReplyID files images media",
     select:
-      "_id bizfullname image name nameOrg path mimeType size author type parent content files images amountCommentReply amountReaction createAt media",
+      "_id bizfullname image name nameOrg description path mimeType size author type parent content files images amountCommentReply amountReaction createAt media",
   },
 });
 

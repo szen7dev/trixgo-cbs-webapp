@@ -22,7 +22,7 @@ import { convertObToUrl } from "utils";
 
 const populatesMedia = JSON.stringify({
     path: "company department other author files images",
-    select: "_id name sign nameOrg path size mimeType type createAt bizfullname image position department members",
+    select: "_id name sign nameOrg description path size mimeType type createAt bizfullname image position department members",
     populate: {
         path: "position department",
         select: "_id name sign"
@@ -31,10 +31,10 @@ const populatesMedia = JSON.stringify({
 
 const populatesComment = JSON.stringify({
     path: "author lastestReplyID files images media",
-    select: "_id bizfullname image name nameOrg path mimeType size author type parent content files images amountCommentReply amountReaction createAt media",
+    select: "_id bizfullname image name nameOrg description path mimeType size author type parent content files images amountCommentReply amountReaction createAt media",
     populate: {
         path: 'author lastestReplyID files images media',
-        select: '_id bizfullname image name nameOrg path mimeType size author type parent content files images amountCommentReply amountReaction createAt media'
+        select: '_id bizfullname image name nameOrg description path mimeType size author type parent content files images amountCommentReply amountReaction createAt media'
     }
 })
 

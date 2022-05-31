@@ -29,6 +29,16 @@ const postActions = (dispatch: DispatchAction) => ({
       payload: index,
     });
   },
+
+  setInfo: (index: number, info: any) => {
+    return dispatch({
+      type: postTypes.SET_INFO_IMAGE,
+      payload: {
+        index,
+        info
+      },
+    });
+  },
 });
 
 export default postActions;
