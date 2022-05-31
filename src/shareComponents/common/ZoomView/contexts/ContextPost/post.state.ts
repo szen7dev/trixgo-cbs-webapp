@@ -12,6 +12,7 @@ export const state = {
 
 export type PostState = Omit<typeof state, "type" | "author"> & {
   type?: "post" | "comment" | "reply";
+  description?: string;
   author?: User;
   createAt?: string;
 };

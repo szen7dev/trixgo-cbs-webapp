@@ -33,7 +33,7 @@ import { convertObToUrl } from "utils";
 
 const populatesTask = JSON.stringify({
   path: "group contract author assignee related parent project company field approver authorAttachs assigneeAttachs signatures",
-  select: "_id name fullname bizfullname image sign _id name nameOrg size path description mimeType type author createAt members company",
+  select: "_id name fullname bizfullname image sign _id name nameOrg description size path mimeType type author createAt members company",
   populate: {
     path: "author",
     select: "_id bizfullname image"
@@ -51,10 +51,10 @@ const populatesResponse = JSON.stringify({
 
 const populatesComment = JSON.stringify({
   path: "author lastestReplyID files images task",
-  select: "_id bizfullname image name nameOrg path mimeType size author type parent content files images amountCommentReply amountReaction createAt task company project group",
+  select: "_id bizfullname image name nameOrg description path mimeType size author type parent content files images amountCommentReply amountReaction createAt task company project group",
   populate: {
       path: 'author lastestReplyID files images task',
-      select: '_id bizfullname image name nameOrg path mimeType size author type parent content files images amountCommentReply amountReaction createAt task company project group'
+      select: '_id bizfullname image name nameOrg description path mimeType size author type parent content files images amountCommentReply amountReaction createAt task company project group'
   }
 });
 

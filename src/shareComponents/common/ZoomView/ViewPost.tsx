@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC, useEffect, useRef, useState } from 'react';
 import moment from 'moment';
-
+import _ from "lodash";
 import cn from 'classnames';
 
 // ======= Custom hook =======
 import useCustomReducer from 'services/hooks/useCustomReducer';
 import useComments from './hooks/useComments';
+import { useFileCore } from 'services/hooks/useFileCore';
 
 import { ContextPost } from 'shareComponents/common/ZoomView/contexts/ContextPost';
 import { state as postState, PostState } from 'shareComponents/common/ZoomView/contexts/ContextPost/post.state';
@@ -31,11 +32,14 @@ const ViewPost: FC<Props> = ({ initialData, toggle }) => {
 	const [state, actions] = useCustomReducer(postReducer, postActions, { ...postState as PostState, ...initialData });
 	const data = useComments({ mediaID: state.mediaID, fileID: String(state.images[state.index]?._id) });
 
+	const { updateFileAsync } = useFileCore();
+
 	const [collapsed, setCollapsed] = useState<boolean>(false);
 	const [isMove, setIsMove] = useState(false);
 	const [zoom, setZoom] = useState(0);
 
 	const imageRef = useRef<HTMLDivElement>(null);
+	const inputDescriptionRef = useRef<HTMLInputElement>(null);
 
 	useEffect(() => {
 		imageRef.current?.parentElement?.focus();
@@ -49,8 +53,25 @@ const ViewPost: FC<Props> = ({ initialData, toggle }) => {
 
 	const toggleCollapse = () => setCollapsed(!collapsed);
 
-	const handleNextImage = () => actions.setIndex(state.index + 1);
-	const handlePreviousImage = () => actions.setIndex(state.index - 1);
+	const handleNextImage = () => {
+		const index = state.index + 1;
+
+		if(inputDescriptionRef.current) {
+			inputDescriptionRef.current.value = state.images[index].description || '';
+		}
+
+		actions.setIndex(index);
+	}
+
+	const handlePreviousImage = () => {
+		const index = state.index - 1;
+
+		if(inputDescriptionRef.current) {
+			inputDescriptionRef.current.value = state.images[index].description || '';
+		}
+
+		actions.setIndex(index);
+	}
 
 	const handleKeyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
 		switch (e.key) {
@@ -113,6 +134,20 @@ const ViewPost: FC<Props> = ({ initialData, toggle }) => {
 	const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
 		console.log(e)
 	}
+
+	const handleUpdateDescriptionFile = _.debounce(async (e: any) => {
+		const image = state.images[state.index];
+
+		await updateFileAsync({
+			fileID: e.target.dataset.fileid,
+			description: e.target.value
+		});
+
+		actions.setInfo(state.index, {
+			...image,
+			description: e.target.value
+		})
+	}, 1000)
 
 	return (
 		<ContextPost.Provider value={{ state, ...actions, ...data }}>
@@ -228,9 +263,20 @@ const ViewPost: FC<Props> = ({ initialData, toggle }) => {
 					</div>
 				}
 				{/* Footer Image */}
-				{/* <div className={cn("react__images-footer absolute w-full bottom-0 text-center py-7 transition-opacity ease-in-out", isZoom ? "opacity-0 invisible" : '')} >
-					Chứng kiến công tác thí nghiệm thép tại công trường số 3, Hoàng Tôn....
-				</div> */}
+				<div
+					className={
+						cn("react__images-footer absolute w-full text-center text-white bottom-0 py-7 transition-opacity ease-in-out", zoom !== 0 ? "opacity-0 invisible" : '')
+					}
+				>
+					<input
+						type="text"
+						className='outline-none bg-transparent text-center w-3/4'
+						onKeyUp={handleUpdateDescriptionFile}
+						data-fileid={state.images[state.index]._id}
+						defaultValue={inputDescriptionRef.current?.value || state.images[state.index].description}
+						ref={inputDescriptionRef}
+					/>
+				</div>
 			</div>
 
 			<SideComments

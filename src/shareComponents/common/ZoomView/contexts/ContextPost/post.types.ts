@@ -7,7 +7,8 @@ const postTypes = {
 	OPEN_COMMENT: "OPEN_COMMENT",
 	
 	// ======= IMAGES =======
-	SET_INDEX_IMAGE:"SET_INDEX_IMAGE"
+	SET_INDEX_IMAGE:"SET_INDEX_IMAGE",
+	SET_INFO_IMAGE:"SET_INFO_IMAGE"
 };
 
 export default postTypes;
