@@ -24,40 +24,45 @@ const ReportContractor: React.FC<Props> = ({ projectID, ...props }) => {
 		if(!projectID) return;
 		setIsFetchContractorSelection(true);
 	}, [projectID]);
+
+	let dataStatus1: any = {};
+	let dataStatus2: any = {};
+	let dataStatus3: any = {};
+	const backgroundColor: any = [];
+	contractorSelection?.forEach((item: any) => {
+		if(item._id.status == 1){
+			dataStatus1 = item;
+			backgroundColor.push("rgba(224, 59, 86, 1)");
+		}
+		if(item._id.status == 2){
+			backgroundColor.push("rgba(44, 134, 237, 1)");
+			dataStatus2 = item;
+		}
+		if(item._id.status == 3){
+			backgroundColor.push("rgba(0, 202, 153, 1)");
+			dataStatus3 = item;
+		}
+	});
 	
 	const _data: ChartData<"doughnut", number[], unknown> = {
 		datasets: [
 		  {
 			// data: [20, 6, 22],
 			data: contractorSelection?.map((item: any) => item.amount),
-			backgroundColor: [
-			  "rgba(224, 59, 86, 1)",
-			  "rgba(44, 134, 237, 1)",
-			  "rgba(0, 202, 153, 1)",
-			//   "rgba(255, 165, 0, 1)",
-			//   "rgba(155, 89, 182, 1)",
+			backgroundColor,
+			// backgroundColor: [
+			//   "rgba(224, 59, 86, 1)",
+			//   "rgba(44, 134, 237, 1)",
 			//   "rgba(0, 202, 153, 1)",
-			//   "rgba(219, 231, 242, 1)",
-			],
+			// //   "rgba(255, 165, 0, 1)",
+			// //   "rgba(155, 89, 182, 1)",
+			// //   "rgba(0, 202, 153, 1)",
+			// //   "rgba(219, 231, 242, 1)",
+			// ],
 			borderWidth: 0,
 		  },
 		],
 	};
-	let dataStatus1: any = {};
-	let dataStatus2: any = {};
-	let dataStatus3: any = {};
-	contractorSelection?.forEach((item: any) => {
-		if(item._id.status == 1){
-			dataStatus1 = item;
-		}
-		if(item._id.status == 2){
-			dataStatus2 = item;
-		}
-		if(item._id.status == 3){
-			dataStatus3 = item;
-		}
-	});
-
 	return (
 		<div {...props}>
 			<Link to={`/bidding/plan/${projectID}`}>
