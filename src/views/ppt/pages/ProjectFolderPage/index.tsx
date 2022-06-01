@@ -87,7 +87,6 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 			select: "image"
 		})
 	}, true);
-
 	const {  
 		infoGroup,
 		refetchInfoGroup
@@ -109,6 +108,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 		},
 		isFetch: !!groupID
 	})
+
 	// xử lý checked
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
@@ -138,7 +138,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 	useEffect(() => {
 		refetchDataUserInfo()
 	}, []);
-	console.log({dataUserInfo})
+
 	return (
 		<>
 			{/* Content */}
@@ -226,7 +226,6 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 							{
 								listPcmPlanGroup.map((props: any, index: any) => {
 									let isGroupDefault = false;
-									console.log({ props })
 									if(dataUserInfo?.data?.groupDefault?.toString() == props._id?.toString()){
 										isGroupDefault = true;
 									}
@@ -269,7 +268,6 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 							{
 								listTasks.map(props => {
 									const percent =  ((props.amountFinishedChecklist / props.amountChecklist) || 0) * 100;
-
 									return (
 										<tr key={props._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
 											<td className="px-4 py-2 w-[1px]">
@@ -303,18 +301,17 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 							}
 						</tbody>
 					</table>
+					 {hasNextPage && (
+						<div className="w-full flex justify-center my-5">
+							<button onClick={fetchNextPage}>
+								<span className="text-primary">
+									{`Xem thêm (${totalRecord - listPcmPlanGroup.length})`}
+								</span>
+							</button>
+						</div>
+					)}
 				</div>
-
-				{hasNextPage && (
-					<button
-						className="text-primary text-[13px]"
-						onClick={fetchNextPage}
-					>
-						{`Xem thêm (${
-							Number(totalRecord) - listPcmPlanGroup.length
-						})`}
-					</button>
-				)}
+				 
 				{/* <Paginate className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white" /> */}
 			</div>
 		</>

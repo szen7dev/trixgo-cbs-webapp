@@ -10,25 +10,27 @@ type Props = {
 const ByBusinessSupport: FC<Props> = ({ timeType }) => {
   const listParam = checkTimeType(timeType);
   const { listCompany } = useListCompanyAccess(listParam);
+  let totalAccept = 0;
+  listCompany.map(item => {
+    totalAccept += item.amountAccesses
+  })
 
   return (
-    <section className="h-[834px] bg-primary-light px-6 py-4 mt-3">
+    <section className=" bg-primary-light px-6 py-4 mt-3">
       <p className="text-primary-gray text-lg font-bold">Theo doanh nghiệp</p>
-
       <div className="mt-6 text-primary-gray">
-        { listCompany.map((item, index) => (
+        { listCompany.map((item: any, index) => (
           <div key={index} className="mb-2">
-            <p>{item.company.name}</p>
+            <p>{item._id.company.name}</p>
             <div className="flex items-center justify-between">
-              <div className="w-full mr-4">
-                <div className="h-2 bg-primary w-full" />
-              </div>
-              <span className="w-1/12">12,2k</span>
+                <div className="t-home-training-progress-bar w-1/4" style={{ width: "100%" }}>
+                  <div style={{ width: `${(item.amountAccesses/totalAccept)*100}%` }}></div>
+                </div>
+              <span className="w-1/12">{item.amountAccesses}</span>
             </div>
           </div>
         ))}
       </div>
-      <p className="mt-5 text-primary">Xem tất cả</p>
     </section>
   );
 };
