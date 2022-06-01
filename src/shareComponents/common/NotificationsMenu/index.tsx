@@ -73,7 +73,7 @@ export const NotificationsMenu: FC = () => {
   }
 
   const handleClickNotification = async (notification: NotificationProps) => {
-    updateNotificationAsync({
+    await updateNotificationAsync({
       notificationID: notification._id,
       status: 3
     })
@@ -82,13 +82,19 @@ export const NotificationsMenu: FC = () => {
   }
 
   const handleUpdateStatusNotification = () => {
-    if(totalRecordSendSuccess > 0) {
-      updateNotificationAsync({
-        isUpdateSendSuccess: true,
-        status: 2
-      });
-      setTotalNoti(0);
-    }
+    updateNotificationAsync({
+      isUpdateSendSuccess: true,
+      status: 2
+    });
+    setTotalNoti(0);
+
+    // if(totalRecordSendSuccess > 0) {
+    //   updateNotificationAsync({
+    //     isUpdateSendSuccess: true,
+    //     status: 2
+    //   });
+    //   setTotalNoti(0);
+    // }
   }
 
   const handleOpenDialogConfirm = () => {
@@ -128,7 +134,7 @@ export const NotificationsMenu: FC = () => {
   const handleChangeTab = (tabId: number) => settabActive(tabId);
 
   return (
-    <Menu as="div" className="relative inline-block text-left" >
+    <Menu as="div" className="relative inline-block text-left z-50">
       <div>
         <Menu.Button as="button" className="w-10 h-10 inline-flex items-center justify-center bg-primary-light hover:bg-secondary-light transition duration-150 rounded-full focus:outline-none ml-6" onPointerDown={handleUpdateStatusNotification}>
           {totalNoti ? (

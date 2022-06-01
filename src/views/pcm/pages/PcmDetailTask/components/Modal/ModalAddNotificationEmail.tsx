@@ -1,41 +1,44 @@
-import { FC, useState, useEffect } from 'react';
+import { FC, useState } from 'react';
 import { unionBy } from 'lodash';
 import { toast } from "react-toastify";
 import SearchIcon from 'assets/icons/SearchIcon';
 import useCheckedList from 'services/hooks/ppt/useCheckedList';
 import { usePcm } from 'services/hooks/pcm/usePcm';
-import { useUserSystem } from 'services/hooks/users/useUserSystem';
+// import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import debounce from "lodash/debounce";
 
 // import TriangleDown from 'assets/icons/TriangleDown';
 // import { CustomFieldFormik } from 'views/datahub/sharedComponents/common'
 
 type Props = {
-	toggle: () => void,
-	task: any
+	toggle: () => void;
+	task: any;
+	userId: string | undefined;
 }
 
-const ModalAddNotificationEmail: FC<Props> = ({ toggle, task }) => {
-	const data = unionBy([task.author, task.assignee, ...task?.related], '_id');
+const ModalAddNotificationEmail: FC<Props> = ({ toggle, task, userId }) => {
+	const usersRelated = [task.assignee, ...task?.related];
+	const data = unionBy([task.author, ...usersRelated], '_id');
+
 	const { sendMailDetailTaskAsync } = usePcm();
 	const [title, setTitle] = useState('');
 	const [content, setContent] = useState('');
 	const [emails, setEmails] = useState('');
 	const [keyword, setKeyword] = useState('');
 	const { assigned, checked, checkboxRef, handleChangeCheckbox, handleCheckAll } = useCheckedList(data);
-	const {
-		data: listUsersSystem,
-		refetch: refetchUser,
-	} = useUserSystem({
-		arrayID: JSON.stringify(data.map(item => item._id)),
-		keyword,
-		isFetch: true,
-		limit: 20
-	});
+	// const {
+	// 	data: listUsersSystem,
+	// 	refetch: refetchUser,
+	// } = useUserSystem({
+	// 	arrayID: JSON.stringify(data.map(item => item._id)),
+	// 	keyword,
+	// 	isFetch: true,
+	// 	limit: 20
+	// });
 
-	useEffect(()=> {
-		refetchUser()
-	}, [keyword])
+	// useEffect(()=> {
+	// 	refetchUser()
+	// }, [keyword])
 
 	const handleSubmit = async () => {
 		if((!checked || !checked.length) && !emails)
@@ -143,23 +146,31 @@ const ModalAddNotificationEmail: FC<Props> = ({ toggle, task }) => {
 						</thead>
 						<tbody className='overflow-y-auto'>
 							{
-								listUsersSystem.map((item, index) => (
-									<tr key={index}>
-										<td className='px-1.5 align-middle'>
-											<input type='checkbox' className='cbs-checkbox' checked={Boolean(assigned[item._id])} onChange={e => handleChangeCheckbox(null, item)} />
-										</td>
-										<td>
-											<div className='flex items-center py-1'>
-												<div className='w-10 h-10 object-cover rounded-full overflow-hidden mr-4'>
-													<img className='w-full h-full' src={`${process.env.REACT_APP_URL_S3_USER}/${item.image}`} alt="" />
-												</div>
-												<div>
-													{item.bizfullname}
-												</div>
-											</div>
-										</td>
-									</tr>
-								))
+								usersRelated.map((item, index) => {
+									if(item._id !== userId) {
+										if(keyword && !item.bizfullname.includes(keyword)) {
+											return <></>;
+										}
+
+										return (
+											<tr key={index}>
+												<td className='px-1.5 align-middle'>
+													<input type='checkbox' className='cbs-checkbox' checked={Boolean(assigned[item._id])} onChange={e => handleChangeCheckbox(null, item)} />
+												</td>
+												<td>
+													<div className='flex items-center py-1'>
+														<div className='w-10 h-10 object-cover rounded-full overflow-hidden mr-4'>
+															<img className='w-full h-full' src={`${process.env.REACT_APP_URL_S3_USER}/${item.image}`} alt="" />
+														</div>
+														<div>
+															{item.bizfullname}
+														</div>
+													</div>
+												</td>
+											</tr>
+										)
+									}
+								})
 							}
 						</tbody>
 					</table>
