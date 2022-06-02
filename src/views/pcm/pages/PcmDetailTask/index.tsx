@@ -164,7 +164,11 @@ const PcmDetailTask: FC = () => {
     return title ? `${title} > ${group?.name}` : group?.name;
   };
 
-  const toggleModalUpdateTaskStatus = () => setIsShowModalUpdateTaskStatus(!isShowModalUpdateTaskStatus);
+  const toggleModalUpdateTaskStatus = () => {
+    if(taskData.status !== 3) {
+      setIsShowModalUpdateTaskStatus(!isShowModalUpdateTaskStatus);
+    }
+  }
 
   const handleConfirmUpdateTaskStatus = (status: number) => setTaskData(previous => ({ ...previous, status }));
 
@@ -183,6 +187,11 @@ const PcmDetailTask: FC = () => {
         createAt: new Date()
       }
     ]))
+
+    setTaskData(prev => ({
+      ...prev,
+      status: 3
+    }))
   }
 
   const handleMarkInterest = async () => {
@@ -471,7 +480,7 @@ const PcmDetailTask: FC = () => {
           {/* <button className="mx-3">
             <img className="w-6 opacity-80" src={IconPrint} alt="Print icon" />
           </button> */}
-          {permissions.hasPermissionAddRelatedUser && infoTask?.subtype != 4 && (
+          {permissions.hasPermissionAddRelatedUser && taskInfo?.subtype != 4 && (
             <button className="mx-3" onClick={openAddUserRelation}>
               <img className="w-6 opacity-80" src={IconAddUser} alt="User add icon" />
             </button>
@@ -776,6 +785,7 @@ const PcmDetailTask: FC = () => {
               <ModalAddNotificationEmail
                 toggle={toggleModal}
                 task={taskInfo}
+                userId={user?._id}
               />}
 
             {type === 'move-task-to-parent' &&

@@ -11,6 +11,19 @@ import chevronRight from "assets/images/icon-expand-arrow-right.png";
 import iconFolder from "assets/images/icons8-application-window-100.png";
 import iconBigFolder from "assets/images/icons8-opened-folder-240.png";
 
+import adminImage from "assets/menu/pcm/admin.png";
+import assignImage from "assets/menu/pcm/assign.png";
+import bookmarkImage from "assets/menu/pcm/bookmark.png";
+import dashboardImage from "assets/menu/pcm/dashboard.png";
+import documentImage from "assets/menu/pcm/document.png";
+import draftImage from "assets/menu/pcm/draft.png";
+import homeImage from "assets/menu/pcm/home.png";
+import portfolioImage from "assets/menu/pcm/portfolio.png";
+import projectsImage from "assets/menu/pcm/projects.png";
+import relatedImage from "assets/menu/pcm/related.png";
+import reportImage from "assets/menu/pcm/report.png";
+import taskImage from "assets/menu/pcm/task.png";
+
 /*=====4.PAGES/COMPONENTS=====*/
 
 /*=====5.TYPINGS=====*/
@@ -49,7 +62,7 @@ export const LeftSideBar: FC = () => {
           {/* <p className="t-leftsidebar-menu-title mb-5">Quản lý dự án</p> */}
           {hasPermission && dataUserAccess?.level == 0 ?
             <NavLink to={`/pcm/admin`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-4 pr-2 text-medium">
-              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+              <img className="w-6 h-6 object-contain mr-3" src={adminImage} alt="Menu item" />
               <span className="truncate">Quản trị viên</span>
             </NavLink> : <></>
           }
@@ -62,7 +75,7 @@ export const LeftSideBar: FC = () => {
                   return (
                     <NavLink key={index} to={`/pcm/${item.slug}`} 
                     className="t-link-menu-item flex items-center text-primary-gray py-2 pl-4 pr-2 text-medium">
-                      <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+                      <img className="w-6 h-6 object-contain mr-3" src={getIconFromSlug(item.slug)} alt="Menu item" />
                       <span className="truncate">{item.name}</span>
                     </NavLink>
                   )
@@ -75,27 +88,27 @@ export const LeftSideBar: FC = () => {
 
           <p className="t-leftsidebar-menu-title mb-1 mt-2">Công việc</p>
           <NavLink to={`/pcm/home`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-4 pr-2 text-medium">
-            <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+            <img className="w-6 h-6 object-contain mr-3" src={homeImage} alt="Menu item" />
             <span className="truncate">Việc của tôi</span>
           </NavLink>
           <NavLink to={`/pcm/assign`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-4 pr-2 text-medium">
-            <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+            <img className="w-6 h-6 object-contain mr-3" src={assignImage} alt="Menu item" />
             <span className="truncate">Việc giao người khác</span>
           </NavLink>
           <NavLink to={`/pcm/bookmark`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-4 pr-2 text-medium">
-            <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+            <img className="w-6 h-6 object-contain mr-3" src={bookmarkImage} alt="Menu item" />
             <span className="truncate">Việc quan tâm</span>
           </NavLink>
           <NavLink to={`/pcm/related`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-4 pr-2 text-medium">
-            <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+            <img className="w-6 h-6 object-contain mr-3" src={relatedImage} alt="Menu item" />
             <span className="truncate">Việc liên quan</span>
           </NavLink>
           <NavLink to={`/pcm/dashboard`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-4 pr-2 text-medium">
-            <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+            <img className="w-6 h-6 object-contain mr-3" src={dashboardImage} alt="Menu item" />
             <span className="truncate">Báo cáo quản trị</span>
           </NavLink>
           <NavLink to={`/pcm/report`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-4 pr-2 text-medium">
-            <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+            <img className="w-6 h-6 object-contain mr-3" src={reportImage} alt="Menu item" />
             <span className="truncate">Báo cáo động</span>
           </NavLink>
         </div>
@@ -113,4 +126,21 @@ export const LeftSideBar: FC = () => {
       </div>
     </div>
   );
+};
+
+const getIconFromSlug = (slug: string) => {
+	switch (slug) {
+		case 'projects':
+			return projectsImage;
+		case 'dashboard-portfolio':
+			return portfolioImage;
+		case 'dashboard-task':
+			return taskImage;
+		case 'dashboard-document':
+			return documentImage;
+		case 'document':
+			return documentImage;
+		default:
+			return '/images/pcm/home.png';
+	}
 };

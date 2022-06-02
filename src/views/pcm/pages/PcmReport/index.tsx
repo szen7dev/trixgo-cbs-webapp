@@ -3,18 +3,26 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import debounce from "lodash/debounce";
 import moment from "moment";
+import classNames from "classnames";
 
 import { SearchInput } from "shareComponents/common";
+import { SpinnerLoading } from "shareComponents/common/Loading";
 import FolderIcon from "assets/images/icons8-folder.svg";
 // import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 // import DownloadIcon from "assets/images/icons8-download-96.svg";
 // import PencilIcon from "assets/images/icons8-pencil-96.svg";
 // import TrashIcon from "assets/images/icons8-remove-96.svg";
 // import { Create, Update, Delete } from "../modal";
-import { usePcmReport, usePcmReportCustom } from "services/hooks/pcm/usePcm";
+
+/**
+ * Utils
+ */
 import { createLinkAndClick } from 'utils';
-import { SpinnerLoading } from "shareComponents/common/Loading";
-import classNames from "classnames";
+
+/**
+ * Hooks, Typings
+ */
+import { usePcmReport, usePcmReportCustom } from "services/hooks/pcm/usePcm";
 
 const PcmReportPage: FC = () => {
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
@@ -24,7 +32,11 @@ const PcmReportPage: FC = () => {
 	});
 	const [keyword, setKeyword] = useState("");
 	const { listReports, nextPageListReports, hasNextPage, totalRecord } = usePcmReport({
-		keyword
+		keyword,
+		populates: JSON.stringify({
+			path: "company author members",
+			select: "_id name sign bizfullname image"
+		}),
 	}, true);
 
 	const { exportReportAsync } = usePcmReportCustom({});
@@ -65,10 +77,10 @@ const PcmReportPage: FC = () => {
 			const { error, data } = await exportReportAsync({ reportID: reportId });
 
 			if(error) {
-				return toast.warn(data.message);
+				return toast.warn(data?.message);
 			}
 
-			createLinkAndClick(data, '_self');
+			data && createLinkAndClick(data, '_self');
 		} catch (error) {
 			if(error instanceof Error)
 				toast.error(error.message)

@@ -10,6 +10,7 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
   onConfirm,
   initialValues = {
     doctypeID: '',
+    parent: '',
     name: '',
     description: '',
     type: 1

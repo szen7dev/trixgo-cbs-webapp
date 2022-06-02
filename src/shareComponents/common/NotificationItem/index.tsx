@@ -2,7 +2,6 @@ import { FC, useState } from "react";
 import moment from 'moment';
 import cn from 'classnames';
 import { NotificationProps } from "typings/notification";
-// import { APP_KEY } from "utils/constants";
 
 type Props = {
   notification: NotificationProps;

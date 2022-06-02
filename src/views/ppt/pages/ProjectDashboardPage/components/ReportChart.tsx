@@ -97,16 +97,18 @@ const ReportChart: React.FC<Props> = ({ projectInfo, contractValues, ...props })
 				const datePreviousCurrent = getAllBefore(labels, date.yy);
 
 				totalContractValues = datePreviousCurrent.reduce((prev, curr) => {
+					let total = 0;
+
 					const infoContractValueByDate = contractValues?.find(contractValue =>
 						contractValue?._id?.month == curr.month &&
 						contractValue?._id?.year == curr.year
 					);
 
 					if(infoContractValueByDate) {
-						totalContractValues = infoContractValueByDate.amount;
+						total = infoContractValueByDate.amount;
 					}
 
-					return prev += totalContractValues;
+					return prev += total;
 				}, 0)
 
 				totalContractValues += totalContractValuesCurrentDate;
