@@ -7,7 +7,7 @@ import {
     PinnedMessagePayload, SearchMessageInConversationByIdPayload, SearchMessageInConversationByIdResponse,
     SendNormalMessagePayload,
     ShareMessageData,
-    ShareMessagePayload, UpdatePinnedMessageData,
+    ShareMessagePayload, UpdateNPSData, UpdateNPSPayload, UpdatePinnedMessageData,
     UpdatePinnedMessagePayload, UpdatePollData, UpdatePollPayload,
     UpdateReminderMessageData,
     UpdateReminderMessagePayload, UpdateSeenMessageConversationPayload
@@ -27,6 +27,7 @@ type UseConversationType = {
     deleteMessage: (params: DeleteRevokeMessagePayload) => void;
     revokeMessage: (params: DeleteRevokeMessagePayload) => Promise<{data: ItemMessage[], error: boolean}>;
     updatePoll: (params: UpdatePollPayload) => Promise<UpdatePollData>;
+    updateNPS: (params: UpdateNPSPayload) => Promise<UpdateNPSData>;
     addUserToConversation: (params: AddUserToConversationPayload) => Promise<{ data: any, error: boolean }>;
     goToMessagePosition: (params: SearchMessageInConversationByIdPayload, isFirstInit? : boolean, direction?: "front"|"back") => Promise<any>;
     updateSeenMessage: (params: UpdateSeenMessageConversationPayload) => Promise<any>;
@@ -136,6 +137,14 @@ export const UseConversation = () : UseConversationType => {
         });
     }
 
+    const updateNPS = async (params: UpdateNPSPayload) => {
+        const {data} = await  ListMessageRepository.updateNPS(params);
+
+        return new Promise<UpdateNPSData>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
     const addUserToConversation = async (params: AddUserToConversationPayload) => {
         const {data, error} = await ListMessageRepository.addUserToConversation(params);
 
@@ -174,6 +183,7 @@ export const UseConversation = () : UseConversationType => {
         deleteMessage,
         revokeMessage,
         updatePoll,
+        updateNPS,
         addUserToConversation,
         goToMessagePosition,
         updateSeenMessage

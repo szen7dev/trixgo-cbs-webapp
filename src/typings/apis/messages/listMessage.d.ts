@@ -447,3 +447,41 @@ export type UpdateSeenMessageConverastionResponse = {
     error: boolean;
     status: number;
 }
+
+export type UpdateNPSPayload = {
+    conversationID: string;
+    messageID: string;
+    score?: number;
+    reasons?: string[];
+}
+
+export type UpdateNPSData = {
+    infoMessage: ItemMessage[];
+    infoMessageNotification: {
+        content: string
+        conversation: string
+        createAt: string
+        createdAt: string
+        files: any[]
+        modifyAt: string
+        poll: string
+        reactions: any[]
+        receivers: string[]
+        sender: string
+        state: number
+        status: number
+        type: number
+        updatedAt: string
+        usersAssigned: string[]
+        usersDelete: string[]
+        usersSeen: string[]
+        __v: number
+        _id: string
+    }
+}
+
+export type UpdateNPSResponse = {
+    data: UpdateNPSData ;
+    error: boolean;
+    status: number;
+}

@@ -211,6 +211,12 @@ export const MainChatContent:FC<Props> = ({chat}) => {
                 } else {
                     return <OthersMessage context={MessageContext} message={message}/>
                 }
+            case 8:
+                if (message.sender._id === profileId) {
+                    return <MyMessage context={MessageContext} message={message}/>
+                } else {
+                    return <OthersMessage context={MessageContext} message={message}/>
+                }
             case 101:
                 return <AddUsersNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã thêm: <span class="text-black">${message.usersAssigned.map(user => user.bizfullname).join("; ")}</span>`}/>
             case 102:

@@ -11,7 +11,7 @@ import {
     SendNormalMessagePayload,
     SendNormalMessageResponse,
     ShareMessagePayload,
-    ShareMessageResponse,
+    ShareMessageResponse, UpdateNPSPayload, UpdateNPSResponse,
     UpdatePinnedMessagePayload,
     UpdatePinnedMessageResponse,
     UpdatePollPayload,
@@ -29,6 +29,7 @@ const updatePinMessage = "/api/chatting/conversations/update-pin-message-convers
 const deleteMessage = "/api/chatting/conversations/delete-message-conversation";
 const revokeMessage = "/api/chatting/conversations/revoke-message-conversation";
 const updatePoll = "/api/chatting/conversations/update-message-Poll-conversation";
+const updateNPS = "/api/chatting/conversations/update-message-nps-conversation";
 const addUserToConversation = "/api/chatting/conversations/add-member-conversation";
 const searchMessageInConversationById = "api/chatting/conversations/search-message-conversation-by-id";
 const updateSeenMessageConversation = "api/chatting/conversations/update-seen-message-conversation";
@@ -108,6 +109,15 @@ const ListMessageRepository = {
     async updatePoll(payload: UpdatePollPayload) : Promise<UpdatePollResponse> {
         const {data} = await API.put(
             `${updatePoll}`,
+            {...payload}
+        )
+
+        return data;
+    },
+
+    async updateNPS(payload: UpdateNPSPayload) : Promise<UpdateNPSResponse> {
+        const {data} = await API.put(
+            `${updateNPS}`,
             {...payload}
         )
 

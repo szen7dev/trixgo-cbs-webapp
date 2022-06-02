@@ -23,6 +23,7 @@ import {Oval} from "react-loader-spinner";
 import {updateUsersMissMessageToConversation} from "redux/reducer/messages/ListConversation";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {setIsReviewOldMessages} from "redux/reducer/messages/ListMessage";
+import {MessageContext} from "../../../../../views/messages/pages/MessageHome";
 
 type Props = {
     chat: ItemListConversation;
@@ -163,6 +164,12 @@ export const MiniChatBoxDetail:FC<Props> = ({chat}) => {
                     return <MyMessage isMini={true} context={MiniChatContext} message={message}/>
                 } else {
                     return <OthersMessage isMini={true} bgMessage={"bg-gray-100"} context={MiniChatContext} message={message}/>
+                }
+            case 8:
+                if (message.sender._id === profileId) {
+                    return <MyMessage context={MessageContext} message={message}/>
+                } else {
+                    return <OthersMessage context={MessageContext} message={message}/>
                 }
             case 101:
                 return <AddUsersNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã thêm: <span class="text-black">${message.usersAssigned.map(user => user.bizfullname).join("; ")}</span>`}/>
