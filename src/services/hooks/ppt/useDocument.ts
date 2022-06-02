@@ -15,6 +15,7 @@ interface UseQueryListDocument {
     // fetchNextPage: () => void;
     // fetchPreviousPage: () => void;
 }
+
 export const useQueryListDocument = (departmentID: string, pageParam: any,  packageID?: string, limit?: string): UseQueryListDocument => {
     const result = useQuery(
         [`list_document`, { pageParam }], async () =>
@@ -24,22 +25,16 @@ export const useQueryListDocument = (departmentID: string, pageParam: any,  pack
             departmentID,
             ...pageParam
         }), {
-        // getNextPageParam: ({ data }: any) => {
-        //     return data?.nextCursor || undefined;
-        // },
         refetchOnWindowFocus: false,
         enabled: true,
     });
+
     const {
         isLoading,
         data,
         refetch,
     } = result;
-    // const listDocument = []
-    //     .concat(
-    //         ...(data?.pages || []).map((d: any) => d.data?.listRecords)
-    //     )
-    //     .filter(Boolean);
+
     const totalRecord = data?.data?.totalRecord || 0;
     const totalPages  = data?.data?.totalPage || 0;
     const nextCursor  = data?.data?.nextCursor || null
@@ -51,9 +46,6 @@ export const useQueryListDocument = (departmentID: string, pageParam: any,  pack
         totalPages,
         refetch,
         nextCursor,
-        // hasNextPage,
-        // fetchNextPage,
-        // fetchPreviousPage,
     }
 }
 interface UseQueryDetailDocument {
@@ -61,7 +53,7 @@ interface UseQueryDetailDocument {
     detailDocument: Document,
     onFetchDetailDocumentAsync: (documentId: string) => Promise<Document>;
 }
-    
+
 export const useQueryDetailDocument = (): UseQueryDetailDocument => {
     const [detailDocument, setDetailDocument] = React.useState<| any>({});
     const [loading, setLoading] = React.useState(false);

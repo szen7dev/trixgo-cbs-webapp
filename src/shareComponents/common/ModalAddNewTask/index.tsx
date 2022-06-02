@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 /**
  * Hooks, Typings
  */
-import { useQueryListDoctype } from "services/hooks/useHuman";
+// import { useQueryListDoctype } from "services/hooks/useHuman";
 import { useDoctype } from "services/hooks/items/useDoctype";
 import { useQueryListGroup } from "services/hooks/usePlanGroup";
 import { useTask } from 'services/hooks/useTask';

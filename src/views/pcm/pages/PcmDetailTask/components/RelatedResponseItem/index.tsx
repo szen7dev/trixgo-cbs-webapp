@@ -18,7 +18,7 @@ import TestImage from "assets/images/home-slide-img1.jpg";
  * Apis, hooks
  */
 import { ResponseProps } from "typings/task";
-import { FileProps, FileUpdatePayload } from "typings/file";
+import { FileUpdatePayload } from "typings/file";
 import TaskRepository from "apis/task";
 import FileRepository from "apis/upload";
 import { ImageProps } from "typings/common";

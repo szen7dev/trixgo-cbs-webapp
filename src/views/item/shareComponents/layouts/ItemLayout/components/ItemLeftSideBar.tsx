@@ -302,18 +302,6 @@ export const ItemLeftSideBar: FC = () => {
             />
             <span className="truncate">NPS-Điểm số</span>
           </NavLink>
-          <NavLink
-            to="/item/home/22"
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
-            title="NPS-Lý do"
-          >
-            <img
-              className="w-6 h-6 object-contain mr-3"
-              src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
-              alt="Menu item"
-            />
-            <span className="truncate">NPS-Lý do</span>
-          </NavLink>
         </div>
       </div>
     </div>
