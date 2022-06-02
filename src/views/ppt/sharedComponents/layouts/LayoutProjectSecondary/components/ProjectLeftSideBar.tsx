@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, memo } from "react";
 // import iconFolder from "assets/images/icons8-application-window-100.png";
 import { NavLink, useRouteMatch, generatePath, useParams } from 'react-router-dom';
 import { useAuth } from "services/hooks/auth/useAuth";
@@ -6,6 +6,20 @@ import { useQueryDetailDepartment } from "services/hooks/items/useDepartment";
 import { useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
 import projectImage from "assets/images/project.jpg";
+
+import drawingImage from "assets/menu/project/drawing.png";
+import biddingImage from "assets/menu/project/bidding.png";
+import budgetImage from "assets/menu/project/budget.png";
+import dashboardImage from "assets/menu/project/dashboard.png";
+import directoryImage from "assets/menu/project/directory.png";
+import documentImage from "assets/menu/project/document.png";
+import folderImage from "assets/menu/project/folder.png";
+import homeImage from "assets/menu/project/home.png";
+import paymentImage from "assets/menu/project/payment.png";
+import photoImage from "assets/menu/project/photo.png";
+import resourceImage from "assets/menu/project/resource.png";
+import scheduleImage from "assets/menu/project/schedule.png";
+import subjectImage from "assets/menu/project/subject.png";
 
 const ProjectLeftSideBar: FC = () => {
 	const { user } = useAuth();
@@ -53,7 +67,7 @@ const ProjectLeftSideBar: FC = () => {
 						to={{ pathname: generatePath('/pcm/project/:id/home', match.params) }}
 						className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-medium"
 					>
-						<img className="w-6 h-6 object-contain mr-3" src={'/images/pcm/folder.png'} alt="Menu item" />
+						<img className="w-6 h-6 object-contain mr-3" src={homeImage} alt="Menu item" />
 						<span className="truncate">Trang chủ</span>
 					</NavLink>
 					{/* <NavLink
@@ -74,7 +88,7 @@ const ProjectLeftSideBar: FC = () => {
 											to={{ pathname: generatePath(`/pcm/project/:id/${item.slug}`, match.params) }}
 											className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-medium"
 										>
-											<img className="w-6 h-6 object-contain mr-3" src={'/images/pcm/folder.png'} alt="Menu item" />
+											<img className="w-6 h-6 object-contain mr-3" src={getIconFromSlug(item.slug)} alt="Menu item" />
 											<span className="truncate">{item.name}</span>
 										</NavLink>
 									)
@@ -88,6 +102,39 @@ const ProjectLeftSideBar: FC = () => {
 			</div>
 		</div>
 	)
-}
+};
+
+const getIconFromSlug = (slug: string) => {
+	switch (slug) {
+		case 'bidding':
+			return biddingImage;
+		case 'budget':
+			return budgetImage;
+		case 'dashboard':
+			return dashboardImage;
+		case 'directory':
+			return directoryImage;
+		case 'document':
+			return documentImage;
+		case 'drawing':
+			return drawingImage;
+		case 'folder':
+			return folderImage;
+		case 'home':
+			return homeImage;
+		case 'payment':
+			return paymentImage;
+		case 'photo':
+			return photoImage;
+		case 'resource':
+			return resourceImage;
+		case 'schedule':
+			return scheduleImage;
+		case 'subject':
+			return subjectImage;
+		default:
+			return '/images/pcm/folder.png';
+	}
+};
 
 export default ProjectLeftSideBar;
