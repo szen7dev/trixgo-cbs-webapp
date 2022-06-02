@@ -12,6 +12,7 @@ import { ProtectedRoute } from "routes/components";
 import ErrorPage from "views/authentication/Error";
 import {
     ItemHomePage,
+    ItemChildPage,
     ItemCustomerPage,
     ItemStoragePage,
 } from "views/item/pages";
@@ -138,6 +139,11 @@ const ItemRouter: FC = () => {
                     exact
                     path="/item/home/22"
                     component={() => <ItemHomePage type={22} />}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/item/home/21/:parentId"
+                    component={() => <ItemChildPage type={21} />}
                 />
                 <ProtectedRoute path="/item/*" component={ErrorPage} />
             </Switch>

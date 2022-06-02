@@ -1,4 +1,4 @@
-import { FC, useState, useCallback } from "react";
+import { FC, useState, useCallback, useEffect } from "react";
 import cn from "classnames";
 import debounce from "lodash/debounce";
 import moment from "moment";
@@ -23,11 +23,16 @@ import iconPencil from 'assets/images/icons8-pencil-96 1.png';
 import { useModal } from "services/hooks/useModal";
 import { useDoctype } from "services/hooks/items/useDoctype";
 import { Doctype } from "typings/items";
+import { Link } from "react-router-dom";
 
 export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
     const { closeModal, openModal } = useModal();
     const [keywordDoctype, setKeywordDoctype] = useState('');
     const [doctypesChecked, setDoctypesChecked] = useState<Array<Doctype.Doctype>>([]);
+    const [itemState, setItemState] = useState({
+        href: ''
+    });
+
     const [initialValues, setInitialValues] = useState({
         doctypeID: '',
         name: '',
@@ -90,6 +95,16 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
             clearData();
         }
     };
+
+    useEffect(() => {
+        switch (type) {
+            case 21:
+                setItemState({ href: `/item/home/21` })
+                break;
+            default:
+                break;
+        }
+    }, [type])
 
     const getStateChecked = useCallback((id: string) => {
         const user = doctypesChecked.find(item => item._id === id);
@@ -252,7 +267,13 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
                                     onChange={() => onClickCheckButton(doctype)}
                                 />
                             </td>
-                            <td className="py-1 px-2">{doctype.name}</td>
+                            <td className="py-1 px-2">
+                                {itemState.href ? (
+                                    <Link to={`${itemState.href}/${doctype._id}`}>
+                                        {doctype.name}
+                                    </Link>
+                                ) : doctype.name}
+                            </td>
                             <td className="py-1 px-2">{doctype.description}</td>
                             <td className="py-1 px-2">
                                 {doctype.modifyAt ? moment(doctype.modifyAt).format('DD/MM/YYYY - HH:mm') : ''}

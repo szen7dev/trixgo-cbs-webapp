@@ -1,21 +1,18 @@
-import { FC, UIEvent, useState } from "react";
-
 /**
  * Libraries
  */
+import { FC, UIEvent, useState } from "react";
 import { Formik, Form, ErrorMessage } from "formik";
 import { useHistory } from 'react-router-dom';
+import { object, string } from "yup";
+import { toast } from "react-toastify";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import moment from "moment";
 import debounce from "lodash/debounce";
-import { PCM_PROPOSAL_TASK } from "apis/localdb";
-import { object, string } from "yup";
-import { toast } from "react-toastify";
 
 /**
  * Hooks, Typings
  */
-// import { useQueryListDoctype } from "services/hooks/useHuman";
 import { useDoctype } from "services/hooks/items/useDoctype";
 import { useQueryListGroup } from "services/hooks/usePlanGroup";
 import { useTask } from 'services/hooks/useTask';
@@ -23,15 +20,16 @@ import { useQueryListDepartmentsIsMember } from 'services/hooks/items/useDepartm
 import { useUserSystem } from "services/hooks/users/useUserSystem";
 import { useContract } from "services/hooks/items/useContract";
 import { useModal } from "services/hooks/useModal";
+import { PCM_PROPOSAL_TASK } from "apis/localdb";
 
 /**
  * Components, Assets
  */
 import { DropdownSearchable } from "shareComponents/common";
-// import AttachIcon from "assets/images/icons8-attach-50.png";
 import Close from "assets/icons/Close";
 import TagIcon from "assets/images/icons8-price-tag-96.svg";
 import fakeThumbnail from "assets/images/avatar.jpg";
+// import AttachIcon from "assets/images/icons8-attach-50.png";
 
 import "react-day-picker/lib/style.css";
 
@@ -75,7 +73,9 @@ export const ModalAddNewTask: FC = () => {
   })
 
   const {
-    list: listDoctypes
+    list: listDoctypes,
+    hasNextPage: hasNextPageDoctypes,
+    fetchNextPage: fetchNextPageDoctypes
   } = useDoctype({
     params: {
       type: 2,
@@ -108,7 +108,11 @@ export const ModalAddNewTask: FC = () => {
     isFetch: !!projectID
   });
 
-  const { data: listUsersProject } = useUserSystem({
+  const {
+    data: listUsersProject,
+    hasNextPage: hasNextPageUsersProject,
+    fetchNextPage: fetchNextPageUsersProject
+  } = useUserSystem({
     projectID,
     keyword: searchFriendName
   }, true);
@@ -130,7 +134,7 @@ export const ModalAddNewTask: FC = () => {
     closeModal();
   };
 
-  const handleScroll = (e: UIEvent<HTMLDivElement>, type: 'project' | 'group' | 'contract') => {
+  const handleScroll = (e: UIEvent<HTMLDivElement>, type: 'project' | 'group' | 'contract' | 'user' | 'field') => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
     const bottom = scrollHeight - scrollTop === clientHeight;
 
@@ -145,6 +149,12 @@ export const ModalAddNewTask: FC = () => {
         break;
       case (type === 'contract' && hasNextPageListContract):
         fetchNextPageListContract();
+        break;
+      case (type === 'user' && hasNextPageUsersProject):
+        fetchNextPageUsersProject();
+        break;
+      case (type === 'field' && hasNextPageDoctypes):
+        fetchNextPageDoctypes();
         break;
       default:
         break;
@@ -406,6 +416,7 @@ export const ModalAddNewTask: FC = () => {
                               </p>
                             </div>
                           )}
+                          onScroll={(e) => handleScroll(e, 'user')}
                           data={listUsersProject.map((item) => ({
                             label: item.bizfullname,
                             value: item._id,
@@ -489,6 +500,7 @@ export const ModalAddNewTask: FC = () => {
                             </p>
                           </div>
                         )}
+                        onScroll={(e) => handleScroll(e, 'field')}
                         data={listDoctypes.map((doctypes) => ({
                           label: doctypes.name,
                           value: doctypes._id,
@@ -546,6 +558,7 @@ export const ModalAddNewTask: FC = () => {
                             </p>
                           </div>
                         )}
+                        onScroll={(e) => handleScroll(e, 'user')}
                         data={listUsersProject.map((item) => ({
                           label: item.bizfullname,
                           value: item._id,

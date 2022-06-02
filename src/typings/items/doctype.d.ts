@@ -36,6 +36,7 @@ export type DoctypeListParams = QueryParam & {
     type?: number;
     companyID?: string;
     projectID?: string;
+    parentID?: string;
     [record: string]: any;
 }
 
