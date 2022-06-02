@@ -61,7 +61,7 @@ const PcmRepository = {
     async listReports(payload: ListReportsPayload): Promise<any> {
         const { data } = await API.get<any>(
             `${pcmURL}/pcm_plan_reports?${convertObToUrl({
-                select: "name company description conditionPin author type createAt",
+                select: "name company description members conditionPin author type createAt",
                 populates: JSON.stringify({
                     path: "company author",
                     select: "_id name sign bizfullname image"
