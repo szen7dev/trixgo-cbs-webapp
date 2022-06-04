@@ -1,4 +1,4 @@
-import { FC, useState, useCallback } from "react";
+import { FC, useState, useCallback, useMemo } from "react";
 import cn from "classnames";
 import debounce from "lodash/debounce";
 import moment from "moment";
@@ -25,8 +25,8 @@ import { useModal } from "services/hooks/useModal";
 import { useDoctype } from "services/hooks/items/useDoctype";
 import { Doctype } from "typings/items";
 
-export const ItemChildPage: FC<{ type: number }> = ({ type }) => {
-    const { parentId } = useParams<{ parentId: string }>();
+export const ItemChildPage: FC = () => {
+    const { type, parentId } = useParams<{ type: string, parentId: string }>();
     const { closeModal, openModal } = useModal();
     const [keywordDoctype, setKeywordDoctype] = useState('');
     const [doctypesChecked, setDoctypesChecked] = useState<Array<Doctype.Doctype>>([]);
@@ -35,7 +35,7 @@ export const ItemChildPage: FC<{ type: number }> = ({ type }) => {
         parent: parentId,
         name: '',
         description: '',
-        type
+        type: +type
     });
 
     const {
@@ -47,7 +47,7 @@ export const ItemChildPage: FC<{ type: number }> = ({ type }) => {
         totalRecord
     } = useDoctype({
         params: {
-            type,
+            type: +type,
             parentID: parentId,
             keyword: keywordDoctype
         },
@@ -67,7 +67,7 @@ export const ItemChildPage: FC<{ type: number }> = ({ type }) => {
             parent: parentId,
             name: '',
             description: '',
-            type
+            type: +type
         }))
     }
 
@@ -102,9 +102,10 @@ export const ItemChildPage: FC<{ type: number }> = ({ type }) => {
         return user ? true : false;
     }, [doctypesChecked]);
 
-    const getStateCheckedAll = useCallback(() => {
+    const getStateCheckedAll = useMemo(() => {
+        if(!doctypesChecked.length && !listDoctypes.length) return false;
         return doctypesChecked.length == listDoctypes.length;
-    }, [doctypesChecked]);
+    }, [doctypesChecked.length, listDoctypes.length]);
 
     const onClickCheckAll = () => {
         if (doctypesChecked.length == listDoctypes.length) {
@@ -148,7 +149,7 @@ export const ItemChildPage: FC<{ type: number }> = ({ type }) => {
                 parent: parentId,
                 name: '',
                 description: '',
-                type
+                type: +type
             };
         }
 
@@ -228,7 +229,7 @@ export const ItemChildPage: FC<{ type: number }> = ({ type }) => {
                                 <input
                                     className="form-check-input"
                                     type="checkbox"
-                                    defaultChecked={getStateCheckedAll()}
+                                    checked={getStateCheckedAll}
                                     onClick={onClickCheckAll}
                                 />
                             </div>
