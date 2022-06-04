@@ -300,7 +300,7 @@ export const ItemLeftSideBar: FC = () => {
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className="truncate">NPS-Điểm số</span>
+            <span className="truncate">NPS-Dịch vụ</span>
           </NavLink>
         </div>
       </div>
