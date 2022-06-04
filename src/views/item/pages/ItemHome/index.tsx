@@ -1,4 +1,4 @@
-import { FC, useState, useCallback, useEffect } from "react";
+import { FC, useState, useCallback, useEffect, useMemo } from "react";
 import cn from "classnames";
 import debounce from "lodash/debounce";
 import moment from "moment";
@@ -96,24 +96,25 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
         }
     };
 
-    useEffect(() => {
-        switch (type) {
-            case 21:
-                setItemState({ href: `/item/home/21` })
-                break;
-            default:
-                break;
-        }
-    }, [type])
+    // useEffect(() => {
+    //     switch (type) {
+    //         case 21:
+    //             setItemState({ href: `/item/home/${type}` })
+    //             break;
+    //         default:
+    //             break;
+    //     }
+    // }, [type])
 
     const getStateChecked = useCallback((id: string) => {
         const user = doctypesChecked.find(item => item._id === id);
         return user ? true : false;
     }, [doctypesChecked]);
 
-    const getStateCheckedAll = useCallback(() => {
+    const getStateCheckedAll = useMemo(() => {
+        if(!doctypesChecked.length && !listDoctypes.length) return false;
         return doctypesChecked.length == listDoctypes.length;
-    }, [doctypesChecked]);
+    }, [doctypesChecked.length, listDoctypes.length]);
 
     const onClickCheckAll = () => {
         if (doctypesChecked.length == listDoctypes.length) {
@@ -233,7 +234,7 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
                                 <input
                                     className="form-check-input"
                                     type="checkbox"
-                                    defaultChecked={getStateCheckedAll()}
+                                    checked={getStateCheckedAll}
                                     onClick={onClickCheckAll}
                                 />
                             </div>
@@ -268,11 +269,16 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
                                 />
                             </td>
                             <td className="py-1 px-2">
-                                {itemState.href ? (
-                                    <Link to={`${itemState.href}/${doctype._id}`}>
+                                {type == 21 ? (
+                                    <Link to={`/item/home/${type}/${doctype._id}`}>
                                         {doctype.name}
                                     </Link>
                                 ) : doctype.name}
+                                {/* {itemState.href ? (
+                                    <Link to={`${itemState.href}/${doctype._id}`}>
+                                        {doctype.name}
+                                    </Link>
+                                ) : doctype.name} */}
                             </td>
                             <td className="py-1 px-2">{doctype.description}</td>
                             <td className="py-1 px-2">
