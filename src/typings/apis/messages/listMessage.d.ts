@@ -1,4 +1,5 @@
 import {ItemListConversation} from "./listConversation";
+import {number} from "yup";
 
 export type ItemMessage = {
     _id: string;
@@ -209,7 +210,22 @@ export type ItemMessage = {
         username: string
         __v: number
         _id: string
-    }[]
+    }[],
+    nps: {
+        _id: string,
+        createAt: string,
+        modifyAt: string,
+        status: number,
+        type: number,
+        state: number,
+        usersVote: {_id: string, user: { _id: string, bizfullname: string, image: string }, score: number, reason: string[]}[],
+        service: {
+            _id: string,
+            childs: {name: string, _id: string}[],
+            name: string,
+            type: number
+        }
+    }
     [key: string]: any;
 }
 export type ListMessageData = {
