@@ -81,3 +81,16 @@ interface ModalProps {
     }
     onConfirm?(): void
 }
+
+export type CashFlowAmountByPropertyParams = {
+    projectID?: string;
+    option?: number;
+    type?: number;
+    property?: number;
+    outin?: number;
+    real?: number;
+}
+
+export type CashFlowCustomParams = {
+    amountByProperty?: Partial<CashFlowAmountByPropertyParams>
+}
