@@ -1,18 +1,18 @@
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import debounce from "lodash/debounce";
 import moment from "moment";
 import classNames from "classnames";
 
-import { SearchInput } from "shareComponents/common";
+import { SearchInput, ModalConfirm } from "shareComponents/common";
 import { SpinnerLoading } from "shareComponents/common/Loading";
+import { ModalUpdateReport } from './components/ModalUpdate';
 import FolderIcon from "assets/images/icons8-folder.svg";
+import PencilIcon from "assets/images/icons8-pencil-96.svg";
+import TrashIcon from "assets/images/icons8-remove-96.svg";
 // import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 // import DownloadIcon from "assets/images/icons8-download-96.svg";
-// import PencilIcon from "assets/images/icons8-pencil-96.svg";
-// import TrashIcon from "assets/images/icons8-remove-96.svg";
-// import { Create, Update, Delete } from "../modal";
 
 /**
  * Utils
@@ -22,16 +22,25 @@ import { createLinkAndClick } from 'utils';
 /**
  * Hooks, Typings
  */
+import { useModal } from "services/hooks/useModal";
 import { usePcmReport, usePcmReportCustom } from "services/hooks/pcm/usePcm";
 
 const PcmReportPage: FC = () => {
+    const { closeModal, openModal } = useModal();
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [stateExport, setStateExport] = useState<{ isExporting: boolean, reportId: string }>({
 		isExporting: false,
 		reportId: ''
 	});
 	const [keyword, setKeyword] = useState("");
-	const { listReports, nextPageListReports, hasNextPage, totalRecord } = usePcmReport({
+	const {
+		listReports,
+		nextPageListReports,
+		refetchListReports,
+		hasNextPage,
+		totalRecord,
+		deleteTaskReportAsync
+	} = usePcmReport({
 		keyword,
 		populates: JSON.stringify({
 			path: "company author members",
@@ -40,6 +49,10 @@ const PcmReportPage: FC = () => {
 	}, true);
 
 	const { exportReportAsync } = usePcmReportCustom({});
+
+	const reportChecked = useMemo(() => {
+		return listReports.find(report => report._id === idsChecked[0]);
+	}, [idsChecked.length])
 
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
@@ -58,9 +71,9 @@ const PcmReportPage: FC = () => {
 		};
 	};
 
-	const getStateCheckedAll = useCallback(() => {
+	const getStateCheckedAll = useMemo(() => {
 		return idsChecked.length == listReports.length;
-	}, [idsChecked]);
+	}, [idsChecked.length, listReports.length]);
 
 	const onClickCheckAll = () => {
 		if (idsChecked.length == listReports.length) {
@@ -89,6 +102,29 @@ const PcmReportPage: FC = () => {
 		}
 	}
 
+	const handleConfirmDelete = async () => {
+		try {
+			const { error, data } = await deleteTaskReportAsync(idsChecked);
+
+			if(error) {
+				return toast.warn(data?.message);
+			}
+
+			toast.success('Xóa thành công');
+			refetchListReports();
+		} catch (error) {
+			if(error instanceof Error)
+				toast.error(error.message)
+		} finally {
+			closeModal();
+		}
+	}
+
+	const handleConfirmUpdate = () => {
+		refetchListReports();
+		setIdsChecked([])
+	}
+
 	return (
 		<main className="h-full overflow-auto">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
@@ -108,64 +144,48 @@ const PcmReportPage: FC = () => {
 							{/* <div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
 								<img src={DownloadIcon} alt="Download" />
 							</div> */}
-							{/* {idsChecked.length == 1 ?
+							{idsChecked.length == 1 ?
 								<div
 									className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
 									onClick={() =>
 										openModal(
 											<div
-												className={
-													"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
-												}
+												className={"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
 											>
-												<Update item={listReports.find(e => e._id == idsChecked[0])} setIdsChecked={setIdsChecked} />
+												<ModalUpdateReport
+													initialValues={{
+														subjectID: idsChecked[0],
+														name: reportChecked?.name,
+														description: reportChecked?.description,
+													}}
+													onConfirm={handleConfirmUpdate}
+												/>
 											</div>
 										)
 									}
 								>
 									<img src={PencilIcon} alt="Pencil" />
 								</div> : <></>
-							} */}
-							{/* <div
+							}
+							<div
 								className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
 								onClick={() =>
-									openModal(
-										<div
-											className={
-												"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
-											}
-										>
-											<Delete idsChecked={idsChecked} setIdsChecked={setIdsChecked} />
-										</div>
-									)
-								}
+                                    openModal(
+                                        <div
+                                            className={
+                                                "inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+                                            }
+                                        >
+                                            <ModalConfirm onConfirm={handleConfirmDelete} onCancel={closeModal} />
+                                        </div>
+                                    )
+                                }
 							>
 								<img src={TrashIcon} alt="Trash" />
-							</div> */}
+							</div>
 						</div>
 					) : <></>}
 				</div>
-				{/* <div className="flex items-center">
-					<button
-						className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold mr-6"
-						onClick={() =>
-							openModal(
-								<div
-									className={
-										"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
-									}
-								>
-									<Create />
-								</div>
-							)
-						}
-					>
-						Tạo mới
-					</button>
-					<button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
-						<img src={Vertical3Dots} alt="3Dots" />
-					</button>
-				</div> */}
 			</header>
 
 			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
@@ -176,7 +196,7 @@ const PcmReportPage: FC = () => {
 								<input
 									className="form-check-input"
 									type="checkbox"
-									checked={getStateCheckedAll()}
+									checked={getStateCheckedAll}
 									onChange={() => onClickCheckAll()}
 								/>
 							</div>

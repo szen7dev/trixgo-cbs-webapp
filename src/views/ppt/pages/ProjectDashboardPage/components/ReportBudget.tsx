@@ -12,31 +12,44 @@ type Props = {
 const ReportBudget: React.FC<Props> = ({ projectInfo, ...props }) => {
 	if(!projectInfo) return <></>
 
-	const totalBudgetFormat = formatNumberMoney(projectInfo.budget + projectInfo.vatBudget);
+	// const totalBudgetFormat = formatNumberMoney(projectInfo.budget + projectInfo.vatBudget);
+	const totalBudgetFormat = formatNumberMoney(((projectInfo.budget + projectInfo.vatBudget) / 1_000_000_000).toFixed(0));
 	const totalBudget = formatNaNToZero(projectInfo.budget + projectInfo.vatBudget) || 1;
 
-	const totalContractFormat = formatNumberMoney(projectInfo.contractValue + projectInfo.contractVatValue);
+	// const totalContractFormat = formatNumberMoney(projectInfo.contractValue + projectInfo.contractVatValue);
+	const totalContractFormat = formatNumberMoney(((projectInfo.contractValue + projectInfo.contractVatValue) / 1_000_000_000).toFixed(0));
 	const percentContract = Math.ceil((formatNaNToZero(projectInfo.contractValue + projectInfo.contractVatValue) / totalBudget) * 100);
 
-	const totalAdvanceFormat = formatNumberMoney(projectInfo.contractAdvancePaymentPaid);
+	// const totalAdvanceFormat = formatNumberMoney(projectInfo.contractAdvancePaymentPaid);
+	const totalAdvanceFormat = formatNumberMoney((projectInfo.contractAdvancePaymentPaid / 1_000_000_000).toFixed(0));
 	const percentAdvance = Math.ceil((formatNaNToZero(projectInfo.contractAdvancePaymentPaid) / totalBudget) * 100);
 
-	const totalQuantityFormat = formatNumberMoney(projectInfo.contractProduce + projectInfo.contractVatProduce);
+	// const totalQuantityFormat = formatNumberMoney(projectInfo.contractProduce + projectInfo.contractVatProduce);
+	const totalQuantityFormat = formatNumberMoney(
+		((projectInfo.contractProduce + projectInfo.contractVatProduce) / 1_000_000_000).toFixed(0));
 	const percentQuantity = Math.ceil((formatNaNToZero(projectInfo.contractProduce + projectInfo.contractVatProduce) / totalBudget) * 100);
 
+	// const totalAcceptanceFormat = formatNumberMoney(
+	// 	projectInfo.contractAcceptance + projectInfo.contractVatAcceptance +
+	// 	projectInfo.contractPlusAcceptance + projectInfo.contractVatPlusAcceptance
+	// );
 	const totalAcceptanceFormat = formatNumberMoney(
-		projectInfo.contractAcceptance + projectInfo.contractVatAcceptance +
-		projectInfo.contractPlusAcceptance + projectInfo.contractVatPlusAcceptance
+		((projectInfo.contractAcceptance + projectInfo.contractVatAcceptance +
+		projectInfo.contractPlusAcceptance + projectInfo.contractVatPlusAcceptance) / 1_000_000_000).toFixed(0)
 	);
 	const percentAcceptance = Math.ceil((formatNaNToZero(
 		projectInfo.contractAcceptance + projectInfo.contractVatAcceptance +
 		projectInfo.contractPlusAcceptance + projectInfo.contractVatPlusAcceptance
 	) / totalBudget) * 100);
 
-	const totalPaymentFormat = formatNumberMoney(projectInfo.contractAmountPaid);
+	// const totalPaymentFormat = formatNumberMoney(projectInfo.contractAmountPaid);
+	const totalPaymentFormat = formatNumberMoney((projectInfo.contractAmountPaid / 1_000_000_000).toFixed(0));
 	const percentPayment = Math.ceil((formatNaNToZero(projectInfo.contractAmountPaid) / totalBudget) * 100);
 
-	const totalDisbursementFormat = formatNumberMoney(projectInfo.contractAmountPaid + projectInfo.contractAdvancePaymentPaid);
+	// const totalDisbursementFormat = formatNumberMoney(projectInfo.contractAmountPaid + projectInfo.contractAdvancePaymentPaid);
+	const totalDisbursementFormat = formatNumberMoney(
+		((projectInfo.contractAmountPaid + projectInfo.contractAdvancePaymentPaid) / 1_000_000_000).toFixed(0)
+	);
 	const percentDisbursement = Math.ceil((formatNaNToZero(projectInfo.contractAmountPaid + projectInfo.contractAdvancePaymentPaid) / totalBudget) * 100);
 
 	return (

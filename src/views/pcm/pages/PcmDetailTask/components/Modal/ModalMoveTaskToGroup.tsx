@@ -7,7 +7,7 @@ import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
 import { useTask } from "services/hooks/useTask";
 import { DropdownSearchable } from "shareComponents/common";
 import { TOAST_DEFAULT_OPTIONS } from 'utils/constants';
-import { PcmPlanGroup } from 'typings/pcm/pcm_group';
+import { PcmPlanGroup } from 'typings/pcm/pcm-group';
 
 type Props = {
 	toggle: () => void,

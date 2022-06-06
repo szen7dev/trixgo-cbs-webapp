@@ -12,9 +12,11 @@ export const ModalCreateOrUpdateCashFlow: FC<ModalProps> = ({
   initialValues = {
     cashFlowID: '',
     name: '',
+    note: '',
     sign: '',
     date: '',
     type: 5,
+    outin: 1,
     property: 3,
     priority: null
   }
@@ -95,7 +97,7 @@ export const ModalCreateOrUpdateCashFlow: FC<ModalProps> = ({
         />
       </header>
 
-      <section className="px-10 py-2">
+      <section className="px-10 py-1">
         <input
           type="text"
           placeholder="Nhập nội dung"
@@ -106,7 +108,7 @@ export const ModalCreateOrUpdateCashFlow: FC<ModalProps> = ({
         />
       </section>
 
-      <section className="px-10 mt-2">
+      <section className="px-10 py-1">
         <input
           type="text"
           placeholder="Nhập mã hiệu"
@@ -117,43 +119,17 @@ export const ModalCreateOrUpdateCashFlow: FC<ModalProps> = ({
         />
       </section>
 
-      {/* Độ ưu tiên */}
-      <div className="px-10 py-2">
-        <DropdownSearchable
-          onchangeValue={(value: any) => {
-            setFormData(previous => ({
-              ...previous,
-              priority: value?.id
-            }))
-          }}
-          onClearData={() => {
-            setFormData(previous => ({
-              ...previous,
-              priority: null
-            }))
-          }}
-          className={"w-full h-32 flex-1 border border-primary-border rounded"}
-          placeholder="Độ ưu tiên"
-          isMultiple={false}
-          allowClearValueSingleInput={true}
-          showTriangle={true}
-          maxWidthInput="max-w-none"
-          data={[
-            { value: 1, label: 'Bình thường' },
-            { value: 2, label: 'Ưu tiên' },
-          ]}
-          initialValue={
-            initialValues?.priority ? {
-              value: initialValues.priority, label: initialValues.priority === 1 ? 'Bình thường' : 'Ưu tiên',
-            } : {}
-          }
-          formatItem={{
-            id: "value",
-            text: "label",
-          }}
-          inlineSearch={true}
+      {/* Ghi chú */}
+      <section className="px-10 py-1">
+        <input
+          type="text"
+          placeholder="Nhập ghi chú"
+          name="note"
+          className="h-12 w-full border border-primary-border outline-none px-8"
+          defaultValue={formData.note}
+          onChange={onChange}
         />
-      </div>
+      </section>
 
       <footer className="absolute right-0 bottom-0 px-10 py-5">
         <button className="bg-primary text-primary-light text-base w-24 h-8 rounded"

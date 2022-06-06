@@ -68,6 +68,7 @@ interface ModalProps {
         parent?: string,
         type?: number;
         name?: string;
+        note?: string;
         sign?: string;
         property?: number;
         planValue?: string;

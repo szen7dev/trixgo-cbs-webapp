@@ -1,5 +1,5 @@
 /*=====1.LIBRARY=====*/
-import { FC, useState, useCallback, ChangeEvent } from "react";
+import { FC, useState, useCallback, ChangeEvent, useMemo } from "react";
 import cn from "classnames";
 import debounce from "lodash/debounce";
 import { useParams, Link } from 'react-router-dom';
@@ -24,7 +24,7 @@ import CashFlowPlan from "typings/financial/cashFlowPlan";
 import { useModal } from "services/hooks/useModal";
 import { useCashFlowPlan } from "services/hooks/financial/useCashFlow";
 
-const ProjectCashFlowPlanPage: FC<{ type: number }> = ({ type }) => {
+const ProjectCashFlowPlanPage: FC<{ outin: number }> = ({ outin }) => {
 	const { id: projectID } = useParams<{ id: string }>();
     const { closeModal, openModal } = useModal();
     const [keyword, setKeyword] = useState('');
@@ -32,7 +32,9 @@ const ProjectCashFlowPlanPage: FC<{ type: number }> = ({ type }) => {
     const [initialValues, setInitialValues] = useState({
         projectID,
         name: '',
+        note: '',
         sign: '',
+        outin,
         type: 5,
         property: 3,
         date: '',
@@ -47,7 +49,7 @@ const ProjectCashFlowPlanPage: FC<{ type: number }> = ({ type }) => {
         fetchNextPage,
         totalRecord
     } = useCashFlowPlan({
-        params: { keyword, projectID },
+        params: { keyword, projectID, outin },
         isFetchList: true
     });
 
@@ -56,8 +58,10 @@ const ProjectCashFlowPlanPage: FC<{ type: number }> = ({ type }) => {
         setInitialValues(previousValue => ({
             ...previousValue,
             name: '',
+            note: '',
             sign: '',
             date: '',
+            outin,
             type: 5,
             property: 3,
             priority: null,
@@ -99,9 +103,10 @@ const ProjectCashFlowPlanPage: FC<{ type: number }> = ({ type }) => {
 	};
 
 	// Handle for checkbox all
-	const getStateCheckboxAll = useCallback(() => {
+	const getStateCheckboxAll = useMemo(() => {
+        if(!itemsChecked.length && !listCashFlowPlans.length) return false;
 		return itemsChecked.length === listCashFlowPlans.length;
-	}, [itemsChecked, listCashFlowPlans]);
+	}, [itemsChecked.length, listCashFlowPlans.length]);
 
 	const handleChangeCheckboxAll = (event: ChangeEvent<HTMLInputElement>) => {
 		const isChecked = event.target.checked;
@@ -113,7 +118,6 @@ const ProjectCashFlowPlanPage: FC<{ type: number }> = ({ type }) => {
 		}
 	}
 
-    // Xóa 1 hoặc nhiều mẩu tin
     const handleConfirmDelete = async () => {
         try {
             const ids = itemsChecked.map(item => item._id);
@@ -147,8 +151,10 @@ const ProjectCashFlowPlanPage: FC<{ type: number }> = ({ type }) => {
             initValues = {
                 projectID,
                 name: '',
+                note: '',
                 sign: '',
                 date: '',
+                outin,
                 type: 5,
                 property: 3,
                 priority: null,
@@ -231,7 +237,7 @@ const ProjectCashFlowPlanPage: FC<{ type: number }> = ({ type }) => {
                                 <input
                                     className="form-check-input"
                                     type="checkbox"
-                                    checked={getStateCheckboxAll()}
+                                    checked={getStateCheckboxAll}
                                     onChange={handleChangeCheckboxAll}
                                 />
                             </div>
@@ -258,7 +264,7 @@ const ProjectCashFlowPlanPage: FC<{ type: number }> = ({ type }) => {
                         </th>
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Mức độ ưu tiên
+                                Ghi chú
                             </div>
                         </th>
                     </tr>
@@ -279,14 +285,14 @@ const ProjectCashFlowPlanPage: FC<{ type: number }> = ({ type }) => {
                                 />
                             </td>
                             <td className="px-2 align-middle">
-                                <Link to={`/pcm/project/${projectID}/cash-flow/${item._id}`}>
+                                <Link to={`/pcm/project/${projectID}/cash-flow/${item._id}/${outin}`}>
                                     {item.name}
                                 </Link>
                             </td>
                             <td className="px-2 align-middle">{item.sign}</td>
                             <td className="px-2 align-middle">{formatNumberMoney(item?.value)}</td>
                             <td className="px-2 align-middle">{formatNumberMoney(item?.realValue)}</td>
-                            <td className="px-2 align-middle">{item.priority === 1 ? 'Bình thường' : 'Ưu tiên'}</td>
+                            <td className="px-2 align-middle">{item.note}</td>
                         </tr>
                     )) : <></>}
                 </tbody>
