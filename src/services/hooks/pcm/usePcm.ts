@@ -96,6 +96,7 @@ export const usePcm = (params?: any, isFetch?: boolean) : UsePcm => {
 type UsePcmReport = {
     addConditionTaskReportAsync: (payload: AddConditionTaskReportPayload) => Promise<any>,
     updateTaskReportAsync: (payload: UpdateTaskReportPayload) => Promise<any>,
+    deleteTaskReportAsync: (payload: Array<string>) => Promise<any>,
     listReports: Array<PcmReport>,
     infoReport: PcmReport,
     refetchInfoReport: () => void,
@@ -116,6 +117,11 @@ export const usePcmReport = (params?: any, isFetch?: boolean) : UsePcmReport => 
     const { mutateAsync: updateTaskReportAsync } =
         useMutation((payload: UpdateTaskReportPayload) =>
             PcmRepository.updateTaskReport(payload)
+        );
+
+    const { mutateAsync: deleteTaskReportAsync } =
+        useMutation((payload: Array<string>) =>
+            PcmRepository.deleteTaskReport(payload)
         );
 
     const { data: dataInfoReport, refetch: refetchInfoReport } = useQuery(
@@ -159,6 +165,7 @@ export const usePcmReport = (params?: any, isFetch?: boolean) : UsePcmReport => 
         refetchInfoReport,
         addConditionTaskReportAsync,
         updateTaskReportAsync,
+        deleteTaskReportAsync,
         listReports,
         isLoadingListReports,
         refetchListReports,

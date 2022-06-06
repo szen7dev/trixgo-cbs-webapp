@@ -58,11 +58,11 @@ const ProjectBudgetPage: FC = () => {
 			<table className='text-medium w-full border-separate border-spacing-0 text-center'>
 				<thead className="text-left">
 					<tr className="font-semibold">
-						<th className="sticky top-0 bg-gray-300 px-1.5 z-10">
+						{/* <th className="sticky top-0 bg-gray-300 px-1.5 z-10">
 							<button className="inline-block text-white rounded bg-gray-600 w-5 h-5" onClick={() => setShow(!show)}>{show ? '+' : '-'}</button>
-						</th>
+						</th> */}
 						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2">
-							TT
+							STT
 						</th>
 						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '240px' }}>Gói thầu/Hợp đồng</th>
 						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '122px' }}>Ngân sách</th>
@@ -82,13 +82,13 @@ const ProjectBudgetPage: FC = () => {
 					className="text-black"
 				>
 					<tr className="text-right">
-						<th className='bg-gray-300 px-1.5 relative'>
+						{/* <th className='bg-gray-300 px-1.5 relative'>
 							<div className={classNames('absolute left-1/2 bg-cbs-subtext top-1/2 w-[1px] h-1/2', { hidden: show })} />
 							<button className="relative inline-block text-white rounded bg-gray-600 w-5 h-5" onClick={() => setShow(!show)}>
 								{show ? '+' : '-'}
 							</button>
-						</th>
-						<th className='py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-center'>A1</th>
+						</th> */}
+						<th className='py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-center'></th>
 						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-left"></th>
 						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5">
 							{formatNumberMoney(projectInfo.budget + projectInfo.vatBudget)}
@@ -122,9 +122,9 @@ const ProjectBudgetPage: FC = () => {
 						</th>
 						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5"></th>
 					</tr>
-					{
-						listPcmProjectBudget.map((_item: any) => <BugetRowGroupTemp row={_item} key={_item._id} show={show} />)
-					}
+					{listPcmProjectBudget.map((_item: any, index) =>
+						<BugetRowGroupTemp row={_item} key={_item._id} index={index} show={show} />
+					)}
 				</RightClickMenuWrapper>
 				{/* <tfoot>
 					<tr className="text-right">

@@ -44,6 +44,17 @@ const PcmRepository = {
         return data;
     },
 
+    async deleteTaskReport(payload: Array<string>): Promise<any> {
+        const { data } = await API.delete<any>(
+            `${pcmURL}/pcm_plan_reports`, {
+                params: {
+                    reportsID: payload
+                }
+            }
+        );
+        return data;
+    },
+
     async getInfoReports(id: string): Promise<any> {
         const { data } = await API.get<any>(
             `${pcmURL}/pcm_plan_reports?${convertObToUrl({

@@ -17,6 +17,8 @@ export type AddConditionTaskReportPayload = {
 
 export type UpdateTaskReportPayload = {
   subjectID: string;
+  name?: string;
+  description?: string;
   members?: string[];
   conditionPin?: Partial<{
     keyword: string,

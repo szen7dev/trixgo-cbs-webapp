@@ -29,9 +29,9 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
     const { closeModal, openModal } = useModal();
     const [keywordDoctype, setKeywordDoctype] = useState('');
     const [doctypesChecked, setDoctypesChecked] = useState<Array<Doctype.Doctype>>([]);
-    const [itemState, setItemState] = useState({
-        href: ''
-    });
+    // const [itemState, setItemState] = useState({
+    //     href: ''
+    // });
 
     const [initialValues, setInitialValues] = useState({
         doctypeID: '',
