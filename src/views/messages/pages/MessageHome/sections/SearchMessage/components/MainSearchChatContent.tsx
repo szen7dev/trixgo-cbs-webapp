@@ -200,9 +200,11 @@ export const MainSearchChatContent:FC<Props> = ({chat}) => {
                 return <ReminderNoti
                     content={`${(message.sender.bizfullname || message.sender.fullname)} đã ${didAccept ? "xác nhận" : "từ chối"} tham gia hội thoại: <span class="text-black">${message.reminder.content}</span>`}/>
             case 120:
+                return <NpsNoti
+                    content={`${(message.sender.bizfullname || message.sender.fullname)} đã tham gia NPS: <span class="text-black">${message.nps.service.name}</span> trong cuộc hội thoại`}/>
             case 121:
                 return <NpsNoti
-                    content={`${(message.sender.bizfullname || message.sender.fullname)} đã thay đổi bình chọn: <span class="text-black">${message.nps.service.name}</span>`}/>
+                    content={`${(message.sender.bizfullname || message.sender.fullname)} đã thay đổi NPS: <span class="text-black">${message.nps.service.name}</span> trong cuộc hội thoại`}/>
         }
     }
     return (

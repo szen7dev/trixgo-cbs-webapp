@@ -134,6 +134,7 @@ export const NpsContentScore:FC<Props> = ({message, className,borderClass, isMyM
             messageID: message._id,
             score: value
         };
+        // socket.emit('CHATTING_CSS_UPDATE_MESSAGE_NPS', body);
         updateNPS(body).then(data => {
             socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessage);
             socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessageNotification);
@@ -141,7 +142,7 @@ export const NpsContentScore:FC<Props> = ({message, className,borderClass, isMyM
     }
 
     return (
-        <div className={"min-w-[70px] rounded-lg p-[7px] relative " + (className??"") + (isMini?" max-w-[250px]":" max-w-[366px]")}>
+        <div className={"min-w-[70px] rounded-lg p-[7px] relative " + (className??"") + (isMini?" max-w-[250px]":" max-w-[366px]") + (isMyMessage ? "" : " border border-gray-200")}>
             {
                 message.nps.type === 1 ?
                 <div className={"mb-3"}>

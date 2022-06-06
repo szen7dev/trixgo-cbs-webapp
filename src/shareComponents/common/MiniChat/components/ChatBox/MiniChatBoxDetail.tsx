@@ -23,7 +23,7 @@ import {Oval} from "react-loader-spinner";
 import {updateUsersMissMessageToConversation} from "redux/reducer/messages/ListConversation";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {setIsReviewOldMessages} from "redux/reducer/messages/ListMessage";
-import {MessageContext} from "../../../../../views/messages/pages/MessageHome";
+import {NpsNoti} from "views/messages/pages/MessageHome/sections/ChattingSection/components/Nps/NpsNoti";
 
 type Props = {
     chat: ItemListConversation;
@@ -167,9 +167,9 @@ export const MiniChatBoxDetail:FC<Props> = ({chat}) => {
                 }
             case 8:
                 if (message.sender._id === profileId) {
-                    return <MyMessage context={MessageContext} message={message}/>
+                    return <MyMessage isMini={true} context={MiniChatContext} message={message}/>
                 } else {
-                    return <OthersMessage context={MessageContext} message={message}/>
+                    return <OthersMessage isMini={true} context={MiniChatContext} message={message}/>
                 }
             case 101:
                 return <AddUsersNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã thêm: <span class="text-black">${message.usersAssigned.map(user => user.bizfullname).join("; ")}</span>`}/>
@@ -199,6 +199,14 @@ export const MiniChatBoxDetail:FC<Props> = ({chat}) => {
                     didAccept = message.reminder.accepts.find(action => action._id === message.sender._id)&&!message.reminder.rejects.find(action => action._id === message.sender._id)
                 }
                 return <ReminderNoti isMini={true} content={`${(message.sender.bizfullname||message.sender.fullname)} đã ${didAccept?"xác nhận":"từ chối"} tham gia hội thoại: <span class="text-black">${message.reminder.content}</span>`}/>
+            case 120:
+                return <NpsNoti
+                    isMini={true}
+                    content={`${(message.sender.bizfullname || message.sender.fullname)} đã tham gia NPS: <span class="text-black">${message.nps.service.name}</span> trong cuộc hội thoại`}/>
+            case 121:
+                return <NpsNoti
+                    isMini={true}
+                    content={`${(message.sender.bizfullname || message.sender.fullname)} đã thay đổi NPS: <span class="text-black">${message.nps.service.name}</span> trong cuộc hội thoại`}/>
         }
     }
 
@@ -216,7 +224,7 @@ export const MiniChatBoxDetail:FC<Props> = ({chat}) => {
                 ref={conversationMessagesList}
                 id={"conversation-messages-MessageList"}
                 className="t-mini-chat-content flex-1 h-[400px] items-center flex flex-col-reverse relative overflow-auto transition-all duration-150 pb-4">
-                <div className={"w-full max-w-full pt-[20px] px-[20px]"}>
+                <div className={"w-full max-w-full pt-[20px] px-[10px]"}>
                     {memoizedValue()}
                     {memoizedFakeValue()}
                 </div>

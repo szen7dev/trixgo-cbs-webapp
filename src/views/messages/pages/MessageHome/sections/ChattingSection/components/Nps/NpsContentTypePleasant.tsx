@@ -99,7 +99,7 @@ export const NpsContentTypePleasant:FC<Props> = ({message, className,borderClass
                     defaultChecked={userVote[child._id].find(vote => vote._id === profileId) !== undefined}
                     onChange={event => handleSelectOption(event.target.checked, child)}
                     value={child._id} type="checkbox" id={"option-" + child._id} name={"option"} className={"form-check-input transition duration-200 rounded-full cursor-pointer mt-0 w-[24px] min-w-[24px] min-h-[24px] h-[24px]"}/>
-                <label htmlFor={"option-" + child._id} className={"text-left ml-3 truncate flex-1"}>{child.name}</label>
+                <label htmlFor={"option-" + child._id} className={"text-left ml-3 flex-1"}>{child.name}</label>
                 <div className={"flex items-center -space-x-1"}>
                     {
                         _map(Object.values(userVote[child._id]).slice(0, 3), user => (
@@ -137,6 +137,7 @@ export const NpsContentTypePleasant:FC<Props> = ({message, className,borderClass
             messageID: message._id,
             ...votesChange
         };
+        // socket.emit('CHATTING_CSS_UPDATE_MESSAGE_NPS', body);
         updateNPS(body).then(data => {
             socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessage);
             socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessageNotification);
@@ -144,7 +145,7 @@ export const NpsContentTypePleasant:FC<Props> = ({message, className,borderClass
     }
 
     return (
-        <div className={"min-w-[70px] rounded-lg p-[7px] relative " + (className??"") + (isMini?" max-w-[250px]":" max-w-[366px]")}>
+        <div className={"min-w-[70px] rounded-lg p-[7px] relative " + (className??"") + (isMini?" max-w-[250px]":" max-w-[366px]") + (isMyMessage ? "" : " border border-gray-200")}>
             {
                 message.nps.type === 1 ?
                 <div className={"mb-3"}>
