@@ -23,6 +23,7 @@ import {
 import moment from "moment";
 import {dismissSearchMode} from "redux/reducer/messages/SearchMessage";
 import {Oval} from "react-loader-spinner";
+import {NpsNoti} from "../../ChattingSection/components/Nps/NpsNoti";
 
 type Props = {
     chat: ItemListConversation
@@ -150,36 +151,58 @@ export const MainSearchChatContent:FC<Props> = ({chat}) => {
                 } else {
                     return <OthersMessage context={MessageContext} message={message}/>
                 }
+            case 8:
+                if (message.sender._id === profileId) {
+                    return <MyMessage context={MessageContext} message={message}/>
+                } else {
+                    return <OthersMessage context={MessageContext} message={message}/>
+                }
             case 101:
-                return <AddUsersNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã thêm: <span class="text-black">${message.usersAssigned.map(user => user.bizfullname).join("; ")}</span>`}/>
+                return <AddUsersNoti
+                    content={`${(message.sender.bizfullname || message.sender.fullname)} đã thêm: <span class="text-black">${message.usersAssigned.map(user => user.bizfullname).join("; ")}</span>`}/>
             case 102:
-                return <AddUsersNoti isLeave={true} content={`${(message.sender.bizfullname||message.sender.fullname)} đã xoá: <span class="text-black">${message.usersAssigned.map(user => user.bizfullname).join("; ")}</span>`}/>
+                return <AddUsersNoti isLeave={true}
+                                     content={`${(message.sender.bizfullname || message.sender.fullname)} đã xoá: <span class="text-black">${message.usersAssigned.map(user => user.bizfullname).join("; ")}</span>`}/>
             case 103:
-                return <ChangeNameNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã đổi tên cuộc hội thoại`}/>;
+                return <ChangeNameNoti
+                    content={`${(message.sender.bizfullname || message.sender.fullname)} đã đổi tên cuộc hội thoại`}/>;
             case 104:
-                return <ChangeAvatarNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã đổi ảnh đại diện cuộc hội thoại`}/>;
+                return <ChangeAvatarNoti
+                    content={`${(message.sender.bizfullname || message.sender.fullname)} đã đổi ảnh đại diện cuộc hội thoại`}/>;
             case 105:
-                return <AddUsersNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã đặt: <span class="text-black">${message.usersAssigned.map(user => user.bizfullname).join("; ")}</span> với trai trò Admin`}/>;
+                return <AddUsersNoti
+                    content={`${(message.sender.bizfullname || message.sender.fullname)} đã đặt: <span class="text-black">${message.usersAssigned.map(user => user.bizfullname).join("; ")}</span> với trai trò Admin`}/>;
             case 106:
-                return <AddUsersNoti isLeave={true} content={`${(message.sender.bizfullname||message.sender.fullname)} đã xóa: <span class="text-black">${message.usersAssigned.map(user => user.bizfullname).join("; ")}</span> với vai trò Admin`}/>
+                return <AddUsersNoti isLeave={true}
+                                     content={`${(message.sender.bizfullname || message.sender.fullname)} đã xóa: <span class="text-black">${message.usersAssigned.map(user => user.bizfullname).join("; ")}</span> với vai trò Admin`}/>
             case 107:
-                return <AddUsersNoti isLeave={true} content={`${(message.sender.bizfullname||message.sender.fullname)} đã rời khỏi cuộc hội thoại`}/>;
+                return <AddUsersNoti isLeave={true}
+                                     content={`${(message.sender.bizfullname || message.sender.fullname)} đã rời khỏi cuộc hội thoại`}/>;
             case 108:
-                return <PinMessageNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã ghim một tin nhắn`}/>
+                return <PinMessageNoti
+                    content={`${(message.sender.bizfullname || message.sender.fullname)} đã ghim một tin nhắn`}/>
             case 109:
-                return <PinMessageNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã bỏ ghim một tin nhắn`}/>
+                return <PinMessageNoti
+                    content={`${(message.sender.bizfullname || message.sender.fullname)} đã bỏ ghim một tin nhắn`}/>
             case 111:
-                return <PollNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã tham gia bình chọn: <span class="text-black">${message.poll.name}</span>`}/>
+                return <PollNoti
+                    content={`${(message.sender.bizfullname || message.sender.fullname)} đã tham gia bình chọn: <span class="text-black">${message.poll.name}</span>`}/>
             case 112:
-                return <PollNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã thay đổi bình chọn: <span class="text-black">${message.poll.name}</span>`}/>
+                return <PollNoti
+                    content={`${(message.sender.bizfullname || message.sender.fullname)} đã thay đổi bình chọn: <span class="text-black">${message.poll.name}</span>`}/>
             case 116:
             case 117:
                 // eslint-disable-next-line no-case-declarations
-                let didAccept = message.reminder.accepts.includes(message.sender._id)&&!message.reminder.rejects.includes(message.sender._id);
+                let didAccept = message.reminder.accepts.includes(message.sender._id) && !message.reminder.rejects.includes(message.sender._id);
                 if (!didAccept) {
-                    didAccept = message.reminder.accepts.find(action => action._id === message.sender._id)&&!message.reminder.rejects.find(action => action._id === message.sender._id)
+                    didAccept = message.reminder.accepts.find(action => action._id === message.sender._id) && !message.reminder.rejects.find(action => action._id === message.sender._id)
                 }
-                return <ReminderNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã ${didAccept?"xác nhận":"từ chối"} tham gia hội thoại: <span class="text-black">${message.reminder.content}</span>`}/>
+                return <ReminderNoti
+                    content={`${(message.sender.bizfullname || message.sender.fullname)} đã ${didAccept ? "xác nhận" : "từ chối"} tham gia hội thoại: <span class="text-black">${message.reminder.content}</span>`}/>
+            case 120:
+            case 121:
+                return <NpsNoti
+                    content={`${(message.sender.bizfullname || message.sender.fullname)} đã thay đổi bình chọn: <span class="text-black">${message.nps.service.name}</span>`}/>
         }
     }
     return (

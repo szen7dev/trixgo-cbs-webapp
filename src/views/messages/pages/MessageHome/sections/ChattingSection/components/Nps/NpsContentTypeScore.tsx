@@ -50,7 +50,7 @@ export const NpsContentScore:FC<Props> = ({message, className,borderClass, isMyM
         let didChange = false;
         const defaultUserVote : {[key: string]: string|undefined} = {};
         for (let i=10; i >=0; i--) {
-            defaultUserVote[i] = message.nps.usersVote.find(vote => vote.score === i && vote.user._id === profileId)?._id;
+            defaultUserVote[i] = message.nps.usersVote.find(vote => vote.score === i && vote.user._id === profileId)?.user._id;
         }
 
         const newVote : {[key:string] : string|undefined} = {}

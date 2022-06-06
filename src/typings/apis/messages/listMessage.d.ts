@@ -218,7 +218,7 @@ export type ItemMessage = {
         status: number,
         type: number,
         state: number,
-        usersVote: {_id: string, user: { _id: string, bizfullname: string, image: string }, score: number, reason: string[]}[],
+        usersVote: {_id: string, user: { _id: string, bizfullname: string, image: string }, score: number, reason: { _id: string }}[],
         service: {
             _id: string,
             childs: {name: string, _id: string}[],

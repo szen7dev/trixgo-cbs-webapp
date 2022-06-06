@@ -29,6 +29,7 @@ import { Oval } from  'react-loader-spinner'
 import {updateUsersMissMessageToConversation} from "redux/reducer/messages/ListConversation";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {setIsReviewOldMessages} from "redux/reducer/messages/ListMessage";
+import {NpsNoti} from "../Nps/NpsNoti";
 
 export const listEmoji = [
     {
@@ -247,6 +248,10 @@ export const MainChatContent:FC<Props> = ({chat}) => {
                     didAccept = message.reminder.accepts.find(action => action._id === message.sender._id)&&!message.reminder.rejects.find(action => action._id === message.sender._id)
                 }
                 return <ReminderNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã ${didAccept?"xác nhận":"từ chối"} tham gia hội thoại: <span class="text-black">${message.reminder.content}</span>`}/>
+            case 120:
+            case 121:
+                return <NpsNoti
+                    content={`${(message.sender.bizfullname || message.sender.fullname)} đã đánh giá: <span class="text-black">${message.nps.service.name}</span>`}/>
         }
     }
     return (

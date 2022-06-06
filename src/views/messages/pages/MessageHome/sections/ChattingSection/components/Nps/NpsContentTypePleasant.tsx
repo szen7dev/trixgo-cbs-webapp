@@ -14,64 +14,129 @@ type Props = {
     context?: any;
 }
 export const NpsContentTypePleasant:FC<Props> = ({message, className,borderClass, isMyMessage, isMini, context}) => {
-    const [showMoreScore, setshowMoreScore] = useState(false);
-    const [value, setValue] = useState<string|number|null|string[]>(null);
-    const {updateNPS} = UseConversation();
-    const {socket} = useContext(context);
+    const {socketRef} = useContext(context);
+    const socket = socketRef.current;
+
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profile = JSON.parse(currentUser);
     const profileId = profile?._id;
 
+    const mapUserVote = () => {
+        const votes : {[key:string]: {
+                _id: string,
+                bizfullname: string,
+                image: string
+            }[]} = {}
+        message.nps?.service?.childs.forEach(child => {
+            votes[child._id] = message.nps.usersVote.filter(vote => vote.reason._id === child._id).map(vote => vote.user)
+        })
+
+        return votes;
+    };
+
+    const [userVote, setUserVote] = useState<{[key: string]: {
+            bizfullname: string
+            image: string
+            _id: string
+        }[]}>(mapUserVote());
+    const {updateNPS} = UseConversation();
+
     const checkDidUserTakeAction = useCallback(() => {
-        if (message.nps.type === 1) {
-            const defaultUserVote : {[key: string]: number} = {};
-            message.nps.usersVote.forEach((user) => {
-                defaultUserVote[user.user._id] = user.score;
-            })
+        let didChange = false;
+        const defaultUserVote : {[key: string]: string|undefined} = {};
+        message?.nps?.service?.childs.forEach(child => {
+            defaultUserVote[child._id] = message.nps.usersVote.find(vote => vote.reason._id === child._id && vote.user._id === profileId)?.user._id;
+        })
 
-            return {
-                defaultUserVote
+        const newVote : {[key:string] : string|undefined} = {}
+        Object.keys(userVote).forEach(key => {
+            newVote[key] = userVote[key].find(vote => vote._id === profileId)?._id;
+        })
+
+        //do compare
+        message?.nps?.service?.childs.forEach(child => {
+            if (defaultUserVote[child._id] !== newVote[child._id]) {
+                didChange = true;
             }
+        })
+
+        //Kiểm tra xem chọn gì chưa
+        if (Object.values(newVote).every(vote => vote === undefined)) {
+            didChange = false;
+        }
+
+        return {
+            didChange,
+            defaultUserVote,
+            newVote
+        };
+    }, [message, userVote])
+
+    const handleSelectOption = (value: boolean, option: any) => {
+        const selected = {...userVote};
+
+        if (value) {
+            selected[option._id] = [...selected[option._id],{
+                _id: profileId,
+                bizfullname: profile.bizfullname,
+                image: profile.image
+            }];
         } else {
-            const defaultUserVote : {[key: string]: string[]} = {};
-            return {
-                defaultUserVote
+            const index = selected[option._id].map(vote => vote._id).indexOf(profileId);
+            const votes = [...selected[option._id]]
+            if (index > -1) {
+                votes.splice(index, 1);
+                selected[option._id] = votes;
             }
         }
-    }, [message])
-
-    useEffect(() => {
-        if (checkDidUserTakeAction().defaultUserVote[profileId] !== undefined) {
-            setValue(checkDidUserTakeAction().defaultUserVote[profileId])
-        }
-    }, [checkDidUserTakeAction])
+        setUserVote(selected);
+    }
 
     const renderOptionForNPS = () => {
         return _map(message.nps.service.childs, child => (
             <div key={child._id} className={"w-full flex items-center mb-[15px]"}>
                 <input
-                    defaultChecked={value === child._id}
-                    onChange={event => setValue(event.target.value)}
-                    value={child._id} type="radio" id={"option-" + child._id} name={"option"} className={"form-check-input mt-0 w-[24px] min-w-[24px] min-h-[24px] h-[24px]"}/>
-                <label htmlFor={"option-" + child} className={"text-left ml-3 truncate flex-1"}>{child.name}</label>
+                    defaultChecked={userVote[child._id].find(vote => vote._id === profileId) !== undefined}
+                    onChange={event => handleSelectOption(event.target.checked, child)}
+                    value={child._id} type="checkbox" id={"option-" + child._id} name={"option"} className={"form-check-input transition duration-200 rounded-full cursor-pointer mt-0 w-[24px] min-w-[24px] min-h-[24px] h-[24px]"}/>
+                <label htmlFor={"option-" + child._id} className={"text-left ml-3 truncate flex-1"}>{child.name}</label>
                 <div className={"flex items-center -space-x-1"}>
-                    <img alt={"------"} src={SampleImage} className={"w-[16px] h-[16px] min-w-[16px] min-h-[16px] rounded-full overflow-hidden border border-white"}/>
-                    <img alt={"------"} src={SampleImage} className={"w-[16px] h-[16px] min-w-[16px] min-h-[16px] rounded-full overflow-hidden border border-white"}/>
-                    <img alt={"------"} src={SampleImage} className={"w-[16px] h-[16px] min-w-[16px] min-h-[16px] rounded-full overflow-hidden border border-white"}/>
+                    {
+                        _map(Object.values(userVote[child._id]).slice(0, 3), user => (
+                            <img key={user._id} alt={"------"} src={`${process.env.REACT_APP_URL_S3_USER}/${user.image}`} className={"w-[16px] h-[16px] min-w-[16px] min-h-[16px] rounded-full overflow-hidden border border-white"}/>
+                        ))
+                    }
                 </div>
             </div>
         ));
     }
 
     const handleUpdatePoll = () => {
-        if (!value) return;
+        const votesChange : {
+            reasons: string[],
+            reasonsCancel: string[]
+        } = {
+            reasons: [],
+            reasonsCancel: []
+        };
+        const reasonChangeInformation = checkDidUserTakeAction();
+        const defaultUserVote = reasonChangeInformation.defaultUserVote;
+        const newVote = reasonChangeInformation.newVote;
+
+        Object.keys(defaultUserVote).forEach(key => {
+            if (defaultUserVote[key] === undefined && newVote[key] !== undefined) {
+                votesChange.reasons.push(key)
+            }
+            if (defaultUserVote[key] !== undefined && newVote[key] === undefined) {
+                votesChange.reasonsCancel.push(key)
+            }
+        })
+
         const body : UpdateNPSPayload = {
             conversationID: message.conversation,
             messageID: message._id,
+            ...votesChange
         };
-        if (message.nps.type === 1 && (typeof value === "string" || typeof value === "number")) {
-            body['score'] = typeof value === "string" ? parseInt(value) : value
-        }
         updateNPS(body).then(data => {
             socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessage);
             socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessageNotification);
@@ -95,7 +160,7 @@ export const NpsContentTypePleasant:FC<Props> = ({message, className,borderClass
             <div className={"flex items-center justify-center relative"}>
                 {
                     message.nps.status &&
-                    <button disabled={!value} className={"text-primary my-[10px] disabled:text-gray-400"} onClick={() => handleUpdatePoll()}>
+                    <button disabled={!checkDidUserTakeAction().didChange} className={"text-primary my-[10px] disabled:text-gray-400"} onClick={() => handleUpdatePoll()}>
                         Xác nhận
                     </button>
                 }
