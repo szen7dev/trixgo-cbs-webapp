@@ -98,8 +98,8 @@ export const NpsContentTypePleasant:FC<Props> = ({message, className,borderClass
                 <input
                     defaultChecked={userVote[child._id].find(vote => vote._id === profileId) !== undefined}
                     onChange={event => handleSelectOption(event.target.checked, child)}
-                    value={child._id} type="checkbox" id={"option-" + child._id} name={"option"} className={"form-check-input transition duration-200 rounded-full cursor-pointer mt-0 w-[24px] min-w-[24px] min-h-[24px] h-[24px]"}/>
-                <label htmlFor={"option-" + child._id} className={"text-left ml-3 flex-1"}>{child.name}</label>
+                    value={child._id} type="checkbox" id={"option-" + child._id  + "-" + message._id} name={"option-"+message._id} className={"form-check-input transition duration-200 rounded-full cursor-pointer mt-0 w-[24px] min-w-[24px] min-h-[24px] h-[24px]"}/>
+                <label htmlFor={"option-" + child._id  + "-" + message._id} className={"text-left ml-3 flex-1"}>{child.name}</label>
                 <div className={"flex items-center -space-x-1"}>
                     {
                         _map(Object.values(userVote[child._id]).slice(0, 3), user => (
@@ -160,7 +160,7 @@ export const NpsContentTypePleasant:FC<Props> = ({message, className,borderClass
             </div>
             <div className={"flex items-center justify-center relative"}>
                 {
-                    message.nps.status &&
+                    message.nps.status && !message.isFake &&
                     <button disabled={!checkDidUserTakeAction().didChange} className={"text-primary my-[10px] disabled:text-gray-400"} onClick={() => handleUpdatePoll()}>
                         Xác nhận
                     </button>

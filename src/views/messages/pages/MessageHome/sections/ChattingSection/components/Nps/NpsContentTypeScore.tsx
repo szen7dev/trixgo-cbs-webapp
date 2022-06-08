@@ -78,6 +78,7 @@ export const NpsContentScore:FC<Props> = ({message, className,borderClass, isMyM
     }, [message, userVote])
 
     const handleSelectOption = (score: number) => {
+        setValue(score);
         const oldValue = value;
         const selected = {...userVote};
         if (oldValue) {
@@ -94,7 +95,6 @@ export const NpsContentScore:FC<Props> = ({message, className,borderClass, isMyM
             image: profile.image
         }];
         setUserVote(selected);
-        setValue(score);
     }
 
     const renderOptionForNPS = () => {
@@ -109,8 +109,8 @@ export const NpsContentScore:FC<Props> = ({message, className,borderClass, isMyM
                         <input
                             checked={value === score}
                             onChange={event => handleSelectOption(score)}
-                            value={score} type="radio" id={"option-" + score} name={"option"} className={"form-check-input mt-0 w-[24px] min-w-[24px] min-h-[24px] h-[24px]"}/>
-                        <label htmlFor={"option-" + score} className={"text-left ml-3 truncate flex-1"}>{score} điểm</label>
+                            value={score} type="radio" id={"option-" + score + "-" + message._id} name={"option-"+message._id} className={"form-check-input mt-0 w-[24px] min-w-[24px] min-h-[24px] h-[24px]"}/>
+                        <label htmlFor={"option-" + score + "-" + message._id} className={"text-left ml-3 truncate flex-1"}>{score} điểm</label>
                         <div className={"flex items-center -space-x-1"}>
                             {
                                 Object.values(userVote[score]).slice(0, 3).map((user) => (
@@ -157,7 +157,7 @@ export const NpsContentScore:FC<Props> = ({message, className,borderClass, isMyM
             </div>
             <div className={"flex items-center justify-center relative"}>
                 {
-                    message.nps.status &&
+                    message.nps.status && !message.isFake &&
                     <button disabled={!checkDidUserTakeAction().didChange} className={"text-primary my-[10px] disabled:text-gray-400"} onClick={() => handleUpdatePoll()}>
                         Xác nhận
                     </button>

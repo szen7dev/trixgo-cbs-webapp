@@ -1,5 +1,4 @@
 import {ItemListConversation} from "./listConversation";
-import {number} from "yup";
 
 export type ItemMessage = {
     _id: string;
@@ -498,6 +497,55 @@ export type UpdateNPSData = {
 
 export type UpdateNPSResponse = {
     data: UpdateNPSData ;
+    error: boolean;
+    status: number;
+}
+
+export type GetNPSDetailPayload = {
+    conversationID: string,
+    messageID: string
+}
+
+export type GetNPSScoreDetailData = {
+    dataStatistics: {
+        _id: {
+            score: number
+        },
+        users: [
+            {
+                image: string,
+                _id: string,
+                bizfullname: string
+            }[]
+        ],
+        avg: number,
+        total: number
+    }[]
+}
+
+export type GetNPSScoreDetailResponse = {
+    data: GetNPSScoreDetailData ;
+    error: boolean;
+    status: number;
+}
+
+export type GetNPSPleasantDetailItem = {
+    reason: {
+        _id: string,
+        name: string,
+        description: string
+    },
+    users: {
+        image: string,
+        _id: string,
+        bizfullname: string
+    }[],
+    total: number
+}
+export type GetNPSPleasantDetailData = GetNPSPleasantDetailItem[]
+
+export type GetNPSPleasantDetailResponse = {
+    data: GetNPSPleasantDetailData;
     error: boolean;
     status: number;
 }

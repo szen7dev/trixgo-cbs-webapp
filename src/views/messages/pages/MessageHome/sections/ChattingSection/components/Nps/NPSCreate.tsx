@@ -5,10 +5,9 @@ import Close from "assets/icons/Close";
 import {map as _map} from "lodash";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
-import {useDoctype} from "../../../../../../../../services/hooks/items/useDoctype";
+import {useDoctype} from "services/hooks/items/useDoctype";
 import {v4 as uuidv4} from "uuid";
-import {appendFakeMessageToConversation} from "../../../../../../../../redux/reducer/messages/ListMessage";
-import {dismissCreatePoll} from "../../../../../../../../redux/reducer/messages/CreatePoll";
+import {appendFakeMessageToConversation} from "redux/reducer/messages/ListMessage";
 
 type Props = {
     context: any
@@ -25,6 +24,7 @@ export const NPSCreate:FC<Props> = ({context}) => {
 
     const [typeNPS, setTypeNPS] = useState(1);
     const [option, setOption] = useState<string|null>(null);
+    const [selectService, setSelectService] = useState<{[key: string] : any}>({});
     const chat = useSelector((state: RootState) => state.listConversation.data.listConversation[conversationId]);
 
     const {
@@ -34,7 +34,8 @@ export const NPSCreate:FC<Props> = ({context}) => {
     } = useDoctype({
         params: {
             type: 21,
-            companyID: chat?.company
+            companyID: chat?.company,
+            populates: {"path": "childs", "select": "_id name type description"}
         },
         isFetchList: isOpenCreateNPS
     })
@@ -76,8 +77,10 @@ export const NPSCreate:FC<Props> = ({context}) => {
                 nps: {
                     type: typeNPS,
                     service: {
-                        name: (listDoctypes??[]).find(item => item._id === option)?.name ?? ""
-                    }
+                        name: (listDoctypes??[]).find(item => item._id === option)?.name ?? "",
+                        childs: selectService.childs
+                    },
+                    usersVote: [],
                 },
                 sender: {
                     _id: profileId,
@@ -88,7 +91,7 @@ export const NPSCreate:FC<Props> = ({context}) => {
             }
         }));
         socket.emit('CHATTING_CSS_SEND_MESSAGE', message);
-        dispatch(dismissCreatePoll({}));
+        dispatch(dismissSendNPSMessage({}));
     }
     if (!chat) return null;
 
@@ -167,8 +170,11 @@ export const NPSCreate:FC<Props> = ({context}) => {
                                     _map(listDoctypes, docType => (
                                         <div key={docType._id} className={"w-full flex items-center border border-gray-100 rounded-md px-[14px] py-[8px] mb-[15px]"}>
                                             <input
-                                                onChange={event => setOption(event.target.value)} value={docType._id} type="radio" id={'option-' + docType._id} name={'option'} className={"form-check-input mt-0 w-[24px] h-[24px] min-w-[24px] min-h-[24px]"}/>
-                                            <label htmlFor={'option-' + docType._id} className={"text-left ml-3 text-primary"}>{docType.name}</label>
+                                                onChange={event => {
+                                                    setOption(event.target.value)
+                                                    setSelectService(docType)
+                                                }} value={docType._id} type="radio" id={'option-nps-create-' + docType._id} name={'option-nps-create'} className={"form-check-input mt-0 w-[24px] h-[24px] min-w-[24px] min-h-[24px]"}/>
+                                            <label htmlFor={'option-nps-create-' + docType._id} className={"text-left ml-3 text-primary"}>{docType.name}</label>
                                         </div>
                                     ))
                                 }

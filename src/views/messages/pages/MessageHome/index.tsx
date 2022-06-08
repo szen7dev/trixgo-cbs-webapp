@@ -25,8 +25,9 @@ import {SocketController} from "views/messages/shareComponents/common/SocketCont
 import {UnreadMessageController} from "./sections/UnreadMessages";
 import {FolderAddConversationPopup} from "./sections/MessageList/components/ListFolders/FolderAddConversationPopup";
 import {NotificationMutePopup} from "./sections/SettingMessageDetail/components/Notification/NotificationMutePopup";
-import {ConversationConfig} from "./sections/ChattingSection/components/HeaderConversation";
+import {ConversationConfig} from "./sections/ChattingSection";
 import {setIsReviewOldMessages} from "redux/reducer/messages/ListMessage";
+import {NpsVoteDetail} from "./sections/ChattingSection";
 
 export const MessageContext = createContext<{
     currentChat: string;
@@ -110,6 +111,7 @@ export const MessagesHome:FC = () => {
             <UsersSeenDetail/>
             <NotificationMutePopup/>
             <ConversationConfig/>
+            <NpsVoteDetail/>
         </MessageContext.Provider>
     )
 }

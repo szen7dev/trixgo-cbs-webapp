@@ -1,7 +1,7 @@
 import ListMessageRepository from "apis/messages/message";
 import {
     AddUserToConversationPayload,
-    DeleteRevokeMessagePayload, ItemMessage,
+    DeleteRevokeMessagePayload, GetNPSDetailPayload, GetNPSPleasantDetailData, GetNPSScoreDetailData, ItemMessage,
     ListMessageData,
     ListMessagePayload,
     PinnedMessagePayload, SearchMessageInConversationByIdPayload, SearchMessageInConversationByIdResponse,
@@ -31,6 +31,8 @@ type UseConversationType = {
     addUserToConversation: (params: AddUserToConversationPayload) => Promise<{ data: any, error: boolean }>;
     goToMessagePosition: (params: SearchMessageInConversationByIdPayload, isFirstInit? : boolean, direction?: "front"|"back") => Promise<any>;
     updateSeenMessage: (params: UpdateSeenMessageConversationPayload) => Promise<any>;
+    getReasonStatisticsNps: (params: GetNPSDetailPayload) => Promise<GetNPSPleasantDetailData>;
+    getScoreStatisticsNps: (params: GetNPSDetailPayload) => Promise<GetNPSScoreDetailData>;
 }
 
 export const UseConversation = () : UseConversationType => {
@@ -173,6 +175,22 @@ export const UseConversation = () : UseConversationType => {
         });
     }
 
+    const getReasonStatisticsNps = async (params: GetNPSDetailPayload) => {
+        const {data} = await  ListMessageRepository.getReasonStatisticsNps(params);
+
+        return new Promise<GetNPSPleasantDetailData>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
+    const getScoreStatisticsNps = async (params: GetNPSDetailPayload) => {
+        const {data} = await  ListMessageRepository.getScoreStatisticsNps(params);
+
+        return new Promise<GetNPSScoreDetailData>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
     return {
         getListMessage,
         sendNormalMessage,
@@ -186,6 +204,8 @@ export const UseConversation = () : UseConversationType => {
         updateNPS,
         addUserToConversation,
         goToMessagePosition,
-        updateSeenMessage
+        updateSeenMessage,
+        getReasonStatisticsNps,
+        getScoreStatisticsNps
     }
 }
