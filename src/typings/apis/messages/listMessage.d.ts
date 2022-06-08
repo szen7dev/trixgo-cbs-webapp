@@ -520,7 +520,24 @@ export type GetNPSScoreDetailData = {
         ],
         avg: number,
         total: number
-    }[]
+    }[],
+    dataAverage: {
+        scoreAverage: number,
+        avgs: {
+            _id: {
+                score: number
+            },
+            users: [
+                {
+                    image: string,
+                    _id: string,
+                    bizfullname: string
+                }[]
+            ],
+            avg: number,
+            total: number
+        }[]
+    }
 }
 
 export type GetNPSScoreDetailResponse = {
