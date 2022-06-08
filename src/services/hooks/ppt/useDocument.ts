@@ -13,10 +13,10 @@ interface UseQueryListDocument {
     hasNextPage?: boolean;
     nextCursor?: string | null;
     // fetchNextPage: () => void;
-    // fetchPreviousPage: () => void;
 }
 
 export const useQueryListDocument = (departmentID: string, pageParam: any,  packageID?: string, limit?: string): UseQueryListDocument => {
+    let nextCursor = null;
     const result = useQuery(
         [`list_document`, { pageParam }], async () =>
         DocumentRepository.fetchListDocument({
@@ -25,6 +25,10 @@ export const useQueryListDocument = (departmentID: string, pageParam: any,  pack
             departmentID,
             ...pageParam
         }), {
+        getNextPageParam: ({ data }: any) => {
+            nextCursor = data?.nextCursor;
+            return data?.nextCursor || undefined;
+        },
         refetchOnWindowFocus: false,
         enabled: true,
     });
@@ -37,7 +41,6 @@ export const useQueryListDocument = (departmentID: string, pageParam: any,  pack
 
     const totalRecord = data?.data?.totalRecord || 0;
     const totalPages  = data?.data?.totalPage || 0;
-    const nextCursor  = data?.data?.nextCursor || null
 
     return {
         loading: isLoading,
