@@ -41,6 +41,10 @@ export const NpsContentTypePleasant:FC<Props> = ({message, className,borderClass
         }[]}>(mapUserVote());
     const {updateNPS} = UseConversation();
 
+    useEffect(() => {
+        setUserVote(mapUserVote);
+    }, [message.nps.usersVote])
+
     const checkDidUserTakeAction = useCallback(() => {
         let didChange = false;
         const defaultUserVote : {[key: string]: string|undefined} = {};

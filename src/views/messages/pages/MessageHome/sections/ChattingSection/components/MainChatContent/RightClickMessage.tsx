@@ -163,11 +163,11 @@ export const RightClickMessage:FC<Props> = ({message, socket, editor, isMini}) =
                     </button>
                 }
                 {
-                    // message.sender._id === profileId &&
+                    message.sender._id === profileId &&
                     message.nps && !message.isFake &&
                     <button
                         onClick={() => {
-                            dispatch(openMessageNPSDetail({message}))
+                            dispatch(openMessageNPSDetail({messageId: message._id, conversationId: message.conversation}))
                             setTimeout(() => {
                                 closeRightClick()
                             }, 100)

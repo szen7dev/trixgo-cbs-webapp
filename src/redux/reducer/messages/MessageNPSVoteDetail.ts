@@ -1,10 +1,11 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 
-const initialState : {data: {isOpenMessageNPSVoteDetail: boolean, message: ItemMessage|null}} = {
+const initialState : {data: {isOpenMessageNPSVoteDetail: boolean, messageId: string, conversationId: string}} = {
     data: {
         isOpenMessageNPSVoteDetail: false,
-        message: null
+        messageId: "",
+        conversationId: ""
     }
 };
 
@@ -16,14 +17,16 @@ const usersMessageNPSVoteDetailSlice = createSlice({
             state.data = {
                 ...state.data,
                 isOpenMessageNPSVoteDetail: true,
-                message: action.payload.message
+                messageId: action.payload.messageId,
+                conversationId: action.payload.conversationId,
             }
         },
         dismissMessageNPSDetail (state) {
             state.data = {
                 ...state.data,
                 isOpenMessageNPSVoteDetail: false,
-                message: null
+                messageId: "",
+                conversationId: ""
             }
         }
     },

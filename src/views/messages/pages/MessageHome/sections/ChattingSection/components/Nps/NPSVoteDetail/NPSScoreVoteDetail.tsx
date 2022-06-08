@@ -24,13 +24,15 @@ export const NPSScoreVoteDetail:FC<Props> = ({message, isOpenMessageNPSVoteDetai
     const {getScoreStatisticsNps} = UseConversation();
 
     useEffect(() => {
-        getScoreStatisticsNps({
-            conversationID: message.conversation,
-            messageID: message._id
-        }).then(data => {
-            setScores(data)
-        })
-    },[isOpenMessageNPSVoteDetail])
+        if (isOpenMessageNPSVoteDetail) {
+            getScoreStatisticsNps({
+                conversationID: message.conversation,
+                messageID: message._id
+            }).then(data => {
+                setScores(data)
+            })
+        }
+    },[isOpenMessageNPSVoteDetail, message.nps.usersVote])
 
     const renderListUserVote = () => {
         if (selectTab === 0) {

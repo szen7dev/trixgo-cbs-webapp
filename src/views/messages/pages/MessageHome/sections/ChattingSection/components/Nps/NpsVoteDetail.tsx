@@ -7,15 +7,16 @@ import {RootState} from "redux/reducer";
 import {dismissMessageNPSDetail} from "redux/reducer/messages/MessageNPSVoteDetail"
 import {NPSScoreVoteDetail} from "./NPSVoteDetail/NPSScoreVoteDetail";
 import {NPSPleasantVoteDetail} from "./NPSVoteDetail/NPSPleasantVoteDetail";
-import IconBackGray from "../../../../../../../../assets/images/icon-back-gray.svg";
+import IconBackGray from "assets/images/icon-back-gray.svg";
 
 export const NpsVoteDetail:FC = () => {
     const focusElementRef = useRef<HTMLDivElement>(null);
-    const {isOpenMessageNPSVoteDetail, message} = useSelector((state: RootState) => state.messageNpsVoteDetail.data);
+    const {isOpenMessageNPSVoteDetail, messageId, conversationId} = useSelector((state: RootState) => state.messageNpsVoteDetail.data);
+    const messagesData = useSelector((state: RootState) => state.listMessage.data.listMessage[conversationId]);
+    const message= messagesData?messagesData[messageId]:null;
     const dispatch = useDispatch();
     const [seeingDetail, setSeeingDetail] = useState(false);
 
-    if (!message) return null;
     return (
         <Transition appear show={isOpenMessageNPSVoteDetail} as={Fragment}>
             <Dialog
@@ -73,16 +74,20 @@ export const NpsVoteDetail:FC = () => {
                                 </div>
                             </div>
                             <div className={"max-h-[500px] min-h-[450px] overflow-auto pb-4 relative"}>
+
                                 {
-                                    message.nps.type === 1 ?
-                                        <NPSScoreVoteDetail
-                                            message={message}
-                                            isOpenMessageNPSVoteDetail={isOpenMessageNPSVoteDetail}/> :
-                                        <NPSPleasantVoteDetail
-                                            seeingDetail={seeingDetail}
-                                            setSeeingDetail={(show) => setSeeingDetail(show)}
-                                            message={message}
-                                            isOpenMessageNPSVoteDetail={isOpenMessageNPSVoteDetail}/>
+                                    message &&
+                                    (
+                                        message.nps.type === 1 ?
+                                            <NPSScoreVoteDetail
+                                                message={message}
+                                                isOpenMessageNPSVoteDetail={isOpenMessageNPSVoteDetail}/> :
+                                            <NPSPleasantVoteDetail
+                                                seeingDetail={seeingDetail}
+                                                setSeeingDetail={(show) => setSeeingDetail(show)}
+                                                message={message}
+                                                isOpenMessageNPSVoteDetail={isOpenMessageNPSVoteDetail}/>
+                                    )
                                 }
                             </div>
                         </div>

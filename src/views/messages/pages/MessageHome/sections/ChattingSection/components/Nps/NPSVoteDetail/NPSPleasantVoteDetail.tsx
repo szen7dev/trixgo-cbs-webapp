@@ -24,13 +24,15 @@ export const NPSPleasantVoteDetail:FC<Props> = ({message, isOpenMessageNPSVoteDe
 
     const {getReasonStatisticsNps} = UseConversation();
     useEffect(() => {
-        getReasonStatisticsNps({
-            conversationID: message.conversation,
-            messageID: message._id
-        }).then(data => {
-            setReasons(data)
-        })
-    },[isOpenMessageNPSVoteDetail])
+        if (isOpenMessageNPSVoteDetail) {
+            getReasonStatisticsNps({
+                conversationID: message.conversation,
+                messageID: message._id
+            }).then(data => {
+                setReasons(data)
+            })
+        }
+    },[isOpenMessageNPSVoteDetail, message.nps.usersVote])
 
     useEffect(() => {
         if (!seeingDetail) {
