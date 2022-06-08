@@ -1,5 +1,5 @@
 /*=====1.LIBRARY=====*/
-import { UIEvent, FC, useState, useCallback, ChangeEvent, useEffect } from "react";
+import { UIEvent, FC, useState, useMemo, ChangeEvent, useEffect } from "react";
 import cn from "classnames";
 import debounce from "lodash/debounce";
 import { toast } from "react-toastify";
@@ -24,7 +24,7 @@ import { useCashFlowPlan } from "services/hooks/financial/useCashFlow";
 import CashFlowPlan from "typings/financial/cashFlowPlan";
 
 const ProjectCashFlowPlanChildPage: FC = () => {
-	const { id: projectID, cashFlowID } = useParams<{ id: string, cashFlowID: string }>();
+	const { id: projectID, cashFlowID, outin } = useParams<{ id: string, cashFlowID: string, outin: string }>();
     const { closeModal, openModal } = useModal();
 
     const [showRowInsert, setShowRowInsert] = useState(true);
@@ -77,9 +77,10 @@ const ProjectCashFlowPlanChildPage: FC = () => {
 	};
 
 	// Handle for checkbox all
-	const getStateCheckboxAll = useCallback(() => {
+	const getStateCheckboxAll = useMemo(() => {
+        if(!itemsChecked.length && !listCashFlowPlans.length) return false;
 		return itemsChecked.length === listCashFlowPlans.length;
-	}, [itemsChecked, listCashFlowPlans]);
+	}, [itemsChecked.length, listCashFlowPlans.length]);
 
 	const handleChangeCheckboxAll = (event: ChangeEvent<HTMLInputElement>) => {
 		const isChecked = event.target.checked;
@@ -193,7 +194,7 @@ const ProjectCashFlowPlanChildPage: FC = () => {
             <header className="sticky top-0 bg-primary-light z-10">
                 <div className="h-[50px] border border-primary-border flex items-center justify-between px-5">
                     <div className="flex items-center">
-                        <Link to={`/pcm/project/${projectID}/cash-flow`}>
+                        <Link to={`/pcm/project/${projectID}/cash-flow-${outin}`}>
 							<img src="/images/common/button_back.png" alt="Button Back" />
 						</Link>
                         <p className="text-lg ml-2">Danh sách</p>
@@ -233,7 +234,7 @@ const ProjectCashFlowPlanChildPage: FC = () => {
                                 <input
                                     className="form-check-input"
                                     type="checkbox"
-                                    checked={getStateCheckboxAll()}
+                                    checked={getStateCheckboxAll}
                                     onChange={handleChangeCheckboxAll}
                                 />
                             </div>

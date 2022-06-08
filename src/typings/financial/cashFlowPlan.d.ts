@@ -68,6 +68,7 @@ interface ModalProps {
         parent?: string,
         type?: number;
         name?: string;
+        note?: string;
         sign?: string;
         property?: number;
         planValue?: string;
@@ -79,4 +80,17 @@ interface ModalProps {
         outin?: number | null;
     }
     onConfirm?(): void
+}
+
+export type CashFlowAmountByPropertyParams = {
+    projectID?: string;
+    option?: number;
+    type?: number;
+    property?: number;
+    outin?: number;
+    real?: number;
+}
+
+export type CashFlowCustomParams = {
+    amountByProperty?: Partial<CashFlowAmountByPropertyParams>
 }
