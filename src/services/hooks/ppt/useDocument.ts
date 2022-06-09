@@ -12,12 +12,12 @@ interface UseQueryListDocument {
     refetch: () => void;
     hasNextPage?: boolean;
     nextCursor?: string | null;
-    // fetchNextPage: () => void;
+    fetchNextPage: () => void;
 }
 
 export const useQueryListDocument = (departmentID: string, pageParam: any,  packageID?: string, limit?: string): UseQueryListDocument => {
     let nextCursor = null;
-    const result = useQuery(
+    const result = useInfiniteQuery(
         [`list_document`, { pageParam }], async () =>
         DocumentRepository.fetchListDocument({
             packageID,
@@ -37,18 +37,25 @@ export const useQueryListDocument = (departmentID: string, pageParam: any,  pack
         isLoading,
         data,
         refetch,
+        fetchNextPage
     } = result;
 
-    const totalRecord = data?.data?.totalRecord || 0;
-    const totalPages  = data?.data?.totalPage || 0;
+    const listDocument = []
+    .concat(...(data?.pages || [])
+        .map((d: any) => d.data?.listRecords))
+    .filter(Boolean);
+
+    const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
+    const totalPages = data?.pages[0]?.data?.totalPage || 0;
 
     return {
         loading: isLoading,
-        data: data?.data?.listRecords || [],
+        data: listDocument,
         totalRecord,
         totalPages,
         refetch,
         nextCursor,
+        fetchNextPage
     }
 }
 interface UseQueryDetailDocument {

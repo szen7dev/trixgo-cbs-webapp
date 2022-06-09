@@ -48,8 +48,14 @@ const ProjectDrawingPage: FC = () => {
 		documentID
 	});
 	const { data: listDocumentParent, totalRecord, totalPages, loading, nextCursor, refetch }   = useQueryListDocument(projectID, { type:"9" }, "");
-	const { data: listDocumentChild, totalRecord: totalRecordChild, totalPages: totalPagesChild, 
-		loading: loadingChild, nextCursor: nextCursorChild, refetch: refetchChild }   = useQueryListDocument(projectID, { type:"9", parentID: documentID, keyword }, "");
+	const { data: listDocumentChild, 
+			totalRecord: totalRecordChild, 
+			totalPages: totalPagesChild, 
+			loading: loadingChild, 
+			nextCursor: nextCursorChild, 
+			fetchNextPage: fetchNextPageDocumentChild,
+			refetch: refetchChild } = useQueryListDocument(projectID, { type:"9", parentID: documentID, keyword }, "");
+		
 	useEffect(() => {
 		refetchChild();
 		refetch()
@@ -78,6 +84,7 @@ const ProjectDrawingPage: FC = () => {
 						))
 					}
 				</div>
+				
 				<div className="flex-1 pt-1.5 pb-8 px-4 h-full overflow-auto">
 					<SearchInput placeholder="Tìm kiếm bản vẽ" classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={debounce(
 							(event: any) => setKeyword(event.target.value),
@@ -110,7 +117,15 @@ const ProjectDrawingPage: FC = () => {
 							</Link>
 						)}
 					</div>
-
+					{Number(totalRecordChild) - listDocumentChild.length > 0 && (
+						<button
+							className="text-primary text-[13px]  mt-2"
+							onClick={() => fetchNextPageDocumentChild()}
+						>
+							{`Xem thêm (${Number(totalRecordChild) - listDocumentChild.length
+							})`}
+						</button>
+					)}
 					<div className={`flex gap-x-2.5 pt-3 pb-2 font-bold`}>File đính kèm({totalDocumentFile})</div>
 					<div className="grid grid-cols-6 gap-4 mt-2">
 						{ documentID &&documentFiles?.map((documentFile, index) => 
@@ -139,13 +154,13 @@ const ProjectDrawingPage: FC = () => {
 						)}
 					</div>
 					{Number(totalDocumentFile) - documentFiles.length > 0 && (
-					<button
-						className="text-primary text-[13px]  mt-2"
-						onClick={() => fetchNextPageDocumentFile()}
-					>
-						{`Xem thêm (${Number(totalDocumentFile) - documentFiles.length
-						})`}
-					</button>
+						<button
+							className="text-primary text-[13px]  mt-2"
+							onClick={() => fetchNextPageDocumentFile()}
+						>
+							{`Xem thêm (${Number(totalDocumentFile) - documentFiles.length
+							})`}
+						</button>
 					)}
 				</div>
 			</div>

@@ -1,12 +1,14 @@
 import { FC, useEffect } from "react";
-import { useHistory } from "react-router-dom"
+import { useHistory, useParams } from "react-router-dom"
 
 import image from 'assets/images/icons8-stacked-organizational-chart-highlighted-first-node-96 1.png';
 import avatar from 'assets/images/avatar.jpg';
 import Gantt from "./components/Gantt";
+import { usePcmProject } from "services/hooks/pcm/usePcmProject";
 
 const ProjectSchedulePage: FC = () => {
 	const history = useHistory();
+	const { id: departmentID } = useParams<{ id: string }>();
 	useEffect(() => {
 		document.title = "CHG.THT-Quản lý tiến độ"
 	}, []);
@@ -14,7 +16,8 @@ const ProjectSchedulePage: FC = () => {
 	function handleClick() {
 		history.goBack();
 	}
-
+	const { infoDepartment } = usePcmProject({ departmentID });
+	
 	const data = {
 		// data: Array.from({ length: 30 }).map((_, i) => ({
 		// 	id: i + 1, text: 'Task #' + i % 4, start_date: new Date((new Date()).setDate(i)), duration: 3, progress: 0.6,
@@ -38,7 +41,7 @@ const ProjectSchedulePage: FC = () => {
 						</svg>
 					</button>
 					<img src={image} alt="icon" className="inline-block mx-2.5" />
-					<h1 className="inline-block font-bold">CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây</h1>
+					<h1 className="inline-block font-bold">{infoDepartment?.data?.sign}.{infoDepartment?.data?.name}</h1>
 				</div>
 				<div className="flex">
 					<img src={avatar} alt="avatar" width="28" className="mx-1 object-cover rounded-3xl border border-white" />

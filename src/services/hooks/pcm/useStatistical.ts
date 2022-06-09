@@ -36,7 +36,9 @@ interface useQueryAmountTaskMilestoneResponse {
 
 interface listCompanyOfAssigneeAndAmountTaskPayload {
     projectID: string;
-    isPassPermision?: number
+    isPassPermision?: number,
+    keyword?: string,
+    subtype?: string
 }
 
 export const useQueryListProjectWithListAmountTask = (params: ListProjectWithListAmountTaskPayload): UseQueryListProjectWithListAmountTask => {
@@ -73,11 +75,11 @@ export const useQueryListCompanyOfAssigneeAndAmountTask = (params: listCompanyOf
     
     const { data, isLoading } = res;
     return {
-        listCompany: data?.data.listCompany,
-        listCompanyAndTaskOverdueWork: data?.data.listCompanyAndTaskOverdueWork,
-        listCompanyAndTaskNextWeekWork: data?.data.listCompanyAndTaskNextWeekWork,
-        listCompanyAndTaskMoreThan7Days: data?.data.listCompanyAndTaskMoreThan7Days,
-        listCompanyAndTaskFinish: data?.data.listCompanyAndTaskFinish,
+        listCompany: data?.data?.listCompany,
+        listCompanyAndTaskOverdueWork: data?.data?.listCompanyAndTaskOverdueWork,
+        listCompanyAndTaskNextWeekWork: data?.data?.listCompanyAndTaskNextWeekWork,
+        listCompanyAndTaskMoreThan7Days: data?.data?.listCompanyAndTaskMoreThan7Days,
+        listCompanyAndTaskFinish: data?.data?.listCompanyAndTaskFinish,
         isLoading,
     }
 }
