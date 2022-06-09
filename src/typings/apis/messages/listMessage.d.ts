@@ -511,13 +511,11 @@ export type GetNPSScoreDetailData = {
         _id: {
             score: number
         },
-        users: [
-            {
-                image: string,
-                _id: string,
-                bizfullname: string
-            }[]
-        ],
+        users: {
+            image: string,
+            _id: string,
+            bizfullname: string
+        }[],
         avg: number,
         total: number
     }[],
@@ -527,13 +525,11 @@ export type GetNPSScoreDetailData = {
             _id: {
                 score: number
             },
-            users: [
-                {
-                    image: string,
-                    _id: string,
-                    bizfullname: string
-                }[]
-            ],
+            users: {
+                image: string,
+                _id: string,
+                bizfullname: string
+            }[],
             avg: number,
             total: number
         }[]

@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from "react";
+import React, {FC, useCallback, useEffect, useState} from "react";
 import {
     GetNPSPleasantDetailItem,
     GetNPSScoreDetailData,
@@ -12,14 +12,13 @@ type Props = {
     isOpenMessageNPSVoteDetail: boolean
 }
 export const NPSScoreVoteDetail:FC<Props> = ({message, isOpenMessageNPSVoteDetail}) => {
-    const [scores, setScores] = useState<GetNPSScoreDetailData>({
-        dataStatistics: [],
-        dataAverage: {
-            scoreAverage: 0,
-            avgs: []
+    const [scores, setScores] = useState<{[key: string]: {displayPoint: number; users: {_id: string; bizfullname:string; image:string, score: number}[]}}>({
+        0: {
+            displayPoint: 0,
+            users: []
         }
     });
-    const [selectTab, setSelectTab] = useState(0);
+    const [selectTab, setSelectTab] = useState<number|null>(null);
 
     const {getScoreStatisticsNps} = UseConversation();
 
@@ -29,33 +28,53 @@ export const NPSScoreVoteDetail:FC<Props> = ({message, isOpenMessageNPSVoteDetai
                 conversationID: message.conversation,
                 messageID: message._id
             }).then(data => {
-                setScores(data)
+                const formatData : {[key: string]: {displayPoint: number; users: {_id: string; bizfullname:string; image:string; score: number}[]}} = {
+                    0: {
+                        displayPoint: 0,
+                        users: []
+                    }
+                };
+                formatData[0].displayPoint = data.dataAverage.scoreAverage;
+                data.dataStatistics.forEach(data => {
+                    const users = data.users.map(user => {
+                        return {
+                            ...user,
+                            score: data._id.score
+                        }
+                    })
+                    formatData[data._id.score] = {
+                        displayPoint: data.total,
+                        users
+                    }
+                    formatData[0].users = formatData[0].users.concat(users);
+                })
+                setScores(formatData)
+                setSelectTab(0)
             })
         }
     },[isOpenMessageNPSVoteDetail, message.nps.usersVote])
 
-    const renderListUserVote = () => {
-        if (selectTab === 0) {
-            return _map(scores.dataAverage.avgs, user => (
-                <div>a</div>
-            ))
-        }
-    }
+    const renderListUserVote = useCallback(() => {
+        if (selectTab === null) return null;
+        return _map(scores[selectTab].users, user => (
+            <div key={user._id} className={"flex py-4 px-[22px] items-center"}>
+                <img alt={user.bizfullname} src={`${process.env.REACT_APP_URL_S3_USER}/${user.image}`} className={"w-[44px] h-[44px] rounded-full overflow-hidden object-cover"}/>
+                <div className={"flex-1 ml-3"}>{user.bizfullname}</div>
+                <div>{user.score}</div>
+            </div>
+        ))
+    }, [selectTab])
 
     return <>
         <p className={"px-[22px] mb-5"}>Điểm về sự hài lòng <b>“{message.nps.service.name}”</b></p>
         <div className={"flex overflow-auto px-[22px] border-b border-gray-200"}>
-            <div
-                onClick={() => setSelectTab(0)}
-                className={"mx-2 py-2 " + (selectTab === 0 ? "text-primary border-b-2 border-primary ": "text-gray-400")}>
-                Trung bình ({scores.dataAverage.scoreAverage})
-            </div>
             {
-                _map(scores.dataStatistics, score => (
+                _map(Object.keys(scores), score => (
                     <div
-                        onClick={() => setSelectTab(score._id.score)}
-                        key={score._id.score} className={"mx-2 py-2 " + (selectTab === score._id.score ? "text-primary border-b-2 border-primary ": "text-gray-400")}>
-                        {score._id.score} ({score.avg})
+                        key={score}
+                        onClick={() => setSelectTab(parseInt(score))}
+                        className={"mx-2 py-2 cursor-pointer " + (selectTab === parseInt(score) ? "text-primary border-b-2 border-primary ": "text-gray-400")}>
+                        {(parseInt(score) === 0) ? "Trung bình" : score} ({scores[score].displayPoint})
                     </div>
                 ))
             }
