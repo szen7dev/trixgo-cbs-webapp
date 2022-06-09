@@ -1,13 +1,16 @@
 import React, { FC, useState } from "react";
+import { toast } from "react-toastify";
 
 import { useModal } from "services/hooks/useModal";
 import { useDoctype } from "services/hooks/items/useDoctype";
-import { toast } from "react-toastify";
 import { ModalProps } from 'typings/items/doctype';
+
+import { DropdownSearchable } from "shareComponents/common";
 
 export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
   modalType,
   onConfirm,
+  level = 'parent',
   initialValues = {
     doctypeID: '',
     parent: '',
@@ -63,8 +66,7 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
     closeModal();
   };
 
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
+  const onChange = ({ name, value }: { name: string, value: string | number | undefined }) => {
     setFormData(previous => ({
       ...previous,
       [name]: value
@@ -92,7 +94,7 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
           name="name"
           className="h-12 w-full border border-primary-border outline-none px-8"
           defaultValue={formData.name}
-          onChange={onChange}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target)}
         />
       </section>
 
@@ -103,13 +105,38 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
           name="description"
           className="h-12 w-full border border-primary-border outline-none px-8"
           defaultValue={formData.description}
-          onChange={onChange}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target)}
         />
       </section>
 
+      {(level === 'child' && initialValues.type === 21) && (
+        <section className="px-10 mt-3">
+          <DropdownSearchable
+            onchangeValue={(value) => onChange({ name: 'level', value: value.id })}
+            placeholder={"Phân loại"}
+            className={"w-full h-12 flex-1 border border-primary-border p-2"}
+            focusedClass={"border-b border-primary"}
+            maxWidthInput={"max-w-none"}
+            isMultiple={false}
+            allowClearValueSingleInput={false}
+            data={[
+              { value: 1, text: 'Không hài lòng' },
+              { value: 2, text: 'Hài lòng' },
+            ]}
+            initialValue={{
+              value: 1, text: 'Không hài lòng'
+            }}
+            formatItem={{
+              id: "value",
+              text: "text",
+            }}
+            disableSearch={true}
+          />
+        </section>
+      )}
+
       <footer className="absolute right-0 bottom-0 px-10 py-5">
-        <button className="bg-primary text-primary-light text-base w-24 h-8 rounded"
-          onClick={handleSubmit}>
+        <button className="bg-primary text-primary-light text-base w-24 h-8 rounded" onClick={handleSubmit}>
           Xác nhận
         </button>
       </footer>
