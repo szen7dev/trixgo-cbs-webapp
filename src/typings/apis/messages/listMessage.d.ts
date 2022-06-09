@@ -209,7 +209,22 @@ export type ItemMessage = {
         username: string
         __v: number
         _id: string
-    }[]
+    }[],
+    nps: {
+        _id: string,
+        createAt: string,
+        modifyAt: string,
+        status: number,
+        type: number,
+        state: number,
+        usersVote: {_id: string, user: { _id: string, bizfullname: string, image: string }, score: number, reason: { _id: string }}[],
+        service: {
+            _id: string,
+            childs: {name: string, _id: string}[],
+            name: string,
+            type: number
+        }
+    }
     [key: string]: any;
 }
 export type ListMessageData = {
@@ -444,6 +459,106 @@ export type UpdateSeenMessageConversationPayload = {
 
 export type UpdateSeenMessageConverastionResponse = {
     data: ItemMessage[];
+    error: boolean;
+    status: number;
+}
+
+export type UpdateNPSPayload = {
+    conversationID: string;
+    messageID: string;
+    score?: number;
+    reasons?: string[];
+}
+
+export type UpdateNPSData = {
+    infoMessage: ItemMessage[];
+    infoMessageNotification: {
+        content: string
+        conversation: string
+        createAt: string
+        createdAt: string
+        files: any[]
+        modifyAt: string
+        poll: string
+        reactions: any[]
+        receivers: string[]
+        sender: string
+        state: number
+        status: number
+        type: number
+        updatedAt: string
+        usersAssigned: string[]
+        usersDelete: string[]
+        usersSeen: string[]
+        __v: number
+        _id: string
+    }
+}
+
+export type UpdateNPSResponse = {
+    data: UpdateNPSData ;
+    error: boolean;
+    status: number;
+}
+
+export type GetNPSDetailPayload = {
+    conversationID: string,
+    messageID: string
+}
+
+export type GetNPSScoreDetailData = {
+    dataStatistics: {
+        _id: {
+            score: number
+        },
+        users: {
+            image: string,
+            _id: string,
+            bizfullname: string
+        }[],
+        avg: number,
+        total: number
+    }[],
+    dataAverage: {
+        scoreAverage: number,
+        avgs: {
+            _id: {
+                score: number
+            },
+            users: {
+                image: string,
+                _id: string,
+                bizfullname: string
+            }[],
+            avg: number,
+            total: number
+        }[]
+    }
+}
+
+export type GetNPSScoreDetailResponse = {
+    data: GetNPSScoreDetailData ;
+    error: boolean;
+    status: number;
+}
+
+export type GetNPSPleasantDetailItem = {
+    reason: {
+        _id: string,
+        name: string,
+        description: string
+    },
+    users: {
+        image: string,
+        _id: string,
+        bizfullname: string
+    }[],
+    total: number
+}
+export type GetNPSPleasantDetailData = GetNPSPleasantDetailItem[]
+
+export type GetNPSPleasantDetailResponse = {
+    data: GetNPSPleasantDetailData;
     error: boolean;
     status: number;
 }

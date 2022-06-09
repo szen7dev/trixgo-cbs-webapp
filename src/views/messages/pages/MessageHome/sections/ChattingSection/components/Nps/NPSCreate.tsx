@@ -5,6 +5,9 @@ import Close from "assets/icons/Close";
 import {map as _map} from "lodash";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
+import {useDoctype} from "services/hooks/items/useDoctype";
+import {v4 as uuidv4} from "uuid";
+import {appendFakeMessageToConversation} from "redux/reducer/messages/ListMessage";
 
 type Props = {
     context: any
@@ -20,7 +23,22 @@ export const NPSCreate:FC<Props> = ({context}) => {
     const profileId = profile?._id;
 
     const [typeNPS, setTypeNPS] = useState(1);
-    const [option, setOption] = useState("");
+    const [option, setOption] = useState<string|null>(null);
+    const [selectService, setSelectService] = useState<{[key: string] : any}>({});
+    const chat = useSelector((state: RootState) => state.listConversation.data.listConversation[conversationId]);
+
+    const {
+        list: listDoctypes,
+        hasNextPage: hasNextPageDoctypes,
+        fetchNextPage: fetchNextPageDoctypes
+    } = useDoctype({
+        params: {
+            type: 21,
+            companyID: chat?.company,
+            populates: {"path": "childs", "select": "_id name type description"}
+        },
+        isFetchList: isOpenCreateNPS
+    })
 
     const tabsMap = [
         {
@@ -38,8 +56,44 @@ export const NPSCreate:FC<Props> = ({context}) => {
     ]
 
     const handleCreateNPS = () => {
-        console.log("created")
+        const message: any = {
+            tmpid: uuidv4(),
+            conversationID: conversationId,
+            sender: {
+                _id: profileId
+            },
+            type: 8,
+            serviceID: option,
+            typeNps: typeNPS
+        };
+        dispatch(appendFakeMessageToConversation({
+            conversationId: conversationId,
+            messageId: message.tmpid,
+            messageData: {
+                ...message,
+                _id: message.tmpid,
+                createAt: new Date(),
+                consversation: conversationId,
+                nps: {
+                    type: typeNPS,
+                    service: {
+                        name: (listDoctypes??[]).find(item => item._id === option)?.name ?? "",
+                        childs: selectService.childs
+                    },
+                    usersVote: [],
+                },
+                sender: {
+                    _id: profileId,
+                    bizfullname: profile.bizfullname,
+                    fullname: profile.fullname,
+                    image: profile.image
+                }
+            }
+        }));
+        socket.emit('CHATTING_CSS_SEND_MESSAGE', message);
+        dispatch(dismissSendNPSMessage({}));
     }
+    if (!chat) return null;
 
     return (
         <Transition appear show={isOpenCreateNPS} as={Fragment}>
@@ -90,6 +144,7 @@ export const NPSCreate:FC<Props> = ({context}) => {
                                     Tin nhắn NPS
                                 </div>
                                 <button
+                                    disabled={!option}
                                     onClick={() => handleCreateNPS()}
                                     className={"h-[36px] w-[105px] rounded-md bg-primary text-white disabled:bg-gray-300"}
                                 >
@@ -110,27 +165,30 @@ export const NPSCreate:FC<Props> = ({context}) => {
                                 }
                             </div>
 
-                            <div className={"p-[22px]"}>
-                                <div className={"w-full flex items-center border border-gray-100 rounded-md px-[14px] py-[8px] mb-[15px]"}>
-                                    <input
-                                        onChange={event => setOption(event.target.value)} value={"abc"} type="radio" id="option-1" name={"option"} className={"form-check-input mt-0 w-[24px] h-[24px] min-w-[24px] min-h-[24px]"}/>
-                                    <label htmlFor="option-1" className={"text-left ml-3 text-primary"}>Trixgo-Ứng dụng quản lý hợp đồng</label>
-                                </div>
-                                <div className={"w-full flex items-center border border-gray-100 rounded-md px-[14px] py-[8px] mb-[15px]"}>
-                                    <input
-                                        onChange={event => setOption(event.target.value)} value={"abc"} type="radio" id="option-2" name={"option"} className={"form-check-input mt-0 w-[24px] h-[24px] min-w-[24px] min-h-[24px]"}/>
-                                    <label htmlFor="option-2" className={"text-left ml-3 text-primary"}>Trixgo-Ứng dụng quản lý hợp đồng</label>
-                                </div>
-                                <div className={"w-full flex items-center border border-gray-100 rounded-md px-[14px] py-[8px] mb-[15px]"}>
-                                    <input
-                                        onChange={event => setOption(event.target.value)} value={"abc"} type="radio" id="option-3" name={"option"} className={"form-check-input mt-0 w-[24px] h-[24px] min-w-[24px] min-h-[24px]"}/>
-                                    <label htmlFor="option-3" className={"text-left ml-3 text-primary"}>Trixgo-Ứng dụng quản lý hợp đồng</label>
-                                </div>
-                                <div className={"w-full flex items-center border border-gray-100 rounded-md px-[14px] py-[8px] mb-[15px]"}>
-                                    <input
-                                        onChange={event => setOption(event.target.value)} value={"abc"} type="radio" id="option-4" name={"option"} className={"form-check-input mt-0 w-[24px] h-[24px] min-w-[24px] min-h-[24px]"}/>
-                                    <label htmlFor="option-4" className={"text-left ml-3 text-primary"}>Trixgo-Ứng dụng quản lý hợp đồng</label>
-                                </div>
+                            <div className={"p-[22px] max-h-[370px] overflow-auto"}>
+                                {
+                                    _map(listDoctypes, docType => (
+                                        <div key={docType._id} className={"w-full flex items-center border border-gray-100 rounded-md px-[14px] py-[8px] mb-[15px]"}>
+                                            <input
+                                                onChange={event => {
+                                                    setOption(event.target.value)
+                                                    setSelectService(docType)
+                                                }} value={docType._id} type="radio" id={'option-nps-create-' + docType._id} name={'option-nps-create'} className={"form-check-input mt-0 w-[24px] h-[24px] min-w-[24px] min-h-[24px]"}/>
+                                            <label htmlFor={'option-nps-create-' + docType._id} className={"text-left ml-3 text-primary"}>{docType.name}</label>
+                                        </div>
+                                    ))
+                                }
+                                {
+                                    hasNextPageDoctypes&&
+                                    <div className={"flex items-center justify-center mb-5"}>
+                                        <button
+                                            onClick={() => fetchNextPageDoctypes()}
+                                            className={"text-primary text-center"}
+                                        >
+                                            Xem thêm
+                                        </button>
+                                    </div>
+                                }
                             </div>
                         </div>
                     </Transition.Child>
