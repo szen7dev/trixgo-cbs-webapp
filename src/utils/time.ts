@@ -83,7 +83,7 @@ export const addDate = (days: number) => {
   return date;
 }
 
-export const calculateExpireTime = (currentTimestamp: any, expireTimestamp: any, type: any) => {
+export const calculateExpireTime = (currentTimestamp: any, expireTimestamp: any, type: any, haveTime = true) => {
   const currentDate = new Date(currentTimestamp);
   const expireDate  = new Date(expireTimestamp);
 
@@ -107,8 +107,13 @@ export const calculateExpireTime = (currentTimestamp: any, expireTimestamp: any,
   const yearCurrent = currentDate.getFullYear();
   const yearExpire = expireDate.getFullYear();
 
-  const current = moment([yearCurrent, monthCurrent, dateCurrent, hoursCurrent, minutesCurrent]);
-  const expire = moment([yearExpire, montExpire, dateExpire, hoursExpire, minutesExpire]);
+  let current = moment([yearCurrent, monthCurrent, dateCurrent, hoursCurrent, minutesCurrent]);
+  let expire = moment([yearExpire, montExpire, dateExpire, hoursExpire, minutesExpire]);
+
+  if(!haveTime) {
+    current = moment([yearCurrent, monthCurrent, dateCurrent]);
+    expire = moment([yearExpire, montExpire, dateExpire]);
+  }
 
   return expire.diff(current, type);
 }
