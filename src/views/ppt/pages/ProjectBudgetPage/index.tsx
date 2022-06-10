@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { usePcmProjectBudget } from "services/hooks/pcm/usePcmProjectBudget";
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import classNames from 'classnames';
 
 import { RightClickMenuWrapper } from "shareComponents/common";
@@ -11,8 +11,11 @@ import { useProject } from 'services/hooks/items/useProject';
 import { formatNumberMoney } from "utils/cmcs";
 import { APP_ID } from 'apis/localdb';
 import { useHistoryTraffics } from "services/hooks/auth/useAuth";
+import { SearchInput } from "shareComponents/common";
+import debounce from "lodash/debounce";
 
 const ProjectBudgetPage: FC = () => {
+	const [keyword, setKeyword] = useState("");
 	 //_____Start history traffict
 	 const payloadHistoryTraffic: any = {
 		appID: APP_ID.PCM.id,
@@ -31,7 +34,7 @@ const ProjectBudgetPage: FC = () => {
 		fetchNextPage,
 		totalRecord
 	} = usePcmProjectBudget({
-		projectID
+		projectID, keyword
 	});
 
 	const [show, setShow] = useState<boolean>(false);
@@ -54,9 +57,20 @@ const ProjectBudgetPage: FC = () => {
 	}
 
 	return (
-		<div className="flex-1 overflow-y-auto pb-8">
-			<table className='text-medium w-full border-separate border-spacing-0 text-center'>
-				<thead className="text-left">
+	<main className="relative h-full overflow-auto">
+		<header className="sticky top-0 bg-primary-light z-10">
+			<div className="h-[50px] border border-primary-border flex items-center justify-between px-5">
+				<div className="flex items-center">
+					<p className="text-lg ml-2">Danh sách</p>
+					<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu ml-4 mr-2" onChange={debounce(
+						(event: any) => setKeyword(event.target.value),
+						500
+					)} />
+				</div>
+			</div>
+		</header>
+			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
+				<thead className="bg-cbs-table-header h-[38px] border-b border-primary-border">
 					<tr className="font-semibold">
 						{/* <th className="sticky top-0 bg-gray-300 px-1.5 z-10">
 							<button className="inline-block text-white rounded bg-gray-600 w-5 h-5" onClick={() => setShow(!show)}>{show ? '+' : '-'}</button>
@@ -126,23 +140,6 @@ const ProjectBudgetPage: FC = () => {
 						<BugetRowGroupTemp row={_item} key={_item._id} index={index} show={show} />
 					)}
 				</RightClickMenuWrapper>
-				{/* <tfoot>
-					<tr className="text-right">
-						<th className="bg-gray-300 px-1.5 z-10">
-						</th>
-						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">
-						</th>
-						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2 text-left">Tổng</th>
-						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">0</th>
-						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">0</th>
-						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">0</th>
-						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">0</th>
-						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">0</th>
-						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">0</th>
-						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">0</th>
-						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2"></th>
-					</tr>
-				</tfoot> */}
 			</table>
 			{hasNextPage && (
                 <div className="w-full flex justify-center my-5">
@@ -153,7 +150,7 @@ const ProjectBudgetPage: FC = () => {
                   </button>
                 </div>
 			)}
-		</div>
+	</main>
 	);
 };
 

@@ -46,7 +46,7 @@ const ReportMainWork: React.FC<Props> = ({ data, ...props }) => {
 			}
 		// }
 	})
-
+	
 	return (
 		<div {...props}>
 			<div className="flex justify-between">

@@ -168,8 +168,8 @@ const PCMRouter: FC = () => {
                         path: "/pcm/project/:id/bidding",
                         navExact: true,
                       },
-                      { id: "2", title: "Hồ sơ mời thầu", path: "/pcm/project/:id/bidding/2" },
-                      { id: "3", title: "Tư vấn thầu", path: "/pcm/project/:id/bidding/3" },
+                      // { id: "2", title: "Hồ sơ mời thầu", path: "/pcm/project/:id/bidding/2" },
+                      // { id: "3", title: "Tư vấn thầu", path: "/pcm/project/:id/bidding/3" },
                     ]}
                   >
                     <Route exact path="/pcm/project/:id/bidding" component={ProjectBiddingPage} />
@@ -188,6 +188,7 @@ const PCMRouter: FC = () => {
                 <Route exact path="/pcm/project/:id/payment" component={ProjectPaymentPage} />
                 <Route exact path="/pcm/project/:id/subject" component={ProjectSubjectPage} />
                 <Route exact path="/pcm/project/:id/subject/company/:companyID" component={ProjectSubjectCompanyOfAssigneePage} />
+                <Route exact path="/pcm/project/:id/subject/company/:companyID/subtype/:subtype" component={ProjectSubjectCompanyOfAssigneePage} />
                 <Route
                   exact
                   path={["/pcm/project/:id/document", "/pcm/project/:id/document/(1|2|3|4)"]}

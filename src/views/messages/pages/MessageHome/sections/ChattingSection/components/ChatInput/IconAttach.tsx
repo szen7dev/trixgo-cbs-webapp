@@ -94,7 +94,7 @@ export const IconAttach:FC<Props> = ({handleUploadFiles}) => {
                             setShowOption(false)
                             dispatch(sendNPSMessageToConversation({conversationId: currentChat}))
                         }}
-                        className={"w-full hover:bg-gray-100 flex items-center px-4 py-2 attach-nps hidden"}>
+                        className={"w-full hover:bg-gray-100 flex items-center px-4 py-2 attach-nps"}>
                         <img  className={"mr-2"} src={NPSIcon} alt={"exit"}/>
                         <div className={"flex-1 text-left ml-4"}>NPS</div>
                     </button>

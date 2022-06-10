@@ -26,6 +26,7 @@ import NotificationMuteSlice from './messages/NotificationMute';
 import DeleteConfirmSlice from './DeleteConfirm';
 import ConfigConversationSlice from './messages/ConversationConfigModal';
 import UserSlice from './UserInfo';
+import MessageNPSVoteDetailSlice from './messages/MessageNPSVoteDetail';
 
 const combinedReducer = combineReducers({
     demo: DemoSlice,
@@ -55,6 +56,7 @@ const combinedReducer = combineReducers({
     deleteConfirm: DeleteConfirmSlice,
     configConversation: ConfigConversationSlice,
     user: UserSlice,
+    messageNpsVoteDetail: MessageNPSVoteDetailSlice
 });
 const rootReducer = (state: any, action: any) => {
     if (action.type === 'user/logout') {

@@ -12,6 +12,9 @@ import {
 } from "views/messages/pages/MessageHome/sections/ChattingSection";
 import {MiniListConversation} from "./MiniListConversation";
 import {UnreadMessageController} from "views/messages/pages/MessageHome/sections/UnreadMessages";
+import {
+    NpsVoteDetail
+} from "views/messages/pages/MessageHome/sections/ChattingSection";
 // import iconSend from "assets/images/icons8-email-send-48.png";
 
 export const MiniChatbox: FC = () => {
@@ -27,6 +30,7 @@ export const MiniChatbox: FC = () => {
             <PopupSendImageAndFile/>
             <UnreadMessageController context={MiniChatContext} currentChat={conversation?._id||""}/>
             <UsersSeenDetail/>
+            <NpsVoteDetail/>
         </div>
     );
 };
