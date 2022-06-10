@@ -160,7 +160,7 @@ export const SideBar: FC<Props> = memo(({
     const opener = (
       <div className="flex justify-between" key={user._id}>
         <div className="flex items-start mr-1">
-          <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
+          <img src={user.image ? `${process.env.REACT_APP_URL_S3_USER}/${user.image}` : HumanAvatar} alt="Avatar" className="w-10 h-10" />
           <div className="ml-2">
             <p className="text-[13px]">{user.bizfullname}</p>
           </div>
