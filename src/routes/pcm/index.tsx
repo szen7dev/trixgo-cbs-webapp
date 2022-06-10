@@ -124,7 +124,7 @@ const PCMRouter: FC = () => {
                 <Route exact path="/pcm/project/:id/folder" component={ProjectFolderPage} />
                 <Route exact path="/pcm/project/:id/folder/:groupID" component={ProjectFolderPage} />
                 <Route exact path="/pcm/project/:id/schedule" component={ProjectSchedulePage} />
-                <Route path="/pcm/project/:id/(budget|cash-flow)">
+                <Route path="/pcm/project/:id/(budget|cash-flow|cash-flow-1|cash-flow-2)">
                   <LayoutSecondary
                     pages={[
                       {
@@ -135,14 +135,28 @@ const PCMRouter: FC = () => {
                       },
                       {
                         id: "2",
-                        title: "Kế hoạch",
-                        path: "/pcm/project/:id/cash-flow"
+                        title: "Kế hoạch thu",
+                        path: "/pcm/project/:id/cash-flow-1"
+                      },
+                      {
+                        id: "3",
+                        title: "Kế hoạch chi",
+                        path: "/pcm/project/:id/cash-flow-2"
                       },
                     ]}
                   >
                     <Route exact path="/pcm/project/:id/budget" component={ProjectBudgetPage} />
-                    <Route exact path="/pcm/project/:id/cash-flow" component={ProjectCashFlowPlanPage} />
-                    <Route exact path="/pcm/project/:id/cash-flow/:cashFlowID" component={ProjectCashFlowPlanChildPage} />
+                    <Route
+                      exact
+                      path="/pcm/project/:id/cash-flow-1"
+                      component={() => <ProjectCashFlowPlanPage outin={1} />}
+                    />
+                    <Route
+                      exact
+                      path="/pcm/project/:id/cash-flow-2"
+                      component={() => <ProjectCashFlowPlanPage outin={2} />}
+                    />
+                    <Route exact path="/pcm/project/:id/cash-flow/:cashFlowID/:outin" component={ProjectCashFlowPlanChildPage} />
                   </LayoutSecondary>
                 </Route>
                 <Route exact path={["/pcm/project/:id/bidding", "/pcm/project/:id/bidding/(2|3)"]}>
@@ -154,8 +168,8 @@ const PCMRouter: FC = () => {
                         path: "/pcm/project/:id/bidding",
                         navExact: true,
                       },
-                      { id: "2", title: "Hồ sơ mời thầu", path: "/pcm/project/:id/bidding/2" },
-                      { id: "3", title: "Tư vấn thầu", path: "/pcm/project/:id/bidding/3" },
+                      // { id: "2", title: "Hồ sơ mời thầu", path: "/pcm/project/:id/bidding/2" },
+                      // { id: "3", title: "Tư vấn thầu", path: "/pcm/project/:id/bidding/3" },
                     ]}
                   >
                     <Route exact path="/pcm/project/:id/bidding" component={ProjectBiddingPage} />
@@ -174,6 +188,7 @@ const PCMRouter: FC = () => {
                 <Route exact path="/pcm/project/:id/payment" component={ProjectPaymentPage} />
                 <Route exact path="/pcm/project/:id/subject" component={ProjectSubjectPage} />
                 <Route exact path="/pcm/project/:id/subject/company/:companyID" component={ProjectSubjectCompanyOfAssigneePage} />
+                <Route exact path="/pcm/project/:id/subject/company/:companyID/subtype/:subtype" component={ProjectSubjectCompanyOfAssigneePage} />
                 <Route
                   exact
                   path={["/pcm/project/:id/document", "/pcm/project/:id/document/(1|2|3|4)"]}

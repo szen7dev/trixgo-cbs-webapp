@@ -56,10 +56,13 @@ export type DoctypeQueryDetailResponse = APIResponse & {
 
 interface ModalProps {
     modalType: "create" | "update";
+    level?: 'parent' | 'child';
     initialValues?: {
-        doctypeID: string,
-        name: string,
-        description: string
+        doctypeID: string;
+        parent?: string;
+        name: string;
+        description: string;
+        type: number;
     }
     onConfirm?(): void
 }

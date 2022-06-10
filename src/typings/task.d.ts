@@ -66,6 +66,7 @@ export type Task = {
     author: User;
     createAt: string
   }>;
+  openedUsers: Array<User>;
   actualStartTime: string;
   actualFinishTime: string;
   amountResponse: number;
@@ -102,6 +103,7 @@ export interface updateTaskPayload {
   milestone?: number;
   actualFinishTime?: string;
   isAddSignature?: boolean;
+  isOpenBidding?: boolean;
   flags?: Array<string>;
   flagsRemoves?: Array<string>;
   authorAttachs?: Array<string>;
@@ -127,6 +129,7 @@ export type TaskListParams = QueryParams & {
   type?: number;
   status?: string;
   sortKey?: string;
+  subtype?: string;
 }
 
 export type TaskInfoParams = {

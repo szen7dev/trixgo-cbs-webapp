@@ -16,6 +16,7 @@ const Gantt: FC<{ tasks: any }> = ({ tasks }) => {
 		<div
 			ref={ganttContainer}
 			className='w-full h-full'
+			style={ { width: '100%', height: '100%' } }
 		/>
 	)
 }

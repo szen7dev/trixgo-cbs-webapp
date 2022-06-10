@@ -8,7 +8,7 @@ type Props = {
     onConfirm: () => void;
 }
 
-export const ModalConfirm: FC<Props> = ({ title, description, defaultText, onConfirm, onCancel }) => {
+export const ModalConfirm: FC<Props> = ({ title, description, defaultText = true, onConfirm, onCancel }) => {
     return (
         <main className="relative h-full">
             <header className="px-10 py-4">

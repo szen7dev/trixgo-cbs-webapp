@@ -18,7 +18,7 @@ type Props = {
 }
 
 export const ProjectSubjectCompanyOfAssigneePage: FC<Props> = ({ type = 1 }) => {
-	const { id: projectID, companyID } = useParams<{ id: string, companyID: string }>();
+	const { id: projectID, companyID, subtype } = useParams<{ id: string, companyID: string, subtype: string }>();
   const [viewMode, setViewMode] = useState("LIST");
   const history = useHistory();
   const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
@@ -32,7 +32,7 @@ export const ProjectSubjectCompanyOfAssigneePage: FC<Props> = ({ type = 1 }) => 
     refetchListTask: refetchListTaskOutDate
   } = useTask({
     params: {
-      keyword, projectID, companyOfAssignee: companyID, isPassPermision: "1", typeStatus: "1", statusNe: "3"
+      keyword, projectID, companyOfAssignee: companyID, subtype, isPassPermision: "1", typeStatus: "1", statusNe: "3"
     },
     isFetch: true
   });
@@ -46,7 +46,7 @@ export const ProjectSubjectCompanyOfAssigneePage: FC<Props> = ({ type = 1 }) => 
     refetchListTask: refetchListTaskNextWeek
   } = useTask({
     params: {
-      keyword, projectID, companyOfAssignee: companyID, isPassPermision: "1", typeStatus: "2", statusNe: "3"
+      keyword, projectID, companyOfAssignee: companyID, subtype, isPassPermision: "1", typeStatus: "2", statusNe: "3"
     },
     isFetch: true
   });
@@ -59,7 +59,7 @@ export const ProjectSubjectCompanyOfAssigneePage: FC<Props> = ({ type = 1 }) => 
     refetchListTask: refetchListTaskMore
   } = useTask({
     params: {
-      keyword, projectID, companyOfAssignee: companyID, isPassPermision: "1", typeStatus: "3", statusNe: "3"
+      keyword, projectID, companyOfAssignee: companyID, subtype, isPassPermision: "1", typeStatus: "3", statusNe: "3"
     },
     isFetch: true
   });
@@ -72,7 +72,7 @@ export const ProjectSubjectCompanyOfAssigneePage: FC<Props> = ({ type = 1 }) => 
     refetchListTask: refetchListtasksCompleted
   } = useTask({
     params: {
-      keyword, projectID, companyOfAssignee: companyID, isPassPermision: "1", status: "3"
+      keyword, projectID, companyOfAssignee: companyID, subtype, isPassPermision: "1", status: "3"
     },
     isFetch: true
   });

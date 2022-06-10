@@ -35,7 +35,6 @@ const ReportContractStatus: React.FC<Props> = ({ projectID, ...props }) => {
 		ontime1_onbudget2 = 0
 		ontime2_onbudget1 = 0
 		ontime2_onbudget2 = 0
-		// return <></>
 	}
 	
 	statisticalStatusByOntimeOnbudget?.forEach((item: any) => {

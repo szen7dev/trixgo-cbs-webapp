@@ -240,7 +240,6 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
 
     const onRemoveMemberConversation = (data: any) => {
        if (!data) return;
-       console.log(data.data)
        const youGotDeleted = data?.data?.removedMember.some((member: {_id: string, [key: string]: any}) => member._id === profileId);
        if (youGotDeleted) {
            dispatch(deleteConversationAction({conversationId: data?.data?.infoConversation?._id}))

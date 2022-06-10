@@ -175,8 +175,9 @@ const ModalAddNotificationEmail: FC<Props> = ({ toggle, task, userId }) => {
 						</tbody>
 					</table>
 				</div>
-				<div className="flex justify-end py-2 px-6">
-					<div className="mr-1.5">
+				{/* px-6 */}
+				<div className="flex justify-end py-3">
+					{/* <div className="mr-1.5"> */}
 						<button
 							type="button"
 							className="px-4 py-2 rounded-md bg-primary text-white text-small leading-5 disabled:opacity-30 disabled:cursor-not-allowed"
@@ -184,7 +185,7 @@ const ModalAddNotificationEmail: FC<Props> = ({ toggle, task, userId }) => {
 						>
 							Xác nhận
 						</button>
-					</div>
+					{/* </div> */}
 				</div>
 			</form>
 		</div>

@@ -21,6 +21,9 @@ import {listEmoji} from "./MainChatContent";
 import {useRightClickMenu} from "services/hooks/useRightClickMenu";
 import {openUsersSeenDetail} from "redux/reducer/messages/UsersSeenDetail"
 import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
+import NPSIcon
+    from "assets/images/icons8-transverse-wave-graph-uncertainty-performance-statistics-report-96.svg";
+import {openMessageNPSDetail} from "redux/reducer/messages/MessageNPSVoteDetail"
 
 type Props = {
     message: ItemMessage;
@@ -157,6 +160,21 @@ export const RightClickMessage:FC<Props> = ({message, socket, editor, isMini}) =
                         className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full select-right-click"}>
                         <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={IconSelected}/>
                         <div className={"mr-2 ml-4"}>Select</div>
+                    </button>
+                }
+                {
+                    message.sender._id === profileId &&
+                    message.nps && !message.isFake &&
+                    <button
+                        onClick={() => {
+                            dispatch(openMessageNPSDetail({messageId: message._id, conversationId: message.conversation}))
+                            setTimeout(() => {
+                                closeRightClick()
+                            }, 100)
+                        }}
+                        className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full user-seen-right-click"}>
+                        <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={NPSIcon}/>
+                        <div className={"mr-4 ml-4"}>Xem kết quả</div>
                     </button>
                 }
                 <button

@@ -32,7 +32,9 @@ type Props = {
   hasPermission: boolean
 } & React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 
-export const CreatorUploadedFile = ({ taskID, companyID, projectID, groupID, authorAttachs, author, hasPermission, ...rest }: Props): JSX.Element => {
+export const CreatorUploadedFile = ({
+  taskID, companyID, projectID, groupID, authorAttachs, author, hasPermission, ...rest
+}: Props): JSX.Element => {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<FileProps[]>(authorAttachs);
 
