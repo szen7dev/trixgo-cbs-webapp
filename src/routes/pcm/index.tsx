@@ -162,12 +162,12 @@ const PCMRouter: FC = () => {
                 <Route exact path={["/pcm/project/:id/bidding", "/pcm/project/:id/bidding/(2|3)"]}>
                   <LayoutSecondary
                     pages={[
-                      {
-                        id: "1",
-                        title: "Hồ sơ dự thầu",
-                        path: "/pcm/project/:id/bidding",
-                        navExact: true,
-                      },
+                      // {
+                      //   id: "1",
+                      //   title: "Hồ sơ dự thầu",
+                      //   path: "/pcm/project/:id/bidding",
+                      //   navExact: true,
+                      // },
                       // { id: "2", title: "Hồ sơ mời thầu", path: "/pcm/project/:id/bidding/2" },
                       // { id: "3", title: "Tư vấn thầu", path: "/pcm/project/:id/bidding/3" },
                     ]}

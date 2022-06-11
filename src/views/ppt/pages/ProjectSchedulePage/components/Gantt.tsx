@@ -11,7 +11,7 @@ const Gantt: FC<{ tasks: any }> = ({ tasks }) => {
 			gantt.init(ganttContainer.current);
 			gantt.parse(tasks);
 		}
-	}, [])
+	}, [JSON.stringify(tasks)])
 	return (
 		<div
 			ref={ganttContainer}
