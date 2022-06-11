@@ -19,7 +19,7 @@ const BugetRowGroupTemp: FC<{ row: Contract, index: number, show: boolean }> = (
 	return (
 		<tr className={classNames(styles.tableBudgetRow, { hidden: state })}>
 			{/* <td className='bg-gray-300 px-1.5 py-2 relative'></td> */}
-			<td className="px-2.5 py-2 bg-cbs-table-header border-t-0.5 border-cbs-border border-r-0.5">{index + 1}</td>
+			<td className="px-2.5 py-2 bg-cbs-table-header border-t-0.5 border-cbs-border border-r-0.5" style={{ maxWidth: '50px' }}>{index + 1}</td>
 			<td className="text-left py-2 px-3 border-t-0.5 border-cbs-border border-r-0.5">
 				<NavLink className='text-cbs-highlight-color' to={`/cmcs/contract/${row._id}/home`}>{row.name}</NavLink>
 				<p className='text-primary-gray text-[12px]'><i>{row.sellerInfo?.name}</i></p>

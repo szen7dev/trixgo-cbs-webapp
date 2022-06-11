@@ -26,7 +26,7 @@ export interface CashFlowPlan {
     realDate: string;
     note: string;
     priority: number;
-    outin: string | null;
+    outin: string | number;
     createAt: string;
     modifyAt: string;
     timeApproved: string;
