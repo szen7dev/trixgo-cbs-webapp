@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 
 // Hook
 import useCheckedList from 'services/hooks/ppt/useCheckedList';
-import { useQueryListCompanyOfAssigneeAndAmountTask } from "services/hooks/pcm/useStatistical";
+import { useQueryListCompanyOfAuthorAndAmountTask } from "services/hooks/pcm/useStatistical";
 
 import { SearchInput, GroupActions, ButtonMore } from "shareComponents/common";
 
@@ -33,7 +33,7 @@ const ProjectSubjectPage: FC = () => {
         listCompanyAndTaskMoreThan7Days,
 		listCompanyAndTaskFinish,
         isLoading,
-	} = useQueryListCompanyOfAssigneeAndAmountTask({
+	} = useQueryListCompanyOfAuthorAndAmountTask({
 		projectID, keyword, subtype: "3"
 	});
 	

@@ -53,7 +53,7 @@ export const ItemChildPage: FC = () => {
         },
         isFetchList: true
     });
-
+    console.log({ listDoctypes })
     const handleConfirmCreateOrUpdateDoctype = () => refetchListDoctype();
 
     const onChangeSearchDoctype = debounce((event: React.ChangeEvent<HTMLInputElement>) => {

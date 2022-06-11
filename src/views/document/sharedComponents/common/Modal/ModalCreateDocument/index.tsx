@@ -73,6 +73,7 @@ const useInitialValues = (
 		keyword: keywordProperty,
 		type: 2,
 		companyID,
+		isShowParentAndChild: 1
 	}); // tính chất
 
 	const { list: listStorages } = useStorage({
