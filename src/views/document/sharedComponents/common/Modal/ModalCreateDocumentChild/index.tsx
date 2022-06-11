@@ -77,7 +77,8 @@ const useInitialValues = (
 	const { listDoctypes: properties } = useQueryListDoctype({
 		keyword: keywordProperty,
 		type: 2,
-		companyID
+		companyID,
+		isShowParentAndChild: 1
 	});
 	const { list: listStorages } = useStorage({
 		params: {

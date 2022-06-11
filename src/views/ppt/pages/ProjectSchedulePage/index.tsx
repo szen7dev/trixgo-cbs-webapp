@@ -8,6 +8,22 @@ import { usePcmProject } from "services/hooks/pcm/usePcmProject";
 import { PCM_MILESTONE } from "apis/localdb/index";
 import { useTask } from "services/hooks/useTask";
 
+let dataGranttInint:any = [
+	{ id: 1, text: "Pháp lý", start_date: null, duration: null, parent:null, progress: 0, open: true},
+	{ id: 2, text: "Thiết kế", start_date: null, duration: null, parent:null, progress: 0, open: true},
+	{ id: 3, text: "Dự toán, ngân sách", start_date: null, duration: null, parent:null, progress: 0, open: true},
+	{ id: 4, text: "Lựa chọn nhà thầu", start_date: null, duration: null, parent:null, progress: 0, open: true},
+	{ id: 5, text: "Thi công", start_date: null, duration: null, parent:null, progress: 0, open: true},
+	{ id: 6, text: "Bàn giao", start_date: null, duration: null, parent:null, progress: 0, open: true},
+	{ id: 7, text: "Quyết toán", start_date: null, duration: null, parent:null, progress: 0, open: true},
+]
+
+const getTimeBetween = function (time1: any, time2: any) {
+    const a = (new Date(time1)).getTime();
+    const b = (new Date(time2)).getTime();
+    return (a - b) / (1000);
+};
+
 const ProjectSchedulePage: FC = () => {
 	const history = useHistory();
 	const { id: departmentID } = useParams<{ id: string }>();
@@ -15,6 +31,13 @@ const ProjectSchedulePage: FC = () => {
 		document.title = "CHG.THT-Quản lý tiến độ"
 	}, []);
 
+	const [dataGrantt, setGranttInint] = useState<any>({
+		data: dataGranttInint,
+		links: [
+			{ id: 1, source: 1, target: 2, type: '0' }
+		]
+	});
+	
 	function handleClick() {
 		history.goBack();
 	}
@@ -26,37 +49,32 @@ const ProjectSchedulePage: FC = () => {
 		refetchListTask
 	  } = useTask({
 		params: {
-			projectID: departmentID, isPassPermision: "1", statusNe: "3", limit: 20
+			projectID: departmentID, isPassPermision: "1", statusNe: "3", limit: 100
 		},
 		isFetch: true
 	});
 
-	let dataGranttInint = [
-		{ id: 1, text: "Pháp lý", start_date: null, duration: null, parent:null, progress: 0, open: true},
-		{ id: 2, text: "Thiết kế", start_date: null, duration: null, parent:null, progress: 0, open: true},
-		{ id: 3, text: "Dự toán, ngân sách", start_date: null, duration: null, parent:null, progress: 0, open: true},
-		{ id: 4, text: "Lựa chọn nhà thầu", start_date: null, duration: null, parent:null, progress: 0, open: true},
-		{ id: 5, text: "Thi công", start_date: null, duration: null, parent:null, progress: 0, open: true},
-		{ id: 6, text: "Bàn giao", start_date: null, duration: null, parent:null, progress: 0, open: true},
-		{ id: 7, text: "Quyết toán", start_date: null, duration: null, parent:null, progress: 0, open: true},
-	]
+	useEffect(() => {
+		listTasks?.forEach((task:any) => {
+			if(task.milestone){
+				const actualStartTime  = new Date(task.actualStartTime);
+				const actualFinishTime =  new Date(task.actualFinishTime);
+				const duration = Math. ceil((actualFinishTime.getTime() - actualStartTime.getTime()) / (24*60*60*1000));
+				dataGranttInint = [ 
+					...dataGranttInint, {
+						id: task._id, text: task.name, start_date: actualStartTime, duration: duration || 0, parent: task.milestone, progress: 0, open: true
+					}
+				]
+			}
+		});
 
-	listTasks?.forEach((task: any) => {
-		if(task.milestone){
-			dataGranttInint = [ 
-				...dataGranttInint, {
-					id: task._id, text: task.name, start_date: task.actualFinishTime, duration: null, parent: task.milestone, progress: 0, open: true
-				}
+		setGranttInint({
+			data: dataGranttInint,
+			links: [
+				{ id: 1, source: 1, target: 2, type: '0' }
 			]
-		}
-	});
-
-	const [data, setData] = useState<any>({
-		data: dataGranttInint,
-		links: [
-			{ id: 1, source: 1, target: 2, type: '0' }
-		]
-	});
+		});
+	}, [JSON.stringify(listTasks)]);
 	
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
@@ -80,7 +98,7 @@ const ProjectSchedulePage: FC = () => {
 			</div>
 			{/* Content */}
 			<main className="flex-1 overflow-auto">
-				<Gantt tasks={data} />
+				<Gantt tasks={dataGrantt} />
 			</main>
 		</div>
 	);
