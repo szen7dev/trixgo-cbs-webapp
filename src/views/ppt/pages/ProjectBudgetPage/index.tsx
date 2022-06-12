@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { usePcmProjectBudget } from "services/hooks/pcm/usePcmProjectBudget";
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import classNames from 'classnames';
 
 import { RightClickMenuWrapper } from "shareComponents/common";
@@ -75,10 +75,10 @@ const ProjectBudgetPage: FC = () => {
 						{/* <th className="sticky top-0 bg-gray-300 px-1.5 z-10">
 							<button className="inline-block text-white rounded bg-gray-600 w-5 h-5" onClick={() => setShow(!show)}>{show ? '+' : '-'}</button>
 						</th> */}
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2 w-[38px]" style={{ maxWidth: '50px' }}>
+						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2 w-[38px]">
 							STT
 						</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2 w-[250px]" style={{ maxWidth: '240px', minWidth: '200px' }}>Gói thầu/Hợp đồng</th>
+						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2 min-w-[150px] w-[200px]">Gói thầu/Hợp đồng</th>
 						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '122px' }}>Ngân sách</th>
 						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '122px' }}>Dự báo</th>
 						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '122px' }}>Ký hợp đồng</th>
@@ -102,36 +102,36 @@ const ProjectBudgetPage: FC = () => {
 								{show ? '+' : '-'}
 							</button>
 						</th> */}
-						<th className='py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-center' style={{ maxWidth: '50px' }}></th>
+						<th className='py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-center'></th>
 						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-left"></th>
-						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5">
+						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 md:text-xs">
 							{formatNumberMoney(projectInfo.budget + projectInfo.vatBudget)}
 						</th>
-						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5">
+						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 md:text-xs">
 							{formatNumberMoney(projectInfo.forecastBudget + projectInfo.vatForecastBudget)}
 						</th>
-						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5">
+						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 md:text-xs">
 							{formatNumberMoney(
 								projectInfo.contractValue + projectInfo.contractVatValue +
 								projectInfo.contractPlus + projectInfo.contractVatPlus
 							)}
 						</th>
-						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5">
+						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 md:text-xs">
 							{formatNumberMoney(projectInfo.contractAdvancePaymentPaid)}
 						</th>
-						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5">
+						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 md:text-xs">
 							{formatNumberMoney(projectInfo.contractProduce + projectInfo.contractVatProduce)}
 						</th>
-						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5">
+						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 md:text-xs">
 							{formatNumberMoney(
 								projectInfo.contractAcceptance + projectInfo.contractVatAcceptance +
 								projectInfo.contractPlusAcceptance + projectInfo.contractVatPlusAcceptance
 							)}
 						</th>
-						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5">
+						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 md:text-xs">
 							{formatNumberMoney(projectInfo.contractAmountPaid)}
 						</th>
-						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5">
+						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 md:text-xs">
 							{formatNumberMoney(projectInfo.contractRemainingPayment)}
 						</th>
 						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5"></th>
