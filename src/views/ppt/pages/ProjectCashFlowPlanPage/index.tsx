@@ -163,7 +163,7 @@ const ProjectCashFlowPlanPage: FC<{ outin: number }> = ({ outin }) => {
 
         openModal(
             <div
-                className={"inline-block w-[521px] h-[320px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
+                className={"inline-block w-[521px] h-[350px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
             >
                 <ModalCreateOrUpdateCashFlow
                     modalType={modalType}
@@ -254,6 +254,11 @@ const ProjectCashFlowPlanPage: FC<{ outin: number }> = ({ outin }) => {
                         </th>
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Phân loại
+                            </div>
+                        </th>
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Kế hoạch giải ngân
                             </div>
                         </th>
@@ -272,10 +277,7 @@ const ProjectCashFlowPlanPage: FC<{ outin: number }> = ({ outin }) => {
 
                 <tbody>
                     {listCashFlowPlans.length ? listCashFlowPlans.map(item => (
-                        <tr
-                            key={item._id}
-                            className="border-b border-primary-border h-10"
-                        >
+                        <tr key={item._id} className="border-b border-primary-border h-10">
                             <td className="px-2 text-center align-middle">
                                 <input
                                     className="form-check-input"
@@ -290,6 +292,7 @@ const ProjectCashFlowPlanPage: FC<{ outin: number }> = ({ outin }) => {
                                 </Link>
                             </td>
                             <td className="px-2 align-middle">{item.sign}</td>
+                            <td className="px-2 align-middle">{item.outin === 1 ? 'Bán ra' : 'Mua vào'}</td>
                             <td className="px-2 align-middle">{formatNumberMoney(item?.value)}</td>
                             <td className="px-2 align-middle">{formatNumberMoney(item?.realValue)}</td>
                             <td className="px-2 align-middle">{item.note}</td>
