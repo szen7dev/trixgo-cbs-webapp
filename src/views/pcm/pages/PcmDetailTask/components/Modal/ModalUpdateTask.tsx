@@ -42,6 +42,7 @@ interface InitialValues {
   name: string,
   startTime: string,
   actualFinishTime: string,
+  expiredHour: string,
   description: string,
   authorAttachs: string[],
   type: number,
@@ -146,7 +147,8 @@ const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
           taskID: values.taskID,
           name: values.name,
           contractID: values.contractID,
-          actualFinishTime: values.actualFinishTime
+          actualFinishTime: values.actualFinishTime,
+          expiredHour: values.expiredHour
       });
 
       if(error) return toast.warning(message);
@@ -174,6 +176,7 @@ const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
     name: task.name,
     startTime: moment(task.startTime).format('MM/DD/YYYY'),
     actualFinishTime: moment(task.actualFinishTime).format('MM/DD/YYYY'),
+    expiredHour: moment(task.actualFinishTime).format('HH:mm'),
     description: task.description,
     authorAttachs: [],
     type: task.type,
@@ -634,6 +637,11 @@ const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
                           placeholder: "Thời hạn",
                           readOnly: true,
                         }}
+                      />
+                      <input
+                        {...formik.getFieldProps('expiredHour')}
+                        type="time"
+                        onChange={(e) => setFieldValue("expiredHour", e.target.value)}
                       />
                     </div>
                   </div>
