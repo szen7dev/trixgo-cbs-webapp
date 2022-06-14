@@ -49,7 +49,7 @@ const ProjectSchedulePage: FC = () => {
 		refetchListTask
 	  } = useTask({
 		params: {
-			projectID: departmentID, isPassPermision: "1", statusNe: "3", limit: 100
+			projectID: departmentID, isPassPermision: "1", statusNe: "3", unlimit: "1"
 		},
 		isFetch: true
 	});
