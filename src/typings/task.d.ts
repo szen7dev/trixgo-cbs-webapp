@@ -102,6 +102,7 @@ export interface updateTaskPayload {
   draft?: number;
   milestone?: number;
   actualFinishTime?: string;
+  expiredHour?: string;
   isAddSignature?: boolean;
   isOpenBidding?: boolean;
   flags?: Array<string>;
@@ -123,6 +124,7 @@ export type TaskListParams = QueryParams & {
   statusNe?: string;
   groupID?: string;
   companyOfAssignee?: string;
+  companyOfAuthor?: string;
   isPassPermision?: string;
   projectID?: string;
   milestone?: string;

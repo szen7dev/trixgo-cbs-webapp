@@ -25,7 +25,7 @@ const ProjectSubjectPage: FC = () => {
 	const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data)
 	const { id: projectID } = useParams<{ id: string }>();
 	const [keyword, setKeyword] = useState("");
-
+	
 	const { 
 		listCompany,
         listCompanyAndTaskOverdueWork,
@@ -192,7 +192,7 @@ const ProjectSubjectPage: FC = () => {
 											<input className="cbs-checkbox" type="checkbox" value={company._id} checked={Boolean(assigned[company._id])} onChange={e => handleChangeCheckbox(e, { id: company._id })} />
 										</td>
 										<td className="pt-2.5 pb-3 px-2 border-b border-r border-cbs-border">
-											<Link to={`/pcm/project/${projectID}/subject/company/${company._id}/subtype/3`}>
+											<Link to={`/pcm/project/${projectID}/payment/company/${company._id}/subtype/3`}>
 												{company.name}
 											</Link>
 										</td>

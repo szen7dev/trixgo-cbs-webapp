@@ -600,6 +600,10 @@ export const ModalAddNewTask: FC = () => {
                           readOnly: true,
                         }}
                       />
+                      <input
+                        type="time"
+                        onChange={(e) => setFieldValue("expiredHour", e.target.value)}
+                      />
                     </div>
                   </div>
                 </div>

@@ -725,7 +725,7 @@ const PcmDetailTask: FC = () => {
                     alt="Organizational icon"
                   />
                   <span className="text-[13px] text-primary-gray mx-2">
-                    Việc cha: <button onClick={() => history.push(`/pcm/detail/${infoTask?.data?.parent?._id}`)}>{infoTask?.data?.parent?.name}</button>
+                    Việc cha: <button onClick={() => history.push(`/pcm/detail/${taskInfo.parent?._id}`)}>{taskInfo.parent?.name}</button>
                   </span>
                 </div>
               )}
@@ -735,10 +735,10 @@ const PcmDetailTask: FC = () => {
               <div className="flex justify-between">
                 <div>
                   <span className="text-lg leading-5">
-                    {moment(infoTask?.data?.actualFinishTime).format("DD/MM/YYYY")}
+                    {moment(taskInfo.actualFinishTime).format("DD/MM/YYYY")}
                   </span>
                   <span className="ml-2 text-[13px] text-primary-gray">
-                    {moment(infoTask?.data?.actualFinishTime).format("HH:mm")}
+                    {moment(taskInfo.actualFinishTime).format("HH:mm")}
                   </span>
                 </div>
                 <div>
