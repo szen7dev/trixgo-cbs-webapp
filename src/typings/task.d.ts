@@ -124,6 +124,7 @@ export type TaskListParams = QueryParams & {
   statusNe?: string;
   groupID?: string;
   companyOfAssignee?: string;
+  companyOfAuthor?: string;
   isPassPermision?: string;
   projectID?: string;
   milestone?: string;

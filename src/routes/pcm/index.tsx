@@ -50,6 +50,7 @@ import {
   ProjectPaymentPage,
   ProjectSubjectPage,
   ProjectSubjectCompanyOfAssigneePage,
+  ProjectSubjectCompanyOfAuthorPage,
   ProjectPhotoContractPage,
   ProjectPhotoPage,
   ProjectResourcePage,
@@ -186,9 +187,9 @@ const PCMRouter: FC = () => {
                   </LayoutSecondary>
                 </Route>
                 <Route exact path="/pcm/project/:id/payment" component={ProjectPaymentPage} />
+                <Route exact path="/pcm/project/:id/payment/company/:companyID/subtype/:subtype" component={ProjectSubjectCompanyOfAuthorPage} />
                 <Route exact path="/pcm/project/:id/subject" component={ProjectSubjectPage} />
                 <Route exact path="/pcm/project/:id/subject/company/:companyID" component={ProjectSubjectCompanyOfAssigneePage} />
-                <Route exact path="/pcm/project/:id/subject/company/:companyID/subtype/:subtype" component={ProjectSubjectCompanyOfAssigneePage} />
                 <Route
                   exact
                   path={["/pcm/project/:id/document", "/pcm/project/:id/document/(1|2|3|4)"]}
