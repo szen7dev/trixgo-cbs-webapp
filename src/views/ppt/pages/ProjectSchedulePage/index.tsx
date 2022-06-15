@@ -49,11 +49,11 @@ const ProjectSchedulePage: FC = () => {
 		refetchListTask
 	  } = useTask({
 		params: {
-			projectID: departmentID, isPassPermision: "1", statusNe: "3", unlimit: "1"
+			projectID: departmentID, isPassPermision: "1", unlimit: "1"
 		},
 		isFetch: true
 	});
-
+	console.log({ listTasks })
 	useEffect(() => {
 		listTasks?.forEach((task:any) => {
 			if(task.milestone){
@@ -62,7 +62,14 @@ const ProjectSchedulePage: FC = () => {
 				const duration = Math. ceil((actualFinishTime.getTime() - actualStartTime.getTime()) / (24*60*60*1000));
 				dataGranttInint = [ 
 					...dataGranttInint, {
-						id: task._id, text: task.name, start_date: actualStartTime, duration: duration || 0, parent: task.milestone, progress: 0, open: true
+						id: task._id, 
+						text: `<a target="_blank" href="/pcm/detail/${task._id}"><b>${task.name} (${(task.percentage)} %)</b></a>`, 
+						start_date: actualStartTime, 
+						end_date: actualFinishTime,
+						duration: duration || 0, 
+						parent: task.milestone, 
+						progress: Number(task.percentage/100).toFixed(3),
+						open: true
 					}
 				]
 			}
