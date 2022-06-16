@@ -32,7 +32,7 @@ export const ProjectSubjectCompanyOfAuthorPage: FC<Props> = ({ type = 1 }) => {
     refetchListTask: refetchListTaskOutDate
   } = useTask({
     params: {
-      keyword, projectID, companyOfAuthor: companyID, subtype, isPassPermision: "1", typeStatus: "1", statusNe: "3"
+      keyword, projectID, companyOfAuthor: companyID, subtype, isPassPermision: "1", typeStatus: "1", statusNe: "3", isParent: "1"
     },
     isFetch: true
   });
@@ -46,7 +46,7 @@ export const ProjectSubjectCompanyOfAuthorPage: FC<Props> = ({ type = 1 }) => {
     refetchListTask: refetchListTaskNextWeek
   } = useTask({
     params: {
-      keyword, projectID, companyOfAuthor: companyID, subtype, isPassPermision: "1", typeStatus: "2", statusNe: "3"
+      keyword, projectID, companyOfAuthor: companyID, subtype, isPassPermision: "1", typeStatus: "2", statusNe: "3", isParent: "1"
     },
     isFetch: true
   });
@@ -59,7 +59,7 @@ export const ProjectSubjectCompanyOfAuthorPage: FC<Props> = ({ type = 1 }) => {
     refetchListTask: refetchListTaskMore
   } = useTask({
     params: {
-      keyword, projectID, companyOfAuthor: companyID, subtype, isPassPermision: "1", typeStatus: "3", statusNe: "3"
+      keyword, projectID, companyOfAuthor: companyID, subtype, isPassPermision: "1", typeStatus: "3", statusNe: "3", isParent: "1"
     },
     isFetch: true
   });
@@ -72,7 +72,7 @@ export const ProjectSubjectCompanyOfAuthorPage: FC<Props> = ({ type = 1 }) => {
     refetchListTask: refetchListtasksCompleted
   } = useTask({
     params: {
-      keyword, projectID, companyOfAuthor: companyID, subtype, isPassPermision: "1", status: "3"
+      keyword, projectID, companyOfAuthor: companyID, subtype, isPassPermision: "1", status: "3", isParent: "1"
     },
     isFetch: true
   });
