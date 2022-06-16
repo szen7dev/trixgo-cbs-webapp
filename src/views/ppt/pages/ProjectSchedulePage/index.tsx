@@ -9,13 +9,13 @@ import { PCM_MILESTONE } from "apis/localdb/index";
 import { useTask } from "services/hooks/useTask";
 import moment from "moment";
 let dataGranttInint:any = [
-	{ id: 1, text: "Pháp lý", start_date: null, duration: null, parent:null, progress: 0, open: true},
-	{ id: 2, text: "Thiết kế", start_date: null, duration: null, parent:null, progress: 0, open: true},
-	{ id: 3, text: "Dự toán, ngân sách", start_date: null, duration: null, parent:null, progress: 0, open: true},
-	{ id: 4, text: "Lựa chọn nhà thầu", start_date: null, duration: null, parent:null, progress: 0, open: true},
-	{ id: 5, text: "Thi công", start_date: null, duration: null, parent:null, progress: 0, open: true},
-	{ id: 6, text: "Bàn giao", start_date: null, duration: null, parent:null, progress: 0, open: true},
-	{ id: 7, text: "Quyết toán", start_date: null, duration: null, parent:null, progress: 0, open: true},
+	{ id: 1, text: "<b>Pháp lý</b>", start_date: null, duration: null, parent:null, progress: 0, open: true},
+	{ id: 2, text: "<b>Thiết kế</b>", start_date: null, duration: null, parent:null, progress: 0, open: true},
+	{ id: 3, text: "<b>Dự toán, ngân sách</b>", start_date: null, duration: null, parent:null, progress: 0, open: true},
+	{ id: 4, text: "<b>Lựa chọn nhà thầu</b>", start_date: null, duration: null, parent:null, progress: 0, open: true},
+	{ id: 5, text: "<b>Thi công</b>", start_date: null, duration: null, parent:null, progress: 0, open: true},
+	{ id: 6, text: "<b>Bàn giao</b>", start_date: null, duration: null, parent:null, progress: 0, open: true},
+	{ id: 7, text: "<b>Quyết toán</b>", start_date: null, duration: null, parent:null, progress: 0, open: true},
 ]
 
 const getTimeBetween = function (time1: any, time2: any) {
@@ -63,7 +63,7 @@ const ProjectSchedulePage: FC = () => {
 				dataGranttInint = [ 
 					...dataGranttInint, {
 						id: task._id, 
-						text: `<a target="_blank" href="/pcm/detail/${task._id}"><b>${task.name} (${(task.percentage)} %)</b></a>`, 
+						text: `<a target="_blank" href="/pcm/detail/${task._id}">${task.name} (${(task.percentage)} %)</a>`, 
 						start_date: actualStartTime, 
 						end_date: actualFinishTime,
 						duration: duration || 0, 
