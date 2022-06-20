@@ -3,7 +3,7 @@ import { UIEvent, FC, useState, useMemo, ChangeEvent, useEffect } from "react";
 import cn from "classnames";
 import debounce from "lodash/debounce";
 import { toast } from "react-toastify";
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useHistory } from 'react-router-dom';
 
 /*=====2.CSS=====*/
 import styles from "views/support/styles/support.module.css";
@@ -12,26 +12,46 @@ import styles from "views/support/styles/support.module.css";
 import DeleteIcon from "assets/images/icons8-remove.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
-import { SearchInput } from "shareComponents/common";
-import { ModalConfirm, RowTableInsertInline, RowTableUpdateInline } from "../../sharedComponents/common";
+import { Loader, SearchInput } from "shareComponents/common";
+import { ModalConfirm, RowTableInsertInline, RowTableUpdateInline, RowTableView } from "../../sharedComponents/common";
+import { AccessingUsers } from "./components/AccessingUsers";
 
 /*=====5.TYPINGS=====*/
 
 /*=====6.HOOKS/APIS=====*/
 import { useModal } from "services/hooks/useModal";
+import { useAuth } from "services/hooks/auth/useAuth";
 import { useContract } from "services/hooks/items/useContract";
 import { useCashFlowPlan } from "services/hooks/financial/useCashFlow";
 import CashFlowPlan from "typings/financial/cashFlowPlan";
+import { User } from "typings/user";
 
 const ProjectCashFlowPlanChildPage: FC = () => {
 	const { id: projectID, cashFlowID, outin } = useParams<{ id: string, cashFlowID: string, outin: string }>();
     const { closeModal, openModal } = useModal();
+    const history = useHistory();
 
     const [showRowInsert, setShowRowInsert] = useState(true);
     const [keywordContract, setKeywordContract] = useState('');
     const [keyword, setKeyword] = useState('');
     const [itemsChecked, setItemsChecked] = useState<string[]>([]);
     const [dataCashFlow, setDataCashFlow] = useState<CashFlowPlan.CashFlowPlan[]>([]);
+
+    const [permissions, setPermissions] = useState<{
+        usersShared: User[];
+        onlyView: boolean;
+        hasPermissionCreateUpdate: boolean;
+        hasPermissionDelete: boolean;
+        hasPermissionShare: boolean;
+    }>({
+        usersShared: [],
+        onlyView: true,
+        hasPermissionCreateUpdate: false,
+        hasPermissionDelete: false,
+        hasPermissionShare: false,
+    });
+
+    const { user } = useAuth();
 
     const {
         insertAsync,
@@ -41,16 +61,28 @@ const ProjectCashFlowPlanChildPage: FC = () => {
         hasNextPage,
         refetch,
         fetchNextPage,
-        totalRecord
+        totalRecord,
+        isLoading: isLoadingCashFlowList
     } = useCashFlowPlan({
-        params: { 
-            projectID, 
+        params: {
+            projectID,
             parentID: cashFlowID,
-            keyword, 
+            keyword,
             sortKey: JSON.stringify(['createAt__1', '_id__1'])
         },
         isFetchList: true
     });
+
+    const { info: cashFlowInfo, isLoadingInfo } = useCashFlowPlan({
+        params: {
+            cashFlowID,
+            populates: JSON.stringify({
+                path: 'admins members userCreate',
+                select: '_id bizfullname image'
+            })
+        },
+        isFetchInfo: true
+    })
 
     const {
         listContracts,
@@ -62,10 +94,50 @@ const ProjectCashFlowPlanChildPage: FC = () => {
     })
 
     useEffect(() => {
-        if(!listCashFlowPlans.length) return;
+        if(listCashFlowPlans && Array.isArray(listCashFlowPlans)) {
+            setDataCashFlow(listCashFlowPlans);
+        }
+    }, [JSON.stringify(listCashFlowPlans)])
 
-        setDataCashFlow(listCashFlowPlans);
-    }, [listCashFlowPlans.length])
+    useEffect(() => {
+        if(!cashFlowInfo || !user || isLoadingInfo) return;
+
+        const usersShared = [...cashFlowInfo?.admins, ...cashFlowInfo?.members];
+        const adminsID    = cashFlowInfo.admins.map(item => item._id);
+        const membersID   = cashFlowInfo.members.map(item => item._id);
+
+        const usersIDShared = [
+            ...adminsID,
+            ...membersID,
+        ];
+        let authorID = '';
+
+        if(typeof cashFlowInfo.userCreate === 'string') {
+            authorID = cashFlowInfo.userCreate;
+        } else{
+            authorID = cashFlowInfo.userCreate?._id;
+        }
+
+        usersIDShared.push(authorID);
+
+        if(!usersIDShared.includes(user._id)) {
+            toast.warn('Bạn đang không có quyền truy cập');
+            history.push(`/pcm/project/${projectID}/cash-flow-1`);;
+        }
+
+        const hasPermissionCreateUpdate = adminsID.includes(user._id) || authorID === user._id;
+        const hasPermissionShare = authorID === user._id;
+        const hasPermissionDelete = authorID === user._id;
+        const onlyView = membersID.includes(user._id) && !adminsID.includes(user._id) && authorID !== user._id;
+
+        setPermissions({
+            usersShared,
+            onlyView,
+            hasPermissionCreateUpdate,
+            hasPermissionDelete,
+            hasPermissionShare
+        })
+    }, [JSON.stringify(user), JSON.stringify(cashFlowInfo)])
 
     const onChangeSearch = debounce((event: ChangeEvent<HTMLInputElement>) => {
         setKeyword(event.target.value);
@@ -106,9 +178,7 @@ const ProjectCashFlowPlanChildPage: FC = () => {
 
     const handleDelete = async () => {
         try {
-            const { error, data } = await deleteManyAsync({
-                cashFlowsID: itemsChecked
-            });
+            const { error, data } = await deleteManyAsync(itemsChecked);
 
             if(error) {
                 return toast.warn(data?.message);
@@ -189,6 +259,10 @@ const ProjectCashFlowPlanChildPage: FC = () => {
         }
     }
 
+    if(isLoadingInfo || isLoadingCashFlowList) {
+        return <Loader className="border-primary" />
+    }
+
     return (
         <main className="relative h-full overflow-auto">
             <header className="sticky top-0 bg-primary-light z-10">
@@ -223,22 +297,35 @@ const ProjectCashFlowPlanChildPage: FC = () => {
                             </button>
                         ) : ''}
                     </div>
+                    <div className={"flex-1 flex items-center justify-end"}>
+                        <button
+                            className="text-gray-400 mr-2"
+                        >
+                            Admin ({cashFlowInfo?.admins?.length})
+                        </button> |
+                        <button className="text-gray-400 mr-2 ml-2">
+                            Thành viên ({cashFlowInfo?.members?.length})
+                        </button>
+                        {cashFlowInfo?.members && <AccessingUsers users={cashFlowInfo.members} />}
+                    </div>
                 </div>
             </header>
 
             <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
                 <thead className="bg-cbs-table-header h-[38px] border-b border-primary-border">
                     <tr className="text-left text-sm">
-                        <th className={cn("py-1 text-center", styles.theadInput)}>
-                            <div className="border-r-2 border-gray-300 flex items-center justify-center">
-                                <input
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    checked={getStateCheckboxAll}
-                                    onChange={handleChangeCheckboxAll}
-                                />
-                            </div>
-                        </th>
+                        {!permissions.onlyView && (
+                            <th className={cn("py-1 text-center", styles.theadInput)}>
+                                <div className="border-r-2 border-gray-300 flex items-center justify-center">
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        checked={getStateCheckboxAll}
+                                        onChange={handleChangeCheckboxAll}
+                                    />
+                                </div>
+                            </th>
+                        )}
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Nội dung
@@ -288,19 +375,26 @@ const ProjectCashFlowPlanChildPage: FC = () => {
                 </thead>
 
                 <tbody>
-                    {dataCashFlow.length ? dataCashFlow.map(item => (
-                        <RowTableUpdateInline
-                            key={item._id}
-                            contracts={listContracts}
-                            cashFlow={item}
-                            itemsChecked={itemsChecked}
-                            onUpdate={handleUpdate}
-                            onScrollContract={handleScroll}
-                            onSearchContract={onChangeSearchContract}
-                            onChangeCheckbox={handleChangeCheckbox}
-                        />
-                    )) : <></>}
-                    {showRowInsert && <RowTableInsertInline onInsert={handleInsert} />}
+                    {(dataCashFlow && dataCashFlow.length) ? dataCashFlow.map(item => {
+                        if(permissions.onlyView) {
+                            return <RowTableView key={item._id} cashFlow={item} />
+                        }
+
+                        return (
+                            <RowTableUpdateInline
+                                key={item._id}
+                                contracts={listContracts}
+                                cashFlow={item}
+                                itemsChecked={itemsChecked}
+                                onUpdate={handleUpdate}
+                                onScrollContract={handleScroll}
+                                onSearchContract={onChangeSearchContract}
+                                onChangeCheckbox={handleChangeCheckbox}
+                            />
+                        )
+                    }) : <></>}
+
+                    {(showRowInsert && permissions.hasPermissionCreateUpdate) && <RowTableInsertInline onInsert={handleInsert} />}
                 </tbody>
             </table>
 

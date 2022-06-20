@@ -48,7 +48,13 @@ export const ModalCreateOrUpdateCashFlow: FC<ModalProps> = ({
           break;
         }
         case 'update': {
-          const { error, data } = await updateAsync(formData);
+          const { error, data } = await updateAsync({
+            cashFlowID: formData.cashFlowID,
+            name: formData.name,
+            note: formData.note,
+            sign: formData.sign,
+            outin: formData.outin
+          });
 
           if (error) {
             return toast.warning(data.message);

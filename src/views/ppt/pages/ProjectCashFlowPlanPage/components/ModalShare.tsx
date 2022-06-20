@@ -12,13 +12,14 @@ import TriangleDown from 'assets/icons/TriangleDown';
 /**
  * Hooks, Typings
  */
-import { useUserSystem } from "services/hooks/users/useUserSystem";
+import { useUsersProject } from "services/hooks/users/useUserSystem";
 import { UserSystemProps } from 'typings/users/userSystem';
 import { useCashFlowPlan } from "services/hooks/financial/useCashFlow";
 import type { User } from "typings/user";
 
 type Props = {
     cashFlowID: string,
+    projectID: string,
 	modalType: 'admins' | 'members',
 	toggle: () => void,
 	refetch?: () => void,
@@ -26,7 +27,7 @@ type Props = {
     hasPermission: boolean;
 }
 
-const ModalShare: FC<Props> = ({ cashFlowID, users, modalType, refetch, toggle, hasPermission }) => {
+const ModalShare: FC<Props> = ({ cashFlowID, projectID, users, modalType, refetch, toggle, hasPermission }) => {
 	const usersID = users?.map(user => user._id) ?? [];
 	const [hasDefault, setHasDefault] = useState(false);
 	const [isShow, setIsShow] = useState(true);
@@ -34,11 +35,11 @@ const ModalShare: FC<Props> = ({ cashFlowID, users, modalType, refetch, toggle, 
 	const [idsChecked, setIdsChecked] = useState<string[]>(usersID || []);
 
     const {
-        data: listUsersSystem,
+        data: listUsersProject,
         hasNextPage,
         fetchNextPage,
         totalRecord
-    } = useUserSystem({ keyword }, true);
+    } = useUsersProject({ projectID, keyword }, true);
 
     const { updateAsync } = useCashFlowPlan({});
 
@@ -64,13 +65,16 @@ const ModalShare: FC<Props> = ({ cashFlowID, users, modalType, refetch, toggle, 
 		};
 	};
 
-	const getStateCheckedAll = useCallback(() => idsChecked.length == listUsersSystem.length, [idsChecked]);
+	const getStateCheckedAll = useCallback(() => {
+        if(!idsChecked.length && !listUsersProject.length) return false;
+		return idsChecked.length === listUsersProject.length;
+    }, [idsChecked.length, listUsersProject.length]);
 
 	const onClickCheckAll = () => {
-		if (idsChecked.length == listUsersSystem.length) {
+		if (idsChecked.length == listUsersProject.length) {
 			setIdsChecked([]);
 		} else {
-			const idsAll = listUsersSystem.map((e: any) => e._id);
+			const idsAll = listUsersProject.map((e: any) => e._id);
 			setIdsChecked(idsAll);
 		}
 	};
@@ -81,32 +85,29 @@ const ModalShare: FC<Props> = ({ cashFlowID, users, modalType, refetch, toggle, 
 			return toast.warning('Bạn không có quyền chia sẻ nội dung này');
         }
 
-        toggle();
-        return toast.warning('Tính năng này đang phát triển');
+		if (!idsChecked || !idsChecked.length) {
+			return toast.warning('Vui lòng chọn user để chia sẻ');
+		}
 
-		// if (!idsChecked || !idsChecked.length) {
-		// 	return toast.warning('Vui lòng chọn user để chia sẻ');
-		// }
+        try {
+            const { error, data } = await updateAsync({
+                cashFlowID,
+                [modalType]: idsChecked,
+            })
 
-        // try {
-        //     const { error, data } = await updateAsync({
-        //         cashFlowID,
-        //         [modalType]: idsChecked,
-        //     })
+            if(error) return toast.warn(data?.message);
 
-        //     if(error) return toast.warn(data?.message);
-
-        //     refetch?.();
-        //     toast.success('Cập nhật thành công');
-        // } catch (error) {
-        //     captureException(error);
-        //     if(error instanceof Error)
-        //         toast.error(error.message);
-        //     if(typeof error === 'string')
-        //         toast.error(error);
-        // } finally {
-        //     toggle();
-        // }
+            refetch?.();
+            toast.success('Cập nhật thành công');
+        } catch (error) {
+            captureException(error);
+            if(error instanceof Error)
+                toast.error(error.message);
+            if(typeof error === 'string')
+                toast.error(error);
+        } finally {
+            toggle();
+        }
 	};
 
 	useEffect(() => {
@@ -180,7 +181,7 @@ const ModalShare: FC<Props> = ({ cashFlowID, users, modalType, refetch, toggle, 
                         </thead>
                         <tbody className='overflow-y-auto'>
                             {
-                                (listUsersSystem.length && isShow) ? listUsersSystem.map((user: UserSystemProps) => (
+                                (listUsersProject.length && isShow) ? listUsersProject.map((user: UserSystemProps) => (
                                     <tr key={user._id}>
                                         <td className='px-1.5 align-middle'>
                                             <input
@@ -209,7 +210,7 @@ const ModalShare: FC<Props> = ({ cashFlowID, users, modalType, refetch, toggle, 
                     {hasNextPage && (
                         <div className="w-full flex justify-center my-5">
                         <button onClick={fetchNextPage}>
-                            <span className="text-primary">{`Xem thêm (${totalRecord - listUsersSystem.length
+                            <span className="text-primary">{`Xem thêm (${totalRecord - listUsersProject.length
                             })`}</span>
                         </button>
                         </div>
