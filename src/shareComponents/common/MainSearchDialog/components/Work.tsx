@@ -150,7 +150,7 @@ const Work: FC = () => {
                         <div className="flex items-center w-3/5">
                           <span className="inline-block w-2 h-2 rounded-full mr-3 bg-green"></span>
                           <img
-                            src={thumbnail}
+                            src={searchResultItem.assignee?.image ? `${process.env.REACT_APP_URL_S3_USER}/${searchResultItem.assignee?.image}` : thumbnail}
                             alt="Thumbnail"
                             className="w-6 h-6 rounded-full mr-3"
                           />
