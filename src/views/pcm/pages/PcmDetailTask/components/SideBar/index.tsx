@@ -1,4 +1,4 @@
-import { FC, useCallback } from "react";
+import React, { FC, useCallback, useEffect, useMemo, useState, memo } from "react";
 import { captureException } from "@sentry/react";
 import moment from "moment";
 
@@ -10,6 +10,7 @@ import { ModalAddRelationUser } from "views/pcm/pages/PcmDetailTask/components";
 import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
 
 import { useTask } from "services/hooks/useTask";
+import { useSocket } from "services/hooks/useSocket";
 import useModal from "views/pcm/hooks/useModal";
 
 import type { Author, Assignee } from "typings/task";
@@ -24,11 +25,16 @@ type Props = {
   createAt: string;
   related?: Array<User>;
   confirmUsers: Array<{ author: User, createAt: string | Date }>;
-  onConfirmSign?: (taskID: string) => void,
-  subtype?: number;
+  openedUsers: Array<User>;
+  onConfirmSign?: (taskID: string) => void;
+  onOpenBidding?: (taskID: string) => void;
+  hasPermissionViewRelatedUser?: boolean;
+  hasPermissionAddSignature?: boolean;
+  hasPermissionOpenBidding?: boolean;
+  hasPermissionViewBidding?: boolean;
 };
 
-export const SideBar: FC<Props> = ({
+export const SideBar: FC<Props> = memo(({
   taskID,
   userID,
   author,
@@ -36,12 +42,46 @@ export const SideBar: FC<Props> = ({
   createAt,
   related,
   confirmUsers,
+  openedUsers,
   onConfirmSign,
-  subtype
+  onOpenBidding,
+  hasPermissionViewRelatedUser = true,
+  hasPermissionAddSignature = true,
+  hasPermissionOpenBidding = false,
+  hasPermissionViewBidding = false,
 }) => {
   const [{ isShow }, { toggleModal, openAddUserRelation: openListUserRelation }] = useModal();
   const { updateTaskAsync } = useTask({});
-  const isSigned = confirmUsers.find(({ author }) => author._id === userID);
+  const [isCurrentUserOpened, setCurrentUserOpened] = useState(false);
+  const [usersOpened, setUsersOpened] = useState(openedUsers.map(item => item._id));
+  const { current: socket }: any = useSocket();
+
+  useEffect(() => {
+    const onEventOpenBidding = (result: any) => {
+      console.log({ result });
+      const { error, message, data } = result;
+
+      if(error) {
+        return toast.warn(message);
+      }
+
+      const relatedUsers = related?.map(item => item._id);
+
+      if(relatedUsers?.includes(data?.userID) && taskID === data?.taskID) {
+        setUsersOpened(prev => ([...prev, data?.userID]));
+      }
+    }
+
+		socket?.on("SUBJECT_PCM_SSC_OPEN_BIDDING", onEventOpenBidding);
+
+    return () => {
+      socket?.off("SUBJECT_PCM_SSC_OPEN_BIDDING", onEventOpenBidding);
+    }
+  }, [socket])
+
+  const isSigned = useMemo(() => {
+    return confirmUsers.find(({ author }) => author._id === userID)
+  }, [confirmUsers, userID])
 
   const handleConfirmSignature = useCallback(async () => {
     try {
@@ -54,19 +94,90 @@ export const SideBar: FC<Props> = ({
         return toast.warning(data.message);
       }
 
-      onConfirmSign && onConfirmSign(taskID);
+      onConfirmSign?.(taskID);
     } catch (error) {
 			captureException(error);
       if (typeof error === "string") {
-          toast.error(error);
+        toast.error(error);
       } else if (error instanceof Error) {
-          toast.error(error.message);
+        toast.error(error.message);
       }
     }
   }, [])
 
+  const handleOpenBidding = useCallback(async () => {
+    if(!hasPermissionOpenBidding) return;
+
+    try {
+      const { error, data } = await updateTaskAsync({
+        taskID,
+        isOpenBidding: true
+      })
+
+      if(error) {
+        return toast.warning(data.message);
+      }
+
+      setCurrentUserOpened(true);
+      onOpenBidding?.(taskID);
+    } catch (error) {
+      captureException(error);
+      if (typeof error === "string") {
+        toast.error(error);
+      } else if (error instanceof Error) {
+        toast.error(error.message);
+      }
+    }
+  }, [hasPermissionOpenBidding])
+
+  const renderUserOpenBidding = (user: User) => {
+    const isOpened = openedUsers.find(item => item._id === user._id);
+    const timeline = <img className="w-10 h-6" src={LineConnector} alt="Timeline icon" />;
+    let status = <></>;
+
+    if(isOpened || usersOpened.includes(user._id) || (userID === user._id && isCurrentUserOpened)) {
+      status = (
+        <span className="font-bold rounded min-w-max text-green-600 text-[13px]">
+          Đã mở
+        </span>
+      )
+    } else{
+      if(userID === user._id && hasPermissionOpenBidding) {
+        status = (
+          <button className="font-bold px-4 h-8 rounded min-w-max text-primary-light text-[13px] bg-green-600" onClick={handleOpenBidding}>
+            Mở thầu
+          </button>
+        )
+      } else{
+        status = (
+          <span className="font-bold px-4 h-6 rounded-xl min-w-max text-green-600 text-[13px] bg-green-100">
+            Pending
+          </span>
+        )
+      }
+    }
+
+    const opener = (
+      <div className="flex justify-between" key={user._id}>
+        <div className="flex items-start mr-1">
+          <img src={user.image ? `${process.env.REACT_APP_URL_S3_USER}/${user.image}` : HumanAvatar} alt="Avatar" className="w-10 h-10" />
+          <div className="ml-2">
+            <p className="text-[13px]">{user.bizfullname}</p>
+          </div>
+        </div>
+
+        {status}
+      </div>
+    )
+
+    return {
+      opener,
+      timeline
+    }
+  }
+
   return (
-    <div>
+    <div className="mb-3">
       <div>
         <div className="flex justify-between mb-2.5">
           <span className="font-bold text-[13px] leading-4">
@@ -114,7 +225,7 @@ export const SideBar: FC<Props> = ({
         </span>
       </div>
 
-      {subtype != 4 ?
+      {hasPermissionViewRelatedUser ?
         <div className="mt-5">
           <div className="flex justify-between items-end mb-2.5">
             <span className="font-bold text-[13px] leading-4">
@@ -144,7 +255,7 @@ export const SideBar: FC<Props> = ({
           <span className="font-bold text-[13px] leading-4">
             Xác nhận
           </span>
-          {!isSigned && (
+          {(!isSigned && hasPermissionAddSignature) && (
             <button onClick={handleConfirmSignature}>
               <span className="text-white font-bold bg-cbs-completed text-small px-4 py-2 rounded-cbs-sm">
                 Đồng ý
@@ -185,81 +296,97 @@ export const SideBar: FC<Props> = ({
         </div>
       </div>
 
-      {/* <div className="mt-5">
-        <div className="mb-2.5">
-          <span className="font-bold text-[13px] leading-4">Mở thầu</span>
+      {hasPermissionViewBidding && (
+        <div className="mt-5">
+          <div className="mb-2.5">
+            <span className="font-bold text-[13px] leading-4">Mở thầu</span>
+          </div>
+          <div>
+            {related?.map((user, index) => {
+              const { opener, timeline } = renderUserOpenBidding(user);
+
+              if(index === 0) {
+                return opener;
+              }
+
+              return (
+                <React.Fragment key={user._id}>
+                  {timeline}
+                  {opener}
+                </React.Fragment>
+              )
+            })}
+            {/* <div className="flex justify-between">
+              <div className="flex items-start">
+                <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
+                <div className="ml-2">
+                  <p className="text-[13px]">Lê Trọng Quyền-CPMI</p>
+                  <p className="text-xs text-primary-gray">
+                    13:15 28/2/21 - 2h ago
+                  </p>
+                </div>
+              </div>
+              <span className="font-bold rounded min-w-max text-green-600 text-[13px]">
+                Đã mở
+              </span>
+            </div>
+            <img className="w-10 h-6" src={LineConnector} alt="Timeline icon" />
+            <div className="flex justify-between">
+              <div className="flex items-start">
+                <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
+                <div className="ml-2">
+                  <p className="text-[13px]">Trần Tiến Tùng-PGI</p>
+                  <p className="text-xs text-primary-gray"></p>
+                </div>
+              </div>
+              <button className="font-bold px-4 h-8 rounded min-w-max text-primary-light text-[13px] bg-green-600">
+                Mở thầu
+              </button>
+            </div>
+            <img className="w-10 h-6" src={LineConnector} alt="Timeline icon" />
+            <div className="flex justify-between">
+              <div className="flex items-start">
+                <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
+                <div className="ml-2">
+                  <p className="text-[13px]">Hà Tiến Dũng-CHG</p>
+                  <p className="text-xs text-primary-gray">
+                    13:15 28/2/21 - 2h ago
+                  </p>
+                </div>
+              </div>
+              <span className="font-bold rounded min-w-max text-green-600 text-[13px]">
+                Đã mở
+              </span>
+            </div>
+            <img className="w-10 h-6" src={LineConnector} alt="Timeline icon" />
+            <div className="flex justify-between">
+              <div className="flex items-start">
+                <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
+                <div className="ml-2">
+                  <p className="text-[13px]">Đỗ Hữu Khu-CHG</p>
+                  <p className="text-xs text-primary-gray">Cán bộ thanh toán</p>
+                </div>
+              </div>
+              <button className="font-bold px-4 h-6 rounded-xl min-w-max text-red-600 text-[13px] bg-red-100">
+                Rejected
+              </button>
+            </div>
+            <img className="w-10 h-6" src={LineConnector} alt="Timeline icon" />
+            <div className="flex justify-between">
+              <div className="flex items-start">
+                <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
+                <div className="ml-2">
+                  <p className="text-[13px]">Vũ Thị Lan-CHG</p>
+                  <p className="text-xs text-primary-gray"></p>
+                </div>
+              </div>
+              <button className="font-bold px-4 h-6 rounded-xl min-w-max text-green-600 text-[13px] bg-green-100">
+                Pending
+              </button>
+            </div> */}
+          </div>
         </div>
-        <div>
-          <div className="flex justify-between">
-            <div className="flex items-start">
-              <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
-              <div className="ml-2">
-                <p className="text-[13px]">Lê Trọng Quyền-CPMI</p>
-                <p className="text-xs text-primary-gray">
-                  13:15 28/2/21 - 2h ago
-                </p>
-              </div>
-            </div>
-            <span className="font-bold rounded min-w-max text-green-600 text-[13px]">
-              Đã mở
-            </span>
-          </div>
-          <img className="w-10 h-6" src={LineConnector} alt="Timeline icon" />
-          <div className="flex justify-between">
-            <div className="flex items-start">
-              <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
-              <div className="ml-2">
-                <p className="text-[13px]">Trần Tiến Tùng-PGI</p>
-                <p className="text-xs text-primary-gray"></p>
-              </div>
-            </div>
-            <button className="font-bold px-4 h-8 rounded min-w-max text-primary-light text-[13px] bg-green-600">
-              Mở thầu
-            </button>
-          </div>
-          <img className="w-10 h-6" src={LineConnector} alt="Timeline icon" />
-          <div className="flex justify-between">
-            <div className="flex items-start">
-              <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
-              <div className="ml-2">
-                <p className="text-[13px]">Hà Tiến Dũng-CHG</p>
-                <p className="text-xs text-primary-gray">
-                  13:15 28/2/21 - 2h ago
-                </p>
-              </div>
-            </div>
-            <span className="font-bold rounded min-w-max text-green-600 text-[13px]">
-              Đã mở
-            </span>
-          </div>
-          <img className="w-10 h-6" src={LineConnector} alt="Timeline icon" />
-          <div className="flex justify-between">
-            <div className="flex items-start">
-              <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
-              <div className="ml-2">
-                <p className="text-[13px]">Đỗ Hữu Khu-CHG</p>
-                <p className="text-xs text-primary-gray">Cán bộ thanh toán</p>
-              </div>
-            </div>
-            <button className="font-bold px-4 h-6 rounded-xl min-w-max text-red-600 text-[13px] bg-red-100">
-              Rejected
-            </button>
-          </div>
-          <img className="w-10 h-6" src={LineConnector} alt="Timeline icon" />
-          <div className="flex justify-between">
-            <div className="flex items-start">
-              <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
-              <div className="ml-2">
-                <p className="text-[13px]">Vũ Thị Lan-CHG</p>
-                <p className="text-xs text-primary-gray"></p>
-              </div>
-            </div>
-            <button className="font-bold px-4 h-6 rounded-xl min-w-max text-green-600 text-[13px] bg-green-100">
-              Pending
-            </button>
-          </div>
-        </div>
-      </div> */}
+      )}
 
       <ModalLarge
         show={isShow}
@@ -276,8 +403,9 @@ export const SideBar: FC<Props> = ({
       </ModalLarge>
     </div>
   );
-};
+});
 
+SideBar.displayName = 'SideBar';
 SideBar.defaultProps = {
   related: [],
 };

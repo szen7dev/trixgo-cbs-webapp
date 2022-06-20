@@ -1,32 +1,88 @@
-import { FC, useEffect } from "react";
-import { useHistory } from "react-router-dom"
+import { FC, useEffect, useState } from "react";
+import { useHistory, useParams } from "react-router-dom"
 
 import image from 'assets/images/icons8-stacked-organizational-chart-highlighted-first-node-96 1.png';
 import avatar from 'assets/images/avatar.jpg';
 import Gantt from "./components/Gantt";
+import { usePcmProject } from "services/hooks/pcm/usePcmProject";
+import { PCM_MILESTONE } from "apis/localdb/index";
+import { useTask } from "services/hooks/useTask";
+
+let dataGranttInint:any = [
+	{ id: 1, text: "<b>Pháp lý</b>", start_date: null, duration: null, parent:null, progress: 0, open: true},
+	{ id: 2, text: "<b>Thiết kế</b>", start_date: null, duration: null, parent:null, progress: 0, open: true},
+	{ id: 3, text: "<b>Dự toán, ngân sách</b>", start_date: null, duration: null, parent:null, progress: 0, open: true},
+	{ id: 4, text: "<b>Lựa chọn nhà thầu</b>", start_date: null, duration: null, parent:null, progress: 0, open: true},
+	{ id: 5, text: "<b>Thi công</b>", start_date: null, duration: null, parent:null, progress: 0, open: true},
+	{ id: 6, text: "<b>Bàn giao</b>", start_date: null, duration: null, parent:null, progress: 0, open: true},
+	{ id: 7, text: "<b>Quyết toán</b>", start_date: null, duration: null, parent:null, progress: 0, open: true},
+]
+
+const getTimeBetween = function (time1: any, time2: any) {
+    const a = (new Date(time1)).getTime();
+    const b = (new Date(time2)).getTime();
+    return (a - b) / (1000);
+};
 
 const ProjectSchedulePage: FC = () => {
 	const history = useHistory();
+	const { id: departmentID } = useParams<{ id: string }>();
 	useEffect(() => {
 		document.title = "CHG.THT-Quản lý tiến độ"
 	}, []);
 
-	function handleClick() {
-		history.goBack();
-	}
-
-	const data = {
-		// data: Array.from({ length: 30 }).map((_, i) => ({
-		// 	id: i + 1, text: 'Task #' + i % 4, start_date: new Date((new Date()).setDate(i)), duration: 3, progress: 0.6,
-		// })),
-		data: [
-			{ id: 1, text: 'Task #1', start_date: '15-04-2019', duration: 3, progress: 0.6 },
-			{ id: 2, text: 'Task #2', start_date: '18-04-2019', duration: 3, progress: 0.4 }
-		],
+	const [dataGrantt, setGranttInint] = useState<any>({
+		data: dataGranttInint,
 		links: [
 			{ id: 1, source: 1, target: 2, type: '0' }
 		]
-	};
+	});
+	
+	function handleClick() {
+		history.goBack();
+	}
+	const { infoDepartment } = usePcmProject({ departmentID });
+	const {
+		listTasks,
+		totalRecord,
+		nextPageListTask,
+		refetchListTask
+	  } = useTask({
+		params: {
+			projectID: departmentID, isPassPermision: "1", unlimit: "1"
+		},
+		isFetch: true
+	});
+	console.log({ listTasks })
+	useEffect(() => {
+		listTasks?.forEach((task:any) => {
+			if(task.milestone){
+				const actualStartTime  = new Date(task.actualStartTime);
+				const actualFinishTime =  new Date(task.actualFinishTime);
+				const duration = Math. ceil((actualFinishTime.getTime() - actualStartTime.getTime()) / (24*60*60*1000));
+				dataGranttInint = [ 
+					...dataGranttInint, {
+						id: task._id, 
+						text: `<a target="_blank" href="/pcm/detail/${task._id}">${task.name} (${(task.percentage)} %)</a>`, 
+						start_date: actualStartTime, 
+						end_date: actualFinishTime,
+						duration: duration || 0, 
+						parent: task.milestone, 
+						progress: Number(task.percentage/100).toFixed(3),
+						open: true
+					}
+				]
+			}
+		});
+
+		setGranttInint({
+			data: dataGranttInint,
+			links: [
+				{ id: 1, source: 1, target: 2, type: '0' }
+			]
+		});
+	}, [JSON.stringify(listTasks)]);
+	
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
 			{/* Header */}
@@ -38,7 +94,7 @@ const ProjectSchedulePage: FC = () => {
 						</svg>
 					</button>
 					<img src={image} alt="icon" className="inline-block mx-2.5" />
-					<h1 className="inline-block font-bold">CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây</h1>
+					<h1 className="inline-block font-bold">{infoDepartment?.data?.sign}.{infoDepartment?.data?.name}</h1>
 				</div>
 				<div className="flex">
 					<img src={avatar} alt="avatar" width="28" className="mx-1 object-cover rounded-3xl border border-white" />
@@ -49,7 +105,7 @@ const ProjectSchedulePage: FC = () => {
 			</div>
 			{/* Content */}
 			<main className="flex-1 overflow-auto">
-				<Gantt tasks={data} />
+				<Gantt tasks={dataGrantt} />
 			</main>
 		</div>
 	);

@@ -75,8 +75,7 @@ export const ModalCreateOrUpdateCashFlow: FC<ModalProps> = ({
     closeModal();
   };
 
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
+  const onChange = ({ name, value }: { name: string, value: string | number | undefined }) => {
     setFormData(previous => ({
       ...previous,
       [name]: value
@@ -98,13 +97,37 @@ export const ModalCreateOrUpdateCashFlow: FC<ModalProps> = ({
       </header>
 
       <section className="px-10 py-1">
+        <DropdownSearchable
+          onchangeValue={(value) => onChange({ name: 'outin', value: value.id })}
+          placeholder={"Phân loại"}
+          className={"w-full h-12 flex-1 border border-primary-border p-2"}
+          focusedClass={"border-b border-primary"}
+          maxWidthInput={"max-w-none"}
+          isMultiple={false}
+          allowClearValueSingleInput={false}
+          data={[
+            { value: 1, text: 'Bán ra' },
+            { value: 2, text: 'Mua vào' },
+          ]}
+          initialValue={{
+            value: initialValues.outin, text: initialValues.outin === 1 ? 'Bán ra' : 'Mua vào'
+          }}
+          formatItem={{
+            id: "value",
+            text: "text",
+          }}
+          disableSearch={true}
+        />
+      </section>
+
+      <section className="px-10 py-1">
         <input
           type="text"
           placeholder="Nhập nội dung"
           name="name"
           className="h-12 w-full border border-primary-border outline-none px-8"
           defaultValue={formData.name}
-          onChange={onChange}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target)}
         />
       </section>
 
@@ -115,7 +138,7 @@ export const ModalCreateOrUpdateCashFlow: FC<ModalProps> = ({
           name="sign"
           className="h-12 w-full border border-primary-border outline-none px-8"
           defaultValue={formData.sign}
-          onChange={onChange}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target)}
         />
       </section>
 
@@ -127,7 +150,7 @@ export const ModalCreateOrUpdateCashFlow: FC<ModalProps> = ({
           name="note"
           className="h-12 w-full border border-primary-border outline-none px-8"
           defaultValue={formData.note}
-          onChange={onChange}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target)}
         />
       </section>
 

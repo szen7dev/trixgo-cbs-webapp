@@ -53,7 +53,7 @@ export const ItemChildPage: FC = () => {
         },
         isFetchList: true
     });
-
+    console.log({ listDoctypes })
     const handleConfirmCreateOrUpdateDoctype = () => refetchListDoctype();
 
     const onChangeSearchDoctype = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -155,10 +155,11 @@ export const ItemChildPage: FC = () => {
 
         openModal(
             <div
-                className={"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
+                className={"inline-block w-[521px] h-[340px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
             >
                 <ModalCreateOrUpdateDoctype
                     modalType={modalType}
+                    level="child"
                     initialValues={initValues}
                     onConfirm={handleConfirmCreateOrUpdateDoctype}
                 />

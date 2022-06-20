@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, memo } from 'react'
 import {
 	Chart as ChartJS,
 	CategoryScale,
@@ -18,6 +18,11 @@ import _lodash from 'lodash';
 import planTable from '../../../chart/ProjectLineChart';
 import { Project } from 'typings/items/project';
 
+/**
+ * Hooks
+ */
+import { useCashFlowPlanCustom } from 'services/hooks/financial/useCashFlow';
+
 ChartJS.register(
 	CategoryScale,
 	LinearScale,
@@ -31,19 +36,52 @@ ChartJS.register(
 
 type Props = {
 	projectInfo: Project | undefined,
-	contractValues: Array<any>
 } & React.HTMLAttributes<HTMLDivElement>
 
-const ReportChart: React.FC<Props> = ({ projectInfo, contractValues, ...props }) => {
+const ReportChart: React.FC<Props> = ({ projectInfo, ...props }) => {
 	const [dataSets, setDataSets] = useState<{
 		labels: Array<{ month: number, year: number, yy: string }>,
-		dataDisbursement: string[],
-		dataAccumulated: string[],
+		dataSpendingPlan: string[],
+		dataAccumulatedSpendingPlan: string[],
+		dataSpendingPlanReal: string[],
+		dataAccumulatedSpendingPlanReal: string[],
 	}>({
 		labels: [],
-		dataDisbursement: [],
-		dataAccumulated: [],
+		dataSpendingPlan: [],
+		dataAccumulatedSpendingPlan: [],
+		dataSpendingPlanReal: [],
+		dataAccumulatedSpendingPlanReal: [],
 	});
+
+	const { listAmountByProperty, isLoadingAmountByProperty } = useCashFlowPlanCustom({
+		params: {
+			amountByProperty: {
+				projectID: projectInfo?._id,
+				option: 4,
+				type: 5,
+				property: 3,
+				outin: 2
+			}
+		},
+		isFetchAmountByProperty: true
+	})
+
+	const {
+		listAmountByProperty: listAmountByPropertyReal,
+		isLoadingAmountByProperty: isLoadingAmountByPropertyReal
+	} = useCashFlowPlanCustom({
+		params: {
+			amountByProperty: {
+				projectID: projectInfo?._id,
+				option: 4,
+				type: 5,
+				property: 3,
+				outin: 2,
+				real: 1
+			}
+		},
+		isFetchAmountByProperty: true
+	})
 
 	useEffect(() => {
 		// Step 1: Get date range (startTimeProject -> now)
@@ -59,74 +97,134 @@ const ReportChart: React.FC<Props> = ({ projectInfo, contractValues, ...props })
 		// Step 3: Unique date label
 		const labels = _lodash.unionBy(datesFormat, 'yy');
 
-		// Step 4: Set data total files by date label
+		// Function Custom
 		const getAllBefore = (arr: any[], current: string) => {
 			const i = arr.findIndex(item => item.yy === current);
 			return i > -1 ? arr.slice(0, i) : [];
 		}
 
-		const dataDisbursement = labels.map(date => {
-			let totalContractValues = 0;
+		// Step 4: Set data total files by date label
 
-			const infoContractValueByDate = contractValues?.find(contractValue =>
-				contractValue?._id?.month == date.month &&
-				contractValue?._id?.year == date.year
+		// Data Plan
+		const dataSpendingPlan = labels.map(date => {
+			let total = 0;
+
+			const infoCashFlow = listAmountByProperty?.find(cashFlow =>
+				cashFlow?._id?.month == date.month &&
+				cashFlow?._id?.year == date.year
 			);
 
-			if(infoContractValueByDate) {
-				totalContractValues = infoContractValueByDate.amount;
+			if(infoCashFlow) {
+				total = infoCashFlow.value;
 			}
 
-			return (totalContractValues / 1_000_000_000).toFixed(2);
+			return (total / 1_000_000_000).toFixed(2);
 		})
 
-		const dataAccumulated = labels.map((date, index) => {
-			let totalContractValuesCurrentDate = 0;
-			let totalContractValues = 0;
+		const dataAccumulatedSpendingPlan = labels.map((date, index) => {
+			let totalCurrentDate = 0;
+			let total = 0;
 
-			const infoContractValueByDate = contractValues?.find(contractValue =>
-				contractValue?._id?.month == date.month &&
-				contractValue?._id?.year == date.year
+			const infoCashFlow = listAmountByProperty?.find(cashFlow =>
+				cashFlow?._id?.month == date.month &&
+				cashFlow?._id?.year == date.year
 			);
 
-			if(infoContractValueByDate) {
-				totalContractValuesCurrentDate = infoContractValueByDate.amount;
+			if(infoCashFlow) {
+				totalCurrentDate = infoCashFlow.value;
 			}
 
 			if(index !== 0) {
 				const datePreviousCurrent = getAllBefore(labels, date.yy);
 
-				totalContractValues = datePreviousCurrent.reduce((prev, curr) => {
-					let total = 0;
+				total = datePreviousCurrent.reduce((prev, curr) => {
+					let totalPrev = 0;
 
-					const infoContractValueByDate = contractValues?.find(contractValue =>
-						contractValue?._id?.month == curr.month &&
-						contractValue?._id?.year == curr.year
+					const infoCashFlow = listAmountByProperty?.find(cashFlow =>
+						cashFlow?._id?.month == curr.month &&
+						cashFlow?._id?.year == curr.year
 					);
 
-					if(infoContractValueByDate) {
-						total = infoContractValueByDate.amount;
+					if(infoCashFlow) {
+						totalPrev = infoCashFlow.value;
 					}
 
-					return prev += total;
+					return prev += totalPrev;
 				}, 0)
 
-				totalContractValues += totalContractValuesCurrentDate;
+				total += totalCurrentDate;
 			} else{
-				totalContractValues = totalContractValuesCurrentDate;
+				total = totalCurrentDate;
 			}
 
-			return (totalContractValues / 1_000_000_000).toFixed(2)
+			return (total / 1_000_000_000).toFixed(2)
+		})
+
+		// Data Real
+		const dataSpendingPlanReal = labels.map(date => {
+			let total = 0;
+
+			const infoCashFlow = listAmountByPropertyReal?.find(cashFlow =>
+				cashFlow?._id?.month == date.month &&
+				cashFlow?._id?.year == date.year
+			);
+
+			if(infoCashFlow) {
+				total = infoCashFlow.realValue;
+			}
+
+			return (total / 1_000_000_000).toFixed(2);
+		})
+
+		const dataAccumulatedSpendingPlanReal = labels.map((date, index) => {
+			let totalCurrentDate = 0;
+			let total = 0;
+
+			const infoCashFlow = listAmountByPropertyReal?.find(cashFlow =>
+				cashFlow?._id?.month == date.month &&
+				cashFlow?._id?.year == date.year
+			);
+
+			if(infoCashFlow) {
+				totalCurrentDate = infoCashFlow.realValue;
+			}
+
+			if(index !== 0) {
+				const datePreviousCurrent = getAllBefore(labels, date.yy);
+
+				total = datePreviousCurrent.reduce((prev, curr) => {
+					let totalPrev = 0;
+
+					const infoCashFlow = listAmountByPropertyReal?.find(cashFlow =>
+						cashFlow?._id?.month == curr.month &&
+						cashFlow?._id?.year == curr.year
+					);
+
+					if(infoCashFlow) {
+						totalPrev = infoCashFlow.realValue;
+					}
+
+					return prev += totalPrev;
+				}, 0)
+
+				total += totalCurrentDate;
+			} else{
+				total = totalCurrentDate;
+			}
+
+			return (total / 1_000_000_000).toFixed(2)
 		})
 
 		setDataSets({
 			labels,
-			dataDisbursement,
-			dataAccumulated
+			dataSpendingPlan,
+			dataAccumulatedSpendingPlan,
+			dataSpendingPlanReal,
+			dataAccumulatedSpendingPlanReal,
 		})
-	}, [JSON.stringify(projectInfo), JSON.stringify(contractValues)])
+	}, [JSON.stringify(projectInfo), JSON.stringify(listAmountByProperty), JSON.stringify(listAmountByPropertyReal)])
 
-	if(!projectInfo) return <></>
+	if(!projectInfo || isLoadingAmountByProperty || isLoadingAmountByPropertyReal) return <></>
 
 	return (
 		<div {...props}>
@@ -230,18 +328,32 @@ const ReportChart: React.FC<Props> = ({ projectInfo, contractValues, ...props })
 					labels: dataSets.labels.map(label => label.yy),
 					datasets: [
 						{
-							label: "Giải ngân",
-							data: dataSets.dataDisbursement,
-							borderWidth: 2,
+							label: "Kế hoạch chi",
+							data: dataSets.dataSpendingPlan,
+							borderWidth: 3,
 							backgroundColor: "transparent",
-							borderColor: "#85B2ED",
+							borderColor: "#45aaf2",
 						},
 						{
-							label: "Lũy kế",
-							data: dataSets.dataAccumulated,
-							borderWidth: 2,
+							label: "Lũy kế chi kế hoạch chi",
+							data: dataSets.dataAccumulatedSpendingPlan,
+							borderWidth: 3,
 							backgroundColor: "transparent",
-							borderColor: "#FF7979",
+							borderColor: "#3867d6",
+						},
+						{
+							label: "Thực tế chi",
+							data: dataSets.dataSpendingPlanReal,
+							borderWidth: 3,
+							backgroundColor: "transparent",
+							borderColor: "#ff793f",
+						},
+						{
+							label: "Lũy kế chi thực tế chi",
+							data: dataSets.dataAccumulatedSpendingPlanReal,
+							borderWidth: 3,
+							backgroundColor: "transparent",
+							borderColor: "#b33939",
 						},
 					]
 				}}
@@ -251,4 +363,4 @@ const ReportChart: React.FC<Props> = ({ projectInfo, contractValues, ...props })
 	)
 }
 
-export default ReportChart
+export default memo(ReportChart)

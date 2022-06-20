@@ -1,5 +1,4 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {ItemListConversation} from "typings/apis/messages/listConversation";
 
 const initialState : {data: {isOpenUsersSeenDetail: boolean, usersSeen: any[]}} = {
     data: {

@@ -5,12 +5,17 @@ import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import { CashFlowPlanRepository } from 'apis/financial';
 import {
     CashFlowPlan,
-    CashFlowPlanInfoPayload,
-    CashFlowPlanQueryPayload
+    CashFlowPlanQueryPayload,
+    CashFlowCustomParams,
 } from 'typings/financial/cashFlowPlan';
 
-/*=====3.INTERFACE DEFINE=====*/
-interface useCashFlowPlan {
+/**
+ * ============================ *********************** ===============================
+ * ============================ 	 CASH FLOW HOOK     ===============================
+ * ============================ *********************** ===============================
+ */
+
+interface UseCashFlowPlan {
     isLoading: boolean;
     isLoadingInfo: boolean;
     totalRecord: number;
@@ -35,7 +40,7 @@ export const useCashFlowPlan = ({
     params = {},
     isFetchList = false,
     isFetchInfo = false
-}: UseCashFlowPlanProps): useCashFlowPlan => {
+}: UseCashFlowPlanProps): UseCashFlowPlan => {
 
     const { mutateAsync: insertAsync } =
         useMutation((payload: any) =>
@@ -102,5 +107,47 @@ export const useCashFlowPlan = ({
         insertAsync,
         updateAsync,
         deleteManyAsync,
+    }
+}
+
+/**
+ * ============================ ************************** ===============================
+ * ============================    CASH FLOW HOOK CUSTOM   ===============================
+ * ============================ ************************** ===============================
+ */
+
+interface UseCashFlowPlanCustom {
+    listAmountByProperty: Array<any>;
+    isLoadingAmountByProperty: boolean;
+    refetchAmountByProperty: () => void;
+}
+
+type UseCashFlowPlanCustomProps = {
+    params?: CashFlowCustomParams,
+    isFetchAmountByProperty?: boolean,
+}
+
+export const useCashFlowPlanCustom = ({
+    params = {},
+    isFetchAmountByProperty = false
+} : UseCashFlowPlanCustomProps) : UseCashFlowPlanCustom => {
+    // Get amount by property
+    const {
+        data: amountByProperty,
+        refetch: refetchAmountByProperty,
+        isLoading: isLoadingAmountByProperty
+    } =
+        useQuery(["cash_flow_plan--amount-by-property", params.amountByProperty],
+            () => CashFlowPlanRepository.fetchAmountByProperty(params.amountByProperty), {
+                refetchOnWindowFocus: false,
+                enabled: isFetchAmountByProperty,
+            });
+
+    const listAmountByProperty = amountByProperty?.data || [];
+
+    return {
+        listAmountByProperty,
+        refetchAmountByProperty,
+        isLoadingAmountByProperty
     }
 }

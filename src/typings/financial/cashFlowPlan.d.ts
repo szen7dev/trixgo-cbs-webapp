@@ -26,7 +26,7 @@ export interface CashFlowPlan {
     realDate: string;
     note: string;
     priority: number;
-    outin: string | null;
+    outin: string | number;
     createAt: string;
     modifyAt: string;
     timeApproved: string;
@@ -80,4 +80,17 @@ interface ModalProps {
         outin?: number | null;
     }
     onConfirm?(): void
+}
+
+export type CashFlowAmountByPropertyParams = {
+    projectID?: string;
+    option?: number;
+    type?: number;
+    property?: number;
+    outin?: number;
+    real?: number;
+}
+
+export type CashFlowCustomParams = {
+    amountByProperty?: Partial<CashFlowAmountByPropertyParams>
 }

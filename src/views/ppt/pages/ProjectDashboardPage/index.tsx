@@ -11,7 +11,6 @@ import 'moment/locale/vi';
  * Hooks, Typings
  */
 import { useProject } from 'services/hooks/items/useProject';
-import { useContractPayment } from 'services/hooks/cmcs/useContractPayment';
 import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 
 import styles from "../../style.module.css";
@@ -62,18 +61,11 @@ const ProjectDashboardPortfolioPage: FC = () => {
 		isFetchInfo: true
 	})
 
-	const { listAmountContractPaymentByMonth } = useContractPayment({
-		params: {
-			projectID
-		},
-		isFetchListAmountContractValue: true
-	})
-
 	useEffect(() => {
 		document.title = "CHG.THT-Báo cáo quản trị";
 	}, []);
 
-	const { 
+	const {
 		taskOverdueWork,
         taskNextWeekWork,
         taskMoreThan7Days,
@@ -105,7 +97,7 @@ const ProjectDashboardPortfolioPage: FC = () => {
 							</div>
 
 							{/* Chartjs */}
-							<ReportChart className='bg-white mx-2 w-full mt-4' projectInfo={projectInfo} contractValues={listAmountContractPaymentByMonth} />
+							<ReportChart className='bg-white mx-2 w-full mt-4' projectInfo={projectInfo} />
 
 							{/* Images */}
 							<ReportImage className="w-full px-2" projectInfo={projectInfo} />

@@ -9,8 +9,8 @@ import { SearchInput, GroupActions, ButtonMore } from "shareComponents/common";
 
 // import DropdownFilterButton from "views/pages/document/components/DocumentFilterButton";
 import ModalInformation from "./components/ModalInformation";
-
 import CaretDownIcon from "assets/images/icon-caret-down.png";
+import debounce from "lodash/debounce";
 
 const ProjectSubjectPage: FC = () => {
 	const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
@@ -24,6 +24,7 @@ const ProjectSubjectPage: FC = () => {
 	const [totalTaskFinish, setRotalTaskFinish] = useState();
 	const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data)
 	const { id: projectID } = useParams<{ id: string }>();
+	const [keyword, setKeyword] = useState("");
 
 	const { 
 		listCompany,
@@ -33,7 +34,7 @@ const ProjectSubjectPage: FC = () => {
 		listCompanyAndTaskFinish,
         isLoading,
 	} = useQueryListCompanyOfAssigneeAndAmountTask({
-		projectID,
+		projectID, keyword
 	});
 	
 	useEffect(() => {
@@ -100,7 +101,10 @@ const ProjectSubjectPage: FC = () => {
 		<div className="flex flex-col h-full overflow-hidden">
 			<div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1">
 				<span className="text-x-large mr-7">Báo cáo tổng hợp công việc</span>
-				{/* <SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={() => 1} /> */}
+				<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={debounce(
+						(event: any) => setKeyword(event.target.value),
+						500
+					)} />
 				{/* <DropdownFilterButton /> */}
 				{/* <GroupActions className="flex items-center flex-1" /> */}
 

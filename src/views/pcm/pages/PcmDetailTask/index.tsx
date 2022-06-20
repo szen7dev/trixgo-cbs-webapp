@@ -1,13 +1,13 @@
 import { FC, useState, useEffect, useContext, useCallback } from "react";
-import { captureException } from "@sentry/react";
 import { useHistory, useParams, Redirect, Link } from "react-router-dom";
+import { captureException } from "@sentry/react";
 import { Menu } from '@headlessui/react';
 import { useQuery } from "react-query";
+import { toast } from "react-toastify";
 import moment from "moment";
 import parse from "html-react-parser";
 import _truncate from "lodash/truncate";
 import cn from "classnames";
-import { toast } from "react-toastify";
 
 /**
  * Assets
@@ -35,7 +35,6 @@ import {
   ModalAddRelationUser,
   SideBar,
   CheckList,
-  // PriceApprovalInfo,
   RelatedResponse,
   ModalUpdateTask,
   ModalUpdateTaskStatus,
@@ -60,21 +59,21 @@ import CommentContext from 'views/pcm/contexts/comment/comment.context';
  */
 import { APP_ID, PCM_STATUS_TASK, PCM_PRIORITY_TASK } from 'apis/localdb';
 import { TOAST_DEFAULT_OPTIONS } from "utils/constants";
+import { nl2p } from "utils";
+import { calculateExpireTime } from 'utils/time';
 
 /**
  * Hooks, Typings
  */
 import TaskRepository from "apis/task";
+import useModalPcm from "views/pcm/hooks/useModal";
 import { useModal } from "services/hooks/useModal";
 import { useSocket } from "services/hooks/useSocket";
-import useModalPcm from "views/pcm/hooks/useModal";
 import { useTask, useCheckList, useChildTask, useCommentPcm } from "services/hooks/useTask";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { useHistoryTraffics } from "services/hooks/auth/useAuth";
-
 import { User } from "typings/user";
-import { nl2p } from "utils";
 
 const PcmDetailTask: FC = () => {
   //_____Start history traffict
@@ -84,6 +83,7 @@ const PcmDetailTask: FC = () => {
     type: "1"
   };
   const { createHistoryTraffics } = useHistoryTraffics();
+
   useEffect(() => {
     createHistoryTraffics({...payloadHistoryTraffic, type: 1});
   }, []);
@@ -140,12 +140,22 @@ const PcmDetailTask: FC = () => {
 
   const [permissions, setPermissions] = useState({
     hasPermissionUpdateTask: false,
+    hasPermissionAddSignature: false,
     hasPermissionAddRelatedUser: false,
-    hasPermissionCreateCheckListAndChildTask: false,
-    hasPermissionCreateRelatedResponse: false,
-    hasPermissionComment: false,
+    hasPermissionViewRelatedUser: false,
     hasPermissionCreatorAddFile: false,
     hasPermissionAssigneeAddFile: false,
+    hasPermissionViewCreatorFile: false,
+    hasPermissionViewAssigneeFile: false,
+    hasPermissionCreateRelatedResponse: false,
+    hasPermissionViewRelatedResponse: false,
+    hasPermissionCreateComment: false,
+    hasPermissionViewComment: false,
+    hasPermissionCreateCheckListAndChildTask: false,
+    hasPermissionViewCheckList: false,
+    hasPermissionViewChildTask: false,
+    hasPermissionOpenBidding: false,
+    hasPermissionViewBidding: false,
   });
 
   const [isMarkInterest, setIsMarkInterest] = useState(infoTask?.data?.flags?.includes(user?._id))
@@ -153,6 +163,7 @@ const PcmDetailTask: FC = () => {
   const [isTruncate, setIsTruncate] = useState(true);
   const [isTempTask, setIsTempTask] = useState(true);
   const [confirmUsers, setConfirmUsers] = useState<Array<{ author: User, createAt: string | Date }>>([]);
+  const [openedUsers, setOpenedUsers] = useState<Array<User>>([]);
 
   const getGroupTitle = (group: any) => {
     let title = "";
@@ -192,6 +203,13 @@ const PcmDetailTask: FC = () => {
       ...prev,
       status: 3
     }))
+  }
+
+  const handleOpenBidding = (taskID: string) => {
+    socket?.emit('SUBJECT_PCM_CSS_OPEN_BIDDING', {
+      taskID,
+      bizfullname: user?.bizfullname
+    });
   }
 
   const handleMarkInterest = async () => {
@@ -353,35 +371,176 @@ const PcmDetailTask: FC = () => {
 
     if (infoTask?.data) {
       const taskInfo = infoTask.data;
-      const { percentage, amountComment, status, priority, signatures } = taskInfo;
+      const {
+        percentage, amountComment, status, priority, subtype, actualFinishTime,
+        author, assignee, related, group, signatures, openedUsers
+      } = taskInfo;
+
       const confirmUsers = signatures?.map((signature: any) => ({
         author: signature.author,
         createAt: signature.createAt
       })) ?? [];
 
-      const relatedsID                    = taskInfo.related?.map((user: any) => user._id) ?? [];
-      const groupMembersID                = taskInfo.group?.members ?? [];
-      const authorAndAssigneeID           = [taskInfo.author?._id, taskInfo.assignee?._id].filter(Boolean);
+      const relatedsID                    = related?.map((user: any) => user._id) ?? [];
+      const groupMembersID                = group?.members ?? [];
+      const authorAndAssigneeID           = [author?._id, assignee?._id].filter(Boolean);
       const authorAndAssigneeAndRelatedID = [...authorAndAssigneeID, ...relatedsID].filter(Boolean);
 
-      const hasPermissionUpdateTask       = taskInfo.author?._id === user?._id;
-      const hasPermissionAddRelatedUser   = authorAndAssigneeID.includes(user?._id);
-      const hasPermissionCreatorAddFile   = taskInfo.author?._id === user?._id;
-      const hasPermissionAssigneeAddFile  = taskInfo.assignee?._id === user?._id;
+      /**
+       * Phân quyền theo phân loại
+       * 4: Lựa chọn đấu thầu
+       * default: Các loại còn lại
+       */
+      switch (subtype) {
+        case 4: {
+          const diff = calculateExpireTime(Date.now(), actualFinishTime, 'days', false)
+          // const actualExpiredTime = moment(actualFinishTime).format('DD/MM/YYYY');
+          // const nowTime = moment().add(0, 'days').format('DD/MM/YYYY');
+          // console.log({ actualExpiredTime, nowTime, diff });
 
-      const hasPermissionCreateCheckListAndChildTask = authorAndAssigneeID.includes(user?._id);
-      const hasPermissionCreateRelatedResponse = authorAndAssigneeAndRelatedID.includes(user?._id);
-      const hasPermissionComment = [...authorAndAssigneeAndRelatedID, ...groupMembersID].includes(user?._id);
+          let allUsersRelatedIsOpenBidding = false;
 
-      setPermissions({
-        hasPermissionUpdateTask,
-        hasPermissionAddRelatedUser,
-        hasPermissionCreateCheckListAndChildTask,
-        hasPermissionCreateRelatedResponse,
-        hasPermissionComment,
-        hasPermissionCreatorAddFile,
-        hasPermissionAssigneeAddFile
-      })
+          if(openedUsers && openedUsers.length) {
+            allUsersRelatedIsOpenBidding = openedUsers.every((user: any) => relatedsID.includes(user._id));
+          }
+
+          if(!allUsersRelatedIsOpenBidding) {
+            const hasPermissionUpdateTask             = author?._id === user?._id;
+            const hasPermissionAddSignature           = assignee?._id === user?._id;
+
+            const hasPermissionAddRelatedUser         = author?._id === user?._id;
+            const hasPermissionViewRelatedUser        = [author?._id, ...relatedsID].includes(user?._id);
+
+            const hasPermissionAssigneeAddFile        = assignee?._id === user?._id;
+            const hasPermissionCreatorAddFile         = author?._id === user?._id;
+            const hasPermissionViewAssigneeFile       = assignee?._id === user?._id;
+            const hasPermissionViewCreatorFile        = authorAndAssigneeAndRelatedID.includes(user?._id);
+
+            const hasPermissionCreateRelatedResponse  = authorAndAssigneeAndRelatedID.includes(user?._id);
+            const hasPermissionViewRelatedResponse    = authorAndAssigneeAndRelatedID.includes(user?._id);
+
+            const hasPermissionCreateComment          = authorAndAssigneeAndRelatedID.includes(user?._id);
+            const hasPermissionViewComment            = authorAndAssigneeAndRelatedID.includes(user?._id);
+
+            const hasPermissionCreateCheckListAndChildTask = false;
+            const hasPermissionViewCheckList          = false;
+            const hasPermissionViewChildTask          = false;
+            const hasPermissionOpenBidding            = relatedsID.includes(user?._id);
+            const hasPermissionViewBidding            = [author?._id, ...relatedsID].includes(user?._id);
+
+            const dataPermissions = {
+              hasPermissionUpdateTask,
+              hasPermissionAddSignature,
+              hasPermissionAddRelatedUser,
+              hasPermissionViewRelatedUser,
+              hasPermissionCreatorAddFile,
+              hasPermissionAssigneeAddFile,
+              hasPermissionViewCreatorFile,
+              hasPermissionViewAssigneeFile,
+              hasPermissionCreateRelatedResponse,
+              hasPermissionViewRelatedResponse,
+              hasPermissionCreateComment,
+              hasPermissionViewComment,
+              hasPermissionCreateCheckListAndChildTask,
+              hasPermissionViewCheckList,
+              hasPermissionViewChildTask,
+              hasPermissionOpenBidding,
+              hasPermissionViewBidding,
+            }
+
+            // Trước deadline
+            if(diff > 0) {
+              setPermissions({
+                ...dataPermissions,
+                hasPermissionOpenBidding: false,
+                hasPermissionViewBidding: false,
+              });
+            }
+
+            // Sau deadline
+            if(diff === 0 || diff < 0) {
+              setPermissions(dataPermissions);
+            }
+
+          } else{ // Sau deadline + tất cả người liên quan đã mở thầu
+            const hasPermissionUpdateTask             = false;
+            const hasPermissionAddSignature           = assignee?._id === user?._id;
+
+            const hasPermissionAddRelatedUser         = author?._id === user?._id;
+            const hasPermissionViewRelatedUser        = [author?._id, ...relatedsID].includes(user?._id);
+
+            const hasPermissionCreatorAddFile         = author?._id === user?._id;
+            const hasPermissionAssigneeAddFile        = assignee?._id === user?._id;
+            const hasPermissionViewCreatorFile        = authorAndAssigneeAndRelatedID.includes(user?._id);
+            const hasPermissionViewAssigneeFile       = authorAndAssigneeAndRelatedID.includes(user?._id);
+
+            const hasPermissionCreateRelatedResponse  = authorAndAssigneeAndRelatedID.includes(user?._id);
+            const hasPermissionViewRelatedResponse    = authorAndAssigneeAndRelatedID.includes(user?._id);
+
+            const hasPermissionCreateComment          = authorAndAssigneeAndRelatedID.includes(user?._id);
+            const hasPermissionViewComment            = authorAndAssigneeAndRelatedID.includes(user?._id);
+
+            const hasPermissionCreateCheckListAndChildTask = false;
+            const hasPermissionViewCheckList          = false;
+            const hasPermissionViewChildTask          = false;
+            const hasPermissionOpenBidding            = relatedsID.includes(user?._id);
+            const hasPermissionViewBidding            = [author?._id, ...relatedsID].includes(user?._id);
+
+            setPermissions({
+              hasPermissionUpdateTask,
+              hasPermissionAddSignature,
+              hasPermissionAddRelatedUser,
+              hasPermissionViewRelatedUser,
+              hasPermissionCreatorAddFile,
+              hasPermissionAssigneeAddFile,
+              hasPermissionViewCreatorFile,
+              hasPermissionViewAssigneeFile,
+              hasPermissionCreateRelatedResponse,
+              hasPermissionViewRelatedResponse,
+              hasPermissionCreateComment,
+              hasPermissionViewComment,
+              hasPermissionCreateCheckListAndChildTask,
+              hasPermissionViewCheckList,
+              hasPermissionViewChildTask,
+              hasPermissionOpenBidding,
+              hasPermissionViewBidding,
+            })
+          }
+
+          break;
+        }
+        default: {
+          const hasPermissionUpdateTask             = author?._id === user?._id;
+          const hasPermissionAddRelatedUser         = authorAndAssigneeID.includes(user?._id);
+          const hasPermissionCreatorAddFile         = author?._id === user?._id;
+          const hasPermissionAssigneeAddFile        = assignee?._id === user?._id;
+
+          const hasPermissionCreateCheckListAndChildTask = authorAndAssigneeID.includes(user?._id);
+          const hasPermissionCreateRelatedResponse  = authorAndAssigneeAndRelatedID.includes(user?._id);
+          const hasPermissionCreateComment          = [...authorAndAssigneeAndRelatedID, ...groupMembersID].includes(user?._id);
+
+          setPermissions({
+            hasPermissionUpdateTask,
+            hasPermissionAddSignature: true,
+            hasPermissionAddRelatedUser,
+            hasPermissionViewRelatedUser: true,
+            hasPermissionCreatorAddFile,
+            hasPermissionAssigneeAddFile,
+            hasPermissionViewCreatorFile: true,
+            hasPermissionViewAssigneeFile: true,
+            hasPermissionCreateRelatedResponse,
+            hasPermissionViewRelatedResponse: true,
+            hasPermissionCreateComment,
+            hasPermissionViewComment: true,
+            hasPermissionCreateCheckListAndChildTask,
+            hasPermissionViewCheckList: true,
+            hasPermissionViewChildTask: true,
+            hasPermissionOpenBidding: false,
+            hasPermissionViewBidding: false,
+          })
+          break;
+        }
+      }
 
       setTaskData({
         percentComplete: `${percentage}%`,
@@ -390,6 +549,7 @@ const PcmDetailTask: FC = () => {
         priority
       });
       setConfirmUsers(confirmUsers);
+      setOpenedUsers(openedUsers);
     }
   }, [infoTask, isSuccessApp, hasPermission]);
 
@@ -402,6 +562,7 @@ const PcmDetailTask: FC = () => {
   }
 
   const taskInfo = infoTask.data;
+
   return (
     <>
       {/*_____________header______________*/}
@@ -424,16 +585,6 @@ const PcmDetailTask: FC = () => {
             </svg>
           </button>
           <span className="mx-5 text-primary-gray">|</span>
-          {/* <button className="mx-3">
-            <img
-              className="w-6 opacity-80"
-              src={DownloadIcon}
-              alt="Download icon"
-            />
-          </button> */}
-          {/* <button className="mx-3">
-            <img className="w-6" src={ShareIcon} alt="Share icon" />
-          </button> */}
           <button className="mx-3" onClick={toggleModalCopyTask}>
             <img className="w-6" src={CopyIcon} alt="Copy icon" />
           </button>
@@ -454,37 +605,27 @@ const PcmDetailTask: FC = () => {
               <img className="w-6" src={IconPencil} alt="Pencil icon" />
             </button>
           )}
-          {/* <button className="mx-3">
-            <img className="w-6" src={RemoveIcon} alt="Remove icon" />
-          </button> */}
-          {/* <DropdownOption
-            view={<img className="w-6 opacity-80" src={IconPrint} alt="Print" />}
-            classNameItem="left-1"
-          >
-            <Menu.Item onClick={() => history.push(`/pcm/detail/${taskInfo._id}/print/1`)}>
-              <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
-                  <div className={"flex-1 text-left ml-4"}>Loại 1</div>
-              </div>
-            </Menu.Item>
-            <Menu.Item onClick={() => history.push(`/pcm/detail/${taskInfo._id}/print/2`)}>
-              <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
-                  <div className={"flex-1 text-left ml-4"}>Loại 2</div>
-              </div>
-            </Menu.Item>
-             <Menu.Item onClick={() => history.push(`/pcm/detail/${taskInfo._id}/print/3`)}>
-              <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
-                  <div className={"flex-1 text-left ml-4"}>Loại 3</div>
-              </div>
-            </Menu.Item>
-          </DropdownOption> */}
-          {/* <button className="mx-3">
-            <img className="w-6 opacity-80" src={IconPrint} alt="Print icon" />
-          </button> */}
-          {permissions.hasPermissionAddRelatedUser && taskInfo?.subtype != 4 && (
+          {permissions.hasPermissionAddRelatedUser && (
             <button className="mx-3" onClick={openAddUserRelation}>
               <img className="w-6 opacity-80" src={IconAddUser} alt="User add icon" />
             </button>
           )}
+          {/* <button className="mx-3">
+            <img
+              className="w-6 opacity-80"
+              src={DownloadIcon}
+              alt="Download icon"
+            />
+          </button> */}
+          {/* <button className="mx-3">
+            <img className="w-6" src={ShareIcon} alt="Share icon" />
+          </button> */}
+          {/* <button className="mx-3">
+            <img className="w-6" src={RemoveIcon} alt="Remove icon" />
+          </button> */}
+          {/* <button className="mx-3">
+            <img className="w-6 opacity-80" src={IconPrint} alt="Print icon" />
+          </button> */}
         </div>
 
         <div className="task-management-header-right-block flex items-center">
@@ -584,7 +725,7 @@ const PcmDetailTask: FC = () => {
                     alt="Organizational icon"
                   />
                   <span className="text-[13px] text-primary-gray mx-2">
-                    Việc cha: <button onClick={() => history.push(`/pcm/detail/${infoTask?.data?.parent?._id}`)}>{infoTask?.data?.parent?.name}</button>
+                    Việc cha: <button onClick={() => history.push(`/pcm/detail/${taskInfo.parent?._id}`)}>{taskInfo.parent?.name}</button>
                   </span>
                 </div>
               )}
@@ -594,10 +735,10 @@ const PcmDetailTask: FC = () => {
               <div className="flex justify-between">
                 <div>
                   <span className="text-lg leading-5">
-                    {moment(infoTask?.data?.actualFinishTime).format("DD/MM/YYYY")}
+                    {moment(taskInfo.actualFinishTime).format("DD/MM/YYYY")}
                   </span>
                   <span className="ml-2 text-[13px] text-primary-gray">
-                    {moment(infoTask?.data?.actualFinishTime).format("HH:mm")}
+                    {moment(taskInfo.actualFinishTime).format("HH:mm")}
                   </span>
                 </div>
                 <div>
@@ -645,55 +786,67 @@ const PcmDetailTask: FC = () => {
               )}
               {/* <FileAttachment files={taskInfo?.authorAttachs} /> */}
             </div>
-						<CreatorUploadedFile
-              className="p-5"
-              authorAttachs={taskInfo?.authorAttachs}
-              author={user}
-              taskID={taskInfo._id}
-              companyID={taskInfo.company?._id}
-              projectID={taskInfo.project?._id}
-              groupID={taskInfo.group?._id}
-              hasPermission={permissions.hasPermissionCreatorAddFile}
-            />
-            <div>
-              <CheckList
-                componentType="CHECKLIST"
-                task={taskInfo}
-                data={listCheckList}
-                totalRecord={totalRecordCheckList}
-                onSeeMore={nextPageListCheckList}
-                hasPermission={permissions.hasPermissionCreateCheckListAndChildTask}
+            {permissions.hasPermissionViewCreatorFile && (
+              <CreatorUploadedFile
+                className="p-5"
+                authorAttachs={taskInfo?.authorAttachs}
+                author={user}
+                taskID={taskInfo._id}
+                companyID={taskInfo.company?._id}
+                projectID={taskInfo.project?._id}
+                groupID={taskInfo.group?._id}
+                hasPermission={permissions.hasPermissionCreatorAddFile}
               />
-            </div>
-            <div className="mt-5 pr-3">
-              <CheckList
-                componentType="CHILD_TASK"
-                task={taskInfo}
-                data={listChildTask}
-                totalRecord={totalRecordChildTask}
-                onSeeMore={nextPageListChildTask}
-                hasPermission={permissions.hasPermissionCreateCheckListAndChildTask}
-              />
-            </div>
+            )}
+            {permissions.hasPermissionViewCheckList && (
+              <div>
+                <CheckList
+                  componentType="CHECKLIST"
+                  task={taskInfo}
+                  data={listCheckList}
+                  totalRecord={totalRecordCheckList}
+                  onSeeMore={nextPageListCheckList}
+                  hasPermission={permissions.hasPermissionCreateCheckListAndChildTask}
+                />
+              </div>
+            )}
+
+            {permissions.hasPermissionViewChildTask && (
+              <div className="mt-5 pr-3">
+                <CheckList
+                  componentType="CHILD_TASK"
+                  task={taskInfo}
+                  data={listChildTask}
+                  totalRecord={totalRecordChildTask}
+                  onSeeMore={nextPageListChildTask}
+                  hasPermission={permissions.hasPermissionCreateCheckListAndChildTask}
+                />
+              </div>
+            )}
+
             {/* <div className="px-5 mt-5">
               <PriceApprovalInfo
                 timeApproved={taskInfo?.timeApproved}
                 valueApproved={taskInfo?.valueApproved}
               />
             </div> */}
-						<OwnerUploadedFile
-              className="px-5 pt-5 pb-2"
-              assigneeAttachs={taskInfo?.assigneeAttachs}
-              author={user}
-              taskID={taskInfo._id}
-              companyID={taskInfo.company?._id}
-              projectID={taskInfo.project?._id}
-              groupID={taskInfo.group?._id}
-              hasPermission={permissions.hasPermissionAssigneeAddFile}
-            />
-            <div className="px-5 mb-5">
-              <RelatedResponse task={taskInfo} />
-            </div>
+            {permissions.hasPermissionViewAssigneeFile && (
+              <OwnerUploadedFile
+                className="px-5 pt-5 pb-2"
+                assigneeAttachs={taskInfo?.assigneeAttachs}
+                author={user}
+                taskID={taskInfo._id}
+                companyID={taskInfo.company?._id}
+                projectID={taskInfo.project?._id}
+                groupID={taskInfo.group?._id}
+                hasPermission={permissions.hasPermissionAssigneeAddFile}
+              />
+            )}
+            {permissions.hasPermissionViewRelatedResponse && (
+              <div className="px-5 mb-5">
+                <RelatedResponse task={taskInfo} />
+              </div>
+            )}
           </div>
 
           {/*_____________task sidebar______________*/}
@@ -706,59 +859,65 @@ const PcmDetailTask: FC = () => {
               createAt={taskInfo?.createAt}
               related={taskInfo?.related}
               confirmUsers={confirmUsers}
+              openedUsers={openedUsers}
+              hasPermissionViewRelatedUser={permissions.hasPermissionViewRelatedUser}
+              hasPermissionAddSignature={permissions.hasPermissionAddSignature}
+              hasPermissionOpenBidding={permissions.hasPermissionOpenBidding}
+              hasPermissionViewBidding={permissions.hasPermissionViewBidding}
               onConfirmSign={handleConfirmSign}
-              subtype={taskInfo?.subtype}
+              onOpenBidding={handleOpenBidding}
             />
           </div>
         </div>
         {/*_____________task comment ______________*/}
         <div className="flex bg-white mt-2" style={{ width: 1100 }}>
-          {/* <CommentContainer className="w-[791px]" /> */}
-          <div className="w-[791px]">
-            <CommentFull
-              userId={user?._id}
-              taskInfo={taskInfo}
-              comments={listComments}
-              amountComment={taskData.amountComment}
-              totalRecord={totalRecord}
-              limit={limit}
-              hasLoadProvider={false}
-              hasPermission={permissions.hasPermissionComment}
-              onConfirm={(method?: string) => {
-                if(method && method === 'INSERT') {
-                  setTaskData(previous => ({ ...previous, amountComment: taskData.amountComment + 1 }))
-                }
-              }}
-            />
-            {/* <div className="text-x-large py-3 px-6 font-bold">
-              Bình luận {taskData.amountComment > 0 ? `(${taskData.amountComment})` : ''}
+          {permissions.hasPermissionViewComment && (
+            <div className="w-[791px]">
+              <CommentFull
+                userId={user?._id}
+                taskInfo={taskInfo}
+                comments={listComments}
+                amountComment={taskData.amountComment}
+                totalRecord={totalRecord}
+                limit={limit}
+                hasLoadProvider={false}
+                hasPermission={permissions.hasPermissionCreateComment}
+                onConfirm={(method?: string) => {
+                  if(method && method === 'INSERT') {
+                    setTaskData(previous => ({ ...previous, amountComment: taskData.amountComment + 1 }))
+                  }
+                }}
+              />
+              {/* <div className="text-x-large py-3 px-6 font-bold">
+                Bình luận {taskData.amountComment > 0 ? `(${taskData.amountComment})` : ''}
+              </div>
+              <RootCommentsList
+                className="px-5"
+                userID={user?._id}
+                comments={listComments}
+                totalRecord={totalRecord}
+                limit={limit}
+                taskID={id}
+              />
+              <div className='flex flex-col w-full max-h-full overflow-y-auto'>
+                {permissions.hasPermissionComment && (
+                  <ReplyCommentField
+                    attachFile
+                    inputContainerClassName="flex w-full p-2"
+                    fileContainerClassName="border-t-0.5 border-cbs-border mr-7 divide-y-0.5 divide-cbs-border"
+                    projectID={taskInfo?.project?._id}
+                    groupID={taskInfo?.group?._id}
+                    taskID={id}
+                    onConfirm={(method?: string) => {
+                      if(method && method === 'INSERT') {
+                        setTaskData(previous => ({ ...previous, amountComment: taskData.amountComment + 1 }))
+                      }
+                    }}
+                  />
+                )}
+              </div> */}
             </div>
-            <RootCommentsList
-              className="px-5"
-              userID={user?._id}
-              comments={listComments}
-              totalRecord={totalRecord}
-              limit={limit}
-              taskID={id}
-            />
-            <div className='flex flex-col w-full max-h-full overflow-y-auto'>
-              {permissions.hasPermissionComment && (
-                <ReplyCommentField
-                  attachFile
-                  inputContainerClassName="flex w-full p-2"
-									fileContainerClassName="border-t-0.5 border-cbs-border mr-7 divide-y-0.5 divide-cbs-border"
-                  projectID={taskInfo?.project?._id}
-                  groupID={taskInfo?.group?._id}
-                  taskID={id}
-                  onConfirm={(method?: string) => {
-                    if(method && method === 'INSERT') {
-                      setTaskData(previous => ({ ...previous, amountComment: taskData.amountComment + 1 }))
-                    }
-                  }}
-                />
-              )}
-            </div> */}
-          </div>
+          )}
           {/*
             Modal
             + Add relation user

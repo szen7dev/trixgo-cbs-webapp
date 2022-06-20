@@ -12,14 +12,16 @@ interface CashFlowPlanRepository {
     deleteCashFlowPlan: (ids: Array<string>) => Promise<any>;
     fetchListCashFlowPlan: (params: CashFlowPlan.CashFlowPlanQueryPayload) => Promise<CashFlowPlan.CashFlowPlanQueryResponse>;
     fetchDetailCashFlowPlan: (params?: CashFlowPlan.CashFlowPlanQueryPayload) => Promise<CashFlowPlan.CashFlowPlanQueryDetailResponse>;
+    fetchAmountByProperty: (params?: CashFlowPlan.CashFlowAmountByPropertyParams) => Promise<any>;
 }
 
 export const cashFlowPlanRepository: CashFlowPlanRepository = {
-    addCashFlowPlan: (params: any) => addCashFlowPlan(params),
-    updateCashFlowPlan: (params: any) => updateCashFlowPlan(params),
-    deleteCashFlowPlan: (ids: Array<string>) => deleteCashFlowPlan(ids),
+    addCashFlowPlan: (params) => addCashFlowPlan(params),
+    updateCashFlowPlan: (params) => updateCashFlowPlan(params),
+    deleteCashFlowPlan: (ids) => deleteCashFlowPlan(ids),
     fetchListCashFlowPlan: async (params) => fetchListCashFlowPlan(params),
     fetchDetailCashFlowPlan: async (params) => fetchListCashFlowPlan(params),
+    fetchAmountByProperty: async (params) => getAmountByProperty(params),
 }
 
 /*=====APIS=====*/
@@ -28,9 +30,9 @@ async function fetchListCashFlowPlan(params: any) {
     const { data } = await API.get(
         `${FIN_URL}/cash_flow_plans`, {
         params: {
-            select: '_id contract project parent type name sign date value planValue realDate realValue note priority outin status property approver timeApproved',
+            select: '_id contract project parent type name sign date value planValue realDate realValue note priority outin status property approver timeApproved userCreate',
             populates: {
-                path: 'parent contract project approver',
+                path: 'parent contract project approver userCreate',
                 select: '_id name sign date priority sellerInfo bizfullname',
                 populate: {
                     path: 'sellerInfo',
@@ -62,10 +64,24 @@ async function updateCashFlowPlan(params: any) {
 }
 
 // Delete
-async function deleteCashFlowPlan(params: any) {
+async function deleteCashFlowPlan(payload: any) {
     const { data } = await API.delete(
-        `${FIN_URL}/cash_flow_plans`, { params }
+        `${FIN_URL}/cash_flow_plans`, {
+            params: {
+                cashFlowsID: payload
+            }
+        }
     );
+
+    return data;
+}
+
+// Get amount by property
+async function getAmountByProperty(params: any) {
+    const { data } = await API.get(
+        `${FIN_URL}/cash_flow_plans/get-amount-by-property`, {
+            params
+        });
 
     return data;
 }

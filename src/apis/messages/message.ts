@@ -3,7 +3,7 @@ import { convertObToUrl } from "utils";
 import {
     AddUserToConversationPayload, AddUserToConversationResponse,
     DeleteRevokeMessagePayload,
-    DeleteRevokeMessageResponse,
+    DeleteRevokeMessageResponse, GetNPSDetailPayload, GetNPSPleasantDetailResponse, GetNPSScoreDetailResponse,
     ListMessagePayload,
     ListMessageResponse,
     PinnedMessagePayload,
@@ -11,7 +11,7 @@ import {
     SendNormalMessagePayload,
     SendNormalMessageResponse,
     ShareMessagePayload,
-    ShareMessageResponse,
+    ShareMessageResponse, UpdateNPSPayload, UpdateNPSResponse,
     UpdatePinnedMessagePayload,
     UpdatePinnedMessageResponse,
     UpdatePollPayload,
@@ -29,9 +29,12 @@ const updatePinMessage = "/api/chatting/conversations/update-pin-message-convers
 const deleteMessage = "/api/chatting/conversations/delete-message-conversation";
 const revokeMessage = "/api/chatting/conversations/revoke-message-conversation";
 const updatePoll = "/api/chatting/conversations/update-message-Poll-conversation";
+const updateNPS = "/api/chatting/conversations/update-message-nps-conversation";
 const addUserToConversation = "/api/chatting/conversations/add-member-conversation";
 const searchMessageInConversationById = "api/chatting/conversations/search-message-conversation-by-id";
 const updateSeenMessageConversation = "api/chatting/conversations/update-seen-message-conversation";
+const getReasonStatisticsNps = "api/chatting/conversations/get-reason-statistics-nps";
+const getScoreStatisticsNps = "api/chatting/conversations/get-score-statistics-nps";
 
 const ListMessageRepository = {
     async getListPinMessage(payload: PinnedMessagePayload): Promise<PinnedMessageResponse> {
@@ -114,6 +117,15 @@ const ListMessageRepository = {
         return data;
     },
 
+    async updateNPS(payload: UpdateNPSPayload) : Promise<UpdateNPSResponse> {
+        const {data} = await API.put(
+            `${updateNPS}`,
+            {...payload}
+        )
+
+        return data;
+    },
+
     async addUserToConversation(payload: AddUserToConversationPayload) : Promise<AddUserToConversationResponse>  {
         const {data} = await API.post(
             `${addUserToConversation}`,
@@ -138,7 +150,23 @@ const ListMessageRepository = {
         )
 
         return data;
-    }
+    },
+
+    async getReasonStatisticsNps(payload: GetNPSDetailPayload) : Promise<GetNPSPleasantDetailResponse> {
+        const {data} = await API.get(
+            `${getReasonStatisticsNps}?${convertObToUrl(payload)}`
+        )
+
+        return data;
+    },
+
+    async getScoreStatisticsNps(payload: GetNPSDetailPayload) : Promise<GetNPSScoreDetailResponse> {
+        const {data} = await API.get(
+            `${getScoreStatisticsNps}?${convertObToUrl(payload)}`
+        )
+
+        return data;
+    },
 };
 
 export default ListMessageRepository;

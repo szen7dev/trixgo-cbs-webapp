@@ -7,6 +7,7 @@ import {removeSelectedMessage, setSelectedMessages} from "redux/reducer/messages
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {DeleteChatContent, ContactContent, TextChatContent, FileChatContent, ImagesContent} from "./index";
+import {NpsContent} from "../../Nps";
 
 type Props = {
     message: ItemMessage;
@@ -45,6 +46,8 @@ export const OthersMessage:FC<Props> = ({message,bgMessage, context, isMini}) =>
                 return <ImagesContent isMini={isMini} context={context} message={message} showSenderName={true}/>;
             case 7:
                 return <ContactContent isMini={isMini} context={context} message={message} className={bgMessage??"bg-white"}/>;
+            case 8:
+                return <NpsContent isMini={isMini} context={context} message={message} className={bgMessage??"bg-white"}/>;
         }
     },[message]);
 

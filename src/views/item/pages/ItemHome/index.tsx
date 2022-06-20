@@ -55,6 +55,8 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
         isFetchList: true
     });
 
+    console.log({ listDoctypes })
+
     const handleConfirmCreateOrUpdateDoctype = () => refetchListDoctype();
 
     const onChangeSearchDoctype = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -258,7 +260,7 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
                 </thead>
 
                 <tbody>
-                    {listDoctypes.length ? listDoctypes.map(doctype => (
+                    {listDoctypes.length ? listDoctypes.map((doctype: any) => (
                         <tr key={doctype._id} className="border-b border-primary-border h-10">
                             <td className="py-1 px-2 text-center">
                                 <input
@@ -269,11 +271,9 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
                                 />
                             </td>
                             <td className="py-1 px-2">
-                                {type == 21 ? (
-                                    <Link to={`/item/home/${type}/${doctype._id}`}>
-                                        {doctype.name}
-                                    </Link>
-                                ) : doctype.name}
+                                <Link to={`/item/home/${type}/${doctype._id}`}>
+                                    {doctype.amountChilds>0? <b>{doctype?.name}({doctype.amountChilds})</b>: doctype.name }
+                                </Link>
                                 {/* {itemState.href ? (
                                     <Link to={`${itemState.href}/${doctype._id}`}>
                                         {doctype.name}

@@ -195,6 +195,15 @@ const PcmRepository = {
         return data;
     },
 
+    async fetchListCompanyOfAuthorAndAmountTask(params?: any) {
+        const { data } = await API.get(`${pcmURL}/pcm_plan_tasks/amount-task-of-company_of_author`, {
+            params: {
+                ...params
+            }
+        });
+        return data;
+    },
+
     async fetchAmountTaskMilestone(params?: any) {
         const { data } = await API.get(`${pcmURL}/pcm_plan_tasks/amount-task-by-milestone`, {
             params: {
