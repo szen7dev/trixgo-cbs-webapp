@@ -2,18 +2,20 @@
 import { FC, useEffect, useCallback, useState } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { Menu } from '@headlessui/react';
+import { toast } from "react-toastify";
 import debounce from 'lodash/debounce';
-import BackIcon from "assets/images/icon-back.svg";
 
 /*=====2.CSS=====*/
 import "views/human/styles/style.module.css";
 
 /*=====3.ICONS=====*/
+// import BackIcon from "assets/images/icon-back.svg";
 import SearchIcon from "assets/images/icons8-search.svg";
 import ThreeDotIcon from "assets/images/icon-3dots.png";
 
 /*=====4.PAGES/COMPONENTS=====*/
-import { InputClearable } from "shareComponents/common";
+import { InputClearable, DropdownOption, Loader } from "shareComponents/common";
 import { NewHumanModal } from "views/human/shareComponents/common/NewHumanModal";
 import { useModal } from "services/hooks/useModal";
 import { DropdownFilterButton } from "views/human/shareComponents/common";
@@ -22,19 +24,24 @@ import { DropdownFilterButton } from "views/human/shareComponents/common";
 import type { Human } from "typings/human";
 
 /*=====6.HOOKS/APIS=====*/
-import { useFetchListHuman, useCreateContactMutation } from "services/hooks/useHuman";
+import { useFetchListHuman, useCreateContactMutation, useHumanCustom } from "services/hooks/useHuman";
 import { useHistoryTraffics } from "services/hooks/auth/useAuth";
-import { usePcmProject } from "services/hooks/pcm/usePcmProject";
+// import { usePcmProject } from "services/hooks/pcm/usePcmProject";
 
 /*=====7.OTHER=====*/
 import { APP_ID } from "apis/localdb"
-const ImageStorageUrl = process.env.REACT_APP_URL_S3_CONTACT;
+import { createLinkAndClick } from 'utils';
+// const ImageStorageUrl = process.env.REACT_APP_URL_S3_CONTACT;
 
 export const HumanHomePage: FC = () => {
   const { t } = useTranslation(["human"]);
 	const { id: departmentID } = useParams<{ id: string }>();
-  const [pageParam, setPageParam] = useState<any>({departmentID});
   const history = useHistory();
+
+  const [pageParam, setPageParam] = useState<any>({departmentID});
+  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+		isExporting: false,
+	});
 
   // Lấy ra data/messageList data ngay lúc đầu vào màn hình
   const humans = useFetchListHuman(pageParam);
@@ -44,6 +51,7 @@ export const HumanHomePage: FC = () => {
   // bấm vào nút tạo thì gọi luôn đến api tạo mẩu tin
   const { createContactMutateAsync } = useCreateContactMutation();
   const { createHistoryTraffics } = useHistoryTraffics();
+  const { exportHumanAsync } = useHumanCustom({});
 
   useEffect(() => {
     createHistoryTraffics(
@@ -82,7 +90,29 @@ export const HumanHomePage: FC = () => {
     setPageParam({});
   }, []);
 
-	const { infoDepartment } = usePcmProject({ departmentID });
+  const handleExportReport = async () => {
+		try {
+			setStateExport({ isExporting: true });
+			const { error, data } = await exportHumanAsync({});
+
+			if(error) {
+				return toast.warn(data?.message);
+			}
+
+			data && createLinkAndClick(data, '_self');
+		} catch (error: any) {
+      toast.error(error.message)
+		} finally {
+			setStateExport({ isExporting: false });
+		}
+	}
+
+	// const { infoDepartment } = usePcmProject({ departmentID });
+
+  if(stateExport.isExporting) {
+    return <Loader className="border-primary" />
+  }
+
   return (
     <section className="w-full">
       <div className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-12 px-6 border border-gray-200">
@@ -121,23 +151,38 @@ export const HumanHomePage: FC = () => {
             initialValues={pageParam}
           />
         </div>
-        <button
-          className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold"
-          onClick={() =>
-            openModal(
-              // <div className={ "inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0" } >
-                <div
-                  className={
-                    "inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"
-                  }
-                >
-                <NewHumanModal onFinish={handleFinishForm} />
+
+        <div className="task-management-header-right-block flex items-center">
+          <button
+            className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold mr-4"
+            onClick={() =>
+              openModal(
+                // <div className={ "inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0" } >
+                  <div
+                    className={
+                      "inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"
+                    }
+                  >
+                  <NewHumanModal onFinish={handleFinishForm} />
+                </div>
+              )
+            }
+          >
+            Tạo mới
+          </button>
+
+          <DropdownOption>
+            {/* IN ẤN */}
+            <Menu.Item onClick={handleExportReport}>
+              <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-3"}>
+                <img src="/images/common/icons8-download-48.png" alt="Download Excel" />
+                <div className={"flex-1 text-left ml-4"}>
+                  Download Excel
+                </div>
               </div>
-            )
-          }
-        >
-          Tạo mới
-        </button>
+            </Menu.Item>
+          </DropdownOption>
+        </div>
       </div>
 
       <div className="px-6 py-4 grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 xs:grid-cols-2 gap-3">
