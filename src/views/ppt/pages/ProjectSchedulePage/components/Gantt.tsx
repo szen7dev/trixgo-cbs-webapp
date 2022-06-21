@@ -97,12 +97,12 @@ const Gantt: FC<{ tasks: any }> = ({ tasks }) => {
 			gantt.init(ganttContainer.current);
 			gantt.parse(tasks);
 			gantt.config.columns =  [
-				{ name:"text", label:"Nội dung", tree: true, width: 400 },
+				{ name:"text", label:"Nội dung", tree: true, min_width: 500 },
 				{ name:"start_date", label:"Bắt đầu", align:"center" },
-				{ name:"end_date", label:"Kết thúc", align:"center"         },
-				{ name:"duration", label:"Số ngày", align:"center", width: 50 },
+				{ name:"end_date", label:"Kết thúc", align:"center" },
+				{ name:"duration", label:"Số ngày", align:"center", width:50 },
 			];
-			// gantt.config.date_format = 'yyyy-MM-dd';
+			// Cho phép kép sang phải để xem
 			gantt.plugins({
 				drag_timeline: true
 			});
