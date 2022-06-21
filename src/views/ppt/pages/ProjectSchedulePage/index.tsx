@@ -53,7 +53,7 @@ const ProjectSchedulePage: FC = () => {
 		},
 		isFetch: true
 	});
-	console.log({ listTasks })
+	
 	useEffect(() => {
 		listTasks?.forEach((task:any) => {
 			if(task.milestone){
@@ -68,6 +68,7 @@ const ProjectSchedulePage: FC = () => {
 						end_date: actualFinishTime,
 						duration: duration || 0, 
 						parent: task.milestone, 
+						percentage: task.percentage,
 						progress: Number(task.percentage/100).toFixed(3),
 						open: true
 					}
