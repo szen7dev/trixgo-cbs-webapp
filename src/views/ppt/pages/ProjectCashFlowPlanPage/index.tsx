@@ -16,13 +16,17 @@ import iconPencil from 'assets/images/icons8-pencil-96 1.png';
 /*=====4.PAGES/COMPONENTS=====*/
 import { SearchInput } from "shareComponents/common";
 import { ModalCreateOrUpdateCashFlow, ModalConfirm } from "../../sharedComponents/common";
+import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
+import ModalShare from "./components/ModalShare";
 
 /*=====5.TYPINGS=====*/
 import CashFlowPlan from "typings/financial/cashFlowPlan";
 
 /*=====6.HOOKS/APIS=====*/
+import { useAuth } from "services/hooks/auth/useAuth";
 import { useModal } from "services/hooks/useModal";
 import { useCashFlowPlan } from "services/hooks/financial/useCashFlow";
+import { User } from "typings/user";
 
 const ProjectCashFlowPlanPage: FC<{ outin: number }> = ({ outin }) => {
 	const { id: projectID } = useParams<{ id: string }>();
@@ -40,6 +44,18 @@ const ProjectCashFlowPlanPage: FC<{ outin: number }> = ({ outin }) => {
         date: '',
         priority: null,
     });
+
+    const [modalShare, setModalShare] = useState<{
+        isShow: boolean, users: User[] | undefined, cashFlowId: string, hasPermission: boolean, modalType: 'members' | 'admins'
+    }>({
+        isShow: false,
+        users: [],
+        hasPermission: false,
+        cashFlowId: '',
+        modalType: 'members'
+    });
+
+    const { user } = useAuth();
 
     const {
         deleteManyAsync,
@@ -121,9 +137,9 @@ const ProjectCashFlowPlanPage: FC<{ outin: number }> = ({ outin }) => {
     const handleConfirmDelete = async () => {
         try {
             const ids = itemsChecked.map(item => item._id);
-            const { error, data } = await deleteManyAsync(ids);
+            const { error, status, data } = await deleteManyAsync(ids);
 
-            if(error) {
+            if(error || status !== 200) {
                 return toast.warn(data?.message);
             }
 
@@ -173,6 +189,9 @@ const ProjectCashFlowPlanPage: FC<{ outin: number }> = ({ outin }) => {
             </div>
         )
     }
+
+    const toggleModalShare = (cashFlowId: string, modalType: 'admins' | 'members', users: User[] | undefined) =>
+        setModalShare({ isShow: !modalShare.isShow, users, cashFlowId, hasPermission: true, modalType });
 
     return (
         <main className="relative h-full">
@@ -272,6 +291,11 @@ const ProjectCashFlowPlanPage: FC<{ outin: number }> = ({ outin }) => {
                                 Ghi chú
                             </div>
                         </th>
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Tác vụ
+                            </div>
+                        </th>
                     </tr>
                 </thead>
 
@@ -296,6 +320,16 @@ const ProjectCashFlowPlanPage: FC<{ outin: number }> = ({ outin }) => {
                             <td className="px-2 align-middle">{formatNumberMoney(item?.value)}</td>
                             <td className="px-2 align-middle">{formatNumberMoney(item?.realValue)}</td>
                             <td className="px-2 align-middle">{item.note}</td>
+                            <td className="px-2 align-middle">
+                                {item.userCreate?._id === user?._id && (
+                                    <button
+                                        className="text-primary underline"
+                                        onClick={() => toggleModalShare(item._id, 'members', item.members)}
+                                    >
+                                        Share
+                                    </button>
+                                )}
+                            </td>
                         </tr>
                     )) : <></>}
                 </tbody>
@@ -310,6 +344,20 @@ const ProjectCashFlowPlanPage: FC<{ outin: number }> = ({ outin }) => {
                     </button>
                 </div>
             )}
+
+            <ModalLarge
+                show={modalShare.isShow}
+                toggle={() => setModalShare(prev => ({ ...prev, isShow: !modalShare.isShow }))}
+                className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[600px] rounded-cbs-md"
+            >
+                <ModalShare
+                    toggle={() => setModalShare(prev => ({ ...prev, isShow: !modalShare.isShow }))}
+                    cashFlowID={modalShare.cashFlowId}
+                    users={modalShare.users}
+                    modalType={modalShare.modalType}
+                    hasPermission={modalShare.hasPermission}
+                />
+            </ModalLarge>
         </main>
     );
 };

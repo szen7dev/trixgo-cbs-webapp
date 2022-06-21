@@ -7,7 +7,7 @@ import Gantt from "./components/Gantt";
 import { usePcmProject } from "services/hooks/pcm/usePcmProject";
 import { PCM_MILESTONE } from "apis/localdb/index";
 import { useTask } from "services/hooks/useTask";
-import moment from "moment";
+
 let dataGranttInint:any = [
 	{ id: 1, text: "<b>Pháp lý</b>", start_date: null, duration: null, parent:null, progress: 0, open: true},
 	{ id: 2, text: "<b>Thiết kế</b>", start_date: null, duration: null, parent:null, progress: 0, open: true},

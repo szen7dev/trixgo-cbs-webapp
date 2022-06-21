@@ -102,6 +102,7 @@ const Gantt: FC<{ tasks: any }> = ({ tasks }) => {
 				{ name:"end_date", label:"Kết thúc", align:"center" },
 				{ name:"duration", label:"Số ngày", align:"center", width:50 },
 			];
+			// gantt.config.date_format = 'yyyy-MM-dd';
 			gantt.plugins({
 				drag_timeline: true
 			});

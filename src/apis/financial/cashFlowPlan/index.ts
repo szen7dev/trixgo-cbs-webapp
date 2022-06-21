@@ -30,9 +30,9 @@ async function fetchListCashFlowPlan(params: any) {
     const { data } = await API.get(
         `${FIN_URL}/cash_flow_plans`, {
         params: {
-            select: '_id contract project parent type name sign date value planValue realDate realValue note priority outin status property approver timeApproved',
+            select: '_id contract project parent type name sign date value planValue realDate realValue note priority outin status property approver timeApproved userCreate',
             populates: {
-                path: 'parent contract project approver',
+                path: 'parent contract project approver userCreate',
                 select: '_id name sign date priority sellerInfo bizfullname',
                 populate: {
                     path: 'sellerInfo',
@@ -64,9 +64,13 @@ async function updateCashFlowPlan(params: any) {
 }
 
 // Delete
-async function deleteCashFlowPlan(params: any) {
+async function deleteCashFlowPlan(payload: any) {
     const { data } = await API.delete(
-        `${FIN_URL}/cash_flow_plans`, { params }
+        `${FIN_URL}/cash_flow_plans`, {
+            params: {
+                cashFlowsID: payload
+            }
+        }
     );
 
     return data;
