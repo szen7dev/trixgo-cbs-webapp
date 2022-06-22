@@ -56,7 +56,7 @@ const PcmTasksReportPage: FC = () => {
     isFetch: !!Object.keys(params).length
   })
 
-  const { infoReport, refetchInfoReport } = usePcmReport({
+  const { infoReport, refetchInfoReport, isLoadingInfoReport } = usePcmReport({
     subjectID: reportID
   });
 
@@ -64,7 +64,7 @@ const PcmTasksReportPage: FC = () => {
     if (!isSuccessApp) return;
     if (isSuccessApp && !hasPermission) {
 			toast.error("Bạn không có quyền truy cập tính năng này!");
-			history.push("/");
+			history.push("/pcm/report");
 		};
 
     document.title = "Quản lý công việc";
@@ -120,12 +120,8 @@ const PcmTasksReportPage: FC = () => {
     }
   }
 
-  if (isLoadingListTask) {
+  if (isLoadingListTask || isLoadingInfoReport) {
     return <Loader className="border-primary" />;
-  }
-
-  if(!infoReport || !Object.keys(infoReport).length) {
-    return <Redirect to={`/pcm/report`} />;
   }
 
   return (
