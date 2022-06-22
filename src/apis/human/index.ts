@@ -71,9 +71,7 @@ async function fetchListContactDocument<T>(params: ContactDocumentPayload): Prom
 
 async function exportHuman<T>(params: any): Promise<T> {
     const { data } = await API.post<any>(
-        `${ITEM_URL}/contacts/export-contact`, {
-            params
-        }
+        `${ITEM_URL}/contacts/export-contact`, params
     );
     return data;
 }

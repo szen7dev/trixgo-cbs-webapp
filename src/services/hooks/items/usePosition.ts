@@ -41,7 +41,7 @@ export const usePosition = (params?: QueryParam, isFetch?: boolean): UsePosition
         fetchPreviousPage,
         hasNextPage
     } = useInfiniteQuery(
-        ['list_positions', params],
+        ['position--list', params],
         async ({ pageParam }: any) =>
         PositionRepository.listPosition({
             lastestID: pageParam,
