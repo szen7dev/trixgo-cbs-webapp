@@ -46,12 +46,18 @@ const ProjectCashFlowPlanPage: FC<{ outin: number }> = ({ outin }) => {
     });
 
     const [modalShare, setModalShare] = useState<{
-        isShow: boolean, users: User[] | undefined, cashFlowId: string, hasPermission: boolean, modalType: 'members' | 'admins'
+        isShow: boolean,
+        users: User[] | undefined,
+        cashFlowId: string,
+        projectID: string,
+        hasPermission: boolean,
+        modalType: 'members' | 'admins'
     }>({
         isShow: false,
         users: [],
         hasPermission: false,
         cashFlowId: '',
+        projectID: '',
         modalType: 'members'
     });
 
@@ -190,8 +196,15 @@ const ProjectCashFlowPlanPage: FC<{ outin: number }> = ({ outin }) => {
         )
     }
 
-    const toggleModalShare = (cashFlowId: string, modalType: 'admins' | 'members', users: User[] | undefined) =>
-        setModalShare({ isShow: !modalShare.isShow, users, cashFlowId, hasPermission: true, modalType });
+    const toggleModalShare = (cashFlow: CashFlowPlan.CashFlowPlan, modalType: 'admins' | 'members') =>
+        setModalShare({
+            isShow: !modalShare.isShow,
+            users: cashFlow.members,
+            cashFlowId: cashFlow._id,
+            projectID: cashFlow.project?._id,
+            hasPermission: true,
+            modalType
+        });
 
     return (
         <main className="relative h-full">
@@ -324,7 +337,7 @@ const ProjectCashFlowPlanPage: FC<{ outin: number }> = ({ outin }) => {
                                 {item.userCreate?._id === user?._id && (
                                     <button
                                         className="text-primary underline"
-                                        onClick={() => toggleModalShare(item._id, 'members', item.members)}
+                                        onClick={() => toggleModalShare(item, 'members')}
                                     >
                                         Share
                                     </button>
@@ -353,6 +366,7 @@ const ProjectCashFlowPlanPage: FC<{ outin: number }> = ({ outin }) => {
                 <ModalShare
                     toggle={() => setModalShare(prev => ({ ...prev, isShow: !modalShare.isShow }))}
                     cashFlowID={modalShare.cashFlowId}
+                    projectID={modalShare.projectID}
                     users={modalShare.users}
                     modalType={modalShare.modalType}
                     hasPermission={modalShare.hasPermission}

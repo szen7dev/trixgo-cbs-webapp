@@ -72,7 +72,7 @@ export const useCashFlowPlan = ({
         fetchNextPage,
         hasNextPage
     } = useInfiniteQuery(
-        ['cash_flow_plan__list', params],
+        ['cash_flow_plan--list', params],
         async ({ pageParam }: any) =>
             CashFlowPlanRepository.fetchListCashFlowPlan({
                 lastestID: pageParam ?? "",

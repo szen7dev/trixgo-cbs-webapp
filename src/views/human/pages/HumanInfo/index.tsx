@@ -65,7 +65,7 @@ export const HumanInfo: FC = () => {
     },
     [detailHuman._id, updateContactMutateAsync, refreshDetailHuman]
   );
-    
+
   const handleClickUpdateButton = useCallback(
     (defaultValues: Human) => () => {
       openModal(

@@ -66,7 +66,7 @@ export const useFetchListHuman = (params: any): UseListHuman => {
         .filter(Boolean);
     const totalRecord = data?.pages[0]?.data?.totalRecord;
     const totalPages = data?.pages[0]?.data?.totalPages;
-            
+
     return {
         isLoading,
         listHuman,
@@ -103,6 +103,27 @@ export const useFetchDetailHuman = (id: string): UseDetailHuman => {
         message: 'Ok',
         loading: res.isLoading,
         refetch: res.refetch,
+    }
+}
+
+type UseHumanCustom = {
+    exportHumanAsync: (payload: any) => Promise<any>,
+};
+
+type UseHumanCustomParams = {
+    params?: any
+}
+
+export const useHumanCustom = ({
+    params = {}
+}: UseHumanCustomParams) : UseHumanCustom => {
+    const { mutateAsync: exportHumanAsync } =
+        useMutation((payload: any) =>
+            HumanRepository.exportHuman(payload)
+        );
+
+    return {
+        exportHumanAsync
     }
 }
 
@@ -377,7 +398,7 @@ export const useQueryContactDocument = (humanId: string, typeParam: TypeParam): 
             enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
         }
     );
-        
+
     const listContactDocument = []
         .concat(
             ...(data?.pages || []).map((d: any) => d.data?.listRecords)
@@ -439,7 +460,7 @@ export const useQueryItemContract = (companyID: string, typeParam?: Pick<QueryCo
         .filter(Boolean);
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPages = data?.pages[0]?.data?.totalPage || 0;
-            
+
     return {
         fetchNextPageContract,
         refetchListContracts,
