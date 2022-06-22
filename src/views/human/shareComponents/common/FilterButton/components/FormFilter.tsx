@@ -4,7 +4,7 @@ import debounce from "lodash/debounce";
 
 import { InputClearable, DropdownSearchable } from "shareComponents/common";
 import TagIcon from "assets/images/icons8-price-tag-96.svg";
-import { 
+import {
   CONTACT_SUB_TYPES,
   GENDER_TYPES,
   CONTACT_TA,
@@ -16,6 +16,8 @@ import {
   useQueryListDepartments,
   useQueryListDoctype,
 } from "services/hooks/useHuman";
+
+import { usePosition } from "services/hooks/items/usePosition";
 
 interface FormFilterProps {
   onSubmit?: (values: any) => void;
@@ -41,16 +43,18 @@ export const FormFilter: React.FC<FormFilterProps> = ({
     limit: 10,
     keyword: searchValues.department || "",
   });
-  const { listDoctypes: listPositions } = useQueryListDoctype({
+
+  const { data: listPositions } = usePosition({
     limit: 10,
-    type: 13,
     keyword: searchValues.position || "",
-  });
+  }, true);
+
   const { listDoctypes: listWorkingStatus } = useQueryListDoctype({
     limit: 50,
     type: 9,
     keyword: searchValues.workingStatus || "",
   });
+
   const { listDoctypes: listContractType } = useQueryListDoctype({
     limit: 50,
     type: 8,

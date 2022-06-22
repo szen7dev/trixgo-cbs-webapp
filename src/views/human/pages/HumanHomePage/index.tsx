@@ -36,16 +36,16 @@ import { createLinkAndClick } from 'utils';
 export const HumanHomePage: FC = () => {
   const { t } = useTranslation(["human"]);
 	const { id: departmentID } = useParams<{ id: string }>();
-  const history = useHistory();
+  // const history = useHistory();
 
   const [pageParam, setPageParam] = useState<any>({departmentID});
   const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
 		isExporting: false,
 	});
+  const { openModal } = useModal();
 
   // Lấy ra data/messageList data ngay lúc đầu vào màn hình
   const humans = useFetchListHuman(pageParam);
-  const { openModal } = useModal();
 
   // Tạo mẩu tin mới, khởi tạo sẵn hàm createContactMutateAsync để khi user
   // bấm vào nút tạo thì gọi luôn đến api tạo mẩu tin
@@ -72,13 +72,21 @@ export const HumanHomePage: FC = () => {
     return false;
   }, [createContactMutateAsync, humans]);
 
-  // const handleOnFilter = useCallback((values) => {
-  //   setPageParam(() => ({ ...values, departmentID }));
-  //   return true;
-  // }, []);
-
   const handleOnFilter = useCallback((values) => {
-    setPageParam(() => ({ ...values }));
+    const optionFilter = {
+      ...values,
+      type: values.type?._id ?? values.type,
+      gender: values.gender?._id ?? values.gender,
+      realStatus: values.realStatus?._id ?? values.realStatus,
+      insuranceStatus: values.insuranceStatus?._id ?? values.insuranceStatus,
+      familyPolicy: values.familyPolicy?._id ?? values.familyPolicy,
+      departmentID: values.department?._id ?? values.department,
+      positionID: values.position?._id ?? values.position,
+      contractTypeID: values.contractType?._id ?? values.contractType,
+      workingStatusID: values.workingStatus?._id ?? values.workingStatus,
+    }
+
+    setPageParam(optionFilter);
     return true;
   }, []);
 
@@ -93,7 +101,10 @@ export const HumanHomePage: FC = () => {
   const handleExportReport = async () => {
 		try {
 			setStateExport({ isExporting: true });
-			const { error, data } = await exportHumanAsync({});
+			const { error, data } = await exportHumanAsync({
+        filterParams: pageParam
+      });
+      console.log({ pageParam })
 
 			if(error) {
 				return toast.warn(data?.message);
@@ -196,9 +207,9 @@ export const HumanHomePage: FC = () => {
                 border: "1px solid #cccccc",
               }}
             >
-              <div className="absolute top-2 right-2 w-[32px] h-[32px] cursor-pointer flex justify-center items-center bg-cbs-gray rounded-full">
+              {/* <div className="absolute top-2 right-2 w-[32px] h-[32px] cursor-pointer flex justify-center items-center bg-cbs-gray rounded-full">
                 <img src={ThreeDotIcon} alt="Three Dot" style={{ margin: 0 }} />
-              </div>
+              </div> */}
               <div className="text-center ml-2 mr-2 pt-[20px] pb-[17px] h-[220px]">
                 <div className="flex justify-center mb-6">
                   <img src={`${process.env.REACT_APP_URL_S3_CONTACT}/${item.image}`} alt="Avatar" className="w-20 h-20 rounded-full" />
@@ -218,7 +229,7 @@ export const HumanHomePage: FC = () => {
           );
         })}
       </div>
-      {humans.totalRecord && humans.totalRecord - humans.listHuman.length > 0 && (
+      {!!humans.totalRecord && humans.totalRecord - humans.listHuman.length > 0 && (
         <div className="w-full flex justify-center my-5">
           <button onClick={() => humans.fetchNextPageHuman()}>
             <span className="text-primary">{`Xem thêm (${humans.totalRecord - humans.listHuman.length })`}</span>

@@ -101,6 +101,7 @@ type UsePcmReport = {
     infoReport: PcmReport,
     refetchInfoReport: () => void,
     isLoadingListReports: boolean,
+    isLoadingInfoReport: boolean,
     refetchListReports: () => void,
     nextPageListReports: () => void,
     prevPageListReports: () => void,
@@ -124,7 +125,11 @@ export const usePcmReport = (params?: any, isFetch?: boolean) : UsePcmReport => 
             PcmRepository.deleteTaskReport(payload)
         );
 
-    const { data: dataInfoReport, refetch: refetchInfoReport } = useQuery(
+    const {
+        data: dataInfoReport,
+        refetch: refetchInfoReport,
+        isLoading: isLoadingInfoReport
+    } = useQuery(
         ['pcm_report--info', params],
 		() => PcmRepository.getInfoReports(params?.subjectID),
 		{
@@ -168,6 +173,7 @@ export const usePcmReport = (params?: any, isFetch?: boolean) : UsePcmReport => 
         deleteTaskReportAsync,
         listReports,
         isLoadingListReports,
+        isLoadingInfoReport,
         refetchListReports,
         nextPageListReports,
         prevPageListReports,

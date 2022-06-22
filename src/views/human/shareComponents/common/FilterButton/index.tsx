@@ -14,35 +14,28 @@ import {
     CONTACT_POLICY
 } from 'apis/localdb';
 
-export const DropdownFilterButton: React.FC<
-    HTMLAttributes<HTMLDivElement> & {
-        onSubmit?: (values: any) => boolean;
-        onCancel?: () => void;
-        initialValues?: {
-            [k: string]: any;
-        };
-    }
-> = ({ onCancel, onSubmit, initialValues, ...props }) => {
+type Props = {
+    onSubmit?: (values: any) => boolean;
+    onCancel?: () => void;
+    initialValues?: {
+        [k: string]: any;
+    };
+} & HTMLAttributes<HTMLDivElement>
+
+export const DropdownFilterButton: React.FC<Props> = ({ onCancel, onSubmit, initialValues, ...props }) => {
     const [showFilter, setShowFilter] = React.useState(false);
     const [defaultValues, setDefaultValues] = React.useState<any>({});
 
     const { onFetchDetailDepartmentAsync } = useQueryDetailDepartment();
     const { onFetchDetailDoctypeAsync } = useQueryDetailDoctype();
 
-    const handleSubmit = React.useCallback(
-        ({ ...values }) => {
-            // console.log(values)
-            const result =
-                onSubmit &&
-                onSubmit({
-                    ...values,
-                });
-            if (result) {
-                setShowFilter(false);
-            }
-        },
-        [onSubmit]
-    );
+    const handleSubmit = React.useCallback(({ ...values }) => {
+        const result = onSubmit?.(values);
+
+        if (result) {
+            setShowFilter(false);
+        }
+    }, [onSubmit]);
 
     const handleFetchInitialValue = React.useCallback(async (values) => {
         const data = { ...values };
