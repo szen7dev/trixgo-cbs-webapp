@@ -69,6 +69,15 @@ async function fetchListContactDocument<T>(params: ContactDocumentPayload): Prom
     return data;
 }
 
+async function exportHuman<T>(params: any): Promise<T> {
+    const { data } = await API.post<any>(
+        `${ITEM_URL}/contacts/export-contact`, {
+            params
+        }
+    );
+    return data;
+}
+
 async function requestCreateContactDocument<T>(body: T): Promise<{ error: boolean; data: T }> {
     const { data } = await API.post(
         `${CONTACT_DOCUMENT_URL}/contact_documents`,
@@ -363,6 +372,7 @@ const HumanRepository = {
         },
         ...params,
     }),
+    exportHuman: (params: any): Promise<any> => exportHuman<any>(params),
 
     fetchListContactDocument: async (params: ContactDocumentPayload): Promise<ContactDocumentResponse> => fetchListContactDocument<ContactDocumentResponse>(params),
     requestCreateContactDocument: async (body: CreateContactDocumentPayload): Promise<MutationContactDocument> => requestCreateContactDocument(body),
