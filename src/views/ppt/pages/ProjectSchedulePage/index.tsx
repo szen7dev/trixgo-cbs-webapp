@@ -7,6 +7,7 @@ import Gantt from "./components/Gantt";
 import { usePcmProject } from "services/hooks/pcm/usePcmProject";
 import { PCM_MILESTONE } from "apis/localdb/index";
 import { useTask } from "services/hooks/useTask";
+import { Link } from "react-router-dom";
 
 let dataGranttInint:any = [
 	{ id: 1, text: "<b>Pháp lý</b>", start_date: null, duration: null, parent:null, progress: 0, open: true},
@@ -59,14 +60,15 @@ const ProjectSchedulePage: FC = () => {
 			if(task.milestone){
 				const actualStartTime  = new Date(task.actualStartTime);
 				const actualFinishTime =  new Date(task.actualFinishTime);
-				const duration = Math. ceil((actualFinishTime.getTime() - actualStartTime.getTime()) / (24*60*60*1000));
+				// const duration = Math. ceil((actualFinishTime.getTime() - actualStartTime.getTime()) / (24*60*60*1000));
 				dataGranttInint = [ 
 					...dataGranttInint, {
 						id: task._id, 
-						text: `<a target="_blank" href="/pcm/detail/${task._id}">${task.name} (${(task.percentage)} %)</a>`, 
+						text: <Link to="/pcm/detail/${task._id}">task.name (${(task.percentage)} %)</Link>, 
+						// text: `<a target="_blank" href="/pcm/detail/${task._id}">${task.name} (${(task.percentage)} %)</a>`, 
 						start_date: actualStartTime, 
 						end_date: actualFinishTime,
-						duration: duration || 0, 
+						// duration: duration || 0, 
 						parent: task.milestone, 
 						percentage: task.percentage,
 						progress: Number(task.percentage/100).toFixed(3),
