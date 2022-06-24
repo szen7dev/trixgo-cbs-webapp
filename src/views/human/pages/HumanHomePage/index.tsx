@@ -12,7 +12,7 @@ import "views/human/styles/style.module.css";
 /*=====3.ICONS=====*/
 // import BackIcon from "assets/images/icon-back.svg";
 import SearchIcon from "assets/images/icons8-search.svg";
-import ThreeDotIcon from "assets/images/icon-3dots.png";
+// import ThreeDotIcon from "assets/images/icon-3dots.png";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import { InputClearable, DropdownOption, Loader } from "shareComponents/common";
@@ -104,7 +104,6 @@ export const HumanHomePage: FC = () => {
 			const { error, data } = await exportHumanAsync({
         filterParams: pageParam
       });
-      console.log({ pageParam })
 
 			if(error) {
 				return toast.warn(data?.message);

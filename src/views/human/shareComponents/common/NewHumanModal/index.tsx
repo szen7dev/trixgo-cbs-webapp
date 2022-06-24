@@ -10,7 +10,7 @@ import React, {
 import { useTranslation } from "react-i18next";
 import { Formik, Form, Field } from "formik";
 import moment from "moment";
-import DayPickerInput from "react-day-picker/DayPickerInput";
+import DatePicker from "react-datepicker";
 import debounce from "lodash/debounce";
 
 import { useOnClickOutside } from "services/hooks/useOnclickOutside";
@@ -25,9 +25,7 @@ import {
   useQueryListDoctype,
   useFetchListArea,
 } from "services/hooks/useHuman";
-import {
-  usePosition
-} from "services/hooks/items/usePosition";
+import { usePosition } from "services/hooks/items/usePosition";
 
 import type { MutationContactPayload } from "typings/human";
 
@@ -275,7 +273,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
 
           <Formik initialValues={defaultValues} onSubmit={handleSubmit}>
             {(formik) => {
-              const { handleBlur, setFieldValue } = formik;
+              const { handleBlur, setFieldValue, values } = formik;
               // console.log('🚀 ~ defaultValues Human', defaultValues)
               return (
                 <Form className="px-6 text-left">
@@ -801,17 +799,21 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
 
                   <div className="flex justify-between items-center h-10 border-b border-gray-200">
                     <div className="w-1/5 flex items-center">
-                      <span className="mr-4 text-primary-gray">Ngày sinh</span>
-                      <DayPickerInput
-                        value={
-                          defaultValues.birthday &&
-                          moment(defaultValues.birthday).format("DD/MM/YYYY")
-                        }
-                        onDayChange={(day) => setFieldValue("birthday", day)}
-                        inputProps={{
-                          className: "w-full h-6 outline-none pl-3",
-                          placeholder: "Ngày sinh...",
-                        }}
+                      <span className="mr-4 text-primary-gray">Ngày sinh {defaultValues.birthday}</span>
+                      <DatePicker
+                        name="birthday"
+                        selected={
+                          values.birthday
+                            ? new Date(values.birthday)
+                            : defaultValues.birthday && new Date(defaultValues.birthday)}
+                        onChange={(date: Date | null) => setFieldValue("birthday", date)}
+                        onSelect={(date: Date | null) => setFieldValue("birthday", date)}
+                        isClearable={false}
+                        closeOnScroll
+                        autoComplete="off"
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText="Ngày sinh..."
+                        className="p-1 pl-2 pr-2 focus:outline-none focus:border-primary"
                       />
                     </div>
                     <div className="w-1/5 flex items-center">
@@ -832,16 +834,20 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                       <span className="w-2/12 mr-4 text-primary-gray">
                         Ngày cấp
                       </span>
-                      <DayPickerInput
-                        value={
-                          defaultValues.dateProvice &&
-                          moment(defaultValues.dateProvice).format("DD/MM/YYYY")
-                        }
-                        onDayChange={(day) => setFieldValue("dateProvice", day)}
-                        inputProps={{
-                          className: "w-full h-6 outline-none pl-3",
-                          placeholder: "Ngày cấp...",
-                        }}
+                      <DatePicker
+                        name="dateProvice"
+                        selected={
+                          values.dateProvice
+                            ? new Date(values.dateProvice)
+                            : defaultValues.dateProvice && new Date(defaultValues.dateProvice)}
+                        onChange={(date: Date | null) => setFieldValue("dateProvice", date)}
+                        onSelect={(date: Date | null) => setFieldValue("dateProvice", date)}
+                        isClearable={false}
+                        closeOnScroll
+                        autoComplete="off"
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText="Ngày cấp..."
+                        className="p-1 pl-2 pr-2 focus:outline-none focus:border-primary"
                       />
                     </div>
                     <div className="w-1/5 flex items-center">
@@ -1050,20 +1056,20 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                       <span className="w-3/12 text-primary-gray">
                         Ngày nộp BH
                       </span>
-                      <DayPickerInput
-                        value={
-                          defaultValues.insuranceDate &&
-                          moment(defaultValues.insuranceDate).format(
-                            "DD/MM/YYYY"
-                          )
-                        }
-                        onDayChange={(day) =>
-                          setFieldValue("insuranceDate", day)
-                        }
-                        inputProps={{
-                          className: "w-full h-6 outline-none pl-3",
-                          placeholder: "Ngày nộp BH...",
-                        }}
+                      <DatePicker
+                        name="insuranceDate"
+                        selected={
+                          values.insuranceDate
+                            ? new Date(values.insuranceDate)
+                            : defaultValues.insuranceDate && new Date(defaultValues.insuranceDate)}
+                        onChange={(date: Date | null) => setFieldValue("insuranceDate", date)}
+                        onSelect={(date: Date | null) => setFieldValue("insuranceDate", date)}
+                        isClearable={false}
+                        closeOnScroll
+                        autoComplete="off"
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText="Ngày nộp BH..."
+                        className="p-1 pl-2 pr-2 focus:outline-none focus:border-primary"
                       />
                     </div>
                     <div className="w-1/5 flex items-center">
@@ -1148,72 +1154,80 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                       <span className="w-5/12 text-primary-gray">
                         Ngày bắt đầu làm việc
                       </span>
-                      <DayPickerInput
-                        value={
-                          defaultValues.workStartDate &&
-                          moment(defaultValues.workStartDate).format(
-                            "DD/MM/YYYY"
-                          )
-                        }
-                        onDayChange={(day) =>
-                          setFieldValue("workStartDate", day)
-                        }
-                        inputProps={{
-                          className: "w-full h-6 outline-none pl-3",
-                          placeholder: "Ngày bắt đầu làm việc...",
-                        }}
+                      <DatePicker
+                        name="workStartDate"
+                        selected={
+                          values.workStartDate
+                            ? new Date(values.workStartDate)
+                            : defaultValues.workStartDate && new Date(defaultValues.workStartDate)}
+                        onChange={(date: Date | null) => setFieldValue("workStartDate", date)}
+                        onSelect={(date: Date | null) => setFieldValue("workStartDate", date)}
+                        isClearable={false}
+                        closeOnScroll
+                        autoComplete="off"
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText="Ngày bắt đầu làm việc..."
+                        className="p-1 pl-2 pr-2 focus:outline-none focus:border-primary"
                       />
                     </div>
                     <div className="w-1/5 flex items-center">
                       <span className="w-3/12 mr-4 text-primary-gray">
                         Ngày chấm dứt
                       </span>
-                      <DayPickerInput
-                        value={
-                          defaultValues.dayOff &&
-                          moment(defaultValues.dayOff).format("DD/MM/YYYY")
-                        }
-                        onDayChange={(day) => setFieldValue("dayOff", day)}
-                        inputProps={{
-                          className: "w-full h-6 outline-none pl-3",
-                          placeholder: "Ngày chấm dứt...",
-                        }}
+                      <DatePicker
+                        name="dayOff"
+                        selected={
+                          values.dayOff
+                            ? new Date(values.dayOff)
+                            : defaultValues.dayOff && new Date(defaultValues.dayOff)}
+                        onChange={(date: Date | null) => setFieldValue("dayOff", date)}
+                        onSelect={(date: Date | null) => setFieldValue("dayOff", date)}
+                        isClearable={false}
+                        closeOnScroll
+                        autoComplete="off"
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText="Ngày chấm dứt..."
+                        className="p-1 pl-2 pr-2 focus:outline-none focus:border-primary"
                       />
                     </div>
                     <div className="w-1/5 flex items-center">
                       <span className="w-3/12 mr-4 text-primary-gray">
                         Ngày bổ nhiệm
                       </span>
-                      <DayPickerInput
-                        value={
-                          defaultValues.appointDate &&
-                          moment(defaultValues.appointDate).format("DD/MM/YYYY")
-                        }
-                        onDayChange={(day) => setFieldValue("appointDate", day)}
-                        inputProps={{
-                          className: "w-full h-6 outline-none pl-3",
-                          placeholder: "Ngày bổ nhiệm...",
-                        }}
+                      <DatePicker
+                        name="appointDate"
+                        selected={
+                          values.appointDate
+                            ? new Date(values.appointDate)
+                            : defaultValues.appointDate && new Date(defaultValues.appointDate)}
+                        onChange={(date: Date | null) => setFieldValue("appointDate", date)}
+                        onSelect={(date: Date | null) => setFieldValue("appointDate", date)}
+                        isClearable={false}
+                        closeOnScroll
+                        autoComplete="off"
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText="Ngày bổ nhiệm..."
+                        className="p-1 pl-2 pr-2 focus:outline-none focus:border-primary"
                       />
                     </div>
                     <div className="w-1/5 flex items-center">
                       <span className="w-3/12 mr-4 text-primary-gray">
                         Thay đổi lương
                       </span>
-                      <DayPickerInput
-                        value={
-                          defaultValues.changeSallaryDate &&
-                          moment(defaultValues.changeSallaryDate).format(
-                            "DD/MM/YYYY"
-                          )
-                        }
-                        onDayChange={(day) =>
-                          setFieldValue("changeSallaryDate", day)
-                        }
-                        inputProps={{
-                          className: "w-full h-6 outline-none pl-3",
-                          placeholder: "Thay đổi lương...",
-                        }}
+                      <DatePicker
+                        name="changeSallaryDate"
+                        selected={
+                          values.changeSallaryDate
+                            ? new Date(values.changeSallaryDate)
+                            : defaultValues.changeSallaryDate && new Date(defaultValues.changeSallaryDate)}
+                        onChange={(date: Date | null) => setFieldValue("changeSallaryDate", date)}
+                        onSelect={(date: Date | null) => setFieldValue("changeSallaryDate", date)}
+                        isClearable={false}
+                        closeOnScroll
+                        autoComplete="off"
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText="Thay đổi lương..."
+                        className="p-1 pl-2 pr-2 focus:outline-none focus:border-primary"
                       />
                     </div>
                   </div>
@@ -1225,80 +1239,80 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                       <span className="w-4/12 text-primary-gray">
                         Ngày ký hợp đồng
                       </span>
-                      <DayPickerInput
-                        value={
-                          defaultValues.contractDate &&
-                          moment(defaultValues.contractDate).format(
-                            "DD/MM/YYYY"
-                          )
-                        }
-                        onDayChange={(day) =>
-                          setFieldValue("contractDate", day)
-                        }
-                        inputProps={{
-                          className: "w-full h-6 outline-none pl-3",
-                          placeholder: "Ngày ký hợp đồng...",
-                        }}
+                      <DatePicker
+                        name="contractDate"
+                        selected={
+                          values.contractDate
+                            ? new Date(values.contractDate)
+                            : defaultValues.contractDate && new Date(defaultValues.contractDate)}
+                        onChange={(date: Date | null) => setFieldValue("contractDate", date)}
+                        onSelect={(date: Date | null) => setFieldValue("contractDate", date)}
+                        isClearable={false}
+                        closeOnScroll
+                        autoComplete="off"
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText="Ngày ký hợp đồng..."
+                        className="p-1 pl-2 pr-2 focus:outline-none focus:border-primary"
                       />
                     </div>
                     <div className="w-1/5 flex items-center">
                       <span className="w-4/12 text-primary-gray">
                         Ngày hiệu lực HĐ
                       </span>
-                      <DayPickerInput
-                        value={
-                          defaultValues.contractValid &&
-                          moment(defaultValues.contractValid).format(
-                            "DD/MM/YYYY"
-                          )
-                        }
-                        onDayChange={(day) =>
-                          setFieldValue("contractValid", day)
-                        }
-                        inputProps={{
-                          className: "w-full h-6 outline-none pl-3",
-                          placeholder: "Ngày hiệu lực HĐ...",
-                        }}
+                      <DatePicker
+                        name="contractValid"
+                        selected={
+                          values.contractValid
+                            ? new Date(values.contractValid)
+                            : defaultValues.contractValid && new Date(defaultValues.contractValid)}
+                        onChange={(date: Date | null) => setFieldValue("contractValid", date)}
+                        onSelect={(date: Date | null) => setFieldValue("contractValid", date)}
+                        isClearable={false}
+                        closeOnScroll
+                        autoComplete="off"
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText="Ngày hiệu lực HĐ..."
+                        className="p-1 pl-2 pr-2 focus:outline-none focus:border-primary"
                       />
                     </div>
                     <div className="w-1/5 flex items-center">
                       <span className="w-3/12 text-primary-gray">
                         Thời hạn HĐ
                       </span>
-                      <DayPickerInput
-                        value={
-                          defaultValues.contractExpire &&
-                          moment(defaultValues.contractExpire).format(
-                            "DD/MM/YYYY"
-                          )
-                        }
-                        onDayChange={(day) =>
-                          setFieldValue("contractExpire", day)
-                        }
-                        inputProps={{
-                          className: "w-full h-6 outline-none pl-3",
-                          placeholder: "Thời hạn HĐ...",
-                        }}
+                      <DatePicker
+                        name="contractExpire"
+                        selected={
+                          values.contractExpire
+                            ? new Date(values.contractExpire)
+                            : defaultValues.contractExpire && new Date(defaultValues.contractExpire)}
+                        onChange={(date: Date | null) => setFieldValue("contractExpire", date)}
+                        onSelect={(date: Date | null) => setFieldValue("contractExpire", date)}
+                        isClearable={false}
+                        closeOnScroll
+                        autoComplete="off"
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText="Thời hạn HĐ..."
+                        className="p-1 pl-2 pr-2 focus:outline-none focus:border-primary"
                       />
                     </div>
                     <div className="w-1/5 flex items-center">
                       <span className="w-4/12 text-primary-gray">
                         Ngày nộp sổ BH
                       </span>
-                      <DayPickerInput
-                        value={
-                          defaultValues.insuranceDate &&
-                          moment(defaultValues.insuranceDate).format(
-                            "DD/MM/YYYY"
-                          )
-                        }
-                        onDayChange={(day) =>
-                          setFieldValue("insuranceDate", day)
-                        }
-                        inputProps={{
-                          className: "w-full h-6 outline-none pl-3",
-                          placeholder: "Ngày nộp sổ BH...",
-                        }}
+                      <DatePicker
+                        name="insuranceDate"
+                        selected={
+                          values.insuranceDate
+                            ? new Date(values.insuranceDate)
+                            : defaultValues.insuranceDate && new Date(defaultValues.insuranceDate)}
+                        onChange={(date: Date | null) => setFieldValue("insuranceDate", date)}
+                        onSelect={(date: Date | null) => setFieldValue("insuranceDate", date)}
+                        isClearable={false}
+                        closeOnScroll
+                        autoComplete="off"
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText="Ngày nộp sổ BH..."
+                        className="p-1 pl-2 pr-2 focus:outline-none focus:border-primary"
                       />
                     </div>
                   </div>

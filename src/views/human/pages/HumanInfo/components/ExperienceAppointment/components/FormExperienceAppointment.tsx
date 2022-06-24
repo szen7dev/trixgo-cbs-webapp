@@ -1,7 +1,7 @@
 import React from "react";
 import { Formik, Form, Field } from "formik";
 import moment from "moment";
-import DayPickerInput from "react-day-picker/DayPickerInput";
+import DatePicker from "react-datepicker";
 import { useTranslation } from "react-i18next";
 import debounce from 'lodash/debounce';
 
@@ -104,7 +104,7 @@ export const FormExperienceAppointment: React.FC<ExperienceAppointmentProps> = (
           </div>
           <Formik initialValues={initialValues} onSubmit={handleSubmit}>
             {(formik) => {
-              const { handleBlur, setFieldValue } = formik;
+              const { handleBlur, setFieldValue, values } = formik;
 
               return (
                 <Form>
@@ -142,7 +142,22 @@ export const FormExperienceAppointment: React.FC<ExperienceAppointmentProps> = (
                       <span className="w-4/12 text-primary-gray text-left text-left">
                         Ngày tháng
                       </span>
-                      <DayPickerInput
+                      <DatePicker
+                        name="toDate"
+                        selected={
+                          values.toDate
+                            ? new Date(values.toDate)
+                            : initialValues.toDate ? new Date(initialValues.toDate) : null}
+                        onChange={(date: Date | null) => setFieldValue("toDate", date)}
+                        onSelect={(date: Date | null) => setFieldValue("toDate", date)}
+                        isClearable={false}
+                        closeOnScroll
+                        autoComplete="off"
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText="Ngày tháng..."
+                        className="w-full h-6 outline-none pl-10 focus:outline-none focus:border-primary"
+                      />
+                      {/* <DayPickerInput
                         value={
                           initialValues.toDate &&
                           moment(initialValues.toDate).format("DD/MM/YYYY")
@@ -152,7 +167,7 @@ export const FormExperienceAppointment: React.FC<ExperienceAppointmentProps> = (
                           className: "w-full h-6 outline-none pl-3",
                           placeholder: "Ngày tháng...",
                         }}
-                      />
+                      /> */}
                     </div>
                     <div className="w-1/4 flex items-center">
                       <span className="w-7/12 text-primary-gray text-left">

@@ -145,10 +145,10 @@ export const HumanInfo: FC = () => {
     },
     [handleFinishForm, openModal]
   );
-  
+
   // useEffect(() => {
   //   if (!isSuccessApp) return;
-    
+
   //   if(dataUserAccess)
 
   //   if (isSuccessApp && !hasPermission) {
@@ -159,12 +159,6 @@ export const HumanInfo: FC = () => {
 
   useEffect(() => {
     if(!user || !Object.keys(detailHuman).length || !dataUserAccess) return;
-    console.log({ 
-      user, 
-      detailHuman, 
-      level: dataUserAccess?.level, 
-      check: !detailHuman.department?.members?.includes(user._id)
-    })
 
     if(!detailHuman.department?.members?.includes(user._id) && dataUserAccess?.level !== 0) {
       history.push('/human/home');
@@ -175,7 +169,7 @@ export const HumanInfo: FC = () => {
   if (loading) {
     return <Loader className="border-primary" />;
   }
-  
+
   return (
     <main className="mb-4">
       <div className="flex items-center justify-between px-4 h-12 border border-gray-200">
