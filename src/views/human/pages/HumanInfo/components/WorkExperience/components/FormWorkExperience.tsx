@@ -1,7 +1,7 @@
 import React from "react";
 import { Formik, Form, Field } from "formik";
 import moment from "moment";
-import DayPickerInput from "react-day-picker/DayPickerInput";
+import DatePicker from "react-datepicker";
 import { useTranslation } from "react-i18next";
 import debounce from 'lodash/debounce';
 
@@ -113,7 +113,7 @@ export const FormWorkExperience: React.FC<WorkExperienceProps> = ({
           </div>
           <Formik initialValues={initialValues} onSubmit={handleSubmit}>
             {(formik) => {
-              const { handleBlur, setFieldValue } = formik;
+              const { handleBlur, setFieldValue, values } = formik;
 
               return (
                 <Form>
@@ -123,32 +123,40 @@ export const FormWorkExperience: React.FC<WorkExperienceProps> = ({
                       <span className="w-4/12 text-primary-gray text-left">
                         {i18n("from-date")}
                       </span>
-                      <DayPickerInput
-                        value={
-                          initialValues.fromDate &&
-                          moment(initialValues.fromDate).format("DD/MM/YYYY")
-                        }
-                        onDayChange={(day) => setFieldValue("fromDate", day)}
-                        inputProps={{
-                          className: "w-full h-6 outline-none pl-3",
-                          placeholder: "Từ ngày...",
-                        }}
+                      <DatePicker
+                        name="fromDate"
+                        selected={
+                          values.fromDate
+                            ? new Date(values.fromDate)
+                            : initialValues.fromDate ? new Date(initialValues.fromDate) : null}
+                        onChange={(date: Date | null) => setFieldValue("fromDate", date)}
+                        onSelect={(date: Date | null) => setFieldValue("fromDate", date)}
+                        isClearable={false}
+                        closeOnScroll
+                        autoComplete="off"
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText="Từ ngày..."
+                        className="w-full h-6 outline-none pl-10 focus:outline-none focus:border-primary"
                       />
                     </div>
                     <div className="w-1/4 flex items-center">
                       <span className="w-4/12 text-primary-gray text-left">
                         {i18n("to-date")}
                       </span>
-                      <DayPickerInput
-                        value={
-                          initialValues.toDate &&
-                          moment(initialValues.toDate).format("DD/MM/YYYY")
-                        }
-                        onDayChange={(day) => setFieldValue("toDate", day)}
-                        inputProps={{
-                          className: "w-full h-6 outline-none pl-3",
-                          placeholder: "Đến ngày...",
-                        }}
+                      <DatePicker
+                        name="toDate"
+                        selected={
+                          values.toDate
+                            ? new Date(values.toDate)
+                            : initialValues.toDate ? new Date(initialValues.toDate) : null}
+                        onChange={(date: Date | null) => setFieldValue("toDate", date)}
+                        onSelect={(date: Date | null) => setFieldValue("toDate", date)}
+                        isClearable={false}
+                        closeOnScroll
+                        autoComplete="off"
+                        dateFormat="dd/MM/yyyy"
+                        placeholderText="Đến ngày..."
+                        className="w-full h-6 outline-none pl-7 focus:outline-none focus:border-primary"
                       />
                     </div>
                     <div className="w-1/4 flex items-center">
