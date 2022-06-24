@@ -1,7 +1,7 @@
 import React from "react";
 import { Formik, Form, Field } from "formik";
 import moment from "moment";
-import DayPickerInput from "react-day-picker/DayPickerInput";
+import DatePicker from "react-datepicker";
 import { useTranslation } from "react-i18next";
 import debounce from 'lodash/debounce';
 
@@ -97,7 +97,7 @@ export const FormEducation: React.FC<WorkHistoryProps> = ({
           </div>
           <Formik initialValues={initialValues} onSubmit={handleSubmit}>
             {(formik) => {
-              const { handleBlur, setFieldValue } = formik;
+              const { handleBlur, setFieldValue, values } = formik;
 
               return (
                 <Form className="flex justify-between items-center h-10 border-b border-gray-200">
@@ -119,7 +119,22 @@ export const FormEducation: React.FC<WorkHistoryProps> = ({
                     <span className="w-4/12 text-primary-gray text-left">
                       {i18n("Graduation-year")}
                     </span>
-                    <DayPickerInput
+                    <DatePicker
+                      name="toDate"
+                      selected={
+                        values.toDate
+                          ? new Date(values.toDate)
+                          : initialValues.toDate ? new Date(initialValues.toDate) : null}
+                      onChange={(date: Date | null) => setFieldValue("toDate", date)}
+                      onSelect={(date: Date | null) => setFieldValue("toDate", date)}
+                      isClearable={false}
+                      closeOnScroll
+                      autoComplete="off"
+                      dateFormat="dd/MM/yyyy"
+                      placeholderText="Đến ngày..."
+                      className="w-full h-6 outline-none focus:outline-none focus:border-primary"
+                    />
+                    {/* <DayPickerInput
                       value={
                         initialValues.toDate &&
                         moment(initialValues.toDate).format("DD/MM/YYYY")
@@ -129,7 +144,7 @@ export const FormEducation: React.FC<WorkHistoryProps> = ({
                         className: "w-full h-6 outline-none pl-3",
                         placeholder: "Đến ngày...",
                       }}
-                    />
+                    /> */}
                   </div>
                   <div className="w-1/4 flex items-center">
                     <span className="w-6/12 text-primary-gray text-left">
