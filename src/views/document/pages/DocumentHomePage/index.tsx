@@ -1,12 +1,13 @@
-import { FC, useContext, useState } from "react";
+import { FC, useState } from "react";
 
+import { Menu } from '@headlessui/react';
 import { Link } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
 import debounce from "lodash/debounce";
 
-import { ModalContext } from "views/document/contexts/modal";
-
-import { ButtonMore } from "shareComponents/common";
+// import { ModalContext } from "views/document/contexts/modal";
+// import { ButtonMore } from "shareComponents/common";
+import { DropdownOption, Loader } from "shareComponents/common";
 
 import {
   SearchInput,
@@ -17,13 +18,46 @@ import projectImage from "assets/images/project.jpg";
 import "views/document/styles/document.css";
 
 import { useQueryListDepartmentsIsMember } from "services/hooks/items/useDepartment";
+import { useDocumentCustom } from "services/hooks/document/useDocument";
+import { toast } from "react-toastify";
+import { createLinkAndClick } from "utils";
 
 export const DocumentHomePage: FC = () => {
-  const { toggleModal } = useContext(ModalContext);
   const [keyword, setKeyword] = useState("");
+  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+		isExporting: false,
+	});
 
-  const { data: listDepartments, totalRecord, fetchNextPage: fetchNextPageDepartments } =
-  useQueryListDepartmentsIsMember({ keyword, isFetch: true });
+  const {
+    data: listDepartments,
+    totalRecord,
+    fetchNextPage: fetchNextPageDepartments,
+    hasNextPage,
+    loading
+  } = useQueryListDepartmentsIsMember({ keyword, isFetch: true });
+
+  const { exportDocumentAsync } = useDocumentCustom({});
+
+  const handleExport = async () => {
+		try {
+			setStateExport({ isExporting: true });
+			const { error, data } = await exportDocumentAsync({});
+
+			if(error) {
+				return toast.warn(data?.message);
+			}
+
+			data && createLinkAndClick(data, '_self');
+		} catch (error: any) {
+      toast.error(error.message)
+		} finally {
+			setStateExport({ isExporting: false });
+		}
+	}
+
+  if(loading || stateExport.isExporting) {
+    return <Loader className="border-primary" />
+  }
 
   return (
     <div className="flex flex-col text-sm text-black overflow-hidden h-full">
@@ -38,7 +72,17 @@ export const DocumentHomePage: FC = () => {
           <DropdownFilterButton />
         </div>
         {/* <ButtonCreate onClick={toggleModal} /> */}
-        <ButtonMore />
+        {/* <ButtonMore /> */}
+        <DropdownOption>
+          <Menu.Item onClick={handleExport}>
+            <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-3"}>
+              <img src="/images/common/icons8-download-48.png" alt="Download Excel" />
+              <div className={"flex-1 text-left ml-4"}>
+                Download Excel
+              </div>
+            </div>
+          </Menu.Item>
+        </DropdownOption>
       </div>
 
       {/* Content */}
@@ -46,13 +90,8 @@ export const DocumentHomePage: FC = () => {
         <InfiniteScroll
           dataLength={totalRecord} //This is important field to render the next data
           next={fetchNextPageDepartments}
-          hasMore={true}
+          hasMore={!!hasNextPage}
           loader={<div className="w-full pt-2 text-center">Loading...</div>}
-          endMessage={
-            <p style={{ textAlign: "center" }}>
-              {/* <b>Yay! You have seen it all</b> */}
-            </p>
-          }
           scrollableTarget="scrollable"
           className="flex flex-wrap w-full px-2 pt-2 pb-20 gap-y-2.5 text-primary-gray"
         >

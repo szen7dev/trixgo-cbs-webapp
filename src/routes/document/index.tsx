@@ -5,7 +5,7 @@ import { Route, Switch, matchPath } from "react-router-dom";
 /*=====LAYOUTS=====*/
 import LayoutSecondary from 'views/ppt/sharedComponents/layouts/LayoutSecondary'
 import { ModalProvider } from "views/document/contexts/modal";
-import { ModalCreateDocument, ModalCreateDocumentChild } from 'views/document/sharedComponents/common';
+import { ModalCreateDocument } from 'views/document/sharedComponents/common';
 
 /*=====PAGES=====*/
 // import { } from 'views/document/pages';
@@ -14,10 +14,10 @@ import {
 	DocumentDetailPage,
 	DocumentFolderPage,
     DocumenDatahubContactPage,
-	DocumentHistoryPage,
+	// DocumentHistoryPage,
 	DocumentProjectPage,
 	DocumentProfilePage,
-	DocumentReportPage,
+	// DocumentReportPage,
     DocumentOfTypePage,
     DocumentOfPackagePage
 } from 'views/document/pages';
