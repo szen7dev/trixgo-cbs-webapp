@@ -88,3 +88,7 @@ export interface DocumentQueryResponse extends APIResponse {
         nextCursor: string | null;
     }
 }
+
+export interface DocumentExportResponse extends APIResponse {
+    data: String
+}

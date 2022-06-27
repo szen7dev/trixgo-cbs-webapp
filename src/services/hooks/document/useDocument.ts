@@ -3,13 +3,32 @@ import { useMutation, useInfiniteQuery } from 'react-query';
 import { DocumentRepository } from 'apis/document';
 
 import type {
-    DocumentInserPayload,
-    DocumentInserResponse,
     DocumentUpdatePayload,
     DocumentUpdateResponse,
     DocumentQueryPayload,
     Document
 } from 'typings/document/document';
+
+type UseDocumentCustom = {
+    exportDocumentAsync: (payload: any) => Promise<any>,
+};
+
+type UseDocumentCustomParams = {
+    params?: any
+}
+
+export const useDocumentCustom = ({
+    params = {}
+}: UseDocumentCustomParams) : UseDocumentCustom => {
+    const { mutateAsync: exportDocumentAsync } =
+        useMutation((payload: any) =>
+            DocumentRepository.exportDocument(payload)
+        );
+
+    return {
+        exportDocumentAsync
+    }
+}
 
 interface UseMutationDocument {
     insertDocumentAsync: (payload: any) => Promise<any>;
