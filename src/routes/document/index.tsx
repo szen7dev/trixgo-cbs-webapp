@@ -8,7 +8,6 @@ import { ModalProvider } from "views/document/contexts/modal";
 import { ModalCreateDocument } from 'views/document/sharedComponents/common';
 
 /*=====PAGES=====*/
-// import { } from 'views/document/pages';
 import {
     DocumentDashboardPage, DocumentHomePage,
 	DocumentDetailPage,
