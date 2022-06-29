@@ -182,7 +182,6 @@ export const HumanHomePage: FC = () => {
           </button>
 
           <DropdownOption>
-            {/* IN ẤN */}
             <Menu.Item onClick={handleExportReport}>
               <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-3"}>
                 <img src="/images/common/icons8-download-48.png" alt="Download Excel" />
