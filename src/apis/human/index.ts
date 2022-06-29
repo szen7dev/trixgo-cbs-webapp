@@ -35,11 +35,13 @@ async function fetchListHuman<T>(params: HumanPayload): Promise<T> {
         `${ITEM_URL}/contacts`,
         {
             params: {
-                // filter: { "company": 1, "name": 1, "createAt": 1, "image": 1 },
-                // select: "",
                 populates: {
-                    "path": "company position department",
-                    "select": "_id name sign members"
+                    "path": "company position department documents contractType workingStatus workplace",
+                    "select": "_id name sign members certificateGrade",
+                    "populate": {
+                        "path": "educationalBackground2 field2 certificateType certificateName",
+                        "select": "name"
+                    }
                 },
                 type: 1,
                 isMember: 1,

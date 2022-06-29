@@ -60,15 +60,12 @@ const ProjectSchedulePage: FC = () => {
 			if(task.milestone){
 				const actualStartTime  = new Date(task.actualStartTime);
 				const actualFinishTime =  new Date(task.actualFinishTime);
-				// const duration = Math. ceil((actualFinishTime.getTime() - actualStartTime.getTime()) / (24*60*60*1000));
 				dataGranttInint = [ 
 					...dataGranttInint, {
 						id: task._id, 
-						text: <Link to="/pcm/detail/${task._id}">task.name (${(task.percentage)} %)</Link>, 
-						// text: `<a target="_blank" href="/pcm/detail/${task._id}">${task.name} (${(task.percentage)} %)</a>`, 
+						text: `<a href="/pcm/detail/${task._id}">${task.name} (${(task.percentage)} %)</a>`, 
 						start_date: actualStartTime, 
 						end_date: actualFinishTime,
-						// duration: duration || 0, 
 						parent: task.milestone, 
 						percentage: task.percentage,
 						progress: Number(task.percentage/100).toFixed(3),
@@ -77,7 +74,6 @@ const ProjectSchedulePage: FC = () => {
 				]
 			}
 		});
-
 		setGranttInint({
 			data: dataGranttInint,
 			links: [
