@@ -89,6 +89,8 @@ export const Education: FC<EducationProps> = (props) => {
         type: "4",
         contactID: humanId,
       });
+      console.log({ res });
+
       if (!res.error) {
         refetchListContactDocument();
         closeModal();
