@@ -76,9 +76,6 @@ export const HumanCertificatePage: FC = () => {
     return false;
   }, [createContactMutateAsync, humans]);
 
-  let typeCertificateAfter: any;
-  let certificateNameAfter: any;
-  let certificateGradeAfter: any;
   const handleOnFilter = useCallback((values) => {
     const optionFilter = {
       ...values,
@@ -97,13 +94,24 @@ export const HumanCertificatePage: FC = () => {
       certificateName: values.certificateName?._id ?? values.certificateName,
       certificateGrade: values.certificateGrade?._id ?? values.certificateGrade
     }
-    typeCertificateAfter = values.typeCertificate?._id ?? values.typeCertificate;
-    certificateNameAfter =  values.certificateName?._id ?? values.certificateName;
-    certificateGradeAfter =  values.certificateGrade?._id ?? values.certificateGrade;
-    setPageParam(optionFilter);
+  
+    setPageParam({ ...optionFilter, 
+      populates: {
+        "path": "company position department documents contractType workingStatus workplace",
+        "select": "_id name sign members certificateGrade",
+        "match": { 
+          "certificateType": optionFilter.typeCertificate,
+          "certificateName": optionFilter.certificateName,
+          "certificateGrade": optionFilter.certificateGrade,
+        },
+        "populate": {
+            "path": "educationalBackground2 field2 certificateType certificateName",
+            "select": "name"
+        }
+    },
+    });
     return true;
   }, []);
-  console.log({ typeCertificateAfter, certificateNameAfter, certificateGradeAfter })
   // const handleOnCancelFilter = useCallback(() => {
   //   setPageParam({departmentID});
   // }, []);
