@@ -124,9 +124,12 @@ export const Education: FC<EducationProps> = (props) => {
     async (values) => {
       const res = await updateContractDocumentAsync({
         ...values,
+        educationalBackground2: values.educationalBackground2._id ?? values.educationalBackground2,
+        field2: values.field2._id ?? values.field2,
         contactID: humanId,
       });
       if (!res.error) {
+        toast.success('Cập nhật thông tin thành công');
         refetchListContactDocument();
         closeModal();
       }
@@ -155,8 +158,7 @@ export const Education: FC<EducationProps> = (props) => {
             defaultValues={{
               toDate: contactDocument.toDate,
               workplace: contactDocument.workplace,
-              educationalBackground2:
-                contactDocument?.educationalBackground2,
+              educationalBackground2: contactDocument?.educationalBackground2,
               field2: contactDocument?.field2
             }}
           />

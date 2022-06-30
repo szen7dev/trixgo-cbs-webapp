@@ -58,7 +58,7 @@ export const FormCertificate: React.FC<FormCertificateProps> = ({
     keyword: searchCertificateName
 });
 
-  const initialValues = React.useMemo(
+  const initialValues: any = React.useMemo(
     () => ({
       name: "", // nội dung
       place: "", // nơi cấp
@@ -82,9 +82,7 @@ export const FormCertificate: React.FC<FormCertificateProps> = ({
         ...values,
         certificateGrade: `${values.certificateGrade}`,
         number: `${values.number}`,
-        toDate:
-          (moment(values.toDate).isValid() && moment(values.toDate).toJSON()) ||
-          "",
+        toDate: (moment(values.toDate).isValid() && moment(values.toDate).toJSON()) || "",
       };
       if (contactDocumentID) {
         formatData.contactDocumentID = contactDocumentID;
@@ -227,7 +225,10 @@ export const FormCertificate: React.FC<FormCertificateProps> = ({
                             <span>{item.text}</span>
                           </div>
                         )}
-                        initialValue={initialValues?.certificateType}
+                        initialValue={{
+                          label: initialValues?.certificateType?.name,
+                          value: initialValues?.certificateType?._id,
+                        }}
                         data={listCertificateType.map((certificateType) => ({
                           label: certificateType.name,
                           value: certificateType._id,
@@ -261,7 +262,10 @@ export const FormCertificate: React.FC<FormCertificateProps> = ({
                             <span>{item.text}</span>
                           </div>
                         )}
-                        initialValue={initialValues?.certificateName}
+                        initialValue={{
+                          label: initialValues?.certificateName?.name,
+                          value: initialValues?.certificateName?._id,
+                        }}
                         data={listCertificateName.map((certificateName) => ({
                           label: certificateName.name,
                           value: certificateName._id,

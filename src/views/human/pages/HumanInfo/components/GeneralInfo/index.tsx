@@ -71,8 +71,9 @@ export const GeneralInfo: FC<Props> = (props) => {
                 {i18n("gender")}
               </td>
               <td className="border w-2/6 pl-4">
-                {info.gender === 1 && i18n("male")}
-                {info.gender === 0 && i18n("email")}
+                {info.gender == 1 && "Nam"}
+                {info.gender == 2 && "Nữ"}
+                {info.gender == 3 && "Khác"}
               </td>
               <td className="border text-primary-gray w-1/6 pl-4">
                 {i18n("department")}
