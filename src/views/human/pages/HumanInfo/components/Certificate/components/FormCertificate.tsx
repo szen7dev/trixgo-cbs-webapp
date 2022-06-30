@@ -248,7 +248,6 @@ export const FormCertificate: React.FC<FormCertificateProps> = ({
                         onchangeValue={(value) =>
                           setFieldValue("certificateName", value.value)
                         }
-                        
                         onSearchInputChange={debounce(value => setSearchCertificateNameValue(value), 1000)}
                         placeholder={i18n("form.classify") + "..."}
                         className="w-full pl-0 -mb-1 outline-none"

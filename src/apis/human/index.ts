@@ -44,7 +44,6 @@ async function fetchListHuman<T>(params: HumanPayload): Promise<T> {
                     }
                 },
                 type: 1,
-                isMember: 1,
                 ...params,
             },
         }

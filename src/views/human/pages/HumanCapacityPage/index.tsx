@@ -49,7 +49,7 @@ export const HumanCapacityPage: FC = () => {
   const [itemsChecked, setItemsChecked] = useState<Array<any>>([]);
 
   // Lấy ra data/messageList data ngay lúc đầu vào màn hình
-  const humans = useFetchListHuman(pageParam);
+  const humans = useFetchListHuman({ ...pageParam, isMember: 1 });
 
   // Tạo mẩu tin mới, khởi tạo sẵn hàm createContactMutateAsync để khi user
   // bấm vào nút tạo thì gọi luôn đến api tạo mẩu tin

@@ -36,6 +36,10 @@ export const HumanLeftSideBar: FC = () => {
                         <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
                         <span className="truncate">Trang chủ</span>
                     </NavLink>
+                    <NavLink to={`/human/partner`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
+                        <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+                        <span className="truncate">Nhân sự đối tác</span>
+                    </NavLink>
                     <NavLink to={`/human/capacity`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
                         <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
                         <span className="">Tra cứu năng lực</span>
