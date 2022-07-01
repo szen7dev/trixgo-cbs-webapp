@@ -1,17 +1,14 @@
-import { FC, useContext, useState } from "react";
+import { FC, useState } from "react";
 
 import { Link } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
 import debounce from "lodash/debounce";
 
-import { ModalContext } from "views/document/contexts/modal";
+// import { ModalContext } from "views/document/contexts/modal";
+// import { ButtonMore } from "shareComponents/common";
+import { Loader } from "shareComponents/common";
 
-import { ButtonMore } from "shareComponents/common";
-
-import {
-  SearchInput,
-  DropdownFilterButton
-} from 'views/document/sharedComponents/common';
+import { SearchInput, DropdownFilterButton } from 'views/document/sharedComponents/common';
 
 import projectImage from "assets/images/project.jpg";
 import "views/document/styles/document.css";
@@ -19,11 +16,19 @@ import "views/document/styles/document.css";
 import { useQueryListDepartmentsIsMember } from "services/hooks/items/useDepartment";
 
 export const DocumentHomePage: FC = () => {
-  const { toggleModal } = useContext(ModalContext);
   const [keyword, setKeyword] = useState("");
 
-  const { data: listDepartments, totalRecord, fetchNextPage: fetchNextPageDepartments } =
-  useQueryListDepartmentsIsMember({ keyword, isFetch: true });
+  const {
+    data: listDepartments,
+    totalRecord,
+    fetchNextPage: fetchNextPageDepartments,
+    hasNextPage,
+    loading
+  } = useQueryListDepartmentsIsMember({ keyword, isFetch: true });
+
+  if(loading) {
+    return <Loader className="border-primary" />
+  }
 
   return (
     <div className="flex flex-col text-sm text-black overflow-hidden h-full">
@@ -38,7 +43,7 @@ export const DocumentHomePage: FC = () => {
           <DropdownFilterButton />
         </div>
         {/* <ButtonCreate onClick={toggleModal} /> */}
-        <ButtonMore />
+        {/* <ButtonMore /> */}
       </div>
 
       {/* Content */}
@@ -46,13 +51,8 @@ export const DocumentHomePage: FC = () => {
         <InfiniteScroll
           dataLength={totalRecord} //This is important field to render the next data
           next={fetchNextPageDepartments}
-          hasMore={true}
+          hasMore={!!hasNextPage}
           loader={<div className="w-full pt-2 text-center">Loading...</div>}
-          endMessage={
-            <p style={{ textAlign: "center" }}>
-              {/* <b>Yay! You have seen it all</b> */}
-            </p>
-          }
           scrollableTarget="scrollable"
           className="flex flex-wrap w-full px-2 pt-2 pb-20 gap-y-2.5 text-primary-gray"
         >

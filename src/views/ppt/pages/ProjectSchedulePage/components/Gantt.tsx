@@ -110,6 +110,7 @@ const Gantt: FC<{ tasks: any }> = ({ tasks }) => {
 				ignore:".gantt_task_line, .gantt_task_link",
 				useKey: false
 		  	};
+			
 		}
 	}, [JSON.stringify(tasks)])
 

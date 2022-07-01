@@ -799,7 +799,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
 
                   <div className="flex justify-between items-center h-10 border-b border-gray-200">
                     <div className="w-1/5 flex items-center">
-                      <span className="mr-4 text-primary-gray">Ngày sinh {defaultValues.birthday}</span>
+                      <span className="mr-4 text-primary-gray">Ngày sinh</span>
                       <DatePicker
                         name="birthday"
                         selected={
