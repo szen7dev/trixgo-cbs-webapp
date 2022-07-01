@@ -38,13 +38,13 @@ export const HumanPartnerPage: FC = () => {
 	const { id: departmentID } = useParams<{ id: string }>();
   // const history = useHistory();
 
-  const [pageParam, setPageParam] = useState<any>({departmentID});
+  const [pageParam, setPageParam] = useState<any>({ departmentID, isPartner: 1 });
   const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
 		isExporting: false,
 	});
+
   const { openModal } = useModal();
-  // Lấy ra data/messageList data ngay lúc đầu vào màn hình
-  const humans = useFetchListHuman({ ...pageParam, isPartner: 1 });
+  const humans = useFetchListHuman(pageParam);
 
   // Tạo mẩu tin mới, khởi tạo sẵn hàm createContactMutateAsync để khi user
   // bấm vào nút tạo thì gọi luôn đến api tạo mẩu tin
