@@ -230,8 +230,7 @@ export const ModalCreateDocument: React.FC = () => {
 	return (
 		<ModalContainer isModalOpen={state.isShow} toggle={() => false}>
 			<div
-				className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white"
-				style={{ maxWidth: "1569px" }}
+				className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[1569px]"
 			>
 				<div className="flex items-center px-6 py-2.5 justify-between border-b border-secondary-gray border-opacity-30">
 					<Dialog.Title as="h3" className="text-lg leading-6 font-bold">
@@ -270,7 +269,7 @@ export const ModalCreateDocument: React.FC = () => {
 						const { handleBlur, setFieldValue } = formik;
 						return (
 							<Form>
-								<div className="px-5 pb-4 overflow-x-auto">
+								<div className="px-5 pb-4 overflow-auto">
 									<div className="document__profile-create whitespace-nowrap">
 										{/* Fisrt row */}
 										{listFormFieldsDropdown.map((item) => {
