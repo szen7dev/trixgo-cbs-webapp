@@ -1,25 +1,25 @@
 import React, { FC, Fragment, useContext, useState, useEffect } from "react";
 import { Link, useParams, useLocation } from "react-router-dom";
 import { Transition } from "@headlessui/react";
+import { Menu } from '@headlessui/react';
+import { toast } from "react-toastify";
 import moment from "moment";
 import debounce from "lodash/debounce";
-import { APP_ID } from 'apis/localdb';
 
 // ========== Context ==========
 import { ModalContext } from "views/document/contexts/modal";
 
 // ========= Global Components =========
-import { Paginate, Loader, ButtonMore, ButtonCreate } from "shareComponents/common";
+import { Paginate, Loader, ButtonCreate, DropdownOption } from "shareComponents/common";
 
-// ========== App common Components ==========
+// ========== Components ==========
 import {
-  // DocumentDropdown,
   DropdownFilterButton,
   GroupActions,
   SearchInput,
 } from "views/document/sharedComponents/common";
 
-// ========== Components Updateable ==========
+// ========== Hooks ==========
 import {
   useQueryListDocument,
   useQueryDetailDocument,
@@ -27,39 +27,39 @@ import {
 import { useQueryDetailDepartment } from "services/hooks/items/useDepartment";
 import { useMutationDocumentChild } from "services/hooks/document/useDocumentChild";
 import { useHistoryTraffics } from "services/hooks/auth/useAuth";
+import { useDocumentCustom } from "services/hooks/document/useDocument";
 
-// import { IPackage } from "typings/document";
+// ========== Utils ==========
+import { APP_ID } from 'apis/localdb';
+import { createLinkAndClick } from "utils";
 
-// const pkgs: Array<IPackage> = Array.from(Array(2).keys()).map((_, i) => ({
-//   id: i,
-//   title: "Thẻ lọc chính",
-// }));
+const payloadHistoryTraffic: any = {
+  appID: APP_ID.PCM.id,
+  menuID: APP_ID.PCM.menuPcmProject.document.id,
+  type: "1"
+};
 
 export const DocumentProjectPage: FC = () => {
   //_____Start history traffict
-	const payloadHistoryTraffic: any = {
-		appID: APP_ID.PCM.id,
-		menuID: APP_ID.PCM.menuPcmProject.document.id,
-		type: "1"
-  };
 	const { createHistoryTraffics } = useHistoryTraffics();
-	useEffect(() => {
-  	createHistoryTraffics({...payloadHistoryTraffic, type: 1});
-	}, []);
+
 	//_____End history traffict
   const location = useLocation()
-  // const [pkg, setPkg] = useState<IPackage>(pkgs[0]);
   const { toggleModal, updateModal } = useContext(ModalContext);
   const { id: departmentID } = useParams<{ id: string }>();
   const [pageParam, setPageParam] = useState<any>({});
   const [cursorPage, setCursorPage] = useState<string[]>([]);
   const [isShow, setIsShow] = useState<boolean>(false);
   const [recordSelected, setSelectRecord] = useState<any>({});
+  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+		isExporting: false,
+	});
 
   const { data, totalRecord, totalPages, loading, nextCursor, refetch } = useQueryListDocument(departmentID, pageParam, "");
   const { insertDocumentChildAsync, updateDocumentChildAsync } = useMutationDocumentChild();
   const { onFetchDetailDepartmentAsync } = useQueryDetailDepartment();
   const { onFetchDetailDocumentAsync }   = useQueryDetailDocument();
+  const { exportDocumentAsync } = useDocumentCustom({});
 
   const toggleModalConfirm = () => {
     setIsShow(!isShow);
@@ -153,12 +153,16 @@ export const DocumentProjectPage: FC = () => {
     setPageParam(() => ({ ...values }));
     return true;
   }, []);
-  
+
   const handleOnCancelFilter = React.useCallback(() => {
     setPageParam({});
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
+  	createHistoryTraffics({...payloadHistoryTraffic, type: 1});
+	}, []);
+
+  useEffect(() => {
     if (nextCursor) {
       const currentIndex = cursorPage.findIndex(
         (cursor) => cursor === nextCursor
@@ -169,7 +173,29 @@ export const DocumentProjectPage: FC = () => {
     }
   }, [cursorPage, nextCursor, pageParam?.lastestID]);
 
-  console.log({ location });
+  const handleExport = async () => {
+		try {
+			setStateExport({ isExporting: true });
+			const { error, data } = await exportDocumentAsync({
+        filterParams: { departmentID }
+      });
+
+			if(error) {
+				return toast.warn(data?.message);
+			}
+
+			data && createLinkAndClick(data, '_self');
+		} catch (error: any) {
+      toast.error(error.message)
+		} finally {
+			setStateExport({ isExporting: false });
+		}
+	}
+
+  if(stateExport.isExporting) {
+    return <Loader className="border-primary" />
+  }
+
   return (
     <>
       {/* Content */}
@@ -204,7 +230,16 @@ export const DocumentProjectPage: FC = () => {
           </div>
           <div className="flex flex-wrap items-center">
             <ButtonCreate onClick={handleCreate} />
-            <ButtonMore />
+            <DropdownOption>
+              <Menu.Item onClick={handleExport}>
+                <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-3"}>
+                  <img src="/images/common/icons8-download-48.png" alt="Download Excel" />
+                  <div className={"flex-1 text-left ml-4"}>
+                    Download Excel
+                  </div>
+                </div>
+              </Menu.Item>
+            </DropdownOption>
           </div>
         </div>
         <div className="flex-1 overflow-y-auto">

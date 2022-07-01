@@ -1,32 +1,22 @@
 import { FC, useState } from "react";
 
-import { Menu } from '@headlessui/react';
 import { Link } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
 import debounce from "lodash/debounce";
 
 // import { ModalContext } from "views/document/contexts/modal";
 // import { ButtonMore } from "shareComponents/common";
-import { DropdownOption, Loader } from "shareComponents/common";
+import { Loader } from "shareComponents/common";
 
-import {
-  SearchInput,
-  DropdownFilterButton
-} from 'views/document/sharedComponents/common';
+import { SearchInput, DropdownFilterButton } from 'views/document/sharedComponents/common';
 
 import projectImage from "assets/images/project.jpg";
 import "views/document/styles/document.css";
 
 import { useQueryListDepartmentsIsMember } from "services/hooks/items/useDepartment";
-import { useDocumentCustom } from "services/hooks/document/useDocument";
-import { toast } from "react-toastify";
-import { createLinkAndClick } from "utils";
 
 export const DocumentHomePage: FC = () => {
   const [keyword, setKeyword] = useState("");
-  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
-		isExporting: false,
-	});
 
   const {
     data: listDepartments,
@@ -36,26 +26,7 @@ export const DocumentHomePage: FC = () => {
     loading
   } = useQueryListDepartmentsIsMember({ keyword, isFetch: true });
 
-  const { exportDocumentAsync } = useDocumentCustom({});
-
-  const handleExport = async () => {
-		try {
-			setStateExport({ isExporting: true });
-			const { error, data } = await exportDocumentAsync({});
-
-			if(error) {
-				return toast.warn(data?.message);
-			}
-
-			data && createLinkAndClick(data, '_self');
-		} catch (error: any) {
-      toast.error(error.message)
-		} finally {
-			setStateExport({ isExporting: false });
-		}
-	}
-
-  if(loading || stateExport.isExporting) {
+  if(loading) {
     return <Loader className="border-primary" />
   }
 
@@ -73,16 +44,6 @@ export const DocumentHomePage: FC = () => {
         </div>
         {/* <ButtonCreate onClick={toggleModal} /> */}
         {/* <ButtonMore /> */}
-        <DropdownOption>
-          <Menu.Item onClick={handleExport}>
-            <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-3"}>
-              <img src="/images/common/icons8-download-48.png" alt="Download Excel" />
-              <div className={"flex-1 text-left ml-4"}>
-                Download Excel
-              </div>
-            </div>
-          </Menu.Item>
-        </DropdownOption>
       </div>
 
       {/* Content */}
