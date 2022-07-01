@@ -46,7 +46,7 @@ export const FormEducation: React.FC<WorkHistoryProps> = ({
     keyword: searchWorkplace,
   });
 
-  const initialValues = React.useMemo(
+  const initialValues: any = React.useMemo(
     () => ({
       workplace: '', // nơi đào tạo
       toDate: '', // năm tốt nghiệp
@@ -72,7 +72,6 @@ export const FormEducation: React.FC<WorkHistoryProps> = ({
       if (contactDocumentID) {
         formatData.contactDocumentID = contactDocumentID;
       }
-      console.log({ formatData })
       if (onFinish) {
         onFinish(formatData);
       }
@@ -168,10 +167,12 @@ export const FormEducation: React.FC<WorkHistoryProps> = ({
                           <span>{item.text}</span>
                         </div>
                       )}
-                      initialValue={typeof initialValues?.educationalBackground2 === 'string' ? ({
-                        name: 'educationalBackground2',
-                        _id: initialValues?.educationalBackground2
-                      }) : initialValues?.educationalBackground2}
+                      // initialValue={typeof initialValues?.educationalBackground2 === 'string' ? ({
+                      //   name: 'educationalBackground2',
+                      //   _id: initialValues?.educationalBackground2
+                      // }) : initialValues?.educationalBackground2}
+                      initialValue={{ label: initialValues?.educationalBackground2?.name,
+                        value: initialValues?.educationalBackground2?._id, }}
                       data={listEducationalBackground.map(educationalBackground => ({
                         label: educationalBackground.name,
                         value: educationalBackground._id,
@@ -204,10 +205,14 @@ export const FormEducation: React.FC<WorkHistoryProps> = ({
                           <span>{item.text}</span>
                         </div>
                       )}
-                      initialValue={typeof initialValues?.field2 === 'string' ? ({
-                        name: 'field2',
-                        _id: initialValues?.field2
-                      }) : initialValues?.field2}
+                      // initialValue={typeof initialValues?.field2 === 'string' ? ({
+                      //   name: 'field2',
+                      //   _id: initialValues?.field2
+                      // }) : initialValues?.field2}
+                      initialValue={{ 
+                        label: initialValues?.field2?.name,
+                        value: initialValues?.field2?._id, 
+                      }}
                       data={listWorkplace.map(workplace => ({
                         label: workplace.name,
                         value: workplace._id,

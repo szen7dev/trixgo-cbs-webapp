@@ -138,8 +138,11 @@ export const Certificate: FC<CertificateProps> = (props) => {
       const res = await updateContractDocumentAsync({
         ...values,
         contactID: humanId,
+        certificateType: values.certificateType._id || values.certificateType,
+        certificateName: values.certificateName._id || values.certificateName,
       });
       if (!res.error) {
+        toast.success("Cập nhật thành công");
         refetchListContactDocument();
         closeModal();
       }
@@ -152,7 +155,6 @@ export const Certificate: FC<CertificateProps> = (props) => {
       updateContractDocumentAsync,
     ]
   );
-
   const handleClickUpdate = useCallback(
     (contactDocument: ContactDocument) => () => {
       openModal(

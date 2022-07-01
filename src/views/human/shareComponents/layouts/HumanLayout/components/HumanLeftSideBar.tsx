@@ -1,6 +1,6 @@
 /*=====1.LIBRARY=====*/
 import { FC } from "react";
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 /*=====2.CSS=====*/
 
@@ -32,10 +32,22 @@ export const HumanLeftSideBar: FC = () => {
 
                 {/* menu block */}
                 <div className="t-link-menu-container">
-                    <Link to={`/human/home`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px] active">
+                    <NavLink to={`/human/home`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
                         <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
                         <span className="truncate">Trang chủ</span>
-                    </Link>
+                    </NavLink>
+                    <NavLink to={`/human/partner`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
+                        <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+                        <span className="truncate">Nhân sự đối tác</span>
+                    </NavLink>
+                    <NavLink to={`/human/capacity`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
+                        <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+                        <span className="">Tra cứu năng lực</span>
+                    </NavLink>
+                    <NavLink to={`/human/certificate`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
+                        <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+                        <span className="truncate">Tra cứu chứng chỉ</span>
+                    </NavLink>
                     {/* <Link to={`/human/cetificate`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
                         <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
                         <span className="truncate">Tra cứu chứng chỉ</span>

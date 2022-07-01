@@ -12,15 +12,27 @@ import { ProtectedRoute } from "routes/components";
 /*=====5.PAGES/COMPONENTS=====*/
 import ErrorPage from "views/authentication/Error";
 
-import { HumanCetificateFilterPage, HumanOtherFilterPage, HumanExpiredPage, HumanHomePage, HumanInfo, HumanDepartment } from "views/human/pages";
+import { 
+        HumanCetificateFilterPage, 
+        HumanOtherFilterPage, 
+        HumanExpiredPage, 
+        HumanHomePage, 
+        HumanPartnerPage,
+        HumanCapacityPage,
+        HumanCertificatePage,
+        HumanInfo, 
+        HumanDepartment 
+    } from "views/human/pages";
 
 const HumanRouter: FC = () => {
     return (
         <Switch>
             <ProtectedRoute exact path="/human/home" component={HumanHomePage} />
+            <ProtectedRoute exact path="/human/partner" component={HumanPartnerPage} />
+            <ProtectedRoute exact path="/human/capacity" component={HumanCapacityPage} />
             {/* <ProtectedRoute exact path="/human/home" component={HumanDepartment} /> */}
             {/* <ProtectedRoute exact path="/human/project/:id/contacts" component={HumanHomePage} /> */}
-            <ProtectedRoute exact path="/human/cetificate" component={HumanCetificateFilterPage} />
+            <ProtectedRoute exact path="/human/certificate" component={HumanCertificatePage} />
             <ProtectedRoute exact path="/human/other" component={HumanOtherFilterPage} />
             <ProtectedRoute exact path="/human/expired" component={HumanExpiredPage} />
             <ProtectedRoute exact path="/human/home/hid=:id" component={HumanInfo} />
