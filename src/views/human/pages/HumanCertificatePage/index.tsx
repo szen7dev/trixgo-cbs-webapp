@@ -28,6 +28,11 @@ import type { Human } from "typings/human";
 
 /*=====6.HOOKS/APIS=====*/
 import { useFetchListHuman, useCreateContactMutation, useHumanCustom } from "services/hooks/useHuman";
+import {
+  useQueryContactDocument,
+  useMutationContactDocument,
+} from "services/hooks/useHuman";
+
 import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 // import { usePcmProject } from "services/hooks/pcm/usePcmProject";
 
@@ -41,22 +46,21 @@ export const HumanCertificatePage: FC = () => {
 	const { id: departmentID } = useParams<{ id: string }>();
   // const history = useHistory();
 
-  const [pageParam, setPageParam] = useState<any>({departmentID});
+  const [pageParam, setPageParam] = useState<any>({ isCertificate: "1" });
   const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
 		isExporting: false,
 	});
   const { openModal } = useModal();
   const [itemsChecked, setItemsChecked] = useState<Array<any>>([]);
-
   // Lấy ra data/messageList data ngay lúc đầu vào màn hình
-  const humans = useFetchListHuman({ ...pageParam, isMember: 1 });
+  // const humans = useFetchListHuman({ ...pageParam, isMember: 1 });
 
   // Tạo mẩu tin mới, khởi tạo sẵn hàm createContactMutateAsync để khi user
   // bấm vào nút tạo thì gọi luôn đến api tạo mẩu tin
   const { createContactMutateAsync } = useCreateContactMutation();
   const { createHistoryTraffics } = useHistoryTraffics();
   const { exportHumanAsync } = useHumanCustom({});
-
+  
   useEffect(() => {
     createHistoryTraffics(
       {
@@ -70,11 +74,11 @@ export const HumanCertificatePage: FC = () => {
   const handleFinishForm = useCallback(async (values) => {
     const res = await createContactMutateAsync(values);
     if (!res.error) {
-      humans.refetchListHuman()
+      refetchListContactDocument()
       return true;
     }
     return false;
-  }, [createContactMutateAsync, humans]);
+  }, [createContactMutateAsync]);
 
   const handleOnFilter = useCallback((values) => {
     const optionFilter = {
@@ -90,28 +94,23 @@ export const HumanCertificatePage: FC = () => {
       workingStatusID: values.workingStatus?._id ?? values.workingStatus,
       educationalBackground2: values.educationalBackground2?._id ?? values.educationalBackground2,
       field2: values.field2?._id ?? values.field2,
-      typeCertificate: values.typeCertificate?._id ?? values.typeCertificate,
+      certificateType: values.certificateType?._id ?? values.certificateType,
       certificateName: values.certificateName?._id ?? values.certificateName,
       certificateGrade: values.certificateGrade?._id ?? values.certificateGrade
     }
   
-    setPageParam({ ...optionFilter, 
-      populates: {
-        "path": "company position department documents contractType workingStatus workplace",
-        "select": "_id name sign members certificateGrade",
-        "match": { 
-          "certificateType": optionFilter.typeCertificate,
-          "certificateName": optionFilter.certificateName,
-          "certificateGrade": optionFilter.certificateGrade,
-        },
-        "populate": {
-            "path": "educationalBackground2 field2 certificateType certificateName",
-            "select": "name"
-        }
-    },
-    });
+    setPageParam({ ...optionFilter });
     return true;
   }, []);
+
+  const {
+    refetchListContactDocument,
+    fetchNextPageContactDocument,
+    totalRecord,
+    listContactDocument,
+  } = useQueryContactDocument("", {
+    isCertificate: "1", limit: 20, ...pageParam
+  });
   // const handleOnCancelFilter = useCallback(() => {
   //   setPageParam({departmentID});
   // }, []);
@@ -145,17 +144,17 @@ export const HumanCertificatePage: FC = () => {
       return user ? true : false;
   }, [itemsChecked]);
 
-  const getStateCheckedAll = useCallback(() => {
-      return itemsChecked.length == humans.listHuman.length;
-  }, [itemsChecked]);
+  // const getStateCheckedAll = useCallback(() => {
+  //     return itemsChecked.length == humans.listHuman.length;
+  // }, [itemsChecked]);
 
-  const onClickCheckAll = () => {
-      if (itemsChecked.length == humans.listHuman.length) {
-          setItemsChecked([]);
-      } else {
-          setItemsChecked(humans.listHuman);
-      }
-  };
+  // const onClickCheckAll = () => {
+  //     if (itemsChecked.length == humans.listHuman.length) {
+  //         setItemsChecked([]);
+  //     } else {
+  //         setItemsChecked(humans.listHuman);
+  //     }
+  // };
 
   if(stateExport.isExporting) {
     return <Loader className="border-primary" />
@@ -199,9 +198,9 @@ export const HumanCertificatePage: FC = () => {
             initialValues={pageParam}
           />
         </div>
-
+        
         <div className="task-management-header-right-block flex items-center">
-          <button
+          {/* <button
             className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold mr-4"
             onClick={() =>
               openModal(
@@ -217,7 +216,7 @@ export const HumanCertificatePage: FC = () => {
             }
           >
             Tạo mới
-          </button>
+          </button> */}
 
           <DropdownOption>
             {/* IN ẤN */}
@@ -240,7 +239,7 @@ export const HumanCertificatePage: FC = () => {
                         <input
                             className="form-check-input"
                             type="checkbox"
-                            defaultChecked={getStateCheckedAll()}
+                            // defaultChecked={getStateCheckedAll()}
                             // onClick={onClickCheckAll}
                         />
                     </div>
@@ -309,7 +308,7 @@ export const HumanCertificatePage: FC = () => {
 
         <tbody>
               {
-                humans.listHuman.length ? humans.listHuman.map((item: any) => {
+                listContactDocument.length ? listContactDocument.map((item: any) => {
                   const d = new Date();
                   let minYear = d.getFullYear();
                   item.documents?.forEach((subitem: any) => {
@@ -334,61 +333,57 @@ export const HumanCertificatePage: FC = () => {
                   }else{
                     type = 3		
                   }
-                  return item.documents?.map((document: any) =>{
-                    if(document.certificateType){
-                      return(
-                        <tr key={item._id} className="border-b border-primary-border h-10">
-                              <td className="py-1 px-2 text-center">
-                                  <input
-                                      className="form-check-input"
-                                      type="checkbox"
-                                      checked={getStateChecked(item._id)}
-                                      // onChange={() => onClickCheckButton(item)}
-                                  />
-                              </td>
-                              <td className="py-1 px-2">{item?.sign}</td>
-                              <td className="py-1 px-2">
-                                  <Link to={`/human/home/hid=${item._id}`}>
-                                      {item.amountChilds>0? <b>{item.name}({item.amountChilds})</b>: item.name }
-                                  </Link>
-                              </td>
-                              <td className="py-1 px-2">
-                                <img
-                                  src={item.image ? `${process.env.REACT_APP_URL_S3_CONTACT}/${item.image}` : `${process.env.REACT_APP_URL_S3_CONTACT}/contact_default.png`}
-                                  alt="Member"
-                                  className="w-6 h-6 rounded-full"
-                                />
-                              </td>
-                              <td className="py-1 px-2">{item.position?.name}</td>
-                              <td className="py-1 px-2">{(Number(item.gender) > 0) && GENDER_TYPES[Number(item.gender)-1].text}</td>
-                              <td className="py-1 px-2">{item.documents?.[0]?.educationalBackground2?.name}</td>
-                              <td className="py-1 px-2">{item.documents?.[0]?.field2?.name}</td>
-                              <td className="py-1 px-2">{numberAgo}</td>
-                              <td className="py-1 px-2">
-                                <i>{arr[type]}</i>
-                                <i>{arr2[type]}</i>
-                              </td>
-                              <td className="py-1 px-2">
-                                {document?.certificateType?.name}
-                              </td>
-                              <td className="py-1 px-2">
-                                {document?.certificateName?.name}
-                              </td>
-                              <td className="py-1 px-2">
-                                { (Number(document.certificateGrade && document.certificateGrade || 0) > 0) ? document.certificateGrade : ""}
-                              </td>
-                        </tr> 
-                      )
-                    }
-                  })
+                  return(
+                    <tr key={item._id} className="border-b border-primary-border h-10">
+                          <td className="py-1 px-2 text-center">
+                              <input
+                                  className="form-check-input"
+                                  type="checkbox"
+                                  checked={getStateChecked(item._id)}
+                                  // onChange={() => onClickCheckButton(item)}
+                              />
+                          </td>
+                          <td className="py-1 px-2">{item?.contact?.sign}</td>
+                          <td className="py-1 px-2">
+                              <Link to={`/human/home/hid=${item?.contact?._id}`}>
+                                  {item?.contact?.name}
+                              </Link>
+                          </td>
+                          <td className="py-1 px-2">
+                            <img
+                              src={item.contact.image ? `${process.env.REACT_APP_URL_S3_CONTACT}/${item.contact.image}` : `${process.env.REACT_APP_URL_S3_CONTACT}/contact_default.png`}
+                              alt="Member"
+                              className="w-6 h-6 rounded-full"
+                            />
+                          </td>
+                          <td className="py-1 px-2">{item?.contact?.position?.name}</td>
+                          <td className="py-1 px-2">{(Number(item.contact.gender) > 0) && GENDER_TYPES[Number(item.contact.gender)-1].text}</td>
+                          <td className="py-1 px-2">{item?.educationalBackground2?.name}</td>
+                          <td className="py-1 px-2">{item?.field2?.name}</td>
+                          <td className="py-1 px-2">{numberAgo}</td>
+                          <td className="py-1 px-2">
+                            <i>{arr[type]}</i>
+                            <i>{arr2[type]}</i>
+                          </td>
+                          <td className="py-1 px-2">
+                            {item?.certificateType?.name}
+                          </td>
+                          <td className="py-1 px-2">
+                            {item?.certificateName?.name}
+                          </td>
+                          <td className="py-1 px-2">
+                            { (Number(item.certificateGrade && item.certificateGrade || 0) > 0) ? item.certificateGrade : ""}
+                          </td>
+                    </tr> 
+                  )
               }) : <></>
            }
         </tbody>
       </table>
-      {!!humans.totalRecord && humans.totalRecord - humans.listHuman.length > 0 && (
+      {!!totalRecord && totalRecord - listContactDocument.length > 0 && (
         <div className="w-full flex justify-center my-5">
-          <button onClick={() => humans.fetchNextPageHuman()}>
-            <span className="text-primary">{`Xem thêm (${humans.totalRecord - humans.listHuman.length })`}</span>
+          <button onClick={() => fetchNextPageContactDocument()}>
+            <span className="text-primary">{`Xem thêm (${totalRecord - listContactDocument.length })`}</span>
           </button>
         </div>
       )}
