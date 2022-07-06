@@ -94,7 +94,7 @@ export const HumanCertificatePage: FC = () => {
       workingStatusID: values.workingStatus?._id ?? values.workingStatus,
       educationalBackground2: values.educationalBackground2?._id ?? values.educationalBackground2,
       field2: values.field2?._id ?? values.field2,
-      certificateType: values.typeCertificate?._id ?? values.typeCertificate,
+      certificateType: values.certificateType?._id ?? values.certificateType,
       certificateName: values.certificateName?._id ?? values.certificateName,
       certificateGrade: values.certificateGrade?._id ?? values.certificateGrade
     }
@@ -111,7 +111,6 @@ export const HumanCertificatePage: FC = () => {
   } = useQueryContactDocument("", {
     isCertificate: "1", limit: 20, ...pageParam
   });
-
   // const handleOnCancelFilter = useCallback(() => {
   //   setPageParam({departmentID});
   // }, []);
@@ -199,7 +198,7 @@ export const HumanCertificatePage: FC = () => {
             initialValues={pageParam}
           />
         </div>
-
+        
         <div className="task-management-header-right-block flex items-center">
           {/* <button
             className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold mr-4"
