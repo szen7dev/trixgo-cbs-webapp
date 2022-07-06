@@ -56,7 +56,7 @@ export const HumanCapacityPage: FC = () => {
   const { createContactMutateAsync } = useCreateContactMutation();
   const { createHistoryTraffics } = useHistoryTraffics();
   const { exportHumanAsync } = useHumanCustom({});
-
+  
   useEffect(() => {
     createHistoryTraffics(
       {
