@@ -119,9 +119,9 @@ export const DropdownFilterButtonCertificate: React.FC<Props> = ({ onCancel, onS
             }
         }
 
-        if (values.typeCertificate) {
-            const result = await onFetchDetailDoctypeAsync(values.typeCertificate);
-            data.typeCertificate = {
+        if (values.certificateType) {
+            const result = await onFetchDetailDoctypeAsync(values.certificateType);
+            data.certificateType = {
                 _id: result._id,
                 name: result.name,
             }

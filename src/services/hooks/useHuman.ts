@@ -374,7 +374,7 @@ interface UseQueryContactDocument {
     refetchListContactDocument: () => void;
     fetchNextPageContactDocument: () => void;
 }
-export const useQueryContactDocument = (humanId: string, typeParam: TypeParam): UseQueryContactDocument => {
+export const useQueryContactDocument = (humanId: string, typeParam: any): UseQueryContactDocument => {
     const {
         isLoading,
         data,
@@ -382,13 +382,14 @@ export const useQueryContactDocument = (humanId: string, typeParam: TypeParam): 
         fetchNextPage: fetchNextPageContactDocument,
         hasNextPage
     } = useInfiniteQuery(
-        [`list_human.${humanId}.${typeParam.type}`, typeParam.limit],
+        [`list_human.${humanId}.${typeParam.type}`, typeParam],
         async ({ pageParam }: any) =>
             HumanRepository.fetchListContactDocument({
                 limit: typeParam.limit || 10,
                 lastestID: pageParam || "",
                 contactID: humanId,
                 type: typeParam.type,
+                ...typeParam
             }),
         {
             getNextPageParam: ({ data }: any) => {
@@ -398,7 +399,7 @@ export const useQueryContactDocument = (humanId: string, typeParam: TypeParam): 
             enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
         }
     );
-
+    
     const listContactDocument = []
         .concat(
             ...(data?.pages || []).map((d: any) => d.data?.listRecords)
@@ -406,7 +407,7 @@ export const useQueryContactDocument = (humanId: string, typeParam: TypeParam): 
         .filter(Boolean);
     const totalRecord = data?.pages[0]?.data?.totalRecord;
     const totalPages = data?.pages[0]?.data?.totalPages;
-
+            
     return {
         refetchListContactDocument,
         fetchNextPageContactDocument,

@@ -109,7 +109,7 @@ export const FormFilter: React.FC<FormFilterProps> = ({
       {
         title: "Loại chứng chỉ",
         data: listDoctypes14,
-        name: "typeCertificate",
+        name: "certificateType",
       },
       {
         title: "Lĩnh vực chứng chỉ",
