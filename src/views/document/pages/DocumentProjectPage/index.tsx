@@ -362,7 +362,7 @@ export const DocumentProjectPage: FC = () => {
                         {moment(document.date).isValid() && moment(document.date).format("DD/MM/YYYY")}
                       </td>
                       <td className="py-2.5 border-b border-cbs-border px-2">
-                        {document?.storeSign?.name}
+                        {document?.storeSign}
                       </td>
                       <td className="py-2.5 border-b border-cbs-border px-2 whitespace-nowrap text-right">
                         {document.amount}
