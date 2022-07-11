@@ -121,6 +121,7 @@ export const ModalCreateDocument: React.FC = () => {
 			sender: state.initialValues?.sender?._id,
 			storage: state.initialValues?.storage?._id,
 			property: state.initialValues?.property?._id,
+			completeStatus: state.initialValues?.completeStatus,
 		}
 	}, [state.initialValues]);
 		
@@ -199,7 +200,7 @@ export const ModalCreateDocument: React.FC = () => {
 				formatValues.receivedDate = moment(values.receivedDate).toJSON();
 			}
 
-			if (values.completeStatus == true) {
+			if (values.completeStatus) {
 				formatValues.completeStatus = 1
 			}else{
 				formatValues.completeStatus = 0
@@ -266,7 +267,7 @@ export const ModalCreateDocument: React.FC = () => {
 					onSubmit={handleSubmit}
 				>
 					{(formik) => {
-						const { handleBlur, setFieldValue } = formik;
+						const { handleBlur, setFieldValue, getFieldProps, values } = formik;
 						return (
 							<Form>
 								<div className="px-5 pb-4 overflow-auto">
@@ -472,9 +473,9 @@ export const ModalCreateDocument: React.FC = () => {
 										<div className="text-black py-1.5 h-[30px] box-content px-2">
 											<div className="py-1.5">
 												<Field
-													onBlur={(e: React.FormEvent<HTMLInputElement>) => {
-														handleBlur(e);
-													}}
+													defaultChecked={values.completeStatus === 1}
+													onBlur={handleBlur}
+													onChange={(e: any) => setFieldValue('completeStatus', e.target.checked)}
 													type="checkbox"
 													name="completeStatus"
 												/>

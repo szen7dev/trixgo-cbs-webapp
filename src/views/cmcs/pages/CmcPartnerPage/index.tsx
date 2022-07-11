@@ -1,19 +1,23 @@
 import { FC, useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Menu } from '@headlessui/react';
+import { toast } from "react-toastify";
+import { debounce } from "lodash";
 import cn from "classnames";
 import moment from "moment";
+
 import { useModal } from "services/hooks/useModal";
 import { CONTRACT_COME_IN_STATUS, DATE_FORMAT } from "apis/localdb/index";
-import { SearchInput, Paginate } from "shareComponents/common";
-import { IncomeFormModal, DropdownFilterButton, ActionMenuTopBar } from "views/cmcs/shareComponents/common";
+import { SearchInput, Paginate, DropdownOption, Loader } from "shareComponents/common";
+import { IncomeFormModal, ActionMenuTopBar } from "views/cmcs/shareComponents/common";
 import { formatNumberMoney } from "utils/cmcs";
 import styles from 'views/cmcs/styles/styles.module.css';
-import { UseContractListIsMember, useCreateContractMutation, useUpdateContractMutation, useDeleteContractMutation } from "services/hooks/cmcs/useContractIncome";
+import { UseContractListIsMember, useCreateContractMutation, useUpdateContractMutation, useDeleteContractMutation, useContractCustom } from "services/hooks/cmcs/useContractIncome";
 import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
-import { debounce } from "lodash";
+import { createLinkAndClick } from 'utils';
 
 export const CmcPartnerPage: FC = () => {
   // --------- history traffic
@@ -22,7 +26,7 @@ export const CmcPartnerPage: FC = () => {
     menuID: APP_ID.CMCS.menuCmcsApp.partner.id,
     type: "1"
   };
-  const { createPermission, updatePermission, deletePermission } = useCheckPerAccessScreen(payload);
+  const { updatePermission, deletePermission } = useCheckPerAccessScreen(payload);
   // ---------
   const { createHistoryTraffics } = useHistoryTraffics();
   useEffect(() => {
@@ -33,11 +37,15 @@ export const CmcPartnerPage: FC = () => {
   const [keyword, setKeyword] = useState("");
   const [pageParam, setPageParam] = useState('');
   const [prevCursor, setPrevCursor] = useState([null]);
+  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+		isExporting: false,
+	});
 
   const { openModal } = useModal();
+  const { exportContractAsync } = useContractCustom({});
 
   const contractIncome = UseContractListIsMember(pageParam, keyword);
-  const { createContractMutateAsync, loading } = useCreateContractMutation();
+  const { createContractMutateAsync } = useCreateContractMutation();
   const { updateContractMutateAsync } = useUpdateContractMutation();
   const { deleteContractMutateAsync } = useDeleteContractMutation();
 
@@ -97,6 +105,7 @@ export const CmcPartnerPage: FC = () => {
       },
     });
   }
+
   const handleEditAction = async () => {
     openModal(
       <div
@@ -108,18 +117,30 @@ export const CmcPartnerPage: FC = () => {
       </div>
     )
   }
-  const handleAddAction = () => {
-    openModal(
-      <div
-        className={
-          "inline-block w-screen h-screen overflow-hidden transition-all transform flex justify-center bg-transparent shadow-xl rounded absolute left-0 right-0 top-10"
-        }
-      >
-        <IncomeFormModal onFinish={handleFinishForm} title="Tạo mới" outin={1}/>
-      </div>
-    )
+
+  const handleExportReport = async () => {
+    try {
+			setStateExport({ isExporting: true });
+			const { error, data } = await exportContractAsync({
+        filterParams: { keyword }, type: 'partner'
+      });
+
+			if(error) {
+				return toast.warn(data?.message);
+			}
+
+			data && createLinkAndClick(data, '_self');
+		} catch (error: any) {
+      toast.error(error.message)
+		} finally {
+			setStateExport({ isExporting: false });
+		}
   }
-  
+
+  if(stateExport.isExporting) {
+    return <Loader className="border-primary" />
+  }
+
   return (
     <main className="relative min-h-full">
       <header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-12 px-6 border border-primary-border">
@@ -136,7 +157,7 @@ export const CmcPartnerPage: FC = () => {
           {itemChecked && (
             <div className="border-l-2 border-primary-border ml-5 pl-5">
               <ActionMenuTopBar
-                deleteAction={handleDeleteAction} 
+                deleteAction={handleDeleteAction}
                 editAction={handleEditAction}
                 updatePermission={updatePermission}
                 deletePermission={deletePermission}
@@ -144,6 +165,16 @@ export const CmcPartnerPage: FC = () => {
             </div>
           )}
         </div>
+        <DropdownOption>
+          <Menu.Item onClick={handleExportReport}>
+            <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-3"}>
+              <img src="/images/common/icons8-download-48.png" alt="Download Excel" />
+              <div className={"flex-1 text-left ml-4"}>
+                Download Excel
+              </div>
+            </div>
+          </Menu.Item>
+        </DropdownOption>
       </header>
 
       <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
@@ -151,7 +182,7 @@ export const CmcPartnerPage: FC = () => {
           <tr className="text-left text-sm text-primary-gray">
             <th className={cn("pb-1 pt-1 text-center", styles.theadInput)}>
               <div className="border-r-2 border-gray-300 flex items-center justify-center">
-                
+
               </div>
             </th>
             <th className="w-1/5 pb-1 pt-1">
@@ -205,7 +236,7 @@ export const CmcPartnerPage: FC = () => {
             return (
               <tr key={item._id} className="border-b border-primary-border ">
                 <td className="py-1 px-2 text-center">
-                  
+
                 </td>
                 <td className="py-1 px-2">
                   <Link to={"/cmcs/contract/" + (item._id) + "/home"}>

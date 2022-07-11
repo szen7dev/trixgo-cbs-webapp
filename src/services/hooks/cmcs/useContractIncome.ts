@@ -2,6 +2,27 @@ import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import ContractIncomeRepository from 'apis/cmcs/contractIncome';
 import HumanRepository from 'apis/human';
 
+type UseContractCustom = {
+    exportContractAsync: (payload: any) => Promise<any>,
+};
+
+type UseContractCustomParams = {
+    params?: any
+}
+
+export const useContractCustom = ({
+    params = {}
+}: UseContractCustomParams) : UseContractCustom => {
+    const { mutateAsync: exportContractAsync } =
+        useMutation((payload: any) =>
+            ContractIncomeRepository.exportContract(payload)
+        );
+
+    return {
+        exportContractAsync
+    }
+}
+
 export const UseContractListIsMember = (pageParam = '', keyword = '', limit = 10): any => {
 
     const {
