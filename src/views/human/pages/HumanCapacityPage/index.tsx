@@ -143,6 +143,7 @@ export const HumanCapacityPage: FC = () => {
   if(stateExport.isExporting) {
     return <Loader className="border-primary" />
   }
+  
   return (
     <section className="w-full">
       <div className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-12 px-6 border border-gray-200">
