@@ -31,7 +31,6 @@ import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 /*=====7.OTHER=====*/
 import { APP_ID } from "apis/localdb"
 import { createLinkAndClick } from 'utils';
-// const ImageStorageUrl = process.env.REACT_APP_URL_S3_CONTACT;
 
 export const HumanHomePage: FC = () => {
   const { t } = useTranslation(["human"]);
@@ -116,8 +115,6 @@ export const HumanHomePage: FC = () => {
 			setStateExport({ isExporting: false });
 		}
 	}
-
-	// const { infoDepartment } = usePcmProject({ departmentID });
 
   if(stateExport.isExporting) {
     return <Loader className="border-primary" />
