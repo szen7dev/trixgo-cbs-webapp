@@ -5,6 +5,7 @@ import type { DocumentFileProps, DocumentFileQueryPayload } from 'typings/docume
 
 interface UseQueryListDocumentFile {
     createDocumentFileMutateAsync: any,
+    deleteDocumentFileMutateAsync: any,
     loading: boolean;
     totalRecord: number;
     totalPages: number;
@@ -21,9 +22,13 @@ export const useQueryListDocumentFile = (params: DocumentFileQueryPayload): UseQ
     const { mutateAsync: createDocumentFileMutateAsync, isLoading: isLoadingCreateDocumentFile } =
       useMutation((params: any) => DocumentFileRepository.insertDocumentFile(params)
     );
-    
+
+    const { mutateAsync: deleteDocumentFileMutateAsync } =
+      useMutation((params: any) => DocumentFileRepository.deleteDocumentFile(params)
+    );
+
     const res = useInfiniteQuery(
-        [`document-files`, { params }],
+        [`document-files`, params],
         async ({ pageParam }: any) =>
             DocumentFileRepository.fetchList({
                 limit: params?.limit || 10,
@@ -39,7 +44,7 @@ export const useQueryListDocumentFile = (params: DocumentFileQueryPayload): UseQ
                 return data?.nextCursor || undefined;
             },
             refetchOnWindowFocus: false,
-            enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+            enabled: !!params.documentID
         }
     );
 
@@ -58,9 +63,10 @@ export const useQueryListDocumentFile = (params: DocumentFileQueryPayload): UseQ
 
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPages = data?.pages[0]?.data?.totalPage || 0;
-    
+
     return {
         createDocumentFileMutateAsync,
+        deleteDocumentFileMutateAsync,
         loading: isLoading,
         nextCursor,
         documentFiles,
