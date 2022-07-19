@@ -80,11 +80,12 @@ export const ModalAddNewTask: FC = () => {
     params: {
       type: 2,
       companyID,
-      keyword: searchOtherField
+      keyword: searchOtherField,
+      isShowParentAndChild: 1
     },
     isFetchList: !!companyID
   })
-
+  // console.log({ listDoctypesxxx: listDoctypes })
   const {
     data: listGroup,
     hasNextPage: hasNextPageListGroup,
@@ -237,7 +238,7 @@ export const ModalAddNewTask: FC = () => {
                           maxWidthInput="max-w-none"
                           renderSelectedItem={(item: any) => (
                             <div
-                              style={{ width: 100 }}
+                              style={{ width: 300 }}
                               className="flex items-center"
                             >
                               <img alt="Tag" src={TagIcon} className="mr-1" />
@@ -295,7 +296,7 @@ export const ModalAddNewTask: FC = () => {
                         maxWidthInput="max-w-none"
                         renderSelectedItem={(item: any) => (
                           <div
-                            style={{ width: 100 }}
+                            style={{ width: 300 }}
                             className="flex items-center"
                           >
                             <img alt="Tag" src={TagIcon} className="mr-1" />
@@ -345,7 +346,7 @@ export const ModalAddNewTask: FC = () => {
                         maxWidthInput="max-w-none"
                         renderSelectedItem={(item: any) => (
                           <div
-                            style={{ width: 100 }}
+                            style={{ width: 300 }}
                             className="flex items-center"
                           >
                             <img alt="Tag" src={TagIcon} className="mr-1" />
@@ -398,7 +399,7 @@ export const ModalAddNewTask: FC = () => {
                           maxWidthInput="max-w-none"
                           renderSelectedItem={(item: any) => (
                             <div
-                              style={{ width: 100 }}
+                              style={{ width: 200 }}
                               className="flex items-center"
                             >
                               <img alt="Thumbnail" src={item.imageUrl || fakeThumbnail} className="mr-1 w-6 h-6 rounded-full" />
@@ -482,7 +483,7 @@ export const ModalAddNewTask: FC = () => {
                         maxWidthInput="max-w-none"
                         renderSelectedItem={(item: any) => (
                           <div
-                            style={{ width: 100 }}
+                            style={{ width: 300 }}
                             className="flex items-center"
                           >
                             <img alt="Tag" src={TagIcon} className="mr-1" />
@@ -540,7 +541,7 @@ export const ModalAddNewTask: FC = () => {
                         maxWidthInput="max-w-none"
                         renderSelectedItem={(item: any) => (
                           <div
-                            style={{ width: 100 }}
+                            style={{ width: 200 }}
                             className="flex items-center"
                           >
                             <img alt="Thumbnail" src={item.imageUrl || fakeThumbnail} className="mr-1 w-6 h-6 rounded-full" />

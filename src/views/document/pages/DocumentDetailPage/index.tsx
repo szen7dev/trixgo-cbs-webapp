@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useContext } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
@@ -21,6 +21,8 @@ import "views/document/styles/document.css";
 import { TableGeneralInformation } from "./components/TableGeneralInformation";
 import { TableFileAttach } from "./components/TableFileAttach";
 import { TableSubtextProfile } from "./components/TableSubtextProfile";
+import { ModalContext } from "views/document/contexts/modal";
+import { useMutationDocumentChild } from "services/hooks/document/useDocumentChild";
 
 import iconMove from "assets/images/icons8-move-stock-96.svg";
 import iconShareFolder from "assets/images/icons8-shared-folder-100_1.svg";
@@ -41,7 +43,9 @@ export const DocumentDetailPage: FC = () => {
   const params = useParams<any>();
   const { user } = useAuth();
   const { t } = useTranslation(["document"]);
+  const { toggleModal, updateModal } = useContext(ModalContext);
 
+  const { insertDocumentChildAsync, updateDocumentChildAsync } = useMutationDocumentChild();
   const [isShow, setIsShow] = useState(false);
   const [isToggleModalQRCode, setIsToggleModalQRCode] = useState(false);
   const toggleModalQRCode = () => setIsToggleModalQRCode(!isToggleModalQRCode);
@@ -122,6 +126,45 @@ export const DocumentDetailPage: FC = () => {
       }
     }
   }
+  const departmentID = detailDocument?.project?._id;
+  const handleOnClickUpdate = React.useCallback(
+    (record) => async () => {
+      const result = await onFetchDetailDocumentAsync(record._id);
+      toggleModal();
+      updateModal({
+        departmentId: departmentID,
+        departmentInfo: {
+          company: {
+            _id: record.company,
+          },
+        },
+        title: "Cập nhật",
+        initialValues: result,
+        onSubmit: async (values: any) => {
+          const result = await updateDocumentChildAsync({
+            ...values,
+            documentID: record._id,
+          });
+          if (result.status === 200) {
+            refetch();
+            toggleModal();
+            updateModal({
+              departmentInfo: {},
+              initialValues: {},
+            });
+          }
+        },
+      });
+    },
+    [
+      departmentID,
+      onFetchDetailDocumentAsync,
+      refetch,
+      toggleModal,
+      updateDocumentChildAsync,
+      updateModal,
+    ]
+  );
 
   return (
     <div className="flex flex-col overflow-hidden bg-cbs-gray h-full">
@@ -147,9 +190,10 @@ export const DocumentDetailPage: FC = () => {
           </svg>
         </button>
         {/* <DropdownFilterButton /> */}
-        <GroupActionsPageDetail className="flex items-center flex-1" onGenerateQRCode={toggleModalQRCode} />
+        {/* <GroupActionsPageDetail className="flex items-center flex-1" onGenerateQRCode={toggleModalQRCode} onClickPencil={handleOnClickUpdate({_id: params.docID})}/> */}
         {/* <ButtonCreate onClick={toggleModal} /> */}
         {/* <ButtonMore /> */}
+        <GroupActionsPageDetail className="flex items-center flex-1" onGenerateQRCode={toggleModalQRCode}/>
       </div>
       <div className="text-cbs-subtext flex-1 overflow-y-auto pb-2">
         <div className="bg-white">
