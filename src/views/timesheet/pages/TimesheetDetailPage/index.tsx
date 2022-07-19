@@ -109,7 +109,7 @@ const TimeSheetDetailPage: FC = () => {
       hasPermissionCreateUpdate,
       hasPermissionShare
     })
-  }, [JSON.stringify(user), JSON.stringify(timeSheetInfo)])
+  }, [JSON.stringify(timeSheetInfo)])
 
   const handleUpdatedTimeSheet = React.useCallback(
     async (values) => {

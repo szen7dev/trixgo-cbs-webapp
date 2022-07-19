@@ -11,6 +11,27 @@ import type {
     UpdateContractPayload
 } from 'typings/cmcs';
 
+type UseContractCustom = {
+    exportContractAsync: (payload: any) => Promise<any>,
+};
+
+type UseContractCustomParams = {
+    params?: any
+}
+
+export const useContractCustom = ({
+    params = {}
+}: UseContractCustomParams) : UseContractCustom => {
+    const { mutateAsync: exportContractAsync } =
+        useMutation((payload: any) =>
+            ContractExpenseRepository.exportContract(payload)
+        );
+
+    return {
+        exportContractAsync
+    }
+}
+
 /*=====3.INTERFACE DEFINE=====*/
 interface UseContractExpense {
     isLoading: boolean;

@@ -7,3 +7,4 @@ export * from './HumanInfo';
 export * from './HumanDepartment';
 export * from './HumanCapacityPage';
 export * from './HumanCertificatePage';
+export * from './HumanCertificateExpiredPage';

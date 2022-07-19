@@ -77,6 +77,13 @@ async function requestDeleteContract(contractID: string): Promise<any> {
     return data;
 }
 
+async function exportContract<T>(params: any): Promise<T> {
+    const { data } = await API.post<any>(
+        `${ITEM_URL}/contracts/export`, params
+    );
+    return data;
+}
+
 const ContractIncomeRepository = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fetchListIsMember: async (params: any): Promise<any> => fetchListIsMember<any>(params),
@@ -87,6 +94,7 @@ const ContractIncomeRepository = {
     requestCreateContract,
     requestUpdateContract,
     requestDeleteContract,
+    exportContract,
 };
 
 export default ContractIncomeRepository

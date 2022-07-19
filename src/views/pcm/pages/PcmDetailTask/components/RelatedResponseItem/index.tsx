@@ -189,7 +189,7 @@ export const RelatedResponseItem: FC<Props> = ({
 			<div className={
 				classNames("flex",
 					isHighlight
-						? 'bg-blue-500 shadow-lg bg-opacity-50 scale-110 p-3 transition ease-in-out delay-150 duration-300'
+						? 'bg-blue-500 shadow-lg bg-opacity-50 scale-100 p-3 transition ease-in-out delay-150 duration-300'
 						: 'animate-[wiggle_1s_ease-in-out_infinite]'
 				)
 			} ref={divRef}>

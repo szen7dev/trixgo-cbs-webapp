@@ -36,12 +36,17 @@ async function fetchListHuman<T>(params: HumanPayload): Promise<T> {
         {
             params: {
                 populates: {
-                    "path": "company position department documents contractType workingStatus workplace",
+                    "path": "company position department documents contractType workingStatus workplace area2",
                     "select": "_id name sign members certificateGrade",
                     "populate": {
-                        "path": "educationalBackground2 field2 certificateType certificateName",
-                        "select": "name"
-                    }
+                        "path": "educationalBackground2 field2 certificateType certificateName parent",
+                        "select": "name",
+                        "populate": {
+                            "path": "parent",
+                            "select": "name"
+                        }
+                    },
+                    
                 },
                 type: 1,
                 ...params,
@@ -57,10 +62,10 @@ async function fetchListContactDocument<T>(params: ContactDocumentPayload): Prom
         params: {
             populates: {
                 "path": "company contact files contract position2 educationalBackground2 field2 certificateName certificateType",
-                "select": "name sign size url userCreate createAt nameOrg description path",
+                "select": "name sign size url userCreate createAt nameOrg description path image gender",
                 "populate": {
-                    "path": "userCreate project",
-                    "select": "fullname bizfullname projectType buildingGrade"
+                    "path": "userCreate project position",
+                    "select": "name fullname bizfullname projectType buildingGrade"
                 }
             },
             ...params,

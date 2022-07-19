@@ -143,7 +143,7 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 				{/* Info and reply */}
 				<div className='group w-full'>
 					<div className="flex items-center">
-						<div className='bg-gray-100 rounded-xl p-2 hover:bg-primary hover:bg-opacity-10 '>
+						<div className='bg-gray-100 rounded-xl p-2 hover:bg-primary hover:bg-opacity-10 break-words' style={{ width: "100%" }}>
 							<p className="font-bold text-medium">{comment.author?.bizfullname}</p>
 							<p
 								className="mt-0.5 text-[15px] leading-4"
