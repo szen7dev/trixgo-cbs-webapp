@@ -2,18 +2,22 @@ import { FC, useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import cn from "classnames";
 import moment from "moment";
+import { Menu } from '@headlessui/react';
+import { toast } from "react-toastify";
+import { debounce } from "lodash";
+
 import { useModal } from "services/hooks/useModal";
 import { CONTRACT_COME_IN_STATUS, DATE_FORMAT } from "apis/localdb/index";
-import { SearchInput, Paginate } from "shareComponents/common";
-import { IncomeFormModal, DropdownFilterButton, ActionMenuTopBar } from "views/cmcs/shareComponents/common";
+import { SearchInput, Paginate, DropdownOption, Loader } from "shareComponents/common";
+import { IncomeFormModal, ActionMenuTopBar } from "views/cmcs/shareComponents/common";
 import { formatNumberMoney } from "utils/cmcs";
-import styles from 'views/cmcs/styles/styles.module.css';
-import { UseContractIncomeList, useCreateContractMutation, useUpdateContractMutation, useDeleteContractMutation } from "services/hooks/cmcs/useContractIncome";
+import { UseContractIncomeList, useCreateContractMutation, useUpdateContractMutation, useDeleteContractMutation, useContractCustom } from "services/hooks/cmcs/useContractIncome";
 import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
+import { createLinkAndClick } from 'utils';
 import { APP_ID } from "apis/localdb";
-import { debounce } from "lodash";
+import styles from 'views/cmcs/styles/styles.module.css';
 
 export const CmcIncomePage: FC = () => {
   // --------- Check phân quyền
@@ -33,6 +37,9 @@ export const CmcIncomePage: FC = () => {
   const [keyword, setKeyword] = useState("");
   const [pageParam, setPageParam] = useState('');
   const [prevCursor, setPrevCursor] = useState([null]);
+  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+		isExporting: false,
+	});
 
   const { openModal } = useModal();
 
@@ -40,6 +47,8 @@ export const CmcIncomePage: FC = () => {
   const { createContractMutateAsync, loading } = useCreateContractMutation();
   const { updateContractMutateAsync } = useUpdateContractMutation();
   const { deleteContractMutateAsync } = useDeleteContractMutation();
+
+  const { exportContractAsync } = useContractCustom({});
 
   const prevPageAction = () => {
     if (!contractIncome.nextCursor) {
@@ -97,6 +106,7 @@ export const CmcIncomePage: FC = () => {
       },
     });
   }
+
   const handleEditAction = async () => {
     openModal(
       <div
@@ -120,6 +130,29 @@ export const CmcIncomePage: FC = () => {
     )
   }
 
+  const handleExportReport = async () => {
+    try {
+			setStateExport({ isExporting: true });
+			const { error, data } = await exportContractAsync({
+        filterParams: pageParam, type: 'out'
+      });
+
+			if(error) {
+				return toast.warn(data?.message);
+			}
+
+			data && createLinkAndClick(data, '_self');
+		} catch (error: any) {
+      toast.error(error.message)
+		} finally {
+			setStateExport({ isExporting: false });
+		}
+  }
+
+  if(stateExport.isExporting) {
+    return <Loader className="border-primary" />
+  }
+
   return (
     <main className="relative min-h-full">
       <header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-12 px-6 border border-primary-border">
@@ -136,7 +169,7 @@ export const CmcIncomePage: FC = () => {
           {itemChecked && (
             <div className="border-l-2 border-primary-border ml-5 pl-5">
               <ActionMenuTopBar
-                deleteAction={handleDeleteAction} 
+                deleteAction={handleDeleteAction}
                 editAction={handleEditAction}
                 updatePermission={updatePermission}
                 deletePermission={deletePermission}
@@ -144,14 +177,27 @@ export const CmcIncomePage: FC = () => {
             </div>
           )}
         </div>
-        {createPermission && 
-           <button
-           className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold"
-           onClick={handleAddAction}
-         >
-           Tạo mới
-         </button>
-        }
+
+        <div className="task-management-header-right-block flex items-center">
+          {createPermission &&
+            <button
+            className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold mr-3"
+            onClick={handleAddAction}
+          >
+            Tạo mới
+          </button>
+          }
+          <DropdownOption>
+            <Menu.Item onClick={handleExportReport}>
+              <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-3"}>
+                <img src="/images/common/icons8-download-48.png" alt="Download Excel" />
+                <div className={"flex-1 text-left ml-4"}>
+                  Download Excel
+                </div>
+              </div>
+            </Menu.Item>
+          </DropdownOption>
+        </div>
       </header>
 
       <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">

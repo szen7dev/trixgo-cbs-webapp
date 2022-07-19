@@ -1,6 +1,8 @@
 import { FC, useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { debounce } from "lodash";
+import { Menu } from '@headlessui/react';
+import { toast } from "react-toastify";
 import cn from "classnames";
 import moment from "moment";
 
@@ -8,17 +10,18 @@ import moment from "moment";
  * Components, Utils
  */
 import { CONTRACT_COME_IN_STATUS, DATE_FORMAT } from "apis/localdb/index";
-import { SearchInput, Paginate } from "shareComponents/common";
-import { IncomeFormModal, ExpenseFormModal, ActionMenuTopBar } from "views/cmcs/shareComponents/common";
+import { SearchInput, Paginate, DropdownOption, Loader } from "shareComponents/common";
+import { IncomeFormModal, ActionMenuTopBar } from "views/cmcs/shareComponents/common";
 import { formatNumberMoney } from "utils/cmcs";
 import { APP_ID } from "apis/localdb";
 import styles from 'views/cmcs/styles/styles.module.css';
+import { createLinkAndClick } from 'utils';
 
 /**
  * Hooks
  */
 import { useModal } from "services/hooks/useModal";
-import { useContractExpense } from 'services/hooks/cmcs/useContractExpense';
+import { useContractExpense, useContractCustom } from 'services/hooks/cmcs/useContractExpense';
 import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
@@ -40,6 +43,12 @@ export const CmcExpensePage: FC = () => {
 
   const [itemChecked, setItemChecked] = useState('');
   const [keyword, setKeyword] = useState('');
+  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+		isExporting: false,
+	});
+
+  const { exportContractAsync } = useContractCustom({});
+
   const { openModal } = useModal();
   const {
     insertAsync: insertContractExpenseAsync,
@@ -108,7 +117,7 @@ export const CmcExpensePage: FC = () => {
       </div>
     )
   }
-  
+
   const handleAddAction = () => {
     openModal(
       <div
@@ -119,6 +128,29 @@ export const CmcExpensePage: FC = () => {
         <IncomeFormModal onFinish={handleFinishForm} title="Tạo mới" outin={2}/>
       </div>
     )
+  }
+
+  const handleExportReport = async () => {
+    try {
+			setStateExport({ isExporting: true });
+			const { error, data } = await exportContractAsync({
+        filterParams: { keyword, outin: 2 }, type: 'in'
+      });
+
+			if(error) {
+				return toast.warn(data?.message);
+			}
+
+			data && createLinkAndClick(data, '_self');
+		} catch (error: any) {
+      toast.error(error.message)
+		} finally {
+			setStateExport({ isExporting: false });
+		}
+  }
+
+  if(stateExport.isExporting) {
+    return <Loader className="border-primary" />
   }
 
   return (
@@ -145,14 +177,26 @@ export const CmcExpensePage: FC = () => {
             </div>
           )}
         </div>
-        {createPermission &&
-           <button
-           className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold"
-           onClick={handleAddAction}
-         >
-           Tạo mới
-         </button>
-        }
+        <div className="task-management-header-right-block flex items-center">
+          {createPermission &&
+            <button
+            className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold mr-3"
+            onClick={handleAddAction}
+          >
+            Tạo mới
+          </button>
+          }
+          <DropdownOption>
+            <Menu.Item onClick={handleExportReport}>
+              <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-3"}>
+                <img src="/images/common/icons8-download-48.png" alt="Download Excel" />
+                <div className={"flex-1 text-left ml-4"}>
+                  Download Excel
+                </div>
+              </div>
+            </Menu.Item>
+          </DropdownOption>
+        </div>
       </header>
 
       <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">

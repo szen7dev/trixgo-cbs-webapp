@@ -48,6 +48,11 @@ export const HumanLeftSideBar: FC = () => {
                         <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
                         <span className="truncate">Tra cứu chứng chỉ</span>
                     </NavLink>
+
+                    <NavLink to={`/human/expired`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
+                        <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+                        <span className="truncate">Theo dõi thời hạn</span>
+                    </NavLink> 
                     {/* <Link to={`/human/cetificate`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
                         <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
                         <span className="truncate">Tra cứu chứng chỉ</span>

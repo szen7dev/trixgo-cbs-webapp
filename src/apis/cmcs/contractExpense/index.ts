@@ -19,7 +19,15 @@ const ContractExpenseRepository = {
     insert,
     update,
     remove,
+    exportContract,
 };
+
+async function exportContract<T>(params: any): Promise<T> {
+    const { data } = await API.post<any>(
+        `${ITEM_URL}/contracts/export`, params
+    );
+    return data;
+}
 
 async function fetchList(params: ListContractsPayload): Promise<ListContractsResponse> {
     const { data } = await API.get(

@@ -10,11 +10,13 @@ const DOCUMENT_URL = "/api/document";
 interface DocumentFileRepository {
     fetchList: (params: DocumentFileQueryPayload) => Promise<DocumentFileQueryResponse>
     insertDocumentFile: (params: any) => Promise<any>
+    deleteDocumentFile: (params: any) => Promise<any>
 }
 
 export const documentFileRepository: DocumentFileRepository = {
-    fetchList: async (params) => fetchListDocumentFile(params),
-    insertDocumentFile: async (params) => insertDocumentFile(params),
+    fetchList: (params) => fetchListDocumentFile(params),
+    insertDocumentFile: (params) => insertDocumentFile(params),
+    deleteDocumentFile: (params) => deleteDocumentFile(params),
 }
 
 async function fetchListDocumentFile(params: any) {
@@ -37,5 +39,12 @@ async function fetchListDocumentFile(params: any) {
 
 async function insertDocumentFile(params: any) {
     const { data } = await API.post(`${DOCUMENT_URL}/add-file-attachment`, params)
+    return data;
+}
+
+async function deleteDocumentFile(params: any) {
+    const { data } = await API.delete(`${DOCUMENT_URL}/document_files`, {
+        params
+    })
     return data;
 }

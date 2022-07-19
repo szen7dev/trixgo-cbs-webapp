@@ -8,7 +8,7 @@ import { validateFiles } from 'validation/file';
 
 import { APP_KEY } from 'utils/constants';
 import { ModalCreateDocumentChild } from 'views/document/sharedComponents/common';
-
+import { ModalConfirm } from "shareComponents/common";
 import { ButtonIcon, ButtonMore } from 'shareComponents/common/Button'
 
 import {
@@ -31,6 +31,7 @@ import { useQueryDetailDocument } from "services/hooks/ppt/useDocument";
 import { useQueryListDocumentChild } from "services/hooks/document/useDocumentChild";
 import { useQueryListDocumentFile } from "services/hooks/document/useDocumentFile";
 
+import { useModal } from "services/hooks/useModal";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { ModalQRCode } from "shareComponents/common/ModalQRCode";
 
@@ -41,6 +42,7 @@ export const DocumentDetailPage: FC = () => {
   const params = useParams<any>();
   const { user } = useAuth();
   const { t } = useTranslation(["document"]);
+  const { openModal, closeModal } = useModal();
 
   const [isShow, setIsShow] = useState(false);
   const [isToggleModalQRCode, setIsToggleModalQRCode] = useState(false);
@@ -54,6 +56,7 @@ export const DocumentDetailPage: FC = () => {
 
   const {
     createDocumentFileMutateAsync,
+    deleteDocumentFileMutateAsync,
     documentFiles,
     refetch,
     fetchNextPage: fetchNextPageDocumentFile,
@@ -84,6 +87,23 @@ export const DocumentDetailPage: FC = () => {
   }, [onFetchDetailDocumentAsync, params.docID]);
 
   const toggleModalCreateDocumentChild = () => setIsShow(!isShow);
+
+  const handleOpenModalConfirmDelete = (fileId: string) => {
+    openModal(
+      <div
+        className={
+          "inline-block w-[521px] h-[150px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+        }
+      >
+        <ModalConfirm
+          title="Bạn có thực sự muốn xóa file không?"
+          defaultText={false}
+          onConfirm={handleDeleteFileAttach.bind(null, fileId)}
+          onCancel={closeModal}
+        />
+      </div>
+    );
+  };
 
   const handleSetFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
@@ -120,6 +140,31 @@ export const DocumentDetailPage: FC = () => {
       if (error instanceof Error) {
         toast.error(error.message);
       }
+    }
+  }
+
+  const handleDeleteFileAttach = async (fileId: string) => {
+    if(!fileId) return toast.warn('Không tìm thấy file')
+
+    try {
+      const { error, data } = await deleteDocumentFileMutateAsync({ docFileID: fileId })
+
+      if(error) {
+        return toast.warn(data.message);
+      }
+
+      refetch();
+      return toast.success('Xóa file thành công');
+    } catch (error) {
+      if(error instanceof Error) {
+        return toast.error(error.message);
+      }
+
+      if(typeof error === 'string') {
+        return toast.error(error);
+      }
+    } finally {
+      closeModal();
     }
   }
 
@@ -227,7 +272,7 @@ export const DocumentDetailPage: FC = () => {
               <input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={handleSetFiles} />
             </label>
           </div>
-          <TableFileAttach fileAttachs={documentFiles}>
+          <TableFileAttach fileAttachs={documentFiles} handleDeleteFileAttach={handleOpenModalConfirmDelete}>
             {Number(totalDocumentFile) - documentFiles.length > 0 && (
               <button
                 className="text-primary text-[13px]"
