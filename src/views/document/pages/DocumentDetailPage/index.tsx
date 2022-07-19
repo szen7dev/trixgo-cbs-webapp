@@ -1,4 +1,4 @@
-import React, { FC, useState, useContext } from "react";
+import React, { FC, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
@@ -8,7 +8,7 @@ import { validateFiles } from 'validation/file';
 
 import { APP_KEY } from 'utils/constants';
 import { ModalCreateDocumentChild } from 'views/document/sharedComponents/common';
-
+import { ModalConfirm } from "shareComponents/common";
 import { ButtonIcon, ButtonMore } from 'shareComponents/common/Button'
 
 import {
@@ -21,8 +21,6 @@ import "views/document/styles/document.css";
 import { TableGeneralInformation } from "./components/TableGeneralInformation";
 import { TableFileAttach } from "./components/TableFileAttach";
 import { TableSubtextProfile } from "./components/TableSubtextProfile";
-import { ModalContext } from "views/document/contexts/modal";
-import { useMutationDocumentChild } from "services/hooks/document/useDocumentChild";
 
 import iconMove from "assets/images/icons8-move-stock-96.svg";
 import iconShareFolder from "assets/images/icons8-shared-folder-100_1.svg";
@@ -33,6 +31,7 @@ import { useQueryDetailDocument } from "services/hooks/ppt/useDocument";
 import { useQueryListDocumentChild } from "services/hooks/document/useDocumentChild";
 import { useQueryListDocumentFile } from "services/hooks/document/useDocumentFile";
 
+import { useModal } from "services/hooks/useModal";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { ModalQRCode } from "shareComponents/common/ModalQRCode";
 
@@ -43,9 +42,8 @@ export const DocumentDetailPage: FC = () => {
   const params = useParams<any>();
   const { user } = useAuth();
   const { t } = useTranslation(["document"]);
-  const { toggleModal, updateModal } = useContext(ModalContext);
+  const { openModal, closeModal } = useModal();
 
-  const { insertDocumentChildAsync, updateDocumentChildAsync } = useMutationDocumentChild();
   const [isShow, setIsShow] = useState(false);
   const [isToggleModalQRCode, setIsToggleModalQRCode] = useState(false);
   const toggleModalQRCode = () => setIsToggleModalQRCode(!isToggleModalQRCode);
@@ -58,6 +56,7 @@ export const DocumentDetailPage: FC = () => {
 
   const {
     createDocumentFileMutateAsync,
+    deleteDocumentFileMutateAsync,
     documentFiles,
     refetch,
     fetchNextPage: fetchNextPageDocumentFile,
@@ -88,6 +87,23 @@ export const DocumentDetailPage: FC = () => {
   }, [onFetchDetailDocumentAsync, params.docID]);
 
   const toggleModalCreateDocumentChild = () => setIsShow(!isShow);
+
+  const handleOpenModalConfirmDelete = (fileId: string) => {
+    openModal(
+      <div
+        className={
+          "inline-block w-[521px] h-[150px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+        }
+      >
+        <ModalConfirm
+          title="Bạn có thực sự muốn xóa file không?"
+          defaultText={false}
+          onConfirm={handleDeleteFileAttach.bind(null, fileId)}
+          onCancel={closeModal}
+        />
+      </div>
+    );
+  };
 
   const handleSetFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
@@ -126,45 +142,31 @@ export const DocumentDetailPage: FC = () => {
       }
     }
   }
-  const departmentID = detailDocument?.project?._id;
-  const handleOnClickUpdate = React.useCallback(
-    (record) => async () => {
-      const result = await onFetchDetailDocumentAsync(record._id);
-      toggleModal();
-      updateModal({
-        departmentId: departmentID,
-        departmentInfo: {
-          company: {
-            _id: record.company,
-          },
-        },
-        title: "Cập nhật",
-        initialValues: result,
-        onSubmit: async (values: any) => {
-          const result = await updateDocumentChildAsync({
-            ...values,
-            documentID: record._id,
-          });
-          if (result.status === 200) {
-            refetch();
-            toggleModal();
-            updateModal({
-              departmentInfo: {},
-              initialValues: {},
-            });
-          }
-        },
-      });
-    },
-    [
-      departmentID,
-      onFetchDetailDocumentAsync,
-      refetch,
-      toggleModal,
-      updateDocumentChildAsync,
-      updateModal,
-    ]
-  );
+
+  const handleDeleteFileAttach = async (fileId: string) => {
+    if(!fileId) return toast.warn('Không tìm thấy file')
+
+    try {
+      const { error, data } = await deleteDocumentFileMutateAsync({ docFileID: fileId })
+
+      if(error) {
+        return toast.warn(data.message);
+      }
+
+      refetch();
+      return toast.success('Xóa file thành công');
+    } catch (error) {
+      if(error instanceof Error) {
+        return toast.error(error.message);
+      }
+
+      if(typeof error === 'string') {
+        return toast.error(error);
+      }
+    } finally {
+      closeModal();
+    }
+  }
 
   return (
     <div className="flex flex-col overflow-hidden bg-cbs-gray h-full">
@@ -190,10 +192,9 @@ export const DocumentDetailPage: FC = () => {
           </svg>
         </button>
         {/* <DropdownFilterButton /> */}
-        {/* <GroupActionsPageDetail className="flex items-center flex-1" onGenerateQRCode={toggleModalQRCode} onClickPencil={handleOnClickUpdate({_id: params.docID})}/> */}
+        <GroupActionsPageDetail className="flex items-center flex-1" onGenerateQRCode={toggleModalQRCode} />
         {/* <ButtonCreate onClick={toggleModal} /> */}
         {/* <ButtonMore /> */}
-        <GroupActionsPageDetail className="flex items-center flex-1" onGenerateQRCode={toggleModalQRCode}/>
       </div>
       <div className="text-cbs-subtext flex-1 overflow-y-auto pb-2">
         <div className="bg-white">
@@ -271,7 +272,7 @@ export const DocumentDetailPage: FC = () => {
               <input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={handleSetFiles} />
             </label>
           </div>
-          <TableFileAttach fileAttachs={documentFiles}>
+          <TableFileAttach fileAttachs={documentFiles} handleDeleteFileAttach={handleOpenModalConfirmDelete}>
             {Number(totalDocumentFile) - documentFiles.length > 0 && (
               <button
                 className="text-primary text-[13px]"

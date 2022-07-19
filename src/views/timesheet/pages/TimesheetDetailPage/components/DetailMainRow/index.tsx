@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { map as _map } from "lodash";
-
+import { convertCurrency } from 'utils/converter';
 import { Loader } from "shareComponents/common/Loader";
 
 // import { useRightClickMenu } from "services/hooks/useRightClickMenu";
@@ -103,13 +103,18 @@ export const DetailMainRow: FC<Props> = ({
         className={
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
         }
-      ></div>
+      >
+        <div className="flex justify-end">
+          {convertCurrency(timeSheetParentInfo?.unitprice)}
+        </div>
+      </div>
       <div
         className={
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
         }
       >
         <div className="flex justify-end">
+          {/* {convertCurrency(timeSheetParentInfo?.amount)} */}
           {`${timeSheetParentInfo?.amount}`.replace(
             /\B(?=(\d{3})+(?!\d))/g,
             ","

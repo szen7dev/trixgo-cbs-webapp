@@ -24,9 +24,9 @@ export const GroupActionsPageDetail: FC<HTMLAttributes<HTMLDivElement> & ButtonP
                 <img className="w-[24px] h-[24px]" alt="icon" src={CopyIcon} />
             </button>}
 
-           <button className="flex items-center mr-0.5 min-w-max rounded-full hover:bg-cbs-gray p-2" onClick={onClickPencil}>
+            {(!types || types?.includes('edit')) && <button className="flex items-center mr-0.5 min-w-max rounded-full hover:bg-cbs-gray p-2 disabled:bg-transparent disabled:opacity-60" onClick={onClickPencil} disabled={!onClickPencil}>
                 <img className="w-[24px] h-[24px]" alt="icon" src={PencilIcon} />
-            </button>
+            </button>}
 
             <button className="flex items-center mr-0.5 min-w-max rounded-full hover:bg-cbs-gray p-2" onClick={onGenerateQRCode}>
                 <img className="w-[24px] h-[24px]" alt="icon" src={QRCodeIcon} />
