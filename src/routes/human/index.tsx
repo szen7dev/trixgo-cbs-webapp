@@ -22,7 +22,8 @@ import {
         HumanCapacityPage,
         HumanCertificatePage,
         HumanInfo, 
-        HumanDepartment 
+        HumanDepartment,
+        HumanCertificateExpiredPage
     } from "views/human/pages";
 
 const HumanRouter: FC = () => {
@@ -48,7 +49,7 @@ const HumanRouter: FC = () => {
                                 }
                             ]}>
                                 <Route exact path="/human/expired" component={HumanExpiredPage} />
-                                <Route exact path="/human/expired/2" component={HumanExpiredPage} />
+                                <Route exact path="/human/expired/2" component={HumanCertificateExpiredPage} />
                             </LayoutSecondary>
                         </Route>
                     </Switch>

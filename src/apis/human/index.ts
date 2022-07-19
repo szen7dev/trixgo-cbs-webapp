@@ -36,12 +36,17 @@ async function fetchListHuman<T>(params: HumanPayload): Promise<T> {
         {
             params: {
                 populates: {
-                    "path": "company position department documents contractType workingStatus workplace",
+                    "path": "company position department documents contractType workingStatus workplace area2",
                     "select": "_id name sign members certificateGrade",
                     "populate": {
-                        "path": "educationalBackground2 field2 certificateType certificateName",
-                        "select": "name"
-                    }
+                        "path": "educationalBackground2 field2 certificateType certificateName parent",
+                        "select": "name",
+                        "populate": {
+                            "path": "parent",
+                            "select": "name"
+                        }
+                    },
+                    
                 },
                 type: 1,
                 ...params,

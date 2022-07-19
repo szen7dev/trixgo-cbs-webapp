@@ -49,15 +49,14 @@ export const DetailChildRow: FC<Props> = ({
   const handleClickUpdateTimeSheet = React.useCallback(
     (value) => {
       if(!hasPermission) {
-        toast.warn('Bạn không có quyền cập nhật nội dung này')
-        return;
+        return toast.warn('Bạn không có quyền cập nhật nội dung này')
       }
       onUpdatedTimeSheetChild({
         ...rowData,
         ...value,
       });
     },
-    [onUpdatedTimeSheetChild, rowData]
+    [onUpdatedTimeSheetChild, rowData, hasPermission]
   );
 
   // const handleContextMenu = React.useCallback(

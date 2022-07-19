@@ -329,9 +329,20 @@ export const ModalCreateDocument: React.FC = () => {
 															isMultiple={false}
 															allowClearValueSingleInput={true}
 															renderSelectedItem={(item) => (
-																<div className={"flex items-center"} >
+																<div style={{ width: 150 }} className={"flex items-center"} >
 																	<img alt={"tag icon"} src={itemTag} />
-																	<span>{item.sign}{item?.sign ? ".": ""}{item.text}</span>
+																	<p
+																		style={{
+																			textOverflow: "ellipsis",
+																			maxWidth: "100%",
+																			minWidth: 0,
+																			whiteSpace: "nowrap",
+																			overflow: "hidden",
+																			flex: "1 1 auto",
+																		}}
+																		>
+																		{item.sign}{item?.sign ? ".": ""}{item.text}
+																	</p>
 																</div>
 															)}
 															onchangeValue={(value) =>

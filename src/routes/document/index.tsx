@@ -66,33 +66,33 @@ const DocumentRouter: FC = () => {
                 )}
             />
 
-        <Route exact path={['/document/project/:id/home', '/document/project/:id/home/(1|2|3|4)']}>
-            <LayoutSecondary pages={[
-                { id: '1', title: 'Danh sách', path: '/document/project/:id/home', navExact: true },
-                { id: '2', title: 'Phân loại', path: '/document/project/:id/home/1' },
-                { id: "3", title: "Danh bạ hệ thống", path: "/document/project/:id/home/2" },
-                { id: '4', title: 'Gói thầu', path: '/document/project/:id/home/3' },
-                // { id: '4', title: 'Báo cáo', path: '/ppt/project/:id/document/3' },
-                // { id: '5', title: 'Lịch sử upload file', path: '/ppt/project/:id/document/4' },
-            ]}>
-                <ModalProvider>
-                    <Switch>
-                        <Route exact path='/document/project/:id/home' component={DocumentProjectPage} />
-                        <Route exact path='/document/project/:id/home/1' component={DocumentProfilePage} />
-                        <Route exact path="/document/project/:id/home/2"  component={DocumenDatahubContactPage}/>
-                        <Route exact path='/document/project/:id/home/3' component={DocumentFolderPage} />
-                        {/* <Route exact path='/document/project/:id/home/3' component={DocumentReportPage} /> */}
-                        {/* <Route exact path='/document/project/:id/home/4' component={DocumentHistoryPage} /> */}
-                    </Switch>
-                    <ModalCreateDocument />
-                </ModalProvider>
-            </LayoutSecondary>
-        </Route>
-        <Route exact path="/document/project/:id/document/1/type/:type" component={DocumentOfTypePage} />
-        <Route exact path="/document/project/:id/document/1/datahubContact/:datahubContactID" component={DocumentOfTypePage} />
-        <Route exact path="/document/project/:id/package/:packageID" component={DocumentOfPackagePage} />
+            <Route exact path={['/document/project/:id/home', '/document/project/:id/home/(1|2|3|4)']}>
+                <LayoutSecondary pages={[
+                    { id: '1', title: 'Danh sách', path: '/document/project/:id/home', navExact: true },
+                    { id: '2', title: 'Phân loại', path: '/document/project/:id/home/1' },
+                    { id: "3", title: "Danh bạ hệ thống", path: "/document/project/:id/home/2" },
+                    { id: '4', title: 'Gói thầu', path: '/document/project/:id/home/3' },
+                    // { id: '4', title: 'Báo cáo', path: '/ppt/project/:id/document/3' },
+                    // { id: '5', title: 'Lịch sử upload file', path: '/ppt/project/:id/document/4' },
+                ]}>
+                    <ModalProvider>
+                        <Switch>
+                            <Route exact path='/document/project/:id/home' component={DocumentProjectPage} />
+                            <Route exact path='/document/project/:id/home/1' component={DocumentProfilePage} />
+                            <Route exact path="/document/project/:id/home/2"  component={DocumenDatahubContactPage}/>
+                            <Route exact path='/document/project/:id/home/3' component={DocumentFolderPage} />
+                            {/* <Route exact path='/document/project/:id/home/3' component={DocumentReportPage} /> */}
+                            {/* <Route exact path='/document/project/:id/home/4' component={DocumentHistoryPage} /> */}
+                        </Switch>
+                        <ModalCreateDocument />
+                    </ModalProvider>
+                </LayoutSecondary>
+            </Route>
+            <Route exact path="/document/project/:id/document/1/type/:type" component={DocumentOfTypePage} />
+            <Route exact path="/document/project/:id/document/1/datahubContact/:datahubContactID" component={DocumentOfTypePage} />
+            <Route exact path="/document/project/:id/package/:packageID" component={DocumentOfPackagePage} />
 
-        <Route exact path='/document/project/:id/detail/:docID' component={DocumentDetailPage} />
+            <Route exact path='/document/project/:id/detail/:docID' component={DocumentDetailPage} />
             <Route path="/document/*" component={ErrorPage} />
         </Switch>
         )

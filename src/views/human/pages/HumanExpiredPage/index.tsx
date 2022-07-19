@@ -49,7 +49,7 @@ export const HumanExpiredPage: FC = () => {
   const [itemsChecked, setItemsChecked] = useState<Array<any>>([]);
 
   // Lấy ra data/messageList data ngay lúc đầu vào màn hình
-  const humans = useFetchListHuman({ ...pageParam, isMember: 1 });
+  const humans = useFetchListHuman({ ...pageParam, isMember: 1, isContractExpire4month: 1 });
 
   // Tạo mẩu tin mới, khởi tạo sẵn hàm createContactMutateAsync để khi user
   // bấm vào nút tạo thì gọi luôn đến api tạo mẩu tin
@@ -238,39 +238,38 @@ export const HumanExpiredPage: FC = () => {
                       Họ tên
                     </div>
                 </th>
-                <th className="w-1/12 py-1">
+                <th className="py-1">
                     <div className="border-r-2 border-gray-300 font-normal pl-2">
-                      Ảnh đại diện
                     </div>
                 </th>
-                <th className="w-1/6 py-1">
+                <th className="w-1/12 py-1">
                     <div className="border-r-2 border-gray-300 font-normal pl-2">
                       Thời hạn hợp đồng
                     </div>
                 </th>
                 <th className="py-1">
                     <div className="border-r-2 border-gray-300 font-normal pl-2">
-					Thường trú
+					            Thường trú
                     </div>
                 </th>
-                <th className="py-1">
+                <th className="py-1 w-1/6">
                     <div className="border-r-2 border-gray-300 font-normal pl-2">
-					Nguyên quán
+					            Nguyên quán
                     </div>
                 </th>
-                <th className={cn("py-1 font-normal", styles.theadTwelvePercent)}>
+                <th className="py-1 w-1/12">
                     <div className="border-r-2 border-gray-300 font-normal pl-2">
-						Giới tính
+						          Giới tính
+                    </div>
+                </th>
+                <th className="py-1 w-1/6 font-normal">
+                    <div className="border-r-2 border-gray-300 font-normal pl-2">
+						          Phòng ban/Bộ phận
                     </div>
                 </th>
                 <th className="py-1 font-normal">
                     <div className="border-r-2 border-gray-300 font-normal pl-2">
-						Phòng ban/Bộ phận
-                    </div>
-                </th>
-                <th className="py-1 font-normal">
-                    <div className="border-r-2 border-gray-300 font-normal pl-2">
-						Chức vụ
+						          Chức vụ
                     </div>
                 </th>
                 <th className="py-1 font-normal">
@@ -312,6 +311,18 @@ export const HumanExpiredPage: FC = () => {
                 }else{
                   type = 3		
                 }
+                let str2 = '';
+                if(item.area2){
+                  if(item.area2 && item.area2.parent){
+                    if(item.area2.parent.parent){
+                      str2 = `${item.area2.name},${item.area2.parent.name},${item.area2.parent.parent.name}`;
+                    }else{
+                      str2 = `${item.area2.name},${item.area2.parent.name}`;
+                    }
+                  }else{
+                    str2 = `${item.area2.name}`;
+                  }
+                }	
                 return (
                   <tr key={item._id} className="border-b border-primary-border h-10">
                       <td className="py-1 px-2 text-center">
@@ -335,14 +346,17 @@ export const HumanExpiredPage: FC = () => {
                           className="w-6 h-6 rounded-full"
                         />
                       </td>
-                      <td className="py-1 px-2">{item.position?.name}</td>
+                      <td className="py-1 px-2">{moment(item.contractExpire).format('DD/MM/YYYY')}</td>
+                      <td className="py-1 px-2">{
+                        item.address
+                      }</td>
+                      <td className="py-1 px-2">{
+                        str2
+                      }</td>
                       <td className="py-1 px-2">{(Number(item.gender) > 0) && GENDER_TYPES[Number(item.gender)-1].text}</td>
-                      <td className="py-1 px-2">{item.documents?.[0]?.educationalBackground2?.name}</td>
-                      <td className="py-1 px-2">{item.documents?.[0]?.field2?.name}</td>
-                      <td className="py-1 px-2">{numberAgo}</td>
+                      <td className="py-1 px-2">{item?.department?.name}</td>
                       <td className="py-1 px-2">
-                        <i>{arr[type]}</i>
-                        <i>{arr2[type]}</i>
+                        {item?.position?.name}
                       </td>
                       <td className="py-1 px-2">
                         {item?.contractType?.name}
