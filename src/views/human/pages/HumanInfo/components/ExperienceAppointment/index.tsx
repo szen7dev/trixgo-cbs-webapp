@@ -104,7 +104,7 @@ export const ExperienceAppointment: FC<WorkExperienceProps> = (props) => {
     totalRecord,
     listContactDocument,
   } = useQueryContactDocument(humanId, {
-    type: 3,
+    type: 3, companyID
   });
 
   const [openFileOption, setOpenFileOption] = useState("");
