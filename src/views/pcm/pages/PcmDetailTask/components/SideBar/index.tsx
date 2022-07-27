@@ -82,7 +82,7 @@ export const SideBar: FC<Props> = memo(({
   const isSigned = useMemo(() => {
     return confirmUsers.find(({ author }) => author._id === userID)
   }, [confirmUsers, userID])
-
+  
   const handleConfirmSignature = useCallback(async () => {
     try {
       const { error, data } = await updateTaskAsync({
