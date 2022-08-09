@@ -84,8 +84,8 @@ export const DashboardV2: FC = () => {
   };
 
   return (
-    <div className="t-home flex">
-
+    <div className="t-home px-4 lg:px-8 py-2 lg:py-4">
+      okookkook
     </div>
   );
 };

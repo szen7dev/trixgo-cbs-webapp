@@ -8,6 +8,7 @@ import cn from "classnames";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import {LeftMenu, MainHeaderV2, LeftNavigate} from "../../common";
+import {HomeHeaderContent, HomeLeftMenuContent} from "./components";
 // import MiniChatbox from "shareComponents/common/MiniChat/components/MiniChatBox";
 
 /*=====5.TYPINGS=====*/
@@ -66,10 +67,13 @@ export const HomeLayout: FC<Props> = ({ children }) => {
           <MainHeaderV2
             headerTitle={"Chủ đề"}
           >
+            <HomeHeaderContent/>
           </MainHeaderV2>
 
           {/* Left navigation */}
-          <LeftMenu />
+          <LeftMenu>
+            <HomeLeftMenuContent/>
+          </LeftMenu>
 
           {/* Content area */}
           <main className="main-route-content transition-all duration-500 ease-out overflow-auto relative">

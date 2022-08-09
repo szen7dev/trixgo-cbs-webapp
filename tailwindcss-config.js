@@ -110,6 +110,10 @@ module.exports = {
                 "cbs-form-input-bg": "#F4F4F5",
                 "cbs-right-navigate-bg": "#eaf1fb",
                 "cbs-hightlight-right-navigate": "#D3E4FD",
+                "cbs-blue-button": "#C2E7FE",
+                "cbs-active-blue": "#D3E3FD",
+                "cbs-bg-input-search": "#EEF3FC",
+                "cbs-soft-blue": "#E9F1FE",
 
                 "cbs-purple": "#9B59B6",
                 "cbs-red": "#FF4242",

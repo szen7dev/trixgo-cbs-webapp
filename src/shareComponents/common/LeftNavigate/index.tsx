@@ -10,6 +10,8 @@ import peopleIcon from "assets/images/icons8-people-64.svg";
 import {Link, useHistory, useLocation} from "react-router-dom";
 import {useSocket} from "../../../services/hooks/useSocket";
 import {useNotification} from "../../../services/hooks/useNotification";
+import {useSelector} from "react-redux";
+import {RootState} from "../../../redux/reducer";
 
 type Props = {
     handleMenuEvent: () => void
@@ -18,8 +20,10 @@ export const LeftNavigate:FC<Props> = ({handleMenuEvent}) => {
     const {pathname} = useLocation();
 
     const [totalNoti, setTotalNoti] = useState(0);
-
     const { current: socket }: any = useSocket();
+
+    const {data} = useSelector((state: RootState) => state.listConversation);
+    const {amountMissMessage} = data;
 
     const {
         totalRecordSendSuccess,
@@ -59,10 +63,10 @@ export const LeftNavigate:FC<Props> = ({handleMenuEvent}) => {
                 <div className={"px-4 py-2 rounded-full relative " + (pathname.includes("/messages") ? "bg-cbs-hightlight-right-navigate" : "")}>
                     <img src={chatIcon} alt={"Chat"}/>
                     {
-                        totalNoti > 0 &&
+                        amountMissMessage > 0 &&
                         <span
                             className={"absolute -top-1 right-1 min-w-5 w-5 h-5 text-xs inline-block border-2 text-center border-white rounded-full bg-negative text-white"}>
-                            {totalNoti}
+                            {amountMissMessage}
                         </span>
                     }
                 </div>
