@@ -32,3 +32,6 @@ export * from './PostFile';
 export * from './PostImage';
 export * from './EditButton';
 export * from './DropdownOption';
+export * from './MainHeaderV2';
+export * from './LeftNavigate';
+export * from './LeftMenu';

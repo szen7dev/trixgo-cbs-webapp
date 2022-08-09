@@ -240,7 +240,7 @@ button {
 /*__________________________________________________________________________*/
 /* ___________Customized layout styles ___________________*/
 .t-leftsidebar-navigation {
-  width: 240px;
+  width: 281px;
 }
 .t-leftsidebar-navigation-container {
   height: 100%;
@@ -1670,3 +1670,14 @@ img {
   content-visibility: auto;
   contain-intrinsic-size: 1px 5000px;
 } */
+
+.main-route-content {
+  width: 100%;
+  height: calc(100vh - 55px);
+  padding-left: 281px;
+  top: 0;
+}
+
+.home-layout.collapse-left .home-main-content {
+  padding-left: 0;
+}

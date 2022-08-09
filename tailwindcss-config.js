@@ -108,6 +108,8 @@ module.exports = {
                 "cbs-green-bg": "#EBFAF2",
                 "cbs-indeterminate": "#F7AF22",
                 "cbs-form-input-bg": "#F4F4F5",
+                "cbs-right-navigate-bg": "#eaf1fb",
+                "cbs-hightlight-right-navigate": "#D3E4FD",
 
                 "cbs-purple": "#9B59B6",
                 "cbs-red": "#FF4242",
@@ -198,6 +200,9 @@ module.exports = {
                 'auto-2': 'repeat(2, auto)',
                 'auto-3': 'repeat(3, auto)',
                 'auto-4': 'repeat(4, auto)',
+            },
+            left: {
+                '[75px]' : '75px'
             }
         },
     },

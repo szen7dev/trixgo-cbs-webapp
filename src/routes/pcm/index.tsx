@@ -21,7 +21,7 @@ import { ProviderModalPost as ProviderModalMedia } from "views/media/contexts/po
 import { ProviderModalPost as ProviderModalPcm } from "views/pcm/contexts/post";
 
 /*=====PAGES=====*/
-import { Dashboard } from "views/homepage/pages";
+import { DashboardV2 } from "views/homepage/pages";
 import {
   DocumentDetailPage,
   DocumentFolderPage,
@@ -93,7 +93,7 @@ const PCMRouter: FC = () => {
             path={"/"}
             component={() => (
               <HomeLayout>
-                <Dashboard />
+                <DashboardV2 />
               </HomeLayout>
             )}
           />
