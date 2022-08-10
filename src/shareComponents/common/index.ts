@@ -16,6 +16,7 @@ export * from './ModalConfirm';
 export * from './ModalReactions';
 export * from './InputClearable';
 export * from './DropdownSearchable';
+export * from './DropdownSearchableV2';
 export * from './UserMenu';
 export * from './AppsMenu';
 export * from './MainSearchDialog';

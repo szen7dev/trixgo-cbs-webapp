@@ -1075,7 +1075,7 @@ button {
   top: calc(100% + 5px);
 }
 .select-dropdown .select-options-container .select-options-section {
-  max-height: 250px;
+  max-height: 350px;
 }
 .alert-warning {
   color: #664d03;

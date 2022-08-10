@@ -114,6 +114,7 @@ module.exports = {
                 "cbs-active-blue": "#D3E3FD",
                 "cbs-bg-input-search": "#EEF3FC",
                 "cbs-soft-blue": "#E9F1FE",
+                "cbs-dropdown-hover": "#F2F4F7",
 
                 "cbs-purple": "#9B59B6",
                 "cbs-red": "#FF4242",
