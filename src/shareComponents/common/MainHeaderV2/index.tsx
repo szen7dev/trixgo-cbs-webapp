@@ -14,11 +14,11 @@ export const MainHeaderV2:FC<HeaderProps> = ({children, headerTitle}) => {
 
     return (
         <header className="home-header relative top-0 transition-all duration-500 ease-out bg-primary-light z-30">
-            <div className="px-4 lg:px-8">
+            <div className="pr-4 lg:pr-8">
                 <div className="flex items-center justify-between h-14 -mb-px">
                     {/* Header: Left side */}
-                    <div className="flex items-center whitespace-nowrap min-w-[281px] max-w-[281px] w-[281px]">
-                        <div className="t-header-company-name flex items-center">
+                    <div className="flex items-center whitespace-nowrap min-w-[256px] max-w-[256px] w-[256px]">
+                        <div className="t-header-company-name flex items-center pl-4 lg-pl-8">
                             <Link to={`/`}>
                                 <img src={user?.company?.image ? `${process.env.REACT_APP_URL_S3_COMPANY}/${user?.company.image}` : fakeThumbnail} alt={user?.company?.name} className="w-10 h-10" />
                             </Link>

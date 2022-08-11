@@ -261,13 +261,13 @@ export const DropdownSearchableV2: FC<Props> = ({
   const renderMultiSelectedValue = () => {
     return (
       <div
-        className={"flex w-full p-1 pl-2  cursor-pointer align-items-center flex-wrap overflow-y-scroll"}
+        className={"flex w-full p-3 cursor-pointer align-items-center flex-wrap overflow-y-scroll"}
       >
         {_map(values, (option) => (
           <div
             key={readDataValue(option, "id")}
             className={
-              "relative border rounded-full py-0.5 pl-1 mr-1 pr-8 mb-1 bg-white"
+              "relative border rounded-full p-2 mr-1.5 pr-8 mb-1.5 bg-white"
             }
             title={renderSelectedItem
               ? modifyItem(option).text
@@ -296,7 +296,7 @@ export const DropdownSearchableV2: FC<Props> = ({
     return (
         <div
             className={classNames(
-                "flex text-left relative py-0.5 pl-2 pr-8 mb-1 mt-1 ",
+                "flex text-left relative p-3 pr-8 mb-1 mt-1 ",
                 {
                   "text-gray-300": !value,
                   border: bordered,
@@ -324,7 +324,7 @@ export const DropdownSearchableV2: FC<Props> = ({
   const renderSingleSelectedValueWithoutClearValue = () => {
     if (!value) return null;
     return (
-        <div className={"flex-1 flex text-left "}>
+        <div className={"flex-1 p-3 flex text-left "}>
           <div
               title={renderSelectedItem
                   ? modifyItem(value).text

@@ -240,7 +240,7 @@ button {
 /*__________________________________________________________________________*/
 /* ___________Customized layout styles ___________________*/
 .t-leftsidebar-navigation {
-  width: 281px;
+  width: 256px;
 }
 .t-leftsidebar-navigation-container {
   height: 100%;
@@ -1674,7 +1674,7 @@ img {
 .main-route-content {
   width: 100%;
   height: calc(100vh - 55px);
-  padding-left: 281px;
+  padding-left: 256px;
   top: 0;
 }
 
@@ -1683,4 +1683,45 @@ img {
 }
 .left-menu-nav.active {
   @apply bg-cbs-active-blue font-bold text-black;
+}
+.crop-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  -webkit-flex-basis: 0;
+  flex-basis: 0;
+  -webkit-box-flex: 1;
+  box-flex: 1;
+  -webkit-flex-grow: 1;
+  flex-grow: 1;
+  -webkit-flex-shrink: 1;
+  flex-shrink: 1;
+  text-align: left;
+}
+.task-infor-td {
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: normal;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-flex: 1 1 auto;
+  -webkit-flex: 1 1 auto;
+  flex: 1 1 auto;
+  height: auto;
+  min-width: 0;
+  padding-right: 10px;
+}
+.tasks .read{
+  @apply bg-cbs-bg-input-search;
+}
+.tasks .unread {
+  @apply bg-white;
+}
+.tasks .unread .user-infor-name,
+.tasks .unread .task-title,
+.tasks .unread .task-date {
+  @apply font-bold;
+}
+.tasks tr {
+  @apply border-0.5 border-primary-border cursor-pointer;
 }

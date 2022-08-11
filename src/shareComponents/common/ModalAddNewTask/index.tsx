@@ -203,7 +203,7 @@ export const ModalAddNewTask: FC = () => {
               <Form>
                 <div className={"t-add-new-task-dialog-select px-6"}>
                   <div className={"flex pb-1 pt-2 border-b"}>
-                    <div className={"w-1/3 flex items-start"}>
+                    <div className={"w-1/4 flex items-start"}>
                       <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Dự án (*)</div>
                       <div className={"w-full flex-1"}>
                         <DropdownSearchable
@@ -273,7 +273,7 @@ export const ModalAddNewTask: FC = () => {
                         />
                       </div>
                     </div>
-                    <div className={"w-1/3 flex items-start pl-3"}>
+                    <div className={"w-1/4 flex items-start pl-3"}>
                       <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Nhóm (*)</div>
                       <DropdownSearchable
                         disabled={values.projectID.length <= 0}
@@ -324,7 +324,34 @@ export const ModalAddNewTask: FC = () => {
                         inlineSearch={true}
                       />
                     </div>
-                    <div className={"w-1/3 flex items-start pl-3"}>
+                    <div className={"w-1/4 flex items-start pl-3"}>
+                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Phân loại (*)</div>
+                      <DropdownSearchable
+                          onchangeValue={(value: any) =>
+                              setFieldValue("subType", value.id)
+                          }
+                          onClearData={() => setFieldValue("subType", "")}
+                          placeholder={"Phân loại"}
+                          className={"w-full flex-1"}
+                          focusedClass={"border-b border-primary"}
+                          maxWidthInput={"max-w-none"}
+                          allowClearValueSingleInput={true}
+                          showTriangle={false}
+                          renderSelectedItem={(item: any) => (
+                              <div className={"flex items-center"}>
+                                <img alt={"tag icon"} src={TagIcon}/>
+                                <span>{item.text}</span>
+                              </div>
+                          )}
+                          data={PCM_PROPOSAL_TASK}
+                          formatItem={{
+                            id: "value",
+                            text: "text",
+                          }}
+                          inlineSearch={true}
+                      />
+                    </div>
+                    <div className={"w-1/4 flex items-start pl-3"}>
                       <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Hợp đồng</div>
                       <DropdownSearchable
                         onchangeValue={(item: any) => {
@@ -376,7 +403,7 @@ export const ModalAddNewTask: FC = () => {
                     </div>
                   </div>
                   <div className={"flex pb-1 pt-2 border-b"}>
-                    <div className={"w-1/3 flex items-start"}>
+                    <div className={"w-full flex items-start"}>
                       <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Gửi tới (*)</div>
                       <div className={"w-full flex-1"}>
                         <DropdownSearchable
@@ -435,83 +462,56 @@ export const ModalAddNewTask: FC = () => {
                         />
                       </div>
                     </div>
-                    <div className={"w-1/3 flex items-start pl-3"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Phân loại (*)</div>
-                      <DropdownSearchable
-                        onchangeValue={(value: any) =>
-                          setFieldValue("subType", value.id)
-                        }
-                        onClearData={() => setFieldValue("subType", "")}
-                        placeholder={"Phân loại"}
-                        className={"w-full flex-1"}
-                        focusedClass={"border-b border-primary"}
-                        maxWidthInput={"max-w-none"}
-                        allowClearValueSingleInput={true}
-                        showTriangle={false}
-                        renderSelectedItem={(item: any) => (
-                          <div className={"flex items-center"}>
-                            <img alt={"tag icon"} src={TagIcon}/>
-                            <span>{item.text}</span>
-                          </div>
-                        )}
-                        data={PCM_PROPOSAL_TASK}
-                        formatItem={{
-                            id: "value",
-                            text: "text",
-                        }}
-                        inlineSearch={true}
-                      />
-                    </div>
-                    <div className={"w-1/3 flex items-start pl-3"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Tính chất</div>
-                      <DropdownSearchable
-                        onchangeValue={(item: any) => {
-                          setFieldValue("fieldID", item.value);
-                          setSearchOtherField("");
-                        }}
-                        onClearData={() => setFieldValue("fieldID", "")}
-                        onSearchInputChange={debounce(
-                          (value) => setSearchOtherField(value),
-                          500
-                        )}
-                        className={"w-full flex-1"}
-                        placeholder="Phân loại khác"
-                        isMultiple={false}
-                        allowClearValueSingleInput={true}
-                        showTriangle={false}
-                        maxWidthInput="max-w-none"
-                        renderSelectedItem={(item: any) => (
-                          <div
-                            style={{ width: 100 }}
-                            className="flex items-center"
-                          >
-                            <img alt="Tag" src={TagIcon} className="mr-1" />
-                            <p
-                              style={{
-                                textOverflow: "ellipsis",
-                                maxWidth: "100%",
-                                minWidth: 0,
-                                whiteSpace: "nowrap",
-                                overflow: "hidden",
-                                flex: "1 1 auto",
-                              }}
-                            >
-                              {item.text}
-                            </p>
-                          </div>
-                        )}
-                        onScroll={(e) => handleScroll(e, 'field')}
-                        data={listDoctypes.map((doctypes) => ({
-                          label: doctypes.name,
-                          value: doctypes._id,
-                        }))}
-                        formatItem={{
-                          id: "value",
-                          text: "label",
-                        }}
-                        inlineSearch={true}
-                      />
-                    </div>
+                    {/*<div className={"w-full flex items-start pl-3"}>*/}
+                    {/*  <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Tính chất</div>*/}
+                    {/*  <DropdownSearchable*/}
+                    {/*    onchangeValue={(item: any) => {*/}
+                    {/*      setFieldValue("fieldID", item.value);*/}
+                    {/*      setSearchOtherField("");*/}
+                    {/*    }}*/}
+                    {/*    onClearData={() => setFieldValue("fieldID", "")}*/}
+                    {/*    onSearchInputChange={debounce(*/}
+                    {/*      (value) => setSearchOtherField(value),*/}
+                    {/*      500*/}
+                    {/*    )}*/}
+                    {/*    className={"w-full flex-1"}*/}
+                    {/*    placeholder="Phân loại khác"*/}
+                    {/*    isMultiple={false}*/}
+                    {/*    allowClearValueSingleInput={true}*/}
+                    {/*    showTriangle={false}*/}
+                    {/*    maxWidthInput="max-w-none"*/}
+                    {/*    renderSelectedItem={(item: any) => (*/}
+                    {/*      <div*/}
+                    {/*        style={{ width: 100 }}*/}
+                    {/*        className="flex items-center"*/}
+                    {/*      >*/}
+                    {/*        <img alt="Tag" src={TagIcon} className="mr-1" />*/}
+                    {/*        <p*/}
+                    {/*          style={{*/}
+                    {/*            textOverflow: "ellipsis",*/}
+                    {/*            maxWidth: "100%",*/}
+                    {/*            minWidth: 0,*/}
+                    {/*            whiteSpace: "nowrap",*/}
+                    {/*            overflow: "hidden",*/}
+                    {/*            flex: "1 1 auto",*/}
+                    {/*          }}*/}
+                    {/*        >*/}
+                    {/*          {item.text}*/}
+                    {/*        </p>*/}
+                    {/*      </div>*/}
+                    {/*    )}*/}
+                    {/*    onScroll={(e) => handleScroll(e, 'field')}*/}
+                    {/*    data={listDoctypes.map((doctypes) => ({*/}
+                    {/*      label: doctypes.name,*/}
+                    {/*      value: doctypes._id,*/}
+                    {/*    }))}*/}
+                    {/*    formatItem={{*/}
+                    {/*      id: "value",*/}
+                    {/*      text: "label",*/}
+                    {/*    }}*/}
+                    {/*    inlineSearch={true}*/}
+                    {/*  />*/}
+                    {/*</div>*/}
                   </div>
                   <div className={"flex pb-1 pt-2 border-b"}>
                     <div className={"w-full flex items-start"}>

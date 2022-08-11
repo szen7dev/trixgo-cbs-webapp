@@ -41,7 +41,7 @@ export const LeftNavigate:FC<Props> = ({handleMenuEvent}) => {
     }, [totalRecordSendSuccess])
 
     return (
-        <div className={"bg-cbs-right-navigate-bg w-[75px] min-w-[75px] flex flex-col items-center relative z-40"}>
+        <div className={"bg-cbs-right-navigate-bg w-[68px] min-w-[68px] flex flex-col items-center relative z-40"}>
             <button title="Toggle left sidebar" onClick={handleMenuEvent} className={"my-6"}>
               <img className="w-4" src={menuIcon} alt="Menu" />
             </button>

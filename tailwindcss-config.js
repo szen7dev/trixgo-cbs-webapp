@@ -147,6 +147,7 @@ module.exports = {
                 ...autoGeneratePx,
                 max: "max-content",
                 fit: 'fit-content',
+                "left-over-content": "calc(100vh - 3.5rem)",
             },
             minWidth: {
                 ...autoGeneratePx,
@@ -155,14 +156,17 @@ module.exports = {
             maxWidth: {
                 ...autoGeneratePx,
                 "[75%]": "75%",
+                "[90%]": "90%",
                 "[1569px]": "1569px"
             },
             minHeight: {
                 ...autoGeneratePx,
                 '9/12': '75%',
+                "left-over-content": "calc(100vh - 3.5rem)",
             },
             maxHeight: {
                 ...autoGeneratePx,
+                "left-over-content": "calc(100vh - 3.5rem)",
             },
             backgroundImage: {
                 authentication: "url('../assets/images/background-authentication.png')",
@@ -207,7 +211,8 @@ module.exports = {
                 'auto-4': 'repeat(4, auto)',
             },
             left: {
-                '[75px]' : '75px'
+                '[75px]' : '75px',
+                '[68px]' : '68px',
             }
         },
     },

@@ -76,7 +76,7 @@ export const HomeLayout: FC<Props> = ({ children }) => {
           </LeftMenu>
 
           {/* Content area */}
-          <main className="main-route-content transition-all duration-500 ease-out overflow-auto relative">
+          <main className="main-route-content transition-all duration-500 ease-out overflow-auto relative h-left-over-content max-h-left-over-content min-h-left-over-content">
             {children}
           </main>
         </section>
