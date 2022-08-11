@@ -356,6 +356,7 @@ const PcmDetailTask: FC = () => {
       socket?.off("SUBJECT_PCM_SSC_ADD_SIGNATURE", onEventAddSignature);
     }
   }, [socket])
+
   useEffect(() => {
     if (!isSuccessApp || !infoTask) return;
     if (isSuccessApp && !hasPermission) {
@@ -399,7 +400,7 @@ const PcmDetailTask: FC = () => {
 
           let allUsersRelatedIsOpenBidding = false;
 
-          if(openedUsers && openedUsers.length) {
+          if(openedUsers && relatedsID.length === openedUsers.length) {
             allUsersRelatedIsOpenBidding = openedUsers.every((user: any) => relatedsID.includes(user._id));
           }
 
@@ -426,6 +427,7 @@ const PcmDetailTask: FC = () => {
             const hasPermissionViewChildTask          = false;
             const hasPermissionOpenBidding            = relatedsID.includes(user?._id);
             const hasPermissionViewBidding            = [author?._id, ...relatedsID].includes(user?._id);
+            console.log({ hasPermissionViewAssigneeFile })
 
             const dataPermissions = {
               hasPermissionUpdateTask,
@@ -688,12 +690,12 @@ const PcmDetailTask: FC = () => {
               />
             </button>
             <button
-              className={cn('inline-block text-white text-xs rounded-xl px-2 py-1 mx-3', PCM_STATUS_TASK[taskData.status - 1].class)}
+              className={cn('inline-block text-white text-xs rounded-xl px-2 py-1 mx-3', PCM_STATUS_TASK[taskData.status - 1]?.class)}
               onClick={toggleModalUpdateTaskStatus}
             >
               {taskData.status && PCM_STATUS_TASK[taskData.status - 1].text}
             </button>
-            <span className={cn('inline-block text-white text-xs rounded-xl px-2 py-1', PCM_PRIORITY_TASK[taskData.priority - 1].class)}>
+            <span className={cn('inline-block text-white text-xs rounded-xl px-2 py-1', PCM_PRIORITY_TASK[taskData.priority - 1]?.class)}>
               {taskData.priority && PCM_PRIORITY_TASK[taskData.priority - 1].text}
             </span>
           </span>
