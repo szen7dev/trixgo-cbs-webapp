@@ -75,7 +75,7 @@ export const WorkExperience: FC<WorkExperienceProps> = (props) => {
     listContactDocument,
     refetchListContactDocument,
   } = useQueryContactDocument(humanId, {
-    type: 2,
+    type: 2, companyID
   });
 
   const [openFileOption, setOpenFileOption] = useState("");

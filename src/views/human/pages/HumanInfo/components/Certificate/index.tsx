@@ -90,7 +90,7 @@ export const Certificate: FC<CertificateProps> = (props) => {
     totalRecord,
     listContactDocument,
   } = useQueryContactDocument(humanId, {
-    type: 5,
+    type: 5, companyID
   });
 
   const [openFileOption, setOpenFileOption] = useState("");
