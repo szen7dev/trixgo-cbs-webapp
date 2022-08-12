@@ -13,7 +13,7 @@ import iconThumbsUp from "assets/images/icons8-thumbs-up-48.png";
 import iconComments from "assets/images/icons8-comments-48.png";
 import iconEye from "assets/images/icons8-eye-48.png";
 // import iconArrowRight from "assets/images/icon-arrow-right.svg";
-import {DropdownSearchableV2} from "../../../../shareComponents/common";
+import {DropdownSearchableV2, TimeRangeDropdown} from "../../../../shareComponents/common";
 import userIcon from "assets/images/icon-user-avatar.svg";
 import maleUserIcon from "assets/images/icons8-male-user-64.svg";
 import categoryIcon from "assets/images/icons8-category-48.svg";
@@ -22,6 +22,8 @@ import projectIcon from "assets/images/icons8-project-50.svg";
 import downloadIcon from "assets/images/icons8-download-96.svg";
 import sendMailIcon from "assets/images/icons8-send-email-96.svg";
 import nextIcon from "assets/images/icons-arrow-next.svg";
+import TriangleDown from "assets/icons/TriangleDown";
+import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
 
 export const DashboardV2: FC = () => {
     const [filter, setFilter] = useState("all");
@@ -73,7 +75,27 @@ export const DashboardV2: FC = () => {
                         ))}
                         prefixIcon={<img className={"mr-2"} src={maleUserIcon} alt={"icon"}/>}
                     />
-
+                    <TimeRangeDropdown
+                        className={"mr-4 border border-primary-border rounded-lg mb-2 p-1 pl-2 "}
+                        placeholder={"Thời hạn"}
+                        iconBack={<TriangleDown/>}
+                        iconFront={<img src={timelineIcon} alt={"----"}/>}
+                        onValueChange={val => console.log(val)}
+                        options={[
+                            {
+                                text: "Tất cả",
+                                value: "all"
+                            },
+                            {
+                                text: "1 tuần tới",
+                                value: "week"
+                            },
+                            {
+                                text: "> 7 ngày tiếp theo",
+                                value: "overweek"
+                            }
+                        ]}
+                    />
                     <DropdownSearchableV2
                         className={"mr-4 border border-primary-border rounded-lg mb-2"}
                         placeholder={"Người tạo"}
@@ -172,7 +194,7 @@ export const DashboardV2: FC = () => {
                     />
                     <DropdownSearchableV2
                         className={"mr-4 border border-primary-border rounded-lg mb-2"}
-                        placeholder={"Phân loại"}
+                        placeholder={"Trạng thái"}
                         prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"}/>}
                         isMultiple={true}
                         disableSearch={true}
@@ -232,7 +254,7 @@ export const DashboardV2: FC = () => {
                             },
                         ]}
                     />
-                    <button className={"bg-green-success rounded text-white px-6 py-1 mb-2"}>
+                    <button className={"bg-green-success rounded text-white px-6 h-[32px] mb-2"}>
                         Lưu kết quả
                     </button>
                 </div>
@@ -278,10 +300,10 @@ export const DashboardV2: FC = () => {
             <div className={"table-content"}>
                 <table className={"w-full table-fixed tasks"}>
                     <tbody>
-                        <tr className={"read"}>
+                        <tr className={"read checked"}>
                             <td className={"w-[46px]"}>
                                 <div className={"flex items-center justify-center py-3"}>
-                                    <input className="form-check-input" type="checkbox" value="" id="check"/>
+                                    <input checked className="form-check-input" type="checkbox" value="" id="check"/>
                                 </div>
                             </td>
                             <td className={"w-[55px]"}>

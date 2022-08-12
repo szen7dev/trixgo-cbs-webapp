@@ -64,7 +64,7 @@ export const HomeLeftMenuContent:FC = () => {
         route: string
     }) => {
       return (
-          <NavLink key={nav.route} to={nav.route} className={"left-menu-nav flex items-center py-2 px-4 rounded-full w-full text-primary-gray"}>
+          <NavLink key={nav.route} to={nav.route} className={"left-menu-nav flex items-center py-1 px-4 rounded-full w-full text-primary-gray"}>
               <img src={nav.icon} alt={nav.label}/>
               <span className={"flex-1 ml-2 text-left"}>{nav.label}</span>
               {

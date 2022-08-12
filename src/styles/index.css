@@ -1723,5 +1723,8 @@ img {
   @apply font-bold;
 }
 .tasks tr {
-  @apply border-0.5 border-primary-border cursor-pointer;
+  @apply cursor-pointer;
+}
+.tasks .checked{
+  @apply bg-cbs-background-selected !important;
 }
