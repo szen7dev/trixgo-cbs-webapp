@@ -25,7 +25,7 @@
     "@reduxjs/toolkit": "^1.6.1",
     "@sentry/react": "^6.19.2",
     "@sentry/tracing": "^6.19.2",
-    "@tinymce/tinymce-react": "^3.13.0",
+    "@tinymce/tinymce-react": "^3.14.0",
     "@types/draft-js": "^0.11.8",
     "@types/react-copy-to-clipboard": "^5.0.2",
     "@types/react-lazy-load-image-component": "^1.5.2",

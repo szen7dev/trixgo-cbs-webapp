@@ -121,6 +121,7 @@ module.exports = {
                 "cbs-red": "#FF4242",
                 "cbs-green-dark": "#008000",
                 "cbs-green-medium": "#198038",
+                "cbs-inline-badge-blue": "#00AAFF",
             },
             fontSize: {
                 "[13px]": "13px",

@@ -30,7 +30,7 @@ export const DashboardV2: FC = () => {
     const history = useHistory();
 
     const jumpToDetail = (row: any) => {
-        history.push("/task-detail/1");
+        history.push("/pcm/detail/1");
         //Thực hiện đánh dấu đã đọc với task nếu cần
     }
     return (

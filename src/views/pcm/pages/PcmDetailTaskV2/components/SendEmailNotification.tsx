@@ -5,7 +5,7 @@ import iconChecklist from "assets/images/icons8-checklist-64.svg";
 import {DropdownSearchableV2} from "shareComponents/common";
 import nextIcon from "assets/images/icons-arrow-next.svg";
 import userIcon from "assets/images/icon-user-avatar.svg";
-import iconSendMail from "../../../../assets/images/icons8-send-email-96.svg";
+import iconSendMail from "../../../../../assets/images/icons8-send-email-96.svg";
 
 export const SendEmailNotification:FC = () => {
     const [isShow, setIsShow] = useState(false);

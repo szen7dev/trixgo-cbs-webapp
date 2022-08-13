@@ -12,7 +12,6 @@ import RightClickMenuProvider from "services/providers/RightClickMenu";
 /*=====3.LAYOUTS=====*/
 import { FullPageLayout } from "shareComponents/layouts";
 import Policy from "views/authentication/Policy";
-import {TaskDetail} from "../views/homepage/pages";
 
 // import { Loader } from "shareComponents/common";
 /*=====4.CONFIG ROUTE=====*/
@@ -216,16 +215,6 @@ const Routes: FC = () => {
                                     path="/policy"
                                     component={Policy}
                                 />
-
-                                {/* =====UI DEMO===== */}
-                                <Route
-                                    exact
-                                    path="/task-detail/:id"
-                                >
-                                    <HomeLayout>
-                                        <TaskDetail/>
-                                    </HomeLayout>
-                                </Route>
 
                                 {/* =====OTHER===== */}
                                 <Route path="*">
