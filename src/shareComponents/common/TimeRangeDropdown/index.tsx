@@ -8,7 +8,8 @@ type Props = {
     placeholder: string,
     options: {
         text: string,
-        value: string,
+        fromDate: string,
+        toDate: string,
     }[],
     onValueChange: (value: any) => void
     className?: string,
@@ -18,7 +19,6 @@ type Props = {
 export const TimeRangeDropdown:FC<Props> = ({placeholder, options, onValueChange, className, iconFront, iconBack}) => {
     const [showOption, setShowOption] = useState(false);
     const [useCustomDate, setUseCustomDate] = useState(false);
-    const [value, setValue] = useState("");
     const [fromToDate, setFromTodate] = useState({
         fromDate: moment().format("DD/MM/YYYY"),
         toDate: moment().format("DD/MM/YYYY")
@@ -26,11 +26,15 @@ export const TimeRangeDropdown:FC<Props> = ({placeholder, options, onValueChange
     const wrapperRef = useRef<HTMLDivElement>(null);
     useOnClickOutside(wrapperRef, () => setShowOption(false));
 
-    const handleSelectOption = (value: string) => {
-        setValue(value);
+    const handleSelectOption = ({fromDate, toDate}: {
+        text: string,
+        fromDate: string,
+        toDate: string,
+    }) => {
+        setFromTodate({fromDate, toDate});
         setShowOption(false);
         setUseCustomDate(false);
-        onValueChange(value)
+        onValueChange({fromDate, toDate})
     }
 
     const handleSetFromToDate = (key: string, date: string) => {
@@ -58,10 +62,10 @@ export const TimeRangeDropdown:FC<Props> = ({placeholder, options, onValueChange
                     {
                         options.map(option => (
                             <div
-                                onClick={() => handleSelectOption(option.value)}
-                                key={option.value} className={" select-option hover:bg-gray-100 transition duration-150 flex cursor-pointer py-3 px-4 "}>
+                                onClick={() => handleSelectOption(option)}
+                                key={option.text} className={" select-option hover:bg-gray-100 transition duration-150 flex cursor-pointer py-3 px-4 "}>
                                 {
-                                    option.value === value ?
+                                    (option.fromDate === fromToDate.fromDate && option.toDate === fromToDate.toDate) ?
                                         <img src={BlueCheck} alt={"checked"} className={"w-[15px] mr-3"} /> :
                                         <div className={"w-[15px] mr-3"} />
                                 }
@@ -74,7 +78,6 @@ export const TimeRangeDropdown:FC<Props> = ({placeholder, options, onValueChange
                     <div
                         onClick={() => {
                             setUseCustomDate(true);
-                            setValue("");
                         }}
                         className={"border-t-0.5 border-primary-border select-option hover:bg-gray-100 transition duration-150 flex cursor-pointer py-3 px-4 "}>
                         <div className={"w-[15px] mr-3"} />

@@ -120,6 +120,7 @@ module.exports = {
                 "cbs-purple": "#9B59B6",
                 "cbs-red": "#FF4242",
                 "cbs-green-dark": "#008000",
+                "cbs-green-medium": "#198038",
             },
             fontSize: {
                 "[13px]": "13px",

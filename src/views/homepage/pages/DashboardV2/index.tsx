@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useState} from "react";
 import moment from "moment";
 import Slider from "react-slick";
-import { Link } from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
 import { useQuery } from "react-query";
 
 import "slick-carousel/slick/slick.css";
@@ -27,6 +27,12 @@ import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
 
 export const DashboardV2: FC = () => {
     const [filter, setFilter] = useState("all");
+    const history = useHistory();
+
+    const jumpToDetail = (row: any) => {
+        history.push("/task-detail/1");
+        //Thực hiện đánh dấu đã đọc với task nếu cần
+    }
     return (
         <div className="t-home">
             <div className={"sticky top-0 bg-white"}>
@@ -84,15 +90,18 @@ export const DashboardV2: FC = () => {
                         options={[
                             {
                                 text: "Tất cả",
-                                value: "all"
+                                fromDate: "00/00/0000",
+                                toDate: "31/12/2999"
                             },
                             {
                                 text: "1 tuần tới",
-                                value: "week"
+                                fromDate: "12/08/2022",
+                                toDate: "17/08/2022"
                             },
                             {
                                 text: "> 7 ngày tiếp theo",
-                                value: "overweek"
+                                fromDate: "17/08/2022",
+                                toDate: "31/12/2999"
                             }
                         ]}
                     />
@@ -307,18 +316,18 @@ export const DashboardV2: FC = () => {
                                 </div>
                             </td>
                             <td className={"w-[55px]"}>
-                                <div className={"py-3"}>
+                                <div onClick={() => jumpToDetail(null)} className={"py-3"}>
                                     <img src={userIcon} alt={"avatar"} className={"w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"}/>
                                 </div>
                             </td>
                             <td className={"w-[170px]"}>
-                                <div className={"user-infor py-3"}>
+                                <div onClick={() => jumpToDetail(null)}  className={"user-infor py-3"}>
                                     <p className={"truncate user-infor-name"}>Phan Văn Trường-PGI</p>
                                     <span className={"text-xs text-primary-gray mt-1"}>8 liên quan, 2 cc</span>
                                 </div>
                             </td>
                             <td className={"task-infor-td"}>
-                                <div className={"task-infor flex-auto overflow-hidden whitespace-nowrap py-3"}>
+                                <div onClick={() => jumpToDetail(null)}  className={"task-infor flex-auto overflow-hidden whitespace-nowrap py-3"}>
                                     <div className={"whitespace-nowrap overflow-hidden"}>
                                         <p className={"task-title"}>HAR.MAR.Biên bản cuộc họp-CĐT & CPMI - Tuần 1.Tháng 12.2021</p>
                                         <span className={"crop-text text-xs text-primary-gray mt-1"}>Kính gửi anh Hiếu và các anh Chủ đầu tư, Đính kèm là Biên bản họp giao ban tuần 1 tháng 12.2021 ngày 10/12/2021 lúc 2:00 PM giữa Chủ đầu tư và Ban quản lý dự án. Trân trọng,
@@ -327,135 +336,7 @@ export const DashboardV2: FC = () => {
                                 </div>
                             </td>
                             <td className={"w-[100px]"}>
-                                <div className={"task-date whitespace-nowrap py-3 text-right pr-4"}>
-                                    4 thg 8
-                                </div>
-                            </td>
-                        </tr>
-                        <tr className={"read"}>
-                            <td className={"w-[46px]"}>
-                                <div className={"flex items-center justify-center py-3"}>
-                                    <input className="form-check-input" type="checkbox" value="" id="check"/>
-                                </div>
-                            </td>
-                            <td className={"w-[55px]"}>
-                                <div className={"py-3"}>
-                                    <img src={userIcon} alt={"avatar"} className={"w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"}/>
-                                </div>
-                            </td>
-                            <td className={"w-[170px]"}>
-                                <div className={"user-infor py-3"}>
-                                    <p className={"truncate user-infor-name"}>Phan Văn Trường-PGI</p>
-                                    <span className={"text-xs text-primary-gray mt-1"}>8 liên quan, 2 cc</span>
-                                </div>
-                            </td>
-                            <td className={"task-infor-td"}>
-                                <div className={"task-infor flex-auto overflow-hidden whitespace-nowrap py-3"}>
-                                    <div className={"whitespace-nowrap overflow-hidden"}>
-                                        <p className={"task-title"}>HAR.MAR.Biên bản cuộc họp-CĐT & CPMI - Tuần 1.Tháng 12.2021</p>
-                                        <span className={"crop-text text-xs text-primary-gray mt-1"}>Kính gửi anh Hiếu và các anh Chủ đầu tư, Đính kèm là Biên bản họp giao ban tuần 1 tháng 12.2021 ngày 10/12/2021 lúc 2:00 PM giữa Chủ đầu tư và Ban quản lý dự án. Trân trọng,
-                                            Ms. Linh from CPMI...</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td className={"w-[100px]"}>
-                                <div className={"task-date whitespace-nowrap py-3 text-right pr-4"}>
-                                    4 thg 8
-                                </div>
-                            </td>
-                        </tr>
-                        <tr className={"read"}>
-                            <td className={"w-[46px]"}>
-                                <div className={"flex items-center justify-center py-3"}>
-                                    <input className="form-check-input" type="checkbox" value="" id="check"/>
-                                </div>
-                            </td>
-                            <td className={"w-[55px]"}>
-                                <div className={"py-3"}>
-                                    <img src={userIcon} alt={"avatar"} className={"w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"}/>
-                                </div>
-                            </td>
-                            <td className={"w-[170px]"}>
-                                <div className={"user-infor py-3"}>
-                                    <p className={"truncate user-infor-name"}>Phan Văn Trường-PGI</p>
-                                    <span className={"text-xs text-primary-gray mt-1"}>8 liên quan, 2 cc</span>
-                                </div>
-                            </td>
-                            <td className={"task-infor-td"}>
-                                <div className={"task-infor flex-auto overflow-hidden whitespace-nowrap py-3"}>
-                                    <div className={"whitespace-nowrap overflow-hidden"}>
-                                        <p className={"task-title"}>HAR.MAR.Biên bản cuộc họp-CĐT & CPMI - Tuần 1.Tháng 12.2021</p>
-                                        <span className={"crop-text text-xs text-primary-gray mt-1"}>Kính gửi anh Hiếu và các anh Chủ đầu tư, Đính kèm là Biên bản họp giao ban tuần 1 tháng 12.2021 ngày 10/12/2021 lúc 2:00 PM giữa Chủ đầu tư và Ban quản lý dự án. Trân trọng,
-                                            Ms. Linh from CPMI...</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td className={"w-[100px]"}>
-                                <div className={"task-date whitespace-nowrap py-3 text-right pr-4"}>
-                                    4 thg 8
-                                </div>
-                            </td>
-                        </tr>
-                        <tr className={"read"}>
-                            <td className={"w-[46px]"}>
-                                <div className={"flex items-center justify-center py-3"}>
-                                    <input className="form-check-input" type="checkbox" value="" id="check"/>
-                                </div>
-                            </td>
-                            <td className={"w-[55px]"}>
-                                <div className={"py-3"}>
-                                    <img src={userIcon} alt={"avatar"} className={"w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"}/>
-                                </div>
-                            </td>
-                            <td className={"w-[170px]"}>
-                                <div className={"user-infor py-3"}>
-                                    <p className={"truncate user-infor-name"}>Phan Văn Trường-PGI</p>
-                                    <span className={"text-xs text-primary-gray mt-1"}>8 liên quan, 2 cc</span>
-                                </div>
-                            </td>
-                            <td className={"task-infor-td"}>
-                                <div className={"task-infor flex-auto overflow-hidden whitespace-nowrap py-3"}>
-                                    <div className={"whitespace-nowrap overflow-hidden"}>
-                                        <p className={"task-title"}>HAR.MAR.Biên bản cuộc họp-CĐT & CPMI - Tuần 1.Tháng 12.2021</p>
-                                        <span className={"crop-text text-xs text-primary-gray mt-1"}>Kính gửi anh Hiếu và các anh Chủ đầu tư, Đính kèm là Biên bản họp giao ban tuần 1 tháng 12.2021 ngày 10/12/2021 lúc 2:00 PM giữa Chủ đầu tư và Ban quản lý dự án. Trân trọng,
-                                            Ms. Linh from CPMI...</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td className={"w-[100px]"}>
-                                <div className={"task-date whitespace-nowrap py-3 text-right pr-4"}>
-                                    4 thg 8
-                                </div>
-                            </td>
-                        </tr>
-                        <tr className={"read"}>
-                            <td className={"w-[46px]"}>
-                                <div className={"flex items-center justify-center py-3"}>
-                                    <input className="form-check-input" type="checkbox" value="" id="check"/>
-                                </div>
-                            </td>
-                            <td className={"w-[55px]"}>
-                                <div className={"py-3"}>
-                                    <img src={userIcon} alt={"avatar"} className={"w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"}/>
-                                </div>
-                            </td>
-                            <td className={"w-[170px]"}>
-                                <div className={"user-infor py-3"}>
-                                    <p className={"truncate user-infor-name"}>Phan Văn Trường-PGI</p>
-                                    <span className={"text-xs text-primary-gray mt-1"}>8 liên quan, 2 cc</span>
-                                </div>
-                            </td>
-                            <td className={"task-infor-td"}>
-                                <div className={"task-infor flex-auto overflow-hidden whitespace-nowrap py-3"}>
-                                    <div className={"whitespace-nowrap overflow-hidden"}>
-                                        <p className={"task-title"}>HAR.MAR.Biên bản cuộc họp-CĐT & CPMI - Tuần 1.Tháng 12.2021</p>
-                                        <span className={"crop-text text-xs text-primary-gray mt-1"}>Kính gửi anh Hiếu và các anh Chủ đầu tư, Đính kèm là Biên bản họp giao ban tuần 1 tháng 12.2021 ngày 10/12/2021 lúc 2:00 PM giữa Chủ đầu tư và Ban quản lý dự án. Trân trọng,
-                                            Ms. Linh from CPMI...</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td className={"w-[100px]"}>
-                                <div className={"task-date whitespace-nowrap py-3 text-right pr-4"}>
+                                <div onClick={() => jumpToDetail(null)}  className={"task-date whitespace-nowrap py-3 text-right pr-4"}>
                                     4 thg 8
                                 </div>
                             </td>
@@ -467,18 +348,18 @@ export const DashboardV2: FC = () => {
                                 </div>
                             </td>
                             <td className={"w-[55px]"}>
-                                <div className={"py-3"}>
+                                <div onClick={() => jumpToDetail(null)} className={"py-3"}>
                                     <img src={userIcon} alt={"avatar"} className={"w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"}/>
                                 </div>
                             </td>
                             <td className={"w-[170px]"}>
-                                <div className={"user-infor py-3"}>
+                                <div onClick={() => jumpToDetail(null)}  className={"user-infor py-3"}>
                                     <p className={"truncate user-infor-name"}>Phan Văn Trường-PGI</p>
                                     <span className={"text-xs text-primary-gray mt-1"}>8 liên quan, 2 cc</span>
                                 </div>
                             </td>
                             <td className={"task-infor-td"}>
-                                <div className={"task-infor flex-auto overflow-hidden whitespace-nowrap py-3"}>
+                                <div onClick={() => jumpToDetail(null)}  className={"task-infor flex-auto overflow-hidden whitespace-nowrap py-3"}>
                                     <div className={"whitespace-nowrap overflow-hidden"}>
                                         <p className={"task-title"}>HAR.MAR.Biên bản cuộc họp-CĐT & CPMI - Tuần 1.Tháng 12.2021</p>
                                         <span className={"crop-text text-xs text-primary-gray mt-1"}>Kính gửi anh Hiếu và các anh Chủ đầu tư, Đính kèm là Biên bản họp giao ban tuần 1 tháng 12.2021 ngày 10/12/2021 lúc 2:00 PM giữa Chủ đầu tư và Ban quản lý dự án. Trân trọng,
@@ -487,391 +368,7 @@ export const DashboardV2: FC = () => {
                                 </div>
                             </td>
                             <td className={"w-[100px]"}>
-                                <div className={"task-date whitespace-nowrap py-3 text-right pr-4"}>
-                                    4 thg 8
-                                </div>
-                            </td>
-                        </tr>
-                        <tr className={"read"}>
-                            <td className={"w-[46px]"}>
-                                <div className={"flex items-center justify-center py-3"}>
-                                    <input className="form-check-input" type="checkbox" value="" id="check"/>
-                                </div>
-                            </td>
-                            <td className={"w-[55px]"}>
-                                <div className={"py-3"}>
-                                    <img src={userIcon} alt={"avatar"} className={"w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"}/>
-                                </div>
-                            </td>
-                            <td className={"w-[170px]"}>
-                                <div className={"user-infor py-3"}>
-                                    <p className={"truncate user-infor-name"}>Phan Văn Trường-PGI</p>
-                                    <span className={"text-xs text-primary-gray mt-1"}>8 liên quan, 2 cc</span>
-                                </div>
-                            </td>
-                            <td className={"task-infor-td"}>
-                                <div className={"task-infor flex-auto overflow-hidden whitespace-nowrap py-3"}>
-                                    <div className={"whitespace-nowrap overflow-hidden"}>
-                                        <p className={"task-title"}>HAR.MAR.Biên bản cuộc họp-CĐT & CPMI - Tuần 1.Tháng 12.2021</p>
-                                        <span className={"crop-text text-xs text-primary-gray mt-1"}>Kính gửi anh Hiếu và các anh Chủ đầu tư, Đính kèm là Biên bản họp giao ban tuần 1 tháng 12.2021 ngày 10/12/2021 lúc 2:00 PM giữa Chủ đầu tư và Ban quản lý dự án. Trân trọng,
-                                            Ms. Linh from CPMI...</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td className={"w-[100px]"}>
-                                <div className={"task-date whitespace-nowrap py-3 text-right pr-4"}>
-                                    4 thg 8
-                                </div>
-                            </td>
-                        </tr>
-                        <tr className={"read"}>
-                            <td className={"w-[46px]"}>
-                                <div className={"flex items-center justify-center py-3"}>
-                                    <input className="form-check-input" type="checkbox" value="" id="check"/>
-                                </div>
-                            </td>
-                            <td className={"w-[55px]"}>
-                                <div className={"py-3"}>
-                                    <img src={userIcon} alt={"avatar"} className={"w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"}/>
-                                </div>
-                            </td>
-                            <td className={"w-[170px]"}>
-                                <div className={"user-infor py-3"}>
-                                    <p className={"truncate user-infor-name"}>Phan Văn Trường-PGI</p>
-                                    <span className={"text-xs text-primary-gray mt-1"}>8 liên quan, 2 cc</span>
-                                </div>
-                            </td>
-                            <td className={"task-infor-td"}>
-                                <div className={"task-infor flex-auto overflow-hidden whitespace-nowrap py-3"}>
-                                    <div className={"whitespace-nowrap overflow-hidden"}>
-                                        <p className={"task-title"}>HAR.MAR.Biên bản cuộc họp-CĐT & CPMI - Tuần 1.Tháng 12.2021</p>
-                                        <span className={"crop-text text-xs text-primary-gray mt-1"}>Kính gửi anh Hiếu và các anh Chủ đầu tư, Đính kèm là Biên bản họp giao ban tuần 1 tháng 12.2021 ngày 10/12/2021 lúc 2:00 PM giữa Chủ đầu tư và Ban quản lý dự án. Trân trọng,
-                                            Ms. Linh from CPMI...</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td className={"w-[100px]"}>
-                                <div className={"task-date whitespace-nowrap py-3 text-right pr-4"}>
-                                    4 thg 8
-                                </div>
-                            </td>
-                        </tr>
-                        <tr className={"read"}>
-                            <td className={"w-[46px]"}>
-                                <div className={"flex items-center justify-center py-3"}>
-                                    <input className="form-check-input" type="checkbox" value="" id="check"/>
-                                </div>
-                            </td>
-                            <td className={"w-[55px]"}>
-                                <div className={"py-3"}>
-                                    <img src={userIcon} alt={"avatar"} className={"w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"}/>
-                                </div>
-                            </td>
-                            <td className={"w-[170px]"}>
-                                <div className={"user-infor py-3"}>
-                                    <p className={"truncate user-infor-name"}>Phan Văn Trường-PGI</p>
-                                    <span className={"text-xs text-primary-gray mt-1"}>8 liên quan, 2 cc</span>
-                                </div>
-                            </td>
-                            <td className={"task-infor-td"}>
-                                <div className={"task-infor flex-auto overflow-hidden whitespace-nowrap py-3"}>
-                                    <div className={"whitespace-nowrap overflow-hidden"}>
-                                        <p className={"task-title"}>HAR.MAR.Biên bản cuộc họp-CĐT & CPMI - Tuần 1.Tháng 12.2021</p>
-                                        <span className={"crop-text text-xs text-primary-gray mt-1"}>Kính gửi anh Hiếu và các anh Chủ đầu tư, Đính kèm là Biên bản họp giao ban tuần 1 tháng 12.2021 ngày 10/12/2021 lúc 2:00 PM giữa Chủ đầu tư và Ban quản lý dự án. Trân trọng,
-                                            Ms. Linh from CPMI...</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td className={"w-[100px]"}>
-                                <div className={"task-date whitespace-nowrap py-3 text-right pr-4"}>
-                                    4 thg 8
-                                </div>
-                            </td>
-                        </tr>
-                        <tr className={"read"}>
-                            <td className={"w-[46px]"}>
-                                <div className={"flex items-center justify-center py-3"}>
-                                    <input className="form-check-input" type="checkbox" value="" id="check"/>
-                                </div>
-                            </td>
-                            <td className={"w-[55px]"}>
-                                <div className={"py-3"}>
-                                    <img src={userIcon} alt={"avatar"} className={"w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"}/>
-                                </div>
-                            </td>
-                            <td className={"w-[170px]"}>
-                                <div className={"user-infor py-3"}>
-                                    <p className={"truncate user-infor-name"}>Phan Văn Trường-PGI</p>
-                                    <span className={"text-xs text-primary-gray mt-1"}>8 liên quan, 2 cc</span>
-                                </div>
-                            </td>
-                            <td className={"task-infor-td"}>
-                                <div className={"task-infor flex-auto overflow-hidden whitespace-nowrap py-3"}>
-                                    <div className={"whitespace-nowrap overflow-hidden"}>
-                                        <p className={"task-title"}>HAR.MAR.Biên bản cuộc họp-CĐT & CPMI - Tuần 1.Tháng 12.2021</p>
-                                        <span className={"crop-text text-xs text-primary-gray mt-1"}>Kính gửi anh Hiếu và các anh Chủ đầu tư, Đính kèm là Biên bản họp giao ban tuần 1 tháng 12.2021 ngày 10/12/2021 lúc 2:00 PM giữa Chủ đầu tư và Ban quản lý dự án. Trân trọng,
-                                            Ms. Linh from CPMI...</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td className={"w-[100px]"}>
-                                <div className={"task-date whitespace-nowrap py-3 text-right pr-4"}>
-                                    4 thg 8
-                                </div>
-                            </td>
-                        </tr>
-                        <tr className={"read"}>
-                            <td className={"w-[46px]"}>
-                                <div className={"flex items-center justify-center py-3"}>
-                                    <input className="form-check-input" type="checkbox" value="" id="check"/>
-                                </div>
-                            </td>
-                            <td className={"w-[55px]"}>
-                                <div className={"py-3"}>
-                                    <img src={userIcon} alt={"avatar"} className={"w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"}/>
-                                </div>
-                            </td>
-                            <td className={"w-[170px]"}>
-                                <div className={"user-infor py-3"}>
-                                    <p className={"truncate user-infor-name"}>Phan Văn Trường-PGI</p>
-                                    <span className={"text-xs text-primary-gray mt-1"}>8 liên quan, 2 cc</span>
-                                </div>
-                            </td>
-                            <td className={"task-infor-td"}>
-                                <div className={"task-infor flex-auto overflow-hidden whitespace-nowrap py-3"}>
-                                    <div className={"whitespace-nowrap overflow-hidden"}>
-                                        <p className={"task-title"}>HAR.MAR.Biên bản cuộc họp-CĐT & CPMI - Tuần 1.Tháng 12.2021</p>
-                                        <span className={"crop-text text-xs text-primary-gray mt-1"}>Kính gửi anh Hiếu và các anh Chủ đầu tư, Đính kèm là Biên bản họp giao ban tuần 1 tháng 12.2021 ngày 10/12/2021 lúc 2:00 PM giữa Chủ đầu tư và Ban quản lý dự án. Trân trọng,
-                                            Ms. Linh from CPMI...</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td className={"w-[100px]"}>
-                                <div className={"task-date whitespace-nowrap py-3 text-right pr-4"}>
-                                    4 thg 8
-                                </div>
-                            </td>
-                        </tr>
-                        <tr className={"unread"}>
-                            <td className={"w-[46px]"}>
-                                <div className={"flex items-center justify-center py-3"}>
-                                    <input className="form-check-input" type="checkbox" value="" id="check"/>
-                                </div>
-                            </td>
-                            <td className={"w-[55px]"}>
-                                <div className={"py-3"}>
-                                    <img src={userIcon} alt={"avatar"} className={"w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"}/>
-                                </div>
-                            </td>
-                            <td className={"w-[170px]"}>
-                                <div className={"user-infor py-3"}>
-                                    <p className={"truncate user-infor-name"}>Phan Văn Trường-PGI</p>
-                                    <span className={"text-xs text-primary-gray mt-1"}>8 liên quan, 2 cc</span>
-                                </div>
-                            </td>
-                            <td className={"task-infor-td"}>
-                                <div className={"task-infor flex-auto overflow-hidden whitespace-nowrap py-3"}>
-                                    <div className={"whitespace-nowrap overflow-hidden"}>
-                                        <p className={"task-title"}>HAR.MAR.Biên bản cuộc họp-CĐT & CPMI - Tuần 1.Tháng 12.2021</p>
-                                        <span className={"crop-text text-xs text-primary-gray mt-1"}>Kính gửi anh Hiếu và các anh Chủ đầu tư, Đính kèm là Biên bản họp giao ban tuần 1 tháng 12.2021 ngày 10/12/2021 lúc 2:00 PM giữa Chủ đầu tư và Ban quản lý dự án. Trân trọng,
-                                            Ms. Linh from CPMI...</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td className={"w-[100px]"}>
-                                <div className={"task-date whitespace-nowrap py-3 text-right pr-4"}>
-                                    4 thg 8
-                                </div>
-                            </td>
-                        </tr>
-                        <tr className={"read"}>
-                            <td className={"w-[46px]"}>
-                                <div className={"flex items-center justify-center py-3"}>
-                                    <input className="form-check-input" type="checkbox" value="" id="check"/>
-                                </div>
-                            </td>
-                            <td className={"w-[55px]"}>
-                                <div className={"py-3"}>
-                                    <img src={userIcon} alt={"avatar"} className={"w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"}/>
-                                </div>
-                            </td>
-                            <td className={"w-[170px]"}>
-                                <div className={"user-infor py-3"}>
-                                    <p className={"truncate user-infor-name"}>Phan Văn Trường-PGI</p>
-                                    <span className={"text-xs text-primary-gray mt-1"}>8 liên quan, 2 cc</span>
-                                </div>
-                            </td>
-                            <td className={"task-infor-td"}>
-                                <div className={"task-infor flex-auto overflow-hidden whitespace-nowrap py-3"}>
-                                    <div className={"whitespace-nowrap overflow-hidden"}>
-                                        <p className={"task-title"}>HAR.MAR.Biên bản cuộc họp-CĐT & CPMI - Tuần 1.Tháng 12.2021</p>
-                                        <span className={"crop-text text-xs text-primary-gray mt-1"}>Kính gửi anh Hiếu và các anh Chủ đầu tư, Đính kèm là Biên bản họp giao ban tuần 1 tháng 12.2021 ngày 10/12/2021 lúc 2:00 PM giữa Chủ đầu tư và Ban quản lý dự án. Trân trọng,
-                                            Ms. Linh from CPMI...</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td className={"w-[100px]"}>
-                                <div className={"task-date whitespace-nowrap py-3 text-right pr-4"}>
-                                    4 thg 8
-                                </div>
-                            </td>
-                        </tr>
-                        <tr className={"read"}>
-                            <td className={"w-[46px]"}>
-                                <div className={"flex items-center justify-center py-3"}>
-                                    <input className="form-check-input" type="checkbox" value="" id="check"/>
-                                </div>
-                            </td>
-                            <td className={"w-[55px]"}>
-                                <div className={"py-3"}>
-                                    <img src={userIcon} alt={"avatar"} className={"w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"}/>
-                                </div>
-                            </td>
-                            <td className={"w-[170px]"}>
-                                <div className={"user-infor py-3"}>
-                                    <p className={"truncate user-infor-name"}>Phan Văn Trường-PGI</p>
-                                    <span className={"text-xs text-primary-gray mt-1"}>8 liên quan, 2 cc</span>
-                                </div>
-                            </td>
-                            <td className={"task-infor-td"}>
-                                <div className={"task-infor flex-auto overflow-hidden whitespace-nowrap py-3"}>
-                                    <div className={"whitespace-nowrap overflow-hidden"}>
-                                        <p className={"task-title"}>HAR.MAR.Biên bản cuộc họp-CĐT & CPMI - Tuần 1.Tháng 12.2021</p>
-                                        <span className={"crop-text text-xs text-primary-gray mt-1"}>Kính gửi anh Hiếu và các anh Chủ đầu tư, Đính kèm là Biên bản họp giao ban tuần 1 tháng 12.2021 ngày 10/12/2021 lúc 2:00 PM giữa Chủ đầu tư và Ban quản lý dự án. Trân trọng,
-                                            Ms. Linh from CPMI...</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td className={"w-[100px]"}>
-                                <div className={"task-date whitespace-nowrap py-3 text-right pr-4"}>
-                                    4 thg 8
-                                </div>
-                            </td>
-                        </tr>
-                        <tr className={"read"}>
-                            <td className={"w-[46px]"}>
-                                <div className={"flex items-center justify-center py-3"}>
-                                    <input className="form-check-input" type="checkbox" value="" id="check"/>
-                                </div>
-                            </td>
-                            <td className={"w-[55px]"}>
-                                <div className={"py-3"}>
-                                    <img src={userIcon} alt={"avatar"} className={"w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"}/>
-                                </div>
-                            </td>
-                            <td className={"w-[170px]"}>
-                                <div className={"user-infor py-3"}>
-                                    <p className={"truncate user-infor-name"}>Phan Văn Trường-PGI</p>
-                                    <span className={"text-xs text-primary-gray mt-1"}>8 liên quan, 2 cc</span>
-                                </div>
-                            </td>
-                            <td className={"task-infor-td"}>
-                                <div className={"task-infor flex-auto overflow-hidden whitespace-nowrap py-3"}>
-                                    <div className={"whitespace-nowrap overflow-hidden"}>
-                                        <p className={"task-title"}>HAR.MAR.Biên bản cuộc họp-CĐT & CPMI - Tuần 1.Tháng 12.2021</p>
-                                        <span className={"crop-text text-xs text-primary-gray mt-1"}>Kính gửi anh Hiếu và các anh Chủ đầu tư, Đính kèm là Biên bản họp giao ban tuần 1 tháng 12.2021 ngày 10/12/2021 lúc 2:00 PM giữa Chủ đầu tư và Ban quản lý dự án. Trân trọng,
-                                            Ms. Linh from CPMI...</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td className={"w-[100px]"}>
-                                <div className={"task-date whitespace-nowrap py-3 text-right pr-4"}>
-                                    4 thg 8
-                                </div>
-                            </td>
-                        </tr>
-                        <tr className={"read"}>
-                            <td className={"w-[46px]"}>
-                                <div className={"flex items-center justify-center py-3"}>
-                                    <input className="form-check-input" type="checkbox" value="" id="check"/>
-                                </div>
-                            </td>
-                            <td className={"w-[55px]"}>
-                                <div className={"py-3"}>
-                                    <img src={userIcon} alt={"avatar"} className={"w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"}/>
-                                </div>
-                            </td>
-                            <td className={"w-[170px]"}>
-                                <div className={"user-infor py-3"}>
-                                    <p className={"truncate user-infor-name"}>Phan Văn Trường-PGI</p>
-                                    <span className={"text-xs text-primary-gray mt-1"}>8 liên quan, 2 cc</span>
-                                </div>
-                            </td>
-                            <td className={"task-infor-td"}>
-                                <div className={"task-infor flex-auto overflow-hidden whitespace-nowrap py-3"}>
-                                    <div className={"whitespace-nowrap overflow-hidden"}>
-                                        <p className={"task-title"}>HAR.MAR.Biên bản cuộc họp-CĐT & CPMI - Tuần 1.Tháng 12.2021</p>
-                                        <span className={"crop-text text-xs text-primary-gray mt-1"}>Kính gửi anh Hiếu và các anh Chủ đầu tư, Đính kèm là Biên bản họp giao ban tuần 1 tháng 12.2021 ngày 10/12/2021 lúc 2:00 PM giữa Chủ đầu tư và Ban quản lý dự án. Trân trọng,
-                                            Ms. Linh from CPMI...</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td className={"w-[100px]"}>
-                                <div className={"task-date whitespace-nowrap py-3 text-right pr-4"}>
-                                    4 thg 8
-                                </div>
-                            </td>
-                        </tr>
-                        <tr className={"read"}>
-                            <td className={"w-[46px]"}>
-                                <div className={"flex items-center justify-center py-3"}>
-                                    <input className="form-check-input" type="checkbox" value="" id="check"/>
-                                </div>
-                            </td>
-                            <td className={"w-[55px]"}>
-                                <div className={"py-3"}>
-                                    <img src={userIcon} alt={"avatar"} className={"w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"}/>
-                                </div>
-                            </td>
-                            <td className={"w-[170px]"}>
-                                <div className={"user-infor py-3"}>
-                                    <p className={"truncate user-infor-name"}>Phan Văn Trường-PGI</p>
-                                    <span className={"text-xs text-primary-gray mt-1"}>8 liên quan, 2 cc</span>
-                                </div>
-                            </td>
-                            <td className={"task-infor-td"}>
-                                <div className={"task-infor flex-auto overflow-hidden whitespace-nowrap py-3"}>
-                                    <div className={"whitespace-nowrap overflow-hidden"}>
-                                        <p className={"task-title"}>HAR.MAR.Biên bản cuộc họp-CĐT & CPMI - Tuần 1.Tháng 12.2021</p>
-                                        <span className={"crop-text text-xs text-primary-gray mt-1"}>Kính gửi anh Hiếu và các anh Chủ đầu tư, Đính kèm là Biên bản họp giao ban tuần 1 tháng 12.2021 ngày 10/12/2021 lúc 2:00 PM giữa Chủ đầu tư và Ban quản lý dự án. Trân trọng,
-                                            Ms. Linh from CPMI...</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td className={"w-[100px]"}>
-                                <div className={"task-date whitespace-nowrap py-3 text-right pr-4"}>
-                                    4 thg 8
-                                </div>
-                            </td>
-                        </tr>
-                        <tr className={"unread"}>
-                            <td className={"w-[46px]"}>
-                                <div className={"flex items-center justify-center py-3"}>
-                                    <input className="form-check-input" type="checkbox" value="" id="check"/>
-                                </div>
-                            </td>
-                            <td className={"w-[55px]"}>
-                                <div className={"py-3"}>
-                                    <img src={userIcon} alt={"avatar"} className={"w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"}/>
-                                </div>
-                            </td>
-                            <td className={"w-[170px]"}>
-                                <div className={"user-infor py-3"}>
-                                    <p className={"truncate user-infor-name"}>Phan Văn Trường-PGI</p>
-                                    <span className={"text-xs text-primary-gray mt-1"}>8 liên quan, 2 cc</span>
-                                </div>
-                            </td>
-                            <td className={"task-infor-td"}>
-                                <div className={"task-infor flex-auto overflow-hidden whitespace-nowrap py-3"}>
-                                    <div className={"whitespace-nowrap overflow-hidden"}>
-                                        <p className={"task-title"}>HAR.MAR.Biên bản cuộc họp-CĐT & CPMI - Tuần 1.Tháng 12.2021</p>
-                                        <span className={"crop-text text-xs text-primary-gray mt-1"}>Kính gửi anh Hiếu và các anh Chủ đầu tư, Đính kèm là Biên bản họp giao ban tuần 1 tháng 12.2021 ngày 10/12/2021 lúc 2:00 PM giữa Chủ đầu tư và Ban quản lý dự án. Trân trọng,
-                                            Ms. Linh from CPMI...</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td className={"w-[100px]"}>
-                                <div className={"task-date whitespace-nowrap py-3 text-right pr-4"}>
+                                <div onClick={() => jumpToDetail(null)}  className={"task-date whitespace-nowrap py-3 text-right pr-4"}>
                                     4 thg 8
                                 </div>
                             </td>
