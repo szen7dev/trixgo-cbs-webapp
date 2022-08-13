@@ -31,11 +31,11 @@ const InlineBadgeSelect:FC<Props> = ({defaultValue, options, placeholder, onValu
         setShowOption(false);
     }
     return (
-        <div className={`relative inline-block ${wrapperClassName}`}>
+        <div className={`relative z-5 inline-block ${wrapperClassName}`}>
             <button onClick={() => setShowOption(!showOption)} className={className}>{placeholder}: {itemSelected()?.text}</button>
             {
                 showOption &&
-                <div className={"absolute w-[335px] shadow-lg rounded-md p-4 text-primary-gray"}>
+                <div className={"absolute z-20 bg-white w-[335px] shadow-lg rounded-md p-4 text-primary-gray"}>
                     <div className={"flex items-center py-2 border-b-0.5 border-primary-border"}>
                         <div className={"flex-1"}>{placeholder}</div>
                         <button onClick={() => setShowOption(false)}>

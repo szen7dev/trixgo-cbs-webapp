@@ -64,13 +64,13 @@ const TimeRange:FC<Props> = ({fromDateDefault, toDateDefault, toTimeDefault, rem
     }
 
     return (
-        <div className={"relative"}>
+        <div className={"relative z-5"}>
             <button onClick={() => setShowOption(!showOption)} className={"flex items-center bg-cbs-form-input-bg rounded px-2 h-[30px]"}>
                 {fromDate} - {toDate} {toTime} <span className={"text-white rounded text-xs bg-negative px-2 mx-2"}>Quá hạn</span> <TriangleDown/>
             </button>
             {
                 showOption &&
-                <div className={"absolute w-[335px] shadow-lg rounded-md p-4 right-0"}>
+                <div className={"absolute z-20 bg-white w-[335px] shadow-lg rounded-md p-4 right-0"}>
                     <div className={"flex items-center py-2 border-b-0.5 border-primary-border"}>
                         <div className={"flex-1 text-primary-gray "}>Thời gian</div>
                         <button onClick={() => setShowOption(false)}>
