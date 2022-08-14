@@ -126,8 +126,14 @@ export const DropdownSearchableV2: FC<Props> = ({
         const oldValues = (values??[]);
         oldValues.splice(existThatItem, 1);
         setValues([...oldValues]);
+        if (onMultipleRemoveValue) {
+          onMultipleRemoveValue(readDataValue(item, "id"))
+        }
       } else {
         setValues((oldValues) => [...(oldValues ?? []), item]);
+        if (onchangeValue) {
+          onchangeValue(modifyItem(item));
+        }
       }
     } else {
       setShowOption(false);
@@ -135,10 +141,10 @@ export const DropdownSearchableV2: FC<Props> = ({
         setValue(undefined);
       } else {
         setValue(item);
+        if (onchangeValue) {
+          onchangeValue(modifyItem(item));
+        }
       }
-    }
-    if (onchangeValue) {
-      onchangeValue(modifyItem(item));
     }
   };
 

@@ -3,12 +3,7 @@ import iconTickBox from "assets/images/icons8-tick-box-48.svg";
 import iconClock from "assets/images/icons8-clock-48.svg";
 import taskUserAvt from "assets/images/task-user.svg";
 import iconHorizontalDots from "assets/images/three-dots-horizontal-v2.svg";
-import {DropdownSearchable} from "../../../../../shareComponents/common";
-import TagIcon from "../../../../../assets/images/icons8-price-tag-96.svg";
-import DatePicker from "react-datepicker";
-import moment from "moment";
-import {getIn} from "formik";
-import DayPickerInput from "react-day-picker/DayPickerInput";
+import {CreateNewSubTask} from "./CreateNewSubTask";
 
 export const TaskDetailSubtask:FC = () => {
     const progress = 100;
@@ -69,64 +64,7 @@ export const TaskDetailSubtask:FC = () => {
                     </button>
                 </div>
 
-                <div className={"create-new-subtask border-0.5 border-primary-border rounded ml-6 mt-4"}>
-                    <div className="flex w-full p-4">
-                        <div className="w-3/6 border-b">
-                            <input
-                                name="name"
-                                className="w-full h-8 placeholder-gray-300 focus:outline-none"
-                                placeholder="Nội dung công việc"
-                            />
-                        </div>
-                        <div className="w-2/6 mx-3 border-b">
-                            <DropdownSearchable
-                                placeholder={"Người thực hiện"}
-                                className={"w-full flex-1"}
-                                showTriangle={false}
-                                maxWidthInput={"max-w-none"}
-                                isMultiple={false}
-                                allowClearValueSingleInput={true}
-                                renderSelectedItem={(item) => (
-                                    <div className={"flex items-center"}>
-                                        <img alt={"tag icon"} src={TagIcon} />
-                                        <span>{item.text}</span>
-                                    </div>
-                                )}
-                                data={[]}
-                                formatItem={{
-                                    id: "value",
-                                    text: "label",
-                                }}
-                                inlineSearch={true}
-                            />
-                        </div>
-                        <div className="w-1/6 border-b">
-                            <DayPickerInput
-                                value={"12/07/2022"}
-                                classNames={{
-                                    container: "w-full relative h-full",
-                                    overlay: "w-full",
-                                    overlayWrapper: "absolute bg-white w-full right-0 z-200"
-                                }}
-                                onDayChange={(day) => console.log(moment(day).format("DD/MM/YYYY"))}
-                                inputProps={{
-                                    className: "outline-none h-full",
-                                    placeholder: "Thời hạn",
-                                    readOnly: true,
-                                }}
-                            />
-                        </div>
-                    </div>
-
-                    <div className={"flex items-center justify-end pt-0 p-4"}>
-                        <button className={"py-2 px-4 rounded bg-cbs-form-input-bg text-primary-gray mr-2"}>
-                            Bỏ qua
-                        </button>
-                        <button className={"py-2 px-4 rounded bg-primary text-white"}>
-                            Xác nhận
-                        </button>
-                    </div>
-                </div>
+                <CreateNewSubTask/>
 
                 <button className={"bg-cbs-form-input-bg rounded px-4 py-2 text-primary-gray mt-4 ml-6"}>
                     Thêm một mục

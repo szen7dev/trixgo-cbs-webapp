@@ -1,8 +1,5 @@
 import React, {FC, Fragment, useState} from "react";
-import {Menu, Transition} from '@headlessui/react';
-import trigangleDown from "assets/images/triangle-down.svg";
 import searchIcon from "assets/images/icons8-search-120.png";
-import BlueCheck from "assets/images/blue-check.svg";
 
 export const HomeHeaderContent:FC = () => {
     const [tab, setTab] = useState(1);
