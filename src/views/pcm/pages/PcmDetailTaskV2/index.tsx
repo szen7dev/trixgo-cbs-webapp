@@ -9,6 +9,7 @@ import {TaskDetailSignature} from "./components/TaskDetailSignature";
 import {TaskDetailDescription} from "./components/TaskDetailDescription";
 import {TaskDetailSubtask} from "./components/TaskDetailSubtask";
 import {TaskDetailRelatedTask} from "./components/TaskDetailRelatedTask";
+import {TaskDetailComment} from "./components/TaskDetailComment";
 
 const PcmDetailTaskV2:FC = () => {
     return (
@@ -23,6 +24,7 @@ const PcmDetailTaskV2:FC = () => {
                 <TaskDetailDescription/>
                 <TaskDetailSubtask/>
                 <TaskDetailRelatedTask/>
+                <TaskDetailComment/>
             </div>
         </div>
     )

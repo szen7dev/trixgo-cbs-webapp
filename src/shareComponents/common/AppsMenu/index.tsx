@@ -43,7 +43,7 @@ export const AppsMenu: FC = () => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 w-80 bg-primary-light rounded-md shadow-lg ring-1 ring-dark ring-opacity-5 focus:outline-none mt-2 pt-4 pr-4 pl-4 pb-1">
+        <Menu.Items className="absolute right-0 w-80 bg-primary-light rounded-md shadow-lg ring-1 ring-dark ring-opacity-5 focus:outline-none mt-2 pt-4 pr-4 pl-4 pb-1 z-200">
           <div className="flex flex-wrap">
             {listAppOfUser.map((item, index) => (
               <Link key={index} to={AppInfo.get(item?.app?._id)?.route || '/'} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">

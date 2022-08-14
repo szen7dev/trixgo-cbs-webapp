@@ -32,7 +32,7 @@ export const UserMenu: FC = () => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute -left-44 origin-top-right w-80 bg-primary-light rounded-md shadow-lg ring-1 ring-dark ring-opacity-5 focus:outline-none p-2 mt-2">
+        <Menu.Items className="absolute -left-44 origin-top-right w-80 bg-primary-light rounded-md shadow-lg ring-1 ring-dark ring-opacity-5 focus:outline-none p-2 mt-2 z-200">
           <Menu.Item>
             <div className="flex items-center rounded-lg cursor-pointer hover:bg-lighter-gray p-3">
               <div className="relative">

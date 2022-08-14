@@ -1731,3 +1731,6 @@ img {
 .task-description .tox.tox-tinymce {
   @apply rounded-md;
 }
+.task-comment .tox.tox-tinymce {
+  @apply border-0 border-t border-primary-border;
+}
