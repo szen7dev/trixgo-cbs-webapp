@@ -98,6 +98,9 @@ export const SendToChat:FC = () => {
                                         </div>
                                     </div>
                                 </div>
+                                <div className={"flex items-center justify-end"}>
+                                    <button className={"bg-primary rounded px-4 py-2 text-white"}>Xác nhận</button>
+                                </div>
                             </div>
                         </Transition.Child>
                     </div>

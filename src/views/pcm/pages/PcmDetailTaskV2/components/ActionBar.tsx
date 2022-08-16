@@ -30,7 +30,7 @@ export const ActionTaskDetailBar:FC<Props> = ({handleCollapse, collapse}) => {
     return (
         <div className={"action-bar z-10 bg-white flex items-center px-2 py-1 border-b-0.5 border-primary-border sticky top-0"}>
             <div className={"flex items-center flex-1"}>
-                <button className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] bg-cbs-form-input-bg mr-3"}>
+                <button className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mr-3"}>
                     <img src={iconBack} alt={"----"} className={"w-[18px]"}/>
                 </button>
                 <button

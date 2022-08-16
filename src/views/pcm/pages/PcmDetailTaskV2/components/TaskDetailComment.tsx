@@ -347,6 +347,7 @@ export const TaskDetailComment:FC = () => {
                     Xác nhận
                 </button>
             </div>
+            <button className={"bg-cbs-form-input-bg rounded px-4 py-2 rounded text-primary-gray ml-12 mt-2"}>Tạo phản hồi</button>
         </div>
     )
 }
