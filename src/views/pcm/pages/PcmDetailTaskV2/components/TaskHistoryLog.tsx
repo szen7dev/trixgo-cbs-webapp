@@ -140,7 +140,7 @@ export const TaskHistoryLog:FC = () => {
                                         </button>
                                     </div>
                                 </div>
-                                <div className={"max-h-[500px] mt-[15px] no-webkit-scrollbar overflow-auto"}>
+                                <div className={"max-h-[500px] min-h-[320px] mt-[15px] no-webkit-scrollbar overflow-auto"}>
                                     <div className={"flex items-center py-2"}>
                                         <img src={userIcon} alt={"user"} className={"rounded-full overflow-hidden w-[36px] h-[36px] min-w-[36px] min-h-[36px] max-w-[36px] max-h-[36px]"}/>
                                         <div className={"log-content text-primary-gray pl-4"}>

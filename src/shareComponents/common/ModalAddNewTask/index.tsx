@@ -1,7 +1,7 @@
 /**
  * Libraries
  */
-import { FC, UIEvent, useState } from "react";
+import React, {FC, UIEvent, useRef, useState} from "react";
 import { Formik, Form, ErrorMessage } from "formik";
 import { useHistory } from 'react-router-dom';
 import { object, string } from "yup";
@@ -32,6 +32,9 @@ import fakeThumbnail from "assets/images/avatar.jpg";
 // import AttachIcon from "assets/images/icons8-attach-50.png";
 
 import "react-day-picker/lib/style.css";
+import {Editor} from "@tinymce/tinymce-react";
+import {Editor as EditorType} from "tinymce";
+import iconAttach from "assets/images/icons8-attach-48.svg";
 
 interface InitialValues {
   projectID: string,
@@ -51,6 +54,7 @@ interface InitialValues {
 export const ModalAddNewTask: FC = () => {
   const history = useHistory();
   const { closeModal } = useModal();
+  const editorRef = useRef<EditorType>();
 
   const [searchDepartmentValue, setSearchDepartmentValue] = useState("");
   const [searchOtherField, setSearchOtherField]           = useState("");
@@ -204,8 +208,8 @@ export const ModalAddNewTask: FC = () => {
                 <div className={"t-add-new-task-dialog-select px-6"}>
                   <div className={"flex pb-1 pt-2 border-b"}>
                     <div className={"w-1/4 flex items-start"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Dự án (*)</div>
-                      <div className={"w-full flex-1"}>
+                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Dự án (*)</div>
+                      <div className={"flex-1 max-w-4/5 w-4/5"}>
                         <DropdownSearchable
                           onchangeValue={(value: any) => {
                             setCompanyID(value.companyId)
@@ -229,30 +233,17 @@ export const ModalAddNewTask: FC = () => {
                             500)
                           }
                           onScroll={(e) => handleScroll(e, 'project')}
-                          className={"w-full flex-1"}
+                          className={"max-w-full flex-1"}
                           placeholder="Dự án"
                           isMultiple={false}
                           allowClearValueSingleInput={true}
                           showTriangle={false}
-                          maxWidthInput="max-w-none"
+                          maxWidthInput="max-w-full"
                           renderSelectedItem={(item: any) => (
                             <div
-                              style={{ width: 100 }}
-                              className="flex items-center"
+                              className="max-w-full"
                             >
-                              <img alt="Tag" src={TagIcon} className="mr-1" />
-                              <p
-                                style={{
-                                  textOverflow: "ellipsis",
-                                  maxWidth: "100%",
-                                  minWidth: 0,
-                                  whiteSpace: "nowrap",
-                                  overflow: "hidden",
-                                  flex: "1 1 auto",
-                                }}
-                              >
-                                {item.text}
-                              </p>
+                              <p className={"truncate"}>{item.text}</p>
                             </div>
                           )}
                           data={listDepartments.map((department) => ({
@@ -274,132 +265,113 @@ export const ModalAddNewTask: FC = () => {
                       </div>
                     </div>
                     <div className={"w-1/4 flex items-start pl-3"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Nhóm (*)</div>
-                      <DropdownSearchable
-                        disabled={values.projectID.length <= 0}
-                        onchangeValue={(item: any) => {
-                          setFieldValue("groupID", item.value);
-                          setSearchGroupName("");
-                        }}
-                        onClearData={() => setFieldValue("groupID", "")}
-                        onSearchInputChange={debounce(
-                          (value) => setSearchGroupName(value),
-                          500
-                        )}
-                        onScroll={(e) => handleScroll(e, 'group')}
-                        className={"w-full flex-1"}
-                        placeholder="Nhóm"
-                        isMultiple={false}
-                        allowClearValueSingleInput={true}
-                        showTriangle={false}
-                        maxWidthInput="max-w-none"
-                        renderSelectedItem={(item: any) => (
-                          <div
-                            style={{ width: 100 }}
-                            className="flex items-center"
-                          >
-                            <img alt="Tag" src={TagIcon} className="mr-1" />
-                            <p
-                              style={{
-                                textOverflow: "ellipsis",
-                                maxWidth: "100%",
-                                minWidth: 0,
-                                whiteSpace: "nowrap",
-                                overflow: "hidden",
-                                flex: "1 1 auto",
-                              }}
-                            >
-                              {item.text}
-                            </p>
-                          </div>
-                        )}
-                        data={listGroup.map((groupItem) => ({
-                          label: `${groupItem.sign}.${groupItem.name}`,
-                          value: groupItem._id,
-                        }))}
-                        formatItem={{
-                          id: "value",
-                          text: "label",
-                        }}
-                        inlineSearch={true}
-                      />
+                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Nhóm (*)</div>
+                      <div className={"flex-1 max-w-4/5 w-4/5"}>
+                        <DropdownSearchable
+                            disabled={values.projectID.length <= 0}
+                            onchangeValue={(item: any) => {
+                              setFieldValue("groupID", item.value);
+                              setSearchGroupName("");
+                            }}
+                            onClearData={() => setFieldValue("groupID", "")}
+                            onSearchInputChange={debounce(
+                                (value) => setSearchGroupName(value),
+                                500
+                            )}
+                            onScroll={(e) => handleScroll(e, 'group')}
+                            className={"max-w-full flex-1"}
+                            placeholder="Nhóm"
+                            isMultiple={false}
+                            allowClearValueSingleInput={true}
+                            showTriangle={false}
+                            maxWidthInput="max-w-full"
+                            renderSelectedItem={(item: any) => (
+                                <div
+                                    className="max-w-full"
+                                >
+                                  <p className={"truncate"}>{item.text}</p>
+                                </div>
+                            )}
+                            data={listGroup.map((groupItem) => ({
+                              label: `${groupItem.sign}.${groupItem.name}`,
+                              value: groupItem._id,
+                            }))}
+                            formatItem={{
+                              id: "value",
+                              text: "label",
+                            }}
+                            inlineSearch={true}
+                        />
+                      </div>
                     </div>
                     <div className={"w-1/4 flex items-start pl-3"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Phân loại (*)</div>
-                      <DropdownSearchable
-                          onchangeValue={(value: any) =>
-                              setFieldValue("subType", value.id)
-                          }
-                          onClearData={() => setFieldValue("subType", "")}
-                          placeholder={"Phân loại"}
-                          className={"w-full flex-1"}
-                          focusedClass={"border-b border-primary"}
-                          maxWidthInput={"max-w-none"}
-                          allowClearValueSingleInput={true}
-                          showTriangle={false}
-                          renderSelectedItem={(item: any) => (
-                              <div className={"flex items-center"}>
-                                <img alt={"tag icon"} src={TagIcon}/>
-                                <span>{item.text}</span>
-                              </div>
-                          )}
-                          data={PCM_PROPOSAL_TASK}
-                          formatItem={{
-                            id: "value",
-                            text: "text",
-                          }}
-                          inlineSearch={true}
-                      />
+                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Phân loại (*)</div>
+                      <div className={"flex-1 max-w-4/5 w-4/5"}>
+                        <DropdownSearchable
+                            onchangeValue={(value: any) =>
+                                setFieldValue("subType", value.id)
+                            }
+                            onClearData={() => setFieldValue("subType", "")}
+                            placeholder={"Phân loại"}
+                            className={"max-w-full flex-1"}
+                            focusedClass={"border-b border-primary"}
+                            allowClearValueSingleInput={true}
+                            showTriangle={false}
+                            maxWidthInput="max-w-full"
+                            renderSelectedItem={(item: any) => (
+                                <div
+                                    className="max-w-full"
+                                >
+                                  <p className={"truncate"}>{item.text}</p>
+                                </div>
+                            )}
+                            data={PCM_PROPOSAL_TASK}
+                            formatItem={{
+                              id: "value",
+                              text: "text",
+                            }}
+                            inlineSearch={true}
+                        />
+                      </div>
                     </div>
                     <div className={"w-1/4 flex items-start pl-3"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Hợp đồng</div>
-                      <DropdownSearchable
-                        onchangeValue={(item: any) => {
-                          setFieldValue("contractID", item.value);
-                          setSearchContract("");
-                        }}
-                        onClearData={() => setFieldValue("contractID", "")}
-                        onSearchInputChange={debounce(
-                          (value) => setSearchContract(value),
-                          500
-                        )}
-                        onScroll={(e) => handleScroll(e, 'contract')}
-                        className={"w-full flex-1"}
-                        placeholder="Hợp đồng"
-                        isMultiple={false}
-                        allowClearValueSingleInput={true}
-                        showTriangle={false}
-                        maxWidthInput="max-w-none"
-                        renderSelectedItem={(item: any) => (
-                          <div
-                            style={{ width: 100 }}
-                            className="flex items-center"
-                          >
-                            <img alt="Tag" src={TagIcon} className="mr-1" />
-                            <p
-                              style={{
-                                textOverflow: "ellipsis",
-                                maxWidth: "100%",
-                                minWidth: 0,
-                                whiteSpace: "nowrap",
-                                overflow: "hidden",
-                                flex: "1 1 auto",
-                              }}
-                            >
-                              {item.text}
-                            </p>
-                          </div>
-                        )}
-                        data={listContracts.map((contract) => ({
-                          label: `${contract.sign}.${contract.name}`,
-                          value: contract._id,
-                        }))}
-                        formatItem={{
-                          id: "value",
-                          text: "label",
-                        }}
-                        inlineSearch={true}
-                      />
+                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Hợp đồng</div>
+                      <div className={"flex-1 max-w-4/5 w-4/5"}>
+                        <DropdownSearchable
+                            onchangeValue={(item: any) => {
+                              setFieldValue("contractID", item.value);
+                              setSearchContract("");
+                            }}
+                            onClearData={() => setFieldValue("contractID", "")}
+                            onSearchInputChange={debounce(
+                                (value) => setSearchContract(value),
+                                500
+                            )}
+                            onScroll={(e) => handleScroll(e, 'contract')}
+                            className={"max-w-full flex-1"}
+                            placeholder="Hợp đồng"
+                            isMultiple={false}
+                            allowClearValueSingleInput={true}
+                            showTriangle={false}
+                            maxWidthInput="max-w-full"
+                            renderSelectedItem={(item: any) => (
+                                <div
+                                    className="max-w-full"
+                                >
+                                  <p className={"truncate"}>{item.text}</p>
+                                </div>
+                            )}
+                            data={listContracts.map((contract) => ({
+                              label: `${contract.sign}.${contract.name}`,
+                              value: contract._id,
+                            }))}
+                            formatItem={{
+                              id: "value",
+                              text: "label",
+                            }}
+                            inlineSearch={true}
+                        />
+                      </div>
                     </div>
                   </div>
                   <div className={"flex pb-1 pt-2 border-b"}>
@@ -609,11 +581,70 @@ export const ModalAddNewTask: FC = () => {
                 </div>
 
                 <div className={"px-6 my-3"}>
-                  <textarea
-                    onChange={(event) => setFieldValue("description", event.target.value)}
-                    className="t-add-new-task-dialog-content outline-none resize-none border-0 w-full"
-                    placeholder="Nhập nội dung..."
-                  ></textarea>
+                  <Editor
+                      onEditorChange={(value) => setFieldValue("description", value)}
+                      // onActivate={}
+                      onInit={(evt, editor) => {
+                        editorRef.current = editor;
+                      }}
+                      // disabled={user?.email !== 'contact@trixgo.com'}
+                      apiKey={process.env.REACT_APP_TINYMCE_API_KEY}
+                      // onSaveContent={handleSave}
+                      init={{
+                        height: "350px",
+                        menu: {
+                          file: { title: "File", items: "newdocument restoredraft | preview | print | basicitem " },
+                          edit: { title: "Edit", items: "undo redo | cut copy paste | selectall | searchreplace" },
+                          view: { title: "View", items: "code | visualaid visualchars visualblocks | spellchecker | preview fullscreen" },
+                          insert: {
+                            title: "Insert",
+                            items: `image link media template codesample inserttable |
+                                                    charmap emoticons hr |
+                                                    pagebreak nonbreaking anchor toc |
+                                                    insertdatetime`,
+                          },
+                          format: {
+                            title: "Format",
+                            items:
+                                "bold italic underline strikethrough superscript subscript codeformat | formats blockformats fontformats fontsizes align lineheight | forecolor backcolor | removeformat",
+                          },
+                          tools: { title: "Tools", items: "spellchecker spellcheckerlanguage | code wordcount" },
+                          table: { title: "Table", items: "inserttable | cell row column | tableprops deletetable" },
+                          help: { title: "Help", items: "help" },
+                        },
+                        plugins: [
+                          "advlist autolink lists link image charmap print preview anchor",
+                          "searchreplace code",
+                          "insertdatetime media table paste code help wordcount",
+                        ],
+                        fullpage_default_title: "My default page title",
+
+                        // images_upload_url: "/api/upload/image",
+                        // file_picker_types: "image",
+                        // images_upload_handler: imagesUploadHandler,
+                        // menubar: user?.email === 'contact@trixgo.com',
+                        // toolbar: user?.email === 'contact@trixgo.com' ?
+                        //     "undo redo | formatselect | " +
+                        //     "bold italic backcolor | alignleft aligncenter " +
+                        //     "alignright alignjustify | bullist numlist outdent indent | " +
+                        //     "removeformat | help | image" : false,
+                        // content_style: "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                        // content_css: "document",
+                        // save_enablewhendirty: true,
+                        setup(editor) {
+                          editor.on("Paste input Undo Redo", () => {
+                            editor.save();
+                          });
+                          editor.ui.registry.addMenuItem("basicitem", {
+                            text: "Save",
+                            onAction: function (e) {
+                              editor.save({ immediate: true });
+                            },
+                            icon: "save",
+                          });
+                        },
+                      }}
+                  />
                   <ErrorMessage
                     name="description"
                     component="div"
@@ -621,33 +652,31 @@ export const ModalAddNewTask: FC = () => {
                   />
                 </div>
 
-                {/* <div className="t-add-new-task-dialog-attachment px-6 mb-3">
-                  <div className="t-add-new-task-dialog-attachment-item px-3 py-2 mb-3 flex items-center">
-                    <p className="t-add-new-task-dialog-attachment-title truncate mr-2" title="BaoCaoDanhGiaTacDongNgoaiCanhLenThietKeMau.png">BaoCaoDanhGiaTacDongNgoaiCanhLenThietKeMau.png</p>
-                    <span className="mr-2">(3.908K)</span>
-                    <div className="t-messageHome-training-progress-bar w-1/3 mr-2">
-                      <div style={{ width: "10%" }}></div>
+               <div className="px-6 mb-3">
+                  <div className="bg-cbs-file-upload-bg max-w-[600px] px-2 py-1 mb-3 flex items-center">
+                    <p className="truncate mr-2 text-black font-bold" title="BaoCaoDanhGiaTacDongNgoaiCanhLenThietKeMau.png">BaoCaoDanhGiaTacDongNgoaiCanhLenThietKeMau.png</p>
+                    <span className="mr-2 text-primary-gray font-bold">(3.908K)</span>
+                    <div className="w-1/5 mr-2 border border-primary bg-white h-[12px] relative">
+                      <div style={{ width: "10%" }} className={"bg-primary absolute top-0 left-0 h-full"}></div>
                     </div>
                     <button className="ml-auto"><Close /></button>
                   </div>
-                  <div className="t-add-new-task-dialog-attachment-item px-3 py-2 mb-3 flex items-center">
-                    <p className="t-add-new-task-dialog-attachment-title truncate mr-2" title="BaoCaoDanhGiaTacDongNgoaiCanhLenThietKeMau.png">BaoCaoDanhGiaTacDongNgoaiCanhLenThietKeMau.png</p>
-                    <span className="mr-2">(3.908K)</span>
-                    <button className="ml-auto"><Close /></button>
-                  </div>
-                  <div className="t-add-new-task-dialog-attachment-item px-3 py-2 mb-3 flex items-center">
-                    <p className="t-add-new-task-dialog-attachment-title truncate mr-2" title="BaoCaoDanhGiaTacDongNgoaiCanhLenThietKeMau.png">BaoCaoDanhGiaTacDongNgoaiCanhLenThietKeMau.png</p>
-                    <span className="mr-2">(3.908K)</span>
-                    <button className="ml-auto"><Close /></button>
-                  </div>
-                </div> */}
+
+                 <div className="bg-cbs-file-upload-bg max-w-[600px] px-2 py-1 mb-3 flex items-center">
+                   <p className="truncate mr-2 text-primary font-bold" title="BaoCaoDanhGiaTacDongNgoaiCanhLenThietKeMau.png">BaoCaoDanhGiaTacDongNgoaiCanhLenThietKeMau.png</p>
+                   <span className="mr-2 text-primary-gray font-bold">(3.908K)</span>
+                   <div className="w-1/5 h-[12px]">
+                   </div>
+                   <button className="ml-auto"><Close /></button>
+                 </div>
+                </div>
 
                 <div className={"flex items-center border-t py-3 px-6"}>
-                  {/* <label>
+                  <label>
                     <img
-                      src={AttachIcon}
+                      src={iconAttach}
                       alt="Icon attach"
-                      className="h-6 w-6 transform -rotate-45"
+                      className="h-6 w-6"
                     />
                     <input
                       type="file"
@@ -657,11 +686,11 @@ export const ModalAddNewTask: FC = () => {
                       accept="image/*"
                       multiple
                     />
-                  </label> */}
-                  {/* <div className={"flex items-center ml-4"}>
+                  </label>
+                  <div className={"flex items-center ml-4"}>
                     <input type="checkbox" id="email-notice" className={"form-check-input mt-0"}/>
                     <label htmlFor="email-notice" className={"text-left ml-2 whitespace-nowrap"}>Thông báo email</label>
-                  </div> */}
+                  </div>
                   <button type="submit" className="btn btn-primary ml-auto">Xác nhận</button>
                 </div>
               </Form>

@@ -122,6 +122,7 @@ module.exports = {
                 "cbs-green-dark": "#008000",
                 "cbs-green-medium": "#198038",
                 "cbs-inline-badge-blue": "#00AAFF",
+                "cbs-file-upload-bg": "#F5F5F5",
             },
             fontSize: {
                 "[13px]": "13px",
