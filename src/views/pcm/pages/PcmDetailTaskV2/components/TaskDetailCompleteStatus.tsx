@@ -3,7 +3,7 @@ import iconTaskCompleted from "assets/images/icons8-task-completed-48.svg";
 
 export const TaskDetailCompleteStatus:FC = () => {
     return (
-        <div className={"task-complete flex items-center mt-8"}>
+        <div className={"task-complete flex items-center mt-5"}>
                     <span className={"mr-4"}>
                         <img src={iconTaskCompleted} alt={'-----'}/>
                     </span>

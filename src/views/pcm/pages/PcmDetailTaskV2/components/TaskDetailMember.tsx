@@ -4,7 +4,7 @@ import taskUserAvt from "assets/images/task-user.svg";
 
 export const TaskDetailMember:FC = () => {
     return (
-        <div className={"task-member flex items-start mt-8"}>
+        <div className={"task-member flex items-start mt-5"}>
                     <span className={"mr-4"}>
                         <img src={iconAddGroup} alt={'-----'}/>
                     </span>
@@ -25,7 +25,7 @@ export const TaskDetailMember:FC = () => {
                             <p className={"text-primary-gray text-xs"}>Người thực hiện</p>
                         </div>
                     </div>
-                    <div className={"flex items-center flex-1 justify-end"}>
+                    <div className={"flex items-center flex-1 justify-start"}>
                         <img alt={"----"} src={taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1"}/>
                         <img alt={"----"} src={taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1"}/>
                         <img alt={"----"} src={taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1"}/>

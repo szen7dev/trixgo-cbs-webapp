@@ -1092,9 +1092,24 @@ button {
 .form-check-input:checked[type="checkbox"] {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e");
 }
+.form-check-input:checked[type="checkbox"].line {
+  background-image: none;
+}
+.form-check-input:checked[type="checkbox"].line::after {
+  content: "";
+  position: absolute;
+  width: 80%;
+  height: 2px;
+  background: white;
+  top: calc(50% - 1px);
+  left: 10%
+}
 .form-check-input:checked {
   background-color: #0d6efd;
   border-color: #0d6efd;
+}
+.form-check-input:checked.line {
+  @apply bg-cbs-indeterminate border-cbs-indeterminate;
 }
 .form-check-input[type="checkbox"] {
   /*border-radius: 0.25em;*/
@@ -1118,6 +1133,7 @@ button {
   appearance: none;
   -webkit-print-color-adjust: exact;
   color-adjust: exact;
+  position: relative;
 }
 .form-check-input.border-white {
   border-color: white;

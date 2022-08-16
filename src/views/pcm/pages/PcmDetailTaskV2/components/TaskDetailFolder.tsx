@@ -8,7 +8,7 @@ export const TaskDetailFolder:FC = () => {
     const folders = ["CHG.THT","Tư vấn thiết kế 112","Hồ sơ thanh toán"];
 
     return (
-        <div className={"task-folder flex items-center text-primary-gray mt-8"}>
+        <div className={"task-folder flex items-center text-primary-gray mt-5"}>
             <div className={"flex items-center flex-1"}>
                 <span className={"mr-4"}>
                     <img src={iconFolder} alt={'-----'}/>

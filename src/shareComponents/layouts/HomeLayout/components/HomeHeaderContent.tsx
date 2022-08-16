@@ -24,7 +24,7 @@ export const HomeHeaderContent:FC = () => {
     ]
     return (
         <div className={"flex items-center justify-between pr-20"}>
-            <div className={"flex-1 relative"}>
+            <div className={"flex-1 relative max-w-1/2"}>
                 <div className={"absolute left-0 flex items-center px-4 justify-center h-full"}>
                     <img src={searchIcon} alt={"search icon"}/>
                 </div>

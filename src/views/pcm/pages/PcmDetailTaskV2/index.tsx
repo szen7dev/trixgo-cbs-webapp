@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import React, {FC, useState} from "react";
 
 import {ActionTaskDetailBar} from "./components/ActionBar";
 import {TaskDetailTitle} from "./components/TaskTitle";
@@ -12,18 +12,25 @@ import {TaskDetailRelatedTask} from "./components/TaskDetailRelatedTask";
 import {TaskDetailComment} from "./components/TaskDetailComment";
 
 const PcmDetailTaskV2:FC = () => {
+    const [collapse, setCollapse] = useState(false);
+
+    const handleCollapse = () => {
+        setCollapse(!collapse);
+    }
     return (
         <div className={"task-detail"}>
-            <ActionTaskDetailBar/>
+            <ActionTaskDetailBar collapse={collapse} handleCollapse={handleCollapse}/>
             <div className={"task-content p-4"}>
-                <TaskDetailTitle/>
-                <TaskDetailFolder/>
-                <TaskDetailCompleteStatus/>
-                <TaskDetailMember/>
-                <TaskDetailSignature/>
-                <TaskDetailDescription/>
-                <TaskDetailSubtask/>
-                <TaskDetailRelatedTask/>
+                <div className={collapse?"hidden":"block"}>
+                    <TaskDetailTitle/>
+                    <TaskDetailFolder/>
+                    <TaskDetailCompleteStatus/>
+                    <TaskDetailMember/>
+                    <TaskDetailSignature/>
+                    <TaskDetailDescription/>
+                    <TaskDetailSubtask/>
+                    <TaskDetailRelatedTask/>
+                </div>
                 <TaskDetailComment/>
             </div>
         </div>

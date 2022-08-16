@@ -5,7 +5,7 @@ import demoSignature from "assets/images/demo-signature.png";
 
 export const TaskDetailSignature:FC = () => {
     return (
-        <div className={"task-signature flex items-start mt-8"}>
+        <div className={"task-signature flex items-start mt-5"}>
                     <span className={"mr-4"}>
                         <img src={iconAssessment} alt={'-----'}/>
                     </span>

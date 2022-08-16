@@ -9,7 +9,7 @@ export const TaskDetailRelatedTask:FC = () => {
     const [showOption, setShowOption] = useState(false);
 
     return (
-        <div className={"subtask mt-8 w-9/12"}>
+        <div className={"subtask mt-5 w-9/12"}>
             <div className={"flex items-center"}>
                 <div className={"flex items-center"}>
                     <img src={iconMessageLink} alt={'-----'} className={"mr-4"}/>

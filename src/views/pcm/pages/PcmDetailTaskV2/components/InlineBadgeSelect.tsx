@@ -35,18 +35,18 @@ const InlineBadgeSelect:FC<Props> = ({defaultValue, options, placeholder, onValu
             <button onClick={() => setShowOption(!showOption)} className={className}>{placeholder}: {itemSelected()?.text}</button>
             {
                 showOption &&
-                <div className={"absolute z-20 bg-white w-[335px] shadow-lg rounded-md p-4 text-primary-gray"}>
-                    <div className={"flex items-center py-2 border-b-0.5 border-primary-border"}>
+                <div className={"absolute z-20 bg-white w-[335px] shadow-lg rounded-md text-primary-gray"}>
+                    <div className={"flex items-center mx-4 py-2 border-b-0.5 border-primary-border"}>
                         <div className={"flex-1"}>{placeholder}</div>
                         <button onClick={() => setShowOption(false)}>
                             <Close/>
                         </button>
                     </div>
-                    <div className={"options"}>
+                    <div className={"options mb-4"}>
                         {
                             options.map(option => (
                                 <button
-                                    className={"mt-4 w-full text-left hover:bg-cbs-table-header " + (value === option.id ? "bg-cbs-table-header" : "")}
+                                    className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header " + (value === option.id ? "bg-cbs-table-header" : "")}
                                     onClick={() => handleSelectOption(option.id)}
                                     key={option.id}>
                                     {option.text}

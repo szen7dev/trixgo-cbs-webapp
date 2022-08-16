@@ -114,13 +114,13 @@ export const CreateNewSubTask:FC = () => {
                                     <DayPickerInput
                                         value={values.expiredTime??""}
                                         classNames={{
-                                            container: "w-full relative h-full",
+                                            container: "relative h-full",
                                             overlay: "w-full",
                                             overlayWrapper: "absolute bg-white w-full right-0 z-200"
                                         }}
                                         onDayChange={(day) => setFieldValue("expiredTime", moment(day).format("DD/MM/YYYY"))}
                                         inputProps={{
-                                            className: "outline-none h-full",
+                                            className: "outline-none h-full max-w-full",
                                             placeholder: "Thời hạn",
                                             readOnly: true,
                                         }}
