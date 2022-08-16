@@ -49,13 +49,13 @@ export const LeftNavigate:FC<Props> = ({handleMenuEvent}) => {
             <Link to={`/`} className={"flex flex-col items-center mb-5"}>
                 <div className={"px-4 py-2 rounded-full relative " + ((pathname === "/" || pathname.includes("/pcm")) ? "bg-cbs-hightlight-right-navigate" : "")}>
                     <img src={mailIcon} alt={"Chủ đề"}/>
-                    {
-                        totalNoti > 0 &&
+                    {/*{*/}
+                    {/*    totalNoti > 0 &&*/}
                         <span
                             className={"absolute -top-1 right-1 min-w-5 w-5 h-5 text-xs inline-block border-2 text-center border-white rounded-full bg-negative text-white"}>
-                            {totalNoti}
+                            99
                         </span>
-                    }
+                    {/*}*/}
                 </div>
                 <span className={"text-primary-gray mt-1"}>Chủ đề</span>
             </Link>
