@@ -22,9 +22,9 @@ export const SubtaskItem:FC = () => {
                     <img src={iconClock} alt={"----"} className={"mr-2"}/>
                     <span>17/2/22</span>
                 </div>
-                <img alt={"----"} src={taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mr-2"}/>
+                <img alt={"----"} src={taskUserAvt} className={"rounded-full overflow-hidden h-[30px] w-[30px] min-h-[30px] min-w-[30px] max-h-[30px] max-w-[30px] mr-2"}/>
                 <div ref={wrapperClass} className={"relative inline-block"}>
-                    <button onClick={() => setShowOption(!showOption)} className={"rounded w-[24px] h-[24px] bg-cbs-form-input-bg flex items-center justify-center"}>
+                    <button onClick={() => setShowOption(!showOption)} className={"rounded w-[24px] h-[24px] min-w-[24px] min-h-[24px] max-w-[24px] max-h-[24px] bg-cbs-form-input-bg flex items-center justify-center"}>
                         <img src={iconHorizontalDots} alt={"----"} className={"w-[10px]"}/>
                     </button>
                     {
