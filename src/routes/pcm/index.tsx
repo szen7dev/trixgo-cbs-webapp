@@ -70,9 +70,9 @@ import ProjectAdminAuthorTab from "views/ppt/pages/ProjectAdminPage/pages/Projec
 import ProjectAdminProjectDetail from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminProjectDetail";
 import ProjectAdminProjectTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminProjectTab";
 import ProjectAdminPositionTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminPositionTab";
-import PcmDetailTaskV2 from "../../views/pcm/pages/PcmDetailTaskV2";
+const PcmDetailTaskV2             = lazy(() => import('views/pcm/pages/PcmDetailTaskV2'));
 
-const PcmHomePage                 = lazy(() => import('views/pcm/pages/PcmHome'));
+const PcmHomePage                 = lazy(() => import('views/pcm/pages/PcmHomeV2'));
 const PcmDetailTaskPage           = lazy(() => import('views/pcm/pages/PcmDetailTask'));
 const PcmGroupPage                = lazy(() => import('views/pcm/pages/PcmGroup'));
 const PcmTaskGroupPage            = lazy(() => import('views/pcm/pages/PcmTaskGroup'));
@@ -392,7 +392,7 @@ const PCMRouter: FC = () => {
                 <Route exact path="/pcm/detail/:id/print/2" component={PcmPrintTaskTypeTwoPage} />
                 <Route exact path="/pcm/detail/:id/print/3" component={PcmPrintTaskTypeThreePage} />
 
-                <Route exact path="/pcm/home" component={PcmHomePage} />
+                <Route exact path="/pcm/home" component={() => <PcmHomePage/>} />
                 <Route exact path="/pcm/assign" component={() => <PcmHomePage type={2} />} />
                 <Route exact path="/pcm/bookmark" component={() => <PcmHomePage type={3} />} />
                 <Route exact path="/pcm/related" component={() => <PcmHomePage type={5} />} />

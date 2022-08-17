@@ -14,8 +14,8 @@ import CollapseShow from "assets/images/CBS-Collapse-Show.svg";
 import CollapseHide from "assets/images/CBS-Collapse-Hide.svg";
 
 type Props = {
-    handleCollapse: () => void
-    collapse: boolean
+    handleCollapse?: () => void
+    collapse?: boolean
 }
 export const ActionTaskDetailBar:FC<Props> = ({handleCollapse, collapse}) => {
     const [activeCopyTextTooltip, setActiveCopyTextTooltip] = useState(false);
@@ -56,7 +56,9 @@ export const ActionTaskDetailBar:FC<Props> = ({handleCollapse, collapse}) => {
                 </button>
             </div>
 
-            <button onClick={() => handleCollapse()} className={"flex items-center justify-center rounded bg-cbs-form-input-bg h-[36px] py-1 px-2 mx-3"}>
+            <button onClick={() => {
+                handleCollapse&&handleCollapse()
+            }} className={"flex items-center justify-center rounded bg-cbs-form-input-bg h-[36px] py-1 px-2 mx-3"}>
                 <img src={CollapseShow} alt={"----"} className={"object-contain max-h-full " + (!collapse ? "hidden":"block")}/>
                 <img src={CollapseHide} alt={"----"} className={"object-contain max-h-full " + (collapse ? "hidden":"block")}/>
                 <div>

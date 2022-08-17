@@ -1750,3 +1750,9 @@ img {
 .task-comment .tox.tox-tinymce {
   @apply border-0 border-t border-primary-border;
 }
+.table-task-sheet th, td {
+  @apply border-0.5 border-primary-border px-4 py-2 align-middle !important;
+}
+.table-task-sheet th {
+  @apply text-primary-gray font-normal text-left;
+}
