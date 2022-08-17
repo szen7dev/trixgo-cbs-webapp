@@ -72,6 +72,7 @@ import ProjectAdminProjectTab from "views/ppt/pages/ProjectAdminPage/pages/Proje
 import ProjectAdminPositionTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminPositionTab";
 const PcmDetailTaskV2             = lazy(() => import('views/pcm/pages/PcmDetailTaskV2'));
 
+// const PcmHomePage                 = lazy(() => import('views/pcm/pages/PcmHome'));
 const PcmHomePage                 = lazy(() => import('views/pcm/pages/PcmHomeV2'));
 const PcmDetailTaskPage           = lazy(() => import('views/pcm/pages/PcmDetailTask'));
 const PcmGroupPage                = lazy(() => import('views/pcm/pages/PcmGroup'));
