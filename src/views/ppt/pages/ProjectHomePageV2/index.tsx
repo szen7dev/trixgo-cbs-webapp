@@ -40,11 +40,11 @@ const ProjectHomePageV2: FC = () => {
 
 			<p className={"font-bold text-primary-gray mt-6"}>Hình ảnh gần đây</p>
 			<div className={"swipe-image flex items-center w-full mt-4"}>
-				<div className={"relative w-1/6 rounded border-0.5 border-primary-border overflow-hidden"}>
+				<div className={"relative max-w-1/6 rounded border-0.5 border-primary-border overflow-hidden"}>
 					<img className={"object-cover w-full max-h-[210px] h-[210px] min-h-[210px]"} src={projectHomeImage} alt={"-----"}/>
 					<div className={"absolute bottom-0 bg-cbs-gray py-1 px-2 flex items-start max-w-full"}>
 						<img src={userAvt} alt={"---"} className={"w-[28px] h-[28px] min-w-[28px] min-h-[28px] max-w-[28px] max-h-[28px] rounded-full overflow-hidden"}/>
-						<div className={"ml-2"}>
+						<div className={"ml-2 w-10/12"}>
 							<p className={"truncate"}>Vũ Thanh Duy-CPMI</p>
 							<p className={"truncate text-primary-gray text-xs"}>CHT.THT.Xây dựng trường trung học...</p>
 							<p className={"truncate text-primary-gray text-xs"}>24/3/2021 16 giờ trước</p>
