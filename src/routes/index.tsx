@@ -22,7 +22,7 @@ const BiddingRouter = lazy(() => import("./bidding"));
 const CmcsRouter = lazy(() => import("./cmcs"));
 const DatahubRouter = lazy(() => import("./datahub"));
 const DocumentRouter = lazy(() => import("./document"));
-const PPTRouter = lazy(() => import("./ppt"));
+// const PPTRouter = lazy(() => import("./ppt"));
 const FinancialRouter = lazy(() => import("./financial"));
 const HumanRouter = lazy(() => import("./human"));
 const MarketRouter = lazy(() => import("./market"));
@@ -31,6 +31,7 @@ const MessagesRouter = lazy(() => import("./messages"));
 const OperationRouter = lazy(() => import("./operation"));
 const OwnerRouter = lazy(() => import('./owner'));
 const PcmRouter = lazy(() => import('./pcm'));
+const PmRouter = lazy(() => import('./pm'));
 const WorkshopRouter = lazy(() => import('./workshop'));
 const PersonalRouter = lazy(() => import("./personal"));
 const QrcodeRouter = lazy(() => import("./qrcode"));
@@ -124,11 +125,10 @@ const Routes: FC = () => {
                                     <PcmRouter />
                                 </Route>
 
-                                {/* =====PPT===== */}
-                                <Route
-                                    path='/ppt'
-                                    component={PPTRouter}
-                                />
+                                {/* =====PM===== */}
+                                <Route path="/pm">
+                                    <PmRouter />
+                                </Route>
 
                                 {/* =====FINANCIAL===== */}
                                 <Route path="/financial">
