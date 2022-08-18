@@ -333,7 +333,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1 }) => {
                                 <input className="form-check-input" type="checkbox" value="" id="check"/>
                             </div>
                         </th>
-                        <th className={"w-3/12"}>
+                        <th className={"w-4/12"}>
                             Nội dung công việc
                         </th>
                         <th className={"w-1/12"}>
@@ -342,7 +342,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1 }) => {
                         <th className={"w-2/12"}>
                             Người thực hiện
                         </th>
-                        <th className={"w-2/12"}>
+                        <th className={"w-1/12"}>
                             Tiến trình
                         </th>
                         <th className={""}>
@@ -370,7 +370,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1 }) => {
                                     </td>
                                     <td>
                                         <div className={"flex items-center"}>
-                                            <img src={userAvt} alt={"----"} className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px] max-w-[24px] max-h-[24px] rounded-full overflow-hidden"}/>
+                                            <img src={`${process.env.REACT_APP_URL_S3_USER}/${item.assignee.image}`} alt={"----"} className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px] max-w-[24px] max-h-[24px] rounded-full overflow-hidden"}/>
                                             <div className={"ml-2"}>{item.assignee.fullname ?? item.assignee.fullname}</div>
                                         </div>
                                     </td>
