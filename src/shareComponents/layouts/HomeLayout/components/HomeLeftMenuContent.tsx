@@ -20,7 +20,7 @@ export const HomeLeftMenuContent:FC = () => {
         route: string
     }[] = [
         {
-            label: "Chủ đề đến",
+            label: "Chủ đề",
             icon: sendAndReceiveIcon,
             count: 2,
             route: '/'
@@ -28,19 +28,19 @@ export const HomeLeftMenuContent:FC = () => {
         {
             label: "Việc của tôi",
             icon: mailOutLineIcon,
-            count: 5,
+            count: 0,
             route: '/pcm/home'
         },
         {
             label: "Việc giao người khác",
             icon: uploadIcon,
-            count: 12,
+            count: 0,
             route: '/pcm/assign'
         },
         {
             label: "Việc quan tâm",
             icon: starIcon,
-            count: 2,
+            count: 0,
             route: '/pcm/bookmark'
         },
         {
