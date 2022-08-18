@@ -1,5 +1,9 @@
 import React, { FC } from "react";
 import {DropdownSearchable, DropdownSearchableV2, TimeRangeDropdown} from "shareComponents/common";
+import moment from "moment";
+import parse from "html-react-parser";
+import { Link } from "react-router-dom";
+
 import userIcon from "assets/images/icon-user-avatar.svg";
 import maleUserIcon from "assets/images/icons8-male-user-64.svg";
 import TriangleDown from "assets/icons/TriangleDown";
@@ -12,11 +16,40 @@ import sendMailIcon from "assets/images/icons8-send-email-96.svg";
 import nextIcon from "assets/images/icons-arrow-next.svg";
 import userAvt from "assets/images/task-user.svg";
 
+import { useTask } from "services/hooks/useTask";
+
 type Props = {
     type?: number
 }
 
 const PcmHomeV2: FC<Props> = ({ type = 1 }) => {
+
+    // Việc quá hạn
+    const {
+        listTasks: tasksOutDate,
+        totalRecord: outDateRecords,
+        nextPageListTask: nextPageTaskOutDate,
+    } = useTask({
+        params: {
+            type, typeStatus: "1", statusNe: "3"
+        },
+        isFetch: true
+    });
+
+    // console.log(tasksOutDate)
+
+    const subContentHtml = (html?: string) => {
+        const removeHtmlTag = parse(
+          (html || "").replace(/<[^>]*>?/gm, " ")
+        ).toString();
+    
+        const result =
+          removeHtmlTag.length > 100
+            ? `${removeHtmlTag.slice(0, 100)}...`
+            : removeHtmlTag;
+        return result;
+      };
+
     return (
         <div className={"task-home"}>
             <div className={"filter-bar flex flex-wrap px-4 py-2"}>
@@ -250,6 +283,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1 }) => {
                     Lưu kết quả
                 </button>
             </div>
+
             <div className={"header-table flex px-4 w-full top-0 bg-white pb-4 flex-wrap"}>
                 <div className={"border-0.5 border-primary-border flex items-center"}>
                     <button className={"px-4 py-2 bg-cbs-soft-blue border-r-0.5 border-primary-border text-primary"}>
@@ -292,6 +326,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1 }) => {
 
             <div className={"table-task-sheet"}>
                 <table className={"w-full table-fixed tasks border-collapse"}>
+
                     <thead className={"bg-cbs-table-header sticky top-0 z-10"}>
                         <th className={"w-[46px]"}>
                             <div className={"flex items-center justify-center py-3"}>
@@ -301,7 +336,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1 }) => {
                         <th className={"w-3/12"}>
                             Nội dung công việc
                         </th>
-                        <th className={""}>
+                        <th className={"w-1/12"}>
                             Thời hạn
                         </th>
                         <th className={"w-2/12"}>
@@ -310,12 +345,50 @@ const PcmHomeV2: FC<Props> = ({ type = 1 }) => {
                         <th className={"w-2/12"}>
                             Tiến trình
                         </th>
-                        <th className={"w-3/12"}>
+                        <th className={""}>
                             Mô tả
                         </th>
                     </thead>
+
                     <tbody>
-                        <tr>
+                        {tasksOutDate?.map((item: any) => {
+                            return (
+
+                                <tr key={item._id}>
+                                    <td>
+                                        <div className={"flex items-center justify-center py-3"}>
+                                            <input className="form-check-input" type="checkbox" value="" id="check"/>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <Link to={"/pcm/detail/" + (item._id)}>
+                                            {item.project.sign}.{item.name}
+                                        </Link>
+                                    </td>
+                                    <td>
+                                        {moment(item.actualFinishTime).format("DD/MM/YYYY")}
+                                    </td>
+                                    <td>
+                                        <div className={"flex items-center"}>
+                                            <img src={userAvt} alt={"----"} className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px] max-w-[24px] max-h-[24px] rounded-full overflow-hidden"}/>
+                                            <div className={"ml-2"}>{item.assignee.fullname ?? item.assignee.fullname}</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p className={"mb-1 text-right text-secondary-gray"}>{item.percentage}%</p>
+                                        <div className={"relative w-full h-[4px] rounded-full border-0.5 border-primary-border bg-cbs-task-assign-progress-bg"}>
+                                            <div className={"absolute h-full left-0 top-0 bg-cbs-schedule-expired"} style={{width: `${item.percentage}%`}}></div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {subContentHtml(item.description)}
+                                    </td>
+                                </tr>
+                            )
+                        })
+                        }
+                        
+                        {/* <tr>
                             <td>
                                 <div className={"flex items-center justify-center py-3"}>
                                     <input className="form-check-input" type="checkbox" value="" id="check"/>
@@ -342,315 +415,8 @@ const PcmHomeV2: FC<Props> = ({ type = 1 }) => {
                             <td>
                                 Gửi Hiệp, Như đã trao đổi qua điện thoại, anh Kiên/ Tùng-Bạn anh Dương số điện thoại 0989771930 có t..
                             </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div className={"flex items-center justify-center py-3"}>
-                                    <input className="form-check-input" type="checkbox" value="" id="check"/>
-                                </div>
-                            </td>
-                            <td>
-                                PGI.BLD.Lập, phê duyệt thực hiện quy chế kế tài chính của PGI
-                            </td>
-                            <td>
-                                05/11/2021
-                            </td>
-                            <td>
-                                <div className={"flex items-center"}>
-                                    <img src={userAvt} alt={"----"} className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px] max-w-[24px] max-h-[24px] rounded-full overflow-hidden"}/>
-                                    <div className={"ml-2"}>Nguyễn Phan Thanh Hương-CPMI</div>
-                                </div>
-                            </td>
-                            <td>
-                                <p className={"mb-1 text-right text-secondary-gray"}>30%</p>
-                                <div className={"relative w-full h-[4px] rounded-full border-0.5 border-primary-border bg-cbs-task-assign-progress-bg"}>
-                                    <div className={"absolute h-full left-0 top-0 bg-cbs-schedule-expired"} style={{width: "30%"}}></div>
-                                </div>
-                            </td>
-                            <td>
-                                Gửi Hiệp, Như đã trao đổi qua điện thoại, anh Kiên/ Tùng-Bạn anh Dương số điện thoại 0989771930 có t..
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div className={"flex items-center justify-center py-3"}>
-                                    <input className="form-check-input" type="checkbox" value="" id="check"/>
-                                </div>
-                            </td>
-                            <td>
-                                PGI.BLD.Lập, phê duyệt thực hiện quy chế kế tài chính của PGI
-                            </td>
-                            <td>
-                                05/11/2021
-                            </td>
-                            <td>
-                                <div className={"flex items-center"}>
-                                    <img src={userAvt} alt={"----"} className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px] max-w-[24px] max-h-[24px] rounded-full overflow-hidden"}/>
-                                    <div className={"ml-2"}>Nguyễn Phan Thanh Hương-CPMI</div>
-                                </div>
-                            </td>
-                            <td>
-                                <p className={"mb-1 text-right text-secondary-gray"}>30%</p>
-                                <div className={"relative w-full h-[4px] rounded-full border-0.5 border-primary-border bg-cbs-task-assign-progress-bg"}>
-                                    <div className={"absolute h-full left-0 top-0 bg-cbs-schedule-expired"} style={{width: "30%"}}></div>
-                                </div>
-                            </td>
-                            <td>
-                                Gửi Hiệp, Như đã trao đổi qua điện thoại, anh Kiên/ Tùng-Bạn anh Dương số điện thoại 0989771930 có t..
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div className={"flex items-center justify-center py-3"}>
-                                    <input className="form-check-input" type="checkbox" value="" id="check"/>
-                                </div>
-                            </td>
-                            <td>
-                                PGI.BLD.Lập, phê duyệt thực hiện quy chế kế tài chính của PGI
-                            </td>
-                            <td>
-                                05/11/2021
-                            </td>
-                            <td>
-                                <div className={"flex items-center"}>
-                                    <img src={userAvt} alt={"----"} className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px] max-w-[24px] max-h-[24px] rounded-full overflow-hidden"}/>
-                                    <div className={"ml-2"}>Nguyễn Phan Thanh Hương-CPMI</div>
-                                </div>
-                            </td>
-                            <td>
-                                <p className={"mb-1 text-right text-secondary-gray"}>30%</p>
-                                <div className={"relative w-full h-[4px] rounded-full border-0.5 border-primary-border bg-cbs-task-assign-progress-bg"}>
-                                    <div className={"absolute h-full left-0 top-0 bg-cbs-schedule-expired"} style={{width: "30%"}}></div>
-                                </div>
-                            </td>
-                            <td>
-                                Gửi Hiệp, Như đã trao đổi qua điện thoại, anh Kiên/ Tùng-Bạn anh Dương số điện thoại 0989771930 có t..
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div className={"flex items-center justify-center py-3"}>
-                                    <input className="form-check-input" type="checkbox" value="" id="check"/>
-                                </div>
-                            </td>
-                            <td>
-                                PGI.BLD.Lập, phê duyệt thực hiện quy chế kế tài chính của PGI
-                            </td>
-                            <td>
-                                05/11/2021
-                            </td>
-                            <td>
-                                <div className={"flex items-center"}>
-                                    <img src={userAvt} alt={"----"} className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px] max-w-[24px] max-h-[24px] rounded-full overflow-hidden"}/>
-                                    <div className={"ml-2"}>Nguyễn Phan Thanh Hương-CPMI</div>
-                                </div>
-                            </td>
-                            <td>
-                                <p className={"mb-1 text-right text-secondary-gray"}>30%</p>
-                                <div className={"relative w-full h-[4px] rounded-full border-0.5 border-primary-border bg-cbs-task-assign-progress-bg"}>
-                                    <div className={"absolute h-full left-0 top-0 bg-cbs-schedule-expired"} style={{width: "30%"}}></div>
-                                </div>
-                            </td>
-                            <td>
-                                Gửi Hiệp, Như đã trao đổi qua điện thoại, anh Kiên/ Tùng-Bạn anh Dương số điện thoại 0989771930 có t..
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div className={"flex items-center justify-center py-3"}>
-                                    <input className="form-check-input" type="checkbox" value="" id="check"/>
-                                </div>
-                            </td>
-                            <td>
-                                PGI.BLD.Lập, phê duyệt thực hiện quy chế kế tài chính của PGI
-                            </td>
-                            <td>
-                                05/11/2021
-                            </td>
-                            <td>
-                                <div className={"flex items-center"}>
-                                    <img src={userAvt} alt={"----"} className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px] max-w-[24px] max-h-[24px] rounded-full overflow-hidden"}/>
-                                    <div className={"ml-2"}>Nguyễn Phan Thanh Hương-CPMI</div>
-                                </div>
-                            </td>
-                            <td>
-                                <p className={"mb-1 text-right text-secondary-gray"}>30%</p>
-                                <div className={"relative w-full h-[4px] rounded-full border-0.5 border-primary-border bg-cbs-task-assign-progress-bg"}>
-                                    <div className={"absolute h-full left-0 top-0 bg-cbs-schedule-expired"} style={{width: "30%"}}></div>
-                                </div>
-                            </td>
-                            <td>
-                                Gửi Hiệp, Như đã trao đổi qua điện thoại, anh Kiên/ Tùng-Bạn anh Dương số điện thoại 0989771930 có t..
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div className={"flex items-center justify-center py-3"}>
-                                    <input className="form-check-input" type="checkbox" value="" id="check"/>
-                                </div>
-                            </td>
-                            <td>
-                                PGI.BLD.Lập, phê duyệt thực hiện quy chế kế tài chính của PGI
-                            </td>
-                            <td>
-                                05/11/2021
-                            </td>
-                            <td>
-                                <div className={"flex items-center"}>
-                                    <img src={userAvt} alt={"----"} className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px] max-w-[24px] max-h-[24px] rounded-full overflow-hidden"}/>
-                                    <div className={"ml-2"}>Nguyễn Phan Thanh Hương-CPMI</div>
-                                </div>
-                            </td>
-                            <td>
-                                <p className={"mb-1 text-right text-secondary-gray"}>30%</p>
-                                <div className={"relative w-full h-[4px] rounded-full border-0.5 border-primary-border bg-cbs-task-assign-progress-bg"}>
-                                    <div className={"absolute h-full left-0 top-0 bg-cbs-schedule-expired"} style={{width: "30%"}}></div>
-                                </div>
-                            </td>
-                            <td>
-                                Gửi Hiệp, Như đã trao đổi qua điện thoại, anh Kiên/ Tùng-Bạn anh Dương số điện thoại 0989771930 có t..
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div className={"flex items-center justify-center py-3"}>
-                                    <input className="form-check-input" type="checkbox" value="" id="check"/>
-                                </div>
-                            </td>
-                            <td>
-                                PGI.BLD.Lập, phê duyệt thực hiện quy chế kế tài chính của PGI
-                            </td>
-                            <td>
-                                05/11/2021
-                            </td>
-                            <td>
-                                <div className={"flex items-center"}>
-                                    <img src={userAvt} alt={"----"} className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px] max-w-[24px] max-h-[24px] rounded-full overflow-hidden"}/>
-                                    <div className={"ml-2"}>Nguyễn Phan Thanh Hương-CPMI</div>
-                                </div>
-                            </td>
-                            <td>
-                                <p className={"mb-1 text-right text-secondary-gray"}>30%</p>
-                                <div className={"relative w-full h-[4px] rounded-full border-0.5 border-primary-border bg-cbs-task-assign-progress-bg"}>
-                                    <div className={"absolute h-full left-0 top-0 bg-cbs-schedule-expired"} style={{width: "30%"}}></div>
-                                </div>
-                            </td>
-                            <td>
-                                Gửi Hiệp, Như đã trao đổi qua điện thoại, anh Kiên/ Tùng-Bạn anh Dương số điện thoại 0989771930 có t..
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div className={"flex items-center justify-center py-3"}>
-                                    <input className="form-check-input" type="checkbox" value="" id="check"/>
-                                </div>
-                            </td>
-                            <td>
-                                PGI.BLD.Lập, phê duyệt thực hiện quy chế kế tài chính của PGI
-                            </td>
-                            <td>
-                                05/11/2021
-                            </td>
-                            <td>
-                                <div className={"flex items-center"}>
-                                    <img src={userAvt} alt={"----"} className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px] max-w-[24px] max-h-[24px] rounded-full overflow-hidden"}/>
-                                    <div className={"ml-2"}>Nguyễn Phan Thanh Hương-CPMI</div>
-                                </div>
-                            </td>
-                            <td>
-                                <p className={"mb-1 text-right text-secondary-gray"}>30%</p>
-                                <div className={"relative w-full h-[4px] rounded-full border-0.5 border-primary-border bg-cbs-task-assign-progress-bg"}>
-                                    <div className={"absolute h-full left-0 top-0 bg-cbs-schedule-expired"} style={{width: "30%"}}></div>
-                                </div>
-                            </td>
-                            <td>
-                                Gửi Hiệp, Như đã trao đổi qua điện thoại, anh Kiên/ Tùng-Bạn anh Dương số điện thoại 0989771930 có t..
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div className={"flex items-center justify-center py-3"}>
-                                    <input className="form-check-input" type="checkbox" value="" id="check"/>
-                                </div>
-                            </td>
-                            <td>
-                                PGI.BLD.Lập, phê duyệt thực hiện quy chế kế tài chính của PGI
-                            </td>
-                            <td>
-                                05/11/2021
-                            </td>
-                            <td>
-                                <div className={"flex items-center"}>
-                                    <img src={userAvt} alt={"----"} className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px] max-w-[24px] max-h-[24px] rounded-full overflow-hidden"}/>
-                                    <div className={"ml-2"}>Nguyễn Phan Thanh Hương-CPMI</div>
-                                </div>
-                            </td>
-                            <td>
-                                <p className={"mb-1 text-right text-secondary-gray"}>30%</p>
-                                <div className={"relative w-full h-[4px] rounded-full border-0.5 border-primary-border bg-cbs-task-assign-progress-bg"}>
-                                    <div className={"absolute h-full left-0 top-0 bg-cbs-schedule-expired"} style={{width: "30%"}}></div>
-                                </div>
-                            </td>
-                            <td>
-                                Gửi Hiệp, Như đã trao đổi qua điện thoại, anh Kiên/ Tùng-Bạn anh Dương số điện thoại 0989771930 có t..
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div className={"flex items-center justify-center py-3"}>
-                                    <input className="form-check-input" type="checkbox" value="" id="check"/>
-                                </div>
-                            </td>
-                            <td>
-                                PGI.BLD.Lập, phê duyệt thực hiện quy chế kế tài chính của PGI
-                            </td>
-                            <td>
-                                05/11/2021
-                            </td>
-                            <td>
-                                <div className={"flex items-center"}>
-                                    <img src={userAvt} alt={"----"} className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px] max-w-[24px] max-h-[24px] rounded-full overflow-hidden"}/>
-                                    <div className={"ml-2"}>Nguyễn Phan Thanh Hương-CPMI</div>
-                                </div>
-                            </td>
-                            <td>
-                                <p className={"mb-1 text-right text-secondary-gray"}>30%</p>
-                                <div className={"relative w-full h-[4px] rounded-full border-0.5 border-primary-border bg-cbs-task-assign-progress-bg"}>
-                                    <div className={"absolute h-full left-0 top-0 bg-cbs-schedule-expired"} style={{width: "30%"}}></div>
-                                </div>
-                            </td>
-                            <td>
-                                Gửi Hiệp, Như đã trao đổi qua điện thoại, anh Kiên/ Tùng-Bạn anh Dương số điện thoại 0989771930 có t..
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div className={"flex items-center justify-center py-3"}>
-                                    <input className="form-check-input" type="checkbox" value="" id="check"/>
-                                </div>
-                            </td>
-                            <td>
-                                PGI.BLD.Lập, phê duyệt thực hiện quy chế kế tài chính của PGI
-                            </td>
-                            <td>
-                                05/11/2021
-                            </td>
-                            <td>
-                                <div className={"flex items-center"}>
-                                    <img src={userAvt} alt={"----"} className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px] max-w-[24px] max-h-[24px] rounded-full overflow-hidden"}/>
-                                    <div className={"ml-2"}>Nguyễn Phan Thanh Hương-CPMI</div>
-                                </div>
-                            </td>
-                            <td>
-                                <p className={"mb-1 text-right text-secondary-gray"}>30%</p>
-                                <div className={"relative w-full h-[4px] rounded-full border-0.5 border-primary-border bg-cbs-task-assign-progress-bg"}>
-                                    <div className={"absolute h-full left-0 top-0 bg-cbs-schedule-expired"} style={{width: "30%"}}></div>
-                                </div>
-                            </td>
-                            <td>
-                                Gửi Hiệp, Như đã trao đổi qua điện thoại, anh Kiên/ Tùng-Bạn anh Dương số điện thoại 0989771930 có t..
-                            </td>
-                        </tr>
+                        </tr> */}
+
                     </tbody>
                 </table>
             </div>
