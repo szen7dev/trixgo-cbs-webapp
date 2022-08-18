@@ -3,8 +3,9 @@ import searchIcon from "assets/images/icons8-search-120.png";
 import debounce from "lodash/debounce";
 import {useOnClickOutside} from "services/hooks/useOnclickOutside";
 import userAvt from "assets/images/task-user.svg";
+import {DropdownSearchable} from "../../../../common";
 
-export const HomeHeaderContent:FC = () => {
+export const PmHeaderContent:FC = () => {
     const wrapperClass = useRef<HTMLDivElement>(null);
     const [tab, setTab] = useState(1);
     const [filter, setFilter] = useState("all");
@@ -12,37 +13,20 @@ export const HomeHeaderContent:FC = () => {
     const [showResult, setShowResult] = useState(false);
 
     useOnClickOutside(wrapperClass, () => setShowResult(false))
-    const menuFilter : {
-        text: string,
-        filter: string
-    }[] = [
-        {
-            text: "Tất cả",
-            filter: "all"
-        },
-        {
-            text: "Chưa đọc",
-            filter: "unread"
-        },
-        {
-            text: "Đã đọc",
-            filter: "read"
-        },
-    ]
 
     const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
         debounce((e) => setSearch(e.target.value), 600)
         setShowResult(true)
     }
     return (
-        <div className={"flex items-center"}>
+        <>
             <div ref={wrapperClass} className={"w-[600px] relative"}>
                 <div className={"absolute left-0 flex items-center px-4 justify-center h-full"}>
                     <img src={searchIcon} alt={"search icon"}/>
                 </div>
                 <input
                     onChange={e => handleSearchChange(e)}
-                    className={"pl-12 w-full h-[45px] bg-cbs-bg-input-search rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-none"} placeholder={"Tìm trong chủ đề"}/>
+                    className={"pl-12 w-full h-[45px] bg-cbs-bg-input-search rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-none"} placeholder={"Tìm kiếm dự án"}/>
 
                 {
                     showResult &&
@@ -87,23 +71,28 @@ export const HomeHeaderContent:FC = () => {
                     </div>
                 }
             </div>
-            <div className={"flex border-collapse ml-3 mr-3"}>
-                <button
-                    onClick={() => setTab(1)}
-                    className={"border-0.5 border-primary-border px-3 py-1 " + (tab === 1 ? "bg-cbs-soft-blue text-primary" : "text-primary-gray")}>
-                    Chủ đề
-                </button>
-                <button
-                    onClick={() => setTab(2)}
-                    className={"border-0.5 border-primary-border px-3 py-1 " + (tab === 2 ? "bg-cbs-soft-blue text-primary" : "text-primary-gray")}>
-                    Phản hồi
-                </button>
-                <button
-                    onClick={() => setTab(3)}
-                    className={"border-0.5 border-primary-border px-3 py-1 " + (tab === 3 ? "bg-cbs-soft-blue text-primary" : "text-primary-gray")}>
-                    File
-                </button>
+            <div className={"flex ml-3 mr-3 justify-end"}>
+                <DropdownSearchable
+                    disableSearch={true}
+                    placeholder={"Lọc theo"}
+                    className={"border-0.5 border-primary-border rounded-full px-2"}
+                    showTriangle={true}
+                    data={[
+                        {
+                            id: 1,
+                            text: "Tất cả"
+                        },
+                        {
+                            id: 2,
+                            text: "Công ty tôi"
+                        },
+                        {
+                            id: 3,
+                            text: "Công ty khác"
+                        }
+                    ]}
+                />
             </div>
-        </div>
+        </>
     )
 }

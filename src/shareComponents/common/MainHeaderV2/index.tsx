@@ -27,7 +27,7 @@ export const MainHeaderV2:FC<HeaderProps> = ({children, headerTitle}) => {
                             </div>
                         </div>
                     </div>
-                    <div className={"flex-1"}>
+                    <div className={"flex-1 flex items-center justify-between"}>
                         {children}
                     </div>
                     {/* Header: Right side */}

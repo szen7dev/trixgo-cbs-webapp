@@ -35,7 +35,7 @@ export const DashboardV2: FC = () => {
     }
     return (
         <div className="t-home">
-            <div className={"sticky top-0 bg-white"}>
+            <div className={"sticky top-0 bg-white z-10"}>
                 <div className={"filter-bar flex flex-wrap px-4 py-2"}>
                     <DropdownSearchableV2
                         className={"mr-4 border border-primary-border rounded-lg mb-2"}

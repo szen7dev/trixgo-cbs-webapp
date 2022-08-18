@@ -1,16 +1,15 @@
 import React, {FC} from "react";
-import plusIcon from "assets/images/icons8-plus-math-96.svg"
 import rocketIcon from "assets/images/icons8-rocket.svg"
-import mailOutLineIcon from "assets/images/icons-mail-outline.svg"
-import uploadIcon from "assets/images/icons-upload.svg"
-import starIcon from "assets/images/icons-star-outline.svg"
-import linkIcon from "assets/images/icons-link.svg"
-import fileIcon from "assets/images/icons-file.svg"
-import {useModal} from "../../../../services/hooks/useModal";
-import {ModalAddNewTask} from "../../../common";
+import {useModal} from "services/hooks/useModal";
+import {ModalAddNewTask} from "../../../../common";
 import { NavLink } from 'react-router-dom';
+import projectIcon from "assets/images/icons-project.svg";
+import shieldIcon from "assets/images/icons8-user-shield-48.svg";
+import reportIcon from "assets/images/icons8-report.svg";
+import paperPenIcon from "assets/images/icons-paper-pen.svg";
+import fileIcon from "assets/images/icon-file.svg";
 
-export const HomeLeftMenuContent:FC = () => {
+export const PmLeftMenuContent:FC = () => {
     const { openModal } = useModal();
 
     const listTab : {
@@ -20,10 +19,34 @@ export const HomeLeftMenuContent:FC = () => {
         route: string
     }[] = [
         {
+            label: "Quản trị viên",
+            icon: shieldIcon,
+            count: 2,
+            route: '/pm/admin'
+        },
+        {
             label: "Danh sách dự án",
             icon: rocketIcon,
             count: 2,
-            route: '/'
+            route: '/pm/projects'
+        },
+        {
+            label: "Báo cáo đầu tư",
+            icon: reportIcon,
+            count: 2,
+            route: '/pm/report-1'
+        },
+        {
+            label: "Báo cáo công việc",
+            icon: paperPenIcon,
+            count: 2,
+            route: '/pm/report-2'
+        },
+        {
+            label: "Báo cáo hồ sơ",
+            icon: fileIcon,
+            count: 2,
+            route: '/pm/report-3'
         },
     ]
 
@@ -55,7 +78,7 @@ export const HomeLeftMenuContent:FC = () => {
                     )
                 }
                 className={"bg-cbs-blue-button rounded-md flex items-center justify-center text-xl text-primary-gray py-2 px-4"}>
-                <img src={plusIcon} alt={"Tạo mới"}/>
+                <img src={projectIcon} alt={"Tạo mới"}/>
                 <span className={"ml-2"}>Tạo mới</span>
             </button>
 
