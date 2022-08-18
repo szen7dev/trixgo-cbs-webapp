@@ -130,8 +130,14 @@ export const DropdownSearchable: FC<Props> = ({
         const oldValues = (values??[]);
         oldValues.splice(existThatItem, 1);
         setValues([...oldValues]);
+        if (onMultipleRemoveValue) {
+          onMultipleRemoveValue(readDataValue(item, "id"))
+        }
       } else {
         setValues((oldValues) => [...(oldValues ?? []), item]);
+        if (onchangeValue) {
+          onchangeValue(modifyItem(item));
+        }
       }
     } else {
       setShowOption(false);
@@ -139,10 +145,10 @@ export const DropdownSearchable: FC<Props> = ({
         setValue(undefined);
       } else {
         setValue(item);
+        if (onchangeValue) {
+          onchangeValue(modifyItem(item));
+        }
       }
-    }
-    if (onchangeValue) {
-      onchangeValue(modifyItem(item));
     }
   };
 
@@ -347,7 +353,7 @@ export const DropdownSearchable: FC<Props> = ({
     ) : (
       <div
         className={classNames(
-          "flex text-left relative py-0.5 pl-2 pr-8 mb-1 mt-1 ",
+          "flex text-left relative py-0.5 pl-2 pr-8 mb-1 mt-1 max-w-full ",
           {
             "text-gray-300": !value,
             border: bordered,

@@ -21,7 +21,7 @@ import { ProviderModalPost as ProviderModalMedia } from "views/media/contexts/po
 import { ProviderModalPost as ProviderModalPcm } from "views/pcm/contexts/post";
 
 /*=====PAGES=====*/
-import { Dashboard } from "views/homepage/pages";
+import { DashboardV2 } from "views/homepage/pages";
 import {
   DocumentDetailPage,
   DocumentFolderPage,
@@ -70,8 +70,10 @@ import ProjectAdminAuthorTab from "views/ppt/pages/ProjectAdminPage/pages/Projec
 import ProjectAdminProjectDetail from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminProjectDetail";
 import ProjectAdminProjectTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminProjectTab";
 import ProjectAdminPositionTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminPositionTab";
+const PcmDetailTaskV2             = lazy(() => import('views/pcm/pages/PcmDetailTaskV2'));
 
-const PcmHomePage                 = lazy(() => import('views/pcm/pages/PcmHome'));
+// const PcmHomePage                 = lazy(() => import('views/pcm/pages/PcmHome'));
+const PcmHomePage                 = lazy(() => import('views/pcm/pages/PcmHomeV2'));
 const PcmDetailTaskPage           = lazy(() => import('views/pcm/pages/PcmDetailTask'));
 const PcmGroupPage                = lazy(() => import('views/pcm/pages/PcmGroup'));
 const PcmTaskGroupPage            = lazy(() => import('views/pcm/pages/PcmTaskGroup'));
@@ -93,7 +95,7 @@ const PCMRouter: FC = () => {
             path={"/"}
             component={() => (
               <HomeLayout>
-                <Dashboard />
+                <DashboardV2 />
               </HomeLayout>
             )}
           />
@@ -386,12 +388,12 @@ const PCMRouter: FC = () => {
                   </LayoutSecondary>
                 </Route>
 
-                <Route exact path="/pcm/detail/:id" component={PcmDetailTaskPage} />
+                <Route exact path="/pcm/detail/:id" component={PcmDetailTaskV2} />
                 <Route exact path="/pcm/detail/:id/print/1" component={PcmPrintTaskTypeOnePage} />
                 <Route exact path="/pcm/detail/:id/print/2" component={PcmPrintTaskTypeTwoPage} />
                 <Route exact path="/pcm/detail/:id/print/3" component={PcmPrintTaskTypeThreePage} />
 
-                <Route exact path="/pcm/home" component={PcmHomePage} />
+                <Route exact path="/pcm/home" component={() => <PcmHomePage/>} />
                 <Route exact path="/pcm/assign" component={() => <PcmHomePage type={2} />} />
                 <Route exact path="/pcm/bookmark" component={() => <PcmHomePage type={3} />} />
                 <Route exact path="/pcm/related" component={() => <PcmHomePage type={5} />} />

@@ -240,7 +240,7 @@ button {
 /*__________________________________________________________________________*/
 /* ___________Customized layout styles ___________________*/
 .t-leftsidebar-navigation {
-  width: 240px;
+  width: 256px;
 }
 .t-leftsidebar-navigation-container {
   height: 100%;
@@ -1075,7 +1075,7 @@ button {
   top: calc(100% + 5px);
 }
 .select-dropdown .select-options-container .select-options-section {
-  max-height: 250px;
+  max-height: 350px;
 }
 .alert-warning {
   color: #664d03;
@@ -1092,9 +1092,24 @@ button {
 .form-check-input:checked[type="checkbox"] {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e");
 }
+.form-check-input:checked[type="checkbox"].line {
+  background-image: none;
+}
+.form-check-input:checked[type="checkbox"].line::after {
+  content: "";
+  position: absolute;
+  width: 80%;
+  height: 2px;
+  background: white;
+  top: calc(50% - 1px);
+  left: 10%
+}
 .form-check-input:checked {
   background-color: #0d6efd;
   border-color: #0d6efd;
+}
+.form-check-input:checked.line {
+  @apply bg-cbs-indeterminate border-cbs-indeterminate;
 }
 .form-check-input[type="checkbox"] {
   /*border-radius: 0.25em;*/
@@ -1118,6 +1133,7 @@ button {
   appearance: none;
   -webkit-print-color-adjust: exact;
   color-adjust: exact;
+  position: relative;
 }
 .form-check-input.border-white {
   border-color: white;
@@ -1670,3 +1686,73 @@ img {
   content-visibility: auto;
   contain-intrinsic-size: 1px 5000px;
 } */
+
+.main-route-content {
+  width: 100%;
+  height: calc(100vh - 55px);
+  padding-left: 256px;
+  top: 0;
+}
+
+.home-layout.collapse-left .main-route-content {
+  padding-left: 0;
+}
+.left-menu-nav.active {
+  @apply bg-cbs-active-blue font-bold text-black;
+}
+.crop-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  -webkit-flex-basis: 0;
+  flex-basis: 0;
+  -webkit-box-flex: 1;
+  box-flex: 1;
+  -webkit-flex-grow: 1;
+  flex-grow: 1;
+  -webkit-flex-shrink: 1;
+  flex-shrink: 1;
+  text-align: left;
+}
+.task-infor-td {
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: normal;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-flex: 1 1 auto;
+  -webkit-flex: 1 1 auto;
+  flex: 1 1 auto;
+  height: auto;
+  min-width: 0;
+  padding-right: 10px;
+}
+.tasks .read{
+  @apply bg-cbs-bg-input-search;
+}
+.tasks .unread {
+  @apply bg-white;
+}
+.tasks .unread .user-infor-name,
+.tasks .unread .task-title,
+.tasks .unread .task-date {
+  @apply font-bold;
+}
+.tasks tr {
+  @apply cursor-pointer;
+}
+.tasks .checked{
+  @apply bg-cbs-background-selected !important;
+}
+.task-description .tox.tox-tinymce {
+  @apply rounded-md;
+}
+.task-comment .tox.tox-tinymce {
+  @apply border-0 border-t border-primary-border;
+}
+.table-task-sheet th,.table-task-sheet td {
+  @apply border-0.5 border-primary-border px-4 py-2 align-middle !important;
+}
+.table-task-sheet th {
+  @apply text-primary-gray font-normal text-left;
+}
