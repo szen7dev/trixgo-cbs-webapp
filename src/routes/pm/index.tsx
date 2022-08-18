@@ -80,12 +80,16 @@ const PCMRouter: FC = () => {
       <ProviderModalMedia>
         <ProviderModalPcm>
           <Switch>
+
+            {/* Điều hướng về danh sách dự án */}
             <ProtectedRoute exact path="/pm">
               <Redirect to="/pm/projects" />
             </ProtectedRoute>
 
             <ProtectedRoute path="/pm">
               <Switch>
+
+                {/* Admin dự án */}
                 <Route path="/pm/admin">
                   <PmLayout>
                     <LayoutSecondary
@@ -121,12 +125,15 @@ const PCMRouter: FC = () => {
                     </LayoutSecondary>
                   </PmLayout>
                 </Route>
+
+                {/* Danh sách dự án */}
                 <Route exact path="/pm/projects">
                   <PmLayout>
                     <ProjectCategoryPage/>
                   </PmLayout>
                 </Route>
 
+                {/* Chi tiết bên trong 1 Dự án */}
                 <Route path="/pm/project/:id">
                   <PmProjectLayout>
                     <Switch>
@@ -376,6 +383,7 @@ const PCMRouter: FC = () => {
                     </Switch>
                   </PmProjectLayout>
                 </Route>
+
               </Switch>
             </ProtectedRoute>
           </Switch>

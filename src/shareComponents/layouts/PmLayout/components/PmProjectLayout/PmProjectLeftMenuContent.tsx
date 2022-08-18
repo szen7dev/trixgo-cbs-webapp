@@ -22,62 +22,62 @@ export const PmProjectLeftMenuContent:FC = () => {
         {
             label: "Trang chủ",
             icon: reportIcon,
-            route: '/pm/project/627235cad9d18a0677e5d71a/home'
+            route: '/pm/project/60a8cb540400462461cbff9f/home'
         },
         {
             label: "Báo cáo quản trị",
             icon: reportIcon,
-            route: '/pm/project/627235cad9d18a0677e5d71a/dashboard'
+            route: '/pm/project/60a8cb540400462461cbff9f/dashboard'
         },
         {
             label: "Thư mục dữ liệu",
             icon: reportIcon,
-            route: '/pm/project/627235cad9d18a0677e5d71a/folder'
+            route: '/pm/project/60a8cb540400462461cbff9f/folder'
         },
         {
             label: "Mốc tiến độ",
             icon: reportIcon,
-            route: '/pm/project/627235cad9d18a0677e5d71a/schedule'
+            route: '/pm/project/60a8cb540400462461cbff9f/schedule'
         },
         {
             label: "Công việc",
             icon: reportIcon,
-            route: '/pm/project/627235cad9d18a0677e5d71a/subject'
+            route: '/pm/project/60a8cb540400462461cbff9f/subject'
         },
         {
             label: "Ngân sách, hợp đồng",
             icon: reportIcon,
-            route: '/pm/project/627235cad9d18a0677e5d71a/budget'
+            route: '/pm/project/60a8cb540400462461cbff9f/budget'
         },
         {
             label: "Lựa chọn nhà thầu",
             icon: reportIcon,
-            route: '/pm/project/627235cad9d18a0677e5d71a/bidding'
+            route: '/pm/project/60a8cb540400462461cbff9f/bidding'
         },
         {
             label: "Hồ sơ thanh toán",
             icon: reportIcon,
-            route: '/pm/project/627235cad9d18a0677e5d71a/payment'
+            route: '/pm/project/60a8cb540400462461cbff9f/payment'
         },
         {
             label: "Hồ sơ văn bản",
             icon: reportIcon,
-            route: '/pm/project/627235cad9d18a0677e5d71a/document'
+            route: '/pm/project/60a8cb540400462461cbff9f/document'
         },
         {
             label: "Hình ảnh",
             icon: reportIcon,
-            route: '/pm/project/627235cad9d18a0677e5d71a/photo'
+            route: '/pm/project/60a8cb540400462461cbff9f/photo'
         },
         {
             label: "Bản vẽ",
             icon: reportIcon,
-            route: '/pm/project/627235cad9d18a0677e5d71a/drawing'
+            route: '/pm/project/60a8cb540400462461cbff9f/drawing'
         },
         {
             label: "Danh bạ dự án",
             icon: reportIcon,
-            route: '/pm/project/627235cad9d18a0677e5d71a/directory'
+            route: '/pm/project/60a8cb540400462461cbff9f/directory'
         },
     ]
 
@@ -95,7 +95,7 @@ export const PmProjectLeftMenuContent:FC = () => {
     }
     return (
         <>
-            <button
+            {/* <button
                 onClick={() =>
                     openModal(
                         <div className="t-add-new-task-dialog text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
@@ -106,7 +106,7 @@ export const PmProjectLeftMenuContent:FC = () => {
                 className={"bg-cbs-blue-button rounded-md flex items-center justify-center text-xl text-primary-gray py-2 px-4"}>
                 <img src={projectIcon} alt={"Tạo mới"}/>
                 <span className={"ml-2"}>Tạo mới</span>
-            </button>
+            </button> */}
 
             <div className={"mt-4"}>
                 {
