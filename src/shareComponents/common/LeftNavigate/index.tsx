@@ -77,12 +77,12 @@ export const LeftNavigate:FC<Props> = ({handleMenuEvent}) => {
                 </div>
                 <span className={"text-primary-gray mt-1"}>Hồ sơ</span>
             </Link>
-            <Link to={`/human/home`} className={"flex flex-col items-center mb-3"}>
+            {/* <Link to={`/human/home`} className={"flex flex-col items-center mb-3"}>
                 <div className={"px-4 py-1 rounded-full relative " + (pathname.includes("/messages") ? "bg-cbs-hightlight-right-navigate" : "")}>
                     <img src={peopleIcon} alt={"Nhân sự"}/>
                 </div>
                 <span className={"text-primary-gray mt-1"}>Nhân sự</span>
-            </Link>
+            </Link> */}
             <Link to={`/messages`} className={"flex flex-col items-center mb-3"}>
                 <div className={"px-4 py-1 rounded-full relative " + (pathname.includes("/messages") ? "bg-cbs-hightlight-right-navigate" : "")}>
                     <img src={chatIcon} alt={"Chat"}/>
@@ -96,12 +96,12 @@ export const LeftNavigate:FC<Props> = ({handleMenuEvent}) => {
                 </div>
                 <span className={"text-primary-gray mt-1"}>Chat</span>
             </Link>
-            <Link to={`/media/home`} className={"flex flex-col items-center mb-3"}>
+            {/* <Link to={`/media/home`} className={"flex flex-col items-center mb-3"}>
                 <div className={"px-4 py-1 rounded-full relative " + (pathname.includes("/messages") ? "bg-cbs-hightlight-right-navigate" : "")}>
                     <img src={commercialIcon} alt={"Media"}/>
                 </div>
                 <span className={"text-primary-gray mt-1"}>Media</span>
-            </Link>
+            </Link> */}
         </div>
     )
 }
