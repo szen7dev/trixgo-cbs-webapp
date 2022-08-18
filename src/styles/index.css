@@ -1690,14 +1690,15 @@ img {
 } */
 
 .main-route-content {
-  width: 100%;
+  width: calc(100% - 256px);
   height: calc(100vh - 55px);
-  padding-left: 256px;
+  margin-left: 256px;
   top: 0;
 }
 
 .home-layout.collapse-left .main-route-content {
-  padding-left: 0;
+  margin-left: 0;
+  width: 100%;
 }
 .left-menu-nav.active {
   @apply bg-cbs-active-blue font-bold text-black;
