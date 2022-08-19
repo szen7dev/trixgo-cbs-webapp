@@ -27,13 +27,14 @@ import {
  * ============================ 	 PCM TASK   ===============================
  * ============================ ************* ===============================
  */
-
+// Định nghĩa kiểu dữ liệu trả về của File useTask.ts
 type UseTask = {
   addRelationUserAsync: (payload: AddRelationUserPayload) => Promise<any>;
   copyTaskAsync: (payload: CopyTaskPayload) => Promise<any>;
   moveTaskToParentAsync: (payload: MoveTaskToParentPayload) => Promise<any>;
   moveTaskToGroupAsync: (payload: MoveTaskToGroupPayload) => Promise<any>;
   listTasks: Array<Task>;
+  listSubject: Array<Task>; // Bổ sung mới
   info: Task,
   addTaskAsync: (payload: addTaskPayload) => Promise<any>;
   updateTaskAsync: (payload: updateTaskPayload) => Promise<any>;
@@ -129,6 +130,12 @@ export const useTask = ({
   const totalRecord = dataListTask?.pages[0]?.data?.totalRecord;
   const totalPages = dataListTask?.pages[0]?.data?.totalPage;
 
+  // Khai báo xử lý
+  const listSubject = []
+  .concat(...(dataListTask?.pages || [])
+  .map((d: any) => d.data?.listRecords))
+  .filter(Boolean);
+
   return {
     addRelationUserAsync,
     copyTaskAsync,
@@ -137,6 +144,7 @@ export const useTask = ({
     updateTaskAsync,
     addTaskAsync,
     listTasks,
+    listSubject, // bổ sung mới
     info,
     isLoadingListTask,
     isLoadingInfo,

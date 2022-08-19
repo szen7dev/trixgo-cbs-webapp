@@ -118,6 +118,7 @@ export interface addTaskResponse {
   message: string;
 }
 
+// Khai báo kiểu dữ liệu đầu vào của Getlist mà client cần truyền lên
 export type TaskListParams = QueryParams & {
   keyword?: string;
   typeStatus?: string;
@@ -135,7 +136,9 @@ export type TaskListParams = QueryParams & {
   unlimit?: string;
   isParent?: string;
   isSortChildTask?: string;
-  // isSortChecklist: number;
+  draft?: string;
+  isActive?: string;
+  isGroup?: string;
 }
 
 export type TaskInfoParams = {
@@ -144,6 +147,7 @@ export type TaskInfoParams = {
   populates?: Populate | string;
 }
 
+// Khai báo kiểu dữ liệu trả về của Data
 export type ListTaskResponse = APIResponse & {
   data: {
     listRecords: Array<Task>;
