@@ -57,7 +57,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     });
 
     // console.log(listSubject)
-    console.log(user)
+    // console.log(user)
 
     const subContentHtml = (html?: string) => {
         const removeHtmlTag = parse(
@@ -359,20 +359,20 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                             return (
                                 <tr key={item._id} className={checkActive(item.news, `${user?._id}`)}>
                                     <td className={"w-[46px]"}>
-                                        <div className={"flex items-center justify-center py-3"}>
+                                        <div className={"flex items-center justify-center py-2"}>
                                             <input className="form-check-input" type="checkbox" value="" id="check"/>
                                         </div>
                                     </td>
                                     <td className={"w-[55px]"}>
                                         <Link to={"/pcm/detail/" + (item._id)}>
-                                            <div className={"py-3"}>
+                                            <div className={"py-2"}>
                                                 <img src={`${process.env.REACT_APP_URL_S3_USER}/${item.lastComment? item.lastComment.author.image : item.assignee.image}`} alt={"avatar"} className={"w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"}/>
                                             </div>
                                         </Link>
                                     </td>
                                     <td className={"w-[170px]"}>
                                         <Link to={"/pcm/detail/" + (item._id)}>
-                                            <div className={"user-infor py-3"}>
+                                            <div className={"user-infor py-1"}>
                                                 <p className={"truncate user-infor-name text-[14px]"}>{item.lastComment ? item.lastComment.author.fullname : item.assignee.fullname}</p>
                                                 <span className={"text-xs text-primary-gray mt-1"}>{item.related.length} liên quan</span>
                                             </div>
@@ -380,7 +380,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                                     </td>
                                     <td className={"task-infor-td"}>
                                         <Link to={"/pcm/detail/" + (item._id)}>
-                                            <div className={"task-infor flex-auto overflow-hidden whitespace-nowrap py-3"}>
+                                            <div className={"task-infor flex-auto overflow-hidden whitespace-nowrap py-2"}>
                                                 <div className={"whitespace-nowrap overflow-hidden"}>
                                                     <p className={"task-title text-[14px]"}>{item.project.sign}.{subContentHtml(item.name)}</p>
                                                     <span className={"crop-text text-xs text-primary-gray mt-1"}>{subContentHtml(item.lastComment?.content)}</span>
@@ -389,7 +389,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                                         </Link>
                                     </td>
                                     <td className={"w-[100px]"}>
-                                        <div className={"task-date whitespace-nowrap py-3 text-right pr-4"}>
+                                        <div className={"task-date whitespace-nowrap py-2 text-right pr-4"}>
                                             {moment(item.modifyAt).format("DD/MM/YYYY")}
                                         </div>
                                     </td>
@@ -398,7 +398,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                         })
                         }
 
-                        {/* <tr className={"read checked"}>
+                        {/* <tr className={"read checked border-b-0.5 border-primary-border"}>
                             <td className={"w-[46px]"}>
                                 <div className={"flex items-center justify-center py-3"}>
                                     <input checked className="form-check-input" type="checkbox" value="" id="check"/>
@@ -430,7 +430,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                                 </div>
                             </td>
                         </tr>
-                        <tr className={"unread"}>
+                        <tr className={"unread border-b-0.5 border-primary-border"}>
                             <td className={"w-[46px]"}>
                                 <div className={"flex items-center justify-center py-3"}>
                                     <input className="form-check-input" type="checkbox" value="" id="check"/>
