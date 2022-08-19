@@ -3,8 +3,6 @@ import userAvt from "assets/images/human-avatar.svg";
 import imageCompany from "assets/images/image-company.png";
 import projectHomeImage from "assets/images/project-home-image.png";
 import Carousel from 'react-elastic-carousel'
-import cn from "classnames";
-import styles from "../../../cmcs/styles/styles.module.css";
 
 const ProjectHomePageV2: FC = () => {
 	useEffect(() => {

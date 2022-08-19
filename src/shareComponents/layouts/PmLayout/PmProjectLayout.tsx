@@ -9,6 +9,7 @@ import cn from "classnames";
 /*=====4.PAGES/COMPONENTS=====*/
 import {LeftMenu, MainHeaderV2, LeftNavigate} from "../../common";
 import {PmHeaderContent, PmLeftMenuContent, PmProjectLeftMenuContent} from "./components";
+import {MainHeaderPm} from "./components/shared/MainHeaderPm";
 
 /*=====5.TYPINGS=====*/
 
@@ -18,9 +19,10 @@ import {PmHeaderContent, PmLeftMenuContent, PmProjectLeftMenuContent} from "./co
 
 type Props = {
   children: ReactNode;
+  headerSearch?: ReactNode;
 };
 
-export const PmProjectLayout: FC<Props> = ({ children }) => {
+export const PmProjectLayout: FC<Props> = ({ children, headerSearch }) => {
   const [isHeaderCollapse, setIsHeaderCollapse] = useState(false);
   const [isLeftMenuCollapse, setIsLeftMenuCollapse] = useState(false);
   const [isRightSideBarCollapse, setIsRightSideBarCollapse] = useState(false);
@@ -49,11 +51,9 @@ export const PmProjectLayout: FC<Props> = ({ children }) => {
         <LeftNavigate handleMenuEvent={handleMenuEvent}/>
         <section className={"main-content-wrapper flex-1"}>
           {/*  Main header */}
-          <MainHeaderV2
-            headerTitle={"Dự án"}
-          >
-            <PmHeaderContent/>
-          </MainHeaderV2>
+          <MainHeaderPm>
+            {headerSearch}
+          </MainHeaderPm>
 
           {/* Left navigation */}
           <LeftMenu>
