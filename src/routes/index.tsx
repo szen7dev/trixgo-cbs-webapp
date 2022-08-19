@@ -66,8 +66,7 @@ const Routes: FC = () => {
                         <Route path="/sample">
                             <SampleRouter />
                         </Route>
-                        {/*<DeleteConfirmProvider>*/}
-                        {/*    <ChatProvider>*/}
+
                         <ModalProvider>
                             <Switch>
 
@@ -225,8 +224,7 @@ const Routes: FC = () => {
 
                             </Switch>
                         </ModalProvider>
-                        {/*</ChatProvider>*/}
-                        {/*</DeleteConfirmProvider>*/}
+
                     </RightClickMenuProvider>
                 </AuthProvider>
             </Router>

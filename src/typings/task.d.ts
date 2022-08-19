@@ -134,6 +134,8 @@ export type TaskListParams = QueryParams & {
   subtype?: string;
   unlimit?: string;
   isParent?: string;
+  isSortChildTask?: string;
+  // isSortChecklist: number;
 }
 
 export type TaskInfoParams = {

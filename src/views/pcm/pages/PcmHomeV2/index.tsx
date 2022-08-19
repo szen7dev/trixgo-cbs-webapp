@@ -31,7 +31,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1 }) => {
         nextPageListTask: nextPageTaskOutDate,
     } = useTask({
         params: {
-            type, typeStatus: "1", statusNe: "3"
+            type, typeStatus: "1", statusNe: "3", isSortChildTask: "1"
         },
         isFetch: true
     });
