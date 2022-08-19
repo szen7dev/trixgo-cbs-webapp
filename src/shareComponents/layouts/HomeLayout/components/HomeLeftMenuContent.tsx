@@ -64,9 +64,9 @@ export const HomeLeftMenuContent:FC = () => {
         route: string
     }) => {
       return (
-          <NavLink key={nav.route} to={nav.route} className={"left-menu-nav flex items-center py-1 px-4 rounded-full w-full text-primary-gray"}>
+          <NavLink key={nav.route} to={nav.route} className={"left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray"}>
               <img src={nav.icon} alt={nav.label}/>
-              <span className={"flex-1 ml-2 text-left"}>{nav.label}</span>
+              <span className={"flex-1 ml-2 text-left text-[14px]"}>{nav.label}</span>
               {
                   nav.count > 0 &&
                   <span>{nav.count}</span>

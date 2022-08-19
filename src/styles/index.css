@@ -1730,8 +1730,11 @@ img {
   min-width: 0;
   padding-right: 10px;
 }
-.tasks .read{
+/* .tasks .read{
   @apply bg-cbs-bg-input-search;
+} */
+.tasks .read{
+  background: #F2F6FC;
 }
 .tasks .unread {
   @apply bg-white;
