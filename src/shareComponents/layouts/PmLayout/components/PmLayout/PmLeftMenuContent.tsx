@@ -21,33 +21,33 @@ export const PmLeftMenuContent:FC = () => {
         {
             label: "Quản trị viên",
             icon: shieldIcon,
-            count: 2,
+            count: 0,
             route: '/pm/admin'
         },
         {
             label: "Danh sách dự án",
             icon: rocketIcon,
-            count: 2,
+            count: 0,
             route: '/pm/projects'
         },
-        {
-            label: "Báo cáo đầu tư",
-            icon: reportIcon,
-            count: 2,
-            route: '/pm/report-1'
-        },
-        {
-            label: "Báo cáo công việc",
-            icon: paperPenIcon,
-            count: 2,
-            route: '/pm/report-2'
-        },
-        {
-            label: "Báo cáo hồ sơ",
-            icon: fileIcon,
-            count: 2,
-            route: '/pm/report-3'
-        },
+        // {
+        //     label: "Báo cáo đầu tư",
+        //     icon: reportIcon,
+        //     count: 0,
+        //     route: '/pm/report-1'
+        // },
+        // {
+        //     label: "Báo cáo công việc",
+        //     icon: paperPenIcon,
+        //     count: 0,
+        //     route: '/pm/report-2'
+        // },
+        // {
+        //     label: "Báo cáo hồ sơ",
+        //     icon: fileIcon,
+        //     count: 0,
+        //     route: '/pm/report-3'
+        // },
     ]
 
     const renderNav = (nav: {
