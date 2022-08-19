@@ -91,12 +91,12 @@ export const HomeHeaderContent:FC = () => {
                 <button
                     onClick={() => setTab(1)}
                     className={"border-0.5 border-primary-border px-3 py-1 " + (tab === 1 ? "bg-cbs-soft-blue text-primary" : "text-primary-gray")}>
-                    Chủ đề
+                    Phản hồi
                 </button>
                 <button
                     onClick={() => setTab(2)}
                     className={"border-0.5 border-primary-border px-3 py-1 " + (tab === 2 ? "bg-cbs-soft-blue text-primary" : "text-primary-gray")}>
-                    Phản hồi
+                    Chủ đề
                 </button>
                 <button
                     onClick={() => setTab(3)}
