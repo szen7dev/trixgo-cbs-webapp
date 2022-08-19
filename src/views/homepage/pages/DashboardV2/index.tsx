@@ -32,7 +32,7 @@ type Props = {
     type?: number
 }
 
-export const DashboardV2: FC<Props> = ({ type = 1 }) => {
+export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     const [filter, setFilter] = useState("all");
     const history = useHistory();
 
