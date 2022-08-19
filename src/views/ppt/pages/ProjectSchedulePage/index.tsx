@@ -85,7 +85,7 @@ const ProjectSchedulePage: FC = () => {
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
 			{/* Header */}
-			<div className="flex justify-between sticky top-0 bg-gray-800 text-white py-1.5 z-10">
+			{/* <div className="flex justify-between sticky top-0 bg-gray-800 text-white py-1.5 z-10">
 				<div className="ml-4">
 					<button onClick={handleClick}>
 						<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -101,7 +101,7 @@ const ProjectSchedulePage: FC = () => {
 					<img src={avatar} alt="avatar2" width="28" className="mx-1 object-cover rounded-3xl border border-white" />
 					<img src={avatar} alt="avatar3" width="28" className="mx-1 object-cover rounded-3xl border border-white" />
 				</div>
-			</div>
+			</div> */}
 			{/* Content */}
 			<main className="flex-1 overflow-auto">
 				<Gantt tasks={dataGrantt} />

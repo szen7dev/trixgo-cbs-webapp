@@ -21,33 +21,33 @@ export const PmLeftMenuContent:FC = () => {
         {
             label: "Quản trị viên",
             icon: shieldIcon,
-            count: 2,
+            count: 0,
             route: '/pm/admin'
         },
         {
             label: "Danh sách dự án",
             icon: rocketIcon,
-            count: 2,
+            count: 0,
             route: '/pm/projects'
         },
-        {
-            label: "Báo cáo đầu tư",
-            icon: reportIcon,
-            count: 2,
-            route: '/pm/report-1'
-        },
-        {
-            label: "Báo cáo công việc",
-            icon: paperPenIcon,
-            count: 2,
-            route: '/pm/report-2'
-        },
-        {
-            label: "Báo cáo hồ sơ",
-            icon: fileIcon,
-            count: 2,
-            route: '/pm/report-3'
-        },
+        // {
+        //     label: "Báo cáo đầu tư",
+        //     icon: reportIcon,
+        //     count: 0,
+        //     route: '/pm/report-1'
+        // },
+        // {
+        //     label: "Báo cáo công việc",
+        //     icon: paperPenIcon,
+        //     count: 0,
+        //     route: '/pm/report-2'
+        // },
+        // {
+        //     label: "Báo cáo hồ sơ",
+        //     icon: fileIcon,
+        //     count: 0,
+        //     route: '/pm/report-3'
+        // },
     ]
 
     const renderNav = (nav: {
@@ -69,7 +69,7 @@ export const PmLeftMenuContent:FC = () => {
     }
     return (
         <>
-            <button
+            {/* <button
                 onClick={() =>
                     openModal(
                         <div className="t-add-new-task-dialog text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
@@ -80,7 +80,7 @@ export const PmLeftMenuContent:FC = () => {
                 className={"bg-cbs-blue-button rounded-md flex items-center justify-center text-xl text-primary-gray py-2 px-4"}>
                 <img src={projectIcon} alt={"Tạo mới"}/>
                 <span className={"ml-2"}>Tạo mới</span>
-            </button>
+            </button> */}
 
             <div className={"mt-4"}>
                 {
