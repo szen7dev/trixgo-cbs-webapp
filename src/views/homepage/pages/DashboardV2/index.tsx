@@ -3,6 +3,7 @@ import moment from "moment";
 import Slider from "react-slick";
 import {Link, useHistory} from 'react-router-dom';
 import { useQuery } from "react-query";
+import parse from "html-react-parser";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -54,6 +55,18 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     });
 
     console.log(listSubject)
+
+    const subContentHtml = (html?: string) => {
+        const removeHtmlTag = parse(
+          (html || "").replace(/<[^>]*>?/gm, " ")
+        ).toString();
+    
+        const result =
+          removeHtmlTag.length > 150
+            ? `${removeHtmlTag.slice(0, 150)}...`
+            : removeHtmlTag;
+        return result;
+      };
 
     return (
         <div className="t-home">
@@ -342,15 +355,15 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                                     <td className={"w-[55px]"}>
                                         <Link to={"/pcm/detail/" + (item._id)}>
                                             <div className={"py-3"}>
-                                                <img src={`${process.env.REACT_APP_URL_S3_USER}/${item.assignee.image}`} alt={"avatar"} className={"w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"}/>
+                                                <img src={`${process.env.REACT_APP_URL_S3_USER}/${item.lastComment? item.lastComment.author.image : item.assignee.image}`} alt={"avatar"} className={"w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"}/>
                                             </div>
                                         </Link>
                                     </td>
                                     <td className={"w-[170px]"}>
                                         <Link to={"/pcm/detail/" + (item._id)}>
                                             <div className={"user-infor py-3"}>
-                                                <p className={"truncate user-infor-name"}>{item.assignee.fullname}</p>
-                                                {/* <span className={"text-xs text-primary-gray mt-1"}>8 liên quan, 2 cc</span> */}
+                                                <p className={"truncate user-infor-name text-[14px]"}>{item.lastComment ? item.lastComment.author.fullname : item.assignee.fullname}</p>
+                                                <span className={"text-xs text-primary-gray mt-1"}>{item.related.length} liên quan</span>
                                             </div>
                                         </Link>
                                     </td>
@@ -358,22 +371,22 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                                         <Link to={"/pcm/detail/" + (item._id)}>
                                             <div className={"task-infor flex-auto overflow-hidden whitespace-nowrap py-3"}>
                                                 <div className={"whitespace-nowrap overflow-hidden"}>
-                                                    <p className={"task-title"}>{item.project.sign}.{item.name}</p>
-                                                    <span className={"crop-text text-xs text-primary-gray mt-1"}>Kính gửi anh Hiếu và các anh Chủ đầu tư, Đính kèm là Biên bản họp giao ban tuần 1 tháng 12.2021 ngày 10/12/2021 lúc 2:00 PM giữa Chủ đầu tư và Ban quản lý dự án. Trân trọng,
-                                                        Ms. Linh from CPMI...</span>
+                                                    <p className={"task-title text-[14px]"}>{item.project.sign}.{subContentHtml(item.name)}</p>
+                                                    <span className={"crop-text text-xs text-primary-gray mt-1"}>{subContentHtml(item.lastComment?.content)}</span>
                                                 </div>
                                             </div>
                                         </Link>
                                     </td>
                                     <td className={"w-[100px]"}>
                                         <div className={"task-date whitespace-nowrap py-3 text-right pr-4"}>
-                                            {moment(item.actualFinishTime).format("DD/MM/YYYY")}
+                                            {moment(item.modifyAt).format("DD/MM/YYYY")}
                                         </div>
                                     </td>
                                 </tr>
                             )
                         })
                         }
+
                         {/* <tr className={"read checked"}>
                             <td className={"w-[46px]"}>
                                 <div className={"flex items-center justify-center py-3"}>

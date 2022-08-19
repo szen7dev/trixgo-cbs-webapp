@@ -107,13 +107,13 @@ const TaskRepository = {
   async listSubject(payload: TaskListParams): Promise<ListTaskResponse> {
     const { data } = await API.get<ListTaskResponse>(
       `${pcmURL}/pcm_plan_tasks/subject?${convertObToUrl({
-        select: "assignee lastLog checklist description name expiredTime status percentage project actualStartTime actualFinishTime amountChecklist amountFinishedChecklist milestone startTime",
+        select: "assignee lastComment checklist description name expiredTime status percentage project actualStartTime actualFinishTime amountChecklist amountFinishedChecklist milestone startTime related modifyAt",
         populates: JSON.stringify({
-          path: "assignee lastLog project",
-          select: "name fullname bizfullname image author content createAt sign",
+          path: "assignee lastComment project",
+          select: "name fullname image author content createAt sign",
           populate: {
             path: "author",
-            select: "_id fullname bizfullname image",
+            select: "_id fullname image",
           }
         }),
         ...payload
