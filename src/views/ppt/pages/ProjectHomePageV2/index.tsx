@@ -1,14 +1,41 @@
 import React, { FC, useEffect } from "react";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/swiper-bundle.min.css';
 import userAvt from "assets/images/human-avatar.svg";
 import imageCompany from "assets/images/image-company.png";
 import projectHomeImage from "assets/images/project-home-image.png";
+import Carousel from 'react-elastic-carousel'
+import cn from "classnames";
+import styles from "../../../cmcs/styles/styles.module.css";
 
 const ProjectHomePageV2: FC = () => {
 	useEffect(() => {
 		document.title = "TRANG CHỦ DỰ ÁN"
 	}, []);
+
+	const renderPrevNextButton = (type: string, onClick: () => void) => {
+		return (
+			<div className={"flex items-center absolute z-10 h-full " + (type === "PREV" ? "left-0" : "right-0")}>
+				<button
+					onClick={onClick}
+					className={"w-10 h-10 flex items-center justify-center border-0.5 rounded-lg border-primary-border bg-cbs-next-prev-button " + (type === "PREV" ? "" : "rotate-180")}
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						className="h-5 w-5"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+					>
+						<path
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							strokeWidth={2}
+							d="M15 19l-7-7 7-7"
+						/>
+					</svg>
+				</button>
+			</div>
+		)
+	}
 
 	return (
 		<div className={"project-home p-2"}>
@@ -39,18 +66,30 @@ const ProjectHomePageV2: FC = () => {
 			</div>
 
 			<p className={"font-bold text-primary-gray mt-6"}>Hình ảnh gần đây</p>
-			<div className={"swipe-image flex items-center w-full mt-4"}>
-				<div className={"relative max-w-1/6 rounded border-0.5 border-primary-border overflow-hidden"}>
-					<img className={"object-cover w-full max-h-[210px] h-[210px] min-h-[210px]"} src={projectHomeImage} alt={"-----"}/>
-					<div className={"absolute bottom-0 bg-cbs-gray py-1 px-2 flex items-start max-w-full"}>
-						<img src={userAvt} alt={"---"} className={"w-[28px] h-[28px] min-w-[28px] min-h-[28px] max-w-[28px] max-h-[28px] rounded-full overflow-hidden"}/>
-						<div className={"ml-2 w-10/12"}>
-							<p className={"truncate"}>Vũ Thanh Duy-CPMI</p>
-							<p className={"truncate text-primary-gray text-xs"}>CHT.THT.Xây dựng trường trung học...</p>
-							<p className={"truncate text-primary-gray text-xs"}>24/3/2021 16 giờ trước</p>
-						</div>
-					</div>
-				</div>
+			<div className={"swipe-image w-full mt-4 relative"}>
+				<Carousel
+					itemsToShow={6}
+				 	isRTL={false}
+					itemPadding={[0,8,0,8]}
+					pagination={false}
+					renderArrow={({type, onClick}) => renderPrevNextButton(type, onClick)}
+				>
+					{
+						[...Array(12)].map((e,i) => (
+							<div key={i} className={"relative max-w-1/6 rounded border-0.5 border-primary-border overflow-hidden"}>
+								<img className={"object-cover w-full max-h-[210px] h-[210px] min-h-[210px]"} src={projectHomeImage} alt={"-----"}/>
+								<div className={"absolute bottom-0 bg-cbs-gray py-1 px-2 flex items-start max-w-full"}>
+									<img src={userAvt} alt={"---"} className={"w-[28px] h-[28px] min-w-[28px] min-h-[28px] max-w-[28px] max-h-[28px] rounded-full overflow-hidden"}/>
+									<div className={"ml-2 w-10/12"}>
+										<p className={"truncate"}>Vũ Thanh Duy-CPMI</p>
+										<p className={"truncate text-primary-gray text-xs"}>CHT.THT.Xây dựng trường trung học...</p>
+										<p className={"truncate text-primary-gray text-xs"}>24/3/2021 16 giờ trước</p>
+									</div>
+								</div>
+							</div>
+						))
+					}
+				</Carousel>
 			</div>
 			<table className={"mt-6 table-fixed w-full"}>
 				<thead>
