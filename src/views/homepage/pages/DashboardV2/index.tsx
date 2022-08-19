@@ -72,9 +72,9 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
       };
 
     const checkActive = (relateds: string[], user: string) => {
-        let result = "read"
+        let result = "read border-b-0.5 border-primary-border"
         if(relateds.includes(user)){
-            result = "unread"
+            result = "unread border-b-0.5 border-primary-border"
         }
         return result;
     };
