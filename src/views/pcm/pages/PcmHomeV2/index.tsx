@@ -24,19 +24,20 @@ type Props = {
 
 const PcmHomeV2: FC<Props> = ({ type = 1 }) => {
 
-    // Việc quá hạn
+    /**
+     * Danh sách công việc của tôi (type=1)
+     * - Trạng thái chưa hoàn thành
+     */
     const {
-        listTasks: tasksOutDate,
-        totalRecord: outDateRecords,
+        listTasks,
+        totalRecord,
         nextPageListTask: nextPageTaskOutDate,
     } = useTask({
         params: {
-            type, typeStatus: "1", statusNe: "3", isSortChildTask: "1"
+            type, statusNe: "3", isSortChildTask: "1"
         },
         isFetch: true
     });
-
-    // console.log(tasksOutDate)
 
     const subContentHtml = (html?: string) => {
         const removeHtmlTag = parse(
@@ -351,7 +352,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1 }) => {
                     </thead>
 
                     <tbody>
-                        {tasksOutDate?.map((item: any) => {
+                        {listTasks?.map((item: any) => {
                             return (
 
                                 <tr key={item._id}>

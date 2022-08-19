@@ -28,6 +28,7 @@ import TriangleDown from "assets/icons/TriangleDown";
 import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
 
 import { useTask } from "services/hooks/useTask";
+import { useAuth } from "services/hooks/auth/useAuth";
 
 type Props = {
     type?: number
@@ -54,7 +55,10 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
         isFetchSubject: true
     });
 
-    console.log(listSubject)
+    // console.log(listSubject)
+
+    const { user } = useAuth();
+    // console.log(user)
 
     const subContentHtml = (html?: string) => {
         const removeHtmlTag = parse(
@@ -67,6 +71,14 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
             : removeHtmlTag;
         return result;
       };
+
+    const checkActive = (relateds: string[], user: string) => {
+        let result = "read"
+        if(relateds.includes(user)){
+            result = "unread"
+        }
+        return result;
+    };
 
     return (
         <div className="t-home">
@@ -346,7 +358,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                     <tbody>
                         {listSubject?.map((item: any) => {
                             return (
-                                <tr key={item._id} className={"read"}>
+                                <tr key={item._id} className={checkActive(item.related, user?._id)}>
                                     <td className={"w-[46px]"}>
                                         <div className={"flex items-center justify-center py-3"}>
                                             <input className="form-check-input" type="checkbox" value="" id="check"/>

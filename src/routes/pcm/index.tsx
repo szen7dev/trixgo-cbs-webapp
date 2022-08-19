@@ -105,6 +105,7 @@ const PCMRouter: FC = () => {
           <Route exact path="/pcm">
             <Redirect to="/pcm/home" />
           </Route>
+
           <ProtectedRoute path="/pcm/project/:id">
             <LayoutProjectSecondary>
               <Switch>
@@ -354,6 +355,7 @@ const PCMRouter: FC = () => {
               </Switch>
             </LayoutProjectSecondary>
           </ProtectedRoute>
+          
           <ProtectedRoute path="/pcm">
             <HomeLayout>
               <Switch>
