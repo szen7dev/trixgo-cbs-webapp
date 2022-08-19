@@ -34,7 +34,6 @@ type UseTask = {
   moveTaskToParentAsync: (payload: MoveTaskToParentPayload) => Promise<any>;
   moveTaskToGroupAsync: (payload: MoveTaskToGroupPayload) => Promise<any>;
   listTasks: Array<Task>;
-  listSubject: Array<Task>; // Bổ sung mới
   info: Task,
   addTaskAsync: (payload: addTaskPayload) => Promise<any>;
   updateTaskAsync: (payload: updateTaskPayload) => Promise<any>;
@@ -47,17 +46,27 @@ type UseTask = {
   refetchListTask: () => void;
   nextPageListTask: () => void;
   prevPageListTask: () => void;
+  // subject
+  listSubject: Array<Task>; // Bổ sung mới
+  isLoadingListSubject: boolean,
+  refetchListSubject: () => void;
+  nextPageListSubject: () => void;
+  prevPageListSubject: () => void;
+  totalRecordSubject: number | undefined;
+  totalPagesSubject: number | undefined;
 };
 
 type UseTaskProps = Partial<{
   params: TaskListParams | TaskInfoParams,
   isFetch?: boolean;
+  isFetchSubject?: boolean;
   isFetchInfo?: boolean;
 }>
 
 export const useTask = ({
   params = {},
   isFetch = false,
+  isFetchSubject = false,
   isFetchInfo = false
 }: UseTaskProps): UseTask => {
   const { mutateAsync: addTaskAsync } =
@@ -131,11 +140,37 @@ export const useTask = ({
   const totalPages = dataListTask?.pages[0]?.data?.totalPage;
 
   // Khai báo xử lý
-  const listSubject = []
-  .concat(...(dataListTask?.pages || [])
-  .map((d: any) => d.data?.listRecords))
-  .filter(Boolean);
+  const {
+    isLoading: isLoadingListSubject,
+    data: dataListSubject,
+    refetch: refetchListSubject,
+    fetchNextPage: nextPageListSubject,
+    fetchPreviousPage: prevPageListSubject,
+    hasNextPage: hasNextPageSubject ,
+  } = useInfiniteQuery(
+    ["subject--list", params],
+    async ({ pageParam }: any) => {
+      return TaskRepository.listSubject({
+        lastestID: pageParam || "",
+        ...params,
+      });
+    },
+    {
+      getNextPageParam: ({ data }: any) => {
+        return data?.nextCursor || undefined;
+      },
+      refetchOnWindowFocus: false,
+      enabled: isFetchSubject ?? false,
+    }
+  );
 
+  const listSubject = []
+    .concat(...(dataListSubject?.pages || [])
+    .map((d: any) => d.data?.listRecords))
+    .filter(Boolean);
+
+  const totalRecordSubject = dataListSubject?.pages[0]?.data?.totalRecord;
+  const totalPagesSubject = dataListSubject?.pages[0]?.data?.totalPage;
   return {
     addRelationUserAsync,
     copyTaskAsync,
@@ -144,7 +179,6 @@ export const useTask = ({
     updateTaskAsync,
     addTaskAsync,
     listTasks,
-    listSubject, // bổ sung mới
     info,
     isLoadingListTask,
     isLoadingInfo,
@@ -155,6 +189,14 @@ export const useTask = ({
     refetchListTask,
     nextPageListTask,
     prevPageListTask,
+    // Subject
+    listSubject, // bổ sung mới
+    isLoadingListSubject,
+    refetchListSubject,
+    nextPageListSubject,
+    prevPageListSubject,
+    totalRecordSubject,
+    totalPagesSubject,
   };
 };
 

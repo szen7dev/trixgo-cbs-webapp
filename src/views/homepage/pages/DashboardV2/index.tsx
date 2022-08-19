@@ -43,17 +43,17 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
 
     // Danh sách các việc quá hạn
     const {
-        listTasks,
-        totalRecord,
-        nextPageListTask,
+        listSubject,
+        totalRecordSubject,
+        nextPageListSubject,
     } = useTask({
         params: {
-            type, typeStatus: "1", statusNe: "3", isSortChildTask: "1"
+           draft: "1", isParent: "1", isActive: "1"
         },
-        isFetch: true
+        isFetchSubject: true
     });
 
-    console.log(listTasks)
+    console.log(listSubject)
 
     return (
         <div className="t-home">
@@ -318,7 +318,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                         <img src={sendMailIcon} alt={"-----"}/>
                     </button>
                     <div className={"flex-1 flex items-center justify-end"}>
-                        <span className={"text-primary-gray"}>1-50 trong số {totalRecord}</span>
+                        <span className={"text-primary-gray"}>1-50 trong số {totalRecordSubject}</span>
                         <button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"} disabled={true}>
                             <img src={nextIcon} alt={"----"} className={"rotate-180"}/>
                         </button>
@@ -331,7 +331,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
             <div className={"table-content"}>
                 <table className={"w-full table-fixed tasks"}>
                     <tbody>
-                        {listTasks?.map((item: any) => {
+                        {listSubject?.map((item: any) => {
                             return (
                                 <tr key={item._id} className={"read"}>
                                     <td className={"w-[46px]"}>

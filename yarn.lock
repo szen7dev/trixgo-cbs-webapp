@@ -13290,7 +13290,7 @@ react-easy-swipe@^0.0.21:
 
 react-elastic-carousel@^0.11.5:
   version "0.11.5"
-  resolved "https://registry.npmjs.org/react-elastic-carousel/-/react-elastic-carousel-0.11.5.tgz"
+  resolved "https://registry.yarnpkg.com/react-elastic-carousel/-/react-elastic-carousel-0.11.5.tgz#4be027ea047c4f7678273caa844e83d91f3784dc"
   integrity sha512-//k1IWUiUNXXNE8LHw4bLdP+8YCXLQHbeSOPiZo/+sTkUBp/YB/hjGKWH4RqSJ59AjF8PoxB+SUbqhdPTcwAuw==
   dependencies:
     classnames "^2.2.6"
