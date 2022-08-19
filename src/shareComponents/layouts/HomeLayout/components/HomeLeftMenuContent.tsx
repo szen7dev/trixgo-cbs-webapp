@@ -20,7 +20,7 @@ export const HomeLeftMenuContent:FC = () => {
         route: string
     }[] = [
         {
-            label: "Chủ đề",
+            label: "Hoạt động",
             icon: sendAndReceiveIcon,
             count: 2,
             route: '/'
