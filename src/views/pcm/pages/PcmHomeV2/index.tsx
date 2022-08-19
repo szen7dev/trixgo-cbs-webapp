@@ -341,7 +341,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1 }) => {
                             Thời hạn
                         </th>
                         <th className={"w-2/12"}>
-                            Người thực hiện
+                           Thực hiện
                         </th>
                         <th className={"w-1/12"}>
                             Tiến trình
