@@ -357,7 +357,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                     <tbody>
                         {listSubject?.map((item: any) => {
                             return (
-                                <tr key={item._id} className={checkActive(item.related, `${user?._id}`)}>
+                                <tr key={item._id} className={checkActive(item.news, `${user?._id}`)}>
                                     <td className={"w-[46px]"}>
                                         <div className={"flex items-center justify-center py-3"}>
                                             <input className="form-check-input" type="checkbox" value="" id="check"/>
