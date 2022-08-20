@@ -1349,6 +1349,9 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                   text: "CHG.THT.Trường tiểu học và trung học cơ sở Tây hồ tây",
                 },
               ]}
+              renderItem={(item) => (
+                  <p className={"min-w-[300px]"}>{item.text}</p>
+              )}
             />
           )}
 
@@ -1657,26 +1660,18 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                         </div>
                       </Link>
                     </td>
-                    <td className={"task-infor-td"}>
+                    <td className={"w-td-dashboard"}>
                       <Link to={"/pcm/detail/" + item._id}>
-                        <div
+                        <p className={"task-title truncate text-[14px]"}>
+                          {item.project?.sign}.{item.task?.name}
+                        </p>
+                        <p
                           className={
-                            "task-infor flex-auto overflow-hidden whitespace-nowrap py-2"
+                            "crop-text truncate text-xs text-primary-gray mt-1"
                           }
                         >
-                          <div className={"whitespace-nowrap overflow-hidden"}>
-                            <p className={"task-title text-[14px]"}>
-                              {item.project?.sign}.{item.task?.name}
-                            </p>
-                            <span
-                              className={
-                                "crop-text text-xs text-primary-gray mt-1"
-                              }
-                            >
-                              {subContentHtml(item.content)}
-                            </span>
-                          </div>
-                        </div>
+                          {subContentHtml(item.content)}
+                        </p>
                       </Link>
                     </td>
                     <td className={"w-[100px]"}>
@@ -1745,26 +1740,18 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                         </div>
                       </Link>
                     </td>
-                    <td className={"task-infor-td"}>
+                    <td className={"w-td-dashboard"}>
                       <Link to={"/pcm/detail/" + item._id}>
-                        <div
-                          className={
-                            "task-infor flex-auto overflow-hidden whitespace-nowrap py-2"
-                          }
-                        >
-                          <div className={"whitespace-nowrap overflow-hidden"}>
-                            <p className={"task-title text-[14px]"}>
-                              {item.project.sign}.{subContentHtml(item.name)}
-                            </p>
-                            <span
-                              className={
-                                "crop-text text-xs text-primary-gray mt-1"
-                              }
-                            >
-                              {subContentHtml(item.lastComment?.content)}
-                            </span>
-                          </div>
-                        </div>
+                          <p className={"task-title truncate text-[14px]"}>
+                            {item.project.sign}.{subContentHtml(item.name)}
+                          </p>
+                          <p
+                            className={
+                              "crop-text truncate text-xs text-primary-gray mt-1"
+                            }
+                          >
+                            {subContentHtml(item.lastComment?.content)}
+                          </p>
                       </Link>
                     </td>
                     <td className={"w-[100px]"}>

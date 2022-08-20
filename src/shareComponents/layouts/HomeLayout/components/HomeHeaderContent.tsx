@@ -117,16 +117,16 @@ export const HomeHeaderContent: FC = () => {
             {!isLoadingSubject && listDataSubject.map((item: any, index: number) => {
               return (
                 <div className={"flex items-center py-2"} key={index}>
-                  <div className={"w-[36px] flex items-center justify-center"}>
+                  <div className={"w-[36px] min-w-[36px] flex items-center justify-center"}>
                     <img
                       src={searchIcon}
                       alt={"----"}
                       className={"w-[18px] h-[18px]"}
                     />
                   </div>
-                  <div className={"ml-4 truncate"}>
-                    <p>{subContentHtml(item.content)}</p>
-                    <p className="text-primary-gray">
+                  <div className={"ml-4 w-[calc(100%-36px-1rem)]"}>
+                    <p className={"truncate"}>{subContentHtml(item.content)}</p>
+                    <p className="text-primary-gray truncate">
                       {item.project?.sign}.{item.task?.name}
                     </p>
                   </div>
@@ -136,7 +136,7 @@ export const HomeHeaderContent: FC = () => {
 
            {!isLoadingSubject ? 
             <div className={"flex items-center py-2"}>
-            <div className={"w-[36px] flex items-center justify-center"}>
+            <div className={"w-[36px] min-w-[36px] flex items-center justify-center"}>
               <img
                 src={userAvt}
                 alt={"----"}
@@ -145,7 +145,7 @@ export const HomeHeaderContent: FC = () => {
                 }
               />
             </div>
-            <p className={"ml-4"}>Lê Lưu Phong-CPMI (người tạo phản hồi)</p>
+            <p className={"ml-4 w-[calc(100%-36px-1rem)]"}>Lê Lưu Phong-CPMI (người tạo phản hồi)</p>
           </div> : <></>
            }
             
