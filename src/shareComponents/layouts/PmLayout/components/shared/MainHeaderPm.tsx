@@ -29,7 +29,7 @@ export const MainHeaderPm:FC = ({children}) => {
                     {/* Header: Right side */}
                     <div className="flex items-center">
                         {/* Search menu */}
-                        <a title="Help" href="https://drive.google.com/drive/folders/1NLUsNBK5Zgx_BGZiFhHCx0fKpTbnOJhf?usp=sharing">
+                        <a title="User Guide/Hướng dẫn sử dụng" href="https://drive.google.com/drive/folders/1NLUsNBK5Zgx_BGZiFhHCx0fKpTbnOJhf?usp=sharing">
                             <img src={iconHelp} alt="Help" className="w-6 h-6 filter-secondary-gray" />
                         </a>
                         <AppsMenu />
