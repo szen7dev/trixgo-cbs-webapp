@@ -366,14 +366,14 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                                     <td className={"w-[55px]"}>
                                         <Link to={"/pcm/detail/" + (item._id)}>
                                             <div className={"py-2"}>
-                                                <img src={`${process.env.REACT_APP_URL_S3_USER}/${item.lastComment? item.lastComment.author.image : item.assignee.image}`} alt={"avatar"} className={"w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"}/>
+                                                <img src={`${process.env.REACT_APP_URL_S3_USER}/${item.lastComment? item.lastComment.author.image : item.author.image}`} alt={"avatar"} className={"w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"}/>
                                             </div>
                                         </Link>
                                     </td>
                                     <td className={"w-[170px]"}>
                                         <Link to={"/pcm/detail/" + (item._id)}>
                                             <div className={"user-infor py-1"}>
-                                                <p className={"truncate user-infor-name text-[14px]"}>{item.lastComment ? item.lastComment.author.fullname : item.assignee.fullname}</p>
+                                                <p className={"truncate user-infor-name text-[14px]"}>{item.lastComment ? item.lastComment.author.fullname : item.author.fullname}</p>
                                                 <span className={"text-xs text-primary-gray mt-1"}>{item.related.length} liên quan</span>
                                             </div>
                                         </Link>
