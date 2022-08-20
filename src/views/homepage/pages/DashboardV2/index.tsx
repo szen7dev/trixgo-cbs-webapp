@@ -372,7 +372,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                                     </td>
                                     <td className={"w-[170px]"}>
                                         <Link to={"/pcm/detail/" + (item._id)}>
-                                            <div className={"user-infor py-1"}>
+                                            <div className={"user-infor py-2"}>
                                                 <p className={"truncate user-infor-name text-[14px]"}>{item.lastComment ? item.lastComment.author.fullname : item.author.fullname}</p>
                                                 <span className={"text-xs text-primary-gray mt-1"}>{item.related.length} liên quan</span>
                                             </div>
@@ -380,8 +380,8 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                                     </td>
                                     <td className={"pr-2 w-td-dashboard"}>
                                         <Link to={"/pcm/detail/" + (item._id)}>
-                                            <p className={"truncate task-title text-[14px]"}>{item.project.sign}.{subContentHtml(item.name)}</p>
-                                            <p className={"truncate crop-text text-xs text-primary-gray mt-1"}>{subContentHtml(item.lastComment?.content)}</p>
+                                            <p className={"truncate task-title text-[14px] py-2"}>{item.project.sign}.{subContentHtml(item.name)}</p>
+                                            <p className={"truncate crop-text text-xs text-primary-gray mt-1 py-2"}>{subContentHtml(item.lastComment?.content)}</p>
                                         </Link>
                                     </td>
                                     <td className={"w-[100px]"}>
