@@ -450,3 +450,4 @@ export const DocumentProjectPage: FC = () => {
     </>
   );
 };
+export default DocumentProjectPage;

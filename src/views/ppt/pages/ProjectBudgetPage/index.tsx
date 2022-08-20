@@ -1,9 +1,8 @@
-import { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { usePcmProjectBudget } from "services/hooks/pcm/usePcmProjectBudget";
 import { useParams } from 'react-router-dom';
-import classNames from 'classnames';
 
-import { RightClickMenuWrapper } from "shareComponents/common";
+import {DropdownSearchableV2, RightClickMenuWrapper} from "shareComponents/common";
 import MenuChildRow from './components/MenuChildRow';
 // import BugetRowGroup from "./components/BudgetRowGroup";
 import BugetRowGroupTemp from "./components/BudgetRowGroupTemp";
@@ -11,10 +10,15 @@ import { useProject } from 'services/hooks/items/useProject';
 import { formatNumberMoney } from "utils/cmcs";
 import { APP_ID } from 'apis/localdb';
 import { useHistoryTraffics } from "services/hooks/auth/useAuth";
-import { SearchInput } from "shareComponents/common";
-import debounce from "lodash/debounce";
+import categoryIcon from "assets/images/icons8-category-48.svg";
+import contractIcon from "assets/images/icons8-contract-64-blue.svg";
+import downloadIcon from "assets/images/icons8-download-64.svg";
+import iconPencil from 'assets/images/icons8-pencil-96 1.png';
+import nextIcon from "assets/images/icons-arrow-next.svg";
+import chervUpIcon from "assets/images/icon-cherv-up.svg";
 
 const ProjectBudgetPage: FC = () => {
+	const [collapse, setCollapse] = useState(false);
 	const [keyword, setKeyword] = useState("");
 	 //_____Start history traffict
 	 const payloadHistoryTraffic: any = {
@@ -57,36 +61,112 @@ const ProjectBudgetPage: FC = () => {
 	}
 
 	return (
-	<main className="relative h-full overflow-auto">
-		<header className="sticky top-0 bg-primary-light z-10">
-			<div className="h-[50px] border border-primary-border flex items-center justify-between px-5">
-				<div className="flex items-center">
-					<p className="text-lg ml-2">Danh sách</p>
-					<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu ml-4 mr-2" onChange={debounce(
-						(event: any) => setKeyword(event.target.value),
-						500
-					)} />
+	<main className="flex flex-col h-full overflow-hidden">
+		<div className={"sticky top-0 z-10 " + (collapse?"hidden":"block")}>
+			<div className={"flex items-center px-4 py-2"}>
+				<div className={"flex items-center flex-1"}>
+					<DropdownSearchableV2
+						className={"mr-4 border border-primary-border rounded-lg mb-2"}
+						placeholder={"Loại gói thầu"}
+						prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"}/>}
+						isMultiple={true}
+						disableSearch={true}
+						data={[]}
+					/>
+					<DropdownSearchableV2
+						className={"mr-4 border border-primary-border rounded-lg mb-2"}
+						placeholder={"Hình thức"}
+						prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"}/>}
+						isMultiple={true}
+						disableSearch={true}
+						data={[]}
+					/>
+					<DropdownSearchableV2
+						className={"mr-4 border border-primary-border rounded-lg mb-2"}
+						placeholder={"Loại hợp đồng"}
+						prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"}/>}
+						isMultiple={true}
+						disableSearch={true}
+						data={[]}
+					/>
+					<DropdownSearchableV2
+						className={"mr-4 border border-primary-border rounded-lg mb-2"}
+						placeholder={"Trạng thái"}
+						prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"}/>}
+						isMultiple={true}
+						disableSearch={true}
+						data={[]}
+					/>
+				</div>
+				<button className={"h-[32px] rounded bg-cbs-green text-white font-bold px-4"}>
+					Tạo mới
+				</button>
+			</div>
+			<div className={"flex items-center pb-2"}>
+				<div className={"border-0.5 border-primary-border flex items-center"}>
+					<button className={"px-4 py-2 bg-cbs-soft-blue border-r-0.5 border-primary-border text-primary"}>
+						Ngân sách
+					</button>
+					<button className={"px-4 py-2 bg-white border-r-0.5 border-primary-border text-primary-gray"}>
+						Bảo lãnh tạm ứng
+					</button>
+					<button className={"px-4 py-2 bg-white border-r-0.5 border-primary-border text-primary-gray"}>
+						Bảo lãnh hợp đồng
+					</button>
+					<button className={"px-4 py-2 bg-white border-r-0.5 border-primary-border text-primary-gray"}>
+						Kế hoạch chi
+					</button>
+					<button className={"px-4 py-2 bg-white border-r-0.5 border-primary-border text-primary-gray"}>
+						Kế hoạch thu
+					</button>
+				</div>
+				<button className={"flex items-center justify-center mx-3 ml-6"}>
+					<img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"}/>
+				</button>
+				<button className={"flex items-center justify-center mx-3 ml-6"}>
+					<img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"}/>
+				</button>
+				<div className={"flex-1 flex items-center justify-end"}>
+					<span className={"text-primary-gray"}>1-50 trong số 2.358</span>
+					<button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"} disabled={true}>
+						<img src={nextIcon} alt={"----"} className={"rotate-180"}/>
+					</button>
+					<button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"}>
+						<img src={nextIcon} alt={"----"}/>
+					</button>
 				</div>
 			</div>
-		</header>
-			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
-				<thead className="bg-cbs-table-header h-[38px] border-b border-primary-border">
-					<tr className="font-semibold">
-						{/* <th className="sticky top-0 bg-gray-300 px-1.5 z-10">
-							<button className="inline-block text-white rounded bg-gray-600 w-5 h-5" onClick={() => setShow(!show)}>{show ? '+' : '-'}</button>
-						</th> */}
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2 w-[38px]">TT</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2 min-w-[200px] w-[300px]">Gói thầu/Hợp đồng</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '122px' }}>Ngân sách</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '122px' }}>Dự báo</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '122px' }}>Ký hợp đồng</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '122px' }}>Đã tạm ứng</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '125px' }}>Sản lượng</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '132px' }}>Nghiệm thu</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '123px' }}>Đã thanh toán</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '124px' }}>Còn lại phải trả</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '246px' }}>Ghi chú</th>
-					</tr>
+		</div>
+		<div className="flex-1 overflow-y-auto">
+			<table className="table-fixed border-collapse w-full overflow-auto border-0.5 border-primary-border">
+				<thead className="bg-cbs-table-header h-[38px] border-0.5 border-primary-border">
+				<tr className="font-semibold">
+					{/* <th className="sticky top-0 bg-gray-300 px-1.5 z-10">
+						<button className="inline-block text-white rounded bg-gray-600 w-5 h-5" onClick={() => setShow(!show)}>{show ? '+' : '-'}</button>
+					</th> */}
+					<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2 w-[38px]">TT</th>
+					<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2 min-w-[200px] w-[300px]">Gói thầu/Hợp đồng</th>
+					<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '122px' }}>Ngân sách</th>
+					<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '122px' }}>Dự báo</th>
+					<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '122px' }}>Ký hợp đồng</th>
+					<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '122px' }}>Đã tạm ứng</th>
+					<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '125px' }}>Sản lượng</th>
+					<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '132px' }}>Nghiệm thu</th>
+					<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '123px' }}>Đã thanh toán</th>
+					<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '124px' }}>Còn lại phải trả</th>
+					<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '246px' }}>
+						<div className={"flex items-center"}>
+							<div className={"flex-1"}>
+								Ghi chú
+							</div>
+							<button
+								onClick={() => setCollapse(!collapse)}
+								className={"p-2 rounded bg-white flex items-center justify-center"}>
+								<img src={chervUpIcon} alt={"----"} className={"transition-all " +(collapse?"rotate-180":"")}/>
+							</button>
+						</div>
+					</th>
+				</tr>
 				</thead>
 				<RightClickMenuWrapper
 					contextMenu={<MenuChildRow />}
@@ -95,44 +175,44 @@ const ProjectBudgetPage: FC = () => {
 				>
 					<tr className="text-right">
 						{/* <th className='bg-gray-300 px-1.5 relative'>
-							<div className={classNames('absolute left-1/2 bg-cbs-subtext top-1/2 w-[1px] h-1/2', { hidden: show })} />
-							<button className="relative inline-block text-white rounded bg-gray-600 w-5 h-5" onClick={() => setShow(!show)}>
-								{show ? '+' : '-'}
-							</button>
-						</th> */}
-						<th className='py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-center'></th>
-						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-left"></th>
-						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 md:text-xs">
+						<div className={classNames('absolute left-1/2 bg-cbs-subtext top-1/2 w-[1px] h-1/2', { hidden: show })} />
+						<button className="relative inline-block text-white rounded bg-gray-600 w-5 h-5" onClick={() => setShow(!show)}>
+							{show ? '+' : '-'}
+						</button>
+					</th> */}
+						<th className='py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border text-center'></th>
+						<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border text-left"></th>
+						<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border md:text-xs">
 							{formatNumberMoney(projectInfo.budget + projectInfo.vatBudget)}
 						</th>
-						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 md:text-xs">
+						<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border md:text-xs">
 							{formatNumberMoney(projectInfo.forecastBudget + projectInfo.vatForecastBudget)}
 						</th>
-						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 md:text-xs">
+						<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border md:text-xs">
 							{formatNumberMoney(
 								projectInfo.contractValue + projectInfo.contractVatValue +
 								projectInfo.contractPlus + projectInfo.contractVatPlus
 							)}
 						</th>
-						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 md:text-xs">
+						<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border md:text-xs">
 							{formatNumberMoney(projectInfo.contractAdvancePaymentPaid)}
 						</th>
-						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 md:text-xs">
+						<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border md:text-xs">
 							{formatNumberMoney(projectInfo.contractProduce + projectInfo.contractVatProduce)}
 						</th>
-						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 md:text-xs">
+						<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border md:text-xs">
 							{formatNumberMoney(
 								projectInfo.contractAcceptance + projectInfo.contractVatAcceptance +
 								projectInfo.contractPlusAcceptance + projectInfo.contractVatPlusAcceptance
 							)}
 						</th>
-						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 md:text-xs">
+						<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border md:text-xs">
 							{formatNumberMoney(projectInfo.contractAmountPaid)}
 						</th>
-						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 md:text-xs">
+						<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border md:text-xs">
 							{formatNumberMoney(projectInfo.contractRemainingPayment)}
 						</th>
-						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5"></th>
+						<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border"></th>
 					</tr>
 					{listPcmProjectBudget.map((_item: any, index) =>
 						<BugetRowGroupTemp row={_item} key={_item._id} index={index} show={show} />
@@ -140,14 +220,15 @@ const ProjectBudgetPage: FC = () => {
 				</RightClickMenuWrapper>
 			</table>
 			{hasNextPage && (
-                <div className="w-full flex justify-center my-5">
-                  <button onClick={fetchNextPage}>
-                    <span className="text-primary">
-                      Xem thêm ({totalRecord - listPcmProjectBudget.length})
-                    </span>
-                  </button>
-                </div>
+				<div className="w-full flex justify-center my-5">
+					<button onClick={fetchNextPage}>
+				<span className="text-primary">
+				  Xem thêm ({totalRecord - listPcmProjectBudget.length})
+				</span>
+					</button>
+				</div>
 			)}
+		</div>
 	</main>
 	);
 };

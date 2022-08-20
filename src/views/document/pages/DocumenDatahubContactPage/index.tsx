@@ -59,3 +59,5 @@ export const DocumenDatahubContactPage: FC = () => {
 		</>
 	);
 };
+
+export default DocumenDatahubContactPage;
