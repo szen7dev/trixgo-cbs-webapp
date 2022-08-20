@@ -427,3 +427,4 @@ export const DocumentOfPackagePage: FC = () => {
     </>
   );
 };
+export default DocumentOfPackagePage;

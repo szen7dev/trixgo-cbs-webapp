@@ -19,27 +19,6 @@ type Props = {
 export const LeftNavigate:FC<Props> = ({handleMenuEvent}) => {
     const {pathname} = useLocation();
 
-    const [totalNoti, setTotalNoti] = useState(0);
-    const { current: socket }: any = useSocket();
-
-    const {data} = useSelector((state: RootState) => state.listConversation);
-    const {amountMissMessage} = data;
-
-    const {
-        totalRecordSendSuccess,
-        refetchListNotification,
-    } = useNotification({}, true);
-
-    useEffect(() => {
-        socket?.on('NOTIFICATION_SSC_RECEIVE_NEW_NOTIFICATION', refetchListNotification);
-
-        return () => socket?.off('NOTIFICATION_SSC_RECEIVE_NEW_NOTIFICATION', refetchListNotification);
-    }, [socket]);
-
-    useEffect(() => {
-        totalRecordSendSuccess && setTotalNoti(totalRecordSendSuccess);
-    }, [totalRecordSendSuccess])
-
     return (
         <div className={"bg-cbs-right-navigate-bg w-[68px] min-w-[68px] flex flex-col items-center relative z-40"}>
             <button title="Toggle left sidebar" onClick={handleMenuEvent} className={"my-6"}>
@@ -86,13 +65,10 @@ export const LeftNavigate:FC<Props> = ({handleMenuEvent}) => {
             <Link to={`/messages`} className={"flex flex-col items-center mb-3"}>
                 <div className={"px-4 py-1 rounded-full relative " + (pathname.includes("/messages") ? "bg-cbs-hightlight-right-navigate" : "")}>
                     <img src={chatIcon} alt={"Chat"}/>
-                    {
-                        amountMissMessage > 0 &&
-                        <span
-                            className={"absolute -top-1 right-1 min-w-5 w-5 h-5 text-xs inline-block border-2 text-center border-white rounded-full bg-negative text-white"}>
-                            {amountMissMessage}
-                        </span>
-                    }
+                    <span
+                        className={"absolute -top-1 right-1 min-w-5 w-5 h-5 text-xs inline-block border-2 text-center border-white rounded-full bg-negative text-white"}>
+                        10
+                    </span>
                 </div>
                 <span className={"text-primary-gray mt-1"}>Chat</span>
             </Link>

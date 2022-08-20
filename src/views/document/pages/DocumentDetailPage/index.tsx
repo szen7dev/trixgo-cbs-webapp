@@ -341,3 +341,5 @@ export const DocumentDetailPage: FC = () => {
     </div>
   );
 };
+
+export default DocumentDetailPage;

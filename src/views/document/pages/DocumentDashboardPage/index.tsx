@@ -402,3 +402,5 @@ export const DocumentDashboardPage: FC = () => {
 		</>
 	);
 };
+
+export default DocumentDashboardPage;

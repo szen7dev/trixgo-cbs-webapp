@@ -1,9 +1,11 @@
 import { FC } from 'react';
 
-export const DocumentReportPage: FC = () => {
+const DocumentReportPage: FC = () => {
 	return (
 		<div>
 			This i report page
 		</div>
 	)
 }
+
+export default DocumentReportPage;

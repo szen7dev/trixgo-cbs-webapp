@@ -88,3 +88,5 @@ export const DocumentProfilePage: FC = () => {
 		</>
 	);
 };
+
+export default DocumentProfilePage;

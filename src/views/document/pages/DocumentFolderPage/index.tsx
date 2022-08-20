@@ -253,3 +253,5 @@ export const DocumentFolderPage: FC = () => {
     </>
   );
 };
+
+export default DocumentFolderPage;

@@ -23,25 +23,15 @@ import { ProviderModalPost as ProviderModalPcm } from "views/pcm/contexts/post";
 /*=====PAGES=====*/
 import {
   DocumentDetailPage,
-  DocumentFolderPage,
-  DocumentProjectPage,
-  DocumentProfilePage,
-  DocumenDatahubContactPage,
   DocumentOfPackagePage,
   DocumentOfTypePage,
 } from "views/document/pages";
 
 import {
   ProjectAdminManagementPage,
-  ProjectBiddingPage,
-  ProjectBudgetPage,
   ProjectCashFlowPlanPage,
   ProjectCashFlowPlanChildPage,
   ProjectCategoryPage,
-  ProjectFolderPage,
-  ProjectPaymentPage,
-  ProjectSubjectPage,
-  ProjectSubjectCompanyOfAssigneePage,
   ProjectSubjectCompanyOfAuthorPage,
   ProjectResourcePage,
   ProjectSchedulePage,
@@ -61,6 +51,17 @@ import ProjectAdminPositionTab from "views/ppt/pages/ProjectAdminPage/pages/Proj
 import {PmProjectLayout} from "../../shareComponents/layouts/PmLayout/PmProjectLayout";
 import {PmHeaderContent} from "../../shareComponents/layouts/PmLayout/components";
 
+const DocumentFolderPage          = lazy(() => import("views/document/pages/DocumentFolderPage"))
+const DocumenDatahubContactPage   = lazy(() => import("views/document/pages/DocumenDatahubContactPage"))
+const DocumentProfilePage         = lazy(() => import("views/document/pages/DocumentProfilePage"))
+const DocumentProjectPage         = lazy(() => import("views/document/pages/DocumentProjectPage"))
+const ProjectPaymentPage          = lazy(() => import("views/ppt/pages/ProjectPaymentPage"))
+const ProjectBiddingPage          = lazy(() => import("views/ppt/pages/ProjectBiddingPage"))
+const ProjectBudgetPage           = lazy(() => import("views/ppt/pages/ProjectBudgetPage"))
+const ProjectBudgetDetailPage     = lazy(() => import("views/ppt/pages/ProjectBudgetDetailPage"))
+const ProjectSubjectCompanyOfAssigneePage          = lazy(() => import("views/ppt/pages/ProjectSubjectCompanyOfAssigneePage"))
+const ProjectSubjectPage          = lazy(() => import("views/ppt/pages/ProjectSubjectPage"))
+const ProjectFolderPage           = lazy(() => import("views/ppt/pages/ProjectFolderPage"))
 const ProjectDashboardPage        = lazy(() => import("views/ppt/pages/ProjectDashboardPage"))
 const ProjectPhotoContractPage    = lazy(() => import("views/ppt/pages/ProjectPhotoContractPage"))
 const ProjectPhotoPage            = lazy(() => import("views/ppt/pages/ProjectPhotoPage"))
@@ -162,31 +163,32 @@ const PCMRouter: FC = () => {
                     </Route>
                     <Route exact path="/pm/project/:id/responses" component={PcmReportQuickPage} />
                     <Route exact path="/pm/project/:id/milestone/:milestoneID" component={ProjectMilestonePage} />
-                    <Route exact path="/pm/project/:id/folder" component={ProjectFolderPage} />
-                    <Route exact path="/pm/project/:id/folder/:groupID" component={ProjectFolderPage} />
-                    <Route exact path="/pm/project/:id/schedule" component={ProjectSchedulePage} />
+                    <Route exact path="/pm/project/:id/folder" render={(props) => (
+                        <PmProjectLayout>
+                          <ProjectFolderPage {...props}/>
+                        </PmProjectLayout>
+                    )}/>
+                    <Route exact path="/pm/project/:id/folder/:groupID" render={(props) => (
+                        <PmProjectLayout>
+                          <ProjectFolderPage {...props}/>
+                        </PmProjectLayout>
+                    )}/>
+                    <Route exact path="/pm/project/:id/schedule">
+                      <PmProjectLayout>
+                        <ProjectSchedulePage/>
+                      </PmProjectLayout>
+                    </Route>
                     <Route path="/pm/project/:id/(budget|cash-flow|cash-flow-1|cash-flow-2)">
-                      <LayoutSecondary
-                          pages={[
-                            {
-                              id: "1",
-                              title: "Ngân sách",
-                              path: "/pm/project/:id/budget",
-                              navExact: true,
-                            },
-                            {
-                              id: "2",
-                              title: "Kế hoạch thu",
-                              path: "/pm/project/:id/cash-flow-1"
-                            },
-                            {
-                              id: "3",
-                              title: "Kế hoạch chi",
-                              path: "/pm/project/:id/cash-flow-2"
-                            },
-                          ]}
-                      >
-                        <Route exact path="/pm/project/:id/budget" component={ProjectBudgetPage} />
+                        <Route exact path="/pm/project/:id/budget">
+                          <PmProjectLayout>
+                            <ProjectBudgetPage/>
+                          </PmProjectLayout>
+                        </Route>
+                      <Route exact path="/pm/project/:id/budget/:budgetId">
+                        <PmProjectLayout>
+                          <ProjectBudgetDetailPage/>
+                        </PmProjectLayout>
+                      </Route>
                         <Route
                             exact
                             path="/pm/project/:id/cash-flow-1"
@@ -198,57 +200,43 @@ const PCMRouter: FC = () => {
                             component={() => <ProjectCashFlowPlanPage outin={2} />}
                         />
                         <Route exact path="/pm/project/:id/cash-flow/:cashFlowID/:outin" component={ProjectCashFlowPlanChildPage} />
-                      </LayoutSecondary>
                     </Route>
                     <Route exact path={["/pm/project/:id/bidding", "/pm/project/:id/bidding/(2|3)"]}>
-                      <LayoutSecondary
-                          pages={[
-                            // {
-                            //   id: "1",
-                            //   title: "Hồ sơ dự thầu",
-                            //   path: "/pcm/project/:id/bidding",
-                            //   navExact: true,
-                            // },
-                            // { id: "2", title: "Hồ sơ mời thầu", path: "/pcm/project/:id/bidding/2" },
-                            // { id: "3", title: "Tư vấn thầu", path: "/pcm/project/:id/bidding/3" },
-                          ]}
-                      >
-                        <Route exact path="/pm/project/:id/bidding" component={ProjectBiddingPage} />
-                        <Route
-                            exact
-                            path="/pm/project/:id/bidding/2"
-                            component={() => <>Sample Data</>}
-                        />
-                        <Route
-                            exact
-                            path="/pm/project/:id/bidding/3"
-                            component={() => <>Sample Data</>}
-                        />
-                      </LayoutSecondary>
+                        <PmProjectLayout>
+                          <Route exact path="/pm/project/:id/bidding" component={ProjectBiddingPage} />
+                          <Route
+                              exact
+                              path="/pm/project/:id/bidding/2"
+                              component={() => <>Sample Data</>}
+                          />
+                          <Route
+                              exact
+                              path="/pm/project/:id/bidding/3"
+                              component={() => <>Sample Data</>}
+                          />
+                        </PmProjectLayout>
                     </Route>
-                    <Route exact path="/pm/project/:id/payment" component={ProjectPaymentPage} />
+                    <Route exact path="/pm/project/:id/payment">
+                      <PmProjectLayout>
+                        <ProjectPaymentPage/>
+                      </PmProjectLayout>
+                    </Route>
                     <Route exact path="/pm/project/:id/payment/company/:companyID/subtype/:subtype" component={ProjectSubjectCompanyOfAuthorPage} />
-                    <Route exact path="/pm/project/:id/subject" component={ProjectSubjectPage} />
-                    <Route exact path="/pm/project/:id/subject/company/:companyID" component={ProjectSubjectCompanyOfAssigneePage} />
+                    <Route exact path="/pm/project/:id/subject">
+                      <PmProjectLayout>
+                        <ProjectSubjectPage/>
+                      </PmProjectLayout>
+                    </Route>
+                    <Route exact path="/pm/project/:id/subject/company/:companyID">
+                      <PmProjectLayout>
+                        <ProjectSubjectCompanyOfAssigneePage/>
+                      </PmProjectLayout>
+                    </Route>
                     <Route
                         exact
                         path={["/pm/project/:id/document", "/pm/project/:id/document/(1|2|3|4)"]}
                     >
-                      <LayoutSecondary
-                          pages={[
-                            {
-                              id: "1",
-                              title: "Danh sách",
-                              path: "/pm/project/:id/document",
-                              navExact: true,
-                            },
-                            { id: "2", title: "Phân loại", path: "/pm/project/:id/document/1" },
-                            { id: "3", title: "Danh bạ hệ thống", path: "/pm/project/:id/document/2" },
-                            { id: "4", title: "Gói thầu", path: "/pm/project/:id/document/3" },
-                            // { id: '4', title: 'Báo cáo', path: '/pcm/project/:id/document/3' },
-                            // { id: '5', title: 'Lịch sử upload file', path: '/pcm/project/:id/document/4' },
-                          ]}
-                      >
+                      <PmProjectLayout>
                         <ModalProvider>
                           <Switch>
                             <Route
@@ -276,7 +264,7 @@ const PCMRouter: FC = () => {
                           </Switch>
                           <ModalCreateDocument />
                         </ModalProvider>
-                      </LayoutSecondary>
+                      </PmProjectLayout>
                     </Route>
                     <Route
                         exact
