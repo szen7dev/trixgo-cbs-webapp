@@ -13,7 +13,7 @@ export const MainHeaderV2:FC<HeaderProps> = ({children, headerTitle}) => {
     const { user } = useAuth();
 
     return (
-        <header className="home-header relative top-0 transition-all duration-500 ease-out bg-primary-light z-30 border-b-0.5 border-primary-border">
+        <header className="home-header relative top-0 transition-all duration-500 ease-out bg-primary-light z-30">
             <div className="pr-4">
                 <div className="flex items-center justify-between h-14 -mb-px">
                     {/* Header: Left side */}
