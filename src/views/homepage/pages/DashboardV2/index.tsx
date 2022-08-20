@@ -335,12 +335,12 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                     <button className={"text-primary mx-2"}>
                         Đánh dấu tất cả đã đọc
                     </button>
-                    <button className={"flex items-center justify-center mx-3"}>
+                    {/* <button className={"flex items-center justify-center mx-3"}>
                         <img src={downloadIcon} alt={"-----"}/>
-                    </button>
-                    <button className={"flex items-center justify-center mx-3"}>
+                    </button> */}
+                    {/* <button className={"flex items-center justify-center mx-3"}>
                         <img src={sendMailIcon} alt={"-----"}/>
-                    </button>
+                    </button> */}
                     <div className={"flex-1 flex items-center justify-end"}>
                         <span className={"text-primary-gray"}>1-50 trong số {totalRecordSubject}</span>
                         <button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"} disabled={true}>
