@@ -42,11 +42,11 @@ export const HomeHeaderContent:FC = () => {
                 </div>
                 <input
                     onChange={e => handleSearchChange(e)}
-                    className={"pl-12 w-full h-[45px] bg-cbs-bg-input-search rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-none"} placeholder={"Tìm trong chủ đề"}/>
+                    className={"pl-12 w-full h-[45px] bg-cbs-bg-input-search rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-none focus:bg-white focus:shadow-md transition-all"} placeholder={"Tìm trong chủ đề"}/>
 
                 {
                     showResult &&
-                    <div className={"absolute top-full w-full rounded border-0.5 border-primary-border p-4 bg-white"}>
+                    <div className={"absolute top-full mt-2 w-full rounded border-0.5 border-primary-border p-4 bg-white"}>
                         <div className={"flex items-center py-2"}>
                             <div className={"w-[36px] flex items-center justify-center"}>
                                 <img src={searchIcon} alt={"----"} className={"w-[18px] h-[18px]"}/>

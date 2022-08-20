@@ -26,6 +26,7 @@ import sendMailIcon from "assets/images/icons8-send-email-96.svg";
 import nextIcon from "assets/images/icons-arrow-next.svg";
 import TriangleDown from "assets/icons/TriangleDown";
 import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
+import userAvt from "assets/images/task-user.svg";
 
 import { useTask } from "services/hooks/useTask";
 import { useAuth } from "services/hooks/auth/useAuth";
@@ -80,7 +81,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     };
 
     return (
-        <div className="t-home">
+        <div className="t-home flex flex-col h-full overflow-hidden">
             <div className={"sticky top-0 bg-white z-10"}>
                 <div className={"filter-bar flex flex-wrap px-4 py-2"}>
                     <DropdownSearchableV2
@@ -352,47 +353,103 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                     </div>
                 </div>
             </div>
-            <div className={"table-content"}>
+
+            <div className={"flex-1 overflow-y-auto"}>
+                <table className={"table-fixed border-collapse w-full border-0.5 border-primary-border"}>
+                    <thead>
+                        <tr className={"sticky top-0"}>
+                            <th className={"text-center py-2 font-normal text-primary-gray w-[70px] bg-cbs-table-header"}>
+                                TT
+                            </th>
+                            <th className={"w-1/12 bg-cbs-table-header text-left font-normal text-primary-gray py-2 border-b-0.5 border-primary-border"}>
+                                Ngày tạo
+                            </th>
+                            <th className={"w-2/12 bg-cbs-table-header text-left font-normal text-primary-gray py-2 border-b-0.5 border-primary-border"}>
+                                Người tạo
+                            </th>
+                            <th className={"w-3/12 bg-cbs-table-header text-left font-normal text-primary-gray py-2 border-b-0.5 border-primary-border"}>
+                                Tên file
+                            </th>
+                            <th className={"w-1/12 bg-cbs-table-header text-left font-normal text-primary-gray py-2 border-b-0.5 border-primary-border"}>
+                                Dung lượng
+                            </th>
+                            <th className={"min-w-4/12 bg-cbs-table-header text-left font-normal text-primary-gray py-2 border-b-0.5 border-primary-border"}>
+                                Thuộc chủ đề
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {
+                        [...Array(12)].map((e,i) => (
+                            <tr key={i}>
+                                <td className={"py-2 border-b-0.5 border-primary-border text-center align-middle"}>
+                                    {i+1}
+                                </td>
+                                <td className={"py-2 border-b-0.5 border-primary-border align-middle"}>
+                                    <p>24/3/2021</p>
+                                    <p className={"text-primary-gray"}>16 giờ trước</p>
+                                </td>
+                                <td className={"py-2 border-b-0.5 border-primary-border align-middle"}>
+                                    <div className={"flex items-center"}>
+                                        <img src={userAvt} alt={"---"} className={"w-[36px] h-[36px] min-w-[36px] min-h-[36px] max-w-[36px] max-h-[36px rounded-full overflow-hidden]"}/>
+                                        <span className={"ml-2"}>Phan Văn Trường</span>
+                                    </div>
+                                </td>
+                                <td className={"py-2 border-b-0.5 border-primary-border align-middle text-cbs-highlight-color break-all pr-2"}>
+                                    2020.12.15_HAR.MAR.HieuNT.DuToanNoiBo_V0.xlsx
+                                </td>
+                                <td className={"py-2 border-b-0.5 border-primary-border align-middle"}>
+                                    63 KB
+                                </td>
+                                <td className={"py-2 border-b-0.5 border-primary-border align-middle"}>
+                                    HAR.MAR.Đề nghị lập chi phí nội bộ và thống nhất với ban lãnh đạo công ty - Dự án Courtyard by Marriott Halong Bay
+                                </td>
+                            </tr>
+                        ))
+                    }
+                    </tbody>
+                </table>
+
                 <table className={"w-full table-fixed tasks"}>
                     <tbody>
-                        {listSubject?.map((item: any) => {
-                            return (
-                                <tr key={item._id} className={checkActive(item.news, `${user?._id}`)}>
-                                    <td className={"w-[46px]"}>
-                                        <div className={"flex items-center justify-center py-2"}>
-                                            <input className="form-check-input" type="checkbox" value="" id="check"/>
+                    {listSubject?.map((item: any) => {
+                        return (
+                            <tr key={item._id} className={checkActive(item.news, `${user?._id}`)}>
+                                <td className={"w-[46px]"}>
+                                    <div className={"flex items-center justify-center py-2"}>
+                                        <input className="form-check-input" type="checkbox" value="" id="check"/>
+                                    </div>
+                                </td>
+                                <td className={"w-[55px]"}>
+                                    <Link to={"/pcm/detail/" + (item._id)}>
+                                        <div className={"py-2"}>
+                                            <img src={`${process.env.REACT_APP_URL_S3_USER}/${item.lastComment? item.lastComment.author.image : item.author.image}`} alt={"avatar"} className={"w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"}/>
                                         </div>
-                                    </td>
-                                    <td className={"w-[55px]"}>
-                                        <Link to={"/pcm/detail/" + (item._id)}>
-                                            <div className={"py-2"}>
-                                                <img src={`${process.env.REACT_APP_URL_S3_USER}/${item.lastComment? item.lastComment.author.image : item.author.image}`} alt={"avatar"} className={"w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"}/>
-                                            </div>
-                                        </Link>
-                                    </td>
-                                    <td className={"w-[170px]"}>
-                                        <Link to={"/pcm/detail/" + (item._id)}>
-                                            <div className={"user-infor py-2"}>
-                                                <p className={"truncate user-infor-name text-[14px]"}>{item.lastComment ? item.lastComment.author.fullname : item.author.fullname}</p>
-                                                <span className={"text-xs text-primary-gray mt-1"}>{item.related.length} liên quan</span>
-                                            </div>
-                                        </Link>
-                                    </td>
-                                    <td className={"pr-2 w-td-dashboard"}>
-                                        <Link to={"/pcm/detail/" + (item._id)}>
-                                            <p className={"truncate task-title text-[14px] py-2"}>{item.project.sign}.{subContentHtml(item.name)}</p>
-                                            <p className={"truncate crop-text text-xs text-primary-gray mt-1 py-2"}>{subContentHtml(item.lastComment?.content)}</p>
-                                        </Link>
-                                    </td>
-                                    <td className={"w-[100px]"}>
-                                        <div className={"task-date whitespace-nowrap py-2 text-right pr-4"}>
-                                            {moment(item.modifyAt).format("DD/MM/YYYY")}
+                                    </Link>
+                                </td>
+                                <td className={"w-[170px]"}>
+                                    <Link to={"/pcm/detail/" + (item._id)}>
+                                        <div className={"user-infor py-2"}>
+                                            <p className={"truncate user-infor-name text-[14px]"}>{item.lastComment ? item.lastComment.author.fullname : item.author.fullname}</p>
+                                            <span className={"text-xs text-primary-gray mt-1"}>{item.related.length} liên quan</span>
                                         </div>
-                                    </td>
-                                </tr>
-                            )
-                        })
-                        }
+                                    </Link>
+                                </td>
+                                <td className={"pr-2 w-td-dashboard"}>
+                                    <Link to={"/pcm/detail/" + (item._id)}>
+                                        <p className={"truncate task-title text-[14px] py-2"}>{item.project.sign}.{subContentHtml(item.name)}</p>
+                                        <p className={"truncate crop-text text-xs text-primary-gray mt-1 py-2"}>{subContentHtml(item.lastComment?.content)}</p>
+                                    </Link>
+                                </td>
+                                <td className={"w-[100px]"}>
+                                    <div className={"task-date whitespace-nowrap py-2 text-right pr-4"}>
+                                        {moment(item.modifyAt).format("DD/MM/YYYY")}
+                                    </div>
+                                </td>
+                            </tr>
+                        )
+                    })
+                    }
                     </tbody>
                 </table>
             </div>
