@@ -100,6 +100,28 @@ const TaskRepository = {
     return data;
   },
 
+  /**
+   * Danh sách chủ đề tại trang chủ
+   * TaskListParams: Kiểu dữ liệu trả về
+   */
+  async listSubject(payload: TaskListParams): Promise<ListTaskResponse> {
+    const { data } = await API.get<ListTaskResponse>(
+      `${pcmURL}/pcm_plan_tasks/subject?${convertObToUrl({
+        select: "author lastComment checklist description name expiredTime status percentage project actualStartTime actualFinishTime amountChecklist amountFinishedChecklist milestone startTime related modifyAt news",
+        populates: JSON.stringify({
+          path: "author lastComment project",
+          select: "name fullname image author content createAt sign",
+          populate: {
+            path: "author",
+            select: "_id fullname image",
+          }
+        }),
+        ...payload
+      })}`
+    );
+    return data;
+  },
+
   async taskInfo(payload: TaskInfoParams): Promise<any> {
     const { data } = await API.get<any>(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl({

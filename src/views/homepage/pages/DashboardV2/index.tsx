@@ -3,16 +3,18 @@ import moment from "moment";
 import Slider from "react-slick";
 import {Link, useHistory} from 'react-router-dom';
 import { useQuery } from "react-query";
+import parse from "html-react-parser";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "views/pcm/styles/pcm.module.css";
 
-import newsImg1 from "assets/images/home-slide-img1.jpg";
-import iconThumbsUp from "assets/images/icons8-thumbs-up-48.png";
-import iconComments from "assets/images/icons8-comments-48.png";
-import iconEye from "assets/images/icons8-eye-48.png";
+// import newsImg1 from "assets/images/home-slide-img1.jpg";
+// import iconThumbsUp from "assets/images/icons8-thumbs-up-48.png";
+// import iconComments from "assets/images/icons8-comments-48.png";
+// import iconEye from "assets/images/icons8-eye-48.png";
 // import iconArrowRight from "assets/images/icon-arrow-right.svg";
+
 import {DropdownSearchableV2, TimeRangeDropdown} from "../../../../shareComponents/common";
 import userIcon from "assets/images/icon-user-avatar.svg";
 import maleUserIcon from "assets/images/icons8-male-user-64.svg";
@@ -25,17 +27,61 @@ import nextIcon from "assets/images/icons-arrow-next.svg";
 import TriangleDown from "assets/icons/TriangleDown";
 import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
 
-export const DashboardV2: FC = () => {
+import { useTask } from "services/hooks/useTask";
+import { useAuth } from "services/hooks/auth/useAuth";
+
+type Props = {
+    type?: number
+}
+
+export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     const [filter, setFilter] = useState("all");
     const history = useHistory();
+    const { user } = useAuth();
 
     const jumpToDetail = (row: any) => {
         history.push("/pcm/detail/1");
         //Thực hiện đánh dấu đã đọc với task nếu cần
     }
+
+    // Danh sách các việc quá hạn
+    const {
+        listSubject,
+        totalRecordSubject,
+        nextPageListSubject,
+    } = useTask({
+        params: {
+           draft: "1", isParent: "1", isActive: "1"
+        },
+        isFetchSubject: true
+    });
+
+    // console.log(listSubject)
+    // console.log(user)
+
+    const subContentHtml = (html?: string) => {
+        const removeHtmlTag = parse(
+          (html || "").replace(/<[^>]*>?/gm, " ")
+        ).toString();
+    
+        const result =
+          removeHtmlTag.length > 150
+            ? `${removeHtmlTag.slice(0, 150)}...`
+            : removeHtmlTag;
+        return result;
+      };
+
+    const checkActive = (relateds: string[], user: string) => {
+        let result = "read border-b-0.5 border-primary-border"
+        if(relateds.includes(user)){
+            result = "unread border-b-0.5 border-primary-border"
+        }
+        return result;
+    };
+
     return (
         <div className="t-home">
-            <div className={"sticky top-0 bg-white"}>
+            <div className={"sticky top-0 bg-white z-10"}>
                 <div className={"filter-bar flex flex-wrap px-4 py-2"}>
                     <DropdownSearchableV2
                         className={"mr-4 border border-primary-border rounded-lg mb-2"}
@@ -263,7 +309,7 @@ export const DashboardV2: FC = () => {
                             },
                         ]}
                     />
-                    <button className={"bg-green-success rounded text-white px-6 h-[32px] mb-2"}>
+                    <button className={"bg-green-success rounded text-white px-2 h-[32px] mb-2"}>
                         Lưu kết quả
                     </button>
                 </div>
@@ -296,7 +342,7 @@ export const DashboardV2: FC = () => {
                         <img src={sendMailIcon} alt={"-----"}/>
                     </button>
                     <div className={"flex-1 flex items-center justify-end"}>
-                        <span className={"text-primary-gray"}>1-50 trong số 2.358</span>
+                        <span className={"text-primary-gray"}>1-50 trong số {totalRecordSubject}</span>
                         <button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"} disabled={true}>
                             <img src={nextIcon} alt={"----"} className={"rotate-180"}/>
                         </button>
@@ -309,7 +355,50 @@ export const DashboardV2: FC = () => {
             <div className={"table-content"}>
                 <table className={"w-full table-fixed tasks"}>
                     <tbody>
-                        <tr className={"read checked"}>
+                        {listSubject?.map((item: any) => {
+                            return (
+                                <tr key={item._id} className={checkActive(item.news, `${user?._id}`)}>
+                                    <td className={"w-[46px]"}>
+                                        <div className={"flex items-center justify-center py-2"}>
+                                            <input className="form-check-input" type="checkbox" value="" id="check"/>
+                                        </div>
+                                    </td>
+                                    <td className={"w-[55px]"}>
+                                        <Link to={"/pcm/detail/" + (item._id)}>
+                                            <div className={"py-2"}>
+                                                <img src={`${process.env.REACT_APP_URL_S3_USER}/${item.lastComment? item.lastComment.author.image : item.author.image}`} alt={"avatar"} className={"w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"}/>
+                                            </div>
+                                        </Link>
+                                    </td>
+                                    <td className={"w-[170px]"}>
+                                        <Link to={"/pcm/detail/" + (item._id)}>
+                                            <div className={"user-infor py-1"}>
+                                                <p className={"truncate user-infor-name text-[14px]"}>{item.lastComment ? item.lastComment.author.fullname : item.author.fullname}</p>
+                                                <span className={"text-xs text-primary-gray mt-1"}>{item.related.length} liên quan</span>
+                                            </div>
+                                        </Link>
+                                    </td>
+                                    <td className={"task-infor-td"}>
+                                        <Link to={"/pcm/detail/" + (item._id)}>
+                                            <div className={"task-infor flex-auto overflow-hidden whitespace-nowrap py-2"}>
+                                                <div className={"whitespace-nowrap overflow-hidden"}>
+                                                    <p className={"task-title text-[14px]"}>{item.project.sign}.{subContentHtml(item.name)}</p>
+                                                    <span className={"crop-text text-xs text-primary-gray mt-1"}>{subContentHtml(item.lastComment?.content)}</span>
+                                                </div>
+                                            </div>
+                                        </Link>
+                                    </td>
+                                    <td className={"w-[100px]"}>
+                                        <div className={"task-date whitespace-nowrap py-2 text-right pr-4"}>
+                                            {moment(item.modifyAt).format("DD/MM/YYYY")}
+                                        </div>
+                                    </td>
+                                </tr>
+                            )
+                        })
+                        }
+
+                        {/* <tr className={"read checked border-b-0.5 border-primary-border"}>
                             <td className={"w-[46px]"}>
                                 <div className={"flex items-center justify-center py-3"}>
                                     <input checked className="form-check-input" type="checkbox" value="" id="check"/>
@@ -322,7 +411,7 @@ export const DashboardV2: FC = () => {
                             </td>
                             <td className={"w-[170px]"}>
                                 <div onClick={() => jumpToDetail(null)}  className={"user-infor py-3"}>
-                                    <p className={"truncate user-infor-name"}>Phan Văn Trường-PGI</p>
+                                    <p className={"truncate user-infor-name"}>Phan Văn Trường-PG 222</p>
                                     <span className={"text-xs text-primary-gray mt-1"}>8 liên quan, 2 cc</span>
                                 </div>
                             </td>
@@ -341,7 +430,7 @@ export const DashboardV2: FC = () => {
                                 </div>
                             </td>
                         </tr>
-                        <tr className={"unread"}>
+                        <tr className={"unread border-b-0.5 border-primary-border"}>
                             <td className={"w-[46px]"}>
                                 <div className={"flex items-center justify-center py-3"}>
                                     <input className="form-check-input" type="checkbox" value="" id="check"/>
@@ -372,7 +461,7 @@ export const DashboardV2: FC = () => {
                                     4 thg 8
                                 </div>
                             </td>
-                        </tr>
+                        </tr> */}
                     </tbody>
                 </table>
             </div>

@@ -1102,7 +1102,8 @@ button {
   height: 2px;
   background: white;
   top: calc(50% - 1px);
-  left: 10%
+  left: 10%;
+  z-index: 1;
 }
 .form-check-input:checked {
   background-color: #0d6efd;
@@ -1134,6 +1135,7 @@ button {
   -webkit-print-color-adjust: exact;
   color-adjust: exact;
   position: relative;
+  z-index: 1;
 }
 .form-check-input.border-white {
   border-color: white;
@@ -1688,14 +1690,15 @@ img {
 } */
 
 .main-route-content {
-  width: 100%;
+  width: calc(100% - 256px);
   height: calc(100vh - 55px);
-  padding-left: 256px;
+  margin-left: 256px;
   top: 0;
 }
 
 .home-layout.collapse-left .main-route-content {
-  padding-left: 0;
+  margin-left: 0;
+  width: 100%;
 }
 .left-menu-nav.active {
   @apply bg-cbs-active-blue font-bold text-black;
@@ -1727,8 +1730,11 @@ img {
   min-width: 0;
   padding-right: 10px;
 }
-.tasks .read{
+/* .tasks .read{
   @apply bg-cbs-bg-input-search;
+} */
+.tasks .read{
+  background: #F2F6FC;
 }
 .tasks .unread {
   @apply bg-white;

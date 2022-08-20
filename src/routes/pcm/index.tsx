@@ -90,6 +90,8 @@ const PCMRouter: FC = () => {
     <ProviderModalMedia>
       <ProviderModalPcm>
         <Switch>
+
+          {/* Trang chủ */}
           <ProtectedRoute
             exact
             path={"/"}
@@ -99,9 +101,11 @@ const PCMRouter: FC = () => {
               </HomeLayout>
             )}
           />
+
           <Route exact path="/pcm">
             <Redirect to="/pcm/home" />
           </Route>
+
           <ProtectedRoute path="/pcm/project/:id">
             <LayoutProjectSecondary>
               <Switch>
@@ -351,6 +355,7 @@ const PCMRouter: FC = () => {
               </Switch>
             </LayoutProjectSecondary>
           </ProtectedRoute>
+          
           <ProtectedRoute path="/pcm">
             <HomeLayout>
               <Switch>

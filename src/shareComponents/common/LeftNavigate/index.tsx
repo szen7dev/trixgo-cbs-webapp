@@ -59,20 +59,20 @@ export const LeftNavigate:FC<Props> = ({handleMenuEvent}) => {
                 </div>
                 <span className={"text-primary-gray mt-1"}>Chủ đề</span>
             </Link>
-            <Link to={`/pm/home`} className={"flex flex-col items-center mb-3"}>
-                <div className={"px-4 py-1 rounded-full relative " + (pathname.includes("/messages") ? "bg-cbs-hightlight-right-navigate" : "")}>
+            <Link to={`/pm`} className={"flex flex-col items-center mb-3"}>
+                <div className={"px-4 py-1 rounded-full relative " + (pathname.includes("/pm") ? "bg-cbs-hightlight-right-navigate" : "")}>
                     <img src={projectIcon} alt={"Dự án"}/>
                 </div>
                 <span className={"text-primary-gray mt-1"}>Dự án</span>
             </Link>
             <Link to={`/cmcs/home`} className={"flex flex-col items-center mb-3"}>
-                <div className={"px-4 py-1 rounded-full relative " + (pathname.includes("/messages") ? "bg-cbs-hightlight-right-navigate" : "")}>
+                <div className={"px-4 py-1 rounded-full relative " + (pathname.includes("/cmcs") ? "bg-cbs-hightlight-right-navigate" : "")}>
                     <img src={contractIcon} alt={"Hợp đồng"}/>
                 </div>
                 <span className={"text-primary-gray mt-1"}>Hợp đồng</span>
             </Link>
             <Link to={`/document/home`} className={"flex flex-col items-center mb-3"}>
-                <div className={"px-4 py-1 rounded-full relative " + (pathname.includes("/messages") ? "bg-cbs-hightlight-right-navigate" : "")}>
+                <div className={"px-4 py-1 rounded-full relative " + (pathname.includes("/document") ? "bg-cbs-hightlight-right-navigate" : "")}>
                     <img src={fileIcon} alt={"Hồ sơ"}/>
                 </div>
                 <span className={"text-primary-gray mt-1"}>Hồ sơ</span>

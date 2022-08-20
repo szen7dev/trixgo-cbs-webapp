@@ -8,7 +8,7 @@ import cn from "classnames";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import {LeftMenu, MainHeaderV2, LeftNavigate} from "../../common";
-import {HomeHeaderContent, HomeLeftMenuContent} from "./components";
+import {PmHeaderContent, PmLeftMenuContent} from "./components";
 
 /*=====5.TYPINGS=====*/
 
@@ -24,8 +24,6 @@ export const PmLayout: FC<Props> = ({ children }) => {
   const [isHeaderCollapse, setIsHeaderCollapse] = useState(false);
   const [isLeftMenuCollapse, setIsLeftMenuCollapse] = useState(false);
   const [isRightSideBarCollapse, setIsRightSideBarCollapse] = useState(false);
-  const [isChatboxVisible, setIsChatboxVisible] = useState(false);
-  const [isNewChatboxVisible, setIsNewChatboxVisible] = useState(false);
 
   const handleHeaderEvent = () => {
     setIsHeaderCollapse(!isHeaderCollapse);
@@ -35,18 +33,6 @@ export const PmLayout: FC<Props> = ({ children }) => {
   };
   const handleRightSideBarEvent = () => {
     setIsRightSideBarCollapse(!isRightSideBarCollapse);
-  };
-  const closeMiniChatbox = () => {
-    setIsChatboxVisible(false);
-  };
-  const openMiniChatbox = () => {
-    setIsChatboxVisible(true);
-  };
-  const handleOpenNewChatbox = () => {
-    setIsNewChatboxVisible(true);
-  };
-  const handleCloseNewChatbox = () => {
-    setIsNewChatboxVisible(false);
   };
 
   return (
@@ -64,14 +50,14 @@ export const PmLayout: FC<Props> = ({ children }) => {
         <section className={"main-content-wrapper flex-1"}>
           {/*  Main header */}
           <MainHeaderV2
-            headerTitle={"Chủ đề"}
+            headerTitle={"Dự án"}
           >
-            <HomeHeaderContent/>
+            <PmHeaderContent/>
           </MainHeaderV2>
 
           {/* Left navigation */}
           <LeftMenu>
-            <HomeLeftMenuContent/>
+            <PmLeftMenuContent/>
           </LeftMenu>
 
           {/* Content area */}
