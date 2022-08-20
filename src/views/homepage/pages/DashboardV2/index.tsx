@@ -1654,7 +1654,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                           <p className={"truncate user-infor-name text-[14px]"}>
                             {item.author.fullname}
                           </p>
-                          <span className={"text-xs text-primary-gray mt-1"}>
+                          <span className={"text-xs text-primary-gray py-2"}>
                             {item.task.related.length} liên quan
                           </span>
                         </div>
@@ -1734,7 +1734,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                               ? item.lastComment.author.fullname
                               : item.author.fullname}
                           </p>
-                          <span className={"text-xs text-primary-gray mt-1"}>
+                          <span className={"text-xs text-primary-gray py-2"}>
                             {item.related.length} liên quan
                           </span>
                         </div>
