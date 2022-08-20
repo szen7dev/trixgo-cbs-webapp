@@ -58,6 +58,7 @@ const DocumentProjectPage         = lazy(() => import("views/document/pages/Docu
 const ProjectPaymentPage          = lazy(() => import("views/ppt/pages/ProjectPaymentPage"))
 const ProjectBiddingPage          = lazy(() => import("views/ppt/pages/ProjectBiddingPage"))
 const ProjectBudgetPage           = lazy(() => import("views/ppt/pages/ProjectBudgetPage"))
+const ProjectBudgetDetailPage     = lazy(() => import("views/ppt/pages/ProjectBudgetDetailPage"))
 const ProjectSubjectCompanyOfAssigneePage          = lazy(() => import("views/ppt/pages/ProjectSubjectCompanyOfAssigneePage"))
 const ProjectSubjectPage          = lazy(() => import("views/ppt/pages/ProjectSubjectPage"))
 const ProjectFolderPage           = lazy(() => import("views/ppt/pages/ProjectFolderPage"))
@@ -183,6 +184,11 @@ const PCMRouter: FC = () => {
                             <ProjectBudgetPage/>
                           </PmProjectLayout>
                         </Route>
+                      <Route exact path="/pm/project/:id/budget/:budgetId">
+                        <PmProjectLayout>
+                          <ProjectBudgetDetailPage/>
+                        </PmProjectLayout>
+                      </Route>
                         <Route
                             exact
                             path="/pm/project/:id/cash-flow-1"
