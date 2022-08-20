@@ -1611,7 +1611,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                         >
                           <div className={"whitespace-nowrap overflow-hidden"}>
                             <p className={"task-title text-[14px]"}>
-                              {item.project?.sign}
+                              {item.project?.sign}.{item.task?.name}
                             </p>
                             <span
                               className={
