@@ -81,7 +81,7 @@ export const HomeHeaderContent: FC = () => {
         <input
           onChange={(e) => handleSearchChange(e)}
           className={
-            "pl-12 w-full h-[45px] bg-cbs-bg-input-search rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-none"
+            "pl-12 w-full h-[45px] bg-cbs-bg-input-search rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-none focus:bg-white focus:shadow-md transition-all"
           }
           placeholder={`Tìm trong ${
             tabIndex === 1 ? "phản hồi" : tabIndex === 2 ? "chủ đề" : "file"
@@ -92,7 +92,7 @@ export const HomeHeaderContent: FC = () => {
         {showResult && (
           <div
             className={
-              "absolute top-full w-full rounded border-0.5 border-primary-border p-4 bg-white"
+              "absolute top-full w-full mt-2 rounded border-0.5 border-primary-border p-4 bg-white"
             }
             style={{minHeight: 300}}
           >

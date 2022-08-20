@@ -8,6 +8,7 @@ import parse from "html-react-parser";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "views/pcm/styles/pcm.module.css";
+import userAvt from "assets/images/task-user.svg";
 
 // import newsImg1 from "assets/images/home-slide-img1.jpg";
 // import iconThumbsUp from "assets/images/icons8-thumbs-up-48.png";
@@ -83,7 +84,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
   };
 
   return (
-    <div className="t-home">
+    <div className="t-home flex flex-col h-full overflow-hidden">
       <div className={"sticky top-0 bg-white z-10"}>
         <div className={"filter-bar flex flex-wrap px-4 py-2"}>
           {tabIndex === 2 && (
@@ -1557,7 +1558,61 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           </div>
         </div>
       </div>
-      <div className={"table-content"}>
+      <div className={"flex-1 overflow-y-auto"}>
+        <table className={"table-fixed border-collapse w-full border-0.5 border-primary-border"}>
+          <thead>
+          <tr className={"sticky top-0"}>
+            <th className={"text-center py-2 font-normal text-primary-gray w-[70px] bg-cbs-table-header"}>
+              TT
+            </th>
+            <th className={"w-1/12 bg-cbs-table-header text-left font-normal text-primary-gray py-2 border-b-0.5 border-primary-border"}>
+              Ngày tạo
+            </th>
+            <th className={"w-2/12 bg-cbs-table-header text-left font-normal text-primary-gray py-2 border-b-0.5 border-primary-border"}>
+              Người tạo
+            </th>
+            <th className={"w-3/12 bg-cbs-table-header text-left font-normal text-primary-gray py-2 border-b-0.5 border-primary-border"}>
+              Tên file
+            </th>
+            <th className={"w-1/12 bg-cbs-table-header text-left font-normal text-primary-gray py-2 border-b-0.5 border-primary-border"}>
+              Dung lượng
+            </th>
+            <th className={"min-w-4/12 bg-cbs-table-header text-left font-normal text-primary-gray py-2 border-b-0.5 border-primary-border"}>
+              Thuộc chủ đề
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          {
+            [...Array(12)].map((e,i) => (
+                <tr key={i}>
+                  <td className={"py-2 border-b-0.5 border-primary-border text-center align-middle"}>
+                    {i+1}
+                  </td>
+                  <td className={"py-2 border-b-0.5 border-primary-border align-middle"}>
+                    <p>24/3/2021</p>
+                    <p className={"text-primary-gray"}>16 giờ trước</p>
+                  </td>
+                  <td className={"py-2 border-b-0.5 border-primary-border align-middle"}>
+                    <div className={"flex items-center"}>
+                      <img src={userAvt} alt={"---"} className={"w-[36px] h-[36px] min-w-[36px] min-h-[36px] max-w-[36px] max-h-[36px rounded-full overflow-hidden]"}/>
+                      <span className={"ml-2"}>Phan Văn Trường</span>
+                    </div>
+                  </td>
+                  <td className={"py-2 border-b-0.5 border-primary-border align-middle text-cbs-highlight-color break-all pr-2"}>
+                    2020.12.15_HAR.MAR.HieuNT.DuToanNoiBo_V0.xlsx
+                  </td>
+                  <td className={"py-2 border-b-0.5 border-primary-border align-middle"}>
+                    63 KB
+                  </td>
+                  <td className={"py-2 border-b-0.5 border-primary-border align-middle"}>
+                    HAR.MAR.Đề nghị lập chi phí nội bộ và thống nhất với ban lãnh đạo công ty - Dự án Courtyard by Marriott Halong Bay
+                  </td>
+                </tr>
+            ))
+          }
+          </tbody>
+        </table>
         <table className={"w-full table-fixed tasks"}>
           {tabActive === 1 ? (
             <tbody>
