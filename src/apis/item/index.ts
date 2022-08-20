@@ -11,5 +11,6 @@ export { GoodsRepository as GoodsRepository } from './goods';
 export { default as ContractRepository} from './contract';
 export { PositionRepository } from './position';
 export { customerRepository as CustomerRepository } from './customer';
+export { departmentDirectoryRepository as DepartmentDirectoryRepository } from './department_directory';
 
 export * from './project';

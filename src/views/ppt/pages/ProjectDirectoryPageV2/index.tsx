@@ -1,12 +1,44 @@
-import React, {FC} from "react";
+import React, {FC, useState } from "react";
 import businessBuilding from "assets/images/icons8-business-building-48.svg";
+import debounce from 'lodash/debounce';
 import downloadIcon from "assets/images/icons8-download-64.svg";
 import pencilIcon from "assets/images/icons8-pencil-96.svg";
 import {DropdownSearchableV2} from "shareComponents/common";
 import nextIcon from "assets/images/icons-arrow-next.svg";
 import userAvatar from "assets/images/task-user.svg";
+import { useQueryListCompany } from 'services/hooks/useCompanies';
+import { useDepartmentDirectory } from 'services/hooks/items/useDepartmentDirectory';
+import iconChevronRight from "assets/images/icon-chevron-right.png";
 
+const DEPARTMENT_DIRECTORY_TYPE = [
+    { id: 1, text: "Trợ lý viên" },
+    { id: 2, text: "Chủ đầu tư" },
+    { id: 3, text: "Tư vấn QLDA" },
+    { id: 4, text: "Tư vấn giám sát" },
+    { id: 5, text: "Tư vấn thiết kế" },
+    { id: 6, text: "Nhà thầu thi công" },
+]
+
+const DEPARTMENT_DIRECTORY_LOCK = [
+    { id: 0, text: "Bình thường" },
+    { id: 1, text: "Khóa" },
+]
 const ProjectDirectoryPageV2:FC = () => {
+    const [keywordCompany, setKeywordCompany] = useState('');
+    const [companySelected, setCompanySelected] = useState('');
+    const { data: listCompanies, fetchNextPage } = useQueryListCompany({ keyword: keywordCompany, limit: 20 });
+    const { 
+        list: listDepartmentDirectory, 
+        totalRecord,
+        fetchNextPage: fetchNextPageDepartmentDirectory
+    } = useDepartmentDirectory({ params: { companyID: companySelected, limit: 10}, isFetchList: true });
+
+    const handleSearch = debounce((value) => setKeywordCompany(value), 500);
+
+    const handleChangeCompany = (value: any) => {
+        setCompanySelected(value.id);
+    }
+
     return (
         <div className={"project-directory"}>
             <div className={"flex px-4 py-2 items-center justify-between"}>
@@ -14,8 +46,10 @@ const ProjectDirectoryPageV2:FC = () => {
                     className={"mr-4 border border-primary-border rounded-lg mb-2"}
                     placeholder={"Đơn vị"}
                     showTriangle={true}
-                    data={[]}
+                    data={listCompanies?.map(company =>({ id: company._id, text: company.name }))}
                     prefixIcon={<img className={"mr-2"} src={businessBuilding} alt={"icon"}/>}
+                    onSearchInputChange={handleSearch}
+                    onchangeValue={handleChangeCompany}
                 />
                 <button className={"bg-cbs-green rounded h-[32px] px-4 text-white font-bold"}>
                     Tạo mới
@@ -31,14 +65,37 @@ const ProjectDirectoryPageV2:FC = () => {
                     </button>
                 </div>
                 <div className={"flex-1 flex items-center justify-end"}>
-                    <span className={"text-primary-gray"}>1-50 trong số 2.358</span>
+                    {/* <span className={"text-primary-gray"}>1-50 trong số 2.358</span>
                     <button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"} disabled={true}>
                         <img src={nextIcon} alt={"----"} className={"rotate-180"}/>
                     </button>
                     <button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"}>
                         <img src={nextIcon} alt={"----"}/>
-                    </button>
+                    </button> */}
+                    {listDepartmentDirectory.length ? (
+                        <>
+                            <span className="mr-4">
+                            {totalRecord && totalRecord > 10 ? "10" : totalRecord} trong số {totalRecord}
+                            </span>
+                            {/* <button className="rounded-full h-10 w-10 flex items-center justify-center hover:bg-gray-100 border border-solid border-transparent hover:border-primary-border">
+                                                    <img alt="Previous" src={iconChevronLeft} className="w-4 filter-primary-gray" />
+                                            </button> */}
+                            {totalRecord && totalRecord > 10 ? (
+                            <button
+                                onClick={fetchNextPageDepartmentDirectory}
+                                className="rounded-full h-10 w-10 flex items-center justify-center hover:bg-gray-100 border border-solid border-transparent hover:border-primary-border"
+                            >
+                                <img alt="Next" src={iconChevronRight} className="w-4 filter-primary-gray" />
+                            </button>
+                            ) : (
+                            ""
+                            )}
+                        </>
+                        ) : (
+                        ""
+                    )}
                 </div>
+              
             </div>
 
             <div className={"table-project-directory mt-2"}>
@@ -71,7 +128,7 @@ const ProjectDirectoryPageV2:FC = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {[...Array(12)].map((e,i) => (
+                        {listDepartmentDirectory?.map((departmentDirectory: any, i) => (
                             <tr key={i}>
                                 <td className={"border-0.5 border-primary-border px-2 align-middle"}>
                                     <div className={"flex items-center justify-center py-3"}>
@@ -81,32 +138,34 @@ const ProjectDirectoryPageV2:FC = () => {
                                 <td className={"border-0.5 border-primary-border px-2 align-middle"}>
                                     <div className={"flex items-center py-2"}>
                                         <img src={userAvatar} alt={"---"} className={"w-[40px] h-[40px] min-w-[40px] min-h-[40px] max-w-[40px] max-h-[40px] rounded-full overflow-hidden"}/>
-                                        <p className={"ml-2"}>Nguyễn Phan Thanh Hương-CPMI</p>
+                                        <p className={"ml-2"}>
+                                            {departmentDirectory?.member?.fullname}
+                                        </p>
                                     </div>
                                 </td>
                                 <td className={"border-0.5 border-primary-border px-2 align-middle"}>
                                     <p>
-                                        Công ty Cổ phần CONINCO Quản lý dự án và đầu tư
+                                        {departmentDirectory?.company?.name}
                                     </p>
                                 </td>
                                 <td className={"border-0.5 border-primary-border px-2 align-middle"}>
                                     <p>
-                                        Trưởng ban QLDA
+                                        { DEPARTMENT_DIRECTORY_TYPE[departmentDirectory?.type - 1]?.text}
                                     </p>
                                 </td>
                                 <td className={"border-0.5 border-primary-border px-2 align-middle"}>
                                     <p className={"truncate"}>
-                                        0988115997
-                                    </p>
-                                </td>
-                                <td className={"border-0.5 border-primary-border px-2 align-middle"}>
-                                    <p className={"break-words "}>
-                                        thaison@conincopmi.com
+                                        { departmentDirectory?.member?.phone }
                                     </p>
                                 </td>
                                 <td className={"border-0.5 border-primary-border px-2 align-middle"}>
                                     <p>
-                                        Khóa
+                                        { departmentDirectory?.member?.email }
+s                                   </p>
+                                </td>
+                                <td className={"border-0.5 border-primary-border px-2 align-middle"}>
+                                    <p>
+                                        { DEPARTMENT_DIRECTORY_LOCK[departmentDirectory.lock].text}
                                     </p>
                                 </td>
                             </tr>
