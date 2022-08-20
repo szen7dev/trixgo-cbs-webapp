@@ -378,14 +378,10 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                                             </div>
                                         </Link>
                                     </td>
-                                    <td className={"task-infor-td"}>
+                                    <td className={"pr-2 w-td-dashboard"}>
                                         <Link to={"/pcm/detail/" + (item._id)}>
-                                            <div className={"task-infor flex-auto overflow-hidden whitespace-nowrap py-2"}>
-                                                <div className={"whitespace-nowrap overflow-hidden"}>
-                                                    <p className={"task-title text-[14px]"}>{item.project.sign}.{subContentHtml(item.name)}</p>
-                                                    <span className={"crop-text text-xs text-primary-gray mt-1"}>{subContentHtml(item.lastComment?.content)}</span>
-                                                </div>
-                                            </div>
+                                            <p className={"truncate task-title text-[14px]"}>{item.project.sign}.{subContentHtml(item.name)}</p>
+                                            <p className={"truncate crop-text text-xs text-primary-gray mt-1"}>{subContentHtml(item.lastComment?.content)}</p>
                                         </Link>
                                     </td>
                                     <td className={"w-[100px]"}>
@@ -397,71 +393,6 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                             )
                         })
                         }
-
-                        {/* <tr className={"read checked border-b-0.5 border-primary-border"}>
-                            <td className={"w-[46px]"}>
-                                <div className={"flex items-center justify-center py-3"}>
-                                    <input checked className="form-check-input" type="checkbox" value="" id="check"/>
-                                </div>
-                            </td>
-                            <td className={"w-[55px]"}>
-                                <div onClick={() => jumpToDetail(null)} className={"py-3"}>
-                                    <img src={userIcon} alt={"avatar"} className={"w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"}/>
-                                </div>
-                            </td>
-                            <td className={"w-[170px]"}>
-                                <div onClick={() => jumpToDetail(null)}  className={"user-infor py-3"}>
-                                    <p className={"truncate user-infor-name"}>Phan Văn Trường-PG 222</p>
-                                    <span className={"text-xs text-primary-gray mt-1"}>8 liên quan, 2 cc</span>
-                                </div>
-                            </td>
-                            <td className={"task-infor-td"}>
-                                <div onClick={() => jumpToDetail(null)}  className={"task-infor flex-auto overflow-hidden whitespace-nowrap py-3"}>
-                                    <div className={"whitespace-nowrap overflow-hidden"}>
-                                        <p className={"task-title"}>HAR.MAR.Biên bản cuộc họp-CĐT & CPMI - Tuần 1.Tháng 12.2021</p>
-                                        <span className={"crop-text text-xs text-primary-gray mt-1"}>Kính gửi anh Hiếu và các anh Chủ đầu tư, Đính kèm là Biên bản họp giao ban tuần 1 tháng 12.2021 ngày 10/12/2021 lúc 2:00 PM giữa Chủ đầu tư và Ban quản lý dự án. Trân trọng,
-                                            Ms. Linh from CPMI...</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td className={"w-[100px]"}>
-                                <div onClick={() => jumpToDetail(null)}  className={"task-date whitespace-nowrap py-3 text-right pr-4"}>
-                                    4 thg 8
-                                </div>
-                            </td>
-                        </tr>
-                        <tr className={"unread border-b-0.5 border-primary-border"}>
-                            <td className={"w-[46px]"}>
-                                <div className={"flex items-center justify-center py-3"}>
-                                    <input className="form-check-input" type="checkbox" value="" id="check"/>
-                                </div>
-                            </td>
-                            <td className={"w-[55px]"}>
-                                <div onClick={() => jumpToDetail(null)} className={"py-3"}>
-                                    <img src={userIcon} alt={"avatar"} className={"w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"}/>
-                                </div>
-                            </td>
-                            <td className={"w-[170px]"}>
-                                <div onClick={() => jumpToDetail(null)}  className={"user-infor py-3"}>
-                                    <p className={"truncate user-infor-name"}>Phan Văn Trường-PGI</p>
-                                    <span className={"text-xs text-primary-gray mt-1"}>8 liên quan, 2 cc</span>
-                                </div>
-                            </td>
-                            <td className={"task-infor-td"}>
-                                <div onClick={() => jumpToDetail(null)}  className={"task-infor flex-auto overflow-hidden whitespace-nowrap py-3"}>
-                                    <div className={"whitespace-nowrap overflow-hidden"}>
-                                        <p className={"task-title"}>HAR.MAR.Biên bản cuộc họp-CĐT & CPMI - Tuần 1.Tháng 12.2021</p>
-                                        <span className={"crop-text text-xs text-primary-gray mt-1"}>Kính gửi anh Hiếu và các anh Chủ đầu tư, Đính kèm là Biên bản họp giao ban tuần 1 tháng 12.2021 ngày 10/12/2021 lúc 2:00 PM giữa Chủ đầu tư và Ban quản lý dự án. Trân trọng,
-                                            Ms. Linh from CPMI...</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td className={"w-[100px]"}>
-                                <div onClick={() => jumpToDetail(null)}  className={"task-date whitespace-nowrap py-3 text-right pr-4"}>
-                                    4 thg 8
-                                </div>
-                            </td>
-                        </tr> */}
                     </tbody>
                 </table>
             </div>
