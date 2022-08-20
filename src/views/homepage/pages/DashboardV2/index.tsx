@@ -57,7 +57,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     });
 
     // console.log(listSubject)
-    console.log(user)
+    // console.log(user)
 
     const subContentHtml = (html?: string) => {
         const removeHtmlTag = parse(
@@ -72,9 +72,9 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
       };
 
     const checkActive = (relateds: string[], user: string) => {
-        let result = "read"
+        let result = "read border-b-0.5 border-primary-border"
         if(relateds.includes(user)){
-            result = "unread"
+            result = "unread border-b-0.5 border-primary-border"
         }
         return result;
     };
@@ -359,21 +359,21 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                             return (
                                 <tr key={item._id} className={checkActive(item.news, `${user?._id}`)}>
                                     <td className={"w-[46px]"}>
-                                        <div className={"flex items-center justify-center py-3"}>
+                                        <div className={"flex items-center justify-center py-2"}>
                                             <input className="form-check-input" type="checkbox" value="" id="check"/>
                                         </div>
                                     </td>
                                     <td className={"w-[55px]"}>
                                         <Link to={"/pcm/detail/" + (item._id)}>
-                                            <div className={"py-3"}>
-                                                <img src={`${process.env.REACT_APP_URL_S3_USER}/${item.lastComment? item.lastComment.author.image : item.assignee.image}`} alt={"avatar"} className={"w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"}/>
+                                            <div className={"py-2"}>
+                                                <img src={`${process.env.REACT_APP_URL_S3_USER}/${item.lastComment? item.lastComment.author.image : item.author.image}`} alt={"avatar"} className={"w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"}/>
                                             </div>
                                         </Link>
                                     </td>
                                     <td className={"w-[170px]"}>
                                         <Link to={"/pcm/detail/" + (item._id)}>
-                                            <div className={"user-infor py-3"}>
-                                                <p className={"truncate user-infor-name text-[14px]"}>{item.lastComment ? item.lastComment.author.fullname : item.assignee.fullname}</p>
+                                            <div className={"user-infor py-1"}>
+                                                <p className={"truncate user-infor-name text-[14px]"}>{item.lastComment ? item.lastComment.author.fullname : item.author.fullname}</p>
                                                 <span className={"text-xs text-primary-gray mt-1"}>{item.related.length} liên quan</span>
                                             </div>
                                         </Link>
@@ -385,7 +385,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                                         </Link>
                                     </td>
                                     <td className={"w-[100px]"}>
-                                        <div className={"task-date whitespace-nowrap py-3 text-right pr-4"}>
+                                        <div className={"task-date whitespace-nowrap py-2 text-right pr-4"}>
                                             {moment(item.modifyAt).format("DD/MM/YYYY")}
                                         </div>
                                     </td>

@@ -4,6 +4,7 @@ import downloadIcon from "assets/images/icons8-download-64.svg";
 import userAvatar from "assets/images/task-user.svg";
 import PDFIcon from "assets/images/CBS-PDF-Icon-48.svg";
 import drawingIcon from "assets/images/icons8-google-drawing-100.svg";
+import drawingIconPdf from "assets/images/icons8-google-pdf-100.svg";
 
 const ProjectDrawingPageV2:FC = () => {
     return (
@@ -36,6 +37,7 @@ const ProjectDrawingPageV2:FC = () => {
                         </tr>
                     </thead>
                     <tbody>
+                        {/* Hồ sơ con của hồ sơ */}
                         {
                             [...Array(12)].map((e, i) => (
                                 <tr key={i}>
@@ -55,11 +57,33 @@ const ProjectDrawingPageV2:FC = () => {
                                         15:30 22/12/2012 (2 day ago)
                                     </td>
                                     <td className={"px-4 py-2 text-left border-b-0.5 border-primary-border text-primary-gray align-middle"}>
-                                        11,6 MB
+                                        -
                                     </td>
                                 </tr>
                             ))
                         }
+                        
+                        {/* File đính kèm của hồ sơ */}
+                        <tr>
+                            <td className={"px-4 py-2 text-left border-b-0.5 border-primary-border align-middle"}>
+                                <div className={"flex items-center"}>
+                                    <img src={drawingIconPdf} alt={"----"} className={"w-[24px] h-[24px]"}/>
+                                    <p className={"ml-4"}>KC001 - Mặt bằng kết cấu tầng hầm 1</p>
+                                </div>
+                            </td>
+                            <td className={"px-4 py-2 text-left border-b-0.5 border-primary-border align-middle"}>
+                                <div className={"flex items-center"}>
+                                    <img src={userAvatar} alt={"----"} className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px] max-w-[24px] max-h-[24px] rounded-full overflow-hidden"}/>
+                                    <p className={"ml-4"}>Nguyễn Phan Thanh Hương-CPMI</p>
+                                </div>
+                            </td>
+                            <td className={"px-4 py-2 text-left border-b-0.5 border-primary-border text-primary-gray align-middle"}>
+                                15:30 22/12/2012 (2 day ago)
+                            </td>
+                            <td className={"px-4 py-2 text-left border-b-0.5 border-primary-border text-primary-gray align-middle"}>
+                                11,6 MB
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
