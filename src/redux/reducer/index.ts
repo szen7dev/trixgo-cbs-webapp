@@ -28,6 +28,10 @@ import ConfigConversationSlice from './messages/ConversationConfigModal';
 import UserSlice from './UserInfo';
 import MessageNPSVoteDetailSlice from './messages/MessageNPSVoteDetail';
 
+// V2
+import DashboardV2Slice from './DashboardV2Slice';
+import { useSelector, TypedUseSelectorHook } from 'react-redux';
+
 const combinedReducer = combineReducers({
     demo: DemoSlice,
     financialPlanningDetails: FinancialPlanningDetailSlice,
@@ -56,7 +60,8 @@ const combinedReducer = combineReducers({
     deleteConfirm: DeleteConfirmSlice,
     configConversation: ConfigConversationSlice,
     user: UserSlice,
-    messageNpsVoteDetail: MessageNPSVoteDetailSlice
+    messageNpsVoteDetail: MessageNPSVoteDetailSlice,
+    dashboardV2: DashboardV2Slice
 });
 const rootReducer = (state: any, action: any) => {
     if (action.type === 'user/logout') {
@@ -66,3 +71,4 @@ const rootReducer = (state: any, action: any) => {
 };
 export type RootState = ReturnType<typeof rootReducer>;
 export default rootReducer;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;

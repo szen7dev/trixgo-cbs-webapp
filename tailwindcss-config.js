@@ -125,7 +125,7 @@ module.exports = {
                 "cbs-file-upload-bg": "#F5F5F5",
                 "cbs-task-assign-progress-bg": "#F7F8FA",
                 "cbs-next-prev-button": "#F6F7F8",
-
+                "cbs-table-highlight": "#F2F6FC",
             },
             fontSize: {
                 "[13px]": "13px",
@@ -149,6 +149,7 @@ module.exports = {
                 ...autoGeneratePx,
                 fill: "-webkit-fill-available",
                 fit: 'fit-content',
+                'td-dashboard': 'calc(100% - 371px)'
             },
             height: {
                 ...autoGeneratePx,

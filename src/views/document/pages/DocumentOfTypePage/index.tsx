@@ -428,3 +428,4 @@ export const DocumentOfTypePage: FC = () => {
     </>
   );
 };
+export default DocumentOfTypePage;
