@@ -1,4 +1,5 @@
 import React, {FC} from "react";
+import adminIcon from "assets/images/icons8-user-shield-48.svg"
 import plusIcon from "assets/images/icons8-plus-math-96.svg"
 import sendAndReceiveIcon from "assets/images/icons-send-and-receive.svg"
 import mailOutLineIcon from "assets/images/icons-mail-outline.svg"
@@ -12,7 +13,7 @@ import { NavLink } from 'react-router-dom';
 
 export const HomeLeftMenuContent:FC = () => {
     const { openModal } = useModal();
-
+    
     const listTab : {
         label: string,
         icon: string,
@@ -90,6 +91,11 @@ export const HomeLeftMenuContent:FC = () => {
             </button>
 
             <div className={"mt-4"}>
+                {/* <NavLink to={`/pcm/admin`} className={"left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray"}>
+                    <img src={adminIcon}/>
+                    <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản trị viên</span>
+                </NavLink> */}
+
                 {
                     listTab.map(nav => renderNav(nav))
                 }

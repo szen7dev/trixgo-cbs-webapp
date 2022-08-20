@@ -1650,11 +1650,11 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                     </td>
                     <td className={"w-[170px]"}>
                       <Link to={"/pcm/detail/" + item._id}>
-                        <div className={"user-infor py-1"}>
+                        <div className={"user-infor py-2"}>
                           <p className={"truncate user-infor-name text-[14px]"}>
                             {item.author.fullname}
                           </p>
-                          <span className={"text-xs text-primary-gray mt-1"}>
+                          <span className={"text-xs text-primary-gray py-2"}>
                             {item.task.related.length} liên quan
                           </span>
                         </div>
@@ -1662,12 +1662,12 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                     </td>
                     <td className={"w-td-dashboard"}>
                       <Link to={"/pcm/detail/" + item._id}>
-                        <p className={"task-title truncate text-[14px]"}>
+                        <p className={"task-title truncate text-[14px] mt-2"}>
                           {item.project?.sign}.{item.task?.name}
                         </p>
                         <p
                           className={
-                            "crop-text truncate text-xs text-primary-gray mt-1"
+                            "crop-text truncate text-xs text-primary-gray py-2"
                           }
                         >
                           {subContentHtml(item.content)}
@@ -1728,13 +1728,13 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                     </td>
                     <td className={"w-[170px]"}>
                       <Link to={"/pcm/detail/" + item._id}>
-                        <div className={"user-infor py-1"}>
+                        <div className={"user-infor py-2"}>
                           <p className={"truncate user-infor-name text-[14px]"}>
                             {item.lastComment
                               ? item.lastComment.author.fullname
                               : item.author.fullname}
                           </p>
-                          <span className={"text-xs text-primary-gray mt-1"}>
+                          <span className={"text-xs text-primary-gray py-2"}>
                             {item.related.length} liên quan
                           </span>
                         </div>
@@ -1742,12 +1742,12 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                     </td>
                     <td className={"w-td-dashboard"}>
                       <Link to={"/pcm/detail/" + item._id}>
-                          <p className={"task-title truncate text-[14px]"}>
+                          <p className={"task-title truncate text-[14px] mt-2"}>
                             {item.project.sign}.{subContentHtml(item.name)}
                           </p>
                           <p
                             className={
-                              "crop-text truncate text-xs text-primary-gray mt-1"
+                              "crop-text truncate text-xs text-primary-gray py-2"
                             }
                           >
                             {subContentHtml(item.lastComment?.content)}
