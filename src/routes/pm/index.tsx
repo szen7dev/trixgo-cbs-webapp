@@ -178,43 +178,51 @@ const PCMRouter: FC = () => {
                         <ProjectSchedulePage/>
                       </PmProjectLayout>
                     </Route>
-                    <Route path="/pm/project/:id/(budget|cash-flow|cash-flow-1|cash-flow-2)">
-                        <Route exact path="/pm/project/:id/budget">
-                          <PmProjectLayout>
-                            <ProjectBudgetPage/>
-                          </PmProjectLayout>
-                        </Route>
-                      <Route exact path="/pm/project/:id/budget/:budgetId">
-                        <PmProjectLayout>
-                          <ProjectBudgetDetailPage/>
-                        </PmProjectLayout>
-                      </Route>
-                        <Route
-                            exact
-                            path="/pm/project/:id/cash-flow-1"
-                            component={() => <ProjectCashFlowPlanPage outin={1} />}
-                        />
-                        <Route
-                            exact
-                            path="/pm/project/:id/cash-flow-2"
-                            component={() => <ProjectCashFlowPlanPage outin={2} />}
-                        />
-                        <Route exact path="/pm/project/:id/cash-flow/:cashFlowID/:outin" component={ProjectCashFlowPlanChildPage} />
+
+                    <Route exact path="/pm/project/:id/budget"
+                           render={({match}) => <Redirect to={`/pm/project/${match.params.id}/budget/type/1`}/>}
+                    />
+                    <Route exact path="/pm/project/:id/budget/type/:type">
+                      <PmProjectLayout>
+                        <ProjectBudgetPage/>
+                      </PmProjectLayout>
+                    </Route>
+                    <Route exact path="/pm/project/:id/budget/type/:type/detail/:budgetId/tab"
+                           render={({match}) => <Redirect to={`/pm/project/${match.params.id}/budget/type/${match.params.type}/detail/${match.params.budgetId}/tab/1`}/>}
+                    />
+                    <Route path="/pm/project/:id/budget/type/:type/detail/:budgetId/tab/:tab">
+                      <PmProjectLayout>
+                        <ProjectBudgetDetailPage/>
+                      </PmProjectLayout>
+                    </Route>
+
+                    <Route path="/pm/project/:id/(cash-flow|cash-flow-1|cash-flow-2)">
+                      <Route
+                          exact
+                          path="/pm/project/:id/cash-flow-1"
+                          component={() => <ProjectCashFlowPlanPage outin={1} />}
+                      />
+                      <Route
+                          exact
+                          path="/pm/project/:id/cash-flow-2"
+                          component={() => <ProjectCashFlowPlanPage outin={2} />}
+                      />
+                      <Route exact path="/pm/project/:id/cash-flow/:cashFlowID/:outin" component={ProjectCashFlowPlanChildPage} />
                     </Route>
                     <Route exact path={["/pm/project/:id/bidding", "/pm/project/:id/bidding/(2|3)"]}>
-                        <PmProjectLayout>
-                          <Route exact path="/pm/project/:id/bidding" component={ProjectBiddingPage} />
-                          <Route
-                              exact
-                              path="/pm/project/:id/bidding/2"
-                              component={() => <>Sample Data</>}
-                          />
-                          <Route
-                              exact
-                              path="/pm/project/:id/bidding/3"
-                              component={() => <>Sample Data</>}
-                          />
-                        </PmProjectLayout>
+                      <PmProjectLayout>
+                        <Route exact path="/pm/project/:id/bidding" component={ProjectBiddingPage} />
+                        <Route
+                            exact
+                            path="/pm/project/:id/bidding/2"
+                            component={() => <>Sample Data</>}
+                        />
+                        <Route
+                            exact
+                            path="/pm/project/:id/bidding/3"
+                            component={() => <>Sample Data</>}
+                        />
+                      </PmProjectLayout>
                     </Route>
                     <Route exact path="/pm/project/:id/payment">
                       <PmProjectLayout>
