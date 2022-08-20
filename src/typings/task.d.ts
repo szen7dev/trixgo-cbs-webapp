@@ -98,7 +98,7 @@ export interface addTaskPayload {
 
 export interface updateTaskPayload {
   taskID: string;
-  description: string;
+  description?: string;
   contractID?: string;
   name?: string;
   status?: number;

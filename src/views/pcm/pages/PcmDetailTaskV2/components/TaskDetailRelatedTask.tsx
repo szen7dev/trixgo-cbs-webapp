@@ -25,7 +25,7 @@ export const TaskDetailRelatedTask:FC<Props> = ({ task }) => {
                 </div>
             </div>
             <div className={"list-subtask mt-4"}>
-                <ReleatedTaskItem/>
+                {/* <ReleatedTaskItem/> */}
 
                 <div className={"relative inline-block"}>
                     <button
