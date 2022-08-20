@@ -76,48 +76,7 @@ export const PcmLeftSideBar: FC = () => {
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Việc quan tâm</span>
 					</Link>
-          {/* <Link to={`/pcm/draft`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
-              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Việc nháp</span>
-					</Link> */}
-
-          {/* <p className="t-leftsidebar-menu-title mb-5">Quản trị doanh nghiệp</p>
-          <div className="t-leftsidebar-menu-container">
-            <a className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray" href="/pcm/messageHome" >
-              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Quản lý công việc</span>
-            </a>
-            <Link to={`/document/home`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
-              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Quản lý hồ sơ văn bản</span>
-						</Link>
-            <Link to={`/cmcs/home`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray" title="Contract Management Control System">
-              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Quản lý hợp đồng</span>
-						</Link>
-          </div> */}
-          {/* <div className="t-leftsidebar-menu-showmore">
-            <button className="t-leftsidebar-menu-showmore-btn flex items-center">
-              <img className="h-1 mr-3" src={icon3dots} alt="Show more" /> Xem thêm
-            </button>
-          </div> */}
         </div>
-
-        {/* menu block */}
-        {/* <div className="t-leftsidebar-menu-block mb-6">
-          <p className="t-leftsidebar-menu-title mb-5">Danh sách dự án</p>
-          <div className="t-leftsidebar-menu-container">
-            <a className="t-leftsidebar-menu-item flex items-center mb-6 text-primary-gray" href="/">
-              <img className="w-6 h-6 object-contain mr-3" src={iconMissile} alt="Menu item" />
-              <span className="truncate">CHG.THT.Xây dựng cụmm thông tin truyền thông và thiết bị</span>
-            </a>
-          </div>
-          <div className="t-leftsidebar-menu-showmore">
-            <button className="t-leftsidebar-menu-showmore-btn flex items-center">
-              <img className="h-1 mr-3" src={icon3dots} alt="Show more" /> Xem thêm
-            </button>
-          </div>
-        </div> */}
 
         {/* customize data block */}
         <div className="t-leftsidebar-customize-data text-center">
