@@ -1,12 +1,17 @@
 import React, {FC, useState} from "react";
-import iconClock from "assets/images/icons8-clock-48.svg";
-import taskUserAvt from "assets/images/task-user.svg";
-import iconHorizontalDots from "assets/images/three-dots-horizontal-v2.svg";
+// import iconClock from "assets/images/icons8-clock-48.svg";
+// import taskUserAvt from "assets/images/task-user.svg";
+// import iconHorizontalDots from "assets/images/three-dots-horizontal-v2.svg";
 import iconMessageLink from "assets/images/icons8-message-link-48.svg";
 import Close from "assets/icons/Close";
-import {ReleatedTaskItem} from "./ReleatedTaskItem";
+import { ReleatedTaskItem } from "./ReleatedTaskItem";
+import { Task } from "typings/task";
 
-export const TaskDetailRelatedTask:FC = () => {
+type Props = {
+    task: Task;
+}
+
+export const TaskDetailRelatedTask:FC<Props> = ({ task }) => {
     const [showOption, setShowOption] = useState(false);
 
     return (
@@ -20,9 +25,6 @@ export const TaskDetailRelatedTask:FC = () => {
                 </div>
             </div>
             <div className={"list-subtask mt-4"}>
-                <ReleatedTaskItem/>
-                <ReleatedTaskItem/>
-                <ReleatedTaskItem/>
                 <ReleatedTaskItem/>
 
                 <div className={"relative inline-block"}>

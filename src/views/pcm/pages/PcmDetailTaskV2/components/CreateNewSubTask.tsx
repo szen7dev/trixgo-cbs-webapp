@@ -1,20 +1,32 @@
 import React, {FC, UIEvent, useEffect, useState} from "react";
 import {useUsersProject} from "services/hooks/users/useUserSystem";
-import {DropdownSearchable} from "shareComponents/common";
+import {DropdownSearchable, Item} from "shareComponents/common";
 import TagIcon from "assets/images/icons8-price-tag-96.svg";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import moment from "moment";
-import {date, object, string} from "yup";
+ import { toast } from "react-toastify";
+ import {date, object, string} from "yup";
 import {useSocket} from "services/hooks/useSocket";
+import { useTask } from 'services/hooks/useTask';
 import {getIn, Formik} from "formik";
 import {SendToMultiSelected} from "./SendToMultiSelected";
+import { Task } from "typings/task";
 
-export const CreateNewSubTask:FC = () => {
+type Props = {
+    task: Task;
+    cancelCreateNewSubTask: () => void;
+    confirmCreateNewSubTask: () => void;
+}
+
+export const CreateNewSubTask:FC<Props> = ({ task, cancelCreateNewSubTask, confirmCreateNewSubTask }) => {
     const [keywordAssignee, setKeywordAssignee] = useState('');
+    const [selectedUser, setSelectedUser] = useState<Item[]>([]);
     const { data: listUsersProject, fetchNextPage } = useUsersProject({
         projectID: "5e847180d7e3490be59aef72",
         keyword: keywordAssignee
     }, true);
+
+   const { addTaskAsync } = useTask({});
 
     const handleScroll = (e: UIEvent<HTMLDivElement>) => {
         const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
@@ -26,34 +38,56 @@ export const CreateNewSubTask:FC = () => {
         setKeywordAssignee(keyword);
     };
 
-    const { current: socket }: any = useSocket();
+    // const { current: socket }: any = useSocket();
 
     const initialValues = {
         name: "",
         assigneeID: "",
         parentID: "5e847180d7e3490be59aef72",
-        groupID: "",
-        projectID: "",
+        groupID: task.group?._id,
+        projectID: task.project?._id,
         expiredTime: null,
         type: 2
     };
 
     const validateSchema = object().shape({
         name: string().required("Bạn cần nhập nội dung checklist"),
-        expiredTime: date()
+        expiredTime: string()
             .required("Bạn cần nhập thời hạn")
             .typeError("Bạn cần nhập thời hạn"),
         assigneeID: string().required("Bạn cần chọn người thực hiện"),
     });
 
     const handleAddChildTask = async (values: any) => {
-        console.log('asddasdasd')
+        try {
+            const usersRelated = selectedUser.map(user => user.value);
+
+            const { error, data } = await addTaskAsync({
+                ...values,
+                isUpdateNews: true,
+                parentID: task._id,
+                relatedIDs: usersRelated
+            });
+
+            if(error) return toast.warning(data?.message);
+
+            toast.success('Tạo công việc thành công');
+            confirmCreateNewSubTask();
+        } catch (error) {
+            if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
+        } finally {
+            cancelCreateNewSubTask();
+        }
     }
 
     return (
         <div className={"create-new-subtask border-0.5 border-primary-border rounded ml-6 mt-4"}>
             <div className={"border-b-0.5 border-primary-border p-4"}>
-                <SendToMultiSelected/>
+                <SendToMultiSelected selectedUser={selectedUser} setSelectedUser={setSelectedUser} />
             </div>
             <Formik
                 initialValues={initialValues}
@@ -118,7 +152,7 @@ export const CreateNewSubTask:FC = () => {
                                             overlay: "w-full",
                                             overlayWrapper: "absolute bg-white w-full right-0 z-200"
                                         }}
-                                        onDayChange={(day) => setFieldValue("expiredTime", moment(day).format("DD/MM/YYYY"))}
+                                        onDayChange={(day) => setFieldValue("expiredTime", moment(day).format("MM/DD/YYYY"))}
                                         inputProps={{
                                             className: "outline-none h-full max-w-full",
                                             placeholder: "Thời hạn",
@@ -157,7 +191,7 @@ export const CreateNewSubTask:FC = () => {
                             </div>
 
                             <div className={"flex items-center justify-end pt-0 p-4"}>
-                                <button className={"py-2 px-4 rounded bg-cbs-form-input-bg text-primary-gray mr-2"}>
+                                <button className={"py-2 px-4 rounded bg-cbs-form-input-bg text-primary-gray mr-2"} onClick={cancelCreateNewSubTask}>
                                     Bỏ qua
                                 </button>
                                 <button

@@ -44,6 +44,8 @@ export type Task = {
   name: string;
   sign: string;
   status: number;
+  priority: number;
+  risk: number;
   expiredTime: string;
   typeStatus: number;
   checklist: string;
@@ -56,6 +58,7 @@ export type Task = {
   group: Group,
   contract: Contract,
   field: Field,
+  parent: Task | undefined,
   startTime: string,
   subType: number,
   subtype: number,
@@ -95,6 +98,7 @@ export interface addTaskPayload {
 
 export interface updateTaskPayload {
   taskID: string;
+  description: string;
   contractID?: string;
   name?: string;
   status?: number;
@@ -128,6 +132,7 @@ export type TaskListParams = QueryParams & {
   companyOfAuthor?: string;
   isPassPermision?: string;
   projectID?: string;
+  parentID?: string;
   milestone?: string;
   type?: number;
   status?: string;
@@ -151,6 +156,7 @@ export type TaskInfoParams = {
 export type ListTaskResponse = APIResponse & {
   data: {
     listRecords: Array<Task>;
+    totalTaskDone?: number;
     totalRecord: number;
     totalPage?: number;
     nextCursor: string;

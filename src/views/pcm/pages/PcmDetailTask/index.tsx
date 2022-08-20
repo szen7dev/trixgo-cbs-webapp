@@ -427,7 +427,6 @@ const PcmDetailTask: FC = () => {
             const hasPermissionViewChildTask          = false;
             const hasPermissionOpenBidding            = relatedsID.includes(user?._id);
             const hasPermissionViewBidding            = [author?._id, ...relatedsID].includes(user?._id);
-            console.log({ hasPermissionViewAssigneeFile })
 
             const dataPermissions = {
               hasPermissionUpdateTask,

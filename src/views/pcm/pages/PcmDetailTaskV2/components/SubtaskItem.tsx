@@ -4,25 +4,66 @@ import taskUserAvt from "assets/images/task-user.svg";
 import iconHorizontalDots from "assets/images/three-dots-horizontal-v2.svg";
 import Close from "assets/icons/Close";
 import {useOnClickOutside} from "services/hooks/useOnclickOutside";
+import { Task } from "typings/task";
+import { useTask } from 'services/hooks/useTask';
+import moment from "moment";
 
-export const SubtaskItem:FC = () => {
+type Props = {
+    task: Task;
+    index: number;
+}
+
+export const SubtaskItem:FC<Props> = ({ task, index }) => {
     const wrapperClass = useRef<HTMLDivElement>(null)
     const [showOption, setShowOption] = useState(false);
+    const [isChecked, setisChecked] = useState(task.status === 3);
+
+    const { updateTaskAsync } = useTask({});
 
     useOnClickOutside(wrapperClass, () => setShowOption(false));
+
+    const handleUpdateStatusTask = async () => {
+        if(task.status === 3) return;
+
+        try {
+            updateTaskAsync({
+                taskID: task._id,
+                status: 3
+            });
+            setisChecked(true);
+        } catch(error) {
+            console.log(error);
+        }
+    }
+
     return (
-        <div className={"flex items-start justify-between mt-4 min-w-fit"}>
-            <input checked className="form-check-input" type="checkbox" value="" id="check"/>
-            <div className={"mx-2"}>
-                <p className={"text-base"}>1. PGI.BLD.Lập, phê duyệt thực hiện quy chế kế tài chính của PGI để trình cổ đông xem xét phê duyệt</p>
-                <p className={"text-xs text-cbs-highlight-color"}>Ngô Trọng Quyền-CPMI</p>
+        <div className="flex items-start justify-between mt-4 min-w-fit">
+            <input
+                className="form-check-input"
+                type="checkbox"
+                defaultChecked={isChecked}
+                disabled={isChecked}
+                onChange={handleUpdateStatusTask}
+            />
+            <div className="mx-2 px-2 w-full">
+                <p className="text-base">
+                    {index + 1}. {task.name}
+                </p>
+                <p className="text-xs text-cbs-highlight-color">
+                    {task.assignee?.bizfullname}
+                </p>
             </div>
             <div className={"flex items-center"}>
                 <div className={"flex items-center justify-center px-4 py-1 rounded text-white bg-cbs-completed mr-2"}>
                     <img src={iconClock} alt={"----"} className={"mr-2"}/>
-                    <span>17/2/22</span>
+                    <span>{moment(task.expiredTime).format('DD/M/YY')}</span>
                 </div>
-                <img alt={"----"} src={taskUserAvt} className={"rounded-full overflow-hidden h-[30px] w-[30px] min-h-[30px] min-w-[30px] max-h-[30px] max-w-[30px] mr-2"}/>
+                <img
+                    alt={task.assignee?.bizfullname}
+                    src={task.assignee?.image ? `${process.env.REACT_APP_URL_S3_USER}/${task.assignee?.image}` : taskUserAvt}
+                    className={"rounded-full overflow-hidden h-[30px] w-[30px] min-h-[30px] min-w-[30px] max-h-[30px] max-w-[30px] mr-2"}
+                />
+
                 <div ref={wrapperClass} className={"relative inline-block"}>
                     <button onClick={() => setShowOption(!showOption)} className={"rounded w-[24px] h-[24px] min-w-[24px] min-h-[24px] max-w-[24px] max-h-[24px] bg-cbs-form-input-bg flex items-center justify-center"}>
                         <img src={iconHorizontalDots} alt={"----"} className={"w-[10px]"}/>

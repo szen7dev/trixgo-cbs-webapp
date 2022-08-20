@@ -3,9 +3,25 @@ import iconFolder from "assets/images/icons8-folder-48.svg";
 import iconCheckmark from "assets/images/icons8-checkmark-yes-64.svg";
 import iconSnooze from "assets/images/icons8-snooze-48.svg";
 import TimeRange from "./TimeRange";
+import { Link } from 'react-router-dom';
+import { Task } from "typings/task";
 
-export const TaskDetailFolder:FC = () => {
+type Props = {
+    task: Task;
+}
+
+export const TaskDetailFolder:FC<Props> = ({ task }) => {
     const folders = ["CHG.THT","Tư vấn thiết kế 112","Hồ sơ thanh toán"];
+
+    const getGroupTitle = (group: any) => {
+        let title = "";
+        if (group?.parent) {
+          const name = getGroupTitle(group?.parent);
+          title = title ? `${name} > ${title}` : name;
+        }
+
+        return title ? `${title} > ${group?.name}` : group?.name;
+    };
 
     return (
         <div className={"task-folder flex items-center text-primary-gray mt-5"}>
@@ -14,11 +30,15 @@ export const TaskDetailFolder:FC = () => {
                     <img src={iconFolder} alt={'-----'}/>
                 </span>
                 <div className={"flex"}>
-                    {
+                    {task?.project?.sign} {">"}{" "}
+                    <Link to={`/pcm/project/${task?.project?._id}/folder/${task?.group?._id}`}>
+                        {getGroupTitle(task?.group)}
+                    </Link>
+                    {/* {
                         folders.map((folder, index) => (
                             <span key={folder}>{folder} {(index < folders.length-1) ? " > " : "" } </span>
                         ))
-                    }
+                    } */}
                 </div>
             </div>
             <div className={"flex items-center"}>
