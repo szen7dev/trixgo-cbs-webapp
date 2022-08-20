@@ -365,15 +365,15 @@ const PcmHomeV2: FC<Props> = ({ type = 1 }) => {
                                             <input className="form-check-input" type="checkbox" value="" id="check"/>
                                         </div>
                                     </td>
-                                    <td>
+                                    <td className="text-[14px]">
                                         <Link to={"/pcm/detail/" + (item._id)}>
                                             {item.project.sign}.{item.name}
                                         </Link>
                                     </td>
-                                    <td>
+                                    <td className="text-[14px]">
                                         {moment(item.actualFinishTime).format("DD/MM/YYYY")}
                                     </td>
-                                    <td>
+                                    <td className="text-[14px]">
                                         <div className={"flex items-center"}>
                                             <img src={`${process.env.REACT_APP_URL_S3_USER}/${item.assignee.image}`} alt={"----"} className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px] max-w-[24px] max-h-[24px] rounded-full overflow-hidden"}/>
                                             <div className={"ml-2"}>{item.assignee.fullname ?? item.assignee.fullname}</div>
