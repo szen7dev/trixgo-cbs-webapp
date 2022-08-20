@@ -335,12 +335,12 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                     <button className={"text-primary mx-2"}>
                         Đánh dấu tất cả đã đọc
                     </button>
-                    <button className={"flex items-center justify-center mx-3"}>
+                    {/* <button className={"flex items-center justify-center mx-3"}>
                         <img src={downloadIcon} alt={"-----"}/>
-                    </button>
-                    <button className={"flex items-center justify-center mx-3"}>
+                    </button> */}
+                    {/* <button className={"flex items-center justify-center mx-3"}>
                         <img src={sendMailIcon} alt={"-----"}/>
-                    </button>
+                    </button> */}
                     <div className={"flex-1 flex items-center justify-end"}>
                         <span className={"text-primary-gray"}>1-50 trong số {totalRecordSubject}</span>
                         <button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"} disabled={true}>
@@ -372,7 +372,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                                     </td>
                                     <td className={"w-[170px]"}>
                                         <Link to={"/pcm/detail/" + (item._id)}>
-                                            <div className={"user-infor py-1"}>
+                                            <div className={"user-infor py-2"}>
                                                 <p className={"truncate user-infor-name text-[14px]"}>{item.lastComment ? item.lastComment.author.fullname : item.author.fullname}</p>
                                                 <span className={"text-xs text-primary-gray mt-1"}>{item.related.length} liên quan</span>
                                             </div>
@@ -380,8 +380,8 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                                     </td>
                                     <td className={"pr-2 w-td-dashboard"}>
                                         <Link to={"/pcm/detail/" + (item._id)}>
-                                            <p className={"truncate task-title text-[14px]"}>{item.project.sign}.{subContentHtml(item.name)}</p>
-                                            <p className={"truncate crop-text text-xs text-primary-gray mt-1"}>{subContentHtml(item.lastComment?.content)}</p>
+                                            <p className={"truncate task-title text-[14px] py-2"}>{item.project.sign}.{subContentHtml(item.name)}</p>
+                                            <p className={"truncate crop-text text-xs text-primary-gray mt-1 py-2"}>{subContentHtml(item.lastComment?.content)}</p>
                                         </Link>
                                     </td>
                                     <td className={"w-[100px]"}>

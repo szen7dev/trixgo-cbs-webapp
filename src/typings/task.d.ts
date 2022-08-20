@@ -139,6 +139,7 @@ export type TaskListParams = QueryParams & {
   draft?: string;
   isActive?: string;
   isGroup?: string;
+  read?: string;
 }
 
 export type TaskInfoParams = {
