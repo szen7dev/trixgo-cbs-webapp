@@ -134,12 +134,19 @@ export const APP_INFO = new Map([
         icon: financialLogo,
         route: '/financial/home'
     }],
-    /* Ứng dụng Quản lý dự án */
+    /* Ứng dụng Quản lý công việc */
     ['5dfe4b9051dc622100bb9d89', {
         key: "5dfe4b9051dc622100bb9d89",
-        name: "Quản lý dự án",
+        name: "Quản lý công việc",
         icon: pcmLogo,
         route: '/pcm/home'
+    }],
+    /* Ứng dụng Quản lý dự án */
+    ['5eabfdc72171391e5f6a0468', {
+        key: "5eabfdc72171391e5f6a0468",
+        name: "Quản lý dự án",
+        icon: pcmLogo,
+        route: '/pm/home'
     }],
     /* Ứng dụng Truyền thông */
     ['5df4ce16506d9b3c587948ca', {

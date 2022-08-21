@@ -11,8 +11,16 @@ import {useModal} from "../../../../services/hooks/useModal";
 import {ModalAddNewTask} from "../../../common";
 import { NavLink } from 'react-router-dom';
 
+/*=====6.HOOKS/APIS=====*/
+import { useAuth } from "services/hooks/auth/useAuth";
+import { useCheckPerAccessApp, useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/auth/usePermissions";
+import { APP_ID } from "apis/localdb";
+
 export const HomeLeftMenuContent:FC = () => {
+
     const { openModal } = useModal();
+    const { user } = useAuth();
+    const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
     
     const listTab : {
         label: string,
@@ -91,10 +99,12 @@ export const HomeLeftMenuContent:FC = () => {
             </button>
 
             <div className={"mt-4"}>
-                {/* <NavLink to={`/pcm/admin`} className={"left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray"}>
-                    <img src={adminIcon}/>
-                    <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản trị viên</span>
-                </NavLink> */}
+                {hasPermission && dataUserAccess?.level == 0 ?
+                    <NavLink to={`/pcm/admin`} className={"left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray"}>
+                        <img src={adminIcon}/>
+                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản trị viên</span>
+                    </NavLink> : <></>
+                }
 
                 {
                     listTab.map(nav => renderNav(nav))

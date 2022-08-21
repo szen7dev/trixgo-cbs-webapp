@@ -78,7 +78,7 @@ const PCMRouter: FC = () => {
           <Switch>
 
             {/* Điều hướng về danh sách dự án */}
-            <ProtectedRoute exact path="/pm">
+            <ProtectedRoute exact path="/pm/home">
               <Redirect to="/pm/projects" />
             </ProtectedRoute>
 

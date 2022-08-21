@@ -167,8 +167,12 @@ export const useCheckPerAccessScreen = (payload: { appID: string, menuID: string
 
     // Phân quyền theo nhóm chức năng
     useEffect(() => {
-        if (isSuccessApp && isSuccessMenu && (!hasPermission || !hasPermissionMenu || permission?.read < 1)) {
-            toast.error("Bạn không có quyền truy cập tính năng này!");
+        // if (isSuccessApp && isSuccessMenu && (!hasPermission || !hasPermissionMenu || permission?.read < 1)) {
+        //     toast.error("Bạn không có quyền truy cập tính năng này!");
+        //     history.push("/");
+        // };
+        if (isSuccessApp && isSuccessMenu && (!hasPermission)) {
+            toast.error("Bạn không có quyền truy cập tính năng này Neww!");
             history.push("/");
         };
     }, [isSuccessApp, isSuccessMenu, hasPermission, hasPermissionMenu, permission]);
