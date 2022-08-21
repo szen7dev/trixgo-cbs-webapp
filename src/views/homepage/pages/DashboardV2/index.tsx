@@ -87,9 +87,85 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     <div className="t-home flex flex-col h-full overflow-hidden">
       <div className={"sticky top-0 bg-white z-10"}>
         <div className={"filter-bar flex flex-wrap px-4 py-2"}>
+
+        {tabIndex === 2 && (
+            <DropdownSearchableV2
+              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              placeholder={"Đơn vị thực hiện"}
+              showTriangle={true}
+              isMultiple={true}
+              renderSelectedItem={(item: any) => (
+                <div className="flex items-center">
+                  <img alt="Tag" src={userIcon} className="mr-1" />
+                  <p
+                    style={{
+                      textOverflow: "ellipsis",
+                      maxWidth: "100%",
+                      minWidth: 0,
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      flex: "1 1 auto",
+                    }}
+                  >
+                    {item.text}
+                  </p>
+                </div>
+              )}
+              data={[
+                {
+                  _id: "627205a5d9d18a0677e5d5b4",
+                  image: "user_default.png",
+                  status: 1,
+                  level: 1,
+                  numLog: 0,
+                  lastLog: null,
+                  email: "tutran01676378375van@gmail.com",
+                  fullname: "Trần Văn Tú-CDC",
+                  company: {
+                    _id: "6046ade4b55525368b1091ac",
+                    name: "Công ty Cổ phần xây dựng CDC",
+                    sign: "CDC",
+                  },
+                  bizfullname: "Trần Văn Tú-CDC",
+                  department: {
+                    _id: "6046ade4b55525368b1091c8",
+                    name: "CÔNG TY",
+                    sign: "C177.CTY",
+                  },
+                  position: {
+                    _id: "61972dcfbc3b2e745ae3e382",
+                    name: "Cán bộ kỹ thuật",
+                  },
+                },
+              ]}
+              formatItem={{
+                id: "_id",
+                text: "fullname",
+              }}
+              renderItem={(item) => (
+                <div className={"flex"}>
+                  <div
+                    className={
+                      "w-[44px] h-[44px] flex items-center justify-center rounded-full bg-accent text-white text-2xl font-bold"
+                    }
+                  >
+                    {item.fullname.charAt(0)}
+                  </div>
+                  <div className={"flex-1 ml-2"}>
+                    <p className={"truncate"}>{item.fullname}</p>
+                    <p className={"text-primary-gray truncate"}>{item.email}</p>
+                  </div>
+                </div>
+              )}
+              prefixIcon={
+                <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
+              }
+            />
+          )}
+          
           {tabIndex === 2 && (
             <DropdownSearchableV2
-              className={"mr-4 border border-primary-border rounded-lg mb-2"}
+              className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Người thực hiện"}
               showTriangle={true}
               isMultiple={true}
@@ -390,7 +466,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           {tabIndex === 2 && (
             <TimeRangeDropdown
               className={
-                "mr-4 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
+                "mr-2 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
               }
               placeholder={"Thời hạn"}
               iconBack={<TriangleDown />}
@@ -417,7 +493,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           )}
           {(tabIndex === 2 || tabIndex === 3) && (
             <DropdownSearchableV2
-              className={"mr-4 border border-primary-border rounded-lg mb-2"}
+              className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Người tạo"}
               showTriangle={true}
               isMultiple={true}
@@ -717,7 +793,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
 
           {tabIndex === 1 && (
             <DropdownSearchableV2
-              className={"mr-4 border border-primary-border rounded-lg mb-2"}
+              className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Đơn vị tạo phản hồi"}
               showTriangle={true}
               isMultiple={true}
@@ -1017,7 +1093,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
 
           {tabIndex === 1 && (
             <DropdownSearchableV2
-              className={"mr-4 border border-primary-border rounded-lg mb-2"}
+              className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Người tạo phản hồi"}
               showTriangle={true}
               isMultiple={true}
@@ -1317,7 +1393,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
 
           {(tabIndex === 1 || tabIndex === 2 || tabIndex === 3) && (
             <DropdownSearchableV2
-              className={"mr-4 border border-primary-border rounded-lg mb-2"}
+              className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Dự án"}
               prefixIcon={
                 <img className={"mr-2"} src={projectIcon} alt={"icon"} />
@@ -1358,7 +1434,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           {(tabIndex === 1 || tabIndex === 3) && (
             <TimeRangeDropdown
               className={
-                "mr-4 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
+                "mr-2 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
               }
               placeholder={"Thời gian tạo"}
               iconBack={<TriangleDown />}
@@ -1371,12 +1447,12 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                   toDate: "31/12/2999",
                 },
                 {
-                  text: "1 tuần tới",
+                  text: "Cách đây 1 tuần",
                   fromDate: "12/08/2022",
                   toDate: "17/08/2022",
                 },
                 {
-                  text: "> 7 ngày tiếp theo",
+                  text: "Cách đây 1 tháng",
                   fromDate: "17/08/2022",
                   toDate: "31/12/2999",
                 },
@@ -1386,7 +1462,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
 
           {tabIndex === 2 && (
             <DropdownSearchableV2
-              className={"mr-4 border border-primary-border rounded-lg mb-2"}
+              className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Quá hạn"}
               prefixIcon={
                 <img className={"mr-2"} src={timeTableIcon} alt={"icon"} />
@@ -1410,7 +1486,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           )}
           {tabIndex === 2 && (
             <DropdownSearchableV2
-              className={"mr-4 border border-primary-border rounded-lg mb-2"}
+              className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Trạng thái"}
               prefixIcon={
                 <img className={"mr-2"} src={categoryIcon} alt={"icon"} />
@@ -1442,12 +1518,16 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                   id: 6,
                   text: "Tiếp tục theo dõi",
                 },
+                {
+                  id: 7,
+                  text: "Khóa đóng",
+                },
               ]}
             />
           )}
-          {(tabIndex === 2 || tabIndex === 1) && (
+          {(tabIndex === 1) && (
             <DropdownSearchableV2
-              className={"mr-4 border border-primary-border rounded-lg mb-2"}
+              className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Phân loại"}
               prefixIcon={
                 <img className={"mr-2"} src={categoryIcon} alt={"icon"} />
@@ -1456,24 +1536,77 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               disableSearch={true}
               data={[
                 {
+                  id: 0,
+                  text: "Tất cả",
+                },
+                {
                   id: 1,
-                  text: "Việc thông thường",
+                  text: "Chính thức",
                 },
                 {
                   id: 2,
+                  text: "Không chính thức",
+                },
+              ]}
+            />
+          )}
+          {(tabIndex === 2) && (
+            <DropdownSearchableV2
+              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              placeholder={"Phân loại"}
+              prefixIcon={
+                <img className={"mr-2"} src={categoryIcon} alt={"icon"} />
+              }
+              isMultiple={true}
+              disableSearch={true}
+              data={[
+                {
+                  id: 0,
+                  text: "Việc thông thường",
+                },
+                {
+                  id: 1,
                   text: "Yêu cầu thông tin",
                 },
                 {
-                  id: 3,
+                  id: 2,
                   text: "Yêu cầu phê duyệt",
                 },
                 {
-                  id: 4,
+                  id: 3,
                   text: "Thanh toán",
                 },
                 {
-                  id: 5,
+                  id: 4,
                   text: "Lựa chọn nhà thầu",
+                },
+                {
+                  id: 5,
+                  text: "Nghiệm thu chất lượng",
+                },
+                {
+                  id: 6,
+                  text: "Yêu cầu sửa chữa",
+                },
+                {
+                  id: 7,
+                  text: "Yêu cầu thay đổi",
+                },
+                {
+                  id: 8,
+                  text: "Yêu cầu thực hiện",
+                },
+                {
+                  id: 9,
+                  text: "Báo cáo",
+                },
+                {
+                  id: 10,
+                  text: "Tiến độ",
+                },
+                {
+                  id: 11,
+                  text: "Họp",
                 },
               ]}
             />
