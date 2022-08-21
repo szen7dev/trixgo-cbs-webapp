@@ -112,12 +112,12 @@ export const PmProjectLeftMenuContent:FC = () => {
 
             <div className={"mt-1"}>
                 {!detailDepartment?.admins?.includes(user?._id || "") ? <></> :
-                    <NavLink to={`/pm/project/${projectID}/admin`} className={"left-menu-nav flex items-center py-2 px-4 rounded-full w-full text-primary-gray"}>
+                    <NavLink to={`/pm/project/${projectID}/admin`} className={"left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray"}>
                         <img src={adminIcon}/>
                         <span className={"flex-1 ml-2 text-left"}>Quản trị viên dự án</span>
                     </NavLink>
 				}
-                <NavLink to={`/pm/project/${projectID}/home`} className={"left-menu-nav flex items-center py-2 px-4 rounded-full w-full text-primary-gray"}>
+                <NavLink to={`/pm/project/${projectID}/home`} className={"left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray"}>
                     <img src={getIconFromSlug('home')}/>
                     <span className={"flex-1 ml-2 text-left"}>Home</span>
                 </NavLink>
@@ -127,7 +127,7 @@ export const PmProjectLeftMenuContent:FC = () => {
                             const roleApp = listAppRoleMenu.find((e: any) => e?._id?.menu == item?._id);
                             if (roleApp && roleApp.read >= 1) {
                                 return (
-                                    <NavLink key={index} to={{ pathname: generatePath(`/pm/project/:id/${item.slug}`, match.params) }} className={"left-menu-nav flex items-center py-2 px-4 rounded-full w-full text-primary-gray"}>
+                                    <NavLink key={index} to={{ pathname: generatePath(`/pm/project/:id/${item.slug}`, match.params) }} className={"left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray"}>
                                         <img src={getIconFromSlug(item.slug)}/>
                                         <span className={"flex-1 ml-2 text-left"}>{item.name}</span>
                                     </NavLink>
