@@ -54,8 +54,8 @@ const PcmHomeV2: FC<Props> = ({ type = 1 }) => {
     return (
         <div className={"task-home"}>
             <div className={"filter-bar flex flex-wrap px-4 py-2"}>
-                <DropdownSearchableV2
-                    className={"mr-4 border border-primary-border rounded-lg mb-2"}
+                {/* <DropdownSearchableV2
+                    className={"mr-2 border border-primary-border rounded-lg mb-2"}
                     placeholder={"Người thực hiện"}
                     showTriangle={true}
                     isMultiple={true}
@@ -99,7 +99,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1 }) => {
                     prefixIcon={<img className={"mr-2"} src={maleUserIcon} alt={"icon"}/>}
                 />
                 <TimeRangeDropdown
-                    className={"mr-4 border border-primary-border rounded-lg mb-2 p-1 pl-2 "}
+                    className={"mr-2 border border-primary-border rounded-lg mb-2 p-1 pl-2 "}
                     placeholder={"Thời hạn"}
                     iconBack={<TriangleDown/>}
                     iconFront={<img src={timelineIcon} alt={"----"}/>}
@@ -123,7 +123,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1 }) => {
                     ]}
                 />
                 <DropdownSearchableV2
-                    className={"mr-4 border border-primary-border rounded-lg mb-2"}
+                    className={"mr-2 border border-primary-border rounded-lg mb-2"}
                     placeholder={"Người tạo"}
                     showTriangle={true}
                     isMultiple={true}
@@ -167,7 +167,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1 }) => {
                     prefixIcon={<img className={"mr-2"} src={maleUserIcon} alt={"icon"}/>}
                 />
                 <DropdownSearchableV2
-                    className={"mr-4 border border-primary-border rounded-lg mb-2"}
+                    className={"mr-2 border border-primary-border rounded-lg mb-2"}
                     placeholder={"Dự án"}
                     prefixIcon={<img className={"mr-2"} src={projectIcon} alt={"icon"}/>}
                     isMultiple={true}
@@ -199,7 +199,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1 }) => {
                     ]}
                 />
                 <DropdownSearchableV2
-                    className={"mr-4 border border-primary-border rounded-lg mb-2"}
+                    className={"mr-2 border border-primary-border rounded-lg mb-2"}
                     placeholder={"Quá hạn"}
                     prefixIcon={<img className={"mr-2"} src={timeTableIcon} alt={"icon"}/>}
                     disableSearch={true}
@@ -219,7 +219,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1 }) => {
                     ]}
                 />
                 <DropdownSearchableV2
-                    className={"mr-4 border border-primary-border rounded-lg mb-2"}
+                    className={"mr-2 border border-primary-border rounded-lg mb-2"}
                     placeholder={"Trạng thái"}
                     prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"}/>}
                     isMultiple={true}
@@ -256,7 +256,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1 }) => {
                     ]}
                 />
                 <DropdownSearchableV2
-                    className={"mr-4 border border-primary-border rounded-lg mb-2"}
+                    className={"mr-2 border border-primary-border rounded-lg mb-2"}
                     placeholder={"Phân loại"}
                     prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"}/>}
                     isMultiple={true}
@@ -283,10 +283,10 @@ const PcmHomeV2: FC<Props> = ({ type = 1 }) => {
                             text: "Lựa chọn nhà thầu"
                         },
                     ]}
-                />
-                <button className={"bg-green-success rounded text-white px-6 h-[32px] mb-2"}>
+                /> */}
+                {/* <button className={"bg-green-success rounded text-white px-6 h-[32px] mb-2"}>
                     Lưu kết quả
-                </button>
+                </button> */}
             </div>
 
             <div className={"header-table flex px-4 w-full top-0 bg-white pb-4 flex-wrap"}>
@@ -316,7 +316,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1 }) => {
                 <div className={"flex-1 flex items-center justify-end"}>
                     {/* <DropdownSearchable
                         showTriangle={true}
-                        className={"border-0.5 border-primary-border rounded-full mr-4"}
+                        className={"border-0.5 border-primary-border rounded-full mr-2"}
                         placeholder={"Lọc theo đơn vị giao việc"}
                     /> */}
                     <span className={"text-primary-gray"}>1-20 trong số {totalRecord}</span>
