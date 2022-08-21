@@ -3,12 +3,14 @@ import businessBuilding from "assets/images/icons8-business-building-48.svg";
 import debounce from 'lodash/debounce';
 import downloadIcon from "assets/images/icons8-download-64.svg";
 import pencilIcon from "assets/images/icons8-pencil-96.svg";
-import {DropdownSearchableV2} from "shareComponents/common";
+import {DropdownSearchableV2, ModalContainer} from "shareComponents/common";
 import nextIcon from "assets/images/icons-arrow-next.svg";
 import userAvatar from "assets/images/task-user.svg";
 import { useQueryListCompany } from 'services/hooks/useCompanies';
 import { useDepartmentDirectory } from 'services/hooks/items/useDepartmentDirectory';
 import iconChevronRight from "assets/images/icon-chevron-right.png";
+import ModalCreateDepartmentDirectory from "../../../ppt/pages/ProjectDirectoryPageV2/components/ModalCreateDepartmentDirectory";
+import ModalUpdateDepartmentDirectory from "../../../ppt/pages/ProjectDirectoryPageV2/components/ModalUpdateDepartmentDirectory";
 
 const DEPARTMENT_DIRECTORY_TYPE = [
     { id: 1, text: "Trợ lý viên" },
@@ -30,7 +32,8 @@ const ProjectDirectoryPageV2:FC = () => {
     const { 
         list: listDepartmentDirectory, 
         totalRecord,
-        fetchNextPage: fetchNextPageDepartmentDirectory
+        fetchNextPage: fetchNextPageDepartmentDirectory,
+        refetch
     } = useDepartmentDirectory({ params: { companyID: companySelected, limit: 10}, isFetchList: true });
 
     const handleSearch = debounce((value) => setKeywordCompany(value), 500);
@@ -38,6 +41,18 @@ const ProjectDirectoryPageV2:FC = () => {
     const handleChangeCompany = (value: any) => {
         setCompanySelected(value.id);
     }
+
+    const [modalShow, setModalShow] = useState({
+        create: false,
+        update: false,
+    });
+
+    const toggleModalCreateOrUpdate = (modalType: "create" | "update") => {
+        setModalShow((prevValue) => ({
+            ...prevValue,
+            [modalType]: !modalShow[modalType],
+        }));
+    };
 
     return (
         <div className={"project-directory"}>
@@ -51,7 +66,9 @@ const ProjectDirectoryPageV2:FC = () => {
                     onSearchInputChange={handleSearch}
                     onchangeValue={handleChangeCompany}
                 />
-                <button className={"bg-cbs-green rounded h-[32px] px-4 text-white font-bold"}>
+                <button className={"bg-cbs-green rounded h-[32px] px-4 text-white font-bold"} 
+                    onClick={toggleModalCreateOrUpdate.bind(null, "create")}
+                >
                     Tạo mới
                 </button>
             </div>
@@ -159,9 +176,7 @@ const ProjectDirectoryPageV2:FC = () => {
                                     </p>
                                 </td>
                                 <td className={"border-0.5 border-primary-border px-2 align-middle"}>
-                                    <p>
-                                        { departmentDirectory?.member?.email }
-s                                   </p>
+                                    { departmentDirectory?.member?.email }
                                 </td>
                                 <td className={"border-0.5 border-primary-border px-2 align-middle"}>
                                     <p>
@@ -173,6 +188,34 @@ s                                   </p>
                     </tbody>
                 </table>
             </div>
+
+            {/* Modal Create danh bạ dự án */}
+            <ModalContainer
+                isModalOpen={modalShow.create}
+                toggle={toggleModalCreateOrUpdate.bind(null, "create")}
+            >
+                <div className="inline-flex flex-col text-black w-full max-w-3xl overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl">
+                <ModalCreateDepartmentDirectory
+                    toggle={toggleModalCreateOrUpdate.bind(null, "create")}
+                    onConfirm={refetch}
+                    projectID={ keywordCompany }
+                />
+                </div>
+            </ModalContainer>
+
+            {/* Modal Update danh bạ dự án */}
+            <ModalContainer
+                isModalOpen={modalShow.update}
+                toggle={toggleModalCreateOrUpdate.bind(null, "update")}
+            >
+                <div className="inline-flex flex-col text-black w-full max-w-3xl overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl">
+                {/* <ModalUpdateDepartmentDirectory
+                    biddingPlanID={biddingPlanIdSelected}
+                    toggle={toggleModalCreateOrUpdate.bind(null, "update")}
+                    onConfirm={refetch}
+                /> */}
+                </div>
+            </ModalContainer>
         </div>
     )
 }
