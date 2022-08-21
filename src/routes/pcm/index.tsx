@@ -94,7 +94,7 @@ const PCMRouter: FC = () => {
           {/* Trang chủ */}
           <ProtectedRoute
             exact
-            path={"/"}
+            path={"/pcm/home"}
             component={() => (
               <HomeLayout>
                 <DashboardV2 />
@@ -102,7 +102,7 @@ const PCMRouter: FC = () => {
             )}
           />
 
-          <Route exact path="/pcm">
+          <Route exact path="/">
             <Redirect to="/pcm/home" />
           </Route>
 
@@ -398,7 +398,7 @@ const PCMRouter: FC = () => {
                 <Route exact path="/pcm/detail/:id/print/2" component={PcmPrintTaskTypeTwoPage} />
                 <Route exact path="/pcm/detail/:id/print/3" component={PcmPrintTaskTypeThreePage} />
 
-                <Route exact path="/pcm/home" component={() => <PcmHomePage/>} />
+                <Route exact path="/pcm/mine" component={() => <PcmHomePage/>} />
                 <Route exact path="/pcm/assign" component={() => <PcmHomePage type={2} />} />
                 <Route exact path="/pcm/bookmark" component={() => <PcmHomePage type={3} />} />
                 <Route exact path="/pcm/related" component={() => <PcmHomePage type={5} />} />
