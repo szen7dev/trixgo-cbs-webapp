@@ -1,8 +1,6 @@
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, { FC, useState } from "react";
 import moment from "moment";
-import Slider from "react-slick";
 import { Link, useHistory } from "react-router-dom";
-import { useQuery } from "react-query";
 import parse from "html-react-parser";
 
 import "slick-carousel/slick/slick.css";
@@ -35,7 +33,7 @@ import businessBuiding from "assets/images/icons8-business-building-48.svg";
 import { useTask } from "services/hooks/useTask";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { useAppSelector } from "redux/reducer";
-import { usePcmDashboardV2 } from "services/hooks/pcm/usePcmDashboardV2";
+import { useListResponseFromSearch, useListSubjectFromSearch } from "services/hooks/pcm/usePcmDashboardV2";
 
 type Props = {
   type?: number;
@@ -53,26 +51,22 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     //Thực hiện đánh dấu đã đọc với task nếu cần
   };
 
-  // Danh sách các việc quá hạn
-  const { listSubject, totalRecordSubject, nextPageListSubject } = useTask({
-    params: {
-      draft: "1",
-      isParent: "1",
-      isActive: "1",
-    },
-    isFetchSubject: true,
-  });
-
-  const keywordForSubject = useAppSelector(
-    (state) => state.dashboardV2.data.keywordForSubject
-  );
   const showModalResult = useAppSelector(
     (state) => state.dashboardV2.data.showModalResult
   );
 
+  const keywordForResponse = useAppSelector(
+    (state) => state.dashboardV2.data.keywordForResponse
+  );
+
   // Danh sách các subject theo keyword
-  const { listDataSubject: listDataSearchFromSubject } = usePcmDashboardV2({
-    keyword: keywordForSubject
+  const { listDataForResponse } = useListResponseFromSearch({
+    keyword: keywordForResponse,
+  });
+
+  // Danh sách các subject theo chủ đề
+  const { listDataForSubject, totalRecord: totalRecordSubject } = useListSubjectFromSearch({
+    keyword: ""
   });
 
   const checkActive = (relateds: string[], user: string) => {
@@ -87,8 +81,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     <div className="t-home flex flex-col h-full overflow-hidden">
       <div className={"sticky top-0 bg-white z-10"}>
         <div className={"filter-bar flex flex-wrap px-4 py-2"}>
-
-        {tabIndex === 2 && (
+          {tabIndex === 2 && (
             <DropdownSearchableV2
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Đơn vị thực hiện"}
@@ -162,7 +155,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               }
             />
           )}
-          
+
           {tabIndex === 2 && (
             <DropdownSearchableV2
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
@@ -1426,7 +1419,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                 },
               ]}
               renderItem={(item) => (
-                  <p className={"min-w-[300px]"}>{item.text}</p>
+                <p className={"min-w-[300px]"}>{item.text}</p>
               )}
             />
           )}
@@ -1530,7 +1523,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               ]}
             />
           )}
-          {(tabIndex === 1) && (
+          {tabIndex === 1 && (
             <DropdownSearchableV2
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Phân loại"}
@@ -1555,7 +1548,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               ]}
             />
           )}
-          {(tabIndex === 2) && (
+          {tabIndex === 2 && (
             <DropdownSearchableV2
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Phân loại"}
@@ -1700,64 +1693,10 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
         </div>
       </div>
       <div className={"flex-1 overflow-y-auto"}>
-        <table className={"table-fixed border-collapse w-full border-0.5 border-primary-border"}>
-          <thead>
-          <tr className={"sticky top-0"}>
-            <th className={"text-center py-2 font-normal text-primary-gray w-[70px] bg-cbs-table-header"}>
-              TT
-            </th>
-            <th className={"w-1/12 bg-cbs-table-header text-left font-normal text-primary-gray py-2 border-b-0.5 border-primary-border"}>
-              Ngày tạo
-            </th>
-            <th className={"w-2/12 bg-cbs-table-header text-left font-normal text-primary-gray py-2 border-b-0.5 border-primary-border"}>
-              Người tạo
-            </th>
-            <th className={"w-3/12 bg-cbs-table-header text-left font-normal text-primary-gray py-2 border-b-0.5 border-primary-border"}>
-              Tên file
-            </th>
-            <th className={"w-1/12 bg-cbs-table-header text-left font-normal text-primary-gray py-2 border-b-0.5 border-primary-border"}>
-              Dung lượng
-            </th>
-            <th className={"min-w-4/12 bg-cbs-table-header text-left font-normal text-primary-gray py-2 border-b-0.5 border-primary-border"}>
-              Thuộc chủ đề
-            </th>
-          </tr>
-          </thead>
-          <tbody>
-          {
-            [...Array(12)].map((e,i) => (
-                <tr key={i}>
-                  <td className={"py-2 border-b-0.5 border-primary-border text-center align-middle"}>
-                    {i+1}
-                  </td>
-                  <td className={"py-2 border-b-0.5 border-primary-border align-middle"}>
-                    <p>24/3/2021</p>
-                    <p className={"text-primary-gray"}>16 giờ trước</p>
-                  </td>
-                  <td className={"py-2 border-b-0.5 border-primary-border align-middle"}>
-                    <div className={"flex items-center"}>
-                      <img src={userAvt} alt={"---"} className={"w-[36px] h-[36px] min-w-[36px] min-h-[36px] max-w-[36px] max-h-[36px rounded-full overflow-hidden]"}/>
-                      <span className={"ml-2"}>Phan Văn Trường</span>
-                    </div>
-                  </td>
-                  <td className={"py-2 border-b-0.5 border-primary-border align-middle text-cbs-highlight-color break-all pr-2"}>
-                    2020.12.15_HAR.MAR.HieuNT.DuToanNoiBo_V0.xlsx
-                  </td>
-                  <td className={"py-2 border-b-0.5 border-primary-border align-middle"}>
-                    63 KB
-                  </td>
-                  <td className={"py-2 border-b-0.5 border-primary-border align-middle"}>
-                    HAR.MAR.Đề nghị lập chi phí nội bộ và thống nhất với ban lãnh đạo công ty - Dự án Courtyard by Marriott Halong Bay
-                  </td>
-                </tr>
-            ))
-          }
-          </tbody>
-        </table>
         <table className={"w-full table-fixed tasks"}>
           {tabActive === 1 ? (
             <tbody>
-              {listDataSearchFromSubject.map((item: any, index: number) => {
+              {listDataForResponse.map((item: any, index: number) => {
                 return (
                   <tr
                     key={index}
@@ -1831,7 +1770,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
 
           {tabActive === 2 ? (
             <tbody>
-              {listSubject?.map((item: any, index: number) => {
+              {listDataForSubject?.map((item: any, index: number) => {
                 return (
                   <tr
                     key={index}
@@ -1880,16 +1819,16 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                     </td>
                     <td className={"w-td-dashboard"}>
                       <Link to={"/pcm/detail/" + item._id}>
-                          <p className={"task-title truncate text-[14px] mt-2"}>
-                            {item.project.sign}.{subContentHtml(item.name)}
-                          </p>
-                          <p
-                            className={
-                              "crop-text truncate text-xs text-primary-gray py-2"
-                            }
-                          >
-                            {subContentHtml(item.lastComment?.content)}
-                          </p>
+                        <p className={"task-title truncate text-[14px] mt-2"}>
+                          {item.project.sign}.{subContentHtml(item.name)}
+                        </p>
+                        <p
+                          className={
+                            "crop-text truncate text-xs text-primary-gray py-2"
+                          }
+                        >
+                          {subContentHtml(item.lastComment?.content)}
+                        </p>
                       </Link>
                     </td>
                     <td className={"w-[100px]"}>
@@ -1909,6 +1848,122 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
             <></>
           )}
         </table>
+
+        {tabActive === 3 ? (
+          <table
+            className={
+              "table-fixed border-collapse w-full border-0.5 border-primary-border"
+            }
+          >
+            <thead>
+              <tr className={"sticky top-0"}>
+                <th
+                  className={
+                    "text-center py-2 font-normal text-primary-gray w-[70px] bg-cbs-table-header"
+                  }
+                >
+                  TT
+                </th>
+                <th
+                  className={
+                    "w-1/12 bg-cbs-table-header text-left font-normal text-primary-gray py-2 border-b-0.5 border-primary-border"
+                  }
+                >
+                  Ngày tạo
+                </th>
+                <th
+                  className={
+                    "w-2/12 bg-cbs-table-header text-left font-normal text-primary-gray py-2 border-b-0.5 border-primary-border"
+                  }
+                >
+                  Người tạo
+                </th>
+                <th
+                  className={
+                    "w-3/12 bg-cbs-table-header text-left font-normal text-primary-gray py-2 border-b-0.5 border-primary-border"
+                  }
+                >
+                  Tên file
+                </th>
+                <th
+                  className={
+                    "w-1/12 bg-cbs-table-header text-left font-normal text-primary-gray py-2 border-b-0.5 border-primary-border"
+                  }
+                >
+                  Dung lượng
+                </th>
+                <th
+                  className={
+                    "min-w-4/12 bg-cbs-table-header text-left font-normal text-primary-gray py-2 border-b-0.5 border-primary-border"
+                  }
+                >
+                  Thuộc chủ đề
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {[...Array(12)].map((e, i) => (
+                <tr key={i}>
+                  <td
+                    className={
+                      "py-2 border-b-0.5 border-primary-border text-center align-middle"
+                    }
+                  >
+                    {i + 1}
+                  </td>
+                  <td
+                    className={
+                      "py-2 border-b-0.5 border-primary-border align-middle"
+                    }
+                  >
+                    <p>24/3/2021</p>
+                    <p className={"text-primary-gray"}>16 giờ trước</p>
+                  </td>
+                  <td
+                    className={
+                      "py-2 border-b-0.5 border-primary-border align-middle"
+                    }
+                  >
+                    <div className={"flex items-center"}>
+                      <img
+                        src={userAvt}
+                        alt={"---"}
+                        className={
+                          "w-[36px] h-[36px] min-w-[36px] min-h-[36px] max-w-[36px] max-h-[36px rounded-full overflow-hidden]"
+                        }
+                      />
+                      <span className={"ml-2"}>Phan Văn Trường</span>
+                    </div>
+                  </td>
+                  <td
+                    className={
+                      "py-2 border-b-0.5 border-primary-border align-middle text-cbs-highlight-color break-all pr-2"
+                    }
+                  >
+                    2020.12.15_HAR.MAR.HieuNT.DuToanNoiBo_V0.xlsx
+                  </td>
+                  <td
+                    className={
+                      "py-2 border-b-0.5 border-primary-border align-middle"
+                    }
+                  >
+                    63 KB
+                  </td>
+                  <td
+                    className={
+                      "py-2 border-b-0.5 border-primary-border align-middle"
+                    }
+                  >
+                    HAR.MAR.Đề nghị lập chi phí nội bộ và thống nhất với ban
+                    lãnh đạo công ty - Dự án Courtyard by Marriott Halong Bay
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );
