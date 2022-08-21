@@ -73,7 +73,7 @@ const PackageDocument: FC = () => {
 			...previous,
 			{ _id, name }
 		]))
-		history.push(`/pcm/project/${projectID}/admin/packages/${_id}`);
+		history.push(`/pm/project/${projectID}/admin/packages/${_id}`);
 	}
 
 	return (
@@ -225,7 +225,7 @@ const PackageDocument: FC = () => {
 									{item?.sign}
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
-									<Link to={`/pcm/project/${projectID}/admin/packages/${item._id}/members`}>
+									<Link to={`/pm/project/${projectID}/admin/packages/${item._id}/members`}>
 										{item?.members.length}
 									</Link>
 								</td>
@@ -233,7 +233,7 @@ const PackageDocument: FC = () => {
 									{moment(item.modifyAt).format("HH:mm DD/MM/YYYY")} {item?.userUpdate?.bizfullname}
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
-									<Link to={`/pcm/project/${projectID}/admin/packages/${item._id}/members`} className="underline text-sky-600">
+									<Link to={`/pm/project/${projectID}/admin/packages/${item._id}/members`} className="underline text-sky-600">
 										Xem thành viên
 									</Link>
 								</td>
