@@ -34,8 +34,8 @@ import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFi
  */
 import { DropdownSearchable } from "shareComponents/common";
 import Close from "assets/icons/Close";
-import TagIcon from "assets/images/icons8-price-tag-96.svg";
 import fakeThumbnail from "assets/images/avatar.jpg";
+// import TagIcon from "assets/images/icons8-price-tag-96.svg";
 // import AttachIcon from "assets/images/icons8-attach-50.png";
 
 import "react-day-picker/lib/style.css";

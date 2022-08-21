@@ -1,5 +1,5 @@
-import React, {FC, useState} from "react";
-import { useParams } from 'react-router-dom';
+import React, {FC, useEffect, useState} from "react";
+import { useHistory, useParams } from 'react-router-dom';
 
 import {ActionTaskDetailBar} from "./components/ActionBar";
 import {TaskDetailTitle} from "./components/TaskTitle";
@@ -13,10 +13,14 @@ import {TaskDetailRelatedTask} from "./components/TaskDetailRelatedTask";
 import {TaskDetailComment} from "./components/TaskDetailComment";
 import { useTask } from 'services/hooks/useTask';
 import { Loader } from "shareComponents/common";
+import CommentProvider from 'views/pcm/contexts/comment/comment.provider';
+import { toast } from "react-toastify";
 
 const PcmDetailTaskV2:FC = () => {
     const [collapse, setCollapse] = useState(false);
     const { id: taskId } = useParams<{ id: string }>();
+
+    const history = useHistory();
 
     const { info: taskInfo, isLoadingInfo, refetchInfo } = useTask({
         params: {
@@ -24,6 +28,13 @@ const PcmDetailTaskV2:FC = () => {
         },
         isFetchInfo: true
     });
+
+    useEffect(() => {
+        if (taskInfo?.message === "permission_denied") {
+            toast.warn('Bạn không có quyền truy cập công việc này');
+            return history.push(`/pcm/home`);
+        }
+    }, [JSON.stringify(taskInfo)]);
 
     const handleCollapse = () => {
         setCollapse(!collapse);
@@ -45,9 +56,11 @@ const PcmDetailTaskV2:FC = () => {
                     <TaskDetailSignature task={taskInfo} />
                     <TaskDetailDescription task={taskInfo} refetchInfo={refetchInfo} />
                     <TaskDetailSubtask task={taskInfo} />
-                    <TaskDetailRelatedTask task={taskInfo} />
+                    <TaskDetailRelatedTask task={taskInfo} refetchInfo={refetchInfo} />
                 </div>
-                <TaskDetailComment task={taskInfo} refetchInfo={refetchInfo} />
+                <CommentProvider>
+                    <TaskDetailComment task={taskInfo} refetchInfo={refetchInfo} />
+                </CommentProvider>
             </div>
         </div>
     )

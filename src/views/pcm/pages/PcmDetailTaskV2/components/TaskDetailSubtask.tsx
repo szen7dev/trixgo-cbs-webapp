@@ -26,7 +26,6 @@ export const TaskDetailSubtask:FC<Props> = ({ task }) => {
     } = useTask({
         params: {
             parentID: task?._id,
-            type: 2,
             isSortChildTask: '1',
         },
         isFetch: true,

@@ -59,6 +59,7 @@ export type Task = {
   contract: Contract,
   field: Field,
   parent: Task | undefined,
+  links: Task[],
   startTime: string,
   subType: number,
   subtype: number,
@@ -77,8 +78,9 @@ export type Task = {
   amountChecklist: number;
   amountComment: number;
   amountFinishedChecklist: number;
-  createAt: string
-  author: Author,
+  createAt: string;
+  author: Author;
+  message?: string;
 };
 
 export interface addTaskPayload {
@@ -113,6 +115,7 @@ export interface updateTaskPayload {
   flagsRemoves?: Array<string>;
   authorAttachs?: Array<string>;
   assigneeAttachs?: Array<string>;
+  tasksLink?: Array<string>;
 }
 
 export interface addTaskResponse {
@@ -393,6 +396,7 @@ export type ListCommentsPayload = {
   contractID?: string;
   parentID?: string;
   isHaveImage?: boolean;
+  official?: boolean;
   select?: string;
   populates?: string;
 };
@@ -405,6 +409,8 @@ export type CommentPayload = {
   content: string;
   files?: string[];
   images?: string[];
+  isOfficial?: boolean;
+  receiversID?: string[];
 };
 
 export type CommentProps = {
@@ -420,9 +426,11 @@ export type CommentProps = {
   };
   type: number;
   content: string;
+  official: boolean;
   files: FileProps[] | undefined;
   images: FileProps[] | undefined;
   author: User;
+  receivers?: User[];
   amountCommentReply: number;
   amountReaction: number;
   parent: string;

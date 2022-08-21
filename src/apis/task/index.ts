@@ -32,11 +32,11 @@ import {
 import { convertObToUrl } from "utils";
 
 const populatesTask = JSON.stringify({
-  path: "group contract author assignee related parent project company field approver authorAttachs assigneeAttachs signatures openedUsers",
-  select: "_id name fullname bizfullname image sign _id name nameOrg description size path mimeType type author createAt members company",
+  path: "group contract author assignee related parent project company field approver authorAttachs assigneeAttachs signatures openedUsers links",
+  select: "_id name fullname bizfullname image sign _id name nameOrg description size path mimeType type author assignee createAt members company expiredTime project",
   populate: {
-    path: "author",
-    select: "_id bizfullname image"
+    path: "author assignee project",
+    select: "_id bizfullname image sign"
   }
 })
 
@@ -50,7 +50,7 @@ const populatesResponse = JSON.stringify({
 });
 
 const populatesComment = JSON.stringify({
-  path: "author lastestReplyID files images task",
+  path: "author lastestReplyID files images task receivers",
   select: "_id bizfullname image name nameOrg description path mimeType size author type parent content files images amountCommentReply amountReaction createAt task company project group",
   populate: {
       path: 'author lastestReplyID files images task',
@@ -125,7 +125,7 @@ const TaskRepository = {
   async taskInfo(payload: TaskInfoParams): Promise<any> {
     const { data } = await API.get<any>(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl({
-        select: "name description type typeStatus status draft priority project contract parent checklist createAt field group author assignee related expiredTime actualFinishTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures openedUsers comments amountComment amountResponse amountMarkedResponse startTime subtype flags milestone",
+        select: "name description type typeStatus status draft priority project contract parent checklist createAt field group author assignee related expiredTime actualFinishTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures openedUsers comments amountComment amountResponse amountMarkedResponse startTime subtype flags milestone links",
         populates: populatesTask,
         ...payload
       })}`
