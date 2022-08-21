@@ -1,9 +1,10 @@
 import React, {FC, useState, useEffect } from "react";
+import { useParams } from 'react-router-dom';
 import businessBuilding from "assets/images/icons8-business-building-48.svg";
 import debounce from 'lodash/debounce';
 import downloadIcon from "assets/images/icons8-download-64.svg";
 import pencilIcon from "assets/images/icons8-pencil-96.svg";
-import {DropdownSearchableV2, ModalContainer, GroupActions} from "shareComponents/common";
+import {DropdownSearchableV2, ModalContainer, GroupActions, Paginate} from "shareComponents/common";
 
 import nextIcon from "assets/images/icons-arrow-next.svg";
 import userAvatar from "assets/images/task-user.svg";
@@ -30,13 +31,19 @@ const DEPARTMENT_DIRECTORY_LOCK = [
 const ProjectDirectoryPageV2:FC = () => {
     const [keywordCompany, setKeywordCompany] = useState('');
     const [companySelected, setCompanySelected] = useState('');
+	const { id: projectID } = useParams<{ id: string }>();
+    const [pageParam, setPageParam] = useState('');
+    const [prevCursor, setPrevCursor] = useState([null]);
+
     const { data: listCompanies, fetchNextPage } = useQueryListCompany({ keyword: keywordCompany, limit: 20 });
-    const { 
+    const {
         list: listDepartmentDirectory, 
         totalRecord,
+        totalPage,
         fetchNextPage: fetchNextPageDepartmentDirectory,
-        refetch
-    } = useDepartmentDirectory({ params: { companyID: companySelected, limit: 10}, isFetchList: true });
+        refetch,
+        nextCursor
+    } = useDepartmentDirectory({ params: { companyID: companySelected, projectID, limit: 10 }, isFetchList: true });
     const [departmentDirectoryIdSelected, setDepartmentDirectoryIdSelected] = useState("");
 
     const { assigned, checked, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(listDepartmentDirectory);
@@ -69,6 +76,15 @@ const ProjectDirectoryPageV2:FC = () => {
         }));
     };
 
+    const prevPageAction = () => {
+        if (!nextCursor) {
+          setPageParam(prevCursor[prevCursor.length - 2] || '')
+        } else {
+          const prev = prevCursor.findIndex(item => item === nextCursor)
+          setPageParam(prevCursor[prev - 2] || '')
+        }
+      };
+     
     // const toggleDeleteModal = () => {
     //     openModal(
     //       <div
@@ -119,7 +135,7 @@ const ProjectDirectoryPageV2:FC = () => {
                         trash: !Object.values(assigned).some((value) => value),
                     }}
                 />
-                <div className={"flex-1 flex items-center justify-end"}>
+                {/* <div className={"flex-1 flex items-center justify-end"}> */}
                     {/* <span className={"text-primary-gray"}>1-50 trong số 2.358</span>
                     <button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"} disabled={true}>
                         <img src={nextIcon} alt={"----"} className={"rotate-180"}/>
@@ -128,29 +144,8 @@ const ProjectDirectoryPageV2:FC = () => {
                         <img src={nextIcon} alt={"----"}/>
                     </button> */}
                     {/* XỬ LÝ PHẤN TRANG */}
-                    {listDepartmentDirectory.length ? (
-                        <>  
-                            <span className="mr-4">
-                            {totalRecord && totalRecord > 10 ? "10" : totalRecord} trong số {totalRecord}
-                            </span>
-                            {/* <button className="rounded-full h-10 w-10 flex items-center justify-center hover:bg-gray-100 border border-solid border-transparent hover:border-primary-border">
-                                <img alt="Previous" src={iconChevronLeft} className="w-4 filter-primary-gray" />
-                            </button> */}
-                            {totalRecord && totalRecord > 10 ? (
-                            <button
-                                onClick={fetchNextPageDepartmentDirectory}
-                                className="rounded-full h-10 w-10 flex items-center justify-center hover:bg-gray-100 border border-solid border-transparent hover:border-primary-border"
-                            >
-                                <img alt="Next" src={iconChevronRight} className="w-4 filter-primary-gray" />
-                            </button>
-                            ) : (
-                            ""
-                            )}
-                        </>
-                        ) : (
-                        ""
-                    )}
-                </div>
+                    <Paginate totalPages={totalPage} totalRecord={totalRecord} hasNextPage prevPageAction={() => prevPageAction()} nextPageAction={() => fetchNextPageDepartmentDirectory} />
+                {/* </div> */}
               
             </div>
 
@@ -200,7 +195,7 @@ const ProjectDirectoryPageV2:FC = () => {
                                 </td>
                                 <td className={"border-0.5 border-primary-border px-2 align-middle"}>
                                     <div className={"flex items-center py-2"}>
-                                        <img src={userAvatar} alt={"---"} className={"w-[40px] h-[40px] min-w-[40px] min-h-[40px] max-w-[40px] max-h-[40px] rounded-full overflow-hidden"}/>
+                                        <img  src={`${process.env.REACT_APP_URL_S3_USER}/${departmentDirectory?.member?.image}`} alt={"---"} className={"w-[40px] h-[40px] min-w-[40px] min-h-[40px] max-w-[40px] max-h-[40px] rounded-full overflow-hidden"}/>
                                         <p className={"ml-2"}>
                                             {departmentDirectory?.member?.fullname}
                                         </p>
@@ -244,7 +239,7 @@ const ProjectDirectoryPageV2:FC = () => {
                 <ModalCreateDepartmentDirectory
                     toggle={toggleModalCreateOrUpdate.bind(null, "create")}
                     onConfirm={refetch}
-                    projectID={ keywordCompany }
+                    projectID={ projectID }
                 />
                 </div>
             </ModalContainer>
@@ -259,6 +254,7 @@ const ProjectDirectoryPageV2:FC = () => {
                     departmentDirectoryID={departmentDirectoryIdSelected}
                     toggle={toggleModalCreateOrUpdate.bind(null, "update")}
                     onConfirm={refetch}
+                    projectID={ projectID }
                 />
                 </div>
             </ModalContainer>

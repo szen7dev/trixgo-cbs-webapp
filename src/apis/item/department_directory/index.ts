@@ -31,7 +31,7 @@ async function fetchListDepartmentDirectory(params: any) {
             select: 'member type name description lock order',
             populates: {
                 path: 'member company',
-                select: 'fullname name phone email'
+                select: 'fullname name phone email image'
             },
             ...params
         }

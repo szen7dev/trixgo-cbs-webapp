@@ -12,6 +12,7 @@ export interface DepartmentDirectory {
 
 export type DepartmentDirectoryQueryPayload = QueryParam & {
     companyID?: string;
+    projectID?: string;
     departmentDirectoryID?: string;
 };
 

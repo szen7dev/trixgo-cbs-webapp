@@ -9,6 +9,8 @@ import type { DepartmentDirectory } from 'typings/items';
 interface useDepartmentDirectory {
     isLoading: boolean;
     totalRecord: number;
+    totalPage: number;
+    nextCursor: string | null,
     hasNextPage: boolean | undefined;
     list: Array<DepartmentDirectory.DepartmentDirectory>;
     info: DepartmentDirectory.DepartmentDirectory | undefined;
@@ -88,18 +90,21 @@ export const useDepartmentDirectory = ({
         .filter(Boolean);
 
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
-
+    const totalPage = data?.pages[0]?.data?.totalPages || 0;
+    const nextCursor = data?.pages[0]?.data?.nextCursor || null;
     // Return data
     return {
         isLoading,
         list,
         info,
         totalRecord,
+        totalPage,
         hasNextPage,
         refetch,
         fetchNextPage,
         insertAsync,
         updateAsync,
         deleteAsync,
+        nextCursor
     }
 }

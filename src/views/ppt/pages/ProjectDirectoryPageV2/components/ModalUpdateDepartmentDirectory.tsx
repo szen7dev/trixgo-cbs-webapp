@@ -31,6 +31,7 @@ import { useAuth } from 'services/hooks/auth/useAuth';
 
 interface ModalProps {
 	departmentDirectoryID: string;
+	projectID: string;
 	toggle: () => void;
 	onConfirm?: () => void;
 }
@@ -49,7 +50,7 @@ const DEPARTMENT_DIRECTORY_LOCK = [
     { id: 1, text: "Khóa" },
 ]
 
-const ModalUpdateBiddingPlan: FC<ModalProps> = ({ departmentDirectoryID, toggle, onConfirm }) => {
+const ModalUpdateBiddingPlan: FC<ModalProps> = ({ departmentDirectoryID, toggle, onConfirm, projectID }) => {
 	const [initValues, setInitValues] = useState<{ [key: string]: any }>({});
 	const { updateAsync } = useDepartmentDirectory({});
 	const [bidder, setBidder] = useState("");
@@ -74,7 +75,7 @@ const ModalUpdateBiddingPlan: FC<ModalProps> = ({ departmentDirectoryID, toggle,
 		data: listUsersSystem,
 		hasNextPage: hasNextPageUserSystem,
 		fetchNextPage: fetchNextPageUserSystem,
-	} = useUserSystem({ keyword: searchUserSystem, companyID }, true);
+	} = useUserSystem({ keyword: searchUserSystem, projectID }, true);
 
 	// useEffect(() => {
 	// 	if(!cashFlowInfo || !departmentDirectoryID) return;

@@ -85,11 +85,11 @@ const ModalCreateDepartmentDirectory: FC<ModalProps> = ({ toggle, onConfirm, pro
 		data: listUsersSystem,
 		hasNextPage: hasNextPageUserSystem,
 		fetchNextPage: fetchNextPageUserSystem,
-	} = useUserSystem({ keyword: searchUserSystem, companyID }, true);
+	} = useUserSystem({ keyword: searchUserSystem, projectID }, true);
 	
 	return (
 		<Formik
-			initialValues={{ name: '', companyID  }}
+			initialValues={{ name: '', companyID, projectID  }}
 			validationSchema={financialSchema}
 			onSubmit={handleSubmit}
 		>
