@@ -35,6 +35,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1 }) => {
     } = useTask({
         params: {
             type, statusNe: "3", isSortChildTask: "1"
+            // , typeStatus: "4"
         },
         isFetch: true
     });
@@ -45,8 +46,8 @@ const PcmHomeV2: FC<Props> = ({ type = 1 }) => {
         ).toString();
     
         const result =
-          removeHtmlTag.length > 100
-            ? `${removeHtmlTag.slice(0, 100)}...`
+          removeHtmlTag.length > 75
+            ? `${removeHtmlTag.slice(0, 75)}...`
             : removeHtmlTag;
         return result;
       };
