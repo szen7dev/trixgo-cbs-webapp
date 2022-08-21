@@ -52,7 +52,7 @@ export const TaskDetailSubtask:FC<Props> = ({ task }) => {
                 </div>
             </div>
             <div className={"progress-bar flex items-center mt-4"}>
-                <span className={"text-primary-gray mr-2"}>100%</span>
+                <span className={"text-primary-gray mr-2"}>{progress}%</span>
                 <div className={"bar-progress-line overflow-hidden flex-1 h-[8px] rounded-full bg-cbs-form-input-bg relative"}>
                     <div style={{width: `${progress}%`}} className={"absolute h-full top-0 left-0 transition-all " + (progress < 100 ? "bg-primary":"bg-positive")}/>
                 </div>

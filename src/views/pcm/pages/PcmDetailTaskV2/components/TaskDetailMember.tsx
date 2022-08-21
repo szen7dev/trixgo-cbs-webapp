@@ -18,14 +18,14 @@ export const TaskDetailMember: FC<Props> = ({ task }) => {
                 <div className={"text-primary-gray text-lg font-bold"}>Thành viên</div>
                 <div className={"flex items-center mt-2"}>
                     <div className={"create-user flex items-center"}>
-                        <img alt={"----"} src={taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px]"} />
+                        <img alt={"----"} src={task?.author?.image ? `${process.env.REACT_APP_URL_S3_USER}/${task?.author?.image}` : taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px]"} />
                         <div className={"flex-1 ml-2"}>
                             <p>{task.author?.bizfullname}</p>
                             <p className={"text-primary-gray text-xs"}>Tạo việc {moment(task.createAt).format('HH:mm DD/M/YYYY')}</p>
                         </div>
                     </div>
-                    <div className={"assigned-user flex items-center ml-4"}>
-                        <img alt={"----"} src={taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px]"} />
+                    <div className={"assigned-user flex items-center ml-4 mr-4"}>
+                        <img alt={"----"} src={task?.assignee?.image ? `${process.env.REACT_APP_URL_S3_USER}/${task?.assignee?.image}` : taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px]"} />
                         <div className={"flex-1 ml-2"}>
                             <p>{task.assignee?.bizfullname}</p>
                             <p className={"text-primary-gray text-xs"}>Người thực hiện</p>
@@ -33,7 +33,7 @@ export const TaskDetailMember: FC<Props> = ({ task }) => {
                     </div>
                     <div className={"flex items-center flex-1 justify-start"}>
                         {!!task.related?.length && task.related.map(item => (
-                            <img key={item._id} alt={"----"} src={taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1"} />
+                            <img key={item._id} alt={"----"} src={item?.image ? `${process.env.REACT_APP_URL_S3_USER}/${item?.image}` : taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1"} />
                         ))}
 
                         {/* <img alt={"----"} src={taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1"} /> */}

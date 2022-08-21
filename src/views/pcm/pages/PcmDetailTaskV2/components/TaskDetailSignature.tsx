@@ -20,7 +20,7 @@ export const TaskDetailSignature: FC<Props> = ({ task }) => {
                 <div className={"mt-2 w-1/3"}>
                     {!!task.signatures?.length && task.signatures.map(item => (
                         <div key={item._id} className={"user-sign flex items-center mb-2"}>
-                            <img alt={"----"} src={taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px]"} />
+                            <img alt={"----"} src={item.author?.image ? `${process.env.REACT_APP_URL_S3_USER}/${item.author?.image}` : taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px]"} />
                             <div className={"flex-1 ml-2"}>
                                 <p>{item.author?.bizfullname}</p>
                                 <p className={"text-primary-gray text-xs"}>

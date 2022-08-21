@@ -46,17 +46,17 @@ export const SubtaskItem:FC<Props> = ({ task, index }) => {
                 onChange={handleUpdateStatusTask}
             />
             <div className="mx-2 px-2 w-full">
-                <p className="text-base">
+                <p className="text-[14px]">
                     {index + 1}. {task.name}
                 </p>
-                <p className="text-xs text-cbs-highlight-color">
+                <p className="text-[12px] text-cbs-highlight-color">
                     {task.assignee?.bizfullname}
                 </p>
             </div>
             <div className={"flex items-center"}>
                 <div className={"flex items-center justify-center px-4 py-1 rounded text-white bg-cbs-completed mr-2"}>
                     <img src={iconClock} alt={"----"} className={"mr-2"}/>
-                    <span>{moment(task.expiredTime).format('DD/M/YY')}</span>
+                    <span className="text-[13px]">{moment(task.expiredTime).format('DD/M/YY')}</span>
                 </div>
                 <img
                     alt={task.assignee?.bizfullname}

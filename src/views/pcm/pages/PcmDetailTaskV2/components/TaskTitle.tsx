@@ -61,7 +61,7 @@ export const TaskDetailTitle:FC<Props> = ({ task }) => {
                 placeholder={"Ưu tiên"}
                 onValueChange={value => console.log(value)}
             />
-            <InlineBadgeSelect
+            {/* <InlineBadgeSelect
                 wrapperClassName={"-translate-y-1"}
                 className={"text-xs bg-cbs-form-input-bg rounded-full text-primary-gray px-2 py-1 mx-1"}
                 defaultValue={task.risk}
@@ -81,7 +81,7 @@ export const TaskDetailTitle:FC<Props> = ({ task }) => {
                 ]}
                 placeholder={"Rủi ro"}
                 onValueChange={value => console.log(value)}
-            />
+            /> */}
         </div>
     )
 }

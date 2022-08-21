@@ -3,6 +3,7 @@ import iconFolder from "assets/images/icons8-folder-48.svg";
 import iconCheckmark from "assets/images/icons8-checkmark-yes-64.svg";
 import iconSnooze from "assets/images/icons8-snooze-48.svg";
 import TimeRange from "./TimeRange";
+import moment from "moment";
 import { Link } from 'react-router-dom';
 import { Task } from "typings/task";
 
@@ -31,7 +32,7 @@ export const TaskDetailFolder:FC<Props> = ({ task }) => {
                 </span>
                 <div className={"flex"}>
                     {task?.project?.sign} {">"}{" "}
-                    <Link to={`/pcm/project/${task?.project?._id}/folder/${task?.group?._id}`}>
+                    <Link to={`/pm/project/${task?.project?._id}/folder/${task?.group?._id}`}>
                         {getGroupTitle(task?.group)}
                     </Link>
                     {/* {
@@ -53,9 +54,9 @@ export const TaskDetailFolder:FC<Props> = ({ task }) => {
                 </div>
 
                 <TimeRange
-                    fromDateDefault={"12/07/2022"}
-                    toDateDefault={"12/08/2022"}
-                    toTimeDefault={"12:00"}
+                    fromDateDefault={moment(task.actualStartTime).format('DD/M/YY')}
+                    toDateDefault={moment(task.actualFinishTime).format('DD/M/YY')}
+                    toTimeDefault={moment(task.actualFinishTime).format('HH:mm')}
                     onApplyNewTime={time => console.log(time)}
                 />
             </div>
