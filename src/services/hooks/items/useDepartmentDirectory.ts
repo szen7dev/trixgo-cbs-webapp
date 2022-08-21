@@ -52,7 +52,7 @@ export const useDepartmentDirectory = ({
 
     // Get info
     const { data: infoDepartmentDirectory } =
-        useQuery("department_directory__info", () => DepartmentDirectoryRepository.fetchDetailDepartmentDirectory(params.DepartmentDirectoryID || ''), {
+        useQuery("department_directory__info", () => DepartmentDirectoryRepository.fetchDetailDepartmentDirectory(params || ''), {
             refetchOnWindowFocus: false,
             enabled: isFetchInfo,
         });

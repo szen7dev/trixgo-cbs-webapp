@@ -52,10 +52,9 @@ const ModalCreateDepartmentDirectory: FC<ModalProps> = ({ toggle, onConfirm, pro
 	const financialSchema = object().shape({
 		member: string().required("Bạn cần chọn thành viên"),
 	});
-
+	
 	const handleSubmit = async (values: any) => {
 		try {
-			console.log({ values })
 			const { error, data } = await insertAsync(values);
 
 			if(error) {
@@ -77,16 +76,17 @@ const ModalCreateDepartmentDirectory: FC<ModalProps> = ({ toggle, onConfirm, pro
             }
 		}
 	};
-
+	// Tạo state tìm kiếm member của dự án
 	const [searchUserSystem, setSearchUserSystem] = useState("");
     const { user } = useAuth();
 	const companyID = user?.company?._id;
+
 	const {
 		data: listUsersSystem,
 		hasNextPage: hasNextPageUserSystem,
 		fetchNextPage: fetchNextPageUserSystem,
 	} = useUserSystem({ keyword: searchUserSystem, companyID }, true);
-
+	
 	return (
 		<Formik
 			initialValues={{ name: '', companyID  }}
@@ -130,6 +130,7 @@ const ModalCreateDepartmentDirectory: FC<ModalProps> = ({ toggle, onConfirm, pro
 										allowClearValueSingleInput={true}
 										showTriangle={true}
 										maxWidthInput="max-w-none"
+										// Render đổ data
 										data={listUsersSystem.map(item => ({
 											value: item._id,
 											label: item.fullname
