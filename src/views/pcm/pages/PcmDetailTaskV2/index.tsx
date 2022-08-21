@@ -47,7 +47,7 @@ const PcmDetailTaskV2:FC = () => {
                     <TaskDetailSubtask task={taskInfo} />
                     <TaskDetailRelatedTask task={taskInfo} />
                 </div>
-                <TaskDetailComment/>
+                <TaskDetailComment task={taskInfo} refetchInfo={refetchInfo} />
             </div>
         </div>
     )

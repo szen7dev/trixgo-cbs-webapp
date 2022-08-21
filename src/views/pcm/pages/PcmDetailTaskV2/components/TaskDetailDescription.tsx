@@ -36,7 +36,7 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
             <div className={"flex-1"}>
                 <div className={"text-primary-gray text-lg font-bold"}>Mô tả</div>
                 <div className={"mt-2"} dangerouslySetInnerHTML={{
-                    __html: editDescription ? task.description : task.description.replace(/\n/g, '<br />')
+                    __html: (editDescription && task.description) ? task.description : task.description?.replace(/\n/g, '<br />')
                 }} />
                 <div className={"mt-2 editor"}>
                     {

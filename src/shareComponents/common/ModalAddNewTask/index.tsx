@@ -204,28 +204,28 @@ export const ModalAddNewTask: FC = () => {
     const validation = await validateFiles(filesSelected);
     if (validation.error) return toast.warn(validation.message);
 
-    const [files, images] = modifyUploadedFilesV2({
+    const [files] = modifyUploadedFilesV2({
       imgLastKey: Object.keys(uploads.images).length || null,
       fileLastKey: Object.keys(uploads.files).length || null,
     }, filesSelected);
 
-    setUploadImage(files);
+    // setUploadImage(images);
     setUploadFile(files);
 
     // Upload images
-    for (const [key, { file }] of Object.entries(images)) {
-      const source = getCancelTokenRequest(key, file);
-      const { _id } = await addFileToUpload({
-        files: file,
-        fileType: 1,
-        source,
-        progress: percentCompleted => {
-          console.log(`${percentCompleted}%`, key);
-          setUploadImageProgress(key, percentCompleted)
-        }
-      })
-      setIDImageUploaded(key, _id);
-    }
+    // for (const [key, { file }] of Object.entries(images)) {
+    //   const source = getCancelTokenRequest(key, file);
+    //   const { _id } = await addFileToUpload({
+    //     files: file,
+    //     fileType: 1,
+    //     source,
+    //     progress: percentCompleted => {
+    //       console.log(`${percentCompleted}%`, key);
+    //       setUploadImageProgress(key, percentCompleted)
+    //     }
+    //   })
+    //   setIDImageUploaded(key, _id);
+    // }
 
     // Upload files
     for (const [key, { file }] of Object.entries(files)) {
