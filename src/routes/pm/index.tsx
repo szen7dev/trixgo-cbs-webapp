@@ -23,7 +23,6 @@ import { ProviderModalPost as ProviderModalPcm } from "views/pcm/contexts/post";
 /*=====PAGES=====*/
 
 import {
-  ProjectAdminManagementPage,
   ProjectCashFlowPlanPage,
   ProjectCashFlowPlanChildPage,
   ProjectCategoryPage,
@@ -33,7 +32,7 @@ import {
   ProjectInspectionTab2Page,
   ProjectInspectionTab3Page,
   ProjectInspectionDetailPage,
-  ProjectMilestonePage
+
 } from "views/ppt/pages";
 
 import ProjectAdminFunctionalTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminFunctionalTab";
@@ -53,6 +52,9 @@ const DocumentFolderPage          = lazy(() => import("views/document/pages/Docu
 const DocumenDatahubContactPage   = lazy(() => import("views/document/pages/DocumenDatahubContactPage"))
 const DocumentProfilePage         = lazy(() => import("views/document/pages/DocumentProfilePage"))
 const DocumentProjectPage         = lazy(() => import("views/document/pages/DocumentProjectPage"))
+
+const ProjectMilestonePage        = lazy(() => import("views/ppt/pages/ProjectMilestonePage"))
+const ProjectAdminManagementPage  = lazy(() => import("views/ppt/pages/ProjectAdminManagementPage"))
 const ProjectSubjectCompanyOfAuthorPage            = lazy(() => import("views/ppt/pages/ProjectSubjectCompanyOfAuthorPage"))
 const ProjectPaymentPage          = lazy(() => import("views/ppt/pages/ProjectPaymentPage"))
 const ProjectBiddingPage          = lazy(() => import("views/ppt/pages/ProjectBiddingPage"))
@@ -78,7 +80,7 @@ const PCMRouter: FC = () => {
           <Switch>
 
             {/* Điều hướng về danh sách dự án */}
-            <ProtectedRoute exact path="/pm">
+            <ProtectedRoute exact path="/pm/home">
               <Redirect to="/pm/projects" />
             </ProtectedRoute>
 
@@ -134,20 +136,33 @@ const PCMRouter: FC = () => {
                   <Switch>
                     <Route
                         exact
-                        path="/pm/project/:id/admin/:tab"
-                        component={ProjectAdminManagementPage}
+                        path="/pm/project/:id/admin"
+                        render={({match}) => <Redirect to={`/pm/project/${match.params.id}/admin/members`}/>}
                     />
+                    <Route
+                        exact
+                        path="/pm/project/:id/admin/:tab"
+                    >
+                      <PmProjectLayout>
+                        <ProjectAdminManagementPage/>
+                      </PmProjectLayout>
+                    </Route>
                     <Route
                         exact
                         path="/pm/project/:id/admin/:tab/:itemID"
-                        component={ProjectAdminManagementPage}
-                    />
+                    >
+                      <PmProjectLayout>
+                        <ProjectAdminManagementPage/>
+                      </PmProjectLayout>
+                    </Route>
                     <Route
                         exact
                         path="/pm/project/:id/admin/:tab/:itemID/members"
-                        component={ProjectAdminManagementPage}
-                    />
-
+                    >
+                      <PmProjectLayout>
+                        <ProjectAdminManagementPage/>
+                      </PmProjectLayout>
+                    </Route>
                     <Route exact path="/pm/project/:id/home" >
                       <PmProjectLayout
                           headerSearch={<PmHeaderContent/>}
@@ -160,8 +175,16 @@ const PCMRouter: FC = () => {
                         <ProjectDashboardPage/>
                       </PmProjectLayout>
                     </Route>
-                    <Route exact path="/pm/project/:id/responses" component={PcmReportQuickPage} />
-                    <Route exact path="/pm/project/:id/milestone/:milestoneID" component={ProjectMilestonePage} />
+                    <Route exact path="/pm/project/:id/responses">
+                      <PmProjectLayout>
+                        <PcmReportQuickPage/>
+                      </PmProjectLayout>
+                    </Route>
+                    <Route exact path="/pm/project/:id/milestone/:milestoneID">
+                      <PmProjectLayout>
+                        <ProjectMilestonePage/>
+                      </PmProjectLayout>
+                    </Route>
                     <Route exact path="/pm/project/:id/folder" render={(props) => (
                         <PmProjectLayout>
                           <ProjectFolderPage {...props}/>

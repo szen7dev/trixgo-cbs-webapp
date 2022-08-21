@@ -38,7 +38,7 @@ export const LeftNavigate:FC<Props> = ({handleMenuEvent}) => {
                 </div>
                 <span className={"text-primary-gray mt-1"}>Chủ đề</span>
             </Link>
-            <Link to={`/pm`} className={"flex flex-col items-center mb-3"}>
+            <Link to={`/pm/projects`} className={"flex flex-col items-center mb-3"}>
                 <div className={"px-4 py-1 rounded-full relative " + (pathname.includes("/pm") ? "bg-cbs-hightlight-right-navigate" : "")}>
                     <img src={projectIcon} alt={"Dự án"}/>
                 </div>

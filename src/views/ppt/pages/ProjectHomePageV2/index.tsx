@@ -49,7 +49,7 @@ const ProjectHomePageV2: FC = () => {
 
 	return (
 		<div className={"project-home p-2"}>
-			<p className={"font-bold text-primary-gray"}>Giới thiệu dự án</p>
+			{/* <p className={"font-bold text-primary-gray"}>Giới thiệu dự án</p>
 			<div className={"mt-4 pl-6"}>
 				<table className={"table-fixed w-full"}>
 					<tbody>
@@ -73,7 +73,7 @@ const ProjectHomePageV2: FC = () => {
 					</tr>
 					</tbody>
 				</table>
-			</div>
+			</div> */}
 
 			<p className={"font-bold text-primary-gray mt-6"}>Hình ảnh gần đây</p>
 			<div className={"swipe-image w-full mt-4 relative"}>

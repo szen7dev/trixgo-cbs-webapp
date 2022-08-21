@@ -19,12 +19,6 @@ export const PmLeftMenuContent:FC = () => {
         route: string
     }[] = [
         {
-            label: "Quản trị viên",
-            icon: shieldIcon,
-            count: 0,
-            route: '/pm/admin'
-        },
-        {
             label: "Danh sách dự án",
             icon: rocketIcon,
             count: 0,
