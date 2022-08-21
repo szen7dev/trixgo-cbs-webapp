@@ -53,7 +53,7 @@ export const SideBar: FC<Props> = memo(({
   const [{ isShow }, { toggleModal, openAddUserRelation: openListUserRelation }] = useModal();
   const { updateTaskAsync } = useTask({});
   const [isCurrentUserOpened, setCurrentUserOpened] = useState(false);
-  const [usersOpened, setUsersOpened] = useState(openedUsers.map(item => item._id));
+  const [usersOpened, setUsersOpened] = useState(openedUsers?.map(item => item._id));
   const { current: socket }: any = useSocket();
 
   useEffect(() => {
@@ -82,7 +82,7 @@ export const SideBar: FC<Props> = memo(({
   const isSigned = useMemo(() => {
     return confirmUsers.find(({ author }) => author._id === userID)
   }, [confirmUsers, userID])
-
+  
   const handleConfirmSignature = useCallback(async () => {
     try {
       const { error, data } = await updateTaskAsync({

@@ -39,7 +39,8 @@ type UseTask = {
   updateTaskAsync: (payload: updateTaskPayload) => Promise<any>;
   isLoadingListTask: boolean;
   isLoadingInfo: boolean;
-  totalRecord: number | undefined;
+  totalRecord: number;
+  totalTaskDone: number;
   totalPages: number | undefined;
   hasNextPage: boolean | undefined;
   refetchInfo: () => void;
@@ -136,8 +137,9 @@ export const useTask = ({
     .map((d: any) => d.data?.listRecords))
     .filter(Boolean);
 
-  const totalRecord = dataListTask?.pages[0]?.data?.totalRecord;
-  const totalPages = dataListTask?.pages[0]?.data?.totalPage;
+  const totalRecord = dataListTask?.pages[0]?.data?.totalRecord || 0;
+  const totalPages = dataListTask?.pages[0]?.data?.totalPage || 0;
+  const totalTaskDone = dataListTask?.pages[0]?.data?.totalTaskDone || 0;
 
   // Khai báo xử lý
   const {
@@ -171,6 +173,7 @@ export const useTask = ({
 
   const totalRecordSubject = dataListSubject?.pages[0]?.data?.totalRecord;
   const totalPagesSubject = dataListSubject?.pages[0]?.data?.totalPage;
+
   return {
     addRelationUserAsync,
     copyTaskAsync,
@@ -184,6 +187,7 @@ export const useTask = ({
     isLoadingInfo,
     totalRecord,
     hasNextPage,
+    totalTaskDone,
     totalPages,
     refetchInfo,
     refetchListTask,

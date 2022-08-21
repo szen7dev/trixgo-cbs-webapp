@@ -1,14 +1,23 @@
-import React, {FC} from "react";
+import React, { FC } from "react";
 import iconTaskCompleted from "assets/images/icons8-task-completed-48.svg";
+import { Task } from "typings/task";
+import { Link } from "react-router-dom";
 
-export const TaskDetailCompleteStatus:FC = () => {
+type Props = {
+    task: Task;
+}
+
+export const TaskDetailCompleteStatus: FC<Props> = ({ task }) => {
+    if(!task.parent) return <></>
     return (
         <div className={"task-complete flex items-center mt-5"}>
-                    <span className={"mr-4"}>
-                        <img src={iconTaskCompleted} alt={'-----'}/>
-                    </span>
+            <span className={"mr-4"}>
+                <img src={iconTaskCompleted} alt={'-----'} />
+            </span>
             <div className={"flex text-cbs-highlight-color"}>
-                Hồ sơ thanh toán của công ty tư vấn thiết kế 112
+                <Link to={`/pcm/detail/${task.parent?._id}`}>
+                    {task.parent?.name}
+                </Link>
             </div>
         </div>
     )

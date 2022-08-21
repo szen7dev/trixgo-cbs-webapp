@@ -262,6 +262,11 @@ export const DocumentProjectPage: FC = () => {
                       id="flexCheckDefault"
                     />
                   </th>
+                  <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '3%' }}>
+                    <span className="pl-2 border-l border-cbs-border">
+                      STT
+                    </span>
+                  </th>
                   <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '25%' }}>
                     <span className="pl-2 border-l border-cbs-border">
                       Nội dung
@@ -340,6 +345,9 @@ export const DocumentProjectPage: FC = () => {
                             return null;
                           }}
                         />
+                      </td>
+                      <td className="py-2.5 border-b border-cbs-border px-2">
+                        {index+1}
                       </td>
                       <td className="px-2 w-[271px] py-2.5 border-b border-cbs-border">
                         <Link to={linkRef}>

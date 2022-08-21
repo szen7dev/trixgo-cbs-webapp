@@ -4,9 +4,13 @@ import {DropdownSearchable, Item} from "shareComponents/common";
 import {useUsersProject} from "services/hooks/users/useUserSystem";
 import taskUserAvt from "assets/images/task-user.svg";
 
-export const SendToMultiSelected:FC = () => {
+type Props = {
+    selectedUser: Item[];
+    setSelectedUser: (users: any) => void;
+}
+
+export const SendToMultiSelected:FC<Props> = ({ selectedUser, setSelectedUser }) => {
     const [showDroprown, setShowDropdown] = useState(false);
-    const [selectedUser, setSelectedUser] = useState<Item[]>([]);
 
     const [keywordAssignee, setKeywordAssignee] = useState('');
     const { data: listUsersProject, fetchNextPage } = useUsersProject({

@@ -13,11 +13,13 @@ import {Editor as EditorType} from "tinymce";
 import {SendToMultiSelected} from "./SendToMultiSelected";
 import CollapseShow from "assets/images/CBS-Collapse-Show.svg";
 import CollapseHide from "assets/images/CBS-Collapse-Hide.svg";
+import {Item} from "shareComponents/common";
 
 export const TaskDetailComment:FC = () => {
     const [filter, setFilter] = useState(1);
     const editorRef = useRef<EditorType>();
     const [collapseComment, setCollapseComment] = useState(false);
+    const [selectedUser, setSelectedUser] = useState<Item[]>([]);
 
     return (
         <div className={"task-comment mt-5"}>
@@ -273,7 +275,7 @@ export const TaskDetailComment:FC = () => {
 
             <div className={"mt-2 editor ml-12 border border-primary-border rounded"}>
                 <div className={"px-2 py-4"}>
-                    <SendToMultiSelected/>
+                    <SendToMultiSelected selectedUser={selectedUser} setSelectedUser={setSelectedUser} />
                 </div>
                 <Editor
                     // onActivate={}

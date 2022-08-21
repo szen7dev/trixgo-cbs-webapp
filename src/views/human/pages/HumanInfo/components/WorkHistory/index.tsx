@@ -73,7 +73,7 @@ export const WorkHistory: FC<PropWorkHistory> = (props) => {
 		totalRecord,
 		listContactDocument,
 	} = useQueryContactDocument(humanId, {
-		type: 1,
+		type: 1, companyID
 	});
 
 	useOnClickOutside(ref, () => setOpenFileOptionById(""));

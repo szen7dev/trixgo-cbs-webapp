@@ -75,7 +75,7 @@ export const Education: FC<EducationProps> = (props) => {
     totalRecord,
     listContactDocument,
   } = useQueryContactDocument(humanId, {
-    type: 4,
+    type: 4, companyID
   });
 
   const [openFileOption, setOpenFileOption] = useState("");

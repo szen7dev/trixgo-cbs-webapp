@@ -1,26 +1,43 @@
-import React, {FC, useRef, useState} from "react";
+import React, { FC, useRef, useState } from "react";
 import iconNote from "assets/images/icons8-note-48.svg";
-import {Editor} from "@tinymce/tinymce-react";
-import {Editor as EditorType} from "tinymce";
+import { Editor } from "@tinymce/tinymce-react";
+import { Editor as EditorType } from "tinymce";
+import { Task } from "typings/task";
+import { useTask } from "services/hooks/useTask";
 
-export const TaskDetailDescription:FC = () => {
+type Props = {
+    task: Task;
+    refetchInfo?: () => void;
+}
+
+export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
     const editorRef = useRef<EditorType>();
     const [editDescription, setEditDescription] = useState(false);
+
+    const { updateTaskAsync } = useTask({});
+
+    const handleUpdateDescription = async () => {
+        if (editorRef.current) {
+            const description = editorRef.current.getContent();
+            await updateTaskAsync({
+                taskID: task._id,
+                description
+            });
+            refetchInfo?.();
+            setEditDescription(false);
+        }
+    }
+
     return (
         <div className={"task-description flex items-start mt-5"}>
-                    <span className={"mr-4"}>
-                        <img src={iconNote} alt={'-----'}/>
-                    </span>
+            <span className={"mr-4"}>
+                <img src={iconNote} alt={'-----'} />
+            </span>
             <div className={"flex-1"}>
                 <div className={"text-primary-gray text-lg font-bold"}>Mô tả</div>
-                <div className={"mt-2"}>
-                    {/* eslint-disable-next-line react/no-unescaped-entities */}
-                    Bộ trưởng Tư pháp Mỹ Garland nói đã "đích thân phê duyệt" cuộc đột kích tư dinh ông Trump ở Florida và đang yêu cầu công khai lệnh khám xét.
-                    {/* eslint-disable-next-line react/no-unescaped-entities */}
-                    "Chính tôi đã phê duyệt quyết định yêu cầu lệnh khám xét", Bộ trưởng Tư pháp Mỹ Merrick Garland nói với phóng viên hôm 11/8 trong bình luận công khai đầu tiên kể từ cuộc đột kích nhà riêng của cựu tổng thống Donald Trump ở bang Florida đầu tuần này. "Bộ không xem nhẹ quyết định như vậy".
-                    {/* eslint-disable-next-line react/no-unescaped-entities */}
-                    Garland lưu ý "các nghĩa vụ đạo đức" không cho phép ông nêu chi tiết lý do cuộc đột kích, nhưng ông đã yêu cầu một thẩm phán Florida công bố lệnh khám xét vì cựu tổng thống Trump đã công khai xác nhận vụ đột kích và có "mối quan tâm đáng kể của công chúng trong vấn đề này".
-                </div>
+                <div className={"mt-2"} dangerouslySetInnerHTML={{
+                    __html: editDescription ? task.description : task.description.replace(/\n/g, '<br />')
+                }} />
                 <div className={"mt-2 editor"}>
                     {
                         !editDescription ?
@@ -38,6 +55,7 @@ export const TaskDetailDescription:FC = () => {
                                     // disabled={user?.email !== 'contact@trixgo.com'}
                                     apiKey={process.env.REACT_APP_TINYMCE_API_KEY}
                                     // onSaveContent={handleSave}
+                                    initialValue={task.description}
                                     init={{
                                         height: "350px",
                                         menu: {
@@ -99,7 +117,7 @@ export const TaskDetailDescription:FC = () => {
                                         className={"py-2 px-4 bg-cbs-form-input-bg rounded text-primary-gray mr-4"}>
                                         Bỏ qua
                                     </button>
-                                    <button className={"py-2 px-4 bg-primary rounded text-white"}>
+                                    <button className={"py-2 px-4 bg-primary rounded text-white"} onClick={handleUpdateDescription}>
                                         Xác nhận
                                     </button>
                                 </div>

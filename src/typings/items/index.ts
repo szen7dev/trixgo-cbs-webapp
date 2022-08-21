@@ -7,3 +7,4 @@ export * as Warehouse from './warehouse';
 export * as Funda from './funda';
 export * as Customer from './customer';
 export * as Goods from './goods';
+export * as DepartmentDirectory from './department_directory';

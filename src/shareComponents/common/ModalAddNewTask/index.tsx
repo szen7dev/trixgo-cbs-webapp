@@ -1,14 +1,16 @@
 /**
  * Libraries
  */
-import React, {FC, UIEvent, useRef, useState} from "react";
+import React, { ChangeEvent, FC, UIEvent, useRef, useState } from "react";
 import { Formik, Form, ErrorMessage } from "formik";
 import { useHistory } from 'react-router-dom';
 import { object, string } from "yup";
+import { toArray } from 'lodash';
 import { toast } from "react-toastify";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import moment from "moment";
 import debounce from "lodash/debounce";
+import Axios from "axios";
 
 /**
  * Hooks, Typings
@@ -20,7 +22,12 @@ import { useQueryListDepartmentsIsMember } from 'services/hooks/items/useDepartm
 import { useUserSystem } from "services/hooks/users/useUserSystem";
 import { useContract } from "services/hooks/items/useContract";
 import { useModal } from "services/hooks/useModal";
+import { useUpload } from "services/hooks/useUpload";
+import { validateFiles } from 'validation/file';
 import { PCM_PROPOSAL_TASK } from "apis/localdb";
+import { APP_ID } from "apis/localdb";
+import { humanFileSize } from 'utils/converter';
+import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
 
 /**
  * Components, Assets
@@ -32,9 +39,10 @@ import fakeThumbnail from "assets/images/avatar.jpg";
 // import AttachIcon from "assets/images/icons8-attach-50.png";
 
 import "react-day-picker/lib/style.css";
-import {Editor} from "@tinymce/tinymce-react";
-import {Editor as EditorType} from "tinymce";
+import { Editor } from "@tinymce/tinymce-react";
+import { Editor as EditorType } from "tinymce";
 import iconAttach from "assets/images/icons8-attach-48.svg";
+import { FileProp, FilePropsUpload } from "typings/common";
 
 interface InitialValues {
   projectID: string,
@@ -56,15 +64,36 @@ export const ModalAddNewTask: FC = () => {
   const { closeModal } = useModal();
   const editorRef = useRef<EditorType>();
 
+  const [tokens, setTokens] = useState<any[]>([]);
   const [searchDepartmentValue, setSearchDepartmentValue] = useState("");
-  const [searchOtherField, setSearchOtherField]           = useState("");
-  const [searchFriendName, setSearchFriendName]           = useState("");
-  const [searchGroupName, setSearchGroupName]             = useState("");
-  const [searchContract, setSearchContract]               = useState("");
-  const [companyID, setCompanyID]                         = useState("");
-  const [projectID, setProjectID]                         = useState("");
+  const [searchOtherField, setSearchOtherField] = useState("");
+  const [searchFriendName, setSearchFriendName] = useState("");
+  const [searchGroupName, setSearchGroupName] = useState("");
+  const [searchContract, setSearchContract] = useState("");
+  const [companyID, setCompanyID] = useState("");
+  const [projectID, setProjectID] = useState("");
+  const [groupID, setGroupID] = useState("");
 
   const { addTaskAsync } = useTask({});
+
+  const { addFileToUpload } = useUpload({
+    appID: APP_ID.PCM.id,
+    companyID,
+    projectID,
+    groupID
+  });
+
+  const [uploads, {
+    setUploadImageProgress,
+    setUploadFileProgress,
+    setIDImageUploaded,
+    setIDFileUploaded,
+    setUploadImage,
+    setUploadFile,
+    removeUploadedImage,
+    removeUploadedFile,
+    removeAllFiles
+  }] = useUploadFile({});
 
   const {
     data: listDepartments,
@@ -123,26 +152,116 @@ export const ModalAddNewTask: FC = () => {
 
   const onSubmitFilterData = async (values: any) => {
     try {
+      let files: string[] = [];
+
+      // Get list file uploaded
+      for (const [, { _id }] of Object.entries(uploads.images)) {
+        _id && (files = [...files, _id]);
+      }
+
+      for (const [, { _id }] of Object.entries(uploads.files)) {
+        _id && (files = [...files, _id]);
+      }
+
+      if(files.length) {
+        values.authorAttachs = files;
+      }
+
       const { error, data } = await addTaskAsync(values);
 
-      if(error) return toast.warning(data.message);
+      if (error) return toast.warning(data.message);
 
+      closeModal();
       history.push(`/pcm/detail/${data._id}`);
     } catch (error) {
       if (typeof error === "string") {
-          toast.error(error);
+        toast.error(error);
       } else if (error instanceof Error) {
-          toast.error(error.message);
+        toast.error(error.message);
       }
     }
-    closeModal();
   };
+
+  const getCancelTokenRequest = (key: string, file: any) => {
+    const CancelToken = Axios.CancelToken;
+    const source = CancelToken.source();
+
+    setTokens(previousValue => ([
+      ...previousValue,
+      {
+        key,
+        file,
+        source
+      }
+    ]))
+
+    return source;
+  }
+
+  const handleUploadAttach = async (filesSelected: FileList | null) => {
+    if (!filesSelected || !filesSelected.length) return;
+
+    const validation = await validateFiles(filesSelected);
+    if (validation.error) return toast.warn(validation.message);
+
+    const [files, images] = modifyUploadedFilesV2({
+      imgLastKey: Object.keys(uploads.images).length || null,
+      fileLastKey: Object.keys(uploads.files).length || null,
+    }, filesSelected);
+
+    setUploadImage(files);
+    setUploadFile(files);
+
+    // Upload images
+    for (const [key, { file }] of Object.entries(images)) {
+      const source = getCancelTokenRequest(key, file);
+      const { _id } = await addFileToUpload({
+        files: file,
+        fileType: 1,
+        source,
+        progress: percentCompleted => {
+          console.log(`${percentCompleted}%`, key);
+          setUploadImageProgress(key, percentCompleted)
+        }
+      })
+      setIDImageUploaded(key, _id);
+    }
+
+    // Upload files
+    for (const [key, { file }] of Object.entries(files)) {
+      const source = getCancelTokenRequest(key, file);
+      const { _id } = await addFileToUpload({
+        files: file,
+        fileType: 2,
+        source,
+        progress: percentCompleted => {
+          console.log(`${percentCompleted}%`, key);
+          setUploadFileProgress(key, percentCompleted)
+        }
+      })
+      setIDFileUploaded(key, _id);
+    }
+  }
+
+  const handleRemoveUpload = (file: FileProp | FilePropsUpload, type: 'FILE' | 'IMAGE') => {
+    if ('id' in file) {
+      const token = tokens.find(item => (item.key == file.id) && (item?.file?.name === file?.file?.name))
+      token && token?.source?.cancel('Operation request canceled by the user.');
+
+      type === 'IMAGE' ? removeUploadedImage(file.id) : removeUploadedFile(file.id);
+    } else {
+      const token = tokens.find(item => (item.key == file._id) && (item?.file?.name === file?.name))
+      token && token?.source?.cancel('Operation request canceled by the user.');
+
+      type === 'IMAGE' ? removeUploadedImage(file._id) : removeUploadedFile(file._id);
+    }
+  }
 
   const handleScroll = (e: UIEvent<HTMLDivElement>, type: 'project' | 'group' | 'contract' | 'user' | 'field') => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
     const bottom = scrollHeight - scrollTop === clientHeight;
 
-    if(!bottom) return;
+    if (!bottom) return;
 
     switch (true) {
       case (type === 'project' && hasNextPageListDepartment):
@@ -183,17 +302,17 @@ export const ModalAddNewTask: FC = () => {
     authorAttachs: [],
     type: 1,
     relatedIDs: [],
-    subType: "",
+    subType: '0',
   };
 
   return (
     <>
       <div className={"flex flex-col"}>
         <div className={"flex w-full py-3 px-6 border-b"}>
-            <h4 className={"flex-1 text-lg font-bold text-left"}>Công việc mới</h4>
-            <div className={"flex items-center justify-center cursor-pointer"}>
-              <Close onClick={closeModal}/>
-            </div>
+          <h4 className={"flex-1 text-lg font-bold text-left"}>Công việc mới</h4>
+          <div className={"flex items-center justify-center cursor-pointer"}>
+            <Close onClick={closeModal} />
+          </div>
         </div>
         {/* input select */}
         <Formik
@@ -216,6 +335,7 @@ export const ModalAddNewTask: FC = () => {
                             setFieldValue("projectID", value?.id);
                             setProjectID(`${value?.id}`);
                             setSearchDepartmentValue("");
+                            setGroupID("");
                             setFieldValue("groupID", "");
                             setFieldValue("assigneeID", "");
                             setFieldValue("relatedIDs", []);
@@ -224,13 +344,14 @@ export const ModalAddNewTask: FC = () => {
                             setCompanyID("");
                             setFieldValue("projectID", "");
                             setFieldValue("groupID", "");
+                            setGroupID("");
                             setFieldValue("assigneeID", "");
                             setFieldValue("relatedIDs", []);
                           }}
                           onSearchInputChange={
                             debounce(
                               (value) => setSearchDepartmentValue(value),
-                            500)
+                              500)
                           }
                           onScroll={(e) => handleScroll(e, 'project')}
                           className={"max-w-full flex-1"}
@@ -268,39 +389,43 @@ export const ModalAddNewTask: FC = () => {
                       <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Nhóm (*)</div>
                       <div className={"flex-1 max-w-4/5 w-4/5"}>
                         <DropdownSearchable
-                            disabled={values.projectID.length <= 0}
-                            onchangeValue={(item: any) => {
-                              setFieldValue("groupID", item.value);
-                              setSearchGroupName("");
-                            }}
-                            onClearData={() => setFieldValue("groupID", "")}
-                            onSearchInputChange={debounce(
-                                (value) => setSearchGroupName(value),
-                                500
-                            )}
-                            onScroll={(e) => handleScroll(e, 'group')}
-                            className={"max-w-full flex-1"}
-                            placeholder="Nhóm"
-                            isMultiple={false}
-                            allowClearValueSingleInput={true}
-                            showTriangle={false}
-                            maxWidthInput="max-w-full"
-                            renderSelectedItem={(item: any) => (
-                                <div
-                                    className="max-w-full"
-                                >
-                                  <p className={"truncate"}>{item.text}</p>
-                                </div>
-                            )}
-                            data={listGroup.map((groupItem) => ({
-                              label: `${groupItem.sign}.${groupItem.name}`,
-                              value: groupItem._id,
-                            }))}
-                            formatItem={{
-                              id: "value",
-                              text: "label",
-                            }}
-                            inlineSearch={true}
+                          disabled={values.projectID.length <= 0}
+                          onchangeValue={(item: any) => {
+                            setFieldValue("groupID", item.value);
+                            setGroupID(item.value);
+                            setSearchGroupName("");
+                          }}
+                          onClearData={() => {
+                            setFieldValue("groupID", "")
+                            setGroupID("");
+                          }}
+                          onSearchInputChange={debounce(
+                            (value) => setSearchGroupName(value),
+                            500
+                          )}
+                          onScroll={(e) => handleScroll(e, 'group')}
+                          className={"max-w-full flex-1"}
+                          placeholder="Nhóm"
+                          isMultiple={false}
+                          allowClearValueSingleInput={true}
+                          showTriangle={false}
+                          maxWidthInput="max-w-full"
+                          renderSelectedItem={(item: any) => (
+                            <div
+                              className="max-w-full"
+                            >
+                              <p className={"truncate"}>{item.text}</p>
+                            </div>
+                          )}
+                          data={listGroup.map((groupItem) => ({
+                            label: `${groupItem.sign}.${groupItem.name}`,
+                            value: groupItem._id,
+                          }))}
+                          formatItem={{
+                            id: "value",
+                            text: "label",
+                          }}
+                          inlineSearch={true}
                         />
                       </div>
                     </div>
@@ -308,29 +433,32 @@ export const ModalAddNewTask: FC = () => {
                       <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Phân loại (*)</div>
                       <div className={"flex-1 max-w-4/5 w-4/5"}>
                         <DropdownSearchable
-                            onchangeValue={(value: any) =>
-                                setFieldValue("subType", value.id)
-                            }
-                            onClearData={() => setFieldValue("subType", "")}
-                            placeholder={"Phân loại"}
-                            className={"max-w-full flex-1"}
-                            focusedClass={"border-b border-primary"}
-                            allowClearValueSingleInput={true}
-                            showTriangle={false}
-                            maxWidthInput="max-w-full"
-                            renderSelectedItem={(item: any) => (
-                                <div
-                                    className="max-w-full"
-                                >
-                                  <p className={"truncate"}>{item.text}</p>
-                                </div>
-                            )}
-                            data={PCM_PROPOSAL_TASK}
-                            formatItem={{
-                              id: "value",
-                              text: "text",
-                            }}
-                            inlineSearch={true}
+                          onchangeValue={(value: any) =>
+                            setFieldValue("subType", value.id)
+                          }
+                          onClearData={() => setFieldValue("subType", "")}
+                          placeholder={"Phân loại"}
+                          className={"max-w-full flex-1"}
+                          focusedClass={"border-b border-primary"}
+                          allowClearValueSingleInput={true}
+                          showTriangle={false}
+                          maxWidthInput="max-w-full"
+                          renderSelectedItem={(item: any) => (
+                            <div className="max-w-full">
+                              <p className={"truncate"}>{item.text}</p>
+                            </div>
+                          )}
+                          data={PCM_PROPOSAL_TASK}
+                          formatItem={{
+                            id: "value",
+                            text: "text",
+                          }}
+                          initialValue={{
+                            id: 0,
+                            value: 0,
+                            text: "Việc thông thường"
+                          }}
+                          inlineSearch={true}
                         />
                       </div>
                     </div>
@@ -338,38 +466,38 @@ export const ModalAddNewTask: FC = () => {
                       <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Hợp đồng</div>
                       <div className={"flex-1 max-w-4/5 w-4/5"}>
                         <DropdownSearchable
-                            onchangeValue={(item: any) => {
-                              setFieldValue("contractID", item.value);
-                              setSearchContract("");
-                            }}
-                            onClearData={() => setFieldValue("contractID", "")}
-                            onSearchInputChange={debounce(
-                                (value) => setSearchContract(value),
-                                500
-                            )}
-                            onScroll={(e) => handleScroll(e, 'contract')}
-                            className={"max-w-full flex-1"}
-                            placeholder="Hợp đồng"
-                            isMultiple={false}
-                            allowClearValueSingleInput={true}
-                            showTriangle={false}
-                            maxWidthInput="max-w-full"
-                            renderSelectedItem={(item: any) => (
-                                <div
-                                    className="max-w-full"
-                                >
-                                  <p className={"truncate"}>{item.text}</p>
-                                </div>
-                            )}
-                            data={listContracts.map((contract) => ({
-                              label: `${contract.sign}.${contract.name}`,
-                              value: contract._id,
-                            }))}
-                            formatItem={{
-                              id: "value",
-                              text: "label",
-                            }}
-                            inlineSearch={true}
+                          onchangeValue={(item: any) => {
+                            setFieldValue("contractID", item.value);
+                            setSearchContract("");
+                          }}
+                          onClearData={() => setFieldValue("contractID", "")}
+                          onSearchInputChange={debounce(
+                            (value) => setSearchContract(value),
+                            500
+                          )}
+                          onScroll={(e) => handleScroll(e, 'contract')}
+                          className={"max-w-full flex-1"}
+                          placeholder="Hợp đồng"
+                          isMultiple={false}
+                          allowClearValueSingleInput={true}
+                          showTriangle={false}
+                          maxWidthInput="max-w-full"
+                          renderSelectedItem={(item: any) => (
+                            <div
+                              className="max-w-full"
+                            >
+                              <p className={"truncate"}>{item.text}</p>
+                            </div>
+                          )}
+                          data={listContracts.map((contract) => ({
+                            label: `${contract.sign}.${contract.name}`,
+                            value: contract._id,
+                          }))}
+                          formatItem={{
+                            id: "value",
+                            text: "label",
+                          }}
+                          inlineSearch={true}
                         />
                       </div>
                     </div>
@@ -380,9 +508,9 @@ export const ModalAddNewTask: FC = () => {
                       <div className={"w-full flex-1"}>
                         <DropdownSearchable
                           onchangeValue={(value: any) => {
-                              setFieldValue("assigneeID", value?.id);
-                              setSearchFriendName("");
-                            }
+                            setFieldValue("assigneeID", value?.id);
+                            setSearchFriendName("");
+                          }
                           }
                           onClearData={() => setFieldValue("assigneeID", "")}
                           onSearchInputChange={debounce(
@@ -490,7 +618,7 @@ export const ModalAddNewTask: FC = () => {
                       <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Liên quan</div>
                       <DropdownSearchable
                         onchangeValue={(value: any) => {
-                          if(!values.relatedIDs.includes(value.id)) {
+                          if (!values.relatedIDs.includes(value.id)) {
                             setFieldValue("relatedIDs", [...values.relatedIDs, value.id]);
                           }
                           setSearchFriendName("");
@@ -564,7 +692,7 @@ export const ModalAddNewTask: FC = () => {
                     <div className={"w-1/4 flex items-start"}>
                       <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Thời hạn (*)</div>
                       <DayPickerInput
-                        value={values.expiredTime && moment(values.expiredTime).format("MM/DD/YYYY")}
+                        value={values.expiredTime ? moment(values.expiredTime).format("MM/DD/YYYY") : moment().format("MM/DD/YYYY")}
                         onDayChange={(day) => setFieldValue("expiredTime", moment(day).format("MM/DD/YYYY"))}
                         inputProps={{
                           className: "w-full h-6 outline-none pl-3",
@@ -574,6 +702,7 @@ export const ModalAddNewTask: FC = () => {
                       />
                       <input
                         type="time"
+                        defaultValue="00:00"
                         onChange={(e) => setFieldValue("expiredHour", e.target.value)}
                       />
                     </div>
@@ -582,68 +711,68 @@ export const ModalAddNewTask: FC = () => {
 
                 <div className={"px-6 my-3"}>
                   <Editor
-                      onEditorChange={(value) => setFieldValue("description", value)}
-                      // onActivate={}
-                      onInit={(evt, editor) => {
-                        editorRef.current = editor;
-                      }}
-                      // disabled={user?.email !== 'contact@trixgo.com'}
-                      apiKey={process.env.REACT_APP_TINYMCE_API_KEY}
-                      // onSaveContent={handleSave}
-                      init={{
-                        height: "350px",
-                        menu: {
-                          file: { title: "File", items: "newdocument restoredraft | preview | print | basicitem " },
-                          edit: { title: "Edit", items: "undo redo | cut copy paste | selectall | searchreplace" },
-                          view: { title: "View", items: "code | visualaid visualchars visualblocks | spellchecker | preview fullscreen" },
-                          insert: {
-                            title: "Insert",
-                            items: `image link media template codesample inserttable |
-                                                    charmap emoticons hr |
-                                                    pagebreak nonbreaking anchor toc |
-                                                    insertdatetime`,
-                          },
-                          format: {
-                            title: "Format",
-                            items:
-                                "bold italic underline strikethrough superscript subscript codeformat | formats blockformats fontformats fontsizes align lineheight | forecolor backcolor | removeformat",
-                          },
-                          tools: { title: "Tools", items: "spellchecker spellcheckerlanguage | code wordcount" },
-                          table: { title: "Table", items: "inserttable | cell row column | tableprops deletetable" },
-                          help: { title: "Help", items: "help" },
+                    onEditorChange={(value) => setFieldValue("description", value)}
+                    // onActivate={}
+                    onInit={(evt, editor) => {
+                      editorRef.current = editor;
+                    }}
+                    // disabled={user?.email !== 'contact@trixgo.com'}
+                    apiKey={process.env.REACT_APP_TINYMCE_API_KEY}
+                    // onSaveContent={handleSave}
+                    init={{
+                      height: "350px",
+                      menu: {
+                        file: { title: "File", items: "newdocument restoredraft | preview | print | basicitem " },
+                        edit: { title: "Edit", items: "undo redo | cut copy paste | selectall | searchreplace" },
+                        view: { title: "View", items: "code | visualaid visualchars visualblocks | spellchecker | preview fullscreen" },
+                        insert: {
+                          title: "Insert",
+                          items: `image link media template codesample inserttable |
+                                                     charmap emoticons hr |
+                                                     pagebreak nonbreaking anchor toc |
+                                                     insertdatetime`,
                         },
-                        plugins: [
-                          "advlist autolink lists link image charmap print preview anchor",
-                          "searchreplace code",
-                          "insertdatetime media table paste code help wordcount",
-                        ],
-                        fullpage_default_title: "My default page title",
+                        format: {
+                          title: "Format",
+                          items:
+                            "bold italic underline strikethrough superscript subscript codeformat | formats blockformats fontformats fontsizes align lineheight | forecolor backcolor | removeformat",
+                        },
+                        tools: { title: "Tools", items: "spellchecker spellcheckerlanguage | code wordcount" },
+                        table: { title: "Table", items: "inserttable | cell row column | tableprops deletetable" },
+                        help: { title: "Help", items: "help" },
+                      },
+                      plugins: [
+                        "advlist autolink lists link image charmap print preview anchor",
+                        "searchreplace code",
+                        "insertdatetime media table paste code help wordcount",
+                      ],
+                      fullpage_default_title: "My default page title",
 
-                        // images_upload_url: "/api/upload/image",
-                        // file_picker_types: "image",
-                        // images_upload_handler: imagesUploadHandler,
-                        // menubar: user?.email === 'contact@trixgo.com',
-                        // toolbar: user?.email === 'contact@trixgo.com' ?
-                        //     "undo redo | formatselect | " +
-                        //     "bold italic backcolor | alignleft aligncenter " +
-                        //     "alignright alignjustify | bullist numlist outdent indent | " +
-                        //     "removeformat | help | image" : false,
-                        // content_style: "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                        // content_css: "document",
-                        // save_enablewhendirty: true,
-                        setup(editor) {
-                          editor.on("Paste input Undo Redo", () => {
-                            editor.save();
-                          });
-                          editor.ui.registry.addMenuItem("basicitem", {
-                            text: "Save",
-                            onAction: function (e) {
-                              editor.save({ immediate: true });
-                            },
-                            icon: "save",
-                          });
-                        },
-                      }}
+                      // images_upload_url: "/api/upload/image",
+                      // file_picker_types: "image",
+                      // images_upload_handler: imagesUploadHandler,
+                      // menubar: user?.email === 'contact@trixgo.com',
+                      // toolbar: user?.email === 'contact@trixgo.com' ?
+                      //     "undo redo | formatselect | " +
+                      //     "bold italic backcolor | alignleft aligncenter " +
+                      //     "alignright alignjustify | bullist numlist outdent indent | " +
+                      //     "removeformat | help | image" : false,
+                      // content_style: "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                      // content_css: "document",
+                      // save_enablewhendirty: true,
+                      setup(editor) {
+                        editor.on("Paste input Undo Redo", () => {
+                          editor.save();
+                        });
+                        editor.ui.registry.addMenuItem("basicitem", {
+                          text: "Save",
+                          onAction: function (e) {
+                            editor.save({ immediate: true });
+                          },
+                          icon: "save",
+                        });
+                      },
+                    }}
                   />
                   <ErrorMessage
                     name="description"
@@ -652,25 +781,41 @@ export const ModalAddNewTask: FC = () => {
                   />
                 </div>
 
-               <div className="px-6 mb-3">
-                  <div className="bg-cbs-file-upload-bg max-w-[600px] px-2 py-1 mb-3 flex items-center">
-                    <p className="truncate mr-2 text-black font-bold" title="BaoCaoDanhGiaTacDongNgoaiCanhLenThietKeMau.png">BaoCaoDanhGiaTacDongNgoaiCanhLenThietKeMau.png</p>
-                    <span className="mr-2 text-primary-gray font-bold">(3.908K)</span>
+                <div className="px-6 mb-3">
+                  {!!Object.keys(uploads.files).length && toArray(uploads.files).map(file => {
+                    if(!file || Object.keys(file).length === 1) return;
+
+                    const { file: fileInfo, progress, id } = file;
+                    const isProgress = progress < 100;
+
+                    return (
+                      <div key={`${id}-${fileInfo.name}-${fileInfo.size}`} className="bg-cbs-file-upload-bg max-w-[600px] px-2 py-1 mb-3 flex items-center">
+                        <p className={`truncate mr-2 font-bold ${isProgress ? 'text-black' : 'text-primary'}`} title={fileInfo.name}>
+                          {fileInfo.name}
+                        </p>
+                        <span className="mr-2 text-primary-gray font-bold">({humanFileSize(fileInfo.size)})</span>
+                        <div className={`w-1/5 h-[12px] ${isProgress && 'mr-2 border border-primary bg-white relative'}`}>
+                          {isProgress && (
+                            <div style={{ width: `${progress}%` }} className={"bg-primary absolute top-0 left-0 h-full"}></div>
+                          )}
+                        </div>
+                        <button className="ml-auto" onClick={handleRemoveUpload.bind(null, fileInfo, 'FILE')}>
+                          <Close />
+                        </button>
+                      </div>
+                    )
+                  })}
+
+                  {/* <div key={`${id}-${fileInfo.name}-${fileInfo.size}`} className="bg-cbs-file-upload-bg max-w-[600px] px-2 py-1 mb-3 flex items-center">
+                    <p className="truncate mr-2 text-black font-bold" title={fileInfo.name}>{fileInfo.name}</p>
+                    <span className="mr-2 text-primary-gray font-bold">({humanFileSize(fileInfo.size)})</span>
                     <div className="w-1/5 mr-2 border border-primary bg-white h-[12px] relative">
-                      <div style={{ width: "10%" }} className={"bg-primary absolute top-0 left-0 h-full"}></div>
+                      <div style={{ width: `${progress}%` }} className={"bg-primary absolute top-0 left-0 h-full"}></div>
                     </div>
                     <button className="ml-auto"><Close /></button>
-                  </div>
+                  </div> */}
 
-                 <div className="bg-cbs-file-upload-bg max-w-[600px] px-2 py-1 mb-3 flex items-center">
-                   <p className="truncate mr-2 text-primary font-bold" title="BaoCaoDanhGiaTacDongNgoaiCanhLenThietKeMau.png">BaoCaoDanhGiaTacDongNgoaiCanhLenThietKeMau.png</p>
-                   <span className="mr-2 text-primary-gray font-bold">(3.908K)</span>
-                   <div className="w-1/5 h-[12px]">
-                   </div>
-                   <button className="ml-auto"><Close /></button>
-                 </div>
                 </div>
-
                 <div className={"flex items-center border-t py-3 px-6"}>
                   <label>
                     <img
@@ -681,14 +826,14 @@ export const ModalAddNewTask: FC = () => {
                     <input
                       type="file"
                       name="files"
-                      id="file"
                       className="hidden"
-                      accept="image/*"
+                      accept="*"
                       multiple
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => handleUploadAttach(e.target.files)}
                     />
                   </label>
                   <div className={"flex items-center ml-4"}>
-                    <input type="checkbox" id="email-notice" className={"form-check-input mt-0"}/>
+                    <input type="checkbox" id="email-notice" className={"form-check-input mt-0"} />
                     <label htmlFor="email-notice" className={"text-left ml-2 whitespace-nowrap"}>Thông báo email</label>
                   </div>
                   <button type="submit" className="btn btn-primary ml-auto">Xác nhận</button>
@@ -698,7 +843,6 @@ export const ModalAddNewTask: FC = () => {
           }}
         </Formik>
       </div>
-
     </>
   );
 };
