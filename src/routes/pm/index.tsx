@@ -240,40 +240,54 @@ const PCMRouter: FC = () => {
                         <ProjectSubjectCompanyOfAssigneePage/>
                       </PmProjectLayout>
                     </Route>
+
                     <Route
                         exact
-                        path={["/pm/project/:id/document", "/pm/project/:id/document/(1|2|3|4)"]}
+                        path="/pm/project/:id/document"
+                        render={({match}) => <Redirect to={`/pm/project/${match.params.id}/document/type/1`}/>}
+                    />
+                    <Route
+                        exact
+                        path="/pm/project/:id/document/type/:type"
                     >
                       <PmProjectLayout>
-                        <ModalProvider>
-                          <Switch>
-                            <Route
-                                exact
-                                path="/pm/project/:id/document"
-                                component={DocumentProjectPage}
-                            />
-                            <Route
-                                exact
-                                path="/pm/project/:id/document/1"
-                                component={DocumentProfilePage}
-                            />
-                            <Route
-                                exact
-                                path="/pm/project/:id/document/2"
-                                component={DocumenDatahubContactPage}
-                            />
-                            <Route
-                                exact
-                                path="/pm/project/:id/document/3"
-                                component={DocumentFolderPage}
-                            />
-                            {/* <Route exact path='/pcm/project/:id/document/3' component={DocumentReportPage} />
-                    <Route exact path='/pcm/project/:id/document/4' component={DocumentHistoryPage} /> */}
-                          </Switch>
-                          <ModalCreateDocument />
-                        </ModalProvider>
+                        <DocumentProjectPage/>
                       </PmProjectLayout>
                     </Route>
+                    {/*<Route*/}
+                    {/*    exact*/}
+                    {/*    path={["/pm/project/:id/document", "/pm/project/:id/document/(1|2|3|4)"]}*/}
+                    {/*>*/}
+                    {/*  <PmProjectLayout>*/}
+                    {/*    <ModalProvider>*/}
+                    {/*      <Switch>*/}
+                    {/*        <Route*/}
+                    {/*            exact*/}
+                    {/*            path="/pm/project/:id/document"*/}
+                    {/*            component={DocumentProjectPage}*/}
+                    {/*        />*/}
+                    {/*        <Route*/}
+                    {/*            exact*/}
+                    {/*            path="/pm/project/:id/document/1"*/}
+                    {/*            component={DocumentProfilePage}*/}
+                    {/*        />*/}
+                    {/*        <Route*/}
+                    {/*            exact*/}
+                    {/*            path="/pm/project/:id/document/2"*/}
+                    {/*            component={DocumenDatahubContactPage}*/}
+                    {/*        />*/}
+                    {/*        <Route*/}
+                    {/*            exact*/}
+                    {/*            path="/pm/project/:id/document/3"*/}
+                    {/*            component={DocumentFolderPage}*/}
+                    {/*        />*/}
+                    {/*        /!* <Route exact path='/pcm/project/:id/document/3' component={DocumentReportPage} />*/}
+                    {/*<Route exact path='/pcm/project/:id/document/4' component={DocumentHistoryPage} /> *!/*/}
+                    {/*      </Switch>*/}
+                    {/*      <ModalCreateDocument />*/}
+                    {/*    </ModalProvider>*/}
+                    {/*  </PmProjectLayout>*/}
+                    {/*</Route>*/}
                     <Route
                         exact
                         path="/pm/project/:id/document/1/type/:type"

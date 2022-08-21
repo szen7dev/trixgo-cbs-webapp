@@ -12,6 +12,7 @@ import iconPencil from 'assets/images/icons8-pencil-96 1.png';
 import nextIcon from "assets/images/icons-arrow-next.svg";
 import { Link } from "react-router-dom";
 import {ProjectBudgetPageType1} from "./components/ProjectBudgetPageType1";
+import {ProjectBudgetPageType2} from "./components/ProjectBudgetPageType2";
 
 const ProjectBudgetPage: FC = () => {
 	const { id: projectID, type } = useParams<{ id: string , type: string}>();
@@ -131,6 +132,10 @@ const ProjectBudgetPage: FC = () => {
 					toggleCollapse={() => setCollapse(!collapse)}
 					projectInfo={projectInfo}
 				/>
+			}
+			{
+				type === "2" &&
+				<ProjectBudgetPageType2 />
 			}
 		</div>
 	</main>

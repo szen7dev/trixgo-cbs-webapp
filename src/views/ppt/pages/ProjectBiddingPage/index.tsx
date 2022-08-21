@@ -1,5 +1,5 @@
-import { ChangeEvent, FC, useState, useEffect } from "react";
-import { NavLink, useLocation, useParams } from "react-router-dom";
+import React, { ChangeEvent, FC, useState, useEffect } from "react";
+import {Link, NavLink, useLocation, useParams} from "react-router-dom";
 import { toast } from "react-toastify";
 import moment from "moment";
 import debounce from "lodash/debounce";
@@ -7,7 +7,7 @@ import debounce from "lodash/debounce";
 /**
  * Components
  */
-import { SearchInput, GroupActions, ModalContainer, ModalConfirm } from "shareComponents/common";
+import {SearchInput, GroupActions, ModalContainer, ModalConfirm, DropdownSearchableV2} from "shareComponents/common";
 // import ModalCreateBiddingPlan from "./components/ModalCreateBiddingPlan";
 // import ModalUpdateBiddingPlan from "./components/ModalUpdateBiddingPlan";
 import ModalCreateBiddingPlan from "../../../bidding/pages/BiddingPlanPage/components/ModalCreateBiddingPlan";
@@ -35,6 +35,11 @@ import useCheckedList from "services/hooks/ppt/useCheckedList";
 import { convertCurrency } from "utils/converter";
 import { useProject } from 'services/hooks/items/useProject';
 import { useBiddingPlan } from "services/hooks/bidding/useBiddingPlan";
+import categoryIcon from "../../../../assets/images/icons8-category-48.svg";
+import contractIcon from "../../../../assets/images/icons8-contract-64-blue.svg";
+import downloadIcon from "../../../../assets/images/icons8-download-64.svg";
+import iconPencil from "../../../../assets/images/icons8-pencil-96 1.png";
+import nextIcon from "../../../../assets/images/icons-arrow-next.svg";
 
 const ProjectBiddingPage: FC = () => {
   const location = useLocation();
@@ -130,40 +135,83 @@ const ProjectBiddingPage: FC = () => {
 
   return (
     <div className={"flex flex-col relative h-full"}>
-      <div className={"flex items-center border-b py-2 px-6"}>
-        <div className={"flex items-center flex-1"}>
-          <div className={"text-lg"}>Kế hoạch thầu</div>
-          <SearchInput
-            classNameWrapper={"ml-4"}
-            onChange={debounce(
-              (e: ChangeEvent<HTMLInputElement>) => setKeyword(e.target.value),
-              500
-            )}
-          />
-          <div className={"mr-3 w-4 border-r border-gray-400 h-[16px]"} />
-          <GroupActions
-            className="flex items-center flex-1"
-            onClickTrash={toggleDeleteModal}
-            onClickPencil={toggleModalCreateOrUpdate.bind(null, "update")}
-            types={["trash", "edit"]}
-            disabled={{
-              pencil: Object.values(assigned).filter(Boolean).length !== 1,
-              trash: !Object.values(assigned).some((value) => value),
-            }}
-          />
+      <div className={"sticky top-0 z-10"}>
+        <div className={"flex items-center px-4 py-2"}>
+          <div className={"flex items-center flex-1"}>
+            <DropdownSearchableV2
+                className={"mr-4 border border-primary-border rounded-lg mb-2"}
+                placeholder={"Loại gói thầu"}
+                prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"}/>}
+                isMultiple={true}
+                disableSearch={true}
+                data={[]}
+            />
+            <DropdownSearchableV2
+                className={"mr-4 border border-primary-border rounded-lg mb-2"}
+                placeholder={"Hình thức"}
+                prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"}/>}
+                isMultiple={true}
+                disableSearch={true}
+                data={[]}
+            />
+            <DropdownSearchableV2
+                className={"mr-4 border border-primary-border rounded-lg mb-2"}
+                placeholder={"Loại hợp đồng"}
+                prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"}/>}
+                isMultiple={true}
+                disableSearch={true}
+                data={[]}
+            />
+            <DropdownSearchableV2
+                className={"mr-4 border border-primary-border rounded-lg mb-2"}
+                placeholder={"Trạng thái"}
+                prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"}/>}
+                isMultiple={true}
+                disableSearch={true}
+                data={[]}
+            />
+          </div>
+          <button className={"h-[32px] rounded bg-cbs-green text-white font-bold px-4"}>
+            Tạo mới
+          </button>
         </div>
-        <button
-          className={"bg-green-success h-[32px] text-white rounded px-5"}
-          onClick={toggleModalCreateOrUpdate.bind(null, "create")}
-        >
-          Tạo mới
-        </button>
+        <div className={"flex items-center pb-2"}>
+          <div className={"border-0.5 border-primary-border flex items-center"}>
+            <button className={"px-4 py-2 border-r-0.5 border-primary-border bg-cbs-soft-blue text-primary"}>
+              Tất cả
+            </button>
+            <button className={"px-4 py-2 border-r-0.5 border-primary-border bg-white text-primary-gray"}>
+              Chưa thực hiện
+            </button>
+            <button className={"px-4 py-2 border-r-0.5 border-primary-border bg-white text-primary-gray"}>
+              Đang triển khai
+            </button>
+            <button className={"px-4 py-2 border-r-0.5 border-primary-border bg-white text-primary-gray"}>
+              Hoàn thành
+            </button>
+          </div>
+          <button className={"flex items-center justify-center mx-3 ml-6"}>
+            <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"}/>
+          </button>
+          <button className={"flex items-center justify-center mx-3 ml-6"}>
+            <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"}/>
+          </button>
+          <div className={"flex-1 flex items-center justify-end"}>
+            <span className={"text-primary-gray"}>1-50 trong số 2.358</span>
+            <button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"} disabled={true}>
+              <img src={nextIcon} alt={"----"} className={"rotate-180"}/>
+            </button>
+            <button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"}>
+              <img src={nextIcon} alt={"----"}/>
+            </button>
+          </div>
+        </div>
       </div>
       <div className="flex-1 overflow-y-auto">
         <table className="text-black text-medium border-separate space-x-0 space-y-0 w-full border-spacing-0">
           <thead className="">
             <tr className="text-primary-gray whitespace-nowrap align-middle text-left">
-              <th className="px-4 py-2.5 font-normal sticky top-0 border-b border-cbs-border w-1">
+              <th className="px-4 py-2.5 font-normal sticky top-0 border-b-0.5 border-cbs-border w-1">
                 <input
                   className="cbs-checkbox"
                   type="checkbox"
@@ -172,34 +220,34 @@ const ProjectBiddingPage: FC = () => {
                   ref={checkboxRef}
                 />
               </th>
-              <th className="py-2.5 font-normal sticky top-0 border-b border-cbs-border px-2">
+              <th className="py-2.5 font-normal sticky top-0 border-b-0.5 border-cbs-border px-2">
                 Nội dung
               </th>
-              <th className="py-2.5 font-normal sticky top-0 border-b border-cbs-border px-2">
+              <th className="py-2.5 font-normal sticky top-0 border-b-0.5 border-cbs-border px-2">
                 Phân loại
               </th>
-              <th className="py-2.5 font-normal sticky top-0 border-b border-cbs-border px-2">
+              <th className="py-2.5 font-normal sticky top-0 border-b-0.5 border-cbs-border px-2">
                 Danh sách dự kiến
               </th>
-              <th className="py-2.5 font-normal sticky top-0 border-b border-cbs-border px-2">
+              <th className="py-2.5 font-normal sticky top-0 border-b-0.5 border-cbs-border px-2">
                 KH bắt đầu
               </th>
-              <th className="py-2.5 font-normal sticky top-0 border-b border-cbs-border px-2">
+              <th className="py-2.5 font-normal sticky top-0 border-b-0.5 border-cbs-border px-2">
                 KH kết thúc
               </th>
-              <th className="py-2.5 font-normal sticky top-0 border-b border-cbs-border px-2">
+              <th className="py-2.5 font-normal sticky top-0 border-b-0.5 border-cbs-border px-2">
                 Hình thức
               </th>
-              <th className="py-2.5 font-normal sticky top-0 border-b border-cbs-border px-2">
+              <th className="py-2.5 font-normal sticky top-0 border-b-0.5 border-cbs-border px-2">
                 Loại hợp đồng
               </th>
-              <th className="py-2.5 font-normal sticky top-0 border-b border-cbs-border px-2">
+              <th className="py-2.5 font-normal sticky top-0 border-b-0.5 border-cbs-border px-2">
                 Tiến độ thực hiện
               </th>
-              <th className="py-2.5 font-normal sticky top-0 border-b border-cbs-border px-2">
+              <th className="py-2.5 font-normal sticky top-0 border-b-0.5 border-cbs-border px-2">
                 Trạng thái
               </th>
-              <th className="py-2.5 font-normal sticky top-0 border-b border-cbs-border px-2">
+              <th className="py-2.5 font-normal sticky top-0 border-b-0.5 border-cbs-border px-2">
                 Đơn vị trúng thầu
               </th>
             </tr>
@@ -209,7 +257,7 @@ const ProjectBiddingPage: FC = () => {
               listBiddingPlan.map((item: any) => (
                 <tr key={item._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
                   <td
-                    className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-center"
+                    className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border text-center"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <input
@@ -221,7 +269,7 @@ const ProjectBiddingPage: FC = () => {
                     />
                   </td>
                   <td
-                    className="pt-2.5 pb-3 px-2 border-b border-cbs-border"
+                    className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <NavLink to={`/bidding/plan/${projectID}/${item._id}`}>{item.name}</NavLink>
@@ -230,32 +278,32 @@ const ProjectBiddingPage: FC = () => {
                       {moment(item.createAt).format("DD/MM/YYYY HH:mm")}
                     </p>
                   </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                  <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
                     {BIDDING_PLAN_TYPE[item.type-1].text}
                   </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                  <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
                     {convertCurrency(item.packagePrice)}
                   </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                  <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
                     { moment(item.startTime).format("L")}
                   </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                  <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
                     { moment(item.finishTime).format("L")}
                   </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                  <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
                     {BIDDING_PLAN_FORM[item.form -1].text}
                   </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                  <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
                     {BIDDING_PLAN_CONTRACT_TYPE[item.contractType -1].text}
                   </td>
 
-                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                  <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
                     {item.duration} Ngày
                   </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                  <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
                     {BIDDING_PLAN_STATUS[item.status -1].text}
                   </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                  <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
                     {item?.bidder?.name}
                   </td>
                 </tr>
