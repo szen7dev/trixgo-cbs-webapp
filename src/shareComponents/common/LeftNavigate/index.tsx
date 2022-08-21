@@ -9,7 +9,7 @@ import commercialIcon from "assets/images/icons8-commercial-64.svg";
 import peopleIcon from "assets/images/icons8-people-64.svg";
 import {Link, useHistory, useLocation} from "react-router-dom";
 import {useSocket} from "../../../services/hooks/useSocket";
-import {useNotification} from "../../../services/hooks/useNotification";
+// import {useNotification} from "../../../services/hooks/useNotification";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../redux/reducer";
 
@@ -32,7 +32,7 @@ export const LeftNavigate:FC<Props> = ({handleMenuEvent}) => {
                     {/*    totalNoti > 0 &&*/}
                         <span
                             className={"absolute -top-1 right-1 min-w-5 w-5 h-5 text-xs inline-block border-2 text-center border-white rounded-full bg-negative text-white"}>
-                            8
+                            00
                         </span>
                     {/*}*/}
                 </div>
@@ -62,7 +62,7 @@ export const LeftNavigate:FC<Props> = ({handleMenuEvent}) => {
                 </div>
                 <span className={"text-primary-gray mt-1"}>Nhân sự</span>
             </Link> */}
-            <Link to={`/messages`} className={"flex flex-col items-center mb-3"}>
+            {/* <Link to={`/messages`} className={"flex flex-col items-center mb-3"}>
                 <div className={"px-4 py-1 rounded-full relative " + (pathname.includes("/messages") ? "bg-cbs-hightlight-right-navigate" : "")}>
                     <img src={chatIcon} alt={"Chat"}/>
                     <span
@@ -71,7 +71,7 @@ export const LeftNavigate:FC<Props> = ({handleMenuEvent}) => {
                     </span>
                 </div>
                 <span className={"text-primary-gray mt-1"}>Chat</span>
-            </Link>
+            </Link> */}
             {/* <Link to={`/media/home`} className={"flex flex-col items-center mb-3"}>
                 <div className={"px-4 py-1 rounded-full relative " + (pathname.includes("/messages") ? "bg-cbs-hightlight-right-navigate" : "")}>
                     <img src={commercialIcon} alt={"Media"}/>
