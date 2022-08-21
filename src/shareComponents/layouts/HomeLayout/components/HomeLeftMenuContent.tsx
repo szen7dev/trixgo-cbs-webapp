@@ -24,13 +24,13 @@ export const HomeLeftMenuContent:FC = () => {
             label: "Hoạt động",
             icon: sendAndReceiveIcon,
             count: 2,
-            route: '/'
+            route: '/pcm/home'
         },
         {
             label: "Việc của tôi",
             icon: mailOutLineIcon,
             count: 0,
-            route: '/pcm/home'
+            route: '/pcm/mine'
         },
         {
             label: "Việc giao người khác",
