@@ -11,7 +11,7 @@ interface DepartmentDirectoryRepository {
     updateDepartmentDirectory: (params: any) => Promise<any>;
     deleteDepartmentDirectory: (ids: Array<string>) => Promise<any>;
     fetchListDepartmentDirectory: (params: DepartmentDirectory.DepartmentDirectoryQueryPayload) => Promise<DepartmentDirectory.DepartmentDirectoryQueryResponse>;
-    fetchDetailDepartmentDirectory: (departmentDirectoryID: string, params?: DepartmentDirectory.DepartmentDirectoryQueryPayload) => Promise<DepartmentDirectory.DepartmentDirectoryQueryDetailResponse>;
+    fetchDetailDepartmentDirectory: ( params?: DepartmentDirectory.DepartmentDirectoryQueryPayload) => Promise<DepartmentDirectory.DepartmentDirectoryQueryDetailResponse>;
 }
 
 export const departmentDirectoryRepository: DepartmentDirectoryRepository = {
@@ -19,7 +19,7 @@ export const departmentDirectoryRepository: DepartmentDirectoryRepository = {
     updateDepartmentDirectory: (params: any) => updateDepartmentDirectory(params),
     deleteDepartmentDirectory: (ids: Array<string>) => deleteDepartmentDirectory(ids),
     fetchListDepartmentDirectory: async (params) => fetchListDepartmentDirectory(params),
-    fetchDetailDepartmentDirectory: async (departmentDirectoryID, params) => fetchListDepartmentDirectory(params),
+    fetchDetailDepartmentDirectory: async (params) => fetchListDepartmentDirectory(params),
 }
 
 /*=====APIS=====*/
@@ -28,7 +28,7 @@ async function fetchListDepartmentDirectory(params: any) {
     const { data } = await API.get(
         `${ITEM_URL}/department_directories`, {
         params: {
-            select: 'member type name description lock',
+            select: 'member type name description lock order',
             populates: {
                 path: 'member company',
                 select: 'fullname name phone email'

@@ -21,46 +21,67 @@ import { BIDDING_PLAN_CONTRACT_TYPE, BIDDING_PLAN_FORM, BIDDING_PLAN_STATUS, FIN
  * Hooks
  */
 import { useBiddingPlan } from 'services/hooks/bidding/useBiddingPlan';
+
 import { BiddingPlanRepository } from 'apis/bidding';
+import { departmentDirectoryRepository } from 'apis/item/department_directory';
 import { useQueryListCompany } from "services/hooks/useCompanies";
+import { useDepartmentDirectory } from 'services/hooks/items/useDepartmentDirectory';
+import { useUserSystem } from "services/hooks/users/useUserSystem";
+import { useAuth } from 'services/hooks/auth/useAuth';
 
 interface ModalProps {
-	biddingPlanID: string;
+	departmentDirectoryID: string;
 	toggle: () => void;
 	onConfirm?: () => void;
 }
 
-const ModalUpdateBiddingPlan: FC<ModalProps> = ({ biddingPlanID, toggle, onConfirm }) => {
+const DEPARTMENT_DIRECTORY_TYPE = [
+    { id: 1, text: "Trợ lý viên" },
+    { id: 2, text: "Chủ đầu tư" },
+    { id: 3, text: "Tư vấn QLDA" },
+    { id: 4, text: "Tư vấn giám sát" },
+    { id: 5, text: "Tư vấn thiết kế" },
+    { id: 6, text: "Nhà thầu thi công" },
+]
+
+const DEPARTMENT_DIRECTORY_LOCK = [
+    { id: 0, text: "Bình thường" },
+    { id: 1, text: "Khóa" },
+]
+
+const ModalUpdateBiddingPlan: FC<ModalProps> = ({ departmentDirectoryID, toggle, onConfirm }) => {
 	const [initValues, setInitValues] = useState<{ [key: string]: any }>({});
-	const { updateAsync } = useBiddingPlan({});
+	const { updateAsync } = useDepartmentDirectory({});
 	const [bidder, setBidder] = useState("");
+	const [searchUserSystem, setSearchUserSystem] = useState("");
+	const { user } = useAuth();
+	const companyID = user?.company?._id;
 
 	useEffect(() => {
-		if(!biddingPlanID) return;
+		if(!departmentDirectoryID) return;
 
 		(async () => {
-			const { error, data } = await BiddingPlanRepository.fetchDetailBiddingPlan({
-				planID: biddingPlanID
+			const { error, data } = await departmentDirectoryRepository.fetchDetailDepartmentDirectory({
+				departmentDirectoryID
 			})
 			if(error) return;
-
-			const { name, sign, type, packagePrice, startTime, finishTime, form, contractType, duration, status, bidder, note, percentOfCompletedPackage } = data;
-			setInitValues({ name, sign, type, packagePrice, startTime, finishTime, form, contractType, duration, status, bidder, note, percentOfCompletedPackage });
+			const { member, name, description, type, lock, order } = data;
+			setInitValues({ member, name, description, type, lock, order });
 		})();
-	}, [biddingPlanID])
+	}, [departmentDirectoryID])
 
 	const {
-		data: listCompany,
-		hasNextPage: hasNextPageCompany,
-		fetchNextPage: fetchNextPageCompany
-	  } = useQueryListCompany({ limit: 20, keyword: bidder });
+		data: listUsersSystem,
+		hasNextPage: hasNextPageUserSystem,
+		fetchNextPage: fetchNextPageUserSystem,
+	} = useUserSystem({ keyword: searchUserSystem, companyID }, true);
 
 	// useEffect(() => {
-	// 	if(!cashFlowInfo || !biddingPlanID) return;
+	// 	if(!cashFlowInfo || !departmentDirectoryID) return;
 
 	// 	const { name, sign, type, note, outin, property, status } = cashFlowInfo;
 	// 	setInitValues({ name, sign, type, note, outin, property, status });
-	// }, [cashFlowInfo, biddingPlanID])
+	// }, [cashFlowInfo, departmentDirectoryID])
 
 	const financialSchema = object().shape({
 		name: string().required("Bạn cần nhập nội dung"),
@@ -68,10 +89,10 @@ const ModalUpdateBiddingPlan: FC<ModalProps> = ({ biddingPlanID, toggle, onConfi
 
 	const handleSubmit = async (values: any) => {
 		try {
-			console.log({ values })
 			const { error, data } = await updateAsync({
-				planID: biddingPlanID,
-				...values
+				departmentDirectoryID,
+				...values,
+				member: values.member?._id || values.member
 			});
 
 			if(error) {
@@ -105,7 +126,6 @@ const ModalUpdateBiddingPlan: FC<ModalProps> = ({ biddingPlanID, toggle, onConfi
 		>
 			{
 				formik => {
-					console.log({ formilk: initValues });
 					return (
 						<Form autoComplete="off">
 							<div className="flex items-center px-6 py-2.5 justify-between bg-cbs-table-header">
@@ -121,17 +141,93 @@ const ModalUpdateBiddingPlan: FC<ModalProps> = ({ biddingPlanID, toggle, onConfi
 									</svg>
 								</button>
 							</div>
-							<div className="relative px-6 mt-2 pt-3.5 flex-1 md:h-[800px] text-x-small">
-								<label className='block'>
+							{/* md:h-[800px] */}
+							<div className="relative px-6 mt-2 pt-3.5 flex-1 text-x-small">
+							<label className='mt-4 block'>
 									<div className='mb-1.5'>
-										Nội dung (*)
+										Thành viên (*)
 									</div>
-									<textarea
-										rows={2}
-										tabIndex={0}
-										autoFocus={true}
-										placeholder="Nhập nội dung"
-										className="py-1.5 px-3 bg-cbs-gray w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"
+									<DropdownSearchable
+										onSearchInputChange={debounce(
+											(value) => setSearchUserSystem(value),
+											500
+										)}
+										onchangeValue={(value: any) => formik.setFieldValue('member', value.value)}
+										onClearData={() => formik.setFieldValue('member', '')}
+										className={"h-32 px-3 w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"}
+										placeholder="Chọn thành viên"
+										isMultiple={false}
+										allowClearValueSingleInput={true}
+										showTriangle={true}
+										maxWidthInput="max-w-none"
+										// Render đổ data
+										data={listUsersSystem.map(item => ({
+											value: item._id,
+											label: item.fullname
+										}))}
+										initialValue={{
+											...initValues.member && {
+												value: initValues.member?._id,
+												label: initValues.member?.fullname,
+											}
+										}}
+										formatItem={{
+											id: "value",
+											text: "label",
+										}}
+										inlineSearch={true}
+									/>
+									<ErrorMessage
+										name="member"
+										component="span"
+										className="font-normal text-negative italic"
+									/>
+								</label>
+
+								<label className='mt-4 block'>
+									<div className='mb-1.5'>
+										Phân loại
+									</div>
+									<DropdownSearchable
+										onchangeValue={(value: any) => formik.setFieldValue('type', value.id)}
+										onClearData={() => formik.setFieldValue('type', '')}
+										className={"h-32 px-3 w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"}
+										placeholder="Chọn phân loại"
+										isMultiple={false}
+										allowClearValueSingleInput={true}
+										showTriangle={true}
+										maxWidthInput="max-w-none"
+										data={DEPARTMENT_DIRECTORY_TYPE.map(item => ({
+											value: item.id,
+											label: item.text
+										}))}
+										initialValue={{
+											...initValues.type && {
+												value: DEPARTMENT_DIRECTORY_TYPE[initValues.type-1]?.id,
+												label: DEPARTMENT_DIRECTORY_TYPE[initValues.type-1]?.text
+											}
+										}}
+										formatItem={{
+											id: "value",
+											text: "label",
+										}}
+										inlineSearch={true}
+									/>
+									<ErrorMessage
+										name="type"
+										component="span"
+										className="font-normal text-negative italic"
+									/>
+								</label>
+
+								<label className='mt-4 block'>
+									<div className='mb-1.5'>
+										Chức vụ trong dự án
+									</div>
+									<input
+										type="text"
+										placeholder="VD: Trưởng ban quản lý dự án"
+										className="py-1.5 px-3  w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"
 										{...formik.getFieldProps('name')}
 									/>
 									<ErrorMessage
@@ -143,16 +239,16 @@ const ModalUpdateBiddingPlan: FC<ModalProps> = ({ biddingPlanID, toggle, onConfi
 
 								<label className='mt-4 block'>
 									<div className='mb-1.5'>
-										Mã hiệu
+										Mô tả
 									</div>
 									<input
 										type="text"
-										placeholder="Nhập mã hiệu"
+										placeholder="VD: Đang hoạt động chính thức"
 										className="py-1.5 px-3  w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"
-										{...formik.getFieldProps('sign')}
+										{...formik.getFieldProps('description')}
 									/>
 									<ErrorMessage
-										name="sign"
+										name="description"
 										component="span"
 										className="font-normal text-negative italic"
 									/>
@@ -160,64 +256,16 @@ const ModalUpdateBiddingPlan: FC<ModalProps> = ({ biddingPlanID, toggle, onConfi
 
 								<label className='mt-4 block'>
 									<div className='mb-1.5'>
-										Ngân dách dự kiến
+										Thứ tự
 									</div>
 									<input
 										type="number"
-										placeholder="Nhập ngân dách dự kiến"
-										className="py-1.5 px-3 w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"
-										{...formik.getFieldProps('packagePrice')}
+										placeholder="Thứ tự"
+										className="py-1.5 px-3  w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"
+										{...formik.getFieldProps('order')}
 									/>
 									<ErrorMessage
-										name="packagePrice"
-										component="span"
-										className="font-normal text-negative italic"
-									/>
-								</label>
-
-								<label className='mt-4 block'>
-									<div className='mb-1.5'>
-										Kế hoạch bắt đầu
-									</div>
-									<input
-										type="date"
-										placeholder="Nhập kế hoạch bắt đầu"
-										className="py-1.5 px-3 w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"
-										// {...formik.getFieldProps('startTime')}
-										name="startTime"
-										onChange={debounce((e) => {
-											const date = e.target.value;
-											if(!date) return;
-											setInitValues({ ...initValues, startTime: date })
-										}, 700)}
-										defaultValue={moment(initValues.startTime).format('YYYY-MM-DD')}
-									/>
-									<ErrorMessage
-										name="startTime"
-										component="span"
-										className="font-normal text-negative italic"
-									/>
-								</label>
-
-								<label className='mt-4 block'>
-									<div className='mb-1.5'>
-										Kế hoạch kết thúc
-									</div>
-									<input
-										type="date"
-										placeholder="Nhập kế hoạch kết thúc"
-										className="py-1.5 px-3 w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"
-										// {...formik.getFieldProps('finishTime')}
-										name="finishTime"
-										defaultValue={moment(initValues.finishTime).format('YYYY-MM-DD')}
-										onChange={debounce((e) => {
-											const date = e.target.value;
-											if(!date) return;
-											setInitValues({ ...initValues, finishTime: date })
-										}, 700)}
-									/>
-									<ErrorMessage
-										name="finishTime"
+										name="order"
 										component="span"
 										className="font-normal text-negative italic"
 									/>
@@ -228,23 +276,21 @@ const ModalUpdateBiddingPlan: FC<ModalProps> = ({ biddingPlanID, toggle, onConfi
 										Hình thức
 									</div>
 									<DropdownSearchable
-										onchangeValue={(value: any) => formik.setFieldValue('form', value.id)}
-										onClearData={() => formik.setFieldValue('form', '')}
+										onchangeValue={(value: any) => formik.setFieldValue('lock', value.id)}
+										onClearData={() => formik.setFieldValue('lock', '')}
 										className={"h-32 px-3 w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"}
-										placeholder="Hình thức"
+										placeholder="Chọn hình thức"
 										isMultiple={false}
 										allowClearValueSingleInput={true}
 										showTriangle={true}
 										maxWidthInput="max-w-none"
-										data={BIDDING_PLAN_FORM.map(item => ({
-											value: item.value,
+										data={DEPARTMENT_DIRECTORY_LOCK.map(item => ({
+											value: item.id,
 											label: item.text
 										}))}
 										initialValue={{
-											...initValues.form && {
-												value: BIDDING_PLAN_FORM[initValues.form - 1]?.value,
-												label: BIDDING_PLAN_FORM[initValues.form - 1]?.text
-											}
+											value: DEPARTMENT_DIRECTORY_LOCK[initValues.lock]?.id,
+											label: DEPARTMENT_DIRECTORY_LOCK[initValues.lock]?.text
 										}}
 										formatItem={{
 											id: "value",
@@ -253,173 +299,7 @@ const ModalUpdateBiddingPlan: FC<ModalProps> = ({ biddingPlanID, toggle, onConfi
 										inlineSearch={true}
 									/>
 									<ErrorMessage
-										name="form"
-										component="span"
-										className="font-normal text-negative italic"
-									/>
-								</label>
-
-								<label className='mt-4 block'>
-									<div className='mb-1.5'>
-										Loại hợp đồng
-									</div>
-									<DropdownSearchable
-										onchangeValue={(value: any) => formik.setFieldValue('contractType', value.id)}
-										onClearData={() => formik.setFieldValue('contractType', '')}
-										className={"h-32 px-3 w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"}
-										placeholder="Loại hợp đồng"
-										isMultiple={false}
-										allowClearValueSingleInput={true}
-										showTriangle={true}
-										maxWidthInput="max-w-none"
-										data={BIDDING_PLAN_CONTRACT_TYPE.map(item => ({
-											value: item.value,
-											label: item.text
-										}))}
-										initialValue={{
-											...initValues.contractType && {
-												value: BIDDING_PLAN_CONTRACT_TYPE[initValues.contractType - 1]?.value,
-												label: BIDDING_PLAN_CONTRACT_TYPE[initValues.contractType - 1]?.text
-											}
-										}}
-										formatItem={{
-											id: "value",
-											text: "label",
-										}}
-										inlineSearch={true}
-									/>
-									<ErrorMessage
-										name="contractType"
-										component="span"
-										className="font-normal text-negative italic"
-									/>
-								</label>
-
-								<label className='mt-4 block'>
-									<div className='mb-1.5'>
-										Thời gian thực hiện(Ngày)
-									</div>
-									<input
-										type="number"
-										placeholder="Nhập thời gian thực hiện(Ngày)"
-										className="py-1.5 px-3 w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"
-										{...formik.getFieldProps('duration')}
-									/>
-									<ErrorMessage
-										name="duration"
-										component="span"
-										className="font-normal text-negative italic"
-									/>
-								</label>
-
-								<label className='mt-4 block'>
-									<div className='mb-1.5'>
-										Đơn vị trúng thầu
-									</div>
-									<DropdownSearchable
-										// onSearchInputChange={value => setBidder(value)}
-										onSearchInputChange={debounce(
-											(value) => setBidder(value),
-											500
-										)}
-										onchangeValue={(value: any) => formik.setFieldValue('bidderID', value.id)}
-										onClearData={() => formik.setFieldValue('bidderID', '')}
-										className={"h-32 px-3 w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"}
-										placeholder="Đơn vị trúng thầu"
-										isMultiple={false}
-										allowClearValueSingleInput={true}
-										showTriangle={true}
-										maxWidthInput="max-w-none"
-										data={listCompany.map(item => ({
-											value: item._id,
-											label: item.name
-										}))}
-										initialValue={{
-											...initValues.bidder && {
-												value: initValues.bidder._id,
-												label:  initValues.bidder.name
-											}
-										}}
-										formatItem={{
-											id: "value",
-											text: "label",
-										}}
-										inlineSearch={true}
-									/>
-									<ErrorMessage
-										name="bidderID"
-										component="span"
-										className="font-normal text-negative italic"
-									/>
-								</label>
-
-								<label className='mt-4 block'>
-									<div className='mb-1.5'>
-										Trạng thái triển khai
-									</div>
-									<DropdownSearchable
-										onchangeValue={(value: any) => formik.setFieldValue('status', value.id)}
-										onClearData={() => formik.setFieldValue('status', '')}
-										className={"h-32 px-3 w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"}
-										placeholder="Trạng thái triển khai"
-										isMultiple={false}
-										allowClearValueSingleInput={true}
-										showTriangle={true}
-										maxWidthInput="max-w-none"
-										data={BIDDING_PLAN_STATUS.map(item => ({
-											value: item.value,
-											label: item.text
-										}))}
-										initialValue={{
-											...initValues.status && {
-												value: BIDDING_PLAN_STATUS[initValues.status - 1]?.value,
-												label: BIDDING_PLAN_STATUS[initValues.status - 1]?.text
-											}
-										}}
-										formatItem={{
-											id: "value",
-											text: "label",
-										}}
-										inlineSearch={true}
-									/>
-									<ErrorMessage
-										name="status"
-										component="span"
-										className="font-normal text-negative italic"
-									/>
-								</label>
-
-								<label className='mt-4 block'>
-									<div className='mb-1.5'>
-										Phần trăm hoàn thành
-									</div>
-									<input
-										type="number"
-										placeholder="Nhập phần trăm hoàn thành"
-										className="py-1.5 px-3 w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"
-										{...formik.getFieldProps('percentOfCompletedPackage')}
-									/>
-									<ErrorMessage
-										name="percentOfCompletedPackage"
-										component="span"
-										className="font-normal text-negative italic"
-									/>
-								</label>
-
-								<label className='mt-4 block'>
-									<div className='mb-1.5'>
-										Ghi chú
-									</div>
-									<textarea
-										rows={2}
-										tabIndex={0}
-										autoFocus={true}
-										placeholder="Nhập nội dung"
-										className="py-1.5 px-3 w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"
-										{...formik.getFieldProps('note')}
-									/>
-									<ErrorMessage
-										name="note"
+										name="lock"
 										component="span"
 										className="font-normal text-negative italic"
 									/>

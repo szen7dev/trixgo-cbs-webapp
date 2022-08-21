@@ -2,16 +2,17 @@ import type { QueryParam, APIResponse } from './commons';
 
 export interface DepartmentDirectory {
     _id: string;
-    members: string;
+    member: string;
     type: number;
     name: string,
     description: string | null;
     lock: number;
+    order: number;
 }
 
 export type DepartmentDirectoryQueryPayload = QueryParam & {
     companyID?: string;
-    DepartmentDirectoryID?: string;
+    departmentDirectoryID?: string;
 };
 
 export type DepartmentDirectoryQueryResponse = APIResponse & {

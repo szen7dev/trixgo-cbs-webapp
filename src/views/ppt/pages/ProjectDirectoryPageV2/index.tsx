@@ -1,9 +1,10 @@
-import React, {FC, useState } from "react";
+import React, {FC, useState, useEffect } from "react";
 import businessBuilding from "assets/images/icons8-business-building-48.svg";
 import debounce from 'lodash/debounce';
 import downloadIcon from "assets/images/icons8-download-64.svg";
 import pencilIcon from "assets/images/icons8-pencil-96.svg";
-import {DropdownSearchableV2, ModalContainer} from "shareComponents/common";
+import {DropdownSearchableV2, ModalContainer, GroupActions} from "shareComponents/common";
+
 import nextIcon from "assets/images/icons-arrow-next.svg";
 import userAvatar from "assets/images/task-user.svg";
 import { useQueryListCompany } from 'services/hooks/useCompanies';
@@ -11,6 +12,7 @@ import { useDepartmentDirectory } from 'services/hooks/items/useDepartmentDirect
 import iconChevronRight from "assets/images/icon-chevron-right.png";
 import ModalCreateDepartmentDirectory from "../../../ppt/pages/ProjectDirectoryPageV2/components/ModalCreateDepartmentDirectory";
 import ModalUpdateDepartmentDirectory from "../../../ppt/pages/ProjectDirectoryPageV2/components/ModalUpdateDepartmentDirectory";
+import useCheckedList from "services/hooks/ppt/useCheckedList";
 
 const DEPARTMENT_DIRECTORY_TYPE = [
     { id: 1, text: "Trợ lý viên" },
@@ -35,6 +37,19 @@ const ProjectDirectoryPageV2:FC = () => {
         fetchNextPage: fetchNextPageDepartmentDirectory,
         refetch
     } = useDepartmentDirectory({ params: { companyID: companySelected, limit: 10}, isFetchList: true });
+    const [departmentDirectoryIdSelected, setDepartmentDirectoryIdSelected] = useState("");
+
+    const { assigned, checked, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(listDepartmentDirectory);
+    useEffect(() => {
+        const assignedEntries = Object.entries(assigned);
+        if (!assignedEntries.length) return;
+    
+        const cashBookSelected = assignedEntries.filter(([_, value]) => value);
+    
+        if (cashBookSelected.length === 1) {
+          setDepartmentDirectoryIdSelected(cashBookSelected[0][0]);
+        }
+      }, [assigned]);
 
     const handleSearch = debounce((value) => setKeywordCompany(value), 500);
 
@@ -53,6 +68,18 @@ const ProjectDirectoryPageV2:FC = () => {
             [modalType]: !modalShow[modalType],
         }));
     };
+
+    // const toggleDeleteModal = () => {
+    //     openModal(
+    //       <div
+    //         className={
+    //           "inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+    //         }
+    //       >
+    //         <ModalConfirm onConfirm={handleConfirmDelete} onCancel={closeModal} />
+    //       </div>
+    //     );
+    //   };
 
     return (
         <div className={"project-directory"}>
@@ -73,14 +100,25 @@ const ProjectDirectoryPageV2:FC = () => {
                 </button>
             </div>
             <div className={"flex items-center mt-2"}>
-                <div className={"flex items-center"}>
+                {/* <div className={"flex items-center"}>
                     <button className={"mx-4"}>
                         <img src={downloadIcon} alt={"----"} className={"w-[18px] h-[18px] min-w-[18px] min-h-[18px] max-w-[18px] max-h-[18px]"}/>
                     </button>
                     <button className={"mx-4"}>
                         <img src={pencilIcon} alt={"----"} className={"w-[18px] h-[18px] min-w-[18px] min-h-[18px] max-w-[18px] max-h-[18px]"}/>
                     </button>
-                </div>
+                </div> */}
+                {/* <div className={"mr-3 w-4 border-r border-gray-400 h-[16px]"} /> */}
+                <GroupActions
+                    className="flex items-center flex-1"
+                    // onClickTrash={toggleDeleteModal}
+                    onClickPencil={toggleModalCreateOrUpdate.bind(null, "update")}
+                    types={["edit"]}
+                    disabled={{
+                        pencil: Object.values(assigned).filter(Boolean).length !== 1,
+                        trash: !Object.values(assigned).some((value) => value),
+                    }}
+                />
                 <div className={"flex-1 flex items-center justify-end"}>
                     {/* <span className={"text-primary-gray"}>1-50 trong số 2.358</span>
                     <button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"} disabled={true}>
@@ -89,14 +127,15 @@ const ProjectDirectoryPageV2:FC = () => {
                     <button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"}>
                         <img src={nextIcon} alt={"----"}/>
                     </button> */}
+                    {/* XỬ LÝ PHẤN TRANG */}
                     {listDepartmentDirectory.length ? (
-                        <>
+                        <>  
                             <span className="mr-4">
                             {totalRecord && totalRecord > 10 ? "10" : totalRecord} trong số {totalRecord}
                             </span>
                             {/* <button className="rounded-full h-10 w-10 flex items-center justify-center hover:bg-gray-100 border border-solid border-transparent hover:border-primary-border">
-                                                    <img alt="Previous" src={iconChevronLeft} className="w-4 filter-primary-gray" />
-                                            </button> */}
+                                <img alt="Previous" src={iconChevronLeft} className="w-4 filter-primary-gray" />
+                            </button> */}
                             {totalRecord && totalRecord > 10 ? (
                             <button
                                 onClick={fetchNextPageDepartmentDirectory}
@@ -147,10 +186,17 @@ const ProjectDirectoryPageV2:FC = () => {
                     <tbody>
                         {listDepartmentDirectory?.map((departmentDirectory: any, i) => (
                             <tr key={i}>
-                                <td className={"border-0.5 border-primary-border px-2 align-middle"}>
-                                    <div className={"flex items-center justify-center py-3"}>
-                                        <input className="form-check-input" type="checkbox" value="" id="check"/>
-                                    </div>
+                                <td
+                                    className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border text-center"
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    <input
+                                    className="cbs-checkbox"
+                                    type="checkbox"
+                                    value={departmentDirectory._id}
+                                    checked={Boolean(assigned[departmentDirectory._id])}
+                                    onChange={(e) => handleChangeCheckbox(e, departmentDirectory)}
+                                    />
                                 </td>
                                 <td className={"border-0.5 border-primary-border px-2 align-middle"}>
                                     <div className={"flex items-center py-2"}>
@@ -209,11 +255,11 @@ const ProjectDirectoryPageV2:FC = () => {
                 toggle={toggleModalCreateOrUpdate.bind(null, "update")}
             >
                 <div className="inline-flex flex-col text-black w-full max-w-3xl overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl">
-                {/* <ModalUpdateDepartmentDirectory
-                    biddingPlanID={biddingPlanIdSelected}
+                <ModalUpdateDepartmentDirectory
+                    departmentDirectoryID={departmentDirectoryIdSelected}
                     toggle={toggleModalCreateOrUpdate.bind(null, "update")}
                     onConfirm={refetch}
-                /> */}
+                />
                 </div>
             </ModalContainer>
         </div>
