@@ -29,7 +29,7 @@ export const DocumentProfilePage: FC = () => {
 	return (
 		<>
 			{/* Content */}
-			<div className="flex flex-1 flex-col overflow-hidden bg-cbs-gray">
+			<div className="flex flex-1 flex-col overflow-hidden">
 				{/* <div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1"> */}
 					{/* <span className="text-x-large mr-7">Hồ sơ: Tất cả</span> */}
 					{/* <SearchInput
@@ -58,12 +58,12 @@ export const DocumentProfilePage: FC = () => {
 						if(location.pathname.includes("/document/project/")){
 							linkRef = `/document/project/${params.id}/document/1/type/${formatData.type}`
 						}else{
-							linkRef = `/pcm/project/${params.id}/document/1/type/${formatData.type}`
+							linkRef = `/pm/project/${params.id}/document/1/type/${formatData.type}`
 						}
 
 						return (
 							<Link className="document__card-container" key={i} to={linkRef}>
-								<div className="bg-white rounded-lg h-[150px] px-3.5 py-4 flex flex-col justify-between">
+								<div className="bg-white border-0.5 border-primary-border rounded-lg h-[150px] px-3.5 py-4 flex flex-col justify-between">
 									<div className="flex justify-between">
 										<h4 className="text-x-large">{formatData.name}</h4>
 										<div>

@@ -161,7 +161,7 @@ export const DocumentFolderPage: FC = () => {
                 if(location.pathname.includes("/document/project/")){
                   linkRef = `/document/project/${params.id}/package/${elm._id}`
                 }else{
-                  linkRef = `/pcm/project/${params.id}/package/${elm._id}`
+                  linkRef = `/pm/project/${params.id}/package/${elm._id}`
                 }
                 return (
                   <tr

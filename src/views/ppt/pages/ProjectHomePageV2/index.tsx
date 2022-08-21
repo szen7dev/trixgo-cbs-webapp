@@ -1,13 +1,25 @@
-import React, { FC, useEffect } from "react";
+import React, {FC, useContext, useEffect} from "react";
 import userAvt from "assets/images/human-avatar.svg";
 import imageCompany from "assets/images/image-company.png";
-import projectHomeImage from "assets/images/project-home-image.png";
 import Carousel from 'react-elastic-carousel'
+import {useProject} from "../../../../services/hooks/items/useProject";
+import {useParams} from "react-router-dom";
+import { ContextModalPost } from "views/media/contexts/post";
+import {ModalZoomView} from "../../../../shareComponents/common";
 
 const ProjectHomePageV2: FC = () => {
 	useEffect(() => {
 		document.title = "TRANG CHỦ DỰ ÁN"
 	}, []);
+	const {openPost, state, toggleModal } = useContext(ContextModalPost);
+
+	const { id: projectID } = useParams<{ id: string }>();
+	const { info: projectInfo } = useProject({
+		params: {
+			departmentID: projectID
+		},
+		isFetchInfo: true
+	})
 
 	const renderPrevNextButton = (type: string, onClick: () => void) => {
 		return (
@@ -73,13 +85,15 @@ const ProjectHomePageV2: FC = () => {
 					renderArrow={({type, onClick}) => renderPrevNextButton(type, onClick)}
 				>
 					{
-						[...Array(12)].map((e,i) => (
-							<div key={i} className={"relative max-w-1/6 rounded border-0.5 border-primary-border overflow-hidden"}>
-								<img className={"object-cover w-full max-h-[210px] h-[210px] min-h-[210px]"} src={projectHomeImage} alt={"-----"}/>
+						projectInfo?.photos?.map((photo,i) => (
+							<div key={i}
+								 onClick={()=> openPost({ author: photo.author, images: projectInfo.photos, index: i, createAt: photo.createAt, mediaId: photo._id.toString() })}
+								 className={"relative cursor-pointer max-w-1/6 rounded border-0.5 border-primary-border overflow-hidden"}>
+								<img className={"object-cover w-full max-h-[210px] h-[210px] min-h-[210px]"}  src={`${process.env.REACT_APP_URL_S3}${photo.path}`} alt={`Report ${photo.path}`}/>
 								<div className={"absolute bottom-0 bg-cbs-gray py-1 px-2 flex items-start max-w-full"}>
-									<img src={userAvt} alt={"---"} className={"w-[28px] h-[28px] min-w-[28px] min-h-[28px] max-w-[28px] max-h-[28px] rounded-full overflow-hidden"}/>
+									<img src={`${process.env.REACT_APP_URL_S3_USER}/${photo.author.image}`} alt={`Report ${photo.author.bizfullname}`} className={"w-[28px] h-[28px] min-w-[28px] min-h-[28px] max-w-[28px] max-h-[28px] rounded-full overflow-hidden"}/>
 									<div className={"ml-2 w-10/12"}>
-										<p className={"truncate"}>Vũ Thanh Duy-CPMI</p>
+										<p className={"truncate"}>{photo.author.bizfullname}</p>
 										<p className={"truncate text-primary-gray text-xs"}>CHT.THT.Xây dựng trường trung học...</p>
 										<p className={"truncate text-primary-gray text-xs"}>24/3/2021 16 giờ trước</p>
 									</div>
@@ -139,6 +153,14 @@ const ProjectHomePageV2: FC = () => {
 					</tr>
 				</tbody>
 			</table>
+
+			<ModalZoomView isShow={state.isShow} toggle={toggleModal} initialData={{
+				createAt: state.createAt,
+				images: state.images,
+				index: state.index,
+				mediaID: state.mediaID,
+				author: state.author
+			}} />
 		</div>
 	);
 };

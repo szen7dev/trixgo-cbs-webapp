@@ -1,13 +1,14 @@
 import React, {FC} from "react";
 import {useModal} from "services/hooks/useModal";
 import {ModalAddNewTask} from "../../../../common";
-import { NavLink } from 'react-router-dom';
+import {NavLink, useParams} from 'react-router-dom';
 import projectIcon from "assets/images/icons-project.svg";
 import shieldIcon from "assets/images/icons8-user-shield-48.svg";
 import reportIcon from "assets/images/icons8-report.svg";
 
 export const PmProjectLeftMenuContent:FC = () => {
     const { openModal } = useModal();
+    const {id} = useParams<{id: string}>();
 
     const listTab : {
         label: string,
@@ -22,62 +23,62 @@ export const PmProjectLeftMenuContent:FC = () => {
         {
             label: "Trang chủ",
             icon: reportIcon,
-            route: '/pm/project/60a8cb540400462461cbff9f/home'
+            route: `/pm/project/${id}/home`
         },
         {
             label: "Báo cáo quản trị",
             icon: reportIcon,
-            route: '/pm/project/60a8cb540400462461cbff9f/dashboard'
+            route: `/pm/project/${id}/dashboard`
         },
         {
             label: "Thư mục dữ liệu",
             icon: reportIcon,
-            route: '/pm/project/60a8cb540400462461cbff9f/folder'
+            route: `/pm/project/${id}/folder`
         },
         {
             label: "Mốc tiến độ",
             icon: reportIcon,
-            route: '/pm/project/60a8cb540400462461cbff9f/schedule'
+            route: `/pm/project/${id}/schedule`
         },
         {
             label: "Công việc",
             icon: reportIcon,
-            route: '/pm/project/60a8cb540400462461cbff9f/subject'
+            route: `/pm/project/${id}/subject`
         },
         {
             label: "Ngân sách, hợp đồng",
             icon: reportIcon,
-            route: '/pm/project/60a8cb540400462461cbff9f/budget'
+            route: `/pm/project/${id}/budget`
         },
         {
             label: "Lựa chọn nhà thầu",
             icon: reportIcon,
-            route: '/pm/project/60a8cb540400462461cbff9f/bidding'
+            route: `/pm/project/${id}/bidding`
         },
         {
             label: "Hồ sơ thanh toán",
             icon: reportIcon,
-            route: '/pm/project/60a8cb540400462461cbff9f/payment'
+            route: `/pm/project/${id}/payment`
         },
         {
             label: "Hồ sơ văn bản",
             icon: reportIcon,
-            route: '/pm/project/60a8cb540400462461cbff9f/document'
+            route: `/pm/project/${id}/document`
         },
         {
             label: "Hình ảnh",
             icon: reportIcon,
-            route: '/pm/project/60a8cb540400462461cbff9f/photo'
+            route: `/pm/project/${id}/photo`
         },
         {
             label: "Bản vẽ",
             icon: reportIcon,
-            route: '/pm/project/60a8cb540400462461cbff9f/drawing'
+            route: `/pm/project/${id}/drawing`
         },
         {
             label: "Danh bạ dự án",
             icon: reportIcon,
-            route: '/pm/project/60a8cb540400462461cbff9f/directory'
+            route: `/pm/project/${id}/directory`
         },
     ]
 

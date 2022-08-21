@@ -21,18 +21,12 @@ import { ProviderModalPost as ProviderModalMedia } from "views/media/contexts/po
 import { ProviderModalPost as ProviderModalPcm } from "views/pcm/contexts/post";
 
 /*=====PAGES=====*/
-import {
-  DocumentDetailPage,
-  DocumentOfPackagePage,
-  DocumentOfTypePage,
-} from "views/document/pages";
 
 import {
   ProjectAdminManagementPage,
   ProjectCashFlowPlanPage,
   ProjectCashFlowPlanChildPage,
   ProjectCategoryPage,
-  ProjectSubjectCompanyOfAuthorPage,
   ProjectResourcePage,
   ProjectSchedulePage,
   ProjectInspectionPage,
@@ -50,11 +44,16 @@ import ProjectAdminProjectTab from "views/ppt/pages/ProjectAdminPage/pages/Proje
 import ProjectAdminPositionTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminPositionTab";
 import {PmProjectLayout} from "../../shareComponents/layouts/PmLayout/PmProjectLayout";
 import {PmHeaderContent} from "../../shareComponents/layouts/PmLayout/components";
+import {DocumentProjectLayout} from "../../views/document/pages/DocumentProjectPage/DocumentProjectLayout";
 
+const DocumentOfPackagePage       = lazy(() => import("views/document/pages/DocumentOfPackagePage"))
+const DocumentOfTypePage          = lazy(() => import("views/document/pages/DocumentOfTypePage"))
+const DocumentDetailPage          = lazy(() => import("views/document/pages/DocumentDetailPage"))
 const DocumentFolderPage          = lazy(() => import("views/document/pages/DocumentFolderPage"))
 const DocumenDatahubContactPage   = lazy(() => import("views/document/pages/DocumenDatahubContactPage"))
 const DocumentProfilePage         = lazy(() => import("views/document/pages/DocumentProfilePage"))
 const DocumentProjectPage         = lazy(() => import("views/document/pages/DocumentProjectPage"))
+const ProjectSubjectCompanyOfAuthorPage            = lazy(() => import("views/ppt/pages/ProjectSubjectCompanyOfAuthorPage"))
 const ProjectPaymentPage          = lazy(() => import("views/ppt/pages/ProjectPaymentPage"))
 const ProjectBiddingPage          = lazy(() => import("views/ppt/pages/ProjectBiddingPage"))
 const ProjectBudgetPage           = lazy(() => import("views/ppt/pages/ProjectBudgetPage"))
@@ -229,7 +228,11 @@ const PCMRouter: FC = () => {
                         <ProjectPaymentPage/>
                       </PmProjectLayout>
                     </Route>
-                    <Route exact path="/pm/project/:id/payment/company/:companyID/subtype/:subtype" component={ProjectSubjectCompanyOfAuthorPage} />
+                    <Route exact path="/pm/project/:id/payment/company/:companyID/subtype/:subtype">
+                      <PmProjectLayout>
+                        <ProjectSubjectCompanyOfAuthorPage/>
+                      </PmProjectLayout>
+                    </Route>
                     <Route exact path="/pm/project/:id/subject">
                       <PmProjectLayout>
                         <ProjectSubjectPage/>
@@ -241,71 +244,86 @@ const PCMRouter: FC = () => {
                       </PmProjectLayout>
                     </Route>
 
-                    <Route
-                        exact
-                        path="/pm/project/:id/document"
-                        render={({match}) => <Redirect to={`/pm/project/${match.params.id}/document/type/1`}/>}
-                    />
-                    <Route
-                        exact
-                        path="/pm/project/:id/document/type/:type"
-                    >
-                      <PmProjectLayout>
-                        <DocumentProjectPage/>
-                      </PmProjectLayout>
-                    </Route>
                     {/*<Route*/}
                     {/*    exact*/}
-                    {/*    path={["/pm/project/:id/document", "/pm/project/:id/document/(1|2|3|4)"]}*/}
+                    {/*    path="/pm/project/:id/document"*/}
+                    {/*    render={({match}) => <Redirect to={`/pm/project/${match.params.id}/document/type/1`}/>}*/}
+                    {/*/>*/}
+                    {/*<Route*/}
+                    {/*    exact*/}
+                    {/*    path="/pm/project/:id/document/type/:type"*/}
                     {/*>*/}
                     {/*  <PmProjectLayout>*/}
-                    {/*    <ModalProvider>*/}
-                    {/*      <Switch>*/}
-                    {/*        <Route*/}
-                    {/*            exact*/}
-                    {/*            path="/pm/project/:id/document"*/}
-                    {/*            component={DocumentProjectPage}*/}
-                    {/*        />*/}
-                    {/*        <Route*/}
-                    {/*            exact*/}
-                    {/*            path="/pm/project/:id/document/1"*/}
-                    {/*            component={DocumentProfilePage}*/}
-                    {/*        />*/}
-                    {/*        <Route*/}
-                    {/*            exact*/}
-                    {/*            path="/pm/project/:id/document/2"*/}
-                    {/*            component={DocumenDatahubContactPage}*/}
-                    {/*        />*/}
-                    {/*        <Route*/}
-                    {/*            exact*/}
-                    {/*            path="/pm/project/:id/document/3"*/}
-                    {/*            component={DocumentFolderPage}*/}
-                    {/*        />*/}
-                    {/*        /!* <Route exact path='/pcm/project/:id/document/3' component={DocumentReportPage} />*/}
-                    {/*<Route exact path='/pcm/project/:id/document/4' component={DocumentHistoryPage} /> *!/*/}
-                    {/*      </Switch>*/}
-                    {/*      <ModalCreateDocument />*/}
-                    {/*    </ModalProvider>*/}
+                    {/*    <DocumentProjectPage/>*/}
                     {/*  </PmProjectLayout>*/}
                     {/*</Route>*/}
                     <Route
                         exact
+                        path={["/pm/project/:id/document", "/pm/project/:id/document/(1|2|3|4)"]}
+                    >
+                      <PmProjectLayout>
+                        <DocumentProjectLayout>
+                          <ModalProvider>
+                            <Switch>
+                              <Route
+                                  exact
+                                  path="/pm/project/:id/document"
+                                  component={DocumentProjectPage}
+                              />
+                              <Route
+                                  exact
+                                  path="/pm/project/:id/document/1"
+                                  component={DocumentProfilePage}
+                              />
+                              <Route
+                                  exact
+                                  path="/pm/project/:id/document/2"
+                                  component={DocumenDatahubContactPage}
+                              />
+                              <Route
+                                  exact
+                                  path="/pm/project/:id/document/3"
+                                  component={DocumentFolderPage}
+                              />
+                              {/* <Route exact path='/pcm/project/:id/document/3' component={DocumentReportPage} />
+                    <Route exact path='/pcm/project/:id/document/4' component={DocumentHistoryPage} /> */}
+                            </Switch>
+                            <ModalCreateDocument />
+                          </ModalProvider>
+                        </DocumentProjectLayout>
+                      </PmProjectLayout>
+                    </Route>
+                    <Route
+                        exact
                         path="/pm/project/:id/document/1/type/:type"
-                        component={DocumentOfTypePage}
-                    />
+                    >
+                      <PmProjectLayout>
+                        <DocumentOfTypePage/>
+                      </PmProjectLayout>
+                    </Route>
                     <Route
                         exact
                         path="/pm/project/:id/document/1/datahubContact/:datahubContactID"
-                        component={DocumentOfTypePage}
-                    />
+                    >
+                      <PmProjectLayout>
+                        <DocumentOfTypePage/>
+                      </PmProjectLayout>
+                    </Route>
                     <Route
                         exact
                         path="/pm/project/:id/package/:packageID"
-                        component={DocumentOfPackagePage}
-                    />
+                    >
+                      <PmProjectLayout>
+                        <DocumentOfPackagePage/>
+                      </PmProjectLayout>
+                    </Route>
                     <Route exact path="/pm/project/:id/group" component={PcmGroupPage} />
                     <Route exact path="/pm/project/:id/group/:groupID" component={PcmTaskGroupPage} />
-                    <Route exact path="/pm/project/:id/document/:docID" component={DocumentDetailPage} />
+                    <Route exact path="/pm/project/:id/document/:docID">
+                      <PmProjectLayout>
+                        <DocumentDetailPage/>
+                      </PmProjectLayout>
+                    </Route>
                     <Route exact path="/pm/project/:id/photo">
                       <PmProjectLayout>
                         <ProjectPhotoPage/>

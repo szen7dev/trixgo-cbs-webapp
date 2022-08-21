@@ -163,7 +163,7 @@ const ProjectSubjectPage: FC = () => {
 											{/*<input className="cbs-checkbox" type="checkbox" value={company._id} checked={Boolean(assigned[company._id])} onChange={e => handleChangeCheckbox(e, { id: company._id })} />*/}
 										</td>
 										<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">
-											<Link to={`/pcm/project/${projectID}/payment/company/${company._id}/subtype/3`}>
+											<Link to={`/pm/project/${projectID}/payment/company/${company._id}/subtype/3`}>
 												{company.name}
 											</Link>
 										</td>

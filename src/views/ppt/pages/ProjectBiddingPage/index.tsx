@@ -171,7 +171,9 @@ const ProjectBiddingPage: FC = () => {
                 data={[]}
             />
           </div>
-          <button className={"h-[32px] rounded bg-cbs-green text-white font-bold px-4"}>
+          <button
+              onClick={toggleModalCreateOrUpdate.bind(null, "create")}
+              className={"h-[32px] rounded bg-cbs-green text-white font-bold px-4"}>
             Tạo mới
           </button>
         </div>
