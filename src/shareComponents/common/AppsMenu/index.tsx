@@ -15,6 +15,8 @@ export const APP_INFO = AppInfo;
 export const AppsMenu: FC = () => {
   const { listAppOfUser, refetchAppUsers } = useGetListAppOfUser();
   const { user } = useAuth();
+
+  // console.log(listAppOfUser)
   
   useEffect(() => {
     if (API.defaults.headers.Authorization) {

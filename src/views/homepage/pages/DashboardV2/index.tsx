@@ -1447,6 +1447,11 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                   toDate: "31/12/2999",
                 },
                 {
+                  text: "Ngày nay",
+                  fromDate: "12/08/2022",
+                  toDate: "17/08/2022",
+                },
+                {
                   text: "Cách đây 1 tuần",
                   fromDate: "12/08/2022",
                   toDate: "17/08/2022",

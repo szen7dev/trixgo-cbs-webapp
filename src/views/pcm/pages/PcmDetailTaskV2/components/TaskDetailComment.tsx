@@ -14,12 +14,23 @@ import {SendToMultiSelected} from "./SendToMultiSelected";
 import CollapseShow from "assets/images/CBS-Collapse-Show.svg";
 import CollapseHide from "assets/images/CBS-Collapse-Hide.svg";
 import {Item} from "shareComponents/common";
+import { usePcmComment } from "services/hooks/pcm/usePcm";
+import { Task } from "typings/task";
 
-export const TaskDetailComment:FC = () => {
+type Props = {
+    task: Task;
+    refetchInfo?: () => void;
+}
+
+export const TaskDetailComment: FC<Props> = ({ task, refetchInfo }) => {
     const [filter, setFilter] = useState(1);
     const editorRef = useRef<EditorType>();
     const [collapseComment, setCollapseComment] = useState(false);
     const [selectedUser, setSelectedUser] = useState<Item[]>([]);
+
+    // const {
+
+    // } = usePcmComment({});
 
     return (
         <div className={"task-comment mt-5"}>
