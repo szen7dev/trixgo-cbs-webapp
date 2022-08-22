@@ -22,7 +22,7 @@ const PcmDetailTaskV2:FC = () => {
 
     const history = useHistory();
 
-    const { info: taskInfo, isLoadingInfo, refetchInfo } = useTask({
+    const { info: taskInfo, isLoadingInfo, refetchInfo, updateStatusMultipleAsync } = useTask({
         params: {
             taskID: taskId
         },
@@ -30,11 +30,20 @@ const PcmDetailTaskV2:FC = () => {
     });
 
     useEffect(() => {
+        (async () => {
+            await updateStatusMultipleAsync({
+                taskIDs: [taskId],
+                option: 1
+            });
+        })()
+    }, [])
+
+    useEffect(() => {
         if (taskInfo?.message === "permission_denied") {
             toast.warn('Bạn không có quyền truy cập công việc này');
             return history.push(`/pcm/home`);
         }
-    }, [JSON.stringify(taskInfo)]);
+    }, [taskInfo?.message]);
 
     const handleCollapse = () => {
         setCollapse(!collapse);

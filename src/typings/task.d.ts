@@ -116,6 +116,14 @@ export interface updateTaskPayload {
   authorAttachs?: Array<string>;
   assigneeAttachs?: Array<string>;
   tasksLink?: Array<string>;
+  isUpdateNews?: boolean;
+}
+
+export interface updateStatusMultiplePayload {
+  taskIDs: string[];
+  parentID?: string;
+  type?: number;
+  option?: number;
 }
 
 export interface addTaskResponse {

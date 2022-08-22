@@ -21,6 +21,7 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
             const description = editorRef.current.getContent();
             await updateTaskAsync({
                 taskID: task._id,
+                isUpdateNews: true,
                 description
             });
             refetchInfo?.();

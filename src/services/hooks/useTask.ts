@@ -19,7 +19,8 @@ import {
   UpdateResponsePayload,
   MoveTaskToParentPayload,
   MoveTaskToGroupPayload,
-  ListResponsePayload
+  ListResponsePayload,
+  updateStatusMultiplePayload
 } from "typings/task";
 
 /**
@@ -37,6 +38,7 @@ type UseTask = {
   info: Task,
   addTaskAsync: (payload: addTaskPayload) => Promise<any>;
   updateTaskAsync: (payload: updateTaskPayload) => Promise<any>;
+  updateStatusMultipleAsync: (payload: updateStatusMultiplePayload) => Promise<any>;
   isLoadingListTask: boolean;
   isLoadingInfo: boolean;
   totalRecord: number;
@@ -78,6 +80,11 @@ export const useTask = ({
   const { mutateAsync: updateTaskAsync } =
     useMutation((payload: updateTaskPayload) =>
       TaskRepository.updateTask(payload)
+    );
+
+  const { mutateAsync: updateStatusMultipleAsync } =
+    useMutation((payload: updateStatusMultiplePayload) =>
+      TaskRepository.updateStatusMultiple(payload)
     );
 
   const { mutateAsync: addRelationUserAsync } =
@@ -179,6 +186,7 @@ export const useTask = ({
     copyTaskAsync,
     moveTaskToParentAsync,
     moveTaskToGroupAsync,
+    updateStatusMultipleAsync,
     updateTaskAsync,
     addTaskAsync,
     listTasks,

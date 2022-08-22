@@ -27,7 +27,8 @@ import {
   ReactionCommentPayload,
   ListReactionPayload,
   updateTaskPayload,
-  UpdateResponsePayload
+  UpdateResponsePayload,
+  updateStatusMultiplePayload
 } from "typings/task";
 import { convertObToUrl } from "utils";
 
@@ -77,6 +78,14 @@ const TaskRepository = {
   async updateTask(payload: updateTaskPayload): Promise<any> {
     const { data } = await API.put<any>(
       `${pcmURL}/pcm_plan_tasks`,
+      payload
+    );
+    return data;
+  },
+
+  async updateStatusMultiple(payload: updateStatusMultiplePayload): Promise<any> {
+    const { data } = await API.put<any>(
+      `${pcmURL}/pcm_plan_tasks/update-status-mutiple`,
       payload
     );
     return data;

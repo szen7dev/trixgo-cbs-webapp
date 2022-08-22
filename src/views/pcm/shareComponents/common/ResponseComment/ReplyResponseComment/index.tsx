@@ -1,9 +1,10 @@
 import React, { FC, useRef, useState, useContext } from "react";
+import { captureException } from "@sentry/react";
 import { Editor } from "@tinymce/tinymce-react";
 import { Editor as EditorType } from "tinymce";
 import { SendToMultiSelected } from "views/pcm/shareComponents/common/SendToMultiSelected";
 import { Item } from "shareComponents/common";
-import { CommentPayload, Task } from "typings/task";
+import { CommentPayload, CommentProps, Task } from "typings/task";
 import { toast } from "react-toastify";
 import { useCommentPcm } from "services/hooks/useTask";
 import CommentContext from "views/pcm/contexts/comment/comment.context";
@@ -12,11 +13,12 @@ import { APP_KEY } from "utils/constants";
 
 type Props = {
     task: Task;
+    parent?: CommentProps;
     onCancelCreateResponse: () => void;
-    onConfirmUpdate?: () => void;
+    onConfirmCreate?: () => void;
 }
 
-export const ReplyResponseComment: FC<Props> = ({ task, onCancelCreateResponse, onConfirmUpdate }) => {
+export const ReplyResponseComment: FC<Props> = ({ task, parent, onCancelCreateResponse, onConfirmCreate }) => {
     const editorRef = useRef<EditorType>();
     const [selectedUser, setSelectedUser] = useState<Item[]>([]);
 
@@ -36,6 +38,7 @@ export const ReplyResponseComment: FC<Props> = ({ task, onCancelCreateResponse, 
             const dataInsert: CommentPayload = {
                 taskID: task?._id,
 			    content: editorRef.current?.getContent(),
+                parentID: parent?._id,
                 type: 1,
             }
 
@@ -49,15 +52,14 @@ export const ReplyResponseComment: FC<Props> = ({ task, onCancelCreateResponse, 
                 return toast.warn(data?.message || 'Tạo bình luận thất bại')
             }
 
-            onConfirmUpdate?.();
-            onCancelCreateResponse();
+            onConfirmCreate?.();
             dispatch({ type: 'ADD_COMMENT', payload: data });
 
             socket?.emit('COMMENT_CSS_ADD_COMMENT', {
 				app: APP_KEY.PCM_PLAN_TASK,
 				objectID: task?._id,
 				method: 'INSERT',
-				parentID: null,
+				parentID: parent?._id,
 				commentType: 'COMMENT',
 				infoComment: data,
 				populates: JSON.stringify({
@@ -66,9 +68,10 @@ export const ReplyResponseComment: FC<Props> = ({ task, onCancelCreateResponse, 
 			})
 
 			// socket?.emit('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', {
-			// 	receivers: data.receivers
+			// 	receivers: data.receiversNoti
 			// });
         } catch(error) {
+			captureException(error);
             if (typeof error === "string") {
 				toast.error(error);
 			} else if (error instanceof Error) {
