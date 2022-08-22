@@ -105,7 +105,7 @@ export const ProjectBudgetPageType1:FC<Props> = ({projectInfo, collapse, toggleC
                         <th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border"></th>
                     </tr>
                     {listPcmProjectBudget.map((_item: any, index) =>
-                        <BugetRowGroupTemp row={_item} key={_item._id} index={index} show={show} />
+                        <BugetRowGroupTemp row={_item} key={_item._id} index={index} show={show} _pid={projectID}/>
                     )}
                 </RightClickMenuWrapper>
             </table>
