@@ -9,3 +9,9 @@ export {default as DocumenDatahubContactPage} from './DocumenDatahubContactPage'
 export {default as DocumentReportPage} from './DocumentReportPage';
 export {default as DocumentOfPackagePage} from './DocumentOfPackagePage';
 export {default as DocumentOfTypePage} from './DocumentOfTypePage';
+export {default as DocumentProjectPageV2} from './DocumentProjectPageV2';
+export {default as DocumentPublishOrg} from './DocumentPublishOrg';
+export {default as DocumentProfileCate} from './DocumentProfileCate';
+export {default as DocumentProfileTypeList} from './DocumentProfileTypeList';
+export {default as DocumentListProfileByCate} from './DocumentListProfileByCate';
+export {default as DocumentProjectPublishOrgByProfileType} from './DocumentProjectPublishOrgByProfileType';

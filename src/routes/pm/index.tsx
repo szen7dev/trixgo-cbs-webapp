@@ -43,7 +43,7 @@ import ProjectAdminProjectTab from "views/ppt/pages/ProjectAdminPage/pages/Proje
 import ProjectAdminPositionTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminPositionTab";
 import {PmProjectLayout} from "../../shareComponents/layouts/PmLayout/PmProjectLayout";
 import {PmHeaderContent} from "../../shareComponents/layouts/PmLayout/components";
-import {DocumentProjectLayout} from "../../views/document/pages/DocumentProjectPage/DocumentProjectLayout";
+import {DocumentProjectLayout} from "views/document/sharedComponents/layouts/DocumentProjectLayout";
 
 const DocumentOfPackagePage       = lazy(() => import("views/document/pages/DocumentOfPackagePage"))
 const DocumentOfTypePage          = lazy(() => import("views/document/pages/DocumentOfTypePage"))
@@ -52,6 +52,12 @@ const DocumentFolderPage          = lazy(() => import("views/document/pages/Docu
 const DocumenDatahubContactPage   = lazy(() => import("views/document/pages/DocumenDatahubContactPage"))
 const DocumentProfilePage         = lazy(() => import("views/document/pages/DocumentProfilePage"))
 const DocumentProjectPage         = lazy(() => import("views/document/pages/DocumentProjectPage"))
+const DocumentProjectPageV2       = lazy(() => import("views/document/pages/DocumentProjectPageV2"))
+const DocumentPublishOrg          = lazy(() => import("views/document/pages/DocumentPublishOrg"))
+const DocumentProfileCate         = lazy(() => import("views/document/pages/DocumentProfileCate"))
+const DocumentProfileTypeList     = lazy(() => import("views/document/pages/DocumentProfileTypeList"))
+const DocumentListProfileByCate   = lazy(() => import("views/document/pages/DocumentListProfileByCate"))
+const DocumentProjectPublishOrgByProfileType   = lazy(() => import("views/document/pages/DocumentProjectPublishOrgByProfileType"))
 
 const ProjectMilestonePage        = lazy(() => import("views/ppt/pages/ProjectMilestonePage"))
 const ProjectAdminManagementPage  = lazy(() => import("views/ppt/pages/ProjectAdminManagementPage"))
@@ -317,6 +323,63 @@ const PCMRouter: FC = () => {
                               </DocumentProjectLayout>
                             </PmProjectLayout>
                           </ModalProvider>
+                    </Route>
+                    <Route
+                        exact
+                        path={[
+                            "/pm/project/:id/document-v2",
+                            "/pm/project/:id/document-v2/:type(1|2|3|4)",
+                            "/pm/project/:id/document-v2/1/cate/:cateId",
+                            "/pm/project/:id/document-v2/1/cate/:cateId/detail/:detailId",
+                            "/pm/project/:id/document-v2/2/profile-type/:typeId",
+                        ]}
+                    >
+
+                      <ModalProvider>
+                        <PmProjectLayout>
+                          <Switch>
+                            <Route
+                              exact
+                              path="/pm/project/:id/document-v2"
+                              component={DocumentProjectPageV2}
+                            />
+                            <Route
+                                exact
+                                path="/pm/project/:id/document-v2/:type"
+                                render={({match}) => {
+                                  switch (match.params.type) {
+                                    case "1":
+                                      return <DocumentPublishOrg/>;
+                                    case "2":
+                                      return <DocumentProfileTypeList/>;
+                                    case "3":
+                                      return null;
+                                    default:
+                                      return null;
+                                  }
+                                }}
+                            />
+                            <Route
+                                exact
+                                path="/pm/project/:id/document-v2/1/cate/:cateId"
+                                component={DocumentProfileCate}
+                            />
+                            <Route
+                                exact
+                                path="/pm/project/:id/document-v2/1/cate/:cateId/detail/:detailId"
+                                component={DocumentListProfileByCate}
+                            />
+                            <Route
+                                exact
+                                path="/pm/project/:id/document-v2/2/profile-type/:typeId"
+                                component={DocumentProjectPublishOrgByProfileType}
+                            />
+                            {/* <Route exact path='/pcm/project/:id/document/3' component={DocumentReportPage} />
+                        <Route exact path='/pcm/project/:id/document/4' component={DocumentHistoryPage} /> */}
+                          </Switch>
+                            <ModalCreateDocument />
+                        </PmProjectLayout>
+                      </ModalProvider>
                     </Route>
                     <Route
                         exact

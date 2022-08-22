@@ -29,7 +29,7 @@ import { APP_ID } from 'apis/localdb';
 import { createLinkAndClick } from "utils";
 
 import {useProject} from "../../../../services/hooks/items/useProject";
-import {DocumentProjectContext} from "./DocumentProjectLayout";
+import {DocumentProjectContext} from "../../sharedComponents/layouts/DocumentProjectLayout";
 
 const payloadHistoryTraffic: any = {
   appID: APP_ID.PCM.id,
