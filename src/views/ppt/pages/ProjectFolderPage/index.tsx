@@ -58,15 +58,15 @@ const FolderIcon: FC<{ type: string }> = ({ type }) => {
 
 const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 	//_____Start history traffict
-	const payloadHistoryTraffic: any = {
-		appID: APP_ID.PCM.id,
-		menuID: APP_ID.PCM.menuPcmProject.folder.id,
-		type: "1"
-	  };
-	const { createHistoryTraffics } = useHistoryTraffics();
-	useEffect(() => {
-	createHistoryTraffics({...payloadHistoryTraffic, type: 1});
-	}, []);
+	// const payloadHistoryTraffic: any = {
+	// 	appID: APP_ID.PCM.id,
+	// 	menuID: APP_ID.PCM.menuPcmProject.folder.id,
+	// 	type: "1"
+	//   };
+	// const { createHistoryTraffics } = useHistoryTraffics();
+	// useEffect(() => {
+	// 	createHistoryTraffics({...payloadHistoryTraffic, type: 1});
+	// }, []);
 	//_____End history traffict
 	const location 	= useLocation();
 	const [data, setData] = useState<IData[]>([]);
@@ -77,6 +77,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 	const { assigned, checkboxRef, handleCheckAll, handleChangeCheckbox } = useCheckedList(data);
 	const { dataUserInfo, refetchDataUserInfo, user } = useAuth();
 	const [keyword, setKeyword] = useState("");
+
 	const {  
 		isLoading,
         refetch,
