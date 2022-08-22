@@ -35,6 +35,12 @@ export const HomeLeftMenuContent:FC = () => {
             route: '/pcm/home'
         },
         {
+            label: "Outbox",
+            icon: sendAndReceiveIcon,
+            count: 0,
+            route: '/pcm/home'
+        },
+        {
             label: "Việc của tôi",
             icon: mailOutLineIcon,
             count: 0,
