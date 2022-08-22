@@ -208,7 +208,7 @@ const ProjectDirectoryPageV2:FC = () => {
                                 </td>
                                 <td className={"border-0.5 border-primary-border px-2 align-middle"}>
                                     <p>
-                                        { DEPARTMENT_DIRECTORY_TYPE[departmentDirectory?.type - 1]?.text}
+                                        { DEPARTMENT_DIRECTORY_TYPE[departmentDirectory?.type - 1]?.text} - {departmentDirectory.name}
                                     </p>
                                 </td>
                                 <td className={"border-0.5 border-primary-border px-2 align-middle"}>
@@ -220,6 +220,9 @@ const ProjectDirectoryPageV2:FC = () => {
                                     { departmentDirectory?.member?.email }
                                 </td>
                                 <td className={"border-0.5 border-primary-border px-2 align-middle"}>
+                                    <p>
+                                        {departmentDirectory.description}
+                                    </p>
                                     <p>
                                         { DEPARTMENT_DIRECTORY_LOCK[departmentDirectory.lock].text}
                                     </p>

@@ -6,10 +6,11 @@ import {useProject} from "../../../../services/hooks/items/useProject";
 import {useParams} from "react-router-dom";
 import { ContextModalPost } from "views/media/contexts/post";
 import {ModalZoomView} from "../../../../shareComponents/common";
+import moment from "moment";
 
 const ProjectHomePageV2: FC = () => {
 	useEffect(() => {
-		document.title = "TRANG CHỦ DỰ ÁN"
+		document.title = `${projectInfo.sign} | Trang chủ dự án`;
 	}, []);
 	const {openPost, state, toggleModal } = useContext(ContextModalPost);
 
@@ -94,8 +95,8 @@ const ProjectHomePageV2: FC = () => {
 									<img src={`${process.env.REACT_APP_URL_S3_USER}/${photo.author.image}`} alt={`Report ${photo.author.bizfullname}`} className={"w-[28px] h-[28px] min-w-[28px] min-h-[28px] max-w-[28px] max-h-[28px] rounded-full overflow-hidden"}/>
 									<div className={"ml-2 w-10/12"}>
 										<p className={"truncate"}>{photo.author.bizfullname}</p>
-										<p className={"truncate text-primary-gray text-xs"}>CHT.THT.Xây dựng trường trung học...</p>
-										<p className={"truncate text-primary-gray text-xs"}>24/3/2021 16 giờ trước</p>
+										<p className={"truncate text-primary-gray text-xs"}>{projectInfo.sign}</p>
+										<p className={"truncate text-primary-gray text-xs"}>{moment(photo.createAt).format('DD/M/YYYY HH:mm')} ({moment(photo.createAt).fromNow()})</p>
 									</div>
 								</div>
 							</div>
@@ -103,7 +104,8 @@ const ProjectHomePageV2: FC = () => {
 					}
 				</Carousel>
 			</div>
-			<table className={"mt-6 table-fixed w-full"}>
+			
+			{/* <table className={"mt-6 table-fixed w-full"}>
 				<thead>
 					<tr className={"border-b-0.5 border-primary-border py-2"}>
 						<th className={"w-6/12 text-primary-gray text-left pl-4 py-2"}>Đơn vị</th>
@@ -152,7 +154,7 @@ const ProjectHomePageV2: FC = () => {
 						<td className={"py-2"}>105</td>
 					</tr>
 				</tbody>
-			</table>
+			</table> */}
 
 			<ModalZoomView isShow={state.isShow} toggle={toggleModal} initialData={{
 				createAt: state.createAt,

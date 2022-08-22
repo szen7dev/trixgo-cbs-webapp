@@ -40,7 +40,7 @@ const ReportQuickReport: React.FC<Props> = ({ projectID, ...props }) => {
 					Cần tập trung đẩy nhanh công tác chọn thầu theo đúng kế hoạch các bên đã thống nhất. Xử lý quan hệ với địa phương để đảm...
 				</p> */}
 			</div>
-			<Link to={`/pcm/project/${projectID}/responses`} className="text-cbs-primary">
+			<Link to={`/pm/project/${projectID}/responses`} className="text-cbs-primary">
 				Xem tất cả
 			</Link>
 		</div>

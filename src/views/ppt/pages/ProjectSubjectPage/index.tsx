@@ -356,7 +356,7 @@ const ProjectSubjectPage: FC = () => {
 				</div>
 			</div>
 			<div className="flex-1 overflow-y-auto">
-				<table className="text-black border-collapse text-medium border-separate space-x-0 space-y-0 w-full" style={{ borderSpacing: 0 }}>
+				<table className="text-black text-medium border-collapse space-x-0 space-y-0 w-full" style={{ borderSpacing: 0 }}>
 					<thead className="">
 						<tr className="text-primary-gray whitespace-nowrap align-middle text-left">
 							<th className="px-3 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border w-1">

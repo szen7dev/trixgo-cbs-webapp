@@ -62,7 +62,7 @@ const ProjectDashboardPortfolioPage: FC = () => {
 	})
 
 	useEffect(() => {
-		document.title = "CHG.THT-Báo cáo quản trị";
+		document.title = `${projectInfo.sign} | Báo cáo quản trị`;
 	}, []);
 
 	const {
