@@ -360,11 +360,18 @@ const PCMRouter: FC = () => {
                         <ProjectPhotoContractPage/>
                       </PmProjectLayout>
                     </Route>
+
                     <Route path="/pm/project/:id/drawing">
                       <PmProjectLayout>
                         <ProjectDrawingPageV2/>
                       </PmProjectLayout>
                     </Route>
+                    {/* <Route path="/pm/project/:id/drawing/:drawingID" render={(props) => (
+                        <PmProjectLayout>
+                          <ProjectDrawingPageV2 {...props}/>
+                        </PmProjectLayout>
+                    )}/> */}
+
                     <Route path="/pm/project/:id/resource">
                       <LayoutSecondary
                           pages={[

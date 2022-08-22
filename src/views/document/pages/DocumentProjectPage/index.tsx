@@ -49,6 +49,8 @@ import echoDbIcon from "assets/images/icons8-amazon-echo-48.svg";
 import TriangleDown from "../../../../assets/icons/TriangleDown";
 import timelineIcon from "../../../../assets/images/icons8-timeline-week-48.svg";
 
+import {useProject} from "../../../../services/hooks/items/useProject";
+
 const payloadHistoryTraffic: any = {
   appID: APP_ID.PCM.id,
   menuID: APP_ID.PCM.menuPcmProject.document.id,
@@ -56,6 +58,22 @@ const payloadHistoryTraffic: any = {
 };
 
 export const DocumentProjectPage: FC = () => {
+  const { id: projectID } = useParams<{ id: string }>();
+  // console.log({projectID})
+
+  const { info: projectInfo } = useProject({
+		params: {
+			departmentID: projectID
+		},
+		isFetchInfo: true
+	})
+
+  // console.log({projectInfo})
+
+	useEffect(() => {
+		document.title = `${projectInfo.sign} | Hồ sơ văn bản`;
+	}, []);
+
   //_____Start history traffict
 	const { createHistoryTraffics } = useHistoryTraffics();
 
