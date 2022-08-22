@@ -7,6 +7,7 @@ import {useOnClickOutside} from "services/hooks/useOnclickOutside";
 import { Task } from "typings/task";
 import { useTask } from 'services/hooks/useTask';
 import moment from "moment";
+import { Link } from "react-router-dom";
 
 type Props = {
     task: Task;
@@ -47,7 +48,9 @@ export const SubtaskItem:FC<Props> = ({ task, index }) => {
             />
             <div className="mx-2 px-2 w-full">
                 <p className="text-[14px]">
-                    {index + 1}. {task.name}
+                    <Link to={"/pcm/detail/" + task._id}>
+                        {index + 1}. {task.name}
+                    </Link>
                 </p>
                 <p className="text-[12px] text-cbs-highlight-color">
                     {task.assignee?.bizfullname}
@@ -56,7 +59,7 @@ export const SubtaskItem:FC<Props> = ({ task, index }) => {
             <div className={"flex items-center"}>
                 <div className={"flex items-center justify-center px-4 py-1 rounded text-white bg-cbs-completed mr-2"}>
                     <img src={iconClock} alt={"----"} className={"mr-2"}/>
-                    <span className="text-[13px]">{moment(task.expiredTime).format('DD/M/YY')}</span>
+                    <span className="text-[13px]">{moment(task.expiredTime).format('DD/M/YYYY')}</span>
                 </div>
                 <img
                     alt={task.assignee?.bizfullname}

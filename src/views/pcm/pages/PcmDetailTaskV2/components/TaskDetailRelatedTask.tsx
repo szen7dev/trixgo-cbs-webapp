@@ -78,7 +78,7 @@ export const TaskDetailRelatedTask: FC<Props> = ({ task, refetchInfo }) => {
                 <div className={"relative inline-block"}>
                     <button
                         onClick={() => setShowOption(!showOption)}
-                        className={"bg-cbs-form-input-bg rounded px-4 py-2 text-primary-gray mt-4"}>
+                        className={"bg-cbs-form-input-bg rounded px-4 py-2 text-primary-gray mt-4 ml-6"}>
                         Thêm việc liên quan
                     </button>
                     {
