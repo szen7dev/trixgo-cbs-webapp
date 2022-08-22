@@ -195,9 +195,14 @@ const ProjectBiddingPage: FC = () => {
           <button className={"flex items-center justify-center mx-3 ml-6"}>
             <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"}/>
           </button>
-          <button className={"flex items-center justify-center mx-3 ml-6"}>
-            <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"}/>
-          </button>
+          {
+              Object.values(assigned).filter(Boolean).length === 1 &&
+              <button
+                  onClick={toggleModalCreateOrUpdate.bind(null, "update")}
+                  className={"flex items-center justify-center mx-3 ml-6"}>
+                <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"}/>
+              </button>
+          }
           <div className={"flex-1 flex items-center justify-end"}>
             <span className={"text-primary-gray"}>1-50 trong số 2.358</span>
             <button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"} disabled={true}>
