@@ -29,7 +29,7 @@ export const HomeLeftMenuContent:FC = () => {
         route: string
     }[] = [
         {
-            label: "Hoạt động",
+            label: "Hoạt động (inbox)",
             icon: sendAndReceiveIcon,
             count: 0,
             route: '/pcm/home'
