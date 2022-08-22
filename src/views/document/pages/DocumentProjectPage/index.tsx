@@ -1,30 +1,18 @@
 import React, { FC, Fragment, useContext, useState, useEffect } from "react";
 import { Link, useParams, useLocation } from "react-router-dom";
 import { Transition } from "@headlessui/react";
-import { Menu } from '@headlessui/react';
 import { toast } from "react-toastify";
 import moment from "moment";
-import debounce from "lodash/debounce";
 
 // ========== Context ==========
 import { ModalContext } from "views/document/contexts/modal";
 
 // ========= Global Components =========
 import {
-  Paginate,
   Loader,
-  ButtonCreate,
-  DropdownOption,
-  DropdownSearchableV2,
-  TimeRangeDropdown
 } from "shareComponents/common";
 
 // ========== Components ==========
-import {
-  DropdownFilterButton,
-  GroupActions,
-  SearchInput,
-} from "views/document/sharedComponents/common";
 
 // ========== Hooks ==========
 import {
@@ -39,17 +27,9 @@ import { useDocumentCustom } from "services/hooks/document/useDocument";
 // ========== Utils ==========
 import { APP_ID } from 'apis/localdb';
 import { createLinkAndClick } from "utils";
-import categoryIcon from "assets/images/icons8-category-48.svg";
-import contractIcon from "assets/images/icons8-contract-64-blue.svg";
-import downloadIcon from "assets/images/icons8-download-64.svg";
-import iconPencil from "assets/images/icons8-pencil-96 1.png";
-import nextIcon from "assets/images/icons-arrow-next.svg";
-import maleUserIcon from "assets/images/icons8-male-user-64.svg";
-import echoDbIcon from "assets/images/icons8-amazon-echo-48.svg";
-import TriangleDown from "../../../../assets/icons/TriangleDown";
-import timelineIcon from "../../../../assets/images/icons8-timeline-week-48.svg";
 
 import {useProject} from "../../../../services/hooks/items/useProject";
+import {DocumentProjectContext} from "./DocumentProjectLayout";
 
 const payloadHistoryTraffic: any = {
   appID: APP_ID.PCM.id,
@@ -61,6 +41,7 @@ export const DocumentProjectPage: FC = () => {
   const { id: projectID } = useParams<{ id: string }>();
   // console.log({projectID})
 
+  const {setSelectRecord, recordSelected} = useContext(DocumentProjectContext);
   const { info: projectInfo } = useProject({
 		params: {
 			departmentID: projectID
@@ -79,118 +60,20 @@ export const DocumentProjectPage: FC = () => {
 
 	//_____End history traffict
   const location = useLocation()
-  const { toggleModal, updateModal } = useContext(ModalContext);
   const { id: departmentID } = useParams<{ id: string }>();
   const [pageParam, setPageParam] = useState<any>({});
   const [cursorPage, setCursorPage] = useState<string[]>([]);
   const [isShow, setIsShow] = useState<boolean>(false);
-  const [recordSelected, setSelectRecord] = useState<any>({});
   const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
 		isExporting: false,
 	});
 
   const { data, totalRecord, totalPages, loading, nextCursor, refetch } = useQueryListDocument(departmentID, pageParam, "");
-  const { insertDocumentChildAsync, updateDocumentChildAsync } = useMutationDocumentChild();
-  const { onFetchDetailDepartmentAsync } = useQueryDetailDepartment();
-  const { onFetchDetailDocumentAsync }   = useQueryDetailDocument();
   const { exportDocumentAsync } = useDocumentCustom({});
 
   const toggleModalConfirm = () => {
     setIsShow(!isShow);
   };
-
-  const handleNextPage = React.useCallback(() => {
-    if (nextCursor) {
-      setPageParam({ lastestID: nextCursor });
-    }
-  }, [nextCursor]);
-
-  const handlePrevPage = React.useCallback(() => {
-    const currentIndex = cursorPage.findIndex(
-      (cursor) => cursor === pageParam?.lastestID
-    );
-    if (currentIndex >= 0) {
-      setPageParam({ lastestID: cursorPage[currentIndex - 1] }); // lấy id trước đó
-    }
-  }, [cursorPage, pageParam]);
-
-  const handleCreate = React.useCallback(async () => {
-    const result = await onFetchDetailDepartmentAsync(departmentID);
-    toggleModal();
-    updateModal({
-      departmentId: departmentID,
-      departmentInfo: result,
-      title: "Thêm mới",
-      onSubmit: async (values: any) => {
-        const result = await insertDocumentChildAsync({
-          ...values,
-          departmentID,
-        });
-        if (result.status === 200) {
-          refetch();
-          toggleModal();
-          updateModal({
-            departmentInfo: {},
-          });
-        }
-      },
-    });
-  }, [
-    departmentID,
-    insertDocumentChildAsync,
-    onFetchDetailDepartmentAsync,
-    refetch,
-    toggleModal,
-    updateModal,
-  ]);
-
-  const handleOnClickUpdate = React.useCallback(
-    (record) => async () => {
-      const result = await onFetchDetailDocumentAsync(record._id);
-      toggleModal();
-      updateModal({
-        departmentId: departmentID,
-        departmentInfo: {
-          company: {
-            _id: record.company,
-          },
-        },
-        title: "Cập nhật",
-        initialValues: result,
-        onSubmit: async (values: any) => {
-          const result = await updateDocumentChildAsync({
-            ...values,
-            documentID: record._id,
-          });
-          if (result.status === 200) {
-            refetch();
-            toggleModal();
-            updateModal({
-              departmentInfo: {},
-              initialValues: {},
-            });
-          }
-        },
-      });
-    },
-    [
-      departmentID,
-      onFetchDetailDocumentAsync,
-      refetch,
-      toggleModal,
-      updateDocumentChildAsync,
-      updateModal,
-    ]
-  );
-
-  const handleOnFilter = React.useCallback((values) => {
-    setPageParam(() => ({ ...values }));
-    return true;
-  }, []);
-
-  const handleOnCancelFilter = React.useCallback(() => {
-    setPageParam({});
-  }, []);
 
   useEffect(() => {
   	createHistoryTraffics({...payloadHistoryTraffic, type: 1});

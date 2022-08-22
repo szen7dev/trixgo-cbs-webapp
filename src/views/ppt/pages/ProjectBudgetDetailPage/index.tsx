@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import React, {FC, useCallback} from "react";
 import iconBack from "assets/images/icon-back-gray.svg";
 import downloadIcon from "assets/images/icons8-download-64.svg";
 import iconPencil from "assets/images/icons8-pencil-96 1.png";
@@ -13,6 +13,11 @@ import {ProjectBudgetDetailTab4} from "./components/ProjectBudgetDetailTab4";
 const ProjectBudgetDetailPage:FC = () => {
     const { id: projectID, type, budgetId, tab } = useParams<{ id: string , type: string, budgetId: string, tab: string}>();
 
+    const activeTab = useCallback(() => {
+        return tab.trim();
+    }, [tab])
+
+    console.log(activeTab())
     return (
         <div className={"project-budget-detail relative flex flex-col h-full overflow-hidden"}>
             <div className={"sticky top-0 bg-white"}>
@@ -24,16 +29,16 @@ const ProjectBudgetDetailPage:FC = () => {
                 </div>
                 <div className={"flex items-center pb-2 mt-2"}>
                     <div className={"border-0.5 border-primary-border flex items-center"}>
-                        <Link to={`/pm/project/${projectID}/budget/type/${type}/detail/${budgetId}/tab/1`} className={"px-4 py-2 border-r-0.5 border-primary-border " + (tab === "1" ? "bg-cbs-soft-blue text-primary":"bg-white text-primary-gray")}>
+                        <Link to={`/pm/project/${projectID}/budget/type/${type}/detail/${budgetId}/tab/1`} className={"px-4 py-2 border-r-0.5 border-primary-border " + (activeTab() === "1" ? "bg-cbs-soft-blue text-primary":"bg-white text-primary-gray")}>
                             Thông tin chung
                         </Link>
-                        <Link to={`/pm/project/${projectID}/budget/type/${type}/detail/${budgetId}/tab/2`}  className={"px-4 py-2 border-r-0.5 border-primary-border " + (tab === "2" ? "bg-cbs-soft-blue text-primary":"bg-white text-primary-gray")}>
+                        <Link to={`/pm/project/${projectID}/budget/type/${type}/detail/${budgetId}/tab/2`}  className={"px-4 py-2 border-r-0.5 border-primary-border " + (activeTab() === "2" ? "bg-cbs-soft-blue text-primary":"bg-white text-primary-gray")}>
                             Sản lượng
                         </Link>
-                        <Link to={`/pm/project/${projectID}/budget/type/${type}/detail/${budgetId}/tab/3`}  className={"px-4 py-2 border-r-0.5 border-primary-border " + (tab === "3" ? "bg-cbs-soft-blue text-primary":"bg-white text-primary-gray")}>
+                        <Link to={`/pm/project/${projectID}/budget/type/${type}/detail/${budgetId}/tab/3`}  className={"px-4 py-2 border-r-0.5 border-primary-border " + (activeTab() === "3" ? "bg-cbs-soft-blue text-primary":"bg-white text-primary-gray")}>
                             Nghiệm thu
                         </Link>
-                        <Link to={`/pm/project/${projectID}/budget/type/${type}/detail/${budgetId}/tab/4`}  className={"px-4 py-2 border-r-0.5 border-primary-border " + (tab === "4" ? "bg-cbs-soft-blue text-primary":"bg-white text-primary-gray")}>
+                        <Link to={`/pm/project/${projectID}/budget/type/${type}/detail/${budgetId}/tab/4`}  className={"px-4 py-2 border-r-0.5 border-primary-border " + (activeTab() === "4" ? "bg-cbs-soft-blue text-primary":"bg-white text-primary-gray")}>
                             Thanh toán
                         </Link>
                     </div>
@@ -58,28 +63,28 @@ const ProjectBudgetDetailPage:FC = () => {
             <div className="flex-1 overflow-y-auto">
                 {/*Thông tin chung*/}
                 {
-                    tab === "1" &&
+                    activeTab() === "1" &&
                     <ProjectBudgetDetailTab1/>
                 }
                 {/*End Thông tin chung*/}
 
                 {/*Sản lượng*/}
                 {
-                    tab === "2" &&
+                    activeTab() === "2" &&
                     <ProjectBudgetDetailTab2/>
                 }
                 {/*End sản lượng*/}
 
                 {/*Nghiệm thu*/}
                 {
-                    tab === "3" &&
+                    activeTab() === "3" &&
                     <ProjectBudgetDetailTab3/>
                 }
                 {/*End nghiệm thu*/}
 
                 {/*Thanh toán*/}
                 {
-                    tab === "4" &&
+                    activeTab() === "4" &&
                     <ProjectBudgetDetailTab4/>
                 }
                 {/*End thanh toán*/}

@@ -285,37 +285,38 @@ const PCMRouter: FC = () => {
                         exact
                         path={["/pm/project/:id/document", "/pm/project/:id/document/(1|2|3|4)"]}
                     >
-                      <PmProjectLayout>
-                        <DocumentProjectLayout>
+
                           <ModalProvider>
-                            <Switch>
-                              <Route
-                                  exact
-                                  path="/pm/project/:id/document"
-                                  component={DocumentProjectPage}
-                              />
-                              <Route
-                                  exact
-                                  path="/pm/project/:id/document/1"
-                                  component={DocumentProfilePage}
-                              />
-                              <Route
-                                  exact
-                                  path="/pm/project/:id/document/2"
-                                  component={DocumenDatahubContactPage}
-                              />
-                              <Route
-                                  exact
-                                  path="/pm/project/:id/document/3"
-                                  component={DocumentFolderPage}
-                              />
-                              {/* <Route exact path='/pcm/project/:id/document/3' component={DocumentReportPage} />
-                    <Route exact path='/pcm/project/:id/document/4' component={DocumentHistoryPage} /> */}
-                            </Switch>
-                            <ModalCreateDocument />
+                            <PmProjectLayout>
+                              <DocumentProjectLayout>
+                                <Switch>
+                                  <Route
+                                      exact
+                                      path="/pm/project/:id/document"
+                                      component={DocumentProjectPage}
+                                  />
+                                  <Route
+                                      exact
+                                      path="/pm/project/:id/document/1"
+                                      component={DocumentProfilePage}
+                                  />
+                                  <Route
+                                      exact
+                                      path="/pm/project/:id/document/2"
+                                      component={DocumenDatahubContactPage}
+                                  />
+                                  <Route
+                                      exact
+                                      path="/pm/project/:id/document/3"
+                                      component={DocumentFolderPage}
+                                  />
+                                  {/* <Route exact path='/pcm/project/:id/document/3' component={DocumentReportPage} />
+                        <Route exact path='/pcm/project/:id/document/4' component={DocumentHistoryPage} /> */}
+                                </Switch>
+                                <ModalCreateDocument />
+                              </DocumentProjectLayout>
+                            </PmProjectLayout>
                           </ModalProvider>
-                        </DocumentProjectLayout>
-                      </PmProjectLayout>
                     </Route>
                     <Route
                         exact
