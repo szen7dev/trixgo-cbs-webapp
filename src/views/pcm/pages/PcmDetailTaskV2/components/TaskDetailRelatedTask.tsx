@@ -31,6 +31,7 @@ export const TaskDetailRelatedTask: FC<Props> = ({ task, refetchInfo }) => {
         try {
             await updateTaskAsync({
                 taskID: task._id,
+                isUpdateNews: true,
                 tasksLink: [taskSelected._id]
             })
             refetchInfo();

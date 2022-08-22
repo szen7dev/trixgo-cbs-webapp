@@ -56,8 +56,6 @@ export const TaskDetailComment: FC<Props> = ({ task, refetchInfo }) => {
 
 	const _comments: CommentProps[] = state.comments;
 
-	if(!totalRecord && !_comments?.length) return <></>;
-
     return (
         <div className={"task-comment mt-5"}>
             <div className={"flex items-center"}>
@@ -83,15 +81,17 @@ export const TaskDetailComment: FC<Props> = ({ task, refetchInfo }) => {
             </div>
 
             {amountComment > 0 && (
-                <button className={"font-bold text-primary-gray my-6"}>
+                <button className={"font-bold text-primary-gray my-6"} onClick={handleClickViewMore}>
                     Xem {amountComment} phản hồi trước
                 </button>
             )}
 
             <div className={"list-comment mt-4"}>
+                {/* !totalRecord && !_comments?.length */}
                 {_comments.map((comment: CommentProps) => (
                     <ParentResponseComment
                         key={comment._id}
+                        task={task}
                         comment={comment}
                         onConfirmUpdate={refetchInfo}
                     />
@@ -102,7 +102,10 @@ export const TaskDetailComment: FC<Props> = ({ task, refetchInfo }) => {
                 <ReplyResponseComment
                     task={task}
                     onCancelCreateResponse={() => setIsOpenCreateResponse(false)}
-                    onConfirmUpdate={refetchInfo}
+                    onConfirmCreate={() => {
+                        setIsOpenCreateResponse(false);
+                        refetchInfo?.();
+                    }}
                 />
             }
             <button

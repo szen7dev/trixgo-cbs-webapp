@@ -1,15 +1,16 @@
-import { ChangeEvent, FC, useState, useContext, useMemo } from "react";
+import { ChangeEvent, FC, useState, useEffect, useContext, useMemo } from "react";
 import trigangleDown from "assets/images/triangle-down.svg";
 import iconUpload from "assets/images/icons8-upload-48.svg";
-import iconAttach from "assets/images/icons8-attach-48.svg";
 import iconLink from "assets/images/icons8-link-96-v3.svg";
-import imageDemo from "assets/images/task-detail-image.png";
 import iconReply from "assets/images/icons8-reply-arrow-48.svg";
 import taskUserAvt from "assets/images/task-user.svg";
+import iconAttach from "assets/images/icons8-attach-48.svg";
+// import imageDemo from "assets/images/task-detail-image.png";
 // import { listEmoji } from "../../../../../messages/pages/MessageHome/sections/ChattingSection";
 import { ChildResponseComment } from "../ChildResponseComment";
-import { CommentProps, CommentPayload } from "typings/task";
-import moment from "moment";
+import { CommentProps, CommentPayload, Task } from "typings/task";
+import moment from 'moment';
+import { debounce } from 'lodash';
 import { nl2p } from 'utils';
 import { APP_KEY } from 'utils/constants';
 import { APP_ID } from "apis/localdb";
@@ -21,26 +22,36 @@ import { toast } from "react-toastify";
 import { useCommentPcm } from "services/hooks/useTask";
 import CommentContext from "views/pcm/contexts/comment/comment.context";
 import { useSocket } from "services/hooks/useSocket";
+import { ReplyResponseComment } from "../ReplyResponseComment";
+import { captureException } from "@sentry/react";
+import TaskRepository from "apis/task";
+import { useFileCore } from 'services/hooks/useFileCore';
 
 type Props = {
+    task: Task;
     comment: CommentProps;
     onConfirmUpdate?: () => void;
 }
 
-export const ParentResponseComment: FC<Props> = ({ comment, onConfirmUpdate }) => {
+export const ParentResponseComment: FC<Props> = ({ task, comment, onConfirmUpdate }) => {
     const [collapseComment, setCollapseComment] = useState(false);
+    const [openReply, setOpenReply] = useState(false);
     const [isOfficial, setIsOfficial] = useState(comment.official);
+	const [amountReply, setAmountReply] = useState(
+        comment?.amountCommentReply > 0 ? comment?.amountCommentReply - 1 : 0
+    );
 
-	const { dispatch } = useContext(CommentContext);
+	const { state, dispatch } = useContext(CommentContext);
 	const { current: socket }: any = useSocket();
 
     const { addFileToUpload } = useUpload({
         appID: APP_ID.PCM.id,
-        companyID: comment.task?.company,
-        projectID: comment.task?.project,
-        groupID: comment.task?.group,
+        companyID: task?.company?._id,
+        projectID: task?.project?._id,
+        groupID: task?.group?._id,
     });
 
+	const { updateFileAsync } = useFileCore();
     const { updateCommentAsync } = useCommentPcm({});
 
     const [uploads, {
@@ -55,22 +66,60 @@ export const ParentResponseComment: FC<Props> = ({ comment, onConfirmUpdate }) =
         // removeAllFiles
     }] = useUploadFile({});
 
+    const commentsReply = (state.commentsReply[comment._id] || []).filter(Boolean);
+
+	useEffect(() => {
+		// Add last reply comment in first time render page
+		if (commentsReply.length === 0 && comment.lastestReplyID) {
+			dispatch({
+				type: 'ADD_COMMENT',
+				payload: comment.lastestReplyID
+			});
+		}
+	}, [])
+
     const receiversText = useMemo(() => {
-        if(!comment.receivers) return '...';
+        if(!comment.receivers) return 'Tới';
 
         const totalRemainPeople = comment.receivers.length - 2;
         const receiversWillShow = comment.receivers.slice(0, 2);
         const receiversName = receiversWillShow.map(receiver => receiver.bizfullname).join(', ');
 
-        {/* tới Lê Lưu Phong-CPMI, Nguyễn Đắc Toàn-TRX và 3 người khác */}
         const str = totalRemainPeople > 0 ? `${receiversName} và ${totalRemainPeople} người khác` : receiversName;
 
+        {/* tới Lê Lưu Phong-CPMI, Nguyễn Đắc Toàn-TRX và 3 người khác */}
         return `Tới ${str}`;
     }, [comment.receivers]);
 
-    const handleUploadAttachments = async (event: ChangeEvent<HTMLInputElement>) => {
-        const fileSelected = event.target.files;
-        if (!fileSelected?.length) return;
+    const handleCheckOfficial = async () => {
+        try {
+            const dataUpdate: any = {
+                taskID: comment.task?._id,
+                commentID: comment._id,
+                isOfficial: true,
+            }
+
+            const { error, data } = await updateCommentAsync(dataUpdate);
+
+            if(error) {
+                return toast.warn(data?.message || 'Đánh dấu chính thức thất bại')
+            }
+
+            setIsOfficial(true);
+            onConfirmUpdate?.();
+        } catch(error) {
+			captureException(error);
+            if (typeof error === "string") {
+				toast.error(error);
+			} else if (error instanceof Error) {
+				toast.error(error.message);
+			}
+        }
+    }
+
+    // Handle for parent/child comment
+    const handleUploadAttachments = async (fileSelected: FileList | null, commentChildId?: string) => {
+        if (!fileSelected || !fileSelected?.length) return;
 
         const validation = await validateFiles(fileSelected);
         if (validation.error) return toast.warn(validation.message);
@@ -114,7 +163,12 @@ export const ParentResponseComment: FC<Props> = ({ comment, onConfirmUpdate }) =
             setIDFileUploaded(key, _id);
         }
 
-        handleUpdateResponseComment({ files: filesID, images: imagesID });
+        handleUpdateResponseComment({
+            files: filesID,
+            images: imagesID,
+            commentID: commentChildId || comment._id,
+            parentID: commentChildId ? comment._id : null,
+        });
     }
 
     const handleUpdateResponseComment = async (values: any) => {
@@ -123,8 +177,6 @@ export const ParentResponseComment: FC<Props> = ({ comment, onConfirmUpdate }) =
                 ...values,
                 taskID: comment.task?._id,
                 type: 1,
-                commentID: comment._id,
-                parentID: comment.parent
             }
 
             const { error, data } = await updateCommentAsync(dataUpdate);
@@ -133,12 +185,11 @@ export const ParentResponseComment: FC<Props> = ({ comment, onConfirmUpdate }) =
                 return toast.warn(data?.message || 'Cập nhật bình luận thất bại')
             }
 
-            onConfirmUpdate?.();
             dispatch({
                 type: 'UPDATE_COMMENT',
                 payload: {
-                    commentID: comment._id,
-                    parent: comment?.parent,
+                    commentID: values.commentID,
+                    parent: values?.parentID,
                     body: data,
                 }
             });
@@ -147,18 +198,15 @@ export const ParentResponseComment: FC<Props> = ({ comment, onConfirmUpdate }) =
 				app: APP_KEY.PCM_PLAN_TASK,
 				objectID: comment.task?._id,
 				method: 'UPDATE',
-				parentID: comment.parent,
+				parentID: values?.parentID,
 				commentType: 'COMMENT',
 				infoComment: data,
 				populates: JSON.stringify({
 					path: 'project author'
 				})
 			})
-
-			socket?.emit('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', {
-				receivers: data.receivers
-			});
         } catch(error) {
+			captureException(error);
             if (typeof error === "string") {
 				toast.error(error);
 			} else if (error instanceof Error) {
@@ -167,29 +215,38 @@ export const ParentResponseComment: FC<Props> = ({ comment, onConfirmUpdate }) =
         }
     }
 
-    const handleCheckOfficial = async () => {
-        try {
-            const dataUpdate: any = {
-                taskID: comment.task?._id,
-                commentID: comment._id,
-                isOfficial: true,
-            }
+    const handleUpdateDescriptionFile = debounce(async (e: any) => {
+		await updateFileAsync({
+			fileID: e.target.dataset.fileid,
+			description: e.target.value
+		});
+	}, 1000)
 
-            const { error, data } = await updateCommentAsync(dataUpdate);
+    const handleClickViewMore = async () => {
+		const lastestID = commentsReply.length ? commentsReply[0]._id : null;
 
-            if(error) {
-                return toast.warn(data?.message || 'Đánh dấu chính thức thất bại')
-            }
+		const { error, data } = await TaskRepository.listComments({
+			lastestID,
+			taskID: comment.task?._id,
+			parentID: comment._id,
+		});
+		setAmountReply(amountReply - 5);
 
-            setIsOfficial(true);
-            onConfirmUpdate?.();
-        } catch(error) {
-            if (typeof error === "string") {
-				toast.error(error);
-			} else if (error instanceof Error) {
-				toast.error(error.message);
-			}
-        }
+		if (!error && data?.listRecords?.length) {
+			dispatch({
+				type: 'VIEW_MORE_COMMENTS_REPLY',
+				payload: {
+					parent: comment._id,
+					comments: data?.listRecords?.reverse()
+				}
+			});
+		}
+	}
+
+    const handleCopyLinkAttachment = (path: string) => {
+        const copyText = `${process.env.REACT_APP_URL_S3}${path}`;
+        navigator.clipboard.writeText(copyText);
+        toast.info('Đã copy link vào clipboard', { autoClose: 1000 });
     }
 
     if (!comment) return <></>;
@@ -197,7 +254,7 @@ export const ParentResponseComment: FC<Props> = ({ comment, onConfirmUpdate }) =
     return (
         <div className={"item-comment flex items-start border-b-0.5 border-primary-border pb-4 mb-3"}>
             <img
-                alt={"----"}
+                alt={comment.author?.bizfullname}
                 src={comment?.author?.image ? `${process.env.REACT_APP_URL_S3_USER}/${comment?.author?.image}` : taskUserAvt}
                 className={"rounded-full overflow-hidden h-[44px] w-[44px] min-h-[44px] min-w-[44px] max-h-[44px] max-w-[44px] mx-2"}
             />
@@ -222,7 +279,7 @@ export const ParentResponseComment: FC<Props> = ({ comment, onConfirmUpdate }) =
                             </span>
                             {
                                 !collapseComment && (
-                                    <button className={"mx-4"}>
+                                    <button className={"mx-4"} onClick={() => setOpenReply(!openReply)}>
                                         <img src={iconReply} alt={"----"} />
                                     </button>
                                 )
@@ -247,7 +304,7 @@ export const ParentResponseComment: FC<Props> = ({ comment, onConfirmUpdate }) =
                                             className="hidden"
                                             accept="*"
                                             multiple
-                                            onChange={handleUploadAttachments}
+                                            onChange={e => handleUploadAttachments(e.target.files)}
                                         />
                                     </label>
                                 )
@@ -266,7 +323,7 @@ export const ParentResponseComment: FC<Props> = ({ comment, onConfirmUpdate }) =
                             <div className={"comment-attach mt-4"}>
                                 {comment.files.map(file => (
                                     <div key={file._id} className={"comment-attach-item flex items-start justify-between mb-2"}>
-                                        <img src={`${process.env.REACT_APP_URL_S3}${file.path}`} alt={file.nameOrg} />
+                                        <img src={iconAttach} alt={file.nameOrg} />
                                         <div className={"comment-attach-item-file-infor mx-2"}>
                                             <a href={"#"} download className={"text-primary"}>
                                                 {file.nameOrg} ({humanFileSize(file.size)})
@@ -277,8 +334,14 @@ export const ParentResponseComment: FC<Props> = ({ comment, onConfirmUpdate }) =
                                                 ({moment(file.createAt).fromNow()})
                                             </p>
                                         </div>
-                                        <input className={"flex-1 text-primary-gray text-center focus:outline-none focus:ring-none"} placeholder={"Nhập nội dung ghi chú"} />
-                                        <button>
+                                        <input
+                                            className={"flex-1 text-primary-gray text-center focus:outline-none focus:ring-none"}
+                                            placeholder={"Nhập nội dung ghi chú"}
+                                            data-fileid={file._id}
+                                            defaultValue={file.description}
+                                            onKeyUp={handleUpdateDescriptionFile}
+                                        />
+                                        <button onClick={handleCopyLinkAttachment.bind(null, file.path)}>
                                             <img src={iconLink} alt={file.path} />
                                         </button>
                                     </div>
@@ -322,8 +385,13 @@ export const ParentResponseComment: FC<Props> = ({ comment, onConfirmUpdate }) =
                                                         ({moment(image.createAt).fromNow()})
                                                     </div>
                                                 </div>
-                                                <textarea className={"p-2 w-full text-xs h-[60px] min-h-[60px] max-h-[60px] bg-cbs-form-input-bg"} placeholder={"Nhập nội dung ghi chú"}>
-                                                </textarea>
+                                                <textarea
+                                                    className={"p-2 w-full text-xs h-[60px] min-h-[60px] max-h-[60px] bg-cbs-form-input-bg"}
+                                                    placeholder={"Nhập nội dung ghi chú"}
+                                                    data-fileid={image._id}
+                                                    onKeyUp={handleUpdateDescriptionFile}
+                                                    defaultValue={image.description}
+                                                ></textarea>
                                             </div>
                                         ))
                                     }
@@ -333,10 +401,10 @@ export const ParentResponseComment: FC<Props> = ({ comment, onConfirmUpdate }) =
 
                         <div className={"comment-action mt-4 flex items-center justify-between"}>
                             <div className={"actions"}>
-                                {/* <button className={"font-bold text-primary-gray mr-6"}>
-                                Thích
-                            </button> */}
-                                <button className={"font-bold text-primary-gray mr-6"}>
+                                <button
+                                    className={"font-bold text-primary-gray mr-6"}
+                                    onClick={() => setOpenReply(!openReply)}
+                                >
                                     Trả lời
                                 </button>
                                 {/* <span className={"text-primary-gray"}>15:30 22/12/2012 (2 day ago)</span> */}
@@ -355,7 +423,29 @@ export const ParentResponseComment: FC<Props> = ({ comment, onConfirmUpdate }) =
                     </div>
                 </div>
 
-                {/* <ChildResponseComment /> */}
+                {openReply &&
+                    <ReplyResponseComment
+                        task={task}
+                        parent={comment}
+                        onCancelCreateResponse={() => setOpenReply(false)}
+                        onConfirmCreate={() => setOpenReply(false)}
+                    />
+                }
+
+                {amountReply > 0 && (
+                    <button className={"font-bold text-primary-gray my-2"} onClick={handleClickViewMore}>
+                        Xem {amountReply} phản hồi trước
+                    </button>
+                )}
+
+                {!!commentsReply.length && commentsReply.map(commentReply => (
+                    <ChildResponseComment
+                        key={commentReply._id}
+                        comment={commentReply}
+                        handleUploadAttachments={handleUploadAttachments}
+                        handleUpdateDescriptionFile={handleUpdateDescriptionFile}
+                    />
+                ))}
             </div>
         </div>
     )
