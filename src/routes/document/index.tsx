@@ -9,7 +9,7 @@ import { ModalCreateDocument } from 'views/document/sharedComponents/common';
 
 /*=====PAGES=====*/
 import {
-    DocumentDashboardPage, DocumentHomePage,
+    DocumentDashboardPage, DocumentHomePage, DocumentHomePageV2,
 	DocumentDetailPage,
 	DocumentFolderPage,
     DocumenDatahubContactPage,
@@ -34,7 +34,7 @@ const DocumentRouter: FC = () => {
             <ProtectedRoute
                 exact
                 path="/document/home"
-                component={DocumentHomePage}
+                component={DocumentHomePageV2}
             />
             <ProtectedRoute
                 exact

@@ -139,7 +139,7 @@ const ProjectDashboardPortfolioPage: FC = () => {
 					</div>
 				</div>
 			</div>
-			<ModalZoomView isShow={state.isShow} toggle={toggleModal} initialData={{
+			<ModalZoomView prioritySingleImageAuthor isShow={state.isShow} toggle={toggleModal} initialData={{
 				createAt: state.createAt,
 				images: state.images,
 				index: state.index,

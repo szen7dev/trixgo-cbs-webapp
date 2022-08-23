@@ -37,7 +37,7 @@ const populatesTask = JSON.stringify({
   select: "_id name fullname bizfullname image sign _id name nameOrg description size path mimeType type author assignee createAt members company expiredTime project",
   populate: {
     path: "author assignee project",
-    select: "_id bizfullname image sign"
+    select: "_id bizfullname image sign signature"
   }
 })
 

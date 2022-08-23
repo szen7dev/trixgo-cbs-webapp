@@ -42,7 +42,7 @@ export const LeftSideBar: FC = () => {
   const { listAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.PCM.id, type: "1" });
 
   return (
-    <div className="t-leftsidebar-navigation fixed left-0 top-14 bottom-0 transition-all duration-500 ease-out border-r border-secondary-light z-10 bg-primary-light">
+    <div className="t-leftsidebar-navigation-v2 fixed left-0 top-14 bottom-0 transition-all duration-500 ease-out border-r border-secondary-light z-10 bg-primary-light">
       <div className="t-leftsidebar-navigation-container overflow-auto transition-all duration-500 ease-out">
         {/* user */}
         <div className="t-leftsidebar-user flex items-center mb-2">

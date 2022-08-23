@@ -144,21 +144,21 @@ export const TaskHistoryLog:FC = () => {
                                     <div className={"flex items-center py-2"}>
                                         <img src={userIcon} alt={"user"} className={"rounded-full overflow-hidden w-[36px] h-[36px] min-w-[36px] min-h-[36px] max-w-[36px] max-h-[36px]"}/>
                                         <div className={"log-content text-primary-gray pl-4"}>
-                                            <p><b>Vũ Thanh Bình-CPMI</b> thay đổi thời hạn công việc từ 15/2/2020 tới 12/6/2022</p>
+                                            <p><b>Vũ Thanh Bình-CPMI</b> thay đổi thời hạn công việc từ 15/2/2020 tới 12/6/2022 ông việc từ ngày hôm đó tới ngày hôm nay</p>
                                             <p>15:30 22/12/2012 (10 day ago)</p>
                                         </div>
                                     </div>
                                     <div className={"flex items-center py-2"}>
                                         <img src={userIcon} alt={"user"} className={"rounded-full overflow-hidden w-[36px] h-[36px] min-w-[36px] min-h-[36px] max-w-[36px] max-h-[36px]"}/>
                                         <div className={"log-content text-primary-gray pl-4"}>
-                                            <p><b>Vũ Thanh Bình-CPMI</b> thay đổi thời hạn công việc từ 15/2/2020 tới 12/6/2022</p>
+                                            <p><b>Vũ Thanh Bình-CPMI</b> thay đổi thời hạn công việc từ 15/2/2020 tới 12/6/2022 ông việc từ ngày hôm đó tới ngày hôm nay</p>
                                             <p>15:30 22/12/2012 (10 day ago)</p>
                                         </div>
                                     </div>
                                     <div className={"flex items-center py-2"}>
                                         <img src={userIcon} alt={"user"} className={"rounded-full overflow-hidden w-[36px] h-[36px] min-w-[36px] min-h-[36px] max-w-[36px] max-h-[36px]"}/>
                                         <div className={"log-content text-primary-gray pl-4"}>
-                                            <p><b>Vũ Thanh Bình-CPMI</b> thay đổi thời hạn công việc từ 15/2/2020 tới 12/6/2022</p>
+                                            <p><b>Vũ Thanh Bình-CPMI</b> thay đổi thời hạn công việc từ 15/2/2020 tới 12/6/2022 ông việc từ ngày hôm đó tới ngày hôm nay</p>
                                             <p>15:30 22/12/2012 (10 day ago)</p>
                                         </div>
                                     </div>

@@ -240,6 +240,9 @@ button {
 /*__________________________________________________________________________*/
 /* ___________Customized layout styles ___________________*/
 .t-leftsidebar-navigation {
+  width: 240px;
+}
+.t-leftsidebar-navigation-v2 {
   width: 256px;
 }
 .t-leftsidebar-navigation-container {
@@ -323,16 +326,17 @@ button {
 .home-layout.collapse-header .tm-right-sidebar {
   top: -30px;
 }
-.home-layout.collapse-header .t-leftsidebar-navigation {
+.home-layout.collapse-header .t-leftsidebar-navigation,
+.home-layout.collapse-header .t-leftsidebar-navigation-v2 {
   top: 0;
 }
 .home-layout.collapse-header .home-header {
   top: -56px;
 }
 .home-main-content {
-  width: calc(100% - 295px);
+  width: calc(100% - 55px);
   height: calc(100vh - 55px);
-  margin-left: 240px;
+  padding-left: 240px;
   top: 0;
 }
 .home-layout.active-right .home-main-content {
@@ -422,9 +426,12 @@ button {
 .home-layout.collapse-left .t-leftsidebar-navigation {
   left: -240px;
 }
+.home-layout.collapse-left .t-leftsidebar-navigation-v2 {
+  left: -256px;
+}
 .home-layout.collapse-left .home-main-content {
   width: calc(100% - 55px);
-  margin-left: 0;
+  padding-left: 0;
 }
 .home-layout.active-right.collapse-left .home-main-content {
   width: 100%;
@@ -447,7 +454,7 @@ button {
 .kanban-board-layout .home-main-content {
   height: calc(100vh - 80px);
   width: calc(100% - 55px);
-  margin-left: 0;
+  padding-left: 0;
 }
 .kanban-board-layout.collapse-header .home-main-content {
   height: 100vh;
@@ -1296,6 +1303,9 @@ input::placeholder {
 }
 .messages-layout.collapse-left .t-leftsidebar-navigation {
   left: -240px;
+}
+.messages-layout.collapse-left .t-leftsidebar-navigation-v2 {
+  left: -256px;
 }
 .online-user-in-message-item:hover .action-button {
   opacity: 1;

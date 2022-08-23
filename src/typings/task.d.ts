@@ -71,6 +71,7 @@ export type Task = {
     createAt: string
   }>;
   openedUsers: Array<User>;
+  accessUsers: Array<User>;
   actualStartTime: string;
   actualFinishTime: string;
   amountResponse: number;

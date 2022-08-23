@@ -1,6 +1,4 @@
 import React, {FC, useContext, useEffect} from "react";
-import userAvt from "assets/images/human-avatar.svg";
-import imageCompany from "assets/images/image-company.png";
 import Carousel from 'react-elastic-carousel'
 import {useProject} from "../../../../services/hooks/items/useProject";
 import {useParams} from "react-router-dom";
@@ -91,9 +89,9 @@ const ProjectHomePageV2: FC = () => {
 						projectInfo?.photos?.map((photo,i) => (
 							<div key={i}
 								 onClick={()=> openPost({ author: photo.author, images: projectInfo.photos, index: i, createAt: photo.createAt, mediaId: photo._id.toString() })}
-								 className={"relative cursor-pointer max-w-1/6 rounded border-0.5 border-primary-border overflow-hidden"}>
-								<img className={"object-cover w-full max-h-[210px] h-[210px] min-h-[210px] min-w-[210px]"}  src={`${process.env.REACT_APP_URL_S3}${photo.path}`} alt={`Report ${photo.path}`}/>
-								<div className={"absolute bottom-0 bg-cbs-gray py-1 px-2 flex items-start max-w-full"}>
+								 className={"relative cursor-pointer h-[210px] w-[210px] rounded border-0.5 border-primary-border overflow-hidden"}>
+								<img className={"object-cover w-full h-full"}  src={`${process.env.REACT_APP_URL_S3}${photo.path}`} alt={`Report ${photo.path}`}/>
+								<div className={"absolute bottom-0 bg-cbs-gray py-1 px-2 flex items-start w-full max-w-full"}>
 									<img src={`${process.env.REACT_APP_URL_S3_USER}/${photo.author.image}`} alt={`Report ${photo.author.bizfullname}`} className={"w-[28px] h-[28px] min-w-[28px] min-h-[28px] max-w-[28px] max-h-[28px] rounded-full overflow-hidden"}/>
 									<div className={"ml-2 w-10/12"}>
 										<p className={"truncate"}>{photo.author.bizfullname}</p>
@@ -158,7 +156,7 @@ const ProjectHomePageV2: FC = () => {
 				</tbody>
 			</table> */}
 
-			<ModalZoomView isShow={state.isShow} toggle={toggleModal} initialData={{
+			<ModalZoomView prioritySingleImageAuthor isShow={state.isShow} toggle={toggleModal} initialData={{
 				createAt: state.createAt,
 				images: state.images,
 				index: state.index,
