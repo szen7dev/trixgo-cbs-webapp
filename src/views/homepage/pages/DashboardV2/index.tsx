@@ -134,7 +134,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
 
   const [fromCreateDate, setFromCreateDate] = useState("");
   const [toCreateDate, setToCreateDate] = useState("");
-  const [official, setOfficial] = useState<any>(null);
+  const [official, setOfficial] = useState<any>(0);
 
   // Danh sách các response
   const query: any = {
@@ -144,11 +144,10 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     project: project,
     fromDate: fromCreateDate,
     toDate: toCreateDate,
+    official: official,
     enabled: tabActive === 1 ? true : false,
   };
-  if (official) {
-    query.official = official === 1 ? true : false
-  }
+ 
   const { listDataForResponse, isLoadingResponse } = useListResponseFromSearch(query);
 
   // Danh sách các subject theo keyword
