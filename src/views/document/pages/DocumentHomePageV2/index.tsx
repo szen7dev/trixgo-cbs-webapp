@@ -7,6 +7,7 @@ import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
 import contractIcon from "assets/images/icons8-contract-64-blue.svg";
 import echoDbIcon from "assets/images/icons8-amazon-echo-48.svg";
 import downloadIcon from "assets/images/icons8-download-96.svg";
+import projectIcon from "assets/images/icons8-project-50.svg";
 import iconPencil from "assets/images/icons8-pencil-96 1.png";
 import nextIcon from "assets/images/icons-arrow-next.svg";
 
@@ -27,6 +28,14 @@ const DocumentHomePageV2:FC = () => {
                         className={"mr-4 border border-primary-border rounded-lg mb-2"}
                         placeholder={"Loại hồ sơ"}
                         prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"}/>}
+                        isMultiple={true}
+                        disableSearch={true}
+                        data={[]}
+                    />
+                    <DropdownSearchableV2
+                        className={"mr-4 border border-primary-border rounded-lg mb-2"}
+                        placeholder={"Dự án"}
+                        prefixIcon={<img className={"mr-2"} src={projectIcon} alt={"icon"}/>}
                         isMultiple={true}
                         disableSearch={true}
                         data={[]}
