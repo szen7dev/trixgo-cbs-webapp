@@ -263,6 +263,7 @@ export const ModalCreateDocument: React.FC = () => {
 					</button>
 				</div>
 				<Formik
+					enableReinitialize={true}
 					initialValues={initialValues}
 					onSubmit={handleSubmit}
 				>

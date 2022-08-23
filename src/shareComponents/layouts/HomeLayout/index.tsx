@@ -25,8 +25,6 @@ export const HomeLayout: FC<Props> = ({ children }) => {
   const [isHeaderCollapse, setIsHeaderCollapse] = useState(false);
   const [isLeftMenuCollapse, setIsLeftMenuCollapse] = useState(false);
   const [isRightSideBarCollapse, setIsRightSideBarCollapse] = useState(false);
-  const [isChatboxVisible, setIsChatboxVisible] = useState(false);
-  const [isNewChatboxVisible, setIsNewChatboxVisible] = useState(false);
 
   const handleHeaderEvent = () => {
     setIsHeaderCollapse(!isHeaderCollapse);
@@ -36,18 +34,6 @@ export const HomeLayout: FC<Props> = ({ children }) => {
   };
   const handleRightSideBarEvent = () => {
     setIsRightSideBarCollapse(!isRightSideBarCollapse);
-  };
-  const closeMiniChatbox = () => {
-    setIsChatboxVisible(false);
-  };
-  const openMiniChatbox = () => {
-    setIsChatboxVisible(true);
-  };
-  const handleOpenNewChatbox = () => {
-    setIsNewChatboxVisible(true);
-  };
-  const handleCloseNewChatbox = () => {
-    setIsNewChatboxVisible(false);
   };
 
   return (

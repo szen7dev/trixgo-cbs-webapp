@@ -15,3 +15,4 @@ export {default as DocumentProfileCate} from './DocumentProfileCate';
 export {default as DocumentProfileTypeList} from './DocumentProfileTypeList';
 export {default as DocumentListProfileByCate} from './DocumentListProfileByCate';
 export {default as DocumentProjectPublishOrgByProfileType} from './DocumentProjectPublishOrgByProfileType';
+export {default as DocumentHomePageV2} from './DocumentHomePageV2';
