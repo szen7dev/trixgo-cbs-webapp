@@ -1,7 +1,8 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, UIEvent } from "react";
 import moment from "moment";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import parse from "html-react-parser";
+import { useQueryListCompany } from "services/hooks/useCompanies";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -16,6 +17,7 @@ import userAvt from "assets/images/task-user.svg";
 
 import {
   DropdownSearchableV2,
+  Loader,
   TimeRangeDropdown,
 } from "../../../../shareComponents/common";
 import userIcon from "assets/images/icon-user-avatar.svg";
@@ -30,44 +32,132 @@ import TriangleDown from "assets/icons/TriangleDown";
 import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
 import businessBuiding from "assets/images/icons8-business-building-48.svg";
 
-import { useTask } from "services/hooks/useTask";
+import { useUserSystem } from "services/hooks/users/useUserSystem";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { useAppSelector } from "redux/reducer";
-import { useListResponseFromSearch, useListSubjectFromSearch } from "services/hooks/pcm/usePcmDashboardV2";
+import {
+  useListResponseFromSearch,
+  useListSubjectFromSearch,
+} from "services/hooks/pcm/usePcmDashboardV2";
+import { debounce } from "lodash";
+import { useQueryListDepartmentsIsMember } from "services/hooks/items/useDepartment";
+import { useDispatch } from "react-redux";
+import { setTabActive } from "redux/reducer/DashboardV2Slice";
 
 type Props = {
   type?: number;
 };
 
 export const DashboardV2: FC<Props> = ({ type = 0 }) => {
+  const dispatch = useDispatch();
   const [filter, setFilter] = useState("all");
-  const history = useHistory();
   const { user } = useAuth();
   const tabIndex = useAppSelector((state) => state.dashboardV2.data.tabIndex);
   const tabActive = useAppSelector((state) => state.dashboardV2.data.tabActive);
-
-  const jumpToDetail = (row: any) => {
-    history.push("/pcm/detail/1");
-    //Thực hiện đánh dấu đã đọc với task nếu cần
-  };
-
-  const showModalResult = useAppSelector(
-    (state) => state.dashboardV2.data.showModalResult
-  );
 
   const keywordForResponse = useAppSelector(
     (state) => state.dashboardV2.data.keywordForResponse
   );
 
-  // Danh sách các subject theo keyword
-  const { listDataForResponse } = useListResponseFromSearch({
-    keyword: keywordForResponse,
+  ///// Đơn vị tạo phản hồi
+  const [companyOfAuthor, setCompanyOfAuthor] = useState<string[]>([]);
+
+  const [companiesAssign, setCompaniesAssign] = useState<string[]>([]);
+
+  ///// Danh sách công ty
+  const [searchCompanyName, setSearchCompanyName] = useState("");
+  const {
+    data: listCompany,
+    hasNextPage: hasNextPageCompany,
+    fetchNextPage: fetchNextPageCompany,
+  } = useQueryListCompany({ keyword: searchCompanyName });
+
+  const handleScrollCompany = (e: UIEvent<HTMLDivElement>) => {
+    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
+    const bottom = scrollHeight - scrollTop === clientHeight;
+
+    if (bottom && hasNextPageCompany) {
+      fetchNextPageCompany();
+    }
+  };
+
+  // Người tạo phản hồi
+  const [authorsCreateResponse, setAuthorsCreateResponse] = useState<string[]>(
+    []
+  );
+
+  // Người tạo
+  const [authors, setAuthors] = useState<string[]>([]);
+
+  // Người thực hiện
+  const [assign, setAssign] = useState<string[]>([]);
+  ////  Danh sách user
+  const [searchUserSystem, setSearchUserSystem] = useState("");
+  const {
+    data: listUsersSystem,
+    hasNextPage: hasNextPageUserSystem,
+    fetchNextPage: fetchNextPageUserSystem,
+  } = useUserSystem({ keyword: searchUserSystem }, true);
+
+  const handleScrollUserSystem = (e: UIEvent<HTMLDivElement>) => {
+    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
+    const bottom = scrollHeight - scrollTop === clientHeight;
+
+    if (bottom && hasNextPageUserSystem) {
+      fetchNextPageUserSystem();
+    }
+  };
+
+  ////  Dự án
+  const [project, setProject] = useState<string[]>([]);
+  const [searchProject, setSearchProject] = useState("");
+
+  const {
+    data: listProject,
+    fetchNextPage: fetchNextPagePrject,
+    hasNextPage: hasNextPageProject,
+  } = useQueryListDepartmentsIsMember({
+    limit: 50,
+    keyword: searchProject,
+    isFetch: true,
   });
 
-  // Danh sách các subject theo chủ đề
-  const { listDataForSubject, totalRecord: totalRecordSubject } = useListSubjectFromSearch({
-    keyword: ""
-  });
+  const handleScrollProject = (e: UIEvent<HTMLDivElement>) => {
+    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
+    const bottom = scrollHeight - scrollTop === clientHeight;
+
+    if (bottom && hasNextPageProject) {
+      fetchNextPagePrject();
+    }
+  };
+  //
+
+  const [fromCreateDate, setFromCreateDate] = useState("");
+  const [toCreateDate, setToCreateDate] = useState("");
+  const [official, setOfficial] = useState<any>(null);
+
+  // Danh sách các response
+  const query: any = {
+    keyword: keywordForResponse,
+    companyOfAuthor: companyOfAuthor,
+    author: authorsCreateResponse,
+    project: project,
+    fromDate: fromCreateDate,
+    toDate: toCreateDate,
+    enabled: tabActive === 1 ? true : false,
+  };
+  if (official) {
+    query.official = official === 1 ? true : false
+  }
+  const { listDataForResponse, isLoadingResponse } = useListResponseFromSearch(query);
+
+  // Danh sách các subject theo keyword
+  const { listDataForSubject, totalRecord: totalRecordSubject } =
+    useListSubjectFromSearch({
+      keyword: "",
+    });
+
+  //////
 
   const checkActive = (relateds: string[], user: string) => {
     let result = "read border-b-0.5 border-primary-border";
@@ -81,74 +171,41 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     <div className="t-home flex flex-col h-full overflow-hidden">
       <div className={"sticky top-0 bg-white z-10"}>
         <div className={"filter-bar flex flex-wrap px-4 py-2"}>
+          {isLoadingResponse && <Loader className="border-primary" />}
           {tabIndex === 2 && (
             <DropdownSearchableV2
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Đơn vị thực hiện"}
               showTriangle={true}
               isMultiple={true}
-              renderSelectedItem={(item: any) => (
-                <div className="flex items-center">
-                  <img alt="Tag" src={userIcon} className="mr-1" />
-                  <p
-                    style={{
-                      textOverflow: "ellipsis",
-                      maxWidth: "100%",
-                      minWidth: 0,
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      flex: "1 1 auto",
-                    }}
-                  >
-                    {item.text}
-                  </p>
-                </div>
+              selectOneByOne={true}
+              onchangeValue={(value) => {
+                if (!companiesAssign?.includes?.(value.id as string)) {
+                  const newData: any = [...companiesAssign, value.id];
+                  setCompaniesAssign(newData);
+                }
+                setSearchCompanyName("");
+              }}
+              onMultipleRemoveValue={(id: any) => {
+                const newList = companiesAssign.filter((item) => item !== id);
+                setCompaniesAssign(newList);
+              }}
+              onClearData={() => setCompaniesAssign([])}
+              onScroll={handleScrollCompany}
+              onSearchInputChange={debounce(
+                (value) => setSearchCompanyName(value),
+                500
               )}
-              data={[
-                {
-                  _id: "627205a5d9d18a0677e5d5b4",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "tutran01676378375van@gmail.com",
-                  fullname: "Trần Văn Tú-CDC",
-                  company: {
-                    _id: "6046ade4b55525368b1091ac",
-                    name: "Công ty Cổ phần xây dựng CDC",
-                    sign: "CDC",
-                  },
-                  bizfullname: "Trần Văn Tú-CDC",
-                  department: {
-                    _id: "6046ade4b55525368b1091c8",
-                    name: "CÔNG TY",
-                    sign: "C177.CTY",
-                  },
-                  position: {
-                    _id: "61972dcfbc3b2e745ae3e382",
-                    name: "Cán bộ kỹ thuật",
-                  },
-                },
-              ]}
+              data={listCompany.map((company) => ({
+                label: company.name,
+                value: company._id,
+              }))}
               formatItem={{
-                id: "_id",
-                text: "fullname",
+                id: "value",
+                text: "label",
               }}
               renderItem={(item) => (
-                <div className={"flex"}>
-                  <div
-                    className={
-                      "w-[44px] h-[44px] flex items-center justify-center rounded-full bg-accent text-white text-2xl font-bold"
-                    }
-                  >
-                    {item.fullname.charAt(0)}
-                  </div>
-                  <div className={"flex-1 ml-2"}>
-                    <p className={"truncate"}>{item.fullname}</p>
-                    <p className={"text-primary-gray truncate"}>{item.email}</p>
-                  </div>
-                </div>
+                <p className={"min-w-[300px]"}>{item.text}</p>
               )}
               prefixIcon={
                 <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
@@ -158,13 +215,35 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
 
           {tabIndex === 2 && (
             <DropdownSearchableV2
+              selectOneByOne={true}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Người thực hiện"}
               showTriangle={true}
               isMultiple={true}
+              onchangeValue={(value) => {
+                if (!assign.includes?.(value.id as string)) {
+                  const newData: any = [...assign, value.id];
+                  setAssign(newData);
+                }
+                setSearchUserSystem("");
+              }}
+              onMultipleRemoveValue={(id: any) => {
+                const newList = assign.filter((item) => item !== id);
+                setAssign(newList);
+              }}
+              onClearData={() => setAssign([])}
+              onSearchInputChange={debounce(
+                (value) => setSearchUserSystem(value),
+                500
+              )}
+              onScroll={handleScrollUserSystem}
               renderSelectedItem={(item: any) => (
                 <div className="flex items-center">
-                  <img alt="Tag" src={userIcon} className="mr-1" />
+                  <img
+                    alt="Thumbnail"
+                    src={item.imageUrl || userIcon}
+                    className="mr-1 w-6 h-6 rounded-full"
+                  />
                   <p
                     style={{
                       textOverflow: "ellipsis",
@@ -179,261 +258,16 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                   </p>
                 </div>
               )}
-              data={[
-                {
-                  _id: "627205a5d9d18a0677e5d5b4",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "tutran01676378375van@gmail.com",
-                  fullname: "Trần Văn Tú-CDC",
-                  company: {
-                    _id: "6046ade4b55525368b1091ac",
-                    name: "Công ty Cổ phần xây dựng CDC",
-                    sign: "CDC",
-                  },
-                  bizfullname: "Trần Văn Tú-CDC",
-                  department: {
-                    _id: "6046ade4b55525368b1091c8",
-                    name: "CÔNG TY",
-                    sign: "C177.CTY",
-                  },
-                  position: {
-                    _id: "61972dcfbc3b2e745ae3e382",
-                    name: "Cán bộ kỹ thuật",
-                  },
-                },
-                {
-                  _id: "6272058ed9d18a0677e5d5b3",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: "2022-05-04T04:53:42.239Z",
-                  email: "lehuuthuan161098@gmail.com",
-                  fullname: "Lê Hữu Thuần-CDC",
-                  company: {
-                    _id: "6046ade4b55525368b1091ac",
-                    name: "Công ty Cổ phần xây dựng CDC",
-                    sign: "CDC",
-                  },
-                  bizfullname: "Lê Hữu Thuần-CDC",
-                  department: {
-                    _id: "6046ade4b55525368b1091c8",
-                    name: "CÔNG TY",
-                    sign: "C177.CTY",
-                  },
-                  position: {
-                    _id: "6046ade5b55525368b10922c",
-                    name: "Cán bộ kỹ thuật",
-                  },
-                },
-                {
-                  _id: "62720577d9d18a0677e5d5b2",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "themvv.econs@gmail.com",
-                  fullname: "Vũ Văn Thêm-CDC",
-                  company: {
-                    _id: "6046ade4b55525368b1091ac",
-                    name: "Công ty Cổ phần xây dựng CDC",
-                    sign: "CDC",
-                  },
-                  bizfullname: "Vũ Văn Thêm-CDC",
-                  department: {
-                    _id: "6046ade4b55525368b1091c8",
-                    name: "CÔNG TY",
-                    sign: "C177.CTY",
-                  },
-                  position: {
-                    _id: "6046ade5b55525368b10922c",
-                    name: "Cán bộ kỹ thuật",
-                  },
-                },
-                {
-                  _id: "6271f9ead9d18a0677e5d4dc",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "thanhnt.kythuat@gmail.com",
-                  fullname: "Nguyễn Tiến Thành-CTECH",
-                  company: {
-                    _id: "6046b087b55525368b110142",
-                    name: "Công ty Cổ phần Tư vấn và Đầu tư Hà Nội",
-                    sign: "CTECH",
-                  },
-                  bizfullname: "Nguyễn Tiến Thành-CTECH",
-                  department: {
-                    _id: "6046b087b55525368b110151",
-                    name: "CÔNG TY",
-                    sign: "C386.CTY",
-                  },
-                  position: {
-                    _id: "6271fb6dd9d18a0677e5d51b",
-                    name: "Trạm biến áp",
-                  },
-                },
-                {
-                  _id: "6271f9d8d9d18a0677e5d4db",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "nguyenbach.cdbk@gmail.com",
-                  fullname: "Nguyễn Văn Bách-CTECH",
-                  company: {
-                    _id: "6046b087b55525368b110142",
-                    name: "Công ty Cổ phần Tư vấn và Đầu tư Hà Nội",
-                    sign: "CTECH",
-                  },
-                  bizfullname: "Nguyễn Văn Bách-CTECH",
-                  department: {
-                    _id: "6046b087b55525368b110151",
-                    name: "CÔNG TY",
-                    sign: "C386.CTY",
-                  },
-                  position: {
-                    _id: "6271fb69d9d18a0677e5d51a",
-                    name: "Thiết kế điều hòa",
-                  },
-                },
-                {
-                  _id: "6271f9c7d9d18a0677e5d4da",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "hailv.plme@gmail.com",
-                  fullname: "Lê Văn Hải-CTECH",
-                  company: {
-                    _id: "6046b087b55525368b110142",
-                    name: "Công ty Cổ phần Tư vấn và Đầu tư Hà Nội",
-                    sign: "CTECH",
-                  },
-                  bizfullname: "Lê Văn Hải-CTECH",
-                  department: {
-                    _id: "6046b087b55525368b110151",
-                    name: "CÔNG TY",
-                    sign: "C386.CTY",
-                  },
-                  position: {
-                    _id: "6271fb65d9d18a0677e5d519",
-                    name: "Thiết kế PCCC",
-                  },
-                },
-                {
-                  _id: "6271f9b8d9d18a0677e5d4d9",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "anhpn0892@gmail.com",
-                  fullname: "Phạm Ngọc Anh-CTECH",
-                  company: {
-                    _id: "6046b087b55525368b110142",
-                    name: "Công ty Cổ phần Tư vấn và Đầu tư Hà Nội",
-                    sign: "CTECH",
-                  },
-                  bizfullname: "Phạm Ngọc Anh-CTECH",
-                  department: {
-                    _id: "6046b087b55525368b110151",
-                    name: "CÔNG TY",
-                    sign: "C386.CTY",
-                  },
-                  position: {
-                    _id: "6271fb52d9d18a0677e5d515",
-                    name: "Thiết kế kiến trúc",
-                  },
-                },
-                {
-                  _id: "6271f9a4d9d18a0677e5d4d8",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "hoatigon161@gmail.com",
-                  fullname: "Ngô Đức Tiến-CTECH",
-                  company: {
-                    _id: "6046b087b55525368b110142",
-                    name: "Công ty Cổ phần Tư vấn và Đầu tư Hà Nội",
-                    sign: "CTECH",
-                  },
-                  bizfullname: "Ngô Đức Tiến-CTECH",
-                  department: {
-                    _id: "6046b087b55525368b110151",
-                    name: "CÔNG TY",
-                    sign: "C386.CTY",
-                  },
-                  position: {
-                    _id: "6271fb5dd9d18a0677e5d518",
-                    name: "Thiết điện, điện nhẹ",
-                  },
-                },
-                {
-                  _id: "6271f991d9d18a0677e5d4d7",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "tranhong2647@gmail.com",
-                  fullname: "Trần Thị Hồng-CTECH",
-                  company: {
-                    _id: "6046b087b55525368b110142",
-                    name: "Công ty Cổ phần Tư vấn và Đầu tư Hà Nội",
-                    sign: "CTECH",
-                  },
-                  bizfullname: "Trần Thị Hồng-CTECH",
-                  department: {
-                    _id: "6046b087b55525368b110151",
-                    name: "CÔNG TY",
-                    sign: "C386.CTY",
-                  },
-                  position: {
-                    _id: "6271fb5ad9d18a0677e5d517",
-                    name: "Thiết kế nước",
-                  },
-                },
-                {
-                  _id: "6271f981d9d18a0677e5d4d6",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "nguyenthihang.11696@gmail.com",
-                  fullname: "Nguyễn Thị Hằng-CTECH",
-                  company: {
-                    _id: "6046b087b55525368b110142",
-                    name: "Công ty Cổ phần Tư vấn và Đầu tư Hà Nội",
-                    sign: "CTECH",
-                  },
-                  bizfullname: "Nguyễn Thị Hằng-CTECH",
-                  department: {
-                    _id: "6046b087b55525368b110151",
-                    name: "CÔNG TY",
-                    sign: "C386.CTY",
-                  },
-                  position: {
-                    _id: "6271fb56d9d18a0677e5d516",
-                    name: "Dự toán",
-                  },
-                },
-              ]}
+              data={listUsersSystem.map((item) => ({
+                label: item.bizfullname || item.fullname,
+                value: item._id,
+                imgUrl: item.imgUrl,
+                email: item.email,
+              }))}
               formatItem={{
-                id: "_id",
-                text: "fullname",
+                id: "value",
+                text: "label",
+                imageUrl: "imgUrl",
               }}
               renderItem={(item) => (
                 <div className={"flex"}>
@@ -442,10 +276,10 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                       "w-[44px] h-[44px] flex items-center justify-center rounded-full bg-accent text-white text-2xl font-bold"
                     }
                   >
-                    {item.fullname.charAt(0)}
+                    {item.label.charAt(0)}
                   </div>
                   <div className={"flex-1 ml-2"}>
-                    <p className={"truncate"}>{item.fullname}</p>
+                    <p className={"truncate"}>{item.label}</p>
                     <p className={"text-primary-gray truncate"}>{item.email}</p>
                   </div>
                 </div>
@@ -486,13 +320,37 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           )}
           {(tabIndex === 2 || tabIndex === 3) && (
             <DropdownSearchableV2
+              selectOneByOne={true}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Người tạo"}
               showTriangle={true}
               isMultiple={true}
+              onchangeValue={(value) => {
+                if (!authors.includes?.(value.id as string)) {
+                  const newData: any = [...authors, value.id];
+                  setAuthors(newData);
+                }
+                setSearchUserSystem("");
+              }}
+              onMultipleRemoveValue={(id: any) => {
+                const newList = authorsCreateResponse.filter(
+                  (item) => item !== id
+                );
+                setAuthors(newList);
+              }}
+              onClearData={() => setAuthors([])}
+              onSearchInputChange={debounce(
+                (value) => setSearchUserSystem(value),
+                500
+              )}
+              onScroll={handleScrollUserSystem}
               renderSelectedItem={(item: any) => (
                 <div className="flex items-center">
-                  <img alt="Tag" src={userIcon} className="mr-1" />
+                  <img
+                    alt="Thumbnail"
+                    src={item.imageUrl || userIcon}
+                    className="mr-1 w-6 h-6 rounded-full"
+                  />
                   <p
                     style={{
                       textOverflow: "ellipsis",
@@ -507,261 +365,16 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                   </p>
                 </div>
               )}
-              data={[
-                {
-                  _id: "627205a5d9d18a0677e5d5b4",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "tutran01676378375van@gmail.com",
-                  fullname: "Trần Văn Tú-CDC",
-                  company: {
-                    _id: "6046ade4b55525368b1091ac",
-                    name: "Công ty Cổ phần xây dựng CDC",
-                    sign: "CDC",
-                  },
-                  bizfullname: "Trần Văn Tú-CDC",
-                  department: {
-                    _id: "6046ade4b55525368b1091c8",
-                    name: "CÔNG TY",
-                    sign: "C177.CTY",
-                  },
-                  position: {
-                    _id: "61972dcfbc3b2e745ae3e382",
-                    name: "Cán bộ kỹ thuật",
-                  },
-                },
-                {
-                  _id: "6272058ed9d18a0677e5d5b3",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: "2022-05-04T04:53:42.239Z",
-                  email: "lehuuthuan161098@gmail.com",
-                  fullname: "Lê Hữu Thuần-CDC",
-                  company: {
-                    _id: "6046ade4b55525368b1091ac",
-                    name: "Công ty Cổ phần xây dựng CDC",
-                    sign: "CDC",
-                  },
-                  bizfullname: "Lê Hữu Thuần-CDC",
-                  department: {
-                    _id: "6046ade4b55525368b1091c8",
-                    name: "CÔNG TY",
-                    sign: "C177.CTY",
-                  },
-                  position: {
-                    _id: "6046ade5b55525368b10922c",
-                    name: "Cán bộ kỹ thuật",
-                  },
-                },
-                {
-                  _id: "62720577d9d18a0677e5d5b2",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "themvv.econs@gmail.com",
-                  fullname: "Vũ Văn Thêm-CDC",
-                  company: {
-                    _id: "6046ade4b55525368b1091ac",
-                    name: "Công ty Cổ phần xây dựng CDC",
-                    sign: "CDC",
-                  },
-                  bizfullname: "Vũ Văn Thêm-CDC",
-                  department: {
-                    _id: "6046ade4b55525368b1091c8",
-                    name: "CÔNG TY",
-                    sign: "C177.CTY",
-                  },
-                  position: {
-                    _id: "6046ade5b55525368b10922c",
-                    name: "Cán bộ kỹ thuật",
-                  },
-                },
-                {
-                  _id: "6271f9ead9d18a0677e5d4dc",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "thanhnt.kythuat@gmail.com",
-                  fullname: "Nguyễn Tiến Thành-CTECH",
-                  company: {
-                    _id: "6046b087b55525368b110142",
-                    name: "Công ty Cổ phần Tư vấn và Đầu tư Hà Nội",
-                    sign: "CTECH",
-                  },
-                  bizfullname: "Nguyễn Tiến Thành-CTECH",
-                  department: {
-                    _id: "6046b087b55525368b110151",
-                    name: "CÔNG TY",
-                    sign: "C386.CTY",
-                  },
-                  position: {
-                    _id: "6271fb6dd9d18a0677e5d51b",
-                    name: "Trạm biến áp",
-                  },
-                },
-                {
-                  _id: "6271f9d8d9d18a0677e5d4db",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "nguyenbach.cdbk@gmail.com",
-                  fullname: "Nguyễn Văn Bách-CTECH",
-                  company: {
-                    _id: "6046b087b55525368b110142",
-                    name: "Công ty Cổ phần Tư vấn và Đầu tư Hà Nội",
-                    sign: "CTECH",
-                  },
-                  bizfullname: "Nguyễn Văn Bách-CTECH",
-                  department: {
-                    _id: "6046b087b55525368b110151",
-                    name: "CÔNG TY",
-                    sign: "C386.CTY",
-                  },
-                  position: {
-                    _id: "6271fb69d9d18a0677e5d51a",
-                    name: "Thiết kế điều hòa",
-                  },
-                },
-                {
-                  _id: "6271f9c7d9d18a0677e5d4da",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "hailv.plme@gmail.com",
-                  fullname: "Lê Văn Hải-CTECH",
-                  company: {
-                    _id: "6046b087b55525368b110142",
-                    name: "Công ty Cổ phần Tư vấn và Đầu tư Hà Nội",
-                    sign: "CTECH",
-                  },
-                  bizfullname: "Lê Văn Hải-CTECH",
-                  department: {
-                    _id: "6046b087b55525368b110151",
-                    name: "CÔNG TY",
-                    sign: "C386.CTY",
-                  },
-                  position: {
-                    _id: "6271fb65d9d18a0677e5d519",
-                    name: "Thiết kế PCCC",
-                  },
-                },
-                {
-                  _id: "6271f9b8d9d18a0677e5d4d9",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "anhpn0892@gmail.com",
-                  fullname: "Phạm Ngọc Anh-CTECH",
-                  company: {
-                    _id: "6046b087b55525368b110142",
-                    name: "Công ty Cổ phần Tư vấn và Đầu tư Hà Nội",
-                    sign: "CTECH",
-                  },
-                  bizfullname: "Phạm Ngọc Anh-CTECH",
-                  department: {
-                    _id: "6046b087b55525368b110151",
-                    name: "CÔNG TY",
-                    sign: "C386.CTY",
-                  },
-                  position: {
-                    _id: "6271fb52d9d18a0677e5d515",
-                    name: "Thiết kế kiến trúc",
-                  },
-                },
-                {
-                  _id: "6271f9a4d9d18a0677e5d4d8",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "hoatigon161@gmail.com",
-                  fullname: "Ngô Đức Tiến-CTECH",
-                  company: {
-                    _id: "6046b087b55525368b110142",
-                    name: "Công ty Cổ phần Tư vấn và Đầu tư Hà Nội",
-                    sign: "CTECH",
-                  },
-                  bizfullname: "Ngô Đức Tiến-CTECH",
-                  department: {
-                    _id: "6046b087b55525368b110151",
-                    name: "CÔNG TY",
-                    sign: "C386.CTY",
-                  },
-                  position: {
-                    _id: "6271fb5dd9d18a0677e5d518",
-                    name: "Thiết điện, điện nhẹ",
-                  },
-                },
-                {
-                  _id: "6271f991d9d18a0677e5d4d7",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "tranhong2647@gmail.com",
-                  fullname: "Trần Thị Hồng-CTECH",
-                  company: {
-                    _id: "6046b087b55525368b110142",
-                    name: "Công ty Cổ phần Tư vấn và Đầu tư Hà Nội",
-                    sign: "CTECH",
-                  },
-                  bizfullname: "Trần Thị Hồng-CTECH",
-                  department: {
-                    _id: "6046b087b55525368b110151",
-                    name: "CÔNG TY",
-                    sign: "C386.CTY",
-                  },
-                  position: {
-                    _id: "6271fb5ad9d18a0677e5d517",
-                    name: "Thiết kế nước",
-                  },
-                },
-                {
-                  _id: "6271f981d9d18a0677e5d4d6",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "nguyenthihang.11696@gmail.com",
-                  fullname: "Nguyễn Thị Hằng-CTECH",
-                  company: {
-                    _id: "6046b087b55525368b110142",
-                    name: "Công ty Cổ phần Tư vấn và Đầu tư Hà Nội",
-                    sign: "CTECH",
-                  },
-                  bizfullname: "Nguyễn Thị Hằng-CTECH",
-                  department: {
-                    _id: "6046b087b55525368b110151",
-                    name: "CÔNG TY",
-                    sign: "C386.CTY",
-                  },
-                  position: {
-                    _id: "6271fb56d9d18a0677e5d516",
-                    name: "Dự toán",
-                  },
-                },
-              ]}
+              data={listUsersSystem.map((item) => ({
+                label: item.bizfullname || item.fullname,
+                value: item._id,
+                imgUrl: item.imgUrl,
+                email: item.email,
+              }))}
               formatItem={{
-                id: "_id",
-                text: "fullname",
+                id: "value",
+                text: "label",
+                imageUrl: "imgUrl",
               }}
               renderItem={(item) => (
                 <div className={"flex"}>
@@ -770,10 +383,10 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                       "w-[44px] h-[44px] flex items-center justify-center rounded-full bg-accent text-white text-2xl font-bold"
                     }
                   >
-                    {item.fullname.charAt(0)}
+                    {item.label.charAt(0)}
                   </div>
                   <div className={"flex-1 ml-2"}>
-                    <p className={"truncate"}>{item.fullname}</p>
+                    <p className={"truncate"}>{item.label}</p>
                     <p className={"text-primary-gray truncate"}>{item.email}</p>
                   </div>
                 </div>
@@ -786,297 +399,39 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
 
           {tabIndex === 1 && (
             <DropdownSearchableV2
+              selectOneByOne={true}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Đơn vị tạo phản hồi"}
+              onchangeValue={(value) => {
+                if (!companyOfAuthor?.includes?.(value.id as string)) {
+                  const newData: any = [...companyOfAuthor, value.id];
+                  setCompanyOfAuthor(newData);
+                }
+                setSearchCompanyName("");
+                dispatch(setTabActive(tabIndex));
+              }}
+              onMultipleRemoveValue={(id: any) => {
+                const newList = companyOfAuthor.filter((item) => item !== id);
+                setCompanyOfAuthor(newList);
+              }}
+              onClearData={() => setCompanyOfAuthor([])}
+              onScroll={handleScrollCompany}
+              onSearchInputChange={debounce(
+                (value) => setSearchCompanyName(value),
+                500
+              )}
               showTriangle={true}
               isMultiple={true}
-              renderSelectedItem={(item: any) => (
-                <div className="flex items-center">
-                  <img alt="Tag" src={userIcon} className="mr-1" />
-                  <p
-                    style={{
-                      textOverflow: "ellipsis",
-                      maxWidth: "100%",
-                      minWidth: 0,
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      flex: "1 1 auto",
-                    }}
-                  >
-                    {item.text}
-                  </p>
-                </div>
-              )}
-              data={[
-                {
-                  _id: "627205a5d9d18a0677e5d5b4",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "tutran01676378375van@gmail.com",
-                  fullname: "Trần Văn Tú-CDC",
-                  company: {
-                    _id: "6046ade4b55525368b1091ac",
-                    name: "Công ty Cổ phần xây dựng CDC",
-                    sign: "CDC",
-                  },
-                  bizfullname: "Trần Văn Tú-CDC",
-                  department: {
-                    _id: "6046ade4b55525368b1091c8",
-                    name: "CÔNG TY",
-                    sign: "C177.CTY",
-                  },
-                  position: {
-                    _id: "61972dcfbc3b2e745ae3e382",
-                    name: "Cán bộ kỹ thuật",
-                  },
-                },
-                {
-                  _id: "6272058ed9d18a0677e5d5b3",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: "2022-05-04T04:53:42.239Z",
-                  email: "lehuuthuan161098@gmail.com",
-                  fullname: "Lê Hữu Thuần-CDC",
-                  company: {
-                    _id: "6046ade4b55525368b1091ac",
-                    name: "Công ty Cổ phần xây dựng CDC",
-                    sign: "CDC",
-                  },
-                  bizfullname: "Lê Hữu Thuần-CDC",
-                  department: {
-                    _id: "6046ade4b55525368b1091c8",
-                    name: "CÔNG TY",
-                    sign: "C177.CTY",
-                  },
-                  position: {
-                    _id: "6046ade5b55525368b10922c",
-                    name: "Cán bộ kỹ thuật",
-                  },
-                },
-                {
-                  _id: "62720577d9d18a0677e5d5b2",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "themvv.econs@gmail.com",
-                  fullname: "Vũ Văn Thêm-CDC",
-                  company: {
-                    _id: "6046ade4b55525368b1091ac",
-                    name: "Công ty Cổ phần xây dựng CDC",
-                    sign: "CDC",
-                  },
-                  bizfullname: "Vũ Văn Thêm-CDC",
-                  department: {
-                    _id: "6046ade4b55525368b1091c8",
-                    name: "CÔNG TY",
-                    sign: "C177.CTY",
-                  },
-                  position: {
-                    _id: "6046ade5b55525368b10922c",
-                    name: "Cán bộ kỹ thuật",
-                  },
-                },
-                {
-                  _id: "6271f9ead9d18a0677e5d4dc",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "thanhnt.kythuat@gmail.com",
-                  fullname: "Nguyễn Tiến Thành-CTECH",
-                  company: {
-                    _id: "6046b087b55525368b110142",
-                    name: "Công ty Cổ phần Tư vấn và Đầu tư Hà Nội",
-                    sign: "CTECH",
-                  },
-                  bizfullname: "Nguyễn Tiến Thành-CTECH",
-                  department: {
-                    _id: "6046b087b55525368b110151",
-                    name: "CÔNG TY",
-                    sign: "C386.CTY",
-                  },
-                  position: {
-                    _id: "6271fb6dd9d18a0677e5d51b",
-                    name: "Trạm biến áp",
-                  },
-                },
-                {
-                  _id: "6271f9d8d9d18a0677e5d4db",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "nguyenbach.cdbk@gmail.com",
-                  fullname: "Nguyễn Văn Bách-CTECH",
-                  company: {
-                    _id: "6046b087b55525368b110142",
-                    name: "Công ty Cổ phần Tư vấn và Đầu tư Hà Nội",
-                    sign: "CTECH",
-                  },
-                  bizfullname: "Nguyễn Văn Bách-CTECH",
-                  department: {
-                    _id: "6046b087b55525368b110151",
-                    name: "CÔNG TY",
-                    sign: "C386.CTY",
-                  },
-                  position: {
-                    _id: "6271fb69d9d18a0677e5d51a",
-                    name: "Thiết kế điều hòa",
-                  },
-                },
-                {
-                  _id: "6271f9c7d9d18a0677e5d4da",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "hailv.plme@gmail.com",
-                  fullname: "Lê Văn Hải-CTECH",
-                  company: {
-                    _id: "6046b087b55525368b110142",
-                    name: "Công ty Cổ phần Tư vấn và Đầu tư Hà Nội",
-                    sign: "CTECH",
-                  },
-                  bizfullname: "Lê Văn Hải-CTECH",
-                  department: {
-                    _id: "6046b087b55525368b110151",
-                    name: "CÔNG TY",
-                    sign: "C386.CTY",
-                  },
-                  position: {
-                    _id: "6271fb65d9d18a0677e5d519",
-                    name: "Thiết kế PCCC",
-                  },
-                },
-                {
-                  _id: "6271f9b8d9d18a0677e5d4d9",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "anhpn0892@gmail.com",
-                  fullname: "Phạm Ngọc Anh-CTECH",
-                  company: {
-                    _id: "6046b087b55525368b110142",
-                    name: "Công ty Cổ phần Tư vấn và Đầu tư Hà Nội",
-                    sign: "CTECH",
-                  },
-                  bizfullname: "Phạm Ngọc Anh-CTECH",
-                  department: {
-                    _id: "6046b087b55525368b110151",
-                    name: "CÔNG TY",
-                    sign: "C386.CTY",
-                  },
-                  position: {
-                    _id: "6271fb52d9d18a0677e5d515",
-                    name: "Thiết kế kiến trúc",
-                  },
-                },
-                {
-                  _id: "6271f9a4d9d18a0677e5d4d8",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "hoatigon161@gmail.com",
-                  fullname: "Ngô Đức Tiến-CTECH",
-                  company: {
-                    _id: "6046b087b55525368b110142",
-                    name: "Công ty Cổ phần Tư vấn và Đầu tư Hà Nội",
-                    sign: "CTECH",
-                  },
-                  bizfullname: "Ngô Đức Tiến-CTECH",
-                  department: {
-                    _id: "6046b087b55525368b110151",
-                    name: "CÔNG TY",
-                    sign: "C386.CTY",
-                  },
-                  position: {
-                    _id: "6271fb5dd9d18a0677e5d518",
-                    name: "Thiết điện, điện nhẹ",
-                  },
-                },
-                {
-                  _id: "6271f991d9d18a0677e5d4d7",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "tranhong2647@gmail.com",
-                  fullname: "Trần Thị Hồng-CTECH",
-                  company: {
-                    _id: "6046b087b55525368b110142",
-                    name: "Công ty Cổ phần Tư vấn và Đầu tư Hà Nội",
-                    sign: "CTECH",
-                  },
-                  bizfullname: "Trần Thị Hồng-CTECH",
-                  department: {
-                    _id: "6046b087b55525368b110151",
-                    name: "CÔNG TY",
-                    sign: "C386.CTY",
-                  },
-                  position: {
-                    _id: "6271fb5ad9d18a0677e5d517",
-                    name: "Thiết kế nước",
-                  },
-                },
-                {
-                  _id: "6271f981d9d18a0677e5d4d6",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "nguyenthihang.11696@gmail.com",
-                  fullname: "Nguyễn Thị Hằng-CTECH",
-                  company: {
-                    _id: "6046b087b55525368b110142",
-                    name: "Công ty Cổ phần Tư vấn và Đầu tư Hà Nội",
-                    sign: "CTECH",
-                  },
-                  bizfullname: "Nguyễn Thị Hằng-CTECH",
-                  department: {
-                    _id: "6046b087b55525368b110151",
-                    name: "CÔNG TY",
-                    sign: "C386.CTY",
-                  },
-                  position: {
-                    _id: "6271fb56d9d18a0677e5d516",
-                    name: "Dự toán",
-                  },
-                },
-              ]}
+              data={listCompany.map((company) => ({
+                label: company.name,
+                value: company._id,
+              }))}
               formatItem={{
-                id: "_id",
-                text: "fullname",
+                id: "value",
+                text: "label",
               }}
               renderItem={(item) => (
-                <div className={"flex"}>
-                  <div
-                    className={
-                      "w-[44px] h-[44px] flex items-center justify-center rounded-full bg-accent text-white text-2xl font-bold"
-                    }
-                  >
-                    {item.fullname.charAt(0)}
-                  </div>
-                  <div className={"flex-1 ml-2"}>
-                    <p className={"truncate"}>{item.fullname}</p>
-                    <p className={"text-primary-gray truncate"}>{item.email}</p>
-                  </div>
-                </div>
+                <p className={"min-w-[300px]"}>{item.text}</p>
               )}
               prefixIcon={
                 <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
@@ -1086,13 +441,38 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
 
           {tabIndex === 1 && (
             <DropdownSearchableV2
+              selectOneByOne={true}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Người tạo phản hồi"}
               showTriangle={true}
               isMultiple={true}
+              onchangeValue={(value) => {
+                if (!authorsCreateResponse.includes?.(value.id as string)) {
+                  const newData: any = [...authorsCreateResponse, value.id];
+                  setAuthorsCreateResponse(newData);
+                }
+                setSearchUserSystem("");
+                dispatch(setTabActive(tabIndex));
+              }}
+              onMultipleRemoveValue={(id: any) => {
+                const newList = authorsCreateResponse.filter(
+                  (item) => item !== id
+                );
+                setAuthorsCreateResponse(newList);
+              }}
+              onClearData={() => setAuthorsCreateResponse([])}
+              onSearchInputChange={debounce(
+                (value) => setSearchUserSystem(value),
+                500
+              )}
+              onScroll={handleScrollUserSystem}
               renderSelectedItem={(item: any) => (
                 <div className="flex items-center">
-                  <img alt="Tag" src={userIcon} className="mr-1" />
+                  <img
+                    alt="Thumbnail"
+                    src={item.imageUrl || userIcon}
+                    className="mr-1 w-6 h-6 rounded-full"
+                  />
                   <p
                     style={{
                       textOverflow: "ellipsis",
@@ -1107,261 +487,16 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                   </p>
                 </div>
               )}
-              data={[
-                {
-                  _id: "627205a5d9d18a0677e5d5b4",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "tutran01676378375van@gmail.com",
-                  fullname: "Trần Văn Tú-CDC",
-                  company: {
-                    _id: "6046ade4b55525368b1091ac",
-                    name: "Công ty Cổ phần xây dựng CDC",
-                    sign: "CDC",
-                  },
-                  bizfullname: "Trần Văn Tú-CDC",
-                  department: {
-                    _id: "6046ade4b55525368b1091c8",
-                    name: "CÔNG TY",
-                    sign: "C177.CTY",
-                  },
-                  position: {
-                    _id: "61972dcfbc3b2e745ae3e382",
-                    name: "Cán bộ kỹ thuật",
-                  },
-                },
-                {
-                  _id: "6272058ed9d18a0677e5d5b3",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: "2022-05-04T04:53:42.239Z",
-                  email: "lehuuthuan161098@gmail.com",
-                  fullname: "Lê Hữu Thuần-CDC",
-                  company: {
-                    _id: "6046ade4b55525368b1091ac",
-                    name: "Công ty Cổ phần xây dựng CDC",
-                    sign: "CDC",
-                  },
-                  bizfullname: "Lê Hữu Thuần-CDC",
-                  department: {
-                    _id: "6046ade4b55525368b1091c8",
-                    name: "CÔNG TY",
-                    sign: "C177.CTY",
-                  },
-                  position: {
-                    _id: "6046ade5b55525368b10922c",
-                    name: "Cán bộ kỹ thuật",
-                  },
-                },
-                {
-                  _id: "62720577d9d18a0677e5d5b2",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "themvv.econs@gmail.com",
-                  fullname: "Vũ Văn Thêm-CDC",
-                  company: {
-                    _id: "6046ade4b55525368b1091ac",
-                    name: "Công ty Cổ phần xây dựng CDC",
-                    sign: "CDC",
-                  },
-                  bizfullname: "Vũ Văn Thêm-CDC",
-                  department: {
-                    _id: "6046ade4b55525368b1091c8",
-                    name: "CÔNG TY",
-                    sign: "C177.CTY",
-                  },
-                  position: {
-                    _id: "6046ade5b55525368b10922c",
-                    name: "Cán bộ kỹ thuật",
-                  },
-                },
-                {
-                  _id: "6271f9ead9d18a0677e5d4dc",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "thanhnt.kythuat@gmail.com",
-                  fullname: "Nguyễn Tiến Thành-CTECH",
-                  company: {
-                    _id: "6046b087b55525368b110142",
-                    name: "Công ty Cổ phần Tư vấn và Đầu tư Hà Nội",
-                    sign: "CTECH",
-                  },
-                  bizfullname: "Nguyễn Tiến Thành-CTECH",
-                  department: {
-                    _id: "6046b087b55525368b110151",
-                    name: "CÔNG TY",
-                    sign: "C386.CTY",
-                  },
-                  position: {
-                    _id: "6271fb6dd9d18a0677e5d51b",
-                    name: "Trạm biến áp",
-                  },
-                },
-                {
-                  _id: "6271f9d8d9d18a0677e5d4db",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "nguyenbach.cdbk@gmail.com",
-                  fullname: "Nguyễn Văn Bách-CTECH",
-                  company: {
-                    _id: "6046b087b55525368b110142",
-                    name: "Công ty Cổ phần Tư vấn và Đầu tư Hà Nội",
-                    sign: "CTECH",
-                  },
-                  bizfullname: "Nguyễn Văn Bách-CTECH",
-                  department: {
-                    _id: "6046b087b55525368b110151",
-                    name: "CÔNG TY",
-                    sign: "C386.CTY",
-                  },
-                  position: {
-                    _id: "6271fb69d9d18a0677e5d51a",
-                    name: "Thiết kế điều hòa",
-                  },
-                },
-                {
-                  _id: "6271f9c7d9d18a0677e5d4da",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "hailv.plme@gmail.com",
-                  fullname: "Lê Văn Hải-CTECH",
-                  company: {
-                    _id: "6046b087b55525368b110142",
-                    name: "Công ty Cổ phần Tư vấn và Đầu tư Hà Nội",
-                    sign: "CTECH",
-                  },
-                  bizfullname: "Lê Văn Hải-CTECH",
-                  department: {
-                    _id: "6046b087b55525368b110151",
-                    name: "CÔNG TY",
-                    sign: "C386.CTY",
-                  },
-                  position: {
-                    _id: "6271fb65d9d18a0677e5d519",
-                    name: "Thiết kế PCCC",
-                  },
-                },
-                {
-                  _id: "6271f9b8d9d18a0677e5d4d9",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "anhpn0892@gmail.com",
-                  fullname: "Phạm Ngọc Anh-CTECH",
-                  company: {
-                    _id: "6046b087b55525368b110142",
-                    name: "Công ty Cổ phần Tư vấn và Đầu tư Hà Nội",
-                    sign: "CTECH",
-                  },
-                  bizfullname: "Phạm Ngọc Anh-CTECH",
-                  department: {
-                    _id: "6046b087b55525368b110151",
-                    name: "CÔNG TY",
-                    sign: "C386.CTY",
-                  },
-                  position: {
-                    _id: "6271fb52d9d18a0677e5d515",
-                    name: "Thiết kế kiến trúc",
-                  },
-                },
-                {
-                  _id: "6271f9a4d9d18a0677e5d4d8",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "hoatigon161@gmail.com",
-                  fullname: "Ngô Đức Tiến-CTECH",
-                  company: {
-                    _id: "6046b087b55525368b110142",
-                    name: "Công ty Cổ phần Tư vấn và Đầu tư Hà Nội",
-                    sign: "CTECH",
-                  },
-                  bizfullname: "Ngô Đức Tiến-CTECH",
-                  department: {
-                    _id: "6046b087b55525368b110151",
-                    name: "CÔNG TY",
-                    sign: "C386.CTY",
-                  },
-                  position: {
-                    _id: "6271fb5dd9d18a0677e5d518",
-                    name: "Thiết điện, điện nhẹ",
-                  },
-                },
-                {
-                  _id: "6271f991d9d18a0677e5d4d7",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "tranhong2647@gmail.com",
-                  fullname: "Trần Thị Hồng-CTECH",
-                  company: {
-                    _id: "6046b087b55525368b110142",
-                    name: "Công ty Cổ phần Tư vấn và Đầu tư Hà Nội",
-                    sign: "CTECH",
-                  },
-                  bizfullname: "Trần Thị Hồng-CTECH",
-                  department: {
-                    _id: "6046b087b55525368b110151",
-                    name: "CÔNG TY",
-                    sign: "C386.CTY",
-                  },
-                  position: {
-                    _id: "6271fb5ad9d18a0677e5d517",
-                    name: "Thiết kế nước",
-                  },
-                },
-                {
-                  _id: "6271f981d9d18a0677e5d4d6",
-                  image: "user_default.png",
-                  status: 1,
-                  level: 1,
-                  numLog: 0,
-                  lastLog: null,
-                  email: "nguyenthihang.11696@gmail.com",
-                  fullname: "Nguyễn Thị Hằng-CTECH",
-                  company: {
-                    _id: "6046b087b55525368b110142",
-                    name: "Công ty Cổ phần Tư vấn và Đầu tư Hà Nội",
-                    sign: "CTECH",
-                  },
-                  bizfullname: "Nguyễn Thị Hằng-CTECH",
-                  department: {
-                    _id: "6046b087b55525368b110151",
-                    name: "CÔNG TY",
-                    sign: "C386.CTY",
-                  },
-                  position: {
-                    _id: "6271fb56d9d18a0677e5d516",
-                    name: "Dự toán",
-                  },
-                },
-              ]}
+              data={listUsersSystem.map((item) => ({
+                label: item.bizfullname || item.fullname,
+                value: item._id,
+                imgUrl: item.imgUrl,
+                email: item.email,
+              }))}
               formatItem={{
-                id: "_id",
-                text: "fullname",
+                id: "value",
+                text: "label",
+                imageUrl: "imgUrl",
               }}
               renderItem={(item) => (
                 <div className={"flex"}>
@@ -1370,10 +505,10 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                       "w-[44px] h-[44px] flex items-center justify-center rounded-full bg-accent text-white text-2xl font-bold"
                     }
                   >
-                    {item.fullname.charAt(0)}
+                    {item.label.charAt(0)}
                   </div>
                   <div className={"flex-1 ml-2"}>
-                    <p className={"truncate"}>{item.fullname}</p>
+                    <p className={"truncate"}>{item.label}</p>
                     <p className={"text-primary-gray truncate"}>{item.email}</p>
                   </div>
                 </div>
@@ -1386,38 +521,39 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
 
           {(tabIndex === 1 || tabIndex === 2 || tabIndex === 3) && (
             <DropdownSearchableV2
+              selectOneByOne={true}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Dự án"}
               prefixIcon={
                 <img className={"mr-2"} src={projectIcon} alt={"icon"} />
               }
               isMultiple={true}
-              data={[
-                {
-                  id: 1,
-                  text: "CHG.THT.Trường tiểu học và trung học cơ sở Tây hồ tây",
-                },
-                {
-                  id: 2,
-                  text: "CHG.THT.Trường tiểu học và trung học cơ sở Tây hồ tây",
-                },
-                {
-                  id: 3,
-                  text: "CHG.THT.Trường tiểu học và trung học cơ sở Tây hồ tây",
-                },
-                {
-                  id: 4,
-                  text: "CHG.THT.Trường tiểu học và trung học cơ sở Tây hồ tây",
-                },
-                {
-                  id: 5,
-                  text: "CHG.THT.Trường tiểu học và trung học cơ sở Tây hồ tây",
-                },
-                {
-                  id: 6,
-                  text: "CHG.THT.Trường tiểu học và trung học cơ sở Tây hồ tây",
-                },
-              ]}
+              onchangeValue={(value) => {
+                if (!project.includes?.(value.id as string)) {
+                  const newData: any = [...project, value.id];
+                  setProject(newData);
+                }
+                setSearchProject("");
+                dispatch(setTabActive(tabIndex));
+              }}
+              onMultipleRemoveValue={(id: any) => {
+                const newList = project.filter((item) => item !== id);
+                setProject(newList);
+              }}
+              onClearData={() => setProject([])}
+              onSearchInputChange={debounce(
+                (value) => setSearchProject(value),
+                500
+              )}
+              onScroll={handleScrollProject}
+              data={listProject.map((item) => ({
+                label: item.name,
+                value: item._id,
+              }))}
+              formatItem={{
+                id: "value",
+                text: "label",
+              }}
               renderItem={(item) => (
                 <p className={"min-w-[300px]"}>{item.text}</p>
               )}
@@ -1432,27 +568,37 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               placeholder={"Thời gian tạo"}
               iconBack={<TriangleDown />}
               iconFront={<img src={timelineIcon} alt={"----"} />}
-              onValueChange={(val) => console.log(val)}
+              onValueChange={(val) => {
+                setFromCreateDate(val.fromDate);
+                setToCreateDate(val.toDate);
+                dispatch(setTabActive(tabIndex));
+              }}
               options={[
                 {
                   text: "Tất cả",
-                  fromDate: "00/00/0000",
+                  fromDate: "1990/01/01",
                   toDate: "31/12/2999",
                 },
                 {
                   text: "Ngày nay",
-                  fromDate: "12/08/2022",
-                  toDate: "17/08/2022",
+                  fromDate: moment().format("YYYY/MM/DD"),
+                  toDate: moment().format("YYYY/MM/DD"),
                 },
                 {
                   text: "Cách đây 1 tuần",
-                  fromDate: "12/08/2022",
-                  toDate: "17/08/2022",
+                  fromDate: moment(
+                    moment().subtract(7, "days").calendar(),
+                    "DD-MM-YYYY"
+                  ).format("YYYY/MM/DD"),
+                  toDate: moment().format("YYYY/MM/DD"),
                 },
                 {
                   text: "Cách đây 1 tháng",
-                  fromDate: "17/08/2022",
-                  toDate: "31/12/2999",
+                  fromDate: moment(
+                    moment().subtract(31, "days").calendar(),
+                    "DD-MM-YYYY"
+                  ).format("YYYY/MM/DD"),
+                  toDate: moment().format("YYYY/MM/DD"),
                 },
               ]}
             />
@@ -1460,6 +606,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
 
           {tabIndex === 2 && (
             <DropdownSearchableV2
+              selectOneByOne={true}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Quá hạn"}
               prefixIcon={
@@ -1484,6 +631,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           )}
           {tabIndex === 2 && (
             <DropdownSearchableV2
+              selectOneByOne={true}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Trạng thái"}
               prefixIcon={
@@ -1525,6 +673,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           )}
           {tabIndex === 1 && (
             <DropdownSearchableV2
+              selectOneByOne={true}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Phân loại"}
               prefixIcon={
@@ -1546,10 +695,14 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                   text: "Không chính thức",
                 },
               ]}
+              onchangeValue={(value) => {
+                setOfficial(value.id);
+              }}
             />
           )}
           {tabIndex === 2 && (
             <DropdownSearchableV2
+              selectOneByOne={true}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Phân loại"}
               prefixIcon={

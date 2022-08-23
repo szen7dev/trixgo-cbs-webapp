@@ -4,9 +4,7 @@ import pcmDashboardV2 from "apis/pcm/pcmDashboardV2";
 import TaskRepository from "apis/task";
 import DatahubRepository from "apis/datahub";
 
-export const useListResponseFromSearch = (payload: {
-  keyword: string;
-}): any => {
+export const useListResponseFromSearch = (payload: any): any => {
   // Get danh sách
   const {
     isLoading: isLoadingResponse,
@@ -15,17 +13,19 @@ export const useListResponseFromSearch = (payload: {
     fetchNextPage: nextPageSubject,
     hasNextPage: hasNextPageSubject,
   } = useInfiniteQuery(
-    [`app_dashboard_search_by_response.${payload.keyword}`, payload.keyword],
+    [`app_dashboard_search_by_response.${payload}`, payload],
     async ({ pageParam }) => {
       return pcmDashboardV2.searchBySubject({
         isActive: 1,
-        keyword: payload.keyword,
+        isGroup: 1,
+        isParent: 0,
         select: "createAt content author task",
         populates: {
           path: "author task project",
           select: "_id name fullname image createAt related sign",
         },
         lastestID: pageParam || "",
+        ...payload
       });
     },
     {
@@ -33,7 +33,7 @@ export const useListResponseFromSearch = (payload: {
         return data?.nextCursor || undefined;
       },
       refetchOnWindowFocus: false,
-      enabled: payload.keyword ? true : false,
+      enabled: payload.enabled ? true : false,
     }
   );
 
