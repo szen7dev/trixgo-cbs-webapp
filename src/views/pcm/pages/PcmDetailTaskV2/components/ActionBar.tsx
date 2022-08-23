@@ -13,22 +13,30 @@ import {SendToChat} from "./SendToChat";
 import {OtherActions} from "./OtherActions";
 import CollapseShow from "assets/images/CBS-Collapse-Show.svg";
 import CollapseHide from "assets/images/CBS-Collapse-Hide.svg";
+import { Task } from "typings/task";
+import { AddUserRelated } from "./AddUserRelated";
 
 type Props = {
-    handleCollapse?: () => void
-    collapse?: boolean
+    handleCollapse?: () => void;
+    collapse?: boolean;
+    task: Task;
+    refetchTaskInfo: () => void;
 }
-export const ActionTaskDetailBar:FC<Props> = ({handleCollapse, collapse}) => {
+
+export const ActionTaskDetailBar:FC<Props> = ({ task, refetchTaskInfo, handleCollapse, collapse }) => {
     const [activeCopyTextTooltip, setActiveCopyTextTooltip] = useState(false);
     const history = useHistory();
+
     const copyLink = () => {
         const copyText = window.location.href;
         navigator.clipboard.writeText(copyText);
         setActiveCopyTextTooltip(true);
     }
+
     const mouseLeaveCopyTextButton = () => {
         setActiveCopyTextTooltip(false);
     }
+
     return (
         <div className={"action-bar z-10 bg-white flex items-center px-2 py-1 border-b-0.5 border-primary-border sticky top-0"}>
             <div className={"flex items-center flex-1"}>
@@ -39,13 +47,13 @@ export const ActionTaskDetailBar:FC<Props> = ({handleCollapse, collapse}) => {
                     <img src={iconBack} alt={"----"} className={"w-[18px]"}/>
                 </button>
                 <button
-                    onClick={() => copyLink()}
+                    onClick={copyLink}
                     onMouseOut={() => mouseLeaveCopyTextButton()}
                     className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mx-3 relative"}>
                     <img src={iconLinkCopy} alt={"----"} className={"w-[18px]"}/>
                     <div className={"absolute top-full bg-primary-gray p-2 rounded w-[170px] text-left text-white transition-all " + (activeCopyTextTooltip?"visible opacity-100":"invisible opacity-0")}>Đã sao chép đường liên kết</div>
                 </button>
-                <SendEmailNotification/>
+                <SendEmailNotification task={task} />
                 <button className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mx-3"}>
                     <img src={iconCopy} alt={"----"} className={"w-[18px]"}/>
                 </button>
@@ -56,9 +64,7 @@ export const ActionTaskDetailBar:FC<Props> = ({handleCollapse, collapse}) => {
                     <img src={iconPrint} alt={"----"} className={"w-[18px]"}/>
                 </button>
                 <SendToChat/>
-                <button className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mx-3"}>
-                    <img src={iconAddUser} alt={"----"} className={"w-[18px]"}/>
-                </button>
+                <AddUserRelated task={task} onConfirmAddUserRelated={refetchTaskInfo} />
             </div>
 
             <button onClick={() => {

@@ -13,12 +13,13 @@ import { humanFileSize } from 'utils/converter';
 import { toast } from "react-toastify";
 
 type Props = {
+    userId?: string;
     comment: CommentProps;
     handleUploadAttachments: (filesSelected: FileList | null, commentChildId: string) => void;
     handleUpdateDescriptionFile: (e: any) => void;
 }
 
-export const ChildResponseComment: FC<Props> = ({ comment, handleUploadAttachments, handleUpdateDescriptionFile }) => {
+export const ChildResponseComment: FC<Props> = ({ userId, comment, handleUploadAttachments, handleUpdateDescriptionFile }) => {
     const [collapseComment, setCollapseComment] = useState(false);
 
     const receiversText = useMemo(() => {
@@ -69,7 +70,7 @@ export const ChildResponseComment: FC<Props> = ({ comment, handleUploadAttachmen
                                 </span>
                                 {/* <input className="form-check-input mx-4" type="checkbox" /> */}
                                 {
-                                    !collapseComment && (
+                                    (!collapseComment && userId === comment.author?._id) && (
                                         <label className="ml-4">
                                             <img
                                                 src={iconUpload}
@@ -140,18 +141,6 @@ export const ChildResponseComment: FC<Props> = ({ comment, handleUploadAttachmen
                             {!!comment.images?.length && (
                                 <div className={"comment-images mt-4"}>
                                     <div className={"grid grid-cols-6 gap-4"}>
-                                        {/* <div className={" border-0.5 border-primary-border bg-cbs-form-input-bg mb-2"}>
-                                        <div className={"relative"}>
-                                            <img className={"h-[120px] max-h-[120px] min-h-[120px] object-cover w-full"} src={imageDemo} alt={"---"} />
-                                            <div className={"text-white px-2 py-4 bg-black opacity-60 absolute text-xs bottom-0 w-full truncate"}>
-                                                {moment(file.createAt).format('DD/MM/YYYY HH:mm')}
-                                                ({moment(file.createAt).fromNow()})
-                                            </div>
-                                        </div>
-                                        <textarea className={"p-2 w-full text-xs h-[60px] min-h-[60px] max-h-[60px] bg-cbs-form-input-bg"} placeholder={"Nhập nội dung ghi chú"}>
-                                            Khu vực để xe của tòa nhà có cam bảo vệ, tại trục A1-A2 khu Z
-                                        </textarea>
-                                    </div> */}
                                         {
                                             comment.images.map(image => (
                                                 <div key={image._id} className={" border-0.5 border-primary-border bg-cbs-form-input-bg mb-2"}>

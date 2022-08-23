@@ -28,12 +28,13 @@ import TaskRepository from "apis/task";
 import { useFileCore } from 'services/hooks/useFileCore';
 
 type Props = {
+    userId?: string;
     task: Task;
     comment: CommentProps;
     onConfirmUpdate?: () => void;
 }
 
-export const ParentResponseComment: FC<Props> = ({ task, comment, onConfirmUpdate }) => {
+export const ParentResponseComment: FC<Props> = ({ userId, task, comment, onConfirmUpdate }) => {
     const [collapseComment, setCollapseComment] = useState(false);
     const [openReply, setOpenReply] = useState(false);
     const [isOfficial, setIsOfficial] = useState(comment.official);
@@ -284,15 +285,17 @@ export const ParentResponseComment: FC<Props> = ({ task, comment, onConfirmUpdat
                                     </button>
                                 )
                             }
-                            <input
-                                className="form-check-input mx-4"
-                                type="checkbox"
-                                disabled={isOfficial}
-                                defaultChecked={isOfficial}
-                                onChange={handleCheckOfficial}
-                            />
+                            {userId === comment.author?._id && (
+                                <input
+                                    className="form-check-input mx-4"
+                                    type="checkbox"
+                                    disabled={isOfficial}
+                                    defaultChecked={isOfficial}
+                                    onChange={handleCheckOfficial}
+                                />
+                            )}
                             {
-                                !collapseComment && (
+                                (!collapseComment && userId === comment.author?._id) && (
                                     <label className="ml-4">
                                         <img
                                             src={iconUpload}
@@ -441,6 +444,7 @@ export const ParentResponseComment: FC<Props> = ({ task, comment, onConfirmUpdat
                 {!!commentsReply.length && commentsReply.map(commentReply => (
                     <ChildResponseComment
                         key={commentReply._id}
+                        userId={userId}
                         comment={commentReply}
                         handleUploadAttachments={handleUploadAttachments}
                         handleUpdateDescriptionFile={handleUpdateDescriptionFile}

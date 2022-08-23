@@ -9,6 +9,7 @@ import { Task, Comment as CommentType, CommentProps } from "typings/task";
 import { ChildResponseComment, ParentResponseComment, ReplyResponseComment } from "views/pcm/shareComponents/common";
 import CommentContext from 'views/pcm/contexts/comment/comment.context';
 import TaskRepository from "apis/task";
+import { useAuth } from "services/hooks/auth/useAuth";
 
 type Props = {
     task: Task;
@@ -23,11 +24,12 @@ export const TaskDetailComment: FC<Props> = ({ task, refetchInfo }) => {
 
 	const { state, dispatch } = useContext(CommentContext);
 
+    const { user } = useAuth();
+
     const { listComments, totalRecord, limit } =
         useCommentPcm({
 			params: {
                 taskID: task._id,
-                type: 1,
                 official: filter === 2 ? true : false,
             },
 			isFetchComment: true
@@ -93,6 +95,7 @@ export const TaskDetailComment: FC<Props> = ({ task, refetchInfo }) => {
                         key={comment._id}
                         task={task}
                         comment={comment}
+                        userId={user?._id}
                         onConfirmUpdate={refetchInfo}
                     />
                 ))}

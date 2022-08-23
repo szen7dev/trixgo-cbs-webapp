@@ -55,7 +55,12 @@ const PcmDetailTaskV2:FC = () => {
 
     return (
         <div className={"task-detail"}>
-            <ActionTaskDetailBar collapse={collapse} handleCollapse={handleCollapse}/>
+            <ActionTaskDetailBar
+                collapse={collapse}
+                handleCollapse={handleCollapse}
+                refetchTaskInfo={refetchInfo}
+                task={taskInfo}
+            />
             <div className={"task-content p-4"}>
                 <div className={collapse?"hidden":"block"}>
                     <TaskDetailTitle task={taskInfo} />
