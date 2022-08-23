@@ -38,6 +38,7 @@ export const HomeHeaderContent: FC = () => {
 
   const { listDataForResponse, isLoadingResponse } = useListResponseFromSearch({
     keyword: keywordSearchForResponse,
+    enabled: keywordSearchForResponse ? true : false
   });
 
   const { listDataForSubject, isLoadingSubject } = useListSubjectFromSearch(

@@ -1,4 +1,11 @@
-import React, { FC, ReactNode, useEffect, useRef, useState, UIEvent } from "react";
+import React, {
+  FC,
+  ReactNode,
+  useEffect,
+  useRef,
+  useState,
+  UIEvent,
+} from "react";
 import { map as _map } from "lodash";
 import classNames from "classnames";
 // import API from "../../apis/repository";
@@ -7,7 +14,7 @@ import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import Close from "assets/icons/Close";
 import BlueCheck from "assets/images/blue-check.svg";
 import TriangleDown from "assets/icons/TriangleDown";
-import {Item} from "../DropdownSearchable";
+import { Item } from "../DropdownSearchable";
 
 type FormatItem = {
   id?: string | number;
@@ -43,9 +50,10 @@ type Props = {
   disableClass?: string;
   searchInputClassName?: string;
   onSearchInputChange?: (valueSearch: string) => void;
-  onScroll?: (e: UIEvent<HTMLDivElement>) => void
+  onScroll?: (e: UIEvent<HTMLDivElement>) => void;
   bordered?: boolean;
-  prefixIcon?: ReactNode
+  prefixIcon?: ReactNode;
+  selectOneByOne?: boolean;
 };
 
 // type Params = {
@@ -82,6 +90,7 @@ export const DropdownSearchableV2: FC<Props> = ({
   onScroll,
   prefixIcon,
   bordered = true,
+  selectOneByOne,
 }) => {
   const [value, setValue] = useState<Item>();
   const [values, setValues] = useState<Array<Item>>();
@@ -121,13 +130,15 @@ export const DropdownSearchableV2: FC<Props> = ({
   const handleSetValue = (item: Item) => {
     setSearchTerm("");
     if (isMultiple) {
-      const existThatItem = (values??[]).findIndex(i => readDataValue(i, "id") === readDataValue(item, "id"));
+      const existThatItem = (values ?? []).findIndex(
+        (i) => readDataValue(i, "id") === readDataValue(item, "id")
+      );
       if (existThatItem > -1) {
-        const oldValues = (values??[]);
+        const oldValues = values ?? [];
         oldValues.splice(existThatItem, 1);
         setValues([...oldValues]);
         if (onMultipleRemoveValue) {
-          onMultipleRemoveValue(readDataValue(item, "id"))
+          onMultipleRemoveValue(readDataValue(item, "id"));
         }
       } else {
         setValues((oldValues) => [...(oldValues ?? []), item]);
@@ -135,9 +146,10 @@ export const DropdownSearchableV2: FC<Props> = ({
           onchangeValue(modifyItem(item));
         }
       }
+      if (selectOneByOne) setShowOption(false);
     } else {
       setShowOption(false);
-      if (value&&readDataValue(value, "id") === readDataValue(item,"id")) {
+      if (value && readDataValue(value, "id") === readDataValue(item, "id")) {
         setValue(undefined);
       } else {
         setValue(item);
@@ -187,7 +199,7 @@ export const DropdownSearchableV2: FC<Props> = ({
       onClearData && onClearData();
     }
   };
-  
+
   const handleRemoveItemSingle = () => {
     setValue(undefined);
     onClearData && onClearData();
@@ -195,16 +207,20 @@ export const DropdownSearchableV2: FC<Props> = ({
 
   useEffect(() => {
     if (inputSearchRef.current) {
-      inputSearchRef.current?.focus()
+      inputSearchRef.current?.focus();
     }
-  }, [inputSearchRef.current])
+  }, [inputSearchRef.current]);
 
   React.useLayoutEffect(() => {
     if (data) {
       setDisplayData(data);
       //   console.log({initialValue})
       if (firstInit && initialValue) {
-        if (isMultiple && Array.isArray(initialValue) && initialValue.every(elm => Object.keys(elm).length > 0)) {
+        if (
+          isMultiple &&
+          Array.isArray(initialValue) &&
+          initialValue.every((elm) => Object.keys(elm).length > 0)
+        ) {
           setValues(initialValue);
         } else if (
           !Array.isArray(initialValue) &&
@@ -239,7 +255,7 @@ export const DropdownSearchableV2: FC<Props> = ({
           values?.find(
             (v) => readDataValue(v, "id") === readDataValue(option, "id")
           )) ||
-          readDataValue(option, "id") === readDataValue(value, "id") ? (
+        readDataValue(option, "id") === readDataValue(value, "id") ? (
           <img src={BlueCheck} alt={"checked"} className={"w-[15px] mr-3"} />
         ) : (
           <div className={"w-[15px] mr-3"} />
@@ -267,7 +283,9 @@ export const DropdownSearchableV2: FC<Props> = ({
   const renderMultiSelectedValue = () => {
     return (
       <div
-        className={"flex w-full p-3 cursor-pointer align-items-center flex-wrap overflow-y-scroll"}
+        className={
+          "flex w-full p-3 cursor-pointer align-items-center flex-wrap overflow-y-scroll"
+        }
       >
         {_map(values, (option) => (
           <div
@@ -275,9 +293,11 @@ export const DropdownSearchableV2: FC<Props> = ({
             className={
               "relative border rounded-full p-2 mr-1.5 pr-8 mb-1.5 bg-white"
             }
-            title={renderSelectedItem
-              ? modifyItem(option).text
-              : readDataValue(option, "text")}
+            title={
+              renderSelectedItem
+                ? modifyItem(option).text
+                : readDataValue(option, "text")
+            }
           >
             {renderSelectedItem
               ? renderSelectedItem(modifyItem(option))
@@ -300,56 +320,59 @@ export const DropdownSearchableV2: FC<Props> = ({
   const renderSingleSelectedValueWithClearValue = () => {
     if (!value) return null;
     return (
+      <div
+        className={classNames("flex text-left relative p-3 pr-8 mb-1 mt-1 ", {
+          "text-gray-300": !value,
+          border: bordered,
+          "rounded-full": bordered,
+        })}
+        title={
+          renderSelectedItem
+            ? modifyItem(value).text
+            : readDataValue(value, "text")
+        }
+      >
+        {renderSelectedItem
+          ? renderSelectedItem(modifyItem(value))
+          : readDataValue(value, "text")}
         <div
-            className={classNames(
-                "flex text-left relative p-3 pr-8 mb-1 mt-1 ",
-                {
-                  "text-gray-300": !value,
-                  border: bordered,
-                  "rounded-full": bordered,
-                }
-            )}
-            title={renderSelectedItem
-                ? modifyItem(value).text
-                : readDataValue(value, "text")}
+          className={
+            "absolute inset-y-0 right-0 flex items-center justify-center pr-2"
+          }
         >
-          {renderSelectedItem
-              ? renderSelectedItem(modifyItem(value))
-              : readDataValue(value, "text")}
-          <div
-              className={
-                "absolute inset-y-0 right-0 flex items-center justify-center pr-2"
-              }
-          >
-            <Close onClick={() => handleRemoveItemSingle()} />
-          </div>
+          <Close onClick={() => handleRemoveItemSingle()} />
         </div>
+      </div>
     );
   };
 
   const renderSingleSelectedValueWithoutClearValue = () => {
     if (!value) return null;
     return (
-        <div className={"flex-1 p-3 flex text-left "}>
-          <div
-              title={renderSelectedItem
-                  ? modifyItem(value).text
-                  : readDataValue(value, "text")}
-          >
-            {readDataValue(value, "text")
-                ? renderSelectedItem
-                    ? renderSelectedItem(modifyItem(value))
-                    : readDataValue(value, "text")
-                : placeholder}
-          </div>
+      <div className={"flex-1 p-3 flex text-left "}>
+        <div
+          title={
+            renderSelectedItem
+              ? modifyItem(value).text
+              : readDataValue(value, "text")
+          }
+        >
+          {readDataValue(value, "text")
+            ? renderSelectedItem
+              ? renderSelectedItem(modifyItem(value))
+              : readDataValue(value, "text")
+            : placeholder}
         </div>
+      </div>
     );
   };
 
   const renderSingleSelectedValue = () => {
     return (
       <div
-        className={"relative w-full flex p-1 h-full pl-2 cursor-pointer align-items-center"}
+        className={
+          "relative w-full flex p-1 h-full pl-2 cursor-pointer align-items-center"
+        }
       >
         {allowClearValueSingleInput
           ? renderSingleSelectedValueWithClearValue()
@@ -367,7 +390,7 @@ export const DropdownSearchableV2: FC<Props> = ({
 
   const handleSearchingValue = (value: string) => {
     setSearchTerm(value);
-    setShowOption(true)
+    setShowOption(true);
     onSearchInputChange && onSearchInputChange(value);
   };
 
@@ -392,24 +415,33 @@ export const DropdownSearchableV2: FC<Props> = ({
       data-value={value?.id}
     >
       <div
-          onClick={() => toggleShowOption()}
-          className={
-              (classNameInput ?? "") +
-              " flex w-full p-1 pl-2 " +
-              (showTriangle ? "pr-7" : "pl-2") +
-              " cursor-pointer align-items-center flex-wrap overflow-y-scroll"
-          }
+        onClick={() => toggleShowOption()}
+        className={
+          (classNameInput ?? "") +
+          " flex w-full p-1 pl-2 " +
+          (showTriangle ? "pr-7" : "pl-2") +
+          " cursor-pointer align-items-center flex-wrap overflow-y-scroll"
+        }
       >
-        {prefixIcon??null}
-        <span className={"text-left"}>{placeholder} {isMultiple? (values?`(${values.length})`:"") : (value?"(1)":"")}</span>
+        {prefixIcon ?? null}
+        <span className={"text-left"}>
+          {placeholder}{" "}
+          {isMultiple
+            ? values
+              ? `(${values.length})`
+              : ""
+            : value
+            ? "(1)"
+            : ""}
+        </span>
         {showTriangle && (
-            <div
-                className={
-                  "absolute inset-y-0 right-1 flex items-center justify-center px-1"
-                }
-            >
-              <TriangleDown />
-            </div>
+          <div
+            className={
+              "absolute inset-y-0 right-1 flex items-center justify-center px-1"
+            }
+          >
+            <TriangleDown />
+          </div>
         )}
       </div>
       {showOption ? (
@@ -436,8 +468,11 @@ export const DropdownSearchableV2: FC<Props> = ({
               />
             </div>
           )}
-          <div className={"border-t-0.5 border-primary-border mx-3"}/>
-          <div className="select-options-section overflow-auto bg-white rounded-md" onScroll={onScroll}>
+          <div className={"border-t-0.5 border-primary-border mx-3"} />
+          <div
+            className="select-options-section overflow-auto bg-white rounded-md"
+            onScroll={onScroll}
+          >
             {renderOptions()}
           </div>
         </div>
@@ -450,5 +485,6 @@ const defaultProps: Props = {
   showTriangle: true,
   disableSearch: false,
   disabled: false,
+  selectOneByOne: false
 };
 DropdownSearchableV2.defaultProps = defaultProps;
