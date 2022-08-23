@@ -32,7 +32,7 @@ const ProjectDirectoryPageV2:FC = () => {
     const [keywordCompany, setKeywordCompany] = useState('');
     const [companySelected, setCompanySelected] = useState('');
 	const { id: projectID } = useParams<{ id: string }>();
-    const [pageParam, setPageParam] = useState('');
+    const [pageParam, setPageParam] = useState("");
     const [prevCursor, setPrevCursor] = useState([null]);
 
     const { data: listCompanies, fetchNextPage } = useQueryListCompany({ keyword: keywordCompany, limit: 20 });
@@ -43,7 +43,9 @@ const ProjectDirectoryPageV2:FC = () => {
         fetchNextPage: fetchNextPageDepartmentDirectory,
         refetch,
         nextCursor
-    } = useDepartmentDirectory({ params: { companyID: companySelected, projectID, limit: 10 }, isFetchList: true });
+    } = useDepartmentDirectory({ params: { companyID: companySelected, projectID, limit: 10, lastestID: pageParam }, isFetchList: true });
+    console.log({ nextCursor });
+    
     const [departmentDirectoryIdSelected, setDepartmentDirectoryIdSelected] = useState("");
 
     const { assigned, checked, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(listDepartmentDirectory);
@@ -84,6 +86,10 @@ const ProjectDirectoryPageV2:FC = () => {
           setPageParam(prevCursor[prev - 2] || '')
         }
       };
+
+    const nextPageAction = () => {
+        setPageParam(nextCursor || "")
+    }
      
     // const toggleDeleteModal = () => {
     //     openModal(
@@ -144,7 +150,7 @@ const ProjectDirectoryPageV2:FC = () => {
                         <img src={nextIcon} alt={"----"}/>
                     </button> */}
                     {/* XỬ LÝ PHẤN TRANG */}
-                    <Paginate totalPages={totalPage} totalRecord={totalRecord} hasNextPage prevPageAction={() => prevPageAction()} nextPageAction={() => fetchNextPageDepartmentDirectory} />
+                    <Paginate totalPages={totalPage} totalRecord={totalRecord} hasNextPage prevPageAction={() => prevPageAction()} nextPageAction={() => nextPageAction()} />
                 {/* </div> */}
               
             </div>
