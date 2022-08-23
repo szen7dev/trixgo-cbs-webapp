@@ -71,7 +71,7 @@ export const PmHeaderContent:FC = () => {
                     </div>
                 }
             </div>
-            <div className={"flex ml-3 mr-3 justify-end"}>
+            {/* <div className={"flex ml-3 mr-3 justify-end"}>
                 <DropdownSearchable
                     disableSearch={true}
                     placeholder={"Lọc theo"}
@@ -92,7 +92,7 @@ export const PmHeaderContent:FC = () => {
                         }
                     ]}
                 />
-            </div>
+            </div> */}
         </>
     )
 }
