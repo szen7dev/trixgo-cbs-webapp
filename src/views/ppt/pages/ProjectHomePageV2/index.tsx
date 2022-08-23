@@ -22,6 +22,8 @@ const ProjectHomePageV2: FC = () => {
 		isFetchInfo: true
 	})
 
+	console.log(projectInfo.photos)
+
 	const renderPrevNextButton = (type: string, onClick: () => void) => {
 		return (
 			<div className={"flex items-center absolute z-10 h-full " + (type === "PREV" ? "left-0" : "right-0")}>
