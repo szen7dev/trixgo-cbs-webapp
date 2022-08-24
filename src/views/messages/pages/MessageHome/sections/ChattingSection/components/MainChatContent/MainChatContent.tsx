@@ -284,7 +284,7 @@ export const MainChatContent:FC<Props> = ({chat}) => {
                         scrollToBottom()
                         markAsRead()
                     }}
-                    className={"animate-bounce w-[48px] h-[48px] rounded-full absolute bottom-100px bg-white flex items-center justify-center right-40px z-10"}>
+                    className={"animate-bounce w-[48px] h-[48px] rounded-full absolute bottom-100px bg-cbs-item-message-other flex items-center justify-center right-40px z-10"}>
                     <img  src={ArrowDown} alt={"arrow down"}/>
                     <span
                         className={"absolute -top-1 -right-1 w-[24px] h-[24px] bg-positive rounded-full flex items-center justify-center text-white"}>{userUnreadMessage()}</span>

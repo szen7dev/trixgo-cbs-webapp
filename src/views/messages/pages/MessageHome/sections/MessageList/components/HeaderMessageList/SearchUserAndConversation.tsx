@@ -23,7 +23,7 @@ export const SearchUserAndConversation:FC = () => {
     useOnClickOutside(wrapperClass, () => setShowResult(false))
 
     const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-        debounce((e) => setSearch(e.target.value), 600)
+        setSearch(e.target.value)
         setShowResult(true)
     }
 

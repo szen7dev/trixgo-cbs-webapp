@@ -42,9 +42,9 @@ export const MyMessage:FC<Props> = ({message, context, isMini}) => {
             case 1:
                 return <ImagesContent isMini={isMini} context={context} message={message} isMyMessage={true}/>;
             case 7:
-                return <ContactContent isMini={isMini} context={context} message={message} className={"bg-primary text-white"} borderClass={"border-gray-300"}/>;
+                return <ContactContent isMini={isMini} context={context} message={message} className={"bg-primary text-white"} borderClass={"border-gray-300"} isMyMessage={true}/>;
             case 8:
-                return <NpsContent isMini={isMini} context={context} message={message} className={"bg-primary text-white"} borderClass={"border-gray-300"} isMyMessage={true}/>;
+                return <NpsContent isMini={isMini} context={context} message={message} className={"border-0.5"} borderClass={"border-gray-300"}/>;
         }
     }, [message]);
 

@@ -127,7 +127,7 @@ export const FileChatContent:FC<Props> = ({message, className,showSenderName, is
             <div className={"date-message text-xs flex items-center w-full justify-end " + (isMyMessage?"text-primary":"text-gray-500")}>
                 <ReactionList message={message}/>
                 <span className={"ml-[5px]"}>{moment(message.createAt).format("HH:mm")}</span>
-                <MessageStatus message={message}/>
+                <MessageStatus message={message} isMine={isMyMessage}/>
             </div>
             <ReactionActions context={context} message={message}/>
         </div>

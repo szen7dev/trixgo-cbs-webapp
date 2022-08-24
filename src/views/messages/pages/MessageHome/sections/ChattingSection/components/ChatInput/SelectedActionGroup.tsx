@@ -17,7 +17,7 @@ export const SelectedActionGroup:FC = () => {
 
     if (!listSelectedMessage||Object.keys(listSelectedMessage).length <= 0) return null;
     return (
-        <div className={"absolute w-full h-full flex items-center bg-white z-10 rounded-md py-[16px] px-[26px]"}>
+        <div className={"absolute w-full h-full flex items-center bg-cbs-chat-input-bg z-10 rounded-md py-[16px] px-[26px]"}>
             <button
                 onClick={() => dispatch(removeAllSelectedMessage({conversationId: currentChat}))}
             >

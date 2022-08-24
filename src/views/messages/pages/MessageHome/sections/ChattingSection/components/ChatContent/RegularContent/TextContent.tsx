@@ -99,7 +99,7 @@ export const TextChatContent:FC<Props> = ({message,className,showSenderName, isM
                 <div className={"date-message date-text-message text-xs flex items-center w-full justify-end "  + (isMyMessage?"text-primary":"text-gray-500")}>
                     <ReactionList message={message}/>
                     <span className={"ml-[5px]"}>{moment(message.createAt).format("HH:mm")}</span>
-                    <MessageStatus message={message}/>
+                    <MessageStatus message={message} isMine={isMyMessage}/>
                 </div>
             </div>
             <ReactionActions context={context} message={message}/>
