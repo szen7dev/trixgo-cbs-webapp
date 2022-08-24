@@ -244,9 +244,9 @@ export const DropdownSearchable: FC<Props> = ({
             (v) => readDataValue(v, "id") === readDataValue(option, "id")
           )) ||
           readDataValue(option, "id") === readDataValue(value, "id") ? (
-          <img src={BlueCheck} alt={"checked"} className={"w-[15px] mr-3"} />
+          <img src={BlueCheck} alt={"checked"} className={"w-[15px] mr-3 min-w-[15px]"} />
         ) : (
-          <div className={"w-[15px] mr-3"} />
+          <div className={"w-[15px] mr-3 min-w-[15px]"} />
         )}
         {renderItem ? (
           renderItem(modifyItem(option))
@@ -495,7 +495,7 @@ export const DropdownSearchable: FC<Props> = ({
               />
             </div>
           )}
-          <div className="select-options-section overflow-auto bg-white" onScroll={onScroll}>
+          <div className="select-options-section overflow-y-auto bg-white" onScroll={onScroll}>
             {renderOptions()}
           </div>
         </div>

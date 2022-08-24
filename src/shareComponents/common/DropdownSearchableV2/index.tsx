@@ -256,9 +256,9 @@ export const DropdownSearchableV2: FC<Props> = ({
             (v) => readDataValue(v, "id") === readDataValue(option, "id")
           )) ||
         readDataValue(option, "id") === readDataValue(value, "id") ? (
-          <img src={BlueCheck} alt={"checked"} className={"w-[15px] mr-3"} />
+          <img src={BlueCheck} alt={"checked"} className={"w-[15px] mr-3 min-w-[15px]"} />
         ) : (
-          <div className={"w-[15px] mr-3"} />
+          <div className={"w-[15px] mr-3 min-w-[15px]"} />
         )}
         {renderItem ? (
           renderItem(modifyItem(option))
@@ -301,7 +301,7 @@ export const DropdownSearchableV2: FC<Props> = ({
           >
             {renderSelectedItem
               ? renderSelectedItem(modifyItem(option))
-              : readDataValue(option, "text")}
+              : <p className={"line-clamp-2"}>{readDataValue(option, "text")}</p>}
             <div
               className={
                 "absolute inset-y-0 right-0 flex items-center justify-center pr-2"
@@ -334,7 +334,7 @@ export const DropdownSearchableV2: FC<Props> = ({
       >
         {renderSelectedItem
           ? renderSelectedItem(modifyItem(value))
-          : readDataValue(value, "text")}
+          : <p className={"line-clamp-2"}>{readDataValue(value, "text")}</p>}
         <div
           className={
             "absolute inset-y-0 right-0 flex items-center justify-center pr-2"
@@ -360,7 +360,7 @@ export const DropdownSearchableV2: FC<Props> = ({
           {readDataValue(value, "text")
             ? renderSelectedItem
               ? renderSelectedItem(modifyItem(value))
-              : readDataValue(value, "text")
+                  : <p className={"line-clamp-2"}>{readDataValue(value, "text")}</p>
             : placeholder}
         </div>
       </div>
@@ -470,7 +470,7 @@ export const DropdownSearchableV2: FC<Props> = ({
           )}
           <div className={"border-t-0.5 border-primary-border mx-3"} />
           <div
-            className="select-options-section overflow-auto bg-white rounded-md"
+            className="select-options-section overflow-y-auto bg-white rounded-md"
             onScroll={onScroll}
           >
             {renderOptions()}
