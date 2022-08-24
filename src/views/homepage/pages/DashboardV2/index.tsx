@@ -37,12 +37,12 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import { useAppSelector } from "redux/reducer";
 import {
   useListResponseFromSearch,
-  useListSubjectFromSearch,
 } from "services/hooks/pcm/usePcmDashboardV2";
 import { debounce } from "lodash";
 import { useQueryListDepartmentsIsMember } from "services/hooks/items/useDepartment";
 import { useDispatch } from "react-redux";
 import { setTabActive } from "redux/reducer/DashboardV2Slice";
+import { useSearchTask } from "services/hooks/useMainSearch";
 
 type Props = {
   type?: number;
@@ -59,9 +59,14 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     (state) => state.dashboardV2.data.keywordForResponse
   );
 
+  const keywordForSubject = useAppSelector(
+    (state) => state.dashboardV2.data.keywordForSubject
+  );
+
   ///// Đơn vị tạo phản hồi
   const [companyOfAuthor, setCompanyOfAuthor] = useState<string[]>([]);
 
+  //// Đơn vị thực hiện
   const [companiesAssign, setCompaniesAssign] = useState<string[]>([]);
 
   ///// Danh sách công ty
@@ -144,17 +149,40 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     project: project,
     fromDate: fromCreateDate,
     toDate: toCreateDate,
-    official: official,
+    // official: official,
     enabled: tabActive === 1 ? true : false,
   };
- 
-  const { listDataForResponse, isLoadingResponse } = useListResponseFromSearch(query);
+
+  const { listDataForResponse, isLoadingResponse } =
+    useListResponseFromSearch(query);
+
+   const [fromExpiredDate, setFromExpiredDate] = useState("");
+  const [toExpiredDate, setToExpiredDate] = useState("");
+  const [isExpired, setIsExpired] = useState<any>(0);
+  const [subtypes, setSubtypes] = useState<string[]>([]);
 
   // Danh sách các subject theo keyword
-  const { listDataForSubject, totalRecord: totalRecordSubject } =
-    useListSubjectFromSearch({
-      keyword: "",
-    });
+  const {
+    listTasks: listDataForSubject,
+    nextPageListTask,
+    totalRecord: totalRecordSubject,
+    isLoadingListTask,
+  } = useSearchTask({
+    params: {
+      keyword: keywordForSubject,
+      companiesOfAssignee: companiesAssign,
+      assigneesID: assign,
+      fromDate: fromExpiredDate,
+      toDate: toExpiredDate,
+      isParent: "1",
+      isActive: "1",
+      authorsID: authors,
+      projectsID: project,
+      isExpired: isExpired,
+      subtypes: subtypes
+    },
+    isFetch: tabActive === 2 ? true : false,
+  });
 
   //////
 
@@ -170,7 +198,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     <div className="t-home flex flex-col h-full overflow-hidden">
       <div className={"sticky top-0 bg-white z-10"}>
         <div className={"filter-bar flex flex-wrap px-4 py-2"}>
-          {isLoadingResponse && <Loader className="border-primary" />}
+          {(isLoadingResponse || isLoadingListTask) && <Loader className="border-primary" />}
           {tabIndex === 2 && (
             <DropdownSearchableV2
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
@@ -297,21 +325,31 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               placeholder={"Thời hạn"}
               iconBack={<TriangleDown />}
               iconFront={<img src={timelineIcon} alt={"----"} />}
-              onValueChange={(val) => console.log(val)}
+              onValueChange={(val) => {
+                setFromExpiredDate(val.fromDate);
+                setToExpiredDate(val.toDate);
+                dispatch(setTabActive(tabIndex));
+              }}
               options={[
                 {
                   text: "Tất cả",
-                  fromDate: "00/00/0000",
+                  fromDate: "1990/01/01",
                   toDate: "31/12/2999",
                 },
                 {
                   text: "1 tuần tới",
-                  fromDate: "12/08/2022",
-                  toDate: "17/08/2022",
+                  fromDate: moment().format("YYYY/MM/DD"),
+                  toDate: moment(
+                    moment().add(7, "days").calendar(),
+                    "DD-MM-YYYY"
+                  ).format("YYYY/MM/DD"),
                 },
                 {
                   text: "> 7 ngày tiếp theo",
-                  fromDate: "17/08/2022",
+                  fromDate: moment(
+                    moment().add(7, "days").calendar(),
+                    "DD-MM-YYYY"
+                  ).format("YYYY/MM/DD"),
                   toDate: "31/12/2999",
                 },
               ]}
@@ -606,23 +644,27 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           {tabIndex === 2 && (
             <DropdownSearchableV2
               selectOneByOne={true}
+              disableSearch={true}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Quá hạn"}
               prefixIcon={
                 <img className={"mr-2"} src={timeTableIcon} alt={"icon"} />
               }
-              disableSearch={true}
+              onchangeValue={(val) => {
+                setIsExpired(val.id);
+                dispatch(setTabActive(tabIndex));
+              }}
               data={[
                 {
-                  id: 1,
+                  id: 0,
                   text: "Tất cả",
                 },
                 {
-                  id: 2,
+                  id: 1,
                   text: "Đã quá hạn",
                 },
                 {
-                  id: 3,
+                  id: 2,
                   text: "Chưa quá hạn",
                 },
               ]}
@@ -638,6 +680,20 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               }
               isMultiple={true}
               disableSearch={true}
+
+              onchangeValue={(value) => {
+                if (!subtypes.includes?.(value.id as string)) {
+                  const newData: any = [...subtypes, value.id];
+                  setSubtypes(newData);
+                }
+                dispatch(setTabActive(tabIndex));
+              }}
+              onMultipleRemoveValue={(id: any) => {
+                const newList = subtypes.filter((item) => item !== id);
+                setSubtypes(newList);
+              }}
+              onClearData={() => setSubtypes([])}
+
               data={[
                 {
                   id: 1,
@@ -865,7 +921,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                       </div>
                     </td>
                     <td className={"w-[55px]"}>
-                      <Link to={"/pcm/detail/" + item._id}>
+                      <Link to={"/pcm/detail/" + item.task?._id}>
                         <div className={"py-2"}>
                           <img
                             src={`${process.env.REACT_APP_URL_S3_USER}/${item.author.image}`}
@@ -878,7 +934,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                       </Link>
                     </td>
                     <td className={"w-[170px]"}>
-                      <Link to={"/pcm/detail/" + item._id}>
+                      <Link to={"/pcm/detail/" + item.task?._id}>
                         <div className={"user-infor py-2"}>
                           <p className={"truncate user-infor-name text-[14px]"}>
                             {item.author.fullname}
@@ -890,7 +946,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                       </Link>
                     </td>
                     <td className={"w-td-dashboard"}>
-                      <Link to={"/pcm/detail/" + item._id}>
+                      <Link to={"/pcm/detail/" + item.task?._id}>
                         <p className={"task-title truncate text-[14px] mt-2"}>
                           {item.project?.sign}.{item.task?.name}
                         </p>

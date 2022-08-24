@@ -96,7 +96,6 @@ export const useSearchTask = ({
     params = {},
     isFetch = false,
 }: UseSearchTaskProps): UseSearchTask => {
-
     const {
         isLoading: isLoadingListTask,
         data: dataListTask,
@@ -110,11 +109,11 @@ export const useSearchTask = ({
         MainSearchRepository.mainSearch({
             lastestID: pageParam || "",
             populates: JSON.stringify({
-                path: "assignee author project group lastLog",
-                select: "name bizfullname image sign content author",
+                path: "assignee author project group lastLog lastComment",
+                select: "name fullname bizfullname image sign content author createAt sign",
                 populate: {
                     path: "author",
-                    select: "bizfullname image sign"
+                    select: "bizfullname fullname image sign" 
                 }
             }),
             ...params,
