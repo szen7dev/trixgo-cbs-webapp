@@ -13,7 +13,7 @@ const DocumentLeftMenuContent:FC = () => {
             label: "Trang chủ",
             icon: fileIcon,
             count: 0,
-            route: '/document-v2/home'
+            route: '/document/home'
         }
     ]
 

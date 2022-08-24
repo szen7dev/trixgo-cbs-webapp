@@ -8,7 +8,7 @@ const DocumentV2Router: FC = () => {
         <Switch>
             <ProtectedRoute
                 exact
-                path="/document-v2/home"
+                path="/document/home"
                 component={DocumentHomePageV2}
             />
         </Switch>

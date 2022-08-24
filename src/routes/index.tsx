@@ -115,14 +115,14 @@ const Routes: FC = () => {
                                 </Route>
 
                                 {/* =====DOCUMENT===== */}
-                                <Route path="/document">
+                                {/* <Route path="/document">
                                     <DocumentLayout>
                                         <DocumentRouter />
                                     </DocumentLayout>
-                                </Route>
+                                </Route> */}
 
                                 {/* =====DOCUMENT V2===== */}
-                                <Route path="/document-v2">
+                                <Route path="/document">
                                     <DocumentLayoutV2>
                                         <DocumentV2Router />
                                     </DocumentLayoutV2>
