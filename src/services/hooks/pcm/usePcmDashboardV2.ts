@@ -54,55 +54,55 @@ export const useListResponseFromSearch = (payload: any): any => {
   };
 };
 
-export const useListSubjectFromSearch = (
-  payload: {
-    keyword: string;
-  },
-  enabled = true
-): any => {
-  // Get danh sách
-  const {
-    isLoading: isLoadingSubject,
-    refetch: refetchSubject,
-    data: dataSubject,
-    fetchNextPage: nextPageSubject,
-    hasNextPage: hasNextPageSubject,
-  } = useInfiniteQuery(
-    [`app_dashboard_search_by_subject.${payload.keyword}`, payload.keyword],
-    async ({ pageParam }) => {
-      return TaskRepository.listSubject({
-        keyword: payload.keyword,
-        draft: "1",
-        isParent: "1",
-        isActive: "1",
-        lastestID: pageParam || "",
-      });
-    },
-    {
-      getNextPageParam: ({ data }) => {
-        return data?.nextCursor || undefined;
-      },
-      refetchOnWindowFocus: false,
-      enabled: enabled,
-    }
-  );
+// export const useListSubjectFromSearch = (
+//   payload: {
+//     keyword: string;
+//   },
+//   enabled = true
+// ): any => {
+//   // Get danh sách
+//   const {
+//     isLoading: isLoadingSubject,
+//     refetch: refetchSubject,
+//     data: dataSubject,
+//     fetchNextPage: nextPageSubject,
+//     hasNextPage: hasNextPageSubject,
+//   } = useInfiniteQuery(
+//     [`app_dashboard_search_by_subject.${payload.keyword}`, payload.keyword],
+//     async ({ pageParam }) => {
+//       return TaskRepository.listSubject({
+//         keyword: payload.keyword,
+//         draft: "1",
+//         isParent: "1",
+//         isActive: "1",
+//         lastestID: pageParam || "",
+//       });
+//     },
+//     {
+//       getNextPageParam: ({ data }) => {
+//         return data?.nextCursor || undefined;
+//       },
+//       refetchOnWindowFocus: false,
+//       enabled: enabled,
+//     }
+//   );
 
-  const listDataForSubject = []
-    .concat(...(dataSubject?.pages || []).map((d: any) => d.data?.listRecords))
-    .filter(Boolean);
-  const totalRecord = dataSubject?.pages[0]?.data?.totalRecord;
-  const totalPage = dataSubject?.pages[0]?.data?.totalPage;
+//   const listDataForSubject = []
+//     .concat(...(dataSubject?.pages || []).map((d: any) => d.data?.listRecords))
+//     .filter(Boolean);
+//   const totalRecord = dataSubject?.pages[0]?.data?.totalRecord;
+//   const totalPage = dataSubject?.pages[0]?.data?.totalPage;
 
-  return {
-    isLoadingSubject,
-    listDataForSubject,
-    totalRecord,
-    totalPage,
-    nextPageSubject,
-    hasNextPageSubject,
-    refetchSubject,
-  };
-};
+//   return {
+//     isLoadingSubject,
+//     listDataForSubject,
+//     totalRecord,
+//     totalPage,
+//     nextPageSubject,
+//     hasNextPageSubject,
+//     refetchSubject,
+//   };
+// };
 
 export const useListCompaniesSystems = (
   payload: {

@@ -1,7 +1,7 @@
 import React, { ChangeEvent, FC, useEffect, useRef, useState } from "react";
 import searchIcon from "assets/images/icons8-search-120.png";
 import { useOnClickOutside } from "services/hooks/useOnclickOutside";
-import userAvt from "assets/images/task-user.svg";
+import { useSearchTask } from "services/hooks/useMainSearch";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "redux/reducer";
 import {
@@ -13,7 +13,6 @@ import {
 } from "redux/reducer/DashboardV2Slice";
 import {
   useListResponseFromSearch,
-  useListSubjectFromSearch,
   useListCompaniesSystems,
 } from "services/hooks/pcm/usePcmDashboardV2";
 import { subContentHtml } from "views/homepage/pages";
@@ -41,12 +40,17 @@ export const HomeHeaderContent: FC = () => {
     enabled: keywordSearchForResponse ? true : false
   });
 
-  const { listDataForSubject, isLoadingSubject } = useListSubjectFromSearch(
-    {
+  const {
+    listTasks: listDataForSubject,
+    isLoadingListTask: isLoadingSubject,
+  } = useSearchTask({
+    params: {
       keyword: keywordSearchForSubject,
+      isParent: "1",
+      isActive: "1",
     },
-    keywordSearchForSubject ? true : false
-  );
+    isFetch: keywordSearchForSubject ? true : false,
+  });
 
   const { data: listUsersSystem, loading: isLoadingUserSystem } = useUserSystem(
     {
