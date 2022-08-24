@@ -223,6 +223,12 @@ module.exports = {
             left: {
                 '[75px]' : '75px',
                 '[68px]' : '68px',
+            },
+            right: {
+                '[10px]' : '10px',
+            },
+            top: {
+                '[10px]' : '10px',
             }
         },
     },

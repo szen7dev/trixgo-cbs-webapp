@@ -57,7 +57,9 @@ export const ItemFileInMessage:FC<Props> = ({file}) => {
                             <a href={`${process.env.REACT_APP_URL_S3}${f.path}`} download target="_blank" rel="noreferrer">{f.nameOrg??f.name}</a>
                             <p className={"text-gray-400"}>{formatBytes(f.size)}</p>
                         </div>
-                        <input type="checkbox" className="form-check-input transition duration-200 rounded-full cursor-pointer absolute top-10px right-10px invisible opacity-0 w-[24px] h-[24px] min-w-[24px] min-h-[24px]" />
+                        <div className={"absolute top-[10px] right-[10px] input-wrapper"}>
+                            <input type="checkbox" className="form-check-input transition duration-200 invisible opacity-0 rounded-full cursor-pointer w-[24px] h-[24px] min-w-[24px] min-h-[24px]" />
+                        </div>
                     </div>
                 ))
             }
