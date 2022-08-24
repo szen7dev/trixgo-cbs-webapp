@@ -144,12 +144,12 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
   // Danh sách các response
   const query: any = {
     keyword: keywordForResponse,
-    companyOfAuthor: companyOfAuthor,
-    author: authorsCreateResponse,
-    project: project,
+    companyOfAuthorsID: companyOfAuthor,
+    authorsID: authorsCreateResponse,
+    projectsID: project,
     fromDate: fromCreateDate,
     toDate: toCreateDate,
-    // official: official,
+    official: official,
     enabled: tabActive === 1 ? true : false,
   };
 
@@ -160,6 +160,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
   const [toExpiredDate, setToExpiredDate] = useState("");
   const [isExpired, setIsExpired] = useState<any>(0);
   const [subtypes, setSubtypes] = useState<string[]>([]);
+  const [status, setStatus] = useState<string[]>([]);
 
   // Danh sách các subject theo keyword
   const {
@@ -179,7 +180,8 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
       authorsID: authors,
       projectsID: project,
       isExpired: isExpired,
-      subtypes: subtypes
+      subtypes: subtypes,
+      status: status
     },
     isFetch: tabActive === 2 ? true : false,
   });
@@ -212,6 +214,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                   setCompaniesAssign(newData);
                 }
                 setSearchCompanyName("");
+                dispatch(setTabActive(tabIndex));
               }}
               onMultipleRemoveValue={(id: any) => {
                 const newList = companiesAssign.filter((item) => item !== id);
@@ -253,6 +256,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                   setAssign(newData);
                 }
                 setSearchUserSystem("");
+                dispatch(setTabActive(tabIndex));
               }}
               onMultipleRemoveValue={(id: any) => {
                 const newList = assign.filter((item) => item !== id);
@@ -334,7 +338,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                 {
                   text: "Tất cả",
                   fromDate: "1990/01/01",
-                  toDate: "31/12/2999",
+                  toDate: "2999/12/31",
                 },
                 {
                   text: "1 tuần tới",
@@ -350,7 +354,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                     moment().add(7, "days").calendar(),
                     "DD-MM-YYYY"
                   ).format("YYYY/MM/DD"),
-                  toDate: "31/12/2999",
+                  toDate: "2999/12/31",
                 },
               ]}
             />
@@ -368,6 +372,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                   setAuthors(newData);
                 }
                 setSearchUserSystem("");
+                dispatch(setTabActive(tabIndex));
               }}
               onMultipleRemoveValue={(id: any) => {
                 const newList = authorsCreateResponse.filter(
@@ -614,7 +619,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                 {
                   text: "Tất cả",
                   fromDate: "1990/01/01",
-                  toDate: "31/12/2999",
+                  toDate: "2999/12/31",
                 },
                 {
                   text: "Ngày nay",
@@ -682,17 +687,17 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               disableSearch={true}
 
               onchangeValue={(value) => {
-                if (!subtypes.includes?.(value.id as string)) {
-                  const newData: any = [...subtypes, value.id];
-                  setSubtypes(newData);
+                if (!status.includes?.(value.id as string)) {
+                  const newData: any = [...status, value.id];
+                  setStatus(newData);
                 }
                 dispatch(setTabActive(tabIndex));
               }}
               onMultipleRemoveValue={(id: any) => {
-                const newList = subtypes.filter((item) => item !== id);
-                setSubtypes(newList);
+                const newList = status.filter((item) => item !== id);
+                setStatus(newList);
               }}
-              onClearData={() => setSubtypes([])}
+              onClearData={() => setStatus([])}
 
               data={[
                 {
@@ -734,7 +739,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               prefixIcon={
                 <img className={"mr-2"} src={categoryIcon} alt={"icon"} />
               }
-              isMultiple={true}
+              isMultiple={false}
               disableSearch={true}
               data={[
                 {
@@ -752,6 +757,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               ]}
               onchangeValue={(value) => {
                 setOfficial(value.id);
+                dispatch(setTabActive(tabIndex));
               }}
             />
           )}
@@ -765,6 +771,18 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               }
               isMultiple={true}
               disableSearch={true}
+              onchangeValue={(value) => {
+                if (!subtypes.includes?.(value.id as string)) {
+                  const newData: any = [...subtypes, value.id];
+                  setSubtypes(newData);
+                }
+                dispatch(setTabActive(tabIndex));
+              }}
+              onMultipleRemoveValue={(id: any) => {
+                const newList = subtypes.filter((item) => item !== id);
+                setSubtypes(newList);
+              }}
+              onClearData={() => setSubtypes([])}
               data={[
                 {
                   id: 0,
