@@ -5,19 +5,48 @@ import chatIcon from "assets/images/icons8-chat-48.svg";
 import projectIcon from "assets/images/icons-project.svg";
 import contractIcon from "assets/images/icons8-contract-64.svg";
 import fileIcon from "assets/images/icons-file.svg";
-import commercialIcon from "assets/images/icons8-commercial-64.svg";
-import peopleIcon from "assets/images/icons8-people-64.svg";
-import {Link, useHistory, useLocation} from "react-router-dom";
-import {useSocket} from "../../../services/hooks/useSocket";
-// import {useNotification} from "../../../services/hooks/useNotification";
-import {useSelector} from "react-redux";
-import {RootState} from "../../../redux/reducer";
+import {Link, useLocation} from "react-router-dom";
+import {useSocket} from "services/hooks/useSocket";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "redux/reducer";
+import {setAmountMissMessage} from "redux/reducer/messages/ListConversation";
+import {UseListConversation} from "services/hooks/messages/useListConversation";
 
 type Props = {
     handleMenuEvent: () => void
 }
 export const LeftNavigate:FC<Props> = ({handleMenuEvent}) => {
     const {pathname} = useLocation();
+    const { current: socket }: any = useSocket();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (!pathname.includes("/messages")) {
+            getListConversation({keyword: ""});
+        }
+    },[])
+
+    useEffect(() => {
+        if (!socket) return;
+        socket.on('CHATTING_SSC_RECEIVE_MESSAGE', onReceiveMessage);
+
+        return () => {
+            socket.off('CHATTING_SSC_RECEIVE_MESSAGE', onReceiveMessage);
+        }
+    },[socket]);
+
+    const amountMissMessage = useSelector((state: RootState) => state.listConversation.data.amountMissMessage);
+    const {getListConversation} = UseListConversation();
+
+    const onReceiveMessage = (data: any) => {
+        if (pathname.includes("/messages")) {
+            return;
+        }
+        if (data?.infoMessage?.error) {
+            return;
+        }
+        dispatch(setAmountMissMessage(data.amountMissMessage))
+    };
 
     return (
         <div className={"bg-cbs-right-navigate-bg w-[68px] min-w-[68px] flex flex-col items-center relative z-40"}>
@@ -59,10 +88,13 @@ export const LeftNavigate:FC<Props> = ({handleMenuEvent}) => {
             <Link to={`/messages`} className={"flex flex-col items-center mb-3"}>
                 <div className={"px-4 py-1 rounded-full relative " + (pathname.includes("/messages") ? "bg-cbs-hightlight-right-navigate" : "")}>
                     <img src={chatIcon} alt={"Chat"}/>
-                    <span
-                        className={"absolute -top-1 right-1 min-w-5 w-5 h-5 text-xs inline-block border-2 text-center border-white rounded-full bg-negative text-white"}>
-                        10
-                    </span>
+                    {
+                        amountMissMessage > 0 &&
+                        <span
+                            className={"absolute -top-1 right-1 min-w-5 w-5 h-5 text-xs inline-block border-2 text-center border-white rounded-full bg-negative text-white"}>
+                            {amountMissMessage}
+                        </span>
+                    }
                 </div>
                 <span className={"text-primary-gray mt-1"}>Chat</span>
             </Link>

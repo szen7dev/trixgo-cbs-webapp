@@ -50,10 +50,10 @@ export const SettingMessageDetailTab:FC<Props> = ({chat}) => {
 
     return (
         <>
-            <div className={"flex max-w-full border-b border-gray-100 bg-white h-[55px] sticky top-55px z-5 min-h-[55px]"}>
+            <div className={"flex max-w-full justify-around border-b border-gray-100 bg-white h-[55px] sticky top-55px z-5 min-h-[55px]"}>
                 {_map(listTab.filter(tab => tab.isShow), (tab) => (
                     <div
-                        className={"flex items-center px-4 hover:bg-gray-100 rounded-tl-md rounded-tr-md"}
+                        className={"flex items-center hover:bg-gray-100 rounded-tl-md rounded-tr-md"}
                         key={tab.tabId}
                         onClick={() => setActiveTab(tab.tabId)}
                     >
