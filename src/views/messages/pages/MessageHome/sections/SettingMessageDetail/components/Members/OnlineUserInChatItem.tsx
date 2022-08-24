@@ -9,7 +9,7 @@ import {useOnClickOutside} from "services/hooks/useOnclickOutside";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {toast} from "react-toastify";
 import {useDeleteConfirm} from "services/hooks/useDeleteConfirm";
-import {MessageContext, populates} from "../../../../index";
+import {MessageContext, populates} from "../../../../../../shareComponents/layouts/MessagesLayoutV2";
 
 type Props = {
     user: ItemMemberMessage,

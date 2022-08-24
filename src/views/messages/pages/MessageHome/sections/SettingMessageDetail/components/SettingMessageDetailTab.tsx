@@ -3,10 +3,10 @@ import {map as _map} from "lodash";
 import {ListOnlineUserInMessage} from "./Members";
 import {ListMediaInMessage} from "./Medias";
 import {ListFileInMessage} from "./Files";
-import {MessageContext} from "../../../index";
 import {ListLinksInMessage} from "./Links";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {ListGeneralGroupByMember} from "./Groups";
+import {MessageContext} from "../../../../../shareComponents/layouts/MessagesLayoutV2";
 
 type Props = {
     chat: ItemListConversation

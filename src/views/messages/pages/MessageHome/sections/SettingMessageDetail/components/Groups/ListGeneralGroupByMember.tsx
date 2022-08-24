@@ -1,10 +1,10 @@
 import React, {FC, useContext, useEffect, useState} from "react";
 import {map as _map} from "lodash";
 
-import {MessageContext} from "../../../../index";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {SearchChatItem} from "../../../MessageList";
+import {MessageContext} from "../../../../../../shareComponents/layouts/MessagesLayoutV2";
 
 type Props = {
     memberId: string;

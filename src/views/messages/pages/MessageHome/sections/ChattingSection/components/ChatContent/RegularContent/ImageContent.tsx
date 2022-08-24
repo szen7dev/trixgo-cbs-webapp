@@ -114,7 +114,7 @@ export const ImagesContent:FC<Props> = ({ message, className, showSenderName, is
 
     return (
         <div className={"min-w-[70px] relative " + (className??"") + (isMini?" max-w-[250px]":" max-w-[366px]")}>
-            <div className={"overflow-hidden rounded-lg " + (isMyMessage?"bg-cbs-active-comment":"bg-white")}>
+            <div className={"overflow-hidden rounded-lg " + (isMyMessage?"bg-primary text-white":"bg-cbs-item-message-other")}>
                 {
                     message.parent&&
                     <div className={"p-2"}>

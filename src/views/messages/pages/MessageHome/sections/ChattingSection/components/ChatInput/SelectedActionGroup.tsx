@@ -5,10 +5,10 @@ import ForwardIcon from "assets/images/icons8-reply-arrow-100.svg";
 import RemoveRedIcon from "assets/images/icons8-remove-48.svg";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
-import {MessageContext} from "../../../../index";
 import {removeAllSelectedMessage} from "redux/reducer/messages/ListMessage";
 import {shareMessageToConversation} from "redux/reducer/messages/ShareMessage";
 import {deleteAndRevokeMessageOfConversation} from "redux/reducer/messages/DeleteAndRevokeMessage";
+import {MessageContext} from "../../../../../../shareComponents/layouts/MessagesLayoutV2";
 
 export const SelectedActionGroup:FC = () => {
     const {currentChat} = useContext(MessageContext);

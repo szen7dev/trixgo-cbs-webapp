@@ -19,7 +19,7 @@ import {toast} from "react-toastify";
 import {RootState} from "redux/reducer";
 import {pushMoreUnreadMessage} from "redux/reducer/messages/UnreadMessages";
 import {UseInformationMessage} from "services/hooks/messages/useInformationMessage";
-import {populates} from "../../../pages/MessageHome";
+import {populates} from "../../layouts/MessagesLayoutV2";
 import Favico from "react-favico-js";
 
 type Props = {

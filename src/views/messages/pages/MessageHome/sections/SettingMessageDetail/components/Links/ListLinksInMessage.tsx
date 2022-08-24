@@ -2,11 +2,11 @@ import React, {FC, useCallback, useContext, useState} from "react";
 import {DropdownSearchable} from "shareComponents/common/DropdownSearchable";
 import {map as _map} from "lodash";
 
-import {MessageContext} from "../../../../index";
 import {ItemLinkInMessage} from "./ItemLinkInMessage";
 import {UseInformationMessage} from "services/hooks/messages/useInformationMessage";
 import {ItemLinkMessage} from "typings/apis/messages/listConversation";
 import moment from "moment";
+import {MessageContext} from "../../../../../../shareComponents/layouts/MessagesLayoutV2";
 
 type Props = {
     isActive: boolean

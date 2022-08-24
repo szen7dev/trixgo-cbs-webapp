@@ -2,7 +2,6 @@ import React, {FC, useCallback, useContext, useEffect, useRef} from "react";
 import IconPinned from "assets/icons/Pinned";
 import { NavLink } from "react-router-dom";
 import {OptionListItemRightClick} from "./OptionListItemRightClick";
-import {MessageContext} from "../../../../index";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import moment from "moment";
 import {AvatarGroupChat} from "./AvatarGroupChat";
@@ -10,6 +9,7 @@ import {RightClickMenuWrapper} from "shareComponents/common";
 import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
+import {MessageContext} from "../../../../../../shareComponents/layouts/MessagesLayoutV2";
 
 type Props = {
     chat: ItemListConversation;

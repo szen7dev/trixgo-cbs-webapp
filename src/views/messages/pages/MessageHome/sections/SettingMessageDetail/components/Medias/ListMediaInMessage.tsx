@@ -3,11 +3,11 @@ import {map as _map} from "lodash";
 import {DropdownSearchable,ModalFullContainer} from "shareComponents/common";
 import {ItemMediaInMessage} from "./ItemMediaInMessage";
 
-import {MessageContext} from "../../../../index";
 import {ViewImage} from "../../../ChattingSection";
 import {UseInformationMessage} from "services/hooks/messages/useInformationMessage";
 import {ItemFileMessage} from "typings/apis/messages/listConversation";
 import moment from "moment";
+import {MessageContext} from "../../../../../../shareComponents/layouts/MessagesLayoutV2";
 
 type Props = {
     isActive: boolean

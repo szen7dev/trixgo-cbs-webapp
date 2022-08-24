@@ -7,12 +7,12 @@ import {dismissShare} from "redux/reducer/messages/ShareMessage";
 import {removeAllSelectedMessage} from "redux/reducer/messages/ListMessage";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {map as _map} from "lodash";
-import {SearchChatItem} from "../../../MessageList/components/SearchUserConversation";
+import {SearchChatItem} from "../../../MessageList";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {SelectedShareConversationItem} from "./SelectedShareConversationItem";
 import CheckIcon from 'assets/images/blue-check.svg';
 import {UseConversation} from "services/hooks/messages/useConversation";
-import {populates} from "../../../../index";
+import {populates} from "../../../../../../shareComponents/layouts/MessagesLayoutV2";
 
 type Props = {
     context: any;

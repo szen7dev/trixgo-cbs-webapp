@@ -2,12 +2,12 @@ import React, {FC, useCallback, useContext} from "react";
 import {MainChatOptions} from "./MainChatOptions";
 import SearchIcon from "assets/images/icons8-search-120.png";
 import {AvatarGroupChat} from "../../../MessageList";
-import {MessageContext} from "../../../../index";
 import {HeaderPinedMessages} from "./index";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
+import {MessageContext} from "../../../../../../shareComponents/layouts/MessagesLayoutV2";
 
 type Props = {
     chat: ItemListConversation
@@ -28,7 +28,7 @@ export const MainChatHeading:FC<Props> = ({chat}) => {
     }
 
     return (
-        <div className={"sticky top-0 bg-white h-[56px] flex px-4 py-1 z-20"}>
+        <div className={"sticky top-0 bg-white h-[56px] flex px-4 py-1 z-20 border-b-0.5 border-primary-border"}>
             <div
                 onClick={() => setShowMenu(!showMenu)}
                 className={"avatar-chat flex items-center justify-center cursor-pointer"}>

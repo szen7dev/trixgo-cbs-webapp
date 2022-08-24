@@ -126,6 +126,8 @@ module.exports = {
                 "cbs-task-assign-progress-bg": "#F7F8FA",
                 "cbs-next-prev-button": "#F6F7F8",
                 "cbs-table-highlight": "#F2F6FC",
+                "cbs-chat-input-bg": "#F0F2F5",
+                "cbs-item-message-other": "#E4E6EB",
             },
             fontSize: {
                 "[13px]": "13px",

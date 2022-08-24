@@ -4,7 +4,6 @@ import {UseConversation} from "services/hooks/messages/useConversation";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
-import {MessageContext} from "../../../index";
 import ArrowDown from "assets/images/icon-arrow-down.svg";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import 'react-circular-progressbar/dist/styles.css';
@@ -24,6 +23,7 @@ import moment from "moment";
 import {dismissSearchMode} from "redux/reducer/messages/SearchMessage";
 import {Oval} from "react-loader-spinner";
 import {NpsNoti} from "../../ChattingSection/components/Nps/NpsNoti";
+import {MessageContext} from "../../../../../shareComponents/layouts/MessagesLayoutV2";
 
 type Props = {
     chat: ItemListConversation

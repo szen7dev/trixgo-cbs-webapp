@@ -2,9 +2,9 @@ import {UseListConversation} from "./useListConversation";
 import {ReactNode, useCallback, useContext} from "react";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import SavedMessage from "assets/images/saved-messages.svg";
-import {MessageContext, populates} from "views/messages/pages/MessageHome";
 import {appendFakeItemListConversation} from "redux/reducer/messages/ListConversation";
 import {useDispatch} from "react-redux";
+import {MessageContext, populates} from "../../../views/messages/shareComponents/layouts/MessagesLayoutV2";
 
 type UseMessageHelperType = {
     handleStartPrivateChat: (memberId: string, redirectOnly?: boolean) => void;

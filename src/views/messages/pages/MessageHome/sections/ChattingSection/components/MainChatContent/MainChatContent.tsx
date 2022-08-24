@@ -4,7 +4,6 @@ import {UseConversation} from "services/hooks/messages/useConversation";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
-import {MessageContext} from "../../../../index";
 import ArrowDown from "assets/images/icon-arrow-down.svg";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import 'react-circular-progressbar/dist/styles.css';
@@ -30,6 +29,7 @@ import {updateUsersMissMessageToConversation} from "redux/reducer/messages/ListC
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {setIsReviewOldMessages} from "redux/reducer/messages/ListMessage";
 import {NpsNoti} from "../Nps/NpsNoti";
+import {MessageContext} from "../../../../../../shareComponents/layouts/MessagesLayoutV2";
 
 export const listEmoji = [
     {

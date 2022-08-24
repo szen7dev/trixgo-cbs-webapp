@@ -25,7 +25,7 @@ import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {useDeleteConfirm} from "services/hooks/useDeleteConfirm";
 import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 import {toast} from "react-toastify";
-import {populates} from "../../../../index";
+import {populates} from "../../../../../../shareComponents/layouts/MessagesLayoutV2";
 
 type Props = {
     chat: ItemListConversation;
