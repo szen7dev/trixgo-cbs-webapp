@@ -16,14 +16,14 @@ export const useListResponseFromSearch = (payload: any): any => {
     [`app_dashboard_search_by_response.${payload}`, payload],
     async ({ pageParam }) => {
       return pcmDashboardV2.searchBySubject({
-        isActive: 1,
-        isGroup: 1,
-        isParent: 0,
+        isActive: "1",
+        isGroup: "1",
+        isParent: "0",
         select: "createAt content author task",
-        populates: {
+        populates: JSON.stringify({
           path: "author task project",
           select: "_id name fullname image createAt related sign",
-        },
+        }),
         lastestID: pageParam || "",
         ...payload
       });
