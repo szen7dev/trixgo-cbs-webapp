@@ -1040,11 +1040,11 @@ value: "6046c7c02c1dc33996dde3f6"
                 },
                 {
                   id: 1,
-                  text: "Yêu cầu thông tin",
+                  text: "Đề nghị cấp thông tin",
                 },
                 {
                   id: 2,
-                  text: "Yêu cầu phê duyệt",
+                  text: "Đề nghị phê duyệt",
                 },
                 {
                   id: 3,
@@ -1052,23 +1052,23 @@ value: "6046c7c02c1dc33996dde3f6"
                 },
                 {
                   id: 4,
-                  text: "Lựa chọn nhà thầu",
+                  text: "Thầu và mua sắm",
                 },
                 {
                   id: 5,
-                  text: "Nghiệm thu chất lượng",
+                  text: "Nghiệm thu",
                 },
                 {
                   id: 6,
-                  text: "Yêu cầu sửa chữa",
+                  text: "Đề nghị sửa chữa",
                 },
                 {
                   id: 7,
-                  text: "Yêu cầu thay đổi",
+                  text: "Đề nghị thay đổi",
                 },
                 {
                   id: 8,
-                  text: "Yêu cầu thực hiện",
+                  text: "Đề nghị thực hiện",
                 },
                 {
                   id: 9,
@@ -1076,7 +1076,7 @@ value: "6046c7c02c1dc33996dde3f6"
                 },
                 {
                   id: 10,
-                  text: "Tiến độ",
+                  text: "Tiến độ, kế hoạch",
                 },
                 {
                   id: 11,
