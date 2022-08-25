@@ -371,34 +371,40 @@ export const DIRECTION_TYPES = [
     { value: 3, text: 'Nội bộ', key: 'internal' }
 ]
 
-// PHÂN LOẠI HỒ SƠ VĂN BẢN
+// TÍNH CHẤT HỒ SƠ VĂN BẢN
 export const DOCUMENT_TYPES = [
-    { value: 1, text: 'Chung, khác', key: 'key' },
+    { value: 1, text: 'Chung', key: 'key' },
     { value: 2, text: 'Hợp đồng', key: 'key' },
     { value: 3, text: 'Quyết định', key: 'key' },
-    { value: 4, text: 'Biên bản họp', key: 'key' },
+    { value: 4, text: 'Họp', key: 'key' },
     { value: 5, text: 'Báo cáo', key: 'key' },
-    { value: 6, text: 'Báo giá, chào giá, dự thầu', key: 'key' },
+    { value: 6, text: 'Báo giá, chào giá', key: 'key' },
     { value: 7, text: 'Công văn', key: 'key' },
     { value: 8, text: 'Thông báo', key: 'key' },
     { value: 9, text: 'Bản vẽ', key: 'key' },
     { value: 10, text: 'Yêu cầu, đề nghị', key: 'key' },
-    { value: 11, text: 'Hồ sơ thanh toán', key: 'key' },
+    { value: 11, text: 'Thanh toán', key: 'key' },
     { value: 12, text: 'Thư kỹ thuật', key: 'key' },
     { value: 13, text: 'Thuyết minh', key: 'key' },
-    { value: 14, text: 'Dự toán, ngân sách', key: 'key' },
+    { value: 14, text: 'Dự toán', key: 'key' },
     { value: 15, text: 'Đề cương', key: 'key' },
     { value: 16, text: 'Tiến độ, kế hoạch', key: 'key' },
     { value: 17, text: 'Tờ trình', key: 'key' },
     { value: 18, text: 'Biên bản', key: 'key' },
     { value: 19, text: 'Hồ sơ năng lực', key: 'key' },
     { value: 20, text: 'Biểu mẫu', key: 'key' },
-    { value: 21, text: 'Hồ sơ pháp lý', key: 'key' },
-    { value: 22, text: 'Tiêu chuẩn, quy chuẩn', key: 'key' },
+    { value: 21, text: 'Tiêu chuẩn, quy chuẩn', key: 'key' },
+    { value: 22, text: 'Quy định', key: 'key' },
     { value: 23, text: 'Quy trình', key: 'key' },
     { value: 24, text: 'Chỉ dẫn', key: 'key' },
-    { value: 25, text: 'Nghiệm thu chất lượng', key: 'key' },
+    { value: 25, text: 'Quy chế', key: 'key' },
     { value: 26, text: 'Hóa đơn', key: 'key' },
+    { value: 27, text: 'Nhiệm vụ', key: 'key' },
+    { value: 28, text: 'Sổ tay', key: 'key' },
+    { value: 29, text: 'Checklist', key: 'key' },
+    { value: 30, text: 'Thiết kế', key: 'key' },
+    { value: 31, text: 'Thiết kế', key: 'key' },
+    { value: 32, text: 'Dữ liệu', key: 'key' },
 ]
 
 // TRẠNG THÁI TRIỂN KHAI CÔNG VIỆC
@@ -458,16 +464,16 @@ export const PCM_DEADLINE_TYPES = [
 // PHÂN LOẠI CÔNG VIỆC/TRÌNH DUYỆT
 export const PCM_PROPOSAL_TASK = [
     { value: 0, text: 'Việc thông thường', sign: 'Tasks', key: 'task' },
-    { value: 1, text: 'Yêu cầu thông tin', sign: 'RFis', key: 'rfi' },
-    { value: 2, text: 'Yêu cầu phê duyệt', sign: 'RFa', key: 'rfa' },
+    { value: 1, text: 'Đề nghị cấp thông tin', sign: 'RFis', key: 'rfi' },
+    { value: 2, text: 'Đề nghị phê duyệt', sign: 'RFa', key: 'rfa' },
     { value: 3, text: 'Thanh toán', sign: 'CRFa', key: 'crfa' },
-    { value: 4, text: 'Lựa chọn nhà thầu', sign: 'BRFa', key: 'brfa' },
-    { value: 5, text: 'Nghiệm thu chất lượng', sign: 'QRFa', key: 'inspection' },
-    { value: 6, text: 'Yêu cầu sửa chữa', sign: 'Punch', key: 'punch' },
-    { value: 7, text: 'Yêu cầu thay đổi', sign: 'RFc', key: 'rfc' },
-    { value: 8, text: 'Yêu cầu thực hiện', sign: 'RFe', key: 'rfe' },
+    { value: 4, text: 'Thầu và mua sắm', sign: 'BRFa', key: 'brfa' },
+    { value: 5, text: 'Nghiệm thu', sign: 'QRFa', key: 'inspection' },
+    { value: 6, text: 'Đề nghị sửa chữa', sign: 'Punch', key: 'punch' },
+    { value: 7, text: 'Đề nghị thay đổi', sign: 'RFc', key: 'rfc' },
+    { value: 8, text: 'Đề nghị thực hiện', sign: 'RFe', key: 'rfe' },
     { value: 9, text: 'Báo cáo', sign: 'Report', key: 'report' },
-    { value: 10, text: 'Tiến độ', sign: 'Schedule', key: 'schedule' },
+    { value: 10, text: 'Tiến độ, kế hoạch', sign: 'Schedule', key: 'schedule' },
     { value: 11, text: 'Họp', sign: 'MOM', key: 'mom' },
 ]
 
@@ -477,7 +483,7 @@ export const PCM_MILESTONE = [
     { value: 1, text: 'Pháp lý', sign: '', key: '' },
     { value: 2, text: 'Thiết kế', sign: '', key: '' },
     { value: 3, text: 'Dự toán, ngân sách', sign: '', key: '' },
-    { value: 4, text: 'Lựa chọn nhà thầu', sign: '', key: '' },
+    { value: 4, text: 'Thầu và mua sắm', sign: '', key: '' },
     { value: 5, text: 'Thi công', sign: '', key: '' },
     { value: 6, text: 'Bàn giao', sign: '', key: '' },
     { value: 7, text: 'Quyết toán', sign: '', key: '' },
@@ -633,9 +639,9 @@ export const PCM_MEMBER_POSITION_TYPE = [
  */
 export const PCM_SUBTYPE = [
     { value: 0, text: 'Việc thông thường' },
-    { value: 1, text: 'Yêu cầu thông tin' },
-    { value: 2, text: 'Yều cầu phê duyệt' },
-    { value: 3, text: 'Thanh toán/Chi phí' },
+    { value: 1, text: 'Đề nghị cấp thông tin' },
+    { value: 2, text: 'Đề nghị phê duyệt' },
+    { value: 3, text: 'Thanh toá' },
     { value: 4, text: 'Đấu thầu' },
     { value: 5, text: 'Nghiệm thu chất lượng' },
     { value: 6, text: 'Yều cầu sửa chữa' },
