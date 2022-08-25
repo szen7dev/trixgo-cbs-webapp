@@ -13,10 +13,11 @@ import { useAuth } from "services/hooks/auth/useAuth";
 
 type Props = {
     task: Task;
+    userId?: string;
     refetchInfo?: () => void;
 }
 
-export const TaskDetailComment: FC<Props> = ({ task, refetchInfo }) => {
+export const TaskDetailComment: FC<Props> = ({ task, userId, refetchInfo }) => {
     const [filter, setFilter] = useState(1);
     const [collapseComment, setCollapseComment] = useState(false);
     const [isOpenCreateResponse, setIsOpenCreateResponse] = useState(false);
@@ -65,9 +66,11 @@ export const TaskDetailComment: FC<Props> = ({ task, refetchInfo }) => {
                 <button onClick={() => setFilter(1)} className={"text-primary-gray text-lg " + (filter === 1 ? "font-bold border-b border-primary-gray": "")}>
                     Phản hồi liên quan ({task.amountResponse})
                 </button>
-                <button onClick={() => setFilter(2)} className={"text-primary-gray text-lg mx-4 " + (filter === 2 ? "font-bold border-b border-primary-gray": "")}>
-                    Nội dung chốt ({task.amountMarkedResponse})
-                </button>
+                {(task.subtype !== 4 && task.assignee?._id === userId) && (
+                    <button onClick={() => setFilter(2)} className={"text-primary-gray text-lg mx-4 " + (filter === 2 ? "font-bold border-b border-primary-gray": "")}>
+                        Nội dung chốt ({task.amountMarkedResponse})
+                    </button>
+                )}
                 {/* <button onClick={() => setFilter(3)} className={"text-primary-gray text-lg mx-4 " + (filter === 3 ? "font-bold border-b border-primary-gray": "")}>
                     Hiện trạng (0)
                 </button>

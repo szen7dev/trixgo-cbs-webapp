@@ -15,12 +15,14 @@ import { useTask } from 'services/hooks/useTask';
 import { Loader } from "shareComponents/common";
 import CommentProvider from 'views/pcm/contexts/comment/comment.provider';
 import { toast } from "react-toastify";
+import { useAuth } from "services/hooks/auth/useAuth";
 
 const PcmDetailTaskV2:FC = () => {
     const [collapse, setCollapse] = useState(false);
     const { id: taskId } = useParams<{ id: string }>();
 
     const history = useHistory();
+    const { user } = useAuth();
 
     const { info: taskInfo, isLoadingInfo, refetchInfo, updateStatusMultipleAsync } = useTask({
         params: {
@@ -64,7 +66,7 @@ const PcmDetailTaskV2:FC = () => {
             <div className={"task-content p-4"}>
                 <div className={collapse?"hidden":"block"}>
                     <TaskDetailTitle task={taskInfo} />
-                    <TaskDetailFolder task={taskInfo} />
+                    <TaskDetailFolder task={taskInfo} user={user} onConfirmSign={refetchInfo} />
                     <TaskDetailCompleteStatus task={taskInfo} />
                     <TaskDetailMember task={taskInfo} />
                     <TaskDetailSignature task={taskInfo} />
@@ -73,7 +75,7 @@ const PcmDetailTaskV2:FC = () => {
                     <TaskDetailRelatedTask task={taskInfo} refetchInfo={refetchInfo} />
                 </div>
                 <CommentProvider>
-                    <TaskDetailComment task={taskInfo} refetchInfo={refetchInfo} />
+                    <TaskDetailComment task={taskInfo} userId={user?._id} refetchInfo={refetchInfo} />
                 </CommentProvider>
             </div>
         </div>
