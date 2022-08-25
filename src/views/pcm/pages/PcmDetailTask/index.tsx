@@ -112,7 +112,7 @@ const PcmDetailTask: FC = () => {
   const { updateTaskAsync, copyTaskAsync } = useTask({});
 
   const { data: infoTask, refetch: refetchInfoTask, isLoading } = useQuery(`task_info.${id}`, () =>
-    TaskRepository.taskInfo({ taskID: id, }),
+    TaskRepository.taskInfo({ taskID: id }),
     { refetchOnWindowFocus: false }
   );
 

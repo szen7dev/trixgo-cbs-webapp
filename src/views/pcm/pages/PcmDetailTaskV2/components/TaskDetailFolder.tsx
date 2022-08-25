@@ -19,12 +19,11 @@ type Props = {
     task: Task;
     user?: User | null;
     onConfirmSign?: () => void;
-    onOpenBidding?: (taskID: string) => void;
+    onOpenBidding?: () => void;
     hasPermissionAddSignature?: boolean;
     hasPermissionOpenBidding?: boolean;
 }
 
-const folders = ["CHG.THT", "Tư vấn thiết kế 112", "Hồ sơ thanh toán"];
 export const TaskDetailFolder: FC<Props> = ({
     task,
     user,
@@ -43,7 +42,6 @@ export const TaskDetailFolder: FC<Props> = ({
     const isSigned = useMemo(() => {
         return task.signatures?.find(({ author }) => author._id === user?._id)
     }, [task.signatures, user?._id])
-    console.log({ task, isCurrentUserOpened })
 
     useEffect(() => {
         const onEventOpenBidding = (result: any) => {
@@ -92,7 +90,7 @@ export const TaskDetailFolder: FC<Props> = ({
             />
           </div>
         );
-      };
+    };
 
     const handleConfirmSignature = useCallback(async () => {
         if (!hasPermissionAddSignature) return;
@@ -125,7 +123,7 @@ export const TaskDetailFolder: FC<Props> = ({
     }, [hasPermissionAddSignature, task._id])
 
     const handleOpenBidding = useCallback(async () => {
-        if (!hasPermissionOpenBidding) return;
+        if (!hasPermissionOpenBidding || isCurrentUserOpened) return;
 
         try {
             const { error, data } = await updateTaskAsync({
@@ -137,6 +135,12 @@ export const TaskDetailFolder: FC<Props> = ({
                 return toast.warning(data.message);
             }
 
+            socket?.emit('SUBJECT_PCM_CSS_OPEN_BIDDING', {
+                taskID: task._id,
+                bizfullname: user?.bizfullname
+            });
+
+            onOpenBidding?.();
             setCurrentUserOpened(true);
         } catch (error) {
             captureException(error);
@@ -145,6 +149,8 @@ export const TaskDetailFolder: FC<Props> = ({
             } else if (error instanceof Error) {
                 toast.error(error.message);
             }
+        } finally {
+            closeModal()
         }
     }, [hasPermissionOpenBidding, task._id])
 
@@ -171,6 +177,7 @@ export const TaskDetailFolder: FC<Props> = ({
                     <button
                         className={"flex text-primary-gray items-center rounded bg-cbs-form-input-bg px-3 h-[30px] "}
                         onClick={toggleModalOpenBidding}
+                        disabled={isCurrentUserOpened}
                     >
                         <img src={iconCheckmark} alt={"----"} className={"mr-2"} />
                         <span>{isCurrentUserOpened ? 'Đã mở thầu' : 'Mở thầu'}</span>

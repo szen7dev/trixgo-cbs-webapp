@@ -70,6 +70,7 @@ export type Task = {
     author: User;
     createAt: string
   }>;
+  openedStatus: number;
   openedUsers: Array<User>;
   accessUsers: Array<User>;
   actualStartTime: string;

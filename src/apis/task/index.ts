@@ -34,7 +34,7 @@ import { convertObToUrl } from "utils";
 
 const populatesTask = JSON.stringify({
   path: "group contract author assignee related parent project company field approver authorAttachs assigneeAttachs signatures openedUsers links",
-  select: "_id name fullname bizfullname image sign _id name nameOrg description size path mimeType type author assignee createAt members company expiredTime project",
+  select: "_id name fullname bizfullname image sign signature _id name nameOrg description size path mimeType type author assignee createAt members company expiredTime project openedStatus",
   populate: {
     path: "author assignee project",
     select: "_id bizfullname image sign signature"
@@ -116,7 +116,7 @@ const TaskRepository = {
   async listSubject(payload: TaskListParams): Promise<ListTaskResponse> {
     const { data } = await API.get<ListTaskResponse>(
       `${pcmURL}/pcm_plan_tasks/subject?${convertObToUrl({
-        select: "author lastComment checklist description name expiredTime status percentage project actualStartTime actualFinishTime amountChecklist amountFinishedChecklist milestone startTime related modifyAt news",
+        select: "author lastComment checklist description name expiredTime status percentage project actualStartTime actualFinishTime amountChecklist amountFinishedChecklist milestone startTime related modifyAt news openedStatus",
         populates: JSON.stringify({
           path: "author lastComment project",
           select: "name fullname image author content createAt sign",
@@ -134,7 +134,7 @@ const TaskRepository = {
   async taskInfo(payload: TaskInfoParams): Promise<any> {
     const { data } = await API.get<any>(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl({
-        select: "name description type typeStatus status draft priority project contract parent checklist createAt field group author assignee related expiredTime actualFinishTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures openedUsers comments amountComment amountResponse amountMarkedResponse startTime subtype flags milestone links",
+        select: "name description type typeStatus status draft priority project contract parent checklist createAt field group author assignee related expiredTime actualFinishTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures openedUsers comments amountComment amountResponse amountMarkedResponse startTime subtype flags milestone links openedStatus",
         populates: populatesTask,
         ...payload
       })}`

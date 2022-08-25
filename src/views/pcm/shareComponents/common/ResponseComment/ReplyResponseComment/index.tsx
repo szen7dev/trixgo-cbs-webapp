@@ -14,11 +14,12 @@ import { APP_KEY } from "utils/constants";
 type Props = {
     task: Task;
     parent?: CommentProps;
+    isOfficial?: boolean;
     onCancelCreateResponse: () => void;
     onConfirmCreate?: () => void;
 }
 
-export const ReplyResponseComment: FC<Props> = ({ task, parent, onCancelCreateResponse, onConfirmCreate }) => {
+export const ReplyResponseComment: FC<Props> = ({ task, parent, isOfficial = false, onCancelCreateResponse, onConfirmCreate }) => {
     const editorRef = useRef<EditorType>();
     const [selectedUser, setSelectedUser] = useState<Item[]>([]);
 
@@ -40,6 +41,7 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, onCancelCreateRe
 			    content: editorRef.current?.getContent(),
                 parentID: parent?._id,
                 type: 1,
+                isOfficial
             }
 
             if(selectedUser.length) {

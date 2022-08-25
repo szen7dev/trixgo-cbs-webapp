@@ -31,10 +31,11 @@ type Props = {
     userId?: string;
     task: Task;
     comment: CommentProps;
+    isOfficialTab: boolean;
     onConfirmUpdate?: () => void;
 }
 
-export const ParentResponseComment: FC<Props> = ({ userId, task, comment, onConfirmUpdate }) => {
+export const ParentResponseComment: FC<Props> = ({ userId, task, comment, isOfficialTab, onConfirmUpdate }) => {
     const [collapseComment, setCollapseComment] = useState(false);
     const [openReply, setOpenReply] = useState(false);
     const [isOfficial, setIsOfficial] = useState(comment.official);
@@ -328,7 +329,7 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, onConf
                                     <div key={file._id} className={"comment-attach-item flex items-start justify-between mb-2"}>
                                         <img src={iconAttach} alt={file.nameOrg} />
                                         <div className={"comment-attach-item-file-infor mx-2"}>
-                                            <a href={"#"} download className={"text-primary"}>
+                                            <a href={`${process.env.REACT_APP_URL_S3}${file.path}`} download className={"text-primary"}>
                                                 {file.nameOrg} ({humanFileSize(file.size)})
                                             </a>
                                             <p className={"text-primary-gray text-xs"}>
@@ -430,6 +431,7 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, onConf
                     <ReplyResponseComment
                         task={task}
                         parent={comment}
+                        isOfficial={isOfficialTab}
                         onCancelCreateResponse={() => setOpenReply(false)}
                         onConfirmCreate={() => setOpenReply(false)}
                     />

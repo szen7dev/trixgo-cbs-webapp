@@ -66,7 +66,7 @@ export const TaskDetailComment: FC<Props> = ({ task, userId, refetchInfo }) => {
                 <button onClick={() => setFilter(1)} className={"text-primary-gray text-lg " + (filter === 1 ? "font-bold border-b border-primary-gray": "")}>
                     Phản hồi liên quan ({task.amountResponse})
                 </button>
-                {(task.subtype !== 4 && task.assignee?._id === userId) && (
+                {(task.openedStatus === 1 || task.assignee?._id === userId) && (
                     <button onClick={() => setFilter(2)} className={"text-primary-gray text-lg mx-4 " + (filter === 2 ? "font-bold border-b border-primary-gray": "")}>
                         Nội dung chốt ({task.amountMarkedResponse})
                     </button>
@@ -98,6 +98,7 @@ export const TaskDetailComment: FC<Props> = ({ task, userId, refetchInfo }) => {
                         key={comment._id}
                         task={task}
                         comment={comment}
+                        isOfficialTab={filter === 2}
                         userId={user?._id}
                         onConfirmUpdate={refetchInfo}
                     />
@@ -107,6 +108,7 @@ export const TaskDetailComment: FC<Props> = ({ task, userId, refetchInfo }) => {
             {isOpenCreateResponse &&
                 <ReplyResponseComment
                     task={task}
+                    isOfficial={filter === 2}
                     onCancelCreateResponse={() => setIsOpenCreateResponse(false)}
                     onConfirmCreate={() => {
                         setIsOpenCreateResponse(false);
