@@ -22,7 +22,9 @@ export const LeftNavigate:FC<Props> = ({handleMenuEvent}) => {
 
     useEffect(() => {
         if (!pathname.includes("/messages")) {
-            getListConversation({keyword: ""});
+            setTimeout(() => {
+                getListConversation({keyword: ""});
+            }, 300)
         }
     },[])
 
