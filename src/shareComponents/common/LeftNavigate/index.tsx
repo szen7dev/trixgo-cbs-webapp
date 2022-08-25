@@ -5,19 +5,57 @@ import chatIcon from "assets/images/icons8-chat-48.svg";
 import projectIcon from "assets/images/icons-project.svg";
 import contractIcon from "assets/images/icons8-contract-64.svg";
 import fileIcon from "assets/images/icons-file.svg";
-import commercialIcon from "assets/images/icons8-commercial-64.svg";
-import peopleIcon from "assets/images/icons8-people-64.svg";
-import {Link, useHistory, useLocation} from "react-router-dom";
-import {useSocket} from "../../../services/hooks/useSocket";
-// import {useNotification} from "../../../services/hooks/useNotification";
-import {useSelector} from "react-redux";
-import {RootState} from "../../../redux/reducer";
+import {Link, useLocation} from "react-router-dom";
+import {useSocket} from "services/hooks/useSocket";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "redux/reducer";
+import {setAmountMissMessage} from "redux/reducer/messages/ListConversation";
+import {UseListConversation} from "services/hooks/messages/useListConversation";
+import { usePcmPlanTaskNotification } from "services/hooks/pcm/usePcmDashboardV2";
 
 type Props = {
     handleMenuEvent: () => void
 }
 export const LeftNavigate:FC<Props> = ({handleMenuEvent}) => {
     const {pathname} = useLocation();
+    const { current: socket }: any = useSocket();
+    const dispatch = useDispatch();
+    const [enabled, setEnabled] = useState(false);
+
+    const {data} = usePcmPlanTaskNotification({enabled: enabled});
+
+    useEffect(() => {
+        setTimeout(() => {
+            setEnabled(true);
+        }, 300);
+        if (!pathname.includes("/messages")) {
+            setTimeout(() => {
+                getListConversation({keyword: ""});
+            }, 300)
+        }
+    },[]);
+
+    useEffect(() => {
+        if (!socket) return;
+        socket.on('CHATTING_SSC_RECEIVE_MESSAGE', onReceiveMessage);
+
+        return () => {
+            socket.off('CHATTING_SSC_RECEIVE_MESSAGE', onReceiveMessage);
+        }
+    },[socket]);
+
+    const amountMissMessage = useSelector((state: RootState) => state.listConversation.data.amountMissMessage);
+    const {getListConversation} = UseListConversation();
+
+    const onReceiveMessage = (data: any) => {
+        if (pathname.includes("/messages")) {
+            return;
+        }
+        if (data?.infoMessage?.error) {
+            return;
+        }
+        dispatch(setAmountMissMessage(data.amountMissMessage))
+    };
 
     return (
         <div className={"bg-cbs-right-navigate-bg w-[68px] min-w-[68px] flex flex-col items-center relative z-40"}>
@@ -30,10 +68,12 @@ export const LeftNavigate:FC<Props> = ({handleMenuEvent}) => {
                     <img src={mailIcon} alt={"Chủ đề"}/>
                     {/*{*/}
                     {/*    totalNoti > 0 &&*/}
+                    {data?.data?.amountUnreadTask && data?.data?.amountUnreadTask > 0 ? 
                         <span
-                            className={"absolute -top-1 right-1 min-w-5 w-5 h-5 text-xs inline-block border-2 text-center border-white rounded-full bg-negative text-white"}>
-                            00
-                        </span>
+                        className={"absolute -top-1 right-1 min-w-5 w-5 h-5 text-xs inline-block border-2 text-center border-white rounded-full bg-negative text-white"}>
+                        {data?.data?.amountUnreadTask}
+                    </span> : <></>
+                    }
                     {/*}*/}
                 </div>
                 <span className={"text-primary-gray mt-1"}>Chủ đề</span>
@@ -59,10 +99,13 @@ export const LeftNavigate:FC<Props> = ({handleMenuEvent}) => {
             <Link to={`/messages`} className={"flex flex-col items-center mb-3"}>
                 <div className={"px-4 py-1 rounded-full relative " + (pathname.includes("/messages") ? "bg-cbs-hightlight-right-navigate" : "")}>
                     <img src={chatIcon} alt={"Chat"}/>
-                    <span
-                        className={"absolute -top-1 right-1 min-w-5 w-5 h-5 text-xs inline-block border-2 text-center border-white rounded-full bg-negative text-white"}>
-                        10
-                    </span>
+                    {
+                        amountMissMessage > 0 &&
+                        <span
+                            className={"absolute -top-1 right-1 min-w-5 w-5 h-5 text-xs inline-block border-2 text-center border-white rounded-full bg-negative text-white"}>
+                            {amountMissMessage <= 10 ? amountMissMessage : "9+"}
+                        </span>
+                    }
                 </div>
                 <span className={"text-primary-gray mt-1"}>Chat</span>
             </Link>

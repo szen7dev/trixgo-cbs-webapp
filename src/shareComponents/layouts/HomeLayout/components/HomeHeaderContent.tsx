@@ -7,6 +7,8 @@ import { useAppSelector } from "redux/reducer";
 import {
   setKeywordForResponse,
   setKeywordForSubject,
+  setQueryResponse,
+  setQuerySubject,
   setShowModalResult,
   setTabActive,
   setTabIndex,
@@ -30,7 +32,12 @@ export const HomeHeaderContent: FC = () => {
     (state) => state.dashboardV2.data.showModalResult
   );
   const dispatch = useDispatch();
-  const [filter, setFilter] = useState("all");
+  const queryResponse = useAppSelector(
+    (state) => state.dashboardV2.data.queryResponse
+  );
+  const querySubject = useAppSelector(
+    (state) => state.dashboardV2.data.querySubject
+  );
 
   const [keywordSearchForResponse, setKeywordSearchForResponse] = useState("");
   const [keywordSearchForSubject, setKeywordSearchForSubject] = useState("");
@@ -107,6 +114,54 @@ export const HomeHeaderContent: FC = () => {
       dispatch(setShowModalResult(false));
       dispatch(setTabActive(tabIndex));
     }
+  };
+
+  const onClickUser = (id: string) => {
+    dispatch(setTabActive(tabIndex));
+    if (tabIndex === 1) {
+      if (!queryResponse.authorsID?.includes?.(id as string)) {
+        const newData: any = [...queryResponse.authorsID, id];
+        dispatch(
+          setQueryResponse({
+            ...queryResponse,
+            authorsID: newData,
+          })
+        );
+      }
+    }
+    if (tabIndex === 2) {
+      if (!querySubject.assigneesID?.includes?.(id as string)) {
+        const newData: any = [...querySubject.assigneesID, id];
+        dispatch(setQuerySubject({
+          ...querySubject,
+          assigneesID: newData
+        }));
+      }
+    };
+    dispatch(setShowModalResult(false));
+  };
+
+  const onClickCompany = (id: string) => {
+    dispatch(setTabActive(tabIndex));
+    if (tabIndex === 1) {
+      if (!queryResponse.companyOfAuthorsID?.includes?.(id as string)) {
+        const newData: any = [...queryResponse.companyOfAuthorsID, id];
+        dispatch(setQueryResponse({
+          ...queryResponse,
+          companyOfAuthorsID: newData
+        }));
+      }
+    };
+    if (tabIndex === 2) {
+      if (!querySubject.companiesOfAssignee?.includes?.(id as string)) {
+        const newData: any = [...querySubject.companiesOfAssignee, id];
+        dispatch(setQuerySubject({
+          ...querySubject,
+          companiesOfAssignee: newData
+        }));
+      }
+    };
+    dispatch(setShowModalResult(false));
   };
 
   const shortListDataForResponse = listDataForResponse || [];
@@ -261,8 +316,8 @@ export const HomeHeaderContent: FC = () => {
             !isLoadingCompaniesSystems &&
             !isLoadingUserSystem ? (
               <>
-                {listUsersSystem.map((item, index) => (
-                  <div key={index} className={"flex items-center py-2"}>
+                {listUsersSystem.map((item: any, index) => (
+                  <button key={index} className={"flex items-center py-2"} onClick={() => onClickUser(item._id)}>
                     <div
                       className={
                         "w-[36px] min-w-[36px] flex items-center justify-center"
@@ -279,7 +334,7 @@ export const HomeHeaderContent: FC = () => {
                     <p className={"ml-4 w-[calc(100%-36px-1rem)]"}>
                       {item.bizfullname}
                     </p>
-                  </div>
+                  </button>
                 ))}
               </>
             ) : (
@@ -292,7 +347,7 @@ export const HomeHeaderContent: FC = () => {
             !isLoadingUserSystem ? (
               <>
                 {listDataCompaniesSystems.map((item: any, index: number) => (
-                  <div key={index} className={"flex items-center py-2"}>
+                  <button key={index} className={"flex items-center py-2"} onClick={() => onClickCompany(item._id)}>
                     <div
                       className={
                         "w-[36px] min-w-[36px] flex items-center justify-center"
@@ -313,7 +368,7 @@ export const HomeHeaderContent: FC = () => {
                     <p className={"ml-4 w-[calc(100%-36px-1rem)]"}>
                       {item.name}
                     </p>
-                  </div>
+                  </button>
                 ))}
               </>
             ) : (

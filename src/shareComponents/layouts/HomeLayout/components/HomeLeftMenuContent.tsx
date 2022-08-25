@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import React, {FC, useEffect, useState} from "react";
 import adminIcon from "assets/images/icons8-user-shield-48.svg"
 import plusIcon from "assets/images/icons8-plus-math-96.svg"
 import sendAndReceiveIcon from "assets/images/icons-send-and-receive.svg"
@@ -7,6 +7,10 @@ import uploadIcon from "assets/images/icons-upload.svg"
 import starIcon from "assets/images/icons-star-outline.svg"
 import linkIcon from "assets/images/icons-link.svg"
 import fileIcon from "assets/images/icons-file.svg"
+import biddingImage from "assets/menu/project/icons-project-bidding.svg"
+import paymentImage from "assets/menu/project/icons-project-payment.svg"
+import deliveryImage from "assets/menu/project/icons-project-delivery.svg"
+
 import {useModal} from "../../../../services/hooks/useModal";
 import {ModalAddNewTask} from "../../../common";
 import { NavLink } from 'react-router-dom';
@@ -15,9 +19,11 @@ import { NavLink } from 'react-router-dom';
 import { useAuth } from "services/hooks/auth/useAuth";
 import { useCheckPerAccessApp, useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
+import { usePcmPlanTaskNotification } from "services/hooks/pcm/usePcmDashboardV2";
 
 export const HomeLeftMenuContent:FC = () => {
-
+    const [enabled, setEnabled] = useState(false);
+    const {data} = usePcmPlanTaskNotification({enabled: enabled});
     const { openModal } = useModal();
     const { user } = useAuth();
     const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
@@ -29,21 +35,39 @@ export const HomeLeftMenuContent:FC = () => {
         route: string
     }[] = [
         {
-            label: "Hoạt động (inbox)",
+            label: "Hoạt động",
             icon: sendAndReceiveIcon,
-            count: 0,
+            count: data?.data?.amountUnreadTask || 0,
             route: '/pcm/home'
         },
+        // {
+        //     label: "Outbox",
+        //     icon: sendAndReceiveIcon,
+        //     count: 0,
+        //     route: '/pcm/send'
+        // },
         {
-            label: "Outbox",
-            icon: sendAndReceiveIcon,
+            label: "Thầu và mua sắm",
+            icon: biddingImage,
             count: 0,
-            route: '/pcm/send'
+            route: '/pcm/bidding'
         },
+        {
+            label: "Báo cáo, giao nộp",
+            icon: deliveryImage,
+            count: 0,
+            route: '/pcm/delivery'
+        },
+        {
+            label: "Thanh toán",
+            icon: paymentImage,
+            count: 0,
+            route: '/pcm/payment'
+        },        
         {
             label: "Việc của tôi",
             icon: mailOutLineIcon,
-            count: 0,
+            count: data?.data?.amountMyTask || 0,
             route: '/pcm/mine'
         },
         {
@@ -70,7 +94,13 @@ export const HomeLeftMenuContent:FC = () => {
             count: 0,
             route: '/pcm/report'
         },
-    ]
+    ];
+
+    useEffect(() => {
+        setTimeout(() => {
+            setEnabled(true);
+        }, 300);
+    },[]);
 
     const renderNav = (nav: {
         label: string,

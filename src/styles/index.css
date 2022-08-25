@@ -1321,12 +1321,12 @@ input::placeholder {
   min-height: calc(100vh - 150px);
 }
 
-.messages-right-bar.right--402px,
-.messages-right-bar-search.right--402px {
-  right: -402px;
+.messages-right-bar.right--324px,
+.messages-right-bar-search.right--324px {
+  right: -324px;
 }
 #chatting-section {
-  max-width: calc(100vw - 402px);
+  max-width: 100%;
 }
 .t-mini-chat-container,
 .messages-main-content {
@@ -1373,7 +1373,7 @@ input::placeholder {
 }
 .message-input .DraftEditor-root {
   flex-grow: 1;
-  max-width: 419px;
+  max-width: 568px;
   min-height: 50px;
   max-height: 200px;
   padding: 15px 0;
@@ -1771,4 +1771,7 @@ img {
 }
 .table-task-sheet th {
   @apply text-primary-gray font-normal text-left;
+}
+.button-icon {
+  @apply border-0 h-full bg-cbs-chat-input-bg !important;
 }

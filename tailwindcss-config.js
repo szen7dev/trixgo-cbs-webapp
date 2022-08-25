@@ -126,6 +126,8 @@ module.exports = {
                 "cbs-task-assign-progress-bg": "#F7F8FA",
                 "cbs-next-prev-button": "#F6F7F8",
                 "cbs-table-highlight": "#F2F6FC",
+                "cbs-chat-input-bg": "#F0F2F5",
+                "cbs-item-message-other": "#E4E6EB",
             },
             fontSize: {
                 "[13px]": "13px",
@@ -163,6 +165,7 @@ module.exports = {
             },
             maxWidth: {
                 ...autoGeneratePx,
+                "[60%]": "60%",
                 "[75%]": "75%",
                 "[90%]": "90%",
                 "[1569px]": "1569px"
@@ -221,6 +224,12 @@ module.exports = {
             left: {
                 '[75px]' : '75px',
                 '[68px]' : '68px',
+            },
+            right: {
+                '[10px]' : '10px',
+            },
+            top: {
+                '[10px]' : '10px',
             }
         },
     },

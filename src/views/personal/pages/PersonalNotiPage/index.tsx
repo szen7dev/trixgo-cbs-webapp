@@ -100,7 +100,7 @@ export const PersonalNotificationPage: FC = () => {
             <img
               src={SearchIcon}
               alt="Search"
-              className="w-4 h-4 absolute top-10px left-3"
+              className="w-4 h-4 absolute top-[10px] left-3"
             />
           </div>
 

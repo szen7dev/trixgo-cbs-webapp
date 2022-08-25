@@ -9,9 +9,10 @@ type Props = {
     className?: string;
     borderClass?: string;
     context: any;
-    isMini?: boolean
+    isMini?: boolean;
+    isMyMessage?: boolean;
 }
-export const ContactContent:FC<Props> = ({message, className, borderClass, context, isMini}) => {
+export const ContactContent:FC<Props> = ({message, className, borderClass, context, isMini, isMyMessage}) => {
     const {handleStartPrivateChat} = UseMessageHelper()
     return <>
         {
@@ -32,7 +33,7 @@ export const ContactContent:FC<Props> = ({message, className, borderClass, conte
                                 Nhắn tin
                             </button>
                             <div className={"absolute right-1 " + (!message.isFake ? "hidden":"")}>
-                                <MessageStatus message={message}/>
+                                <MessageStatus message={message} isMine={isMyMessage}/>
                             </div>
                         </div>
                     </div>

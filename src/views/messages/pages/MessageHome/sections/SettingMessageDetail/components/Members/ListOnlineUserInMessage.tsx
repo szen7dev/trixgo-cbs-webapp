@@ -1,12 +1,9 @@
-import React, {FC, useCallback, useContext, useEffect} from "react";
+import React, {FC, useCallback, useContext} from "react";
 import {map as _map} from "lodash";
 import {OnlineUserInChatItem} from "./OnlineUserInChatItem";
-import {MessageContext} from "../../../../index";
-import {UseListConversation} from "services/hooks/messages/useListConversation";
-import {useSelector} from "react-redux";
-import {RootState} from "redux/reducer";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {UseInformationMessage} from "services/hooks/messages/useInformationMessage";
+import {MessageContext} from "../../../../../../shareComponents/layouts/MessagesLayoutV2";
 
 type Props = {
     chat: ItemListConversation;

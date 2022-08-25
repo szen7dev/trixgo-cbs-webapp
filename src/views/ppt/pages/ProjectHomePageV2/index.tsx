@@ -81,17 +81,17 @@ const ProjectHomePageV2: FC = () => {
 				<Carousel
 					itemsToShow={6}
 				 	isRTL={false}
-					itemPadding={[0,8,0,8]}
+					itemPadding={[0,5,0,5]}
 					pagination={false}
 					renderArrow={({type, onClick}) => renderPrevNextButton(type, onClick)}
 				>
 					{
 						projectInfo?.photos?.map((photo,i) => (
-							<div key={i}
-								 onClick={()=> openPost({ author: photo.author, images: projectInfo.photos, index: i, createAt: photo.createAt, mediaId: photo._id.toString() })}
-								 className={"relative cursor-pointer h-[210px] w-[210px] rounded border-0.5 border-primary-border overflow-hidden"}>
-								<img className={"object-cover w-full h-full"}  src={`${process.env.REACT_APP_URL_S3}${photo.path}`} alt={`Report ${photo.path}`}/>
-								<div className={"absolute bottom-0 bg-cbs-gray py-1 px-2 flex items-start w-full max-w-full"}>
+							<div key={photo._id} className='w-full pb-[100%] relative' onClick={()=> openPost({ author: photo.author, images: projectInfo.photos, index: i, createAt: photo.createAt, mediaId: photo._id.toString() })}>
+								<div className='absolute inset-0 overflow-hidden z-1'>
+									<img src={`${process.env.REACT_APP_URL_S3}${photo.path}`} alt={`Report ${photo.path}`} className="object-cover h-full w-full" />
+								</div>
+								<div className={"absolute bottom-0 bg-cbs-gray py-1 px-2 flex items-start w-full max-w-full z-2"}>
 									<img src={`${process.env.REACT_APP_URL_S3_USER}/${photo.author.image}`} alt={`Report ${photo.author.bizfullname}`} className={"w-[28px] h-[28px] min-w-[28px] min-h-[28px] max-w-[28px] max-h-[28px] rounded-full overflow-hidden"}/>
 									<div className={"ml-2 w-10/12"}>
 										<p className={"truncate"}>{photo.author.bizfullname}</p>

@@ -12,7 +12,7 @@ export const NotificationCenter:FC<Props> = ({content}) => {
 
     return (
         <div className={"notifi-center flex items-center justify-center mb-2"}>
-            <div className={"rounded-full text-xs bg-gray-200 text-gray-500 px-5 py-1"} ref={notificationRef}></div>
+            <div className={"rounded-full text-xs bg-cbs-item-message-other text-gray-500 px-5 py-1"} ref={notificationRef}></div>
         </div>
     )
 }

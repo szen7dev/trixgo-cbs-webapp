@@ -3,10 +3,10 @@ import {DropdownSearchable} from "shareComponents/common/DropdownSearchable";
 import {map as _map} from "lodash";
 import {ItemFileInMessage} from "./ItemFileInMessage";
 
-import {MessageContext} from "../../../../index";
 import {UseInformationMessage} from "services/hooks/messages/useInformationMessage";
 import {ItemFileMessage} from "typings/apis/messages/listConversation";
 import moment from "moment";
+import {MessageContext} from "../../../../../../shareComponents/layouts/MessagesLayoutV2";
 
 type Props = {
     isActive: boolean

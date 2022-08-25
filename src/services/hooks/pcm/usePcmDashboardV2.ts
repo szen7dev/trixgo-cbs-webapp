@@ -12,19 +12,21 @@ export const useListResponseFromSearch = (payload: any): any => {
     data: dataSubject,
     fetchNextPage: nextPageSubject,
     hasNextPage: hasNextPageSubject,
+    isFetching
   } = useInfiniteQuery(
     [`app_dashboard_search_by_response.${payload}`, payload],
     async ({ pageParam }) => {
       return pcmDashboardV2.searchBySubject({
-        isActive: 1,
-        isGroup: 1,
-        isParent: 0,
+        isActive: "1",
+        isGroup: "1",
+        isParent: "0",
         select: "createAt content author task",
-        populates: {
+        populates: JSON.stringify({
           path: "author task project",
           select: "_id name fullname image createAt related sign",
-        },
+        }),
         lastestID: pageParam || "",
+        limit: "50",
         ...payload
       });
     },
@@ -51,6 +53,7 @@ export const useListResponseFromSearch = (payload: any): any => {
     nextPageSubject,
     hasNextPageSubject,
     refetchSubject,
+    isFetching
   };
 };
 
@@ -154,5 +157,26 @@ export const useListCompaniesSystems = (
     nextPageCompaniesSystems,
     hasNextPageCompaniesSystems,
     refetchCompaniesSystems,
+  };
+};
+
+export const usePcmPlanTaskNotification = (payload: any): any => {
+  const {
+    data
+  } = useQuery(
+    [`usePcmPlanTaskNotification`, payload],
+    async () => {
+      return pcmDashboardV2.pcmPlanTaskNotification({
+        ...payload
+      });
+    },
+    {
+      refetchOnWindowFocus: false,
+      enabled: payload.enabled ? true : false,
+    }
+  );
+
+  return {
+    data
   };
 };

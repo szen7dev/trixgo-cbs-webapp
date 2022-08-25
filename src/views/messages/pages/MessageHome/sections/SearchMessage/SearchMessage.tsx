@@ -1,12 +1,12 @@
 import React, {FC, useCallback, useContext, useEffect, useRef, useState} from "react";
-import {MessageContext} from "../../index";
 import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import SearchIcon from "assets/images/icons8-search-120.png";
 import {UseMessage} from "services/hooks/messages/useMessage";
 import {map as _map} from "lodash";
-import {ListSearchMessagesItem} from "./components/ListSearchMessagesItem";
+import {ListSearchMessagesItem} from "./components";
 import Close from "assets/icons/Close";
+import {MessageContext} from "../../../../shareComponents/layouts/MessagesLayoutV2";
 
 export const SearchMessage:FC = () => {
     const {currentChat, setShowSearch, showSearch} = useContext(MessageContext);
@@ -34,7 +34,7 @@ export const SearchMessage:FC = () => {
 
     if (!chat) return null;
     return (
-        <div className={"messages-right-bar-search border-l transition-all duration-500 group w-[402px] min-w-[402px] absolute h-full bg-white z-11 " + (showSearch?"right-0":"right--402px")}>
+        <div className={"messages-right-bar-search border-l transition-all duration-500 group w-[324px] min-w-[324px] absolute h-full bg-white z-11 " + (showSearch?"right-0":"right--324px")}>
             <div className={"h-full group overflow-auto no-webkit-scrollbar"}>
                 <div className={"bg-white p-2 sticky top-0 z-5"}>
                     <div className={"flex items-center"}>

@@ -4,7 +4,7 @@ import {ListChatItem} from "./components/ListCoversation";
 import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
-import {SearchUserAndConversation, HamLeftMenu, AddNewChatGroup} from "./components/HeaderMessageList";
+import {HamLeftMenu, AddNewChatGroup} from "./components/HeaderMessageList";
 import {ListFolders} from "./components/ListFolders";
 import {Oval} from "react-loader-spinner";
 
@@ -70,29 +70,27 @@ export const MessageList:FC = () => {
     },[listConversation]);
 
     return (
-        <div className={"messages-left-bar w-[402px] min-w-[402px] border-r transition duration-150 group relative"}>
-                <div className={"bg-white z-5"}>
-                    <div className={"p-2 flex"}>
-                        <HamLeftMenu/>
-                        <SearchUserAndConversation/>
-                    </div>
-                    <ListFolders/>
+        <div className={"messages-left-bar w-[256px] min-w-[256px] transition duration-150 group relative"}>
+            <div className={"bg-white z-5"}>
+                <div className={"p-2 flex"}>
+                    <HamLeftMenu/>
                 </div>
-                <div
-                    className={"overflow-auto message-list-height px-[5px] pb-10"}
-                    ref={listInnerRef}
-                    id={'list-conversation'}>
-                    {renderListConversation()}
-                    {
-                        isLoading&&
-                        <div className={"absolute w-full flex items-center justify-center z-21 spinner-animation from-bottom transition-all"}>
-                            <div className={"bg-white rounded-full p-1"}>
-                                <Oval color={"#0d6efd"} strokeWidth={3} secondaryColor={"#fff"} height={30} width={30}/>
-                            </div>
+                <ListFolders/>
+            </div>
+            <div
+                className={"overflow-auto message-list-height px-[5px] pb-10"}
+                ref={listInnerRef}
+                id={'list-conversation'}>
+                {renderListConversation()}
+                {
+                    isLoading&&
+                    <div className={"absolute w-full flex items-center justify-center z-21 spinner-animation from-bottom transition-all"}>
+                        <div className={"bg-white rounded-full p-1"}>
+                            <Oval color={"#0d6efd"} strokeWidth={3} secondaryColor={"#fff"} height={30} width={30}/>
                         </div>
-                    }
-                </div>
-            <AddNewChatGroup/>
+                    </div>
+                }
+            </div>
         </div>
     )
 }
