@@ -13,8 +13,6 @@ const initialState: any = {
       companyOfAuthorsID: [],
       authorsID: [],
       projectsID: [],
-      fromDate: "1990/01/01",
-      toDate: "2999/12/31",
       official: 0,
     },
 
@@ -24,6 +22,10 @@ const initialState: any = {
       isParent: "1",
       isActive: "1",
     },
+    queryFile: {
+      companyOfAuthorsID: [],
+      authorsID: [],
+    }
   },
 };
 
@@ -43,6 +45,9 @@ const dashboardV2Slice = createSlice({
     setKeywordForSubject(state, action) {
       state.data.keywordForSubject = action.payload;
     },
+    setKeywordForFile(state, action) {
+      state.data.keywordForFile = action.payload;
+    },
     setShowModalResult(state, action) {
       state.data.showModalResult = action.payload;
     },
@@ -51,6 +56,16 @@ const dashboardV2Slice = createSlice({
     },
     setQuerySubject(state, action) {
       state.data.querySubject = action.payload;
+    },
+    setQueryFile(state, action) {
+      state.data.queryFile = action.payload;
+    },
+    resetFilterDashboard(state, action) {
+      state.data = {
+        ...initialState.data,
+        tabIndex: state.data.tabIndex,
+        tabActive: state.data.tabActive,
+      }
     },
   },
 });
@@ -62,6 +77,9 @@ export const {
   setShowModalResult,
   setTabActive,
   setQueryResponse,
-  setQuerySubject
+  setQuerySubject,
+  setKeywordForFile,
+  setQueryFile,
+  resetFilterDashboard
 } = dashboardV2Slice.actions;
 export default dashboardV2Slice.reducer;

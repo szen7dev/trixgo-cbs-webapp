@@ -180,3 +180,52 @@ export const usePcmPlanTaskNotification = (payload: any): any => {
     data
   };
 };
+
+export const useListFileFromSearch = (payload: any): any => {
+  // Get danh sách
+  const {
+    isLoading: isLoadingFile,
+    refetch: refetchFile,
+    data: dataFile,
+    fetchNextPage: nextPageFile,
+    hasNextPage: hasNextPageFile,
+    isFetching
+  } = useInfiniteQuery(
+    [`app_dashboard_search_by_file.${payload}`, payload],
+    async ({ pageParam }) => {
+      return pcmDashboardV2.pcmFiles({
+        populates: JSON.stringify({
+          path: "author task project",
+          select: "_id name fullname image createAt related sign",
+        }),
+        lastestID: pageParam || "",
+        limit: "50",
+        ...payload
+      });
+    },
+    {
+      getNextPageParam: ({ data }) => {
+        return data?.nextCursor || undefined;
+      },
+      refetchOnWindowFocus: false,
+      enabled: payload.enabled ? true : false,
+    }
+  );
+
+  const listDataForFile = []
+    .concat(...(dataFile?.pages || []).map((d: any) => d.data?.listRecords))
+    .filter(Boolean);
+  const totalRecord = dataFile?.pages[0]?.data?.totalRecord;
+  const totalPage = dataFile?.pages[0]?.data?.totalPage;
+
+  return {
+    isLoadingFile,
+    listDataForFile,
+    totalRecord,
+    totalPage,
+    nextPageFile,
+    hasNextPageFile,
+    refetchFile,
+    isFetching
+  };
+};
