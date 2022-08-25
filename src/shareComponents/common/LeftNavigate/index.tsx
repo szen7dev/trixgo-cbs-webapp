@@ -94,7 +94,7 @@ export const LeftNavigate:FC<Props> = ({handleMenuEvent}) => {
                         amountMissMessage > 0 &&
                         <span
                             className={"absolute -top-1 right-1 min-w-5 w-5 h-5 text-xs inline-block border-2 text-center border-white rounded-full bg-negative text-white"}>
-                            {amountMissMessage}
+                            {amountMissMessage <= 10 ? amountMissMessage : "9+"}
                         </span>
                     }
                 </div>
