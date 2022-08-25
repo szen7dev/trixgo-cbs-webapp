@@ -28,7 +28,7 @@ export const ListChatItem:FC<Props> = ({chat, customLink, customOnClick}) => {
         });
     }
 
-    const {getNameConversation, getAvatarMembers} = UseMessageHelper();
+    const {getNameConversation, getBackgroundGroupChat, getAvatarMembers} = UseMessageHelper();
 
     const userUnreadMessage = useCallback(() => {
         const userUnread = chat?.usersMissMessage?.find(unread => unread.userID === profileId)
@@ -49,7 +49,7 @@ export const ListChatItem:FC<Props> = ({chat, customLink, customOnClick}) => {
             }
             switch (chat.lastMessage.type) {
                 case 0:
-                    return <p className={"flex items-center max-w-[250px] truncate"}>
+                    return <p className={"flex items-center max-w-full truncate"}>
                         <span className={"whitespace-nowrap "+(currentChat===chat._id ?"text-white":"text-black")}>{getSenderName()}</span>:
                         <span className={"ml-[5px] truncate max-w-full"}>
                             {chat.lastMessage.content.replaceAll(/[@]\[(.*?)\]\((.*?)\)/g, (replacement: string) => {
@@ -100,7 +100,7 @@ export const ListChatItem:FC<Props> = ({chat, customLink, customOnClick}) => {
     const getSenderName = useCallback(() => {
         if (chat.lastMessage.sender._id === profileId) {
             return "Bạn";
-        } else return (chat.lastMessage.sender.bizfullname||chat.lastMessage.sender.fullname);
+        } else return (chat.lastMessage.sender.bizfullname.slice(0, 10)||chat.lastMessage.sender.fullname.slice(0, 10));
     },[chat.lastMessage])
 
     const displayClass = (
@@ -121,6 +121,7 @@ export const ListChatItem:FC<Props> = ({chat, customLink, customOnClick}) => {
             contextMenu={<OptionListItemRightClick currentChat={currentChat} chat={chat} socketRef={socketRef}/>}
         >
             <NavLink
+                title={getNameConversation(chat, profileId)}
                 onClick={() => {
                     if (customOnClick) {
                         customOnClick(chat)
@@ -129,66 +130,44 @@ export const ListChatItem:FC<Props> = ({chat, customLink, customOnClick}) => {
                     }
                 }}
                 to={customLink??`#${chat._id}`}
-                className={"group smooth-animation flex p-[10px] cursor-pointer rounded-lg z-1 " + (currentChat===chat._id ? "bg-primary":"hover:bg-gray-100")}>
+                className={"group smooth-animation flex px-[10px] py-[7px] items-center cursor-pointer rounded-full z-1 " + (currentChat===chat._id ? "bg-primary":"hover:bg-gray-100")}>
                 {
                     chat.avatar?
-                        <img  className={"w-[56px] h-[56px] min-w-[56px] min-h-[56px] rounded-full overflow-hidden object-cover"} src={`${process.env.REACT_APP_URL_S3}${chat?.avatar?.path}`} alt={getNameConversation(chat, profileId)}/>:
+                        <img  className={"w-[28px] h-[28px] min-w-[28px] min-h-[28px] rounded-full overflow-hidden object-cover"} src={`${process.env.REACT_APP_URL_S3}${chat?.avatar?.path}`} alt={getNameConversation(chat, profileId)}/>:
                         (
                             getAvatarMembers(chat, profileId).length === 0 ?
-                                <div className={"w-[56px] h-[56px] min-w-[56px] min-h-[56px] rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[56px] min-h-[56px]"} style={{background: "#8DD4D6"}}>
+                                <div className={"w-[28px] h-[28px] min-w-[28px] min-h-[28px] rounded-full flex items-center justify-center text-white text-lg min-w-[28px] min-h-[28px]"} style={{background: getBackgroundGroupChat(chat)}}>
                                     {getPresentGroupName(getNameConversation(chat, profileId))}
                                 </div> :
                                 <AvatarGroupChat
                                     avatars={getAvatarMembers(chat, profileId)}
-                                    imageClass={"w-[56px] h-[56px] min-w-[56px] min-h-[56px]"}
+                                    imageClass={"w-[28px] h-[28px] min-w-[28px] min-h-[28px]"}
                                     classesMap={{
                                         "group_1": {
                                             imgWidth: "w-full h-full",
                                             groupPosition: [""]
-                                        },
-                                        "group_2": {
-                                            imgWidth: "w-[38px] h-[38px] absolute",
-                                            groupPosition: [
-                                                "bottom-0 left-0 z-2",
-                                                "top-0 right-0 z-1",
-                                            ]
-                                        },
-                                        "group_3": {
-                                            imgWidth: "w-[32px] h-[32px] absolute",
-                                            groupPosition: [
-                                                "bottom-0 left-12px z-3",
-                                                "top-0 left-0 z-2",
-                                                "top-0 right-0 z-1",
-                                            ]
-                                        },
-                                        "group_4": {
-                                            imgWidth: "w-[28px] h-[28px] absolute",
-                                            groupPosition: [
-                                                "bottom-0 left-0 z-4",
-                                                "top-0 left-0 z-3",
-                                                "top-0 right-0 z-2",
-                                                "bottom-0 right-0 z-1"
-                                            ]
                                         }
                                     }}
                                 />
                         )
                 }
-                <div className={"flex-1 flex flex-col justify-center ml-[10px]"}>
-                    <div className={"flex"}>
-                        <div className={"flex-1 font-bold "+ (currentChat===chat._id ? "text-white":"")}>
+                <div className={"flex-1 flex flex-col justify-center ml-[10px] max-w-[180px]"}>
+                    <div className={"flex items-center"}>
+                        <div className={"flex-1 font-bold truncate mr-1 "+ (currentChat===chat._id ? "text-white":"")}>
                             {getNameConversation(chat, profileId)}
                         </div>
-                        <div className={"text-xs "+ (currentChat===chat._id ? "text-white":"text-gray-500")}>
+                        <div className={"text-xs "+ (currentChat===chat._id ? "text-white":"text-primary-gray")}>
                             {getDate()}
                         </div>
                     </div>
-                    <div className={"flex mt-1"}>
-                        <div className={"flex-1 "+ (currentChat===chat._id ? "text-white":"text-gray-500")}>{getLastMessage()}</div>
-                        {
-                            userUnreadMessage() > 0 &&
-                            <div className={"rounded-full flex items-center justify-center bg-positive text-xs text-white w-[18px] h-[18px] text-center leading-[18px]"}>{userUnreadMessage()}</div>}
-                        {chat.isPin&&<IconPinned style={{filter: currentChat === chat._id ? "brightness(0) invert(1)": "none"}}/>}
+                    <div className={"flex mt-1 max-w-full items-center justify-between"}>
+                        <div className={"flex-1 max-w-[140px] "+ (currentChat===chat._id ? "text-white":"text-primary-gray")}>{getLastMessage()}</div>
+                        <div className={"flex items-center"}>
+                            {
+                                userUnreadMessage() > 0 &&
+                                <div className={"rounded-full flex items-center justify-center bg-positive text-xs text-white w-[18px] h-[18px] text-center leading-[18px]"}>{userUnreadMessage()}</div>}
+                            {chat.isPin&&<IconPinned style={{filter: currentChat === chat._id ? "brightness(0) invert(1)": "none"}}/>}
+                        </div>
                     </div>
                 </div>
             </NavLink>

@@ -13,6 +13,7 @@ type UseMessageHelperType = {
     isAuthor: (chat: ItemListConversation, profileId: string) => boolean;
     isMasterAuthor: (chat: ItemListConversation, profileId: string) => boolean;
     hasPermission: (chat: ItemListConversation, profileId: string, permission: string) => boolean;
+    getBackgroundGroupChat: (chat: ItemListConversation) => string;
 }
 
 export const UseMessageHelper = () : UseMessageHelperType => {
@@ -20,6 +21,7 @@ export const UseMessageHelper = () : UseMessageHelperType => {
     const {socketRef,setCurrentChat, currentChat} = useContext(MessageContext);
     const socket = socketRef?.current;
     const dispatch = useDispatch();
+    const bgArray = ['#FCC4A2', '#8DD4D6', '#FAA2FC', '#A6DA95'];
 
     const handleStartPrivateChat = (memberId: string, redirectOnly = false) => {
         createConversation({
@@ -51,13 +53,13 @@ export const UseMessageHelper = () : UseMessageHelperType => {
                 return [`${process.env.REACT_APP_URL_S3_USER}/${members[0].image}`];
             }
         }
-        const avatars: any = [];
-        if (chat.members && chat.members.length) {
-            chat.members.slice(0, 4).forEach((member: any) => {
-                avatars.push(`${process.env.REACT_APP_URL_S3_USER}/${member.image}`);
-            });
-        }
-        return avatars;
+        // const avatars: any = [];
+        // if (chat.members && chat.members.length) {
+        //     chat.members.slice(0, 4).forEach((member: any) => {
+        //         avatars.push(`${process.env.REACT_APP_URL_S3_USER}/${member.image}`);
+        //     });
+        // }
+        return [];
     };
 
     const getNameConversation = (chat: ItemListConversation, profileId: string) : string => {
@@ -87,12 +89,25 @@ export const UseMessageHelper = () : UseMessageHelperType => {
         return (value===1||isAuthor(chat, profileId))
     }
 
+    const getBackgroundGroupChat = (chat: ItemListConversation) => {
+        let backgroundColor = localStorage.getItem(`chat-bg-${chat._id}`);
+        if (!backgroundColor) {
+            const pickRandomColor = Math.floor(Math.random() * 4);
+            backgroundColor = bgArray[pickRandomColor];
+            localStorage.setItem(`chat-bg-${chat._id}`, backgroundColor);
+
+            return backgroundColor;
+        }
+        return backgroundColor;
+    }
+
     return {
         handleStartPrivateChat,
         getAvatarMembers,
         getNameConversation,
         isAuthor,
         isMasterAuthor,
-        hasPermission
+        hasPermission,
+        getBackgroundGroupChat
     }
 };

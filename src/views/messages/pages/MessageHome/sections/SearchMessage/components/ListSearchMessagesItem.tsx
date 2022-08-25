@@ -33,7 +33,7 @@ export const ListSearchMessagesItem:FC<Props> = ({message}) => {
         switch (message.type) {
             case 0:
                 return <p className={"flex items-center max-w-[250px]"}>
-                    <span className={"ml-[5px] truncate max-w-full"}>
+                    <span className={"truncate max-w-full"}>
                         {message.content.replaceAll(/[@]\[(.*?)\]\((.*?)\)/g, (replacement: string) => {
                             const matchs = (/[@]\[(.*?)\]\((.*?)\)/g).exec(replacement);
                             if (matchs) {
@@ -47,15 +47,11 @@ export const ListSearchMessagesItem:FC<Props> = ({message}) => {
                 </p>
             case 1:
                 return <p className={"flex items-center"}>
-                    <span className={"ml-[5px]"}>
                     [Hình ảnh]
-                    </span>
                 </p>;
             case 2:
                 return <p className={"flex items-center"}>
-                    <span className={"ml-[5px]"}>
                     [Tệp tin]
-                    </span>
                 </p>;
             default:
                 return "[Thông báo]";
@@ -80,7 +76,7 @@ export const ListSearchMessagesItem:FC<Props> = ({message}) => {
         <div
             onClick={() => handleGoToMessage(message._id)}
             className={"group smooth-animation flex p-[10px] cursor-pointer rounded-lg z-1 hover:bg-gray-100"}>
-            <img  className={"w-[56px] h-[56px] min-w-[56px] min-h-[56px] rounded-full overflow-hidden"} src={`${process.env.REACT_APP_URL_S3_USER}/${message?.sender?.image}`} alt={message.sender.bizfullname}/>
+            <img  className={"w-[40px] h-[40px] min-w-[40px] min-h-[40px] rounded-full overflow-hidden"} src={`${process.env.REACT_APP_URL_S3_USER}/${message?.sender?.image}`} alt={message.sender.bizfullname}/>
             <div className={"flex-1 flex flex-col justify-center ml-[10px]"}>
                 <div className={"flex"}>
                     <div className={"flex-1 font-bold"}>
@@ -91,7 +87,7 @@ export const ListSearchMessagesItem:FC<Props> = ({message}) => {
                     </div>
                 </div>
                 <div className={"flex mt-1"}>
-                    <div className={"flex-1 text-gray-500"}>{getMessageContent()}</div>
+                    <div className={"flex-1 text-primary-gray"}>{getMessageContent()}</div>
                 </div>
             </div>
         </div>

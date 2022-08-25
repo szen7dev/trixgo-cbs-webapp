@@ -20,7 +20,10 @@ export const SearchUserAndConversation:FC = () => {
     const [search, setSearch] = useState("");
     const [showResult, setShowResult] = useState(false);
 
-    useOnClickOutside(wrapperClass, () => setShowResult(false))
+    useOnClickOutside(wrapperClass, () => {
+        setShowResult(false);
+        setSearch("");
+    })
 
     const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
         setSearch(e.target.value)
@@ -28,12 +31,13 @@ export const SearchUserAndConversation:FC = () => {
     }
 
     const params = {limit: 5, select: 'fullname bizfullname email phone image', populates: '{"path": "company", "select": "name"}', keyword: search}
-    const {data, hasNextPage, fetchNextPage} = useUserSystem(params, showResult);
+    const {data} = useUserSystem(params, showResult);
 
     const paramsListConversation = {limit: 5, keyword: search};
-    const {listConversations, nextPageListConversations, hasListConversationNextPage, createConversation} = UseListConversation(paramsListConversation, showResult);
+    const {listConversations, createConversation} = UseListConversation(paramsListConversation, showResult);
 
     const handleStartPrivateChat = (memberId: string) => {
+        setSearch("");
         createConversation({
             name: "",
             description: "",
@@ -49,7 +53,7 @@ export const SearchUserAndConversation:FC = () => {
             setCurrentChat(data._id);
             window.location.hash = `#${data._id}`
         });
-        setShowResult(false)
+        setShowResult(false);
     }
 
     return (
@@ -58,17 +62,18 @@ export const SearchUserAndConversation:FC = () => {
                 <img src={searchIcon} alt={"search icon"}/>
             </div>
             <input
+                value={search}
                 onChange={e => handleSearchChange(e)}
-                className={"pl-12 w-full h-[45px] bg-cbs-bg-input-search rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-none focus:bg-white focus:shadow-md transition-all"} placeholder={"Tìm trong bạn bè hoặc cuộc hội thoại"}/>
+                className={"pl-12 w-full h-[45px] bg-cbs-bg-input-search rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-none focus:shadow-md transition-all"} placeholder={"Tìm trong bạn bè hoặc cuộc hội thoại"}/>
 
             {
                 showResult &&
-                <div className={"absolute top-full mt-2 w-full rounded border-0.5 border-primary-border p-4 bg-white"}>
+                <div className={"absolute top-full mt-2 w-full rounded border-0.5 border-primary-border p-2 bg-white"}>
                     {
                         data.map(friend => (
                             <div
                                 key={friend._id}
-                                className={"flex items-center py-2 cursor-pointer"}
+                                className={"flex items-center p-[10px] cursor-pointer rounded-md hover:bg-gray-100"}
                                 onClick={() => handleStartPrivateChat(friend._id)}
                             >
                                 <div className={"w-[36px] flex items-center justify-center"}>
@@ -85,6 +90,7 @@ export const SearchUserAndConversation:FC = () => {
                                     dispatch(appendFakeItemListConversation({conversationId: chat._id, conversation: chat}))
                                     setCurrentChat(chat._id);
                                     setShowResult(false)
+                                    setSearch("");
                                 }}
                                 chat={conversation} key={conversation._id}/>
                         ))

@@ -1,5 +1,5 @@
 /*=====LIBRARY=====*/
-import { FC } from "react";
+import {FC, lazy} from "react";
 import { Switch } from "react-router-dom";
 import { ProtectedRoute } from "routes/components";
 
@@ -7,7 +7,7 @@ import { ProtectedRoute } from "routes/components";
 import { MessagesLayoutV2 } from "views/messages/shareComponents/layouts/MessagesLayoutV2";
 
 /*=====PAGES=====*/
-import { MessagesHome } from "views/messages/pages/MessageHome";
+const MessagesHome          = lazy(() => import('views/messages/pages/MessageHome'));
 
 const MessagesRouter: FC = () => {
     return (

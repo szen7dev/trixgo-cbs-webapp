@@ -22,7 +22,7 @@ export const BasicInformationConversation:FC<Props> = ({chat}) => {
         companyID: chat.company,
         conversationID: chat._id
     });
-    const {getAvatarMembers, getNameConversation} = UseMessageHelper();
+    const {getBackgroundGroupChat, getNameConversation, getAvatarMembers} = UseMessageHelper();
     const {updateConversation} = UseListConversation();
     const [chatName, setChatName] = useState(getNameConversation(chat, profileId));
     const [avatarId, setAvatarId] = useState("");
@@ -104,7 +104,7 @@ export const BasicInformationConversation:FC<Props> = ({chat}) => {
                             <img  className={"w-[120px] h-[120px] min-w-[120px] min-h-[120px] rounded-full overflow-hidden"} src={`${process.env.REACT_APP_URL_S3}${chat?.avatar?.path}`} alt={getNameConversation(chat, profileId)}/>:
                             (
                                 getAvatarMembers(chat, profileId).length === 0 ?
-                                    <div className={"w-[120px] h-[120px] rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[56px] min-h-[56px]"} style={{background: "#8DD4D6"}}>
+                                    <div className={"w-[120px] h-[120px] rounded-full flex items-center justify-center text-white font-bold text-7xl min-w-[120px] min-h-[120px]"} style={{background: getBackgroundGroupChat(chat)}}>
                                         {getPresentGroupName(getNameConversation(chat, profileId))}
                                     </div> :
                                     <AvatarGroupChat
@@ -114,30 +114,6 @@ export const BasicInformationConversation:FC<Props> = ({chat}) => {
                                             "group_1": {
                                                 imgWidth: "w-full h-full",
                                                 groupPosition: [""]
-                                            },
-                                            "group_2": {
-                                                imgWidth: "w-[80px] h-[80px] absolute",
-                                                groupPosition: [
-                                                    "bottom-0 left-0 z-2",
-                                                    "top-0 right-0 z-1",
-                                                ]
-                                            },
-                                            "group_3": {
-                                                imgWidth: "w-[70px] h-[70px] absolute",
-                                                groupPosition: [
-                                                    "bottom-0 left-25px z-3",
-                                                    "top-0 left-0 z-2",
-                                                    "top-0 right-0 z-1",
-                                                ]
-                                            },
-                                            "group_4": {
-                                                imgWidth: "w-[70px] h-[70px] absolute",
-                                                groupPosition: [
-                                                    "bottom-0 left-0 z-4",
-                                                    "top-0 left-0 z-3",
-                                                    "top-0 right-0 z-2",
-                                                    "bottom-0 right-0 z-1"
-                                                ]
                                             }
                                         }}
                                     />

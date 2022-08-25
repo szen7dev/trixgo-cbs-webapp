@@ -8,7 +8,7 @@ import {
 import {SearchMessage} from "./sections/SearchMessage";
 import {MessageContext} from "../../shareComponents/layouts/MessagesLayoutV2";
 
-export const MessagesHome:FC = () => {
+const MessagesHome:FC = () => {
     const {showMenu,showSearch} = useContext(MessageContext);
     return (
         <div className={"main-message flex content-avoid-header overflow-hidden relative " + (showMenu?" show-menu":"") + (showSearch?" show-SearchMessage":"")}>
@@ -18,3 +18,4 @@ export const MessagesHome:FC = () => {
         </div>
     )
 }
+export default MessagesHome;
