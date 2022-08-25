@@ -1373,7 +1373,7 @@ input::placeholder {
 }
 .message-input .DraftEditor-root {
   flex-grow: 1;
-  max-width: 419px;
+  max-width: 568px;
   min-height: 50px;
   max-height: 200px;
   padding: 15px 0;

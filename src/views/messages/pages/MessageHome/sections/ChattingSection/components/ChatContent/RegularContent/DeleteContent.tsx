@@ -41,7 +41,7 @@ export const DeleteChatContent:FC<Props> = ({message,className,showSenderName, i
         <div className={"max-w-[366px] min-w-[70px] rounded-lg p-[7px] relative " + (className??"")}>
             {
                 showSenderName&&
-                <div className={"reply-user-name text-primary"}>
+                <div className={"reply-user-name text-gray-400"}>
                     {message.sender.bizfullname||message.sender.fullname}
                 </div>
             }

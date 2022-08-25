@@ -8,6 +8,7 @@ import {
   setKeywordForFile,
   setKeywordForResponse,
   setKeywordForSubject,
+  setQueryFile,
   setQueryResponse,
   setQuerySubject,
   setShowModalResult,
@@ -39,6 +40,9 @@ export const HomeHeaderContent: FC = () => {
   );
   const querySubject = useAppSelector(
     (state) => state.dashboardV2.data.querySubject
+  );
+  const queryFile = useAppSelector(
+    (state) => state.dashboardV2.data.queryFile
   );
 
   const [keywordSearchForResponse, setKeywordSearchForResponse] = useState("");
@@ -166,7 +170,30 @@ export const HomeHeaderContent: FC = () => {
           })
         );
       }
+    };
+
+    if (tabIndex === 2) {
+      if (!querySubject.assigneesID?.includes?.(id as string)) {
+        const newData: any = [...querySubject.assigneesID, id];
+        dispatch(
+          setQuerySubject({
+            ...querySubject,
+            assigneesID: newData,
+          })
+        );
+      }
     }
+    if (tabIndex === 3) {
+      if (!queryFile.authorsID?.includes?.(id as string)) {
+        const newData: any = [...queryFile.authorsID, id];
+        dispatch(
+          setQueryFile({
+            ...queryFile,
+            authorsID: newData,
+          })
+        );
+      }
+    };
     dispatch(setShowModalResult(false));
   };
 
@@ -193,7 +220,18 @@ export const HomeHeaderContent: FC = () => {
           })
         );
       }
-    }
+    };
+    if (tabIndex === 3) {
+      if (!queryFile.companyOfAuthorsID?.includes?.(id as string)) {
+        const newData: any = [...queryFile.companyOfAuthorsID, id];
+        dispatch(
+          setQuerySubject({
+            ...queryFile,
+            companyOfAuthorsID: newData,
+          })
+        );
+      }
+    };
     dispatch(setShowModalResult(false));
   };
 

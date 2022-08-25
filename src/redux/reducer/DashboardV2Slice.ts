@@ -22,6 +22,10 @@ const initialState: any = {
       isParent: "1",
       isActive: "1",
     },
+    queryFile: {
+      companyOfAuthorsID: [],
+      authorsID: [],
+    }
   },
 };
 
@@ -53,6 +57,16 @@ const dashboardV2Slice = createSlice({
     setQuerySubject(state, action) {
       state.data.querySubject = action.payload;
     },
+    setQueryFile(state, action) {
+      state.data.queryFile = action.payload;
+    },
+    resetFilterDashboard(state, action) {
+      state.data = {
+        ...initialState.data,
+        tabIndex: state.data.tabIndex,
+        tabActive: state.data.tabActive,
+      }
+    },
   },
 });
 
@@ -64,6 +78,8 @@ export const {
   setTabActive,
   setQueryResponse,
   setQuerySubject,
-  setKeywordForFile
+  setKeywordForFile,
+  setQueryFile,
+  resetFilterDashboard
 } = dashboardV2Slice.actions;
 export default dashboardV2Slice.reducer;

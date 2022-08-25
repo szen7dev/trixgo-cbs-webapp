@@ -34,7 +34,7 @@ const PcmReportQuick: FC = () => {
 		<main className="h-full overflow-y-auto comment__wrapper">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
 				<div className="flex items-center">
-					<Link to={`/pcm/project/${projectID}/dashboard`}>
+					<Link to={`/pm/project/${projectID}/dashboard`}>
 						<svg
 						xmlns="http://www.w3.org/2000/svg"
 						className="h-5 w-5"

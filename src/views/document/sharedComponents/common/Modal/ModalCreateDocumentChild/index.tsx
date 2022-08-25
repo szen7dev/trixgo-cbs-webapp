@@ -162,7 +162,7 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 				})),
 				name: "direction",
 			},
-			{ title: "Ban hành (*)", data: listContactSender, name: "sender" },
+			{ title: "Cá nhân ban hành", data: listContactSender, name: "sender" },
 			{ title: "Nhận", data: listContactReceiver, name: "receiver" },
 			{ title: "Tính chất (*)", data: properties, name: "property" },
 			{
@@ -542,11 +542,11 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 										</div>
 
 										<div className="py-1.5 h-[30px] box-content">
-											<p className="py-1.5">Cơ quan, tổ chức</p>
+											<p className="py-1.5">Tổ chức ban hành</p>
 										</div>
 										<div className="py-0.5 h-[30px] box-content px-2">
 											<DropdownSearchable
-												placeholder={"Cơ quan, tổ chức"}
+												placeholder={"Tổ chức ban hành"}
 												className={"w-full flex-1"}
 												showTriangle={false}
 												maxWidthInput={"max-w-none"}

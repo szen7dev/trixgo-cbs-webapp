@@ -1,4 +1,4 @@
-import React, { FC, useState, UIEvent } from "react";
+import React, { FC, useState, UIEvent, useRef } from "react";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import parse from "html-react-parser";
@@ -35,11 +35,14 @@ import { debounce } from "lodash";
 import { useQueryListDepartmentsIsMember } from "services/hooks/items/useDepartment";
 import { useDispatch } from "react-redux";
 import {
+  resetFilterDashboard,
+  setQueryFile,
   setQueryResponse,
   setQuerySubject,
   setTabActive,
 } from "redux/reducer/DashboardV2Slice";
 import { useSearchTask } from "services/hooks/useMainSearch";
+import { humanFileSize } from "utils/converter";
 
 type Props = {
   type?: number;
@@ -72,6 +75,9 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     (state) => state.dashboardV2.data.querySubject
   );
 
+  const queryFile = useAppSelector((state) => state.dashboardV2.data.queryFile);
+
+  const [reset, setReset] = useState(false);
   ///// Danh sách công ty
   const [searchCompanyName, setSearchCompanyName] = useState("");
   const {
@@ -153,8 +159,8 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     isFetching: isFetchingResponse,
   } = useListResponseFromSearch(query);
 
-  const [fromExpiredDate, setFromExpiredDate] = useState("");
-  const [toExpiredDate, setToExpiredDate] = useState("");
+  const [fromExpiredDate, setFromExpiredDate] = useState("1990/01/01");
+  const [toExpiredDate, setToExpiredDate] = useState("2999/12/31");
   const [isExpired, setIsExpired] = useState<any>(0);
   const [subtypes, setSubtypes] = useState<string[]>([]);
   const [status, setStatus] = useState<string[]>([]);
@@ -191,14 +197,31 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     isFetching: isFetchingFile,
   } = useListFileFromSearch({
     keyword: keywordForFile,
-      fromDate: fromCreateDate,
-      toDate: toCreateDate,
-      authorsID: authors,
-      projectsID: project,
-      limit: "50",
+    fromDate: fromCreateDate,
+    toDate: toCreateDate,
+    projectsID: project,
+    ...queryFile,
+    limit: "50",
     enabled: tabActive === 3 ? true : false,
   });
   //////
+
+  const onReset = () => {
+    setReset(false);
+    dispatch(resetFilterDashboard({}));
+    setFromCreateDate("1990/01/01");
+    settoCreateDate("2999/12/31");
+    setProject([]);
+    setAuthors([]);
+    setFromExpiredDate("1990/01/01");
+    setToExpiredDate("2999/12/31");
+    setIsExpired(0);
+    setSubtypes([]);
+    setStatus([]);
+    setTimeout(() => {
+      setReset(true);
+    }, 0);
+  }
 
   const checkActive = (relateds: string[], user: string) => {
     let result = "read border-b-0.5 border-primary-border";
@@ -207,6 +230,14 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     }
     return result;
   };
+
+  const dropdownSearchableV2: any = useRef(null);
+  
+  const xxxxxx = 
+  [{
+    label: "Công ty C1020",
+value: "6046c7c02c1dc33996dde3f6"
+  }];
 
   return (
     <div className="t-home flex flex-col h-full overflow-hidden">
@@ -220,6 +251,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
             isFetchingFile) && <Loader className="border-primary" />}
           {tabIndex === 2 && (
             <DropdownSearchableV2
+              reset={reset}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Đơn vị thực hiện"}
               countBadge={querySubject.companiesOfAssignee.length}
@@ -290,6 +322,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           {tabIndex === 2 && (
             <DropdownSearchableV2
               selectOneByOne={true}
+              reset={reset}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Người thực hiện"}
               showTriangle={true}
@@ -423,26 +456,123 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               ]}
             />
           )}
+
+          {tabIndex === 3 && (
+            <DropdownSearchableV2
+              selectOneByOne={true}
+              reset={reset}
+              countBadge={queryFile.companyOfAuthorsID.length}
+              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              placeholder={"Đơn vị tạo"}
+              onchangeValue={(value) => {
+                dispatch(setTabActive(tabIndex));
+                if (
+                  !queryFile.companyOfAuthorsID?.includes?.(value.id as string)
+                ) {
+                  const newData: any = [
+                    ...queryFile.companyOfAuthorsID,
+                    value.id,
+                  ];
+                  dispatch(
+                    setQueryFile({
+                      ...queryFile,
+                      companyOfAuthorsID: newData,
+                    })
+                  );
+                }
+                setSearchCompanyName("");
+              }}
+              onMultipleRemoveValue={(id: any) => {
+                const newList = queryFile.companyOfAuthorsID.filter(
+                  (item: any) => item !== id
+                );
+                dispatch(
+                  setQueryFile({
+                    ...queryFile,
+                    companyOfAuthorsID: newList,
+                  })
+                );
+              }}
+              onClearData={() =>
+                dispatch(
+                  setQueryFile({
+                    ...queryFile,
+                    companyOfAuthorsID: [],
+                  })
+                )
+              }
+              onScroll={handleScrollCompany}
+              onSearchInputChange={debounce(
+                (value) => setSearchCompanyName(value),
+                500
+              )}
+              showTriangle={true}
+              isMultiple={true}
+              data={listCompany.map((company) => ({
+                label: company.name,
+                value: company._id,
+              }))}
+              formatItem={{
+                id: "value",
+                text: "label",
+              }}
+              renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+              )}
+              prefixIcon={
+                <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
+              }
+            />
+          )}
+
           {(tabIndex === 2 || tabIndex === 3) && (
             <DropdownSearchableV2
               selectOneByOne={true}
+              reset={reset}
+              countBadge={
+                tabIndex === 3
+                  ? (queryFile.authorsID && queryFile.authorsID.length) || 0
+                  : 0
+              }
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Người tạo"}
               showTriangle={true}
               isMultiple={true}
               onchangeValue={(value) => {
-                if (!authors?.includes?.(value.id as string)) {
-                  const newData: any = [...authors, value.id];
-                  setAuthors(newData);
+                dispatch(setTabActive(tabIndex));
+                if (tabIndex === 3) {
+                  if (!queryFile.authorsID?.includes?.(value.id as string)) {
+                    const newData: any = [...queryFile.authorsID, value.id];
+                    dispatch(
+                      setQueryFile({
+                        ...queryFile,
+                        authorsID: newData,
+                      })
+                    );
+                  }
+                } else {
+                  if (!authors?.includes?.(value.id as string)) {
+                    const newData: any = [...authors, value.id];
+                    setAuthors(newData);
+                  }
                 }
                 setSearchUserSystem("");
-                dispatch(setTabActive(tabIndex));
               }}
               onMultipleRemoveValue={(id: any) => {
-                const newList = queryResponse.authorsID.filter(
-                  (item: any) => item !== id
-                );
-                setAuthors(newList);
+                if (tabIndex === 3) {
+                  const newList = queryFile.authorsID.filter(
+                    (item: any) => item !== id
+                  );
+                  dispatch(
+                    setQueryFile({
+                      ...queryFile,
+                      authorsID: newList,
+                    })
+                  );
+                } else {
+                  const newList = authors.filter((item: any) => item !== id);
+                  setAuthors(newList);
+                }
               }}
               onClearData={() => setAuthors([])}
               onSearchInputChange={debounce(
@@ -505,6 +635,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
 
           {tabIndex === 1 && (
             <DropdownSearchableV2
+              reset={reset}
               selectOneByOne={true}
               countBadge={queryResponse.companyOfAuthorsID.length}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
@@ -575,6 +706,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           {tabIndex === 1 && (
             <DropdownSearchableV2
               selectOneByOne={true}
+              reset={reset}
               countBadge={queryResponse.authorsID.length}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Người tạo phản hồi"}
@@ -673,6 +805,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           {(tabIndex === 1 || tabIndex === 2 || tabIndex === 3) && (
             <DropdownSearchableV2
               selectOneByOne={true}
+              reset={reset}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Dự án"}
               prefixIcon={
@@ -759,6 +892,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
             <DropdownSearchableV2
               selectOneByOne={true}
               disableSearch={true}
+              reset={reset}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Quá hạn"}
               prefixIcon={
@@ -787,6 +921,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           {tabIndex === 2 && (
             <DropdownSearchableV2
               selectOneByOne={true}
+              reset={reset}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Trạng thái"}
               prefixIcon={
@@ -841,6 +976,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           {tabIndex === 1 && (
             <DropdownSearchableV2
               selectOneByOne={true}
+              reset={reset}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Phân loại"}
               prefixIcon={
@@ -876,6 +1012,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           {tabIndex === 2 && (
             <DropdownSearchableV2
               selectOneByOne={true}
+              reset={reset}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Phân loại"}
               prefixIcon={
@@ -947,7 +1084,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               ]}
             />
           )}
-          {tabIndex === 2 && (
+          {/* {tabIndex === 2 && (
             <button
               className={
                 "bg-green-success rounded text-white px-2 h-[32px] mb-2"
@@ -955,7 +1092,14 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
             >
               Lưu kết quả
             </button>
-          )}
+          )} */}
+
+          <button
+            className={"bg-green-success rounded text-white px-2 h-[32px] mb-2"}
+            onClick={onReset}
+          >
+            Thiết lập lại
+          </button>
         </div>
         <div className={"header-table flex px-4 w-full top-0 bg-white pb-4"}>
           <div className={"flex items-center justify-center mr-2"}>
@@ -1020,7 +1164,9 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               -
               {tabActive === 1
                 ? listDataForResponse.length
-                : tabActive === 2 ? listDataForSubject.length : listDataForFile.length}{" "}
+                : tabActive === 2
+                ? listDataForSubject.length
+                : listDataForFile.length}{" "}
               trong số{" "}
               {tabActive === 1
                 ? totalRecordResponse
@@ -1319,14 +1465,21 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                       "py-2 border-b-0.5 border-primary-border align-middle text-cbs-highlight-color break-all pr-2"
                     }
                   >
-                    {item.nameOrg}
+                    <a
+                      href={`${process.env.REACT_APP_URL_S3}${item.path}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-cbs-highlight-color"
+                    >
+                      {item.nameOrg}
+                    </a>
                   </td>
                   <td
                     className={
                       "py-2 border-b-0.5 border-primary-border align-middle"
                     }
                   >
-                    {item.size} KB
+                    {humanFileSize(item.size)}
                   </td>
                   <td
                     className={
