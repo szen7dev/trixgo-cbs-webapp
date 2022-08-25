@@ -5,8 +5,10 @@ import { useSearchTask } from "services/hooks/useMainSearch";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "redux/reducer";
 import {
+  setKeywordForFile,
   setKeywordForResponse,
   setKeywordForSubject,
+  setQueryFile,
   setQueryResponse,
   setQuerySubject,
   setShowModalResult,
@@ -16,6 +18,7 @@ import {
 import {
   useListResponseFromSearch,
   useListCompaniesSystems,
+  useListFileFromSearch,
 } from "services/hooks/pcm/usePcmDashboardV2";
 import { subContentHtml } from "views/homepage/pages";
 import { Oval } from "react-loader-spinner";
@@ -38,43 +41,65 @@ export const HomeHeaderContent: FC = () => {
   const querySubject = useAppSelector(
     (state) => state.dashboardV2.data.querySubject
   );
+  const queryFile = useAppSelector(
+    (state) => state.dashboardV2.data.queryFile
+  );
 
   const [keywordSearchForResponse, setKeywordSearchForResponse] = useState("");
   const [keywordSearchForSubject, setKeywordSearchForSubject] = useState("");
+  const [keywordSearchForFile, setKeywordSearchForFile] = useState("");
 
   const { listDataForResponse, isLoadingResponse } = useListResponseFromSearch({
     keyword: keywordSearchForResponse,
-    enabled: keywordSearchForResponse ? true : false
+    enabled: keywordSearchForResponse ? true : false,
   });
 
-  const {
-    listTasks: listDataForSubject,
-    isLoadingListTask: isLoadingSubject,
-  } = useSearchTask({
-    params: {
-      keyword: keywordSearchForSubject,
-      isParent: "1",
-      isActive: "1",
-    },
-    isFetch: keywordSearchForSubject ? true : false,
+  const { listTasks: listDataForSubject, isLoadingListTask: isLoadingSubject } =
+    useSearchTask({
+      params: {
+        keyword: keywordSearchForSubject,
+        isParent: "1",
+        isActive: "1",
+      },
+      isFetch: keywordSearchForSubject ? true : false,
+    });
+
+  const { isLoadingFile, listDataForFile } = useListFileFromSearch({
+    keyword: keywordSearchForFile,
+    enabled: keywordSearchForFile ? true : false,
+    limit: "3",
   });
 
   const { data: listUsersSystem, loading: isLoadingUserSystem } = useUserSystem(
     {
       keyword:
-        tabIndex === 1 ? keywordSearchForResponse : keywordSearchForSubject,
+        tabIndex === 1
+          ? keywordSearchForResponse
+          : tabIndex === 2
+          ? keywordSearchForSubject
+          : keywordSearchForFile,
       limit: 3,
     },
-    keywordSearchForResponse || keywordSearchForSubject ? true : false
+    keywordSearchForResponse || keywordSearchForSubject || keywordSearchForFile
+      ? true
+      : false
   );
 
   const { listDataCompaniesSystems, isLoadingCompaniesSystems } =
     useListCompaniesSystems(
       {
         keyword:
-          tabIndex === 1 ? keywordSearchForResponse : keywordSearchForSubject,
+          tabIndex === 1
+            ? keywordSearchForResponse
+            : tabIndex === 2
+            ? keywordSearchForSubject
+            : keywordSearchForFile,
       },
-      keywordSearchForResponse || keywordSearchForSubject ? true : false
+      keywordSearchForResponse ||
+        keywordSearchForSubject ||
+        keywordSearchForFile
+        ? true
+        : false
     );
 
   const setTypingTimeoutRef: any = useRef(null);
@@ -93,6 +118,9 @@ export const HomeHeaderContent: FC = () => {
         case 2:
           setKeywordSearchForSubject(e.target.value);
           break;
+        case 3:
+          setKeywordSearchForFile(e.target.value);
+          break;
         default:
           break;
       }
@@ -107,6 +135,9 @@ export const HomeHeaderContent: FC = () => {
           break;
         case 2:
           dispatch(setKeywordForSubject(keywordSearchForSubject));
+          break;
+        case 3:
+          dispatch(setKeywordForFile(keywordSearchForFile));
           break;
         default:
           break;
@@ -132,10 +163,35 @@ export const HomeHeaderContent: FC = () => {
     if (tabIndex === 2) {
       if (!querySubject.assigneesID?.includes?.(id as string)) {
         const newData: any = [...querySubject.assigneesID, id];
-        dispatch(setQuerySubject({
-          ...querySubject,
-          assigneesID: newData
-        }));
+        dispatch(
+          setQuerySubject({
+            ...querySubject,
+            assigneesID: newData,
+          })
+        );
+      }
+    };
+
+    if (tabIndex === 2) {
+      if (!querySubject.assigneesID?.includes?.(id as string)) {
+        const newData: any = [...querySubject.assigneesID, id];
+        dispatch(
+          setQuerySubject({
+            ...querySubject,
+            assigneesID: newData,
+          })
+        );
+      }
+    }
+    if (tabIndex === 3) {
+      if (!queryFile.authorsID?.includes?.(id as string)) {
+        const newData: any = [...queryFile.authorsID, id];
+        dispatch(
+          setQueryFile({
+            ...queryFile,
+            authorsID: newData,
+          })
+        );
       }
     };
     dispatch(setShowModalResult(false));
@@ -146,19 +202,34 @@ export const HomeHeaderContent: FC = () => {
     if (tabIndex === 1) {
       if (!queryResponse.companyOfAuthorsID?.includes?.(id as string)) {
         const newData: any = [...queryResponse.companyOfAuthorsID, id];
-        dispatch(setQueryResponse({
-          ...queryResponse,
-          companyOfAuthorsID: newData
-        }));
+        dispatch(
+          setQueryResponse({
+            ...queryResponse,
+            companyOfAuthorsID: newData,
+          })
+        );
       }
-    };
+    }
     if (tabIndex === 2) {
       if (!querySubject.companiesOfAssignee?.includes?.(id as string)) {
         const newData: any = [...querySubject.companiesOfAssignee, id];
-        dispatch(setQuerySubject({
-          ...querySubject,
-          companiesOfAssignee: newData
-        }));
+        dispatch(
+          setQuerySubject({
+            ...querySubject,
+            companiesOfAssignee: newData,
+          })
+        );
+      }
+    };
+    if (tabIndex === 3) {
+      if (!queryFile.companyOfAuthorsID?.includes?.(id as string)) {
+        const newData: any = [...queryFile.companyOfAuthorsID, id];
+        dispatch(
+          setQuerySubject({
+            ...queryFile,
+            companyOfAuthorsID: newData,
+          })
+        );
       }
     };
     dispatch(setShowModalResult(false));
@@ -172,6 +243,11 @@ export const HomeHeaderContent: FC = () => {
   const shortListDataForSubject = listDataForSubject || [];
   if (shortListDataForSubject.length > 3) {
     shortListDataForSubject.length = 3;
+  }
+
+  const shortListDataForFile = listDataForFile || [];
+  if (shortListDataForFile.length > 3) {
+    shortListDataForFile.length = 3;
   }
 
   return (
@@ -203,12 +279,15 @@ export const HomeHeaderContent: FC = () => {
             style={{ minHeight: 300 }}
           >
             {!isLoadingResponse &&
+            !isLoadingFile &&
             !isLoadingSubject &&
             !isLoadingCompaniesSystems &&
             !isLoadingUserSystem &&
             (tabIndex === 1
-              ? (!listDataForResponse.length)
-              : (!listDataForSubject.length)) &&
+              ? !listDataForResponse.length
+              : tabIndex === 2
+              ? !listDataForSubject.length
+              : !listDataForFile.length) &&
             !listUsersSystem.length &&
             !listDataCompaniesSystems.length ? (
               <div className="italic pt-200 flex items-center justify-center h-[200px]">
@@ -221,6 +300,7 @@ export const HomeHeaderContent: FC = () => {
             {isLoadingResponse ||
             isLoadingSubject ||
             isLoadingUserSystem ||
+            isLoadingFile ||
             isLoadingCompaniesSystems ? (
               <div
                 className={
@@ -311,13 +391,47 @@ export const HomeHeaderContent: FC = () => {
                 );
               })}
 
+            {!isLoadingFile &&
+              !isLoadingUserSystem &&
+              !isLoadingCompaniesSystems &&
+              tabIndex === 3 &&
+              shortListDataForFile.map((item: any, index: number) => {
+                return (
+                  <Link
+                    to={"/pcm/detail/" + item.task?._id}
+                    className={"flex items-center py-2"}
+                    key={index}
+                    onClick={() => dispatch(setShowModalResult(false))}
+                  >
+                    <div
+                      className={
+                        "w-[36px] min-w-[36px] flex items-center justify-center"
+                      }
+                    >
+                      <img
+                        src={searchIcon}
+                        alt={"----"}
+                        className={"w-[18px] h-[18px]"}
+                      />
+                    </div>
+                    <div className={"ml-4 w-[calc(100%-36px-1rem)]"}>
+                      <p className={"truncate"}>{item.nameOrg}</p>
+                    </div>
+                  </Link>
+                );
+              })}
+
             {!isLoadingResponse &&
             !isLoadingSubject &&
             !isLoadingCompaniesSystems &&
             !isLoadingUserSystem ? (
               <>
                 {listUsersSystem.map((item: any, index) => (
-                  <button key={index} className={"flex items-center py-2"} onClick={() => onClickUser(item._id)}>
+                  <button
+                    key={index}
+                    className={"flex items-center py-2"}
+                    onClick={() => onClickUser(item._id)}
+                  >
                     <div
                       className={
                         "w-[36px] min-w-[36px] flex items-center justify-center"
@@ -347,7 +461,11 @@ export const HomeHeaderContent: FC = () => {
             !isLoadingUserSystem ? (
               <>
                 {listDataCompaniesSystems.map((item: any, index: number) => (
-                  <button key={index} className={"flex items-center py-2"} onClick={() => onClickCompany(item._id)}>
+                  <button
+                    key={index}
+                    className={"flex items-center py-2"}
+                    onClick={() => onClickCompany(item._id)}
+                  >
                     <div
                       className={
                         "w-[36px] min-w-[36px] flex items-center justify-center"

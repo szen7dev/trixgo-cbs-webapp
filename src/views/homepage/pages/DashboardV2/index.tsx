@@ -1,19 +1,11 @@
-import React, { FC, useState, UIEvent } from "react";
+import React, { FC, useState, UIEvent, useRef } from "react";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import parse from "html-react-parser";
 import { useQueryListCompany } from "services/hooks/useCompanies";
-
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "views/pcm/styles/pcm.module.css";
-import userAvt from "assets/images/task-user.svg";
-
-// import newsImg1 from "assets/images/home-slide-img1.jpg";
-// import iconThumbsUp from "assets/images/icons8-thumbs-up-48.png";
-// import iconComments from "assets/images/icons8-comments-48.png";
-// import iconEye from "assets/images/icons8-eye-48.png";
-// import iconArrowRight from "assets/images/icon-arrow-right.svg";
 
 import {
   DropdownSearchableV2,
@@ -36,13 +28,21 @@ import { useUserSystem } from "services/hooks/users/useUserSystem";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { useAppSelector } from "redux/reducer";
 import {
+  useListFileFromSearch,
   useListResponseFromSearch,
 } from "services/hooks/pcm/usePcmDashboardV2";
 import { debounce } from "lodash";
 import { useQueryListDepartmentsIsMember } from "services/hooks/items/useDepartment";
 import { useDispatch } from "react-redux";
-import { setQueryResponse, setQuerySubject, setTabActive } from "redux/reducer/DashboardV2Slice";
+import {
+  resetFilterDashboard,
+  setQueryFile,
+  setQueryResponse,
+  setQuerySubject,
+  setTabActive,
+} from "redux/reducer/DashboardV2Slice";
 import { useSearchTask } from "services/hooks/useMainSearch";
+import { humanFileSize } from "utils/converter";
 
 type Props = {
   type?: number;
@@ -67,10 +67,17 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     (state) => state.dashboardV2.data.keywordForSubject
   );
 
+  const keywordForFile = useAppSelector(
+    (state) => state.dashboardV2.data.keywordForFile
+  );
+
   const querySubject = useAppSelector(
     (state) => state.dashboardV2.data.querySubject
   );
 
+  const queryFile = useAppSelector((state) => state.dashboardV2.data.queryFile);
+
+  const [reset, setReset] = useState(false);
   ///// Danh sách công ty
   const [searchCompanyName, setSearchCompanyName] = useState("");
   const {
@@ -108,6 +115,8 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     }
   };
 
+  const [fromCreateDate, setFromCreateDate] = useState("1990/01/01");
+  const [toCreateDate, settoCreateDate] = useState("2999/12/31");
   ////  Dự án
   const [project, setProject] = useState<string[]>([]);
   const [searchProject, setSearchProject] = useState("");
@@ -137,14 +146,21 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     ...queryResponse,
     keyword: keywordForResponse,
     projectsID: project,
+    fromDate: fromCreateDate,
+    toDate: toCreateDate,
     enabled: tabActive === 1 ? true : false,
   };
 
-  const { listDataForResponse, isLoadingResponse, totalRecord: totalRecordResponse, nextPageSubject, isFetching: isFetchingResponse } =
-    useListResponseFromSearch(query);
+  const {
+    listDataForResponse,
+    isLoadingResponse,
+    totalRecord: totalRecordResponse,
+    nextPageSubject,
+    isFetching: isFetchingResponse,
+  } = useListResponseFromSearch(query);
 
-   const [fromExpiredDate, setFromExpiredDate] = useState("");
-  const [toExpiredDate, setToExpiredDate] = useState("");
+  const [fromExpiredDate, setFromExpiredDate] = useState("1990/01/01");
+  const [toExpiredDate, setToExpiredDate] = useState("2999/12/31");
   const [isExpired, setIsExpired] = useState<any>(0);
   const [subtypes, setSubtypes] = useState<string[]>([]);
   const [status, setStatus] = useState<string[]>([]);
@@ -155,7 +171,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     nextPageListTask,
     totalRecord: totalRecordSubject,
     isLoadingListTask,
-    isFetching: isFetchingNextPageSubject
+    isFetching: isFetchingNextPageSubject,
   } = useSearchTask({
     params: {
       keyword: keywordForSubject,
@@ -166,13 +182,47 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
       isExpired: isExpired,
       subtypes: subtypes,
       status: status,
-      limit: 50,
-      ...querySubject
+      // read: 1, // 1-Chưa đọc, 2-Đã đọc, Không truyền => lấy tất cả
+      limit: 5,
+      ...querySubject,
     },
     isFetch: tabActive === 2 ? true : false,
   });
 
+  // Danh sách File
+  const {
+    isLoadingFile,
+    nextPageFile,
+    totalRecord: totalRecordFile,
+    listDataForFile,
+    isFetching: isFetchingFile,
+  } = useListFileFromSearch({
+    keyword: keywordForFile,
+    fromDate: fromCreateDate,
+    toDate: toCreateDate,
+    projectsID: project,
+    ...queryFile,
+    limit: "50",
+    enabled: tabActive === 3 ? true : false,
+  });
   //////
+
+  const onReset = () => {
+    setReset(false);
+    dispatch(resetFilterDashboard({}));
+    setFromCreateDate("1990/01/01");
+    settoCreateDate("2999/12/31");
+    setProject([]);
+    setAuthors([]);
+    setFromExpiredDate("1990/01/01");
+    setToExpiredDate("2999/12/31");
+    setIsExpired(0);
+    setSubtypes([]);
+    setStatus([]);
+    setTimeout(() => {
+      setReset(true);
+    }, 0);
+  }
 
   const checkActive = (relateds: string[], user: string) => {
     let result = "read border-b-0.5 border-primary-border";
@@ -182,13 +232,27 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     return result;
   };
 
+  const dropdownSearchableV2: any = useRef(null);
+  
+  const xxxxxx = 
+  [{
+    label: "Công ty C1020",
+value: "6046c7c02c1dc33996dde3f6"
+  }];
+
   return (
     <div className="t-home flex flex-col h-full overflow-hidden">
       <div className={"sticky top-0 bg-white z-10"}>
         <div className={"filter-bar flex flex-wrap px-4 py-2"}>
-          {(isLoadingResponse || isLoadingListTask || isFetchingNextPageSubject || isFetchingResponse) && <Loader className="border-primary" />}
+          {(isLoadingResponse ||
+            isLoadingListTask ||
+            isFetchingNextPageSubject ||
+            isFetchingResponse ||
+            isLoadingFile ||
+            isFetchingFile) && <Loader className="border-primary" />}
           {tabIndex === 2 && (
             <DropdownSearchableV2
+              reset={reset}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Đơn vị thực hiện"}
               countBadge={querySubject.companiesOfAssignee.length}
@@ -196,27 +260,44 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               isMultiple={true}
               selectOneByOne={true}
               onchangeValue={(value) => {
-                if (!querySubject.companiesOfAssignee?.includes?.(value.id as string)) {
-                  const newData: any = [...querySubject.companiesOfAssignee, value.id];
-                  dispatch(setQuerySubject({
-                    ...querySubject,
-                    companiesOfAssignee: newData
-                  }));
+                if (
+                  !querySubject.companiesOfAssignee?.includes?.(
+                    value.id as string
+                  )
+                ) {
+                  const newData: any = [
+                    ...querySubject.companiesOfAssignee,
+                    value.id,
+                  ];
+                  dispatch(
+                    setQuerySubject({
+                      ...querySubject,
+                      companiesOfAssignee: newData,
+                    })
+                  );
                 }
                 setSearchCompanyName("");
                 dispatch(setTabActive(tabIndex));
               }}
               onMultipleRemoveValue={(id: any) => {
-                const newList = querySubject.companiesOfAssignee.filter((item: any) => item !== id);
-                dispatch(setQuerySubject({
-                  ...querySubject,
-                  companiesOfAssignee: newList
-                }));
+                const newList = querySubject.companiesOfAssignee.filter(
+                  (item: any) => item !== id
+                );
+                dispatch(
+                  setQuerySubject({
+                    ...querySubject,
+                    companiesOfAssignee: newList,
+                  })
+                );
               }}
-              onClearData={() => dispatch(setQuerySubject({
-                ...querySubject,
-                companiesOfAssignee: []
-              }))}
+              onClearData={() =>
+                dispatch(
+                  setQuerySubject({
+                    ...querySubject,
+                    companiesOfAssignee: [],
+                  })
+                )
+              }
               onScroll={handleScrollCompany}
               onSearchInputChange={debounce(
                 (value) => setSearchCompanyName(value),
@@ -242,6 +323,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           {tabIndex === 2 && (
             <DropdownSearchableV2
               selectOneByOne={true}
+              reset={reset}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Người thực hiện"}
               showTriangle={true}
@@ -250,25 +332,35 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               onchangeValue={(value) => {
                 if (!querySubject.assigneesID?.includes?.(value.id as string)) {
                   const newData: any = [...querySubject.assigneesID, value.id];
-                  dispatch(setQuerySubject({
-                    ...querySubject,
-                    assigneesID: newData
-                  }));
+                  dispatch(
+                    setQuerySubject({
+                      ...querySubject,
+                      assigneesID: newData,
+                    })
+                  );
                 }
                 setSearchUserSystem("");
                 dispatch(setTabActive(tabIndex));
               }}
               onMultipleRemoveValue={(id: any) => {
-                const newList = querySubject.assigneesID.filter((item: any) => item !== id);
-                dispatch(setQuerySubject({
-                  ...querySubject,
-                  assigneesID: newList
-                }));
+                const newList = querySubject.assigneesID.filter(
+                  (item: any) => item !== id
+                );
+                dispatch(
+                  setQuerySubject({
+                    ...querySubject,
+                    assigneesID: newList,
+                  })
+                );
               }}
-              onClearData={() => dispatch(setQuerySubject({
-                ...querySubject,
-                assigneesID: []
-              }))}
+              onClearData={() =>
+                dispatch(
+                  setQuerySubject({
+                    ...querySubject,
+                    assigneesID: [],
+                  })
+                )
+              }
               onSearchInputChange={debounce(
                 (value) => setSearchUserSystem(value),
                 500
@@ -365,24 +457,123 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               ]}
             />
           )}
+
+          {tabIndex === 3 && (
+            <DropdownSearchableV2
+              selectOneByOne={true}
+              reset={reset}
+              countBadge={queryFile.companyOfAuthorsID.length}
+              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              placeholder={"Đơn vị tạo"}
+              onchangeValue={(value) => {
+                dispatch(setTabActive(tabIndex));
+                if (
+                  !queryFile.companyOfAuthorsID?.includes?.(value.id as string)
+                ) {
+                  const newData: any = [
+                    ...queryFile.companyOfAuthorsID,
+                    value.id,
+                  ];
+                  dispatch(
+                    setQueryFile({
+                      ...queryFile,
+                      companyOfAuthorsID: newData,
+                    })
+                  );
+                }
+                setSearchCompanyName("");
+              }}
+              onMultipleRemoveValue={(id: any) => {
+                const newList = queryFile.companyOfAuthorsID.filter(
+                  (item: any) => item !== id
+                );
+                dispatch(
+                  setQueryFile({
+                    ...queryFile,
+                    companyOfAuthorsID: newList,
+                  })
+                );
+              }}
+              onClearData={() =>
+                dispatch(
+                  setQueryFile({
+                    ...queryFile,
+                    companyOfAuthorsID: [],
+                  })
+                )
+              }
+              onScroll={handleScrollCompany}
+              onSearchInputChange={debounce(
+                (value) => setSearchCompanyName(value),
+                500
+              )}
+              showTriangle={true}
+              isMultiple={true}
+              data={listCompany.map((company) => ({
+                label: company.name,
+                value: company._id,
+              }))}
+              formatItem={{
+                id: "value",
+                text: "label",
+              }}
+              renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+              )}
+              prefixIcon={
+                <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
+              }
+            />
+          )}
+
           {(tabIndex === 2 || tabIndex === 3) && (
             <DropdownSearchableV2
               selectOneByOne={true}
+              reset={reset}
+              countBadge={
+                tabIndex === 3
+                  ? (queryFile.authorsID && queryFile.authorsID.length) || 0
+                  : 0
+              }
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Người tạo"}
               showTriangle={true}
               isMultiple={true}
               onchangeValue={(value) => {
-                if (!authors?.includes?.(value.id as string)) {
-                  const newData: any = [...authors, value.id];
-                  setAuthors(newData);
+                dispatch(setTabActive(tabIndex));
+                if (tabIndex === 3) {
+                  if (!queryFile.authorsID?.includes?.(value.id as string)) {
+                    const newData: any = [...queryFile.authorsID, value.id];
+                    dispatch(
+                      setQueryFile({
+                        ...queryFile,
+                        authorsID: newData,
+                      })
+                    );
+                  }
+                } else {
+                  if (!authors?.includes?.(value.id as string)) {
+                    const newData: any = [...authors, value.id];
+                    setAuthors(newData);
+                  }
                 }
                 setSearchUserSystem("");
-                dispatch(setTabActive(tabIndex));
               }}
               onMultipleRemoveValue={(id: any) => {
-                const newList = queryResponse.authorsID.filter((item: any) => item !== id);
-                setAuthors(newList);
+                if (tabIndex === 3) {
+                  const newList = queryFile.authorsID.filter(
+                    (item: any) => item !== id
+                  );
+                  dispatch(
+                    setQueryFile({
+                      ...queryFile,
+                      authorsID: newList,
+                    })
+                  );
+                } else {
+                  const newList = authors.filter((item: any) => item !== id);
+                  setAuthors(newList);
+                }
               }}
               onClearData={() => setAuthors([])}
               onSearchInputChange={debounce(
@@ -445,32 +636,50 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
 
           {tabIndex === 1 && (
             <DropdownSearchableV2
+              reset={reset}
               selectOneByOne={true}
               countBadge={queryResponse.companyOfAuthorsID.length}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Đơn vị tạo phản hồi"}
               onchangeValue={(value) => {
-                if (!queryResponse.companyOfAuthorsID?.includes?.(value.id as string)) {
-                  const newData: any = [...queryResponse.companyOfAuthorsID, value.id];
-                  dispatch(setQueryResponse({
-                    ...queryResponse,
-                    companyOfAuthorsID: newData
-                  }));
+                if (
+                  !queryResponse.companyOfAuthorsID?.includes?.(
+                    value.id as string
+                  )
+                ) {
+                  const newData: any = [
+                    ...queryResponse.companyOfAuthorsID,
+                    value.id,
+                  ];
+                  dispatch(
+                    setQueryResponse({
+                      ...queryResponse,
+                      companyOfAuthorsID: newData,
+                    })
+                  );
                 }
                 setSearchCompanyName("");
                 dispatch(setTabActive(tabIndex));
               }}
               onMultipleRemoveValue={(id: any) => {
-                const newList = queryResponse.companyOfAuthorsID.filter((item: any) => item !== id);
-                dispatch(setQueryResponse({
-                  ...queryResponse,
-                  companyOfAuthorsID: newList
-                }));
+                const newList = queryResponse.companyOfAuthorsID.filter(
+                  (item: any) => item !== id
+                );
+                dispatch(
+                  setQueryResponse({
+                    ...queryResponse,
+                    companyOfAuthorsID: newList,
+                  })
+                );
               }}
-              onClearData={() => dispatch(setQueryResponse({
-                ...queryResponse,
-                companyOfAuthorsID: []
-              }))}
+              onClearData={() =>
+                dispatch(
+                  setQueryResponse({
+                    ...queryResponse,
+                    companyOfAuthorsID: [],
+                  })
+                )
+              }
               onScroll={handleScrollCompany}
               onSearchInputChange={debounce(
                 (value) => setSearchCompanyName(value),
@@ -498,6 +707,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           {tabIndex === 1 && (
             <DropdownSearchableV2
               selectOneByOne={true}
+              reset={reset}
               countBadge={queryResponse.authorsID.length}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Người tạo phản hồi"}
@@ -506,25 +716,35 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               onchangeValue={(value) => {
                 if (!queryResponse.authorsID?.includes?.(value.id as string)) {
                   const newData: any = [...queryResponse.authorsID, value.id];
-                  dispatch(setQueryResponse({
-                    ...queryResponse,
-                    authorsID: newData
-                  }));
+                  dispatch(
+                    setQueryResponse({
+                      ...queryResponse,
+                      authorsID: newData,
+                    })
+                  );
                 }
                 setSearchUserSystem("");
                 dispatch(setTabActive(tabIndex));
               }}
               onMultipleRemoveValue={(id: any) => {
-                const newList = queryResponse.authorsID.filter((item: any) => item !== id);
-                dispatch(setQueryResponse({
-                  ...queryResponse,
-                  authorsID: newList
-                }));
+                const newList = queryResponse.authorsID.filter(
+                  (item: any) => item !== id
+                );
+                dispatch(
+                  setQueryResponse({
+                    ...queryResponse,
+                    authorsID: newList,
+                  })
+                );
               }}
-              onClearData={() => dispatch(setQueryResponse({
-                ...queryResponse,
-                authorsID: []
-              }))}
+              onClearData={() =>
+                dispatch(
+                  setQueryResponse({
+                    ...queryResponse,
+                    authorsID: [],
+                  })
+                )
+              }
               onSearchInputChange={debounce(
                 (value) => setSearchUserSystem(value),
                 500
@@ -586,6 +806,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           {(tabIndex === 1 || tabIndex === 2 || tabIndex === 3) && (
             <DropdownSearchableV2
               selectOneByOne={true}
+              reset={reset}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Dự án"}
               prefixIcon={
@@ -633,11 +854,8 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               iconBack={<TriangleDown />}
               iconFront={<img src={timelineIcon} alt={"----"} />}
               onValueChange={(val) => {
-                dispatch(setQueryResponse({
-                  ...queryResponse,
-                  fromDate: val.fromDate,
-                  toDate: val.toDate
-                }));
+                setFromCreateDate(val.fromDate);
+                settoCreateDate(val.toDate);
                 dispatch(setTabActive(tabIndex));
               }}
               options={[
@@ -675,6 +893,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
             <DropdownSearchableV2
               selectOneByOne={true}
               disableSearch={true}
+              reset={reset}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Quá hạn"}
               prefixIcon={
@@ -703,6 +922,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           {tabIndex === 2 && (
             <DropdownSearchableV2
               selectOneByOne={true}
+              reset={reset}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Trạng thái"}
               prefixIcon={
@@ -710,7 +930,6 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               }
               isMultiple={true}
               disableSearch={true}
-
               onchangeValue={(value) => {
                 if (!status.includes?.(value.id as string)) {
                   const newData: any = [...status, value.id];
@@ -723,7 +942,6 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                 setStatus(newList);
               }}
               onClearData={() => setStatus([])}
-
               data={[
                 {
                   id: 1,
@@ -759,6 +977,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           {tabIndex === 1 && (
             <DropdownSearchableV2
               selectOneByOne={true}
+              reset={reset}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Phân loại"}
               prefixIcon={
@@ -781,10 +1000,12 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                 },
               ]}
               onchangeValue={(value) => {
-                dispatch(setQueryResponse({
-                  ...queryResponse,
-                  official: value.id
-                }));
+                dispatch(
+                  setQueryResponse({
+                    ...queryResponse,
+                    official: value.id,
+                  })
+                );
                 dispatch(setTabActive(tabIndex));
               }}
             />
@@ -792,6 +1013,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           {tabIndex === 2 && (
             <DropdownSearchableV2
               selectOneByOne={true}
+              reset={reset}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Phân loại"}
               prefixIcon={
@@ -863,7 +1085,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               ]}
             />
           )}
-          {tabIndex === 2 && (
+          {/* {tabIndex === 2 && (
             <button
               className={
                 "bg-green-success rounded text-white px-2 h-[32px] mb-2"
@@ -871,7 +1093,14 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
             >
               Lưu kết quả
             </button>
-          )}
+          )} */}
+
+          <button
+            className={"bg-green-success rounded text-white px-2 h-[32px] mb-2"}
+            onClick={onReset}
+          >
+            Thiết lập lại
+          </button>
         </div>
         <div className={"header-table flex px-4 w-full top-0 bg-white pb-4"}>
           <div className={"flex items-center justify-center mr-2"}>
@@ -926,9 +1155,25 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           </button>
           <div className={"flex-1 flex items-center justify-end"}>
             <span className={"text-primary-gray"}>
-              {tabActive === 1 && listDataForResponse.length ? "1" : 
-              tabActive === 2 && listDataForSubject.length ? "1" : "0"
-              }-{tabActive === 1 ? listDataForResponse.length : listDataForSubject.length} trong số {tabActive === 1 ? totalRecordResponse : totalRecordSubject}
+              {tabActive === 1 && listDataForResponse.length
+                ? "1"
+                : tabActive === 2 && listDataForSubject.length
+                ? "1"
+                : tabActive === 3 && listDataForFile.length
+                ? "1"
+                : "0"}
+              -
+              {tabActive === 1
+                ? listDataForResponse.length
+                : tabActive === 2
+                ? listDataForSubject.length
+                : listDataForFile.length}{" "}
+              trong số{" "}
+              {tabActive === 1
+                ? totalRecordResponse
+                : tabActive === 2
+                ? totalRecordSubject
+                : totalRecordFile}
             </span>
             <button
               className={
@@ -943,10 +1188,18 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                 "w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"
               }
               onClick={() => {
-                if (tabActive === 1) {
-                  nextPageSubject();
-                } else {
-                  nextPageListTask();
+                switch (tabActive) {
+                  case 1:
+                    nextPageSubject();
+                    break;
+                  case 2:
+                    nextPageListTask();
+                    break;
+                  case 3:
+                    nextPageFile();
+                    break;
+                  default:
+                    break;
                 }
               }}
             >
@@ -979,7 +1232,11 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                       <Link to={"/pcm/detail/" + item.task?._id}>
                         <div className={"py-2"}>
                           <img
-                            src={`${process.env.REACT_APP_URL_S3_USER}/${item.author.image}`}
+                            src={
+                              item?.author?.image
+                                ? `${process.env.REACT_APP_URL_S3_USER}/${item?.author?.image}`
+                                : userIcon
+                            }
                             alt={"avatar"}
                             className={
                               "w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"
@@ -1165,7 +1422,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               </tr>
             </thead>
             <tbody>
-              {[...Array(12)].map((e, i) => (
+              {(listDataForFile || []).map((item: any, i: number) => (
                 <tr key={i}>
                   <td
                     className={
@@ -1179,8 +1436,10 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                       "py-2 border-b-0.5 border-primary-border align-middle"
                     }
                   >
-                    <p>24/3/2021</p>
-                    <p className={"text-primary-gray"}>16 giờ trước</p>
+                    <p>{moment(item.createAt).format("DD/MM/YYYY")}</p>
+                    <p className={"text-primary-gray"}>
+                      {moment(item.createAt).fromNow()}
+                    </p>
                   </td>
                   <td
                     className={
@@ -1189,13 +1448,17 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                   >
                     <div className={"flex items-center"}>
                       <img
-                        src={userAvt}
+                        src={
+                          item?.author?.image
+                            ? `${process.env.REACT_APP_URL_S3_USER}/${item?.author?.image}`
+                            : userIcon
+                        }
                         alt={"---"}
                         className={
                           "w-[36px] h-[36px] min-w-[36px] min-h-[36px] max-w-[36px] max-h-[36px rounded-full overflow-hidden]"
                         }
                       />
-                      <span className={"ml-2"}>Phan Văn Trường</span>
+                      <span className={"ml-2"}>{item?.author?.fullname}</span>
                     </div>
                   </td>
                   <td
@@ -1203,22 +1466,30 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                       "py-2 border-b-0.5 border-primary-border align-middle text-cbs-highlight-color break-all pr-2"
                     }
                   >
-                    2020.12.15_HAR.MAR.HieuNT.DuToanNoiBo_V0.xlsx
+                    <a
+                      href={`${process.env.REACT_APP_URL_S3}${item.path}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-cbs-highlight-color"
+                    >
+                      {item.nameOrg}
+                    </a>
                   </td>
                   <td
                     className={
                       "py-2 border-b-0.5 border-primary-border align-middle"
                     }
                   >
-                    63 KB
+                    {humanFileSize(item.size)}
                   </td>
                   <td
                     className={
                       "py-2 border-b-0.5 border-primary-border align-middle"
                     }
                   >
-                    HAR.MAR.Đề nghị lập chi phí nội bộ và thống nhất với ban
-                    lãnh đạo công ty - Dự án Courtyard by Marriott Halong Bay
+                    <Link to={"/pcm/detail/" + item.task?._id}>
+                      {item?.project?.sign}.{item.task?.name}
+                    </Link>
                   </td>
                 </tr>
               ))}

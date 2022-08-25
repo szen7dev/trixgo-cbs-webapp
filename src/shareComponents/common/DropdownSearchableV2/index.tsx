@@ -55,6 +55,7 @@ type Props = {
   prefixIcon?: ReactNode;
   selectOneByOne?: boolean;
   countBadge?: number;
+  reset?: boolean;
 };
 
 // type Params = {
@@ -92,10 +93,12 @@ export const DropdownSearchableV2: FC<Props> = ({
   prefixIcon,
   bordered = true,
   selectOneByOne,
-  countBadge
+  countBadge,
+  reset
 }) => {
   const [value, setValue] = useState<Item>();
   const [values, setValues] = useState<Array<Item>>();
+  
   const [displayData, setDisplayData] = useState<Array<Item>>([]);
   const [showOption, setShowOption] = useState(false);
   const [firstInit, setFirstInit] = useState(true);
@@ -128,6 +131,13 @@ export const DropdownSearchableV2: FC<Props> = ({
     }
     return item;
   };
+
+  useEffect(() => {
+    if (reset) {
+      setValues([]);
+      setValue(undefined);
+    }
+  }, [reset]);
 
   const handleSetValue = (item: Item) => {
     setSearchTerm("");
@@ -429,7 +439,7 @@ export const DropdownSearchableV2: FC<Props> = ({
         <span className={"text-left"}>
           {placeholder}{" "}
           {isMultiple
-            ? countBadge ? `(${countBadge})` : values
+            ? countBadge ? `(${countBadge})` : (values && values.length)
               ? `(${values.length})`
               : ""
             : value
