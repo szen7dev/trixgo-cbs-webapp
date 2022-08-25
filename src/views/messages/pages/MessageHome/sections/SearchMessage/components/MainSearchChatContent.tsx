@@ -222,7 +222,7 @@ export const MainSearchChatContent:FC<Props> = ({chat}) => {
                 id={"conversation-messages-MessageList"}
                 className={"flex-1 h-full items-center flex flex-col-reverse relative overflow-auto transition-all duration-150 pb-4"}
             >
-                <div className={"w-full max-w-[645px] pt-[20px] px-[20px]"}>
+                <div className={"w-full max-w-[60%] pt-[20px] px-[20px]"}>
                     {memoizedValue()}
                 </div>
                 <div style={{ float:"left", clear: "both" }} ref={messagesEndRef} />

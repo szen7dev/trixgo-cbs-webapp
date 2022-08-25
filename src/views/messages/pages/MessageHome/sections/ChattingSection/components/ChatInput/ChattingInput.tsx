@@ -285,7 +285,7 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
     return (
         <ChattingInputContext.Provider value={value}>
             <div className={"w-full px-[20px] flex justify-center bg-transparent py-[10px] chatting-input-container"}>
-                <div className={"w-full max-w-[585px] flex items-end justify-center relative"}>
+                <div className={"w-full max-w-[60%] flex items-end justify-center relative"}>
                     <SelectedActionGroup/>
                     <div className={"flex-1 message-input max-w-[525px] rounded-md bg-cbs-chat-input-bg flex items-end relative flex-col"}>
                         {/*<IconButton/>*/}

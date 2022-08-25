@@ -3,8 +3,9 @@ import React, {FC, useEffect, useRef} from "react";
 type Props = {
     message: any;
     className?: string;
+    isMyMessage?: boolean
 }
-export const TextReply:FC<Props> = ({message, className}) => {
+export const TextReply:FC<Props> = ({message, className, isMyMessage}) => {
     const textContentRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -23,10 +24,10 @@ export const TextReply:FC<Props> = ({message, className}) => {
     },[textContentRef, message.content])
     return (
         <div className={"reply-content border-l-2 border-primary pl-[7px] " + (className??"")}>
-            <div className={"reply-user-name text-blue-900"} style={{color: message.themeColor}}>
+            <div className={"reply-user-name " + (isMyMessage? "text-white font-bold text-opacity-75" : "text-gray-900")} style={{color: message.themeColor}}>
                 {message.sender.bizfullname||message.sender.fullname}
             </div>
-            <div className={"truncate reply-content-text text-gray-400 max-w-[250px]"} ref={textContentRef}>
+            <div className={"truncate reply-content-text max-w-[250px] " + (isMyMessage? "text-white text-opacity-75" : "text-gray-400")} ref={textContentRef}>
             </div>
         </div>
     )

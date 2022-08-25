@@ -6,7 +6,7 @@ import {ViewImage} from "./ViewImage";
 import moment from "moment";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import {ReactionList, ReactionActions} from "../../Reactions";
-import {ContactReply, TextReply, FileReply, ImageReply, DeleteReply} from "../ReplyContent";
+import {ContactReply, TextReply, FileReply, ImageReply, DeleteReply, NPSReply} from "../ReplyContent";
 import {MessageStatus} from "./MessageStatus";
 
 type Props = {
@@ -98,17 +98,19 @@ export const ImagesContent:FC<Props> = ({ message, className, showSenderName, is
     }, [message])
     const renderReply = () => {
         if (isDeleted()) {
-            return <DeleteReply message={message} />
+            return <DeleteReply message={message} isMyMessage={isMyMessage}/>
         }
         switch (message.parent.type) {
             case 0:
-                return <TextReply message={message.parent}/>;
+                return <TextReply message={message.parent} isMyMessage={isMyMessage}/>;
             case 2:
-                return <FileReply message={message.parent}/>;
+                return <FileReply message={message.parent} isMyMessage={isMyMessage}/>;
             case 1:
-                return <ImageReply message={message.parent}/>;
+                return <ImageReply message={message.parent} isMyMessage={isMyMessage}/>;
             case 7:
-                return <ContactReply message={message.parent}/>;
+                return <ContactReply message={message.parent} isMyMessage={isMyMessage}/>;
+            case 8:
+                return <NPSReply message={message.parent} isMyMessage={isMyMessage}/>;
         }
     }
 

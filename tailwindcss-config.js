@@ -165,6 +165,7 @@ module.exports = {
             },
             maxWidth: {
                 ...autoGeneratePx,
+                "[60%]": "60%",
                 "[75%]": "75%",
                 "[90%]": "90%",
                 "[1569px]": "1569px"

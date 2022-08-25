@@ -107,7 +107,7 @@ export const MessagesLayoutV2: FC<Props> = ({ children }) => {
               </LeftMenuMessage>
 
               {/* Content area */}
-              <main className="main-route-content transition-all duration-500 ease-out overflow-auto relative h-left-over-content max-h-left-over-content min-h-left-over-content">
+              <main className="messages-main-content  main-route-content transition-all duration-500 ease-out overflow-auto relative h-left-over-content max-h-left-over-content min-h-left-over-content">
                 {children}
               </main>
               <SubComponents/>

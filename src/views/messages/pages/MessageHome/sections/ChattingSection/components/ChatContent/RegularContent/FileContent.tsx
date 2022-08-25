@@ -9,7 +9,7 @@ import {map as _map} from "lodash";
 import { CircularProgressbar , buildStyles } from 'react-circular-progressbar';
 import moment from "moment";
 import {ReactionList, ReactionActions} from "../../Reactions";
-import {ContactReply, TextReply, FileReply, ImageReply, DeleteReply} from "../ReplyContent";
+import {ContactReply, TextReply, FileReply, ImageReply, DeleteReply, NPSReply} from "../ReplyContent";
 import {MessageStatus} from "./MessageStatus";
 type Props = {
     message: any;
@@ -51,17 +51,19 @@ export const FileChatContent:FC<Props> = ({message, className,showSenderName, is
     }, [message])
     const renderReply = () => {
         if (isDeleted()) {
-            return <DeleteReply message={message} />
+            return <DeleteReply message={message} isMyMessage={isMyMessage}/>
         }
         switch (message.parent.type) {
             case 0:
-                return <TextReply message={message.parent}/>;
+                return <TextReply message={message.parent} isMyMessage={isMyMessage}/>;
             case 2:
-                return <FileReply message={message.parent}/>;
+                return <FileReply message={message.parent} isMyMessage={isMyMessage}/>;
             case 1:
-                return <ImageReply message={message.parent}/>;
+                return <ImageReply message={message.parent} isMyMessage={isMyMessage}/>;
             case 7:
-                return <ContactReply message={message.parent}/>;
+                return <ContactReply message={message.parent} isMyMessage={isMyMessage}/>;
+            case 8:
+                return <NPSReply message={message.parent} isMyMessage={isMyMessage}/>;
         }
     }
 
@@ -81,7 +83,7 @@ export const FileChatContent:FC<Props> = ({message, className,showSenderName, is
         <div className={"min-w-[70px] rounded-lg p-[7px] pb-[10px] relative " + (className??"") + (isMini?" max-w-[250px]":" max-w-[366px]")}>
             {
                 showSenderName&&
-                <div className={"reply-user-name"} style={{color: message.themeColor}}>
+                <div className={"reply-user-name text-gray-400"} style={{color: message.themeColor}}>
                     {message.userName}
                 </div>
             }
