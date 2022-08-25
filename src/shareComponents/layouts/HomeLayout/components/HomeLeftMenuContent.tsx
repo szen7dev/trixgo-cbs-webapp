@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import React, {FC, useEffect, useState} from "react";
 import adminIcon from "assets/images/icons8-user-shield-48.svg"
 import plusIcon from "assets/images/icons8-plus-math-96.svg"
 import sendAndReceiveIcon from "assets/images/icons-send-and-receive.svg"
@@ -19,9 +19,11 @@ import { NavLink } from 'react-router-dom';
 import { useAuth } from "services/hooks/auth/useAuth";
 import { useCheckPerAccessApp, useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
+import { usePcmPlanTaskNotification } from "services/hooks/pcm/usePcmDashboardV2";
 
 export const HomeLeftMenuContent:FC = () => {
-
+    const [enabled, setEnabled] = useState(false);
+    const {data} = usePcmPlanTaskNotification({enabled: enabled});
     const { openModal } = useModal();
     const { user } = useAuth();
     const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
@@ -33,9 +35,9 @@ export const HomeLeftMenuContent:FC = () => {
         route: string
     }[] = [
         {
-            label: "Hoạt động (inbox)",
+            label: "Hoạt động",
             icon: sendAndReceiveIcon,
-            count: 0,
+            count: data?.data?.amountUnreadTask || 0,
             route: '/pcm/home'
         },
         // {
@@ -65,7 +67,7 @@ export const HomeLeftMenuContent:FC = () => {
         {
             label: "Việc của tôi",
             icon: mailOutLineIcon,
-            count: 0,
+            count: data?.data?.amountMyTask || 0,
             route: '/pcm/mine'
         },
         {
@@ -92,7 +94,13 @@ export const HomeLeftMenuContent:FC = () => {
             count: 0,
             route: '/pcm/report'
         },
-    ]
+    ];
+
+    useEffect(() => {
+        setTimeout(() => {
+            setEnabled(true);
+        }, 300);
+    },[]);
 
     const renderNav = (nav: {
         label: string,

@@ -54,6 +54,7 @@ type Props = {
   bordered?: boolean;
   prefixIcon?: ReactNode;
   selectOneByOne?: boolean;
+  countBadge?: number;
 };
 
 // type Params = {
@@ -91,6 +92,7 @@ export const DropdownSearchableV2: FC<Props> = ({
   prefixIcon,
   bordered = true,
   selectOneByOne,
+  countBadge
 }) => {
   const [value, setValue] = useState<Item>();
   const [values, setValues] = useState<Array<Item>>();
@@ -427,7 +429,7 @@ export const DropdownSearchableV2: FC<Props> = ({
         <span className={"text-left"}>
           {placeholder}{" "}
           {isMultiple
-            ? values
+            ? countBadge ? `(${countBadge})` : values
               ? `(${values.length})`
               : ""
             : value
