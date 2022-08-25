@@ -7,6 +7,10 @@ import uploadIcon from "assets/images/icons-upload.svg"
 import starIcon from "assets/images/icons-star-outline.svg"
 import linkIcon from "assets/images/icons-link.svg"
 import fileIcon from "assets/images/icons-file.svg"
+import biddingImage from "assets/menu/project/icons-project-bidding.svg"
+import paymentImage from "assets/menu/project/icons-project-payment.svg"
+import deliveryImage from "assets/menu/project/icons-project-delivery.svg"
+
 import {useModal} from "../../../../services/hooks/useModal";
 import {ModalAddNewTask} from "../../../common";
 import { NavLink } from 'react-router-dom';
@@ -34,12 +38,30 @@ export const HomeLeftMenuContent:FC = () => {
             count: 0,
             route: '/pcm/home'
         },
+        // {
+        //     label: "Outbox",
+        //     icon: sendAndReceiveIcon,
+        //     count: 0,
+        //     route: '/pcm/send'
+        // },
         {
-            label: "Outbox",
-            icon: sendAndReceiveIcon,
+            label: "Thầu và mua sắm",
+            icon: biddingImage,
             count: 0,
-            route: '/pcm/send'
+            route: '/pcm/bidding'
         },
+        {
+            label: "Báo cáo, giao nộp",
+            icon: deliveryImage,
+            count: 0,
+            route: '/pcm/delivery'
+        },
+        {
+            label: "Thanh toán",
+            icon: paymentImage,
+            count: 0,
+            route: '/pcm/payment'
+        },        
         {
             label: "Việc của tôi",
             icon: mailOutLineIcon,
