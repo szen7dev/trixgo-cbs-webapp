@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+const initialState: any = {
   data: {
     tabIndex: 1,
     tabActive: 2, // hiển thị data theo tab, 1 là phản hồi, 2 là chủ đề, 3 là file
@@ -8,6 +8,22 @@ const initialState = {
     keywordForSubject: "",
     keywordForFile: "",
     showModalResult: false,
+
+    queryResponse: {
+      companyOfAuthorsID: [],
+      authorsID: [],
+      projectsID: [],
+      fromDate: "1990/01/01",
+      toDate: "2999/12/31",
+      official: 0,
+    },
+
+    querySubject: {
+      companiesOfAssignee: [],
+      assigneesID: [],
+      isParent: "1",
+      isActive: "1",
+    },
   },
 };
 
@@ -30,6 +46,12 @@ const dashboardV2Slice = createSlice({
     setShowModalResult(state, action) {
       state.data.showModalResult = action.payload;
     },
+    setQueryResponse(state, action) {
+      state.data.queryResponse = action.payload;
+    },
+    setQuerySubject(state, action) {
+      state.data.querySubject = action.payload;
+    },
   },
 });
 
@@ -39,5 +61,7 @@ export const {
   setKeywordForResponse,
   setShowModalResult,
   setTabActive,
+  setQueryResponse,
+  setQuerySubject
 } = dashboardV2Slice.actions;
 export default dashboardV2Slice.reducer;

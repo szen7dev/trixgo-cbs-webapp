@@ -11,6 +11,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {setAmountMissMessage} from "redux/reducer/messages/ListConversation";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
+import { usePcmPlanTaskNotification } from "services/hooks/pcm/usePcmDashboardV2";
 
 type Props = {
     handleMenuEvent: () => void
@@ -19,14 +20,20 @@ export const LeftNavigate:FC<Props> = ({handleMenuEvent}) => {
     const {pathname} = useLocation();
     const { current: socket }: any = useSocket();
     const dispatch = useDispatch();
+    const [enabled, setEnabled] = useState(false);
+
+    const {data} = usePcmPlanTaskNotification({enabled: enabled});
 
     useEffect(() => {
+        setTimeout(() => {
+            setEnabled(true);
+        }, 300);
         if (!pathname.includes("/messages")) {
             setTimeout(() => {
                 getListConversation({keyword: ""});
             }, 300)
         }
-    },[])
+    },[]);
 
     useEffect(() => {
         if (!socket) return;
@@ -61,10 +68,12 @@ export const LeftNavigate:FC<Props> = ({handleMenuEvent}) => {
                     <img src={mailIcon} alt={"Chủ đề"}/>
                     {/*{*/}
                     {/*    totalNoti > 0 &&*/}
+                    {data?.data?.amountUnreadTask && data?.data?.amountUnreadTask > 0 ? 
                         <span
-                            className={"absolute -top-1 right-1 min-w-5 w-5 h-5 text-xs inline-block border-2 text-center border-white rounded-full bg-negative text-white"}>
-                            00
-                        </span>
+                        className={"absolute -top-1 right-1 min-w-5 w-5 h-5 text-xs inline-block border-2 text-center border-white rounded-full bg-negative text-white"}>
+                        {data?.data?.amountUnreadTask}
+                    </span> : <></>
+                    }
                     {/*}*/}
                 </div>
                 <span className={"text-primary-gray mt-1"}>Chủ đề</span>

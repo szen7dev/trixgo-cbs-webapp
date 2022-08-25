@@ -8,6 +8,14 @@ const pcmDashboardV2 = {
     );
     return data;
   },
+  async pcmPlanTaskNotification(payload: any): Promise<any> {
+    const { data } = await API.get<any>(
+      `${pcmURL}/pcm_plan_tasks/notification`, {
+        params: payload
+      }
+    );
+    return data;
+  },
 };
 
 export default pcmDashboardV2;
