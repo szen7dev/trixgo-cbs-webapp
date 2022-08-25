@@ -3,17 +3,9 @@ import moment from "moment";
 import { Link } from "react-router-dom";
 import parse from "html-react-parser";
 import { useQueryListCompany } from "services/hooks/useCompanies";
-
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "views/pcm/styles/pcm.module.css";
-import userAvt from "assets/images/task-user.svg";
-
-// import newsImg1 from "assets/images/home-slide-img1.jpg";
-// import iconThumbsUp from "assets/images/icons8-thumbs-up-48.png";
-// import iconComments from "assets/images/icons8-comments-48.png";
-// import iconEye from "assets/images/icons8-eye-48.png";
-// import iconArrowRight from "assets/images/icon-arrow-right.svg";
 
 import {
   DropdownSearchableV2,
@@ -36,12 +28,17 @@ import { useUserSystem } from "services/hooks/users/useUserSystem";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { useAppSelector } from "redux/reducer";
 import {
+  useListFileFromSearch,
   useListResponseFromSearch,
 } from "services/hooks/pcm/usePcmDashboardV2";
 import { debounce } from "lodash";
 import { useQueryListDepartmentsIsMember } from "services/hooks/items/useDepartment";
 import { useDispatch } from "react-redux";
-import { setQueryResponse, setQuerySubject, setTabActive } from "redux/reducer/DashboardV2Slice";
+import {
+  setQueryResponse,
+  setQuerySubject,
+  setTabActive,
+} from "redux/reducer/DashboardV2Slice";
 import { useSearchTask } from "services/hooks/useMainSearch";
 
 type Props = {
@@ -65,6 +62,10 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
 
   const keywordForSubject = useAppSelector(
     (state) => state.dashboardV2.data.keywordForSubject
+  );
+
+  const keywordForFile = useAppSelector(
+    (state) => state.dashboardV2.data.keywordForFile
   );
 
   const querySubject = useAppSelector(
@@ -108,6 +109,8 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     }
   };
 
+  const [fromCreateDate, setFromCreateDate] = useState("1990/01/01");
+  const [toCreateDate, settoCreateDate] = useState("2999/12/31");
   ////  Dự án
   const [project, setProject] = useState<string[]>([]);
   const [searchProject, setSearchProject] = useState("");
@@ -137,13 +140,20 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     ...queryResponse,
     keyword: keywordForResponse,
     projectsID: project,
+    fromDate: fromCreateDate,
+    toDate: toCreateDate,
     enabled: tabActive === 1 ? true : false,
   };
 
-  const { listDataForResponse, isLoadingResponse, totalRecord: totalRecordResponse, nextPageSubject, isFetching: isFetchingResponse } =
-    useListResponseFromSearch(query);
+  const {
+    listDataForResponse,
+    isLoadingResponse,
+    totalRecord: totalRecordResponse,
+    nextPageSubject,
+    isFetching: isFetchingResponse,
+  } = useListResponseFromSearch(query);
 
-   const [fromExpiredDate, setFromExpiredDate] = useState("");
+  const [fromExpiredDate, setFromExpiredDate] = useState("");
   const [toExpiredDate, setToExpiredDate] = useState("");
   const [isExpired, setIsExpired] = useState<any>(0);
   const [subtypes, setSubtypes] = useState<string[]>([]);
@@ -155,7 +165,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     nextPageListTask,
     totalRecord: totalRecordSubject,
     isLoadingListTask,
-    isFetching: isFetchingNextPageSubject
+    isFetching: isFetchingNextPageSubject,
   } = useSearchTask({
     params: {
       keyword: keywordForSubject,
@@ -167,11 +177,27 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
       subtypes: subtypes,
       status: status,
       limit: 50,
-      ...querySubject
+      ...querySubject,
     },
     isFetch: tabActive === 2 ? true : false,
   });
 
+  // Danh sách File
+  const {
+    isLoadingFile,
+    nextPageFile,
+    totalRecord: totalRecordFile,
+    listDataForFile,
+    isFetching: isFetchingFile,
+  } = useListFileFromSearch({
+    keyword: keywordForFile,
+      fromDate: fromCreateDate,
+      toDate: toCreateDate,
+      authorsID: authors,
+      projectsID: project,
+      limit: "50",
+    enabled: tabActive === 3 ? true : false,
+  });
   //////
 
   const checkActive = (relateds: string[], user: string) => {
@@ -186,7 +212,12 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     <div className="t-home flex flex-col h-full overflow-hidden">
       <div className={"sticky top-0 bg-white z-10"}>
         <div className={"filter-bar flex flex-wrap px-4 py-2"}>
-          {(isLoadingResponse || isLoadingListTask || isFetchingNextPageSubject || isFetchingResponse) && <Loader className="border-primary" />}
+          {(isLoadingResponse ||
+            isLoadingListTask ||
+            isFetchingNextPageSubject ||
+            isFetchingResponse ||
+            isLoadingFile ||
+            isFetchingFile) && <Loader className="border-primary" />}
           {tabIndex === 2 && (
             <DropdownSearchableV2
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
@@ -196,27 +227,44 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               isMultiple={true}
               selectOneByOne={true}
               onchangeValue={(value) => {
-                if (!querySubject.companiesOfAssignee?.includes?.(value.id as string)) {
-                  const newData: any = [...querySubject.companiesOfAssignee, value.id];
-                  dispatch(setQuerySubject({
-                    ...querySubject,
-                    companiesOfAssignee: newData
-                  }));
+                if (
+                  !querySubject.companiesOfAssignee?.includes?.(
+                    value.id as string
+                  )
+                ) {
+                  const newData: any = [
+                    ...querySubject.companiesOfAssignee,
+                    value.id,
+                  ];
+                  dispatch(
+                    setQuerySubject({
+                      ...querySubject,
+                      companiesOfAssignee: newData,
+                    })
+                  );
                 }
                 setSearchCompanyName("");
                 dispatch(setTabActive(tabIndex));
               }}
               onMultipleRemoveValue={(id: any) => {
-                const newList = querySubject.companiesOfAssignee.filter((item: any) => item !== id);
-                dispatch(setQuerySubject({
-                  ...querySubject,
-                  companiesOfAssignee: newList
-                }));
+                const newList = querySubject.companiesOfAssignee.filter(
+                  (item: any) => item !== id
+                );
+                dispatch(
+                  setQuerySubject({
+                    ...querySubject,
+                    companiesOfAssignee: newList,
+                  })
+                );
               }}
-              onClearData={() => dispatch(setQuerySubject({
-                ...querySubject,
-                companiesOfAssignee: []
-              }))}
+              onClearData={() =>
+                dispatch(
+                  setQuerySubject({
+                    ...querySubject,
+                    companiesOfAssignee: [],
+                  })
+                )
+              }
               onScroll={handleScrollCompany}
               onSearchInputChange={debounce(
                 (value) => setSearchCompanyName(value),
@@ -250,25 +298,35 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               onchangeValue={(value) => {
                 if (!querySubject.assigneesID?.includes?.(value.id as string)) {
                   const newData: any = [...querySubject.assigneesID, value.id];
-                  dispatch(setQuerySubject({
-                    ...querySubject,
-                    assigneesID: newData
-                  }));
+                  dispatch(
+                    setQuerySubject({
+                      ...querySubject,
+                      assigneesID: newData,
+                    })
+                  );
                 }
                 setSearchUserSystem("");
                 dispatch(setTabActive(tabIndex));
               }}
               onMultipleRemoveValue={(id: any) => {
-                const newList = querySubject.assigneesID.filter((item: any) => item !== id);
-                dispatch(setQuerySubject({
-                  ...querySubject,
-                  assigneesID: newList
-                }));
+                const newList = querySubject.assigneesID.filter(
+                  (item: any) => item !== id
+                );
+                dispatch(
+                  setQuerySubject({
+                    ...querySubject,
+                    assigneesID: newList,
+                  })
+                );
               }}
-              onClearData={() => dispatch(setQuerySubject({
-                ...querySubject,
-                assigneesID: []
-              }))}
+              onClearData={() =>
+                dispatch(
+                  setQuerySubject({
+                    ...querySubject,
+                    assigneesID: [],
+                  })
+                )
+              }
               onSearchInputChange={debounce(
                 (value) => setSearchUserSystem(value),
                 500
@@ -381,7 +439,9 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                 dispatch(setTabActive(tabIndex));
               }}
               onMultipleRemoveValue={(id: any) => {
-                const newList = queryResponse.authorsID.filter((item: any) => item !== id);
+                const newList = queryResponse.authorsID.filter(
+                  (item: any) => item !== id
+                );
                 setAuthors(newList);
               }}
               onClearData={() => setAuthors([])}
@@ -450,27 +510,44 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
               placeholder={"Đơn vị tạo phản hồi"}
               onchangeValue={(value) => {
-                if (!queryResponse.companyOfAuthorsID?.includes?.(value.id as string)) {
-                  const newData: any = [...queryResponse.companyOfAuthorsID, value.id];
-                  dispatch(setQueryResponse({
-                    ...queryResponse,
-                    companyOfAuthorsID: newData
-                  }));
+                if (
+                  !queryResponse.companyOfAuthorsID?.includes?.(
+                    value.id as string
+                  )
+                ) {
+                  const newData: any = [
+                    ...queryResponse.companyOfAuthorsID,
+                    value.id,
+                  ];
+                  dispatch(
+                    setQueryResponse({
+                      ...queryResponse,
+                      companyOfAuthorsID: newData,
+                    })
+                  );
                 }
                 setSearchCompanyName("");
                 dispatch(setTabActive(tabIndex));
               }}
               onMultipleRemoveValue={(id: any) => {
-                const newList = queryResponse.companyOfAuthorsID.filter((item: any) => item !== id);
-                dispatch(setQueryResponse({
-                  ...queryResponse,
-                  companyOfAuthorsID: newList
-                }));
+                const newList = queryResponse.companyOfAuthorsID.filter(
+                  (item: any) => item !== id
+                );
+                dispatch(
+                  setQueryResponse({
+                    ...queryResponse,
+                    companyOfAuthorsID: newList,
+                  })
+                );
               }}
-              onClearData={() => dispatch(setQueryResponse({
-                ...queryResponse,
-                companyOfAuthorsID: []
-              }))}
+              onClearData={() =>
+                dispatch(
+                  setQueryResponse({
+                    ...queryResponse,
+                    companyOfAuthorsID: [],
+                  })
+                )
+              }
               onScroll={handleScrollCompany}
               onSearchInputChange={debounce(
                 (value) => setSearchCompanyName(value),
@@ -506,25 +583,35 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               onchangeValue={(value) => {
                 if (!queryResponse.authorsID?.includes?.(value.id as string)) {
                   const newData: any = [...queryResponse.authorsID, value.id];
-                  dispatch(setQueryResponse({
-                    ...queryResponse,
-                    authorsID: newData
-                  }));
+                  dispatch(
+                    setQueryResponse({
+                      ...queryResponse,
+                      authorsID: newData,
+                    })
+                  );
                 }
                 setSearchUserSystem("");
                 dispatch(setTabActive(tabIndex));
               }}
               onMultipleRemoveValue={(id: any) => {
-                const newList = queryResponse.authorsID.filter((item: any) => item !== id);
-                dispatch(setQueryResponse({
-                  ...queryResponse,
-                  authorsID: newList
-                }));
+                const newList = queryResponse.authorsID.filter(
+                  (item: any) => item !== id
+                );
+                dispatch(
+                  setQueryResponse({
+                    ...queryResponse,
+                    authorsID: newList,
+                  })
+                );
               }}
-              onClearData={() => dispatch(setQueryResponse({
-                ...queryResponse,
-                authorsID: []
-              }))}
+              onClearData={() =>
+                dispatch(
+                  setQueryResponse({
+                    ...queryResponse,
+                    authorsID: [],
+                  })
+                )
+              }
               onSearchInputChange={debounce(
                 (value) => setSearchUserSystem(value),
                 500
@@ -633,11 +720,8 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               iconBack={<TriangleDown />}
               iconFront={<img src={timelineIcon} alt={"----"} />}
               onValueChange={(val) => {
-                dispatch(setQueryResponse({
-                  ...queryResponse,
-                  fromDate: val.fromDate,
-                  toDate: val.toDate
-                }));
+                setFromCreateDate(val.fromDate);
+                settoCreateDate(val.toDate);
                 dispatch(setTabActive(tabIndex));
               }}
               options={[
@@ -710,7 +794,6 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               }
               isMultiple={true}
               disableSearch={true}
-
               onchangeValue={(value) => {
                 if (!status.includes?.(value.id as string)) {
                   const newData: any = [...status, value.id];
@@ -723,7 +806,6 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                 setStatus(newList);
               }}
               onClearData={() => setStatus([])}
-
               data={[
                 {
                   id: 1,
@@ -781,10 +863,12 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                 },
               ]}
               onchangeValue={(value) => {
-                dispatch(setQueryResponse({
-                  ...queryResponse,
-                  official: value.id
-                }));
+                dispatch(
+                  setQueryResponse({
+                    ...queryResponse,
+                    official: value.id,
+                  })
+                );
                 dispatch(setTabActive(tabIndex));
               }}
             />
@@ -926,9 +1010,23 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           </button>
           <div className={"flex-1 flex items-center justify-end"}>
             <span className={"text-primary-gray"}>
-              {tabActive === 1 && listDataForResponse.length ? "1" : 
-              tabActive === 2 && listDataForSubject.length ? "1" : "0"
-              }-{tabActive === 1 ? listDataForResponse.length : listDataForSubject.length} trong số {tabActive === 1 ? totalRecordResponse : totalRecordSubject}
+              {tabActive === 1 && listDataForResponse.length
+                ? "1"
+                : tabActive === 2 && listDataForSubject.length
+                ? "1"
+                : tabActive === 3 && listDataForFile.length
+                ? "1"
+                : "0"}
+              -
+              {tabActive === 1
+                ? listDataForResponse.length
+                : tabActive === 2 ? listDataForSubject.length : listDataForFile.length}{" "}
+              trong số{" "}
+              {tabActive === 1
+                ? totalRecordResponse
+                : tabActive === 2
+                ? totalRecordSubject
+                : totalRecordFile}
             </span>
             <button
               className={
@@ -943,10 +1041,18 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                 "w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"
               }
               onClick={() => {
-                if (tabActive === 1) {
-                  nextPageSubject();
-                } else {
-                  nextPageListTask();
+                switch (tabActive) {
+                  case 1:
+                    nextPageSubject();
+                    break;
+                  case 2:
+                    nextPageListTask();
+                    break;
+                  case 3:
+                    nextPageFile();
+                    break;
+                  default:
+                    break;
                 }
               }}
             >
@@ -979,7 +1085,11 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                       <Link to={"/pcm/detail/" + item.task?._id}>
                         <div className={"py-2"}>
                           <img
-                            src={`${process.env.REACT_APP_URL_S3_USER}/${item.author.image}`}
+                            src={
+                              item?.author?.image
+                                ? `${process.env.REACT_APP_URL_S3_USER}/${item?.author?.image}`
+                                : userIcon
+                            }
                             alt={"avatar"}
                             className={
                               "w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"
@@ -1165,7 +1275,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               </tr>
             </thead>
             <tbody>
-              {[...Array(12)].map((e, i) => (
+              {(listDataForFile || []).map((item: any, i: number) => (
                 <tr key={i}>
                   <td
                     className={
@@ -1179,8 +1289,10 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                       "py-2 border-b-0.5 border-primary-border align-middle"
                     }
                   >
-                    <p>24/3/2021</p>
-                    <p className={"text-primary-gray"}>16 giờ trước</p>
+                    <p>{moment(item.createAt).format("DD/MM/YYYY")}</p>
+                    <p className={"text-primary-gray"}>
+                      {moment(item.createAt).fromNow()}
+                    </p>
                   </td>
                   <td
                     className={
@@ -1189,13 +1301,17 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                   >
                     <div className={"flex items-center"}>
                       <img
-                        src={userAvt}
+                        src={
+                          item?.author?.image
+                            ? `${process.env.REACT_APP_URL_S3_USER}/${item?.author?.image}`
+                            : userIcon
+                        }
                         alt={"---"}
                         className={
                           "w-[36px] h-[36px] min-w-[36px] min-h-[36px] max-w-[36px] max-h-[36px rounded-full overflow-hidden]"
                         }
                       />
-                      <span className={"ml-2"}>Phan Văn Trường</span>
+                      <span className={"ml-2"}>{item?.author?.fullname}</span>
                     </div>
                   </td>
                   <td
@@ -1203,22 +1319,23 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                       "py-2 border-b-0.5 border-primary-border align-middle text-cbs-highlight-color break-all pr-2"
                     }
                   >
-                    2020.12.15_HAR.MAR.HieuNT.DuToanNoiBo_V0.xlsx
+                    {item.nameOrg}
                   </td>
                   <td
                     className={
                       "py-2 border-b-0.5 border-primary-border align-middle"
                     }
                   >
-                    63 KB
+                    {item.size} KB
                   </td>
                   <td
                     className={
                       "py-2 border-b-0.5 border-primary-border align-middle"
                     }
                   >
-                    HAR.MAR.Đề nghị lập chi phí nội bộ và thống nhất với ban
-                    lãnh đạo công ty - Dự án Courtyard by Marriott Halong Bay
+                    <Link to={"/pcm/detail/" + item.task?._id}>
+                      {item?.project?.sign}.{item.task?.name}
+                    </Link>
                   </td>
                 </tr>
               ))}

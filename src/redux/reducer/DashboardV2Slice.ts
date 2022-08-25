@@ -13,8 +13,6 @@ const initialState: any = {
       companyOfAuthorsID: [],
       authorsID: [],
       projectsID: [],
-      fromDate: "1990/01/01",
-      toDate: "2999/12/31",
       official: 0,
     },
 
@@ -43,6 +41,9 @@ const dashboardV2Slice = createSlice({
     setKeywordForSubject(state, action) {
       state.data.keywordForSubject = action.payload;
     },
+    setKeywordForFile(state, action) {
+      state.data.keywordForFile = action.payload;
+    },
     setShowModalResult(state, action) {
       state.data.showModalResult = action.payload;
     },
@@ -62,6 +63,7 @@ export const {
   setShowModalResult,
   setTabActive,
   setQueryResponse,
-  setQuerySubject
+  setQuerySubject,
+  setKeywordForFile
 } = dashboardV2Slice.actions;
 export default dashboardV2Slice.reducer;
