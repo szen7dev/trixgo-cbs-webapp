@@ -182,7 +182,8 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
       isExpired: isExpired,
       subtypes: subtypes,
       status: status,
-      limit: 50,
+      // read: 1, // 1-Chưa đọc, 2-Đã đọc, Không truyền => lấy tất cả
+      limit: 5,
       ...querySubject,
     },
     isFetch: tabActive === 2 ? true : false,
