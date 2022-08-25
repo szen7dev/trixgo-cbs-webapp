@@ -85,6 +85,7 @@ type UseSearchTask = {
     refetchListTask: () => void;
     nextPageListTask: () => void;
     prevPageListTask: () => void;
+    isFetching: boolean;
 };
 
 type UseSearchTaskProps ={
@@ -103,6 +104,7 @@ export const useSearchTask = ({
         fetchNextPage: nextPageListTask,
         fetchPreviousPage: prevPageListTask,
         hasNextPage,
+        isFetching,
     } = useInfiniteQuery(
         ["task--list_by_filter", params],
         async ({ pageParam }: any) =>
@@ -131,7 +133,7 @@ export const useSearchTask = ({
         .concat(...(dataListTask?.pages || [])
         .map((d: any) => d.data?.listRecords))
         .filter(Boolean);
-
+    
     const totalRecord = dataListTask?.pages[0]?.data?.totalRecord;
     const totalPage = dataListTask?.pages[0]?.data?.totalPage;
 
@@ -144,5 +146,6 @@ export const useSearchTask = ({
         refetchListTask,
         nextPageListTask,
         prevPageListTask,
+        isFetching
     };
 };
