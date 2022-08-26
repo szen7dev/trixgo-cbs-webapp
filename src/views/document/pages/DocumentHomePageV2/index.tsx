@@ -1,5 +1,5 @@
-import React, {FC} from "react";
-import {DropdownSearchableV2, TimeRangeDropdown} from "shareComponents/common";
+import React, {FC, useState} from "react";
+import {DropdownSearchableV2, PaginateV2, TimeRangeDropdown} from "shareComponents/common";
 import maleUserIcon from "assets/images/icons8-male-user-64.svg";
 import categoryIcon from "assets/images/icons8-category-48.svg";
 import TriangleDown from "assets/icons/TriangleDown";
@@ -9,9 +9,16 @@ import echoDbIcon from "assets/images/icons8-amazon-echo-48.svg";
 import downloadIcon from "assets/images/icons8-download-96.svg";
 import projectIcon from "assets/images/icons8-project-50.svg";
 import iconPencil from "assets/images/icons8-pencil-96 1.png";
-import nextIcon from "assets/images/icons-arrow-next.svg";
+import {useListDocument} from "services/hooks/document/useDocument";
+import moment from "moment";
 
 const DocumentHomePageV2:FC = () => {
+    const [pageIndex, setPageIndex] = useState(0);
+    const { listDocumentWithPager, isLoading, totalRecord, totalPage, fetchNextPageDocument, hasNextPage } = useListDocument({
+        params: {},
+        isFetchList: true
+    });
+
     return (
         <div className="flex flex-1 flex-col overflow-hidden">
             <div className={"sticky top-0 z-10"}>
@@ -106,15 +113,20 @@ const DocumentHomePageV2:FC = () => {
                         className={"flex items-center justify-center mx-3 ml-6"}>
                         <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"}/>
                     </button>
-                    <div className={"flex-1 flex items-center justify-end"}>
-                        <span className={"text-primary-gray"}>1-50 trong số 2.358</span>
-                        <button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"} disabled={true}>
-                            <img src={nextIcon} alt={"----"} className={"rotate-180"}/>
-                        </button>
-                        <button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"}>
-                            <img src={nextIcon} alt={"----"}/>
-                        </button>
-                    </div>
+                    <PaginateV2
+                        totalRecord={totalRecord}
+                        totalPages={totalPage}
+                        limit={30}
+                        hasNextPage={hasNextPage}
+                        isFetching={isLoading}
+                        nextPageAction={() => {
+                            fetchNextPageDocument();
+                            setPageIndex(oldState => oldState+1)
+                        }}
+                        prevPageAction={() => {
+                            setPageIndex(oldState => oldState-1)
+                        }}
+                    />
                 </div>
             </div>
             <div className="flex-1 overflow-y-auto">
@@ -160,7 +172,7 @@ const DocumentHomePageV2:FC = () => {
                     </thead>
                     <tbody>
                     {
-                        [...Array(3)].map((e,i) => (
+                        (listDocumentWithPager[pageIndex]??[]).map((document,i) => (
                             <tr key={i}>
                                 <td className={"border-b-0.5 border-primary-border py-3 text-center"}>
                                     <input
@@ -171,32 +183,32 @@ const DocumentHomePageV2:FC = () => {
                                     />
                                 </td>
                                 <td className={"border-b-0.5 border-primary-border py-3"}>
-                                    <p>Giấy chứng nhận Đăng ký doanh nghiệp (thay đổi lần thứ 2 ngày 17/05/2021)</p>
-                                    <p className={"mt-1 text-primary-gray text-xs"}>Phùng Thị Hà-PGI-20/07/2021</p>
+                                    <p>{document.name}</p>
+                                    <p className={"mt-1 text-primary-gray text-xs"}>{document.author?.fullname}-{document.createAt}</p>
                                 </td>
                                 <td className={"border-b-0.5 border-primary-border py-3"}>
-                                    Sở Kế hoạch và Đầu tư thành phố Hà Nội
+                                    {document.sender?.name}
                                 </td>
                                 <td className={"border-b-0.5 border-primary-border py-3"}>
                                     ARM.CAL-PGI.PMI\HDCG\210515
                                 </td>
                                 <td className={"border-b-0.5 border-primary-border py-3 text-center"}>
-                                    20/05/2021
+                                    {moment(document.date).format('DD/MM/YYYY')}
                                 </td>
                                 <td className={"border-b-0.5 border-primary-border py-3"}>
-                                    ARM.CAL-PGI.PMI\HDCG\210515
+                                    {document.storeSign}
                                 </td>
                                 <td className={"border-b-0.5 border-primary-border py-3 text-right pr-2"}>
-                                    12
+                                    {document.amount}
                                 </td>
                                 <td className={"border-b-0.5 border-primary-border py-3"}>
-                                    Đã ký
+                                    {document.status}
                                 </td>
                                 <td className={"border-b-0.5 border-primary-border py-3"}>
-                                    Có bản gốc đi kèm
+                                    {document.note}
                                 </td>
                                 <td className={"border-b-0.5 border-primary-border py-3"}>
-                                    Cặp F1, Ngăn A5, Tủ A1
+                                    {document.storage?.name}
                                 </td>
                             </tr>
                         ))}
