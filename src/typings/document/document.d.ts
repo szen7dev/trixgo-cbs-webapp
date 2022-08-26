@@ -130,6 +130,10 @@ export interface DocumentQueryPayload extends QueryParam {
         fromDate?: string;
         toDate?: string;
         limit?: number|string;
+        datahubContactID?: string;
+        departmentID?: string;
+        direction?: string;
+        contractID?: string;
     },
     isFetchList?: boolean;
 }

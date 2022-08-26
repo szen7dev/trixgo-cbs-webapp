@@ -1,41 +1,108 @@
-import React, {FC, useState} from "react";
+import React, {FC, useContext, useState} from "react";
 import {DropdownSearchableV2} from "shareComponents/common";
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
-import maleUserIcon from "assets/images/icons8-male-user-64.svg";
+import maleUserIcon from "assets/images/icons8-business-building-48.svg";
 import categoryIcon from "assets/images/icons8-category-48.svg";
 import TriangleDown from "assets/icons/TriangleDown";
 import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
 import contractIcon from "assets/images/icons8-contract-64-blue.svg";
-import echoDbIcon from "assets/images/icons8-amazon-echo-48.svg";
 import downloadIcon from "assets/images/icons8-download-96.svg";
 import projectIcon from "assets/images/icons8-project-50.svg";
 import iconPencil from "assets/images/icons8-pencil-96 1.png";
 import {useListDocument} from "services/hooks/document/useDocument";
 import moment from "moment";
 import PaginateV2 from "shareComponents/common/PaginateV2";
-import {DOCUMENT_TYPES} from "apis/localdb";
+import {DOCUMENT_TYPES, DIRECTION_TYPES} from "apis/localdb";
 import {useDatahubContact} from "services/hooks/datahub/contact/useDatahubContact";
+import {useProjectCustom} from "services/hooks/items/useProject";
+import {debounce} from "lodash";
+import {useContractIsMembers} from "services/hooks/items/useContract";
+import {ModalContext} from "../../contexts/modal";
+import {useQueryDetailDocument} from "services/hooks/ppt/useDocument";
+import {useMutationDocumentChild} from "services/hooks/document/useDocumentChild";
+
 const DocumentHomePageV2:FC = () => {
     type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+
+    const [recordSelected, setSelectRecord] = useState<any>({});
 
     const ref = React.useRef<PaginateHandle>(null);
     const [pageIndex, setPageIndex] = useState(0);
     const [fromToDate, setFromToDate] = useState({fromDate: "", toDate: ""})
 
     const [keywordDatahubContact, setKeywordDatahubContact] = useState("");
-    const [datahubContact, setDatahubContact] = useState("");
+    const [datahubContactID, setDatahubContact] = useState("");
+
+    const [projectKeyword, setProjectKeyword] = useState("");
+    const [departmentID, setDepartmentID] = useState("");
 
     const [type, setType] = useState("");
 
+    const [direction, setDirection] = useState("");
+
+    const [contractKeyword, setContractKeyword] = useState("");
+    const [contractID, setContractID] = useState("");
+
     const { data: listDatahubContact } = useDatahubContact({ keyword: keywordDatahubContact }, true, false); // Danh bạ hệ thống
+    const { listProjectsUserIsMember } = useProjectCustom({ paramsProjectsUserIsMember: { keyword: projectKeyword }, isFetchProjectsUserIsMember: true});
+    const { listContracts } = useContractIsMembers({ params: contractKeyword, isFetch: true });
+
     const { listDocumentWithPager, isLoading, totalRecord, totalPage, fetchNextPageDocument, hasNextPage, refetchListDocument } = useListDocument({
         params: {
             ...fromToDate,
-            datahubContact,
-            type
+            datahubContactID,
+            type,
+            departmentID,
+            direction,
+            contractID
         },
         isFetchList: true
     });
+
+    // const { toggleModal, updateModal } = useContext(ModalContext);
+    // const { onFetchDetailDocumentAsync }   = useQueryDetailDocument();
+    // const { updateDocumentChildAsync } = useMutationDocumentChild();
+    //
+    // const handleOnClickUpdate = React.useCallback(
+    //     (record) => async () => {
+    //         const result = await onFetchDetailDocumentAsync(record._id);
+    //         toggleModal();
+    //         updateModal({
+    //             departmentId: departmentID,
+    //             departmentInfo: {
+    //                 company: {
+    //                     _id: record.company,
+    //                 },
+    //             },
+    //             title: "Cập nhật",
+    //             initialValues: result,
+    //             onSubmit: async (values: any) => {
+    //                 const result = await updateDocumentChildAsync({
+    //                     ...values,
+    //                     documentID: record._id,
+    //                 });
+    //                 if (result.status === 200) {
+    //                     refetchListDocument();
+    //                     setPageIndex(0);
+    //                     ref.current&&ref.current.resetPaginate();
+    //                     toggleModal();
+    //                     updateModal({
+    //                         departmentInfo: {},
+    //                         initialValues: {},
+    //                     });
+    //                 }
+    //             },
+    //         });
+    //     },
+    //     [
+    //         departmentID,
+    //         onFetchDetailDocumentAsync,
+    //         refetchListDocument,
+    //         toggleModal,
+    //         updateDocumentChildAsync,
+    //         updateModal,
+    //     ]
+    // );
 
     return (
         <div className="flex flex-1 flex-col overflow-hidden h-full">
@@ -52,7 +119,10 @@ const DocumentHomePageV2:FC = () => {
                             id: "_id",
                             text: "name"
                         }}
-                        onSearchInputChange={valueSearch => setKeywordDatahubContact(valueSearch)}
+                        onSearchInputChange={debounce(
+                            (valueSearch) => setKeywordDatahubContact(valueSearch),
+                            500
+                        )}
                         onchangeValue={item => {
                             setDatahubContact(item._id);
                             setPageIndex(0);
@@ -63,6 +133,10 @@ const DocumentHomePageV2:FC = () => {
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
                         }}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.text}</p>
+                        )}
+                        selectOneByOne={true}
                     />
                     <DropdownSearchableV2
                         className={"mr-4 border border-primary-border rounded-lg mb-2"}
@@ -85,15 +159,37 @@ const DocumentHomePageV2:FC = () => {
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
                         }}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.text}</p>
+                        )}
+                        selectOneByOne={true}
                     />
                     <DropdownSearchableV2
                         className={"mr-4 border border-primary-border rounded-lg mb-2"}
                         placeholder={"Dự án"}
                         prefixIcon={<img className={"mr-2"} src={projectIcon} alt={"icon"}/>}
                         isMultiple={false}
-                        disableSearch={true}
                         allowClearValueSingleInput={true}
-                        data={[]}
+                        data={listProjectsUserIsMember}
+                        formatItem={{
+                            id: "_id",
+                            text: "name"
+                        }}
+                        onSearchInputChange={debounce(valueSearch => setProjectKeyword(valueSearch), 500)}
+                        onchangeValue={item => {
+                            setDepartmentID(item._id);
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        onClearData={() => {
+                            setDepartmentID("");
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.text}</p>
+                        )}
+                        selectOneByOne={true}
                     />
                     <TimeRangeDropdown
                         className={
@@ -128,7 +224,24 @@ const DocumentHomePageV2:FC = () => {
                         isMultiple={false}
                         disableSearch={true}
                         allowClearValueSingleInput={true}
-                        data={[]}
+                        data={DIRECTION_TYPES}
+                        formatItem={{
+                            "id": "value"
+                        }}
+                        onchangeValue={item => {
+                            setDirection(item.value);
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        onClearData={() => {
+                            setDirection("");
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.text}</p>
+                        )}
+                        selectOneByOne={true}
                     />
                     <DropdownSearchableV2
                         className={"mr-4 border border-primary-border rounded-lg mb-2"}
@@ -137,16 +250,26 @@ const DocumentHomePageV2:FC = () => {
                         isMultiple={false}
                         disableSearch={true}
                         allowClearValueSingleInput={true}
-                        data={[]}
-                    />
-                    <DropdownSearchableV2
-                        className={"mr-4 border border-primary-border rounded-lg mb-2"}
-                        placeholder={"Địa chỉ lưu trữ"}
-                        prefixIcon={<img className={"mr-2"} src={echoDbIcon} alt={"icon"}/>}
-                        isMultiple={false}
-                        disableSearch={true}
-                        allowClearValueSingleInput={true}
-                        data={[]}
+                        data={listContracts}
+                        formatItem={{
+                            id: "_id",
+                            text: "name"
+                        }}
+                        onSearchInputChange={debounce(valueSearch => setContractKeyword(valueSearch), 500)}
+                        onchangeValue={item => {
+                            setContractID(item._id);
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        onClearData={() => {
+                            setContractID("");
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.text}</p>
+                        )}
+                        selectOneByOne={true}
                     />
                 </div>
                 <div className={"flex items-center pb-2"}>
@@ -160,10 +283,14 @@ const DocumentHomePageV2:FC = () => {
                     <button className={"flex items-center justify-center mx-3 ml-6"}>
                         <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"}/>
                     </button>
-                    <button
-                        className={"flex items-center justify-center mx-3 ml-6"}>
-                        <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"}/>
-                    </button>
+                    {/*{*/}
+                    {/*    recordSelected._id&&*/}
+                    {/*    <button*/}
+                    {/*        onClick={handleOnClickUpdate(recordSelected)}*/}
+                    {/*        className={"flex items-center justify-center mx-3 ml-6"}>*/}
+                    {/*        <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"}/>*/}
+                    {/*    </button>*/}
+                    {/*}*/}
                     <PaginateV2
                         ref={ref}
                         totalRecord={totalRecord}
@@ -231,7 +358,16 @@ const DocumentHomePageV2:FC = () => {
                                         className="form-check-input"
                                         type="checkbox"
                                         value=""
-                                        id="flexCheckDefault"
+                                        id={"flexCheckDefault_" + document._id}
+                                        checked={document._id === recordSelected._id}
+                                        onChange={(e) => {
+                                            if (e.target.checked) {
+                                                setSelectRecord(document);
+                                                return null;
+                                            }
+                                            setSelectRecord({});
+                                            return null;
+                                        }}
                                     />
                                 </td>
                                 <td className={"border-b-0.5 border-primary-border py-3"}>

@@ -1,8 +1,6 @@
 import React, {ChangeEvent, FC, useContext, useRef, useState} from "react";
 import searchIcon from "assets/images/icons8-search-120.png";
-import userAvt from "assets/images/task-user.svg";
 import {useOnClickOutside} from "services/hooks/useOnclickOutside";
-import debounce from "lodash/debounce";
 import {useUserSystem} from "services/hooks/users/useUserSystem";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {MessageContext, populates} from "../../../../../../shareComponents/layouts/MessagesLayoutV2";
@@ -10,6 +8,7 @@ import {appendFakeItemListConversation} from "redux/reducer/messages/ListConvers
 import {useDispatch} from "react-redux";
 import {map as _map} from "lodash";
 import {SearchChatItem} from "../SearchUserConversation";
+import {debounce} from "lodash";
 
 export const SearchUserAndConversation:FC = () => {
     const {currentChat, socketRef, setCurrentChat} = useContext(MessageContext);
@@ -63,7 +62,7 @@ export const SearchUserAndConversation:FC = () => {
             </div>
             <input
                 value={search}
-                onChange={e => handleSearchChange(e)}
+                onChange={debounce(e => handleSearchChange(e), 500)}
                 className={"pl-12 w-full h-[45px] bg-cbs-bg-input-search rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-none focus:shadow-md transition-all"} placeholder={"Tìm trong bạn bè hoặc cuộc hội thoại"}/>
 
             {
