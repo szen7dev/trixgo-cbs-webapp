@@ -6,10 +6,12 @@ import CollapseShow from "assets/images/CBS-Collapse-Show.svg";
 import CollapseHide from "assets/images/CBS-Collapse-Hide.svg";
 import { useCommentPcm } from "services/hooks/useTask";
 import { Task, Comment as CommentType, CommentProps } from "typings/task";
-import { ChildResponseComment, ParentResponseComment, ReplyResponseComment } from "views/pcm/shareComponents/common";
+import { ParentResponseComment, ReplyResponseComment } from "views/pcm/shareComponents/common";
 import CommentContext from 'views/pcm/contexts/comment/comment.context';
 import TaskRepository from "apis/task";
 import { useAuth } from "services/hooks/auth/useAuth";
+import { ModalZoomView } from "shareComponents/common";
+import { ImageProps } from "typings/common";
 
 type Props = {
     task: Task;
@@ -22,9 +24,15 @@ export const TaskDetailComment: FC<Props> = ({ task, userId, refetchInfo }) => {
     const [collapseComment, setCollapseComment] = useState(false);
     const [isOpenCreateResponse, setIsOpenCreateResponse] = useState(false);
 	const [amountComment, setAmountComment] = useState(0);
+	const [isShowImageFullScreen, setIsShowImageFullScreen] = useState(false);
+    const [defaultState, setDefaultState] = useState({
+		mediaID: '',
+		images: [] as ImageProps[],
+		index: 0,
+		createAt: ""
+	});
 
 	const { state, dispatch } = useContext(CommentContext);
-
     const { user } = useAuth();
 
     const { listComments, totalRecord, limit } =
@@ -101,6 +109,17 @@ export const TaskDetailComment: FC<Props> = ({ task, userId, refetchInfo }) => {
                         isOfficialTab={filter === 2}
                         userId={user?._id}
                         onConfirmUpdate={refetchInfo}
+                        onClickImage={(comment: CommentProps, index: number) => {
+                            if(comment.images?.length) {
+                                setDefaultState({
+                                    mediaID: comment._id,
+                                    images: comment.images,
+                                    index,
+                                    createAt: comment.createAt
+                                });
+                                setIsShowImageFullScreen(true);
+                            }
+                        }}
                     />
                 ))}
             </div>
@@ -122,6 +141,11 @@ export const TaskDetailComment: FC<Props> = ({ task, userId, refetchInfo }) => {
             >
                 Tạo phản hồi
             </button>
+			<ModalZoomView
+                isShow={isShowImageFullScreen}
+                toggle={()=> setIsShowImageFullScreen(!isShowImageFullScreen)}
+                initialData={defaultState}
+            />
         </div>
     )
 }

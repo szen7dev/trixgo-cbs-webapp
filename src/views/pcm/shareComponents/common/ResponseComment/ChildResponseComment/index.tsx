@@ -6,7 +6,7 @@ import iconLink from "assets/images/icons8-link-96-v3.svg";
 import iconAttach from "assets/images/icons8-attach-48.svg";
 // import imageDemo from "assets/images/task-detail-image.png";
 // import {listEmoji} from "../../../../../messages/pages/MessageHome/sections/ChattingSection";
-import { CommentProps, Task } from "typings/task";
+import type { Comment as CommentType, CommentProps, Task } from "typings/task";
 import moment from "moment";
 import { nl2p } from 'utils';
 import { humanFileSize } from 'utils/converter';
@@ -15,11 +15,12 @@ import { toast } from "react-toastify";
 type Props = {
     userId?: string;
     comment: CommentProps;
+	onClickImage?: (comment: CommentType, index: number) => void,
     handleUploadAttachments: (filesSelected: FileList | null, commentChildId: string) => void;
     handleUpdateDescriptionFile: (e: any) => void;
 }
 
-export const ChildResponseComment: FC<Props> = ({ userId, comment, handleUploadAttachments, handleUpdateDescriptionFile }) => {
+export const ChildResponseComment: FC<Props> = ({ userId, comment, onClickImage, handleUploadAttachments, handleUpdateDescriptionFile }) => {
     const [collapseComment, setCollapseComment] = useState(false);
 
     const receiversText = useMemo(() => {
@@ -142,9 +143,9 @@ export const ChildResponseComment: FC<Props> = ({ userId, comment, handleUploadA
                                 <div className={"comment-images mt-4"}>
                                     <div className={"grid grid-cols-6 gap-4"}>
                                         {
-                                            comment.images.map(image => (
+                                            comment.images.map((image, index) => (
                                                 <div key={image._id} className={" border-0.5 border-primary-border bg-cbs-form-input-bg mb-2"}>
-                                                    <div className={"relative"}>
+                                                    <div className={"relative"} onClick={() => onClickImage?.(comment, index)}>
                                                         <img className={"h-[120px] max-h-[120px] min-h-[120px] object-cover w-full"} src={`${process.env.REACT_APP_URL_S3}${image.path}`} alt={image.nameOrg} />
                                                         <div className={"text-white px-2 py-4 bg-black opacity-60 absolute text-xs bottom-0 w-full truncate"}>
                                                             {moment(image.createAt).format('DD/MM/YYYY HH:mm')}
