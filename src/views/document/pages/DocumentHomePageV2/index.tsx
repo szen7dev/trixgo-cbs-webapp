@@ -1,5 +1,6 @@
 import React, {FC, useState} from "react";
-import {DropdownSearchableV2, PaginateV2, TimeRangeDropdown} from "shareComponents/common";
+import {DropdownSearchableV2} from "shareComponents/common";
+import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
 import maleUserIcon from "assets/images/icons8-male-user-64.svg";
 import categoryIcon from "assets/images/icons8-category-48.svg";
 import TriangleDown from "assets/icons/TriangleDown";
@@ -11,40 +12,87 @@ import projectIcon from "assets/images/icons8-project-50.svg";
 import iconPencil from "assets/images/icons8-pencil-96 1.png";
 import {useListDocument} from "services/hooks/document/useDocument";
 import moment from "moment";
-
+import PaginateV2 from "shareComponents/common/PaginateV2";
+import {DOCUMENT_TYPES} from "apis/localdb";
+import {useDatahubContact} from "services/hooks/datahub/contact/useDatahubContact";
 const DocumentHomePageV2:FC = () => {
+    type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+
+    const ref = React.useRef<PaginateHandle>(null);
     const [pageIndex, setPageIndex] = useState(0);
-    const { listDocumentWithPager, isLoading, totalRecord, totalPage, fetchNextPageDocument, hasNextPage } = useListDocument({
-        params: {},
+    const [fromToDate, setFromToDate] = useState({fromDate: "", toDate: ""})
+
+    const [keywordDatahubContact, setKeywordDatahubContact] = useState("");
+    const [datahubContact, setDatahubContact] = useState("");
+
+    const [type, setType] = useState("");
+
+    const { data: listDatahubContact } = useDatahubContact({ keyword: keywordDatahubContact }, true, false); // Danh bạ hệ thống
+    const { listDocumentWithPager, isLoading, totalRecord, totalPage, fetchNextPageDocument, hasNextPage, refetchListDocument } = useListDocument({
+        params: {
+            ...fromToDate,
+            datahubContact,
+            type
+        },
         isFetchList: true
     });
 
     return (
-        <div className="flex flex-1 flex-col overflow-hidden">
+        <div className="flex flex-1 flex-col overflow-hidden h-full">
             <div className={"sticky top-0 z-10"}>
                 <div className={"flex flex-wrap items-center px-4 py-2"}>
                     <DropdownSearchableV2
                         className={"mr-4 border border-primary-border rounded-lg mb-2"}
-                        placeholder={"Chủ đề ban hành"}
+                        placeholder={"Tổ chức ban hành"}
                         prefixIcon={<img className={"mr-2"} src={maleUserIcon} alt={"icon"}/>}
-                        isMultiple={true}
-                        disableSearch={true}
-                        data={[]}
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        data={listDatahubContact}
+                        formatItem={{
+                            id: "_id",
+                            text: "name"
+                        }}
+                        onSearchInputChange={valueSearch => setKeywordDatahubContact(valueSearch)}
+                        onchangeValue={item => {
+                            setDatahubContact(item._id);
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        onClearData={() => {
+                            setDatahubContact("");
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
                     />
                     <DropdownSearchableV2
                         className={"mr-4 border border-primary-border rounded-lg mb-2"}
-                        placeholder={"Loại hồ sơ"}
+                        placeholder={"Tính chất hồ sơ"}
                         prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"}/>}
-                        isMultiple={true}
+                        isMultiple={false}
                         disableSearch={true}
-                        data={[]}
+                        allowClearValueSingleInput={true}
+                        data={DOCUMENT_TYPES}
+                        formatItem={{
+                            "id": "value"
+                        }}
+                        onchangeValue={item => {
+                            setType(item.value);
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        onClearData={() => {
+                            setType("");
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
                     />
                     <DropdownSearchableV2
                         className={"mr-4 border border-primary-border rounded-lg mb-2"}
                         placeholder={"Dự án"}
                         prefixIcon={<img className={"mr-2"} src={projectIcon} alt={"icon"}/>}
-                        isMultiple={true}
+                        isMultiple={false}
                         disableSearch={true}
+                        allowClearValueSingleInput={true}
                         data={[]}
                     />
                     <TimeRangeDropdown
@@ -54,22 +102,22 @@ const DocumentHomePageV2:FC = () => {
                         placeholder={"Thời khoảng"}
                         iconBack={<TriangleDown />}
                         iconFront={<img src={timelineIcon} alt={"----"} />}
-                        onValueChange={(val) => console.log(val)}
+                        onValueChange={(val) => setFromToDate(val)}
                         options={[
                             {
                                 text: "Tất cả",
-                                fromDate: "00/00/0000",
-                                toDate: "31/12/2999",
+                                fromDate: "",
+                                toDate: "",
                             },
                             {
-                                text: "1 tuần tới",
-                                fromDate: "12/08/2022",
-                                toDate: "17/08/2022",
+                                text: "Cách đây 1 tuần",
+                                fromDate: moment().format("YYYY-MM-DD"),
+                                toDate: moment().subtract(7,'d').format("YYYY-MM-DD"),
                             },
                             {
-                                text: "> 7 ngày tiếp theo",
-                                fromDate: "17/08/2022",
-                                toDate: "31/12/2999",
+                                text: "Cách đây 1 tháng",
+                                fromDate: moment().format("YYYY-MM-DD"),
+                                toDate: moment().subtract(1,'m').format("YYYY-MM-DD"),
                             },
                         ]}
                     />
@@ -77,24 +125,27 @@ const DocumentHomePageV2:FC = () => {
                         className={"mr-4 border border-primary-border rounded-lg mb-2"}
                         placeholder={"Hướng hồ sơ"}
                         prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"}/>}
-                        isMultiple={true}
+                        isMultiple={false}
                         disableSearch={true}
+                        allowClearValueSingleInput={true}
                         data={[]}
                     />
                     <DropdownSearchableV2
                         className={"mr-4 border border-primary-border rounded-lg mb-2"}
                         placeholder={"Thuộc hợp đồng"}
                         prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"}/>}
-                        isMultiple={true}
+                        isMultiple={false}
                         disableSearch={true}
+                        allowClearValueSingleInput={true}
                         data={[]}
                     />
                     <DropdownSearchableV2
                         className={"mr-4 border border-primary-border rounded-lg mb-2"}
                         placeholder={"Địa chỉ lưu trữ"}
                         prefixIcon={<img className={"mr-2"} src={echoDbIcon} alt={"icon"}/>}
-                        isMultiple={true}
+                        isMultiple={false}
                         disableSearch={true}
+                        allowClearValueSingleInput={true}
                         data={[]}
                     />
                 </div>
@@ -114,6 +165,7 @@ const DocumentHomePageV2:FC = () => {
                         <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"}/>
                     </button>
                     <PaginateV2
+                        ref={ref}
                         totalRecord={totalRecord}
                         totalPages={totalPage}
                         limit={30}
@@ -189,13 +241,13 @@ const DocumentHomePageV2:FC = () => {
                                 <td className={"border-b-0.5 border-primary-border py-3"}>
                                     {document.sender?.name}
                                 </td>
-                                <td className={"border-b-0.5 border-primary-border py-3"}>
+                                <td className={"border-b-0.5 border-primary-border py-3 break-all"}>
                                     ARM.CAL-PGI.PMI\HDCG\210515
                                 </td>
                                 <td className={"border-b-0.5 border-primary-border py-3 text-center"}>
                                     {moment(document.date).format('DD/MM/YYYY')}
                                 </td>
-                                <td className={"border-b-0.5 border-primary-border py-3"}>
+                                <td className={"border-b-0.5 border-primary-border py-3 break-all"}>
                                     {document.storeSign}
                                 </td>
                                 <td className={"border-b-0.5 border-primary-border py-3 text-right pr-2"}>

@@ -10,8 +10,8 @@ import "views/pcm/styles/pcm.module.css";
 import {
   DropdownSearchableV2,
   Loader,
-  TimeRangeDropdown,
-} from "../../../../shareComponents/common";
+} from "shareComponents/common";
+import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
 import userIcon from "assets/images/icon-user-avatar.svg";
 import maleUserIcon from "assets/images/icons8-male-user-64.svg";
 import categoryIcon from "assets/images/icons8-category-48.svg";

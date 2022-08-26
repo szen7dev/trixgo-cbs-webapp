@@ -133,6 +133,9 @@ export const DropdownSearchable: FC<Props> = ({
         if (onMultipleRemoveValue) {
           onMultipleRemoveValue(readDataValue(item, "id"))
         }
+        if ([...oldValues].length <= 0) {
+          onClearData && onClearData();
+        }
       } else {
         setValues((oldValues) => [...(oldValues ?? []), item]);
         if (onchangeValue) {
@@ -143,6 +146,7 @@ export const DropdownSearchable: FC<Props> = ({
       setShowOption(false);
       if (value&&readDataValue(value, "id") === readDataValue(item,"id")) {
         setValue(undefined);
+        onClearData && onClearData();
       } else {
         setValue(item);
         if (onchangeValue) {
