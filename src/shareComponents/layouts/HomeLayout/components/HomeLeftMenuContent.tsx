@@ -110,7 +110,7 @@ export const HomeLeftMenuContent:FC = () => {
     }) => {
       return (
           <NavLink key={nav.route} to={nav.route} className={"left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray"}>
-              <img src={nav.icon} alt={nav.label}/>
+              <img width={'20px'} src={nav.icon} alt={nav.label}/>
               <span className={"flex-1 ml-2 text-left text-[14px]"}>{nav.label}</span>
               {
                   nav.count > 0 &&
@@ -137,7 +137,7 @@ export const HomeLeftMenuContent:FC = () => {
             <div className={"mt-4"}>
                 {hasPermission && dataUserAccess?.level == 0 ?
                     <NavLink to={`/pcm/admin`} className={"left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray"}>
-                        <img src={adminIcon}/>
+                        <img width={'20px'} src={adminIcon}/>
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản trị viên</span>
                     </NavLink> : <></>
                 }
