@@ -9,7 +9,6 @@ import { CommentPayload, CommentProps, Task } from "typings/task";
 import { toast } from "react-toastify";
 import { useCommentPcm } from "services/hooks/useTask";
 import CommentContext from "views/pcm/contexts/comment/comment.context";
-import { useSocket } from "services/hooks/useSocket";
 import { APP_KEY } from "utils/constants";
 import iconAttach from 'assets/images/icons8-attach-50.png';
 import { IconImage } from 'views/media/shareComponents/common';
@@ -25,12 +24,12 @@ type Props = {
     task: Task;
     parent?: CommentProps;
     tab: number;
-    isOfficial?: boolean;
+    socket?: any;
     onCancelCreateResponse: () => void;
     onConfirmCreate?: () => void;
 }
 
-export const ReplyResponseComment: FC<Props> = ({ task, parent, tab, isOfficial = false, onCancelCreateResponse, onConfirmCreate }) => {
+export const ReplyResponseComment: FC<Props> = ({ task, parent, tab, socket, onCancelCreateResponse, onConfirmCreate }) => {
     const refDivFile = useRef<HTMLDivElement | null>(null);
     const editorRef = useRef<EditorType>();
 
@@ -51,7 +50,6 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, tab, isOfficial 
     }] = useUploadFile({});
 
     const { dispatch } = useContext(CommentContext);
-    const { current: socket }: any = useSocket();
 
     const { addFileToUpload } = useUpload({
         appID: APP_KEY.PCM_PLAN_TASK,
@@ -142,7 +140,6 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, tab, isOfficial 
             _id && (files = [...files, _id]);
         }
 
-        console.log({ files, images, content });
         if (!files.length && !images.length && !content) return;
 
         try {
@@ -151,7 +148,7 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, tab, isOfficial 
                 content,
                 parentID: parent?._id,
                 type: 1,
-                isOfficial,
+                isOfficial: tab === 2,
                 files,
                 images,
             }
@@ -176,11 +173,7 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, tab, isOfficial 
                 return toast.warn(data?.message || 'Tạo bình luận thất bại')
             }
 
-            // Clear text input
-            removeAllFiles();
-            onConfirmCreate?.();
-            dispatch({ type: 'ADD_COMMENT', payload: data });
-
+            console.log({ ADD_COMMENT_SOCKET: socket })
             socket?.emit('COMMENT_CSS_ADD_COMMENT', {
                 app: APP_KEY.PCM_PLAN_TASK,
                 objectID: task?._id,
@@ -192,6 +185,11 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, tab, isOfficial 
                     path: 'project author'
                 })
             })
+
+            // Clear text input
+            removeAllFiles();
+            onConfirmCreate?.();
+            dispatch({ type: 'ADD_COMMENT', payload: data });
 
             // socket?.emit('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', {
             // 	receivers: data.receiversNoti

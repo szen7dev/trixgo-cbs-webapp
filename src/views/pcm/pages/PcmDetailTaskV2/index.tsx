@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
-import { useHistory, useParams } from 'react-router-dom';
+import { Redirect, useHistory, useParams } from 'react-router-dom';
 
 import { ActionTaskDetailBar } from "./components/ActionBar";
 import { TaskDetailTitle } from "./components/TaskTitle";
@@ -241,6 +241,10 @@ const PcmDetailTaskV2: FC = () => {
 
     if (isLoadingInfo) {
         return <Loader className="border-primary" />
+    }
+
+    if(!taskInfo._id) {
+        return <Redirect to='/pcm/home' />
     }
 
     return (
