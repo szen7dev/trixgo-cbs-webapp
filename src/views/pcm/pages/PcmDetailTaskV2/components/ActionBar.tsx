@@ -6,7 +6,6 @@ import {SendEmailNotification} from "./SendEmailNotification";
 import iconCopy from "assets/images/icons8-copy-96.svg";
 import iconRemove from "assets/images/icons8-remove-96.svg";
 import iconPrint from "assets/images/icons8-print-96.svg";
-import iconAddUser from "assets/images/icons8-add-user-male-96 1.png";
 import {TaskHistoryLog} from "./TaskHistoryLog";
 import iconMember from "assets/images/icons8-member-48-white.svg";
 import {SendToChat} from "./SendToChat";
@@ -15,15 +14,17 @@ import CollapseShow from "assets/images/CBS-Collapse-Show.svg";
 import CollapseHide from "assets/images/CBS-Collapse-Hide.svg";
 import { Task } from "typings/task";
 import { AddUserRelated } from "./AddUserRelated";
+import { User } from "typings/user";
 
 type Props = {
     handleCollapse?: () => void;
     collapse?: boolean;
     task: Task;
+    user: User | null;
     refetchTaskInfo: () => void;
 }
 
-export const ActionTaskDetailBar:FC<Props> = ({ task, refetchTaskInfo, handleCollapse, collapse }) => {
+export const ActionTaskDetailBar:FC<Props> = ({ task, user, refetchTaskInfo, handleCollapse, collapse }) => {
     const [activeCopyTextTooltip, setActiveCopyTextTooltip] = useState(false);
     const history = useHistory();
 
@@ -53,7 +54,7 @@ export const ActionTaskDetailBar:FC<Props> = ({ task, refetchTaskInfo, handleCol
                     <img src={iconLinkCopy} alt={"----"} className={"w-[18px]"}/>
                     <div className={"absolute top-full bg-primary-gray p-2 rounded w-[170px] text-left text-white transition-all " + (activeCopyTextTooltip?"visible opacity-100":"invisible opacity-0")}>Đã sao chép đường liên kết</div>
                 </button>
-                <SendEmailNotification task={task} />
+                <SendEmailNotification task={task} userId={user?._id} />
                 <button className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mx-3"}>
                     <img src={iconCopy} alt={"----"} className={"w-[18px]"}/>
                 </button>

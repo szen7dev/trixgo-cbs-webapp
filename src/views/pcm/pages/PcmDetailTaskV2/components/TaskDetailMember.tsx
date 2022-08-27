@@ -32,7 +32,7 @@ export const TaskDetailMember: FC<Props> = ({ task }) => {
                         </div>
                     </div>
                     <div className={"flex items-center flex-1 justify-start"}>
-                        {!!task.related?.length && task.related.map(item => (
+                        {!!task.related?.length && task.related.slice(0, 10).map(item => (
                             <img key={item._id} alt={"----"} src={item?.image ? `${process.env.REACT_APP_URL_S3_USER}/${item?.image}` : taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1"} />
                         ))}
 
@@ -40,7 +40,7 @@ export const TaskDetailMember: FC<Props> = ({ task }) => {
 
                         {task.related?.length > 11 && (
                             <div className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1 bg-cbs-form-input-bg border-0.5 border-primary-border flex items-center justify-center text-primary-gray"}>
-                                {task.related?.length - 11}+
+                                {task.related?.length - 10}+
                             </div>
                         )}
                         {/* <button className={"text-xl rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1 bg-cbs-form-input-bg border-0.5 border-primary-border flex items-center justify-center text-primary-gray"}>

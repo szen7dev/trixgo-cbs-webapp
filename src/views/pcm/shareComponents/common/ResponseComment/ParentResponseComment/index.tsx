@@ -8,7 +8,7 @@ import iconAttach from "assets/images/icons8-attach-48.svg";
 // import imageDemo from "assets/images/task-detail-image.png";
 // import { listEmoji } from "../../../../../messages/pages/MessageHome/sections/ChattingSection";
 import { ChildResponseComment } from "../ChildResponseComment";
-import { CommentProps, CommentPayload, Task } from "typings/task";
+import { Comment as CommentType, CommentProps, CommentPayload, Task } from "typings/task";
 import moment from 'moment';
 import { debounce } from 'lodash';
 import { nl2p } from 'utils';
@@ -31,11 +31,13 @@ type Props = {
     userId?: string;
     task: Task;
     comment: CommentProps;
+    tab: number;
     isOfficialTab: boolean;
+	onClickImage?: (comment: CommentType, index: number) => void,
     onConfirmUpdate?: () => void;
 }
 
-export const ParentResponseComment: FC<Props> = ({ userId, task, comment, isOfficialTab, onConfirmUpdate }) => {
+export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, isOfficialTab, onClickImage, onConfirmUpdate }) => {
     const [collapseComment, setCollapseComment] = useState(false);
     const [openReply, setOpenReply] = useState(false);
     const [isOfficial, setIsOfficial] = useState(comment.official);
@@ -251,6 +253,10 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, isOffi
         toast.info('Đã copy link vào clipboard', { autoClose: 1000 });
     }
 
+    const handleClickImage = (index: number) => {
+		onClickImage?.(comment, index);
+	}
+
     if (!comment) return <></>;
 
     return (
@@ -380,9 +386,9 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, isOffi
                                         </textarea>
                                     </div> */}
                                     {
-                                        comment.images.map(image => (
+                                        comment.images.map((image, index) => (
                                             <div key={image._id} className={" border-0.5 border-primary-border bg-cbs-form-input-bg mb-2"}>
-                                                <div className={"relative"}>
+                                                <div className={"relative"} onClick={() => handleClickImage(index)}>
                                                     <img className={"h-[120px] max-h-[120px] min-h-[120px] object-cover w-full"} src={`${process.env.REACT_APP_URL_S3}${image.path}`} alt={image.nameOrg} />
                                                     <div className={"text-white px-2 py-4 bg-black opacity-60 absolute text-xs bottom-0 w-full truncate"}>
                                                         {moment(image.createAt).format('DD/MM/YYYY HH:mm')}
@@ -431,6 +437,7 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, isOffi
                     <ReplyResponseComment
                         task={task}
                         parent={comment}
+                        tab={tab}
                         isOfficial={isOfficialTab}
                         onCancelCreateResponse={() => setOpenReply(false)}
                         onConfirmCreate={() => setOpenReply(false)}
@@ -443,11 +450,12 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, isOffi
                     </button>
                 )}
 
-                {!!commentsReply.length && commentsReply.map(commentReply => (
+                {!!commentsReply.length && commentsReply.map((commentReply, index) => (
                     <ChildResponseComment
                         key={commentReply._id}
                         userId={userId}
                         comment={commentReply}
+                        onClickImage={onClickImage}
                         handleUploadAttachments={handleUploadAttachments}
                         handleUpdateDescriptionFile={handleUpdateDescriptionFile}
                     />

@@ -1,6 +1,8 @@
-import React, { FC, Fragment, useRef, useState } from "react"
+import React, { FC, Fragment, useMemo, useRef, useState, useCallback } from "react"
 import { Dialog, Transition } from "@headlessui/react";
+import debounce from "lodash/debounce";
 
+import SearchIcon from 'assets/icons/SearchIcon';
 import Close from "assets/icons/Close";
 import iconSendMail from "../../../../../assets/images/icons8-send-email-96.svg";
 import { Task } from "typings/task";
@@ -14,20 +16,55 @@ import { captureException } from "@sentry/react";
 
 type Props = {
     task: Task;
+    userId?: string;
 }
 
-export const SendEmailNotification: FC<Props> = ({ task }) => {
-    const [isShow, setIsShow] = useState(false);
+export const SendEmailNotification: FC<Props> = ({ task, userId = '' }) => {
+    const accessUsers = useMemo(() => {
+        const accessUsersID = task.accessUsers?.map(user => user._id);
+        return accessUsersID.filter(userID => userID !== userId);
+    }, [task._id, task.accessUsers]) || [];
+
     const focusElementRef = useRef<HTMLDivElement>(null);
+
+    const [isShow, setIsShow] = useState(false);
+    const [keyword, setKeyword] = useState('');
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [emails, setEmails] = useState('');
-
-    // const usersRelated = [task.author, task.assignee, ...task?.related];
-    // const usersSendMail = unionBy(usersRelated, '_id');
-    // console.log({ usersSendMail })
+    const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 
     const { sendMailDetailTaskAsync } = usePcm();
+
+    const getStateChecked = useCallback((id: string) => {
+        return idsChecked.includes(id) ? true : false;
+    }, [idsChecked]);
+
+    const onClickCheckButton = (id: string) => {
+        const check = idsChecked.includes(id);
+        if (check) {
+            const newList = [...idsChecked];
+            const index = newList.findIndex((e: any) => e == id);
+            newList.splice(index, 1);
+            setIdsChecked(newList);
+        } else {
+            const newList = [...idsChecked, id];
+            setIdsChecked(newList);
+        };
+    };
+
+    const getStateCheckedAll = useCallback(() => {
+        if (!idsChecked.length && !accessUsers.length) return false;
+        return idsChecked.length == accessUsers.length;
+    }, [idsChecked.length, accessUsers.length]);
+
+    const onClickCheckAll = () => {
+        if (idsChecked.length == accessUsers.length) {
+            setIdsChecked([]);
+        } else {
+            setIdsChecked(accessUsers);
+        }
+    };
 
     const handleSubmit = async () => {
         try {
@@ -37,18 +74,18 @@ export const SendEmailNotification: FC<Props> = ({ task }) => {
             if (!content.trim())
                 return toast.warning('Vui lòng nhập nội dung');
 
-            let usersSendMail = task.accessUsers?.map(user => user._id);
+            // let usersSendMail = task.accessUsers?.map(user => user._id);
 
-            if(!usersSendMail) {
-                const usersRelated = task.related.map(user => user._id);
-                usersSendMail = [task.author?._id, task.assignee?._id, ...usersRelated];
-            }
+            // if (!usersSendMail) {
+            //     const usersRelated = task.related.map(user => user._id);
+            //     usersSendMail = [task.author?._id, task.assignee?._id, ...usersRelated];
+            // }
 
             const result = await sendMailDetailTaskAsync({
                 taskID: task._id,
                 title,
                 notice: content,
-                members: usersSendMail,
+                members: idsChecked,
                 emails
             });
 
@@ -64,6 +101,7 @@ export const SendEmailNotification: FC<Props> = ({ task }) => {
             setEmails('');
             setTitle('');
             setContent('');
+            setIdsChecked([]);
 
             toast.success('Gửi email thành công');
         } catch (error) {
@@ -149,8 +187,71 @@ export const SendEmailNotification: FC<Props> = ({ task }) => {
                                         placeholder={"Nhập email ngoài hệ thống"}
                                         rows={3}
                                         className={"w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
-					                    onChange={e => setEmails(e.target.value)}
+                                        onChange={e => setEmails(e.target.value)}
                                     ></textarea>
+
+                                    <div className='relative border-cbs-border border-0.5 flex items-center mt-2'>
+                                        <SearchIcon className='absolute left-3 w-4 h-4' />
+                                        <input
+                                            type="text"
+                                            placeholder='Nhập từ khóa tìm kiếm'
+                                            className='pl-9 py-3 text-medium w-full focus:outline-none bg-cbs-table-header'
+                                            onChange={debounce((e: any) => setKeyword(e.target.value), 600)}
+                                        />
+                                    </div>
+
+                                    <div className='flex items-center mt-4 mb-4 ml-2'>
+                                        <input
+                                            type='checkbox'
+                                            className='cbs-checkbox inline-block'
+                                            checked={getStateCheckedAll()}
+                                            onChange={onClickCheckAll}
+                                        />
+                                        <span className="font-normal ml-2">Chọn tất cả</span>
+                                    </div>
+
+                                    <div className='text-small overflow-auto' style={{ height: '470px' }}>
+                                        <table>
+                                            <tbody className='overflow-y-auto'>
+                                                {
+                                                    task.accessUsers?.map((item, index) => {
+                                                        if (item._id !== userId) {
+                                                            const textSearch = keyword?.toLowerCase();
+                                                            const fullname = item.bizfullname?.toLowerCase();
+
+                                                            if (textSearch && !fullname.includes(textSearch)) {
+                                                                return <></>;
+                                                            }
+
+                                                            return (
+                                                                <tr key={index}>
+                                                                    <td className='px-1.5 align-middle'>
+                                                                        <input
+                                                                            type='checkbox'
+                                                                            className='cbs-checkbox'
+                                                                            checked={getStateChecked(item._id)}
+                                                                            onChange={onClickCheckButton.bind(null, item._id)}
+                                                                        />
+                                                                    </td>
+                                                                    <td>
+                                                                        <div className='flex items-center py-1'>
+                                                                            <div className='w-10 h-10 object-cover rounded-full overflow-hidden mr-4'>
+                                                                                <img className='w-full h-full' src={`${process.env.REACT_APP_URL_S3_USER}/${item.image}`} alt="" />
+                                                                            </div>
+                                                                            <div>
+                                                                                {item.bizfullname}
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            )
+                                                        }
+                                                    })
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+
                                     <div className="flex justify-end w-full mt-3">
                                         <button
                                             className="rounded bg-cbs-primary w-[100px] h-[36px] text-white flex items-center justify-center"

@@ -1,4 +1,5 @@
 import React, { FC, useRef, useState, useContext } from "react";
+import Axios from 'axios';
 import { captureException } from "@sentry/react";
 import { Editor } from "@tinymce/tinymce-react";
 import { Editor as EditorType } from "tinymce";
@@ -10,76 +11,222 @@ import { useCommentPcm } from "services/hooks/useTask";
 import CommentContext from "views/pcm/contexts/comment/comment.context";
 import { useSocket } from "services/hooks/useSocket";
 import { APP_KEY } from "utils/constants";
+import iconAttach from 'assets/images/icons8-attach-50.png';
+import { IconImage } from 'views/media/shareComponents/common';
+import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
+import { validateFiles } from 'validation/file';
+import { useUpload } from 'services/hooks/useUpload';
+import { PostImage, PostFile } from 'shareComponents/common';
+import classNames from 'classnames';
+import { toArray } from 'lodash';
+import { FileProps, FilePropsUpload } from 'typings/common';
 
 type Props = {
     task: Task;
     parent?: CommentProps;
+    tab: number;
     isOfficial?: boolean;
     onCancelCreateResponse: () => void;
     onConfirmCreate?: () => void;
 }
 
-export const ReplyResponseComment: FC<Props> = ({ task, parent, isOfficial = false, onCancelCreateResponse, onConfirmCreate }) => {
+export const ReplyResponseComment: FC<Props> = ({ task, parent, tab, isOfficial = false, onCancelCreateResponse, onConfirmCreate }) => {
+    const refDivFile = useRef<HTMLDivElement | null>(null);
     const editorRef = useRef<EditorType>();
+
     const [selectedUser, setSelectedUser] = useState<Item[]>([]);
+    const [isUploading, setIsUploading] = useState(false);
+    const [tokens, setTokens] = useState<any[]>([]);
+
+    const [uploads, {
+        setUploadImageProgress,
+        setUploadFileProgress,
+        setIDImageUploaded,
+        setIDFileUploaded,
+        setUploadImage,
+        setUploadFile,
+        removeAllFiles,
+        removeUploadedImage,
+        removeUploadedFile
+    }] = useUploadFile({});
 
     const { dispatch } = useContext(CommentContext);
-	const { current: socket }: any = useSocket();
+    const { current: socket }: any = useSocket();
+
+    const { addFileToUpload } = useUpload({
+        appID: APP_KEY.PCM_PLAN_TASK,
+        companyID: task.company?._id,
+        projectID: task.project?._id,
+        groupID: task.group?._id
+    });
 
     const { createCommentAsync } = useCommentPcm({});
 
-    const handleCreateResponseComment = async () => {
-        if(!editorRef.current) return;
+    const getCancelTokenRequest = (key: string, file: any) => {
+        const CancelToken = Axios.CancelToken;
+        const source = CancelToken.source();
 
-        if(!editorRef.current?.getContent()) {
-            return toast.warn("Vui lòng nhập nội dung trả lời");
+        setTokens(previousValue => ([
+            ...previousValue,
+            {
+                key,
+                file,
+                source
+            }
+        ]))
+
+        return source;
+    }
+
+    const handleSetFiles = async (filesSelected: FileList | null) => {
+        if (!filesSelected) return;
+
+        const { error, message } = await validateFiles(filesSelected);
+        if (error) return toast.warn(message);
+
+        const [files, images] = modifyUploadedFilesV2({
+            imgLastKey: Object.keys(uploads.images).length || null,
+            fileLastKey: Object.keys(uploads.files).length || null,
+        }, filesSelected);
+
+        setIsUploading(true);
+        setUploadImage(images);
+        setUploadFile(files);
+
+        // Upload images
+        for (const [key, { file }] of Object.entries(images)) {
+            const source = getCancelTokenRequest(key, file);
+            const { _id } = await addFileToUpload({
+                files: file,
+                fileType: 1,
+                source,
+                progress: percentCompleted => {
+                    console.log(`${percentCompleted}%`, key);
+                    setUploadImageProgress(key, percentCompleted)
+                }
+            })
+            setIDImageUploaded(key, _id);
         }
+
+        // Upload files
+        for (const [key, { file }] of Object.entries(files)) {
+            const source = getCancelTokenRequest(key, file);
+            const { _id } = await addFileToUpload({
+                files: file,
+                fileType: 2,
+                source,
+                progress: percentCompleted => {
+                    console.log(`${percentCompleted}%`, key);
+                    setUploadFileProgress(key, percentCompleted)
+                }
+            })
+            setIDFileUploaded(key, _id);
+        }
+
+        setIsUploading(false);
+    }
+
+    const handleCreateResponseComment = async () => {
+        if (!editorRef.current) return;
+        const content = editorRef.current?.getContent();
+
+        let images: string[] = [];
+        let files: string[] = [];
+
+        // Get MessageList file uploaded
+        for (const [, { _id }] of Object.entries(uploads.images)) {
+            _id && (images = [...images, _id]);
+        }
+
+        for (const [, { _id }] of Object.entries(uploads.files)) {
+            _id && (files = [...files, _id]);
+        }
+
+        console.log({ files, images, content });
+        if (!files.length && !images.length && !content) return;
 
         try {
             const dataInsert: CommentPayload = {
                 taskID: task?._id,
-			    content: editorRef.current?.getContent(),
+                content,
                 parentID: parent?._id,
                 type: 1,
-                isOfficial
+                isOfficial,
+                files,
+                images,
             }
 
-            if(selectedUser.length) {
+            switch (tab) {
+                case 1:
+                case 2:
+                    dataInsert.type = 1;
+                    break;
+                default:
+                    dataInsert.type = tab;
+                    break;
+            }
+
+            if (selectedUser.length) {
                 dataInsert.receiversID = selectedUser.map(user => user.id) as string[];
             }
 
             const { error, data } = await createCommentAsync(dataInsert);
 
-            if(error) {
+            if (error) {
                 return toast.warn(data?.message || 'Tạo bình luận thất bại')
             }
 
+            // Clear text input
+            removeAllFiles();
             onConfirmCreate?.();
             dispatch({ type: 'ADD_COMMENT', payload: data });
 
             socket?.emit('COMMENT_CSS_ADD_COMMENT', {
-				app: APP_KEY.PCM_PLAN_TASK,
-				objectID: task?._id,
-				method: 'INSERT',
-				parentID: parent?._id,
-				commentType: 'COMMENT',
-				infoComment: data,
-				populates: JSON.stringify({
-					path: 'project author'
-				})
-			})
+                app: APP_KEY.PCM_PLAN_TASK,
+                objectID: task?._id,
+                method: 'INSERT',
+                parentID: parent?._id,
+                commentType: 'COMMENT',
+                infoComment: data,
+                populates: JSON.stringify({
+                    path: 'project author'
+                })
+            })
 
-			// socket?.emit('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', {
-			// 	receivers: data.receiversNoti
-			// });
-        } catch(error) {
-			captureException(error);
+            // socket?.emit('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', {
+            // 	receivers: data.receiversNoti
+            // });
+        } catch (error) {
+            captureException(error);
             if (typeof error === "string") {
-				toast.error(error);
-			} else if (error instanceof Error) {
-				toast.error(error.message);
-			}
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
         }
+    }
+
+    const handleRemoveUpload = (file: FileProps | FilePropsUpload, type: 'FILE' | 'IMAGE') => {
+        if ('id' in file) {
+            const token = tokens.find(item => (item.key == file.id) && (item?.file?.name === file?.file?.name))
+            token && token?.source?.cancel('Operation request canceled by the user.');
+
+            type === 'IMAGE' ? removeUploadedImage(file.id) : removeUploadedFile(file.id);
+        } else {
+            const token = tokens.find(item => (item.key == file._id) && (item?.file?.name === file?.name))
+            token && token?.source?.cancel('Operation request canceled by the user.');
+
+            type === 'IMAGE' ? removeUploadedImage(file._id) : removeUploadedFile(file._id);
+        }
+    }
+
+    const handleCancelCreateResponseComment = () => {
+        tokens.map(token => {
+            token?.source?.cancel('Operation request canceled by the user.');
+        })
+
+        removeAllFiles();
+        onCancelCreateResponse();
     }
 
     return (
@@ -152,13 +299,70 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, isOfficial = fal
                     }}
                 />
             </div>
-            <div className={"flex items-center justify-end mt-2"}>
-                <button className={"py-2 px-4 bg-cbs-form-input-bg rounded text-primary-gray mr-4"} onClick={onCancelCreateResponse}>
-                    Bỏ qua
-                </button>
-                <button className={"py-2 px-4 bg-primary rounded text-white"} onClick={handleCreateResponseComment}>
-                    Xác nhận
-                </button>
+            <div
+                className={
+                    classNames("flex flex-wrap max-h-44 w-full pr-4 pl-12 py-2 custom-scroll overflow-x-hidden overflow-y-auto",
+                        (!Object.keys(uploads.images).length && !Object.keys(uploads.files).length) ? "h-0" : "")
+                }
+                ref={refDivFile}
+            >
+                <PostFile
+                    files={toArray(uploads.files)}
+                    onRemove={handleRemoveUpload}
+                    className="text-black w-full"
+                />
+                <PostImage
+                    images={toArray(uploads.images)}
+                    onRemove={handleRemoveUpload}
+                    className="post__files-row pt-5 text-black gap-5 flex-wrap"
+                />
+            </div>
+            <div className={"flex items-center justify-between mt-2"}>
+                <div className="flex pl-12">
+                    <label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer mr-2">
+                        <IconImage />
+                        <input
+                            type="file"
+                            name="images"
+                            className="hidden"
+                            accept="image/*"
+                            multiple
+                            onChange={e => handleSetFiles(e.target.files)}
+                        />
+                    </label>
+                    <label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer">
+                        <img
+                            src={iconAttach}
+                            alt="Icon attach"
+                            className="h-6 w-6"
+                        />
+                        <input
+                            type="file"
+                            name="files"
+                            className="hidden"
+                            accept="*"
+                            multiple
+                            onChange={e => handleSetFiles(e.target.files)}
+                        />
+                    </label>
+                </div>
+                <div>
+                    <button
+                        className={"py-2 px-4 bg-cbs-form-input-bg rounded text-primary-gray mr-4"}
+                        onClick={handleCancelCreateResponseComment}
+                    >
+                        Bỏ qua
+                    </button>
+                    <button
+                        className={classNames("py-2 px-4 bg-primary rounded text-white", {
+                            'disabled:opacity-60': isUploading
+                        })}
+                        onClick={handleCreateResponseComment}
+                        disabled={isUploading}
+                    >
+                        Xác nhận
+                    </button>
+                </div>
             </div>
         </>
     )
