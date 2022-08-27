@@ -1,6 +1,5 @@
 import React, {FC, useEffect, useContext, useCallback, useState} from "react";
 import {UseConversation} from "services/hooks/messages/useConversation";
-import {MessageContext} from "../../../../index";
 import {map as _map} from "lodash";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import {TextPinned, FilePinned, ImagePinned, DeletedPinned} from "../PinContent";
@@ -15,6 +14,7 @@ import {
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
+import {MessageContext} from "../../../../../../shareComponents/layouts/MessagesLayoutV2";
 
 type Props = {
     listPinnedMessage: ItemMessage[]

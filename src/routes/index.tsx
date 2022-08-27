@@ -22,7 +22,8 @@ const BiddingRouter = lazy(() => import("./bidding"));
 const CmcsRouter = lazy(() => import("./cmcs"));
 const DatahubRouter = lazy(() => import("./datahub"));
 const DocumentRouter = lazy(() => import("./document"));
-const PPTRouter = lazy(() => import("./ppt"));
+const DocumentV2Router = lazy(() => import("./documentV2"));
+// const PPTRouter = lazy(() => import("./ppt"));
 const FinancialRouter = lazy(() => import("./financial"));
 const HumanRouter = lazy(() => import("./human"));
 const MarketRouter = lazy(() => import("./market"));
@@ -31,6 +32,7 @@ const MessagesRouter = lazy(() => import("./messages"));
 const OperationRouter = lazy(() => import("./operation"));
 const OwnerRouter = lazy(() => import('./owner'));
 const PcmRouter = lazy(() => import('./pcm'));
+const PmRouter = lazy(() => import('./pm'));
 const WorkshopRouter = lazy(() => import('./workshop'));
 const PersonalRouter = lazy(() => import("./personal"));
 const QrcodeRouter = lazy(() => import("./qrcode"));
@@ -45,6 +47,7 @@ const ErrorPage = lazy(() => import("views/authentication/Error"));
 const HomeLayout = lazy(() => import("shareComponents/layouts"));
 const HumanLayout = lazy(() => import("views/human/shareComponents/layouts"));
 const DocumentLayout = lazy(() => import('views/document/sharedComponents/layouts'));
+const DocumentLayoutV2 = lazy(() => import('views/document/sharedComponents/layouts/DocumentLayoutV2'));
 const AccountingLayout = lazy(() => import('views/accounting/shareComponents/layouts'));
 
 const Routes: FC = () => {
@@ -65,8 +68,7 @@ const Routes: FC = () => {
                         <Route path="/sample">
                             <SampleRouter />
                         </Route>
-                        {/*<DeleteConfirmProvider>*/}
-                        {/*    <ChatProvider>*/}
+
                         <ModalProvider>
                             <Switch>
 
@@ -113,10 +115,17 @@ const Routes: FC = () => {
                                 </Route>
 
                                 {/* =====DOCUMENT===== */}
-                                <Route path="/document">
+                                {/* <Route path="/document">
                                     <DocumentLayout>
                                         <DocumentRouter />
                                     </DocumentLayout>
+                                </Route> */}
+
+                                {/* =====DOCUMENT V2===== */}
+                                <Route path="/document">
+                                    <DocumentLayoutV2>
+                                        <DocumentV2Router />
+                                    </DocumentLayoutV2>
                                 </Route>
 
                                 {/* =====PCM===== */}
@@ -124,11 +133,10 @@ const Routes: FC = () => {
                                     <PcmRouter />
                                 </Route>
 
-                                {/* =====PPT===== */}
-                                <Route
-                                    path='/ppt'
-                                    component={PPTRouter}
-                                />
+                                {/* =====PM===== */}
+                                <Route path="/pm">
+                                    <PmRouter />
+                                </Route>
 
                                 {/* =====FINANCIAL===== */}
                                 <Route path="/financial">
@@ -225,8 +233,7 @@ const Routes: FC = () => {
 
                             </Switch>
                         </ModalProvider>
-                        {/*</ChatProvider>*/}
-                        {/*</DeleteConfirmProvider>*/}
+
                     </RightClickMenuProvider>
                 </AuthProvider>
             </Router>

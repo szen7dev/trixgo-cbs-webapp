@@ -2,7 +2,7 @@ import { FC, Fragment, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import { Menu, Transition } from "@headlessui/react";
 
-import iconGrid from "assets/images/icons8-menu-100.png";
+import iconGrid from "assets/images/icons8-menu-100.svg";
 import iconSearch from "assets/images/icons8-search-50.png";
 import supportLogo from "assets/logos/support.png";
 
@@ -15,6 +15,8 @@ export const APP_INFO = AppInfo;
 export const AppsMenu: FC = () => {
   const { listAppOfUser, refetchAppUsers } = useGetListAppOfUser();
   const { user } = useAuth();
+
+  // console.log(listAppOfUser)
   
   useEffect(() => {
     if (API.defaults.headers.Authorization) {
@@ -43,12 +45,7 @@ export const AppsMenu: FC = () => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute -right-3 w-80 origin-top-right bg-primary-light rounded-md shadow-lg ring-1 ring-dark ring-opacity-5 focus:outline-none mt-2 pt-4 pr-4 pl-4 pb-1">
-          <div className="font-bold text-2xl leading-7 text-dark pt-2 mb-4">Ứng dụng</div>
-          <div className="t-header-app-search relative mb-5">
-            <img src={iconSearch} alt="Filter" className="w-6 h-6 filter-primary-gray absolute top-2 left-3" />
-            <input onKeyDown={handleSearchTextKeyboardEvent} className="h-10 border-0 bg-secondary-light w-full pr-3 pl-12 outline-none" type="text" placeholder="Tìm kiếm" />
-          </div>
+        <Menu.Items className="absolute right-0 w-80 bg-primary-light rounded-md shadow-lg ring-1 ring-dark ring-opacity-5 focus:outline-none mt-2 pt-4 pr-4 pl-4 pb-1 z-200">
           <div className="flex flex-wrap">
             {listAppOfUser.map((item, index) => (
               <Link key={index} to={AppInfo.get(item?.app?._id)?.route || '/'} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">

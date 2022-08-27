@@ -62,7 +62,7 @@ export const TableSubtextProfile: FC<TableSubtextProfileProps> = ({
           {(docChildPayload?.listDocumentChild?.length) ? docChildPayload.listDocumentChild?.map((doc, i) => (
             <tr key={doc._id}>
               <td className="py-3 px-3">
-                  <Link to={`/ppt/project/${doc?.project}/document/${doc._id}`} className="ml-3 mr-3">
+                  <Link to={`/pm/project/${doc?.project}/document/${doc._id}`} className="ml-3 mr-3">
                     {doc.name || ''}
                   </Link>
                 </td>

@@ -8,7 +8,7 @@ import {map as _map} from "lodash";
 import {v4 as uuidv4} from "uuid";
 import {appendFakeMessageToConversation} from "redux/reducer/messages/ListMessage";
 import {useUser} from "services/hooks/useUser";
-import {populates} from "../../../../index";
+import {populates} from "../../../../../../shareComponents/layouts/MessagesLayoutV2";
 
 type Props = {
     context: any

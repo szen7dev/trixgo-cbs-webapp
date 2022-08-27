@@ -5,15 +5,10 @@ import cn from "classnames";
 /*=====2.CSS=====*/
 
 /*=====3.ICONS=====*/
-import menuIcon from "assets/images/icon-mobile-menu-black.png";
-import chevronRightIcon from "assets/images/icon-chevron-right.png";
-import chevronUpIcon from "assets/images/icon-chevron-up.png";
-import iconChat from "assets/images/icons8-chat-96.png";
 
 /*=====4.PAGES/COMPONENTS=====*/
-import { MainHeader } from "shareComponents/common";
-import { LeftSideBar } from './components';
-import { HomeRightSideBar } from "shareComponents/layouts";
+import {LeftMenu, MainHeaderV2, LeftNavigate} from "../../common";
+import {HomeHeaderContent, HomeLeftMenuContent} from "./components";
 // import MiniChatbox from "shareComponents/common/MiniChat/components/MiniChatBox";
 
 /*=====5.TYPINGS=====*/
@@ -30,8 +25,6 @@ export const HomeLayout: FC<Props> = ({ children }) => {
   const [isHeaderCollapse, setIsHeaderCollapse] = useState(false);
   const [isLeftMenuCollapse, setIsLeftMenuCollapse] = useState(false);
   const [isRightSideBarCollapse, setIsRightSideBarCollapse] = useState(false);
-  const [isChatboxVisible, setIsChatboxVisible] = useState(false);
-  const [isNewChatboxVisible, setIsNewChatboxVisible] = useState(false);
 
   const handleHeaderEvent = () => {
     setIsHeaderCollapse(!isHeaderCollapse);
@@ -41,18 +34,6 @@ export const HomeLayout: FC<Props> = ({ children }) => {
   };
   const handleRightSideBarEvent = () => {
     setIsRightSideBarCollapse(!isRightSideBarCollapse);
-  };
-  const closeMiniChatbox = () => {
-    setIsChatboxVisible(false);
-  };
-  const openMiniChatbox = () => {
-    setIsChatboxVisible(true);
-  };
-  const handleOpenNewChatbox = () => {
-    setIsNewChatboxVisible(true);
-  };
-  const handleCloseNewChatbox = () => {
-    setIsNewChatboxVisible(false);
   };
 
   return (
@@ -64,64 +45,28 @@ export const HomeLayout: FC<Props> = ({ children }) => {
       })}
     >
       {/* Collapse menu button */}
-      <button title="Toggle left sidebar" onClick={handleMenuEvent} className="home-left-sidebar-collapse-btn transition-all duration-500 ease-out fixed top-3 left-2 z-40 p-2">
-        <img className="w-4" src={menuIcon} alt="Menu" />
-      </button>
 
-      {/*  Main header */}
-      <MainHeader />
+      <div className={"flex"}>
+        <LeftNavigate handleMenuEvent={handleMenuEvent}/>
+        <section className={"main-content-wrapper flex-1"}>
+          {/*  Main header */}
+          <MainHeaderV2
+            headerTitle={"Chủ đề"}
+          >
+            <HomeHeaderContent/>
+          </MainHeaderV2>
 
-      {/* Left navigation */}
-      <LeftSideBar />
+          {/* Left navigation */}
+          <LeftMenu>
+            <HomeLeftMenuContent/>
+          </LeftMenu>
 
-      {/* Content area */}
-      <main className="home-main-content transition-all duration-500 ease-out overflow-auto relative">
-        {children}
-      </main>
-
-      {/* Collapse header button */}
-      <button
-        title="Toggle header"
-        onClick={handleHeaderEvent}
-        className="tm-header-toggle-btn fixed top-16 right-3 z-50 w-8 h-8 pl-2 pr-2 rounded-md bg-secondary-light hover:bg-accent-light text-center transition-all duration-500 ease-out"
-      >
-        <img
-          className="w-3 inline-block transition-all duration-500 ease-out"
-          src={chevronUpIcon}
-          alt="Header toggle button"
-        />
-      </button>
-
-      {/* Mini chatbox */}
-      {/* {!isChatboxVisible &&
-        <button
-          onClick={openMiniChatbox}
-          className="btn-chat-now fixed bottom-0 z-50 flex items-center px-4 pt-3 pb-2 border border-primary-border transition-all duration-500 ease-out"
-        >
-          <img
-            className="w-6 h-6 object-contain"
-            src={iconChat}
-            alt="Chat"
-          />
-          <span className="text-[15px] text-dark leading-tight">Trao đổi với chuyên gia</span>
-        </button>
-      } */}
-
-      {/* Right side bar */}
-      <HomeRightSideBar />
-
-      {/* Collapse right side bar button */}
-      <button
-        title="Toggle right sidebar"
-        onClick={handleRightSideBarEvent}
-        className="tm-right-sidebar-toggle-btn fixed bottom-2 right-2 z-10 w-10 h-10 pl-3 pr-3 rounded-full bg-secondary-light hover:bg-accent-light text-center transition-all duration-500 ease-out"
-      >
-        <img
-          className="w-5 inline-block transition-all duration-500 ease-out"
-          src={chevronRightIcon}
-          alt="Right sidebar toggle button"
-        />
-      </button>
+          {/* Content area */}
+          <main className="main-route-content transition-all duration-500 ease-out overflow-auto relative h-left-over-content max-h-left-over-content min-h-left-over-content">
+            {children}
+          </main>
+        </section>
+      </div>
     </section>
   );
 };

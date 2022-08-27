@@ -25,10 +25,11 @@ import classNames from 'classnames';
 
 interface Props {
 	initialData: PostState,
-	toggle(): void
+	toggle(): void,
+	prioritySingleImageAuthor?: boolean
 }
 
-const ViewPost: FC<Props> = ({ initialData, toggle }) => {
+const ViewPost: FC<Props> = ({ initialData, toggle, prioritySingleImageAuthor }) => {
 	const [state, actions] = useCustomReducer(postReducer, postActions, { ...postState as PostState, ...initialData });
 	const data = useComments({ mediaID: state.mediaID, fileID: String(state.images[state.index]?._id) });
 
@@ -163,8 +164,8 @@ const ViewPost: FC<Props> = ({ initialData, toggle }) => {
 							</svg>
 						</button>
 						<div>
-							<p className="text-base">{state?.author?.bizfullname || state.images[state.index]?.author?.bizfullname}</p>
-							<p className="text-sm">{moment(state.createAt).format('HH:mm DD/M/yyyy')}</p>
+							<p className="text-base">{prioritySingleImageAuthor ? (state.images[state.index]?.author?.bizfullname || state?.author?.bizfullname) : (state?.author?.bizfullname || state.images[state.index]?.author?.bizfullname)}</p>
+							<p className="text-sm">{prioritySingleImageAuthor ? moment(state.images[state.index]?.createAt || state.createAt).format('HH:mm DD/M/yyyy') : moment(state.createAt).format('HH:mm DD/M/yyyy')}</p>
 						</div>
 					</div>
 					<div className="flex gap-x-5">
@@ -280,6 +281,7 @@ const ViewPost: FC<Props> = ({ initialData, toggle }) => {
 			</div>
 
 			<SideComments
+				prioritySingleImageAuthor={prioritySingleImageAuthor}
 				className={cn("react__comments-wrapper transition-all flex flex-col text-black bg-white h-full overflow-hidden", { collapsed })}
 			/>
 		</ContextPost.Provider>

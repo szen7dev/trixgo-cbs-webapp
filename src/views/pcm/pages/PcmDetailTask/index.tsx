@@ -112,7 +112,7 @@ const PcmDetailTask: FC = () => {
   const { updateTaskAsync, copyTaskAsync } = useTask({});
 
   const { data: infoTask, refetch: refetchInfoTask, isLoading } = useQuery(`task_info.${id}`, () =>
-    TaskRepository.taskInfo({ taskID: id, }),
+    TaskRepository.taskInfo({ taskID: id }),
     { refetchOnWindowFocus: false }
   );
 
@@ -427,7 +427,6 @@ const PcmDetailTask: FC = () => {
             const hasPermissionViewChildTask          = false;
             const hasPermissionOpenBidding            = relatedsID.includes(user?._id);
             const hasPermissionViewBidding            = [author?._id, ...relatedsID].includes(user?._id);
-            console.log({ hasPermissionViewAssigneeFile })
 
             const dataPermissions = {
               hasPermissionUpdateTask,

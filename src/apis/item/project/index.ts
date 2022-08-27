@@ -41,7 +41,7 @@ async function fetchInfo(params: any): Promise<any> {
         `${ITEM_URL}/departments?${convertObToUrl({
             populates: JSON.stringify({
                 path: "members photos",
-                select: "fullname bizfullname name sign image nameOrg path description size author",
+                select: "fullname bizfullname name sign image nameOrg path description size author createAt",
                 populate: {
                     path: "author",
                     select: "_id bizfullname image"

@@ -58,7 +58,6 @@ export const SideBar: FC<Props> = memo(({
 
   useEffect(() => {
     const onEventOpenBidding = (result: any) => {
-      console.log({ result });
       const { error, message, data } = result;
 
       if(error) {
@@ -82,7 +81,7 @@ export const SideBar: FC<Props> = memo(({
   const isSigned = useMemo(() => {
     return confirmUsers.find(({ author }) => author._id === userID)
   }, [confirmUsers, userID])
-  
+
   const handleConfirmSignature = useCallback(async () => {
     try {
       const { error, data } = await updateTaskAsync({

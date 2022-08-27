@@ -16,8 +16,8 @@ import {UseInformationMessage} from "services/hooks/messages/useInformationMessa
 import 'draft-js/dist/Draft.css';
 
 defaultTheme.emojiSelectPopover = defaultTheme.emojiSelectPopover + " bottom-60px left-0 shadow-md rounded-md border-0";
-defaultTheme.emojiSelectButton = defaultTheme.emojiSelectButton + " border-0 h-full";
-defaultTheme.emojiSelectButtonPressed = defaultTheme.emojiSelectButtonPressed + " border-0 h-full";
+defaultTheme.emojiSelectButton = defaultTheme.emojiSelectButton + " button-icon border-0 h-full";
+defaultTheme.emojiSelectButtonPressed = defaultTheme.emojiSelectButtonPressed + " button-icon border-0 h-full";
 defaultTheme.emojiSelectPopoverEntry = defaultTheme.emojiSelectPopoverEntry + " flex items-center justify-center";
 defaultTheme.emojiSelectPopoverEntryFocused = defaultTheme.emojiSelectPopoverEntryFocused + " flex items-center justify-center";
 

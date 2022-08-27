@@ -108,10 +108,26 @@ module.exports = {
                 "cbs-green-bg": "#EBFAF2",
                 "cbs-indeterminate": "#F7AF22",
                 "cbs-form-input-bg": "#F4F4F5",
+                "cbs-right-navigate-bg": "#eaf1fb",
+                "cbs-hightlight-right-navigate": "#D3E4FD",
+                "cbs-blue-button": "#C2E7FE",
+                "cbs-active-blue": "#D3E3FD",
+                "cbs-bg-input-search": "#EEF3FC",
+                "cbs-soft-blue": "#E9F1FE",
+                "cbs-dropdown-hover": "#F2F4F7",
+                "cbs-background-selected": "#C2DBFE",
 
                 "cbs-purple": "#9B59B6",
                 "cbs-red": "#FF4242",
                 "cbs-green-dark": "#008000",
+                "cbs-green-medium": "#198038",
+                "cbs-inline-badge-blue": "#00AAFF",
+                "cbs-file-upload-bg": "#F5F5F5",
+                "cbs-task-assign-progress-bg": "#F7F8FA",
+                "cbs-next-prev-button": "#F6F7F8",
+                "cbs-table-highlight": "#F2F6FC",
+                "cbs-chat-input-bg": "#F0F2F5",
+                "cbs-item-message-other": "#E4E6EB",
             },
             fontSize: {
                 "[13px]": "13px",
@@ -135,11 +151,13 @@ module.exports = {
                 ...autoGeneratePx,
                 fill: "-webkit-fill-available",
                 fit: 'fit-content',
+                'td-dashboard': 'calc(100% - 371px)'
             },
             height: {
                 ...autoGeneratePx,
                 max: "max-content",
                 fit: 'fit-content',
+                "left-over-content": "calc(100vh - 3.5rem)",
             },
             minWidth: {
                 ...autoGeneratePx,
@@ -147,15 +165,19 @@ module.exports = {
             },
             maxWidth: {
                 ...autoGeneratePx,
+                "[60%]": "60%",
                 "[75%]": "75%",
+                "[90%]": "90%",
                 "[1569px]": "1569px"
             },
             minHeight: {
                 ...autoGeneratePx,
                 '9/12': '75%',
+                "left-over-content": "calc(100vh - 3.5rem)",
             },
             maxHeight: {
                 ...autoGeneratePx,
+                "left-over-content": "calc(100vh - 3.5rem)",
             },
             backgroundImage: {
                 authentication: "url('../assets/images/background-authentication.png')",
@@ -198,6 +220,16 @@ module.exports = {
                 'auto-2': 'repeat(2, auto)',
                 'auto-3': 'repeat(3, auto)',
                 'auto-4': 'repeat(4, auto)',
+            },
+            left: {
+                '[75px]' : '75px',
+                '[68px]' : '68px',
+            },
+            right: {
+                '[10px]' : '10px',
+            },
+            top: {
+                '[10px]' : '10px',
             }
         },
     },

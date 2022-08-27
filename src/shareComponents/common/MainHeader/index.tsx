@@ -52,19 +52,19 @@ export const MainHeader: FC = () => {
                 )
               }
             >
-              <SearchIcon className="w-4 h-4" />
+              {/* <SearchIcon className="w-4 h-4" /> */}
             </button>
 
-            <Link to={`/messages`} className="relative w-10 h-10 flex items-center justify-center bg-primary-light hover:bg-secondary-light transition duration-150 rounded-md focus:outline-none ml-6">
+            {/* <Link to={`/messages`} className="relative w-10 h-10 flex items-center justify-center bg-primary-light hover:bg-secondary-light transition duration-150 rounded-md focus:outline-none ml-6">
               <img src={iconChat} alt="Filter" className="w-6 h-6" />
-            </Link>
+            </Link> */}
 
             <AppsMenu />
             {/* <button className="relative w-10 h-10 flex items-center justify-center transition duration-150 focus:outline-none ml-6">
               <img src={iconGrid} alt="Grid" className="w-6 h-6" />
             </button> */}
 
-            <NotificationsMenu />
+            {/* <NotificationsMenu /> */}
             <UserMenu />
           </div>
         </div>

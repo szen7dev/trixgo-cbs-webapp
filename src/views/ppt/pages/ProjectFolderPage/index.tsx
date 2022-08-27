@@ -1,4 +1,4 @@
-import { FC, useCallback, useState, useEffect } from "react";
+import React, { FC, useCallback, useState, useEffect } from "react";
 import { RouteComponentProps, useHistory, useLocation, useParams, Link } from "react-router-dom";
 import { APP_ID, PCM_STATUS_TASK } from 'apis/localdb';
 import { useModal } from "services/hooks/useModal";
@@ -18,6 +18,10 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 import { Paginate, SearchInput } from "shareComponents/common";
 import debounce from "lodash/debounce";
+import nextIcon from "assets/images/icons-arrow-next.svg";
+import downloadIcon from "assets/images/icons8-download-64.svg";
+import iconBack from "assets/images/icon-back-gray.svg";
+import userAvt from "assets/images/task-user.svg";
 
 interface IData {
 	id: number,
@@ -54,15 +58,15 @@ const FolderIcon: FC<{ type: string }> = ({ type }) => {
 
 const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 	//_____Start history traffict
-	const payloadHistoryTraffic: any = {
-		appID: APP_ID.PCM.id,
-		menuID: APP_ID.PCM.menuPcmProject.folder.id,
-		type: "1"
-	  };
-	const { createHistoryTraffics } = useHistoryTraffics();
-	useEffect(() => {
-	createHistoryTraffics({...payloadHistoryTraffic, type: 1});
-	}, []);
+	// const payloadHistoryTraffic: any = {
+	// 	appID: APP_ID.PCM.id,
+	// 	menuID: APP_ID.PCM.menuPcmProject.folder.id,
+	// 	type: "1"
+	//   };
+	// const { createHistoryTraffics } = useHistoryTraffics();
+	// useEffect(() => {
+	// 	createHistoryTraffics({...payloadHistoryTraffic, type: 1});
+	// }, []);
 	//_____End history traffict
 	const location 	= useLocation();
 	const [data, setData] = useState<IData[]>([]);
@@ -73,6 +77,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 	const { assigned, checkboxRef, handleCheckAll, handleChangeCheckbox } = useCheckedList(data);
 	const { dataUserInfo, refetchDataUserInfo, user } = useAuth();
 	const [keyword, setKeyword] = useState("");
+
 	const {  
 		isLoading,
         refetch,
@@ -147,57 +152,80 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 
 	return (
 		<>
-			{/* Content */}
+			 {/* Content  */}
 			<div className="flex flex-col h-full overflow-hidden">
-				<div className="flex flex-wrap items-center w-full px-4 gap-x-2 text-black text-small py-1">
-					<span className="">{infoDepartment?.data?.sign}</span>
-					{/* <button className="bg-cbs-active-comment text-cbs-primary h-10 w-10 text-center rounded-full">
-						<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
-						</svg>
-					</button> */}
-					{/* <IconArrowRight /> */}
-					{ infoGroup?.data?.sign && <IconArrowRight /> }
-					<Link to={`/pcm/project/${projectID}/folder/${ infoGroup?.data?._id}`}  className="align-top">
+				<div className={"nav-drawing flex items-center text-lg p-4 text-primary-gray"}>
+					<button className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mr-3"}>
+						<img src={iconBack} alt={"----"} className={"w-[18px]"}/>
+					</button>
+					{ infoGroup?.data?.sign && <img src={nextIcon} alt={"-----"} className={"mx-4 h-[12px] w-[12px]"}/> }
+					<Link to={`/pm/project/${projectID}/folder/${ infoGroup?.data?._id}`}>
 						<span className="truncate max-w-[132px]">{infoGroup?.data?.sign}</span>
 					</Link>
 
-					{ infoGroup?.data?.parent?.sign && <IconArrowRight /> }
-					<Link to={`/pcm/project/${projectID}/folder/${ infoGroup?.data?.parent?._id}`}  className="align-top">
+					{ infoGroup?.data?.parent?.sign && <img src={nextIcon} alt={"-----"} className={"mx-4 h-[12px] w-[12px]"}/>}
+					<Link to={`/pm/project/${projectID}/folder/${ infoGroup?.data?.parent?._id}`}>
 						<span className="truncate max-w-[132px]">{infoGroup?.data?.parent?.sign}</span>
 					</Link>
 
-					{ infoGroup?.data?.parent?.parent?.sign && <IconArrowRight /> }
-					<Link to={`/pcm/project/${projectID}/folder/${ infoGroup?.data?.parent?.parent?._id}`}  className="align-top">
+					{ infoGroup?.data?.parent?.parent?.sign && <img src={nextIcon} alt={"-----"} className={"mx-4 h-[12px] w-[12px]"}/> }
+					<Link to={`/pm/project/${projectID}/folder/${ infoGroup?.data?.parent?.parent?._id}`}>
 						<span className="truncate max-w-[132px]">{infoGroup?.data?.parent?.parent?.sign}</span>
 					</Link>
-					{(idsChecked && idsChecked.length) ? (
-						<div className="flex items-center gap-2 border-l-2 border-primary-border px-4 ml-4">
-							{idsChecked.length == 1 ?
-								<button 
-								className="bg-primary pt-3 pb-3 pl-4 pr-4 text-primary-light rounded"
-								onClick={() =>
-									openModal(
-										<div
-											className={
-												"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
-											}
-										>
-											<SetGroupDefault idsChecked={idsChecked} setIdsChecked={setIdsChecked} />
-										</div>
-									)
-								}
-								>
-									Set Group Default
-								</button> : <></>
-							}
-						</div>
-					) : <></>}
-					<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={debounce(
-						(event: any) => setKeyword(event.target.value),
-						500
-					)} />
+					<button className={"ml-6"}>
+						<img src={downloadIcon} alt={"-----"} className={"h-[24px] w-[24px]"}/>
+					</button>
 				</div>
+
+				{/* <div className={"table-folder-project"}>
+					<table className={"table-fixed w-full border-collapse"}>
+						<thead className={"sticky top-0"}>
+							<tr>
+								<th className={"w-1/3 border-b-0.5 border-primary-border px-4 py-2 text-left text-primary-gray font-normal"}>
+									Tên
+								</th>
+								<th className={"w-1/4 border-b-0.5 border-primary-border px-4 py-2 text-left text-primary-gray font-normal"}>
+									Người tạo
+								</th>
+								<th className={"w-1/4 border-b-0.5 border-primary-border px-4 py-2 text-left text-primary-gray font-normal"}>
+									Cập nhật lần cuối
+								</th>
+								<th className={"border-b-0.5 border-primary-border px-4 py-2 text-left text-primary-gray font-normal"}>
+									Thành viên
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+						{
+							[...Array(4)].map((e,i) => (
+								<tr key={i}>
+									<td className={"px-4 py-2 border-b-0.5 border-primary-border align-middle"}>
+										<Link to={`/pm/project/60a8cb540400462461cbff9f/folder/624bcf04c9e6180a5570fbfa`}>
+											<div className={"flex items-center"}>
+												<FolderIcon type="folder" />
+												<p className={"ml-4"}>Báo cáo tổng hợp giai đoạn</p>
+											</div>
+										</Link>
+									</td>
+									<td className={"px-4 py-2 border-b-0.5 border-primary-border align-middle"}>
+										<div className={"flex items-center"}>
+											<img src={userAvt} alt={"-----"} className={"w-[24px] h-[24px] min-w-[24px] min-h-[24] max-w-[24px] max-h-[24px] rounded-full overflow-hidden"}/>
+											<p className={"ml-4"}>Nguyễn Phan Thanh Hương-CPMI</p>
+										</div>
+									</td>
+									<td className={"px-4 py-2 border-b-0.5 border-primary-border text-primary-gray align-middle"}>
+										15:30 22/12/2012 (2 day ago)
+									</td>
+									<td className={"px-4 py-2 border-b-0.5 border-primary-border text-primary-gray align-middle"}>
+										122
+									</td>
+								</tr>
+							))
+						}
+						</tbody>
+					</table>
+				</div> */}
+				
 				<div className="flex-1 overflow-y-auto">
 					<table className="text-black text-medium border-separate space-x-0 space-y-0 w-full" style={{ borderSpacing: 0 }}>
 						<thead className="">
@@ -232,6 +260,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 								</th>
 							</tr>
 						</thead>
+						
 						<tbody className="">
 							{
 								listPcmPlanGroup.map((props: any, index: any) => {
@@ -250,7 +279,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 												onChange={() => onClickCheckButton(props._id)} />
 											</td>
 											<td className="px-2 py-2">
-												<Link to={`/pcm/project/${projectID}/folder/${props._id}`} className="align-top">
+												<Link to={`/pm/project/${projectID}/folder/${props._id}`} className="align-top">
 													<FolderIcon type="folder" />
 													{props.name} ({props.amountTasks})  {isGroupDefault && <img src={GroupDefaultIcon} alt="file" className="inline-block mr-3" title="Group default" />}
 												</Link> 
@@ -274,6 +303,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 									)
 								})
 							}
+							
 							{/* Danh sách task */}
 							{
 								listTasks.map(props => {
@@ -318,9 +348,9 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 									{`Xem thêm (${totalRecord - listPcmPlanGroup.length})`}
 								</span>
 							</button>
-						</div>
+						 </div>
 					)}
-				</div>
+				</div> 
 				 
 				{/* <Paginate className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white" /> */}
 			</div>

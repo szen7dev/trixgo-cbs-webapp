@@ -1,23 +1,77 @@
 import type { APIResponse, QueryParam } from './commons';
+import {Author, Project} from "../ppt";
 
 export type { Document } from 'typings/ppt/Document';
 
 export interface DocumentProps extends Omit<DocumentInserPayload, 'parentID' | 'departmentID' | 'packageID' |'senderID' | 'receiverID' | 'propertyID' | 'fieldID' |'storageID'> {
     _id: string;
-    parent: string;
-    package: string;
-    receiver: string;
-    field: string;
-    storage: string;
-    modifyAt: string;
+    author?: Author;
+    project: Project;
+    name?: string;
+    sign: string;
+    image: string;
+    sender?: {
+        _id: string;
+        name: string;
+    };
+    receiver?: {
+        _id: string;
+        name: string;
+    };
+    date?: string;
+    receivedDate?: string;
+    style?: string;
+    direction?: number;
+    storeSign?: {
+        _id: string;
+        name: string;
+    };
+    amount: number;
+    status: string;
+    note: string;
+    storage: {
+        _id: string;
+        name: string;
+    };
     createAt: string;
-    createdAt: string;
     updatedAt: string;
-
-    property?: string;
-    sender?: string;
-    receiver?: string;
-    userUpdate?: string;
+    userCreate?: Author;
+    userUpdate?: Author;
+    package?: {
+        _id: string;
+        name: string;
+        sign: string;
+        members: string[];
+    };
+    contract?: {
+        _id: string;
+        name: string;
+    };
+    field?: {
+        _id: string;
+        name: string;
+    };
+    datahubContact?: {
+        _id: string;
+        name: string;
+    };
+    property: {
+        _id: string;
+        name: string;
+    },
+    type?: number;
+    amountDelivery?: number;
+    requestResponse?: boolean;
+    completeStatus?: number;
+    expiredResponse?: string;
+    approver?: string;
+    value?: string;
+    parent: {
+        _id: string;
+        name: string;
+        sign: string;
+    },
+    amountDocumentChild?:number
 }
 
 interface DocumentInserPayload {
@@ -75,6 +129,11 @@ export interface DocumentQueryPayload extends QueryParam {
         contract?: string;
         fromDate?: string;
         toDate?: string;
+        limit?: number|string;
+        datahubContactID?: string;
+        departmentID?: string;
+        direction?: string;
+        contractID?: string;
     },
     isFetchList?: boolean;
 }

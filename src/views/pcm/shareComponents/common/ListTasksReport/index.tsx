@@ -59,23 +59,20 @@ export const ListTasksReport: FC<Props> = memo(({
                         <th className="px-2 py-2 text-[13px] font-normal border w-[41px]">
                             TT
                         </th>
-                        <th className="px-2 py-2 text-[13px] font-normal border w-1/5 text-left">
+                        <th className="px-2 py-2 text-[13px] font-normal border w-4/12 text-left">
                             Nội dung công việc
                         </th>
-                        <th className="px-2 py-2 text-[13px] font-normal border w-[90px] text-left">
+                        <th className="px-2 py-2 text-[13px] font-normal border w-1/12 text-left">
                             Thời hạn
                         </th>
-                        <th className="px-2 py-2 text-[13px] font-normal border w-[196px] text-left">
+                        <th className="px-2 py-2 text-[13px] font-normal border w-2/12 text-left">
                             Thực hiện
                         </th>
-                        <th className="px-2 py-2 text-[13px]  font-normal border w-[143px] text-left">
+                        <th className="px-2 py-2 text-[13px]  font-normal border w-1/12 text-left">
                             Tiến trình
                         </th>
-                        <th className="px-2 py-2 text-[13px] font-normal border text-left w-1/4">
-                            Mô tả/ghi chú
-                        </th>
-                        <th className="px-2 py-2 text-[13px] font-normal border text-left w-1/4">
-                            Thảo luận
+                        <th className="px-2 py-2 text-[13px] font-normal border text-left">
+                            Mô tả
                         </th>
                     </tr>
                 </thead>
@@ -105,20 +102,6 @@ export const ListTasksReport: FC<Props> = memo(({
                             </td>
                             <td className={cn(styles["dont-break-out"], "p-2 border")}>
                                 {subContentHtml(taskOutDate.description)}
-                            </td>
-                            <td className="border p-2">
-                                {taskOutDate.lastLog && (
-                                <span className={cn(styles["dont-break-out"])}>
-                                    {subContentHtml(taskOutDate.lastLog?.content)}
-                                    <span> - </span>
-                                    <span className="text-primary text-[13px]">
-                                    {taskOutDate.lastLog?.author?.fullname}
-                                    </span>
-                                    <span className="text-primary-gray mx-2 text-[13px]">
-                                    {moment(taskOutDate.lastLog?.createAt).fromNow()}
-                                    </span>
-                                </span>
-                                )}
                             </td>
                             </tr>
                         )) : <></>}

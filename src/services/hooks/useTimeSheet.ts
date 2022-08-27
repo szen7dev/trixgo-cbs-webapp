@@ -39,6 +39,10 @@ export const useQueryListTimeSheetParent = (): UseQueryListTimeSheetParent => {
         getNextPageParam: ({ data }: any) => {
             return data?.nextCursor || undefined;
         },
+        getPreviousPageParam: (data) => {
+            console.log(data)
+            return undefined;
+        },
         refetchOnWindowFocus: false,
         enabled: true,
     });

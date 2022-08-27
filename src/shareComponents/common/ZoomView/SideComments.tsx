@@ -10,7 +10,8 @@ import ReplyCommentField, { SubmitComment } from './components/ReplyCommentField
 import RootCommentsList from './components/RootCommentsList';
 
 type Props = {
-	type?: string
+	type?: string,
+	prioritySingleImageAuthor?: boolean
 } & HTMLAttributes<HTMLDivElement>
 
 const SideComments: FC<Props> = ({ ...props }) => {
@@ -38,10 +39,10 @@ const SideComments: FC<Props> = ({ ...props }) => {
 					{/* Header post */}
 					<div className="pt-4 text-black">
 						<div className="flex px-4">
-							<img src={`${process.env.REACT_APP_URL_S3_USER}/${state.author?.image || state.images[state.index]?.author?.image}`} alt="" className="rounded-full w-12 h-12 mr-2" />
+							<img src={`${process.env.REACT_APP_URL_S3_USER}/${props.prioritySingleImageAuthor ? (state.images[state.index]?.author?.image || state.author?.image) : (state.author?.image || state.images[state.index]?.author?.image)}`} alt="" className="rounded-full w-12 h-12 mr-2" />
 							<div>
-								<p className="text-black text-[15px] font-bold">{state?.author?.bizfullname || state.images[state.index]?.author?.bizfullname}</p>
-								<p className="leading-[15px] mt-1">{moment(state.createAt).format('HH:mm DD/M/yyyy')}</p>
+								<p className="text-black text-[15px] font-bold">{props.prioritySingleImageAuthor ? (state.images[state.index]?.author?.bizfullname || state?.author?.bizfullname) : (state?.author?.bizfullname || state.images[state.index]?.author?.bizfullname)}</p>
+								<p className="leading-[15px] mt-1">{props.prioritySingleImageAuthor ? moment(state.images[state.index]?.createAt || state.createAt).format('HH:mm DD/M/yyyy') : moment(state.createAt).format('HH:mm DD/M/yyyy')}</p>
 							</div>
 						</div>
 						<p className="text-[15px] pl-4 pr-5 mt-2.5 leading-4"></p>

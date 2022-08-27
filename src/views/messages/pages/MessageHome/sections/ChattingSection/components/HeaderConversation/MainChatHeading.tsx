@@ -2,12 +2,12 @@ import React, {FC, useCallback, useContext} from "react";
 import {MainChatOptions} from "./MainChatOptions";
 import SearchIcon from "assets/images/icons8-search-120.png";
 import {AvatarGroupChat} from "../../../MessageList";
-import {MessageContext} from "../../../../index";
 import {HeaderPinedMessages} from "./index";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
+import {MessageContext} from "../../../../../../shareComponents/layouts/MessagesLayoutV2";
 
 type Props = {
     chat: ItemListConversation
@@ -19,7 +19,7 @@ export const MainChatHeading:FC<Props> = ({chat}) => {
     const profileId = JSON.parse(currentUser)?._id;
     const listPinnedMessage = useSelector((state: RootState) => state.listMessage.data.listMessagePinned[currentChat]);
 
-    const {getNameConversation, getAvatarMembers} = UseMessageHelper();
+    const {getNameConversation, getBackgroundGroupChat, getAvatarMembers} = UseMessageHelper();
 
     const getPresentGroupName = (name: string) => {
         return name.split('').slice(0, 1).map((text: string) => {
@@ -28,7 +28,7 @@ export const MainChatHeading:FC<Props> = ({chat}) => {
     }
 
     return (
-        <div className={"sticky top-0 bg-white h-[56px] flex px-4 py-1 z-20"}>
+        <div className={"sticky top-0 bg-white h-[56px] flex px-4 py-1 z-20 border-b-0.5 border-primary-border"}>
             <div
                 onClick={() => setShowMenu(!showMenu)}
                 className={"avatar-chat flex items-center justify-center cursor-pointer"}>
@@ -37,7 +37,7 @@ export const MainChatHeading:FC<Props> = ({chat}) => {
                         <img  className={"w-[40px] h-[40px] min-w-[40px] min-h-[40px] rounded-full overflow-hidden"} src={`${process.env.REACT_APP_URL_S3}${chat?.avatar?.path}`} alt={getNameConversation(chat, profileId)}/>:
                         (
                             getAvatarMembers(chat, profileId).length === 0 ?
-                                <div className={"w-[40px] h-[40px] rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[56px] min-h-[56px]"} style={{background: "#8DD4D6"}}>
+                                <div className={"w-[40px] h-[40px] rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[40px] min-h-[40px]"} style={{background: getBackgroundGroupChat(chat)}}>
                                     {getPresentGroupName(getNameConversation(chat, profileId))}
                                 </div> :
                                 <AvatarGroupChat
@@ -47,30 +47,6 @@ export const MainChatHeading:FC<Props> = ({chat}) => {
                                         "group_1": {
                                             imgWidth: "w-full h-full",
                                             groupPosition: [""]
-                                        },
-                                        "group_2": {
-                                            imgWidth: "w-[26px] h-[26px] absolute",
-                                            groupPosition: [
-                                                "bottom-0 left-0 z-2",
-                                                "top-0 right-0 z-1",
-                                            ]
-                                        },
-                                        "group_3": {
-                                            imgWidth: "w-[22px] h-[22px] absolute",
-                                            groupPosition: [
-                                                "bottom-0 left-9px z-3",
-                                                "top-0 left-0 z-2",
-                                                "top-0 right-0 z-1",
-                                            ]
-                                        },
-                                        "group_4": {
-                                            imgWidth: "w-[20px] h-[20px] absolute",
-                                            groupPosition: [
-                                                "bottom-0 left-0 z-4",
-                                                "top-0 left-0 z-3",
-                                                "top-0 right-0 z-2",
-                                                "bottom-0 right-0 z-1"
-                                            ]
                                         }
                                     }}
                                 />
@@ -82,7 +58,7 @@ export const MainChatHeading:FC<Props> = ({chat}) => {
                     setShowMenu(!showMenu)
                     if (showMenu) setShowSearch(false)
                 }} className={"cursor-pointer truncate"}>{getNameConversation(chat, profileId)}</div>
-                <div className={"text-xs text-gray-300"}>{chat.members.length} thành viên</div>
+                <div className={"text-xs text-primary-gray"}>{chat.members.length} thành viên</div>
             </div>
             <div className={"flex items-center flex-1 justify-end"}>
                 <HeaderPinedMessages listPinnedMessage={listPinnedMessage}/>

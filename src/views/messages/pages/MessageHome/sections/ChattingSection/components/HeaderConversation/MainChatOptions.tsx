@@ -8,7 +8,6 @@ import DotsVerticalIcon from "assets/icons/DotsVertical";
 import { Menu } from '@headlessui/react'
 import {setSelectedStateOn} from "redux/reducer/messages/ListMessage";
 import {useDispatch, useSelector} from "react-redux";
-import {MessageContext, populates} from "../../../../index";
 import {RootState} from "redux/reducer";
 import {dismissNotificationMute, openNotificationMute} from "redux/reducer/messages/NotificationMute";
 import {deleteConversationAction, updateUsersMuteToConversation} from "redux/reducer/messages/ListConversation";
@@ -16,6 +15,7 @@ import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 import {toast} from "react-toastify";
 import {openConfigConversation} from "redux/reducer/messages/ConversationConfigModal";
+import {MessageContext, populates} from "../../../../../../shareComponents/layouts/MessagesLayoutV2";
 
 export const MainChatOptions:FC = () => {
     const {currentChat, socketRef} = useContext(MessageContext);

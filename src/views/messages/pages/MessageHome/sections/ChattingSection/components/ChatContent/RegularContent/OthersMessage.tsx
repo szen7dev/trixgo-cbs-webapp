@@ -35,19 +35,19 @@ export const OthersMessage:FC<Props> = ({message,bgMessage, context, isMini}) =>
     }, [message])
     const renderMessageContent = useCallback(() => {
         if (isDeleted()) {
-            return <DeleteChatContent isMini={isMini} message={message} showSenderName={true} className={bgMessage??"bg-white"}/>
+            return <DeleteChatContent isMini={isMini} message={message} showSenderName={true} className={bgMessage??"bg-cbs-item-message-other"}/>
         }
         switch (message.type) {
             case 0:
-                return <TextChatContent isMini={isMini} context={context} message={message} showSenderName={true} className={bgMessage??"bg-white"}/>;
+                return <TextChatContent isMini={isMini} context={context} message={message} showSenderName={true} className={bgMessage??"bg-cbs-item-message-other"}/>;
             case 2:
-                return <FileChatContent isMini={isMini} context={context} message={message} showSenderName={true} className={bgMessage??"bg-white"}/>;
+                return <FileChatContent isMini={isMini} context={context} message={message} showSenderName={true} className={bgMessage??"bg-cbs-item-message-other"}/>;
             case 1:
                 return <ImagesContent isMini={isMini} context={context} message={message} showSenderName={true}/>;
             case 7:
-                return <ContactContent isMini={isMini} context={context} message={message} className={bgMessage??"bg-white"}/>;
+                return <ContactContent isMini={isMini} context={context} message={message} className={bgMessage??"bg-cbs-item-message-other"}/>;
             case 8:
-                return <NpsContent isMini={isMini} context={context} message={message} className={bgMessage??"bg-white"}/>;
+                return <NpsContent isMini={isMini} context={context} message={message} className={"border-0.5"} borderClass={"border-gray-300"}/>;
         }
     },[message]);
 

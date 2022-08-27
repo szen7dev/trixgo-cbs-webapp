@@ -6,6 +6,7 @@ import {useOnClickOutside} from "services/hooks/useOnclickOutside";
 import {useDispatch} from "react-redux";
 import {openCreateUpdateFolder} from "redux/reducer/messages/CreateUpdateFolder";
 import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
+import {AddNewChatGroup} from "./AddNewChatGroup";
 
 export const HamLeftMenu:FC = () => {
     const currentUser = localStorage.getItem("currentUser")??"{}";
@@ -16,7 +17,8 @@ export const HamLeftMenu:FC = () => {
     useOnClickOutside(el, () => setShowOption(false))
     const {handleStartPrivateChat} = UseMessageHelper();
     return (
-        <div ref={el} className={"relative mr-[14px]"}>
+        <div ref={el} className={"relative mr-[14px] flex items-center justify-between flex-1"}>
+            <AddNewChatGroup/>
             <button onClick={() => setShowOption(oldValue => !oldValue)} className={"w-[40px] h-[40px] hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 rounded-full flex items-center justify-center"}>
                 <img  src={SettingIcon} alt={"ham"}/>
             </button>

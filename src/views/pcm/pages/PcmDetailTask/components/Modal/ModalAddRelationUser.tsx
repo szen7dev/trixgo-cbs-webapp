@@ -24,7 +24,7 @@ const ModalAddRelationUser: FC<Props> = ({ taskID, projectID, related, modalType
 	const [keyword, setKeyword] = useState("");
 	const [idsChecked, setIdsChecked] = useState<Array<string>>(relatedsID || []);
 
-	const { data: listUsersProject, hasNextPage, fetchNextPage, totalRecord } = useUsersProject({ 
+	const { data: listUsersProject, hasNextPage, fetchNextPage, totalRecord } = useUsersProject({
 		projectID,
 		keyword
 	}, modalType === 'ADD_RELATION_USER');
@@ -117,9 +117,9 @@ const ModalAddRelationUser: FC<Props> = ({ taskID, projectID, related, modalType
 				<form className='px-[30px] mt-2' onSubmit={e => e.preventDefault()}>
 					<div className='relative border-cbs-border border-0.5 flex items-center'>
 						<SearchIcon className='absolute left-3 w-4 h-4' />
-						<input 
-							type="text" 
-							placeholder='Nhập từ khóa tìm kiếm' 
+						<input
+							type="text"
+							placeholder='Nhập từ khóa tìm kiếm'
 							className='pl-9 py-3 text-medium w-full focus:outline-none bg-cbs-table-header'
 							onChange={debounce((event: any) => setKeyword(event.target.value), 500)}
 						/>
@@ -130,9 +130,9 @@ const ModalAddRelationUser: FC<Props> = ({ taskID, projectID, related, modalType
 								<tr className="sticky top-0 bg-white">
 									<th className='px-1.5'>
 										<div className='flex items-center'>
-											<input 
-												type='checkbox' 
-												className='cbs-checkbox inline-block' 
+											<input
+												type='checkbox'
+												className='cbs-checkbox inline-block'
 												checked={getStateCheckedAll()}
 												onChange={onClickCheckAll}
 											/>
@@ -149,12 +149,12 @@ const ModalAddRelationUser: FC<Props> = ({ taskID, projectID, related, modalType
 									(listUsersProject.length && isShow) ? listUsersProject.map((user: UserSystemProps) => (
 										<tr key={user._id}>
 											<td className='px-1.5 align-middle'>
-												<input 
-													type='checkbox' 
+												<input
+													type='checkbox'
 													className='cbs-checkbox'
 													checked={getStateChecked(user._id)}
 													onChange={() => onClickCheckButton(user._id)}
-													// checked={Boolean(assigned[user._id]false 
+													// checked={Boolean(assigned[user._id]false
 													// onChange={e => handleChangeCheckbox(null, user)}
 												/>
 											</td>
@@ -224,7 +224,7 @@ const ModalAddRelationUser: FC<Props> = ({ taskID, projectID, related, modalType
 					</table>
 				</div>
 			)}
-			
+
 		</div>
 	)
 }

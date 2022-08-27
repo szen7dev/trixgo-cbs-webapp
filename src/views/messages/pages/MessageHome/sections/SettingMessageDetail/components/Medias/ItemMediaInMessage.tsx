@@ -17,11 +17,13 @@ export const ItemMediaInMessage:FC<Props> = ({media, setModalShowImage}) => {
                 {
                     _map(media.files.filter(image => image !== null), (image) => (
                         <div
-                            key={image._id} className={"w-[130px] h-[130px] p-[2px] relative media-item-message"}>
+                            key={image._id} className={"w-[108px] h-[108px] p-[2px] relative media-item-message"}>
                             <img onClick={() => {
                                 setModalShowImage({show: true, index: image.index})
                             }}  src={`${process.env.REACT_APP_URL_S3}${image?.path}`} alt={"----"} className={"w-full h-full object-cover cursor-pointer"}/>
-                            <input type="checkbox" className="form-check-input transition duration-200 rounded-full cursor-pointer absolute top-10px right-10px invisible opacity-0 w-[24px] h-[24px] min-w-[24px] min-h-[24px]" />
+                            <div className={"absolute top-[10px] right-[10px] input-wrapper"}>
+                                <input type="checkbox" className="form-check-input transition duration-200 invisible opacity-0  rounded-full cursor-pointer w-[24px] h-[24px] min-w-[24px] min-h-[24px]" />
+                            </div>
                         </div>
                     ))
                 }

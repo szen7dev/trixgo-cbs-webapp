@@ -19,7 +19,8 @@ import {
   UpdateResponsePayload,
   MoveTaskToParentPayload,
   MoveTaskToGroupPayload,
-  ListResponsePayload
+  ListResponsePayload,
+  updateStatusMultiplePayload
 } from "typings/task";
 
 /**
@@ -27,7 +28,7 @@ import {
  * ============================ 	 PCM TASK   ===============================
  * ============================ ************* ===============================
  */
-
+// Định nghĩa kiểu dữ liệu trả về của File useTask.ts
 type UseTask = {
   addRelationUserAsync: (payload: AddRelationUserPayload) => Promise<any>;
   copyTaskAsync: (payload: CopyTaskPayload) => Promise<any>;
@@ -37,26 +38,38 @@ type UseTask = {
   info: Task,
   addTaskAsync: (payload: addTaskPayload) => Promise<any>;
   updateTaskAsync: (payload: updateTaskPayload) => Promise<any>;
+  updateStatusMultipleAsync: (payload: updateStatusMultiplePayload) => Promise<any>;
   isLoadingListTask: boolean;
   isLoadingInfo: boolean;
-  totalRecord: number | undefined;
+  totalRecord: number;
+  totalTaskDone: number;
   totalPages: number | undefined;
   hasNextPage: boolean | undefined;
   refetchInfo: () => void;
   refetchListTask: () => void;
   nextPageListTask: () => void;
   prevPageListTask: () => void;
+  // subject
+  listSubject: Array<Task>; // Bổ sung mới
+  isLoadingListSubject: boolean,
+  refetchListSubject: () => void;
+  nextPageListSubject: () => void;
+  prevPageListSubject: () => void;
+  totalRecordSubject: number | undefined;
+  totalPagesSubject: number | undefined;
 };
 
 type UseTaskProps = Partial<{
   params: TaskListParams | TaskInfoParams,
   isFetch?: boolean;
+  isFetchSubject?: boolean;
   isFetchInfo?: boolean;
 }>
 
 export const useTask = ({
   params = {},
   isFetch = false,
+  isFetchSubject = false,
   isFetchInfo = false
 }: UseTaskProps): UseTask => {
   const { mutateAsync: addTaskAsync } =
@@ -67,6 +80,11 @@ export const useTask = ({
   const { mutateAsync: updateTaskAsync } =
     useMutation((payload: updateTaskPayload) =>
       TaskRepository.updateTask(payload)
+    );
+
+  const { mutateAsync: updateStatusMultipleAsync } =
+    useMutation((payload: updateStatusMultiplePayload) =>
+      TaskRepository.updateStatusMultiple(payload)
     );
 
   const { mutateAsync: addRelationUserAsync } =
@@ -126,14 +144,49 @@ export const useTask = ({
     .map((d: any) => d.data?.listRecords))
     .filter(Boolean);
 
-  const totalRecord = dataListTask?.pages[0]?.data?.totalRecord;
-  const totalPages = dataListTask?.pages[0]?.data?.totalPage;
+  const totalRecord = dataListTask?.pages[0]?.data?.totalRecord || 0;
+  const totalPages = dataListTask?.pages[0]?.data?.totalPage || 0;
+  const totalTaskDone = dataListTask?.pages[0]?.data?.totalTaskDone || 0;
+
+  // Khai báo xử lý
+  const {
+    isLoading: isLoadingListSubject,
+    data: dataListSubject,
+    refetch: refetchListSubject,
+    fetchNextPage: nextPageListSubject,
+    fetchPreviousPage: prevPageListSubject,
+    hasNextPage: hasNextPageSubject ,
+  } = useInfiniteQuery(
+    ["subject--list", params],
+    async ({ pageParam }: any) => {
+      return TaskRepository.listSubject({
+        lastestID: pageParam || "",
+        ...params,
+      });
+    },
+    {
+      getNextPageParam: ({ data }: any) => {
+        return data?.nextCursor || undefined;
+      },
+      refetchOnWindowFocus: false,
+      enabled: isFetchSubject ?? false,
+    }
+  );
+
+  const listSubject = []
+    .concat(...(dataListSubject?.pages || [])
+    .map((d: any) => d.data?.listRecords))
+    .filter(Boolean);
+
+  const totalRecordSubject = dataListSubject?.pages[0]?.data?.totalRecord;
+  const totalPagesSubject = dataListSubject?.pages[0]?.data?.totalPage;
 
   return {
     addRelationUserAsync,
     copyTaskAsync,
     moveTaskToParentAsync,
     moveTaskToGroupAsync,
+    updateStatusMultipleAsync,
     updateTaskAsync,
     addTaskAsync,
     listTasks,
@@ -142,11 +195,20 @@ export const useTask = ({
     isLoadingInfo,
     totalRecord,
     hasNextPage,
+    totalTaskDone,
     totalPages,
     refetchInfo,
     refetchListTask,
     nextPageListTask,
     prevPageListTask,
+    // Subject
+    listSubject, // bổ sung mới
+    isLoadingListSubject,
+    refetchListSubject,
+    nextPageListSubject,
+    prevPageListSubject,
+    totalRecordSubject,
+    totalPagesSubject,
   };
 };
 

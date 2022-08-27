@@ -130,19 +130,29 @@ export const DropdownSearchable: FC<Props> = ({
         const oldValues = (values??[]);
         oldValues.splice(existThatItem, 1);
         setValues([...oldValues]);
+        if (onMultipleRemoveValue) {
+          onMultipleRemoveValue(readDataValue(item, "id"))
+        }
+        if ([...oldValues].length <= 0) {
+          onClearData && onClearData();
+        }
       } else {
         setValues((oldValues) => [...(oldValues ?? []), item]);
+        if (onchangeValue) {
+          onchangeValue(modifyItem(item));
+        }
       }
     } else {
       setShowOption(false);
       if (value&&readDataValue(value, "id") === readDataValue(item,"id")) {
         setValue(undefined);
+        onClearData && onClearData();
       } else {
         setValue(item);
+        if (onchangeValue) {
+          onchangeValue(modifyItem(item));
+        }
       }
-    }
-    if (onchangeValue) {
-      onchangeValue(modifyItem(item));
     }
   };
 
@@ -238,9 +248,9 @@ export const DropdownSearchable: FC<Props> = ({
             (v) => readDataValue(v, "id") === readDataValue(option, "id")
           )) ||
           readDataValue(option, "id") === readDataValue(value, "id") ? (
-          <img src={BlueCheck} alt={"checked"} className={"w-[15px] mr-3"} />
+          <img src={BlueCheck} alt={"checked"} className={"w-[15px] mr-3 min-w-[15px]"} />
         ) : (
-          <div className={"w-[15px] mr-3"} />
+          <div className={"w-[15px] mr-3 min-w-[15px]"} />
         )}
         {renderItem ? (
           renderItem(modifyItem(option))
@@ -347,7 +357,7 @@ export const DropdownSearchable: FC<Props> = ({
     ) : (
       <div
         className={classNames(
-          "flex text-left relative py-0.5 pl-2 pr-8 mb-1 mt-1 ",
+          "flex text-left relative py-0.5 pl-2 pr-8 mb-1 mt-1 max-w-full ",
           {
             "text-gray-300": !value,
             border: bordered,
@@ -489,7 +499,7 @@ export const DropdownSearchable: FC<Props> = ({
               />
             </div>
           )}
-          <div className="select-options-section overflow-auto bg-white" onScroll={onScroll}>
+          <div className="select-options-section overflow-y-auto bg-white" onScroll={onScroll}>
             {renderOptions()}
           </div>
         </div>

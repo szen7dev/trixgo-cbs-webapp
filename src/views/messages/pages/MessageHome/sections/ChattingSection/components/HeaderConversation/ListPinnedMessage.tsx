@@ -5,7 +5,7 @@ import {ItemMessage} from "typings/apis/messages/listMessage";
 import {MyMessage, OthersMessage, NotificationCenter} from "../ChatContent/RegularContent";
 import {map as _map} from "lodash"
 import moment from "moment";
-import {MessageContext} from "../../../../index";
+import {MessageContext} from "../../../../../../shareComponents/layouts/MessagesLayoutV2";
 
 type Props = {
     listPinnedMessage: ItemMessage[]

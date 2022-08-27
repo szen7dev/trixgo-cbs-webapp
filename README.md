@@ -59,3 +59,9 @@ và khai báo các dữ liệu trả về
 - Import Hooks
 - Khai báo Data vào file quản lý chung các view con
 - Truyền Data vào view con qua Props
+=================
+https://gitlab.com/hiepyen/cbs_webapp/-/commit/14fe624f6da4e93a19966f6a04e341c6b592417d
+1-Vào file src/apis/task/index.ts
+- Viết hàm mới
+- Khai báo Type cho hàm src/typings/task.d.ts
+2-Vào file src/services/hooks/useTask.ts

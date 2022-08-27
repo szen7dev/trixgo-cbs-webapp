@@ -57,16 +57,8 @@ const ProjectPhotoPage: FC = () => {
 	return (
 		<>
 			<div className="flex flex-col h-full overflow-hidden">
-				<div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1">
-					<span className="text-x-large mr-7">Danh sách</span>
-					<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={onChangeSearch} />
-					{/* <DropdownFilterButton className="mr-auto" /> */}
-
-					{/* <ButtonCreate onClick={() => setIsShow(false)} />
-					<ButtonMore /> */}
-				</div>
 				<div className="overflow-auto">
-					<div className="pl-6 pr-2.5 border-0.5 border-cbs-border">
+					<div className="pl-6 pr-2.5">
 						<div className="flex justify-between flex-wrap items-center">
 							<h3 className="text-x-large mt-2.5 font-bold text-cbs-subtext">Báo cáo theo thời gian</h3>
 						</div>
@@ -78,7 +70,7 @@ const ProjectPhotoPage: FC = () => {
 					<div className="flex flex-wrap py-5 gap-y-4">
 						{(filesGroupByContract && filesGroupByContract.length) ? filesGroupByContract.map((file, i) => (
 							<div className="lg:w-6/12 2xl:w-4/12 px-2" key={file.contract?._id}>
-								<div className="grid shadow-cbs-md h-full" style={{gridTemplateRows:'1fr max-content'}}>
+								<div className="grid border-0.5 border-primary-border h-full" style={{gridTemplateRows:'1fr max-content'}}>
 									{/* grid grid-cols-3 gap-1 */}
 									<div className="flex flex-wrap text-white px-1">
 										{file.contract?.photos?.slice(0, 6)?.map((photo, index) =>
@@ -90,13 +82,13 @@ const ProjectPhotoPage: FC = () => {
 												key={photo._id}
 											/>)}
 									</div>
-									<Link to={`${location.pathname}/contract/${file.contract?._id}`}>
+									<Link to={`${location.pathname}/${file.contract?._id}`}>
 										<div className="px-4 py-3 text-justify font-bold text-large">
 											{file.contract?.name}
 										</div>
 									</Link>
-									<div className="flex justify-between pl-4 pr-6 py-1.5 text-medium bg-cbs-table-header">
-										<span >Số lượng ảnh</span>
+									<div className="flex justify-between pl-4 pr-6 py-1.5 bg-cbs-table-header">
+										<span className={"text-primary-gray"}>Số lượng ảnh</span>
 										<span>
 											<b> {file.count} </b>
 										</span>

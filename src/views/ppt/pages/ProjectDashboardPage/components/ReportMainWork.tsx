@@ -75,7 +75,7 @@ const ReportMainWork: React.FC<Props> = ({ data, ...props }) => {
 								<tr key={milestone?.milestone.value}>
 									<td className="pt-3">
 										<div style={{ maxWidth: "89px" }}>
-											<Link to={`/pcm/project/${projectID}/milestone/${milestone?.milestone?.value}`}>
+											<Link to={`/pm/project/${projectID}/milestone/${milestone?.milestone?.value}`}>
 												{milestone?.milestone?.text}
 											</Link>
 											<div className={cn(styles.progress, "w-full h-1 mt-1.5")} style={{ '--width': `${

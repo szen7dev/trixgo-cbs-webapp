@@ -21,47 +21,47 @@ import { ProviderModalPost as ProviderModalMedia } from "views/media/contexts/po
 import { ProviderModalPost as ProviderModalPcm } from "views/pcm/contexts/post";
 
 /*=====PAGES=====*/
-import { Dashboard } from "views/homepage/pages";
+import { DashboardV2 } from "views/homepage/pages";
 import {
-  DocumentDetailPage,
-  DocumentFolderPage,
-  DocumentProjectPage,
-  DocumentProfilePage,
-  DocumenDatahubContactPage,
   DocumentDashboardPage,
-  DocumentOfPackagePage,
-  DocumentOfTypePage,
+  // DocumentDetailPage,
+  // DocumentFolderPage,
+  // DocumentProjectPage,
+  // DocumentProfilePage,
+  // DocumenDatahubContactPage,
+  // DocumentOfPackagePage,
+  // DocumentOfTypePage,
 } from "views/document/pages";
 
 import {
-  ProjectAdminManagementPage,
-  ProjectBiddingPage,
-  ProjectBudgetPage,
-  ProjectCashFlowPlanPage,
-  ProjectCashFlowPlanChildPage,
   ProjectCategoryPage,
   ProjectDashboardPortfolioPage,
   ProjectDashboardTaskPage,
   ProjectMarketPage,
-  ProjectDrawing2Page,
-  ProjectDrawingPage,
-  ProjectFolderPage,
-  ProjectHomePage,
-  ProjectPaymentPage,
-  ProjectSubjectPage,
-  ProjectSubjectCompanyOfAssigneePage,
-  ProjectSubjectCompanyOfAuthorPage,
-  ProjectPhotoContractPage,
-  ProjectPhotoPage,
-  ProjectResourcePage,
-  ProjectSchedulePage,
-  ProjectInspectionPage,
-  ProjectDashboardPage,
-  ProjectInspectionTab2Page,
-  ProjectInspectionTab3Page,
-  ProjectInspectionDetailPage,
-  ProjectDirectoryPage,
-  ProjectMilestonePage
+  // ProjectAdminManagementPage,
+  // ProjectBiddingPage,
+  // ProjectBudgetPage,
+  // ProjectCashFlowPlanPage,
+  // ProjectCashFlowPlanChildPage,
+  // ProjectDrawing2Page,
+  // ProjectDrawingPage,
+  // ProjectFolderPage,
+  // ProjectHomePage,
+  // ProjectPaymentPage,
+  // ProjectSubjectPage,
+  // ProjectSubjectCompanyOfAssigneePage,
+  // ProjectSubjectCompanyOfAuthorPage,
+  // ProjectPhotoContractPage,
+  // ProjectPhotoPage,
+  // ProjectResourcePage,
+  // ProjectSchedulePage,
+  // ProjectInspectionPage,
+  // ProjectDashboardPage,
+  // ProjectInspectionTab2Page,
+  // ProjectInspectionTab3Page,
+  // ProjectInspectionDetailPage,
+  // ProjectDirectoryPage,
+  // ProjectMilestonePage
 } from "views/ppt/pages";
 
 import ProjectAdminFunctionalTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminFunctionalTab";
@@ -70,14 +70,15 @@ import ProjectAdminAuthorTab from "views/ppt/pages/ProjectAdminPage/pages/Projec
 import ProjectAdminProjectDetail from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminProjectDetail";
 import ProjectAdminProjectTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminProjectTab";
 import ProjectAdminPositionTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminPositionTab";
+const PcmDetailTaskV2             = lazy(() => import('views/pcm/pages/PcmDetailTaskV2'));
 
-const PcmHomePage                 = lazy(() => import('views/pcm/pages/PcmHome'));
-const PcmDetailTaskPage           = lazy(() => import('views/pcm/pages/PcmDetailTask'));
-const PcmGroupPage                = lazy(() => import('views/pcm/pages/PcmGroup'));
-const PcmTaskGroupPage            = lazy(() => import('views/pcm/pages/PcmTaskGroup'));
+const PcmHomePage                 = lazy(() => import('views/pcm/pages/PcmHomeV2'));
 const PcmReportPage               = lazy(() => import('views/pcm/pages/PcmReport'));
-const PcmReportQuickPage          = lazy(() => import('views/pcm/pages/PcmReportQuick'));
 const PcmTasksReportPage          = lazy(() => import('views/pcm/pages/PcmTasksReport'));
+// const PcmReportQuickPage          = lazy(() => import('views/pcm/pages/PcmReportQuick'));
+// const PcmDetailTaskPage           = lazy(() => import('views/pcm/pages/PcmDetailTask'));
+// const PcmGroupPage                = lazy(() => import('views/pcm/pages/PcmGroup'));
+// const PcmTaskGroupPage            = lazy(() => import('views/pcm/pages/PcmTaskGroup'));
 
 const PcmPrintTaskTypeOnePage     = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeOne'));
 const PcmPrintTaskTypeTwoPage     = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeTwo'));
@@ -88,19 +89,23 @@ const PCMRouter: FC = () => {
     <ProviderModalMedia>
       <ProviderModalPcm>
         <Switch>
+
+          {/* Trang chủ */}
           <ProtectedRoute
             exact
-            path={"/"}
+            path={"/pcm/home"}
             component={() => (
               <HomeLayout>
-                <Dashboard />
+                <DashboardV2 />
               </HomeLayout>
             )}
           />
-          <Route exact path="/pcm">
+
+          <Route exact path="/">
             <Redirect to="/pcm/home" />
           </Route>
-          <ProtectedRoute path="/pcm/project/:id">
+
+          {/* <ProtectedRoute path="/pcm/project/:id">
             <LayoutProjectSecondary>
               <Switch>
                 <Route
@@ -163,14 +168,6 @@ const PCMRouter: FC = () => {
                 <Route exact path={["/pcm/project/:id/bidding", "/pcm/project/:id/bidding/(2|3)"]}>
                   <LayoutSecondary
                     pages={[
-                      // {
-                      //   id: "1",
-                      //   title: "Hồ sơ dự thầu",
-                      //   path: "/pcm/project/:id/bidding",
-                      //   navExact: true,
-                      // },
-                      // { id: "2", title: "Hồ sơ mời thầu", path: "/pcm/project/:id/bidding/2" },
-                      // { id: "3", title: "Tư vấn thầu", path: "/pcm/project/:id/bidding/3" },
                     ]}
                   >
                     <Route exact path="/pcm/project/:id/bidding" component={ProjectBiddingPage} />
@@ -205,8 +202,6 @@ const PCMRouter: FC = () => {
                       { id: "2", title: "Phân loại", path: "/pcm/project/:id/document/1" },
                       { id: "3", title: "Danh bạ hệ thống", path: "/pcm/project/:id/document/2" },
                       { id: "4", title: "Gói thầu", path: "/pcm/project/:id/document/3" },
-                      // { id: '4', title: 'Báo cáo', path: '/pcm/project/:id/document/3' },
-                      // { id: '5', title: 'Lịch sử upload file', path: '/pcm/project/:id/document/4' },
                     ]}
                   >
                     <ModalProvider>
@@ -231,8 +226,6 @@ const PCMRouter: FC = () => {
                           path="/pcm/project/:id/document/3"
                           component={DocumentFolderPage}
                         />
-                        {/* <Route exact path='/pcm/project/:id/document/3' component={DocumentReportPage} />
-                      <Route exact path='/pcm/project/:id/document/4' component={DocumentHistoryPage} /> */}
                       </Switch>
                       <ModalCreateDocument />
                     </ModalProvider>
@@ -266,8 +259,6 @@ const PCMRouter: FC = () => {
                   <LayoutSecondary
                     pages={[
                       { id: "1", title: "Bản vẽ", path: "/pcm/project/:id/drawing", navExact: true },
-                      // { id: '2', title: 'Chỉ dẫn kỹ thuật', path: '/pcm/project/:id/drawing/1' },
-                      // { id: '3', title: 'Quản lý phiên bản', path: '/pcm/project/:id/drawing/2' },
                     ]}
                   >
                     <Route exact path="/pcm/project/:id/drawing" component={ProjectDrawingPage} />
@@ -348,7 +339,8 @@ const PCMRouter: FC = () => {
                 />
               </Switch>
             </LayoutProjectSecondary>
-          </ProtectedRoute>
+          </ProtectedRoute> */}
+          
           <ProtectedRoute path="/pcm">
             <HomeLayout>
               <Switch>
@@ -369,7 +361,7 @@ const PCMRouter: FC = () => {
                           return { pathname: "/pcm/admin/2", state: match ? match.params.id : null };
                         },
                       },
-                      { id: "3", title: "Dự án", path: "/pcm/admin/3" },
+                      { id: "3", title: "Dự án phòng ban", path: "/pcm/admin/3" },
                       { id: "4", title: "Chức danh", path: "/pcm/admin/4" },
                     ]}
                   >
@@ -386,17 +378,6 @@ const PCMRouter: FC = () => {
                   </LayoutSecondary>
                 </Route>
 
-                <Route exact path="/pcm/detail/:id" component={PcmDetailTaskPage} />
-                <Route exact path="/pcm/detail/:id/print/1" component={PcmPrintTaskTypeOnePage} />
-                <Route exact path="/pcm/detail/:id/print/2" component={PcmPrintTaskTypeTwoPage} />
-                <Route exact path="/pcm/detail/:id/print/3" component={PcmPrintTaskTypeThreePage} />
-
-                <Route exact path="/pcm/home" component={PcmHomePage} />
-                <Route exact path="/pcm/assign" component={() => <PcmHomePage type={2} />} />
-                <Route exact path="/pcm/bookmark" component={() => <PcmHomePage type={3} />} />
-                <Route exact path="/pcm/related" component={() => <PcmHomePage type={5} />} />
-                <Route exact path="/pcm/report" component={PcmReportPage} />
-                <Route exact path="/pcm/report/:reportID" component={PcmTasksReportPage} />
                 <Route exact path="/pcm/projects" component={ProjectCategoryPage} />
                 <Route exact path="/pcm/market" component={ProjectMarketPage} />
                 <Route exact path="/pcm/(dashboard-portfolio|dashboard-task|dashboard-document)">
@@ -413,6 +394,19 @@ const PCMRouter: FC = () => {
                     <Route exact path="/pcm/dashboard-document" component={DocumentDashboardPage} />
                   </LayoutSecondary>
                 </Route>
+
+                <Route exact path="/pcm/mine" component={() => <PcmHomePage/>} />
+                <Route exact path="/pcm/assign" component={() => <PcmHomePage type={2} />} />
+                <Route exact path="/pcm/bookmark" component={() => <PcmHomePage type={3} />} />
+                <Route exact path="/pcm/related" component={() => <PcmHomePage type={5} />} />
+                <Route exact path="/pcm/report" component={PcmReportPage} />
+                <Route exact path="/pcm/report/:reportID" component={PcmTasksReportPage} />
+
+                <Route exact path="/pcm/detail/:id" component={PcmDetailTaskV2} />
+                <Route exact path="/pcm/detail/:id/print/1" component={PcmPrintTaskTypeOnePage} />
+                <Route exact path="/pcm/detail/:id/print/2" component={PcmPrintTaskTypeTwoPage} />
+                <Route exact path="/pcm/detail/:id/print/3" component={PcmPrintTaskTypeThreePage} />
+
               </Switch>
             </HomeLayout>
           </ProtectedRoute>
@@ -422,4 +416,4 @@ const PCMRouter: FC = () => {
   );
 };
 
-export default PCMRouter;
+export default PCMRouter

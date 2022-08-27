@@ -10,3 +10,4 @@ export * from './InputClearable';
 export * from './Modal';
 export * from './SearchInput';
 export * from './TabsList';
+export * from './NavigateTab';

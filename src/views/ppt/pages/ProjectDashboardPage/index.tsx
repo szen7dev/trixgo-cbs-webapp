@@ -30,7 +30,7 @@ import ReportImage from "./components/ReportImage";
 import ReportBudget from "./components/ReportBudget";
 import ReportQuickReport from "./components/ReportQuickReport";
 import ReportContractStatus from "./components/ReportContractStatus";
-import ReportMultipleChart from "./components/ReportMultipleChart";
+// import ReportMultipleChart from "./components/ReportMultipleChart";
 
 import { ModalZoomView } from "shareComponents/common";
 import { ContextModalPost } from "views/media/contexts/post";
@@ -62,7 +62,7 @@ const ProjectDashboardPortfolioPage: FC = () => {
 	})
 
 	useEffect(() => {
-		document.title = "CHG.THT-Báo cáo quản trị";
+		document.title = `${projectInfo.sign} | Báo cáo quản trị`;
 	}, []);
 
 	const {
@@ -128,7 +128,7 @@ const ProjectDashboardPortfolioPage: FC = () => {
 								projectID }}/>
 
 							{/* Multiple Chart */}
-							<ReportMultipleChart className='bg-white h-full pl-5 pr-12 pb-3 w-full mt-4' projectInfo={projectInfo}/>
+							{/* <ReportMultipleChart className='bg-white h-full pl-5 pr-12 pb-3 w-full mt-4' projectInfo={projectInfo}/> */}
 
 							{/* Quick report */}
 							<ReportQuickReport className={cn(styles['quick-report'], 'bg-white h-full pt-4 px-6 pb-6 w-full mt-4')} projectID={projectID} />
@@ -139,7 +139,7 @@ const ProjectDashboardPortfolioPage: FC = () => {
 					</div>
 				</div>
 			</div>
-			<ModalZoomView isShow={state.isShow} toggle={toggleModal} initialData={{
+			<ModalZoomView prioritySingleImageAuthor isShow={state.isShow} toggle={toggleModal} initialData={{
 				createAt: state.createAt,
 				images: state.images,
 				index: state.index,

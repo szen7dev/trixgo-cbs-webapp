@@ -29,13 +29,13 @@ export const Poll:FC<Props> = ({message,chat, isMini, context}) => {
     }, [message])
     return (
         <div className={"Poll-center flex flex-col items-center justify-center mb-2"}>
-            <div className={"rounded-full text-xs text-gray-500 px-5 py-1 mb-2 px-[33px] flex items-center " + (isMini?"bg-gray-100":"bg-white")}>
+            <div className={"rounded-full text-xs text-gray-500 px-5 py-1 mb-2 px-[33px] flex items-center " + (isMini?"bg-gray-100":"bg-cbs-item-message-other")}>
                 <img src={PollIcon} alt={"-----"} className={"w-[14px] h-[16px] mr-2"}/>
                 <span>
                 {message.sender.bizfullname||message.sender.fullname} đã tạo một bình chọn: <span className="text-black">{message.poll.name}</span>
                 </span>
             </div>
-            <div className={"rounded-md mb-5 " + (isMini?"w-[300px] border border-gray-200":"w-[365px] bg-white")}>
+            <div className={"rounded-md mb-5 border border-gray-200 " + (isMini?"w-[300px]":"w-[365px]")}>
                 <div className={"px-[12px] py-[16px] border-b border-gray-200"}>
                     <div className={"font-bold text-lg"}>
                         {message.poll.name}
