@@ -78,8 +78,12 @@ export type Task = {
   amountResponse: number;
   amountMarkedResponse: number;
   amountChecklist: number;
-  amountComment: number;
   amountFinishedChecklist: number;
+  amountComment: number;
+  amountCurrentStatus: number;
+  amountSolution: number;
+  amountCurrentStatus: number;
+  amountResponseOther: number;
   createAt: string;
   author: Author;
   message?: string;

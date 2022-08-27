@@ -31,12 +31,13 @@ type Props = {
     userId?: string;
     task: Task;
     comment: CommentProps;
+    tab: number;
     isOfficialTab: boolean;
 	onClickImage?: (comment: CommentType, index: number) => void,
     onConfirmUpdate?: () => void;
 }
 
-export const ParentResponseComment: FC<Props> = ({ userId, task, comment, isOfficialTab, onClickImage, onConfirmUpdate }) => {
+export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, isOfficialTab, onClickImage, onConfirmUpdate }) => {
     const [collapseComment, setCollapseComment] = useState(false);
     const [openReply, setOpenReply] = useState(false);
     const [isOfficial, setIsOfficial] = useState(comment.official);
@@ -436,6 +437,7 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, isOffi
                     <ReplyResponseComment
                         task={task}
                         parent={comment}
+                        tab={tab}
                         isOfficial={isOfficialTab}
                         onCancelCreateResponse={() => setOpenReply(false)}
                         onConfirmCreate={() => setOpenReply(false)}

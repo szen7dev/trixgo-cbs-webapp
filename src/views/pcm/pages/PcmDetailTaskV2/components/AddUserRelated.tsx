@@ -27,8 +27,8 @@ export const AddUserRelated: FC<Props> = ({ task, onConfirmAddUserRelated }) => 
     const [isShow, setIsShow] = useState(false);
     const [collapse, setCollapse] = useState(true);
     const focusElementRef = useRef<HTMLDivElement>(null);
-    const [hasDefault, setHasDefault] = useState(false);
 	const [keyword, setKeyword] = useState("");
+    const [hasDefault, setHasDefault] = useState(false);
 	const [idsChecked, setIdsChecked] = useState<Array<string>>(relatedsID || []);
 
     const { data: listUsersProject, hasNextPage, fetchNextPage, totalRecord } = useUsersProject({
