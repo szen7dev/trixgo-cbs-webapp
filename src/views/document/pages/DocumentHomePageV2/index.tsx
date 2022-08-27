@@ -195,7 +195,7 @@ const DocumentHomePageV2:FC = () => {
                         className={
                             "mr-4 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
                         }
-                        placeholder={"Thời khoảng"}
+                        placeholder={"Ngày nhận"}
                         iconBack={<TriangleDown />}
                         iconFront={<img src={timelineIcon} alt={"----"} />}
                         onValueChange={(val) => setFromToDate(val)}

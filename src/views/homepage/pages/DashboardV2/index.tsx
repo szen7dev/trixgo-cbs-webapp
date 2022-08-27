@@ -183,7 +183,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
       subtypes: subtypes,
       status: status,
       // read: 1, // 1-Chưa đọc, 2-Đã đọc, Không truyền => lấy tất cả
-      limit: 5,
+      limit: 50,
       ...querySubject,
     },
     isFetch: tabActive === 2 ? true : false,
