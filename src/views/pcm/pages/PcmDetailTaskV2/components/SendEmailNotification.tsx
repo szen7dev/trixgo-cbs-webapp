@@ -21,9 +21,9 @@ type Props = {
 
 export const SendEmailNotification: FC<Props> = ({ task, userId = '' }) => {
     const accessUsers = useMemo(() => {
-        const accessUsersID = task.accessUsers?.map(user => user._id);
+        const accessUsersID = task.accessUsers?.map(user => user._id) || [];
         return accessUsersID.filter(userID => userID !== userId);
-    }, [task._id, task.accessUsers]) || [];
+    }, [task._id, task.accessUsers]);
 
     const focusElementRef = useRef<HTMLDivElement>(null);
 
