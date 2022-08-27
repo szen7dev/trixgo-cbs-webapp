@@ -5,8 +5,8 @@ import { useParams, Link } from 'react-router-dom';
 import useCheckedList from 'services/hooks/ppt/useCheckedList';
 import { useQueryListCompanyOfAssigneeAndAmountTask } from "services/hooks/pcm/useStatistical";
 
-import {SearchInput, GroupActions, ButtonMore, DropdownSearchableV2, TimeRangeDropdown} from "shareComponents/common";
-
+import {SearchInput, GroupActions, ButtonMore, DropdownSearchableV2} from "shareComponents/common";
+import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
 // import DropdownFilterButton from "views/pages/document/components/DocumentFilterButton";
 import ModalInformation from "./components/ModalInformation";
 import CaretDownIcon from "assets/images/icon-caret-down.png";

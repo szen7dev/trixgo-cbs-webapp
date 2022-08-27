@@ -82,7 +82,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
               : "")
           }
         >
-          <img src={mailIcon} alt={"Chủ đề"} />
+          <img width={'20px'} src={mailIcon} alt={"Chủ đề"} />
           {/*{*/}
           {/*    totalNoti > 0 &&*/}
           {data?.data?.amountUnreadTask && data?.data?.amountUnreadTask > 0 ? (
@@ -109,7 +109,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
             (pathname.includes("/pm") ? "bg-cbs-hightlight-right-navigate" : "")
           }
         >
-          <img src={projectIcon} alt={"Dự án"} />
+          <img width={'20px'} src={projectIcon} alt={"Dự án"} />
         </div>
         <span className={"text-primary-gray mt-1"}>Dự án</span>
       </Link>
@@ -122,7 +122,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
               : "")
           }
         >
-          <img src={contractIcon} alt={"Hợp đồng"} />
+          <img width={'20px'} src={contractIcon} alt={"Hợp đồng"} />
         </div>
         <span className={"text-primary-gray mt-1"}>Hợp đồng</span>
       </Link>
@@ -135,7 +135,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
               : "")
           }
         >
-          <img src={fileIcon} alt={"Hồ sơ"} />
+          <img width={'20px'} src={fileIcon} alt={"Hồ sơ"} />
         </div>
         <span className={"text-primary-gray mt-1"}>Hồ sơ</span>
       </Link>
@@ -148,7 +148,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
               : "")
           }
         >
-          <img src={chatIcon} alt={"Chat"} />
+          <img width={'20px'} src={chatIcon} alt={"Chat"} />
           {amountMissMessage > 0 && (
             <span
               className={

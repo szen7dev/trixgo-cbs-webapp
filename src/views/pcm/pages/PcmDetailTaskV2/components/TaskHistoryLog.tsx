@@ -2,7 +2,8 @@ import React, {FC, Fragment, useRef, useState} from "react"
 import {Dialog, Transition} from "@headlessui/react";
 import Close from "assets/icons/Close";
 import iconChecklist from "assets/images/icons8-checklist-64.svg";
-import {DropdownSearchableV2, TimeRangeDropdown} from "shareComponents/common";
+import {DropdownSearchableV2} from "shareComponents/common";
+import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
 import nextIcon from "assets/images/icons-arrow-next.svg";
 import userIcon from "assets/images/icon-user-avatar.svg";
 import TriangleDown from "assets/icons/TriangleDown";

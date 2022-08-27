@@ -152,6 +152,9 @@ export const DropdownSearchableV2: FC<Props> = ({
         if (onMultipleRemoveValue) {
           onMultipleRemoveValue(readDataValue(item, "id"));
         }
+        if ([...oldValues].length <= 0) {
+          onClearData && onClearData();
+        }
       } else {
         setValues((oldValues) => [...(oldValues ?? []), item]);
         if (onchangeValue) {
@@ -163,6 +166,7 @@ export const DropdownSearchableV2: FC<Props> = ({
       setShowOption(false);
       if (value && readDataValue(value, "id") === readDataValue(item, "id")) {
         setValue(undefined);
+        onClearData && onClearData();
       } else {
         setValue(item);
         if (onchangeValue) {
@@ -296,14 +300,14 @@ export const DropdownSearchableV2: FC<Props> = ({
     return (
       <div
         className={
-          "flex w-full p-3 cursor-pointer align-items-center flex-wrap overflow-y-scroll"
+          "flex w-full px-3 py-1 cursor-pointer align-items-center flex-wrap overflow-y-scroll"
         }
       >
         {_map(values, (option) => (
           <div
             key={readDataValue(option, "id")}
             className={
-              "relative border rounded-full p-2 mr-1.5 pr-8 mb-1.5 bg-white"
+              "relative border rounded-3xl p-2 mr-1.5 pr-8 mb-1.5 bg-white"
             }
             title={
               renderSelectedItem
@@ -333,10 +337,10 @@ export const DropdownSearchableV2: FC<Props> = ({
     if (!value) return null;
     return (
       <div
-        className={classNames("flex text-left relative p-3 pr-8 mb-1 mt-1 ", {
+        className={classNames("flex text-left relative px-3 py-1 pr-8 mb-1 mt-1 ", {
           "text-gray-300": !value,
           border: bordered,
-          "rounded-full": bordered,
+          "rounded-3xl": bordered,
         })}
         title={
           renderSelectedItem
@@ -361,7 +365,7 @@ export const DropdownSearchableV2: FC<Props> = ({
   const renderSingleSelectedValueWithoutClearValue = () => {
     if (!value) return null;
     return (
-      <div className={"flex-1 p-3 flex text-left "}>
+      <div className={"flex-1 px-3 py-1 flex text-left "}>
         <div
           title={
             renderSelectedItem

@@ -1,5 +1,5 @@
 /*=====LIBRARY=====*/
-import { FC } from "react";
+import {FC, lazy} from "react";
 import { Route, Switch, matchPath } from "react-router-dom";
 
 /*=====LAYOUTS=====*/
@@ -8,25 +8,23 @@ import { ModalProvider } from "views/document/contexts/modal";
 import { ModalCreateDocument } from 'views/document/sharedComponents/common';
 
 /*=====PAGES=====*/
-import {
-    DocumentDashboardPage, DocumentHomePage, DocumentHomePageV2,
-	DocumentDetailPage,
-	DocumentFolderPage,
-    DocumenDatahubContactPage,
-	// DocumentHistoryPage,
-	DocumentProjectPage,
-	DocumentProfilePage,
-	// DocumentReportPage,
-    DocumentOfTypePage,
-    DocumentOfPackagePage
-} from 'views/document/pages';
-
-import ErrorPage from 'views/authentication/Error';
 import { ProtectedRoute } from "routes/components";
-// import LayoutSecondary from "views/document/sharedComponents/layouts/LayoutSecondary";
-import DocumentAdminFunctionalTab from "views/document/pages/DocumentAdminPage/pages/DocumentAdminFunctionalTab";
-import DocumentAdminDetail from "views/document/pages/DocumentAdminPage/pages/DocumentAdminDetail";
-import DocumentAdminAuthorTab from "views/document/pages/DocumentAdminPage/pages/DocumentAdminAuthorTab";
+
+const ErrorPage       = lazy(() => import("views/authentication/Error"))
+
+const DocumentHomePageV2 = lazy(() => import("views/document/pages/DocumentHomePageV2"))
+const DocumentDashboardPage       = lazy(() => import("views/document/pages/DocumentDashboardPage"))
+const DocumentProjectPage       = lazy(() => import("views/document/pages/DocumentProjectPage"))
+const DocumentProfilePage       = lazy(() => import("views/document/pages/DocumentProfilePage"))
+const DocumentDetailPage       = lazy(() => import("views/document/pages/DocumentDetailPage"))
+const DocumentFolderPage       = lazy(() => import("views/document/pages/DocumentFolderPage"))
+const DocumenDatahubContactPage       = lazy(() => import("views/document/pages/DocumenDatahubContactPage"))
+const DocumentOfTypePage       = lazy(() => import("views/document/pages/DocumentOfTypePage"))
+const DocumentOfPackagePage       = lazy(() => import("views/document/pages/DocumentOfPackagePage"))
+
+const DocumentAdminFunctionalTab       = lazy(() => import("views/document/pages/DocumentAdminPage/pages/DocumentAdminFunctionalTab"))
+const DocumentAdminDetail       = lazy(() => import("views/document/pages/DocumentAdminPage/pages/DocumentAdminDetail"))
+const DocumentAdminAuthorTab       = lazy(() => import("views/document/pages/DocumentAdminPage/pages/DocumentAdminAuthorTab"))
 
 const DocumentRouter: FC = () => {
     return (

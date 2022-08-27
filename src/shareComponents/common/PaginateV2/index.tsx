@@ -1,4 +1,4 @@
-import React, {FC, HTMLAttributes, useEffect, useState} from "react";
+import React, {forwardRef, useState, useImperativeHandle} from "react";
 import nextIcon from "assets/images/icons-arrow-next.svg";
 
 type Props = {
@@ -9,13 +9,21 @@ type Props = {
     totalRecord?: number;
     totalPages?: number;
     hasNextPage?: boolean;
-}
+};
 
-export const PaginateV2: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
-    prevPageAction, nextPageAction, limit = 10, totalRecord = 0, totalPages, isFetching, hasNextPage, ...props
-}) => {
+type PaginateHandle = {
+    resetPaginate: () => void
+}
+const PaginateV2 = forwardRef<PaginateHandle, Props>(
+    ({prevPageAction, nextPageAction, limit = 10, totalRecord = 0, totalPages, isFetching, hasNextPage, ...props}, paginateRef) => {
     const [currentIndex, setCurrentIndex] = useState(1);
     const totalPagesNumber = totalPages || 0
+
+    useImperativeHandle(paginateRef, () => ({
+        resetPaginate() {
+            setCurrentIndex(1);
+        }
+    }));
 
     const handlePrevPage = () => {
         setCurrentIndex(currentIndex => currentIndex - 1);
@@ -46,4 +54,8 @@ export const PaginateV2: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
             </button>
         </div>
     )
-}
+})
+
+PaginateV2.displayName = "PaginateV2";
+
+export default PaginateV2;

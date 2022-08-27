@@ -1,5 +1,6 @@
 import React, { FC } from "react";
-import {DropdownSearchable, DropdownSearchableV2, TimeRangeDropdown} from "shareComponents/common";
+import {DropdownSearchable, DropdownSearchableV2} from "shareComponents/common";
+import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
 import moment from "moment";
 import parse from "html-react-parser";
 import { Link } from "react-router-dom";

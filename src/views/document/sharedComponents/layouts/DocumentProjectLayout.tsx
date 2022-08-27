@@ -1,5 +1,6 @@
 import React, {createContext, FC, useContext, useEffect, useMemo, useState} from "react";
-import {DropdownSearchableV2, TimeRangeDropdown} from "shareComponents/common";
+import {DropdownSearchableV2} from "shareComponents/common";
+import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
 import maleUserIcon from "assets/images/icons8-male-user-64.svg";
 import categoryIcon from "assets/images/icons8-category-48.svg";
 import TriangleDown from "assets/icons/TriangleDown";
@@ -141,7 +142,7 @@ export const DocumentProjectLayout:FC = ({children}) => {
                     <div className={"flex items-center flex-1"}>
                         <DropdownSearchableV2
                             className={"mr-4 border border-primary-border rounded-lg mb-2"}
-                            placeholder={"Chủ đề ban hành"}
+                            placeholder={"Tổ chức ban hành"}
                             prefixIcon={<img className={"mr-2"} src={maleUserIcon} alt={"icon"}/>}
                             isMultiple={true}
                             disableSearch={true}
@@ -149,7 +150,7 @@ export const DocumentProjectLayout:FC = ({children}) => {
                         />
                         <DropdownSearchableV2
                             className={"mr-4 border border-primary-border rounded-lg mb-2"}
-                            placeholder={"Loại hồ sơ"}
+                            placeholder={"Tính chất hồ sơ"}
                             prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"}/>}
                             isMultiple={true}
                             disableSearch={true}
@@ -159,7 +160,7 @@ export const DocumentProjectLayout:FC = ({children}) => {
                             className={
                                 "mr-4 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
                             }
-                            placeholder={"Thời khoảng"}
+                            placeholder={"Ngày nhận"}
                             iconBack={<TriangleDown />}
                             iconFront={<img src={timelineIcon} alt={"----"} />}
                             onValueChange={(val) => console.log(val)}
