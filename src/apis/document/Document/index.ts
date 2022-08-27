@@ -28,7 +28,7 @@ export const documentRepository: DocumentRepository = {
 async function fetchListDocument(params : any) {
     const { data } = await API.get(`${DOCUMENT_URL}/list-document`, {
         params: {
-            select: 'name sign author project sign date createAt',
+            select: 'name sign author project sign date createAt description note',
             populates: {
                 "path": "author sender storage",
                 "select": "fullname bizfullname sign image name"

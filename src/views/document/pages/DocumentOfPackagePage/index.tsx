@@ -45,7 +45,7 @@ export const DocumentOfPackagePage: FC = () => {
   const [recordSelected, setSelectRecord] = useState<any>({});
 
   const { data, totalRecord, totalPages, loading, nextCursor, refetch }   = useQueryListDocument(departmentID, pageParam, packageID);
-  const { insertDocumentChildAsync, updateDocumentChildAsync }             = useMutationDocumentChild();
+  const { insertDocumentChildAsync, updateDocumentChildAsync }            = useMutationDocumentChild();
   const { onFetchDetailDepartmentAsync }                                  = useQueryDetailDepartment();
   const { onFetchDetailDocumentAsync }                                    = useQueryDetailDocument();
 
