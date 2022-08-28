@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState, useContext } from "react";
+import React, { FC, useRef, useState, useContext, useMemo } from "react";
 import Axios from 'axios';
 import { captureException } from "@sentry/react";
 import { Editor } from "@tinymce/tinymce-react";
@@ -9,7 +9,6 @@ import { CommentPayload, CommentProps, Task } from "typings/task";
 import { toast } from "react-toastify";
 import { useCommentPcm } from "services/hooks/useTask";
 import CommentContext from "views/pcm/contexts/comment/comment.context";
-import { useSocket } from "services/hooks/useSocket";
 import { APP_KEY } from "utils/constants";
 import iconAttach from 'assets/images/icons8-attach-50.png';
 import { IconImage } from 'views/media/shareComponents/common';
@@ -20,21 +19,39 @@ import { PostImage, PostFile } from 'shareComponents/common';
 import classNames from 'classnames';
 import { toArray } from 'lodash';
 import { FileProps, FilePropsUpload } from 'typings/common';
+import taskUserAvt from "assets/images/task-user.svg";
 
 type Props = {
     task: Task;
     parent?: CommentProps;
     tab: number;
-    isOfficial?: boolean;
+    socket?: any;
     onCancelCreateResponse: () => void;
     onConfirmCreate?: () => void;
 }
 
-export const ReplyResponseComment: FC<Props> = ({ task, parent, tab, isOfficial = false, onCancelCreateResponse, onConfirmCreate }) => {
+export const ReplyResponseComment: FC<Props> = ({ task, parent, tab, socket, onCancelCreateResponse, onConfirmCreate }) => {
     const refDivFile = useRef<HTMLDivElement | null>(null);
     const editorRef = useRef<EditorType>();
 
-    const [selectedUser, setSelectedUser] = useState<Item[]>([]);
+    const initUsersSelected = useMemo(() => {
+        if(parent) {
+            const { _id, bizfullname, image } = parent.author;
+            return [{
+                label: bizfullname,
+                value: _id,
+                image: image ? `${process.env.REACT_APP_URL_S3_USER}/${image}` : taskUserAvt
+            }];
+        } else{
+            return task.accessUsers?.map(({ bizfullname, _id, image }) => ({
+                label: bizfullname,
+                value: _id,
+                image: image ? `${process.env.REACT_APP_URL_S3_USER}/${image}` : taskUserAvt
+            })) || [];
+        }
+    }, [task, parent])
+
+    const [selectedUser, setSelectedUser] = useState<Item[]>(initUsersSelected);
     const [isUploading, setIsUploading] = useState(false);
     const [tokens, setTokens] = useState<any[]>([]);
 
@@ -51,7 +68,6 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, tab, isOfficial 
     }] = useUploadFile({});
 
     const { dispatch } = useContext(CommentContext);
-    const { current: socket }: any = useSocket();
 
     const { addFileToUpload } = useUpload({
         appID: APP_KEY.PCM_PLAN_TASK,
@@ -142,7 +158,6 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, tab, isOfficial 
             _id && (files = [...files, _id]);
         }
 
-        console.log({ files, images, content });
         if (!files.length && !images.length && !content) return;
 
         try {
@@ -151,7 +166,7 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, tab, isOfficial 
                 content,
                 parentID: parent?._id,
                 type: 1,
-                isOfficial,
+                isOfficial: tab === 2,
                 files,
                 images,
             }
@@ -176,11 +191,7 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, tab, isOfficial 
                 return toast.warn(data?.message || 'Tạo bình luận thất bại')
             }
 
-            // Clear text input
-            removeAllFiles();
-            onConfirmCreate?.();
-            dispatch({ type: 'ADD_COMMENT', payload: data });
-
+            console.log({ ADD_COMMENT_SOCKET: socket })
             socket?.emit('COMMENT_CSS_ADD_COMMENT', {
                 app: APP_KEY.PCM_PLAN_TASK,
                 objectID: task?._id,
@@ -192,6 +203,11 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, tab, isOfficial 
                     path: 'project author'
                 })
             })
+
+            // Clear text input
+            removeAllFiles();
+            onConfirmCreate?.();
+            dispatch({ type: 'ADD_COMMENT', payload: data });
 
             // socket?.emit('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', {
             // 	receivers: data.receiversNoti
@@ -233,7 +249,10 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, tab, isOfficial 
         <>
             <div className={"mt-2 editor ml-12 border border-primary-border rounded"}>
                 <div className={"px-2 py-4"}>
-                    <SendToMultiSelected selectedUser={selectedUser} setSelectedUser={setSelectedUser} />
+                    <SendToMultiSelected
+                        selectedUser={selectedUser}
+                        setSelectedUser={setSelectedUser}
+                    />
                 </div>
                 <Editor
                     // onActivate={}

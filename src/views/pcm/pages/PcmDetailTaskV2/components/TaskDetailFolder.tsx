@@ -32,10 +32,17 @@ export const TaskDetailFolder: FC<Props> = ({
     onConfirmSign,
     onOpenBidding,
 }) => {
+    const isOpened = useMemo(() => {
+        return task.openedUsers?.find(u => u._id === user?._id);
+    }, [task._id, task.openedUsers])
+
+    const usersTaskOpened = useMemo(() => {
+        return task.openedUsers?.map(item => item._id);
+    }, [task._id, task.openedUsers])
+
     const { updateTaskAsync } = useTask({});
-    const [isCurrentUserOpened, setCurrentUserOpened] = useState(task.openedUsers.find(u => u._id === user?._id) !== undefined);
-    const [usersOpened, setUsersOpened] = useState(task.openedUsers?.map(item => item._id));
-    // usersOpened.includes(user._id)
+    const [isCurrentUserOpened, setCurrentUserOpened] = useState(isOpened !== undefined);
+    const [usersOpened, setUsersOpened] = useState(usersTaskOpened);
     const { current: socket }: any = useSocket();
     const { openModal, closeModal } = useModal();
 

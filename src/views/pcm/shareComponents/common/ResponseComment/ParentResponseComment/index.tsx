@@ -32,12 +32,12 @@ type Props = {
     task: Task;
     comment: CommentProps;
     tab: number;
-    isOfficialTab: boolean;
+    socket?: any;
 	onClickImage?: (comment: CommentType, index: number) => void,
     onConfirmUpdate?: () => void;
 }
 
-export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, isOfficialTab, onClickImage, onConfirmUpdate }) => {
+export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, socket, onClickImage, onConfirmUpdate }) => {
     const [collapseComment, setCollapseComment] = useState(false);
     const [openReply, setOpenReply] = useState(false);
     const [isOfficial, setIsOfficial] = useState(comment.official);
@@ -46,7 +46,7 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, i
     );
 
 	const { state, dispatch } = useContext(CommentContext);
-	const { current: socket }: any = useSocket();
+	// const { current: socket }: any = useSocket();
 
     const { addFileToUpload } = useUpload({
         appID: APP_ID.PCM.id,
@@ -438,7 +438,7 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, i
                         task={task}
                         parent={comment}
                         tab={tab}
-                        isOfficial={isOfficialTab}
+                        socket={socket}
                         onCancelCreateResponse={() => setOpenReply(false)}
                         onConfirmCreate={() => setOpenReply(false)}
                     />
