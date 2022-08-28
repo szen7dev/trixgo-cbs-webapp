@@ -47,7 +47,7 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, tab, socket, onC
                 label: bizfullname,
                 value: _id,
                 image: image ? `${process.env.REACT_APP_URL_S3_USER}/${image}` : taskUserAvt
-            }));
+            })) || [];
         }
     }, [task, parent])
 
