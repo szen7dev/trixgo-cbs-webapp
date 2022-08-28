@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState, useContext } from "react";
+import React, { FC, useRef, useState, useContext, useMemo } from "react";
 import Axios from 'axios';
 import { captureException } from "@sentry/react";
 import { Editor } from "@tinymce/tinymce-react";
@@ -19,6 +19,7 @@ import { PostImage, PostFile } from 'shareComponents/common';
 import classNames from 'classnames';
 import { toArray } from 'lodash';
 import { FileProps, FilePropsUpload } from 'typings/common';
+import taskUserAvt from "assets/images/task-user.svg";
 
 type Props = {
     task: Task;
@@ -33,7 +34,24 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, tab, socket, onC
     const refDivFile = useRef<HTMLDivElement | null>(null);
     const editorRef = useRef<EditorType>();
 
-    const [selectedUser, setSelectedUser] = useState<Item[]>([]);
+    const initUsersSelected = useMemo(() => {
+        if(parent) {
+            const { _id, bizfullname, image } = parent.author;
+            return [{
+                label: bizfullname,
+                value: _id,
+                image: image ? `${process.env.REACT_APP_URL_S3_USER}/${image}` : taskUserAvt
+            }];
+        } else{
+            return task.accessUsers?.map(({ bizfullname, _id, image }) => ({
+                label: bizfullname,
+                value: _id,
+                image: image ? `${process.env.REACT_APP_URL_S3_USER}/${image}` : taskUserAvt
+            }));
+        }
+    }, [task, parent])
+
+    const [selectedUser, setSelectedUser] = useState<Item[]>(initUsersSelected);
     const [isUploading, setIsUploading] = useState(false);
     const [tokens, setTokens] = useState<any[]>([]);
 
@@ -231,7 +249,10 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, tab, socket, onC
         <>
             <div className={"mt-2 editor ml-12 border border-primary-border rounded"}>
                 <div className={"px-2 py-4"}>
-                    <SendToMultiSelected selectedUser={selectedUser} setSelectedUser={setSelectedUser} />
+                    <SendToMultiSelected
+                        selectedUser={selectedUser}
+                        setSelectedUser={setSelectedUser}
+                    />
                 </div>
                 <Editor
                     // onActivate={}
