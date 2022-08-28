@@ -9,6 +9,8 @@ import {ProjectBudgetDetailTab1} from "./components/ProjectBudgetDetailTab1";
 import {ProjectBudgetDetailTab2} from "./components/ProjectBudgetDetailTab2";
 import {ProjectBudgetDetailTab3} from "./components/ProjectBudgetDetailTab3";
 import {ProjectBudgetDetailTab4} from "./components/ProjectBudgetDetailTab4";
+// hook backend
+import { useContract } from 'services/hooks/items/useContract';
 
 const ProjectBudgetDetailPage:FC = () => {
     const { id: projectID, type, budgetId, tab } = useParams<{ id: string , type: string, budgetId: string, tab: string}>();
@@ -16,8 +18,24 @@ const ProjectBudgetDetailPage:FC = () => {
     const activeTab = useCallback(() => {
         return tab.trim();
     }, [tab])
+    // Xử lý logic code
+    const contractID = budgetId;
+    const { contractInfo } = useContract({
+		params: {
+			contractID,
+			select: `name sign date buyerBank sellerBank sellerInfo status expiredAg expiredCg 
+            contractValue contractVatValue contractPlus contractVatPlus contractProduce contractVatProduce
+            contractAcceptance contractVatAcceptance contractPlusAcceptance contractVatPlusAcceptance
+            contractAmountPaid contractRemainingPayment finalValue produce vatProduce plusProduce vatPlusProduce remainingProduce 
+            recommendedPayment amountPaid remainingPayment`,
+			populates: JSON.stringify({
+				path: "project buyerInfo",
+				select: "_id name"
+			})
+		},
+		isFetchInfo: !!contractID
+	});
 
-    console.log(activeTab())
     return (
         <div className={"project-budget-detail relative flex flex-col h-full overflow-hidden"}>
             <div className={"sticky top-0 bg-white"}>
@@ -25,7 +43,7 @@ const ProjectBudgetDetailPage:FC = () => {
                     <button className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mr-3"}>
                         <img src={iconBack} alt={"----"} className={"w-[18px]"}/>
                     </button>
-                    <p className={"text-lg text-primary-gray ml-2"}>Hợp đồng cung cấp, lắp đặt thiết bị hệ thống trạm xử lý nước thải</p>
+                    <p className={"text-lg text-primary-gray ml-2"}>{contractInfo?.name}</p>
                 </div>
                 <div className={"flex items-center pb-2 mt-2"}>
                     <div className={"border-0.5 border-primary-border flex items-center"}>
@@ -64,28 +82,28 @@ const ProjectBudgetDetailPage:FC = () => {
                 {/*Thông tin chung*/}
                 {
                     activeTab() === "1" &&
-                    <ProjectBudgetDetailTab1/>
+                    <ProjectBudgetDetailTab1 contractInfo={contractInfo}/>
                 }
                 {/*End Thông tin chung*/}
 
                 {/*Sản lượng*/}
                 {
                     activeTab() === "2" &&
-                    <ProjectBudgetDetailTab2/>
+                    <ProjectBudgetDetailTab2 contractInfo={contractInfo}/>
                 }
                 {/*End sản lượng*/}
 
                 {/*Nghiệm thu*/}
                 {
                     activeTab() === "3" &&
-                    <ProjectBudgetDetailTab3/>
+                    <ProjectBudgetDetailTab3 contractInfo={contractInfo}/>
                 }
                 {/*End nghiệm thu*/}
 
                 {/*Thanh toán*/}
                 {
                     activeTab() === "4" &&
-                    <ProjectBudgetDetailTab4/>
+                    <ProjectBudgetDetailTab4 contractInfo={contractInfo}/>
                 }
                 {/*End thanh toán*/}
             </div>
