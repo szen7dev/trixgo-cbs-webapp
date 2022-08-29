@@ -1,4 +1,4 @@
-import React, { FC, useState, UIEvent, useRef } from "react";
+import React, { FC, useState, UIEvent } from "react";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import parse from "html-react-parser";
@@ -7,10 +7,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "views/pcm/styles/pcm.module.css";
 
-import {
-  DropdownSearchableV2,
-  Loader
-} from "shareComponents/common";
+import { DropdownSearchableV2, Loader } from "shareComponents/common";
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
 import userIcon from "assets/images/icon-user-avatar.svg";
 import maleUserIcon from "assets/images/icons8-male-user-64.svg";
@@ -19,7 +16,6 @@ import timeTableIcon from "assets/images/icons8-timetable-48.svg";
 import projectIcon from "assets/images/icons8-project-50.svg";
 import downloadIcon from "assets/images/icons8-download-96.svg";
 import sendMailIcon from "assets/images/icons8-send-email-96.svg";
-import nextIcon from "assets/images/icons-arrow-next.svg";
 import TriangleDown from "assets/icons/TriangleDown";
 import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
 import businessBuiding from "assets/images/icons8-business-building-48.svg";
@@ -43,15 +39,19 @@ import {
 } from "redux/reducer/DashboardV2Slice";
 import { useSearchTask } from "services/hooks/useMainSearch";
 import { humanFileSize } from "utils/converter";
+import PaginateV2 from "shareComponents/common/PaginateV2";
 
 type Props = {
   type?: number;
 };
 
 export const DashboardV2: FC<Props> = ({ type = 0 }) => {
+  type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   const dispatch = useDispatch();
   const [filter, setFilter] = useState("all");
   const { user } = useAuth();
+  const [pageIndex, setPageIndex] = useState(0);
+  const ref = React.useRef<PaginateHandle>(null);
   const tabIndex = useAppSelector((state) => state.dashboardV2.data.tabIndex);
   const tabActive = useAppSelector((state) => state.dashboardV2.data.tabActive);
 
@@ -126,7 +126,6 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     fetchNextPage: fetchNextPagePrject,
     hasNextPage: hasNextPageProject,
   } = useQueryListDepartmentsIsMember({
-    limit: 50,
     keyword: searchProject,
     isFetch: true,
   });
@@ -152,10 +151,12 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
   };
 
   const {
-    listDataForResponse,
+    listDataForResponseWithPager: listDataForResponse,
     isLoadingResponse,
     totalRecord: totalRecordResponse,
-    nextPageSubject,
+    totalPage: totalPageResponse,
+    hasNextPageSubject: hasNextPageResponse,
+    nextPageSubject: nextPageResponse,
     isFetching: isFetchingResponse,
   } = useListResponseFromSearch(query);
 
@@ -167,9 +168,11 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
 
   // Danh sách các subject theo keyword
   const {
-    listTasks: listDataForSubject,
+    listTasksWithPager: listDataForSubject,
     nextPageListTask,
     totalRecord: totalRecordSubject,
+    totalPage: totalPageSubject,
+    hasNextPage: hasNextPageSubject,
     isLoadingListTask,
     isFetching: isFetchingNextPageSubject,
   } = useSearchTask({
@@ -183,7 +186,6 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
       subtypes: subtypes,
       status: status,
       // read: 1, // 1-Chưa đọc, 2-Đã đọc, Không truyền => lấy tất cả
-      limit: 50,
       ...querySubject,
     },
     isFetch: tabActive === 2 ? true : false,
@@ -194,15 +196,16 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     isLoadingFile,
     nextPageFile,
     totalRecord: totalRecordFile,
-    listDataForFile,
+    totalPage: totalPageFile,
+    listDataForFileWithPager: listDataForFile,
     isFetching: isFetchingFile,
+    hasNextPageFile,
   } = useListFileFromSearch({
     keyword: keywordForFile,
     fromDate: fromCreateDate,
     toDate: toCreateDate,
     projectsID: project,
     ...queryFile,
-    limit: "50",
     enabled: tabActive === 3 ? true : false,
   });
   //////
@@ -222,7 +225,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     setTimeout(() => {
       setReset(true);
     }, 0);
-  }
+  };
 
   const checkActive = (relateds: string[], user: string) => {
     let result = "read border-b-0.5 border-primary-border";
@@ -231,14 +234,6 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     }
     return result;
   };
-
-  const dropdownSearchableV2: any = useRef(null);
-  
-  const xxxxxx = 
-  [{
-    label: "Công ty C1020",
-value: "6046c7c02c1dc33996dde3f6"
-  }];
 
   return (
     <div className="t-home flex flex-col h-full overflow-hidden">
@@ -278,6 +273,8 @@ value: "6046c7c02c1dc33996dde3f6"
                 }
                 setSearchCompanyName("");
                 dispatch(setTabActive(tabIndex));
+                setPageIndex(0);
+                ref.current && ref.current.resetPaginate();
               }}
               onMultipleRemoveValue={(id: any) => {
                 const newList = querySubject.companiesOfAssignee.filter(
@@ -341,6 +338,8 @@ value: "6046c7c02c1dc33996dde3f6"
                 }
                 setSearchUserSystem("");
                 dispatch(setTabActive(tabIndex));
+                setPageIndex(0);
+                ref.current && ref.current.resetPaginate();
               }}
               onMultipleRemoveValue={(id: any) => {
                 const newList = querySubject.assigneesID.filter(
@@ -482,6 +481,8 @@ value: "6046c7c02c1dc33996dde3f6"
                   );
                 }
                 setSearchCompanyName("");
+                setPageIndex(0);
+                ref.current && ref.current.resetPaginate();
               }}
               onMultipleRemoveValue={(id: any) => {
                 const newList = queryFile.companyOfAuthorsID.filter(
@@ -558,6 +559,8 @@ value: "6046c7c02c1dc33996dde3f6"
                   }
                 }
                 setSearchUserSystem("");
+                setPageIndex(0);
+                ref.current && ref.current.resetPaginate();
               }}
               onMultipleRemoveValue={(id: any) => {
                 if (tabIndex === 3) {
@@ -660,6 +663,8 @@ value: "6046c7c02c1dc33996dde3f6"
                 }
                 setSearchCompanyName("");
                 dispatch(setTabActive(tabIndex));
+                setPageIndex(0);
+                ref.current && ref.current.resetPaginate();
               }}
               onMultipleRemoveValue={(id: any) => {
                 const newList = queryResponse.companyOfAuthorsID.filter(
@@ -725,6 +730,8 @@ value: "6046c7c02c1dc33996dde3f6"
                 }
                 setSearchUserSystem("");
                 dispatch(setTabActive(tabIndex));
+                setPageIndex(0);
+                ref.current && ref.current.resetPaginate();
               }}
               onMultipleRemoveValue={(id: any) => {
                 const newList = queryResponse.authorsID.filter(
@@ -820,6 +827,8 @@ value: "6046c7c02c1dc33996dde3f6"
                 }
                 setSearchProject("");
                 dispatch(setTabActive(tabIndex));
+                setPageIndex(0);
+                ref.current && ref.current.resetPaginate();
               }}
               onMultipleRemoveValue={(id: any) => {
                 const newList = project.filter((item: any) => item !== id);
@@ -902,6 +911,8 @@ value: "6046c7c02c1dc33996dde3f6"
               onchangeValue={(val) => {
                 setIsExpired(val.id);
                 dispatch(setTabActive(tabIndex));
+                setPageIndex(0);
+                ref.current && ref.current.resetPaginate();
               }}
               data={[
                 {
@@ -936,6 +947,8 @@ value: "6046c7c02c1dc33996dde3f6"
                   setStatus(newData);
                 }
                 dispatch(setTabActive(tabIndex));
+                setPageIndex(0);
+                ref.current && ref.current.resetPaginate();
               }}
               onMultipleRemoveValue={(id: any) => {
                 const newList = status.filter((item) => item !== id);
@@ -1007,6 +1020,8 @@ value: "6046c7c02c1dc33996dde3f6"
                   })
                 );
                 dispatch(setTabActive(tabIndex));
+                setPageIndex(0);
+                ref.current && ref.current.resetPaginate();
               }}
             />
           )}
@@ -1027,6 +1042,8 @@ value: "6046c7c02c1dc33996dde3f6"
                   setSubtypes(newData);
                 }
                 dispatch(setTabActive(tabIndex));
+                setPageIndex(0);
+                ref.current && ref.current.resetPaginate();
               }}
               onMultipleRemoveValue={(id: any) => {
                 const newList = subtypes.filter((item) => item !== id);
@@ -1154,43 +1171,41 @@ value: "6046c7c02c1dc33996dde3f6"
             <img src={sendMailIcon} alt={"-----"} />
           </button>
           <div className={"flex-1 flex items-center justify-end"}>
-            <span className={"text-primary-gray"}>
-              {tabActive === 1 && listDataForResponse.length
-                ? "1"
-                : tabActive === 2 && listDataForSubject.length
-                ? "1"
-                : tabActive === 3 && listDataForFile.length
-                ? "1"
-                : "0"}
-              -
-              {tabActive === 1
-                ? listDataForResponse.length
-                : tabActive === 2
-                ? listDataForSubject.length
-                : listDataForFile.length}{" "}
-              trong số{" "}
-              {tabActive === 1
-                ? totalRecordResponse
-                : tabActive === 2
-                ? totalRecordSubject
-                : totalRecordFile}
-            </span>
-            <button
-              className={
-                "w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"
+            <PaginateV2
+              ref={ref}
+              totalRecord={
+                tabActive === 1
+                  ? totalRecordResponse
+                  : tabActive === 2
+                  ? totalRecordSubject
+                  : totalRecordFile
               }
-              disabled={true}
-            >
-              <img src={nextIcon} alt={"----"} className={"rotate-180"} />
-            </button>
-            <button
-              className={
-                "w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"
+              totalPages={
+                tabActive === 1
+                  ? totalPageResponse
+                  : tabActive === 2
+                  ? totalPageSubject
+                  : totalPageFile
               }
-              onClick={() => {
+              limit={20}
+              hasNextPage={
+                tabActive === 1
+                  ? hasNextPageResponse
+                  : tabActive === 2
+                  ? hasNextPageSubject
+                  : hasNextPageFile
+              }
+              isFetching={
+                tabActive === 1
+                  ? isFetchingResponse
+                  : tabActive === 2
+                  ? isFetchingNextPageSubject
+                  : isFetchingFile
+              }
+              nextPageAction={() => {
                 switch (tabActive) {
                   case 1:
-                    nextPageSubject();
+                    nextPageResponse();
                     break;
                   case 2:
                     nextPageListTask();
@@ -1201,10 +1216,12 @@ value: "6046c7c02c1dc33996dde3f6"
                   default:
                     break;
                 }
+                setPageIndex((oldState) => oldState + 1);
               }}
-            >
-              <img src={nextIcon} alt={"----"} />
-            </button>
+              prevPageAction={() => {
+                setPageIndex((oldState) => oldState - 1);
+              }}
+            />
           </div>
         </div>
       </div>
@@ -1212,77 +1229,83 @@ value: "6046c7c02c1dc33996dde3f6"
         <table className={"w-full table-fixed tasks"}>
           {tabActive === 1 ? (
             <tbody>
-              {listDataForResponse.map((item: any, index: number) => {
-                return (
-                  <tr
-                    key={index}
-                    className={"read border-b-0.5 border-primary-border"}
-                  >
-                    <td className={"w-[46px]"}>
-                      <div className={"flex items-center justify-center py-2"}>
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="check"
-                        />
-                      </div>
-                    </td>
-                    <td className={"w-[55px]"}>
-                      <Link to={"/pcm/detail/" + item.task?._id}>
-                        <div className={"py-2"}>
-                          <img
-                            src={
-                              item?.author?.image
-                                ? `${process.env.REACT_APP_URL_S3_USER}/${item?.author?.image}`
-                                : userIcon
-                            }
-                            alt={"avatar"}
-                            className={
-                              "w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"
-                            }
+              {(listDataForResponse[pageIndex] ?? []).map(
+                (item: any, index: number) => {
+                  return (
+                    <tr
+                      key={index}
+                      className={"read border-b-0.5 border-primary-border"}
+                    >
+                      <td className={"w-[46px]"}>
+                        <div
+                          className={"flex items-center justify-center py-2"}
+                        >
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            value=""
+                            id="check"
                           />
                         </div>
-                      </Link>
-                    </td>
-                    <td className={"w-[170px]"}>
-                      <Link to={"/pcm/detail/" + item.task?._id}>
-                        <div className={"user-infor py-2"}>
-                          <p className={"truncate user-infor-name text-[14px]"}>
-                            {item.author.fullname}
+                      </td>
+                      <td className={"w-[55px]"}>
+                        <Link to={"/pcm/detail/" + item.task?._id}>
+                          <div className={"py-2"}>
+                            <img
+                              src={
+                                item?.author?.image
+                                  ? `${process.env.REACT_APP_URL_S3_USER}/${item?.author?.image}`
+                                  : userIcon
+                              }
+                              alt={"avatar"}
+                              className={
+                                "w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"
+                              }
+                            />
+                          </div>
+                        </Link>
+                      </td>
+                      <td className={"w-[170px]"}>
+                        <Link to={"/pcm/detail/" + item.task?._id}>
+                          <div className={"user-infor py-2"}>
+                            <p
+                              className={"truncate user-infor-name text-[14px]"}
+                            >
+                              {item.author.fullname}
+                            </p>
+                            <span className={"text-xs text-primary-gray py-2"}>
+                              {item.task.related.length} liên quan
+                            </span>
+                          </div>
+                        </Link>
+                      </td>
+                      <td className={"w-td-dashboard"}>
+                        <Link to={"/pcm/detail/" + item.task?._id}>
+                          <p className={"task-title truncate text-[14px] mt-2"}>
+                            {item.project?.sign}.{item.task?.name}
                           </p>
-                          <span className={"text-xs text-primary-gray py-2"}>
-                            {item.task.related.length} liên quan
-                          </span>
-                        </div>
-                      </Link>
-                    </td>
-                    <td className={"w-td-dashboard"}>
-                      <Link to={"/pcm/detail/" + item.task?._id}>
-                        <p className={"task-title truncate text-[14px] mt-2"}>
-                          {item.project?.sign}.{item.task?.name}
-                        </p>
-                        <p
+                          <p
+                            className={
+                              "crop-text truncate text-xs text-primary-gray py-2"
+                            }
+                          >
+                            {subContentHtml(item.content)}
+                          </p>
+                        </Link>
+                      </td>
+                      <td className={"w-[100px]"}>
+                        <div
                           className={
-                            "crop-text truncate text-xs text-primary-gray py-2"
+                            "task-date whitespace-nowrap py-2 text-right pr-4"
                           }
                         >
-                          {subContentHtml(item.content)}
-                        </p>
-                      </Link>
-                    </td>
-                    <td className={"w-[100px]"}>
-                      <div
-                        className={
-                          "task-date whitespace-nowrap py-2 text-right pr-4"
-                        }
-                      >
-                        {moment(item.createAt).format("DD/MM/YYYY")}
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
+                          {moment(item.createAt).format("DD/MM/YYYY")}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                }
+              )}
             </tbody>
           ) : (
             <></>
@@ -1290,79 +1313,85 @@ value: "6046c7c02c1dc33996dde3f6"
 
           {tabActive === 2 ? (
             <tbody>
-              {listDataForSubject?.map((item: any, index: number) => {
-                return (
-                  <tr
-                    key={index}
-                    className={checkActive(item.news, `${user?._id}`)}
-                  >
-                    <td className={"w-[46px]"}>
-                      <div className={"flex items-center justify-center py-2"}>
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="check"
-                        />
-                      </div>
-                    </td>
-                    <td className={"w-[55px]"}>
-                      <Link to={"/pcm/detail/" + item._id}>
-                        <div className={"py-2"}>
-                          <img
-                            src={`${process.env.REACT_APP_URL_S3_USER}/${
-                              item.lastComment
-                                ? item.lastComment.author.image
-                                : item.author.image
-                            }`}
-                            alt={"avatar"}
-                            className={
-                              "w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"
-                            }
+              {(listDataForSubject[pageIndex] ?? []).map(
+                (item: any, index: number) => {
+                  return (
+                    <tr
+                      key={index}
+                      className={checkActive(item.news, `${user?._id}`)}
+                    >
+                      <td className={"w-[46px]"}>
+                        <div
+                          className={"flex items-center justify-center py-2"}
+                        >
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            value=""
+                            id="check"
                           />
                         </div>
-                      </Link>
-                    </td>
-                    <td className={"w-[170px]"}>
-                      <Link to={"/pcm/detail/" + item._id}>
-                        <div className={"user-infor py-2"}>
-                          <p className={"truncate user-infor-name text-[14px]"}>
-                            {item.lastComment
-                              ? item.lastComment.author.fullname
-                              : item.author.fullname}
+                      </td>
+                      <td className={"w-[55px]"}>
+                        <Link to={"/pcm/detail/" + item._id}>
+                          <div className={"py-2"}>
+                            <img
+                              src={`${process.env.REACT_APP_URL_S3_USER}/${
+                                item.lastComment
+                                  ? item.lastComment.author.image
+                                  : item.author.image
+                              }`}
+                              alt={"avatar"}
+                              className={
+                                "w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"
+                              }
+                            />
+                          </div>
+                        </Link>
+                      </td>
+                      <td className={"w-[170px]"}>
+                        <Link to={"/pcm/detail/" + item._id}>
+                          <div className={"user-infor py-2"}>
+                            <p
+                              className={"truncate user-infor-name text-[14px]"}
+                            >
+                              {item.lastComment
+                                ? item.lastComment.author.fullname
+                                : item.author.fullname}
+                            </p>
+                            <span className={"text-xs text-primary-gray py-2"}>
+                              {item.related.length} liên quan
+                            </span>
+                          </div>
+                        </Link>
+                      </td>
+                      <td className={"w-td-dashboard"}>
+                        <Link to={"/pcm/detail/" + item._id}>
+                          <p className={"task-title truncate text-[14px] mt-2"}>
+                            {item.project.sign}.{subContentHtml(item.name)}
                           </p>
-                          <span className={"text-xs text-primary-gray py-2"}>
-                            {item.related.length} liên quan
-                          </span>
-                        </div>
-                      </Link>
-                    </td>
-                    <td className={"w-td-dashboard"}>
-                      <Link to={"/pcm/detail/" + item._id}>
-                        <p className={"task-title truncate text-[14px] mt-2"}>
-                          {item.project.sign}.{subContentHtml(item.name)}
-                        </p>
-                        <p
+                          <p
+                            className={
+                              "crop-text truncate text-xs text-primary-gray py-2"
+                            }
+                          >
+                            {subContentHtml(item.lastComment?.content)}
+                          </p>
+                        </Link>
+                      </td>
+                      <td className={"w-[100px]"}>
+                        <div
                           className={
-                            "crop-text truncate text-xs text-primary-gray py-2"
+                            "task-date whitespace-nowrap py-2 text-right pr-4"
                           }
                         >
-                          {subContentHtml(item.lastComment?.content)}
-                        </p>
-                      </Link>
-                    </td>
-                    <td className={"w-[100px]"}>
-                      <div
-                        className={
-                          "task-date whitespace-nowrap py-2 text-right pr-4"
-                        }
-                      >
-                        {moment(item.modifyAt).format("DD/MM/YYYY")}
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
+                          {moment(item.modifyAt).format("DD/MM/YYYY")}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                }
+              )}
             </tbody>
           ) : (
             <></>
@@ -1422,77 +1451,79 @@ value: "6046c7c02c1dc33996dde3f6"
               </tr>
             </thead>
             <tbody>
-              {(listDataForFile || []).map((item: any, i: number) => (
-                <tr key={i}>
-                  <td
-                    className={
-                      "py-2 border-b-0.5 border-primary-border text-center align-middle"
-                    }
-                  >
-                    {i + 1}
-                  </td>
-                  <td
-                    className={
-                      "py-2 border-b-0.5 border-primary-border align-middle"
-                    }
-                  >
-                    <p>{moment(item.createAt).format("DD/MM/YYYY")}</p>
-                    <p className={"text-primary-gray"}>
-                      {moment(item.createAt).fromNow()}
-                    </p>
-                  </td>
-                  <td
-                    className={
-                      "py-2 border-b-0.5 border-primary-border align-middle"
-                    }
-                  >
-                    <div className={"flex items-center"}>
-                      <img
-                        src={
-                          item?.author?.image
-                            ? `${process.env.REACT_APP_URL_S3_USER}/${item?.author?.image}`
-                            : userIcon
-                        }
-                        alt={"---"}
-                        className={
-                          "w-[36px] h-[36px] min-w-[36px] min-h-[36px] max-w-[36px] max-h-[36px rounded-full overflow-hidden]"
-                        }
-                      />
-                      <span className={"ml-2"}>{item?.author?.fullname}</span>
-                    </div>
-                  </td>
-                  <td
-                    className={
-                      "py-2 border-b-0.5 border-primary-border align-middle text-cbs-highlight-color break-all pr-2"
-                    }
-                  >
-                    <a
-                      href={`${process.env.REACT_APP_URL_S3}${item.path}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-cbs-highlight-color"
+              {(listDataForFile[pageIndex] ?? []).map(
+                (item: any, i: number) => (
+                  <tr key={i}>
+                    <td
+                      className={
+                        "py-2 border-b-0.5 border-primary-border text-center align-middle"
+                      }
                     >
-                      {item.nameOrg}
-                    </a>
-                  </td>
-                  <td
-                    className={
-                      "py-2 border-b-0.5 border-primary-border align-middle"
-                    }
-                  >
-                    {humanFileSize(item.size)}
-                  </td>
-                  <td
-                    className={
-                      "py-2 border-b-0.5 border-primary-border align-middle"
-                    }
-                  >
-                    <Link to={"/pcm/detail/" + item.task?._id}>
-                      {item?.project?.sign}.{item.task?.name}
-                    </Link>
-                  </td>
-                </tr>
-              ))}
+                      {i + 1}
+                    </td>
+                    <td
+                      className={
+                        "py-2 border-b-0.5 border-primary-border align-middle"
+                      }
+                    >
+                      <p>{moment(item.createAt).format("DD/MM/YYYY")}</p>
+                      <p className={"text-primary-gray"}>
+                        {moment(item.createAt).fromNow()}
+                      </p>
+                    </td>
+                    <td
+                      className={
+                        "py-2 border-b-0.5 border-primary-border align-middle"
+                      }
+                    >
+                      <div className={"flex items-center"}>
+                        <img
+                          src={
+                            item?.author?.image
+                              ? `${process.env.REACT_APP_URL_S3_USER}/${item?.author?.image}`
+                              : userIcon
+                          }
+                          alt={"---"}
+                          className={
+                            "w-[36px] h-[36px] min-w-[36px] min-h-[36px] max-w-[36px] max-h-[36px rounded-full overflow-hidden]"
+                          }
+                        />
+                        <span className={"ml-2"}>{item?.author?.fullname}</span>
+                      </div>
+                    </td>
+                    <td
+                      className={
+                        "py-2 border-b-0.5 border-primary-border align-middle text-cbs-highlight-color break-all pr-2"
+                      }
+                    >
+                      <a
+                        href={`${process.env.REACT_APP_URL_S3}${item.path}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-cbs-highlight-color"
+                      >
+                        {item.nameOrg}
+                      </a>
+                    </td>
+                    <td
+                      className={
+                        "py-2 border-b-0.5 border-primary-border align-middle"
+                      }
+                    >
+                      {humanFileSize(item.size)}
+                    </td>
+                    <td
+                      className={
+                        "py-2 border-b-0.5 border-primary-border align-middle"
+                      }
+                    >
+                      <Link to={"/pcm/detail/" + item.task?._id}>
+                        {item?.project?.sign}.{item.task?.name}
+                      </Link>
+                    </td>
+                  </tr>
+                )
+              )}
             </tbody>
           </table>
         ) : (
