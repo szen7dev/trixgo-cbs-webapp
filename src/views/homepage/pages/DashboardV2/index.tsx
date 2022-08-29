@@ -40,6 +40,7 @@ import {
 import { useSearchTask } from "services/hooks/useMainSearch";
 import { humanFileSize } from "utils/converter";
 import PaginateV2 from "shareComponents/common/PaginateV2";
+import { useTask } from "services/hooks/useTask";
 
 type Props = {
   type?: number;
@@ -150,6 +151,10 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     enabled: tabActive === 1 ? true : false,
   };
 
+  if (filter !== "all") {
+    query.read = filter === "read" ? 2 : 1;
+  }
+
   const {
     listDataForResponseWithPager: listDataForResponse,
     isLoadingResponse,
@@ -167,6 +172,23 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
   const [status, setStatus] = useState<string[]>([]);
 
   // Danh sách các subject theo keyword
+
+  const querySearchTask: any = {
+    keyword: keywordForSubject,
+    fromDate: fromExpiredDate,
+    toDate: toExpiredDate,
+    authorsID: authors,
+    projectsID: project,
+    isExpired: isExpired,
+    subtypes: subtypes,
+    status: status,
+    ...querySubject,
+  };
+
+  if (filter !== "all") {
+    querySearchTask.read = filter === "read" ? 2 : 1;
+  }
+
   const {
     listTasksWithPager: listDataForSubject,
     nextPageListTask,
@@ -176,18 +198,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     isLoadingListTask,
     isFetching: isFetchingNextPageSubject,
   } = useSearchTask({
-    params: {
-      keyword: keywordForSubject,
-      fromDate: fromExpiredDate,
-      toDate: toExpiredDate,
-      authorsID: authors,
-      projectsID: project,
-      isExpired: isExpired,
-      subtypes: subtypes,
-      status: status,
-      // read: 1, // 1-Chưa đọc, 2-Đã đọc, Không truyền => lấy tất cả
-      ...querySubject,
-    },
+    params: querySearchTask,
     isFetch: tabActive === 2 ? true : false,
   });
 
@@ -226,6 +237,11 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
       setReset(true);
     }, 0);
   };
+
+  const { updateStatusMultipleAsync } = useTask({
+    params: {},
+    isFetchInfo: false,
+  });
 
   const checkActive = (relateds: string[], user: string) => {
     let result = "read border-b-0.5 border-primary-border";
@@ -1161,7 +1177,10 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           >
             Đã đọc
           </button>
-          <button className={"text-primary mx-2"}>
+          <button
+            className={"text-primary mx-2"}
+            onClick={() => updateStatusMultipleAsync({ option: 2 })}
+          >
             Đánh dấu tất cả đã đọc
           </button>
           <button className={"flex items-center justify-center mx-3"}>
@@ -1299,7 +1318,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                             "task-date whitespace-nowrap py-2 text-right pr-4"
                           }
                         >
-                          {moment(item.createAt).format("DD/MM/YYYY")}
+                          {showTime(item.createAt)}
                         </div>
                       </td>
                     </tr>
@@ -1385,7 +1404,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                             "task-date whitespace-nowrap py-2 text-right pr-4"
                           }
                         >
-                          {moment(item.modifyAt).format("DD/MM/YYYY")}
+                          {showTime(item.modifyAt)}
                         </div>
                       </td>
                     </tr>
@@ -1466,9 +1485,10 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                         "py-2 border-b-0.5 border-primary-border align-middle"
                       }
                     >
-                      <p>{moment(item.createAt).format("DD/MM/YYYY")}</p>
+                      <p>{showTime(item.createAt)}</p>
                       <p className={"text-primary-gray"}>
                         {moment(item.createAt).fromNow()}
+                      
                       </p>
                     </td>
                     <td
@@ -1544,4 +1564,17 @@ export const subContentHtml = (html?: string) => {
       ? `${removeHtmlTag.slice(0, 150)}...`
       : removeHtmlTag;
   return result;
+};
+
+export const showTime = (time: any) => {
+  const toDay = new Date();
+  const timeDay = new Date(time);
+  if (
+    toDay.getDate() === timeDay.getDate() &&
+    toDay.getMonth() === timeDay.getMonth()
+  ) {
+    return moment(time).format("HH:mm");
+  } else {
+    return moment(time).format("DD/MM/YYYY");
+  }
 };
