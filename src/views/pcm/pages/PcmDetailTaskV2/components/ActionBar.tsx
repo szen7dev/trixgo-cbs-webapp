@@ -84,7 +84,7 @@ export const ActionTaskDetailBar:FC<Props> = ({ task, user, refetchTaskInfo, han
                 <img src={iconMember} alt={"----"} className={"w-[24px] mr-2"}/>
                 <span>Chia sẻ</span>
             </button>
-            <OtherActions/>
+            <OtherActions task={task} />
         </div>
     )
 }
