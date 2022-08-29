@@ -8,13 +8,13 @@ import {appendFakeItemListConversation} from "redux/reducer/messages/ListConvers
 import {useDispatch} from "react-redux";
 import {map as _map} from "lodash";
 import {SearchChatItem} from "../SearchUserConversation";
-import {debounce} from "lodash";
 
 export const SearchUserAndConversation:FC = () => {
     const {currentChat, socketRef, setCurrentChat} = useContext(MessageContext);
     const socket = socketRef.current;
     const dispatch = useDispatch();
 
+    const inputRef = useRef<HTMLInputElement>(null);
     const wrapperClass = useRef<HTMLDivElement>(null);
     const [search, setSearch] = useState("");
     const [showResult, setShowResult] = useState(false);
@@ -22,11 +22,20 @@ export const SearchUserAndConversation:FC = () => {
     useOnClickOutside(wrapperClass, () => {
         setShowResult(false);
         setSearch("");
+        if (inputRef.current) {
+            inputRef.current.value = "";
+        }
     })
 
-    const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setSearch(e.target.value)
-        setShowResult(true)
+    const setTypingTimeoutRef: any = useRef(null);
+    async function handleSearchChange(e: React.ChangeEvent<HTMLInputElement>) {
+        if (setTypingTimeoutRef.current) {
+            clearTimeout(setTypingTimeoutRef.current);
+        }
+        setTypingTimeoutRef.current = setTimeout(() => {
+            setSearch(e.target.value);
+            setShowResult(true);
+        }, 300)
     }
 
     const params = {limit: 5, select: 'fullname bizfullname email phone image', populates: '{"path": "company", "select": "name"}', keyword: search}
@@ -37,6 +46,9 @@ export const SearchUserAndConversation:FC = () => {
 
     const handleStartPrivateChat = (memberId: string) => {
         setSearch("");
+        if (inputRef.current) {
+            inputRef.current.value = "";
+        }
         createConversation({
             name: "",
             description: "",
@@ -61,8 +73,8 @@ export const SearchUserAndConversation:FC = () => {
                 <img src={searchIcon} alt={"search icon"}/>
             </div>
             <input
-                value={search}
-                onChange={debounce(e => handleSearchChange(e), 500)}
+                ref={inputRef}
+                onChange={e => handleSearchChange(e)}
                 className={"pl-12 w-full h-[45px] bg-cbs-bg-input-search rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-none focus:shadow-md transition-all"} placeholder={"Tìm trong bạn bè hoặc cuộc hội thoại"}/>
 
             {
@@ -90,6 +102,9 @@ export const SearchUserAndConversation:FC = () => {
                                     setCurrentChat(chat._id);
                                     setShowResult(false)
                                     setSearch("");
+                                    if (inputRef.current) {
+                                        inputRef.current.value = "";
+                                    }
                                 }}
                                 chat={conversation} key={conversation._id}/>
                         ))
