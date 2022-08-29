@@ -49,6 +49,10 @@ const HumanLayout = lazy(() => import("views/human/shareComponents/layouts"));
 // const DocumentLayout = lazy(() => import('views/document/sharedComponents/layouts'));
 const AccountingLayout = lazy(() => import('views/accounting/shareComponents/layouts'));
 
+const PcmPrintTaskTypeOnePage     = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeOne'));
+const PcmPrintTaskTypeTwoPage     = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeTwo'));
+const PcmPrintTaskTypeThreePage   = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeThree'));
+
 const Routes: FC = () => {
     useEffect(() => {
         document.title = "Trixgo | Quản trị doanh nghiệp";
@@ -70,6 +74,10 @@ const Routes: FC = () => {
 
                         <ModalProvider>
                             <Switch>
+
+                                <Route exact path="/pcm/detail/:id/print/1" component={PcmPrintTaskTypeOnePage} />
+                                <Route exact path="/pcm/detail/:id/print/2" component={PcmPrintTaskTypeTwoPage} />
+                                <Route exact path="/pcm/detail/:id/print/3" component={PcmPrintTaskTypeThreePage} />
 
                                 {/* =====AUTHENTICATION===== */}
                                 <Route path="/(authentication|login)/:path?">

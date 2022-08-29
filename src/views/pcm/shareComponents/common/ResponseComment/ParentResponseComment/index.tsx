@@ -439,6 +439,7 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
                         parent={comment}
                         tab={tab}
                         socket={socket}
+                        userId={userId}
                         onCancelCreateResponse={() => setOpenReply(false)}
                         onConfirmCreate={() => setOpenReply(false)}
                     />

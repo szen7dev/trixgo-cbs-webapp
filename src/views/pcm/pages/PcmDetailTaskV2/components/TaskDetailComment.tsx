@@ -176,6 +176,7 @@ export const TaskDetailComment: FC<Props> = ({ task, userId, refetchInfo }) => {
                     task={task}
                     tab={filter}
                     socket={socket}
+                    userId={userId}
                     onCancelCreateResponse={() => setIsOpenCreateResponse(false)}
                     onConfirmCreate={() => {
                         setIsOpenCreateResponse(false);

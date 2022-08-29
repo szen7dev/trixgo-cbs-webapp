@@ -24,31 +24,44 @@ import taskUserAvt from "assets/images/task-user.svg";
 type Props = {
     task: Task;
     parent?: CommentProps;
+    userId?: string;
     tab: number;
     socket?: any;
     onCancelCreateResponse: () => void;
     onConfirmCreate?: () => void;
 }
 
-export const ReplyResponseComment: FC<Props> = ({ task, parent, tab, socket, onCancelCreateResponse, onConfirmCreate }) => {
+export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, socket, onCancelCreateResponse, onConfirmCreate }) => {
     const refDivFile = useRef<HTMLDivElement | null>(null);
     const editorRef = useRef<EditorType>();
 
     const initUsersSelected = useMemo(() => {
+        let arr = [];
         if(parent) {
             const { _id, bizfullname, image } = parent.author;
-            return [{
+            arr = [{
                 label: bizfullname,
                 value: _id,
                 image: image ? `${process.env.REACT_APP_URL_S3_USER}/${image}` : taskUserAvt
             }];
         } else{
-            return task.accessUsers?.map(({ bizfullname, _id, image }) => ({
-                label: bizfullname,
-                value: _id,
-                image: image ? `${process.env.REACT_APP_URL_S3_USER}/${image}` : taskUserAvt
-            })) || [];
+            if(task.accessUsers && task.accessUsers.length) {
+                arr = task.accessUsers.map(({ bizfullname, _id, image }) => ({
+                    label: bizfullname,
+                    value: _id,
+                    image: image ? `${process.env.REACT_APP_URL_S3_USER}/${image}` : taskUserAvt
+                }))
+            } else{
+                const accessUsers = [task.author, task.assignee, ...task.related];
+                arr = accessUsers.map(({ bizfullname, _id, image }) => ({
+                    label: bizfullname,
+                    value: _id,
+                    image: image ? `${process.env.REACT_APP_URL_S3_USER}/${image}` : taskUserAvt
+                }))
+            }
         }
+
+        return arr.filter(item => item.value !== userId);
     }, [task, parent])
 
     const [selectedUser, setSelectedUser] = useState<Item[]>(initUsersSelected);

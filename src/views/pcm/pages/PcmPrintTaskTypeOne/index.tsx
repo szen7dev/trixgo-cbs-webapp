@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef, useState } from "react";
-import { useParams, useHistory, Link } from "react-router-dom";
+import { useParams, useHistory, Link, Redirect } from "react-router-dom";
 import { toast } from "react-toastify";
 // import ReactDatePicker from "react-datepicker";
 
@@ -100,12 +100,14 @@ const PcmPrintTaskTypeOne: FC = () => {
 
   if (isLoadingInfo) return <Loader className="border-primary" />;
 
-  const assigneeAndRelated = [taskInfo.assignee, ...taskInfo.related];
+  if(!taskInfo) return <Redirect to="/pcm/home" />;
+
+  const assigneeAndRelated = [taskInfo?.assignee, ...taskInfo?.related];
 
   return (
-    <div className="bg-cbs-gray h-full overflow-hidden">
-      <div className="h-full overflow-auto py-6">
-        <div className="max-w-[791px] bg-white w-full mx-auto pl-[3.75rem] pr-6 py-6 shadow-cbs-md">
+    <div className="bg-cbs-gray overflow-auto" style={{ height: '100vh' }}>
+      <div className="overflow-auto h-auto py-6">
+        <div className="max-w-[791px] h-auto bg-white w-full mx-auto pl-[3.75rem] pr-6 py-6 shadow-cbs-md">
           <table ref={componentRef} className="space-y-5">
             <style type="text/css" media="print">
               {`
