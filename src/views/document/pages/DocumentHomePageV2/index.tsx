@@ -47,7 +47,7 @@ const DocumentHomePageV2:FC = () => {
 
     const { data: listDatahubContact } = useDatahubContact({ keyword: keywordDatahubContact }, true, false); // Danh bạ hệ thống
     const { listProjectsUserIsMember } = useProjectCustom({ paramsProjectsUserIsMember: { keyword: projectKeyword }, isFetchProjectsUserIsMember: true});
-    const { listContracts } = useContractIsMembers({ params: contractKeyword, isFetch: true });
+    const { listContracts } = useContractIsMembers({ params: {keyword: contractKeyword, populates: JSON.stringify({"path": "project", "select":"name sign"})}, isFetch: true });
 
     const { listDocumentWithPager, isLoading, totalRecord, totalPage, fetchNextPageDocument, hasNextPage, refetchListDocument } = useListFilterDocument({
         params: {
@@ -265,7 +265,7 @@ const DocumentHomePageV2:FC = () => {
                         }}
                         onchangeValue={item => {
                             const cloneIDs = [...directions];
-                            cloneIDs.push(item._id);
+                            cloneIDs.push(item.value);
                             setDirections(cloneIDs);
 
                             setPageIndex(0);
@@ -324,7 +324,7 @@ const DocumentHomePageV2:FC = () => {
                             ref.current&&ref.current.resetPaginate();
                         }}
                         renderItem={(item) => (
-                            <p className={"min-w-[300px]"}>{item.text}</p>
+                            <p className={"min-w-[300px]"}>{item.project.sign}.{item.name}-{item.sign}</p>
                         )}
                         selectOneByOne={true}
                     />
