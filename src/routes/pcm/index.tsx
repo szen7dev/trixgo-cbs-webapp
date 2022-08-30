@@ -80,9 +80,9 @@ const PcmTasksReportPage          = lazy(() => import('views/pcm/pages/PcmTasksR
 // const PcmGroupPage                = lazy(() => import('views/pcm/pages/PcmGroup'));
 // const PcmTaskGroupPage            = lazy(() => import('views/pcm/pages/PcmTaskGroup'));
 
-const PcmPrintTaskTypeOnePage     = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeOne'));
-const PcmPrintTaskTypeTwoPage     = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeTwo'));
-const PcmPrintTaskTypeThreePage   = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeThree'));
+// const PcmPrintTaskTypeOnePage     = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeOne'));
+// const PcmPrintTaskTypeTwoPage     = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeTwo'));
+// const PcmPrintTaskTypeThreePage   = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeThree'));
 
 const PCMRouter: FC = () => {
   return (
@@ -340,7 +340,7 @@ const PCMRouter: FC = () => {
               </Switch>
             </LayoutProjectSecondary>
           </ProtectedRoute> */}
-          
+
           <ProtectedRoute path="/pcm">
             <HomeLayout>
               <Switch>
@@ -403,12 +403,10 @@ const PCMRouter: FC = () => {
                 <Route exact path="/pcm/report/:reportID" component={PcmTasksReportPage} />
 
                 <Route exact path="/pcm/detail/:id" component={PcmDetailTaskV2} />
-                <Route exact path="/pcm/detail/:id/print/1" component={PcmPrintTaskTypeOnePage} />
-                <Route exact path="/pcm/detail/:id/print/2" component={PcmPrintTaskTypeTwoPage} />
-                <Route exact path="/pcm/detail/:id/print/3" component={PcmPrintTaskTypeThreePage} />
 
               </Switch>
             </HomeLayout>
+
           </ProtectedRoute>
         </Switch>
       </ProviderModalPcm>

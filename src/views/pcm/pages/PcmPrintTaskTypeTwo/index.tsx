@@ -62,7 +62,7 @@ const PcmPrintTaskTypeTwo: FC = () => {
   const assigneeAndRelated = [taskInfo.assignee, ...taskInfo.related];
 
   return (
-    <div className="bg-cbs-gray h-full overflow-hidden">
+    <div className="bg-cbs-gray overflow-auto" style={{ height: '100vh' }}>
       <div className="h-full overflow-auto py-6">
         <div className="max-w-[791px] bg-white w-full mx-auto pl-[3.75rem] pr-6 py-6 shadow-cbs-md">
           <table
