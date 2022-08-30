@@ -12,3 +12,4 @@ export * from './SearchInput';
 export * from './TabsList';
 export * from './NavigateTabV2';
 export * from './NavigateTab';
+export * from './DocumentSearchHeaderContent';

@@ -5,7 +5,7 @@ export const NavigateTab:FC = () => {
     const {id: departmentID, type} = useParams<{id: string, type: string}>();
 
     return (
-        <div className={"border-0.5 border-primary-border flex items-center"}>
+        <div className={"border-0.5 border-primary-border flex items-center mt-1"}>
             <Link to={`/pm/project/${departmentID}/document`} className={"px-4 py-2 border-r-0.5 border-primary-border " + (!type ? "bg-cbs-soft-blue text-primary" : "bg-white text-primary-gray")}>
                 Danh sách
             </Link>

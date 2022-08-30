@@ -10,7 +10,12 @@ const DocumentHeaderContent:FC =  () => {
     const [search, setSearch] = useState("");
     const [showResult, setShowResult] = useState(false);
 
-    useOnClickOutside(wrapperClass, () => setShowResult(false))
+    useOnClickOutside(wrapperClass, () => {
+        setShowResult(false)
+        if (inputRef.current) {
+            inputRef.current.value = "";
+        }
+    })
 
     const setTypingTimeoutRef: any = useRef(null);
     const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -57,7 +62,7 @@ const DocumentHeaderContent:FC =  () => {
                                     }}
                                     to={`/document/home/${document._id}`}
                                     key={document._id} className={"flex items-center py-2"}>
-                                    <div className={"w-[36px] flex items-center justify-center"}>
+                                    <div className={"w-[36px] min-w-[36px] flex items-center justify-center"}>
                                         <img src={searchIcon} alt={"----"} className={"w-[18px] h-[18px]"}/>
                                     </div>
                                     <p className={"ml-4"}>{document.name}</p>

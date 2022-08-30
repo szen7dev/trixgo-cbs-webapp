@@ -46,7 +46,7 @@ async function fetchFilterListDocument(params : any) {
         params: {
             select: 'name sign author project date createAt description note store amount status storeSign',
             populates: {
-                "path": "author sender storage",
+                "path": "author sender storage project",
                 "select": "fullname bizfullname sign image name"
             },
             ...params,
