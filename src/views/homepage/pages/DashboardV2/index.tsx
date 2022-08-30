@@ -1,4 +1,4 @@
-import React, { FC, useState, UIEvent } from "react";
+import React, { FC, useState, UIEvent, useEffect } from "react";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import parse from "html-react-parser";
@@ -37,6 +37,7 @@ import {
   setQueryResponse,
   setQuerySubject,
   setTabActive,
+  setTabIndex,
 } from "redux/reducer/DashboardV2Slice";
 import { useSearchTask } from "services/hooks/useMainSearch";
 import { humanFileSize } from "utils/converter";
@@ -241,6 +242,14 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
       setReset(true);
     }, 0);
   };
+
+  useEffect(() => {
+    return () => {
+      onReset();
+      dispatch(setTabActive(2));
+      dispatch(setTabIndex(1));
+    }
+  }, []);
 
   const {refetch: refetchPcmPlanTaskNotification} = usePcmPlanTaskNotification({enabled: false});
 
