@@ -1,32 +1,55 @@
-import React, {FC, UIEvent, useEffect, useState} from "react";
-import {useUsersProject} from "services/hooks/users/useUserSystem";
-import {DropdownSearchable, Item} from "shareComponents/common";
+import React, { FC, UIEvent, useMemo, useState } from "react";
+import { useUsersProject } from "services/hooks/users/useUserSystem";
+import { DropdownSearchable, Item } from "shareComponents/common";
 import TagIcon from "assets/images/icons8-price-tag-96.svg";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import moment from "moment";
- import { toast } from "react-toastify";
- import {date, object, string} from "yup";
-import {useSocket} from "services/hooks/useSocket";
+import { toast } from "react-toastify";
+import { date, object, string } from "yup";
+import { useSocket } from "services/hooks/useSocket";
 import { useTask } from 'services/hooks/useTask';
-import {getIn, Formik} from "formik";
-import {SendToMultiSelected} from "./SendToMultiSelected";
+import { getIn, Formik } from "formik";
+import { SendToMultiSelected } from "./SendToMultiSelected";
 import { Task } from "typings/task";
+import taskUserAvt from "assets/images/task-user.svg";
 
 type Props = {
     task: Task;
+    userId?: string;
     cancelCreateNewSubTask: () => void;
     confirmCreateNewSubTask: () => void;
 }
 
-export const CreateNewSubTask:FC<Props> = ({ task, cancelCreateNewSubTask, confirmCreateNewSubTask }) => {
+export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTask, confirmCreateNewSubTask }) => {
+    const initUsersSelected = useMemo(() => {
+        let arr = [];
+        if (task.accessUsers && task.accessUsers.length) {
+            arr = task.accessUsers.map(({ bizfullname, _id, image }) => ({
+                label: bizfullname,
+                value: _id,
+                image: image ? `${process.env.REACT_APP_URL_S3_USER}/${image}` : taskUserAvt
+            }))
+        } else {
+            const accessUsers = [task.author, task.assignee, ...task.related];
+            arr = accessUsers.map(({ bizfullname, _id, image }) => ({
+                label: bizfullname,
+                value: _id,
+                image: image ? `${process.env.REACT_APP_URL_S3_USER}/${image}` : taskUserAvt
+            }))
+        }
+
+        return arr.filter(item => item.value !== userId);
+    }, [task])
+
+    const [selectedUser, setSelectedUser] = useState<Item[]>(initUsersSelected);
     const [keywordAssignee, setKeywordAssignee] = useState('');
-    const [selectedUser, setSelectedUser] = useState<Item[]>([]);
+
     const { data: listUsersProject, fetchNextPage } = useUsersProject({
         projectID: "5e847180d7e3490be59aef72",
         keyword: keywordAssignee
     }, true);
 
-   const { addTaskAsync } = useTask({});
+    const { addTaskAsync } = useTask({});
 
     const handleScroll = (e: UIEvent<HTMLDivElement>) => {
         const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
@@ -42,7 +65,7 @@ export const CreateNewSubTask:FC<Props> = ({ task, cancelCreateNewSubTask, confi
 
     const initialValues = {
         name: "",
-        assigneeID: "",
+        assigneeID: task.assignee?._id,
         parentID: "5e847180d7e3490be59aef72",
         groupID: task.group?._id,
         projectID: task.project?._id,
@@ -69,7 +92,7 @@ export const CreateNewSubTask:FC<Props> = ({ task, cancelCreateNewSubTask, confi
                 relatedIDs: usersRelated
             });
 
-            if(error) return toast.warning(data?.message);
+            if (error) return toast.warning(data?.message);
 
             toast.success('Tạo công việc thành công');
             confirmCreateNewSubTask();
@@ -95,14 +118,14 @@ export const CreateNewSubTask:FC<Props> = ({ task, cancelCreateNewSubTask, confi
                 onSubmit={handleAddChildTask}
             >
                 {({
-                      values,
-                      touched,
-                      errors,
-                      handleBlur,
-                      handleChange,
-                      setFieldValue,
-                      handleSubmit,
-                  }) => {
+                    values,
+                    touched,
+                    errors,
+                    handleBlur,
+                    handleChange,
+                    setFieldValue,
+                    handleSubmit,
+                }) => {
                     return (
                         <>
                             <div className="flex w-full px-4 pt-4">
@@ -133,6 +156,10 @@ export const CreateNewSubTask:FC<Props> = ({ task, cancelCreateNewSubTask, confi
                                             label: item.bizfullname,
                                             value: item._id,
                                         }))}
+                                        initialValue={{
+                                            label: task.assignee?.bizfullname,
+                                            value: task.assignee?._id
+                                        }}
                                         formatItem={{
                                             id: "value",
                                             text: "label",
@@ -146,7 +173,7 @@ export const CreateNewSubTask:FC<Props> = ({ task, cancelCreateNewSubTask, confi
                                 </div>
                                 <div className="w-1/6 border-b">
                                     <DayPickerInput
-                                        value={values.expiredTime??""}
+                                        value={values.expiredTime ?? ""}
                                         classNames={{
                                             container: "relative h-full",
                                             overlay: "w-full",
@@ -164,29 +191,29 @@ export const CreateNewSubTask:FC<Props> = ({ task, cancelCreateNewSubTask, confi
 
                             <div className="flex w-full px-4 pb-4 mt-1">
                                 <div className="w-3/6">
-                                      <span
-                                          className="text-red-500"
-                                          style={{ fontSize: 11 }}
-                                      >
+                                    <span
+                                        className="text-red-500"
+                                        style={{ fontSize: 11 }}
+                                    >
                                         {touched.name && errors.name}
-                                      </span>
+                                    </span>
                                 </div>
                                 <div className="w-2/6 mx-3 ">
-                                  <span
-                                      className="text-red-500"
-                                      style={{ fontSize: 11 }}
-                                  >
-                                    {getIn(touched, "assigneeID") &&
-                                        getIn(errors, "assigneeID")}
-                                  </span>
+                                    <span
+                                        className="text-red-500"
+                                        style={{ fontSize: 11 }}
+                                    >
+                                        {getIn(touched, "assigneeID") &&
+                                            getIn(errors, "assigneeID")}
+                                    </span>
                                 </div>
                                 <div className="w-1/6 ">
-                                  <span
-                                      className="text-red-500"
-                                      style={{ fontSize: 11 }}
-                                  >
-                                    {touched.expiredTime && errors.expiredTime}
-                                  </span>
+                                    <span
+                                        className="text-red-500"
+                                        style={{ fontSize: 11 }}
+                                    >
+                                        {touched.expiredTime && errors.expiredTime}
+                                    </span>
                                 </div>
                             </div>
 

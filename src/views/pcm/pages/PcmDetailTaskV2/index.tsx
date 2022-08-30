@@ -243,7 +243,7 @@ const PcmDetailTaskV2: FC = () => {
         return <Loader className="border-primary" />
     }
 
-    if(!taskInfo._id) {
+    if(!taskInfo) {
         return <Redirect to='/pcm/home' />
     }
 
@@ -272,7 +272,7 @@ const PcmDetailTaskV2: FC = () => {
                     <TaskDetailSignature task={taskInfo} />
                     <TaskDetailOpenedBidding task={taskInfo} />
                     <TaskDetailDescription task={taskInfo} refetchInfo={refetchInfo} />
-                    <TaskDetailSubtask task={taskInfo} />
+                    <TaskDetailSubtask task={taskInfo} userId={user?._id} />
                     <TaskDetailRelatedTask task={taskInfo} refetchInfo={refetchInfo} />
                 </div>
                 <CommentProvider>

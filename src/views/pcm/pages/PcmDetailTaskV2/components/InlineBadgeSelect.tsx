@@ -47,7 +47,10 @@ const InlineBadgeSelect:FC<Props> = ({defaultValue, options, placeholder, onValu
                             options.map(option => (
                                 <button
                                     className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header " + (value === option.id ? "bg-cbs-table-header" : "")}
-                                    onClick={() => handleSelectOption(option.id)}
+                                    onClick={() => {
+                                        onValueChange(option);
+                                        handleSelectOption(option.id)
+                                    }}
                                     key={option.id}>
                                     {option.text}
                                 </button>
