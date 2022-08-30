@@ -1193,12 +1193,12 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           >
             Đánh dấu tất cả đã đọc
           </button>
-          <button className={"flex items-center justify-center mx-3"}>
+          {/* <button className={"flex items-center justify-center mx-3"}>
             <img src={downloadIcon} alt={"-----"} />
           </button>
           <button className={"flex items-center justify-center mx-3"}>
             <img src={sendMailIcon} alt={"-----"} />
-          </button>
+          </button> */}
           <div className={"flex-1 flex items-center justify-end"}>
             <PaginateV2
               ref={ref}
