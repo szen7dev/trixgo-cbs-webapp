@@ -26,6 +26,7 @@ import { useAppSelector } from "redux/reducer";
 import {
   useListFileFromSearch,
   useListResponseFromSearch,
+  usePcmPlanTaskNotification,
 } from "services/hooks/pcm/usePcmDashboardV2";
 import { debounce } from "lodash";
 import { useQueryListDepartmentsIsMember } from "services/hooks/items/useDepartment";
@@ -41,6 +42,7 @@ import { useSearchTask } from "services/hooks/useMainSearch";
 import { humanFileSize } from "utils/converter";
 import PaginateV2 from "shareComponents/common/PaginateV2";
 import { useTask } from "services/hooks/useTask";
+import { UpdateStatusDialog } from "./UpdateStatusDialog";
 
 type Props = {
   type?: number;
@@ -55,6 +57,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
   const ref = React.useRef<PaginateHandle>(null);
   const tabIndex = useAppSelector((state) => state.dashboardV2.data.tabIndex);
   const tabActive = useAppSelector((state) => state.dashboardV2.data.tabActive);
+  const [showUpdateStatus, setShowUpdateStatus] = useState(false);
 
   const keywordForResponse = useAppSelector(
     (state) => state.dashboardV2.data.keywordForResponse
@@ -238,10 +241,17 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     }, 0);
   };
 
+  const {refetch: refetchPcmPlanTaskNotification} = usePcmPlanTaskNotification({enabled: false});
+
   const { updateStatusMultipleAsync } = useTask({
     params: {},
     isFetchInfo: false,
   });
+
+  const onPressUpdateStatus = async () => {
+    await updateStatusMultipleAsync({ option: 2 });
+    refetchPcmPlanTaskNotification();
+  };
 
   const checkActive = (relateds: string[], user: string) => {
     let result = "read border-b-0.5 border-primary-border";
@@ -1179,7 +1189,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           </button>
           <button
             className={"text-primary mx-2"}
-            onClick={() => updateStatusMultipleAsync({ option: 2 })}
+            onClick={() => setShowUpdateStatus(true)}
           >
             Đánh dấu tất cả đã đọc
           </button>
@@ -1488,7 +1498,6 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                       <p>{showTime(item.createAt)}</p>
                       <p className={"text-primary-gray"}>
                         {moment(item.createAt).fromNow()}
-                      
                       </p>
                     </td>
                     <td
@@ -1550,6 +1559,11 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           <></>
         )}
       </div>
+      <UpdateStatusDialog
+        showUpdateStatus={showUpdateStatus}
+        setShowUpdateStatus={setShowUpdateStatus}
+        onPress={onPressUpdateStatus}
+      />
     </div>
   );
 };
