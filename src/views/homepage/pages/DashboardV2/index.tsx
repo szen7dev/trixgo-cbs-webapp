@@ -200,6 +200,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     hasNextPage: hasNextPageSubject,
     isLoadingListTask,
     isFetching: isFetchingNextPageSubject,
+    refetchListTask
   } = useSearchTask({
     params: querySearchTask,
     isFetch: tabActive === 2 ? true : false,
@@ -251,6 +252,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
   const onPressUpdateStatus = async () => {
     await updateStatusMultipleAsync({ option: 2 });
     refetchPcmPlanTaskNotification();
+    refetchListTask();
   };
 
   const checkActive = (relateds: string[], user: string) => {
@@ -867,7 +869,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               )}
               onScroll={handleScrollProject}
               data={listProject.map((item) => ({
-                label: item.name,
+                label: `${item.sign}.${item.name}`,
                 value: item._id,
               }))}
               formatItem={{
