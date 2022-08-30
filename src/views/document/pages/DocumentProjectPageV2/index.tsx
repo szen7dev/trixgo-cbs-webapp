@@ -10,7 +10,7 @@ import echoDbIcon from "assets/images/icons8-amazon-echo-48.svg";
 import downloadIcon from "assets/images/icons8-download-64.svg";
 import iconPencil from "assets/images/icons8-pencil-96 1.png";
 import nextIcon from "assets/images/icons-arrow-next.svg";
-import {NavigateTab} from "../../sharedComponents/common";
+import {NavigateTabV2} from "../../sharedComponents/common";
 
 const DocumentProjectPageV2:FC = () => {
     return (
@@ -90,7 +90,7 @@ const DocumentProjectPageV2:FC = () => {
                     </button>
                 </div>
                 <div className={"flex items-center pb-2"}>
-                    <NavigateTab/>
+                    <NavigateTabV2/>
                     <button className={"flex items-center justify-center mx-3 ml-6"}>
                         <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"}/>
                     </button>

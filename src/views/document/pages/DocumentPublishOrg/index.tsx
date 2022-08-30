@@ -7,7 +7,7 @@ import TriangleDown from "assets/icons/TriangleDown";
 import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
 import contractIcon from "assets/images/icons8-contract-64-blue.svg";
 import echoDbIcon from "assets/images/icons8-amazon-echo-48.svg";
-import {NavigateTab} from "../../sharedComponents/common";
+import {NavigateTabV2} from "../../sharedComponents/common";
 import nextIcon from "assets/images/icons-arrow-next.svg";
 import folderIcon from "assets/images/icons8-folder-48-gray.svg";
 import {Link, useParams} from "react-router-dom";
@@ -93,7 +93,7 @@ const DocumentPublishOrg:FC = () => {
                     </button>
                 </div>
                 <div className={"flex items-center pb-2"}>
-                    <NavigateTab/>
+                    <NavigateTabV2/>
                     <div className={"flex items-center ml-6"}>
                         <img src={searchIcon} alt={"search icon"} className={"w-[24px] h-[24px]"}/>
                         <input className={"py-2 border-b border-black ml-2 w-[370px] focus:outline-none focus:ring-none"} placeholder={"Tìm kiếm"}/>

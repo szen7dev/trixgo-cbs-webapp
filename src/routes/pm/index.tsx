@@ -43,7 +43,7 @@ import ProjectAdminProjectTab from "views/ppt/pages/ProjectAdminPage/pages/Proje
 import ProjectAdminPositionTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminPositionTab";
 import {PmProjectLayout} from "../../shareComponents/layouts/PmLayout/PmProjectLayout";
 import {PmHeaderContent} from "../../shareComponents/layouts/PmLayout/components";
-import {DocumentProjectLayout} from "views/document/sharedComponents/layouts/DocumentProjectLayout";
+// import {DocumentProjectLayout} from "views/document/sharedComponents/layouts/DocumentProjectLayout";
 
 const DocumentOfPackagePage       = lazy(() => import("views/document/pages/DocumentOfPackagePage"))
 const DocumentOfTypePage          = lazy(() => import("views/document/pages/DocumentOfTypePage"))
@@ -294,7 +294,6 @@ const PCMRouter: FC = () => {
 
                           <ModalProvider>
                             <PmProjectLayout>
-                              <DocumentProjectLayout>
                                 <Switch>
                                   <Route
                                       exact
@@ -320,7 +319,6 @@ const PCMRouter: FC = () => {
                         <Route exact path='/pcm/project/:id/document/4' component={DocumentHistoryPage} /> */}
                                 </Switch>
                                 <ModalCreateDocument />
-                              </DocumentProjectLayout>
                             </PmProjectLayout>
                           </ModalProvider>
                     </Route>
