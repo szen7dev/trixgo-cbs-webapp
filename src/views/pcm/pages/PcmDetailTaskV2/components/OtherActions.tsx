@@ -2,8 +2,14 @@ import React, {FC, useRef, useState} from "react";
 import DotsVerticalIcon from "assets/icons/DotsVertical";
 import Close from "assets/icons/Close";
 import {useOnClickOutside} from "services/hooks/useOnclickOutside";
+import { Link } from 'react-router-dom';
+import { Task } from "typings/task";
 
-export const OtherActions:FC = () => {
+type Props = {
+    task: Task;
+}
+
+export const OtherActions:FC<Props> = ({ task }) => {
     const wrapperClass = useRef<HTMLDivElement>(null)
     const [showOption, setShowOption] = useState(false);
 
@@ -49,21 +55,24 @@ export const OtherActions:FC = () => {
                         >
                             Gán hợp đồng
                         </button>
-                        <button
-                            className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
+                        <Link
+                            className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header block"}
+                            to={`/pcm/detail/${task._id}/print/1`}
                         >
                             In ấn - Mẫu biên bản họp
-                        </button>
-                        <button
-                            className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
+                        </Link>
+                        <Link
+                            className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header block"}
+                            to={`/pcm/detail/${task._id}/print/2`}
                         >
                             In ấn - Mẫu báo cáo
-                        </button>
-                        <button
-                            className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
+                        </Link>
+                        <Link
+                            className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header block"}
+                            to={`/pcm/detail/${task._id}/print/3`}
                         >
                             In ấn - Mẫu phụ lục ảnh
-                        </button>
+                        </Link>
                         <button
                             className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
                         >

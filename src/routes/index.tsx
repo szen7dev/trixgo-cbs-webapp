@@ -21,7 +21,7 @@ const SampleRouter = lazy(() => import("./sample"));
 const BiddingRouter = lazy(() => import("./bidding"));
 const CmcsRouter = lazy(() => import("./cmcs"));
 const DatahubRouter = lazy(() => import("./datahub"));
-const DocumentRouter = lazy(() => import("./document"));
+// const DocumentRouter = lazy(() => import("./document"));
 const DocumentV2Router = lazy(() => import("./documentV2"));
 // const PPTRouter = lazy(() => import("./ppt"));
 const FinancialRouter = lazy(() => import("./financial"));
@@ -46,9 +46,12 @@ const BudgetRouter = lazy(() => import("./budget"));
 const ErrorPage = lazy(() => import("views/authentication/Error"));
 const HomeLayout = lazy(() => import("shareComponents/layouts"));
 const HumanLayout = lazy(() => import("views/human/shareComponents/layouts"));
-const DocumentLayout = lazy(() => import('views/document/sharedComponents/layouts'));
-const DocumentLayoutV2 = lazy(() => import('views/document/sharedComponents/layouts/DocumentLayoutV2'));
+// const DocumentLayout = lazy(() => import('views/document/sharedComponents/layouts'));
 const AccountingLayout = lazy(() => import('views/accounting/shareComponents/layouts'));
+
+const PcmPrintTaskTypeOnePage     = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeOne'));
+const PcmPrintTaskTypeTwoPage     = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeTwo'));
+const PcmPrintTaskTypeThreePage   = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeThree'));
 
 const Routes: FC = () => {
     useEffect(() => {
@@ -71,6 +74,10 @@ const Routes: FC = () => {
 
                         <ModalProvider>
                             <Switch>
+
+                                <Route exact path="/pcm/detail/:id/print/1" component={PcmPrintTaskTypeOnePage} />
+                                <Route exact path="/pcm/detail/:id/print/2" component={PcmPrintTaskTypeTwoPage} />
+                                <Route exact path="/pcm/detail/:id/print/3" component={PcmPrintTaskTypeThreePage} />
 
                                 {/* =====AUTHENTICATION===== */}
                                 <Route path="/(authentication|login)/:path?">
@@ -123,9 +130,7 @@ const Routes: FC = () => {
 
                                 {/* =====DOCUMENT V2===== */}
                                 <Route path="/document">
-                                    <DocumentLayoutV2>
-                                        <DocumentV2Router />
-                                    </DocumentLayoutV2>
+                                    <DocumentV2Router />
                                 </Route>
 
                                 {/* =====PCM===== */}

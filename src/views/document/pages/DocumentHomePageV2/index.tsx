@@ -9,7 +9,7 @@ import contractIcon from "assets/images/icons8-contract-64-blue.svg";
 import downloadIcon from "assets/images/icons8-download-96.svg";
 import projectIcon from "assets/images/icons8-project-50.svg";
 import iconPencil from "assets/images/icons8-pencil-96 1.png";
-import {useListDocument} from "services/hooks/document/useDocument";
+import {useListFilterDocument} from "services/hooks/document/useDocument";
 import moment from "moment";
 import PaginateV2 from "shareComponents/common/PaginateV2";
 import {DOCUMENT_TYPES, DIRECTION_TYPES} from "apis/localdb";
@@ -17,9 +17,11 @@ import {useDatahubContact} from "services/hooks/datahub/contact/useDatahubContac
 import {useProjectCustom} from "services/hooks/items/useProject";
 import {debounce} from "lodash";
 import {useContractIsMembers} from "services/hooks/items/useContract";
-import {ModalContext} from "../../contexts/modal";
-import {useQueryDetailDocument} from "services/hooks/ppt/useDocument";
-import {useMutationDocumentChild} from "services/hooks/document/useDocumentChild";
+import {Link} from "react-router-dom";
+
+// import {ModalContext} from "../../contexts/modal";
+// import {useQueryDetailDocument} from "services/hooks/ppt/useDocument";
+// import {useMutationDocumentChild} from "services/hooks/document/useDocumentChild";
 
 const DocumentHomePageV2:FC = () => {
     type PaginateHandle = React.ElementRef<typeof PaginateV2>;
@@ -31,30 +33,30 @@ const DocumentHomePageV2:FC = () => {
     const [fromToDate, setFromToDate] = useState({fromDate: "", toDate: ""})
 
     const [keywordDatahubContact, setKeywordDatahubContact] = useState("");
-    const [datahubContactID, setDatahubContact] = useState("");
+    const [datahubContactsID, setDatahubContactsID] = useState<string[]>([]);
 
     const [projectKeyword, setProjectKeyword] = useState("");
-    const [departmentID, setDepartmentID] = useState("");
+    const [departmentsID, setDepartmentsID] = useState<string[]>([]);
 
-    const [type, setType] = useState("");
+    const [types, setTypes] = useState<string[]>([]);
 
-    const [direction, setDirection] = useState("");
+    const [directions, setDirections] = useState<string[]>([]);
 
     const [contractKeyword, setContractKeyword] = useState("");
-    const [contractID, setContractID] = useState("");
+    const [contractsID, setContractsID] = useState<string[]>([]);
 
     const { data: listDatahubContact } = useDatahubContact({ keyword: keywordDatahubContact }, true, false); // Danh bạ hệ thống
     const { listProjectsUserIsMember } = useProjectCustom({ paramsProjectsUserIsMember: { keyword: projectKeyword }, isFetchProjectsUserIsMember: true});
-    const { listContracts } = useContractIsMembers({ params: contractKeyword, isFetch: true });
+    const { listContracts } = useContractIsMembers({ params: {keyword: contractKeyword, populates: JSON.stringify({"path": "project", "select":"name sign"})}, isFetch: true });
 
-    const { listDocumentWithPager, isLoading, totalRecord, totalPage, fetchNextPageDocument, hasNextPage, refetchListDocument } = useListDocument({
+    const { listDocumentWithPager, isLoading, totalRecord, totalPage, fetchNextPageDocument, hasNextPage, refetchListDocument } = useListFilterDocument({
         params: {
             ...fromToDate,
-            datahubContactID,
-            type,
-            departmentID,
-            direction,
-            contractID
+            datahubContactsID,
+            types,
+            departmentsID,
+            directions,
+            contractsID
         },
         isFetchList: true
     });
@@ -112,7 +114,7 @@ const DocumentHomePageV2:FC = () => {
                         className={"mr-4 border border-primary-border rounded-lg mb-2"}
                         placeholder={"Tổ chức ban hành"}
                         prefixIcon={<img className={"mr-2"} src={maleUserIcon} alt={"icon"}/>}
-                        isMultiple={false}
+                        isMultiple={true}
                         allowClearValueSingleInput={true}
                         data={listDatahubContact}
                         formatItem={{
@@ -124,12 +126,23 @@ const DocumentHomePageV2:FC = () => {
                             500
                         )}
                         onchangeValue={item => {
-                            setDatahubContact(item._id);
+                            const cloneIDs = [...datahubContactsID];
+                            cloneIDs.push(item._id);
+                            setDatahubContactsID(cloneIDs);
+
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
                         }}
                         onClearData={() => {
-                            setDatahubContact("");
+                            setDatahubContactsID([]);
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        onMultipleRemoveValue={id => {
+                            const cloneIDs = [...datahubContactsID];
+                            const newList = cloneIDs.filter(selectId => selectId !== id);
+                            setDatahubContactsID(newList);
+
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
                         }}
@@ -142,7 +155,7 @@ const DocumentHomePageV2:FC = () => {
                         className={"mr-4 border border-primary-border rounded-lg mb-2"}
                         placeholder={"Tính chất hồ sơ"}
                         prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"}/>}
-                        isMultiple={false}
+                        isMultiple={true}
                         disableSearch={true}
                         allowClearValueSingleInput={true}
                         data={DOCUMENT_TYPES}
@@ -150,12 +163,23 @@ const DocumentHomePageV2:FC = () => {
                             "id": "value"
                         }}
                         onchangeValue={item => {
-                            setType(item.value);
+                            const cloneIDs = [...types];
+                            cloneIDs.push(item.value);
+                            setTypes(cloneIDs);
+
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
                         }}
                         onClearData={() => {
-                            setType("");
+                            setTypes([]);
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        onMultipleRemoveValue={id => {
+                            const cloneIDs = [...types];
+                            const newList = cloneIDs.filter(selectId => selectId !== id);
+                            setTypes(newList);
+
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
                         }}
@@ -168,7 +192,7 @@ const DocumentHomePageV2:FC = () => {
                         className={"mr-4 border border-primary-border rounded-lg mb-2"}
                         placeholder={"Dự án"}
                         prefixIcon={<img className={"mr-2"} src={projectIcon} alt={"icon"}/>}
-                        isMultiple={false}
+                        isMultiple={true}
                         allowClearValueSingleInput={true}
                         data={listProjectsUserIsMember}
                         formatItem={{
@@ -177,12 +201,23 @@ const DocumentHomePageV2:FC = () => {
                         }}
                         onSearchInputChange={debounce(valueSearch => setProjectKeyword(valueSearch), 500)}
                         onchangeValue={item => {
-                            setDepartmentID(item._id);
+                            const cloneIDs = [...departmentsID];
+                            cloneIDs.push(item._id);
+                            setDepartmentsID(cloneIDs);
+
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
                         }}
                         onClearData={() => {
-                            setDepartmentID("");
+                            setDepartmentsID([]);
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        onMultipleRemoveValue={id => {
+                            const cloneIDs = [...departmentsID];
+                            const newList = cloneIDs.filter(selectId => selectId !== id);
+                            setDepartmentsID(newList);
+
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
                         }}
@@ -221,7 +256,7 @@ const DocumentHomePageV2:FC = () => {
                         className={"mr-4 border border-primary-border rounded-lg mb-2"}
                         placeholder={"Hướng hồ sơ"}
                         prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"}/>}
-                        isMultiple={false}
+                        isMultiple={true}
                         disableSearch={true}
                         allowClearValueSingleInput={true}
                         data={DIRECTION_TYPES}
@@ -229,12 +264,23 @@ const DocumentHomePageV2:FC = () => {
                             "id": "value"
                         }}
                         onchangeValue={item => {
-                            setDirection(item.value);
+                            const cloneIDs = [...directions];
+                            cloneIDs.push(item.value);
+                            setDirections(cloneIDs);
+
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
                         }}
                         onClearData={() => {
-                            setDirection("");
+                            setDirections([]);
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        onMultipleRemoveValue={id => {
+                            const cloneIDs = [...directions];
+                            const newList = cloneIDs.filter(selectId => selectId !== id);
+                            setDirections(newList);
+
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
                         }}
@@ -248,7 +294,7 @@ const DocumentHomePageV2:FC = () => {
                         placeholder={"Thuộc hợp đồng"}
                         prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"}/>}
                         isMultiple={false}
-                        disableSearch={true}
+                        disableSearch={false}
                         allowClearValueSingleInput={true}
                         data={listContracts}
                         formatItem={{
@@ -257,17 +303,28 @@ const DocumentHomePageV2:FC = () => {
                         }}
                         onSearchInputChange={debounce(valueSearch => setContractKeyword(valueSearch), 500)}
                         onchangeValue={item => {
-                            setContractID(item._id);
+                            const cloneIDs = [...contractsID];
+                            cloneIDs.push(item._id);
+                            setContractsID(cloneIDs);
+
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
                         }}
                         onClearData={() => {
-                            setContractID("");
+                            setContractsID([]);
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        onMultipleRemoveValue={id => {
+                            const cloneIDs = [...contractsID];
+                            const newList = cloneIDs.filter(selectId => selectId !== id);
+                            setContractsID(newList);
+
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
                         }}
                         renderItem={(item) => (
-                            <p className={"min-w-[300px]"}>{item.text}</p>
+                            <p className={"min-w-[300px]"}>{item.project.sign}.{item.name}-{item.sign}</p>
                         )}
                         selectOneByOne={true}
                     />
@@ -311,7 +368,7 @@ const DocumentHomePageV2:FC = () => {
             <div className="flex-1 overflow-y-auto">
                 <table className={"table-fixed border-collapse w-full"}>
                     <thead>
-                    <tr className={"sticky top-0"}>
+                    <tr className={"sticky top-0 z-5"}>
                         <th className={"bg-cbs-table-header text-primary-gray text-center font-normal w-[50px] border-b-0.5 border-primary-border align-middle py-3"}>
                             <input
                                 className="form-check-input"
@@ -371,14 +428,14 @@ const DocumentHomePageV2:FC = () => {
                                     />
                                 </td>
                                 <td className={"border-b-0.5 border-primary-border py-3"}>
-                                    <p>{document.name}</p>
+                                    <Link to={`/document/home/${document._id}`}>{document.name}</Link>
                                     <p className={"mt-1 text-primary-gray text-xs"}>{document.author?.fullname}-{document.createAt}</p>
                                 </td>
                                 <td className={"border-b-0.5 border-primary-border py-3"}>
                                     {document.sender?.name}
                                 </td>
                                 <td className={"border-b-0.5 border-primary-border py-3 break-all"}>
-                                    ARM.CAL-PGI.PMI\HDCG\210515
+                                    {document.sign}
                                 </td>
                                 <td className={"border-b-0.5 border-primary-border py-3 text-center"}>
                                     {moment(document.date).format('DD/MM/YYYY')}
