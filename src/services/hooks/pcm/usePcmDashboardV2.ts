@@ -166,8 +166,8 @@ export const useListCompaniesSystems = (
 };
 
 export const usePcmPlanTaskNotification = (payload: any): any => {
-  const { data } = useQuery(
-    [`usePcmPlanTaskNotification`, payload],
+  const { data, refetch } = useQuery(
+    [`usePcmPlanTaskNotification`],
     async () => {
       return pcmDashboardV2.pcmPlanTaskNotification({
         ...payload,
@@ -181,6 +181,7 @@ export const usePcmPlanTaskNotification = (payload: any): any => {
 
   return {
     data,
+    refetch
   };
 };
 

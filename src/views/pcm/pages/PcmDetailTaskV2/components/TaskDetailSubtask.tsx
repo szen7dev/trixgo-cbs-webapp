@@ -10,9 +10,10 @@ import { Task } from "typings/task";
 
 type Props = {
     task: Task;
+    userId?: string;
 }
 
-export const TaskDetailSubtask:FC<Props> = ({ task }) => {
+export const TaskDetailSubtask:FC<Props> = ({ task, userId }) => {
     const progress = task.percentage;
     const [showCreateNewSubTask, setShowCreateNewSubTask] = useState(false);
 
@@ -65,6 +66,7 @@ export const TaskDetailSubtask:FC<Props> = ({ task }) => {
                 {showCreateNewSubTask &&
                     <CreateNewSubTask
                         task={task}
+                        userId={userId}
                         cancelCreateNewSubTask={() => setShowCreateNewSubTask(false)}
                         confirmCreateNewSubTask={refetchListTask}
                     />

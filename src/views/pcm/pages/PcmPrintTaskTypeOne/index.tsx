@@ -222,9 +222,12 @@ const PcmPrintTaskTypeOne: FC = () => {
                         <span>NỘI DUNG</span>
                       </div>
                       <div className="mt-2.5">
-                        <div className="border-cbs-border border-0.5 min-h-[300px]">
-                          {taskInfo.description}
-                        </div>
+                        <div
+                          className="min-h-[300px]"
+                          dangerouslySetInnerHTML={{
+                            __html: taskInfo?.description?.replace(/\n/g, '<br />')
+                          }}
+                        />
                       </div>
                     </section>
                     {/* Việc xử lý */}

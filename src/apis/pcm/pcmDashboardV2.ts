@@ -3,14 +3,18 @@ const pcmURL = "/api/subject_pcm";
 
 const pcmDashboardV2 = {
   async searchBySubject(payload: any): Promise<any> {
-    const { data } = await API.post<any>(
+    const { data } = await API.get<any>(
       `${pcmURL}/pcm_comments/search-by-subject`,
-      payload
+      {
+        params: payload
+      }
     );
     return data;
   },
   async pcmFiles(payload: any): Promise<any> {
-    const { data } = await API.post<any>(`${pcmURL}/pcm_files/filter`, payload);
+    const { data } = await API.get<any>(`${pcmURL}/pcm_files/filter`, {
+      params: payload
+    });
     return data;
   },
   async pcmPlanTaskNotification(payload: any): Promise<any> {

@@ -1,4 +1,4 @@
-import React, { FC, useState, UIEvent } from "react";
+import React, { FC, useState, UIEvent, useEffect } from "react";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import parse from "html-react-parser";
@@ -26,6 +26,7 @@ import { useAppSelector } from "redux/reducer";
 import {
   useListFileFromSearch,
   useListResponseFromSearch,
+  usePcmPlanTaskNotification,
 } from "services/hooks/pcm/usePcmDashboardV2";
 import { debounce } from "lodash";
 import { useQueryListDepartmentsIsMember } from "services/hooks/items/useDepartment";
@@ -36,11 +37,13 @@ import {
   setQueryResponse,
   setQuerySubject,
   setTabActive,
+  setTabIndex,
 } from "redux/reducer/DashboardV2Slice";
 import { useSearchTask } from "services/hooks/useMainSearch";
 import { humanFileSize } from "utils/converter";
 import PaginateV2 from "shareComponents/common/PaginateV2";
 import { useTask } from "services/hooks/useTask";
+import { UpdateStatusDialog } from "./UpdateStatusDialog";
 
 type Props = {
   type?: number;
@@ -55,6 +58,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
   const ref = React.useRef<PaginateHandle>(null);
   const tabIndex = useAppSelector((state) => state.dashboardV2.data.tabIndex);
   const tabActive = useAppSelector((state) => state.dashboardV2.data.tabActive);
+  const [showUpdateStatus, setShowUpdateStatus] = useState(false);
 
   const keywordForResponse = useAppSelector(
     (state) => state.dashboardV2.data.keywordForResponse
@@ -197,6 +201,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     hasNextPage: hasNextPageSubject,
     isLoadingListTask,
     isFetching: isFetchingNextPageSubject,
+    refetchListTask
   } = useSearchTask({
     params: querySearchTask,
     isFetch: tabActive === 2 ? true : false,
@@ -238,10 +243,26 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     }, 0);
   };
 
+  useEffect(() => {
+    return () => {
+      onReset();
+      dispatch(setTabActive(2));
+      dispatch(setTabIndex(1));
+    }
+  }, []);
+
+  const {refetch: refetchPcmPlanTaskNotification} = usePcmPlanTaskNotification({enabled: false});
+
   const { updateStatusMultipleAsync } = useTask({
     params: {},
     isFetchInfo: false,
   });
+
+  const onPressUpdateStatus = async () => {
+    await updateStatusMultipleAsync({ option: 2 });
+    refetchPcmPlanTaskNotification();
+    refetchListTask();
+  };
 
   const checkActive = (relateds: string[], user: string) => {
     let result = "read border-b-0.5 border-primary-border";
@@ -857,7 +878,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               )}
               onScroll={handleScrollProject}
               data={listProject.map((item) => ({
-                label: item.name,
+                label: `${item.sign}.${item.name}`,
                 value: item._id,
               }))}
               formatItem={{
@@ -1179,16 +1200,16 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           </button>
           <button
             className={"text-primary mx-2"}
-            onClick={() => updateStatusMultipleAsync({ option: 2 })}
+            onClick={() => setShowUpdateStatus(true)}
           >
             Đánh dấu tất cả đã đọc
           </button>
-          <button className={"flex items-center justify-center mx-3"}>
+          {/* <button className={"flex items-center justify-center mx-3"}>
             <img src={downloadIcon} alt={"-----"} />
           </button>
           <button className={"flex items-center justify-center mx-3"}>
             <img src={sendMailIcon} alt={"-----"} />
-          </button>
+          </button> */}
           <div className={"flex-1 flex items-center justify-end"}>
             <PaginateV2
               ref={ref}
@@ -1488,7 +1509,6 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                       <p>{showTime(item.createAt)}</p>
                       <p className={"text-primary-gray"}>
                         {moment(item.createAt).fromNow()}
-                      
                       </p>
                     </td>
                     <td
@@ -1550,6 +1570,11 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           <></>
         )}
       </div>
+      <UpdateStatusDialog
+        showUpdateStatus={showUpdateStatus}
+        setShowUpdateStatus={setShowUpdateStatus}
+        onPress={onPressUpdateStatus}
+      />
     </div>
   );
 };
