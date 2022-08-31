@@ -8,6 +8,7 @@ import {appendFakeItemListConversation} from "redux/reducer/messages/ListConvers
 import {useDispatch} from "react-redux";
 import {map as _map} from "lodash";
 import {SearchChatItem} from "../SearchUserConversation";
+import {Oval} from "react-loader-spinner";
 
 export const SearchUserAndConversation:FC = () => {
     const {currentChat, socketRef, setCurrentChat} = useContext(MessageContext);
@@ -39,10 +40,10 @@ export const SearchUserAndConversation:FC = () => {
     }
 
     const params = {limit: 5, select: 'fullname bizfullname email phone image', populates: '{"path": "company", "select": "name"}', keyword: search}
-    const {data} = useUserSystem(params, showResult);
+    const {data, loading} = useUserSystem(params, showResult);
 
     const paramsListConversation = {limit: 5, keyword: search};
-    const {listConversations, createConversation} = UseListConversation(paramsListConversation, showResult);
+    const {listConversations, createConversation, isLoadingListConversations} = UseListConversation(paramsListConversation, showResult);
 
     const handleStartPrivateChat = (memberId: string) => {
         setSearch("");
@@ -79,8 +80,33 @@ export const SearchUserAndConversation:FC = () => {
 
             {
                 showResult &&
-                <div className={"absolute top-full mt-2 w-full rounded border-0.5 border-primary-border p-2 bg-white"}>
+                <div className={"absolute min-h-[300px] focus:bg-white top-full mt-2 w-full rounded border-0.5 border-primary-border p-2 bg-white"}>
                     {
+                        (isLoadingListConversations||loading) &&
+                        <div
+                            className={
+                                "absolute w-full flex items-center justify-center h-[200px]"
+                            }
+                        >
+                            <div className={"bg-white rounded-full"}>
+                                <Oval
+                                    color={"#0d6efd"}
+                                    strokeWidth={3}
+                                    secondaryColor={"#fff"}
+                                    height={30}
+                                    width={30}
+                                />
+                            </div>
+                        </div>
+                    }
+                    {
+                        !loading && !loading && data.length === 0 && listConversations.length === 0 &&
+                        <div className="italic pt-200 flex items-center justify-center h-[200px]">
+                            <span>Không tìm thấy kết quả phù hợp</span>
+                        </div>
+                    }
+                    {
+                        !loading &&
                         data.map(friend => (
                             <div
                                 key={friend._id}
@@ -95,6 +121,7 @@ export const SearchUserAndConversation:FC = () => {
                         ))
                     }
                     {
+                        !isLoadingListConversations &&
                         _map(listConversations, conversation => (
                             <SearchChatItem
                                 itemClickAction={(chat) => {

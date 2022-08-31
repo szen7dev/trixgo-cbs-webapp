@@ -141,6 +141,7 @@ export interface DocumentQueryPayload extends QueryParam {
         contractsID?: string[];
         keyword?: string;
         storageID?: string;
+        storagesID?: string[];
     },
     isFetchList?: boolean;
 }

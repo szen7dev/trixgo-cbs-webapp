@@ -104,7 +104,7 @@ export const DocumentProjectPage: FC = () => {
     const [contractsID, setContractsID] = useState<string[]>([]);
 
     const [storageKeyword, setStorageKeyword] = useState("");
-    const [storageID, setStorageID] = useState<string>("");
+    const [storagesID, setStoragesID] = useState<string[]>([]);
 
     const { data: listDatahubContact } = useDatahubContact({ keyword: keywordDatahubContact }, true, false); // Danh bạ hệ thống
     const { listContracts } = useContractIsMembers({ params: {keyword: contractKeyword, populates: JSON.stringify({"path": "project", "select":"name sign"})}, isFetch: true });
@@ -118,7 +118,7 @@ export const DocumentProjectPage: FC = () => {
             types,
             directions,
             contractsID,
-            storageID
+            storagesID
         },
         isFetchList: true
     });
@@ -382,7 +382,7 @@ export const DocumentProjectPage: FC = () => {
                             className={"mr-4 border border-primary-border rounded-lg mb-2"}
                             placeholder={"Thuộc hợp đồng"}
                             prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"}/>}
-                            isMultiple={false}
+                            isMultiple={true}
                             disableSearch={false}
                             allowClearValueSingleInput={true}
                             data={listContracts}
@@ -422,6 +422,7 @@ export const DocumentProjectPage: FC = () => {
                             placeholder={"Địa chỉ lưu trữ"}
                             prefixIcon={<img className={"mr-2"} src={echoDbIcon} alt={"icon"}/>}
                             disableSearch={false}
+                            isMultiple={true}
                             allowClearValueSingleInput={true}
                             data={listStorages}
                             formatItem={{
@@ -430,13 +431,23 @@ export const DocumentProjectPage: FC = () => {
                             }}
                             onSearchInputChange={debounce(valueSearch => setStorageKeyword(valueSearch), 500)}
                             onchangeValue={item => {
-                                setStorageID(item._id)
+                                const cloneIDs = [...storagesID];
+                                cloneIDs.push(item._id);
+                                setStoragesID(cloneIDs);
 
                                 setPageIndex(0);
                                 ref.current&&ref.current.resetPaginate();
                             }}
                             onClearData={() => {
-                                setStorageID("");
+                                setStoragesID([]);
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onMultipleRemoveValue={id => {
+                                const cloneIDs = [...storagesID];
+                                const newList = cloneIDs.filter(selectId => selectId !== id);
+                                setStoragesID(newList);
+
                                 setPageIndex(0);
                                 ref.current&&ref.current.resetPaginate();
                             }}

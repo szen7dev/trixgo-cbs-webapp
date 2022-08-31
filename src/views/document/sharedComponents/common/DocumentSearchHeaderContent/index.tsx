@@ -3,6 +3,7 @@ import {useOnClickOutside} from "services/hooks/useOnclickOutside";
 import {useListFilterDocument} from "services/hooks/document/useDocument";
 import searchIcon from "assets/images/icons8-search-120.png";
 import {Link, useLocation, useParams} from "react-router-dom";
+import {Oval} from "react-loader-spinner";
 
 export const DocumentSearchHeaderContent:FC = () => {
     const inputRef = useRef<HTMLInputElement>(null);
@@ -30,7 +31,7 @@ export const DocumentSearchHeaderContent:FC = () => {
         }, 300)
     }
 
-    const { listDocument } = useListFilterDocument({
+    const { listDocument, isLoading } = useListFilterDocument({
         params: {
             departmentsID: [departmentID],
             keyword: search,
@@ -52,8 +53,33 @@ export const DocumentSearchHeaderContent:FC = () => {
 
                 {
                     showResult &&
-                    <div className={"absolute top-full mt-2 w-full rounded border-0.5 border-primary-border p-4 bg-white"}>
+                    <div className={"absolute min-h-[300px] focus:bg-white top-full mt-2 w-full rounded border-0.5 border-primary-border p-4 bg-white"}>
                         {
+                            isLoading &&
+                            <div
+                                className={
+                                    "absolute w-full flex items-center justify-center h-[200px]"
+                                }
+                            >
+                                <div className={"bg-white rounded-full"}>
+                                    <Oval
+                                        color={"#0d6efd"}
+                                        strokeWidth={3}
+                                        secondaryColor={"#fff"}
+                                        height={30}
+                                        width={30}
+                                    />
+                                </div>
+                            </div>
+                        }
+                        {
+                            !isLoading && listDocument.length === 0 &&
+                            <div className="italic pt-200 flex items-center justify-center h-[200px]">
+                                <span>Không tìm thấy kết quả phù hợp</span>
+                            </div>
+                        }
+                        {
+                            !isLoading && listDocument.length > 0 &&
                             listDocument.map(document => {
                                 let linkRef;
                                 if(location.pathname.includes("/document/project/")){
@@ -75,7 +101,7 @@ export const DocumentSearchHeaderContent:FC = () => {
                                         <div className={"w-[36px] min-w-[36px] flex items-center justify-center"}>
                                             <img src={searchIcon} alt={"----"} className={"w-[18px] h-[18px]"}/>
                                         </div>
-                                        <p className={"ml-4"}>{document.name}</p>
+                                        <p className={"ml-4"}>{document.project.sign}.{document.name} {document.sign} {document.storeSign}</p>
                                     </Link>
                                 )
                             })

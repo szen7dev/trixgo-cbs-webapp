@@ -222,7 +222,7 @@ const DocumentHomePageV2:FC = () => {
                             ref.current&&ref.current.resetPaginate();
                         }}
                         renderItem={(item) => (
-                            <p className={"min-w-[300px]"}>{item.text}</p>
+                            <p className={"min-w-[300px]"}>{item.sign}.{item.text}</p>
                         )}
                         selectOneByOne={true}
                     />
@@ -293,7 +293,7 @@ const DocumentHomePageV2:FC = () => {
                         className={"mr-4 border border-primary-border rounded-lg mb-2"}
                         placeholder={"Thuộc hợp đồng"}
                         prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"}/>}
-                        isMultiple={false}
+                        isMultiple={true}
                         disableSearch={false}
                         allowClearValueSingleInput={true}
                         data={listContracts}
