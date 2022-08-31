@@ -110,7 +110,7 @@ const ProjectSubjectPage: FC = () => {
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
 			<div className={"sticky top-0 bg-white z-10"}>
-				<div className={"filter-bar flex flex-wrap px-4 py-2"}>
+				{/* <div className={"filter-bar flex flex-wrap px-4 py-2"}>
 					<DropdownSearchableV2
 						className={"mr-4 border border-primary-border rounded-lg mb-2"}
 						placeholder={"Người thực hiện"}
@@ -337,13 +337,13 @@ const ProjectSubjectPage: FC = () => {
 							},
 						]}
 					/>
-				</div>
+				</div> */}
 				<div className={"header-table flex px-4 w-full top-0 bg-white pb-4"}>
 					<button
 						className={"py-1 border-b-2 border-primary text-primary "}>
 						Theo đơn vị thực hiện
 					</button>
-					<button
+					{/* <button
 						className={"py-1 mx-4 mr-6 text-primary-gray "}>
 						Theo tính chất công việc
 					</button>
@@ -352,7 +352,7 @@ const ProjectSubjectPage: FC = () => {
 					</button>
 					<button className={"flex items-center justify-center mx-3"}>
 						<img src={sendMailIcon} alt={"-----"}/>
-					</button>
+					</button> */}
 				</div>
 			</div>
 			<div className="flex-1 overflow-y-auto">
