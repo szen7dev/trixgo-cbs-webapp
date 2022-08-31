@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FC, useRef, useState} from "react";
+import React, {ChangeEvent, FC, useEffect, useRef, useState} from "react";
 import {useOnClickOutside} from "services/hooks/useOnclickOutside";
 import searchIcon from "assets/images/icons8-search-120.png";
 import { useListFilterDocument} from "services/hooks/document/useDocument";
@@ -15,15 +15,20 @@ const DocumentHeaderContent:FC =  () => {
     const [showResult, setShowResult] = useState(false);
 
     const dispatch = useDispatch();
-    const filterDropdown = useAppSelector(
-        (state) => state.documentHome.data.filterDropdown
+    const {filterDropdown, keywordInput} = useAppSelector(
+        (state) => state.documentHome.data
     );
+
+    useEffect(() => {
+        if (keywordInput.length === 0) {
+            if (inputRef.current) {
+                inputRef.current.value = "";
+            }
+        }
+    }, [keywordInput])
 
     useOnClickOutside(wrapperClass, () => {
         setShowResult(false)
-        if (inputRef.current) {
-            inputRef.current.value = "";
-        }
     })
 
     const setTypingTimeoutRef: any = useRef(null);
@@ -63,11 +68,11 @@ const DocumentHeaderContent:FC =  () => {
                     onKeyDown={onKeyDown}
                     ref={inputRef}
                     onChange={e => handleSearchChange(e)}
-                    className={"pl-12 w-full h-[45px] bg-cbs-bg-input-search rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-none focus:shadow-md transition-all"} placeholder={"Tìm kiếm hồ sơ"}/>
+                    className={"pl-12 w-full h-[45px] focus:bg-white bg-cbs-bg-input-search rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-none focus:shadow-md transition-all"} placeholder={"Tìm kiếm hồ sơ"}/>
 
                 {
                     showResult &&
-                    <div className={"absolute min-h-[300px] focus:bg-white top-full mt-2 w-full rounded border-0.5 border-primary-border p-4 bg-white"}>
+                    <div className={"absolute min-h-[300px] top-full mt-2 w-full rounded border-0.5 border-primary-border p-4 bg-white"}>
                         {
                             isLoading &&
                             <div

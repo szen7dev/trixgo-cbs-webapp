@@ -76,8 +76,17 @@ export const DocumentProjectPage: FC = () => {
     })
 
     type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+    type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
+    type TimeRangeHandle = React.ElementRef<typeof TimeRangeDropdown>;
     // console.log({projectID})
     const ref = React.useRef<PaginateHandle>(null);
+    const datahubRef = React.useRef<DropdownHandle>(null);
+    const typesRef = React.useRef<DropdownHandle>(null);
+    const directionsRef = React.useRef<DropdownHandle>(null);
+    const contractsRef = React.useRef<DropdownHandle>(null);
+    const storagesRef = React.useRef<DropdownHandle>(null);
+    const fromToRef = React.useRef<TimeRangeHandle>(null);
+
     const [pageIndex, setPageIndex] = useState(0);
     const [recordSelected, setSelectRecord] = useState<any>({});
 
@@ -131,7 +140,8 @@ export const DocumentProjectPage: FC = () => {
             types,
             directions,
             contractsID,
-            storagesID
+            storagesID,
+            keyword: keywordInput
         },
         isFetchList: true
     });
@@ -155,6 +165,8 @@ export const DocumentProjectPage: FC = () => {
                     departmentID,
                 });
                 if (result.status === 200) {
+                    setSelectRecord({});
+                    resetAllFilter();
                     dispatch(resetAllFilterAndKeyword({}));
                     refetchListDocument();
                     setPageIndex(0);
@@ -193,6 +205,8 @@ export const DocumentProjectPage: FC = () => {
                         documentID: record._id,
                     });
                     if (result.status === 200) {
+                        setSelectRecord({});
+                        resetAllFilter();
                         dispatch(resetAllFilterAndKeyword({}));
                         refetchListDocument();
                         setPageIndex(0);
@@ -243,6 +257,15 @@ export const DocumentProjectPage: FC = () => {
         }
     }
 
+    const resetAllFilter = () => {
+        datahubRef.current&&datahubRef.current.resetDropdown();
+        typesRef.current&&typesRef.current.resetDropdown();
+        directionsRef.current&&directionsRef.current.resetDropdown();
+        storagesRef.current&&storagesRef.current.resetDropdown();
+        contractsRef.current&&contractsRef.current.resetDropdown();
+        fromToRef.current&&fromToRef.current.resetTimeRange();
+    }
+
     if(stateExport.isExporting) {
         return <Loader className="border-primary" />
     }
@@ -253,6 +276,7 @@ export const DocumentProjectPage: FC = () => {
                 <div className={"flex flex-wrap items-center px-4 py-2"}>
                     <div className={"flex items-center flex-1"}>
                         <DropdownSearchableV2
+                            ref={datahubRef}
                             className={"mr-4 border border-primary-border rounded-lg mb-2"}
                             placeholder={"Tổ chức ban hành"}
                             prefixIcon={<img className={"mr-2"} src={maleUserIcon} alt={"icon"}/>}
@@ -298,6 +322,7 @@ export const DocumentProjectPage: FC = () => {
                             selectOneByOne={true}
                         />
                         <DropdownSearchableV2
+                            ref={typesRef}
                             className={"mr-4 border border-primary-border rounded-lg mb-2"}
                             placeholder={"Tính chất hồ sơ"}
                             prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"}/>}
@@ -339,6 +364,7 @@ export const DocumentProjectPage: FC = () => {
                             selectOneByOne={true}
                         />
                         <TimeRangeDropdown
+                            ref={fromToRef}
                             className={
                                 "mr-4 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
                             }
@@ -371,6 +397,7 @@ export const DocumentProjectPage: FC = () => {
                             ]}
                         />
                         <DropdownSearchableV2
+                            ref={directionsRef}
                             className={"mr-4 border border-primary-border rounded-lg mb-2"}
                             placeholder={"Hướng hồ sơ"}
                             prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"}/>}
@@ -412,6 +439,7 @@ export const DocumentProjectPage: FC = () => {
                             selectOneByOne={true}
                         />
                         <DropdownSearchableV2
+                            ref={contractsRef}
                             className={"mr-4 border border-primary-border rounded-lg mb-2"}
                             placeholder={"Thuộc hợp đồng"}
                             prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"}/>}
@@ -455,6 +483,7 @@ export const DocumentProjectPage: FC = () => {
                             selectOneByOne={true}
                         />
                         <DropdownSearchableV2
+                            ref={storagesRef}
                             className={"mr-4 border border-primary-border rounded-lg mb-2"}
                             placeholder={"Địa chỉ lưu trữ"}
                             prefixIcon={<img className={"mr-2"} src={echoDbIcon} alt={"icon"}/>}
