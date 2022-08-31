@@ -147,7 +147,7 @@ const FormFilter: FC<FormFilterProps> = ({
         const { setFieldValue } = formik;
         return (
           <Form>
-            <div
+            {/* <div
               className={
                 "absolute transition duration-150 top-full left-3 bg-white py-2 pb-6 px-4 shadow-md z-20 rounded-md max-w-[900px] min-w-[600px]"
               }
@@ -257,7 +257,7 @@ const FormFilter: FC<FormFilterProps> = ({
                   Xác nhận
                 </button>
               </div>
-            </div>
+            </div> */}
           </Form>
         );
       }}

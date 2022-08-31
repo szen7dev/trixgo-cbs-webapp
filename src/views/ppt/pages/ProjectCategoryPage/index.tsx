@@ -64,11 +64,11 @@ const ProjectCategoryPage: FC = () => {
 			<div className="px-4 flex items-center w-full text-primary-gray bg-white py-2">
 				<div className={"inline-flex items-center border-collapse border-0.5 border-primary-border"}>
 					<button className={"border-r-0.5 border-primary-border px-4 py-2 bg-cbs-soft-blue text-primary"}>
-						Dự án
+						Tất cả
 					</button>
-					<button className={"px-4 py-2 text-primary-gray"}>
+					{/* <button className={"px-4 py-2 text-primary-gray"}>
 						Phòng ban
-					</button>
+					</button> */}
 				</div>
 			</div>
 
