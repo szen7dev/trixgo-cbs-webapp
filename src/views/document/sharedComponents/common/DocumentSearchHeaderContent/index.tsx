@@ -4,6 +4,9 @@ import {useListFilterDocument} from "services/hooks/document/useDocument";
 import searchIcon from "assets/images/icons8-search-120.png";
 import {Link, useLocation, useParams} from "react-router-dom";
 import {Oval} from "react-loader-spinner";
+import {setKeyword} from "redux/reducer/DocumentProjectSlice";
+import {useDispatch} from "react-redux";
+import {useAppSelector} from "redux/reducer";
 
 export const DocumentSearchHeaderContent:FC = () => {
     const inputRef = useRef<HTMLInputElement>(null);
@@ -12,6 +15,11 @@ export const DocumentSearchHeaderContent:FC = () => {
     const [showResult, setShowResult] = useState(false);
     const location = useLocation()
     const { id: departmentID } = useParams<{ id: string }>();
+
+    const dispatch = useDispatch();
+    const filterDropdown = useAppSelector(
+        (state) => state.documentHome.data.filterDropdown
+    );
 
     useOnClickOutside(wrapperClass, () => {
         setShowResult(false)
@@ -31,11 +39,19 @@ export const DocumentSearchHeaderContent:FC = () => {
         }, 300)
     }
 
+    const onKeyDown = (e: any) => {
+        if (e.key === "Enter") {
+            dispatch(setKeyword(search));
+            setShowResult(false)
+        }
+    }
+
     const { listDocument, isLoading } = useListFilterDocument({
         params: {
             departmentsID: [departmentID],
             keyword: search,
-            limit: 10
+            limit: 10,
+            ...filterDropdown,
         },
         isFetchList: showResult
     });
@@ -47,6 +63,7 @@ export const DocumentSearchHeaderContent:FC = () => {
                     <img src={searchIcon} alt={"search icon"}/>
                 </div>
                 <input
+                    onKeyDown={onKeyDown}
                     ref={inputRef}
                     onChange={e => handleSearchChange(e)}
                     className={"pl-12 w-full h-[45px] bg-cbs-bg-input-search rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-none focus:shadow-md transition-all"} placeholder={"Tìm kiếm hồ sơ"}/>

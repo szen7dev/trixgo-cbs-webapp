@@ -30,6 +30,8 @@ import MessageNPSVoteDetailSlice from './messages/MessageNPSVoteDetail';
 
 // V2
 import DashboardV2Slice from './DashboardV2Slice';
+import DocumentHomeSlice from "./DocumentHomeSlice";
+import DocumentProjectSlice from "./DocumentProjectSlice";
 import { useSelector, TypedUseSelectorHook } from 'react-redux';
 
 const combinedReducer = combineReducers({
@@ -61,7 +63,9 @@ const combinedReducer = combineReducers({
     configConversation: ConfigConversationSlice,
     user: UserSlice,
     messageNpsVoteDetail: MessageNPSVoteDetailSlice,
-    dashboardV2: DashboardV2Slice
+    dashboardV2: DashboardV2Slice,
+    documentHome: DocumentHomeSlice,
+    documentProject: DocumentProjectSlice,
 });
 const rootReducer = (state: any, action: any) => {
     if (action.type === 'user/logout') {

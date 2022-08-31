@@ -4,12 +4,20 @@ import searchIcon from "assets/images/icons8-search-120.png";
 import { useListFilterDocument} from "services/hooks/document/useDocument";
 import {Link} from "react-router-dom";
 import {Oval} from "react-loader-spinner";
+import {useDispatch} from "react-redux";
+import {useAppSelector} from "redux/reducer";
+import {setKeyword} from "redux/reducer/DocumentHomeSlice";
 
 const DocumentHeaderContent:FC =  () => {
     const inputRef = useRef<HTMLInputElement>(null);
     const wrapperClass = useRef<HTMLDivElement>(null);
     const [search, setSearch] = useState("");
     const [showResult, setShowResult] = useState(false);
+
+    const dispatch = useDispatch();
+    const filterDropdown = useAppSelector(
+        (state) => state.documentHome.data.filterDropdown
+    );
 
     useOnClickOutside(wrapperClass, () => {
         setShowResult(false)
@@ -29,10 +37,18 @@ const DocumentHeaderContent:FC =  () => {
         }, 300)
     }
 
+    const onKeyDown = (e: any) => {
+        if (e.key === "Enter") {
+            dispatch(setKeyword(search));
+            setShowResult(false)
+        }
+    }
+
     const { listDocument, isLoading } = useListFilterDocument({
         params: {
             keyword: search,
-            limit: 10
+            limit: 10,
+            ...filterDropdown,
         },
         isFetchList: showResult
     });
@@ -44,6 +60,7 @@ const DocumentHeaderContent:FC =  () => {
                     <img src={searchIcon} alt={"search icon"}/>
                 </div>
                 <input
+                    onKeyDown={onKeyDown}
                     ref={inputRef}
                     onChange={e => handleSearchChange(e)}
                     className={"pl-12 w-full h-[45px] bg-cbs-bg-input-search rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-none focus:shadow-md transition-all"} placeholder={"Tìm kiếm hồ sơ"}/>
