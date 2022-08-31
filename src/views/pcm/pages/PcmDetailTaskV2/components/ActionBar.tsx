@@ -1,5 +1,5 @@
 import React, {FC, useState} from "react";
-import {useHistory} from "react-router-dom";
+import { useHistory, Link} from "react-router-dom";
 import iconBack from "assets/images/icon-back-gray.svg";
 import iconLinkCopy from "assets/images/icons8-link-96-v3.svg";
 import {SendEmailNotification} from "./SendEmailNotification";
@@ -58,13 +58,15 @@ export const ActionTaskDetailBar:FC<Props> = ({ task, user, refetchTaskInfo, han
                 <button className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mx-3"}>
                     <img src={iconCopy} alt={"----"} className={"w-[18px]"}/>
                 </button>
-                <button className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mx-3"}>
+                {/* <button className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mx-3"}>
                     <img src={iconRemove} alt={"----"} className={"w-[18px]"}/>
-                </button>
-                <button className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mx-3"}>
-                    <img src={iconPrint} alt={"----"} className={"w-[18px]"}/>
-                </button>
-                <SendToChat/>
+                </button> */}
+                <Link to={`/pcm/detail/${task._id}/print/1`}>
+                    <button className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mx-3"}>
+                        <img src={iconPrint} alt={"----"} className={"w-[18px]"}/>
+                    </button>
+                </Link>
+                {/* <SendToChat/> */}
                 <AddUserRelated task={task} onConfirmAddUserRelated={refetchTaskInfo} />
             </div>
 
@@ -79,11 +81,11 @@ export const ActionTaskDetailBar:FC<Props> = ({ task, user, refetchTaskInfo, han
                     }
                 </div>
             </button>
-            <TaskHistoryLog/>
-            <button className={"rounded bg-cbs-green-medium h-[36px] text-white flex items-center justify-center px-3 mx-3"}>
+            {/* <TaskHistoryLog/> */}
+            {/* <button className={"rounded bg-cbs-green-medium h-[36px] text-white flex items-center justify-center px-3 mx-3"}>
                 <img src={iconMember} alt={"----"} className={"w-[24px] mr-2"}/>
                 <span>Chia sẻ</span>
-            </button>
+            </button> */}
             <OtherActions task={task} />
         </div>
     )

@@ -16,7 +16,7 @@ export const TaskDetailSignature: FC<Props> = ({ task }) => {
                 <img src={iconAssessment} alt={'-----'} />
             </span>
             <div className={"flex-1"}>
-                <div className={"text-primary-gray text-lg font-bold"}>Ký xác nhận</div>
+                <div className={"text-primary-gray text-[16px] font-bold"}>Ký xác nhận</div>
                 <div className={"mt-2 w-1/3"}>
                     {!!task.signatures?.length && task.signatures.map(item => (
                         <div key={item._id} className={"user-sign flex items-center mb-2"}>

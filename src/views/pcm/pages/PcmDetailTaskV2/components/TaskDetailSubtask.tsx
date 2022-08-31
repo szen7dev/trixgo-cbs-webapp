@@ -37,7 +37,7 @@ export const TaskDetailSubtask:FC<Props> = ({ task, userId }) => {
             <div className={"flex items-center"}>
                 <div className={"flex items-center"}>
                     <img src={iconTickBox} alt={'-----'} className={"mr-4"}/>
-                    <span className={"text-primary-gray text-lg font-bold"}>
+                    <span className={"text-primary-gray text-[16px] font-bold"}>
                         Việc con
                     </span>
                 </div>
