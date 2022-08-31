@@ -3,8 +3,7 @@ import iconBack from "assets/images/icon-back-gray.svg";
 import downloadIcon from "assets/images/icons8-download-64.svg";
 import iconPencil from "assets/images/icons8-pencil-96 1.png";
 import nextIcon from "assets/images/icons-arrow-next.svg";
-import {useParams} from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {ProjectBudgetDetailTab1} from "./components/ProjectBudgetDetailTab1";
 import {ProjectBudgetDetailTab2} from "./components/ProjectBudgetDetailTab2";
 import {ProjectBudgetDetailTab3} from "./components/ProjectBudgetDetailTab3";
@@ -14,6 +13,8 @@ import { useContract } from 'services/hooks/items/useContract';
 
 const ProjectBudgetDetailPage:FC = () => {
     const { id: projectID, type, budgetId, tab } = useParams<{ id: string , type: string, budgetId: string, tab: string}>();
+    console.log({type})
+    console.log({tab})
 
     const activeTab = useCallback(() => {
         return tab.trim();

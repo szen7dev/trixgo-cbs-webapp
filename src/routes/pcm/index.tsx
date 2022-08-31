@@ -395,16 +395,15 @@ const PCMRouter: FC = () => {
                   </LayoutSecondary>
                 </Route>
 
-                <Route exact path="/pcm/bidding" component={() => <PcmHomePage subtype={4}/>} />
-                <Route exact path="/pcm/delivery" component={() => <PcmHomePage subtype={9} type={2}/>} />
-                <Route exact path="/pcm/payment" component={() => <PcmHomePage subtype={3} type={2}/>} />
-                <Route exact path="/pcm/mine" component={() => <PcmHomePage/>} />
-                <Route exact path="/pcm/assign" component={() => <PcmHomePage type={2} />} />
-                <Route exact path="/pcm/bookmark" component={() => <PcmHomePage type={3} />} />
-                <Route exact path="/pcm/related" component={() => <PcmHomePage type={5} />} />
+                <Route exact path="/pcm/bidding/:tab?" component={() => <PcmHomePage subtype={4} option={1}/>} />
+                <Route exact path="/pcm/delivery/:tab?" component={() => <PcmHomePage subtype={9} type={2} option={2}/>} />
+                <Route exact path="/pcm/payment/:tab?" component={() => <PcmHomePage subtype={3} type={2} option={3}/>} />
+                <Route exact path="/pcm/mine/:tab?" component={() => <PcmHomePage option={4}/>} />
+                <Route exact path="/pcm/assign/:tab?" component={() => <PcmHomePage type={2} option={5}/>} />
+                <Route exact path="/pcm/bookmark/:tab?" component={() => <PcmHomePage type={3} option={6}/>} />
+                <Route exact path="/pcm/related/:tab?" component={() => <PcmHomePage type={5} option={7}/>} />
                 <Route exact path="/pcm/report" component={PcmReportPage} />
                 <Route exact path="/pcm/report/:reportID" component={PcmTasksReportPage} />
-
                 <Route exact path="/pcm/detail/:id" component={PcmDetailTaskV2} />
 
               </Switch>
