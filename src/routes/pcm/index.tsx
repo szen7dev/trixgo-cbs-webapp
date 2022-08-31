@@ -395,6 +395,9 @@ const PCMRouter: FC = () => {
                   </LayoutSecondary>
                 </Route>
 
+                <Route exact path="/pcm/bidding" component={() => <PcmHomePage subtype={4}/>} />
+                <Route exact path="/pcm/delivery" component={() => <PcmHomePage subtype={9} type={2}/>} />
+                <Route exact path="/pcm/payment" component={() => <PcmHomePage subtype={3} type={2}/>} />
                 <Route exact path="/pcm/mine" component={() => <PcmHomePage/>} />
                 <Route exact path="/pcm/assign" component={() => <PcmHomePage type={2} />} />
                 <Route exact path="/pcm/bookmark" component={() => <PcmHomePage type={3} />} />

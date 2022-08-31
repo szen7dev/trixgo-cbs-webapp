@@ -20,10 +20,11 @@ import userAvt from "assets/images/task-user.svg";
 import { useTask } from "services/hooks/useTask";
 
 type Props = {
-    type?: number
+    type?: number,
+    subtype?: number,
 }
 
-const PcmHomeV2: FC<Props> = ({ type = 1 }) => {
+const PcmHomeV2: FC<Props> = ({ type = 1, subtype }) => {
 
     /**
      * Danh sách công việc của tôi (type=1)
@@ -35,7 +36,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1 }) => {
         nextPageListTask: nextPageTaskOutDate,
     } = useTask({
         params: {
-            type, statusNe: "3", isSortChildTask: "1"
+            type, subtype, statusNe: "3", isSortChildTask: "1"
             // , typeStatus: "4"
         },
         isFetch: true
@@ -309,9 +310,9 @@ const PcmHomeV2: FC<Props> = ({ type = 1 }) => {
                         Hoàn thành
                     </button>
                 </div>
-                <button className={"flex items-center justify-center mx-3"}>
+                {/* <button className={"flex items-center justify-center mx-3"}>
                     <img src={downloadIcon} alt={"-----"}/>
-                </button>
+                </button> */}
                 {/* <button className={"flex items-center justify-center mx-3"}>
                     <img src={sendMailIcon} alt={"-----"}/>
                 </button> */}
