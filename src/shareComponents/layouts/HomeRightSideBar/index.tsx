@@ -5,7 +5,6 @@ import { Dialog, Transition } from "@headlessui/react";
 
 import { useModal } from "services/hooks/useModal";
 
-import { ModalAddNewTask } from "shareComponents/common";
 import icon2 from "assets/images/icons8-inbox-100.png";
 import iconPlus from "assets/images/icons8-plus-math-24.png";
 import {ChatsOnRightSideBar} from "shareComponents/common";
