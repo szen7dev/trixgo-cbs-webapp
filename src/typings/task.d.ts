@@ -70,9 +70,10 @@ export type Task = {
     author: User;
     createAt: string
   }>;
-  openedStatus: number;
-  openedUsers: Array<User>;
+  authorAttachs: Array<FileProps>;
   accessUsers: Array<User>;
+  openedUsers: Array<User>;
+  openedStatus: number;
   actualStartTime: string;
   actualFinishTime: string;
   amountResponse: number;
@@ -190,6 +191,21 @@ export type AddRelationUserPayload = {
 
 export type CopyTaskPayload = {
   taskID: string;
+  name: string;
+  description: string;
+  projectID: string;
+  groupID: string;
+  fieldID: string;
+  assigneeID: string;
+  subtype: number;
+  type: number;
+  startTime: string;
+  expiredHour?: string;
+  expiredTime: string;
+  relatedIDs: string[];
+  authorAttachs: string[];
+  isCloneChildTask: boolean;
+  isDraftTask: boolean;
 };
 
 export type MoveTaskToParentPayload = {

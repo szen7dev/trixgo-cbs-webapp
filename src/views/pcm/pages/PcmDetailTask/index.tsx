@@ -273,12 +273,13 @@ const PcmDetailTask: FC = () => {
   };
 
   const handleCopyTask = async () => {
+    toast.info('Tính năng đang bào trì')
     try {
-      const { error, data } = await copyTaskAsync({ taskID: id });
+      // const { error, data } = await copyTaskAsync({ taskID: id });
 
-      if(error) return toast.warn(data?.message);
+      // if(error) return toast.warn(data?.message);
 
-      history.push(`/pcm/detail/${data._id}`);
+      // history.push(`/pcm/detail/${data._id}`);
     } catch (error) {
 			captureException(error);
       if(error instanceof Error)

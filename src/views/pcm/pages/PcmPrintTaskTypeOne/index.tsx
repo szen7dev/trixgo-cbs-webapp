@@ -63,10 +63,10 @@ const PcmPrintTaskTypeOne: FC = () => {
       taskID: taskId,
       populates: JSON.stringify({
         path: "author assignee related project group signatures",
-        select: "_id name company image bizfullname members author",
+        select: "_id name company image bizfullname members author image",
         populate: {
           path: "company author members",
-          select: "_id image bizfullname",
+          select: "_id image bizfullname signature",
         },
       }),
     },
@@ -95,6 +95,7 @@ const PcmPrintTaskTypeOne: FC = () => {
       hasPermissionCreateCheckList,
     });
   }, [taskInfo, isSuccessApp]);
+
   const componentRef = useRef(null);
   usePrintComponent({ ref: componentRef });
 
@@ -152,7 +153,7 @@ const PcmPrintTaskTypeOne: FC = () => {
                         </div>
                       </div>
                       <div className="text-large align-middle text-cbs-secondary">
-                        {taskInfo.subType >= 0 && PCM_SUBTYPE[taskInfo.subType].text}
+                        {PCM_SUBTYPE[taskInfo.subtype].text}
                       </div>
                     </div>
                     <div className={styles.headerInfo}>
@@ -217,21 +218,23 @@ const PcmPrintTaskTypeOne: FC = () => {
                 <td>
                   <main className="space-y-5">
                     {/* Nội dung */}
-                    <section>
-                      <div className="font-bold">
-                        <span>NỘI DUNG</span>
-                      </div>
-                      <div className="mt-2.5">
-                        <div
-                          className="min-h-[300px]"
-                          dangerouslySetInnerHTML={{
-                            __html: taskInfo?.description?.replace(/\n/g, '<br />')
-                          }}
-                        />
-                      </div>
-                    </section>
+                    {taskInfo?.description && (
+                      <section className="mt-2">
+                        <div className="font-bold">
+                          <span>NỘI DUNG</span>
+                        </div>
+                        <div className="mt-2.5">
+                          <div
+                            className="min-h-[300px]"
+                            dangerouslySetInnerHTML={{
+                              __html: taskInfo?.description?.replace(/\n/g, '<br />')
+                            }}
+                          />
+                        </div>
+                      </section>
+                    )}
                     {/* Việc xử lý */}
-                    <section>
+                    <section className="mt-2">
                       <div className="font-bold">
                         <span>VIỆC XỬ LÝ</span>
                       </div>
@@ -307,9 +310,9 @@ const PcmPrintTaskTypeOne: FC = () => {
                     <section>
                       <div className="flex justify-between">
                         <span className="font-bold">XÁC NHẬN</span>
-                        <button className="px-4 py-2 rounded-cbs-sm bg-cbs-completed text-white">
+                        {/* <button className="px-4 py-2 rounded-cbs-sm bg-cbs-completed text-white">
                           Đồng ý
-                        </button>
+                        </button> */}
                       </div>
                       <div className="mt-2.5">
                         <table className="border-collapse border-cbs-border border-0.5 w-full">
@@ -337,12 +340,18 @@ const PcmPrintTaskTypeOne: FC = () => {
                                   </td>
                                   <td className="pl-5 pb-3 pt-4">
                                     <div className="w-28 h-11">
-                                      <img alt="Chữ ký" className="h-full w-full object-cover" />
+                                      {item.author?.signature && (
+                                        <img
+                                          className="h-full w-full object-cover"
+                                          src={`${process.env.REACT_APP_URL_S3_USER}/${item.author?.signature}`}
+                                          alt={item.author?.bizfullname}
+                                        />
+                                      )}
                                     </div>
                                   </td>
-                                  <td className="pl-5 pb-3 pt-4">
+                                  {/* <td className="pl-5 pb-3 pt-4">
                                     <button className="px-2.5 py-1.5 bg-cbs-gray">Khoá</button>
-                                  </td>
+                                  </td> */}
                                 </tr>
                               ))
                             ) : (
