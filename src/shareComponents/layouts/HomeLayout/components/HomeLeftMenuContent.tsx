@@ -89,6 +89,12 @@ export const HomeLeftMenuContent:FC = () => {
             route: '/pcm/related'
         },
         {
+            label: "Việc nháp",
+            icon: fileIcon,
+            count: 0,
+            route: '/pcm/draft'
+        },
+        {
             label: "Báo cáo động",
             icon: fileIcon,
             count: 0,

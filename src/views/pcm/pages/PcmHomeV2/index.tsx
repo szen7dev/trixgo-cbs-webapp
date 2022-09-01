@@ -24,21 +24,24 @@ import {PcmHomeTab4} from "./components/PcmHomeTab4";
 import {PcmHomeTab5} from "./components/PcmHomeTab5";
 import {PcmHomeTab6} from "./components/PcmHomeTab6";
 import {PcmHomeTab7} from "./components/PcmHomeTab7";
+import {PcmHomeTab8} from "./components/PcmHomeTab8";
 
 import { useTask } from "services/hooks/useTask";
 
 type Props = {
     type?: number,
     subtype?: number,
-    option?: number
+    option?: number,
+    draft?: number
 }
 
-const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option }) => {
+const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
 
     // Khai báo active Tab
     const { tab } = useParams<{ tab: string}>();
     // console.log({tab})
     // console.log({option})
+    console.log({draft})
 
     const getStatusValue = (tab?: any) => {
         switch(tab) {
@@ -72,7 +75,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option }) => {
         nextPageListTask: nextPageTaskOutDate,
     } = useTask({
         params: {
-            type, subtype, typeStatus, statusNe: "3", isSortChildTask: "1"
+            type, draft, subtype, typeStatus, statusNe: "3", isSortChildTask: "1",
         },
         isFetch: true
     });
@@ -122,6 +125,10 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option }) => {
                     {
                         option == 7 &&
                         <PcmHomeTab7 tab={tab}/>
+                    }
+                    {
+                        option == 8 &&
+                        <PcmHomeTab8 tab={tab}/>
                     }
                 </div>
                 {/* <button className={"flex items-center justify-center mx-3"}>
