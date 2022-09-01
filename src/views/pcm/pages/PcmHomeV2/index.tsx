@@ -5,17 +5,17 @@ import moment from "moment";
 import parse from "html-react-parser";
 import { Link, useParams } from "react-router-dom";
 
-import userIcon from "assets/images/icon-user-avatar.svg";
-import maleUserIcon from "assets/images/icons8-male-user-64.svg";
-import TriangleDown from "assets/icons/TriangleDown";
-import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
-import projectIcon from "assets/images/icons8-project-50.svg";
-import timeTableIcon from "assets/images/icons8-timetable-48.svg";
-import categoryIcon from "assets/images/icons8-category-48.svg";
-import downloadIcon from "assets/images/icons8-download-64.svg";
-import sendMailIcon from "assets/images/icons8-send-email-96.svg";
+// import userIcon from "assets/images/icon-user-avatar.svg";
+// import maleUserIcon from "assets/images/icons8-male-user-64.svg";
+// import TriangleDown from "assets/icons/TriangleDown";
+// import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
+// import projectIcon from "assets/images/icons8-project-50.svg";
+// import timeTableIcon from "assets/images/icons8-timetable-48.svg";
+// import categoryIcon from "assets/images/icons8-category-48.svg";
+// import downloadIcon from "assets/images/icons8-download-64.svg";
+// import sendMailIcon from "assets/images/icons8-send-email-96.svg";
 import nextIcon from "assets/images/icons-arrow-next.svg";
-import userAvt from "assets/images/task-user.svg";
+// import userAvt from "assets/images/task-user.svg";
 
 import {PcmHomeTab1} from "./components/PcmHomeTab1";
 import {PcmHomeTab2} from "./components/PcmHomeTab2";
@@ -37,8 +37,8 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option }) => {
 
     // Khai báo active Tab
     const { tab } = useParams<{ tab: string}>();
-    console.log({tab})
-    console.log({option})
+    // console.log({tab})
+    // console.log({option})
 
     const getStatusValue = (tab?: any) => {
         switch(tab) {
@@ -60,7 +60,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option }) => {
     }
 
     const typeStatus = getStatusValue(tab)
-    console.log({typeStatus})
+    // console.log({typeStatus})
 
     /**
      * Danh sách công việc của tôi (type=1)

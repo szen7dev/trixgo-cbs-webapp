@@ -131,7 +131,7 @@ const PCMRouter: FC = () => {
                 </Route>
 
                 {/* Danh sách dự án */}
-                <Route exact path="/pm/projects">
+                <Route exact path="/pm/projects/:tab?">
                   <PmLayout>
                     <ProjectCategoryPage/>
                   </PmLayout>
