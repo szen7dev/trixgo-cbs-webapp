@@ -291,7 +291,7 @@ export const DocumentOfPackagePage: FC = () => {
                   if(location.pathname.includes("/document/project/")){
                     linkRef = `/document/project/${document.project._id}/detail/${document._id}`
                   }else{
-                    linkRef = `/pcm/project/${document.project._id}/document/${document._id}`
+                    linkRef = `/pm/project/${document.project._id}/document/${document._id}`
                   }
                   return (
                     <tr
