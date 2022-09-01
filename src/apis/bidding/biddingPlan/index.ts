@@ -30,7 +30,7 @@ async function fetchListBiddingPlan(params: any) {
     const { data } = await API.get(
         `${BIDDING_URL}/bidding_plans`, {
         params: {
-            select: '_id project name sign type packagePrice startTime finishTime form contractType duration status bidder note userCreate percentOfCompletedPackage',
+            select: '_id project name sign type packagePrice startTime finishTime form contractType duration status bidder note userCreate percentOfCompletedPackage createAt',
             populates: {
                 path: 'project userCreate bidder',
                 select: '_id name sign bizfullname',

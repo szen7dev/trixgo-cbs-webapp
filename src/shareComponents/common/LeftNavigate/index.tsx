@@ -12,11 +12,14 @@ import { RootState } from "redux/reducer";
 import { setAmountMissMessage } from "redux/reducer/messages/ListConversation";
 import { UseListConversation } from "services/hooks/messages/useListConversation";
 import { usePcmPlanTaskNotification } from "services/hooks/pcm/usePcmDashboardV2";
+// import { useGetListAppOfUser } from "services/hooks/auth/usePermissions";
 
 type Props = {
   handleMenuEvent: () => void;
 };
 export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
+  // const { listAppOfUser, refetchAppUsers } = useGetListAppOfUser();
+
   const { pathname } = useLocation();
   const pathBreak = pathname.split("/");
   const firstRoute = pathBreak[1];
