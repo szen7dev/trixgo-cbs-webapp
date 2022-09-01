@@ -642,7 +642,7 @@ export const PCM_SUBTYPE = [
     { value: 0, text: 'Việc thông thường' },
     { value: 1, text: 'Đề nghị cấp thông tin' },
     { value: 2, text: 'Đề nghị phê duyệt' },
-    { value: 3, text: 'Thanh toá' },
+    { value: 3, text: 'Thanh toán' },
     { value: 4, text: 'Đấu thầu' },
     { value: 5, text: 'Nghiệm thu chất lượng' },
     { value: 6, text: 'Yều cầu sửa chữa' },

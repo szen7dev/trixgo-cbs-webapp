@@ -63,7 +63,7 @@ const PcmPrintTaskTypeOne: FC = () => {
       taskID: taskId,
       populates: JSON.stringify({
         path: "author assignee related project group signatures",
-        select: "_id name company image bizfullname members author image",
+        select: "_id name sign company image bizfullname members author image createAt",
         populate: {
           path: "company author members",
           select: "_id image bizfullname signature",
@@ -80,6 +80,8 @@ const PcmPrintTaskTypeOne: FC = () => {
       toast.error("Bạn không có quyền truy cập tính năng này!");
       return history.push("/");
     }
+
+    document.title = `Trixgo-${taskInfo.name}`;
 
     const relatedsID = taskInfo.related?.map((user: any) => user._id) ?? [];
     const groupMembersID = taskInfo.group?.members?.map((user: any) => user._id) ?? [];
@@ -104,6 +106,8 @@ const PcmPrintTaskTypeOne: FC = () => {
   if(!taskInfo) return <Redirect to="/pcm/home" />;
 
   const assigneeAndRelated = [taskInfo?.assignee, ...taskInfo?.related];
+
+  // console.log(taskInfo)
 
   return (
     <div className="bg-cbs-gray overflow-auto" style={{ height: '100vh' }}>
@@ -142,7 +146,7 @@ const PcmPrintTaskTypeOne: FC = () => {
                           </div>
                         ))}
                       </div>
-                      <div className="text-x-small">{taskInfo.project?.name}</div>
+                      <div className="text-x-small uppercase">{taskInfo.project?.sign}.{taskInfo.project?.name}</div>
                       <div className="row-span-2">
                         <div className={styles.headerImageContainer}>
                           <img
@@ -152,7 +156,7 @@ const PcmPrintTaskTypeOne: FC = () => {
                           />
                         </div>
                       </div>
-                      <div className="text-large align-middle text-cbs-secondary">
+                      <div className="text-large align-middle text-cbs-secondary uppercase font-bold">
                         {PCM_SUBTYPE[taskInfo.subtype].text}
                       </div>
                     </div>

@@ -36,7 +36,7 @@ const PcmPrintTaskTypeTwo: FC = () => {
       taskID: taskId,
       populates: JSON.stringify({
         path: "project contract author assignee related",
-        select: "_id name company address bizfullname image",
+        select: "_id name sign company address bizfullname image",
         populate: {
           path: "company",
           select: "_id name image",
@@ -53,6 +53,9 @@ const PcmPrintTaskTypeTwo: FC = () => {
       toast.error("Bạn không có quyền truy cập tính năng này!");
       return history.push("/");
     }
+
+    document.title = `Trixgo-${taskInfo.name}`;
+
   }, [taskInfo, isSuccessApp]);
   const componentRef = useRef(null);
   usePrintComponent({ ref: componentRef });
@@ -113,7 +116,7 @@ const PcmPrintTaskTypeTwo: FC = () => {
                     </div>
                     <div className={classNames(styles.reportInfo, "mt-2")}>
                       <div>Dự án:</div>
-                      <div> {taskInfo.project?.name} </div>
+                      <div> {taskInfo.project?.sign}.{taskInfo.project?.name} </div>
                       <div>Chủ đầu tư:</div>
                       <div>
                         {typeof taskInfo.project?.company === "object" &&
@@ -176,8 +179,8 @@ const PcmPrintTaskTypeTwo: FC = () => {
                     {/* Ký */}
                     <section className="font-bold flex justify-end text-center">
                       <div className="px-14">
-                        <p>ĐOÀN TƯ VẤN</p>
-                        <p className="mt-14">Trưởng đoàn tư vấn</p>
+                        <p>ĐƠN VỊ LẬP BÁO CÁO</p>
+                        <p className="mt-14">...............</p>
                       </div>
                     </section>
                   </main>
