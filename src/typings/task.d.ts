@@ -437,6 +437,7 @@ export type CommentPayload = {
   parentID?: string;
   type: number;
   content: string;
+  rawContent?: string;
   files?: string[];
   images?: string[];
   isOfficial?: boolean;

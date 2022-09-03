@@ -34,6 +34,7 @@ type Props = {
 export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, socket, onCancelCreateResponse, onConfirmCreate }) => {
     const refDivFile = useRef<HTMLDivElement | null>(null);
     const editorRef = useRef<EditorType>();
+    const [rawContent, setRawContent] = useState('');
 
     const initUsersSelected = useMemo(() => {
         let arr = [];
@@ -157,7 +158,9 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
 
     const handleCreateResponseComment = async () => {
         if (!editorRef.current) return;
-        const content = editorRef.current?.getContent();
+
+        const contentRaw = editorRef.current?.getContent({ format: 'raw' });
+        const contentText = editorRef.current?.getContent({ format: 'text' });
 
         let images: string[] = [];
         let files: string[] = [];
@@ -171,12 +174,13 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
             _id && (files = [...files, _id]);
         }
 
-        if (!files.length && !images.length && !content) return;
+        if (!files.length && !images.length && !contentText) return;
 
         try {
             const dataInsert: CommentPayload = {
                 taskID: task?._id,
-                content,
+                content: contentRaw,
+                rawContent: contentText,
                 parentID: parent?._id,
                 type: 1,
                 isOfficial: tab === 2,
@@ -195,7 +199,7 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
             }
 
             if (selectedUser.length) {
-                dataInsert.receiversID = selectedUser.map(user => user.id) as string[];
+                dataInsert.receiversID = selectedUser.map(user => user.value) as string[];
             }
 
             const { error, data } = await createCommentAsync(dataInsert);
@@ -204,7 +208,6 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
                 return toast.warn(data?.message || 'Tạo bình luận thất bại')
             }
 
-            console.log({ ADD_COMMENT_SOCKET: socket })
             socket?.emit('COMMENT_CSS_ADD_COMMENT', {
                 app: APP_KEY.PCM_PLAN_TASK,
                 objectID: task?._id,
@@ -268,11 +271,9 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
                     />
                 </div>
                 <Editor
-                    // onActivate={}
                     onInit={(evt, editor) => {
                         editorRef.current = editor;
                     }}
-                    // disabled={user?.email !== 'contact@trixgo.com'}
                     apiKey={process.env.REACT_APP_TINYMCE_API_KEY}
                     // onSaveContent={handleSave}
                     init={{
