@@ -45,7 +45,7 @@ export const DocumentOfPackagePage: FC = () => {
   const [recordSelected, setSelectRecord] = useState<any>({});
 
   const { data, totalRecord, totalPages, loading, nextCursor, refetch }   = useQueryListDocument(departmentID, pageParam, packageID);
-  const { insertDocumentChildAsync, updateDocumentChildAsync }             = useMutationDocumentChild();
+  const { insertDocumentChildAsync, updateDocumentChildAsync }            = useMutationDocumentChild();
   const { onFetchDetailDepartmentAsync }                                  = useQueryDetailDepartment();
   const { onFetchDetailDocumentAsync }                                    = useQueryDetailDocument();
 
@@ -291,7 +291,7 @@ export const DocumentOfPackagePage: FC = () => {
                   if(location.pathname.includes("/document/project/")){
                     linkRef = `/document/project/${document.project._id}/detail/${document._id}`
                   }else{
-                    linkRef = `/pcm/project/${document.project._id}/document/${document._id}`
+                    linkRef = `/pm/project/${document.project._id}/document/${document._id}`
                   }
                   return (
                     <tr
@@ -427,3 +427,4 @@ export const DocumentOfPackagePage: FC = () => {
     </>
   );
 };
+export default DocumentOfPackagePage;

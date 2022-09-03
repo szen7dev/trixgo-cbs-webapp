@@ -3,9 +3,9 @@ import BellIcon from "assets/images/icons8-bell-100.svg";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {useDispatch, useSelector} from "react-redux";
 import {updateUsersMuteToConversation} from "redux/reducer/messages/ListConversation";
-import {MessageContext} from "../../../../index";
 import {openNotificationMute, dismissNotificationMute} from "redux/reducer/messages/NotificationMute";
-import {RootState} from "../../../../../../../../redux/reducer";
+import {RootState} from "redux/reducer";
+import {MessageContext} from "../../../../../../shareComponents/layouts/MessagesLayoutV2";
 
 type Props = {
     chat: any

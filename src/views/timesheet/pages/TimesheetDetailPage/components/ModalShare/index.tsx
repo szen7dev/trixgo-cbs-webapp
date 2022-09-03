@@ -139,7 +139,7 @@ export const ModalShare: FC<Props> = ({ expertTimesheetID, users, modalType, ref
 			</div>
 
 			<form className='px-[30px] mt-2' onSubmit={e => e.preventDefault()}>
-                <div className='relative border-cbs-border border-0.5 flex items-center'>
+                <div className='relative border-cbs-border border-[1px] flex items-center'>
                     <SearchIcon className='absolute left-3 w-4 h-4' />
                     <input
                         type="text"
@@ -150,7 +150,7 @@ export const ModalShare: FC<Props> = ({ expertTimesheetID, users, modalType, ref
                 </div>
                 {(users && users.length) ? (
                     <div className='relative flex items-center'>
-                        <div className="box-content overflow-auto h-auto w-full p-4 border-4 text-cbs-primary">
+                        <div className="box-content overflow-auto h-auto w-full p-4 border-1 text-cbs-primary">
                             {users?.map((item, index) => (index + 1) !== users.length ? `${item.bizfullname} | ` : item.bizfullname)}
                         </div>
                     </div>

@@ -112,7 +112,7 @@ const PcmDetailTask: FC = () => {
   const { updateTaskAsync, copyTaskAsync } = useTask({});
 
   const { data: infoTask, refetch: refetchInfoTask, isLoading } = useQuery(`task_info.${id}`, () =>
-    TaskRepository.taskInfo({ taskID: id, }),
+    TaskRepository.taskInfo({ taskID: id }),
     { refetchOnWindowFocus: false }
   );
 
@@ -273,12 +273,13 @@ const PcmDetailTask: FC = () => {
   };
 
   const handleCopyTask = async () => {
+    toast.info('Tính năng đang bào trì')
     try {
-      const { error, data } = await copyTaskAsync({ taskID: id });
+      // const { error, data } = await copyTaskAsync({ taskID: id });
 
-      if(error) return toast.warn(data?.message);
+      // if(error) return toast.warn(data?.message);
 
-      history.push(`/pcm/detail/${data._id}`);
+      // history.push(`/pcm/detail/${data._id}`);
     } catch (error) {
 			captureException(error);
       if(error instanceof Error)
@@ -427,7 +428,6 @@ const PcmDetailTask: FC = () => {
             const hasPermissionViewChildTask          = false;
             const hasPermissionOpenBidding            = relatedsID.includes(user?._id);
             const hasPermissionViewBidding            = [author?._id, ...relatedsID].includes(user?._id);
-            console.log({ hasPermissionViewAssigneeFile })
 
             const dataPermissions = {
               hasPermissionUpdateTask,

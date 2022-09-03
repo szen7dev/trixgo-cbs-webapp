@@ -63,7 +63,7 @@ const fieldInputByRow = [
 const useInitialValues = (
 	departmentID: string, companyID: string, keywordPackage?: string,
 	keywordSender?: string, keywordReceiver?: string, keywordProperty?: string,
-	keywordContract?: string, keywordStorage?: string, keywordDatahubContact?: string ) => {
+	keywordContract?: string, keywordStorage?: string, keywordDatahubContact?: string, title?: string ) => {
 
 	const { listPackage } = useQueryListPackage({ keyword: keywordPackage, departmentID });
 	const { listContact: listContactSender } = useQueryContact({ companyID, keyword: keywordSender });
@@ -84,16 +84,18 @@ const useInitialValues = (
 	});
 	const { listContracts } = useQueryItemContract({ companyID, keyword: keywordContract });
 
-	if (!companyID || !departmentID) {
-		return {
-			listPackage: [],
-			listContactSender: [],
-			listContactReceiver: [],
-			fields: [],
-			properties: [],
-			listStorages: [],
-			listContracts: [],
-		};
+	if (title != 'Cập nhật') {
+		if (!companyID || !departmentID) {
+			return {
+				listPackage: [],
+				listContactSender: [],
+				listContactReceiver: [],
+				fields: [],
+				properties: [],
+				listStorages: [],
+				listContracts: [],
+			};
+		}
 	}
 
 	return {
@@ -150,7 +152,8 @@ export const ModalCreateDocument: React.FC = () => {
 		keywordProperty,
 		keywordContract,
 		keywordStorage,
-		keywordDatahubContact
+		keywordDatahubContact,
+		state?.title
 	);
 	
 	const listFormFieldsDropdown = React.useMemo((): {
@@ -168,7 +171,7 @@ export const ModalCreateDocument: React.FC = () => {
 				})),
 				name: "direction",
 			},
-			{ title: "Ban hành (*)", data: listContactSender, name: "sender" },
+			{ title: "Cá nhân ban hành", data: listContactSender, name: "sender" },
 			{ title: "Nhận", data: listContactReceiver, name: "receiver" },
 			{ title: "Tính chất (*)", data: properties, name: "property" },
 			{
@@ -227,7 +230,7 @@ export const ModalCreateDocument: React.FC = () => {
 		},
 		[state]
 	);
-	
+
 	return (
 		<ModalContainer isModalOpen={state.isShow} toggle={() => false}>
 			<div
@@ -263,6 +266,7 @@ export const ModalCreateDocument: React.FC = () => {
 					</button>
 				</div>
 				<Formik
+					enableReinitialize={true}
 					initialValues={initialValues}
 					onSubmit={handleSubmit}
 				>
@@ -494,11 +498,11 @@ export const ModalCreateDocument: React.FC = () => {
 										</div>
 
 										<div className="py-1.5 h-[30px] box-content">
-											<p className="py-1.5">Cơ quan, tổ chức</p>
+											<p className="py-1.5">Tổ chức ban hành (*)</p>
 										</div>
 										<div className="py-0.5 h-[30px] box-content px-2">
 											<DropdownSearchable
-												placeholder={"Cơ quan, tổ chức"}
+												placeholder={"Tổ chức ban hành"}
 												className={"w-full flex-1"}
 												showTriangle={false}
 												maxWidthInput={"max-w-none"}

@@ -7,7 +7,7 @@ import {dismissAddUserToConversation} from "redux/reducer/messages/AddUserToConv
 import {map as _map} from "lodash";
 import {UseConversation} from "services/hooks/messages/useConversation";
 import {toast} from "react-toastify";
-import {populates} from "../../../../index";
+import {populates} from "../../../../../../shareComponents/layouts/MessagesLayoutV2";
 import {useUserSystem} from "services/hooks/users/useUserSystem";
 
 type Props = {

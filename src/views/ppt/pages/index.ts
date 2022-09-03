@@ -34,3 +34,7 @@ export { default as ProjectInspectionDetailPage } from "./ProjectInspectionDetai
 export { default as ProjectSubjectCompanyOfAssigneePage } from "./ProjectSubjectCompanyOfAssigneePage";
 export { default as ProjectSubjectCompanyOfAuthorPage } from "./ProjectSubjectCompanyOfAuthorPage";
 export { default as ProjectMilestonePage } from "./ProjectMilestonePage";
+export { default as ProjectHomePageV2 } from "./ProjectHomePageV2";
+export { default as ProjectDirectoryPageV2 } from "./ProjectDirectoryPageV2";
+export { default as ProjectDrawingPageV2 } from "./ProjectDrawingPageV2";
+export { default as ProjectBudgetDetailPage } from "./ProjectBudgetDetailPage";

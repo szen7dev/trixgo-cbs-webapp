@@ -83,7 +83,7 @@ const FunctionalTab: FC = () => {
 			...previous,
 			{ _id, name }
 		]))
-		history.push(`/pcm/project/${projectID}/admin/groups/${_id}`);
+		history.push(`/pm/project/${projectID}/admin/groups/${_id}`);
 	}
 
 	return (

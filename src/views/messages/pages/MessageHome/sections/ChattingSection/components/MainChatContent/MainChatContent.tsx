@@ -4,7 +4,6 @@ import {UseConversation} from "services/hooks/messages/useConversation";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
-import {MessageContext} from "../../../../index";
 import ArrowDown from "assets/images/icon-arrow-down.svg";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import 'react-circular-progressbar/dist/styles.css';
@@ -30,6 +29,7 @@ import {updateUsersMissMessageToConversation} from "redux/reducer/messages/ListC
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {setIsReviewOldMessages} from "redux/reducer/messages/ListMessage";
 import {NpsNoti} from "../Nps/NpsNoti";
+import {MessageContext} from "../../../../../../shareComponents/layouts/MessagesLayoutV2";
 
 export const listEmoji = [
     {
@@ -271,7 +271,7 @@ export const MainChatContent:FC<Props> = ({chat}) => {
                 id={"conversation-messages-MessageList"}
                 className={"flex-1 h-full items-center flex flex-col-reverse relative overflow-auto justify-start transition-all duration-150 pb-4"}
             >
-                <div className={"w-full max-w-[645px] pt-[20px] px-[20px]"}>
+                <div className={"w-full max-w-[60%] pt-[20px] px-[20px]"}>
                     {memoizedValue()}
                     {memoizedFakeValue()}
                 </div>
@@ -284,7 +284,7 @@ export const MainChatContent:FC<Props> = ({chat}) => {
                         scrollToBottom()
                         markAsRead()
                     }}
-                    className={"animate-bounce w-[48px] h-[48px] rounded-full absolute bottom-100px bg-white flex items-center justify-center right-40px z-10"}>
+                    className={"animate-bounce w-[48px] h-[48px] rounded-full absolute bottom-100px bg-cbs-item-message-other flex items-center justify-center right-40px z-10"}>
                     <img  src={ArrowDown} alt={"arrow down"}/>
                     <span
                         className={"absolute -top-1 -right-1 w-[24px] h-[24px] bg-positive rounded-full flex items-center justify-center text-white"}>{userUnreadMessage()}</span>

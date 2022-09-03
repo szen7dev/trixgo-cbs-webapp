@@ -44,6 +44,8 @@ export type Task = {
   name: string;
   sign: string;
   status: number;
+  priority: number;
+  risk: number;
   expiredTime: string;
   typeStatus: number;
   checklist: string;
@@ -56,6 +58,8 @@ export type Task = {
   group: Group,
   contract: Contract,
   field: Field,
+  parent: Task | undefined,
+  links: Task[],
   startTime: string,
   subType: number,
   subtype: number,
@@ -66,16 +70,24 @@ export type Task = {
     author: User;
     createAt: string
   }>;
+  authorAttachs: Array<FileProps>;
+  accessUsers: Array<User>;
   openedUsers: Array<User>;
+  openedStatus: number;
   actualStartTime: string;
   actualFinishTime: string;
   amountResponse: number;
   amountMarkedResponse: number;
   amountChecklist: number;
-  amountComment: number;
   amountFinishedChecklist: number;
-  createAt: string
-  author: Author,
+  amountComment: number;
+  amountCurrentStatus: number;
+  amountSolution: number;
+  amountCurrentStatus: number;
+  amountResponseOther: number;
+  createAt: string;
+  author: Author;
+  message?: string;
 };
 
 export interface addTaskPayload {
@@ -95,6 +107,7 @@ export interface addTaskPayload {
 
 export interface updateTaskPayload {
   taskID: string;
+  description?: string;
   contractID?: string;
   name?: string;
   status?: number;
@@ -109,6 +122,15 @@ export interface updateTaskPayload {
   flagsRemoves?: Array<string>;
   authorAttachs?: Array<string>;
   assigneeAttachs?: Array<string>;
+  tasksLink?: Array<string>;
+  isUpdateNews?: boolean;
+}
+
+export interface updateStatusMultiplePayload {
+  taskIDs: string[];
+  parentID?: string;
+  type?: number;
+  option?: number;
 }
 
 export interface addTaskResponse {
@@ -118,6 +140,7 @@ export interface addTaskResponse {
   message: string;
 }
 
+// Khai báo kiểu dữ liệu đầu vào của Getlist mà client cần truyền lên
 export type TaskListParams = QueryParams & {
   keyword?: string;
   typeStatus?: string;
@@ -127,6 +150,7 @@ export type TaskListParams = QueryParams & {
   companyOfAuthor?: string;
   isPassPermision?: string;
   projectID?: string;
+  parentID?: string;
   milestone?: string;
   type?: number;
   status?: string;
@@ -134,6 +158,12 @@ export type TaskListParams = QueryParams & {
   subtype?: string;
   unlimit?: string;
   isParent?: string;
+  isSortChildTask?: string;
+  draft?: string;
+  isActive?: string;
+  isGroup?: string;
+  read?: string;
+  collection?: number;
 }
 
 export type TaskInfoParams = {
@@ -142,9 +172,11 @@ export type TaskInfoParams = {
   populates?: Populate | string;
 }
 
+// Khai báo kiểu dữ liệu trả về của Data
 export type ListTaskResponse = APIResponse & {
   data: {
     listRecords: Array<Task>;
+    totalTaskDone?: number;
     totalRecord: number;
     totalPage?: number;
     nextCursor: string;
@@ -159,6 +191,21 @@ export type AddRelationUserPayload = {
 
 export type CopyTaskPayload = {
   taskID: string;
+  name: string;
+  description: string;
+  projectID: string;
+  groupID: string;
+  fieldID: string;
+  assigneeID: string;
+  subtype: number;
+  type: number;
+  startTime: string;
+  expiredHour?: string;
+  expiredTime: string;
+  relatedIDs: string[];
+  authorAttachs: string[];
+  isCloneChildTask: boolean;
+  isDraftTask: boolean;
 };
 
 export type MoveTaskToParentPayload = {
@@ -379,6 +426,7 @@ export type ListCommentsPayload = {
   contractID?: string;
   parentID?: string;
   isHaveImage?: boolean;
+  official?: boolean;
   select?: string;
   populates?: string;
 };
@@ -389,8 +437,11 @@ export type CommentPayload = {
   parentID?: string;
   type: number;
   content: string;
+  rawContent?: string;
   files?: string[];
   images?: string[];
+  isOfficial?: boolean;
+  receiversID?: string[];
 };
 
 export type CommentProps = {
@@ -406,9 +457,11 @@ export type CommentProps = {
   };
   type: number;
   content: string;
+  official: boolean;
   files: FileProps[] | undefined;
   images: FileProps[] | undefined;
   author: User;
+  receivers?: User[];
   amountCommentReply: number;
   amountReaction: number;
   parent: string;

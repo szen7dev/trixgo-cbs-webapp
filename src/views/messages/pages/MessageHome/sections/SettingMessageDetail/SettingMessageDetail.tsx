@@ -1,13 +1,13 @@
 import React, {FC, useContext} from "react";
 import AddUserToGroup from "assets/images/icons8-add-user-group-man-man-96.svg";
 import {SettingMessageDetailTab} from "./components";
-import {MessageContext} from "../../index";
 import {useSelector, useDispatch} from "react-redux";
 import {RootState} from "redux/reducer";
 import {openAddUserToConversation} from "redux/reducer/messages/AddUserToConversation";
 import {NotificationController} from "./components/Notification/NotificationController";
 import {BasicInformationConversation} from "./components/BasicInformation";
 import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
+import {MessageContext} from "../../../../shareComponents/layouts/MessagesLayoutV2";
 
 export const SettingMessageDetail:FC = () => {
     const {currentChat, showMenu} = useContext(MessageContext);
@@ -19,7 +19,7 @@ export const SettingMessageDetail:FC = () => {
 
     if (!chat) return null
     return (
-        <div className={"messages-right-bar border-l transition-all duration-500 group w-[402px] min-w-[402px] absolute h-full bg-white  z-10 " + (showMenu?"right-0":"right--402px")}>
+        <div className={"messages-right-bar transition-all duration-500 group w-[324px] min-w-[324px] absolute h-full bg-white  z-10 " + (showMenu?"right-0":"right--324px")}>
             <div className={"h-full group overflow-auto no-webkit-scrollbar pb-20"}>
                 <BasicInformationConversation chat={chat}/>
                 <NotificationController chat={chat}/>

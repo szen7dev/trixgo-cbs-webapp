@@ -15,6 +15,7 @@ import { ContextPost, ContextPostType } from './contexts/ContextPost';
 interface Props {
 	initialData: PostState,
 	isShow: boolean,
+	prioritySingleImageAuthor?: boolean,
 	toggle: () => void
 }
 

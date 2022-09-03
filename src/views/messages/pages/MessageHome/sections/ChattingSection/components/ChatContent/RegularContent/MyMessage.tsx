@@ -32,19 +32,19 @@ export const MyMessage:FC<Props> = ({message, context, isMini}) => {
     }, [message])
     const renderMessageContent = useCallback(() => {
         if (isDeleted()) {
-            return <DeleteChatContent isMini={isMini} message={message} className={"bg-cbs-active-comment"} isMyMessage={true}/>
+            return <DeleteChatContent isMini={isMini} message={message} className={"bg-primary text-white"} isMyMessage={true}/>
         }
         switch (message.type) {
             case 0:
-                return <TextChatContent isMini={isMini} context={context} message={message} className={"bg-cbs-active-comment"} isMyMessage={true}/>;
+                return <TextChatContent isMini={isMini} context={context} message={message} className={"bg-primary text-white"} isMyMessage={true}/>;
             case 2:
-                return <FileChatContent isMini={isMini} context={context} message={message} className={"bg-cbs-active-comment"} isMyMessage={true}/>;
+                return <FileChatContent isMini={isMini} context={context} message={message} className={"bg-primary text-white"} isMyMessage={true}/>;
             case 1:
                 return <ImagesContent isMini={isMini} context={context} message={message} isMyMessage={true}/>;
             case 7:
-                return <ContactContent isMini={isMini} context={context} message={message} className={"bg-cbs-active-comment"} borderClass={"border-gray-300"}/>;
+                return <ContactContent isMini={isMini} context={context} message={message} className={"bg-primary text-white"} borderClass={"border-gray-300"} isMyMessage={true}/>;
             case 8:
-                return <NpsContent isMini={isMini} context={context} message={message} className={"bg-cbs-active-comment"} borderClass={"border-gray-300"} isMyMessage={true}/>;
+                return <NpsContent isMini={isMini} context={context} message={message} className={"border-0.5"} borderClass={"border-gray-300"}/>;
         }
     }, [message]);
 

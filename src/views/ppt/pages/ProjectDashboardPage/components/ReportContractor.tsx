@@ -65,7 +65,7 @@ const ReportContractor: React.FC<Props> = ({ projectID, ...props }) => {
 	};
 	return (
 		<div {...props}>
-			<Link to={`/bidding/plan/${projectID}`}>
+			<Link to={`/pm/project/${projectID}/bidding`}>
 			<h3>Lựa chọn nhà thầu</h3>
 			<div className={cn(styles.chart, "mt-4 mx-auto")}>
 				<ChartDoughnutSmall _data={_data} title="GÓI THẦU" />

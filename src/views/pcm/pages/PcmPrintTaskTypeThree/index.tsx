@@ -71,6 +71,8 @@ const PcmPrintTaskTypeThree: FC = () => {
       toast.error("Bạn không có quyền truy cập tính năng này!");
       return history.push("/");
     }
+
+    document.title = `Trixgo-${taskInfo.name}`;
   }, [taskInfo, isSuccessApp, isLoadingInfo, hasPermission]);
 
   const listImagesComment = useMemo(() => {
@@ -88,7 +90,7 @@ const PcmPrintTaskTypeThree: FC = () => {
   if (isLoadingInfo || isLoadingPcmComments) return <Loader className="border-primary" />;
 
   return (
-    <div className="bg-cbs-gray h-full overflow-hidden">
+    <div className="bg-cbs-gray overflow-auto" style={{ height: '100vh' }}>
       <div className="h-full overflow-auto py-6">
         <div className="max-w-[791px] bg-white w-full mx-auto pl-[3.75rem] pr-6 py-6 shadow-cbs-md">
           <table ref={componentRef} className="print_area w-full">

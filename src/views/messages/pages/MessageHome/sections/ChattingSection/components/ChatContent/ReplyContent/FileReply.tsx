@@ -8,8 +8,9 @@ import OtherIcon from "assets/images/CBS-Other-Icon.svg";
 type Props = {
     message: any;
     className?: string;
+    isMyMessage?: boolean;
 }
-export const FileReply:FC<Props> = ({message, className}) => {
+export const FileReply:FC<Props> = ({message, className, isMyMessage}) => {
     const renderFileTypeImage = (file:any) => {
         const filename = file.name??file.file.name;
         const extension = filename.split(".").pop();
@@ -37,10 +38,10 @@ export const FileReply:FC<Props> = ({message, className}) => {
                 {renderFileTypeImage(message.files[0].file)}
             </div>
             <div className={"flex-1"}>
-                <div className={"reply-user-name text-blue-900"} style={{color: message.themeColor}}>
+                <div className={"reply-user-name " + (isMyMessage? "text-white font-bold text-opacity-75" : "text-gray-900")} style={{color: message.themeColor}}>
                     {message.sender.bizfullname||message.sender.fullname}
                 </div>
-                <div className={"truncate reply-content-text text-gray-400 max-w-[250px]"}>
+                <div className={"truncate reply-content-text max-w-[250px] " + (isMyMessage? "text-white text-opacity-75" : "text-gray-400")}>
                     {message.files[0].file.nameOrg??message.files[0].file.file.nameOrg}
                 </div>
             </div>

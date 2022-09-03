@@ -199,7 +199,7 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 					className="text-black w-full mr-4"
 				/>
 			</div>
-			<div className={inputContainerClassName}>
+			{/* <div className={inputContainerClassName}>
 				<div className="flex self-end h-9 w-9">
 					<button className="flex items-center justify-center h-9 w-9">
 						<img src={iconFace} alt="Icon face" className="h-6 w-6" />
@@ -246,7 +246,7 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 						<img src={iconEmailSend} alt="Icon attach" className="h-9 w-9" />
 					</button>
 				</div>
-			</div>
+			</div> */}
 		</div>
 	)
 }

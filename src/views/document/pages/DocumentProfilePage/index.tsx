@@ -1,4 +1,4 @@
-import { FC, useContext, useState } from "react";
+import React, { FC, useContext, useState } from "react";
 import { useParams, Link, useLocation } from "react-router-dom";
 import { DOCUMENT_TYPES } from "apis/localdb";
 
@@ -11,6 +11,7 @@ import { useQueryStatistical } from "services/hooks/document/useStatistical";
 // ========== App common Components ==========
 
 import { IPackage } from "typings/document";
+import {NavigateTab} from "../../sharedComponents/common";
 
 const pkgs: Array<IPackage> = Array.from(Array(2).keys()).map((_, i) => ({
 	id: i,
@@ -25,11 +26,16 @@ export const DocumentProfilePage: FC = () => {
 	const [pkg, setPkg] = useState<IPackage>(pkgs[0]);
 
 	const { data } = useQueryStatistical({ departmentID: params.id });
-	console.log({ data })
+
 	return (
 		<>
 			{/* Content */}
-			<div className="flex flex-1 flex-col overflow-hidden bg-cbs-gray">
+			<div className="flex flex-1 flex-col overflow-hidden h-full">
+				<div className={"sticky top-0 z-10"}>
+					<div className={"flex items-center pb-2"}>
+						<NavigateTab/>
+					</div>
+				</div>
 				{/* <div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1"> */}
 					{/* <span className="text-x-large mr-7">Hồ sơ: Tất cả</span> */}
 					{/* <SearchInput
@@ -58,12 +64,12 @@ export const DocumentProfilePage: FC = () => {
 						if(location.pathname.includes("/document/project/")){
 							linkRef = `/document/project/${params.id}/document/1/type/${formatData.type}`
 						}else{
-							linkRef = `/pcm/project/${params.id}/document/1/type/${formatData.type}`
+							linkRef = `/pm/project/${params.id}/document/1/type/${formatData.type}`
 						}
 
 						return (
 							<Link className="document__card-container" key={i} to={linkRef}>
-								<div className="bg-white rounded-lg h-[150px] px-3.5 py-4 flex flex-col justify-between">
+								<div className="bg-white border-0.5 border-primary-border rounded-lg h-[150px] px-3.5 py-4 flex flex-col justify-between">
 									<div className="flex justify-between">
 										<h4 className="text-x-large">{formatData.name}</h4>
 										<div>
@@ -88,3 +94,5 @@ export const DocumentProfilePage: FC = () => {
 		</>
 	);
 };
+
+export default DocumentProfilePage;

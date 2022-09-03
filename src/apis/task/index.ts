@@ -27,16 +27,17 @@ import {
   ReactionCommentPayload,
   ListReactionPayload,
   updateTaskPayload,
-  UpdateResponsePayload
+  UpdateResponsePayload,
+  updateStatusMultiplePayload
 } from "typings/task";
 import { convertObToUrl } from "utils";
 
 const populatesTask = JSON.stringify({
-  path: "group contract author assignee related parent project company field approver authorAttachs assigneeAttachs signatures openedUsers",
-  select: "_id name fullname bizfullname image sign _id name nameOrg description size path mimeType type author createAt members company",
+  path: "group contract author assignee related parent project company field approver authorAttachs assigneeAttachs signatures openedUsers links accessUsers",
+  select: "_id name fullname bizfullname image sign signature _id name nameOrg description size path mimeType type author assignee createAt members company expiredTime project openedStatus",
   populate: {
-    path: "author",
-    select: "_id bizfullname image"
+    path: "author assignee project",
+    select: "_id bizfullname image sign signature"
   }
 })
 
@@ -50,7 +51,7 @@ const populatesResponse = JSON.stringify({
 });
 
 const populatesComment = JSON.stringify({
-  path: "author lastestReplyID files images task",
+  path: "author lastestReplyID files images task receivers",
   select: "_id bizfullname image name nameOrg description path mimeType size author type parent content files images amountCommentReply amountReaction createAt task company project group",
   populate: {
       path: 'author lastestReplyID files images task',
@@ -82,10 +83,18 @@ const TaskRepository = {
     return data;
   },
 
+  async updateStatusMultiple(payload: updateStatusMultiplePayload): Promise<any> {
+    const { data } = await API.put<any>(
+      `${pcmURL}/pcm_plan_tasks/update-status-mutiple`,
+      payload
+    );
+    return data;
+  },
+
   async listTask(payload: TaskListParams): Promise<ListTaskResponse> {
     const { data } = await API.get<ListTaskResponse>(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl({
-        select: "assignee lastLog checklist description name expiredTime status percentage project actualStartTime actualFinishTime amountChecklist amountFinishedChecklist milestone startTime",
+        select: "assignee lastLog checklist description name expiredTime status percentage project actualStartTime actualFinishTime amountChecklist amountFinishedChecklist milestone startTime amountCurrentStatus amountSolution amountResponseOther accessUsers",
         populates: JSON.stringify({
           path: "assignee lastLog project",
           select: "name fullname bizfullname image author content createAt sign",
@@ -100,10 +109,32 @@ const TaskRepository = {
     return data;
   },
 
+  /**
+   * Danh sách chủ đề tại trang chủ
+   * TaskListParams: Kiểu dữ liệu trả về
+   */
+  async listSubject(payload: TaskListParams): Promise<ListTaskResponse> {
+    const { data } = await API.get<ListTaskResponse>(
+      `${pcmURL}/pcm_plan_tasks/subject?${convertObToUrl({
+        select: "author lastComment checklist description name expiredTime status percentage project actualStartTime actualFinishTime amountChecklist amountFinishedChecklist milestone startTime related modifyAt news openedStatus amountCurrentStatus amountSolution amountResponseOther",
+        populates: JSON.stringify({
+          path: "author lastComment project",
+          select: "name fullname image author content createAt sign",
+          populate: {
+            path: "author",
+            select: "_id fullname image",
+          }
+        }),
+        ...payload
+      })}`
+    );
+    return data;
+  },
+
   async taskInfo(payload: TaskInfoParams): Promise<any> {
     const { data } = await API.get<any>(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl({
-        select: "name description type typeStatus status draft priority project contract parent checklist createAt field group author assignee related expiredTime actualFinishTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures openedUsers comments amountComment amountResponse amountMarkedResponse startTime subtype flags milestone",
+        select: "name description type typeStatus status draft priority project contract parent checklist createAt field group author assignee related expiredTime actualFinishTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures openedUsers comments amountComment amountResponse amountMarkedResponse startTime subtype flags milestone links openedStatus amountCurrentStatus amountSolution amountResponseOther accessUsers",
         populates: populatesTask,
         ...payload
       })}`

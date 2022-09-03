@@ -21,8 +21,9 @@ const SampleRouter = lazy(() => import("./sample"));
 const BiddingRouter = lazy(() => import("./bidding"));
 const CmcsRouter = lazy(() => import("./cmcs"));
 const DatahubRouter = lazy(() => import("./datahub"));
-const DocumentRouter = lazy(() => import("./document"));
-const PPTRouter = lazy(() => import("./ppt"));
+// const DocumentRouter = lazy(() => import("./document"));
+const DocumentV2Router = lazy(() => import("./documentV2"));
+// const PPTRouter = lazy(() => import("./ppt"));
 const FinancialRouter = lazy(() => import("./financial"));
 const HumanRouter = lazy(() => import("./human"));
 const MarketRouter = lazy(() => import("./market"));
@@ -31,6 +32,7 @@ const MessagesRouter = lazy(() => import("./messages"));
 const OperationRouter = lazy(() => import("./operation"));
 const OwnerRouter = lazy(() => import('./owner'));
 const PcmRouter = lazy(() => import('./pcm'));
+const PmRouter = lazy(() => import('./pm'));
 const WorkshopRouter = lazy(() => import('./workshop'));
 const PersonalRouter = lazy(() => import("./personal"));
 const QrcodeRouter = lazy(() => import("./qrcode"));
@@ -44,8 +46,12 @@ const BudgetRouter = lazy(() => import("./budget"));
 const ErrorPage = lazy(() => import("views/authentication/Error"));
 const HomeLayout = lazy(() => import("shareComponents/layouts"));
 const HumanLayout = lazy(() => import("views/human/shareComponents/layouts"));
-const DocumentLayout = lazy(() => import('views/document/sharedComponents/layouts'));
+// const DocumentLayout = lazy(() => import('views/document/sharedComponents/layouts'));
 const AccountingLayout = lazy(() => import('views/accounting/shareComponents/layouts'));
+
+const PcmPrintTaskTypeOnePage     = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeOne'));
+const PcmPrintTaskTypeTwoPage     = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeTwo'));
+const PcmPrintTaskTypeThreePage   = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeThree'));
 
 const Routes: FC = () => {
     useEffect(() => {
@@ -65,10 +71,13 @@ const Routes: FC = () => {
                         <Route path="/sample">
                             <SampleRouter />
                         </Route>
-                        {/*<DeleteConfirmProvider>*/}
-                        {/*    <ChatProvider>*/}
+
                         <ModalProvider>
                             <Switch>
+
+                                <Route exact path="/pcm/detail/:id/print/1" component={PcmPrintTaskTypeOnePage} />
+                                <Route exact path="/pcm/detail/:id/print/2" component={PcmPrintTaskTypeTwoPage} />
+                                <Route exact path="/pcm/detail/:id/print/3" component={PcmPrintTaskTypeThreePage} />
 
                                 {/* =====AUTHENTICATION===== */}
                                 <Route path="/(authentication|login)/:path?">
@@ -113,10 +122,15 @@ const Routes: FC = () => {
                                 </Route>
 
                                 {/* =====DOCUMENT===== */}
-                                <Route path="/document">
+                                {/* <Route path="/document">
                                     <DocumentLayout>
                                         <DocumentRouter />
                                     </DocumentLayout>
+                                </Route> */}
+
+                                {/* =====DOCUMENT V2===== */}
+                                <Route path="/document">
+                                    <DocumentV2Router />
                                 </Route>
 
                                 {/* =====PCM===== */}
@@ -124,11 +138,10 @@ const Routes: FC = () => {
                                     <PcmRouter />
                                 </Route>
 
-                                {/* =====PPT===== */}
-                                <Route
-                                    path='/ppt'
-                                    component={PPTRouter}
-                                />
+                                {/* =====PM===== */}
+                                <Route path="/pm">
+                                    <PmRouter />
+                                </Route>
 
                                 {/* =====FINANCIAL===== */}
                                 <Route path="/financial">
@@ -225,8 +238,7 @@ const Routes: FC = () => {
 
                             </Switch>
                         </ModalProvider>
-                        {/*</ChatProvider>*/}
-                        {/*</DeleteConfirmProvider>*/}
+
                     </RightClickMenuProvider>
                 </AuthProvider>
             </Router>

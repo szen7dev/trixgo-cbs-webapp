@@ -85,6 +85,8 @@ type UseSearchTask = {
     refetchListTask: () => void;
     nextPageListTask: () => void;
     prevPageListTask: () => void;
+    isFetching: boolean;
+    listTasksWithPager: any;
 };
 
 type UseSearchTaskProps ={
@@ -96,7 +98,6 @@ export const useSearchTask = ({
     params = {},
     isFetch = false,
 }: UseSearchTaskProps): UseSearchTask => {
-
     const {
         isLoading: isLoadingListTask,
         data: dataListTask,
@@ -104,17 +105,18 @@ export const useSearchTask = ({
         fetchNextPage: nextPageListTask,
         fetchPreviousPage: prevPageListTask,
         hasNextPage,
+        isFetching,
     } = useInfiniteQuery(
         ["task--list_by_filter", params],
         async ({ pageParam }: any) =>
         MainSearchRepository.mainSearch({
             lastestID: pageParam || "",
             populates: JSON.stringify({
-                path: "assignee author project group lastLog",
-                select: "name bizfullname image sign content author",
+                path: "assignee author project group lastLog lastComment",
+                select: "name fullname bizfullname image sign content author createAt sign",
                 populate: {
                     path: "author",
-                    select: "bizfullname image sign"
+                    select: "bizfullname fullname image sign" 
                 }
             }),
             ...params,
@@ -133,6 +135,8 @@ export const useSearchTask = ({
         .map((d: any) => d.data?.listRecords))
         .filter(Boolean);
 
+    const listTasksWithPager = (dataListTask?.pages || []).map((d: any) => d.data?.listRecords);
+    
     const totalRecord = dataListTask?.pages[0]?.data?.totalRecord;
     const totalPage = dataListTask?.pages[0]?.data?.totalPage;
 
@@ -145,5 +149,7 @@ export const useSearchTask = ({
         refetchListTask,
         nextPageListTask,
         prevPageListTask,
+        isFetching,
+        listTasksWithPager
     };
 };

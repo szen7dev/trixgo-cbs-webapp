@@ -39,7 +39,7 @@ export const ProjectBiddingPage: FC = () => {
 	});
 
 	useEffect(() => {
-		document.title = "PPT - Danh mục dự án";
+		document.title = "Trixgo | Danh sách dự án";
 	}, []);
 
 	const onChangeSearch = debounce((e: React.ChangeEvent<HTMLInputElement>) => {

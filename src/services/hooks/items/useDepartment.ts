@@ -76,6 +76,7 @@ type ListDepartmentIsMemberProps = {
     keyword?: string;
     limit?: number;
     type?: number;
+    isBudget?: number;
     isFetch?: boolean;
     lastestID?: string;
 }

@@ -192,7 +192,7 @@ const PcmReportPage: FC = () => {
 				<thead className="bg-cbs-table-header h-10 border-b border-primary-border">
 					<tr className="text-left text-sm text-primary-gray">
 						<th className="pb-1 pt-1 text-center" style={{ width: "3.5%" }}>
-							<div className="border-r-2 border-gray-300 flex items-center justify-center">
+							<div className="flex items-center justify-center">
 								<input
 									className="form-check-input"
 									type="checkbox"
@@ -202,17 +202,22 @@ const PcmReportPage: FC = () => {
 							</div>
 						</th>
 						<th className="w-1/4 pb-1 pt-1">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
+							<div className="font-normal pl-2">
 								Nội dung
 							</div>
 						</th>
 						<th className="w-1/4 pb-1 pt-1 font-normal">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
+							<div className="font-normal pl-2">Ngày tạo</div>
+						</th>
+						<th className="w-1/4 pb-1 pt-1 font-normal">
+							<div className="font-normal pl-2">
 								Người tạo
 							</div>
 						</th>
 						<th className="w-1/4 pb-1 pt-1 font-normal">
-							<div className="font-normal pl-2">Ngày tạo</div>
+							<div className="font-normal pl-2">
+								Chia sẻ
+							</div>
 						</th>
 						<th className="w-1/4 pb-1 pt-1 font-normal">
 							<div className="font-normal pl-2">Tác vụ</div>
@@ -241,10 +246,13 @@ const PcmReportPage: FC = () => {
 									</Link>
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
+									{moment(item.createAt).format("HH:mm DD/MM/YYYY")}
+								</td>
+								<td className="py-1 px-2 text-primary-gray">
 									{item.author?.bizfullname}
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
-									{moment(item.createAt).format("HH:mm DD/MM/YYYY")}
+									
 								</td>
 								<td className="py-1 px-2">
 									<button

@@ -1,460 +1,677 @@
 import React, { FC, Fragment, useContext, useState, useEffect } from "react";
 import { Link, useParams, useLocation } from "react-router-dom";
 import { Transition } from "@headlessui/react";
-import { Menu } from '@headlessui/react';
 import { toast } from "react-toastify";
 import moment from "moment";
-import debounce from "lodash/debounce";
 
 // ========== Context ==========
 import { ModalContext } from "views/document/contexts/modal";
 
 // ========= Global Components =========
-import { Paginate, Loader, ButtonCreate, DropdownOption } from "shareComponents/common";
+import {
+    DropdownSearchableV2,
+    Loader,
+} from "shareComponents/common";
 
 // ========== Components ==========
-import {
-  DropdownFilterButton,
-  GroupActions,
-  SearchInput,
-} from "views/document/sharedComponents/common";
 
 // ========== Hooks ==========
 import {
-  useQueryListDocument,
-  useQueryDetailDocument,
+    useQueryListDocument,
+    useQueryDetailDocument,
 } from "services/hooks/ppt/useDocument";
 import { useQueryDetailDepartment } from "services/hooks/items/useDepartment";
 import { useMutationDocumentChild } from "services/hooks/document/useDocumentChild";
 import { useHistoryTraffics } from "services/hooks/auth/useAuth";
-import { useDocumentCustom } from "services/hooks/document/useDocument";
+import {useDocumentCustom, useListFilterDocument} from "services/hooks/document/useDocument";
 
 // ========== Utils ==========
-import { APP_ID } from 'apis/localdb';
+import {APP_ID, DIRECTION_TYPES, DOCUMENT_TYPES} from 'apis/localdb';
 import { createLinkAndClick } from "utils";
 
+import {useProject, useProjectCustom} from "services/hooks/items/useProject";
+import maleUserIcon from "assets/images/icons8-male-user-64.svg";
+import categoryIcon from "assets/images/icons8-category-48.svg";
+import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
+import TriangleDown from "assets/icons/TriangleDown";
+import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
+import contractIcon from "assets/images/icons8-contract-64-blue.svg";
+import echoDbIcon from "assets/images/icons8-amazon-echo-48.svg";
+import downloadIcon from "assets/images/icons8-download-64.svg";
+import iconPencil from "assets/images/icons8-pencil-96 1.png";
+import nextIcon from "assets/images/icons-arrow-next.svg";
+import {NavigateTab} from "../../sharedComponents/common";
+import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
+import {useDatahubContact} from "services/hooks/datahub/contact/useDatahubContact";
+import {useContractIsMembers} from "services/hooks/items/useContract";
+import {debounce} from "lodash";
+import {useStorage} from "services/hooks/items/useStorage";
+
 const payloadHistoryTraffic: any = {
-  appID: APP_ID.PCM.id,
-  menuID: APP_ID.PCM.menuPcmProject.document.id,
-  type: "1"
+    appID: APP_ID.PCM.id,
+    menuID: APP_ID.PCM.menuPcmProject.document.id,
+    type: "1"
 };
 
 export const DocumentProjectPage: FC = () => {
-  //_____Start history traffict
-	const { createHistoryTraffics } = useHistoryTraffics();
-
-	//_____End history traffict
-  const location = useLocation()
-  const { toggleModal, updateModal } = useContext(ModalContext);
-  const { id: departmentID } = useParams<{ id: string }>();
-  const [pageParam, setPageParam] = useState<any>({});
-  const [cursorPage, setCursorPage] = useState<string[]>([]);
-  const [isShow, setIsShow] = useState<boolean>(false);
-  const [recordSelected, setSelectRecord] = useState<any>({});
-  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
-		isExporting: false,
-	});
-
-  const { data, totalRecord, totalPages, loading, nextCursor, refetch } = useQueryListDocument(departmentID, pageParam, "");
-  const { insertDocumentChildAsync, updateDocumentChildAsync } = useMutationDocumentChild();
-  const { onFetchDetailDepartmentAsync } = useQueryDetailDepartment();
-  const { onFetchDetailDocumentAsync }   = useQueryDetailDocument();
-  const { exportDocumentAsync } = useDocumentCustom({});
-
-  const toggleModalConfirm = () => {
-    setIsShow(!isShow);
-  };
-
-  const handleNextPage = React.useCallback(() => {
-    if (nextCursor) {
-      setPageParam({ lastestID: nextCursor });
-    }
-  }, [nextCursor]);
-
-  const handlePrevPage = React.useCallback(() => {
-    const currentIndex = cursorPage.findIndex(
-      (cursor) => cursor === pageParam?.lastestID
-    );
-    if (currentIndex >= 0) {
-      setPageParam({ lastestID: cursorPage[currentIndex - 1] }); // lấy id trước đó
-    }
-  }, [cursorPage, pageParam]);
-
-  const handleCreate = React.useCallback(async () => {
-    const result = await onFetchDetailDepartmentAsync(departmentID);
-    toggleModal();
-    updateModal({
-      departmentId: departmentID,
-      departmentInfo: result,
-      title: "Thêm mới",
-      onSubmit: async (values: any) => {
-        const result = await insertDocumentChildAsync({
-          ...values,
-          departmentID,
-        });
-        if (result.status === 200) {
-          refetch();
-          toggleModal();
-          updateModal({
-            departmentInfo: {},
-          });
-        }
-      },
-    });
-  }, [
-    departmentID,
-    insertDocumentChildAsync,
-    onFetchDetailDepartmentAsync,
-    refetch,
-    toggleModal,
-    updateModal,
-  ]);
-
-  const handleOnClickUpdate = React.useCallback(
-    (record) => async () => {
-      const result = await onFetchDetailDocumentAsync(record._id);
-      toggleModal();
-      updateModal({
-        departmentId: departmentID,
-        departmentInfo: {
-          company: {
-            _id: record.company,
-          },
+    const { id: projectID } = useParams<{ id: string }>();
+    const { info: projectInfo, isLoading: isloadingProjectInfo } = useProject({
+        params: {
+            departmentID: projectID
         },
-        title: "Cập nhật",
-        initialValues: result,
-        onSubmit: async (values: any) => {
-          const result = await updateDocumentChildAsync({
-            ...values,
-            documentID: record._id,
-          });
-          if (result.status === 200) {
-            refetch();
+        isFetchInfo: true
+    })
+
+    type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+    // console.log({projectID})
+    const ref = React.useRef<PaginateHandle>(null);
+    const [pageIndex, setPageIndex] = useState(0);
+    const [recordSelected, setSelectRecord] = useState<any>({});
+
+    // console.log({projectInfo})
+
+    useEffect(() => {
+        document.title = `${projectInfo.sign} | Hồ sơ văn bản`;
+    }, []);
+
+    //_____Start history traffict
+    const { createHistoryTraffics } = useHistoryTraffics();
+
+    //_____End history traffict
+    const location = useLocation()
+    const { id: departmentID } = useParams<{ id: string }>();
+    const [isShow, setIsShow] = useState<boolean>(false);
+    const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+        isExporting: false,
+    });
+
+    // const { listDocumentWithPager, totalRecord, totalPages, loading, refetch, fetchNextPage, hasNextPage } = useQueryListDocument(
+    //     departmentID,
+    //     {},
+    //     ""
+    // );
+
+    const [fromToDate, setFromToDate] = useState({fromDate: "", toDate: ""})
+
+    const [keywordDatahubContact, setKeywordDatahubContact] = useState("");
+    const [datahubContactsID, setDatahubContactsID] = useState<string[]>([]);
+
+    const [types, setTypes] = useState<string[]>([]);
+
+    const [directions, setDirections] = useState<string[]>([]);
+
+    const [contractKeyword, setContractKeyword] = useState("");
+    const [contractsID, setContractsID] = useState<string[]>([]);
+
+    const [storageKeyword, setStorageKeyword] = useState("");
+    const [storagesID, setStoragesID] = useState<string[]>([]);
+
+    const { data: listDatahubContact } = useDatahubContact({ keyword: keywordDatahubContact }, true, false); // Danh bạ hệ thống
+    const { listContracts } = useContractIsMembers({ params: {keyword: contractKeyword, populates: JSON.stringify({"path": "project", "select":"name sign"})}, isFetch: true });
+    const { list: listStorages } = useStorage({ params: { companyID: typeof projectInfo.company === "string" ? projectInfo.company : "", keyword: storageKeyword,}, isFetchList: (!isloadingProjectInfo && typeof projectInfo._id === "string")});
+
+    const { listDocumentWithPager, isLoading, totalRecord, totalPage, fetchNextPageDocument, hasNextPage, refetchListDocument } = useListFilterDocument({
+        params: {
+            departmentsID: [departmentID],
+            ...fromToDate,
+            datahubContactsID,
+            types,
+            directions,
+            contractsID,
+            storagesID
+        },
+        isFetchList: true
+    });
+
+    const { exportDocumentAsync } = useDocumentCustom({});
+    const { onFetchDetailDepartmentAsync } = useQueryDetailDepartment();
+    const { insertDocumentChildAsync, updateDocumentChildAsync } = useMutationDocumentChild();
+    const { toggleModal, updateModal } = useContext(ModalContext);
+    const { onFetchDetailDocumentAsync }   = useQueryDetailDocument();
+
+    const handleCreate = React.useCallback(async () => {
+        const result = await onFetchDetailDepartmentAsync(departmentID);
+        toggleModal();
+        updateModal({
+            departmentId: departmentID,
+            departmentInfo: result,
+            title: "Thêm mới",
+            onSubmit: async (values: any) => {
+                const result = await insertDocumentChildAsync({
+                    ...values,
+                    departmentID,
+                });
+                if (result.status === 200) {
+                    refetchListDocument();
+                    setPageIndex(0);
+                    ref.current&&ref.current.resetPaginate();
+                    toggleModal();
+                    updateModal({
+                        departmentInfo: {},
+                    });
+                }
+            },
+        });
+    }, [
+        departmentID,
+        insertDocumentChildAsync,
+        onFetchDetailDepartmentAsync,
+        refetchListDocument,
+        toggleModal,
+        updateModal,
+    ]);
+
+    const handleOnClickUpdate = React.useCallback((record) => async () => {
+            const result = await onFetchDetailDocumentAsync(record._id);
             toggleModal();
             updateModal({
-              departmentInfo: {},
-              initialValues: {},
+                departmentId: departmentID,
+                departmentInfo: {
+                    company: {
+                        _id: record.company,
+                    },
+                },
+                title: "Cập nhật",
+                initialValues: result,
+                onSubmit: async (values: any) => {
+                    const result = await updateDocumentChildAsync({
+                        ...values,
+                        documentID: record._id,
+                    });
+                    if (result.status === 200) {
+                        refetchListDocument();
+                        setPageIndex(0);
+                        ref.current&&ref.current.resetPaginate();
+                        toggleModal();
+                        updateModal({
+                            departmentInfo: {},
+                            initialValues: {},
+                        });
+                    }
+                },
             });
-          }
         },
-      });
-    },
-    [
-      departmentID,
-      onFetchDetailDocumentAsync,
-      refetch,
-      toggleModal,
-      updateDocumentChildAsync,
-      updateModal,
-    ]
-  );
+        [
+            departmentID,
+            onFetchDetailDocumentAsync,
+            refetchListDocument,
+            toggleModal,
+            updateDocumentChildAsync,
+            updateModal,
+        ]
+    );
 
-  const handleOnFilter = React.useCallback((values) => {
-    setPageParam(() => ({ ...values }));
-    return true;
-  }, []);
+    const toggleModalConfirm = () => {
+        setIsShow(!isShow);
+    };
 
-  const handleOnCancelFilter = React.useCallback(() => {
-    setPageParam({});
-  }, []);
+    useEffect(() => {
+        createHistoryTraffics({...payloadHistoryTraffic, type: 1});
+    }, []);
 
-  useEffect(() => {
-  	createHistoryTraffics({...payloadHistoryTraffic, type: 1});
-	}, []);
+    const handleExport = async () => {
+        try {
+            setStateExport({ isExporting: true });
+            const { error, data } = await exportDocumentAsync({
+                filterParams: { departmentID }
+            });
 
-  useEffect(() => {
-    if (nextCursor) {
-      const currentIndex = cursorPage.findIndex(
-        (cursor) => cursor === nextCursor
-      );
-      if (currentIndex < 0) {
-        setCursorPage([...cursorPage, nextCursor]); // lưu lại con trỏ trang
-      }
+            if(error) {
+                return toast.warn(data?.message);
+            }
+
+            data && createLinkAndClick(data, '_self');
+        } catch (error: any) {
+            toast.error(error.message)
+        } finally {
+            setStateExport({ isExporting: false });
+        }
     }
-  }, [cursorPage, nextCursor, pageParam?.lastestID]);
 
-  const handleExport = async () => {
-		try {
-			setStateExport({ isExporting: true });
-			const { error, data } = await exportDocumentAsync({
-        filterParams: { departmentID }
-      });
+    if(stateExport.isExporting) {
+        return <Loader className="border-primary" />
+    }
 
-			if(error) {
-				return toast.warn(data?.message);
-			}
+    return (
+        <div className="flex flex-1 flex-col overflow-hidden h-full">
+            <div className={"sticky top-0 z-10"}>
+                <div className={"flex flex-wrap items-center px-4 py-2"}>
+                    <div className={"flex items-center flex-1"}>
+                        <DropdownSearchableV2
+                            className={"mr-4 border border-primary-border rounded-lg mb-2"}
+                            placeholder={"Tổ chức ban hành"}
+                            prefixIcon={<img className={"mr-2"} src={maleUserIcon} alt={"icon"}/>}
+                            isMultiple={true}
+                            allowClearValueSingleInput={true}
+                            data={listDatahubContact}
+                            formatItem={{
+                                id: "_id",
+                                text: "name"
+                            }}
+                            onSearchInputChange={debounce(
+                                (valueSearch) => setKeywordDatahubContact(valueSearch),
+                                500
+                            )}
+                            onchangeValue={item => {
+                                const cloneIDs = [...datahubContactsID];
+                                cloneIDs.push(item._id);
+                                setDatahubContactsID(cloneIDs);
 
-			data && createLinkAndClick(data, '_self');
-		} catch (error: any) {
-      toast.error(error.message)
-		} finally {
-			setStateExport({ isExporting: false });
-		}
-	}
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onClearData={() => {
+                                setDatahubContactsID([]);
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onMultipleRemoveValue={id => {
+                                const cloneIDs = [...datahubContactsID];
+                                const newList = cloneIDs.filter(selectId => selectId !== id);
+                                setDatahubContactsID(newList);
 
-  if(stateExport.isExporting) {
-    return <Loader className="border-primary" />
-  }
-
-  return (
-    <>
-      {/* Content */}
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <div className="flex flex-wrap items-center justify-between w-full px-4 gap-x-2 text-black py-1">
-          <div className="flex flex-wrap items-center">
-            <span className="text-x-large mr-7">Danh sách</span>
-            {/* <DocumentDropdown
-              data={pkgs}
-              value={pkg.title}
-              onSelectValue={setPkg}
-            /> */}
-            <SearchInput
-              classNameWrapper="rounded-sm flex bg-cbs-left-menu mr-2"
-              onChange={debounce((e) => {
-                handleOnFilter({
-                  keyword: e.target.value,
-                });
-              }, 500)}
-            />
-            <DropdownFilterButton
-              onSubmit={handleOnFilter}
-              onCancel={handleOnCancelFilter}
-              initialValues={pageParam}
-            />
-            {Object.keys(recordSelected).length > 0 && (
-              <GroupActions
-                className="flex items-center flex-1"
-                onClickPencil={handleOnClickUpdate(recordSelected)}
-              />
-            )}
-          </div>
-          <div className="flex flex-wrap items-center">
-            <ButtonCreate onClick={handleCreate} />
-            <DropdownOption>
-              <Menu.Item onClick={handleExport}>
-                <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-3"}>
-                  <img src="/images/common/icons8-download-48.png" alt="Download Excel" />
-                  <div className={"flex-1 text-left ml-4"}>
-                    Download Excel
-                  </div>
-                </div>
-              </Menu.Item>
-            </DropdownOption>
-          </div>
-        </div>
-        <div className="flex-1 overflow-y-auto">
-          {loading && <Loader absolute={true} className="border-primary" />}
-          {data.length === 0 && (
-            <h2 className="text-center">Không có kết quả được trả về</h2>
-          )}
-          {!loading && data.length > 0 && (
-            <table
-              className="text-black text-medium border-separate space-x-0 space-y-0"
-              style={{ borderSpacing: 0 }}
-            >
-              <thead className="">
-                <tr className="text-primary-gray whitespace-nowrap align-middle text-left">
-                  <th className="px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '30px' }}>
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value=""
-                      id="flexCheckDefault"
-                    />
-                  </th>
-                  <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '3%' }}>
-                    <span className="pl-2 border-l border-cbs-border">
-                      STT
-                    </span>
-                  </th>
-                  <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '25%' }}>
-                    <span className="pl-2 border-l border-cbs-border">
-                      Nội dung
-                    </span>
-                  </th>
-                  <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '15%' }}>
-                    <span className="pl-2 border-l border-cbs-border">
-                      Chủ thể ban hành
-                    </span>
-                  </th>
-                  <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '10%' }}>
-                    <span className="pl-2 border-l border-cbs-border">
-                      Mã hiệu
-                    </span>
-                  </th>
-                  <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '5%' }}>
-                    <span className="pl-2 border-l border-cbs-border">
-                      Ngày văn bản
-                    </span>
-                  </th>
-                  <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '5%' }}>
-                    <span className="pl-2 border-l border-cbs-border">
-                      Mã hiệu lưu
-                    </span>
-                  </th>
-                  <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '5%' }}>
-                    <span className="pl-2 border-l border-cbs-border">
-                      Số lượng
-                    </span>
-                  </th>
-                  <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '10%' }}>
-                    <span className="pl-2 border-l border-cbs-border">
-                      Tình trạng
-                    </span>
-                  </th>
-                  <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                    <span className="pl-2 border-l border-cbs-border">
-                      Ghi chú
-                    </span>
-                  </th>
-                  <th
-                    className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border"
-                    style={{ width: '10%' }}
-                  >
-                    <span className="pl-2 border-l border-cbs-border">
-                      Địa chỉ lưu trữ
-                    </span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="">
-                {data.map((document, index) => {
-                  let linkRef;
-                  if(location.pathname.includes("/document/project/")){
-                    linkRef = `/document/project/${document.project._id}/detail/${document._id}`
-                  }else{
-                    linkRef = `/pcm/project/${document.project._id}/document/${document._id}`
-                  }
-                  return (
-                    <tr
-                      key={index}
-                      className="text-left hover:bg-cbs-active-comment"
-                    >
-                      <td className="px-4 py-2.5 border-b border-cbs-border">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          id="flexCheckDefault"
-                          checked={document._id === recordSelected._id}
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              setSelectRecord(document);
-                              return null;
-                            }
-                            setSelectRecord({});
-                            return null;
-                          }}
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            renderItem={(item) => (
+                                <p className={"min-w-[300px]"}>{item.text}</p>
+                            )}
+                            selectOneByOne={true}
                         />
-                      </td>
-                      <td className="py-2.5 border-b border-cbs-border px-2">
-                        {index+1}
-                      </td>
-                      <td className="px-2 w-[271px] py-2.5 border-b border-cbs-border">
-                        <Link to={linkRef}>
-                          <p className="text-cbs-highlight-color">{document?.name || ""}</p>
-                          <p className="mt-1.5 text-primary-gray">
-                            {`${document?.author?.fullname || ""}-${
-                              moment(document.createAt).isValid() &&
-                              moment(document.createAt).format("DD/MM/YYYY")
-                            }`}
-                          </p>
-                        </Link>
-                      </td>
-                      <td className="py-2.5 border-b border-cbs-border px-2">
-                        {document?.sender?.name}
-                      </td>
-                      <td className="py-2.5 border-b border-cbs-border px-2">
-                        {document?.sign}
-                      </td>
-                      <td className="py-2.5 border-b border-cbs-border px-2 w-24 text-right">
-                        {moment(document.date).isValid() && moment(document.date).format("DD/MM/YYYY")}
-                      </td>
-                      <td className="py-2.5 border-b border-cbs-border px-2">
-                        {document?.storeSign}
-                      </td>
-                      <td className="py-2.5 border-b border-cbs-border px-2 whitespace-nowrap text-right">
-                        {document.amount}
-                      </td>
-                      <td className="py-2.5 border-b border-cbs-border px-2 box-border">
-                        {document.status}
-                      </td>
-                      <td className="py-2.5 border-b border-cbs-border px-2 box-border">
-                        {document.note}
-                      </td>
-                      <td className="py-2.5 border-b border-cbs-border px-2">
-                        {document?.storage?.name}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          )}
-        </div>
-      </div>
-      {/* Footer */}
-      <Paginate
-        totalPages={totalPages}
-        totalRecord={totalRecord}
-        nextPageAction={handleNextPage}
-        prevPageAction={handlePrevPage}
-        isFetching={loading}
-        hasNextPage
-      />
-      <Transition.Root appear show={isShow} as={Fragment}>
-        <div className="fixed inset-0 overflow-y-auto" style={{ zIndex: 51 }}>
-          <div className="min-h-screen px-4 text-center">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <div className="fixed inset-0 bg-dark bg-opacity-75 transition-opacity" />
-            </Transition.Child>
+                        <DropdownSearchableV2
+                            className={"mr-4 border border-primary-border rounded-lg mb-2"}
+                            placeholder={"Tính chất hồ sơ"}
+                            prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"}/>}
+                            isMultiple={true}
+                            disableSearch={true}
+                            allowClearValueSingleInput={true}
+                            data={DOCUMENT_TYPES}
+                            formatItem={{
+                                "id": "value"
+                            }}
+                            onchangeValue={item => {
+                                const cloneIDs = [...types];
+                                cloneIDs.push(item.value);
+                                setTypes(cloneIDs);
 
-            <span
-              className="inline-block h-screen align-middle"
-              aria-hidden="true"
-            >
-              &#8203;
-            </span>
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onClearData={() => {
+                                setTypes([]);
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onMultipleRemoveValue={id => {
+                                const cloneIDs = [...types];
+                                const newList = cloneIDs.filter(selectId => selectId !== id);
+                                setTypes(newList);
 
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
-            >
-              <div className="inline-flex flex-col text-black w-full max-w-lg my-8 overflow-hidden text-left transition-all transform bg-white">
-                <div className="p-5 mb-4 text-xl leading-6 font-bold">
-                  Bạn có muốn xóa không?
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            renderItem={(item) => (
+                                <p className={"min-w-[300px]"}>{item.text}</p>
+                            )}
+                            selectOneByOne={true}
+                        />
+                        <TimeRangeDropdown
+                            className={
+                                "mr-4 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
+                            }
+                            placeholder={"Ngày nhận"}
+                            iconBack={<TriangleDown />}
+                            iconFront={<img src={timelineIcon} alt={"----"} />}
+                            onValueChange={(val) => setFromToDate(val)}
+                            options={[
+                                {
+                                    text: "Tất cả",
+                                    fromDate: "",
+                                    toDate: "",
+                                },
+                                {
+                                    text: "Cách đây 1 tuần",
+                                    fromDate: moment().format("YYYY-MM-DD"),
+                                    toDate: moment().subtract(7,'d').format("YYYY-MM-DD"),
+                                },
+                                {
+                                    text: "Cách đây 1 tháng",
+                                    fromDate: moment().format("YYYY-MM-DD"),
+                                    toDate: moment().subtract(1,'m').format("YYYY-MM-DD"),
+                                },
+                            ]}
+                        />
+                        <DropdownSearchableV2
+                            className={"mr-4 border border-primary-border rounded-lg mb-2"}
+                            placeholder={"Hướng hồ sơ"}
+                            prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"}/>}
+                            isMultiple={true}
+                            disableSearch={true}
+                            allowClearValueSingleInput={true}
+                            data={DIRECTION_TYPES}
+                            formatItem={{
+                                "id": "value"
+                            }}
+                            onchangeValue={item => {
+                                const cloneIDs = [...directions];
+                                cloneIDs.push(item.value);
+                                setDirections(cloneIDs);
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onClearData={() => {
+                                setDirections([]);
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onMultipleRemoveValue={id => {
+                                const cloneIDs = [...directions];
+                                const newList = cloneIDs.filter(selectId => selectId !== id);
+                                setDirections(newList);
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            renderItem={(item) => (
+                                <p className={"min-w-[300px]"}>{item.text}</p>
+                            )}
+                            selectOneByOne={true}
+                        />
+                        <DropdownSearchableV2
+                            className={"mr-4 border border-primary-border rounded-lg mb-2"}
+                            placeholder={"Thuộc hợp đồng"}
+                            prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"}/>}
+                            isMultiple={true}
+                            disableSearch={false}
+                            allowClearValueSingleInput={true}
+                            data={listContracts}
+                            formatItem={{
+                                id: "_id",
+                                text: "name"
+                            }}
+                            onSearchInputChange={debounce(valueSearch => setContractKeyword(valueSearch), 500)}
+                            onchangeValue={item => {
+                                const cloneIDs = [...contractsID];
+                                cloneIDs.push(item._id);
+                                setContractsID(cloneIDs);
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onClearData={() => {
+                                setContractsID([]);
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onMultipleRemoveValue={id => {
+                                const cloneIDs = [...contractsID];
+                                const newList = cloneIDs.filter(selectId => selectId !== id);
+                                setContractsID(newList);
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            renderItem={(item) => (
+                                <p className={"min-w-[300px]"}>{item.project.sign}.{item.name}-{item.sign}</p>
+                            )}
+                            selectOneByOne={true}
+                        />
+                        <DropdownSearchableV2
+                            className={"mr-4 border border-primary-border rounded-lg mb-2"}
+                            placeholder={"Địa chỉ lưu trữ"}
+                            prefixIcon={<img className={"mr-2"} src={echoDbIcon} alt={"icon"}/>}
+                            disableSearch={false}
+                            isMultiple={true}
+                            allowClearValueSingleInput={true}
+                            data={listStorages}
+                            formatItem={{
+                                id: "_id",
+                                text: "name"
+                            }}
+                            onSearchInputChange={debounce(valueSearch => setStorageKeyword(valueSearch), 500)}
+                            onchangeValue={item => {
+                                const cloneIDs = [...storagesID];
+                                cloneIDs.push(item._id);
+                                setStoragesID(cloneIDs);
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onClearData={() => {
+                                setStoragesID([]);
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onMultipleRemoveValue={id => {
+                                const cloneIDs = [...storagesID];
+                                const newList = cloneIDs.filter(selectId => selectId !== id);
+                                setStoragesID(newList);
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            renderItem={(item) => (
+                                <p className={"min-w-[300px]"}>{item.text}</p>
+                            )}
+                            selectOneByOne={true}
+                        />
+                    </div>
+                    <button
+                        onClick={() => handleCreate()}
+                        className={"h-[32px] rounded bg-cbs-green text-white font-bold px-4 mb-2"}>
+                        Tạo mới
+                    </button>
                 </div>
-                <div className="text-right pt-6 pb-5 px-8 text-base leading-5 border-t border-gray-100">
-                  <button
-                    className="py-1.5 px-3 border bg-white hover:bg-gray-100 shadow-xl rounded-md mr-2"
-                    onClick={toggleModalConfirm}
-                  >
-                    Hủy
-                  </button>
-                  <button
-                    className="py-1.5 px-3 border border-primary bg-primary hover:bg-opacity-90 text-white rounded-md"
-                    onClick={toggleModalConfirm}
-                  >
-                    Xác nhận
-                  </button>
+                <div className={"flex items-center pb-2"}>
+                    <NavigateTab/>
+                    <button className={"flex items-center justify-center mx-3 ml-6"}>
+                        <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"}/>
+                    </button>
+                    {
+                        recordSelected._id&&
+                        <button
+                            onClick={handleOnClickUpdate(recordSelected)}
+                            className={"flex items-center justify-center mx-3 ml-6"}>
+                            <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"}/>
+                        </button>
+                    }
+                    <PaginateV2
+                        ref={ref}
+                        totalRecord={totalRecord}
+                        totalPages={totalPage}
+                        limit={30}
+                        hasNextPage={hasNextPage}
+                        isFetching={isLoading}
+                        nextPageAction={() => {
+                            fetchNextPageDocument();
+                            setPageIndex(oldState => oldState+1)
+                        }}
+                        prevPageAction={() => {
+                            setPageIndex(oldState => oldState-1)
+                        }}
+                    />
                 </div>
-              </div>
-            </Transition.Child>
-          </div>
+            </div>
+            <div className="flex-1 overflow-y-auto">
+                {/* Content */}
+                {isLoading && <Loader absolute={true} className="border-primary" />}
+                {(!listDocumentWithPager[pageIndex] || listDocumentWithPager[pageIndex].length === 0) && (
+                    <h2 className="text-center">Không có kết quả được trả về</h2>
+                )}
+                {!isLoading && listDocumentWithPager[pageIndex] && listDocumentWithPager[pageIndex].length > 0 && (
+                    <table
+                        className="text-black text-medium border-separate space-x-0 space-y-0"
+                        style={{ borderSpacing: 0 }}
+                    >
+                        <thead className="">
+                        <tr className="text-primary-gray whitespace-nowrap align-middle text-left">
+                            <th className="px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '30px' }}>
+                                <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    value=""
+                                    id="flexCheckDefault"
+                                />
+                            </th>
+                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '25%' }}>
+                                Nội dung
+                            </th>
+                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '15%' }}>
+                                Chủ thể ban hành
+                            </th>
+                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '10%' }}>
+                                Mã hiệu
+                            </th>
+                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '5%' }}>
+                                Ngày văn bản
+                            </th>
+                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '5%' }}>
+                                Mã hiệu lưu
+                            </th>
+                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '5%' }}>
+                                Số lượng
+                            </th>
+                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '10%' }}>
+                                Tình trạng
+                            </th>
+                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+                                Ghi chú
+                            </th>
+                            <th
+                                className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border"
+                                style={{ width: '10%' }}
+                            >
+                                Địa chỉ lưu trữ
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody className="">
+                        {listDocumentWithPager[pageIndex].map((document, index) => {
+                            let linkRef;
+                            if(location.pathname.includes("/document/project/")){
+                                linkRef = `/document/project/${document.project._id}/detail/${document._id}`
+                            }else{
+                                linkRef = `/pm/project/${document.project._id}/document/${document._id}`
+                            }
+                            return (
+                                <tr
+                                    key={index}
+                                    className="text-left hover:bg-cbs-active-comment"
+                                >
+                                    <td className="px-4 py-2.5 border-b border-cbs-border">
+                                        <input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            id="flexCheckDefault"
+                                            checked={document._id === recordSelected._id}
+                                            onChange={(e) => {
+                                                if (e.target.checked) {
+                                                    setSelectRecord(document);
+                                                    return null;
+                                                }
+                                                setSelectRecord({});
+                                                return null;
+                                            }}
+                                        />
+                                    </td>
+                                    <td className="px-2 w-[271px] py-2.5 border-b border-cbs-border">
+                                        <Link to={linkRef}>
+                                            <p className="text-cbs-highlight-color">{document?.name || ""}</p>
+                                            <p className="mt-1.5 text-primary-gray text-xs">
+                                                {`${document?.author?.fullname || ""}-${
+                                                    moment(document.createAt).isValid() &&
+                                                    moment(document.createAt).format("DD/MM/YYYY")
+                                                }`}
+                                            </p>
+                                        </Link>
+                                    </td>
+                                    <td className="py-2.5 border-b border-cbs-border px-2">
+                                        {document?.sender?.name}
+                                    </td>
+                                    <td className="py-2.5 border-b border-cbs-border px-2">
+                                        {document?.sign}
+                                    </td>
+                                    <td className="py-2.5 border-b border-cbs-border px-2 w-24 text-right">
+                                        {moment(document.date).isValid() && moment(document.date).format("DD/MM/YYYY")}
+                                    </td>
+                                    <td className="py-2.5 border-b border-cbs-border px-2">
+                                        {document?.storeSign}
+                                    </td>
+                                    <td className="py-2.5 border-b border-cbs-border px-2 whitespace-nowrap text-right">
+                                        {document.amount}
+                                    </td>
+                                    <td className="py-2.5 border-b border-cbs-border px-2 box-border">
+                                        {document.status}
+                                    </td>
+                                    <td className="py-2.5 border-b border-cbs-border px-2 box-border">
+                                        {document.note}
+                                    </td>
+                                    <td className="py-2.5 border-b border-cbs-border px-2">
+                                        {document?.storage?.name}
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                        </tbody>
+                    </table>
+                )}
+                <Transition.Root appear show={isShow} as={Fragment}>
+                    <div className="fixed inset-0 overflow-y-auto" style={{ zIndex: 51 }}>
+                        <div className="min-h-screen px-4 text-center">
+                            <Transition.Child
+                                as={Fragment}
+                                enter="ease-out duration-300"
+                                enterFrom="opacity-0"
+                                enterTo="opacity-100"
+                                leave="ease-in duration-200"
+                                leaveFrom="opacity-100"
+                                leaveTo="opacity-0"
+                            >
+                                <div className="fixed inset-0 bg-dark bg-opacity-75 transition-opacity" />
+                            </Transition.Child>
+
+                            <span
+                                className="inline-block h-screen align-middle"
+                                aria-hidden="true"
+                            >
+                              &#8203;
+                            </span>
+
+                            <Transition.Child
+                                as={Fragment}
+                                enter="ease-out duration-300"
+                                enterFrom="opacity-0 scale-95"
+                                enterTo="opacity-100 scale-100"
+                                leave="ease-in duration-200"
+                                leaveFrom="opacity-100 scale-100"
+                                leaveTo="opacity-0 scale-95"
+                            >
+                                <div className="inline-flex flex-col text-black w-full max-w-lg my-8 overflow-hidden text-left transition-all transform bg-white">
+                                    <div className="p-5 mb-4 text-xl leading-6 font-bold">
+                                        Bạn có muốn xóa không?
+                                    </div>
+                                    <div className="text-right pt-6 pb-5 px-8 text-base leading-5 border-t border-gray-100">
+                                        <button
+                                            className="py-1.5 px-3 border bg-white hover:bg-gray-100 shadow-xl rounded-md mr-2"
+                                            onClick={toggleModalConfirm}
+                                        >
+                                            Hủy
+                                        </button>
+                                        <button
+                                            className="py-1.5 px-3 border border-primary bg-primary hover:bg-opacity-90 text-white rounded-md"
+                                            onClick={toggleModalConfirm}
+                                        >
+                                            Xác nhận
+                                        </button>
+                                    </div>
+                                </div>
+                            </Transition.Child>
+                        </div>
+                    </div>
+                </Transition.Root>
+            </div>
         </div>
-      </Transition.Root>
-    </>
-  );
+    );
 };
+export default DocumentProjectPage;

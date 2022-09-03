@@ -99,58 +99,28 @@ const ProjectSubjectPage: FC = () => {
 
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
-			<div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1">
-				<span className="text-x-large mr-7">Hồ sơ thanh toán</span>
-				<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={debounce(
-						(event: any) => setKeyword(event.target.value),
-						500
-					)} />
-				{/* <DropdownFilterButton /> */}
-				{/* <GroupActions className="flex items-center flex-1" /> */}
-
-				<div className="text-x-large flex items-center gap-x-4">
-					<span>
-						<i className="inline-block align-middle mr-1 w-2 h-2 rounded-lg bg-cbs-schedule-expired"></i>
-						{totalTaskOverdueWork}
-					</span>
-					<span>
-						<i className="inline-block align-middle mr-1 w-2 h-2 rounded-lg bg-cbs-schedule-nextweek"></i>
-						{totalTaskNextWeekWork}
-					</span>
-					<span>
-						<i className="inline-block align-middle mr-1 w-2 h-2 rounded-lg bg-cbs-schedule-after-7days"></i>
-						{totalTaskMoreThan7Days}
-					</span>
-					<span>
-						<i className="inline-block align-middle mr-1 w-2 h-2 rounded-lg bg-cbs-primary"></i>
-						{totalTaskFinish}
-					</span>
-					{/* <ButtonMore /> */}
-				</div>
-			</div>
 			<div className="flex-1 overflow-y-auto">
-				<table className="text-black text-medium border-separate space-x-0 space-y-0 w-full" style={{ borderSpacing: 0 }}>
+				<table className="text-black text-medium border-collapse space-x-0 space-y-0 w-full" style={{ borderSpacing: 0 }}>
 					<thead className="">
 						<tr className="text-primary-gray whitespace-nowrap align-middle text-left">
-							<th className="px-4 py-2.5 font-normal bg-cbs-active-comment sticky top-0 border border-r-0 border-cbs-border w-1">
-								<input className="cbs-checkbox" type="checkbox" value="checkAll" id="flexCheckDefault" ref={checkboxRef} onClick={handleCheckAll} />
-								<button className="inline-block align-middle" type="button">
-									<img
-										className="w-8 opacity-50"
-										src={CaretDownIcon}
-										alt="Dropdown"
-									/>
-								</button>
+							<th className="px-4 py-2.5 font-normal bg-cbs-active-comment sticky top-0 border-0.5 border-cbs-border w-1">
+								{/*<input className="cbs-checkbox" type="checkbox" value="checkAll" id="flexCheckDefault" ref={checkboxRef} onClick={handleCheckAll} />*/}
+								{/*<button className="inline-block align-middle" type="button">*/}
+								{/*	<img*/}
+								{/*		className="w-8 opacity-50"*/}
+								{/*		src={CaretDownIcon}*/}
+								{/*		alt="Dropdown"*/}
+								{/*	/>*/}
+								{/*</button>*/}
+								TT
 							</th>
-							<th className="py-2.5 font-normal bg-cbs-active-comment sticky top-0 border border-l-0 border-cbs-border">
-								<span className="border-l border-cbs-border pl-2">
-									Đơn vị thực hiện
-								</span>
+							<th className="py-2.5 font-normal bg-cbs-active-comment sticky top-0 border-0.5 border-cbs-border">
+								Đơn vị thực hiện
 							</th>
-							<th className="py-2.5 px-3 font-normal bg-cbs-active-comment sticky top-0 border border-l-0 border-cbs-border">
+							<th className="py-2.5 px-3 font-normal bg-cbs-active-comment sticky top-0 border-0.5 border-cbs-border">
 								Mã hiệu
 							</th>
-							<th className="py-2.5 px-3 font-normal bg-cbs-active-comment sticky top-0 border border-l-0 border-cbs-border">
+							<th className="py-2.5 px-3 font-normal bg-cbs-active-comment sticky top-0 border-0.5 border-cbs-border">
 								<div className="flex justify-between">
 									<span>
 										Đang triển khai
@@ -178,26 +148,27 @@ const ProjectSubjectPage: FC = () => {
 									</div>
 								</div>
 							</th>
-							<th className="py-2.5 px-3 font-normal bg-cbs-active-comment sticky top-0 border border-l-0 border-cbs-border">
+							<th className="py-2.5 px-3 font-normal bg-cbs-active-comment sticky top-0 border-0.5 border-cbs-border">
 								Hoàn thành
 							</th>
 						</tr>
 					</thead>
 					<tbody className="">
 						{
-							dataCompany?.map((company: any) => {
+							dataCompany?.map((company: any, index) => {
 								return (
 									<tr key={company._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
-										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-center" onClick={e => e.stopPropagation()}>
-											<input className="cbs-checkbox" type="checkbox" value={company._id} checked={Boolean(assigned[company._id])} onChange={e => handleChangeCheckbox(e, { id: company._id })} />
+										<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border text-center" onClick={e => e.stopPropagation()}>
+											{index+1}
+											{/*<input className="cbs-checkbox" type="checkbox" value={company._id} checked={Boolean(assigned[company._id])} onChange={e => handleChangeCheckbox(e, { id: company._id })} />*/}
 										</td>
-										<td className="pt-2.5 pb-3 px-2 border-b border-r border-cbs-border">
-											<Link to={`/pcm/project/${projectID}/payment/company/${company._id}/subtype/3`}>
+										<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">
+											<Link to={`/pm/project/${projectID}/payment/company/${company._id}/subtype/3`}>
 												{company.name}
 											</Link>
 										</td>
-										<td className="pt-2.5 pb-3 px-2 border-b border-r border-cbs-border">{company.sign}</td>
-										<td className="pt-2.5 pb-3 px-2 border-b border-r border-cbs-border text-right cursor-auto" style={{ minWidth: "155px", fontSize: '10px' }} onClick={e => e.stopPropagation()}>
+										<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">{company.sign}</td>
+										<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border text-right cursor-auto" style={{ minWidth: "155px", fontSize: '10px' }} onClick={e => e.stopPropagation()}>
 											<div className="flex w-full h-3 mt-2">
 												<button
 													className="flex items-center justify-center bg-red-500"
@@ -226,7 +197,7 @@ const ProjectSubjectPage: FC = () => {
 												</button>
 											</div>
 										</td>
-										<td className="pt-2.5 pb-3 px-2 border-b border-r border-cbs-border text-right text-white cursor-auto" style={{ fontSize: '10px' }} onClick={e => e.stopPropagation()}>
+										<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border text-right text-white cursor-auto" style={{ fontSize: '10px' }} onClick={e => e.stopPropagation()}>
 											{company?.totalFinish ? 
 												<div className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2" >{company?.totalFinish}</div> : 
 												<></>

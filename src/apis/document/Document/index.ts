@@ -15,6 +15,7 @@ interface DocumentRepository {
     insert: (data: DocumentInserPayload) => Promise<DocumentInserResponse>;
     update: (data: DocumentUpdatePayload) => Promise<DocumentUpdateResponse>;
     fetchList: (data: any) => Promise<DocumentQueryResponse>;
+    fetchFilterList: (data: any) => Promise<DocumentQueryResponse>;
     exportDocument: (data: any) => Promise<DocumentExportResponse>;
 }
 
@@ -22,15 +23,30 @@ export const documentRepository: DocumentRepository = {
     insert: data => inserDocument(data),
     update: data => updateDocument(data),
     fetchList: params => fetchListDocument(params),
+    fetchFilterList: params => fetchFilterListDocument(params),
     exportDocument: params => exportDocument(params),
 }
 
 async function fetchListDocument(params : any) {
     const { data } = await API.get(`${DOCUMENT_URL}/list-document`, {
         params: {
-            select: 'name sign author project sign date createAt',
+            select: 'name sign author project sign date createAt description note',
             populates: {
                 "path": "author sender storage",
+                "select": "fullname bizfullname sign image name"
+            },
+            ...params,
+        }
+    })
+    return data;
+}
+
+async function fetchFilterListDocument(params : any) {
+    const { data } = await API.get(`${DOCUMENT_URL}/filter-document`, {
+        params: {
+            select: 'name sign author project date createAt description note store amount status storeSign',
+            populates: {
+                "path": "author sender storage project",
                 "select": "fullname bizfullname sign image name"
             },
             ...params,

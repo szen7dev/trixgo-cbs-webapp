@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from "react";
 import debounce from 'lodash/debounce';
 
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Link, generatePath } from "react-router-dom";
+import { Link, useParams, generatePath } from "react-router-dom";
 
 import { useQueryListDepartmentsIsMember } from "services/hooks/items/useDepartment";
 
@@ -24,6 +24,35 @@ import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 const { REACT_APP_URL_S3, REACT_APP_URL_S3_PROJECT } = process.env;
 
 const ProjectCategoryPage: FC = () => {
+	// Khai báo active Tab
+	const { tab } = useParams<{ tab: string}>();
+	// console.log({tab})
+
+	const getTypeValue = (tab?: any) => {
+        switch(tab) {
+            case '2':
+                return 1;
+
+          default:
+            return 2;
+        }
+    }
+
+	const getBudgetValue = (tab?: any) => {
+        switch(tab) {
+            case '2':
+                return 0;
+
+          default:
+            return 1;
+        }
+    }
+
+	const type = getTypeValue(tab)
+	const isBudget = getBudgetValue(tab)
+	// console.log({type})
+	// console.log({isBudget})
+
 	//_____Start history traffict
 	const payloadHistoryTraffic: any = {
 		appID: APP_ID.PCM.id,
@@ -46,13 +75,14 @@ const ProjectCategoryPage: FC = () => {
 
 	const { data: listDepartments, fetchNextPage, hasNextPage, totalRecord } = useQueryListDepartmentsIsMember({
 		limit: 20,
-		type: 2,
+		type,
+		isBudget,
 		keyword,
 		isFetch: true
 	});
 
 	useEffect(() => {
-		document.title = "PPT - Danh mục dự án";
+		document.title = "Trixgo | Danh sách dự án";
 	}, []);
 
 	const onChangeSearch = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,21 +91,25 @@ const ProjectCategoryPage: FC = () => {
 
 	return (
 		<div className="flex flex-col text-sm text-black overflow-hidden h-full">
-			{/* Header */}
-			<div className="px-4 flex items-center w-full text-primary-gray bg-white border-b-[0.5px] border-cbs-border py-1">
-				<div className="flex flex-1 items-center">
-					<span className="text-x-large mr-7 text-black">
-						Danh sách
-					</span>
-					<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu mr-2" onChange={onChangeSearch} />
-					{/* <DropdownFilterButton /> */}
+			<div className="px-4 flex items-center w-full text-primary-gray bg-white py-2">
+				<div className={"inline-flex items-center border-collapse border-0.5 border-primary-border"}>
+					{/* <button className={"border-r-0.5 border-primary-border px-4 py-2 bg-cbs-soft-blue text-primary"}>
+						Dự án
+					</button>
+					<button className={"px-4 py-2 text-primary-gray"}>
+						Phòng ban
+					</button> */}
+					<Link to={"/pm/projects"}>
+						<button className={"px-4 py-2 border-r-0.5 border-primary-border " + (!tab ? "bg-cbs-soft-blue text-primary":"bg-white text-primary-gray")}>
+							Dự án
+						</button>
+					</Link>
+					<Link to={"/pm/projects/2"}>
+						<button className={"px-4 py-2 border-r-0.5 border-primary-border " + (tab == "2" ? "bg-cbs-soft-blue text-primary":"bg-white text-primary-gray")}>
+							Phòng ban
+						</button>
+            		</Link>
 				</div>
-				{createPermission &&
-					<ButtonCreate />
-				}
-				{(updatePermission || deletePermission) &&
-					<ButtonMore />
-				}
 			</div>
 
 			<div id="scrollable" className="flex-1 overflow-y-auto">
@@ -105,7 +139,7 @@ const ProjectCategoryPage: FC = () => {
 
 							return (
 								<div key={record._id} className="document__card-container">
-									<div className="rounded-cbs-md border-cbs-border border pt-4 px-4 pb-7 h-full">
+									<div className="rounded-cbs-md border-cbs-border border-0.5 shadow-lg pt-4 px-4 pb-7 h-full">
 										<div className="flex gap-x-3.5">
 											<img width="90" height="90" src={imgUrl} alt="project" />
 											<div className="flex-1">
@@ -132,7 +166,7 @@ const ProjectCategoryPage: FC = () => {
 											</div>
 										</div>
 										<h3 className="line-clamp-2 text-large text-black pt-2">
-											<Link className="" to={generatePath("/pcm/project/:id/home", { id: record._id })}>{record.company.sign}.{record.name}</Link>
+											<Link className="" to={generatePath("/pm/project/:id/home", { id: record._id })}>{record.company.sign}.{record.name}</Link>
 										</h3>
 										<p className="text-x-small mt-1.5 truncate">
 											{record.company.name}

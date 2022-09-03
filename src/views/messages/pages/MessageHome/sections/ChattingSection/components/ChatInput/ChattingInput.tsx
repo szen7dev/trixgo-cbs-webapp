@@ -285,9 +285,9 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
     return (
         <ChattingInputContext.Provider value={value}>
             <div className={"w-full px-[20px] flex justify-center bg-transparent py-[10px] chatting-input-container"}>
-                <div className={"w-full max-w-[585px] flex items-end justify-center relative"}>
+                <div className={"w-full max-w-[60%] flex items-end justify-center relative"}>
                     <SelectedActionGroup/>
-                    <div className={"flex-1 message-input max-w-[525px] rounded-md bg-white flex items-end relative flex-col"}>
+                    <div className={"flex-1 message-input max-w-full rounded-md bg-cbs-chat-input-bg flex items-end relative flex-col"}>
                         {/*<IconButton/>*/}
                         <ReplyChat replyData={replyData} currentChat={chat._id}/>
                         <InputForMessage
@@ -300,7 +300,7 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
                     </div>
                     <button
                         onClick={() => handleSendMessage()}
-                        className={"send-chat-button w-[50px] h-[50px] rounded-full bg-white flex items-center justify-center ml-[10px]"}>
+                        className={"send-chat-button w-[50px] h-[50px] rounded-full bg-cbs-chat-input-bg flex items-center justify-center ml-[10px]"}>
                         <img  src={IconSendMessage} alt={"send message"}/>
                     </button>
                 </div>

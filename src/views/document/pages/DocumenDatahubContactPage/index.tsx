@@ -1,4 +1,4 @@
-import { FC, useContext, useState } from "react";
+import React, { FC, useContext, useState } from "react";
 import { useParams, Link, useLocation } from "react-router-dom";
 import { DOCUMENT_TYPES } from "apis/localdb";
 
@@ -11,6 +11,7 @@ import { useQueryStatistical } from "services/hooks/document/useStatistical";
 // ========== App common Components ==========
 
 import { IPackage } from "typings/document";
+import {NavigateTab} from "../../sharedComponents/common";
 
 export const DocumenDatahubContactPage: FC = () => {
 	const location = useLocation()
@@ -19,7 +20,12 @@ export const DocumenDatahubContactPage: FC = () => {
 	return (
 		<>
 			{/* Content */}
-			<div className="flex flex-1 flex-col overflow-hidden bg-cbs-gray">
+			<div className="flex flex-1 flex-col overflow-hidden h-full">
+				<div className={"sticky top-0 z-10"}>
+					<div className={"flex items-center pb-2"}>
+						<NavigateTab/>
+					</div>
+				</div>
 				<div className="flex flex-wrap gap-y-3.5 overflow-y-auto px-5 py-2.5">
 					{data?.map((elm: any, i) => {
 						const formatData = {
@@ -30,11 +36,11 @@ export const DocumenDatahubContactPage: FC = () => {
 						if(location.pathname.includes("/document/project/")){
 							linkRef = `/document/project/${params.id}/document/1/datahubContact/${formatData.datahubContact._id}`
 						}else{
-							linkRef = `/pcm/project/${params.id}/document/1/datahubContact/${formatData.datahubContact._id}`
+							linkRef = `/pm/project/${params.id}/document/1/datahubContact/${formatData.datahubContact._id}`
 						}
 						return (
 							<Link className="document__card-container" key={i} to={linkRef}>
-								<div className="bg-white rounded-lg h-[150px] px-3.5 py-4 flex flex-col justify-between">
+								<div className="bg-white border-0.5 border-primary-border rounded-lg h-[150px] px-3.5 py-4 flex flex-col justify-between">
 									<div className="flex justify-between">
 										<h4 className="text-x-large">{formatData.name}</h4>
 										<div>
@@ -59,3 +65,5 @@ export const DocumenDatahubContactPage: FC = () => {
 		</>
 	);
 };
+
+export default DocumenDatahubContactPage;

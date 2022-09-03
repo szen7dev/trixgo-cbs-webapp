@@ -98,3 +98,5 @@ export const DocumentHomePage: FC = () => {
     </div>
   );
 };
+
+export default DocumentHomePage;

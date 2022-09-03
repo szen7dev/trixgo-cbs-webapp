@@ -19,7 +19,6 @@ type Props = {
 const ModalAddNotificationEmail: FC<Props> = ({ toggle, task, userId }) => {
 	const usersRelated = [task.author, task.assignee, ...task?.related];
 	const data = unionBy([task.author, ...usersRelated], '_id');
-	console.log({ usersRelated })
 
 	const { sendMailDetailTaskAsync } = usePcm();
 	const [title, setTitle] = useState('');

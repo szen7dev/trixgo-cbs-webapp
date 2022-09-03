@@ -63,13 +63,13 @@ export const Reminder:FC<Props> = ({message, context, isMini}) => {
     }
     return (
         <div className={"Reminder-center flex flex-col items-center justify-center mb-2"}>
-            <div className={"rounded-full text-xs text-gray-500 px-5 py-1 mb-2 px-[33px] flex items-center " + (isMini?"bg-gray-100":"bg-white")}>
+            <div className={"rounded-full text-xs text-gray-500 px-5 py-1 mb-2 px-[33px] flex items-center " + (isMini?"bg-gray-100":"bg-cbs-item-message-other")}>
                 <img src={Clock} alt={"-----"} className={"w-[18px] h-[18px] mr-2"}/>
                 <span>
                 {`${message.sender.bizfullname||message.sender.fullname} đã tạo một lời nhắc`}
                 </span>
             </div>
-            <div className={"rounded-md mb-5 " + (isMini?"w-[300px] bg-gray-100":"w-[365px] bg-white")}>
+            <div className={"rounded-md mb-5 border-0.5 border-gray-200 " + (isMini?"w-[300px]":"w-[365px]")}>
                 <div className={"p-3 flex"}>
                     <div className={"flex flex-col items-center px-2"}>
                         <div className={"text-lg text-negative"}>{moment(message.reminder.remindTime).format("MMM")}</div>

@@ -7,6 +7,7 @@ import type { Document, } from 'typings/ppt';
 interface UseQueryListDocument {
     loading: boolean;
     data: Document[];
+    listDocumentWithPager: Array<Document[]>
     totalPages: number;
     totalRecord: number;
     refetch: () => void;
@@ -18,12 +19,13 @@ interface UseQueryListDocument {
 export const useQueryListDocument = (departmentID: string, pageParam: any,  packageID?: string, limit?: string): UseQueryListDocument => {
     let nextCursor = null;
     const result = useInfiniteQuery(
-        [`list_document`, { pageParam }], async () =>
+        [`list_document`, { pageParam }], async ({pageParam: params}) =>
         DocumentRepository.fetchListDocument({
             packageID,
             limit,
             departmentID,
-            ...pageParam
+            lastestID: params,
+            ...pageParam,
         }), {
         getNextPageParam: ({ data }: any) => {
             nextCursor = data?.nextCursor;
@@ -37,7 +39,8 @@ export const useQueryListDocument = (departmentID: string, pageParam: any,  pack
         isLoading,
         data,
         refetch,
-        fetchNextPage
+        fetchNextPage,
+        hasNextPage
     } = result;
 
     const listDocument = []
@@ -47,15 +50,18 @@ export const useQueryListDocument = (departmentID: string, pageParam: any,  pack
 
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPages = data?.pages[0]?.data?.totalPage || 0;
+    const listDocumentWithPager = (data?.pages || []).map((d: any) => d.data?.listRecords);
 
     return {
         loading: isLoading,
         data: listDocument,
+        listDocumentWithPager,
         totalRecord,
         totalPages,
         refetch,
         nextCursor,
-        fetchNextPage
+        fetchNextPage,
+        hasNextPage
     }
 }
 interface UseQueryDetailDocument {

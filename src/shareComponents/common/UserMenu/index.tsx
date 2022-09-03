@@ -11,7 +11,10 @@ export const UserMenu: FC = () => {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div className="flex items-center justify-center ml-6">
-        <Menu.Button className="flex justify-center items-center group focus:outline-none">
+        <Menu.Button className="flex justify-center items-center group focus:outline-none border rounded-lg border-primary-border p-1.5">
+          <span className={"text-2xl text-primary-gray mr-2"}>
+              Trixgo
+          </span>
           <img
             src={`${process.env.REACT_APP_URL_S3_USER}/${user?.image}`}
             alt="User Avatar"
@@ -29,7 +32,7 @@ export const UserMenu: FC = () => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute -left-52 origin-top-right w-80 bg-primary-light rounded-md shadow-lg ring-1 ring-dark ring-opacity-5 focus:outline-none p-2 mt-2">
+        <Menu.Items className="absolute -left-44 origin-top-right w-80 bg-primary-light rounded-md shadow-lg ring-1 ring-dark ring-opacity-5 focus:outline-none p-2 mt-2 z-200">
           <Menu.Item>
             <div className="flex items-center rounded-lg cursor-pointer hover:bg-lighter-gray p-3">
               <div className="relative">

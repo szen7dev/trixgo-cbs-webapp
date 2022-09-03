@@ -12,6 +12,7 @@ export type StorageQueryPayload = QueryParam & {
     parentID?: string;
     isListParentOfListChilds?: string;
     storageID?: string;
+    projectID?: string;
 };
 
 export type StorageQueryResponse = APIResponse & {

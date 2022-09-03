@@ -24,7 +24,7 @@ const ProjectAdminManagementPage: FC = (): any => {
 		}
 	}, [projectID]);
 
-  const onClickTab = (tab?: string) => history.push(`/pcm/project/${projectID}/admin/${tab}`)
+  const onClickTab = (tab?: string) => history.push(`/pm/project/${projectID}/admin/${tab}`)
   return (
     <main className="h-full">
       <header className="sticky flex justify-between items-center top-0 bg-primary-light z-10 h-10 px-6 border-b border-gray-300">

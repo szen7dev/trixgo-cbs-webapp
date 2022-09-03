@@ -159,7 +159,7 @@ export const RootComment: FC<Props> = ({
 							companyID={comment.task?.company}
 							projectID={comment.task?.project}
 							groupID={comment.task?.group}
-							taskID={comment.task._id}
+							taskID={comment.task?._id}
 							onConfirm={() => {
 								setIsReply(false);
 								setInfoComment({

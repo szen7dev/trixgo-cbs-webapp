@@ -6,7 +6,7 @@ import {RootState} from "redux/reducer";
 import {dismissConfigConversation} from "redux/reducer/messages/ConversationConfigModal";
 import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
-import {MessageContext, populates} from "../../../../index";
+import {MessageContext, populates} from "../../../../../../shareComponents/layouts/MessagesLayoutV2";
 
 export const ConversationConfig:FC = () => {
     const dispatch = useDispatch();

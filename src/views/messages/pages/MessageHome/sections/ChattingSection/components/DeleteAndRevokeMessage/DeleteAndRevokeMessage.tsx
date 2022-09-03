@@ -7,7 +7,7 @@ import {dismissDeleteRevoke} from "redux/reducer/messages/DeleteAndRevokeMessage
 import {UseConversation} from "services/hooks/messages/useConversation";
 import {removeAllSelectedMessage} from "redux/reducer/messages/ListMessage";
 import {ItemMessage} from "typings/apis/messages/listMessage";
-import {populates} from "../../../../index";
+import {populates} from "../../../../../../shareComponents/layouts/MessagesLayoutV2";
 
 type Props = {
     context: any

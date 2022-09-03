@@ -7,6 +7,8 @@ export * from './LoadImage';
 export * from './FileUploadRow';
 export * from './Comment';
 export * from './AccessingUsers';
+export * from './SendToMultiSelected';
+export * from './ResponseComment';
 
 export * from './ClassifyDrawer';
 export * from './ClassifyProgress';

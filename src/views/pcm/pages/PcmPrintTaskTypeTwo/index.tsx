@@ -36,7 +36,7 @@ const PcmPrintTaskTypeTwo: FC = () => {
       taskID: taskId,
       populates: JSON.stringify({
         path: "project contract author assignee related",
-        select: "_id name company address bizfullname image",
+        select: "_id name sign company address bizfullname image",
         populate: {
           path: "company",
           select: "_id name image",
@@ -53,6 +53,9 @@ const PcmPrintTaskTypeTwo: FC = () => {
       toast.error("Bạn không có quyền truy cập tính năng này!");
       return history.push("/");
     }
+
+    document.title = `Trixgo-${taskInfo.name}`;
+
   }, [taskInfo, isSuccessApp]);
   const componentRef = useRef(null);
   usePrintComponent({ ref: componentRef });
@@ -62,7 +65,7 @@ const PcmPrintTaskTypeTwo: FC = () => {
   const assigneeAndRelated = [taskInfo.assignee, ...taskInfo.related];
 
   return (
-    <div className="bg-cbs-gray h-full overflow-hidden">
+    <div className="bg-cbs-gray overflow-auto" style={{ height: '100vh' }}>
       <div className="h-full overflow-auto py-6">
         <div className="max-w-[791px] bg-white w-full mx-auto pl-[3.75rem] pr-6 py-6 shadow-cbs-md">
           <table
@@ -113,7 +116,7 @@ const PcmPrintTaskTypeTwo: FC = () => {
                     </div>
                     <div className={classNames(styles.reportInfo, "mt-2")}>
                       <div>Dự án:</div>
-                      <div> {taskInfo.project?.name} </div>
+                      <div> {taskInfo.project?.sign}.{taskInfo.project?.name} </div>
                       <div>Chủ đầu tư:</div>
                       <div>
                         {typeof taskInfo.project?.company === "object" &&
@@ -165,16 +168,19 @@ const PcmPrintTaskTypeTwo: FC = () => {
                         <span>NỘI DUNG</span>
                       </div>
                       <div className="mt-2.5">
-                        <div className="border-cbs-border border-0.5 min-h-[300px]">
-                          {taskInfo.description}
-                        </div>
+                        <div
+                          className="min-h-[300px]"
+                          dangerouslySetInnerHTML={{
+                            __html: taskInfo?.description?.replace(/\n/g, '<br />')
+                          }}
+                        />
                       </div>
                     </section>
                     {/* Ký */}
                     <section className="font-bold flex justify-end text-center">
                       <div className="px-14">
-                        <p>ĐOÀN TƯ VẤN</p>
-                        <p className="mt-14">Trưởng đoàn tư vấn</p>
+                        <p>ĐƠN VỊ LẬP BÁO CÁO</p>
+                        <p className="mt-14">...............</p>
                       </div>
                     </section>
                   </main>

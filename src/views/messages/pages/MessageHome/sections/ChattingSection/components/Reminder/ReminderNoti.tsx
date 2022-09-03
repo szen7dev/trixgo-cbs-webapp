@@ -14,7 +14,7 @@ export const ReminderNoti:FC<Props> = ({content,isMini}) => {
 
     return (
         <div className={"Reminder-content flex items-center justify-center mb-2"}>
-            <div className={"rounded-full text-xs text-gray-500 px-5 py-1 mb-2 px-[33px] flex items-center " + (isMini?"bg-gray-100":"bg-white")}>
+            <div className={"rounded-full text-xs text-gray-500 px-5 py-1 mb-2 px-[33px] flex items-center " + (isMini?"bg-gray-100":"bg-cbs-item-message-other")}>
                 <img src={Clock} alt={"-----"} className={"w-[18px] h-[18px] mr-2"}/>
                 <span ref={notificationRef}>
                 </span>
