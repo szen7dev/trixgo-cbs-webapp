@@ -22,7 +22,7 @@ type Props = {
 export const SendEmailNotification: FC<Props> = ({ task, userId = '' }) => {
     const accessUsersID = useMemo(() => {
         let accessUsersID = [];
-        if(task.accessUsers && task.accessUsers.length) {
+        if(task.accessUsers && task.accessUsers?.length) {
             accessUsersID = task.accessUsers.map(user => user._id);
         } else{
             accessUsersID = task.related?.map(user => user._id) || [];
@@ -40,10 +40,12 @@ export const SendEmailNotification: FC<Props> = ({ task, userId = '' }) => {
     }, [task._id]);
 
     const accessUsers = useMemo(() => {
-        if (task.accessUsers && task.accessUsers.length) {
+        if(!task) return [];
+
+        if (task.accessUsers && task.accessUsers?.length) {
             return task.accessUsers;
         } else {
-            return [task.author, task.assignee, ...task.related];
+            return [task.author, task.assignee, ...task?.related];
         }
     }, [task])
 
