@@ -8,13 +8,14 @@ import {appendFakeItemListConversation} from "redux/reducer/messages/ListConvers
 import {useDispatch} from "react-redux";
 import {map as _map} from "lodash";
 import {SearchChatItem} from "../SearchUserConversation";
-import {debounce} from "lodash";
+import {Oval} from "react-loader-spinner";
 
 export const SearchUserAndConversation:FC = () => {
     const {currentChat, socketRef, setCurrentChat} = useContext(MessageContext);
     const socket = socketRef.current;
     const dispatch = useDispatch();
 
+    const inputRef = useRef<HTMLInputElement>(null);
     const wrapperClass = useRef<HTMLDivElement>(null);
     const [search, setSearch] = useState("");
     const [showResult, setShowResult] = useState(false);
@@ -22,21 +23,33 @@ export const SearchUserAndConversation:FC = () => {
     useOnClickOutside(wrapperClass, () => {
         setShowResult(false);
         setSearch("");
+        if (inputRef.current) {
+            inputRef.current.value = "";
+        }
     })
 
-    const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setSearch(e.target.value)
-        setShowResult(true)
+    const setTypingTimeoutRef: any = useRef(null);
+    async function handleSearchChange(e: React.ChangeEvent<HTMLInputElement>) {
+        if (setTypingTimeoutRef.current) {
+            clearTimeout(setTypingTimeoutRef.current);
+        }
+        setTypingTimeoutRef.current = setTimeout(() => {
+            setSearch(e.target.value);
+            setShowResult(true);
+        }, 300)
     }
 
     const params = {limit: 5, select: 'fullname bizfullname email phone image', populates: '{"path": "company", "select": "name"}', keyword: search}
-    const {data} = useUserSystem(params, showResult);
+    const {data, loading} = useUserSystem(params, showResult);
 
     const paramsListConversation = {limit: 5, keyword: search};
-    const {listConversations, createConversation} = UseListConversation(paramsListConversation, showResult);
+    const {listConversations, createConversation, isLoadingListConversations} = UseListConversation(paramsListConversation, showResult);
 
     const handleStartPrivateChat = (memberId: string) => {
         setSearch("");
+        if (inputRef.current) {
+            inputRef.current.value = "";
+        }
         createConversation({
             name: "",
             description: "",
@@ -61,14 +74,39 @@ export const SearchUserAndConversation:FC = () => {
                 <img src={searchIcon} alt={"search icon"}/>
             </div>
             <input
-                value={search}
-                onChange={debounce(e => handleSearchChange(e), 500)}
-                className={"pl-12 w-full h-[45px] bg-cbs-bg-input-search rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-none focus:shadow-md transition-all"} placeholder={"Tìm trong bạn bè hoặc cuộc hội thoại"}/>
+                ref={inputRef}
+                onChange={e => handleSearchChange(e)}
+                className={"pl-12 w-full h-[45px] focus:bg-white bg-cbs-bg-input-search rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-none focus:shadow-md transition-all"} placeholder={"Tìm trong bạn bè hoặc cuộc hội thoại"}/>
 
             {
                 showResult &&
-                <div className={"absolute top-full mt-2 w-full rounded border-0.5 border-primary-border p-2 bg-white"}>
+                <div className={"absolute min-h-[300px] top-full mt-2 w-full rounded border-0.5 border-primary-border p-2 bg-white"}>
                     {
+                        (isLoadingListConversations||loading) &&
+                        <div
+                            className={
+                                "absolute w-full flex items-center justify-center h-[200px]"
+                            }
+                        >
+                            <div className={"bg-white rounded-full"}>
+                                <Oval
+                                    color={"#0d6efd"}
+                                    strokeWidth={3}
+                                    secondaryColor={"#fff"}
+                                    height={30}
+                                    width={30}
+                                />
+                            </div>
+                        </div>
+                    }
+                    {
+                        !loading && !loading && data.length === 0 && listConversations.length === 0 &&
+                        <div className="italic pt-200 flex items-center justify-center h-[200px]">
+                            <span>Không tìm thấy kết quả phù hợp</span>
+                        </div>
+                    }
+                    {
+                        !loading &&
                         data.map(friend => (
                             <div
                                 key={friend._id}
@@ -83,6 +121,7 @@ export const SearchUserAndConversation:FC = () => {
                         ))
                     }
                     {
+                        !isLoadingListConversations &&
                         _map(listConversations, conversation => (
                             <SearchChatItem
                                 itemClickAction={(chat) => {
@@ -90,6 +129,9 @@ export const SearchUserAndConversation:FC = () => {
                                     setCurrentChat(chat._id);
                                     setShowResult(false)
                                     setSearch("");
+                                    if (inputRef.current) {
+                                        inputRef.current.value = "";
+                                    }
                                 }}
                                 chat={conversation} key={conversation._id}/>
                         ))

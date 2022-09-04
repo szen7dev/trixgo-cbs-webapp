@@ -134,6 +134,14 @@ export interface DocumentQueryPayload extends QueryParam {
         departmentID?: string;
         direction?: string;
         contractID?: string;
+        datahubContactsID?: string[];
+        types?: string[];
+        departmentsID?: string[];
+        directions?: string[];
+        contractsID?: string[];
+        keyword?: string;
+        storageID?: string;
+        storagesID?: string[];
     },
     isFetchList?: boolean;
 }

@@ -12,7 +12,7 @@ export const useListResponseFromSearch = (payload: any): any => {
     data: dataSubject,
     fetchNextPage: nextPageSubject,
     hasNextPage: hasNextPageSubject,
-    isFetching
+    isFetching,
   } = useInfiniteQuery(
     [`app_dashboard_search_by_response.${payload}`, payload],
     async ({ pageParam }) => {
@@ -27,7 +27,7 @@ export const useListResponseFromSearch = (payload: any): any => {
         }),
         lastestID: pageParam || "",
         limit: "50",
-        ...payload
+        ...payload,
       });
     },
     {
@@ -42,18 +42,23 @@ export const useListResponseFromSearch = (payload: any): any => {
   const listDataForResponse = []
     .concat(...(dataSubject?.pages || []).map((d: any) => d.data?.listRecords))
     .filter(Boolean);
+
+  const listDataForResponseWithPager = (dataSubject?.pages || []).map(
+    (d: any) => d.data?.listRecords
+  );
   const totalRecord = dataSubject?.pages[0]?.data?.totalRecord;
   const totalPage = dataSubject?.pages[0]?.data?.totalPage;
 
   return {
     isLoadingResponse,
     listDataForResponse,
+    listDataForResponseWithPager,
     totalRecord,
     totalPage,
     nextPageSubject,
     hasNextPageSubject,
     refetchSubject,
-    isFetching
+    isFetching,
   };
 };
 
@@ -161,13 +166,11 @@ export const useListCompaniesSystems = (
 };
 
 export const usePcmPlanTaskNotification = (payload: any): any => {
-  const {
-    data
-  } = useQuery(
-    [`usePcmPlanTaskNotification`, payload],
+  const { data, refetch } = useQuery(
+    [`usePcmPlanTaskNotification`],
     async () => {
       return pcmDashboardV2.pcmPlanTaskNotification({
-        ...payload
+        ...payload,
       });
     },
     {
@@ -177,7 +180,8 @@ export const usePcmPlanTaskNotification = (payload: any): any => {
   );
 
   return {
-    data
+    data,
+    refetch
   };
 };
 
@@ -189,7 +193,7 @@ export const useListFileFromSearch = (payload: any): any => {
     data: dataFile,
     fetchNextPage: nextPageFile,
     hasNextPage: hasNextPageFile,
-    isFetching
+    isFetching,
   } = useInfiniteQuery(
     [`app_dashboard_search_by_file.${payload}`, payload],
     async ({ pageParam }) => {
@@ -200,7 +204,7 @@ export const useListFileFromSearch = (payload: any): any => {
         }),
         lastestID: pageParam || "",
         limit: "50",
-        ...payload
+        ...payload,
       });
     },
     {
@@ -215,17 +219,23 @@ export const useListFileFromSearch = (payload: any): any => {
   const listDataForFile = []
     .concat(...(dataFile?.pages || []).map((d: any) => d.data?.listRecords))
     .filter(Boolean);
+
+  const listDataForFileWithPager = (dataFile?.pages || []).map(
+    (d: any) => d.data?.listRecords
+  );
+
   const totalRecord = dataFile?.pages[0]?.data?.totalRecord;
   const totalPage = dataFile?.pages[0]?.data?.totalPage;
 
   return {
     isLoadingFile,
     listDataForFile,
+    listDataForFileWithPager,
     totalRecord,
     totalPage,
     nextPageFile,
     hasNextPageFile,
     refetchFile,
-    isFetching
+    isFetching,
   };
 };

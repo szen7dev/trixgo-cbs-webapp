@@ -65,7 +65,7 @@ export const TaskDetailRelatedTask: FC<Props> = ({ task, refetchInfo }) => {
             <div className={"flex items-center"}>
                 <div className={"flex items-center"}>
                     <img src={iconMessageLink} alt={'-----'} className={"mr-4"} />
-                    <span className={"text-primary-gray text-lg font-bold"}>
+                    <span className={"text-primary-gray text-[16px] font-bold"}>
                         Việc liên quan
                     </span>
                 </div>

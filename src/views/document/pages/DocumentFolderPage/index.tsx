@@ -6,6 +6,7 @@ import debounce from "lodash/debounce";
 
 import { Paginate } from "shareComponents/common";
 import {
+  NavigateTab,
   // DocumentDropdown,
   SearchInput,
 } from "views/document/sharedComponents/common";
@@ -76,7 +77,12 @@ export const DocumentFolderPage: FC = () => {
   return (
     <>
       {/* Content */}
-      <div className="flex flex-1 flex-col overflow-hidden">
+      <div className="flex flex-1 flex-col overflow-hidden h-full">
+        <div className={"sticky top-0 z-10"}>
+          <div className={"flex items-center pb-2"}>
+            <NavigateTab/>
+          </div>
+        </div>
         <div className="flex flex-wrap items-center w-full px-4 gap-x-2 text-black text-small py-1">
         <span className="text-x-large mr-7">Danh sách</span>
           {/* <span className="">CHG.THT</span>

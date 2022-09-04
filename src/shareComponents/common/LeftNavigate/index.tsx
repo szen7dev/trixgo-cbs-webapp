@@ -12,12 +12,18 @@ import { RootState } from "redux/reducer";
 import { setAmountMissMessage } from "redux/reducer/messages/ListConversation";
 import { UseListConversation } from "services/hooks/messages/useListConversation";
 import { usePcmPlanTaskNotification } from "services/hooks/pcm/usePcmDashboardV2";
+// import { useGetListAppOfUser } from "services/hooks/auth/usePermissions";
 
 type Props = {
   handleMenuEvent: () => void;
 };
 export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
+  // const { listAppOfUser, refetchAppUsers } = useGetListAppOfUser();
+
   const { pathname } = useLocation();
+  const pathBreak = pathname.split("/");
+  const firstRoute = pathBreak[1];
+
   const { current: socket }: any = useSocket();
   const dispatch = useDispatch();
   const [enabled, setEnabled] = useState(false);
@@ -28,7 +34,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
     setTimeout(() => {
       setEnabled(true);
     }, 300);
-    if (!pathname.includes("/messages")) {
+    if (firstRoute !== "messages") {
       setTimeout(() => {
         getListConversation({ keyword: "" });
       }, 300);
@@ -50,7 +56,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
   const { getListConversation } = UseListConversation();
 
   const onReceiveMessage = (data: any) => {
-    if (pathname.includes("/messages")) {
+    if (firstRoute === "messages") {
       return;
     }
     if (data?.infoMessage?.error) {
@@ -77,7 +83,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
         <div
           className={
             "px-4 py-1 rounded-full relative " +
-            (pathname === "/" || pathname.includes("/pcm")
+              ((firstRoute === "" || firstRoute === "pcm")
               ? "bg-cbs-hightlight-right-navigate"
               : "")
           }
@@ -106,7 +112,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
         <div
           className={
             "px-4 py-1 rounded-full relative " +
-            (pathname.includes("/pm") ? "bg-cbs-hightlight-right-navigate" : "")
+            (firstRoute === "pm" ? "bg-cbs-hightlight-right-navigate" : "")
           }
         >
           <img width={'20px'} src={projectIcon} alt={"Dự án"} />
@@ -117,7 +123,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
         <div
           className={
             "px-4 py-1 rounded-full relative " +
-            (pathname.includes("/cmcs")
+            (firstRoute === "cmcs"
               ? "bg-cbs-hightlight-right-navigate"
               : "")
           }
@@ -130,7 +136,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
         <div
           className={
             "px-4 py-1 rounded-full relative " +
-            (pathname.includes("/document")
+            (firstRoute === "document"
               ? "bg-cbs-hightlight-right-navigate"
               : "")
           }
@@ -143,7 +149,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
         <div
           className={
             "px-4 py-1 rounded-full relative " +
-            (pathname.includes("/messages")
+            (firstRoute === "messages"
               ? "bg-cbs-hightlight-right-navigate"
               : "")
           }

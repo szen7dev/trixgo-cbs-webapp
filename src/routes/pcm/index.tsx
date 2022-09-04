@@ -80,9 +80,9 @@ const PcmTasksReportPage          = lazy(() => import('views/pcm/pages/PcmTasksR
 // const PcmGroupPage                = lazy(() => import('views/pcm/pages/PcmGroup'));
 // const PcmTaskGroupPage            = lazy(() => import('views/pcm/pages/PcmTaskGroup'));
 
-const PcmPrintTaskTypeOnePage     = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeOne'));
-const PcmPrintTaskTypeTwoPage     = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeTwo'));
-const PcmPrintTaskTypeThreePage   = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeThree'));
+// const PcmPrintTaskTypeOnePage     = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeOne'));
+// const PcmPrintTaskTypeTwoPage     = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeTwo'));
+// const PcmPrintTaskTypeThreePage   = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeThree'));
 
 const PCMRouter: FC = () => {
   return (
@@ -340,7 +340,7 @@ const PCMRouter: FC = () => {
               </Switch>
             </LayoutProjectSecondary>
           </ProtectedRoute> */}
-          
+
           <ProtectedRoute path="/pcm">
             <HomeLayout>
               <Switch>
@@ -395,20 +395,21 @@ const PCMRouter: FC = () => {
                   </LayoutSecondary>
                 </Route>
 
-                <Route exact path="/pcm/mine" component={() => <PcmHomePage/>} />
-                <Route exact path="/pcm/assign" component={() => <PcmHomePage type={2} />} />
-                <Route exact path="/pcm/bookmark" component={() => <PcmHomePage type={3} />} />
-                <Route exact path="/pcm/related" component={() => <PcmHomePage type={5} />} />
+                <Route exact path="/pcm/bidding/:tab?" component={() => <PcmHomePage subtype={4} option={1} draft={0}/>} />
+                <Route exact path="/pcm/delivery/:tab?" component={() => <PcmHomePage subtype={9} type={2} option={2} draft={0}/>} />
+                <Route exact path="/pcm/payment/:tab?" component={() => <PcmHomePage subtype={3} type={2} option={3} draft={0}/>} />
+                <Route exact path="/pcm/mine/:tab?" component={() => <PcmHomePage option={4} draft={0}/>} />
+                <Route exact path="/pcm/assign/:tab?" component={() => <PcmHomePage type={2} option={5} draft={0}/>} />
+                <Route exact path="/pcm/bookmark/:tab?" component={() => <PcmHomePage type={3} option={6} draft={0}/>} />
+                <Route exact path="/pcm/related/:tab?" component={() => <PcmHomePage type={5} option={7} draft={0}/>} />
+                <Route exact path="/pcm/draft/:tab?" component={() => <PcmHomePage type={4} option={8} draft={1}/>} />
                 <Route exact path="/pcm/report" component={PcmReportPage} />
                 <Route exact path="/pcm/report/:reportID" component={PcmTasksReportPage} />
-
                 <Route exact path="/pcm/detail/:id" component={PcmDetailTaskV2} />
-                <Route exact path="/pcm/detail/:id/print/1" component={PcmPrintTaskTypeOnePage} />
-                <Route exact path="/pcm/detail/:id/print/2" component={PcmPrintTaskTypeTwoPage} />
-                <Route exact path="/pcm/detail/:id/print/3" component={PcmPrintTaskTypeThreePage} />
 
               </Switch>
             </HomeLayout>
+
           </ProtectedRoute>
         </Switch>
       </ProviderModalPcm>

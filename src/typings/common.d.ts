@@ -23,7 +23,7 @@ interface FileProp {
 
 export type FileProps = {
 	file?: FileProp
-  _id: number | string;
+  _id: string;
   path: string;
   name: string;
   nameOrg: string;

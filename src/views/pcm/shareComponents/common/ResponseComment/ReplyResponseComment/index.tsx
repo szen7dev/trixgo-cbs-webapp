@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState, useContext } from "react";
+import React, { FC, useRef, useState, useContext, useMemo } from "react";
 import Axios from 'axios';
 import { captureException } from "@sentry/react";
 import { Editor } from "@tinymce/tinymce-react";
@@ -19,21 +19,53 @@ import { PostImage, PostFile } from 'shareComponents/common';
 import classNames from 'classnames';
 import { toArray } from 'lodash';
 import { FileProps, FilePropsUpload } from 'typings/common';
+import taskUserAvt from "assets/images/task-user.svg";
 
 type Props = {
     task: Task;
     parent?: CommentProps;
+    userId?: string;
     tab: number;
     socket?: any;
     onCancelCreateResponse: () => void;
     onConfirmCreate?: () => void;
 }
 
-export const ReplyResponseComment: FC<Props> = ({ task, parent, tab, socket, onCancelCreateResponse, onConfirmCreate }) => {
+export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, socket, onCancelCreateResponse, onConfirmCreate }) => {
     const refDivFile = useRef<HTMLDivElement | null>(null);
     const editorRef = useRef<EditorType>();
+    const [rawContent, setRawContent] = useState('');
 
-    const [selectedUser, setSelectedUser] = useState<Item[]>([]);
+    const initUsersSelected = useMemo(() => {
+        let arr = [];
+        if(parent) {
+            const { _id, bizfullname, image } = parent.author;
+            arr = [{
+                label: bizfullname,
+                value: _id,
+                image: image ? `${process.env.REACT_APP_URL_S3_USER}/${image}` : taskUserAvt
+            }];
+        } else{
+            if(task.accessUsers && task.accessUsers.length) {
+                arr = task.accessUsers.map(({ bizfullname, _id, image }) => ({
+                    label: bizfullname,
+                    value: _id,
+                    image: image ? `${process.env.REACT_APP_URL_S3_USER}/${image}` : taskUserAvt
+                }))
+            } else{
+                const accessUsers = [task.author, task.assignee, ...task.related];
+                arr = accessUsers.map(({ bizfullname, _id, image }) => ({
+                    label: bizfullname,
+                    value: _id,
+                    image: image ? `${process.env.REACT_APP_URL_S3_USER}/${image}` : taskUserAvt
+                }))
+            }
+        }
+
+        return arr.filter(item => item.value !== userId);
+    }, [task, parent])
+
+    const [selectedUser, setSelectedUser] = useState<Item[]>(initUsersSelected);
     const [isUploading, setIsUploading] = useState(false);
     const [tokens, setTokens] = useState<any[]>([]);
 
@@ -126,7 +158,9 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, tab, socket, onC
 
     const handleCreateResponseComment = async () => {
         if (!editorRef.current) return;
-        const content = editorRef.current?.getContent();
+
+        const contentRaw = editorRef.current?.getContent({ format: 'raw' });
+        const contentText = editorRef.current?.getContent({ format: 'text' });
 
         let images: string[] = [];
         let files: string[] = [];
@@ -140,12 +174,13 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, tab, socket, onC
             _id && (files = [...files, _id]);
         }
 
-        if (!files.length && !images.length && !content) return;
+        if (!files.length && !images.length && !contentText) return;
 
         try {
             const dataInsert: CommentPayload = {
                 taskID: task?._id,
-                content,
+                content: contentRaw,
+                rawContent: contentText,
                 parentID: parent?._id,
                 type: 1,
                 isOfficial: tab === 2,
@@ -164,7 +199,7 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, tab, socket, onC
             }
 
             if (selectedUser.length) {
-                dataInsert.receiversID = selectedUser.map(user => user.id) as string[];
+                dataInsert.receiversID = selectedUser.map(user => user.value) as string[];
             }
 
             const { error, data } = await createCommentAsync(dataInsert);
@@ -173,7 +208,6 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, tab, socket, onC
                 return toast.warn(data?.message || 'Tạo bình luận thất bại')
             }
 
-            console.log({ ADD_COMMENT_SOCKET: socket })
             socket?.emit('COMMENT_CSS_ADD_COMMENT', {
                 app: APP_KEY.PCM_PLAN_TASK,
                 objectID: task?._id,
@@ -231,14 +265,15 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, tab, socket, onC
         <>
             <div className={"mt-2 editor ml-12 border border-primary-border rounded"}>
                 <div className={"px-2 py-4"}>
-                    <SendToMultiSelected selectedUser={selectedUser} setSelectedUser={setSelectedUser} />
+                    <SendToMultiSelected
+                        selectedUser={selectedUser}
+                        setSelectedUser={setSelectedUser}
+                    />
                 </div>
                 <Editor
-                    // onActivate={}
                     onInit={(evt, editor) => {
                         editorRef.current = editor;
                     }}
-                    // disabled={user?.email !== 'contact@trixgo.com'}
                     apiKey={process.env.REACT_APP_TINYMCE_API_KEY}
                     // onSaveContent={handleSave}
                     init={{

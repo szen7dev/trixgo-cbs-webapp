@@ -428,7 +428,7 @@ export const PCM_STATUS_CHECKLIST = [
 
 // MỨC ĐỘ QUAN TRỌNG
 export const PCM_PRIORITY_TASK = [
-    { value: 1, text: 'Thấp', class: 'bg-grey', backgroud: '808080', key: 'low' },
+    { value: 1, text: 'Thấp', class: 'bg-gray-400', backgroud: '808080', key: 'low' },
     { value: 2, text: 'Trung bình', class: 'bg-blue', backgroud: '5bc0de', key: 'normal' },
     { value: 3, text: 'Cao', class: 'bg-red', backgroud: 'ff0000', key: 'high' },
     { value: 4, text: 'Siêu quan trọng', class: 'bg-red', backgroud: 'ff0000', key: 'supperhigh' }
@@ -642,7 +642,7 @@ export const PCM_SUBTYPE = [
     { value: 0, text: 'Việc thông thường' },
     { value: 1, text: 'Đề nghị cấp thông tin' },
     { value: 2, text: 'Đề nghị phê duyệt' },
-    { value: 3, text: 'Thanh toá' },
+    { value: 3, text: 'Thanh toán' },
     { value: 4, text: 'Đấu thầu' },
     { value: 5, text: 'Nghiệm thu chất lượng' },
     { value: 6, text: 'Yều cầu sửa chữa' },

@@ -9,8 +9,10 @@ const searchURL = "/api/subject_pcm/pcm_plan_tasks/filter";
 
 const MainSearchRepository = {
     async mainSearch(payload: SearchPayload): Promise<SearchResultResponse> {
-        const { data } = await API.post<SearchResultResponse>(
-            searchURL, payload
+        const { data } = await API.get<SearchResultResponse>(
+            searchURL, {
+                params: payload
+            }
         );
         return data;
     },

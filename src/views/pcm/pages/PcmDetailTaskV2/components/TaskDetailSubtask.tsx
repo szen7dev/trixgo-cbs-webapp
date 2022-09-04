@@ -10,9 +10,10 @@ import { Task } from "typings/task";
 
 type Props = {
     task: Task;
+    userId?: string;
 }
 
-export const TaskDetailSubtask:FC<Props> = ({ task }) => {
+export const TaskDetailSubtask:FC<Props> = ({ task, userId }) => {
     const progress = task.percentage;
     const [showCreateNewSubTask, setShowCreateNewSubTask] = useState(false);
 
@@ -36,7 +37,7 @@ export const TaskDetailSubtask:FC<Props> = ({ task }) => {
             <div className={"flex items-center"}>
                 <div className={"flex items-center"}>
                     <img src={iconTickBox} alt={'-----'} className={"mr-4"}/>
-                    <span className={"text-primary-gray text-lg font-bold"}>
+                    <span className={"text-primary-gray text-[16px] font-bold"}>
                         Việc con
                     </span>
                 </div>
@@ -65,6 +66,7 @@ export const TaskDetailSubtask:FC<Props> = ({ task }) => {
                 {showCreateNewSubTask &&
                     <CreateNewSubTask
                         task={task}
+                        userId={userId}
                         cancelCreateNewSubTask={() => setShowCreateNewSubTask(false)}
                         confirmCreateNewSubTask={refetchListTask}
                     />

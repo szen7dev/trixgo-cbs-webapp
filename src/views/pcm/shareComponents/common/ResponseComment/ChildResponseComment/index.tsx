@@ -103,7 +103,7 @@ export const ChildResponseComment: FC<Props> = ({ userId, comment, onClickImage,
                                     {comment.files.map(file => (
                                         <div key={file._id} className={"comment-attach-item flex items-start justify-between mb-2"}>
                                             <img src={iconAttach} alt={file.nameOrg} />
-                                            <div className={"comment-attach-item-file-infor mx-2"}>
+                                            <div className={"text-cbs-highlight-color mx-2"}>
                                                 <a href={`${process.env.REACT_APP_URL_S3}${file.path}`} download className={"text-primary"}>
                                                     {file.nameOrg} ({humanFileSize(file.size)})
                                                 </a>

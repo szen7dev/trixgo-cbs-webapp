@@ -15,7 +15,7 @@ export const TaskDetailMember: FC<Props> = ({ task }) => {
                 <img src={iconAddGroup} alt={'-----'} />
             </span>
             <div className={"flex-1"}>
-                <div className={"text-primary-gray text-lg font-bold"}>Thành viên</div>
+                <div className={"text-primary-gray text-[16px] font-bold"}>Thành viên</div>
                 <div className={"flex items-center mt-2"}>
                     <div className={"create-user flex items-center"}>
                         <img alt={"----"} src={task?.author?.image ? `${process.env.REACT_APP_URL_S3_USER}/${task?.author?.image}` : taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px]"} />

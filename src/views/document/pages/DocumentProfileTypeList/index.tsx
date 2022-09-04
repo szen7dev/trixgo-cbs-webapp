@@ -8,7 +8,7 @@ import TriangleDown from "assets/icons/TriangleDown";
 import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
 import contractIcon from "assets/images/icons8-contract-64-blue.svg";
 import echoDbIcon from "assets/images/icons8-amazon-echo-48.svg";
-import {NavigateTab} from "../../sharedComponents/common";
+import {NavigateTabV2} from "../../sharedComponents/common";
 import downloadIcon from "assets/images/icons8-download-64.svg";
 import iconPencil from "assets/images/icons8-pencil-96 1.png";
 import nextIcon from "assets/images/icons-arrow-next.svg";
@@ -93,7 +93,7 @@ const DocumentProfileTypeList:FC = () => {
                     </button>
                 </div>
                 <div className={"flex items-center pb-2"}>
-                    <NavigateTab/>
+                    <NavigateTabV2/>
                     <div className={"flex-1 flex items-center justify-end"}>
                         <span className={"text-primary-gray"}>1-50 trong số 2.358</span>
                         <button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"} disabled={true}>

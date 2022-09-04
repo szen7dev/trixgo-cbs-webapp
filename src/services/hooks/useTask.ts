@@ -38,7 +38,7 @@ type UseTask = {
   info: Task,
   addTaskAsync: (payload: addTaskPayload) => Promise<any>;
   updateTaskAsync: (payload: updateTaskPayload) => Promise<any>;
-  updateStatusMultipleAsync: (payload: updateStatusMultiplePayload) => Promise<any>;
+  updateStatusMultipleAsync: (payload: updateStatusMultiplePayload | any) => Promise<any>;
   isLoadingListTask: boolean;
   isLoadingInfo: boolean;
   totalRecord: number;
@@ -60,7 +60,7 @@ type UseTask = {
 };
 
 type UseTaskProps = Partial<{
-  params: TaskListParams | TaskInfoParams,
+  params: TaskListParams | TaskInfoParams | any,
   isFetch?: boolean;
   isFetchSubject?: boolean;
   isFetchInfo?: boolean;

@@ -14,7 +14,7 @@ import LayoutProjectSecondary from "views/ppt/sharedComponents/layouts/LayoutPro
 /*=====4.CONFIG ROUTE=====*/
 
 /*=====5.COMPONENTS=====*/
-import { ModalCreateDocument } from "views/document/sharedComponents/common";
+import {DocumentSearchHeaderContent, ModalCreateDocument} from "views/document/sharedComponents/common";
 
 /*=====CONTEXTS=====*/
 import { ProviderModalPost as ProviderModalMedia } from "views/media/contexts/post";
@@ -43,7 +43,7 @@ import ProjectAdminProjectTab from "views/ppt/pages/ProjectAdminPage/pages/Proje
 import ProjectAdminPositionTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminPositionTab";
 import {PmProjectLayout} from "../../shareComponents/layouts/PmLayout/PmProjectLayout";
 import {PmHeaderContent} from "../../shareComponents/layouts/PmLayout/components";
-import {DocumentProjectLayout} from "views/document/sharedComponents/layouts/DocumentProjectLayout";
+// import {DocumentProjectLayout} from "views/document/sharedComponents/layouts/DocumentProjectLayout";
 
 const DocumentOfPackagePage       = lazy(() => import("views/document/pages/DocumentOfPackagePage"))
 const DocumentOfTypePage          = lazy(() => import("views/document/pages/DocumentOfTypePage"))
@@ -131,7 +131,7 @@ const PCMRouter: FC = () => {
                 </Route>
 
                 {/* Danh sách dự án */}
-                <Route exact path="/pm/projects">
+                <Route exact path="/pm/projects/:tab?">
                   <PmLayout>
                     <ProjectCategoryPage/>
                   </PmLayout>
@@ -289,12 +289,13 @@ const PCMRouter: FC = () => {
                     {/*</Route>*/}
                     <Route
                         exact
-                        path={["/pm/project/:id/document", "/pm/project/:id/document/(1|2|3|4)"]}
+                        path={["/pm/project/:id/document", "/pm/project/:id/document/:type(1|2|3|4)"]}
                     >
 
                           <ModalProvider>
-                            <PmProjectLayout>
-                              <DocumentProjectLayout>
+                            <PmProjectLayout
+                              headerSearch={<DocumentSearchHeaderContent/>}
+                            >
                                 <Switch>
                                   <Route
                                       exact
@@ -303,24 +304,24 @@ const PCMRouter: FC = () => {
                                   />
                                   <Route
                                       exact
-                                      path="/pm/project/:id/document/1"
-                                      component={DocumentProfilePage}
-                                  />
-                                  <Route
-                                      exact
-                                      path="/pm/project/:id/document/2"
-                                      component={DocumenDatahubContactPage}
-                                  />
-                                  <Route
-                                      exact
-                                      path="/pm/project/:id/document/3"
-                                      component={DocumentFolderPage}
+                                      path="/pm/project/:id/document/:type"
+                                      render={({match}) => {
+                                        switch (match.params.type) {
+                                          case "1":
+                                            return <DocumentProfilePage/>;
+                                          case "2":
+                                            return <DocumenDatahubContactPage/>;
+                                          case "3":
+                                            return <DocumentFolderPage/>;
+                                          default:
+                                            return null;
+                                        }
+                                      }}
                                   />
                                   {/* <Route exact path='/pcm/project/:id/document/3' component={DocumentReportPage} />
                         <Route exact path='/pcm/project/:id/document/4' component={DocumentHistoryPage} /> */}
                                 </Switch>
                                 <ModalCreateDocument />
-                              </DocumentProjectLayout>
                             </PmProjectLayout>
                           </ModalProvider>
                     </Route>

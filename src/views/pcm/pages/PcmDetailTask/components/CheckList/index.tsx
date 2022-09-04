@@ -476,7 +476,7 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
             </div>
           )}
 
-          <div className={classnames("shadow-lg px-5", {
+          {/* <div className={classnames("shadow-lg px-5", {
             'mt-5 pb-5': hasPermission
           })}>
             {hasPermission && (
@@ -487,7 +487,7 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
                 </div>
               </button>
             )}
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
