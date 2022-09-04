@@ -76,11 +76,11 @@ export const SearchUserAndConversation:FC = () => {
             <input
                 ref={inputRef}
                 onChange={e => handleSearchChange(e)}
-                className={"pl-12 w-full h-[45px] bg-cbs-bg-input-search rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-none focus:shadow-md transition-all"} placeholder={"Tìm trong bạn bè hoặc cuộc hội thoại"}/>
+                className={"pl-12 w-full h-[45px] focus:bg-white bg-cbs-bg-input-search rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-none focus:shadow-md transition-all"} placeholder={"Tìm trong bạn bè hoặc cuộc hội thoại"}/>
 
             {
                 showResult &&
-                <div className={"absolute min-h-[300px] focus:bg-white top-full mt-2 w-full rounded border-0.5 border-primary-border p-2 bg-white"}>
+                <div className={"absolute min-h-[300px] top-full mt-2 w-full rounded border-0.5 border-primary-border p-2 bg-white"}>
                     {
                         (isLoadingListConversations||loading) &&
                         <div

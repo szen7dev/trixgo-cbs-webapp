@@ -46,6 +46,9 @@ import {useDatahubContact} from "services/hooks/datahub/contact/useDatahubContac
 import {useContractIsMembers} from "services/hooks/items/useContract";
 import {debounce} from "lodash";
 import {useStorage} from "services/hooks/items/useStorage";
+import {useDispatch} from "react-redux";
+import {useAppSelector} from "redux/reducer";
+import {setFilterDropdown, resetAllFilterAndKeyword} from "redux/reducer/DocumentProjectSlice";
 
 const payloadHistoryTraffic: any = {
     appID: APP_ID.PCM.id,
@@ -54,6 +57,16 @@ const payloadHistoryTraffic: any = {
 };
 
 export const DocumentProjectPage: FC = () => {
+    const dispatch = useDispatch();
+    const {keywordInput} = useAppSelector(
+        (state) => state.documentProject.data
+    );
+
+    useEffect(() => {
+        setPageIndex(0);
+        ref.current&&ref.current.resetPaginate();
+    }, [keywordInput]);
+
     const { id: projectID } = useParams<{ id: string }>();
     const { info: projectInfo, isLoading: isloadingProjectInfo } = useProject({
         params: {
@@ -63,8 +76,17 @@ export const DocumentProjectPage: FC = () => {
     })
 
     type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+    type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
+    type TimeRangeHandle = React.ElementRef<typeof TimeRangeDropdown>;
     // console.log({projectID})
     const ref = React.useRef<PaginateHandle>(null);
+    const datahubRef = React.useRef<DropdownHandle>(null);
+    const typesRef = React.useRef<DropdownHandle>(null);
+    const directionsRef = React.useRef<DropdownHandle>(null);
+    const contractsRef = React.useRef<DropdownHandle>(null);
+    const storagesRef = React.useRef<DropdownHandle>(null);
+    const fromToRef = React.useRef<TimeRangeHandle>(null);
+
     const [pageIndex, setPageIndex] = useState(0);
     const [recordSelected, setSelectRecord] = useState<any>({});
 
@@ -118,7 +140,8 @@ export const DocumentProjectPage: FC = () => {
             types,
             directions,
             contractsID,
-            storagesID
+            storagesID,
+            keyword: keywordInput
         },
         isFetchList: true
     });
@@ -142,6 +165,9 @@ export const DocumentProjectPage: FC = () => {
                     departmentID,
                 });
                 if (result.status === 200) {
+                    setSelectRecord({});
+                    resetAllFilter();
+                    dispatch(resetAllFilterAndKeyword({}));
                     refetchListDocument();
                     setPageIndex(0);
                     ref.current&&ref.current.resetPaginate();
@@ -179,6 +205,9 @@ export const DocumentProjectPage: FC = () => {
                         documentID: record._id,
                     });
                     if (result.status === 200) {
+                        setSelectRecord({});
+                        resetAllFilter();
+                        dispatch(resetAllFilterAndKeyword({}));
                         refetchListDocument();
                         setPageIndex(0);
                         ref.current&&ref.current.resetPaginate();
@@ -228,6 +257,15 @@ export const DocumentProjectPage: FC = () => {
         }
     }
 
+    const resetAllFilter = () => {
+        datahubRef.current&&datahubRef.current.resetDropdown();
+        typesRef.current&&typesRef.current.resetDropdown();
+        directionsRef.current&&directionsRef.current.resetDropdown();
+        storagesRef.current&&storagesRef.current.resetDropdown();
+        contractsRef.current&&contractsRef.current.resetDropdown();
+        fromToRef.current&&fromToRef.current.resetTimeRange();
+    }
+
     if(stateExport.isExporting) {
         return <Loader className="border-primary" />
     }
@@ -238,6 +276,7 @@ export const DocumentProjectPage: FC = () => {
                 <div className={"flex flex-wrap items-center px-4 py-2"}>
                     <div className={"flex items-center flex-1"}>
                         <DropdownSearchableV2
+                            ref={datahubRef}
                             className={"mr-4 border border-primary-border rounded-lg mb-2"}
                             placeholder={"Tổ chức ban hành"}
                             prefixIcon={<img className={"mr-2"} src={maleUserIcon} alt={"icon"}/>}
@@ -256,12 +295,15 @@ export const DocumentProjectPage: FC = () => {
                                 const cloneIDs = [...datahubContactsID];
                                 cloneIDs.push(item._id);
                                 setDatahubContactsID(cloneIDs);
+                                dispatch(setFilterDropdown({keyFilter: "datahubContactsID", dataFilter: cloneIDs}))
 
                                 setPageIndex(0);
                                 ref.current&&ref.current.resetPaginate();
                             }}
                             onClearData={() => {
                                 setDatahubContactsID([]);
+                                dispatch(setFilterDropdown({keyFilter: "datahubContactsID", dataFilter: []}))
+
                                 setPageIndex(0);
                                 ref.current&&ref.current.resetPaginate();
                             }}
@@ -269,6 +311,7 @@ export const DocumentProjectPage: FC = () => {
                                 const cloneIDs = [...datahubContactsID];
                                 const newList = cloneIDs.filter(selectId => selectId !== id);
                                 setDatahubContactsID(newList);
+                                dispatch(setFilterDropdown({keyFilter: "datahubContactsID", dataFilter: newList}))
 
                                 setPageIndex(0);
                                 ref.current&&ref.current.resetPaginate();
@@ -279,6 +322,7 @@ export const DocumentProjectPage: FC = () => {
                             selectOneByOne={true}
                         />
                         <DropdownSearchableV2
+                            ref={typesRef}
                             className={"mr-4 border border-primary-border rounded-lg mb-2"}
                             placeholder={"Tính chất hồ sơ"}
                             prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"}/>}
@@ -293,12 +337,15 @@ export const DocumentProjectPage: FC = () => {
                                 const cloneIDs = [...types];
                                 cloneIDs.push(item.value);
                                 setTypes(cloneIDs);
+                                dispatch(setFilterDropdown({keyFilter: "types", dataFilter: cloneIDs}))
 
                                 setPageIndex(0);
                                 ref.current&&ref.current.resetPaginate();
                             }}
                             onClearData={() => {
                                 setTypes([]);
+                                dispatch(setFilterDropdown({keyFilter: "types", dataFilter: []}))
+
                                 setPageIndex(0);
                                 ref.current&&ref.current.resetPaginate();
                             }}
@@ -306,6 +353,7 @@ export const DocumentProjectPage: FC = () => {
                                 const cloneIDs = [...types];
                                 const newList = cloneIDs.filter(selectId => selectId !== id);
                                 setTypes(newList);
+                                dispatch(setFilterDropdown({keyFilter: "types", dataFilter: newList}))
 
                                 setPageIndex(0);
                                 ref.current&&ref.current.resetPaginate();
@@ -316,13 +364,20 @@ export const DocumentProjectPage: FC = () => {
                             selectOneByOne={true}
                         />
                         <TimeRangeDropdown
+                            ref={fromToRef}
                             className={
                                 "mr-4 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
                             }
                             placeholder={"Ngày nhận"}
                             iconBack={<TriangleDown />}
                             iconFront={<img src={timelineIcon} alt={"----"} />}
-                            onValueChange={(val) => setFromToDate(val)}
+                            onValueChange={(val) => {
+                                setFromToDate(val)
+                                dispatch(setFilterDropdown({keyFilter: "fromDate", dataFilter: val.fromDate}))
+                                dispatch(setFilterDropdown({keyFilter: "toDate", dataFilter: val.toDate}))
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
                             options={[
                                 {
                                     text: "Tất cả",
@@ -342,6 +397,7 @@ export const DocumentProjectPage: FC = () => {
                             ]}
                         />
                         <DropdownSearchableV2
+                            ref={directionsRef}
                             className={"mr-4 border border-primary-border rounded-lg mb-2"}
                             placeholder={"Hướng hồ sơ"}
                             prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"}/>}
@@ -356,12 +412,15 @@ export const DocumentProjectPage: FC = () => {
                                 const cloneIDs = [...directions];
                                 cloneIDs.push(item.value);
                                 setDirections(cloneIDs);
+                                dispatch(setFilterDropdown({keyFilter: "directions", dataFilter: cloneIDs}))
 
                                 setPageIndex(0);
                                 ref.current&&ref.current.resetPaginate();
                             }}
                             onClearData={() => {
                                 setDirections([]);
+                                dispatch(setFilterDropdown({keyFilter: "directions", dataFilter: []}))
+
                                 setPageIndex(0);
                                 ref.current&&ref.current.resetPaginate();
                             }}
@@ -369,6 +428,7 @@ export const DocumentProjectPage: FC = () => {
                                 const cloneIDs = [...directions];
                                 const newList = cloneIDs.filter(selectId => selectId !== id);
                                 setDirections(newList);
+                                dispatch(setFilterDropdown({keyFilter: "directions", dataFilter: newList}))
 
                                 setPageIndex(0);
                                 ref.current&&ref.current.resetPaginate();
@@ -379,6 +439,7 @@ export const DocumentProjectPage: FC = () => {
                             selectOneByOne={true}
                         />
                         <DropdownSearchableV2
+                            ref={contractsRef}
                             className={"mr-4 border border-primary-border rounded-lg mb-2"}
                             placeholder={"Thuộc hợp đồng"}
                             prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"}/>}
@@ -395,12 +456,15 @@ export const DocumentProjectPage: FC = () => {
                                 const cloneIDs = [...contractsID];
                                 cloneIDs.push(item._id);
                                 setContractsID(cloneIDs);
+                                dispatch(setFilterDropdown({keyFilter: "contractsID", dataFilter: cloneIDs}))
 
                                 setPageIndex(0);
                                 ref.current&&ref.current.resetPaginate();
                             }}
                             onClearData={() => {
                                 setContractsID([]);
+                                dispatch(setFilterDropdown({keyFilter: "contractsID", dataFilter: []}))
+
                                 setPageIndex(0);
                                 ref.current&&ref.current.resetPaginate();
                             }}
@@ -408,6 +472,7 @@ export const DocumentProjectPage: FC = () => {
                                 const cloneIDs = [...contractsID];
                                 const newList = cloneIDs.filter(selectId => selectId !== id);
                                 setContractsID(newList);
+                                dispatch(setFilterDropdown({keyFilter: "contractsID", dataFilter: newList}))
 
                                 setPageIndex(0);
                                 ref.current&&ref.current.resetPaginate();
@@ -418,6 +483,7 @@ export const DocumentProjectPage: FC = () => {
                             selectOneByOne={true}
                         />
                         <DropdownSearchableV2
+                            ref={storagesRef}
                             className={"mr-4 border border-primary-border rounded-lg mb-2"}
                             placeholder={"Địa chỉ lưu trữ"}
                             prefixIcon={<img className={"mr-2"} src={echoDbIcon} alt={"icon"}/>}
@@ -434,12 +500,15 @@ export const DocumentProjectPage: FC = () => {
                                 const cloneIDs = [...storagesID];
                                 cloneIDs.push(item._id);
                                 setStoragesID(cloneIDs);
+                                dispatch(setFilterDropdown({keyFilter: "storagesID", dataFilter: cloneIDs}))
 
                                 setPageIndex(0);
                                 ref.current&&ref.current.resetPaginate();
                             }}
                             onClearData={() => {
                                 setStoragesID([]);
+                                dispatch(setFilterDropdown({keyFilter: "storagesID", dataFilter: []}))
+
                                 setPageIndex(0);
                                 ref.current&&ref.current.resetPaginate();
                             }}
@@ -447,6 +516,7 @@ export const DocumentProjectPage: FC = () => {
                                 const cloneIDs = [...storagesID];
                                 const newList = cloneIDs.filter(selectId => selectId !== id);
                                 setStoragesID(newList);
+                                dispatch(setFilterDropdown({keyFilter: "storagesID", dataFilter: newList}))
 
                                 setPageIndex(0);
                                 ref.current&&ref.current.resetPaginate();

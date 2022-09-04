@@ -4,7 +4,7 @@ import React, {
   useEffect,
   useRef,
   useState,
-  UIEvent,
+  UIEvent, forwardRef, useImperativeHandle,
 } from "react";
 import { map as _map } from "lodash";
 import classNames from "classnames";
@@ -57,11 +57,13 @@ type Props = {
   countBadge?: number;
   reset?: boolean;
 };
-
+type DropdownSearchableV2Handle = {
+  resetDropdown: () => void
+}
 // type Params = {
 //     [key: string]: string;
 // }
-export const DropdownSearchableV2: FC<Props> = ({
+export const DropdownSearchableV2 = forwardRef<DropdownSearchableV2Handle, Props>(({
   data,
   // searchUrl,
   // searchParam,
@@ -95,10 +97,10 @@ export const DropdownSearchableV2: FC<Props> = ({
   selectOneByOne,
   countBadge,
   reset
-}) => {
+}, dropdownsearchRef) => {
   const [value, setValue] = useState<Item>();
   const [values, setValues] = useState<Array<Item>>();
-  
+
   const [displayData, setDisplayData] = useState<Array<Item>>([]);
   const [showOption, setShowOption] = useState(false);
   const [firstInit, setFirstInit] = useState(true);
@@ -109,15 +111,25 @@ export const DropdownSearchableV2: FC<Props> = ({
 
   useOnClickOutside(wrapperRef, () => setShowOption(false));
 
-  const readDataValue = React.useCallback(
-    (item: Item | undefined, key: string) => {
-      if (!item) return undefined;
-      if (formatItem) {
-        return item[formatItem[key]] ?? item[key];
+  useImperativeHandle(dropdownsearchRef, () => ({
+    resetDropdown() {
+      setValue(undefined);
+      setValues([]);
+      if (onClearData) {
+        onClearData()
       }
-      return item[key];
-    },
-    [formatItem]
+    }
+  }));
+
+  const readDataValue = React.useCallback(
+      (item: Item | undefined, key: string) => {
+        if (!item) return undefined;
+        if (formatItem) {
+          return item[formatItem[key]] ?? item[key];
+        }
+        return item[key];
+      },
+      [formatItem]
   );
 
   const modifyItem = (item: Item) => {
@@ -143,7 +155,7 @@ export const DropdownSearchableV2: FC<Props> = ({
     setSearchTerm("");
     if (isMultiple) {
       const existThatItem = (values ?? []).findIndex(
-        (i) => readDataValue(i, "id") === readDataValue(item, "id")
+          (i) => readDataValue(i, "id") === readDataValue(item, "id")
       );
       if (existThatItem > -1) {
         const oldValues = values ?? [];
@@ -182,32 +194,32 @@ export const DropdownSearchableV2: FC<Props> = ({
   };
 
   const setDefaultValue = React.useCallback(
-    (checkDataArr: Array<Item>, _initialValue) => {
-      if (_initialValue) {
-        if (isMultiple) {
-          if (
-            typeof _initialValue !== "number" &&
-            typeof _initialValue !== "string"
-          ) {
-            const initialItem = checkDataArr?.filter((item) =>
-              _initialValue.includes(readDataValue(item, "id"))
+      (checkDataArr: Array<Item>, _initialValue) => {
+        if (_initialValue) {
+          if (isMultiple) {
+            if (
+                typeof _initialValue !== "number" &&
+                typeof _initialValue !== "string"
+            ) {
+              const initialItem = checkDataArr?.filter((item) =>
+                  _initialValue.includes(readDataValue(item, "id"))
+              );
+              setValues(initialItem ?? []);
+            }
+          } else {
+            const initialItem = checkDataArr?.find(
+                (item) => readDataValue(item, "id") === _initialValue
             );
-            setValues(initialItem ?? []);
+            setValue(initialItem);
           }
-        } else {
-          const initialItem = checkDataArr?.find(
-            (item) => readDataValue(item, "id") === _initialValue
-          );
-          setValue(initialItem);
         }
-      }
-    },
-    [isMultiple, readDataValue]
+      },
+      [isMultiple, readDataValue]
   );
 
   const handleRemoveItem = (id: string | number) => {
     const valuesWillUpdate = values?.filter(
-      (item) => readDataValue(item, "id") !== id
+        (item) => readDataValue(item, "id") !== id
     );
     setValues(valuesWillUpdate);
     onMultipleRemoveValue && onMultipleRemoveValue(id);
@@ -233,14 +245,14 @@ export const DropdownSearchableV2: FC<Props> = ({
       //   console.log({initialValue})
       if (firstInit && initialValue) {
         if (
-          isMultiple &&
-          Array.isArray(initialValue) &&
-          initialValue.every((elm) => Object.keys(elm).length > 0)
+            isMultiple &&
+            Array.isArray(initialValue) &&
+            initialValue.every((elm) => Object.keys(elm).length > 0)
         ) {
           setValues(initialValue);
         } else if (
-          !Array.isArray(initialValue) &&
-          Object.keys(initialValue).length > 0
+            !Array.isArray(initialValue) &&
+            Object.keys(initialValue).length > 0
         ) {
           setValue(initialValue);
         }
@@ -252,148 +264,148 @@ export const DropdownSearchableV2: FC<Props> = ({
   const renderOptions = () => {
     if (displayData?.length === 0) {
       return (
-        <div className={"pt-3 pb-3 alert alert-warning m-3"}>
-          Danh sách rỗng
-        </div>
+          <div className={"pt-3 pb-3 alert alert-warning m-3"}>
+            Danh sách rỗng
+          </div>
       );
     }
     return _map(displayData, (option) => (
-      <div
-        key={readDataValue(option, "id")}
-        className={
-          (classNameItem ?? "") +
-          " select-option hover:bg-gray-100 transition duration-150 flex cursor-pointer py-3 px-4 "
-        }
-        onClick={() => handleSetValue(option)}
-        data-option-value={option.id}
-      >
-        {(isMultiple &&
-          values?.find(
-            (v) => readDataValue(v, "id") === readDataValue(option, "id")
-          )) ||
-        readDataValue(option, "id") === readDataValue(value, "id") ? (
-          <img src={BlueCheck} alt={"checked"} className={"w-[15px] mr-3 min-w-[15px]"} />
-        ) : (
-          <div className={"w-[15px] mr-3 min-w-[15px]"} />
-        )}
-        {renderItem ? (
-          renderItem(modifyItem(option))
-        ) : (
-          <div className={"flex align-items-center text-left"}>
-            {readDataValue(option, "imageUrl") ? (
-              <img
-                alt={"Avt"}
-                src={readDataValue(option, "imageUrl")}
-                className={"w-9 h-9 object-cover rounded-full mr-3"}
-              />
-            ) : null}
-            <span className={"flex-1 ml-1 mr-1"}>
+        <div
+            key={readDataValue(option, "id")}
+            className={
+                (classNameItem ?? "") +
+                " select-option hover:bg-gray-100 transition duration-150 flex cursor-pointer py-3 px-4 "
+            }
+            onClick={() => handleSetValue(option)}
+            data-option-value={option.id}
+        >
+          {(isMultiple &&
+              values?.find(
+                  (v) => readDataValue(v, "id") === readDataValue(option, "id")
+              )) ||
+          readDataValue(option, "id") === readDataValue(value, "id") ? (
+              <img src={BlueCheck} alt={"checked"} className={"w-[15px] mr-3 min-w-[15px]"} />
+          ) : (
+              <div className={"w-[15px] mr-3 min-w-[15px]"} />
+          )}
+          {renderItem ? (
+              renderItem(modifyItem(option))
+          ) : (
+              <div className={"flex align-items-center text-left"}>
+                {readDataValue(option, "imageUrl") ? (
+                    <img
+                        alt={"Avt"}
+                        src={readDataValue(option, "imageUrl")}
+                        className={"w-9 h-9 object-cover rounded-full mr-3"}
+                    />
+                ) : null}
+                <span className={"flex-1 ml-1 mr-1"}>
               {readDataValue(option, "text")}
             </span>
-          </div>
-        )}
-      </div>
+              </div>
+          )}
+        </div>
     ));
   };
 
   const renderMultiSelectedValue = () => {
     return (
-      <div
-        className={
-          "flex w-full px-3 py-1 cursor-pointer align-items-center flex-wrap overflow-y-scroll"
-        }
-      >
-        {_map(values, (option) => (
-          <div
-            key={readDataValue(option, "id")}
+        <div
             className={
-              "relative border rounded-3xl p-2 mr-1.5 pr-8 mb-1.5 bg-white"
+              "flex w-full px-3 py-1 cursor-pointer align-items-center flex-wrap overflow-y-scroll"
             }
-            title={
-              renderSelectedItem
-                ? modifyItem(option).text
-                : readDataValue(option, "text")
-            }
-          >
-            {renderSelectedItem
-              ? renderSelectedItem(modifyItem(option))
-              : <p className={"line-clamp-2"}>{readDataValue(option, "text")}</p>}
-            <div
-              className={
-                "absolute inset-y-0 right-0 flex items-center justify-center pr-2"
-              }
-            >
-              <Close
-                onClick={() => handleRemoveItem(readDataValue(option, "id"))}
-              />
-            </div>
-          </div>
-        ))}
-      </div>
+        >
+          {_map(values, (option) => (
+              <div
+                  key={readDataValue(option, "id")}
+                  className={
+                    "relative border rounded-3xl p-2 mr-1.5 pr-8 mb-1.5 bg-white"
+                  }
+                  title={
+                    renderSelectedItem
+                        ? modifyItem(option).text
+                        : readDataValue(option, "text")
+                  }
+              >
+                {renderSelectedItem
+                    ? renderSelectedItem(modifyItem(option))
+                    : <p className={"line-clamp-2"}>{readDataValue(option, "text")}</p>}
+                <div
+                    className={
+                      "absolute inset-y-0 right-0 flex items-center justify-center pr-2"
+                    }
+                >
+                  <Close
+                      onClick={() => handleRemoveItem(readDataValue(option, "id"))}
+                  />
+                </div>
+              </div>
+          ))}
+        </div>
     );
   };
 
   const renderSingleSelectedValueWithClearValue = () => {
     if (!value) return null;
     return (
-      <div
-        className={classNames("flex text-left relative px-3 py-1 pr-8 mb-1 mt-1 ", {
-          "text-gray-300": !value,
-          border: bordered,
-          "rounded-3xl": bordered,
-        })}
-        title={
-          renderSelectedItem
-            ? modifyItem(value).text
-            : readDataValue(value, "text")
-        }
-      >
-        {renderSelectedItem
-          ? renderSelectedItem(modifyItem(value))
-          : <p className={"line-clamp-2"}>{readDataValue(value, "text")}</p>}
         <div
-          className={
-            "absolute inset-y-0 right-0 flex items-center justify-center pr-2"
-          }
+            className={classNames("flex text-left relative px-3 py-1 pr-8 mb-1 mt-1 ", {
+              "text-gray-300": !value,
+              border: bordered,
+              "rounded-3xl": bordered,
+            })}
+            title={
+              renderSelectedItem
+                  ? modifyItem(value).text
+                  : readDataValue(value, "text")
+            }
         >
-          <Close onClick={() => handleRemoveItemSingle()} />
+          {renderSelectedItem
+              ? renderSelectedItem(modifyItem(value))
+              : <p className={"line-clamp-2"}>{readDataValue(value, "text")}</p>}
+          <div
+              className={
+                "absolute inset-y-0 right-0 flex items-center justify-center pr-2"
+              }
+          >
+            <Close onClick={() => handleRemoveItemSingle()} />
+          </div>
         </div>
-      </div>
     );
   };
 
   const renderSingleSelectedValueWithoutClearValue = () => {
     if (!value) return null;
     return (
-      <div className={"flex-1 px-3 py-1 flex text-left "}>
-        <div
-          title={
-            renderSelectedItem
-              ? modifyItem(value).text
-              : readDataValue(value, "text")
-          }
-        >
-          {readDataValue(value, "text")
-            ? renderSelectedItem
-              ? renderSelectedItem(modifyItem(value))
-                  : <p className={"line-clamp-2"}>{readDataValue(value, "text")}</p>
-            : placeholder}
+        <div className={"flex-1 px-3 py-1 flex text-left "}>
+          <div
+              title={
+                renderSelectedItem
+                    ? modifyItem(value).text
+                    : readDataValue(value, "text")
+              }
+          >
+            {readDataValue(value, "text")
+                ? renderSelectedItem
+                    ? renderSelectedItem(modifyItem(value))
+                    : <p className={"line-clamp-2"}>{readDataValue(value, "text")}</p>
+                : placeholder}
+          </div>
         </div>
-      </div>
     );
   };
 
   const renderSingleSelectedValue = () => {
     return (
-      <div
-        className={
-          "relative w-full flex p-1 h-full pl-2 cursor-pointer align-items-center"
-        }
-      >
-        {allowClearValueSingleInput
-          ? renderSingleSelectedValueWithClearValue()
-          : renderSingleSelectedValueWithoutClearValue()}
-      </div>
+        <div
+            className={
+              "relative w-full flex p-1 h-full pl-2 cursor-pointer align-items-center"
+            }
+        >
+          {allowClearValueSingleInput
+              ? renderSingleSelectedValueWithClearValue()
+              : renderSingleSelectedValueWithoutClearValue()}
+        </div>
     );
   };
 
@@ -411,91 +423,91 @@ export const DropdownSearchableV2: FC<Props> = ({
   };
 
   const maxWidthClass = isMultiple
-    ? maxWidthInput
       ? maxWidthInput
-      : "max-w-[250px]"
-    : "";
+          ? maxWidthInput
+          : "max-w-[250px]"
+      : "";
   const maxHeightClass = maxHeightInput ?? "";
   const beingFocusClass = showOption ? focusedClass ?? "" : "";
   const extraClassName = className ?? "";
   const disableClassCustom = disableClass ?? "bg-gray-100";
   const disabledClass = disabled
-    ? `cursor-not-allowed ${disableClassCustom}`
-    : "";
+      ? `cursor-not-allowed ${disableClassCustom}`
+      : "";
   return (
-    <div
-      ref={wrapperRef}
-      id={id}
-      placeholder={placeholder}
-      className={`${extraClassName} relative select-dropdown flex items-center ${maxWidthClass} ${maxHeightClass} ${beingFocusClass} ${disabledClass}`}
-      data-value={value?.id}
-    >
       <div
-        onClick={() => toggleShowOption()}
-        className={
-          (classNameInput ?? "") +
-          " flex w-full p-1 pl-2 " +
-          (showTriangle ? "pr-7" : "pl-2") +
-          " cursor-pointer align-items-center flex-wrap overflow-y-scroll"
-        }
+          ref={wrapperRef}
+          id={id}
+          placeholder={placeholder}
+          className={`${extraClassName} relative select-dropdown flex items-center ${maxWidthClass} ${maxHeightClass} ${beingFocusClass} ${disabledClass}`}
+          data-value={value?.id}
       >
-        {prefixIcon ?? null}
-        <span className={"text-left"}>
-          {placeholder}{" "}
-          {isMultiple
-            ? countBadge ? `(${countBadge})` : (values && values.length)
-              ? `(${values.length})`
-              : ""
-            : value
-            ? "(1)"
-            : ""}
-        </span>
-        {showTriangle && (
-          <div
-            className={
-              "absolute inset-y-0 right-1 flex items-center justify-center px-1"
-            }
-          >
-            <TriangleDown />
-          </div>
-        )}
-      </div>
-      {showOption ? (
         <div
-          className={
-            "border-0.5 border-primary-border bg-white rounded select-options-container absolute z-100 min-w-[230px] max-w-[352px] rounded-md left-0"
-          }
+            onClick={() => toggleShowOption()}
+            className={
+                (classNameInput ?? "") +
+                " flex w-full p-1 pl-2 " +
+                (showTriangle ? "pr-7" : "pl-2") +
+                " cursor-pointer align-items-center flex-wrap overflow-y-scroll"
+            }
         >
-          {renderSelectedValue()}
-          {!inlineSearch && !disableSearch && (
-            <div className={"w-full px-3 flex"}>
-              <input
-                disabled={disabled}
-                className={
-                  "select-SearchMessage flex-1 py-3 focus:outline-none focus:ring-0" +
-                  (searchInputClassName ?? "")
-                }
-                placeholder={"Nhập nội dung"}
-                type="text"
-                autoComplete="off"
-                value={searchTerm}
-                autoFocus
-                onChange={(e) => handleSearchingValue(e.target.value)}
-              />
-            </div>
+          {prefixIcon ?? null}
+          <span className={"text-left"}>
+          {placeholder}{" "}
+            {isMultiple
+                ? countBadge ? `(${countBadge})` : (values && values.length)
+                    ? `(${values.length})`
+                    : ""
+                : value
+                    ? "(1)"
+                    : ""}
+        </span>
+          {showTriangle && (
+              <div
+                  className={
+                    "absolute inset-y-0 right-1 flex items-center justify-center px-1"
+                  }
+              >
+                <TriangleDown />
+              </div>
           )}
-          <div className={"border-t-0.5 border-primary-border mx-3"} />
-          <div
-            className="select-options-section overflow-y-auto bg-white rounded-md"
-            onScroll={onScroll}
-          >
-            {renderOptions()}
-          </div>
         </div>
-      ) : null}
-    </div>
+        {showOption ? (
+            <div
+                className={
+                  "border-0.5 border-primary-border bg-white rounded select-options-container absolute z-100 min-w-[230px] max-w-[352px] rounded-md left-0"
+                }
+            >
+              {renderSelectedValue()}
+              {!inlineSearch && !disableSearch && (
+                  <div className={"w-full px-3 flex"}>
+                    <input
+                        disabled={disabled}
+                        className={
+                            "select-SearchMessage flex-1 py-3 focus:outline-none focus:ring-0" +
+                            (searchInputClassName ?? "")
+                        }
+                        placeholder={"Nhập nội dung"}
+                        type="text"
+                        autoComplete="off"
+                        value={searchTerm}
+                        autoFocus
+                        onChange={(e) => handleSearchingValue(e.target.value)}
+                    />
+                  </div>
+              )}
+              <div className={"border-t-0.5 border-primary-border mx-3"} />
+              <div
+                  className="select-options-section overflow-y-auto bg-white rounded-md"
+                  onScroll={onScroll}
+              >
+                {renderOptions()}
+              </div>
+            </div>
+        ) : null}
+      </div>
   );
-};
+});
 const defaultProps: Props = {
   isMultiple: false,
   showTriangle: true,
@@ -503,4 +515,5 @@ const defaultProps: Props = {
   disabled: false,
   selectOneByOne: false
 };
+DropdownSearchableV2.displayName = "DropdownSearchableV2";
 DropdownSearchableV2.defaultProps = defaultProps;

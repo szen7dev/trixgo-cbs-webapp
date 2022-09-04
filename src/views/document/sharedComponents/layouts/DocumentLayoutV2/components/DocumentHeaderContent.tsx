@@ -1,9 +1,12 @@
-import React, {ChangeEvent, FC, useRef, useState} from "react";
+import React, {ChangeEvent, FC, useEffect, useRef, useState} from "react";
 import {useOnClickOutside} from "services/hooks/useOnclickOutside";
 import searchIcon from "assets/images/icons8-search-120.png";
 import { useListFilterDocument} from "services/hooks/document/useDocument";
 import {Link} from "react-router-dom";
 import {Oval} from "react-loader-spinner";
+import {useDispatch} from "react-redux";
+import {useAppSelector} from "redux/reducer";
+import {setKeyword} from "redux/reducer/DocumentHomeSlice";
 
 const DocumentHeaderContent:FC =  () => {
     const inputRef = useRef<HTMLInputElement>(null);
@@ -11,11 +14,21 @@ const DocumentHeaderContent:FC =  () => {
     const [search, setSearch] = useState("");
     const [showResult, setShowResult] = useState(false);
 
+    const dispatch = useDispatch();
+    const {filterDropdown, keywordInput} = useAppSelector(
+        (state) => state.documentHome.data
+    );
+
+    useEffect(() => {
+        if (keywordInput.length === 0) {
+            if (inputRef.current) {
+                inputRef.current.value = "";
+            }
+        }
+    }, [keywordInput])
+
     useOnClickOutside(wrapperClass, () => {
         setShowResult(false)
-        if (inputRef.current) {
-            inputRef.current.value = "";
-        }
     })
 
     const setTypingTimeoutRef: any = useRef(null);
@@ -29,10 +42,18 @@ const DocumentHeaderContent:FC =  () => {
         }, 300)
     }
 
+    const onKeyDown = (e: any) => {
+        if (e.key === "Enter") {
+            dispatch(setKeyword(search));
+            setShowResult(false)
+        }
+    }
+
     const { listDocument, isLoading } = useListFilterDocument({
         params: {
             keyword: search,
-            limit: 10
+            limit: 10,
+            ...filterDropdown,
         },
         isFetchList: showResult
     });
@@ -44,13 +65,14 @@ const DocumentHeaderContent:FC =  () => {
                     <img src={searchIcon} alt={"search icon"}/>
                 </div>
                 <input
+                    onKeyDown={onKeyDown}
                     ref={inputRef}
                     onChange={e => handleSearchChange(e)}
-                    className={"pl-12 w-full h-[45px] bg-cbs-bg-input-search rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-none focus:shadow-md transition-all"} placeholder={"Tìm kiếm hồ sơ"}/>
+                    className={"pl-12 w-full h-[45px] focus:bg-white bg-cbs-bg-input-search rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-none focus:shadow-md transition-all"} placeholder={"Tìm kiếm hồ sơ"}/>
 
                 {
                     showResult &&
-                    <div className={"absolute min-h-[300px] focus:bg-white top-full mt-2 w-full rounded border-0.5 border-primary-border p-4 bg-white"}>
+                    <div className={"absolute min-h-[300px] top-full mt-2 w-full rounded border-0.5 border-primary-border p-4 bg-white"}>
                         {
                             isLoading &&
                             <div

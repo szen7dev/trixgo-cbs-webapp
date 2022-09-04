@@ -1,4 +1,4 @@
-import React, {FC, useContext, useState} from "react";
+import React, {FC, useContext, useEffect, useState} from "react";
 import {DropdownSearchableV2} from "shareComponents/common";
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
 import maleUserIcon from "assets/images/icons8-business-building-48.svg";
@@ -18,6 +18,9 @@ import {useProjectCustom} from "services/hooks/items/useProject";
 import {debounce} from "lodash";
 import {useContractIsMembers} from "services/hooks/items/useContract";
 import {Link} from "react-router-dom";
+import {useAppSelector} from "redux/reducer";
+import {setFilterDropdown} from "redux/reducer/DocumentHomeSlice";
+import {useDispatch} from "react-redux";
 
 // import {ModalContext} from "../../contexts/modal";
 // import {useQueryDetailDocument} from "services/hooks/ppt/useDocument";
@@ -25,6 +28,16 @@ import {Link} from "react-router-dom";
 
 const DocumentHomePageV2:FC = () => {
     type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+
+    const dispatch = useDispatch();
+    const {keywordInput} = useAppSelector(
+        (state) => state.documentHome.data
+    );
+
+    useEffect(() => {
+        setPageIndex(0);
+        ref.current&&ref.current.resetPaginate();
+    }, [keywordInput]);
 
     const [recordSelected, setSelectRecord] = useState<any>({});
 
@@ -56,7 +69,8 @@ const DocumentHomePageV2:FC = () => {
             types,
             departmentsID,
             directions,
-            contractsID
+            contractsID,
+            keyword: keywordInput
         },
         isFetchList: true
     });
@@ -129,12 +143,15 @@ const DocumentHomePageV2:FC = () => {
                             const cloneIDs = [...datahubContactsID];
                             cloneIDs.push(item._id);
                             setDatahubContactsID(cloneIDs);
+                            dispatch(setFilterDropdown({keyFilter: "datahubContactsID", dataFilter: cloneIDs}))
 
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
                         }}
                         onClearData={() => {
                             setDatahubContactsID([]);
+                            dispatch(setFilterDropdown({keyFilter: "datahubContactsID", dataFilter: []}))
+
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
                         }}
@@ -142,6 +159,7 @@ const DocumentHomePageV2:FC = () => {
                             const cloneIDs = [...datahubContactsID];
                             const newList = cloneIDs.filter(selectId => selectId !== id);
                             setDatahubContactsID(newList);
+                            dispatch(setFilterDropdown({keyFilter: "datahubContactsID", dataFilter: newList}))
 
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
@@ -166,12 +184,15 @@ const DocumentHomePageV2:FC = () => {
                             const cloneIDs = [...types];
                             cloneIDs.push(item.value);
                             setTypes(cloneIDs);
+                            dispatch(setFilterDropdown({keyFilter: "types", dataFilter: cloneIDs}))
 
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
                         }}
                         onClearData={() => {
                             setTypes([]);
+                            dispatch(setFilterDropdown({keyFilter: "types", dataFilter: []}))
+
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
                         }}
@@ -179,6 +200,7 @@ const DocumentHomePageV2:FC = () => {
                             const cloneIDs = [...types];
                             const newList = cloneIDs.filter(selectId => selectId !== id);
                             setTypes(newList);
+                            dispatch(setFilterDropdown({keyFilter: "types", dataFilter: newList}))
 
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
@@ -204,12 +226,15 @@ const DocumentHomePageV2:FC = () => {
                             const cloneIDs = [...departmentsID];
                             cloneIDs.push(item._id);
                             setDepartmentsID(cloneIDs);
+                            dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: cloneIDs}))
 
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
                         }}
                         onClearData={() => {
                             setDepartmentsID([]);
+                            dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: []}))
+
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
                         }}
@@ -217,6 +242,7 @@ const DocumentHomePageV2:FC = () => {
                             const cloneIDs = [...departmentsID];
                             const newList = cloneIDs.filter(selectId => selectId !== id);
                             setDepartmentsID(newList);
+                            dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: newList}))
 
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
@@ -233,7 +259,13 @@ const DocumentHomePageV2:FC = () => {
                         placeholder={"Ngày nhận"}
                         iconBack={<TriangleDown />}
                         iconFront={<img src={timelineIcon} alt={"----"} />}
-                        onValueChange={(val) => setFromToDate(val)}
+                        onValueChange={(val) => {
+                            setFromToDate(val)
+                            dispatch(setFilterDropdown({keyFilter: "fromDate", dataFilter: val.fromDate}))
+                            dispatch(setFilterDropdown({keyFilter: "toDate", dataFilter: val.toDate}))
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
                         options={[
                             {
                                 text: "Tất cả",
@@ -267,12 +299,15 @@ const DocumentHomePageV2:FC = () => {
                             const cloneIDs = [...directions];
                             cloneIDs.push(item.value);
                             setDirections(cloneIDs);
+                            dispatch(setFilterDropdown({keyFilter: "directions", dataFilter: cloneIDs}))
 
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
                         }}
                         onClearData={() => {
                             setDirections([]);
+                            dispatch(setFilterDropdown({keyFilter: "directions", dataFilter: []}))
+
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
                         }}
@@ -280,6 +315,7 @@ const DocumentHomePageV2:FC = () => {
                             const cloneIDs = [...directions];
                             const newList = cloneIDs.filter(selectId => selectId !== id);
                             setDirections(newList);
+                            dispatch(setFilterDropdown({keyFilter: "directions", dataFilter: newList}))
 
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
@@ -306,12 +342,15 @@ const DocumentHomePageV2:FC = () => {
                             const cloneIDs = [...contractsID];
                             cloneIDs.push(item._id);
                             setContractsID(cloneIDs);
+                            dispatch(setFilterDropdown({keyFilter: "contractsID", dataFilter: cloneIDs}))
 
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
                         }}
                         onClearData={() => {
                             setContractsID([]);
+                            dispatch(setFilterDropdown({keyFilter: "contractsID", dataFilter: []}))
+
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
                         }}
@@ -319,6 +358,7 @@ const DocumentHomePageV2:FC = () => {
                             const cloneIDs = [...contractsID];
                             const newList = cloneIDs.filter(selectId => selectId !== id);
                             setContractsID(newList);
+                            dispatch(setFilterDropdown({keyFilter: "contractsID", dataFilter: newList}))
 
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
