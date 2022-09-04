@@ -279,7 +279,8 @@ const ProjectBiddingPage: FC = () => {
                     className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <NavLink to={`/bidding/plan/${projectID}/${item._id}`}>{item.name}</NavLink>
+                    {/* <NavLink to={`/bidding/plan/${projectID}/${item._id}`}>{item.name}</NavLink> */}
+                    {item.name}
                     <p className={"mt-1 text-gray-500"}>
                       {item.userCreate?.bizfullname}
                       {moment(item.createAt).format("DD/MM/YYYY HH:mm")}

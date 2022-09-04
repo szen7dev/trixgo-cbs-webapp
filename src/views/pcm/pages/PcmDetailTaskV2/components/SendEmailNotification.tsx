@@ -20,9 +20,9 @@ type Props = {
 }
 
 export const SendEmailNotification: FC<Props> = ({ task, userId = '' }) => {
-    const accessUsers = useMemo(() => {
+    const accessUsersID = useMemo(() => {
         let accessUsersID = [];
-        if(task.accessUsers && task.accessUsers.length) {
+        if(task.accessUsers && task.accessUsers?.length) {
             accessUsersID = task.accessUsers.map(user => user._id);
         } else{
             accessUsersID = task.related?.map(user => user._id) || [];
@@ -38,6 +38,16 @@ export const SendEmailNotification: FC<Props> = ({ task, userId = '' }) => {
 
         return accessUsersID.filter(userID => userID !== userId);
     }, [task._id]);
+
+    const accessUsers = useMemo(() => {
+        if(!task) return [];
+
+        if (task.accessUsers && task.accessUsers?.length) {
+            return task.accessUsers;
+        } else {
+            return [task.author, task.assignee, ...task?.related];
+        }
+    }, [task])
 
     const focusElementRef = useRef<HTMLDivElement>(null);
 
@@ -68,15 +78,15 @@ export const SendEmailNotification: FC<Props> = ({ task, userId = '' }) => {
     };
 
     const getStateCheckedAll = useCallback(() => {
-        if (!idsChecked.length && !accessUsers.length) return false;
-        return idsChecked.length == accessUsers.length;
-    }, [idsChecked.length, accessUsers.length]);
+        if (!idsChecked.length && !accessUsersID.length) return false;
+        return idsChecked.length == accessUsersID.length;
+    }, [idsChecked.length, accessUsersID.length]);
 
     const onClickCheckAll = () => {
-        if (idsChecked.length == accessUsers.length) {
+        if (idsChecked.length == accessUsersID.length) {
             setIdsChecked([]);
         } else {
-            setIdsChecked(accessUsers);
+            setIdsChecked(accessUsersID);
         }
     };
 
@@ -228,7 +238,7 @@ export const SendEmailNotification: FC<Props> = ({ task, userId = '' }) => {
                                         <table>
                                             <tbody className='overflow-y-auto'>
                                                 {
-                                                    task.accessUsers?.map((item, index) => {
+                                                    accessUsers.map((item, index) => {
                                                         if (item._id !== userId) {
                                                             const textSearch = keyword?.toLowerCase();
                                                             const fullname = item.bizfullname?.toLowerCase();

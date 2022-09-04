@@ -63,7 +63,7 @@ const fieldInputByRow = [
 const useInitialValues = (
 	departmentID: string, companyID: string, keywordPackage?: string,
 	keywordSender?: string, keywordReceiver?: string, keywordProperty?: string,
-	keywordContract?: string, keywordStorage?: string, keywordDatahubContact?: string ) => {
+	keywordContract?: string, keywordStorage?: string, keywordDatahubContact?: string, title?: string ) => {
 
 	const { listPackage } = useQueryListPackage({ keyword: keywordPackage, departmentID });
 	const { listContact: listContactSender } = useQueryContact({ companyID, keyword: keywordSender });
@@ -84,16 +84,18 @@ const useInitialValues = (
 	});
 	const { listContracts } = useQueryItemContract({ companyID, keyword: keywordContract });
 
-	if (!companyID || !departmentID) {
-		return {
-			listPackage: [],
-			listContactSender: [],
-			listContactReceiver: [],
-			fields: [],
-			properties: [],
-			listStorages: [],
-			listContracts: [],
-		};
+	if (title != 'Cập nhật') {
+		if (!companyID || !departmentID) {
+			return {
+				listPackage: [],
+				listContactSender: [],
+				listContactReceiver: [],
+				fields: [],
+				properties: [],
+				listStorages: [],
+				listContracts: [],
+			};
+		}
 	}
 
 	return {
@@ -150,7 +152,8 @@ export const ModalCreateDocument: React.FC = () => {
 		keywordProperty,
 		keywordContract,
 		keywordStorage,
-		keywordDatahubContact
+		keywordDatahubContact,
+		state?.title
 	);
 	
 	const listFormFieldsDropdown = React.useMemo((): {
@@ -227,7 +230,7 @@ export const ModalCreateDocument: React.FC = () => {
 		},
 		[state]
 	);
-	
+
 	return (
 		<ModalContainer isModalOpen={state.isShow} toggle={() => false}>
 			<div

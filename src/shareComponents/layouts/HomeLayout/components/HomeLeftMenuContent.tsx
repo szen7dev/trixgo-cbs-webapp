@@ -27,7 +27,7 @@ export const HomeLeftMenuContent:FC = () => {
     const { openModal } = useModal();
     const { user } = useAuth();
     const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
-    
+
     const listTab : {
         label: string,
         icon: string,
@@ -63,7 +63,7 @@ export const HomeLeftMenuContent:FC = () => {
             icon: paymentImage,
             count: 0,
             route: '/pcm/payment'
-        },        
+        },
         {
             label: "Việc của tôi",
             icon: mailOutLineIcon,
@@ -87,6 +87,12 @@ export const HomeLeftMenuContent:FC = () => {
             icon: linkIcon,
             count: 0,
             route: '/pcm/related'
+        },
+        {
+            label: "Việc nháp",
+            icon: fileIcon,
+            count: 0,
+            route: '/pcm/draft'
         },
         {
             label: "Báo cáo động",

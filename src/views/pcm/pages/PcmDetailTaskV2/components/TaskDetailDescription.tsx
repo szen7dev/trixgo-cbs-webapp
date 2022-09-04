@@ -18,11 +18,12 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
 
     const handleUpdateDescription = async () => {
         if (editorRef.current) {
-            const description = editorRef.current.getContent();
+            const contentRaw = editorRef.current.getContent({ format: 'raw' });
+
             await updateTaskAsync({
                 taskID: task._id,
                 isUpdateNews: true,
-                description
+                description: contentRaw
             });
             refetchInfo?.();
             setEditDescription(false);
@@ -35,7 +36,7 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                 <img src={iconNote} alt={'-----'} />
             </span>
             <div className={"flex-1"}>
-                <div className={"text-primary-gray text-lg font-bold"}>Mô tả</div>
+                <div className={"text-primary-gray text-[16px] font-bold"}>Mô tả</div>
                 <div className={"mt-2"} dangerouslySetInnerHTML={{
                     __html: (editDescription && task.description) ? task.description : task.description?.replace(/\n/g, '<br />')
                 }} />

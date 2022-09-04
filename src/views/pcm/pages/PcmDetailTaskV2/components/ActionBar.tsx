@@ -1,20 +1,22 @@
 import React, {FC, useState} from "react";
-import {useHistory} from "react-router-dom";
+import { useHistory, Link} from "react-router-dom";
 import iconBack from "assets/images/icon-back-gray.svg";
 import iconLinkCopy from "assets/images/icons8-link-96-v3.svg";
 import {SendEmailNotification} from "./SendEmailNotification";
 import iconCopy from "assets/images/icons8-copy-96.svg";
-import iconRemove from "assets/images/icons8-remove-96.svg";
 import iconPrint from "assets/images/icons8-print-96.svg";
-import {TaskHistoryLog} from "./TaskHistoryLog";
-import iconMember from "assets/images/icons8-member-48-white.svg";
-import {SendToChat} from "./SendToChat";
+// import iconRemove from "assets/images/icons8-remove-96.svg";
+// import {TaskHistoryLog} from "./TaskHistoryLog";
+// import iconMember from "assets/images/icons8-member-48-white.svg";
+// import {SendToChat} from "./SendToChat";
 import {OtherActions} from "./OtherActions";
 import CollapseShow from "assets/images/CBS-Collapse-Show.svg";
 import CollapseHide from "assets/images/CBS-Collapse-Hide.svg";
 import { Task } from "typings/task";
 import { AddUserRelated } from "./AddUserRelated";
 import { User } from "typings/user";
+import {useModal} from "services/hooks/useModal";
+import { ModalCloneTask } from "./ModalCloneTask";
 
 type Props = {
     handleCollapse?: () => void;
@@ -27,6 +29,8 @@ type Props = {
 export const ActionTaskDetailBar:FC<Props> = ({ task, user, refetchTaskInfo, handleCollapse, collapse }) => {
     const [activeCopyTextTooltip, setActiveCopyTextTooltip] = useState(false);
     const history = useHistory();
+
+    const { openModal } = useModal();
 
     const copyLink = () => {
         const copyText = window.location.href;
@@ -55,16 +59,27 @@ export const ActionTaskDetailBar:FC<Props> = ({ task, user, refetchTaskInfo, han
                     <div className={"absolute top-full bg-primary-gray p-2 rounded w-[170px] text-left text-white transition-all " + (activeCopyTextTooltip?"visible opacity-100":"invisible opacity-0")}>Đã sao chép đường liên kết</div>
                 </button>
                 <SendEmailNotification task={task} userId={user?._id} />
-                <button className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mx-3"}>
+                <button
+                    className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mx-3"}
+                    onClick={() =>
+                        openModal(
+                            <div className="t-add-new-task-dialog text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
+                                <ModalCloneTask task={task} />
+                            </div>
+                        )
+                    }
+                >
                     <img src={iconCopy} alt={"----"} className={"w-[18px]"}/>
                 </button>
-                <button className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mx-3"}>
+                {/* <button className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mx-3"}>
                     <img src={iconRemove} alt={"----"} className={"w-[18px]"}/>
-                </button>
-                <button className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mx-3"}>
-                    <img src={iconPrint} alt={"----"} className={"w-[18px]"}/>
-                </button>
-                <SendToChat/>
+                </button> */}
+                <Link to={`/pcm/detail/${task._id}/print/1`}>
+                    <button className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mx-3"}>
+                        <img src={iconPrint} alt={"----"} className={"w-[18px]"}/>
+                    </button>
+                </Link>
+                {/* <SendToChat/> */}
                 <AddUserRelated task={task} onConfirmAddUserRelated={refetchTaskInfo} />
             </div>
 
@@ -79,11 +94,11 @@ export const ActionTaskDetailBar:FC<Props> = ({ task, user, refetchTaskInfo, han
                     }
                 </div>
             </button>
-            <TaskHistoryLog/>
-            <button className={"rounded bg-cbs-green-medium h-[36px] text-white flex items-center justify-center px-3 mx-3"}>
+            {/* <TaskHistoryLog/> */}
+            {/* <button className={"rounded bg-cbs-green-medium h-[36px] text-white flex items-center justify-center px-3 mx-3"}>
                 <img src={iconMember} alt={"----"} className={"w-[24px] mr-2"}/>
                 <span>Chia sẻ</span>
-            </button>
+            </button> */}
             <OtherActions task={task} />
         </div>
     )

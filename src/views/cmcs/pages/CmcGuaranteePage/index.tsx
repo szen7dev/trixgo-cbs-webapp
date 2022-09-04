@@ -68,11 +68,6 @@ export const CmcGuaranteePage: FC = () => {
             initialValues={{}}
           /> */}
         </div>
-        {createPermission &&
-          <button className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold">
-            Tạo mới
-          </button>
-        }
       </header>
 
       <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">

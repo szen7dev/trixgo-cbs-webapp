@@ -31,7 +31,7 @@ export const PmHeaderContent:FC = () => {
                 {
                     showResult &&
                     <div className={"absolute top-full mt-2 w-full rounded border-0.5 border-primary-border p-4 bg-white"}>
-                        <div className={"flex items-center py-2"}>
+                        {/* <div className={"flex items-center py-2"}>
                             <div className={"w-[36px] flex items-center justify-center"}>
                                 <img src={searchIcon} alt={"----"} className={"w-[18px] h-[18px]"}/>
                             </div>
@@ -67,7 +67,7 @@ export const PmHeaderContent:FC = () => {
                                 <img src={userAvt} alt={"----"} className={"w-[36px] h-[36px] min-w-[36px] min-h-[36px] max-w-[36px] max-h-[36px] rounded-full overflow-hidden"}/>
                             </div>
                             <p className={"ml-4"}>Lê Lưu Phong-CPMI (người tạo phản hồi)</p>
-                        </div>
+                        </div> */}
                     </div>
                 }
             </div>
