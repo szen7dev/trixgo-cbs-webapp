@@ -197,10 +197,10 @@ export const TaskDetailFolder: FC<Props> = ({
                     </button>
                 )}
 
-                <div className={"flex items-center mx-6 text-primary-gray"}>
+                {/* <div className={"flex items-center mx-6 text-primary-gray"}>
                     <img src={iconSnooze} alt={"----"} className={"mr-2"} />
                     <span>1 day</span>
-                </div>
+                </div> */}
 
                 <TimeRange
                     fromDateDefault={moment(task.actualStartTime).format('DD/M/YY')}
