@@ -322,7 +322,7 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
                         </div>
                     </div>
                     <div
-                        className={"comment-text mt-2"}
+                        className={"comment-text mt-2 break-all"}
                         dangerouslySetInnerHTML={{
                             __html: nl2p(comment.content)
                         }}
