@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { useParams, useHistory, Link, Redirect } from "react-router-dom";
 import { toast } from "react-toastify";
 // import ReactDatePicker from "react-datepicker";
@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
  */
 // import IconPlus from "assets/images/icons8-plus-math-100.png";
 import styles from "../../styles/pcm_print.module.css";
-import { CommentFull } from "views/pcm/shareComponents/common";
+import {CommentFull, PcmPrintTaskComment} from "views/pcm/shareComponents/common";
 import { CheckList } from "views/pcm/pages/PcmDetailTask/components";
 import { PCM_SUBTYPE, APP_ID } from "apis/localdb";
 
@@ -93,7 +93,7 @@ const PcmPrintTaskTypeFour: FC = () => {
     const authorAndAssigneeAndRelatedID = [...authorAndAssigneeID, ...relatedsID].filter(Boolean);
     const hasPermissionCreateCheckList = authorAndAssigneeID.includes(user._id);
     const hasPermissionComment = [...authorAndAssigneeAndRelatedID, ...groupMembersID].includes(
-      user?._id
+        user?._id
     );
 
     setPermissions({
@@ -114,12 +114,12 @@ const PcmPrintTaskTypeFour: FC = () => {
   // console.log(taskInfo)
 
   return (
-    <div className="bg-cbs-gray overflow-auto" style={{ height: '100vh' }}>
-      <div className="overflow-auto h-auto py-6">
-        <div className="max-w-[791px] h-auto bg-white w-full mx-auto pl-[3.75rem] pr-6 py-6 shadow-cbs-md">
-          <table ref={componentRef} className="space-y-5 table-fixed w-full">
-            <style type="text/css" media="print">
-              {`
+      <div className="bg-cbs-gray overflow-auto" style={{ height: '100vh' }}>
+        <div className="overflow-auto h-auto py-6">
+          <div className="max-w-[791px] h-auto bg-white w-full mx-auto pl-[3.75rem] pr-6 py-6 shadow-cbs-md">
+            <table ref={componentRef} className="space-y-5 table-fixed w-full">
+              <style type="text/css" media="print">
+                {`
 								@media print { 
 									table { page-break-inside:auto }
 									thead { display:table-header-group; }
@@ -133,30 +133,30 @@ const PcmPrintTaskTypeFour: FC = () => {
 									}
 								}
 							`}
-            </style>
-            <tbody>
+              </style>
+              <tbody>
               <tr>
                 <td>
                   <header>
                     <div className={styles.headerTitle}>
                       <div className="row-span-2 flex space-x-2.5">
                         {assigneeAndRelated.slice(0, 3).map((item) => (
-                          <div key={item._id} className={styles.headerImageContainer}>
-                            <img
-                              src={`${process.env.REACT_APP_URL_S3_COMPANY}/${item.company?.image}`}
-                              alt={item.company?.name}
-                              className="border-cbs-border border-0.5"
-                            />
-                          </div>
+                            <div key={item._id} className={styles.headerImageContainer}>
+                              <img
+                                  src={`${process.env.REACT_APP_URL_S3_COMPANY}/${item.company?.image}`}
+                                  alt={item.company?.name}
+                                  className="border-cbs-border border-0.5"
+                              />
+                            </div>
                         ))}
                       </div>
                       <div className="text-x-small uppercase">{taskInfo.project?.sign}.{taskInfo.project?.name}</div>
                       <div className="row-span-2">
                         <div className={styles.headerImageContainer}>
                           <img
-                            src={`${process.env.REACT_APP_URL_S3_COMPANY}/${taskInfo.author?.company?.image}`}
-                            alt={`${taskInfo.author?.company?.name}`}
-                            className="border-cbs-border border-0.5"
+                              src={`${process.env.REACT_APP_URL_S3_COMPANY}/${taskInfo.author?.company?.image}`}
+                              alt={`${taskInfo.author?.company?.name}`}
+                              className="border-cbs-border border-0.5"
                           />
                         </div>
                       </div>
@@ -179,9 +179,9 @@ const PcmPrintTaskTypeFour: FC = () => {
                           <span className="font-normal">
                             <span className="inline-block w-8 h-8 rounded-full overflow-hidden align-middle mr-2">
                               <img
-                                src={`${process.env.REACT_APP_URL_S3_USER}/${taskInfo.author?.image}`}
-                                alt={taskInfo.author?.bizfullname}
-                                className="h-full w-full"
+                                  src={`${process.env.REACT_APP_URL_S3_USER}/${taskInfo.author?.image}`}
+                                  alt={taskInfo.author?.bizfullname}
+                                  className="h-full w-full"
                               />
                             </span>
                             {taskInfo.author?.bizfullname}
@@ -205,14 +205,14 @@ const PcmPrintTaskTypeFour: FC = () => {
                         <p className="space-x-1">
                           Liên quan:
                           {assigneeAndRelated.map((item) => (
-                            <span
-                              key={item._id}
-                              className="inline-block w-8 h-8 rounded-full overflow-hidden align-middle border-cbs-border border-0.5"
-                            >
+                              <span
+                                  key={item._id}
+                                  className="inline-block w-8 h-8 rounded-full overflow-hidden align-middle border-cbs-border border-0.5"
+                              >
                               <img
-                                src={`${process.env.REACT_APP_URL_S3_USER}/${item?.image}`}
-                                alt={item.bizfullname}
-                                className="h-full w-full"
+                                  src={`${process.env.REACT_APP_URL_S3_USER}/${item?.image}`}
+                                  alt={item.bizfullname}
+                                  className="h-full w-full"
                               />
                             </span>
                           ))}
@@ -227,19 +227,19 @@ const PcmPrintTaskTypeFour: FC = () => {
                   <main className="space-y-5">
                     {/* Nội dung */}
                     {taskInfo?.description && (
-                      <section className="mt-2">
-                        <div className="font-bold">
-                          <span>NỘI DUNG</span>
-                        </div>
-                        <div className="mt-2.5">
-                          <div
-                            className="min-h-[300px]"
-                            dangerouslySetInnerHTML={{
-                              __html: taskInfo?.description?.replace(/\n/g, '<br />')
-                            }}
-                          />
-                        </div>
-                      </section>
+                        <section className="mt-2">
+                          <div className="font-bold">
+                            <span>NỘI DUNG</span>
+                          </div>
+                          <div className="mt-2.5">
+                            <div
+                                className="min-h-[300px]"
+                                dangerouslySetInnerHTML={{
+                                  __html: taskInfo?.description?.replace(/\n/g, '<br />')
+                                }}
+                            />
+                          </div>
+                        </section>
                     )}
                     {/* Việc xử lý */}
                     <section className="mt-2">
@@ -325,10 +325,72 @@ const PcmPrintTaskTypeFour: FC = () => {
                           />
                         </div>
                       </div>
-                      <div className="border-cbs-border border-0.5 mt-2.5">
-
-                      </div>
+                      <table className="table-fixed w-full mt-2.5">
+                        <tbody>
+                        <tr>
+                          <td className={"border-0.5 border-primary-border w-[40px] p-2 text-center"}>
+                            1
+                          </td>
+                          <td className={"border-0.5 border-primary-border p-2"}>
+                            Cán bộ thanh toán kiểm tra hồ sơ thanh toán đợt 9 (Tư vấn B.I.M đợt 4)
+                          </td>
+                          <td className={"border-0.5 border-primary-border p-2"}>
+                            <div className={"flex items-center justify-end"}>
+                              <div className={"p-2 rounded-md bg-cbs-form-input-bg"}>
+                                <span className={"text-primary-gray"}>22/8/2022</span>
+                                <span className={"bg-negative rounded px-2 ml-4 text-white"}>Quá hạn</span>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className={"border-0.5 border-primary-border w-[40px] p-2 text-center"}>
+                            2
+                          </td>
+                          <td className={"border-0.5 border-primary-border p-2"}>
+                            <PcmPrintTaskComment/>
+                          </td>
+                          <td className={"border-0.5 border-primary-border p-2"}>
+                            <PcmPrintTaskComment/>
+                            <PcmPrintTaskComment/>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className={"border-0.5 border-primary-border w-[40px] p-2 text-center"}>
+                            3
+                          </td>
+                          <td className={"border-0.5 border-primary-border p-2"}>
+                            Cán bộ thanh toán kiểm tra hồ sơ thanh toán đợt 9 (Tư vấn B.I.M đợt 4)
+                          </td>
+                          <td className={"border-0.5 border-primary-border p-2"}>
+                            <div className={"flex items-center justify-end"}>
+                              <div className={"p-2 rounded-md bg-cbs-form-input-bg"}>
+                                <span className={"text-primary-gray"}>22/8/2022</span>
+                                <span className={"bg-cbs-inline-badge-blue rounded px-2 ml-4 text-white"}>Đang triển khai</span>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className={"border-0.5 border-primary-border w-[40px] p-2 text-center"}>
+                            4
+                          </td>
+                          <td className={"border-0.5 border-primary-border p-2"}>
+                            Cán bộ thanh toán kiểm tra hồ sơ thanh toán đợt 9 (Tư vấn B.I.M đợt 4)
+                          </td>
+                          <td className={"border-0.5 border-primary-border p-2"}>
+                            <div className={"flex items-center justify-end"}>
+                              <div className={"p-2 rounded-md bg-cbs-form-input-bg"}>
+                                <span className={"text-primary-gray"}>22/8/2022</span>
+                                <span className={"bg-cbs-completed rounded px-2 ml-4 text-white"}>Hoàn thành</span>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                        </tbody>
+                      </table>
                     </section>
+
                     {/* Xác nhận */}
                     <section>
                       <div className="flex justify-between">
@@ -340,81 +402,110 @@ const PcmPrintTaskTypeFour: FC = () => {
                       <div className="mt-2.5">
                         <table className="border-collapse border-cbs-border border-0.5 w-full">
                           <tbody>
-                            {taskInfo.signatures && taskInfo.signatures.length ? (
+                          {taskInfo.signatures && taskInfo.signatures.length ? (
                               taskInfo.signatures.map((item) => (
-                                <tr
-                                  key={item._id}
-                                  className="border-b-0.5 border-cbs-border align-top"
-                                >
-                                  <td className="pl-5 pb-3 pt-2.5">
+                                  <tr
+                                      key={item._id}
+                                      className="border-b-0.5 border-cbs-border align-top"
+                                  >
+                                    <td className="pl-5 pb-3 pt-2.5">
                                     <span className="inline-block w-8 h-8 rounded-full overflow-hidden align-middle">
                                       <img
-                                        src={`${process.env.REACT_APP_URL_S3_USER}/${item.author?.image}`}
-                                        className="h-full w-full"
-                                        alt={item.author?.bizfullname}
+                                          src={`${process.env.REACT_APP_URL_S3_USER}/${item.author?.image}`}
+                                          className="h-full w-full"
+                                          alt={item.author?.bizfullname}
                                       />
                                     </span>
-                                  </td>
-                                  <td className="pl-5 pb-3 pt-4 text-cbs-highlight-color">
-                                    {item.author?.bizfullname}
-                                  </td>
-                                  <td className="pl-5 pb-3 pt-4 text-cbs-primary">
-                                    {moment(item.createAt).format("DD/MM/YYYY HH:mm")}
-                                  </td>
-                                  <td className="pl-5 pb-3 pt-4">
-                                    <div className="w-28 h-11">
-                                      {item.author?.signature && (
-                                        <img
-                                          className="h-full w-full object-cover"
-                                          src={`${process.env.REACT_APP_URL_S3_USER}/${item.author?.signature}`}
-                                          alt={item.author?.bizfullname}
-                                        />
-                                      )}
-                                    </div>
-                                  </td>
-                                  {/* <td className="pl-5 pb-3 pt-4">
+                                    </td>
+                                    <td className="pl-5 pb-3 pt-4 text-cbs-highlight-color">
+                                      {item.author?.bizfullname}
+                                    </td>
+                                    <td className="pl-5 pb-3 pt-4 text-cbs-primary">
+                                      {moment(item.createAt).format("DD/MM/YYYY HH:mm")}
+                                    </td>
+                                    <td className="pl-5 pb-3 pt-4">
+                                      <div className="w-28 h-11">
+                                        {item.author?.signature && (
+                                            <img
+                                                className="h-full w-full object-cover"
+                                                src={`${process.env.REACT_APP_URL_S3_USER}/${item.author?.signature}`}
+                                                alt={item.author?.bizfullname}
+                                            />
+                                        )}
+                                      </div>
+                                    </td>
+                                    {/* <td className="pl-5 pb-3 pt-4">
                                     <button className="px-2.5 py-1.5 bg-cbs-gray">Khoá</button>
                                   </td> */}
-                                </tr>
+                                  </tr>
                               ))
-                            ) : (
+                          ) : (
                               <></>
-                            )}
+                          )}
                           </tbody>
                         </table>
                       </div>
                     </section>
 
                     {/* Thảo luận */}
-                    {/*<section>*/}
-                    {/*  <div className="font-bold">*/}
-                    {/*    <span>THẢO LUẬN</span>*/}
-                    {/*  </div>*/}
-                    {/*  <div className="mt-2.5 border-cbs-border border-0.5">*/}
-                    {/*    <CommentFull*/}
-                    {/*      userId={user?._id}*/}
-                    {/*      taskInfo={taskInfo}*/}
-                    {/*      comments={listComments}*/}
-                    {/*      amountComment={taskInfo.amountComment}*/}
-                    {/*      totalRecord={totalRecord}*/}
-                    {/*      limit={limit}*/}
-                    {/*      hasPermission={permissions.hasPermissionComment}*/}
-                    {/*      onConfirm={(method?: string) => {*/}
-                    {/*        if (method && method === "INSERT") {*/}
-                    {/*          setTaskData((previous) => ({*/}
-                    {/*            ...previous,*/}
-                    {/*            amountComment: taskData.amountComment + 1,*/}
-                    {/*          }));*/}
-                    {/*        }*/}
-                    {/*      }}*/}
-                    {/*    />*/}
-                    {/*  </div>*/}
-                    {/*</section>*/}
+                    <section>
+                      <div className="font-bold">
+                        <span>THẢO LUẬN</span>
+                      </div>
+                      <div className="mt-2.5 border-cbs-border border-0.5">
+                        <CommentFull
+                            userId={user?._id}
+                            taskInfo={taskInfo}
+                            comments={listComments}
+                            amountComment={taskInfo.amountComment}
+                            totalRecord={totalRecord}
+                            limit={limit}
+                            hasPermission={permissions.hasPermissionComment}
+                            onConfirm={(method?: string) => {
+                              if (method && method === "INSERT") {
+                                setTaskData((previous) => ({
+                                  ...previous,
+                                  amountComment: taskData.amountComment + 1,
+                                }));
+                              }
+                            }}
+                        />
+                        {/* <div className="text-x-large py-3 px-6 font-bold">
+                  Bình luận {taskInfo.amountComment > 0 ? `(${taskInfo.amountComment})` : ''}
+                </div>
+                <RootCommentsList
+                  className="px-5"
+                  userID={user?._id}
+                  comments={listComments}
+                  totalRecord={totalRecord}
+                  limit={limit}
+                  taskID={taskId}
+                />
+                <div className="flex flex-col w-full max-h-full overflow-y-auto">
+                  <ReplyCommentField
+                    attachFile
+                    inputContainerClassName="flex w-full p-2"
+                    fileContainerClassName="border-0.5 border-l-0 border-cbs-border mr-7 divide-y-0.5 divide-cbs-border"
+                    projectID={taskInfo?.project?._id}
+                    groupID={taskInfo?.group?._id}
+                    taskID={taskId}
+                    onConfirm={(method?: string) => {
+                      if (method && method === "INSERT") {
+                        setTaskData((previous) => ({
+                          ...previous,
+                          amountComment: taskData.amountComment + 1,
+                        }));
+                      }
+                    }}
+                  />
+                </div> */}
+                      </div>
+                    </section>
                   </main>
                 </td>
               </tr>
-            </tbody>
-            <tfoot>
+              </tbody>
+              <tfoot>
               <tr>
                 <td>
                   <footer>
@@ -429,11 +520,11 @@ const PcmPrintTaskTypeFour: FC = () => {
                   </footer>
                 </td>
               </tr>
-            </tfoot>
-          </table>
+              </tfoot>
+            </table>
+          </div>
         </div>
       </div>
-    </div>
   );
 };
 

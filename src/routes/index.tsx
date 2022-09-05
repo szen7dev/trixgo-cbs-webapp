@@ -52,7 +52,7 @@ const AccountingLayout = lazy(() => import('views/accounting/shareComponents/lay
 const PcmPrintTaskTypeOnePage     = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeOne'));
 const PcmPrintTaskTypeTwoPage     = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeTwo'));
 const PcmPrintTaskTypeThreePage   = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeThree'));
-const PcmPrintTaskTypeFourPage   = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeFour'));
+const PcmPrintTaskTypeFourPage    = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeFour'));
 
 const Routes: FC = () => {
     useEffect(() => {
