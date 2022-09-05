@@ -66,7 +66,9 @@ const TimeRange:FC<Props> = ({fromDateDefault, toDateDefault, toTimeDefault, rem
     return (
         <div className={"relative"}>
             <button onClick={() => setShowOption(!showOption)} className={"flex items-center bg-cbs-form-input-bg rounded px-2 h-[30px]"}>
-                {fromDate} - {toDate} {toTime} <span className={"text-white rounded text-xs bg-negative px-2 mx-2"}>Quá hạn</span> <TriangleDown/>
+                {fromDate} - {toDate} {toTime} 
+                {/* <span className={"text-white rounded text-xs bg-negative px-2 mx-2"}>Quá hạn</span>  */}
+                <TriangleDown/>
             </button>
             {
                 showOption &&
