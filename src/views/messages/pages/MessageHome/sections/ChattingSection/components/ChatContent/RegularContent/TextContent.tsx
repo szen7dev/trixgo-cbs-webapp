@@ -37,7 +37,7 @@ export const TextChatContent:FC<Props> = ({message,className,showSenderName, isM
                     if (matchs) {
                         const fullName = matchs[1];
                         const userId = matchs[2];
-                        return `<span class="text-primary cursor-pointer user-tag-in-content" data-userId="${userId}">@${fullName}</span>`;
+                        return `<span class="cursor-pointer user-tag-in-content" data-userId="${userId}">@${fullName}</span>`;
                     } else {
                         return replacement;
                     }
@@ -50,7 +50,7 @@ export const TextChatContent:FC<Props> = ({message,className,showSenderName, isM
                     // eslint-disable-next-line no-useless-escape
                     const matchs = (/(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/g).exec(replacement);
                     if (matchs) {
-                        return `<a class="text-primary" href="${matchs[0]}" target="_blank">${matchs[0]}</a>`
+                        return `<a class="link-in-content" href="${matchs[0]}" target="_blank">${matchs[0]}</a>`
                     }
                 });
         }

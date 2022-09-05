@@ -103,6 +103,7 @@ export interface addTaskPayload {
   expiredTime: string;
   relatedIDs: string[];
   authorAttachs: string[];
+  isNotiEmail: boolean;
 }
 
 export interface updateTaskPayload {

@@ -266,6 +266,7 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
             <div className={"mt-2 editor ml-12 border border-primary-border rounded"}>
                 <div className={"px-2 py-4"}>
                     <SendToMultiSelected
+                        projectId={task.project?._id}
                         selectedUser={selectedUser}
                         setSelectedUser={setSelectedUser}
                     />

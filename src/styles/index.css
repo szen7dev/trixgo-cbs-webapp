@@ -1775,3 +1775,16 @@ img {
 .button-icon {
   @apply border-0 h-full bg-cbs-chat-input-bg !important;
 }
+.user-tag-in-content,
+.link-in-content {
+  @apply font-bold;
+}
+.is-out .user-tag-in-content,.is-out .link-in-content {
+  @apply text-white;
+}
+.is-in .user-tag-in-content,
+.is-in .link-in-content,
+.chatting-input-reply .user-tag-in-content,
+.chatting-input-reply .link-in-content {
+  @apply text-primary;
+}
