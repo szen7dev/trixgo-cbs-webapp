@@ -470,35 +470,6 @@ const PcmPrintTaskTypeFour: FC = () => {
                               }
                             }}
                         />
-                        {/* <div className="text-x-large py-3 px-6 font-bold">
-                  Bình luận {taskInfo.amountComment > 0 ? `(${taskInfo.amountComment})` : ''}
-                </div>
-                <RootCommentsList
-                  className="px-5"
-                  userID={user?._id}
-                  comments={listComments}
-                  totalRecord={totalRecord}
-                  limit={limit}
-                  taskID={taskId}
-                />
-                <div className="flex flex-col w-full max-h-full overflow-y-auto">
-                  <ReplyCommentField
-                    attachFile
-                    inputContainerClassName="flex w-full p-2"
-                    fileContainerClassName="border-0.5 border-l-0 border-cbs-border mr-7 divide-y-0.5 divide-cbs-border"
-                    projectID={taskInfo?.project?._id}
-                    groupID={taskInfo?.group?._id}
-                    taskID={taskId}
-                    onConfirm={(method?: string) => {
-                      if (method && method === "INSERT") {
-                        setTaskData((previous) => ({
-                          ...previous,
-                          amountComment: taskData.amountComment + 1,
-                        }));
-                      }
-                    }}
-                  />
-                </div> */}
                       </div>
                     </section>
                   </main>
