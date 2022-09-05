@@ -49,7 +49,7 @@ export const TaskDetailMember: FC<Props> = ({ task }) => {
                     </div>
                 </div>
                 {/*UI DEMO*/}
-                <div className={"flex items-center flex-wrap mt-2"}>
+                {/* <div className={"flex items-center flex-wrap mt-2"}>
                     {
                         [...Array(10)].map((e, i) => (
                             <img key={i} alt={"----"} src={taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mr-2 border-0.5 border-primary-border"} />
@@ -61,7 +61,7 @@ export const TaskDetailMember: FC<Props> = ({ task }) => {
                     <button className={"text-xl rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] bg-cbs-form-input-bg border-0.5 border-primary-border flex items-center justify-center text-primary-gray"}>
                             +
                     </button>
-                </div>
+                </div> */}
             </div>
         </div>
     )

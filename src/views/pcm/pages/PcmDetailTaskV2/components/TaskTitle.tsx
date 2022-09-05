@@ -87,6 +87,22 @@ export const TaskDetailTitle: FC<Props> = ({ task }) => {
                         id: 3,
                         text: "Hoàn thành"
                     },
+                    {
+                        id: 4,
+                        text: "Treo lại"
+                    },
+                    {
+                        id: 5,
+                        text: "Chờ người khác giải quyết"
+                    },
+                    {
+                        id: 6,
+                        text: "Tiếp tục theo dõi"
+                    },
+                    {
+                        id: 7,
+                        text: "Khóa đóng"
+                    },
                 ]}
                 placeholder={"Trạng thái"}
                 onValueChange={handleChangeStatus}

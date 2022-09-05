@@ -73,11 +73,12 @@ export const OtherActions:FC<Props> = ({ task }) => {
                         >
                             In ấn - Mẫu phụ lục ảnh
                         </Link>
-                        <button
-                            className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
+                        <Link
+                            className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header block"}
+                            to={`/pcm/detail/${task._id}/print/4`}
                         >
                             In ấn - Yêu cầu, đệ trình
-                        </button>
+                        </Link>
                     </div>
                 </div>
             }
