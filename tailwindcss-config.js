@@ -224,6 +224,7 @@ module.exports = {
             left: {
                 '[75px]' : '75px',
                 '[68px]' : '68px',
+                '[50%]' : '50%',
             },
             right: {
                 '[10px]' : '10px',

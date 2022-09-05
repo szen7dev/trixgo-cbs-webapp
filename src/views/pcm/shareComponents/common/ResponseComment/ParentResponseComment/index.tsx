@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useState, useEffect, useContext, useMemo } from "react";
+import {FC, useContext, useEffect, useMemo, useRef, useState} from "react";
 import trigangleDown from "assets/images/triangle-down.svg";
 import iconUpload from "assets/images/icons8-upload-48.svg";
 import iconLink from "assets/images/icons8-link-96-v3.svg";
@@ -7,25 +7,25 @@ import taskUserAvt from "assets/images/task-user.svg";
 import iconAttach from "assets/images/icons8-attach-48.svg";
 // import imageDemo from "assets/images/task-detail-image.png";
 // import { listEmoji } from "../../../../../messages/pages/MessageHome/sections/ChattingSection";
-import { ChildResponseComment } from "../ChildResponseComment";
-import { Comment as CommentType, CommentProps, CommentPayload, Task } from "typings/task";
+import {ChildResponseComment} from "../ChildResponseComment";
+import {Comment as CommentType, CommentPayload, CommentProps, Task} from "typings/task";
 import moment from 'moment';
-import { debounce } from 'lodash';
-import { nl2p } from 'utils';
-import { APP_KEY } from 'utils/constants';
-import { APP_ID } from "apis/localdb";
-import { humanFileSize } from 'utils/converter';
-import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
-import { validateFiles } from 'validation/file';
-import { useUpload } from "services/hooks/useUpload";
-import { toast } from "react-toastify";
-import { useCommentPcm } from "services/hooks/useTask";
+import {debounce} from 'lodash';
+import {nl2p} from 'utils';
+import {APP_KEY} from 'utils/constants';
+import {APP_ID} from "apis/localdb";
+import {humanFileSize} from 'utils/converter';
+import useUploadFile, {modifyUploadedFilesV2} from 'services/hooks/useUploadFile';
+import {validateFiles} from 'validation/file';
+import {useUpload} from "services/hooks/useUpload";
+import {toast} from "react-toastify";
+import {useCommentPcm} from "services/hooks/useTask";
 import CommentContext from "views/pcm/contexts/comment/comment.context";
-import { useSocket } from "services/hooks/useSocket";
-import { ReplyResponseComment } from "../ReplyResponseComment";
-import { captureException } from "@sentry/react";
+import {ReplyResponseComment} from "../ReplyResponseComment";
+import {captureException} from "@sentry/react";
 import TaskRepository from "apis/task";
-import { useFileCore } from 'services/hooks/useFileCore';
+import {useFileCore} from 'services/hooks/useFileCore';
+import {useOnClickOutside} from "../../../../../../services/hooks/useOnclickOutside";
 
 type Props = {
     userId?: string;
@@ -44,6 +44,10 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
 	const [amountReply, setAmountReply] = useState(
         comment?.amountCommentReply > 0 ? comment?.amountCommentReply - 1 : 0
     );
+    const [showDetail, setShowDetail] = useState(false);
+    const detailRef = useRef<HTMLDivElement>(null);
+
+    useOnClickOutside(detailRef, () => setShowDetail(false));
 
 	const { state, dispatch } = useContext(CommentContext);
 	// const { current: socket }: any = useSocket();
@@ -93,6 +97,12 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
 
         {/* tới Lê Lưu Phong-CPMI, Nguyễn Đắc Toàn-TRX và 3 người khác */}
         return `Tới ${str}`;
+    }, [comment.receivers]);
+
+    const receiversFullText = useMemo(() => {
+        if(!comment.receivers) return '';
+
+        return comment.receivers.map(receiver => receiver.bizfullname).join(', ');
     }, [comment.receivers]);
 
     const handleCheckOfficial = async () => {
@@ -277,7 +287,46 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
                                     <span className={"mr-2"}>
                                         {receiversText}
                                     </span>
-                                    <img src={trigangleDown} alt={"-----"} />
+                                    <button
+                                        onClick={() => setShowDetail(!showDetail)}
+                                        className={"relative"}>
+                                        <img src={trigangleDown} alt={"-----"} />
+                                        {
+                                            showDetail &&
+                                            <div
+                                                ref={detailRef}
+                                                className={"absolute top-full bg-white left-[50%] shadow-lg rounded-md max-w-[600px] min-w-[600px] p-3"}>
+                                                <table className={"table-fixed w-full"}>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td className={"text-primary-gray w-1/6 text-left py-2"}>
+                                                            Từ
+                                                        </td>
+                                                        <td className={"text-left text-black py-2"}>
+                                                            {comment.author?.bizfullname}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td className={"text-primary-gray w-1/6 text-left py-2"}>
+                                                            Tới
+                                                        </td>
+                                                        <td className={"text-left text-black py-2"}>
+                                                            {receiversFullText}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td className={"text-primary-gray w-1/6 text-left py-2"}>
+                                                            Ngày tạo
+                                                        </td>
+                                                        <td className={"text-left text-black py-2"}>
+                                                            {moment(comment.createAt).format('HH:mm DD/MM/YYYY')} ({moment(comment.createAt).fromNow()})
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        }
+                                    </button>
                                 </div>
                             }
                         </div>
