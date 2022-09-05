@@ -4,6 +4,11 @@ import { Editor } from "@tinymce/tinymce-react";
 import { Editor as EditorType } from "tinymce";
 import { Task } from "typings/task";
 import { useTask } from "services/hooks/useTask";
+import { humanFileSize } from 'utils/converter';
+import iconAttach from "assets/images/icons8-attach-48.svg";
+import iconLink from "assets/images/icons8-link-96-v3.svg";
+import imageDemo from "assets/images/task-detail-image.png";
+import moment from "moment";
 
 type Props = {
     task: Task;
@@ -11,6 +16,9 @@ type Props = {
 }
 
 export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
+    console.log(task)
+    console.log(task.authorAttachs.length)
+
     const editorRef = useRef<EditorType>();
     const [editDescription, setEditDescription] = useState(false);
 
@@ -126,6 +134,68 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                             )
                     }
                 </div>
+                {/*  UI DEMO  */}
+
+                {/* {
+                    task.authorAttachs?.length
+                } */}
+                <div className={"mt-2"}>
+                    <div className={"user-attach mt-4"}>
+                        {task.authorAttachs?.map(file => {
+                            if (file.type == '1') return;
+
+                            return (
+                                <div key={file._id} className={"comment-attach-item flex items-start justify-between mb-2"}>
+                                    <img src={iconAttach} alt={"---"} />
+                                    <div className={"comment-attach-item-file-infor mx-2"}>
+                                        <a href={`${process.env.REACT_APP_URL_S3}/${file.path}`} download className={"text-primary"}>
+                                            {file.nameOrg} ({humanFileSize(file.size)})
+                                        </a>
+                                        <p className={"text-primary-gray text-xs"}>
+                                            {file.author?.bizfullname}
+                                            {moment(file.createAt).format('DD/MM/YYYY HH:mm')} {moment(file.createAt).fromNow()}
+                                        </p>
+                                    </div>
+                                    <input
+                                        className={"flex-1 text-primary-gray text-center focus:outline-none focus:ring-none"}
+                                        placeholder={"Nhập nội dung ghi chú"}
+                                    />
+                                    <button>
+                                        <img src={iconLink} alt={"---"} />
+                                    </button>
+                                </div>
+                            )
+                        })}
+                    </div>
+
+                    <div className={"user-images mt-4"}>
+                        <div className={"grid grid-cols-6 gap-4"}>
+                            {
+                                task.authorAttachs?.map(file => {
+                                    if(file.type == '2') return;
+
+                                    return (
+                                        <div key={file._id} className={" border-0.5 border-primary-border bg-cbs-form-input-bg mb-2"}>
+                                            <div className={"relative"}>
+                                                <img
+                                                    className={"h-[120px] max-h-[120px] min-h-[120px] object-cover w-full"}
+                                                    src={`${process.env.REACT_APP_URL_S3}/${file.path}`}
+                                                    alt={file.nameOrg}
+                                                />
+                                                <div className={"text-white px-2 py-4 bg-black opacity-60 absolute text-xs bottom-0 w-full truncate"}>
+                                                    {moment(file.createAt).format('DD/MM/YYYY HH:mm')} {moment(file.createAt).fromNow()}
+                                                </div>
+                                            </div>
+                                            <textarea className={"p-2 w-full text-xs h-[60px] min-h-[60px] max-h-[60px] bg-cbs-form-input-bg"} placeholder={"Nhập nội dung ghi chú"}>
+                                            </textarea>
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
+                    </div>
+                </div>
+                
             </div>
         </div>
     )

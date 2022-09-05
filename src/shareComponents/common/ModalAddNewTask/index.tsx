@@ -73,6 +73,7 @@ export const ModalAddNewTask: FC = () => {
   const [companyID, setCompanyID] = useState("");
   const [projectID, setProjectID] = useState("");
   const [groupID, setGroupID] = useState("");
+  const [isNotiEmail, setIsNotiEmail] = useState(false);
 
   const { addTaskAsync } = useTask({});
 
@@ -84,15 +85,15 @@ export const ModalAddNewTask: FC = () => {
   });
 
   const [uploads, {
-    setUploadImageProgress,
+    // setUploadImageProgress,
     setUploadFileProgress,
-    setIDImageUploaded,
+    // setIDImageUploaded,
     setIDFileUploaded,
-    setUploadImage,
+    // setUploadImage,
     setUploadFile,
     removeUploadedImage,
     removeUploadedFile,
-    removeAllFiles
+    // removeAllFiles
   }] = useUploadFile({});
 
   const {
@@ -106,7 +107,7 @@ export const ModalAddNewTask: FC = () => {
   })
 
   const {
-    list: listDoctypes,
+    // list: listDoctypes,
     hasNextPage: hasNextPageDoctypes,
     fetchNextPage: fetchNextPageDoctypes
   } = useDoctype({
@@ -167,7 +168,10 @@ export const ModalAddNewTask: FC = () => {
         values.authorAttachs = files;
       }
 
-      const { error, data } = await addTaskAsync(values);
+      const { error, data } = await addTaskAsync({
+        ...values,
+        isNotiEmail
+      });
 
       if (error) return toast.warning(data.message);
 
@@ -833,7 +837,12 @@ export const ModalAddNewTask: FC = () => {
                     />
                   </label>
                   <div className={"flex items-center ml-4"}>
-                    <input type="checkbox" id="email-notice" className={"form-check-input mt-0"} />
+                    <input
+                      type="checkbox"
+                      id="email-notice"
+                      className={"form-check-input mt-0"}
+                      onChange={e => setIsNotiEmail(e.target.checked)}
+                    />
                     <label htmlFor="email-notice" className={"text-left ml-2 whitespace-nowrap"}>Thông báo email</label>
                   </div>
                   <button type="submit" className="btn btn-primary ml-auto">Xác nhận</button>

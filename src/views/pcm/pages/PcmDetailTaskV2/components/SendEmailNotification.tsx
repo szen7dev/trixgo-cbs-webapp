@@ -105,6 +105,9 @@ export const SendEmailNotification: FC<Props> = ({ task, userId = '' }) => {
             //     usersSendMail = [task.author?._id, task.assignee?._id, ...usersRelated];
             // }
 
+            setIsShow(false);
+
+            toast.info('Đang tiến hành gửi email...');
             const result = await sendMailDetailTaskAsync({
                 taskID: task._id,
                 title,
@@ -121,7 +124,6 @@ export const SendEmailNotification: FC<Props> = ({ task, userId = '' }) => {
                 return toast.error('Gửi email thất bại');
             }
 
-            setIsShow(false);
             setEmails('');
             setTitle('');
             setContent('');

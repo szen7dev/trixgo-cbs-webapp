@@ -113,7 +113,7 @@ const PcmPrintTaskTypeOne: FC = () => {
     <div className="bg-cbs-gray overflow-auto" style={{ height: '100vh' }}>
       <div className="overflow-auto h-auto py-6">
         <div className="max-w-[791px] h-auto bg-white w-full mx-auto pl-[3.75rem] pr-6 py-6 shadow-cbs-md">
-          <table ref={componentRef} className="space-y-5">
+          <table ref={componentRef} className="space-y-5 table-fixed w-full">
             <style type="text/css" media="print">
               {`
 								@media print { 

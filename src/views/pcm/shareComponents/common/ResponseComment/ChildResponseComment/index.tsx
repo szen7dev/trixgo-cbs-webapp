@@ -1,4 +1,4 @@
-import { FC, useState, useMemo, ChangeEvent } from "react";
+import {FC, useState, useMemo, ChangeEvent, useRef} from "react";
 import taskUserAvt from "assets/images/task-user.svg";
 import trigangleDown from "assets/images/triangle-down.svg";
 import iconUpload from "assets/images/icons8-upload-48.svg";
@@ -11,6 +11,7 @@ import moment from "moment";
 import { nl2p } from 'utils';
 import { humanFileSize } from 'utils/converter';
 import { toast } from "react-toastify";
+import {useOnClickOutside} from "../../../../../../services/hooks/useOnclickOutside";
 
 type Props = {
     userId?: string;
@@ -22,6 +23,10 @@ type Props = {
 
 export const ChildResponseComment: FC<Props> = ({ userId, comment, onClickImage, handleUploadAttachments, handleUpdateDescriptionFile }) => {
     const [collapseComment, setCollapseComment] = useState(false);
+    const [showDetail, setShowDetail] = useState(false);
+    const detailRef = useRef<HTMLDivElement>(null);
+
+    useOnClickOutside(detailRef, () => setShowDetail(false));
 
     const receiversText = useMemo(() => {
         if (!comment.receivers) return 'Tới';
@@ -34,6 +39,12 @@ export const ChildResponseComment: FC<Props> = ({ userId, comment, onClickImage,
         const str = totalRemainPeople > 0 ? `${receiversName} và ${totalRemainPeople} người khác` : receiversName;
 
         return `Tới ${str}`;
+    }, [comment.receivers]);
+
+    const receiversFullText = useMemo(() => {
+        if(!comment.receivers) return '';
+
+        return comment.receivers.map(receiver => receiver.bizfullname).join(', ');
     }, [comment.receivers]);
 
     const handleCopyLinkAttachment = (path: string) => {
@@ -61,7 +72,46 @@ export const ChildResponseComment: FC<Props> = ({ userId, comment, onClickImage,
                                         <span className={"mr-2"}>
                                             {receiversText}
                                         </span>
-                                        <img src={trigangleDown} alt={"-----"} />
+                                        <button
+                                            onClick={() => setShowDetail(!showDetail)}
+                                            className={"relative"}>
+                                            <img src={trigangleDown} alt={"-----"} />
+                                            {
+                                                showDetail &&
+                                                <div
+                                                    ref={detailRef}
+                                                    className={"absolute top-full bg-white left-[50%] shadow-lg rounded-md max-w-[600px] min-w-[600px] p-3"}>
+                                                    <table className={"table-fixed w-full"}>
+                                                        <tbody>
+                                                        <tr>
+                                                            <td className={"text-primary-gray w-1/6 text-left py-2"}>
+                                                                Từ
+                                                            </td>
+                                                            <td className={"text-left text-black py-2"}>
+                                                                {comment.author?.bizfullname}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td className={"text-primary-gray w-1/6 text-left py-2"}>
+                                                                Tới
+                                                            </td>
+                                                            <td className={"text-left text-black py-2"}>
+                                                                {receiversFullText}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td className={"text-primary-gray w-1/6 text-left py-2"}>
+                                                                Ngày tạo
+                                                            </td>
+                                                            <td className={"text-left text-black py-2"}>
+                                                                {moment(comment.createAt).format('HH:mm DD/MM/YYYY')} ({moment(comment.createAt).fromNow()})
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            }
+                                        </button>
                                     </div>
                                 }
                             </div>
@@ -91,7 +141,7 @@ export const ChildResponseComment: FC<Props> = ({ userId, comment, onClickImage,
                             </div>
                         </div>
                         <div
-                            className={"comment-text mt-2"}
+                            className={"comment-text mt-2 break-all"}
                             dangerouslySetInnerHTML={{
                                 __html: nl2p(comment.content)
                             }}

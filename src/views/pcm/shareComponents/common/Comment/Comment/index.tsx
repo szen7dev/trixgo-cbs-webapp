@@ -58,8 +58,8 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 
 	useEffect(() => {
 		if(comment.createAt) {
-			const expireTime = new Date(comment.createAt).addHours(1);
-			const now 		 = new Date(Date.now());
+			const expireTime = moment(comment.createAt).add(1, 'hours').valueOf();
+			const now 		 = moment().valueOf();
 
 			if(expireTime < now){
 				setIsExpiredInteractComment(true);
@@ -133,7 +133,7 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 
 	return (
 		<>
-			<div {...props} className={cn("flex pb-1.5 break-all", props.className)}>
+			<div {...props} className={cn("flex pb-1.5", props.className)}>
 				{/* Avatar */}
 				<div className="rounded-full overflow-hidden self-start mr-2 min-w-min">
 					<div className="h-9 w-9">
@@ -145,13 +145,12 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 					<div className="flex items-center">
 						<div className='bg-gray-100 rounded-xl p-2 hover:bg-primary hover:bg-opacity-10 break-words' style={{ width: "100%" }}>
 							<p className="font-bold text-medium">{comment.author?.bizfullname}</p>
-							<p
-								className="mt-0.5 text-[15px] leading-4"
-								style={{ wordBreak: 'normal' }}
+							<div
+								className="mt-0.5 text-[15px] leading-4 break-all"
 								dangerouslySetInnerHTML={{
 									__html: nl2p(comment.content)
 								}}>
-							</p>
+							</div>
 						</div>
 						{(Options && !isExpiredInteractComment) && <Options
 							className="opacity-0 group-hover:opacity-100"
