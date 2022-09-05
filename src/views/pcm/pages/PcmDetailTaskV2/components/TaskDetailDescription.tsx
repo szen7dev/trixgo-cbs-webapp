@@ -16,6 +16,9 @@ type Props = {
 }
 
 export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
+    console.log(task)
+    console.log(task.authorAttachs.length)
+
     const editorRef = useRef<EditorType>();
     const [editDescription, setEditDescription] = useState(false);
 
@@ -132,6 +135,10 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                     }
                 </div>
                 {/*  UI DEMO  */}
+
+                {/* {
+                    task.authorAttachs?.length
+                } */}
                 <div className={"mt-2"}>
                     <div className={"user-attach mt-4"}>
                         {task.authorAttachs?.map(file => {
@@ -188,6 +195,7 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                         </div>
                     </div>
                 </div>
+                
             </div>
         </div>
     )
