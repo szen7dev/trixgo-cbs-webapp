@@ -16,7 +16,8 @@ export const MessageList:FC = () => {
     const {listConversation, nextCursor, isLoading,  hasMoreData} = mapData.data;
 
     useEffect(() => {
-        Object.keys(listConversation).length===0&&getListConversation({});
+        // Object.keys(listConversation).length===0&&getListConversation({});
+        getListConversation({})
     },[]);
 
     useEffect(() => {

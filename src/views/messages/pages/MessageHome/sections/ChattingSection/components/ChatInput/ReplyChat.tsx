@@ -3,7 +3,7 @@ import Close from "assets/icons/Close";
 import {useDispatch} from "react-redux";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import {removeReplyMessage} from "redux/reducer/messages/ListMessage";
-import {ContactReply, TextReply, FileReply, ImageReply, DeleteReply} from "../ChatContent/ReplyContent";
+import {ContactReply, TextReply, FileReply, ImageReply, DeleteReply, NPSReply} from "../ChatContent/ReplyContent";
 import {DeleteChatContent} from "../ChatContent/RegularContent";
 
 type Props = {
@@ -27,13 +27,15 @@ export const ReplyChat:FC<Props> = ({replyData,currentChat}) => {
         }
         switch (replyData.type) {
             case 0:
-                return <TextReply message={replyData} className={"text-xs"}/>;
+                return <TextReply message={replyData} className={"text-xs chatting-input-reply"}/>;
             case 2:
                 return <FileReply message={replyData} className={"text-xs"}/>;
             case 1:
                 return <ImageReply message={replyData} className={"text-xs"}/>;
             case 7:
                 return <ContactReply message={replyData} className={"text-xs"}/>;
+            case 8:
+                return <NPSReply message={replyData} className={"text-xs"}/>;
         }
     }
 
