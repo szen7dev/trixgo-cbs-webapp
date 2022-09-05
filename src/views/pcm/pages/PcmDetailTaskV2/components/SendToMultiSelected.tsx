@@ -5,16 +5,17 @@ import {useUsersProject} from "services/hooks/users/useUserSystem";
 import taskUserAvt from "assets/images/task-user.svg";
 
 type Props = {
+    projectId: string;
     selectedUser: Item[];
     setSelectedUser: (users: any) => void;
 }
 
-export const SendToMultiSelected:FC<Props> = ({ selectedUser, setSelectedUser }) => {
+export const SendToMultiSelected:FC<Props> = ({ projectId, selectedUser, setSelectedUser }) => {
     const [showDroprown, setShowDropdown] = useState(false);
 
     const [keywordAssignee, setKeywordAssignee] = useState('');
     const { data: listUsersProject, fetchNextPage } = useUsersProject({
-        projectID: "5e847180d7e3490be59aef72",
+        projectID: projectId,
         keyword: keywordAssignee
     }, true);
 

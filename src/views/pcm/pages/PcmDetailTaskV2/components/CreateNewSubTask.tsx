@@ -45,9 +45,9 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
     const [keywordAssignee, setKeywordAssignee] = useState('');
 
     const { data: listUsersProject, fetchNextPage } = useUsersProject({
-        projectID: "5e847180d7e3490be59aef72",
+        projectID: task.project?._id,
         keyword: keywordAssignee
-    }, true);
+    }, !!task.project?._id);
 
     const { addTaskAsync } = useTask({});
 
@@ -66,7 +66,7 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
     const initialValues = {
         name: "",
         assigneeID: task.assignee?._id,
-        parentID: "5e847180d7e3490be59aef72",
+        parentID: task.parent?._id,
         groupID: task.group?._id,
         projectID: task.project?._id,
         expiredTime: null,
@@ -110,7 +110,11 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
     return (
         <div className={"create-new-subtask border-0.5 border-primary-border rounded ml-6 mt-4"}>
             <div className={"border-b-0.5 border-primary-border p-4"}>
-                <SendToMultiSelected selectedUser={selectedUser} setSelectedUser={setSelectedUser} />
+                <SendToMultiSelected
+                    projectId={task.project?._id}
+                    selectedUser={selectedUser}
+                    setSelectedUser={setSelectedUser}
+                />
             </div>
             <Formik
                 initialValues={initialValues}

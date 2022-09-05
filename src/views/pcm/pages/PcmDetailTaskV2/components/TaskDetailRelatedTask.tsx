@@ -49,7 +49,7 @@ export const TaskDetailRelatedTask: FC<Props> = ({ task, refetchInfo }) => {
     const handleChangeInputSearch = debounce((e: ChangeEvent<HTMLInputElement>) => {
         const keyword = e.target.value;
         setKeyword(keyword);
-    })
+    }, 700)
 
     const handleScroll = (e: UIEvent<HTMLDivElement>) => {
         const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
