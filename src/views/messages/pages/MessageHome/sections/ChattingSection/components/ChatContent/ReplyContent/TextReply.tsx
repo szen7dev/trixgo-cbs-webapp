@@ -3,23 +3,36 @@ import React, {FC, useEffect, useRef} from "react";
 type Props = {
     message: any;
     className?: string;
-    isMyMessage?: boolean
+    isMyMessage?: boolean;
 }
 export const TextReply:FC<Props> = ({message, className, isMyMessage}) => {
     const textContentRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         if (textContentRef && textContentRef.current) {
-            textContentRef.current.innerHTML =  message.content.replaceAll(/[@]\[(.*?)\]\((.*?)\)/g, (replacement: string) => {
-                const matchs = (/[@]\[(.*?)\]\((.*?)\)/g).exec(replacement);
-                if (matchs) {
-                    const fullName = matchs[1];
-                    const userId = matchs[2];
-                    return `<a class="text-primary" href="${userId}">@${fullName}</a>`;
-                } else {
-                    return replacement;
-                }
-            })
+            textContentRef.current.innerHTML =  message.content
+                //Regex mention
+                .replaceAll(/[@]\[(.*?)\]\((.*?)\)/g, (replacement: string) => {
+                    const matchs = (/[@]\[(.*?)\]\((.*?)\)/g).exec(replacement);
+                    if (matchs) {
+                        const fullName = matchs[1];
+                        const userId = matchs[2];
+                        return `<span class="cursor-pointer user-tag-in-content" data-userId="${userId}">@${fullName}</span>`;
+                    } else {
+                        return replacement;
+                    }
+                })
+                //Regex new line
+                .replaceAll("\n","<br>")
+                //Regex link
+                // eslint-disable-next-line no-useless-escape
+                .replaceAll(/(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/g, (replacement: string) => {
+                    // eslint-disable-next-line no-useless-escape
+                    const matchs = (/(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/g).exec(replacement);
+                    if (matchs) {
+                        return `<a class="link-in-content" href="${matchs[0]}" target="_blank">${matchs[0]}</a>`
+                    }
+                });
         }
     },[textContentRef, message.content])
     return (

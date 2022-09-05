@@ -209,7 +209,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
                                             <div className={"absolute h-full left-0 top-0 bg-cbs-schedule-expired"} style={{width: `${item.percentage}%`}}></div>
                                         </div>
                                     </td>
-                                    <td>
+                                    <td className={"break-all"}>
                                         {subContentHtml(item.description)}
                                     </td>
                                 </tr>

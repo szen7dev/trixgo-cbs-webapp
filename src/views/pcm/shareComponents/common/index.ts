@@ -13,3 +13,5 @@ export * from './ResponseComment';
 export * from './ClassifyDrawer';
 export * from './ClassifyProgress';
 export * from './ClassifyTable';
+
+export * from './PcmPrintTaskComment';

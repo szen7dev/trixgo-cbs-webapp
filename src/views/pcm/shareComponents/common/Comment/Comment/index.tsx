@@ -58,8 +58,8 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 
 	useEffect(() => {
 		if(comment.createAt) {
-			const expireTime = new Date(comment.createAt).addHours(1);
-			const now 		 = new Date(Date.now());
+			const expireTime = moment(comment.createAt).add(1, 'hours').valueOf();
+			const now 		 = moment().valueOf();
 
 			if(expireTime < now){
 				setIsExpiredInteractComment(true);
