@@ -49,6 +49,8 @@ type UseTask = {
   refetchListTask: () => void;
   nextPageListTask: () => void;
   prevPageListTask: () => void;
+  isFetchingListTask: boolean;
+  listTasksWithPager: any;
   // subject
   listSubject: Array<Task>; // Bổ sung mới
   isLoadingListSubject: boolean,
@@ -122,6 +124,7 @@ export const useTask = ({
     fetchNextPage: nextPageListTask,
     fetchPreviousPage: prevPageListTask,
     hasNextPage,
+    isFetching: isFetchingListTask
   } = useInfiniteQuery(
     ["task--list", params],
     async ({ pageParam }: any) => {
@@ -144,6 +147,8 @@ export const useTask = ({
     .map((d: any) => d.data?.listRecords))
     .filter(Boolean);
 
+  const listTasksWithPager = (dataListTask?.pages || []).map((d: any) => d.data?.listRecords);
+
   const totalRecord = dataListTask?.pages[0]?.data?.totalRecord || 0;
   const totalPages = dataListTask?.pages[0]?.data?.totalPage || 0;
   const totalTaskDone = dataListTask?.pages[0]?.data?.totalTaskDone || 0;
@@ -155,7 +160,7 @@ export const useTask = ({
     refetch: refetchListSubject,
     fetchNextPage: nextPageListSubject,
     fetchPreviousPage: prevPageListSubject,
-    hasNextPage: hasNextPageSubject ,
+    hasNextPage: hasNextPageSubject,
   } = useInfiniteQuery(
     ["subject--list", params],
     async ({ pageParam }: any) => {
@@ -201,6 +206,8 @@ export const useTask = ({
     refetchListTask,
     nextPageListTask,
     prevPageListTask,
+    isFetchingListTask,
+    listTasksWithPager,
     // Subject
     listSubject, // bổ sung mới
     isLoadingListSubject,

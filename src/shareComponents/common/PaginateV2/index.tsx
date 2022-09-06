@@ -48,7 +48,7 @@ const PaginateV2 = forwardRef<PaginateHandle, Props>(
             </button>
             <button
                 onClick={handleNextPage}
-                disabled={!hasNextPage || isFetching || currentIndex >= totalPagesNumber}
+                disabled={isFetching || currentIndex >= totalPagesNumber}
                 className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"}>
                 <img src={nextIcon} alt={"----"}/>
             </button>

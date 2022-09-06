@@ -20,6 +20,8 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import { useCheckPerAccessApp, useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
 import { usePcmPlanTaskNotification } from "services/hooks/pcm/usePcmDashboardV2";
+import { useDispatch } from "react-redux";
+import { resetFilterDashboard } from "redux/reducer/DashboardV2Slice";
 
 export const HomeLeftMenuContent:FC = () => {
     const [enabled, setEnabled] = useState(false);
@@ -27,6 +29,7 @@ export const HomeLeftMenuContent:FC = () => {
     const { openModal } = useModal();
     const { user } = useAuth();
     const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
+    const dispatch = useDispatch();
 
     const listTab : {
         label: string,
@@ -115,7 +118,7 @@ export const HomeLeftMenuContent:FC = () => {
         route: string
     }) => {
       return (
-          <NavLink key={nav.route} to={nav.route} className={"left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray"}>
+          <NavLink key={nav.route} to={nav.route} className={"left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray"} onClick={() => dispatch(resetFilterDashboard({}))}>
               <img width={'20px'} src={nav.icon} alt={nav.label}/>
               <span className={"flex-1 ml-2 text-left text-[14px]"}>{nav.label}</span>
               {
