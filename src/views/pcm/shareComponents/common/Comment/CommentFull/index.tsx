@@ -22,9 +22,9 @@ const Comment: FC<Props> = ({
 }) => {
   return (
     <React.Fragment>
-      <div className="text-x-large py-3 px-6 font-bold">
+      {/* <div className="text-x-large py-3 px-6 font-bold">
         Bình luận {amountComment > 0 ? `(${amountComment})` : ''}
-      </div>
+      </div> */}
       <RootCommentsList
         className="px-5"
         userID={userId}
