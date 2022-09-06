@@ -26,6 +26,7 @@ import {captureException} from "@sentry/react";
 import TaskRepository from "apis/task";
 import {useFileCore} from 'services/hooks/useFileCore';
 import {useOnClickOutside} from "../../../../../../services/hooks/useOnclickOutside";
+import {OptionsComment} from "../OptionsComment";
 
 type Props = {
     userId?: string;
@@ -295,7 +296,7 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
                                             showDetail &&
                                             <div
                                                 ref={detailRef}
-                                                className={"absolute top-full bg-white left-[50%] shadow-lg rounded-md max-w-[600px] min-w-[600px] p-3"}>
+                                                className={"absolute top-full bg-white left-[50%] shadow-lg rounded-md max-w-[600px] min-w-[600px] p-3 z-10"}>
                                                 <table className={"table-fixed w-full"}>
                                                     <tbody>
                                                     <tr>
@@ -352,20 +353,9 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
                             )}
                             {
                                 (!collapseComment && userId === comment.author?._id) && (
-                                    <label className="ml-4">
-                                        <img
-                                            src={iconUpload}
-                                            alt="Icon attach"
-                                            className="h-6 w-6"
-                                        />
-                                        <input
-                                            type="file"
-                                            className="hidden"
-                                            accept="*"
-                                            multiple
-                                            onChange={e => handleUploadAttachments(e.target.files)}
-                                        />
-                                    </label>
+                                    <OptionsComment
+                                        handleUploadAttachments={(files => handleUploadAttachments(files))}
+                                    />
                                 )
                             }
                         </div>
