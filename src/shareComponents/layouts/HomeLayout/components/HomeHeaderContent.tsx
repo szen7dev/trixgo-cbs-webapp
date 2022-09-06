@@ -244,18 +244,18 @@ export const HomeHeaderContent: FC = () => {
   };
 
   const shortListDataForResponse = listDataForResponse || [];
-  if (shortListDataForResponse.length > 3) {
-    shortListDataForResponse.length = 3;
+  if (shortListDataForResponse.length > 10) {
+    shortListDataForResponse.length = 10;
   }
 
   const shortListDataForSubject = listDataForSubject || [];
-  if (shortListDataForSubject.length > 3) {
-    shortListDataForSubject.length = 3;
+  if (shortListDataForSubject.length > 10) {
+    shortListDataForSubject.length = 10;
   }
 
   const shortListDataForFile = listDataForFile || [];
-  if (shortListDataForFile.length > 3) {
-    shortListDataForFile.length = 3;
+  if (shortListDataForFile.length > 10) {
+    shortListDataForFile.length = 10;
   }
 
   return (
