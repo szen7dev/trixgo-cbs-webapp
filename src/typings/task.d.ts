@@ -71,6 +71,7 @@ export type Task = {
     createAt: string
   }>;
   authorAttachs: Array<FileProps>;
+  assigneeAttachs: Array<FileProps>;
   accessUsers: Array<User>;
   openedUsers: Array<User>;
   openedStatus: number;

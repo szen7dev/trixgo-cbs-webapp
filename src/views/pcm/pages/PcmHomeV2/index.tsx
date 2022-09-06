@@ -41,7 +41,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
     const { tab } = useParams<{ tab: string}>();
     // console.log({tab})
     // console.log({option})
-    console.log({draft})
+    // console.log({draft})
 
     const getStatusValue = (tab?: any) => {
         switch(tab) {
@@ -75,7 +75,8 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
         nextPageListTask: nextPageTaskOutDate,
     } = useTask({
         params: {
-            type, draft, subtype, typeStatus, statusNe: "3", isSortChildTask: "1",
+            // type, draft, subtype, typeStatus, statusNe: "3", isSortChildTask: "1",
+            type, draft, subtype, typeStatus, statusNe: "3",
         },
         isFetch: true
     });
