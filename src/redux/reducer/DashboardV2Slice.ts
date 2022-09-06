@@ -4,6 +4,7 @@ const initialState: any = {
   data: {
     tabIndex: 1,
     tabActive: 2, // hiển thị data theo tab, 1 là phản hồi, 2 là chủ đề, 3 là file
+    keyword: "",
     keywordForResponse: "",
     keywordForSubject: "",
     keywordForFile: "",
@@ -39,6 +40,9 @@ const dashboardV2Slice = createSlice({
     setTabActive(state, action) {
       state.data.tabActive = action.payload;
     },
+    setKeywordForRedux(state, action) {
+      state.data.keyword = action.payload;
+    },
     setKeywordForResponse(state, action) {
       state.data.keywordForResponse = action.payload;
     },
@@ -72,6 +76,7 @@ const dashboardV2Slice = createSlice({
 
 export const {
   setTabIndex,
+  setKeywordForRedux,
   setKeywordForSubject,
   setKeywordForResponse,
   setShowModalResult,

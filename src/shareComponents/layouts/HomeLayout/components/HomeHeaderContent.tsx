@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { useAppSelector } from "redux/reducer";
 import {
   setKeywordForFile,
+  setKeywordForRedux,
   setKeywordForResponse,
   setKeywordForSubject,
   setQueryFile,
@@ -22,13 +23,14 @@ import {
 } from "services/hooks/pcm/usePcmDashboardV2";
 import { subContentHtml } from "views/homepage/pages";
 import { Oval } from "react-loader-spinner";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useUserSystem } from "services/hooks/users/useUserSystem";
 import companyDefault from "assets/images/company_default.png";
 
 export const HomeHeaderContent: FC = () => {
   const wrapperClass = useRef<HTMLDivElement>(null);
   useOnClickOutside(wrapperClass, () => dispatch(setShowModalResult(false)));
+  const history = useHistory();
 
   const tabIndex = useAppSelector((state) => state.dashboardV2.data.tabIndex);
   const showResult = useAppSelector(
@@ -43,6 +45,10 @@ export const HomeHeaderContent: FC = () => {
   );
   const queryFile = useAppSelector(
     (state) => state.dashboardV2.data.queryFile
+  );
+
+  const keyword = useAppSelector(
+    (state) => state.dashboardV2.data.keyword
   );
 
   const [keywordSearchForResponse, setKeywordSearchForResponse] = useState("");
@@ -104,6 +110,7 @@ export const HomeHeaderContent: FC = () => {
 
   const setTypingTimeoutRef: any = useRef(null);
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+    dispatch(setKeywordForRedux(e.target.value));
     if (setTypingTimeoutRef.current) {
       clearTimeout(setTypingTimeoutRef.current);
     }
@@ -144,6 +151,7 @@ export const HomeHeaderContent: FC = () => {
       }
       dispatch(setShowModalResult(false));
       dispatch(setTabActive(tabIndex));
+      history.push('/pcm/home');
     }
   };
 
@@ -261,6 +269,7 @@ export const HomeHeaderContent: FC = () => {
           <img src={searchIcon} alt={"search icon"} />
         </div>
         <input
+          value={keyword}
           onChange={(e) => handleSearchChange(e)}
           className={
             "pl-12 w-full h-[45px] bg-cbs-bg-input-search rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-none focus:bg-white focus:shadow-md transition-all"

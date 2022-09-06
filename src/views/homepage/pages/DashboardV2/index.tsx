@@ -14,8 +14,6 @@ import maleUserIcon from "assets/images/icons8-male-user-64.svg";
 import categoryIcon from "assets/images/icons8-category-48.svg";
 import timeTableIcon from "assets/images/icons8-timetable-48.svg";
 import projectIcon from "assets/images/icons8-project-50.svg";
-import downloadIcon from "assets/images/icons8-download-96.svg";
-import sendMailIcon from "assets/images/icons8-send-email-96.svg";
 import TriangleDown from "assets/icons/TriangleDown";
 import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
 import businessBuiding from "assets/images/icons8-business-building-48.svg";

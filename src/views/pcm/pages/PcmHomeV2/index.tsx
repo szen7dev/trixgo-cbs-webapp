@@ -1,9 +1,10 @@
-import React, { FC, useCallback } from "react";
-import {DropdownSearchable, DropdownSearchableV2} from "shareComponents/common";
+import React, { FC, useCallback, useEffect } from "react";
+import { DropdownSearchable, DropdownSearchableV2 } from "shareComponents/common";
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
 import moment from "moment";
 import parse from "html-react-parser";
 import { Link, useParams } from "react-router-dom";
+import { Loader } from "shareComponents/common";
 
 // import userIcon from "assets/images/icon-user-avatar.svg";
 // import maleUserIcon from "assets/images/icons8-male-user-64.svg";
@@ -17,15 +18,15 @@ import { Link, useParams } from "react-router-dom";
 import nextIcon from "assets/images/icons-arrow-next.svg";
 // import userAvt from "assets/images/task-user.svg";
 
-import {PcmHomeTab1} from "./components/PcmHomeTab1";
-import {PcmHomeTab2} from "./components/PcmHomeTab2";
-import {PcmHomeTab3} from "./components/PcmHomeTab3";
-import {PcmHomeTab4} from "./components/PcmHomeTab4";
-import {PcmHomeTab5} from "./components/PcmHomeTab5";
-import {PcmHomeTab6} from "./components/PcmHomeTab6";
-import {PcmHomeTab7} from "./components/PcmHomeTab7";
-import {PcmHomeTab8} from "./components/PcmHomeTab8";
-
+import { PcmHomeTab1 } from "./components/PcmHomeTab1";
+import { PcmHomeTab2 } from "./components/PcmHomeTab2";
+import { PcmHomeTab3 } from "./components/PcmHomeTab3";
+import { PcmHomeTab4 } from "./components/PcmHomeTab4";
+import { PcmHomeTab5 } from "./components/PcmHomeTab5";
+import { PcmHomeTab6 } from "./components/PcmHomeTab6";
+import { PcmHomeTab7 } from "./components/PcmHomeTab7";
+import { PcmHomeTab8 } from "./components/PcmHomeTab8";
+import PaginateV2 from "shareComponents/common/PaginateV2";
 import { useTask } from "services/hooks/useTask";
 
 type Props = {
@@ -36,15 +37,19 @@ type Props = {
 }
 
 const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
+    // Phân trang
+    type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+    const ref = React.useRef<PaginateHandle>(null);
+    const [pageIndex, setPageIndex] = React.useState(0);
 
     // Khai báo active Tab
-    const { tab } = useParams<{ tab: string}>();
+    const { tab } = useParams<{ tab: string }>();
     // console.log({tab})
     // console.log({option})
     // console.log({draft})
 
     const getStatusValue = (tab?: any) => {
-        switch(tab) {
+        switch (tab) {
             case '2':
                 return 1;
 
@@ -56,9 +61,9 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
 
             case '5':
                 return 4;
-            
-          default:
-            return 0;
+
+            default:
+                return 0;
         }
     }
 
@@ -70,9 +75,13 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
      * - Trạng thái chưa hoàn thành
      */
     const {
-        listTasks,
+        listTasksWithPager,
         totalRecord,
-        nextPageListTask: nextPageTaskOutDate,
+        totalPages,
+        hasNextPage,
+        nextPageListTask,
+        isFetchingListTask,
+        isLoadingListTask
     } = useTask({
         params: {
             // type, draft, subtype, typeStatus, statusNe: "3", isSortChildTask: "1",
@@ -81,55 +90,63 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
         isFetch: true
     });
 
+    useEffect(() => {
+        ref.current && ref.current.resetPaginate();
+        setPageIndex(0);
+    }, [tab]);
+
     const subContentHtml = (html?: string) => {
         const removeHtmlTag = parse(
-          (html || "").replace(/<[^>]*>?/gm, " ")
+            (html || "").replace(/<[^>]*>?/gm, " ")
         ).toString();
-    
+
         const result =
-          removeHtmlTag.length > 75
-            ? `${removeHtmlTag.slice(0, 75)}...`
-            : removeHtmlTag;
+            removeHtmlTag.length > 75
+                ? `${removeHtmlTag.slice(0, 75)}...`
+                : removeHtmlTag;
         return result;
-      };
+    };
 
     return (
         <div className={"task-home"}>
+            {(isFetchingListTask ||
+                isFetchingListTask) && <Loader className="border-primary" />}
+
             <div className={"filter-bar flex flex-wrap px-4 py-2"}></div>
 
             <div className={"header-table flex px-4 w-full top-0 bg-white pb-4 flex-wrap"}>
                 <div className={"border-0.5 border-primary-border flex items-center"}>
                     {
                         option == 1 &&
-                        <PcmHomeTab1 tab={tab}/>
+                        <PcmHomeTab1 tab={tab} />
                     }
                     {
                         option == 2 &&
-                        <PcmHomeTab2 tab={tab}/>
+                        <PcmHomeTab2 tab={tab} />
                     }
                     {
                         option == 3 &&
-                        <PcmHomeTab3 tab={tab}/>
+                        <PcmHomeTab3 tab={tab} />
                     }
                     {
                         option == 4 &&
-                        <PcmHomeTab4 tab={tab}/>
+                        <PcmHomeTab4 tab={tab} />
                     }
                     {
                         option == 5 &&
-                        <PcmHomeTab5 tab={tab}/>
+                        <PcmHomeTab5 tab={tab} />
                     }
                     {
                         option == 6 &&
-                        <PcmHomeTab6 tab={tab}/>
+                        <PcmHomeTab6 tab={tab} />
                     }
                     {
                         option == 7 &&
-                        <PcmHomeTab7 tab={tab}/>
+                        <PcmHomeTab7 tab={tab} />
                     }
                     {
                         option == 8 &&
-                        <PcmHomeTab8 tab={tab}/>
+                        <PcmHomeTab8 tab={tab} />
                     }
                 </div>
                 {/* <button className={"flex items-center justify-center mx-3"}>
@@ -139,18 +156,21 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
                     <img src={sendMailIcon} alt={"-----"}/>
                 </button> */}
                 <div className={"flex-1 flex items-center justify-end"}>
-                    {/* <DropdownSearchable
-                        showTriangle={true}
-                        className={"border-0.5 border-primary-border rounded-full mr-2"}
-                        placeholder={"Lọc theo đơn vị giao việc"}
-                    /> */}
-                    <span className={"text-primary-gray"}>1-20 trong số {totalRecord}</span>
-                    <button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"} disabled={true}>
-                        <img src={nextIcon} alt={"----"} className={"rotate-180"}/>
-                    </button>
-                    <button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"}>
-                        <img src={nextIcon} alt={"----"}/>
-                    </button>
+                    <PaginateV2
+                        ref={ref}
+                        totalRecord={totalRecord}
+                        totalPages={totalPages}
+                        limit={20}
+                        hasNextPage={hasNextPage}
+                        isFetching={isFetchingListTask}
+                        nextPageAction={() => {
+                            nextPageListTask();
+                            setPageIndex((oldState) => oldState + 1);
+                        }}
+                        prevPageAction={() => {
+                            setPageIndex((oldState) => oldState - 1);
+                        }}
+                    />
                 </div>
             </div>
 
@@ -160,7 +180,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
                     <thead className={"bg-cbs-table-header sticky top-0 z-10"}>
                         <th className={"w-[46px]"}>
                             <div className={"flex items-center justify-center py-3"}>
-                                <input className="form-check-input" type="checkbox" value="" id="check"/>
+                                <input className="form-check-input" type="checkbox" value="" id="check" />
                             </div>
                         </th>
                         <th className={"w-4/12"}>
@@ -170,7 +190,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
                             Thời hạn
                         </th>
                         <th className={"w-2/12"}>
-                           Thực hiện
+                            Thực hiện
                         </th>
                         <th className={"w-1/12"}>
                             Tiến trình
@@ -181,13 +201,12 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
                     </thead>
 
                     <tbody>
-                        {listTasks?.map((item: any) => {
+                        {(listTasksWithPager[pageIndex] ?? []).map((item: any) => {
                             return (
-
                                 <tr key={item._id}>
                                     <td>
                                         <div className={"flex items-center justify-center py-3"}>
-                                            <input className="form-check-input" type="checkbox" value="" id="check"/>
+                                            <input className="form-check-input" type="checkbox" value="" id="check" />
                                         </div>
                                     </td>
                                     <td className="text-[14px]">
@@ -200,14 +219,14 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
                                     </td>
                                     <td className="text-[14px]">
                                         <div className={"flex items-center"}>
-                                            <img src={`${process.env.REACT_APP_URL_S3_USER}/${item.assignee.image}`} alt={"----"} className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px] max-w-[24px] max-h-[24px] rounded-full overflow-hidden"}/>
+                                            <img src={`${process.env.REACT_APP_URL_S3_USER}/${item.assignee.image}`} alt={"----"} className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px] max-w-[24px] max-h-[24px] rounded-full overflow-hidden"} />
                                             <div className={"ml-2"}>{item.assignee.fullname ?? item.assignee.fullname}</div>
                                         </div>
                                     </td>
                                     <td>
                                         <p className={"mb-1 text-right text-secondary-gray"}>{item.percentage}%</p>
                                         <div className={"relative w-full h-[4px] rounded-full border-0.5 border-primary-border bg-cbs-task-assign-progress-bg"}>
-                                            <div className={"absolute h-full left-0 top-0 bg-cbs-schedule-expired"} style={{width: `${item.percentage}%`}}></div>
+                                            <div className={"absolute h-full left-0 top-0 bg-cbs-schedule-expired"} style={{ width: `${item.percentage}%` }}></div>
                                         </div>
                                     </td>
                                     <td className={"break-all"}>
@@ -217,7 +236,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
                             )
                         })
                         }
-                        
+
                         {/* <tr>
                             <td>
                                 <div className={"flex items-center justify-center py-3"}>
