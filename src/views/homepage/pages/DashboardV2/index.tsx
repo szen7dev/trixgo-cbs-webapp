@@ -265,9 +265,9 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
   };
 
   const checkActive = (relateds: string[], user: string) => {
-    let result = "read border-b-0.5 border-primary-border";
+    let result = "read border-b-0.5 border-primary-border hover:shadow-md hover:z-2 hover:relative";
     if (relateds.includes(user)) {
-      result = "unread border-b-0.5 border-primary-border";
+      result = "unread border-b-0.5 border-primary-border hover:shadow-md hover:z-2 hover:relative";
     }
     return result;
   };
@@ -1274,7 +1274,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                   return (
                     <tr
                       key={index}
-                      className={"read border-b-0.5 border-primary-border"}
+                      className={"read border-b-0.5 border-primary-border hover:shadow-md hover:z-2 hover:relative"}
                     >
                       <td className={"w-[46px]"}>
                         <div
