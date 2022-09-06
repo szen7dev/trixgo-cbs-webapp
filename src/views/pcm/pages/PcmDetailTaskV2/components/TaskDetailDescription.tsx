@@ -145,12 +145,12 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                                     <div key={file._id} className={"comment-attach-item flex items-start justify-between mb-2"}>
                                         <img src={iconAttach} alt={"---"} />
                                         <div className={"comment-attach-item-file-infor mx-2"}>
-                                            <a href={`${process.env.REACT_APP_URL_S3}/${file.path}`} download className={"text-primary"}>
+                                            <a href={`${process.env.REACT_APP_URL_S3}${file.path}`} download className={"text-primary"}>
                                                 {file.nameOrg} ({humanFileSize(file.size)})
                                             </a>
                                             <p className={"text-primary-gray text-xs"}>
-                                                {file.author?.bizfullname}
-                                                {moment(file.createAt).format('DD/MM/YYYY HH:mm')} {moment(file.createAt).fromNow()}
+                                                {file.author?.bizfullname} - 
+                                                 {moment(file.createAt).format('DD/MM/YYYY HH:mm')} {moment(file.createAt).fromNow()}
                                             </p>
                                         </div>
                                         <input
@@ -176,7 +176,7 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                                                 <div className={"relative"}>
                                                     <img
                                                         className={"h-[120px] max-h-[120px] min-h-[120px] object-cover w-full"}
-                                                        src={`${process.env.REACT_APP_URL_S3}/${file.path}`}
+                                                        src={`${process.env.REACT_APP_URL_S3}${file.path}`}
                                                         alt={file.nameOrg}
                                                     />
                                                     <div className={"text-white px-2 py-4 bg-black opacity-60 absolute text-xs bottom-0 w-full truncate"}>
@@ -207,8 +207,8 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                                                 {file.nameOrg} ({humanFileSize(file.size)})
                                             </a>
                                             <p className={"text-primary-gray text-xs"}>
-                                                {file.author?.bizfullname}
-                                                {moment(file.createAt).format('DD/MM/YYYY HH:mm')} {moment(file.createAt).fromNow()}
+                                                {file.author?.bizfullname} - 
+                                                 {moment(file.createAt).format('DD/MM/YYYY HH:mm')} {moment(file.createAt).fromNow()}
                                             </p>
                                         </div>
                                         <input
