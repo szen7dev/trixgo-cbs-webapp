@@ -223,7 +223,7 @@ const PCMRouter: FC = () => {
                       </PmProjectLayout>
                     </Route>
 
-                    <Route path="/pm/project/:id/budget/type/:type(1)/detail/:budgetId">
+                    <Route path="/pm/project/:id/budget/type/:type(4)/detail/:budgetId">
                       <PmProjectLayout>
                         <ProjectBudgetSpendingDetailPage/>
                       </PmProjectLayout>
