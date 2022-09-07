@@ -9,8 +9,8 @@ import {useCashFlowPlan} from "services/hooks/financial/useCashFlow";
 import {Project} from "typings/items/project";
 import PaginateV2 from "shareComponents/common/PaginateV2";
 import moment from "moment";
-import {formatNumberMoney} from "../../../../../utils/cmcs";
-
+import {formatNumberMoney} from "utils/cmcs";
+import {Link} from "react-router-dom";
 type Props = {
     projectInfo: Project
 }
@@ -88,7 +88,7 @@ export const ProjectBudgetPageType4:FC<Props> = ({projectInfo}) => {
                         ref={ref}
                         totalRecord={totalRecord}
                         totalPages={totalPage}
-                        limit={30}
+                        limit={20}
                         hasNextPage={hasNextPage}
                         isFetching={isLoading}
                         nextPageAction={() => {
@@ -143,7 +143,7 @@ export const ProjectBudgetPageType4:FC<Props> = ({projectInfo}) => {
                                     />
                                 </td>
                                 <td className={"p-2 border-0.5 border-primary-border"}>
-                                    <p>{plan.name}</p>
+                                    <Link to={`/pm/project/${projectInfo._id}/budget/type/4/detail/${plan._id}`}>{plan.name}</Link>
                                     <p className={"text-primary-gray text-xs"}>{plan.userCreate.bizfullname} | Ngày ký: {moment(plan.createAt).format("DD/MM/YYYY HH:mm")}</p>
                                 </td>
                                 <td className={"p-2 border-0.5 border-primary-border"}>
