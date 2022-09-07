@@ -4,6 +4,7 @@ import {ItemMediaOfConversation, ItemMembersOfConversation} from "typings/apis/m
 
 const initialState : {
     data: {
+        currentChat: string,
         listMessage: {
             [key: string]: {
                 [key: string] : ItemMessage
@@ -58,6 +59,7 @@ const initialState : {
     }
 } = {
     data: {
+        currentChat: "",
         listMessage: {},
         listFakeMessage: {},
         totalRecord: {},
@@ -80,6 +82,12 @@ const listMessageSlice = createSlice({
     name: 'list-message',
     initialState,
     reducers: {
+        setCurrentChatGlobal(state, action) {
+            state.data = {
+                ...state.data,
+                currentChat: action.payload
+            }
+        },
         setListMessage(state, action) {
             const newMessageData:{[key: string]: ItemMessage} = {};
             (action.payload.data.listRecords??[]).forEach((message: ItemMessage) => {
@@ -449,6 +457,13 @@ const listMessageSlice = createSlice({
                     [conversationId]: isReview
                 }
             }
+        },
+
+        resetAllSearchMode (state) {
+            state.data = {
+                ...state.data,
+                isReviewOldMessage: {}
+            }
         }
     },
     extraReducers: {}
@@ -476,6 +491,8 @@ export const {
     revokeMessageInConversation,
     updateSeenMessage,
     deleteAllMessagesInConversation,
-    setIsReviewOldMessages
+    setIsReviewOldMessages,
+    setCurrentChatGlobal,
+    resetAllSearchMode
 } = listMessageSlice.actions;
 export default listMessageSlice.reducer;

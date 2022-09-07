@@ -8,8 +8,8 @@ import {useLocation} from "react-router-dom";
 import Editor from "@draft-js-plugins/editor";
 import {useSocket} from "services/hooks/useSocket";
 import {useDispatch} from "react-redux";
-import {dismissSearchMode} from "redux/reducer/messages/SearchMessage";
-import {setIsReviewOldMessages} from "redux/reducer/messages/ListMessage";
+import {clearAllSearchMode, dismissSearchMode} from "redux/reducer/messages/SearchMessage";
+import {resetAllSearchMode, setCurrentChatGlobal, setIsReviewOldMessages} from "redux/reducer/messages/ListMessage";
 import {SubComponents} from "../../pages/MessageHome/sections/SubComponents";
 import {LeftMenuMessage} from "./LeftMenuMessage";
 
@@ -57,8 +57,8 @@ type Props = {
 export const MessagesLayoutV2: FC<Props> = ({ children }) => {
   const [isLeftMenuCollapse, setIsLeftMenuCollapse] = useState(false);
 
-  const location = useLocation();
-  const [currentChat, setCurrentChat] = useState(location.hash.replace("#",""));
+  const {hash} = useLocation();
+  const [currentChat, setCurrentChat] = useState(hash.replace("#",""));
   const [showMenu, setShowMenu] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
@@ -77,6 +77,10 @@ export const MessagesLayoutV2: FC<Props> = ({ children }) => {
     currentChat&&dispatch(dismissSearchMode({conversationId: currentChat}));
     currentChat&&dispatch(setIsReviewOldMessages({conversationId: currentChat, isReview: false}));
   }, [currentChat])
+
+  useEffect(() => {
+    dispatch(setCurrentChatGlobal(hash.replace("#","")));
+  }, [hash])
 
   const handleMenuEvent = () => {
     setIsLeftMenuCollapse(!isLeftMenuCollapse);
