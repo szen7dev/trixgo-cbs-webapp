@@ -208,7 +208,7 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
             if (files.length) {
                 values.authorAttachs = files;
             }
-            console.log({ task, values, isCloneChildTask, isDraftTask })
+            // console.log({ task, values, isCloneChildTask, isDraftTask })
 
             const { error, data } = await copyTaskAsync({
                 ...values,
@@ -326,7 +326,7 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
         assigneeID: task.assignee?._id,
         name: task.name,
         startTime: moment(task.startTime).format('MM/DD/YYYY'),
-        expiredTime: task.expiredTime,
+        expiredTime: moment(task.expiredTime).format('MM/DD/YYYY'),
         description: task.description,
         authorAttachs: task.authorAttachs?.map(file => file._id),
         relatedIDs: task.related.map(user => user._id),
