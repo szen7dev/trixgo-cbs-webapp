@@ -1225,7 +1225,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                   ? totalPageSubject
                   : totalPageFile
               }
-              limit={20}
+              limit={50}
               hasNextPage={
                 tabActive === 1
                   ? hasNextPageResponse

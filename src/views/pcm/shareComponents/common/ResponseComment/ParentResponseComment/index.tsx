@@ -338,7 +338,7 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
                             {
                                 !collapseComment && (
                                     <button className={"mx-4"} onClick={() => setOpenReply(!openReply)}>
-                                        <img src={iconReply} alt={"----"} />
+                                        <img src={iconReply} alt={"----"} className="h-[18px] w-[18px]"/>
                                     </button>
                                 )
                             }
