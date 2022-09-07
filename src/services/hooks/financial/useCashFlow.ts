@@ -19,8 +19,10 @@ interface UseCashFlowPlan {
     isLoading: boolean;
     isLoadingInfo: boolean;
     totalRecord: number;
+    totalPage: number;
     hasNextPage: boolean | undefined;
     list: Array<CashFlowPlan>;
+    listWithPager: Array<CashFlowPlan[]>;
     info: CashFlowPlan | undefined;
     refetch: () => void;
     refetchInfo: () => void;
@@ -91,15 +93,19 @@ export const useCashFlowPlan = ({
         .concat(...(data?.pages || [])
         .map((d: any) => d.data?.listRecords))
         .filter(Boolean);
+    const listWithPager = (data?.pages || []).map((d: any) => d.data?.listRecords);
 
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
+    const totalPage = data?.pages[0]?.data?.totalPage || 0;
 
     return {
         isLoading,
         isLoadingInfo,
         list,
+        listWithPager,
         info,
         totalRecord,
+        totalPage,
         hasNextPage,
         refetch,
         refetchInfo,

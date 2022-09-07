@@ -30,7 +30,7 @@ async function fetchListCashFlowPlan(params: any) {
     const { data } = await API.get(
         `${FIN_URL}/cash_flow_plans`, {
         params: {
-            select: '_id contract project parent type name sign date value planValue realDate realValue note priority outin status property approver timeApproved userCreate admins members',
+            select: '_id contract project parent type name sign date value planValue realDate realValue note priority outin status property approver timeApproved userCreate admins members createAt',
             populates: {
                 path: 'parent contract project approver userCreate admins members',
                 select: '_id name sign date priority sellerInfo bizfullname',
