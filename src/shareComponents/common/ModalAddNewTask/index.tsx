@@ -205,6 +205,10 @@ export const ModalAddNewTask: FC = () => {
   const handleUploadAttach = async (filesSelected: FileList | null) => {
     if (!filesSelected || !filesSelected.length) return;
 
+    if(!projectID || !groupID) {
+      return toast.warn('Bạn cần chọn dự án và nhóm trước khi thêm file đính kèm');
+    }
+
     const validation = await validateFiles(filesSelected);
     if (validation.error) return toast.warn(validation.message);
 
