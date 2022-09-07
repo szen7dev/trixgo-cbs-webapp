@@ -169,6 +169,21 @@ const listSearchMessageSlice = createSlice({
                     [action.payload.conversationId]: false
                 },
             }
+        },
+        clearAllSearchMode (state) {
+            state.data = {
+                ...state.data,
+                listSearchMessage: {},
+                totalRecordBack: {},
+                totalRecordFront: {},
+                nextCursor: {},
+                prevCursor: {},
+                hasMoreDataBack: {},
+                hasMoreDataFront: {},
+                isLoading: {},
+                inSearchMode: {},
+                shouldStartListenEvent: {}
+            }
         }
     },
     extraReducers: {}
@@ -180,6 +195,7 @@ export const {
     setInSearchMode,
     dismissSearchMode,
     setShouldStartListenEvent,
-    clearListMessage
+    clearListMessage,
+    clearAllSearchMode
 } = listSearchMessageSlice.actions;
 export default listSearchMessageSlice.reducer;

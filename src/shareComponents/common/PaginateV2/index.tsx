@@ -9,13 +9,14 @@ type Props = {
     totalRecord?: number;
     totalPages?: number;
     hasNextPage?: boolean;
+    fitContent?: boolean
 };
 
 type PaginateHandle = {
     resetPaginate: () => void
 }
 const PaginateV2 = forwardRef<PaginateHandle, Props>(
-    ({prevPageAction, nextPageAction, limit = 10, totalRecord = 0, totalPages, isFetching, hasNextPage, ...props}, paginateRef) => {
+    ({fitContent, prevPageAction, nextPageAction, limit = 10, totalRecord = 0, totalPages, isFetching, hasNextPage, ...props}, paginateRef) => {
     const [currentIndex, setCurrentIndex] = useState(1);
     const totalPagesNumber = totalPages || 0
 
@@ -38,7 +39,7 @@ const PaginateV2 = forwardRef<PaginateHandle, Props>(
     }
 
     return (
-        <div className={"flex-1 flex items-center justify-end"}>
+        <div className={(fitContent?"":"flex-1") + " flex items-center justify-end"}>
             <span className={"text-primary-gray"}>{(currentIndex - 1) * limit + 1}-{(currentIndex * limit) >= totalRecord ? totalRecord : currentIndex * limit} trong số {totalRecord}</span>
             <button
                 onClick={handlePrevPage}

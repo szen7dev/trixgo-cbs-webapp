@@ -37,16 +37,12 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
     const isReviewOldMessage = useSelector((state: RootState) => state.listMessage.data.isReviewOldMessage[currentChat]);
 
     const socket = socketRef.current;
-    const {getListConversation} = UseListConversation();
     const {getListPinMessage} = UseConversation();
     const paramsRefetchListMember = {conversationID: currentChat, populates: JSON.stringify({"path": "addedBy member", "select": "_id bizfullname image"})};
     const {refetchListMembers} = UseInformationMessage(paramsRefetchListMember, false, "members");
 
-    const audioRef = useRef<HTMLAudioElement>(null)
-
     useEffect(() => {
         if (!socket) return;
-        socket.on('CHATTING_SSC_RECEIVE_MESSAGE', onReceiveMessage);
         socket.on('CHATTING_SSC_FIRE_MESSAGE', onFireMessage);
         socket.on('CHATTING_SSC_REVOKE_MESSAGE', onReceiveRevokeMessage);
         socket.on('CHATTING_SSC_REACTION_MESSAGE', onReceiveReactionMessage);
@@ -57,7 +53,6 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
         socket.on('CHATTING_SSC_GET_INFO_CONVERSATION', onGetInfoConversation);
 
         return () => {
-            socket.off('CHATTING_SSC_RECEIVE_MESSAGE', onReceiveMessage);
             socket.off('CHATTING_SSC_FIRE_MESSAGE', onFireMessage);
             socket.off('CHATTING_SSC_REVOKE_MESSAGE', onReceiveRevokeMessage);
             socket.off('CHATTING_SSC_REACTION_MESSAGE', onReceiveReactionMessage);
@@ -76,55 +71,6 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
             document.title = `${process.env.REACT_APP_WEBSITE_NAME}`
         }
     }, [amountMissMessage])
-
-    const onReceiveMessage = (data: any) => {
-        if (data?.infoMessage?.error) {
-            // Alert.alert(t('notification'), data.infoMessage.message);
-            getListConversation({keyword: ""});
-            return;
-        }
-        dispatch(setAmountMissMessage(data.amountMissMessage))
-        // console.log(data)
-        socket.emit('CHATTING_CSS_GET_INFO_CONVERSATION', {
-            conversationID: data?.infoMessage?.conversation,
-            populates
-        });
-        if (data?.infoMessage?.sender?._id === profileId) {
-            dispatch(updateNewMessageToConversation({
-                conversationId: data?.infoMessage?.conversation,
-                newMessageId: data?.infoMessage?._id,
-                oldMessageId: data?.tmpid,
-                messageData: {
-                    ...data?.infoMessage,
-                    noAnimation: true
-                }
-            }));
-        } else {
-            playSound();
-            dispatch(appendMessageToConversation({
-                conversationId: data?.infoMessage?.conversation,
-                messageId: data?.infoMessage?._id,
-                messageData: {
-                    ...data?.infoMessage,
-                    noAnimation: true
-                }
-            }));
-            if (currentChat === data?.infoMessage?.conversation) {
-                dispatch(pushMoreUnreadMessage({conversationId: data?.infoMessage?.conversation, messagesId: [data?.infoMessage?._id]}));
-            }
-            if (!inSearchMode && currentChat === data?.infoMessage?.conversation && !isReviewOldMessage){
-                setTimeout(() => {
-                    scrollToBottom();
-                }, 100)
-            }
-        }
-    };
-
-    // const onReceiveConversation = (data: any) => {
-    //     // console.log('CHATTING_SSC_GET_LIST_CONVERSATION', data.data.listRecords,  new Date())
-    //     if (!data) return;
-    //     dispatch(setListConversation(data?.data));
-    // }
 
     const onFireMessage = (data: any) => {
         if (!data) return;
@@ -258,14 +204,6 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
     //     }))
     // }
 
-    const playSound = () => {
-        if (audioRef.current) {
-            if (!(audioRef.current.paused && audioRef.current.currentTime > 0 && !audioRef.current.ended)) {
-                audioRef.current.play();
-            }
-        }
-    }
-
     const onGetInfoConversation = (data: any) => {
         if (!data) return;
         if (data.error) return;
@@ -274,8 +212,5 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
         }))
     }
 
-    return <>
-        <audio src={"/sounds/messages/teaser.mp3"} ref={audioRef}/>
-        <Favico counter={amountMissMessage}/>
-    </>;
+    return null;
 };
