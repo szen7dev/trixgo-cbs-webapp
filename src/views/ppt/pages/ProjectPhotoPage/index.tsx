@@ -76,7 +76,7 @@ const ProjectPhotoPage: FC = () => {
 										{file.contract?.photos?.slice(0, 6)?.map((photo, index) =>
 											<CardImage
 												image={photo}
-												pathname={`${location.pathname}/contract/${file.contract?._id}`}
+												pathname={`${location.pathname}/${file.contract?._id}`}
 												index={index}
 												total={file.count}
 												key={photo._id}
