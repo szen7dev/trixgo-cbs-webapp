@@ -426,7 +426,6 @@ const PCMRouter: FC = () => {
                         <ProjectPhotoContractPage/>
                       </PmProjectLayout>
                     </Route>
-
                     <Route path="/pm/project/:id/drawing">
                       <PmProjectLayout>
                         <ProjectDrawingPageV2/>
