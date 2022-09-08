@@ -44,7 +44,7 @@ export const ProjectBudgetDetailTab2:FC<Props> = ({ contractInfo }) => {
         fetchNextPage,
         hasNextPage,
         isLoading
-    } = UseContractProduceListWithPager({}, params.budgetId, 20, true);
+    } = UseContractProduceListWithPager(true, {}, params.budgetId, 20);
   
     const { createContractProduceMutateAsync } = useCreateContractProduceMutation();
     const { updateContractProduceMutateAsync } = useUpdateContractProduceMutation();

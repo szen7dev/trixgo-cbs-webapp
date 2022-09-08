@@ -47,7 +47,7 @@ export const UseContractProduceList = (pageParam = '', contractID = '', limit = 
     }
 };
 
-export const UseContractProduceListWithPager = (param = {}, contractID = '', limit = 10, isFetchList = false): any => {
+export const UseContractProduceListWithPager = (isFetchList = false, param = {}, contractID = '', limit = 10): any => {
     const res = useInfiniteQuery(
         [`contractProduceListWithPager`, { param }],
         async ({ pageParam }: any) =>
