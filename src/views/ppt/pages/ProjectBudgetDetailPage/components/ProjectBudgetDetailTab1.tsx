@@ -1,14 +1,12 @@
 import moment from "moment";
-import React, {FC, useState, useEffect } from "react";
+import React, {FC, useState } from "react";
 import { CONTRACT_COME_IN_STATUS } from "apis/localdb/index";
 import { useListDocument } from "services/hooks/document/useDocument";
-import { Link } from "react-router-dom";
+import {Link, useHistory, useParams} from "react-router-dom";
 import { formatNumberMoney } from "utils/cmcs"
-import downloadIcon from "../../../../../assets/images/icons8-download-64.svg";
-import iconPencil from "../../../../../assets/images/icons8-pencil-96 1.png";
-import nextIcon from "../../../../../assets/images/icons-arrow-next.svg";
 import {NavigateTabBudgetDetail} from "./NavigateTabBudgetDetail";
-import PaginateV2 from "../../../../../shareComponents/common/PaginateV2";
+import PaginateV2 from "shareComponents/common/PaginateV2";
+import iconBack from "assets/images/icon-back-gray.svg";
 
 interface Props {
     contractInfo: any
@@ -51,6 +49,9 @@ interface Props {
 };
 
 export const ProjectBudgetDetailTab1:FC<Props> = ({ contractInfo }) => {
+    const { id: projectID, type, budgetId, tab } = useParams<{ id: string , type: string, budgetId: string, tab: string}>();
+    const history = useHistory();
+
     type PaginateHandle = React.ElementRef<typeof PaginateV2>;
     const ref = React.useRef<PaginateHandle>(null);
     const [pageIndex, setPageIndex] = useState(0);
@@ -68,7 +69,17 @@ export const ProjectBudgetDetailTab1:FC<Props> = ({ contractInfo }) => {
 
     return (
         <>
-        <div className={"sticky top-0 mt-2 bg-white"}>
+        <div className={"sticky top-0 bg-white"}>
+            <div className={"flex items-center"}>
+                <div className={"flex flex-1 items-center"}>
+                    <button
+                        onClick={() => history.push(`/pm/project/${projectID}/budget/type/1`)}
+                        className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mr-3"}>
+                        <img src={iconBack} alt={"----"} className={"w-[18px]"}/>
+                    </button>
+                    <p className={"text-lg text-primary-gray ml-2"}>{contractInfo?.name}</p>
+                </div>
+            </div>
             <div className={"flex items-center pb-2"}>
                 <NavigateTabBudgetDetail/>
                 <PaginateV2
