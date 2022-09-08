@@ -1,9 +1,6 @@
 import React, {FC, useCallback} from "react";
 import iconBack from "assets/images/icon-back-gray.svg";
-import downloadIcon from "assets/images/icons8-download-64.svg";
-import iconPencil from "assets/images/icons8-pencil-96 1.png";
-import nextIcon from "assets/images/icons-arrow-next.svg";
-import {Link, useHistory, useParams} from "react-router-dom";
+import {useHistory, useParams} from "react-router-dom";
 import {ProjectBudgetDetailTab1} from "./components/ProjectBudgetDetailTab1";
 import {ProjectBudgetDetailTab2} from "./components/ProjectBudgetDetailTab2";
 import {ProjectBudgetDetailTab3} from "./components/ProjectBudgetDetailTab3";
@@ -15,8 +12,8 @@ import {
     UseContractProduceList,
     useCreateContractProduceMutation,
     useUpdateContractProduceMutation
-} from "../../../../services/hooks/cmcs/useContractProduce";
-import {useModal} from "../../../../services/hooks/useModal";
+} from "services/hooks/cmcs/useContractProduce";
+import {useModal} from "services/hooks/useModal";
 
 const ProjectBudgetDetailPage:FC = () => {
     const { id: projectID, type, budgetId, tab } = useParams<{ id: string , type: string, budgetId: string, tab: string}>();
@@ -66,6 +63,8 @@ const ProjectBudgetDetailPage:FC = () => {
         }
         return false;
     }, [contractProduce]);
+
+    if (!contractInfo) return null;
 
     return (
         <div className={"project-budget-detail relative flex flex-col h-full overflow-hidden"}>

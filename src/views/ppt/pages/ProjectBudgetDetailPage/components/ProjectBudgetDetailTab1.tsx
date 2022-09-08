@@ -51,20 +51,15 @@ interface Props {
 };
 
 export const ProjectBudgetDetailTab1:FC<Props> = ({ contractInfo }) => {
-    const [paramsSearch, setParamsSearch] = useState({});
     type PaginateHandle = React.ElementRef<typeof PaginateV2>;
     const ref = React.useRef<PaginateHandle>(null);
     const [pageIndex, setPageIndex] = useState(0);
 
-    useEffect(() => {
-        setParamsSearch({
+    const { listDocumentWithPager, isLoading, totalRecord, totalPage, hasNextPage, fetchNextPageDocument } = useListDocument({
+        params: {
             contractID: contractInfo?._id,
             limit: "20",
-        })
-    }, [contractInfo]);
-
-    const { listDocumentWithPager, isLoading, totalRecord, totalPage, hasNextPage, fetchNextPageDocument } = useListDocument({
-        params: paramsSearch,
+        },
         isFetchList: true
     }); 
 

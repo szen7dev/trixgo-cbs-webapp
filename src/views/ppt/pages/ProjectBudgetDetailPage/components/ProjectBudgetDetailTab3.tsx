@@ -1,25 +1,19 @@
-import React, { FC, useCallback, useEffect, useState } from "react";
-
-import cn from "classnames";
+import React, { FC, useCallback, useState } from "react";
 
 import { useModal } from "services/hooks/useModal";
 import moment from "moment";
 import { DATE_FORMAT } from "apis/localdb/index";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
-import { SearchInput, Paginate } from "shareComponents/common";
-import { ContractIpcModal, DropdownFilterButton, ActionMenuTopBar } from "views/cmcs/shareComponents/common";
+import { ContractIpcModal, ActionMenuTopBar } from "views/cmcs/shareComponents/common";
 import { formatNumberMoney } from "utils/cmcs"
-import styles from 'views/cmcs/styles/styles.module.css';
-import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 import { useParams } from "react-router-dom";
 import {
-    UseContractIPCList,
     useCreateContractIPCMutation,
     useUpdateContractIPCMutation,
     useDeleteContractIPCMutation, UseContractIPCListWithPager,
 } from "services/hooks/cmcs/useContractIPC";
 import {NavigateTabBudgetDetail} from "./NavigateTabBudgetDetail";
-import PaginateV2 from "../../../../../shareComponents/common/PaginateV2";
+import PaginateV2 from "shareComponents/common/PaginateV2";
 
 interface Props {
     contractInfo: any
