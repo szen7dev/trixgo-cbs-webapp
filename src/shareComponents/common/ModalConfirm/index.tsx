@@ -17,11 +17,11 @@ export const ModalConfirm: FC<Props> = ({ title, description, defaultText = true
                 </p>
             </header>
 
-            <section className="px-10 text-primary-gray">
+            {/* <section className="px-10 text-primary-gray">
                 <p>
                     {defaultText ? 'Dữ liệu của bạn sẽ bị xóa vĩnh viễn và bạn không thể khôi phục lại dữ liệu này' : description}
                 </p>
-            </section>
+            </section> */}
 
             <footer className="absolute right-0 bottom-0 px-10 py-9">
                 <button
