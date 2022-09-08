@@ -57,6 +57,7 @@ interface InitialValues {
   type: number,
   relatedIDs: string[],
   groupID: string,
+  expiredHour: string
 }
 
 export const ModalAddNewTask: FC = () => {
@@ -243,7 +244,6 @@ export const ModalAddNewTask: FC = () => {
         fileType: 2,
         source,
         progress: percentCompleted => {
-          console.log(`${percentCompleted}%`, key);
           setUploadFileProgress(key, percentCompleted)
         }
       })
@@ -305,7 +305,8 @@ export const ModalAddNewTask: FC = () => {
     assigneeID: "",
     name: "",
     startTime: moment().format('MM/DD/YYYY'),
-    expiredTime: "",
+    expiredTime: moment().format('MM/DD/YYYY'),
+    expiredHour: "00:00",
     description: "",
     authorAttachs: [],
     type: 1,

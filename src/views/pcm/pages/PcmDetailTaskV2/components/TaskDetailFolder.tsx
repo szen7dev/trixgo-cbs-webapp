@@ -91,7 +91,7 @@ export const TaskDetailFolder: FC<Props> = ({
           >
             <ModalConfirm
               title="Bạn có muốn mở thầu không?"
-              description="Bạn có muốn xác nhận là sẽ mở thầu ngay bây giờ không?"
+              description="Mở thầu để xem hồ sơ dự thầu của nhà thầu"
               onConfirm={handleOpenBidding}
               defaultText={false}
               onCancel={closeModal}
@@ -100,15 +100,33 @@ export const TaskDetailFolder: FC<Props> = ({
         );
     };
 
+    const toggleModalOpenSign = () => {
+        openModal(
+          <div
+            className={
+              "inline-block w-[521px] h-[240px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+            }
+          >
+            <ModalConfirm
+              title="Bạn có muốn xác nhận không?"
+              description="Thông tin xác nhận của bạn sẽ được hiển thị trong chi tiết công việc"
+              onConfirm={handleConfirmSignature}
+              defaultText={false}
+              onCancel={closeModal}
+            />
+          </div>
+        );
+    };
+
     const handleConfirmSignature = useCallback(async () => {
-        if (!hasPermissionAddSignature) return;
+        if (!hasPermissionAddSignature) return closeModal();
 
         try {
             const { error, data } = await updateTaskAsync({
                 taskID: task._id,
                 isAddSignature: true
             })
-
+            closeModal();
             if (error) {
                 return toast.warning(data.message);
             }
@@ -121,6 +139,7 @@ export const TaskDetailFolder: FC<Props> = ({
             toast.success('Ký xác nhận thành công');
             onConfirmSign?.();
         } catch (error) {
+            closeModal();
             captureException(error);
             if (typeof error === "string") {
                 toast.error(error);
@@ -183,7 +202,7 @@ export const TaskDetailFolder: FC<Props> = ({
             <div className={"flex items-center"}>
                 {(task.subtype === 4) && hasPermissionOpenBidding && (
                     <button
-                        className={"flex text-primary-gray items-center rounded bg-cbs-form-input-bg px-3 h-[30px] "}
+                        className={"flex text-primary-gray items-center rounded bg-cbs-form-input-bg px-3 h-[30px] mr-2"}
                         onClick={toggleModalOpenBidding}
                         disabled={isCurrentUserOpened}
                     >
@@ -192,7 +211,7 @@ export const TaskDetailFolder: FC<Props> = ({
                     </button>
                 )}
                 {!isSigned && hasPermissionAddSignature && (
-                    <button className={"flex text-primary-gray items-center rounded bg-cbs-form-input-bg px-3 h-[30px] ml-2"} onClick={handleConfirmSignature}>
+                    <button className={"flex text-primary-gray items-center rounded bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={toggleModalOpenSign}>
                         <img src={iconCheckmark} alt={"----"} className={"mr-2"} />
                         <span>Xác nhận</span>
                     </button>
