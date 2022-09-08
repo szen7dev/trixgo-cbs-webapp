@@ -89,7 +89,10 @@ const PcmDetailTaskV2: FC = () => {
          */
         switch (subtype) {
             case 4: {
-                const diff = calculateExpireTime(Date.now(), actualFinishTime, 'days', false);
+               
+                const currentTime = new Date().getTime();
+                const actualFinishTimeConvert = new Date(actualFinishTime).getTime();
+                const preDeadline = currentTime < actualFinishTimeConvert ? true : false;
                 let allUsersRelatedIsOpenBidding = false;
 
                 if (openedUsers && relatedsID.length === openedUsers.length) {
@@ -141,7 +144,7 @@ const PcmDetailTaskV2: FC = () => {
                     }
 
                     // Trước deadline
-                    if (diff > 0) {
+                    if (preDeadline) {
                         setPermissions({
                             ...dataPermissions,
                             hasPermissionOpenBidding: false,
@@ -150,7 +153,7 @@ const PcmDetailTaskV2: FC = () => {
                     }
 
                     // Sau deadline
-                    if (diff === 0 || diff < 0) {
+                    if (!preDeadline) {
                         setPermissions({
                             ...dataPermissions,
                             hasPermissionAddSignature: false
