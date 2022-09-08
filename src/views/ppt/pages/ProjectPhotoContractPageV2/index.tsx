@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import {useParams, Link, useHistory} from 'react-router-dom';
 import InfiniteScroll from "react-infinite-scroll-component";
+import parse from "html-react-parser";
 
 import { ModalZoomView } from "shareComponents/common/ZoomView";
 import { ImageProps } from "typings/common";
@@ -11,6 +12,18 @@ import { User } from "typings/user";
 import iconBack from "assets/images/icon-back-gray.svg";
 
 const ProjectPhotoContractPage: FC = () => {
+	const subContentHtml = (html?: string) => {
+        const removeHtmlTag = parse(
+            (html || "").replace(/<[^>]*>?/gm, " ")
+        ).toString();
+
+        const result =
+            removeHtmlTag.length > 75
+                ? `${removeHtmlTag.slice(0, 75)}...`
+                : removeHtmlTag;
+        return result;
+    };
+
 	const history = useHistory();
 	const { contractID, id: projectID } = useParams<{ contractID: string, id: string }>();
 	const [defaultState, setDefaultState] = useState({
@@ -101,7 +114,7 @@ const ProjectPhotoContractPage: FC = () => {
 													className={"text-base"}
 													title={comment.content}
 													dangerouslySetInnerHTML={{
-														__html: comment.content
+														__html: subContentHtml(comment.content)
 													}}
 												>
 												</div>
