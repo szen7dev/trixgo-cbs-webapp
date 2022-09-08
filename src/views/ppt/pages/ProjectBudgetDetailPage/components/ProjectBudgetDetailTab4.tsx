@@ -7,7 +7,7 @@ import { DATE_FORMAT, CONTRACT_IPC_TYPES } from "apis/localdb/index";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import { ContractPaymentModal, ActionMenuTopBar } from "views/cmcs/shareComponents/common";
 import { formatNumberMoney } from "utils/cmcs"
-import { useParams } from "react-router-dom";
+import {useHistory, useParams} from "react-router-dom";
 
 import {
     useCreateContractPaymentMutation,
@@ -16,11 +16,15 @@ import {
 } from "services/hooks/cmcs/useContractPayment";
 import {NavigateTabBudgetDetail} from "./NavigateTabBudgetDetail";
 import PaginateV2 from "shareComponents/common/PaginateV2";
+import iconBack from "assets/images/icon-back-gray.svg";
 interface Props {
     contractInfo: any
 };
 
 export const ProjectBudgetDetailTab4:FC<Props> = ({ contractInfo }) => {
+    const { id: projectID, type, budgetId, tab } = useParams<{ id: string , type: string, budgetId: string, tab: string}>();
+    const history = useHistory();
+
     const [itemChecked, setItemChecked] = useState('');
 
     type PaginateHandle = React.ElementRef<typeof PaginateV2>;
@@ -44,57 +48,86 @@ export const ProjectBudgetDetailTab4:FC<Props> = ({ contractInfo }) => {
     const { deleteContractPaymentMutateAsync } = useDeleteContractPaymentMutation();
   
     const { openDeleteConfirm } = useDeleteConfirm();
-  
+
     const handleDeleteAction = async () => {
-      if (!itemChecked) {
-        return
-      }
-      openDeleteConfirm({
-        deleteAction: async () => {
-          const res = await deleteContractPaymentMutateAsync(itemChecked)
-          if (!res.error) {
-            refetch()
-          }
-        },
-      });
+        if (!itemChecked) {
+            return
+        }
+        openDeleteConfirm({
+            deleteAction: async () => {
+                const res = await deleteContractPaymentMutateAsync(itemChecked)
+                if (!res.error) {
+                    setPageIndex(0);
+                    ref.current&&ref.current.resetPaginate();
+                    refetch()
+                }
+            },
+        });
     }
-  
+
     const handleEditAction = async () => {
-      if (!itemChecked) {
-        return
-      }
-      openModal(
-        <div className={
-            "inline-block w-screen h-screen overflow-hidden transition-all transform flex justify-center bg-transparent shadow-xl rounded absolute left-0 right-0 top-10"
-          }
-        >
-          <ContractPaymentModal onFinish={handleFinishForm} idEdit={itemChecked} isEdit={true} contractID={params.budgetId} title="Cập nhật" refetchList={refetch}/>
-        </div>
-      )
+        if (!itemChecked) {
+            return
+        }
+        openModal(
+            <div className={
+                "inline-block w-screen h-screen overflow-hidden transition-all transform flex justify-center bg-transparent shadow-xl rounded absolute left-0 right-0 top-10"
+            }
+            >
+                <ContractPaymentModal onFinish={handleFinishForm} idEdit={itemChecked} isEdit={true} contractID={params.budgetId} title="Cập nhật" refetchList={refetch}/>
+            </div>
+        )
     }
-  
+
     const handleFinishForm = useCallback(async (values, isEdit = false) => {
-      let res: any
-      if (isEdit) {
-        res = await updateContractPaymentMutateAsync(values);
-      } else {
-        res = await createContractPaymentMutateAsync(values);
-      }
-  
-      if (res.code && res.code !== 200) {
+        let res: any
+        if (isEdit) {
+            res = await updateContractPaymentMutateAsync(values);
+        } else {
+            res = await createContractPaymentMutateAsync(values);
+        }
+
+        if (res.code && res.code !== 200) {
+            return false;
+        }
+
+        if (!res.error) {
+            setPageIndex(0);
+            ref.current&&ref.current.resetPaginate();
+            refetch()
+            return true;
+        }
         return false;
-      }
-  
-      if (!res.error) {
-        refetch()
-        return true;
-      }
-      return false;
     }, [listContractPaymentWithPager]);
   
     return (
         <>
-            <div className={"sticky top-0 mt-2 bg-white"}>
+            <div className={"sticky top-0 bg-white"}>
+                <div className={"flex items-center"}>
+                    <div className={"flex flex-1 items-center"}>
+                        <button
+                            onClick={() => history.push(`/pm/project/${projectID}/budget/type/1`)}
+                            className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mr-3"}>
+                            <img src={iconBack} alt={"----"} className={"w-[18px]"}/>
+                        </button>
+                        <p className={"text-lg text-primary-gray ml-2"}>{contractInfo?.name}</p>
+                    </div>
+                    <button
+                        className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold mr-4"
+                        onClick={() =>
+                            openModal(
+                                <div className={
+                                    "inline-block w-screen h-screen overflow-hidden transition-all transform flex justify-center bg-transparent shadow-xl rounded absolute left-0 right-0 top-10"
+                                }
+                                >
+                                    <ContractPaymentModal onFinish={handleFinishForm} contractID={params.budgetId} refetchList={refetch} title="Tạo mới" />
+                                </div>
+                            )
+                        }
+                    >
+                        Tạo mới
+                    </button>
+                </div>
                 <div className={"flex items-center pb-2"}>
                     <NavigateTabBudgetDetail/>
                     {itemChecked && (
