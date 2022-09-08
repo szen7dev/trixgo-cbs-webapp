@@ -3,7 +3,7 @@ import iconBack from "assets/images/icon-back-gray.svg";
 import downloadIcon from "assets/images/icons8-download-64.svg";
 import iconPencil from "assets/images/icons8-pencil-96 1.png";
 import nextIcon from "assets/images/icons-arrow-next.svg";
-import { Link, useParams } from "react-router-dom";
+import {Link, useHistory, useParams} from "react-router-dom";
 import {ProjectBudgetDetailTab1} from "./components/ProjectBudgetDetailTab1";
 import {ProjectBudgetDetailTab2} from "./components/ProjectBudgetDetailTab2";
 import {ProjectBudgetDetailTab3} from "./components/ProjectBudgetDetailTab3";
@@ -13,8 +13,7 @@ import { useContract } from 'services/hooks/items/useContract';
 
 const ProjectBudgetDetailPage:FC = () => {
     const { id: projectID, type, budgetId, tab } = useParams<{ id: string , type: string, budgetId: string, tab: string}>();
-    console.log({type})
-    console.log({tab})
+    const history = useHistory();
 
     const activeTab = useCallback(() => {
         return tab.trim();
@@ -24,11 +23,11 @@ const ProjectBudgetDetailPage:FC = () => {
     const { contractInfo } = useContract({
 		params: {
 			contractID,
-			select: `name sign date buyerBank sellerBank sellerInfo status expiredAg expiredCg 
-            contractValue contractVatValue contractPlus contractVatPlus contractProduce contractVatProduce
-            contractAcceptance contractVatAcceptance contractPlusAcceptance contractVatPlusAcceptance
-            contractAmountPaid contractRemainingPayment finalValue produce vatProduce plusProduce vatPlusProduce remainingProduce 
-            recommendedPayment amountPaid remainingPayment`,
+			// select: `name sign date buyerBank sellerBank sellerInfo status expiredAg expiredCg 
+            // value vatValue plus vatPlus contractProduce contractVatProduce
+            // contractAcceptance contractVatAcceptance contractPlusAcceptance contractVatPlusAcceptance
+            // contractAmountPaid contractRemainingPayment finalValue produce vatProduce plusProduce vatPlusProduce remainingProduce 
+            // recommendedPayment amountPaid remainingPayment`,
 			populates: JSON.stringify({
 				path: "project buyerInfo",
 				select: "_id name"
@@ -41,7 +40,9 @@ const ProjectBudgetDetailPage:FC = () => {
         <div className={"project-budget-detail relative flex flex-col h-full overflow-hidden"}>
             <div className={"sticky top-0 bg-white"}>
                 <div className={"flex items-center"}>
-                    <button className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mr-3"}>
+                    <button
+                        onClick={() => history.push(`/pm/project/${projectID}/budget/type/1`)}
+                        className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mr-3"}>
                         <img src={iconBack} alt={"----"} className={"w-[18px]"}/>
                     </button>
                     <p className={"text-lg text-primary-gray ml-2"}>{contractInfo?.name}</p>

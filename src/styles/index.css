@@ -1788,3 +1788,6 @@ img {
 .chatting-input-reply .link-in-content {
   @apply text-primary;
 }
+.tox .tox-editor-header {
+  z-index: 0 !important;
+}

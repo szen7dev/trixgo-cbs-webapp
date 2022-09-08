@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, {FC, useEffect, useRef, useState} from "react";
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
 import mailIcon from "assets/images/icons8-secure-mail-48.svg";
 import chatIcon from "assets/images/icons8-chat-48.svg";
@@ -12,6 +12,10 @@ import { RootState } from "redux/reducer";
 import { setAmountMissMessage } from "redux/reducer/messages/ListConversation";
 import { UseListConversation } from "services/hooks/messages/useListConversation";
 import { usePcmPlanTaskNotification } from "services/hooks/pcm/usePcmDashboardV2";
+import {populates} from "../../../views/messages/shareComponents/layouts/MessagesLayoutV2";
+import {appendMessageToConversation, updateNewMessageToConversation} from "../../../redux/reducer/messages/ListMessage";
+import {pushMoreUnreadMessage} from "../../../redux/reducer/messages/UnreadMessages";
+import Favico from "react-favico-js";
 // import { useGetListAppOfUser } from "services/hooks/auth/usePermissions";
 
 type Props = {
@@ -19,6 +23,9 @@ type Props = {
 };
 export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
   // const { listAppOfUser, refetchAppUsers } = useGetListAppOfUser();
+  const currentUser = localStorage.getItem("currentUser")??"{}";
+  const profileId = JSON.parse(currentUser)?._id;
+  const audioRef = useRef<HTMLAudioElement>(null)
 
   const { pathname } = useLocation();
   const pathBreak = pathname.split("/");
@@ -50,19 +57,69 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
     };
   }, [socket]);
 
-  const amountMissMessage = useSelector(
-    (state: RootState) => state.listConversation.data.amountMissMessage
-  );
+  const currentChat = useSelector((state: RootState) => state.listMessage.data.currentChat);
+  const amountMissMessage = useSelector((state: RootState) => state.listConversation.data.amountMissMessage);
+  const inSearchMode = useSelector((state: RootState) => state.searchMessage.data.inSearchMode[currentChat]);
+  const isReviewOldMessage = useSelector((state: RootState) => state.listMessage.data.isReviewOldMessage[currentChat]);
   const { getListConversation } = UseListConversation();
 
   const onReceiveMessage = (data: any) => {
-    if (firstRoute === "messages") {
-      return;
-    }
     if (data?.infoMessage?.error) {
+      // Alert.alert(t('notification'), data.infoMessage.message);
+      getListConversation({keyword: ""});
       return;
     }
-    dispatch(setAmountMissMessage(data.amountMissMessage));
+    dispatch(setAmountMissMessage(data.amountMissMessage))
+    // console.log(data)
+    socket.emit('CHATTING_CSS_GET_INFO_CONVERSATION', {
+      conversationID: data?.infoMessage?.conversation,
+      populates
+    });
+    if (data?.infoMessage?.sender?._id === profileId) {
+      dispatch(updateNewMessageToConversation({
+        conversationId: data?.infoMessage?.conversation,
+        newMessageId: data?.infoMessage?._id,
+        oldMessageId: data?.tmpid,
+        messageData: {
+          ...data?.infoMessage,
+          noAnimation: true
+        }
+      }));
+    } else {
+      playSound();
+      dispatch(appendMessageToConversation({
+        conversationId: data?.infoMessage?.conversation,
+        messageId: data?.infoMessage?._id,
+        messageData: {
+          ...data?.infoMessage,
+          noAnimation: true
+        }
+      }));
+      if (currentChat === data?.infoMessage?.conversation) {
+        dispatch(pushMoreUnreadMessage({conversationId: data?.infoMessage?.conversation, messagesId: [data?.infoMessage?._id]}));
+      }
+      if (!inSearchMode && currentChat === data?.infoMessage?.conversation && !isReviewOldMessage){
+        setTimeout(() => {
+          scrollToBottom();
+        }, 100)
+      }
+    }
+  };
+
+  const playSound = () => {
+    if (audioRef.current) {
+      if (!(audioRef.current.paused && audioRef.current.currentTime > 0 && !audioRef.current.ended)) {
+        audioRef.current.volume = 0.2;
+        audioRef.current.play();
+      }
+    }
+  }
+
+  const scrollToBottom = () => {
+    const conversationMessagesList = document.getElementById("conversation-messages-MessageList");
+    if (conversationMessagesList) {
+      conversationMessagesList.scrollTo({top: conversationMessagesList.scrollHeight, behavior: "smooth" });
+    }
   };
 
   return (
@@ -179,6 +236,9 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
                 </div>
                 <span className={"text-primary-gray mt-1"}>Media</span>
             </Link> */}
+
+      <audio src={"/sounds/messages/teaser.mp3"} ref={audioRef}/>
+      <Favico counter={amountMissMessage}/>
     </div>
   );
 };
