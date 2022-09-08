@@ -124,7 +124,7 @@ const ProjectBudgetSpendingDetailPage:FC = () => {
                             Ngày thực tế
                         </th>
                         <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-normal text-left"}>
-                            Xây dựng mẫu BoQ cho công tác preliminaries
+                            Ghi chú
                         </th>
                         <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-normal text-left"}>
                             Cao
