@@ -68,7 +68,6 @@ const ModalUpdateBiddingPlan: FC<ModalProps> = ({ biddingPlanID, toggle, onConfi
 
 	const handleSubmit = async (values: any) => {
 		try {
-			console.log({ values })
 			const { error, data } = await updateAsync({
 				planID: biddingPlanID,
 				...values

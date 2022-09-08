@@ -100,7 +100,6 @@ export const useContractSpending = ({
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPage = data?.pages[0]?.data?.totalPage || 0;
     const nextCursor = data?.pages[0]?.data?.nextCursor
-    console.log({ totalRecord, totalPage, nextCursor, data })
     // Return data
     return {
         isLoading,

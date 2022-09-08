@@ -267,8 +267,20 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
     const handleClickImage = (index: number) => {
 		onClickImage?.(comment, index);
 	}
-
+    
     if (!comment) return <></>;
+    
+    if (task.subtype === 4 && task.openedStatus === 0) {
+        const currentTime = new Date().getTime();
+        const actualFinishTime = new Date(task.actualFinishTime).getTime();
+        // now(FE)<=infoTask.actualFinishTime và infoTask.openedStatus=0
+        if (currentTime < actualFinishTime) {
+            // Chỉ người thực hiện mới nhìn thấy comment
+            if (task?.assignee?._id !== userId && comment.official) {
+                return <></>;
+            }
+        }
+    };
 
     return (
         <div className={"item-comment flex items-start border-b-0.5 border-primary-border pb-4 mb-3"}>

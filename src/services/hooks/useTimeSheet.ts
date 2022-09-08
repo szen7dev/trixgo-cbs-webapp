@@ -40,7 +40,6 @@ export const useQueryListTimeSheetParent = (): UseQueryListTimeSheetParent => {
             return data?.nextCursor || undefined;
         },
         getPreviousPageParam: (data) => {
-            console.log(data)
             return undefined;
         },
         refetchOnWindowFocus: false,
