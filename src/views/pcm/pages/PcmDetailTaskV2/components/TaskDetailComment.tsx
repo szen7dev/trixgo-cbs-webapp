@@ -58,7 +58,6 @@ export const TaskDetailComment: FC<Props> = ({ task, userId, refetchInfo }) => {
 
     useEffect(() => {
         const onEventAddComment = (result: any) => {
-            console.log({ result })
             const { data, error } = result;
 
             if (error) return;

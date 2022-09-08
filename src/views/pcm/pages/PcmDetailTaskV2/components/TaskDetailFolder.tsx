@@ -91,8 +91,9 @@ export const TaskDetailFolder: FC<Props> = ({
           >
             <ModalConfirm
               title="Bạn có muốn mở thầu không?"
-              description=""
+              description="Bạn có muốn xác nhận là sẽ mở thầu ngay bây giờ không?"
               onConfirm={handleOpenBidding}
+              defaultText={false}
               onCancel={closeModal}
             />
           </div>
@@ -180,7 +181,7 @@ export const TaskDetailFolder: FC<Props> = ({
                 </div>
             </div>
             <div className={"flex items-center"}>
-                {(task.subtype === 4) && (
+                {(task.subtype === 4) && hasPermissionOpenBidding && (
                     <button
                         className={"flex text-primary-gray items-center rounded bg-cbs-form-input-bg px-3 h-[30px] "}
                         onClick={toggleModalOpenBidding}
@@ -190,7 +191,7 @@ export const TaskDetailFolder: FC<Props> = ({
                         <span>{isCurrentUserOpened ? 'Đã mở thầu' : 'Mở thầu'}</span>
                     </button>
                 )}
-                {!isSigned && (
+                {!isSigned && hasPermissionAddSignature && (
                     <button className={"flex text-primary-gray items-center rounded bg-cbs-form-input-bg px-3 h-[30px] ml-2"} onClick={handleConfirmSignature}>
                         <img src={iconCheckmark} alt={"----"} className={"mr-2"} />
                         <span>Xác nhận</span>

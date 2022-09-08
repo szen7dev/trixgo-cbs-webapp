@@ -560,7 +560,7 @@ export const useCommentPcm = ({
       hasNextPage: hasNextPageComments
   } =
     useInfiniteQuery(
-      [key || "list_comments", params],
+      [key || `list_comments.${params}`, params],
       async ({ pageParam }: any) =>
       TaskRepository.listComments({
         lastestID: pageParam ?? "",
