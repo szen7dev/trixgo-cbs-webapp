@@ -1,68 +1,45 @@
-import { FC, useCallback, useEffect, useState } from "react";
-import cn from "classnames";
+import React, { FC, useCallback, useState } from "react";
 import { useModal } from "services/hooks/useModal";
 
-import { SearchInput, Paginate } from "shareComponents/common";
-import { ContractProduceModal, DropdownFilterButton, ActionMenuTopBar } from "views/cmcs/shareComponents/common";
+import { ContractProduceModal, ActionMenuTopBar } from "views/cmcs/shareComponents/common";
 import { formatNumberMoney } from "utils/cmcs"
-
-import styles from 'views/cmcs/styles/styles.module.css';
-
-import PolygonIcon from "assets/images/icon-polygon.svg";
-import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
-
 import moment from "moment";
 import { DATE_FORMAT } from "apis/localdb/index";
 
 import {
-  UseContractProduceList,
-  useCreateContractProduceMutation,
-  useUpdateContractProduceMutation,
-  useDeleteContractProduceMutation,
+    useCreateContractProduceMutation,
+    useUpdateContractProduceMutation,
+    useDeleteContractProduceMutation, UseContractProduceListWithPager,
 } from "services/hooks/cmcs/useContractProduce";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import { useParams } from "react-router-dom";
+import {NavigateTabBudgetDetail} from "./NavigateTabBudgetDetail";
+import PaginateV2 from "shareComponents/common/PaginateV2";
 interface Props {
     contractInfo: any
 };
 
 export const ProjectBudgetDetailTab2:FC<Props> = ({ contractInfo }) => {
     const [itemChecked, setItemChecked] = useState('');
-
-    const [pageParam, setPageParam] = useState('');
-    const [prevCursor, setPrevCursor] = useState([null]);
+    type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+    const ref = React.useRef<PaginateHandle>(null);
+    const [pageIndex, setPageIndex] = useState(0);
   
     const { openModal } = useModal();
     const params: any = useParams();
-    const contractProduce = UseContractProduceList(pageParam, params.budgetId);
+    const {
+        listContractProduceWithPager,
+        totalRecord,
+        totalPage,
+        refetch,
+        fetchNextPage,
+        hasNextPage,
+        isLoading
+    } = UseContractProduceListWithPager(true, {}, params.budgetId, 20);
   
     const { createContractProduceMutateAsync } = useCreateContractProduceMutation();
     const { updateContractProduceMutateAsync } = useUpdateContractProduceMutation();
     const { deleteContractProduceMutateAsync } = useDeleteContractProduceMutation();
-  
-    useEffect(() => {
-      if (!contractProduce.nextCursor) {
-        return;
-      }
-      const isExist = prevCursor.find((item: any) => item === contractProduce.nextCursor)
-      if (!isExist) {
-        setPrevCursor([...prevCursor, contractProduce.nextCursor])
-      }
-    }, [contractProduce.nextCursor]);
-  
-    const prevPageAction = () => {
-      if (!contractProduce.nextCursor) {
-        setPageParam(prevCursor[prevCursor.length - 2] || '')
-      } else {
-        const prev = prevCursor.findIndex((item: any) => item === contractProduce.nextCursor)
-        setPageParam(prevCursor[prev - 2] || '')
-      }
-  
-    };
-  
-    const nextPageAction = () => {
-      setPageParam(contractProduce.nextCursor)
-    }
   
     const { openDeleteConfirm } = useDeleteConfirm();
   
@@ -74,7 +51,7 @@ export const ProjectBudgetDetailTab2:FC<Props> = ({ contractInfo }) => {
         deleteAction: async () => {
           const res = await deleteContractProduceMutateAsync(itemChecked)
           if (!res.error) {
-            contractProduce.refetch()
+            refetch()
           }
         },
       });
@@ -107,47 +84,40 @@ export const ProjectBudgetDetailTab2:FC<Props> = ({ contractInfo }) => {
       }
   
       if (!res.error) {
-        contractProduce.refetch()
+        refetch()
         return true;
       }
       return false;
-    }, [contractProduce]);
-  
-    const handleOnFilter = useCallback((values) => {
-  
-      // setPageParam(() => ({ ...values }));
-      return true;
-    }, []);
-  
-    const handleOnCancelFilter = useCallback(() => {
-      // setPageParam({});
-    }, []);
+    }, [listContractProduceWithPager]);
+
     return (
         <>
-        {itemChecked && (
-            <ActionMenuTopBar deleteAction={handleDeleteAction} editAction={handleEditAction} updatePermission={true} deletePermission={true}/>
-        )}
-        <button
-            className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold mr-6"
-            onClick={() =>
-            openModal(
-                <div
-                className={
-                    // "inline-block w-[900px] h-[800px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
-                    "inline-block w-screen h-screen overflow-hidden transition-all transform flex justify-center bg-transparent shadow-xl rounded absolute left-0 right-0 top-10"
-                }
-                >
-                <ContractProduceModal onFinish={handleFinishForm} contractID={params.budgetId} title="Thêm mới" />
-                </div>
-            )
-            }
-        >
-            Tạo mới
-        </button>
-           
+        <div className={"sticky top-0 mt-2 bg-white"}>
+            <div className={"flex items-center pb-2"}>
+                <NavigateTabBudgetDetail/>
+                {itemChecked && (
+                    <ActionMenuTopBar deleteAction={handleDeleteAction} editAction={handleEditAction} updatePermission={true} deletePermission={true}/>
+                )}
+                <PaginateV2
+                    ref={ref}
+                    totalRecord={totalRecord}
+                    totalPages={totalPage}
+                    limit={20}
+                    hasNextPage={hasNextPage}
+                    isFetching={isLoading}
+                    nextPageAction={() => {
+                        fetchNextPage();
+                        setPageIndex(oldState => oldState+1)
+                    }}
+                    prevPageAction={() => {
+                        setPageIndex(oldState => oldState-1)
+                    }}
+                />
+            </div>
+        </div>
         <table className={"table-fixed border-collapse w-full mt-4 mb-6"}>
             <thead>
-            <tr className={"sticky top-0"}>
+            <tr className={"sticky top-0 z-5"}>
                 <th className={"w-[50px] bg-cbs-table-header p-2 border-0.5 border-primary-border align-middle"}>
                     <input className="form-check-input line mr-2" type="checkbox" value="" id="check"/>
                 </th>
@@ -203,12 +173,12 @@ export const ProjectBudgetDetailTab2:FC<Props> = ({ contractInfo }) => {
                 </td>
             </tr>
             {
-                contractProduce?.listContractProduce?.map((item: any, index: number) => (
+                (listContractProduceWithPager[pageIndex]??[]).map((item: any, index: number) => (
                     <tr key={index}>
                         <td className={"border-0.5 border-primary-border p-2 text-center align-middle"}>
                             {/* <input className="form-check-input line mr-2" type="checkbox" value="" id="check"/> */}
                             <input
-                                className="form-check-input line mr-2"
+                                className="form-check-input mr-2"
                                 type="checkbox"
                                 value=""
                                 id="flexCheckDefault"

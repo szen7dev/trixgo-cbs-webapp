@@ -1,6 +1,7 @@
-import { useMutation, useQuery } from "react-query";
+import {useInfiniteQuery, useMutation, useQuery} from "react-query";
 
 import ContractProduceRepository from 'apis/cmcs/contractProduce';
+import {DocumentRepository} from "../../../apis/document";
 
 type UseContractProduceProp = {
     listContractProduce: Array<any>;
@@ -43,6 +44,58 @@ export const UseContractProduceList = (pageParam = '', contractID = '', limit = 
         totalPage,
         nextCursor,
         refetch
+    }
+};
+
+export const UseContractProduceListWithPager = (isFetchList = false, param = {}, contractID = '', limit = 10): any => {
+    const res = useInfiniteQuery(
+        [`contractProduceListWithPager`, { param }],
+        async ({ pageParam }: any) =>
+            ContractProduceRepository.fetchList({
+                lastestID: pageParam,
+                limit,
+                contractID
+            }),
+        {
+            getNextPageParam: ({ data }: any) => {
+                return data?.nextCursor || undefined;
+            },
+            refetchOnWindowFocus: false,
+            enabled: isFetchList ?? true, // https://react-query.tanstack.com/guides/disabling-queries
+        }
+    );
+
+    const {
+        isLoading,
+        data,
+        refetch,
+        fetchNextPage,
+        fetchPreviousPage,
+        hasNextPage,
+    } = res;
+
+    const listContractProduce = []
+        .concat(
+            ...(data?.pages || []).map((d: any) => d.data?.listRecords)
+        )
+        .filter(Boolean);
+    const listContractProduceWithPager = (data?.pages || []).map((d: any) => d.data?.listRecords);
+
+    const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
+    const totalPage = data?.pages[0]?.data?.totalPage || 0;
+    const nextCursor = data?.pages && data?.pages[0]?.data?.nextCursor;
+
+    return {
+        listContractProduce,
+        listContractProduceWithPager,
+        totalRecord,
+        totalPage,
+        nextCursor,
+        refetch,
+        fetchNextPage,
+        fetchPreviousPage,
+        hasNextPage,
+        isLoading
     }
 };
 

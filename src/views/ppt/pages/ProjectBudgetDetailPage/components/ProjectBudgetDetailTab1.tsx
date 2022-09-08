@@ -4,6 +4,11 @@ import { CONTRACT_COME_IN_STATUS } from "apis/localdb/index";
 import { useListDocument } from "services/hooks/document/useDocument";
 import { Link } from "react-router-dom";
 import { formatNumberMoney } from "utils/cmcs"
+import downloadIcon from "../../../../../assets/images/icons8-download-64.svg";
+import iconPencil from "../../../../../assets/images/icons8-pencil-96 1.png";
+import nextIcon from "../../../../../assets/images/icons-arrow-next.svg";
+import {NavigateTabBudgetDetail} from "./NavigateTabBudgetDetail";
+import PaginateV2 from "../../../../../shareComponents/common/PaginateV2";
 
 interface Props {
     contractInfo: any
@@ -46,16 +51,15 @@ interface Props {
 };
 
 export const ProjectBudgetDetailTab1:FC<Props> = ({ contractInfo }) => {
-    const [paramsSearch, setParamsSearch] = useState({});
-    useEffect(() => {
-        setParamsSearch({
+    type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+    const ref = React.useRef<PaginateHandle>(null);
+    const [pageIndex, setPageIndex] = useState(0);
+
+    const { listDocumentWithPager, isLoading, totalRecord, totalPage, hasNextPage, fetchNextPageDocument } = useListDocument({
+        params: {
             contractID: contractInfo?._id,
             limit: "20",
-        })
-    }, [contractInfo]);
-
-    const { listDocument, isLoading, totalRecord, totalPage, nextCursor } = useListDocument({
-        params: paramsSearch,
+        },
         isFetchList: true
     }); 
 
@@ -63,6 +67,27 @@ export const ProjectBudgetDetailTab1:FC<Props> = ({ contractInfo }) => {
     // console.log({ listDocument })
 
     return (
+        <>
+        <div className={"sticky top-0 mt-2 bg-white"}>
+            <div className={"flex items-center pb-2"}>
+                <NavigateTabBudgetDetail/>
+                <PaginateV2
+                    ref={ref}
+                    totalRecord={totalRecord}
+                    totalPages={totalPage}
+                    limit={20}
+                    hasNextPage={hasNextPage}
+                    isFetching={isLoading}
+                    nextPageAction={() => {
+                        fetchNextPageDocument();
+                        setPageIndex(oldState => oldState+1)
+                    }}
+                    prevPageAction={() => {
+                        setPageIndex(oldState => oldState-1)
+                    }}
+                />
+            </div>
+        </div>
         <div className={"mt-4 mb-6"}>
             <div className={"px-4 mb-2 text-lg text-primary-gray"}>
                 Thông tin chung
@@ -198,7 +223,7 @@ export const ProjectBudgetDetailTab1:FC<Props> = ({ contractInfo }) => {
 
             <table className={"table-fixed border-collapse w-full"}>
                 <tbody>
-                {listDocument.map((document, i) => (
+                {(listDocumentWithPager[pageIndex]??[]).map((document, i) => (
                     <tr key={i}>
                         <td className={"w-4/12 border-b-0.5 border-primary-border px-4 py-2"}>
                             <p>
@@ -226,5 +251,6 @@ export const ProjectBudgetDetailTab1:FC<Props> = ({ contractInfo }) => {
             </table>
 
         </div>
+        </>
     )
 }
