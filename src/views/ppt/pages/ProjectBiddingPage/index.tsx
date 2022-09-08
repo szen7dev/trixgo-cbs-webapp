@@ -138,7 +138,7 @@ const ProjectBiddingPage: FC = () => {
       <div className={"sticky top-0 z-10"}>
         <div className={"flex items-center px-4 py-2"}>
           <div className={"flex items-center flex-1"}>
-            <DropdownSearchableV2
+            {/* <DropdownSearchableV2
                 className={"mr-4 border border-primary-border rounded-lg mb-2"}
                 placeholder={"Loại gói thầu"}
                 prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"}/>}
@@ -169,7 +169,7 @@ const ProjectBiddingPage: FC = () => {
                 isMultiple={true}
                 disableSearch={true}
                 data={[]}
-            />
+            /> */}
           </div>
           <button
               onClick={toggleModalCreateOrUpdate.bind(null, "create")}
@@ -182,7 +182,7 @@ const ProjectBiddingPage: FC = () => {
             <button className={"px-4 py-2 border-r-0.5 border-primary-border bg-cbs-soft-blue text-primary"}>
               Tất cả
             </button>
-            <button className={"px-4 py-2 border-r-0.5 border-primary-border bg-white text-primary-gray"}>
+            {/* <button className={"px-4 py-2 border-r-0.5 border-primary-border bg-white text-primary-gray"}>
               Chưa thực hiện
             </button>
             <button className={"px-4 py-2 border-r-0.5 border-primary-border bg-white text-primary-gray"}>
@@ -190,7 +190,7 @@ const ProjectBiddingPage: FC = () => {
             </button>
             <button className={"px-4 py-2 border-r-0.5 border-primary-border bg-white text-primary-gray"}>
               Hoàn thành
-            </button>
+            </button> */}
           </div>
           <button className={"flex items-center justify-center mx-3 ml-6"}>
             <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"}/>

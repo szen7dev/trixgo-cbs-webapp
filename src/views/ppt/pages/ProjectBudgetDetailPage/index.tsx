@@ -23,11 +23,11 @@ const ProjectBudgetDetailPage:FC = () => {
     const { contractInfo } = useContract({
 		params: {
 			contractID,
-			select: `name sign date buyerBank sellerBank sellerInfo status expiredAg expiredCg 
-            contractValue contractVatValue contractPlus contractVatPlus contractProduce contractVatProduce
-            contractAcceptance contractVatAcceptance contractPlusAcceptance contractVatPlusAcceptance
-            contractAmountPaid contractRemainingPayment finalValue produce vatProduce plusProduce vatPlusProduce remainingProduce 
-            recommendedPayment amountPaid remainingPayment`,
+			// select: `name sign date buyerBank sellerBank sellerInfo status expiredAg expiredCg 
+            // value vatValue plus vatPlus contractProduce contractVatProduce
+            // contractAcceptance contractVatAcceptance contractPlusAcceptance contractVatPlusAcceptance
+            // contractAmountPaid contractRemainingPayment finalValue produce vatProduce plusProduce vatPlusProduce remainingProduce 
+            // recommendedPayment amountPaid remainingPayment`,
 			populates: JSON.stringify({
 				path: "project buyerInfo",
 				select: "_id name"

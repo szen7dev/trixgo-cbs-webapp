@@ -59,7 +59,9 @@ export const ProjectBudgetDetailTab1:FC<Props> = ({ contractInfo }) => {
         isFetchList: true
     }); 
 
-    console.log({ listDocument })
+    // console.log({ contractInfo })
+    // console.log({ listDocument })
+
     return (
         <div className={"mt-4 mb-6"}>
             <div className={"px-4 mb-2 text-lg text-primary-gray"}>
@@ -136,7 +138,7 @@ export const ProjectBudgetDetailTab1:FC<Props> = ({ contractInfo }) => {
                         Giá trị ký
                     </td>
                     <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
-                        {formatNumberMoney(contractInfo?.contractValue+contractInfo?.contractVatValue+contractInfo?.contractPlus+contractInfo?.contractVatPlus)}
+                        {formatNumberMoney(contractInfo?.value+contractInfo?.vatValue+contractInfo?.plus+contractInfo?.vatPlus)}
                     </td>
                 </tr>
                 <tr>
@@ -144,7 +146,7 @@ export const ProjectBudgetDetailTab1:FC<Props> = ({ contractInfo }) => {
                         Sản lượng
                     </td>
                     <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
-                        {formatNumberMoney(contractInfo?.contractProduce+contractInfo?.contractVatProduce)}
+                        {formatNumberMoney(contractInfo?.produce+contractInfo?.plusProduce)}
                     </td>
                 </tr>
                 <tr>
@@ -152,7 +154,7 @@ export const ProjectBudgetDetailTab1:FC<Props> = ({ contractInfo }) => {
                         Nghiệm thu hoàn thành
                     </td>
                     <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
-                        { formatNumberMoney(contractInfo?.contractAcceptance + contractInfo?.contractVatAcceptance + contractInfo?.contractPlusAcceptance + contractInfo?.contractVatPlusAcceptance) }
+                        { formatNumberMoney(contractInfo?.acceptance + contractInfo?.vatAcceptance + contractInfo?.plusAcceptance + contractInfo?.vatPlusAcceptance) }
                     </td>
                 </tr>
                 <tr>
@@ -160,7 +162,7 @@ export const ProjectBudgetDetailTab1:FC<Props> = ({ contractInfo }) => {
                         Thanh toán
                     </td>
                     <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
-                        {formatNumberMoney(contractInfo?.contractAmountPaid)}
+                        {formatNumberMoney(contractInfo?.advancePaymentPaid+contractInfo?.amountPaid)}
                     </td>
                 </tr>
                 <tr>
@@ -168,12 +170,12 @@ export const ProjectBudgetDetailTab1:FC<Props> = ({ contractInfo }) => {
                         Còn lại chưa thanh toán
                     </td>
                     <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
-                        {formatNumberMoney(contractInfo?.contractRemainingPayment)}
+                        {formatNumberMoney(contractInfo?.remainingPayment)}
                     </td>
                 </tr>
                 <tr>
                     <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
-                        Ngày quyết toán
+                        Ngày ký
                     </td>
                     <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
                         {moment(contractInfo?.date).format("L")}
@@ -190,9 +192,9 @@ export const ProjectBudgetDetailTab1:FC<Props> = ({ contractInfo }) => {
                 </tbody>
             </table>
 
-            <div className={"px-4 mb-2 mt-4 text-lg text-primary-gray"}>
+            {/* <div className={"px-4 mb-2 mt-4 text-lg text-primary-gray"}>
                 Hồ sơ đính kèm
-            </div>
+            </div> */}
 
             <table className={"table-fixed border-collapse w-full"}>
                 <tbody>
