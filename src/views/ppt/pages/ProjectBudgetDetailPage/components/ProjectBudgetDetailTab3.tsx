@@ -153,7 +153,8 @@ export const ProjectBudgetDetailTab3:FC<Props> = ({ contractInfo }) => {
                     />
                 </div>
             </div>
-            <table className={"table-fixed border-collapse w-full mt-4 mb-6"}>
+            <div className="flex-1 overflow-y-auto">
+                <table className={"table-fixed border-collapse w-full mt-4 mb-6"}>
                 <thead>
                 <tr className={"sticky top-0 z-5"}>
                     <th className={"w-[50px] bg-cbs-table-header p-2 border-0.5 border-primary-border align-middle"}>
@@ -250,6 +251,7 @@ export const ProjectBudgetDetailTab3:FC<Props> = ({ contractInfo }) => {
                 }
                 </tbody>
             </table>
+            </div>
         </>
     )
 }

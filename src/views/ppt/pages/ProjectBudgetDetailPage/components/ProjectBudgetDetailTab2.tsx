@@ -150,106 +150,108 @@ export const ProjectBudgetDetailTab2:FC<Props> = ({ contractInfo }) => {
                 />
             </div>
         </div>
-        <table className={"table-fixed border-collapse w-full mt-4 mb-6"}>
-            <thead>
-            <tr className={"sticky top-0 z-5"}>
-                <th className={"w-[50px] bg-cbs-table-header p-2 border-0.5 border-primary-border align-middle"}>
-                    <input className="form-check-input line mr-2" type="checkbox" value="" id="check"/>
-                </th>
-                <th className={"w-3/12 bg-cbs-table-header p-2 border-0.5 border-primary-border text-primary-gray font-normal text-left"}>
-                    Nội dung
-                </th>
-                <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-primary-gray font-normal text-left"}>
-                    Ngày tháng
-                </th>
-                <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-primary-gray font-normal text-left"}>
-                    Mã hiệu
-                </th>
-                <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-primary-gray font-normal text-left"}>
-                    Sản lượng trước VAT
-                </th>
-                <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-primary-gray font-normal text-left"}>
-                    Sản lượng phần VAT
-                </th>
-                <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-primary-gray font-normal text-left"}>
-                    Sản lượng phát sinh trước VAT
-                </th>
-                <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-primary-gray font-normal text-left"}>
-                    Sản lượng phát sinh phần VAT
-                </th>
-                <th className={"w-3/12 bg-cbs-table-header p-2 border-0.5 border-primary-border text-primary-gray font-normal text-left"}>
-                    Ghi chú
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td className={"border-0.5 border-primary-border p-2 bg-cbs-table-highlight"}>
-                </td>
-                <td className={"border-0.5 border-primary-border p-2 bg-cbs-table-highlight"}>
-                </td>
-                <td className={"border-0.5 border-primary-border p-2 bg-cbs-table-highlight"}>
-                </td>
-                <td className={"border-0.5 border-primary-border p-2 bg-cbs-table-highlight"}>
-                </td>
-                <td className={"border-0.5 border-primary-border p-2 bg-cbs-table-highlight font-bold text-primary-gray text-right"}>
-                    {formatNumberMoney(contractInfo?.produce)}
-                </td>
-                <td className={"border-0.5 border-primary-border p-2 bg-cbs-table-highlight font-bold text-primary-gray text-right"}>
-                    {formatNumberMoney(contractInfo?.vatProduce)}
-                </td>
-                <td className={"border-0.5 border-primary-border p-2 bg-cbs-table-highlight font-bold text-primary-gray text-right"}>
-                    {formatNumberMoney(contractInfo?.plusProduce)}
-                </td>
-                <td className={"border-0.5 border-primary-border p-2 bg-cbs-table-highlight font-bold text-primary-gray text-right"}>
-                    {formatNumberMoney(contractInfo?.vatPlusProduce)}
-                </td>
-                <td className={"border-0.5 border-primary-border p-2 bg-cbs-table-highlight"}>
-                </td>
-            </tr>
-            {
-                (listContractProduceWithPager[pageIndex]??[]).map((item: any, index: number) => (
-                    <tr key={index}>
-                        <td className={"border-0.5 border-primary-border p-2 text-center align-middle"}>
-                            {/* <input className="form-check-input line mr-2" type="checkbox" value="" id="check"/> */}
-                            <input
-                                className="form-check-input mr-2"
-                                type="checkbox"
-                                value=""
-                                id="flexCheckDefault"
-                                checked={itemChecked === item._id}
-                                onChange={() => setItemChecked(item._id)}
-                            />
-                        </td>
-                        <td className={"border-0.5 border-primary-border p-2"}>
-                            {item.name}
-                        </td>
-                        <td className={"border-0.5 border-primary-border p-2"}>
-                            {moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}
-                        </td>
-                        <td className={"border-0.5 border-primary-border p-2"}>
-                            {item.sign}
-                        </td>
-                        <td className={"border-0.5 border-primary-border p-2 text-right"}>
-                            {formatNumberMoney((item.produce || 0))}
-                        </td>
-                        <td className={"border-0.5 border-primary-border p-2 text-right"}>
-                            {formatNumberMoney((item.vatProduce || 0))}
-                        </td>
-                        <td className={"border-0.5 border-primary-border p-2 text-right"}>
-                            {formatNumberMoney((item.plusProduce || 0))}
-                        </td>
-                        <td className={"border-0.5 border-primary-border p-2 text-right"}>
-                            {formatNumberMoney((item.vatPlusProduce || 0))}
-                        </td>
-                        <td className={"border-0.5 border-primary-border p-2"}>
-                            {item.description}
-                        </td>
-                    </tr>
-                ))
-            }
-            </tbody>
-        </table>
+        <div className="flex-1 overflow-y-auto">
+            <table className={"table-fixed border-collapse w-full mt-4 mb-6"}>
+        <thead>
+        <tr className={"sticky top-0 z-5"}>
+            <th className={"w-[50px] bg-cbs-table-header p-2 border-0.5 border-primary-border align-middle"}>
+                <input className="form-check-input line mr-2" type="checkbox" value="" id="check"/>
+            </th>
+            <th className={"w-3/12 bg-cbs-table-header p-2 border-0.5 border-primary-border text-primary-gray font-normal text-left"}>
+                Nội dung
+            </th>
+            <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-primary-gray font-normal text-left"}>
+                Ngày tháng
+            </th>
+            <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-primary-gray font-normal text-left"}>
+                Mã hiệu
+            </th>
+            <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-primary-gray font-normal text-left"}>
+                Sản lượng trước VAT
+            </th>
+            <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-primary-gray font-normal text-left"}>
+                Sản lượng phần VAT
+            </th>
+            <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-primary-gray font-normal text-left"}>
+                Sản lượng phát sinh trước VAT
+            </th>
+            <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-primary-gray font-normal text-left"}>
+                Sản lượng phát sinh phần VAT
+            </th>
+            <th className={"w-3/12 bg-cbs-table-header p-2 border-0.5 border-primary-border text-primary-gray font-normal text-left"}>
+                Ghi chú
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td className={"border-0.5 border-primary-border p-2 bg-cbs-table-highlight"}>
+            </td>
+            <td className={"border-0.5 border-primary-border p-2 bg-cbs-table-highlight"}>
+            </td>
+            <td className={"border-0.5 border-primary-border p-2 bg-cbs-table-highlight"}>
+            </td>
+            <td className={"border-0.5 border-primary-border p-2 bg-cbs-table-highlight"}>
+            </td>
+            <td className={"border-0.5 border-primary-border p-2 bg-cbs-table-highlight font-bold text-primary-gray text-right"}>
+                {formatNumberMoney(contractInfo?.produce)}
+            </td>
+            <td className={"border-0.5 border-primary-border p-2 bg-cbs-table-highlight font-bold text-primary-gray text-right"}>
+                {formatNumberMoney(contractInfo?.vatProduce)}
+            </td>
+            <td className={"border-0.5 border-primary-border p-2 bg-cbs-table-highlight font-bold text-primary-gray text-right"}>
+                {formatNumberMoney(contractInfo?.plusProduce)}
+            </td>
+            <td className={"border-0.5 border-primary-border p-2 bg-cbs-table-highlight font-bold text-primary-gray text-right"}>
+                {formatNumberMoney(contractInfo?.vatPlusProduce)}
+            </td>
+            <td className={"border-0.5 border-primary-border p-2 bg-cbs-table-highlight"}>
+            </td>
+        </tr>
+        {
+            (listContractProduceWithPager[pageIndex]??[]).map((item: any, index: number) => (
+                <tr key={index}>
+                    <td className={"border-0.5 border-primary-border p-2 text-center align-middle"}>
+                        {/* <input className="form-check-input line mr-2" type="checkbox" value="" id="check"/> */}
+                        <input
+                            className="form-check-input mr-2"
+                            type="checkbox"
+                            value=""
+                            id="flexCheckDefault"
+                            checked={itemChecked === item._id}
+                            onChange={() => setItemChecked(item._id)}
+                        />
+                    </td>
+                    <td className={"border-0.5 border-primary-border p-2"}>
+                        {item.name}
+                    </td>
+                    <td className={"border-0.5 border-primary-border p-2"}>
+                        {moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}
+                    </td>
+                    <td className={"border-0.5 border-primary-border p-2"}>
+                        {item.sign}
+                    </td>
+                    <td className={"border-0.5 border-primary-border p-2 text-right"}>
+                        {formatNumberMoney((item.produce || 0))}
+                    </td>
+                    <td className={"border-0.5 border-primary-border p-2 text-right"}>
+                        {formatNumberMoney((item.vatProduce || 0))}
+                    </td>
+                    <td className={"border-0.5 border-primary-border p-2 text-right"}>
+                        {formatNumberMoney((item.plusProduce || 0))}
+                    </td>
+                    <td className={"border-0.5 border-primary-border p-2 text-right"}>
+                        {formatNumberMoney((item.vatPlusProduce || 0))}
+                    </td>
+                    <td className={"border-0.5 border-primary-border p-2"}>
+                        {item.description}
+                    </td>
+                </tr>
+            ))
+        }
+        </tbody>
+    </table>
+        </div>
         </>
     )
 }
