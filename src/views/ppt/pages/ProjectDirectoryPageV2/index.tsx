@@ -14,6 +14,7 @@ import iconChevronRight from "assets/images/icon-chevron-right.png";
 import ModalCreateDepartmentDirectory from "../../../ppt/pages/ProjectDirectoryPageV2/components/ModalCreateDepartmentDirectory";
 import ModalUpdateDepartmentDirectory from "../../../ppt/pages/ProjectDirectoryPageV2/components/ModalUpdateDepartmentDirectory";
 import useCheckedList from "services/hooks/ppt/useCheckedList";
+import { useProject } from 'services/hooks/items/useProject';
 
 const DEPARTMENT_DIRECTORY_TYPE = [
     { id: 1, text: "Trợ lý viên" },
@@ -44,7 +45,20 @@ const ProjectDirectoryPageV2:FC = () => {
         refetch,
         nextCursor
     } = useDepartmentDirectory({ params: { companyID: companySelected, projectID, limit: 10, lastestID: pageParam }, isFetchList: true });
-    console.log({ nextCursor });
+    // console.log({ nextCursor });
+
+    const { info: projectInfo } = useProject({
+		params: {
+			departmentID: projectID,
+			select: "name sign",
+			populates: ""
+		},
+		isFetchInfo: true
+	})
+
+	useEffect(() => {
+		document.title = `${projectInfo.sign} | Danh bạ dự án`
+	}, []);
     
     const [departmentDirectoryIdSelected, setDepartmentDirectoryIdSelected] = useState("");
 

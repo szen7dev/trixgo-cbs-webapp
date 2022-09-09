@@ -18,6 +18,7 @@ import {
 import { APP_ID } from 'apis/localdb';
 import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 import { useQueryListDocumentFile } from "services/hooks/document/useDocumentFile";
+import { useProject } from 'services/hooks/items/useProject';
 
 const ProjectDrawingPageV2:FC = () => {
 	const [keyword, setKeyword] = useState("");
@@ -25,8 +26,18 @@ const ProjectDrawingPageV2:FC = () => {
 	const { id: projectID, documentID } = useParams<{ id: string, documentID: string }>();
 	// Call hook lấy thông tin project
 	const { infoDepartment } = usePcmProject({ departmentID: projectID });
+
+    const { info: projectInfo } = useProject({
+		params: {
+			departmentID: projectID,
+			select: "name sign",
+			populates: ""
+		},
+		isFetchInfo: true
+	})
+
 	useEffect(() => {
-		document.title = `${infoDepartment?.data?.sign} | Bản vẽ`
+		document.title = `${projectInfo.sign} | Bản vẽ`
 	}, []);
 
 	const {

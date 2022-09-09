@@ -12,6 +12,7 @@ import { useQueryDetailDepartment } from "services/hooks/items/useDepartment";
 import { usePcmFile } from 'services/hooks/pcm/usePcm';
 import { APP_ID } from 'apis/localdb';
 import { useHistoryTraffics } from "services/hooks/auth/useAuth";
+import { useProject } from 'services/hooks/items/useProject';
 
 const ProjectPhotoPage: FC = () => {
 	//_____Start history traffict
@@ -46,8 +47,17 @@ const ProjectPhotoPage: FC = () => {
 		}
 	}, [projectID])
 
+	const { info: projectInfo } = useProject({
+		params: {
+			departmentID: projectID,
+			select: "name sign",
+			populates: ""
+		},
+		isFetchInfo: true
+	})
+
 	useEffect(() => {
-		document.title = "CHG.THT-Hình ảnh"
+		document.title = `${projectInfo.sign} | Hình ảnh`
 	}, []);
 
 	const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
