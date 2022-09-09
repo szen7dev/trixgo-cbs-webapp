@@ -51,6 +51,10 @@ const ProjectBiddingPage: FC = () => {
 		isFetchInfo: true
 	})
 
+  useEffect(() => {
+		document.title = `${projectInfo.sign} | Lựa chọn nhà thầu`
+	}, []);
+
   const { closeModal, openModal } = useModal();
   const [biddingPlanIdSelected, setbiddingPlanIdSelected] = useState("");
   const [modalShow, setModalShow] = useState({
