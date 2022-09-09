@@ -238,7 +238,7 @@ export const DropdownSearchable: FC<Props> = ({
         key={readDataValue(option, "id")}
         className={
           (classNameItem ?? "") +
-          " select-option hover:bg-gray-100 transition duration-150 flex cursor-pointer py-3 px-4 "
+          " select-option max-w-full hover:bg-gray-100 transition duration-150 flex cursor-pointer py-3 px-4 "
         }
         onClick={() => handleSetValue(option)}
         data-option-value={option.id}
@@ -255,7 +255,7 @@ export const DropdownSearchable: FC<Props> = ({
         {renderItem ? (
           renderItem(modifyItem(option))
         ) : (
-          <div className={"flex align-items-center text-left"}>
+          <div className={"flex flex-1 align-items-center text-left"}>
             {readDataValue(option, "imageUrl") ? (
               <img
                 alt={"Avt"}
@@ -263,7 +263,7 @@ export const DropdownSearchable: FC<Props> = ({
                 className={"w-9 h-9 object-cover rounded-full mr-3"}
               />
             ) : null}
-            <span className={"flex-1 ml-1 mr-1"}>
+            <span className={"flex-1 ml-1 mr-1 whitespace-normal"}>
               {readDataValue(option, "text")}
             </span>
           </div>
@@ -479,7 +479,7 @@ export const DropdownSearchable: FC<Props> = ({
       {showOption ? (
         <div
           className={
-            "shadow-lg bg-white rounded select-options-container absolute z-100 w-full min-w-[230px] rounded-md overflow-hidden left-0"
+            "shadow-lg bg-white rounded select-options-container absolute z-100 min-w-[240px] max-w-[400px] w-max rounded-md overflow-hidden left-0"
           }
         >
           {!inlineSearch && !disableSearch && (

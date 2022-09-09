@@ -274,7 +274,7 @@ export const DropdownSearchableV2 = forwardRef<DropdownSearchableV2Handle, Props
             key={readDataValue(option, "id")}
             className={
                 (classNameItem ?? "") +
-                " select-option hover:bg-gray-100 transition duration-150 flex cursor-pointer py-3 px-4 "
+                " select-option max-w-full hover:bg-gray-100 transition duration-150 flex cursor-pointer py-3 px-4 "
             }
             onClick={() => handleSetValue(option)}
             data-option-value={option.id}
@@ -291,7 +291,7 @@ export const DropdownSearchableV2 = forwardRef<DropdownSearchableV2Handle, Props
           {renderItem ? (
               renderItem(modifyItem(option))
           ) : (
-              <div className={"flex align-items-center text-left"}>
+              <div className={"flex flex-1 align-items-center text-left"}>
                 {readDataValue(option, "imageUrl") ? (
                     <img
                         alt={"Avt"}
@@ -299,9 +299,9 @@ export const DropdownSearchableV2 = forwardRef<DropdownSearchableV2Handle, Props
                         className={"w-9 h-9 object-cover rounded-full mr-3"}
                     />
                 ) : null}
-                <span className={"flex-1 ml-1 mr-1"}>
-              {readDataValue(option, "text")}
-            </span>
+                <span className={"flex-1 ml-1 mr-1 whitespace-normal"}>
+                  {readDataValue(option, "text")}
+                </span>
               </div>
           )}
         </div>
@@ -475,7 +475,7 @@ export const DropdownSearchableV2 = forwardRef<DropdownSearchableV2Handle, Props
         {showOption ? (
             <div
                 className={
-                  "border-0.5 border-primary-border bg-white rounded select-options-container absolute z-100 min-w-[230px] max-w-[352px] rounded-md left-0"
+                  "border-0.5 border-primary-border bg-white rounded select-options-container absolute z-100 min-w-[240px] max-w-[400px] w-max rounded-md left-0"
                 }
             >
               {renderSelectedValue()}
