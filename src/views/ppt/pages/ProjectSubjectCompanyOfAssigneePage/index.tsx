@@ -13,6 +13,8 @@ import { useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
 
+import { useProject } from 'services/hooks/items/useProject';
+
 type Props = {
   type?: number
 }
@@ -105,13 +107,22 @@ export const ProjectSubjectCompanyOfAssigneePage: FC<Props> = ({ type = 1 }) => 
     }
   };
 
+  const { info: projectInfo } = useProject({
+		params: {
+			departmentID: projectID,
+			select: "name sign",
+			populates: ""
+		},
+		isFetchInfo: true
+	})
+
   useEffect(() => {
     if (!isSuccessApp) return;
     if (isSuccessApp && !hasPermission) {
 			toast.error("Bạn không có quyền truy cập tính năng này!");
 			history.push("/");
     };
-    document.title = "Quản lý công việc";
+    document.title = `${projectInfo.sign} | Công việc`
   }, [isSuccessApp]);  
 
   if (isLoadingListTask) {

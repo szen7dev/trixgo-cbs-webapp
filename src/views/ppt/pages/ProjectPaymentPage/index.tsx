@@ -11,6 +11,7 @@ import { SearchInput, GroupActions, ButtonMore } from "shareComponents/common";
 import ModalInformation from "./components/ModalInformation";
 import CaretDownIcon from "assets/images/icon-caret-down.png";
 import debounce from "lodash/debounce";
+import { useProject } from 'services/hooks/items/useProject';
 
 const ProjectSubjectPage: FC = () => {
 	const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
@@ -79,18 +80,19 @@ const ProjectSubjectPage: FC = () => {
 		}
 	}, [listCompany, listCompanyAndTaskOverdueWork, listCompanyAndTaskNextWeekWork, listCompanyAndTaskMoreThan7Days]);
 
+	const { info: projectInfo } = useProject({
+		params: {
+			departmentID: projectID,
+			select: "name sign",
+			populates: ""
+		},
+		isFetchInfo: true
+	})
+
 	useEffect(() => {
-		document.title = "CHG.THT-Hồ sơ thanh toán"
-		// setData(() => listCompany.map((company, index) => ({
-		// 	id: index,
-		// 	project: index % 2 ? "Thi công rà phá bom mìn, vật nổ" : 'Thi công ép cọc thí nghiệm, thí nghiệm cọc thí nghiệm và thi công ép cọc đại trà',
-		// 	joined: 8,
-		// 	worked: 15,
-		// 	created_at: "15:30 22/12/2021",
-		// 	updated_at: "15:30 22/12/2021",
-		// 	status: index,
-		// })));
+		document.title = `${projectInfo.sign} | Hồ sơ thanh toán`
 	}, []);
+
 	const toggleVisible = ({ company, typeStatus }: any) => {
 		setVisibleDrawer(!visibleDrawer)
 		setCompanyPopup(company)

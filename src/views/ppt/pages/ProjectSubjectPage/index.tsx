@@ -9,18 +9,20 @@ import {SearchInput, GroupActions, ButtonMore, DropdownSearchableV2} from "share
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
 // import DropdownFilterButton from "views/pages/document/components/DocumentFilterButton";
 import ModalInformation from "./components/ModalInformation";
-import CaretDownIcon from "assets/images/icon-caret-down.png";
-import debounce from "lodash/debounce";
-import userIcon from "assets/images/icon-user-avatar.svg";
-import maleUserIcon from "assets/images/icons8-male-user-64.svg";
-import TriangleDown from "assets/icons/TriangleDown";
-import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
-import projectIcon from "assets/images/icons8-project-50.svg";
-import timeTableIcon from "assets/images/icons8-timetable-48.svg";
-import categoryIcon from "assets/images/icons8-category-48.svg";
-import downloadIcon from "assets/images/icons8-download-96.svg";
-import sendMailIcon from "assets/images/icons8-send-email-96.svg";
-import nextIcon from "assets/images/icons-arrow-next.svg";
+// import CaretDownIcon from "assets/images/icon-caret-down.png";
+// import debounce from "lodash/debounce";
+// import userIcon from "assets/images/icon-user-avatar.svg";
+// import maleUserIcon from "assets/images/icons8-male-user-64.svg";
+// import TriangleDown from "assets/icons/TriangleDown";
+// import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
+// import projectIcon from "assets/images/icons8-project-50.svg";
+// import timeTableIcon from "assets/images/icons8-timetable-48.svg";
+// import categoryIcon from "assets/images/icons8-category-48.svg";
+// import downloadIcon from "assets/images/icons8-download-96.svg";
+// import sendMailIcon from "assets/images/icons8-send-email-96.svg";
+// import nextIcon from "assets/images/icons-arrow-next.svg";
+
+import { useProject } from 'services/hooks/items/useProject';
 
 const ProjectSubjectPage: FC = () => {
 	const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
@@ -89,18 +91,19 @@ const ProjectSubjectPage: FC = () => {
 		}
 	}, [listCompany, listCompanyAndTaskOverdueWork, listCompanyAndTaskNextWeekWork, listCompanyAndTaskMoreThan7Days]);
 
+	const { info: projectInfo } = useProject({
+		params: {
+			departmentID: projectID,
+			select: "name sign",
+			populates: ""
+		},
+		isFetchInfo: true
+	})
+
 	useEffect(() => {
-		document.title = "CHG.THT-Hồ sơ thanh toán"
-		// setData(() => listCompany.map((company, index) => ({
-		// 	id: index,
-		// 	project: index % 2 ? "Thi công rà phá bom mìn, vật nổ" : 'Thi công ép cọc thí nghiệm, thí nghiệm cọc thí nghiệm và thi công ép cọc đại trà',
-		// 	joined: 8,
-		// 	worked: 15,
-		// 	created_at: "15:30 22/12/2021",
-		// 	updated_at: "15:30 22/12/2021",
-		// 	status: index,
-		// })));
+		document.title = `${projectInfo.sign} | Công việc`
 	}, []);
+
 	const toggleVisible = ({ company, typeStatus }: any) => {
 		setVisibleDrawer(!visibleDrawer)
 		setCompanyPopup(company)

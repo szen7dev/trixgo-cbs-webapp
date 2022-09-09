@@ -10,6 +10,7 @@ import { useContract } from 'services/hooks/items/useContract';
 import moment from "moment";
 import { User } from "typings/user";
 import iconBack from "assets/images/icon-back-gray.svg";
+import { useProject } from 'services/hooks/items/useProject';
 
 const ProjectPhotoContractPage: FC = () => {
 	const subContentHtml = (html?: string) => {
@@ -63,9 +64,18 @@ const ProjectPhotoContractPage: FC = () => {
 		},
 		isFetchComment: !!contractID
 	});
+	
+	const { info: projectInfo } = useProject({
+		params: {
+			departmentID: projectID,
+			select: "name sign",
+			populates: ""
+		},
+		isFetchInfo: true
+	})
 
 	useEffect(() => {
-		document.title = "CHG.THT-Hình ảnh"
+		document.title = `${projectInfo.sign} | Hình ảnh`
 	}, []);
 
 	const toggle = () => setIsShow(!isShow)

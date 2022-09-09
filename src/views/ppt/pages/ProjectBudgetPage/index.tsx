@@ -28,7 +28,7 @@ const ProjectBudgetPage: FC = () => {
 	const { info: projectInfo } = useProject({
 		params: {
 			departmentID: projectID,
-			select: "budget vatBudget forecastBudget vatForecastBudget contractValue contractVatValue contractPlus contractVatPlus contractAdvancePaymentPaid contractProduce contractVatProduce contractAcceptance contractVatAcceptance contractPlusAcceptance contractVatPlusAcceptance contractAmountPaid contractRemainingPayment",
+			select: "sign budget vatBudget forecastBudget vatForecastBudget contractValue contractVatValue contractPlus contractVatPlus contractAdvancePaymentPaid contractProduce contractVatProduce contractAcceptance contractVatAcceptance contractPlusAcceptance contractVatPlusAcceptance contractAmountPaid contractRemainingPayment",
 			populates: ""
 		},
 		isFetchInfo: true
