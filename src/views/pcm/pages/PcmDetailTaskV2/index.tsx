@@ -276,7 +276,7 @@ const PcmDetailTaskV2: FC = () => {
                         hasPermissionOpenBidding={permissions.hasPermissionOpenBidding}
                     />
                     <TaskDetailCompleteStatus task={taskInfo} />
-                    <TaskDetailMember task={taskInfo} />
+                    <TaskDetailMember task={taskInfo} user={user} />
                     <TaskDetailSignature task={taskInfo} />
                     <TaskDetailOpenedBidding task={taskInfo} />
                     <TaskDetailDescription task={taskInfo} refetchInfo={refetchInfo} />
