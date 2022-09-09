@@ -134,7 +134,6 @@ export const ModalCreateDocument: React.FC = () => {
 	const  [ keywordContract,  setKeywordContract ]   = useState("");
 	const  [ keywordStorage,  setKeywordStorage ]     = useState("");
 	const  [ keywordDatahubContact,  setKeywordDatahubContact ] = useState("");
-
 	const {
 		fields,
 		listContactSender,
