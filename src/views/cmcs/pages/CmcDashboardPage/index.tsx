@@ -17,7 +17,7 @@ import StatusReport from "./components/StatusReport";
 // Import data từ API
 import { useCmcs } from 'services/hooks/useCmcs';
 import { useAuth } from "services/hooks/auth/useAuth";
-export const CmcDashboardPage: FC = () => {
+const CmcDashboardPage: FC = () => {
 
   // --------- Check phân quyền
   useCheckPerAccessScreen({
@@ -91,3 +91,4 @@ export const CmcDashboardPage: FC = () => {
     </main>
   );
 };
+export default CmcDashboardPage;

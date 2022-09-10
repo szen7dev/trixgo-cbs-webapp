@@ -25,7 +25,7 @@ import {
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import { useParams } from "react-router-dom";
 
-export const ContractProduce: FC = () => {
+const ContractProduce: FC = () => {
   const [itemChecked, setItemChecked] = useState('');
 
   const [pageParam, setPageParam] = useState('');
@@ -266,3 +266,4 @@ export const ContractProduce: FC = () => {
     </main>
   );
 };
+export default ContractProduce;

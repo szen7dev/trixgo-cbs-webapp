@@ -19,7 +19,7 @@ import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
 import { createLinkAndClick } from 'utils';
 
-export const CmcPartnerPage: FC = () => {
+const CmcPartnerPage: FC = () => {
   // --------- history traffic
   const payload: any = {
     appID: APP_ID.CMCS.id,
@@ -263,3 +263,4 @@ export const CmcPartnerPage: FC = () => {
     </main>
   );
 };
+export default CmcPartnerPage;

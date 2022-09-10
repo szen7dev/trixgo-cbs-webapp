@@ -23,26 +23,16 @@ type Props = {
 };
 
 export const PmProjectLayout: FC<Props> = ({ children, headerSearch }) => {
-  const [isHeaderCollapse, setIsHeaderCollapse] = useState(false);
   const [isLeftMenuCollapse, setIsLeftMenuCollapse] = useState(false);
-  const [isRightSideBarCollapse, setIsRightSideBarCollapse] = useState(false);
 
-  const handleHeaderEvent = () => {
-    setIsHeaderCollapse(!isHeaderCollapse);
-  };
   const handleMenuEvent = () => {
     setIsLeftMenuCollapse(!isLeftMenuCollapse);
-  };
-  const handleRightSideBarEvent = () => {
-    setIsRightSideBarCollapse(!isRightSideBarCollapse);
   };
 
   return (
     <section
       className={cn("home-layout relative bg-primary-light", {
         "collapse-left": isLeftMenuCollapse,
-        "active-right": isRightSideBarCollapse,
-        "collapse-header": isHeaderCollapse,
       })}
     >
       {/* Collapse menu button */}

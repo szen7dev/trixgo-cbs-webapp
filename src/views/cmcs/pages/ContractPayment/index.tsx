@@ -25,7 +25,7 @@ import {
   useDeleteContractPaymentMutation,
 } from "services/hooks/cmcs/useContractPayment";
 
-export const ContractPayment: FC = () => {
+const ContractPayment: FC = () => {
   const [itemChecked, setItemChecked] = useState('');
   const [keyword, setKeyword]         = useState('');
   const [pageParam, setPageParam] = useState('');
@@ -269,3 +269,5 @@ export const ContractPayment: FC = () => {
     </main>
   );
 };
+
+export default ContractPayment;
