@@ -270,10 +270,11 @@ const CmcIncomePage: FC = () => {
                   />
                 </td>
                 <td className="py-1 px-2">
-                  <Link to={"/cmcs/contract/" + (item._id) + "/home"}>
+                  {/* <Link to={"/cmcs/contract/" + (item._id) + "/home"}>
                     {item.name}
                     <p className="text-primary-gray">{item?.project?.sign} | {item.sign}</p>
-                  </Link>
+                  </Link> */}
+                  <Link to={`/cmcs/home/${item._id}/tab/1`}>{item.project.sign}.{item.name} - {item.sign}</Link>
                 </td>
                 <td className="py-1 px-2"> {moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
                 <td className="py-1 px-2 text-right">{formatNumberMoney((item.value || 0) + (item.vatValue || 0) + (item.plus || 0) + (item.vatPlus || 0) )} </td>

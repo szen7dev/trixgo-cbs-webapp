@@ -319,7 +319,7 @@ const CmcHomePageV2:FC = () => {
                                 text: "Đúng tiến độ"
                             },
                             {
-                                id: 0,
+                                id: 2,
                                 text: "Chậm tiến độ"
                             }
                         ]}
@@ -367,7 +367,7 @@ const CmcHomePageV2:FC = () => {
                                 text: "Đúng ngân sách"
                             },
                             {
-                                id: 0,
+                                id: 2,
                                 text: "Vượt ngân sách"
                             }
                         ]}
@@ -425,22 +425,22 @@ const CmcHomePageV2:FC = () => {
                         <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-[100px] border-0.5 border-primary-border py-3 px-2"}>
                             Ngày ký
                         </th>
-                        <th className={"bg-cbs-table-header text-primary-gray text-left max-w-[120px] font-normal border-0.5 border-primary-border py-3 px-2"}>
+                        <th className={"bg-cbs-table-header text-primary-gray text-left max-w-[90px] font-normal border-0.5 border-primary-border py-3 px-2"}>
                             Giá trị ký + phát sinh (gồm cả VAT)
                         </th>
-                        <th className={"bg-cbs-table-header text-primary-gray text-left max-w-[120px] font-normal border-0.5 border-primary-border py-3 px-2"}>
+                        <th className={"bg-cbs-table-header text-primary-gray text-left max-w-[90px] font-normal border-0.5 border-primary-border py-3 px-2"}>
                             Sản lượng (gồm cả VAT)
                         </th>
-                        <th className={"bg-cbs-table-header text-primary-gray text-left max-w-[120px] font-normal border-0.5 border-primary-border py-3 px-2"}>
+                        <th className={"bg-cbs-table-header text-primary-gray text-left max-w-[90px] font-normal border-0.5 border-primary-border py-3 px-2"}>
                             Giá trị nghiệm thu hoàn thành
                         </th>
-                        <th className={"bg-cbs-table-header text-primary-gray max-w-[120px] text-left font-normal border-0.5 border-primary-border py-3 px-2"}>
+                        <th className={"bg-cbs-table-header text-primary-gray max-w-[90px] text-left font-normal border-0.5 border-primary-border py-3 px-2"}>
                             Giá trị đề nghị tạm ứng+thanh toán
                         </th>
-                        <th className={"bg-cbs-table-header text-primary-gray text-left max-w-[120px] font-normal border-0.5 border-primary-border py-3 px-2"}>
+                        <th className={"bg-cbs-table-header text-primary-gray text-left max-w-[90px] font-normal border-0.5 border-primary-border py-3 px-2"}>
                             Giá trị đã tạm ứng, thanh toán
                         </th>
-                        <th className={"bg-cbs-table-header text-primary-gray text-left max-w-[120px] font-normal border-0.5 border-primary-border py-3 px-2"}>
+                        <th className={"bg-cbs-table-header text-primary-gray text-left max-w-[90px] font-normal border-0.5 border-primary-border py-3 px-2"}>
                             Còn lại phải thanh toán
                         </th>
                         <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-[100px] border-0.5 border-primary-border py-3 px-2"}>
@@ -498,7 +498,7 @@ const CmcHomePageV2:FC = () => {
                                         }}
                                     />
                                 </td>
-                                <td className={"border-0.5 border-primary-border py-3 px-2 break-all"}>
+                                <td className={"border-0.5 border-primary-border py-3 px-2"}>
                                     <Link to={`/cmcs/home/${cmcs._id}/tab/1`}>{cmcs.project.sign}.{cmcs.name} - {cmcs.sign}</Link>
                                 </td>
                                 <td className={"border-0.5 border-primary-border py-3 px-2"}>

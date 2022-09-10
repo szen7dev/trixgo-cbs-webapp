@@ -113,62 +113,76 @@ export const ProjectBudgetDetailTab1:FC<Props> = ({ contractInfo }) => {
         </div>
         <table className={"table-fixed border-collapse w-full"}>
             <tbody>
-            <tr>
-                <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
-                    Hợp đồng
-                </td>
-                <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
-                    {contractInfo?.name}
-                </td>
-                <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
-                    Thuộc dự án
-                </td>
-                <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
-                    { contractInfo?.project?.name}
-                </td>
-            </tr>
-            <tr>
-                <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
-                    Số hiệu/Ngày ký
-                </td>
-                <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
-                    {contractInfo?.sign} ngày {moment(contractInfo?.date).format("L")}
-                </td>
-                <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
-                    Trạng thái
-                </td>
-                <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
-                    {CONTRACT_COME_IN_STATUS[contractInfo?.status - 1]?.text}
-                </td>
-            </tr>
-            <tr>
-                <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
-                    Thông tin người mua/Tài khoản
-                </td>
-                <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
-                    {contractInfo?.buyerInfo?.name}{contractInfo?.buyerBank}
-                </td>
-                <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
-                    Bảo lãnh tạm ứng
-                </td>
-                <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
-                    Thời hạn {moment(contractInfo?.expiredAg).format("L")}
-                </td>
-            </tr>
-            <tr>
-                <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
-                    Thông tin người bán/Tài khoản
-                </td>
-                <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
-                   {contractInfo?.buyerInfo?.name}{contractInfo?.sellerBank}
-                </td>
-                <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
-                    Bảo lãnh thực hiện hợp đồng
-                </td>
-                <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
-                    Thời hạn {moment(contractInfo?.expiredCg).format("L")}
-                </td>
-            </tr>
+                <tr>
+                    <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
+                        Hợp đồng
+                    </td>
+                    <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
+                        {contractInfo?.name}
+                    </td>
+                    <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
+                        Thuộc dự án
+                    </td>
+                    <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
+                        { contractInfo?.project?.name}
+                    </td>
+                </tr>
+                <tr>
+                    <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
+                        Số hiệu/Ngày ký
+                    </td>
+                    <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
+                        {contractInfo?.sign} ngày {moment(contractInfo?.date).format("L")}
+                    </td>
+                    <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
+                        Trạng thái
+                    </td>
+                    <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
+                        {CONTRACT_COME_IN_STATUS[contractInfo?.status - 1]?.text}
+                    </td>
+                </tr>
+                <tr>
+                    <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
+                        Thông tin người mua/Tài khoản
+                    </td>
+                    <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
+                        {contractInfo?.buyerInfo?.name}{contractInfo?.buyerBank}
+                    </td>
+                    <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
+                        Bảo lãnh tạm ứng
+                    </td>
+                    <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
+                        Thời hạn {moment(contractInfo?.expiredAg).format("DD/MM/YYYY")}
+                    </td>
+                </tr>
+                <tr>
+                    <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
+                        Thông tin người bán/Tài khoản
+                    </td>
+                    <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
+                    {contractInfo?.sellerInfo?.name}{contractInfo?.sellerBank}
+                    </td>
+                    <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
+                        Bảo lãnh thực hiện hợp đồng
+                    </td>
+                    <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
+                        Thời hạn {moment(contractInfo?.expiredCg).format("DD/MM/YYYY")}
+                    </td>
+                </tr>
+                <tr>
+                    <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
+                        Khởi tạo
+                    </td>
+                    <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
+                        {contractInfo?.userUpdate.fullname} - {moment(contractInfo?.createAt).format("DD/MM/YYYY HH:mm")}
+                    </td>
+                    <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
+                        Cập nhật
+                    </td>
+                    <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
+                        {contractInfo?.userUpdate.fullname} - {moment(contractInfo?.modifyAt).format("DD/MM/YYYY HH:mm")}
+                    </td>
+                </tr>
             </tbody>
         </table>
 
@@ -177,62 +191,62 @@ export const ProjectBudgetDetailTab1:FC<Props> = ({ contractInfo }) => {
         </div>
         <table className={"table-fixed border-collapse w-1/2"}>
             <tbody>
-            <tr>
-                <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
-                    Giá trị ký
-                </td>
-                <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
-                    {formatNumberMoney(contractInfo?.value+contractInfo?.vatValue+contractInfo?.plus+contractInfo?.vatPlus)}
-                </td>
-            </tr>
-            <tr>
-                <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
-                    Sản lượng
-                </td>
-                <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
-                    {formatNumberMoney(contractInfo?.produce+contractInfo?.plusProduce)}
-                </td>
-            </tr>
-            <tr>
-                <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
-                    Nghiệm thu hoàn thành
-                </td>
-                <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
-                    { formatNumberMoney(contractInfo?.acceptance + contractInfo?.vatAcceptance + contractInfo?.plusAcceptance + contractInfo?.vatPlusAcceptance) }
-                </td>
-            </tr>
-            <tr>
-                <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
-                    Thanh toán
-                </td>
-                <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
-                    {formatNumberMoney(contractInfo?.advancePaymentPaid+contractInfo?.amountPaid)}
-                </td>
-            </tr>
-            <tr>
-                <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
-                    Còn lại chưa thanh toán
-                </td>
-                <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
-                    {formatNumberMoney(contractInfo?.remainingPayment)}
-                </td>
-            </tr>
-            <tr>
-                <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
-                    Ngày ký
-                </td>
-                <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
-                    {moment(contractInfo?.date).format("L")}
-                </td>
-            </tr>
-            <tr>
-                <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
-                    Giá trị quyết toán
-                </td>
-                <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
-                    {contractInfo?.finalValue}
-                </td>
-            </tr>
+                <tr>
+                    <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
+                        Giá trị ký
+                    </td>
+                    <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
+                        {formatNumberMoney(contractInfo?.value+contractInfo?.vatValue+contractInfo?.plus+contractInfo?.vatPlus)}
+                    </td>
+                </tr>
+                <tr>
+                    <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
+                        Sản lượng
+                    </td>
+                    <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
+                        {formatNumberMoney(contractInfo?.produce+contractInfo?.plusProduce)}
+                    </td>
+                </tr>
+                <tr>
+                    <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
+                        Nghiệm thu hoàn thành
+                    </td>
+                    <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
+                        { formatNumberMoney(contractInfo?.acceptance + contractInfo?.vatAcceptance + contractInfo?.plusAcceptance + contractInfo?.vatPlusAcceptance) }
+                    </td>
+                </tr>
+                <tr>
+                    <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
+                        Thanh toán
+                    </td>
+                    <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
+                        {formatNumberMoney(contractInfo?.advancePaymentPaid+contractInfo?.amountPaid)}
+                    </td>
+                </tr>
+                <tr>
+                    <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
+                        Còn lại chưa thanh toán
+                    </td>
+                    <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
+                        {formatNumberMoney(contractInfo?.remainingPayment)}
+                    </td>
+                </tr>
+                <tr>
+                    <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
+                        Ngày ký
+                    </td>
+                    <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
+                        {moment(contractInfo?.date).format("DD/MM/YYYY")}
+                    </td>
+                </tr>
+                <tr>
+                    <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
+                        Giá trị quyết toán
+                    </td>
+                    <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
+                        {contractInfo?.finalValue}
+                    </td>
+                </tr>
             </tbody>
         </table>
 
