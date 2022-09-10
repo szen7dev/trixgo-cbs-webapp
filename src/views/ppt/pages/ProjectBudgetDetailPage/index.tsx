@@ -26,14 +26,14 @@ const ProjectBudgetDetailPage:FC = () => {
     const { contractInfo } = useContract({
 		params: {
 			contractID,
-			// select: `name sign date buyerBank sellerBank sellerInfo status expiredAg expiredCg 
-            // value vatValue plus vatPlus contractProduce contractVatProduce
-            // contractAcceptance contractVatAcceptance contractPlusAcceptance contractVatPlusAcceptance
-            // contractAmountPaid contractRemainingPayment finalValue produce vatProduce plusProduce vatPlusProduce remainingProduce 
-            // recommendedPayment amountPaid remainingPayment`,
+			select: `name sign date buyerBank sellerBank sellerInfo status expiredAg expiredCg 
+            value vatValue plus vatPlus contractProduce contractVatProduce
+            contractAcceptance contractVatAcceptance contractPlusAcceptance contractVatPlusAcceptance
+            contractAmountPaid contractRemainingPayment finalValue produce vatProduce plusProduce vatPlusProduce remainingProduce 
+            recommendedPayment amountPaid remainingPayment userCreate userUpdate createAt modifyAt`,
 			populates: JSON.stringify({
-				path: "project buyerInfo",
-				select: "_id name"
+				path: "project buyerInfo sellerInfo userCreate userUpdate",
+				select: "_id name fullname"
 			})
 		},
 		isFetchInfo: !!contractID
