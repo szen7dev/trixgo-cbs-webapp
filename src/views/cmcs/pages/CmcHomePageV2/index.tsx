@@ -248,7 +248,7 @@ const CmcHomePageV2:FC = () => {
                         disableSearch={true}
                         onchangeValue={item => {
                             const cloneIDs = [...statuss];
-                            cloneIDs.push(item._id);
+                            cloneIDs.push(item.value);
                             setStatuss(cloneIDs);
                             dispatch(setFilterDropdown({keyFilter: "statuss", dataFilter: cloneIDs}))
 
@@ -290,7 +290,7 @@ const CmcHomePageV2:FC = () => {
                         disableSearch={true}
                         onchangeValue={item => {
                             const cloneIDs = [...ontimes];
-                            cloneIDs.push(item._id);
+                            cloneIDs.push(item.id as string);
                             setOntimes(cloneIDs);
                             dispatch(setFilterDropdown({keyFilter: "ontimes", dataFilter: cloneIDs}))
 
@@ -315,10 +315,6 @@ const CmcHomePageV2:FC = () => {
                         }}
                         data={[
                             {
-                                id: undefined,
-                                text: "Tất cả"
-                            },
-                            {
                                 id: 1,
                                 text: "Đúng tiến độ"
                             },
@@ -342,7 +338,7 @@ const CmcHomePageV2:FC = () => {
                         disableSearch={true}
                         onchangeValue={item => {
                             const cloneIDs = [...onbudgets];
-                            cloneIDs.push(item._id);
+                            cloneIDs.push(item.id as string);
                             setOnbudgets(cloneIDs);
                             dispatch(setFilterDropdown({keyFilter: "onbudgets", dataFilter: cloneIDs}))
 
@@ -366,10 +362,6 @@ const CmcHomePageV2:FC = () => {
                             ref.current&&ref.current.resetPaginate();
                         }}
                         data={[
-                            {
-                                id: undefined,
-                                text: "Tất cả"
-                            },
                             {
                                 id: 1,
                                 text: "Đúng ngân sách"
