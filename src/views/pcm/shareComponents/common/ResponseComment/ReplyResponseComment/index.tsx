@@ -161,6 +161,8 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
 
         const contentRaw = editorRef.current?.getContent({ format: 'raw' });
         const contentText = editorRef.current?.getContent({ format: 'text' });
+        const content = editorRef.current?.getContent();
+        console.log({ content, contentRaw, contentText })
 
         let images: string[] = [];
         let files: string[] = [];
@@ -279,6 +281,9 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
                     // onSaveContent={handleSave}
                     init={{
                         height: "350px",
+                        force_br_newlines: true,
+                        force_p_newlines : false,
+                        forced_root_block : '',
                         menu: {
                             file: { title: "File", items: "newdocument restoredraft | preview | print | basicitem " },
                             edit: { title: "Edit", items: "undo redo | cut copy paste | selectall | searchreplace" },
