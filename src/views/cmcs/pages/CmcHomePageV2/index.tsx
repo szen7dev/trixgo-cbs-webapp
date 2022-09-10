@@ -8,14 +8,16 @@ import {useProjectCustom} from "services/hooks/items/useProject";
 import {useDispatch} from "react-redux";
 import PaginateV2 from "shareComponents/common/PaginateV2";
 import {useAppSelector} from "redux/reducer";
-import {useListFilterContract} from "services/hooks/cmcs/useContract";
+import {useListAccessByContract, useListFilterContract} from "services/hooks/cmcs/useContract";
 import TriangleDown from "assets/icons/TriangleDown";
 import moment from "moment";
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
 import downloadIcon from "assets/images/icons8-download-96.svg";
 import iconPencil from "assets/images/icons8-pencil-96 1.png";
+import iconMaleUser from "assets/images/icons8-male-user-64.svg";
 import {formatNumberMoney} from "utils";
 import {CONTRACT_COME_IN_STATUS} from "apis/localdb";
+import categoryIcon from "assets/images/icons8-category-48.svg";
 const CmcHomePageV2:FC = () => {
     const dispatch = useDispatch();
     const {keywordInput} = useAppSelector(
@@ -40,10 +42,28 @@ const CmcHomePageV2:FC = () => {
 
     const { listProjectsUserIsMember } = useProjectCustom({ paramsProjectsUserIsMember: { keyword: projectKeyword }, isFetchProjectsUserIsMember: true});
 
+    const [listAccessByContractSellKeyword, setListAccessByContractSellKeyword] = useState("");
+    const [buyerInfosID, setBuyerInfosID] = useState<string[]>([]);
+
+    const [listAccessByContractBuyKeyword, setListAccessByContractBuyKeyword] = useState("");
+    const [sellerInfosID, setSellerInfosID] = useState<string[]>([]);
+
+    const { listAccessByContract:  listAccessByContractSell} = useListAccessByContract({ params: {keyword: listAccessByContractSellKeyword, option: 1}, isFetchList: true} );
+    const { listAccessByContract: listAccessByContractBuy } = useListAccessByContract({ params: {keyword: listAccessByContractBuyKeyword, option: 2}, isFetchList: true} );
+
+    const [ statuss, setStatuss ]  = useState<string[]>([]);
+    const [ ontimes, setOntimes ]  = useState<string[]>([]);
+    const [ onbudgets, setOnbudgets ]  = useState<string[]>([]);
+
     const {isLoading, totalRecord, totalPage, hasNextPage, listCmcsByFilterWithPager, fetchNextPageListCmcsByFilter} = useListFilterContract({
         params: {
             ...fromToDate,
             projectsID,
+            buyerInfosID,
+            sellerInfosID,
+            statuss,
+            ontimes,
+            onbudgets,
             keyword: keywordInput
         },
         isFetchList: true
@@ -131,6 +151,237 @@ const CmcHomePageV2:FC = () => {
                             },
                         ]}
                     />
+                    <DropdownSearchableV2
+                        className={"mr-4 border border-primary-border rounded-lg mb-2"}
+                        placeholder={"Bên mua"}
+                        prefixIcon={<img className={"mr-2"} src={iconMaleUser} alt={"icon"}/>}
+                        isMultiple={true}
+                        allowClearValueSingleInput={true}
+                        data={listAccessByContractBuy}
+                        formatItem={{
+                            id: "_id",
+                            text: "name"
+                        }}
+                        onSearchInputChange={debounce(valueSearch => setListAccessByContractSellKeyword(valueSearch), 500)}
+                        onchangeValue={item => {
+                            const cloneIDs = [...buyerInfosID];
+                            cloneIDs.push(item._id);
+                            setBuyerInfosID(cloneIDs);
+                            dispatch(setFilterDropdown({keyFilter: "buyerInfosID", dataFilter: cloneIDs}))
+
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        onClearData={() => {
+                            setBuyerInfosID([]);
+                            dispatch(setFilterDropdown({keyFilter: "buyerInfosID", dataFilter: []}))
+
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        onMultipleRemoveValue={id => {
+                            const cloneIDs = [...buyerInfosID];
+                            const newList = cloneIDs.filter(selectId => selectId !== id);
+                            setBuyerInfosID(newList);
+                            dispatch(setFilterDropdown({keyFilter: "buyerInfosID", dataFilter: newList}))
+
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.company.sign}.{item.text}</p>
+                        )}
+                        selectOneByOne={true}
+                    />
+                    <DropdownSearchableV2
+                        className={"mr-4 border border-primary-border rounded-lg mb-2"}
+                        placeholder={"Bên bán"}
+                        prefixIcon={<img className={"mr-2"} src={iconMaleUser} alt={"icon"}/>}
+                        isMultiple={true}
+                        allowClearValueSingleInput={true}
+                        data={listAccessByContractSell}
+                        formatItem={{
+                            id: "_id",
+                            text: "name"
+                        }}
+                        onSearchInputChange={debounce(valueSearch => setListAccessByContractBuyKeyword(valueSearch), 500)}
+                        onchangeValue={item => {
+                            const cloneIDs = [...sellerInfosID];
+                            cloneIDs.push(item._id);
+                            setSellerInfosID(cloneIDs);
+                            dispatch(setFilterDropdown({keyFilter: "sellerInfosID", dataFilter: cloneIDs}))
+
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        onClearData={() => {
+                            setSellerInfosID([]);
+                            dispatch(setFilterDropdown({keyFilter: "sellerInfosID", dataFilter: []}))
+
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        onMultipleRemoveValue={id => {
+                            const cloneIDs = [...sellerInfosID];
+                            const newList = cloneIDs.filter(selectId => selectId !== id);
+                            setSellerInfosID(newList);
+                            dispatch(setFilterDropdown({keyFilter: "sellerInfosID", dataFilter: newList}))
+
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.company.sign}.{item.text}</p>
+                        )}
+                        selectOneByOne={true}
+                    />
+                    <DropdownSearchableV2
+                        selectOneByOne={true}
+                        className={"mr-2 border border-primary-border rounded-lg mb-2"}
+                        placeholder={"Trạng thái"}
+                        prefixIcon={
+                            <img className={"mr-2"} src={categoryIcon} alt={"icon"} />
+                        }
+                        isMultiple={true}
+                        disableSearch={true}
+                        onchangeValue={item => {
+                            const cloneIDs = [...statuss];
+                            cloneIDs.push(item._id);
+                            setStatuss(cloneIDs);
+                            dispatch(setFilterDropdown({keyFilter: "statuss", dataFilter: cloneIDs}))
+
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        onClearData={() => {
+                            setStatuss([]);
+                            dispatch(setFilterDropdown({keyFilter: "statuss", dataFilter: []}))
+
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        onMultipleRemoveValue={id => {
+                            const cloneIDs = [...statuss];
+                            const newList = cloneIDs.filter(selectId => selectId !== id);
+                            setStatuss(newList);
+                            dispatch(setFilterDropdown({keyFilter: "statuss", dataFilter: newList}))
+
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        data={CONTRACT_COME_IN_STATUS}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.text}</p>
+                        )}
+                        formatItem={{
+                            id: "value"
+                        }}
+                    />
+                    <DropdownSearchableV2
+                        selectOneByOne={true}
+                        className={"mr-2 border border-primary-border rounded-lg mb-2"}
+                        placeholder={"Tiến độ"}
+                        prefixIcon={
+                            <img className={"mr-2"} src={categoryIcon} alt={"icon"} />
+                        }
+                        isMultiple={true}
+                        disableSearch={true}
+                        onchangeValue={item => {
+                            const cloneIDs = [...ontimes];
+                            cloneIDs.push(item._id);
+                            setOntimes(cloneIDs);
+                            dispatch(setFilterDropdown({keyFilter: "ontimes", dataFilter: cloneIDs}))
+
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        onClearData={() => {
+                            setOntimes([]);
+                            dispatch(setFilterDropdown({keyFilter: "ontimes", dataFilter: []}))
+
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        onMultipleRemoveValue={id => {
+                            const cloneIDs = [...ontimes];
+                            const newList = cloneIDs.filter(selectId => selectId !== id);
+                            setOntimes(newList);
+                            dispatch(setFilterDropdown({keyFilter: "ontimes", dataFilter: newList}))
+
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        data={[
+                            {
+                                id: undefined,
+                                text: "Tất cả"
+                            },
+                            {
+                                id: 1,
+                                text: "Đúng tiến độ"
+                            },
+                            {
+                                id: 0,
+                                text: "Chậm tiến độ"
+                            }
+                        ]}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.text}</p>
+                        )}
+                    />
+                    <DropdownSearchableV2
+                        selectOneByOne={true}
+                        className={"mr-2 border border-primary-border rounded-lg mb-2"}
+                        placeholder={"Ngân sách"}
+                        prefixIcon={
+                            <img className={"mr-2"} src={categoryIcon} alt={"icon"} />
+                        }
+                        isMultiple={true}
+                        disableSearch={true}
+                        onchangeValue={item => {
+                            const cloneIDs = [...onbudgets];
+                            cloneIDs.push(item._id);
+                            setOnbudgets(cloneIDs);
+                            dispatch(setFilterDropdown({keyFilter: "onbudgets", dataFilter: cloneIDs}))
+
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        onClearData={() => {
+                            setOnbudgets([]);
+                            dispatch(setFilterDropdown({keyFilter: "onbudgets", dataFilter: []}))
+
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        onMultipleRemoveValue={id => {
+                            const cloneIDs = [...onbudgets];
+                            const newList = cloneIDs.filter(selectId => selectId !== id);
+                            setOnbudgets(newList);
+                            dispatch(setFilterDropdown({keyFilter: "onbudgets", dataFilter: newList}))
+
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        data={[
+                            {
+                                id: undefined,
+                                text: "Tất cả"
+                            },
+                            {
+                                id: 1,
+                                text: "Đúng ngân sách"
+                            },
+                            {
+                                id: 0,
+                                text: "Vượt ngân sách"
+                            }
+                        ]}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.text}</p>
+                        )}
+                    />
+                    <button className={"bg-green-success h-[32px] text-white rounded px-5"}>Tạo mới</button>
                 </div>
 
                 <div className={"flex items-center"}>
@@ -232,19 +483,19 @@ const CmcHomePageV2:FC = () => {
                                     {moment(cmcs.date).format('DD/MM/YYYY')}
                                 </td>
                                 <td className={"border-0.5 border-primary-border py-3 px-2"}>
-                                    {formatNumberMoney(cmcs.value??0+cmcs.vatValue??0+cmcs.plus??0+cmcs.vatPlus??0)}
+                                    {formatNumberMoney((cmcs.value??0)+(cmcs.vatValue??0)+(cmcs.plus??0)+(cmcs.vatPlus??0))}
                                 </td>
                                 <td className={"border-0.5 border-primary-border py-3 px-2"}>
-                                    {formatNumberMoney(cmcs.produce??0+cmcs.vatProduce??0+cmcs.plusProduce??0+cmcs.vatPlusProduce??0)}
+                                    {formatNumberMoney((cmcs.produce??0)+(cmcs.vatProduce??0)+(cmcs.plusProduce??0)+(cmcs.vatPlusProduce??0))}
                                 </td>
                                 <td className={"border-0.5 border-primary-border py-3 px-2"}>
-                                    {formatNumberMoney(cmcs.acceptance??0+cmcs.vatAcceptance??0+cmcs.plusAcceptance??0+cmcs.vatPlusAcceptance??0)}
+                                    {formatNumberMoney((cmcs.acceptance??0)+(cmcs.vatAcceptance??0)+(cmcs.plusAcceptance??0)+(cmcs.vatPlusAcceptance??0))}
                                 </td>
                                 <td className={"border-0.5 border-primary-border py-3 px-2 text-right pr-2"}>
                                     {formatNumberMoney(cmcs.recommendedPayment??0)}
                                 </td>
                                 <td className={"border-0.5 border-primary-border py-3 px-2"}>
-                                    {formatNumberMoney(cmcs.advancePaymentPaid??0+cmcs.amountPaid??0)}
+                                    {formatNumberMoney((cmcs.advancePaymentPaid??0)+(cmcs.amountPaid??0))}
                                 </td>
                                 <td className={"border-0.5 border-primary-border py-3 px-2"}>
                                     {formatNumberMoney(cmcs.remainingPayment??0)}

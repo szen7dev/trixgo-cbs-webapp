@@ -9,7 +9,11 @@ import {
   InfoContractPayload,
   InsertContractPayload,
   UpdateContractPayload,
-  DeleteContractPayload, ListByFilterContractsPayload, ListContractsByFilterResponse,
+  DeleteContractPayload,
+  ListByFilterContractsPayload,
+  ListContractsByFilterResponse,
+  ListAccessByContractPayload,
+  ListAccessByContractsResponse, CmcsListAccessByContractQueryPayload,
 } from "typings/cmcs";
 
 // Đường dẫn Endpoint
@@ -60,7 +64,7 @@ const CmcsRepository = {
         `${cmcsURL}/list-contract-by-filter`,
         {
           params: {
-            // select: 'name sign author project date createAt description note store amount status storeSign',
+            select: 'name sign author project date value vatValue plus vatPlus produce vatProduce plusProduce vatPlusProduce acceptance vatAcceptance plusAcceptance vatPlusAcceptance recommendedPayment advancePaymentPaid amountPaid remainingPayment status',
             populates: {
               "path": "project",
               "select": "sign name"
@@ -71,7 +75,22 @@ const CmcsRepository = {
     )
 
     return data;
-  }
+  },
+
+   async listAccessByContract (payload: CmcsListAccessByContractQueryPayload) : Promise<ListAccessByContractsResponse> {
+      const { data } = await API.get(
+          `${cmcsURL}/contacts/list-access-by-contract`,
+          {
+            params: {
+              select: 'name sign company',
+              populates: {"path": "company", "select": "name sign"},
+              ...payload
+            }
+          }
+      )
+
+     return data;
+   }
 };
 
 export default CmcsRepository;

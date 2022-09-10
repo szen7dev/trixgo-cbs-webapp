@@ -9,6 +9,7 @@ import cn from "classnames";
 /*=====4.PAGES/COMPONENTS=====*/
 import {LeftMenu, MainHeaderV2, LeftNavigate} from "../../common";
 import {CmcsLeftMenuContent} from "./components/CmcsLeftMenuContent";
+import {CmcsHeaderSearchContent} from "./components/CmcsHeaderSearchContent";
 
 /*=====5.TYPINGS=====*/
 
@@ -18,10 +19,9 @@ import {CmcsLeftMenuContent} from "./components/CmcsLeftMenuContent";
 
 type Props = {
     children: ReactNode;
-    headerSearch?: ReactNode;
 };
 
-export const CmcsLayoutV2: FC<Props> = ({ children, headerSearch }) => {
+export const CmcsLayoutV2: FC<Props> = ({ children }) => {
     const [isLeftMenuCollapse, setIsLeftMenuCollapse] = useState(false);
 
     const handleMenuEvent = () => {
@@ -43,7 +43,7 @@ export const CmcsLayoutV2: FC<Props> = ({ children, headerSearch }) => {
                     <MainHeaderV2
                         headerTitle={"Hợp đồng"}
                     >
-                        {headerSearch}
+                        <CmcsHeaderSearchContent/>
                     </MainHeaderV2>
 
                     {/* Left navigation */}
