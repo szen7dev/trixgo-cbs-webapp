@@ -247,7 +247,7 @@ const FunctionalTab: FC = () => {
 									{item?.sign}
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
-									<Link to={`/pcm/project/${projectID}/admin/groups/${item._id}/members`}>
+									<Link to={`/pm/project/${projectID}/admin/groups/${item._id}/members`}>
 										{item?.members.length}
 									</Link>
 								</td>
@@ -255,7 +255,7 @@ const FunctionalTab: FC = () => {
 									{moment(item.modifyAt).format("HH:mm DD/MM/YYYY")} {item?.userUpdate?.bizfullname}
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
-									<Link to={`/pcm/project/${projectID}/admin/groups/${item._id}/members`} className="underline text-sky-600">
+									<Link to={`/pm/project/${projectID}/admin/groups/${item._id}/members`} className="underline text-sky-600">
 										Xem thành viên
 									</Link>
 								</td>

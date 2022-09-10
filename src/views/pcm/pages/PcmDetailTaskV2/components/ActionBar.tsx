@@ -27,6 +27,9 @@ type Props = {
 }
 
 export const ActionTaskDetailBar:FC<Props> = ({ task, user, refetchTaskInfo, handleCollapse, collapse }) => {
+    // console.log(task)
+    // console.log(user)
+
     const [activeCopyTextTooltip, setActiveCopyTextTooltip] = useState(false);
     const history = useHistory();
 
@@ -51,14 +54,20 @@ export const ActionTaskDetailBar:FC<Props> = ({ task, user, refetchTaskInfo, han
                 >
                     <img src={iconBack} alt={"----"} className={"w-[18px]"}/>
                 </button>
-                <button
-                    onClick={copyLink}
-                    onMouseOut={() => mouseLeaveCopyTextButton()}
-                    className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mx-3 relative"}>
-                    <img src={iconLinkCopy} alt={"----"} className={"w-[18px]"}/>
-                    <div className={"absolute top-full bg-primary-gray p-2 rounded w-[170px] text-left text-white transition-all " + (activeCopyTextTooltip?"visible opacity-100":"invisible opacity-0")}>Đã sao chép đường liên kết</div>
-                </button>
-                <SendEmailNotification task={task} userId={user?._id} />
+                {
+                    task.assignee._id.toString() != user?._id.toString() ?  
+                        <button
+                            onClick={copyLink}
+                            onMouseOut={() => mouseLeaveCopyTextButton()}
+                            className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mx-3 relative"}>
+                            <img src={iconLinkCopy} alt={"----"} className={"w-[18px]"}/>
+                            <div className={"absolute top-full bg-primary-gray p-2 rounded w-[170px] text-left text-white transition-all " + (activeCopyTextTooltip?"visible opacity-100":"invisible opacity-0")}>Đã sao chép đường liên kết</div>
+                        </button>
+                    : <></>
+                }
+                {
+                    task.assignee._id.toString() != user?._id.toString() ?  <SendEmailNotification task={task} userId={user?._id} /> : <></>
+                }
                 <button
                     className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mx-3"}
                     onClick={() =>
@@ -80,7 +89,9 @@ export const ActionTaskDetailBar:FC<Props> = ({ task, user, refetchTaskInfo, han
                     </button>
                 </Link>
                 {/* <SendToChat/> */}
-                <AddUserRelated task={task} onConfirmAddUserRelated={refetchTaskInfo} />
+                {
+                    task.assignee._id.toString() != user?._id.toString() ?  <AddUserRelated task={task} onConfirmAddUserRelated={refetchTaskInfo} /> : <></>
+                }
             </div>
 
             <button onClick={() => {
