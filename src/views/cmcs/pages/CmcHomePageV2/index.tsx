@@ -18,6 +18,8 @@ import iconMaleUser from "assets/images/icons8-male-user-64.svg";
 import {formatNumberMoney} from "utils";
 import {CONTRACT_COME_IN_STATUS} from "apis/localdb";
 import categoryIcon from "assets/images/icons8-category-48.svg";
+import {Link} from "react-router-dom";
+
 const CmcHomePageV2:FC = () => {
     const dispatch = useDispatch();
     const {keywordInput} = useAppSelector(
@@ -118,7 +120,7 @@ const CmcHomePageV2:FC = () => {
                         className={
                             "mr-4 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
                         }
-                        placeholder={"Ngày nhận"}
+                        placeholder={"Năm ký"}
                         iconBack={<TriangleDown />}
                         iconFront={<img src={timetableIcon} alt={"----"} />}
                         onValueChange={(val) => {
@@ -162,7 +164,7 @@ const CmcHomePageV2:FC = () => {
                             id: "_id",
                             text: "name"
                         }}
-                        onSearchInputChange={debounce(valueSearch => setListAccessByContractSellKeyword(valueSearch), 500)}
+                        onSearchInputChange={debounce(valueSearch => setListAccessByContractBuyKeyword(valueSearch), 500)}
                         onchangeValue={item => {
                             const cloneIDs = [...buyerInfosID];
                             cloneIDs.push(item._id);
@@ -204,7 +206,7 @@ const CmcHomePageV2:FC = () => {
                             id: "_id",
                             text: "name"
                         }}
-                        onSearchInputChange={debounce(valueSearch => setListAccessByContractBuyKeyword(valueSearch), 500)}
+                        onSearchInputChange={debounce(valueSearch => setListAccessByContractSellKeyword(valueSearch), 500)}
                         onchangeValue={item => {
                             const cloneIDs = [...sellerInfosID];
                             cloneIDs.push(item._id);
@@ -246,7 +248,7 @@ const CmcHomePageV2:FC = () => {
                         disableSearch={true}
                         onchangeValue={item => {
                             const cloneIDs = [...statuss];
-                            cloneIDs.push(item._id);
+                            cloneIDs.push(item.value);
                             setStatuss(cloneIDs);
                             dispatch(setFilterDropdown({keyFilter: "statuss", dataFilter: cloneIDs}))
 
@@ -288,7 +290,7 @@ const CmcHomePageV2:FC = () => {
                         disableSearch={true}
                         onchangeValue={item => {
                             const cloneIDs = [...ontimes];
-                            cloneIDs.push(item._id);
+                            cloneIDs.push(item.id as string);
                             setOntimes(cloneIDs);
                             dispatch(setFilterDropdown({keyFilter: "ontimes", dataFilter: cloneIDs}))
 
@@ -313,15 +315,11 @@ const CmcHomePageV2:FC = () => {
                         }}
                         data={[
                             {
-                                id: undefined,
-                                text: "Tất cả"
-                            },
-                            {
                                 id: 1,
                                 text: "Đúng tiến độ"
                             },
                             {
-                                id: 0,
+                                id: 2,
                                 text: "Chậm tiến độ"
                             }
                         ]}
@@ -340,7 +338,7 @@ const CmcHomePageV2:FC = () => {
                         disableSearch={true}
                         onchangeValue={item => {
                             const cloneIDs = [...onbudgets];
-                            cloneIDs.push(item._id);
+                            cloneIDs.push(item.id as string);
                             setOnbudgets(cloneIDs);
                             dispatch(setFilterDropdown({keyFilter: "onbudgets", dataFilter: cloneIDs}))
 
@@ -365,15 +363,11 @@ const CmcHomePageV2:FC = () => {
                         }}
                         data={[
                             {
-                                id: undefined,
-                                text: "Tất cả"
-                            },
-                            {
                                 id: 1,
                                 text: "Đúng ngân sách"
                             },
                             {
-                                id: 0,
+                                id: 2,
                                 text: "Vượt ngân sách"
                             }
                         ]}
@@ -381,7 +375,6 @@ const CmcHomePageV2:FC = () => {
                             <p className={"min-w-[300px]"}>{item.text}</p>
                         )}
                     />
-                    <button className={"bg-green-success h-[32px] text-white rounded px-5"}>Tạo mới</button>
                 </div>
 
                 <div className={"flex items-center"}>
@@ -426,28 +419,28 @@ const CmcHomePageV2:FC = () => {
                                 id="flexCheckDefault"
                             />
                         </th>
-                        <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-1/5 border-0.5 border-primary-border py-3 px-2"}>
+                        <th className={"bg-cbs-table-header text-primary-gray text-left font-normal border-0.5 border-primary-border py-3 px-2"}>
                             Hợp đồng
                         </th>
                         <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-[100px] border-0.5 border-primary-border py-3 px-2"}>
                             Ngày ký
                         </th>
-                        <th className={"bg-cbs-table-header text-primary-gray text-left w-[160px] font-normal border-0.5 border-primary-border py-3 px-2"}>
+                        <th className={"bg-cbs-table-header text-primary-gray text-left max-w-[90px] font-normal border-0.5 border-primary-border py-3 px-2"}>
                             Giá trị ký + phát sinh (gồm cả VAT)
                         </th>
-                        <th className={"bg-cbs-table-header text-primary-gray text-left w-[160px] font-normal border-0.5 border-primary-border py-3 px-2"}>
+                        <th className={"bg-cbs-table-header text-primary-gray text-left max-w-[90px] font-normal border-0.5 border-primary-border py-3 px-2"}>
                             Sản lượng (gồm cả VAT)
                         </th>
-                        <th className={"bg-cbs-table-header text-primary-gray text-left w-[160px] font-normal border-0.5 border-primary-border py-3 px-2"}>
+                        <th className={"bg-cbs-table-header text-primary-gray text-left max-w-[90px] font-normal border-0.5 border-primary-border py-3 px-2"}>
                             Giá trị nghiệm thu hoàn thành
                         </th>
-                        <th className={"bg-cbs-table-header text-primary-gray w-[160px] text-left font-normal border-0.5 border-primary-border py-3 px-2"}>
+                        <th className={"bg-cbs-table-header text-primary-gray max-w-[90px] text-left font-normal border-0.5 border-primary-border py-3 px-2"}>
                             Giá trị đề nghị tạm ứng+thanh toán
                         </th>
-                        <th className={"bg-cbs-table-header text-primary-gray text-left w-[160px] font-normal border-0.5 border-primary-border py-3 px-2"}>
+                        <th className={"bg-cbs-table-header text-primary-gray text-left max-w-[90px] font-normal border-0.5 border-primary-border py-3 px-2"}>
                             Giá trị đã tạm ứng, thanh toán
                         </th>
-                        <th className={"bg-cbs-table-header text-primary-gray text-left w-[160px] font-normal border-0.5 border-primary-border py-3 px-2"}>
+                        <th className={"bg-cbs-table-header text-primary-gray text-left max-w-[90px] font-normal border-0.5 border-primary-border py-3 px-2"}>
                             Còn lại phải thanh toán
                         </th>
                         <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-[100px] border-0.5 border-primary-border py-3 px-2"}>
@@ -506,7 +499,7 @@ const CmcHomePageV2:FC = () => {
                                     />
                                 </td>
                                 <td className={"border-0.5 border-primary-border py-3 px-2"}>
-                                    {cmcs.project.sign}.{cmcs.name} - {cmcs.sign}
+                                    <Link to={`/cmcs/home/${cmcs._id}/tab/1`}>{cmcs.project.sign}.{cmcs.name} - {cmcs.sign}</Link>
                                 </td>
                                 <td className={"border-0.5 border-primary-border py-3 px-2"}>
                                     {moment(cmcs.date).format('DD/MM/YYYY')}
