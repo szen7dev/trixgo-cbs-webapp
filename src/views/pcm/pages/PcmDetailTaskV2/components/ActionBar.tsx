@@ -20,15 +20,17 @@ import { ModalCloneTask } from "./ModalCloneTask";
 
 type Props = {
     handleCollapse?: () => void;
+    checkAssigneeBid?: boolean;
     collapse?: boolean;
     task: Task;
     user: User | null;
     refetchTaskInfo: () => void;
 }
 
-export const ActionTaskDetailBar:FC<Props> = ({ task, user, refetchTaskInfo, handleCollapse, collapse }) => {
+export const ActionTaskDetailBar:FC<Props> = ({ checkAssigneeBid, task, user, refetchTaskInfo, handleCollapse, collapse }) => {
     // console.log(task)
     // console.log(user)
+    // console.log(checkAssigneeBid)
 
     const [activeCopyTextTooltip, setActiveCopyTextTooltip] = useState(false);
     const history = useHistory();
@@ -54,32 +56,32 @@ export const ActionTaskDetailBar:FC<Props> = ({ task, user, refetchTaskInfo, han
                 >
                     <img src={iconBack} alt={"----"} className={"w-[18px]"}/>
                 </button>
-                {
-                    task.assignee._id.toString() != user?._id.toString() ?  
-                        <button
-                            onClick={copyLink}
-                            onMouseOut={() => mouseLeaveCopyTextButton()}
-                            className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mx-3 relative"}>
-                            <img src={iconLinkCopy} alt={"----"} className={"w-[18px]"}/>
-                            <div className={"absolute top-full bg-primary-gray p-2 rounded w-[170px] text-left text-white transition-all " + (activeCopyTextTooltip?"visible opacity-100":"invisible opacity-0")}>Đã sao chép đường liên kết</div>
-                        </button>
-                    : <></>
-                }
-                {
-                    task.assignee._id.toString() != user?._id.toString() ?  <SendEmailNotification task={task} userId={user?._id} /> : <></>
-                }
                 <button
-                    className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mx-3"}
-                    onClick={() =>
-                        openModal(
-                            <div className="t-add-new-task-dialog text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
-                                <ModalCloneTask task={task} />
-                            </div>
-                        )
-                    }
-                >
-                    <img src={iconCopy} alt={"----"} className={"w-[18px]"}/>
+                    onClick={copyLink}
+                    onMouseOut={() => mouseLeaveCopyTextButton()}
+                    className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mx-3 relative"}>
+                    <img src={iconLinkCopy} alt={"----"} className={"w-[18px]"}/>
+                    <div className={"absolute top-full bg-primary-gray p-2 rounded w-[170px] text-left text-white transition-all " + (activeCopyTextTooltip?"visible opacity-100":"invisible opacity-0")}>Đã sao chép đường liên kết</div>
                 </button>
+                {
+                    (task.subtype == 4 && task.assignee._id.toString() == user?._id.toString()) ?  <></> : <SendEmailNotification task={task} userId={user?._id}/>
+                }
+                {
+                    (task.subtype == 4 && task.assignee._id.toString() == user?._id.toString()) ?  <></> : 
+                    <button
+                        className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mx-3"}
+                        onClick={() =>
+                            openModal(
+                                <div className="t-add-new-task-dialog text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
+                                    <ModalCloneTask task={task} />
+                                </div>
+                            )
+                        }
+                    >
+                        <img src={iconCopy} alt={"----"} className={"w-[18px]"}/>
+                    </button>
+                }
+                
                 {/* <button className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mx-3"}>
                     <img src={iconRemove} alt={"----"} className={"w-[18px]"}/>
                 </button> */}
@@ -90,7 +92,7 @@ export const ActionTaskDetailBar:FC<Props> = ({ task, user, refetchTaskInfo, han
                 </Link>
                 {/* <SendToChat/> */}
                 {
-                    task.assignee._id.toString() != user?._id.toString() ?  <AddUserRelated task={task} onConfirmAddUserRelated={refetchTaskInfo} /> : <></>
+                    (task.subtype == 4 && task.assignee._id.toString() == user?._id.toString()) ?  <></> : <AddUserRelated task={task} onConfirmAddUserRelated={refetchTaskInfo} />
                 }
             </div>
 
