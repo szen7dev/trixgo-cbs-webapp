@@ -192,11 +192,7 @@ export const DocumentProjectPage: FC = () => {
             toggleModal();
             updateModal({
                 departmentId: departmentID,
-                departmentInfo: {
-                    company: {
-                        _id: record.company,
-                    },
-                },
+                departmentInfo: result,
                 title: "Cập nhật",
                 initialValues: result,
                 onSubmit: async (values: any) => {

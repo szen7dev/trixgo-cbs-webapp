@@ -1,6 +1,6 @@
-import React, { FC, useCallback, useEffect } from "react";
-import { DropdownSearchable, DropdownSearchableV2 } from "shareComponents/common";
-import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
+import React, { FC, useEffect } from "react";
+// import { DropdownSearchable, DropdownSearchableV2 } from "shareComponents/common";
+// import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
 import moment from "moment";
 import parse from "html-react-parser";
 import { Link, useParams } from "react-router-dom";
@@ -15,7 +15,7 @@ import { Loader } from "shareComponents/common";
 // import categoryIcon from "assets/images/icons8-category-48.svg";
 // import downloadIcon from "assets/images/icons8-download-64.svg";
 // import sendMailIcon from "assets/images/icons8-send-email-96.svg";
-import nextIcon from "assets/images/icons-arrow-next.svg";
+// import nextIcon from "assets/images/icons-arrow-next.svg";
 // import userAvt from "assets/images/task-user.svg";
 
 import { PcmHomeTab1 } from "./components/PcmHomeTab1";

@@ -2,7 +2,7 @@ import { FC } from "react";
 
 import image from "assets/images/cmcs/datahub.jpg";
 
-export const CmcHomePage: FC = () => {
+const CmcHomePage: FC = () => {
   return (
     <main className="w-full h-full flex flex-col items-center justify-center">
       <div className="text-2xl mb-4">
@@ -35,3 +35,4 @@ export const CmcHomePage: FC = () => {
     </main>
   );
 };
+export default CmcHomePage

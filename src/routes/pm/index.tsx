@@ -71,7 +71,7 @@ const ProjectSubjectCompanyOfAssigneePage          = lazy(() => import("views/pp
 const ProjectSubjectPage          = lazy(() => import("views/ppt/pages/ProjectSubjectPage"))
 const ProjectFolderPage           = lazy(() => import("views/ppt/pages/ProjectFolderPage"))
 const ProjectDashboardPage        = lazy(() => import("views/ppt/pages/ProjectDashboardPage"))
-const ProjectPhotoContractPage    = lazy(() => import("views/ppt/pages/ProjectPhotoContractPage"))
+const ProjectPhotoContractPageV2    = lazy(() => import("views/ppt/pages/ProjectPhotoContractPageV2"))
 const ProjectPhotoPage            = lazy(() => import("views/ppt/pages/ProjectPhotoPage"))
 const ProjectDrawingPageV2        = lazy(() => import("views/ppt/pages/ProjectDrawingPageV2"))
 const ProjectDirectoryPageV2      = lazy(() => import("views/ppt/pages/ProjectDirectoryPageV2"))
@@ -427,7 +427,7 @@ const PCMRouter: FC = () => {
                         path="/pm/project/:id/photo/:contractID"
                     >
                       <PmProjectLayout>
-                        <ProjectPhotoContractPage/>
+                        <ProjectPhotoContractPageV2/>
                       </PmProjectLayout>
                     </Route>
                     <Route path="/pm/project/:id/drawing">

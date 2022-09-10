@@ -3,12 +3,14 @@ import iconAddGroup from "assets/images/icons8-add-user-group-man-man-64.svg";
 import taskUserAvt from "assets/images/task-user.svg";
 import { Task } from "typings/task";
 import moment from "moment";
+import { User } from "typings/user";
 
 type Props = {
     task: Task;
+    user: User | null;
 }
 
-export const TaskDetailMember: FC<Props> = ({ task }) => {
+export const TaskDetailMember: FC<Props> = ({ task, user }) => {
     return (
         <div className={"task-member flex items-start mt-5"}>
             <span className={"mr-4"}>
@@ -31,22 +33,27 @@ export const TaskDetailMember: FC<Props> = ({ task }) => {
                             <p className={"text-primary-gray text-xs"}>Người thực hiện</p>
                         </div>
                     </div>
-                    <div className={"flex items-center flex-1 justify-start"}>
-                        {!!task.related?.length && task.related.slice(0, 10).map(item => (
-                            <img key={item._id} alt={"----"} src={item?.image ? `${process.env.REACT_APP_URL_S3_USER}/${item?.image}` : taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1 border-0.5 border-primary-border"} />
-                        ))}
 
-                        {/* <img alt={"----"} src={taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1"} /> */}
+                    {
+                        (task.subtype == 4 && task.assignee._id.toString() == user?._id.toString()) ?  <></> : 
+                        <div className={"flex items-center flex-1 justify-start"}>
+                            {!!task.related?.length && task.related.slice(0, 10).map(item => (
+                                <img key={item._id} alt={"----"} src={item?.image ? `${process.env.REACT_APP_URL_S3_USER}/${item?.image}` : taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1 border-0.5 border-primary-border"} />
+                            ))}
 
-                        {task.related?.length > 11 && (
-                            <div className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1 bg-cbs-form-input-bg border-0.5 border-primary-border flex items-center justify-center text-primary-gray"}>
-                                {task.related?.length - 10}+
-                            </div>
-                        )}
-                        {/* <button className={"text-xl rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1 bg-cbs-form-input-bg border-0.5 border-primary-border flex items-center justify-center text-primary-gray"}>
-                            +
-                        </button> */}
-                    </div>
+                            {/* <img alt={"----"} src={taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1"} /> */}
+
+                            {task.related?.length > 11 && (
+                                <div className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1 bg-cbs-form-input-bg border-0.5 border-primary-border flex items-center justify-center text-primary-gray"}>
+                                    {task.related?.length - 10}+
+                                </div>
+                            )}
+                            {/* <button className={"text-xl rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1 bg-cbs-form-input-bg border-0.5 border-primary-border flex items-center justify-center text-primary-gray"}>
+                                +
+                            </button> */}
+                        </div>
+                    }
+                    
                 </div>
                 {/*UI DEMO*/}
                 {/* <div className={"flex items-center flex-wrap mt-2"}>

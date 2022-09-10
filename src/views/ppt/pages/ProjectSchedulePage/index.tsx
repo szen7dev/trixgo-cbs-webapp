@@ -54,6 +54,10 @@ const ProjectSchedulePage: FC = () => {
 		},
 		isFetch: true
 	});
+
+	useEffect(() => {
+		document.title = `${infoDepartment?.data?.sign}-Mốc tiến độ`;
+	});
 	
 	useEffect(() => {
 		listTasks?.forEach((task:any) => {

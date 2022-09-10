@@ -32,6 +32,7 @@ import MessageNPSVoteDetailSlice from './messages/MessageNPSVoteDetail';
 import DashboardV2Slice from './DashboardV2Slice';
 import DocumentHomeSlice from "./DocumentHomeSlice";
 import DocumentProjectSlice from "./DocumentProjectSlice";
+import CmcsHomeSlice from "./CmcsHomeSlice";
 import { useSelector, TypedUseSelectorHook } from 'react-redux';
 
 const combinedReducer = combineReducers({
@@ -66,6 +67,7 @@ const combinedReducer = combineReducers({
     dashboardV2: DashboardV2Slice,
     documentHome: DocumentHomeSlice,
     documentProject: DocumentProjectSlice,
+    cmcsHome: CmcsHomeSlice,
 });
 const rootReducer = (state: any, action: any) => {
     if (action.type === 'user/logout') {

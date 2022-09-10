@@ -4,7 +4,7 @@ import cn from "classnames";
 
 import { useModal } from "services/hooks/useModal";
 
-export const ContractDashBoard: FC = () => {
+const ContractDashBoard: FC = () => {
   const { openModal } = useModal();
 
   return (
@@ -13,3 +13,5 @@ export const ContractDashBoard: FC = () => {
     </main>
   );
 };
+
+export default ContractDashBoard;

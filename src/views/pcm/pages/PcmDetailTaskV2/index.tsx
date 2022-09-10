@@ -19,7 +19,7 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import { TaskDetailOpenedBidding } from "./components/TaskDetailOpenedBidding";
 import { calculateExpireTime } from 'utils/time';
 
-const PcmDetailTaskV2: FC = () => {
+const PcmDetailTaskV2: FC = () => {     
     const [collapse, setCollapse] = useState(false);
     const [permissions, setPermissions] = useState({
         hasPermissionUpdateTask: false,
@@ -89,7 +89,10 @@ const PcmDetailTaskV2: FC = () => {
          */
         switch (subtype) {
             case 4: {
-                const diff = calculateExpireTime(Date.now(), actualFinishTime, 'days', false);
+               
+                const currentTime = new Date().getTime();
+                const actualFinishTimeConvert = new Date(actualFinishTime).getTime();
+                const preDeadline = currentTime < actualFinishTimeConvert ? true : false;
                 let allUsersRelatedIsOpenBidding = false;
 
                 if (openedUsers && relatedsID.length === openedUsers.length) {
@@ -141,7 +144,7 @@ const PcmDetailTaskV2: FC = () => {
                     }
 
                     // Trước deadline
-                    if (diff > 0) {
+                    if (preDeadline) {
                         setPermissions({
                             ...dataPermissions,
                             hasPermissionOpenBidding: false,
@@ -150,13 +153,18 @@ const PcmDetailTaskV2: FC = () => {
                     }
 
                     // Sau deadline
-                    if (diff === 0 || diff < 0) {
-                        setPermissions(dataPermissions);
+                    if (!preDeadline) {
+                        setPermissions({
+                            ...dataPermissions,
+                            hasPermissionAddSignature: false
+                        });
                     }
 
                 } else { // Sau deadline + tất cả người liên quan đã mở thầu
                     const hasPermissionUpdateTask = false;
-                    const hasPermissionAddSignature = assignee?._id === user?._id;
+
+                    // const hasPermissionAddSignature = assignee?._id === user?._id;
+                    const hasPermissionAddSignature = false;
 
                     const hasPermissionAddRelatedUser = author?._id === user?._id;
                     const hasPermissionViewRelatedUser = [author?._id, ...relatedsID].includes(user?._id);
@@ -268,7 +276,7 @@ const PcmDetailTaskV2: FC = () => {
                         hasPermissionOpenBidding={permissions.hasPermissionOpenBidding}
                     />
                     <TaskDetailCompleteStatus task={taskInfo} />
-                    <TaskDetailMember task={taskInfo} />
+                    <TaskDetailMember task={taskInfo} user={user} />
                     <TaskDetailSignature task={taskInfo} />
                     <TaskDetailOpenedBidding task={taskInfo} />
                     <TaskDetailDescription task={taskInfo} refetchInfo={refetchInfo} />

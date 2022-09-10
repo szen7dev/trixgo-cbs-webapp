@@ -1,5 +1,7 @@
 import { FC } from "react";
 
-export const ContractHome: FC = () => {
+const ContractHome: FC = () => {
   return <section></section>;
 };
+
+export default ContractHome;

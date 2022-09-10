@@ -1,5 +1,6 @@
 // Khai báo kiểu dữ liệu chung trả về từ tất cả các API
 import { APIResponse } from "./apis/response";
+import {QueryParam} from "./document/commons";
 
 // Kiểu dữ liệu từ client truyền lên server để lấy data API
 export type ListContractsPayload = {
@@ -16,12 +17,31 @@ export type ListContractsPayload = {
   expenseID?: any;
 };
 
+export type ListByFilterContractsPayload = {
+  lastestID?: string;
+  projectsID?: string[];
+  fromDate?: string;
+  toDate?: string;
+  buyerInfosID?: string[];
+  sellerInfosID?: string[];
+  statuss?: string[];
+  ontimes?: string[];
+  onbudgets?: string[];
+  keyword?: string;
+};
+
+export type ListAccessByContractPayload = {
+  keyword?: string;
+  lastestID?: string;
+  option?: 1|2;
+}
+
 // Kiểu dữ liệu của Danh sách/Info
 export type Contract = {
   _id: string;
   name: string,
   sign: string,
-  date: String,
+  date: string,
   storeSign: string,
   description: string,
   company: string,
@@ -52,12 +72,43 @@ export type Contract = {
   advancePaymentPaid: number,
   amountPaid: number,
   remainingPayment: number,
+  recommendedPayment: number,
+  status: number
 };
 
 // Kiểu dữ liệu trả về
 export type ListContractsResponse = APIResponse & {
   data: {
     listRecords: Array<Contract>;
+    totalRecord: number;
+    totalPage?: number;
+    nextCursor: string;
+  };
+};
+
+export type ListContractsByFilterResponse = APIResponse & {
+  data: {
+    listRecords: Array<Contract>;
+    totalRecord: number;
+    totalPage?: number;
+    nextCursor: string;
+  };
+};
+
+export type ListAccessByContractsResponse = APIResponse & {
+  data: {
+    listRecords: Array<{
+      _id: string,
+      company: {
+        _id: string;
+        name: string;
+        sign: string;
+        [key: string] : any;
+      };
+      name: string;
+      sign: string|null;
+      [key: string] : any;
+    }>;
     totalRecord: number;
     totalPage?: number;
     nextCursor: string;
@@ -213,3 +264,13 @@ export type DeleteContractPayload = {
 export type DeleteMultiContractPayload = {
   contractsID: Array<string>;
 };
+
+export interface CmcsListByFilterQueryPayload extends QueryParam {
+  params?: ListByFilterContractsPayload,
+  isFetchList?: boolean;
+}
+
+export interface CmcsListAccessByContractQueryPayload extends QueryParam {
+  params?: ListAccessByContractPayload,
+  isFetchList?: boolean;
+}

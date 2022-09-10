@@ -25,7 +25,7 @@ import {
   useDeleteContractIPCMutation,
 } from "services/hooks/cmcs/useContractIPC";
 
-export const ContractIpc: FC = () => {
+const ContractIpc: FC = () => {
   const [itemChecked, setItemChecked] = useState('');
 
   const [pageParam, setPageParam] = useState('');
@@ -265,3 +265,4 @@ export const ContractIpc: FC = () => {
     </main>
   );
 };
+export default ContractIpc;

@@ -57,16 +57,17 @@ interface InitialValues {
   type: number,
   relatedIDs: string[],
   groupID: string,
+  expiredHour: string
 }
 
 export const ModalAddNewTask: FC = () => {
   const history = useHistory();
   const { closeModal } = useModal();
   const editorRef = useRef<EditorType>();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [tokens, setTokens] = useState<any[]>([]);
   const [searchDepartmentValue, setSearchDepartmentValue] = useState("");
-  const [searchOtherField, setSearchOtherField] = useState("");
   const [searchFriendName, setSearchFriendName] = useState("");
   const [searchGroupName, setSearchGroupName] = useState("");
   const [searchContract, setSearchContract] = useState("");
@@ -74,6 +75,7 @@ export const ModalAddNewTask: FC = () => {
   const [projectID, setProjectID] = useState("");
   const [groupID, setGroupID] = useState("");
   const [isNotiEmail, setIsNotiEmail] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
   const { addTaskAsync } = useTask({});
 
@@ -114,9 +116,9 @@ export const ModalAddNewTask: FC = () => {
     params: {
       type: 2,
       companyID,
-      keyword: searchOtherField
+      // keyword: searchOtherField
     },
-    isFetchList: !!companyID
+    isFetchList: false // !!companyID
   })
 
   const {
@@ -206,6 +208,11 @@ export const ModalAddNewTask: FC = () => {
     if (!filesSelected || !filesSelected.length) return;
 
     if(!projectID || !groupID) {
+      // Clear input file
+      if(fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+
       return toast.warn('Bạn cần chọn dự án và nhóm trước khi thêm file đính kèm');
     }
 
@@ -219,6 +226,12 @@ export const ModalAddNewTask: FC = () => {
 
     // setUploadImage(images);
     setUploadFile(files);
+    setIsUploading(true);
+
+    // Clear input file
+    if(fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
 
     // Upload images
     // for (const [key, { file }] of Object.entries(images)) {
@@ -243,12 +256,13 @@ export const ModalAddNewTask: FC = () => {
         fileType: 2,
         source,
         progress: percentCompleted => {
-          console.log(`${percentCompleted}%`, key);
           setUploadFileProgress(key, percentCompleted)
         }
       })
       setIDFileUploaded(key, _id);
     }
+
+    setIsUploading(false);
   }
 
   const handleRemoveUpload = (file: FileProp | FilePropsUpload, type: 'FILE' | 'IMAGE') => {
@@ -305,7 +319,8 @@ export const ModalAddNewTask: FC = () => {
     assigneeID: "",
     name: "",
     startTime: moment().format('MM/DD/YYYY'),
-    expiredTime: "",
+    expiredTime: moment().format('MM/DD/YYYY'),
+    expiredHour: "00:00",
     description: "",
     authorAttachs: [],
     type: 1,
@@ -807,7 +822,7 @@ export const ModalAddNewTask: FC = () => {
                             <div style={{ width: `${progress}%` }} className={"bg-primary absolute top-0 left-0 h-full"}></div>
                           )}
                         </div>
-                        <button className="ml-auto" onClick={handleRemoveUpload.bind(null, fileInfo, 'FILE')}>
+                        <button className="ml-auto" onClick={handleRemoveUpload.bind(null, file, 'FILE')}>
                           <Close />
                         </button>
                       </div>
@@ -837,6 +852,7 @@ export const ModalAddNewTask: FC = () => {
                       className="hidden"
                       accept="*"
                       multiple
+                      ref={fileInputRef}
                       onChange={(e: ChangeEvent<HTMLInputElement>) => handleUploadAttach(e.target.files)}
                     />
                   </label>
@@ -849,7 +865,7 @@ export const ModalAddNewTask: FC = () => {
                     />
                     <label htmlFor="email-notice" className={"text-left ml-2 whitespace-nowrap"}>Thông báo email</label>
                   </div>
-                  <button type="submit" className="btn btn-primary ml-auto">Xác nhận</button>
+                  <button type="submit" className="btn btn-primary ml-auto" disabled={isUploading}>Xác nhận</button>
                 </div>
               </Form>
             );

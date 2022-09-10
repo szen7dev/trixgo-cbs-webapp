@@ -30,7 +30,7 @@ export const OtherActions:FC<Props> = ({ task }) => {
                     </div>
 
                     <div className={"mb-4"}>
-                        <button
+                        {/* <button
                             className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
                         >
                             Di chuyển tới việc cha
@@ -54,7 +54,7 @@ export const OtherActions:FC<Props> = ({ task }) => {
                             className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
                         >
                             Gán hợp đồng
-                        </button>
+                        </button> */}
                         <Link
                             className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header block"}
                             to={`/pcm/detail/${task._id}/print/1`}
