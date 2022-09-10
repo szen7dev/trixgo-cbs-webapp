@@ -41,7 +41,9 @@ import { useSearchTask } from "services/hooks/useMainSearch";
 import { humanFileSize } from "utils/converter";
 import PaginateV2 from "shareComponents/common/PaginateV2";
 import { useTask } from "services/hooks/useTask";
+import { useModal } from "services/hooks/useModal";
 import { UpdateStatusDialog } from "./UpdateStatusDialog";
+import { ModalCreateResultSearch } from "./ModalCreateResultSearch";
 
 type Props = {
   type?: number;
@@ -57,6 +59,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
   const tabIndex = useAppSelector((state) => state.dashboardV2.data.tabIndex);
   const tabActive = useAppSelector((state) => state.dashboardV2.data.tabActive);
   const [showUpdateStatus, setShowUpdateStatus] = useState(false);
+  const { openModal } = useModal();
 
   const keywordForResponse = useAppSelector(
     (state) => state.dashboardV2.data.keywordForResponse
@@ -269,6 +272,18 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     }
     return result;
   };
+
+  const onSaveResultSearch = () => {
+    openModal(
+      <div
+        className={
+          "inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
+        }
+      >
+        <ModalCreateResultSearch condition={querySearchTask} />
+      </div>
+    )
+  }
 
   return (
     <div className="t-home flex flex-col h-full overflow-hidden">
@@ -1152,6 +1167,12 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
             onClick={onReset}
           >
             Thiết lập lại
+          </button>
+          <button
+            className={"bg-green-success rounded text-white px-2 h-[32px] ml-2"}
+            onClick={onSaveResultSearch}
+          >
+            Lưu kết quả
           </button>
         </div>
         <div className={"header-table flex px-4 w-full top-0 bg-white pb-4"}>
