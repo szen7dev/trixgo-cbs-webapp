@@ -432,22 +432,22 @@ const CmcHomePageV2:FC = () => {
                         <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-[100px] border-0.5 border-primary-border py-3 px-2"}>
                             Ngày ký
                         </th>
-                        <th className={"bg-cbs-table-header text-primary-gray text-left font-normal border-0.5 border-primary-border py-3 px-2"}>
+                        <th className={"bg-cbs-table-header text-primary-gray text-left w-[160px] font-normal border-0.5 border-primary-border py-3 px-2"}>
                             Giá trị ký + phát sinh (gồm cả VAT)
                         </th>
-                        <th className={"bg-cbs-table-header text-primary-gray text-left font-normal border-0.5 border-primary-border py-3 px-2"}>
+                        <th className={"bg-cbs-table-header text-primary-gray text-left w-[160px] font-normal border-0.5 border-primary-border py-3 px-2"}>
                             Sản lượng (gồm cả VAT)
                         </th>
-                        <th className={"bg-cbs-table-header text-primary-gray text-left font-normal border-0.5 border-primary-border py-3 px-2"}>
+                        <th className={"bg-cbs-table-header text-primary-gray text-left w-[160px] font-normal border-0.5 border-primary-border py-3 px-2"}>
                             Giá trị nghiệm thu hoàn thành
                         </th>
-                        <th className={"bg-cbs-table-header w-[70px] text-primary-gray text-center font-normal border-0.5 border-primary-border py-3 px-2"}>
+                        <th className={"bg-cbs-table-header text-primary-gray w-[160px] text-left font-normal border-0.5 border-primary-border py-3 px-2"}>
                             Giá trị đề nghị tạm ứng+thanh toán
                         </th>
-                        <th className={"bg-cbs-table-header text-primary-gray text-left font-normal border-0.5 border-primary-border py-3 px-2"}>
+                        <th className={"bg-cbs-table-header text-primary-gray text-left w-[160px] font-normal border-0.5 border-primary-border py-3 px-2"}>
                             Giá trị đã tạm ứng, thanh toán
                         </th>
-                        <th className={"bg-cbs-table-header text-primary-gray text-left font-normal border-0.5 border-primary-border py-3 px-2"}>
+                        <th className={"bg-cbs-table-header text-primary-gray text-left w-[160px] font-normal border-0.5 border-primary-border py-3 px-2"}>
                             Còn lại phải thanh toán
                         </th>
                         <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-[100px] border-0.5 border-primary-border py-3 px-2"}>
@@ -456,6 +456,35 @@ const CmcHomePageV2:FC = () => {
                     </tr>
                     </thead>
                     <tbody>
+                    <tr>
+                        <td className={"border-0.5 border-primary-border py-3 px-2 text-center"}>
+
+                        </td>
+                        <td className={"border-0.5 border-primary-border py-3 px-2"}>
+                        </td>
+                        <td className={"border-0.5 border-primary-border py-3 px-2"}>
+                        </td>
+                        <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
+                            15.332.000.000
+                        </td>
+                        <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
+                            15.332.000.000
+                        </td>
+                        <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
+                            15.332.000.000
+                        </td>
+                        <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
+                            15.332.000.000
+                        </td>
+                        <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
+                            15.332.000.000
+                        </td>
+                        <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
+                            15.332.000.000
+                        </td>
+                        <td className={"border-0.5 border-primary-border py-3 px-2"}>
+                        </td>
+                    </tr>
                     {
                         (listCmcsByFilterWithPager[pageIndex]??[]).map((cmcs, i) => (
                             <tr key={cmcs._id}>
@@ -482,22 +511,22 @@ const CmcHomePageV2:FC = () => {
                                 <td className={"border-0.5 border-primary-border py-3 px-2"}>
                                     {moment(cmcs.date).format('DD/MM/YYYY')}
                                 </td>
-                                <td className={"border-0.5 border-primary-border py-3 px-2"}>
+                                <td className={"border-0.5 border-primary-border py-3 px-2 text-center"}>
                                     {formatNumberMoney((cmcs.value??0)+(cmcs.vatValue??0)+(cmcs.plus??0)+(cmcs.vatPlus??0))}
                                 </td>
-                                <td className={"border-0.5 border-primary-border py-3 px-2"}>
+                                <td className={"border-0.5 border-primary-border py-3 px-2 text-center"}>
                                     {formatNumberMoney((cmcs.produce??0)+(cmcs.vatProduce??0)+(cmcs.plusProduce??0)+(cmcs.vatPlusProduce??0))}
                                 </td>
-                                <td className={"border-0.5 border-primary-border py-3 px-2"}>
+                                <td className={"border-0.5 border-primary-border py-3 px-2 text-center"}>
                                     {formatNumberMoney((cmcs.acceptance??0)+(cmcs.vatAcceptance??0)+(cmcs.plusAcceptance??0)+(cmcs.vatPlusAcceptance??0))}
                                 </td>
-                                <td className={"border-0.5 border-primary-border py-3 px-2 text-right pr-2"}>
+                                <td className={"border-0.5 border-primary-border py-3 px-2 text-center"}>
                                     {formatNumberMoney(cmcs.recommendedPayment??0)}
                                 </td>
-                                <td className={"border-0.5 border-primary-border py-3 px-2"}>
+                                <td className={"border-0.5 border-primary-border py-3 px-2 text-center"}>
                                     {formatNumberMoney((cmcs.advancePaymentPaid??0)+(cmcs.amountPaid??0))}
                                 </td>
-                                <td className={"border-0.5 border-primary-border py-3 px-2"}>
+                                <td className={"border-0.5 border-primary-border py-3 px-2 text-center"}>
                                     {formatNumberMoney(cmcs.remainingPayment??0)}
                                 </td>
                                 <td className={"border-0.5 border-primary-border py-3 px-2"}>
