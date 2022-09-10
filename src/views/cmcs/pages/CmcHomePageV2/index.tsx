@@ -18,6 +18,8 @@ import iconMaleUser from "assets/images/icons8-male-user-64.svg";
 import {formatNumberMoney} from "utils";
 import {CONTRACT_COME_IN_STATUS} from "apis/localdb";
 import categoryIcon from "assets/images/icons8-category-48.svg";
+import {Link} from "react-router-dom";
+
 const CmcHomePageV2:FC = () => {
     const dispatch = useDispatch();
     const {keywordInput} = useAppSelector(
@@ -162,7 +164,7 @@ const CmcHomePageV2:FC = () => {
                             id: "_id",
                             text: "name"
                         }}
-                        onSearchInputChange={debounce(valueSearch => setListAccessByContractSellKeyword(valueSearch), 500)}
+                        onSearchInputChange={debounce(valueSearch => setListAccessByContractBuyKeyword(valueSearch), 500)}
                         onchangeValue={item => {
                             const cloneIDs = [...buyerInfosID];
                             cloneIDs.push(item._id);
@@ -204,7 +206,7 @@ const CmcHomePageV2:FC = () => {
                             id: "_id",
                             text: "name"
                         }}
-                        onSearchInputChange={debounce(valueSearch => setListAccessByContractBuyKeyword(valueSearch), 500)}
+                        onSearchInputChange={debounce(valueSearch => setListAccessByContractSellKeyword(valueSearch), 500)}
                         onchangeValue={item => {
                             const cloneIDs = [...sellerInfosID];
                             cloneIDs.push(item._id);
@@ -381,7 +383,6 @@ const CmcHomePageV2:FC = () => {
                             <p className={"min-w-[300px]"}>{item.text}</p>
                         )}
                     />
-                    <button className={"bg-green-success h-[32px] text-white rounded px-5"}>Tạo mới</button>
                 </div>
 
                 <div className={"flex items-center"}>
@@ -426,28 +427,28 @@ const CmcHomePageV2:FC = () => {
                                 id="flexCheckDefault"
                             />
                         </th>
-                        <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-1/5 border-0.5 border-primary-border py-3 px-2"}>
+                        <th className={"bg-cbs-table-header text-primary-gray text-left font-normal border-0.5 border-primary-border py-3 px-2"}>
                             Hợp đồng
                         </th>
                         <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-[100px] border-0.5 border-primary-border py-3 px-2"}>
                             Ngày ký
                         </th>
-                        <th className={"bg-cbs-table-header text-primary-gray text-left w-[160px] font-normal border-0.5 border-primary-border py-3 px-2"}>
+                        <th className={"bg-cbs-table-header text-primary-gray text-left max-w-[120px] font-normal border-0.5 border-primary-border py-3 px-2"}>
                             Giá trị ký + phát sinh (gồm cả VAT)
                         </th>
-                        <th className={"bg-cbs-table-header text-primary-gray text-left w-[160px] font-normal border-0.5 border-primary-border py-3 px-2"}>
+                        <th className={"bg-cbs-table-header text-primary-gray text-left max-w-[120px] font-normal border-0.5 border-primary-border py-3 px-2"}>
                             Sản lượng (gồm cả VAT)
                         </th>
-                        <th className={"bg-cbs-table-header text-primary-gray text-left w-[160px] font-normal border-0.5 border-primary-border py-3 px-2"}>
+                        <th className={"bg-cbs-table-header text-primary-gray text-left max-w-[120px] font-normal border-0.5 border-primary-border py-3 px-2"}>
                             Giá trị nghiệm thu hoàn thành
                         </th>
-                        <th className={"bg-cbs-table-header text-primary-gray w-[160px] text-left font-normal border-0.5 border-primary-border py-3 px-2"}>
+                        <th className={"bg-cbs-table-header text-primary-gray max-w-[120px] text-left font-normal border-0.5 border-primary-border py-3 px-2"}>
                             Giá trị đề nghị tạm ứng+thanh toán
                         </th>
-                        <th className={"bg-cbs-table-header text-primary-gray text-left w-[160px] font-normal border-0.5 border-primary-border py-3 px-2"}>
+                        <th className={"bg-cbs-table-header text-primary-gray text-left max-w-[120px] font-normal border-0.5 border-primary-border py-3 px-2"}>
                             Giá trị đã tạm ứng, thanh toán
                         </th>
-                        <th className={"bg-cbs-table-header text-primary-gray text-left w-[160px] font-normal border-0.5 border-primary-border py-3 px-2"}>
+                        <th className={"bg-cbs-table-header text-primary-gray text-left max-w-[120px] font-normal border-0.5 border-primary-border py-3 px-2"}>
                             Còn lại phải thanh toán
                         </th>
                         <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-[100px] border-0.5 border-primary-border py-3 px-2"}>
@@ -456,36 +457,36 @@ const CmcHomePageV2:FC = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td className={"border-0.5 border-primary-border py-3 px-2 text-center"}>
+                        <tr>
+                            <td className={"border-0.5 border-primary-border py-3 px-2 text-center"}>
 
-                        </td>
-                        <td className={"border-0.5 border-primary-border py-3 px-2"}>
-                        </td>
-                        <td className={"border-0.5 border-primary-border py-3 px-2"}>
-                        </td>
-                        <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
-                            15.332.000.000
-                        </td>
-                        <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
-                            15.332.000.000
-                        </td>
-                        <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
-                            15.332.000.000
-                        </td>
-                        <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
-                            15.332.000.000
-                        </td>
-                        <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
-                            15.332.000.000
-                        </td>
-                        <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
-                            15.332.000.000
-                        </td>
-                        <td className={"border-0.5 border-primary-border py-3 px-2"}>
-                        </td>
-                    </tr>
-                    {
+                            </td>
+                            <td className={"border-0.5 border-primary-border py-3 px-2"}>
+                            </td>
+                            <td className={"border-0.5 border-primary-border py-3 px-2"}>
+                            </td>
+                            <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
+                                15.332.000.000
+                            </td>
+                            <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
+                                15.332.000.000
+                            </td>
+                            <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
+                                15.332.000.000
+                            </td>
+                            <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
+                                15.332.000.000
+                            </td>
+                            <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
+                                15.332.000.000
+                            </td>
+                            <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
+                                15.332.000.000
+                            </td>
+                            <td className={"border-0.5 border-primary-border py-3 px-2"}>
+                            </td>
+                        </tr>
+                        {
                         (listCmcsByFilterWithPager[pageIndex]??[]).map((cmcs, i) => (
                             <tr key={cmcs._id}>
                                 <td className={"border-0.5 border-primary-border py-3 px-2 text-center"}>
@@ -505,8 +506,8 @@ const CmcHomePageV2:FC = () => {
                                         }}
                                     />
                                 </td>
-                                <td className={"border-0.5 border-primary-border py-3 px-2"}>
-                                    {cmcs.project.sign}.{cmcs.name} - {cmcs.sign}
+                                <td className={"border-0.5 border-primary-border py-3 px-2 break-all"}>
+                                    <Link to={`/cmcs/home/${cmcs._id}/tab/1`}>{cmcs.project.sign}.{cmcs.name} - {cmcs.sign}</Link>
                                 </td>
                                 <td className={"border-0.5 border-primary-border py-3 px-2"}>
                                     {moment(cmcs.date).format('DD/MM/YYYY')}
