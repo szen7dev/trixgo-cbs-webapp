@@ -40,7 +40,7 @@ export const CmcsHeaderSearchContent:FC = () => {
         setTypingTimeoutRef.current = setTimeout(() => {
             setSearch(e.target.value);
             setShowResult(true);
-        }, 300)
+        }, 500)
     }
 
     const onKeyDown = (e: any) => {

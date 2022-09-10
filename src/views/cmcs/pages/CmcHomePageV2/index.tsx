@@ -120,7 +120,7 @@ const CmcHomePageV2:FC = () => {
                         className={
                             "mr-4 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
                         }
-                        placeholder={"Ngày nhận"}
+                        placeholder={"Năm ký"}
                         iconBack={<TriangleDown />}
                         iconFront={<img src={timetableIcon} alt={"----"} />}
                         onValueChange={(val) => {
@@ -164,7 +164,7 @@ const CmcHomePageV2:FC = () => {
                             id: "_id",
                             text: "name"
                         }}
-                        onSearchInputChange={debounce(valueSearch => setListAccessByContractSellKeyword(valueSearch), 500)}
+                        onSearchInputChange={debounce(valueSearch => setListAccessByContractBuyKeyword(valueSearch), 500)}
                         onchangeValue={item => {
                             const cloneIDs = [...buyerInfosID];
                             cloneIDs.push(item._id);
