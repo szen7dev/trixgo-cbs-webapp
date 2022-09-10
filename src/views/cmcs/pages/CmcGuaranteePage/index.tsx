@@ -9,7 +9,7 @@ import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
 import styles from 'views/cmcs/styles/styles.module.css';
 
-export const CmcGuaranteePage: FC = () => {
+const CmcGuaranteePage: FC = () => {
   const { createPermission } = useCheckPerAccessScreen({
     appID: APP_ID.CMCS.id,
     menuID: APP_ID.CMCS.menuCmcsApp.guarantee.id,
@@ -163,3 +163,5 @@ export const CmcGuaranteePage: FC = () => {
     </main>
   );
 };
+
+export default CmcGuaranteePage;

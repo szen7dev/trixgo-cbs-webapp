@@ -26,7 +26,7 @@ import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
 
-export const CmcExpensePage: FC = () => {
+const CmcExpensePage: FC = () => {
   // --------- Check phân quyền
   const payload: any = {
     appID: APP_ID.CMCS.id,
@@ -300,3 +300,5 @@ export const CmcExpensePage: FC = () => {
     </main>
   );
 };
+
+export default CmcExpensePage;

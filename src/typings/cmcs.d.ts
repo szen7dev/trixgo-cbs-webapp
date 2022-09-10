@@ -1,5 +1,6 @@
 // Khai báo kiểu dữ liệu chung trả về từ tất cả các API
 import { APIResponse } from "./apis/response";
+import {QueryParam} from "./document/commons";
 
 // Kiểu dữ liệu từ client truyền lên server để lấy data API
 export type ListContractsPayload = {
@@ -14,6 +15,19 @@ export type ListContractsPayload = {
   lastestID?: string;
   contractID?: string;
   expenseID?: any;
+};
+
+export type ListByFilterContractsPayload = {
+  lastestID?: string;
+  projectsID?: string[];
+  fromDate?: string;
+  toDate?: string;
+  buyerInfosID?: string[];
+  sellerInfosID?: string[];
+  statuss?: string[];
+  ontimes?: string[];
+  onbudgets?: string[];
+  keyword?: string;
 };
 
 // Kiểu dữ liệu của Danh sách/Info
@@ -56,6 +70,15 @@ export type Contract = {
 
 // Kiểu dữ liệu trả về
 export type ListContractsResponse = APIResponse & {
+  data: {
+    listRecords: Array<Contract>;
+    totalRecord: number;
+    totalPage?: number;
+    nextCursor: string;
+  };
+};
+
+export type ListContractsByFilterResponse = APIResponse & {
   data: {
     listRecords: Array<Contract>;
     totalRecord: number;
@@ -213,3 +236,8 @@ export type DeleteContractPayload = {
 export type DeleteMultiContractPayload = {
   contractsID: Array<string>;
 };
+
+export interface CmcsListByFilterQueryPayload extends QueryParam {
+  params?: ListByFilterContractsPayload,
+  isFetchList?: boolean;
+}

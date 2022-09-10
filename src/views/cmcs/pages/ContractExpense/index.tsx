@@ -25,7 +25,7 @@ import { useContractExpense } from "services/hooks/cmcs/useContractExpense";
 import { useParams } from "react-router-dom";
 import { useContractSpending } from "services/hooks/cmcs/useContractSpending";
 
-export const ContractExpense: FC = () => {
+const ContractExpense: FC = () => {
   const [itemChecked, setItemChecked] = useState('');
   const [pageParam, setPageParam] = useState('');
   const [keyword, setKeyword] = useState('');
@@ -254,3 +254,4 @@ export const ContractExpense: FC = () => {
     </main>
   );
 };
+export default ContractExpense;

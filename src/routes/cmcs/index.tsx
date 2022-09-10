@@ -1,5 +1,5 @@
 /*=====1.LIBRARY=====*/
-import { FC } from "react";
+import {FC, lazy} from "react";
 import { Route, Switch, matchPath } from "react-router-dom";
 
 /*=====2.PROVIDERS=====*/
@@ -11,33 +11,33 @@ import { ProtectedRoute } from "routes/components";
 /*=====4.CONFIG ROUTE=====*/
 
 /*=====5.PAGES/COMPONENTS=====*/
-import {
-    CmcHomePage,
-    CmcIncomePage,
-    CmcPartnerPage,
-    CmcGuaranteePage,
-    ContractHome,
-    ContractIpc,
-    ContractPayment,
-    ContractProduce,
-    ContractExpense,
-    ContractAdminPage,
-    CmcDashboardPage,
-    ContractDashBoard,
-    CmcPortfolioPage,
-    CmcExpensePage,
-    ContractEditor,
-    ContractBill,
-    ContractBudget,
-    ContractProduct,
-} from "views/cmcs/pages";
 import ErrorPage from "views/authentication/Error";
-import CmcsAdminFunctionalTab from "views/cmcs/pages/CmcAdminPage/pages/CmcsAdminFunctionalTab";
-import CmcsAdminDetail from "views/cmcs/pages/CmcAdminPage/pages/CmcsAdminDetail";
-import CmcsAdminAuthorTab from "views/cmcs/pages/CmcAdminPage/pages/CmcsAdminAuthorTab";
 import LayoutSecondary from "views/cmcs/shareComponents/layouts/LayoutSecondary";
-import CmcsAdminContractTab from "views/cmcs/pages/CmcAdminPage/pages/CmcsAdminContractTab";
-import CmcsAdminContractDetail from "views/cmcs/pages/CmcAdminPage/pages/CmcsAdminContractDetail";
+import {CmcsLayoutV2} from "../../shareComponents/layouts/CmcsLayout";
+
+const CmcsAdminFunctionalTab       = lazy(() => import("views/cmcs/pages/CmcAdminPage/pages/CmcsAdminFunctionalTab"))
+const CmcsAdminDetail       = lazy(() => import("views/cmcs/pages/CmcAdminPage/pages/CmcsAdminDetail"))
+const CmcsAdminAuthorTab       = lazy(() => import("views/cmcs/pages/CmcAdminPage/pages/CmcsAdminAuthorTab"))
+const CmcsAdminContractTab       = lazy(() => import("views/cmcs/pages/CmcAdminPage/pages/CmcsAdminContractTab"))
+const CmcsAdminContractDetail       = lazy(() => import("views/cmcs/pages/CmcAdminPage/pages/CmcsAdminContractDetail"))
+// const CmcHomePage         = lazy(() => import("views/cmcs/pages/CmcHomePage"))
+const CmcHomePageV2       = lazy(() => import("views/cmcs/pages/CmcHomePageV2"))
+const CmcIncomePage       = lazy(() => import("views/cmcs/pages/CmcIncomePage"))
+const CmcPartnerPage      = lazy(() => import("views/cmcs/pages/CmcPartnerPage"))
+const CmcGuaranteePage    = lazy(() => import("views/cmcs/pages/CmcGuaranteePage"))
+const ContractHome        = lazy(() => import("views/cmcs/pages/ContractHome"))
+const ContractIpc         = lazy(() => import("views/cmcs/pages/ContractIpc"))
+const ContractPayment     = lazy(() => import("views/cmcs/pages/ContractPayment"))
+const ContractProduce     = lazy(() => import("views/cmcs/pages/ContractProduce"))
+const ContractExpense     = lazy(() => import("views/cmcs/pages/ContractExpense"))
+const ContractAdminPage   = lazy(() => import("views/cmcs/pages/ContractAdminPage"))
+const CmcDashboardPage    = lazy(() => import("views/cmcs/pages/CmcDashboardPage"))
+const ContractDashBoard   = lazy(() => import("views/cmcs/pages/ContractDashBoard"))
+const CmcExpensePage      = lazy(() => import("views/cmcs/pages/CmcExpensePage"))
+const ContractEditor      = lazy(() => import("views/cmcs/pages/ContractEditor"))
+const ContractBill        = lazy(() => import("views/cmcs/pages/ContractBill"))
+const ContractBudget      = lazy(() => import("views/cmcs/pages/ContractBudget"))
+const ContractProduct     = lazy(() => import("views/cmcs/pages/ContractProduct"))
 
 const CmcsRouter: FC = () => {
     return (
@@ -45,7 +45,7 @@ const CmcsRouter: FC = () => {
             <ProtectedRoute
                 path="/cmcs/admin"
                 component={() => (
-                    <CmcsLayout>
+                    <CmcsLayoutV2>
                         <Switch>
                             <Route path="/cmcs/admin">
                                 <LayoutSecondary pages={[
@@ -69,43 +69,43 @@ const CmcsRouter: FC = () => {
                             </Route>
                         </Switch>
 
-                    </CmcsLayout>
+                    </CmcsLayoutV2>
                 )}
             />
             <ProtectedRoute
                 exact
                 path="/cmcs/home"
                 component={() => (
-                    <CmcsLayout>
-                        <CmcHomePage />
-                    </CmcsLayout>
+                    <CmcsLayoutV2>
+                        <CmcHomePageV2 />
+                    </CmcsLayoutV2>
                 )}
             />
             <ProtectedRoute
                 exact
                 path="/cmcs/income"
                 component={() => (
-                    <CmcsLayout>
+                    <CmcsLayoutV2>
                         <CmcIncomePage />
-                    </CmcsLayout>
+                    </CmcsLayoutV2>
                 )}
             />
             <ProtectedRoute
                 exact
                 path="/cmcs/partner"
                 component={() => (
-                    <CmcsLayout>
+                    <CmcsLayoutV2>
                         <CmcPartnerPage />
-                    </CmcsLayout>
+                    </CmcsLayoutV2>
                 )}
             />
             <ProtectedRoute
                 exact
                 path="/cmcs/expense"
                 component={() => (
-                    <CmcsLayout>
+                    <CmcsLayoutV2>
                         <CmcExpensePage />
-                    </CmcsLayout>
+                    </CmcsLayoutV2>
                 )}
             />
             {/* <ProtectedRoute
@@ -121,9 +121,9 @@ const CmcsRouter: FC = () => {
                 exact
                 path="/cmcs/guarantee"
                 component={() => (
-                    <CmcsLayout>
+                    <CmcsLayoutV2>
                         <CmcGuaranteePage />
-                    </CmcsLayout>
+                    </CmcsLayoutV2>
                 )}
             />
             <ProtectedRoute

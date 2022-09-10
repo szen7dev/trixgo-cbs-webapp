@@ -19,7 +19,7 @@ import { createLinkAndClick } from 'utils';
 import { APP_ID } from "apis/localdb";
 import styles from 'views/cmcs/styles/styles.module.css';
 
-export const CmcIncomePage: FC = () => {
+const CmcIncomePage: FC = () => {
   // --------- Check phân quyền
   const payload: any = {
     appID: APP_ID.CMCS.id,
@@ -294,3 +294,4 @@ export const CmcIncomePage: FC = () => {
     </main>
   );
 };
+export default CmcIncomePage;

@@ -9,7 +9,7 @@ import {
   InfoContractPayload,
   InsertContractPayload,
   UpdateContractPayload,
-  DeleteContractPayload,
+  DeleteContractPayload, ListByFilterContractsPayload, ListContractsByFilterResponse,
 } from "typings/cmcs";
 
 // Đường dẫn Endpoint
@@ -54,6 +54,24 @@ const CmcsRepository = {
     );
     return data;
   },
+
+  async listByFilter(payload: ListByFilterContractsPayload): Promise<ListContractsByFilterResponse> {
+    const { data } = await API.get(
+        `${cmcsURL}/list-contract-by-filter`,
+        {
+          params: {
+            // select: 'name sign author project date createAt description note store amount status storeSign',
+            populates: {
+              "path": "project",
+              "select": "sign name"
+            },
+            ...payload,
+          }
+        }
+    )
+
+    return data;
+  }
 };
 
 export default CmcsRepository;
