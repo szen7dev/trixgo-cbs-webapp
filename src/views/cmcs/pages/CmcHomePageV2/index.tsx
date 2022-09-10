@@ -164,7 +164,7 @@ const CmcHomePageV2:FC = () => {
                             id: "_id",
                             text: "name"
                         }}
-                        onSearchInputChange={debounce(valueSearch => setListAccessByContractBuyKeyword(valueSearch), 500)}
+                        onSearchInputChange={debounce(valueSearch => setListAccessByContractSellKeyword(valueSearch), 500)}
                         onchangeValue={item => {
                             const cloneIDs = [...buyerInfosID];
                             cloneIDs.push(item._id);
@@ -457,36 +457,36 @@ const CmcHomePageV2:FC = () => {
                     </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td className={"border-0.5 border-primary-border py-3 px-2 text-center"}>
+                    {/* <tr>
+                        <td className={"border-0.5 border-primary-border py-3 px-2 text-center"}>
 
-                            </td>
-                            <td className={"border-0.5 border-primary-border py-3 px-2"}>
-                            </td>
-                            <td className={"border-0.5 border-primary-border py-3 px-2"}>
-                            </td>
-                            <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
-                                15.332.000.000
-                            </td>
-                            <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
-                                15.332.000.000
-                            </td>
-                            <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
-                                15.332.000.000
-                            </td>
-                            <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
-                                15.332.000.000
-                            </td>
-                            <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
-                                15.332.000.000
-                            </td>
-                            <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
-                                15.332.000.000
-                            </td>
-                            <td className={"border-0.5 border-primary-border py-3 px-2"}>
-                            </td>
-                        </tr>
-                        {
+                        </td>
+                        <td className={"border-0.5 border-primary-border py-3 px-2"}>
+                        </td>
+                        <td className={"border-0.5 border-primary-border py-3 px-2"}>
+                        </td>
+                        <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
+                            15.332.000.000
+                        </td>
+                        <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
+                            15.332.000.000
+                        </td>
+                        <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
+                            15.332.000.000
+                        </td>
+                        <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
+                            15.332.000.000
+                        </td>
+                        <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
+                            15.332.000.000
+                        </td>
+                        <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
+                            15.332.000.000
+                        </td>
+                        <td className={"border-0.5 border-primary-border py-3 px-2"}>
+                        </td>
+                    </tr> */}
+                    {
                         (listCmcsByFilterWithPager[pageIndex]??[]).map((cmcs, i) => (
                             <tr key={cmcs._id}>
                                 <td className={"border-0.5 border-primary-border py-3 px-2 text-center"}>

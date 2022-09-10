@@ -61,11 +61,11 @@ const PcmTasksReportPage: FC = () => {
   });
 
   useEffect(() => {
-    if (!isSuccessApp) return;
-    if (isSuccessApp && !hasPermission) {
-			toast.error("Bạn không có quyền truy cập tính năng này!");
-			history.push("/pcm/report");
-		};
+    // if (!isSuccessApp) return;
+    // if (isSuccessApp && !hasPermission) {
+		// 	toast.error("Bạn không có quyền truy cập tính năng này!");
+		// 	history.push("/pcm/report");
+		// };
 
     document.title = "Quản lý công việc";
   }, [isSuccessApp, hasPermission]);

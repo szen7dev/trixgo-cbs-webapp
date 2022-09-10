@@ -19,7 +19,7 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import { TaskDetailOpenedBidding } from "./components/TaskDetailOpenedBidding";
 import { calculateExpireTime } from 'utils/time';
 
-const PcmDetailTaskV2: FC = () => {
+const PcmDetailTaskV2: FC = () => {     
     const [collapse, setCollapse] = useState(false);
     const [permissions, setPermissions] = useState({
         hasPermissionUpdateTask: false,

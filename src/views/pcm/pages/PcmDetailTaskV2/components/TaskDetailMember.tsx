@@ -35,7 +35,7 @@ export const TaskDetailMember: FC<Props> = ({ task, user }) => {
                     </div>
 
                     {
-                    task.assignee._id.toString() != user?._id.toString() ?  
+                        (task.subtype == 4 && task.assignee._id.toString() == user?._id.toString()) ?  <></> : 
                         <div className={"flex items-center flex-1 justify-start"}>
                             {!!task.related?.length && task.related.slice(0, 10).map(item => (
                                 <img key={item._id} alt={"----"} src={item?.image ? `${process.env.REACT_APP_URL_S3_USER}/${item?.image}` : taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1 border-0.5 border-primary-border"} />
@@ -52,7 +52,6 @@ export const TaskDetailMember: FC<Props> = ({ task, user }) => {
                                 +
                             </button> */}
                         </div>
-                        : <></>
                     }
                     
                 </div>
