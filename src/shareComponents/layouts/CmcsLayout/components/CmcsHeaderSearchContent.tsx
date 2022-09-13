@@ -40,7 +40,7 @@ export const CmcsHeaderSearchContent:FC = () => {
         setTypingTimeoutRef.current = setTimeout(() => {
             setSearch(e.target.value);
             setShowResult(true);
-        }, 300)
+        }, 500)
     }
 
     const onKeyDown = (e: any) => {
@@ -69,7 +69,7 @@ export const CmcsHeaderSearchContent:FC = () => {
                     onKeyDown={onKeyDown}
                     ref={inputRef}
                     onChange={e => handleSearchChange(e)}
-                    className={"pl-12 w-full h-[45px] focus:bg-white bg-cbs-bg-input-search rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-none focus:shadow-md transition-all"} placeholder={"Tìm kiếm hợp đồng"}/>
+                    className={"pl-12 w-full h-[45px] focus:bg-white bg-cbs-bg-input-search rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-none focus:shadow-md transition-all"} placeholder={"Tìm trong tên hoặc số hiệu hợp đồng"}/>
 
                 {
                     showResult &&
@@ -109,7 +109,7 @@ export const CmcsHeaderSearchContent:FC = () => {
                                         setSearch("");
                                         setShowResult(false)
                                     }}
-                                    to={`linkRef`}
+                                    to={`/cmcs/home/${cmcs._id}/tab/1`}
                                     key={cmcs._id} className={"flex items-center py-2"}>
                                     <div className={"w-[36px] min-w-[36px] flex items-center justify-center"}>
                                         <img src={searchIcon} alt={"----"} className={"w-[18px] h-[18px]"}/>

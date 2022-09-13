@@ -33,6 +33,7 @@ export const TaskDetailSubtask:FC<Props> = ({ task, userId }) => {
     });
 
     return (
+        (task.subtype == 4 && task.assignee._id.toString() == userId?.toString()) ?  <></> : 
         <div className={"subtask mt-5 w-2/3"}>
             <div className={"flex items-center"}>
                 <div className={"flex items-center"}>

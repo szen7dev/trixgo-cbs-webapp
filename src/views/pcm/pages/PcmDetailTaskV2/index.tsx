@@ -19,7 +19,7 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import { TaskDetailOpenedBidding } from "./components/TaskDetailOpenedBidding";
 import { calculateExpireTime } from 'utils/time';
 
-const PcmDetailTaskV2: FC = () => {
+const PcmDetailTaskV2: FC = () => {     
     const [collapse, setCollapse] = useState(false);
     const [permissions, setPermissions] = useState({
         hasPermissionUpdateTask: false,
@@ -275,13 +275,13 @@ const PcmDetailTaskV2: FC = () => {
                         hasPermissionAddSignature={permissions.hasPermissionAddSignature}
                         hasPermissionOpenBidding={permissions.hasPermissionOpenBidding}
                     />
-                    <TaskDetailCompleteStatus task={taskInfo} />
+                    <TaskDetailCompleteStatus task={taskInfo} userId={user?._id}/>
                     <TaskDetailMember task={taskInfo} user={user} />
                     <TaskDetailSignature task={taskInfo} />
                     <TaskDetailOpenedBidding task={taskInfo} />
                     <TaskDetailDescription task={taskInfo} refetchInfo={refetchInfo} />
                     <TaskDetailSubtask task={taskInfo} userId={user?._id} />
-                    <TaskDetailRelatedTask task={taskInfo} refetchInfo={refetchInfo} />
+                    <TaskDetailRelatedTask task={taskInfo} userId={user?._id} refetchInfo={refetchInfo} />
                 </div>
                 <CommentProvider>
                     <TaskDetailComment task={taskInfo} userId={user?._id} refetchInfo={refetchInfo} />

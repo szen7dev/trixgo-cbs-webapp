@@ -1152,28 +1152,23 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               ]}
             />
           )}
-          {/* {tabIndex === 2 && (
-            <button
-              className={
-                "bg-green-success rounded text-white px-2 h-[32px] mb-2"
-              }
-            >
-              Lưu kết quả
-            </button>
-          )} */}
 
           <button
-            className={"bg-green-success rounded text-white px-2 h-[32px] mb-2"}
+            className={"bg-gray-300 rounded text-white px-2 h-[32px] mb-2"}
             onClick={onReset}
           >
-            Thiết lập lại
+            Reset
           </button>
-          <button
-            className={"bg-green-success rounded text-white px-2 h-[32px] ml-2"}
-            onClick={onSaveResultSearch}
-          >
-            Lưu kết quả
-          </button>
+
+          {tabIndex === 2 && (
+             <button
+             className={"bg-green-success rounded text-white px-2 h-[32px] ml-2"}
+             onClick={onSaveResultSearch}
+           >
+             Lưu kết quả
+           </button>
+          )}
+
         </div>
         <div className={"header-table flex px-4 w-full top-0 bg-white pb-4"}>
           <div className={"flex items-center justify-center mr-2"}>

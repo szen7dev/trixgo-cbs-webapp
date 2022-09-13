@@ -7,7 +7,7 @@ import { DATE_FORMAT, CONTRACT_IPC_TYPES } from "apis/localdb/index";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import { ContractPaymentModal, ActionMenuTopBar } from "views/cmcs/shareComponents/common";
 import { formatNumberMoney } from "utils/cmcs"
-import {useHistory, useParams} from "react-router-dom";
+import {useHistory, useLocation, useParams} from "react-router-dom";
 
 import {
     useCreateContractPaymentMutation,
@@ -24,6 +24,7 @@ interface Props {
 export const ProjectBudgetDetailTab4:FC<Props> = ({ contractInfo }) => {
     const { id: projectID, type, budgetId, tab } = useParams<{ id: string , type: string, budgetId: string, tab: string}>();
     const history = useHistory();
+    const location = useLocation();
 
     const [itemChecked, setItemChecked] = useState('');
 
@@ -106,7 +107,13 @@ export const ProjectBudgetDetailTab4:FC<Props> = ({ contractInfo }) => {
                 <div className={"flex items-center"}>
                     <div className={"flex flex-1 items-center"}>
                         <button
-                            onClick={() => history.push(`/pm/project/${projectID}/budget/type/1`)}
+                            onClick={() => {
+                                if(location.pathname.includes("/cmcs/home/")){
+                                    history.push(`/cmcs/home`)
+                                } else {
+                                    history.push(`/pm/project/${projectID}/budget/type/1`)
+                                }
+                            }}
                             className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mr-3"}>
                             <img src={iconBack} alt={"----"} className={"w-[18px]"}/>
                         </button>

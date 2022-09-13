@@ -38,6 +38,7 @@ const ContractEditor      = lazy(() => import("views/cmcs/pages/ContractEditor")
 const ContractBill        = lazy(() => import("views/cmcs/pages/ContractBill"))
 const ContractBudget      = lazy(() => import("views/cmcs/pages/ContractBudget"))
 const ContractProduct     = lazy(() => import("views/cmcs/pages/ContractProduct"))
+const ProjectBudgetDetailPage     = lazy(() => import("views/ppt/pages/ProjectBudgetDetailPage"))
 
 const CmcsRouter: FC = () => {
     return (
@@ -133,6 +134,15 @@ const CmcsRouter: FC = () => {
                     <CmcsContractLayout>
                         <ContractHome />
                     </CmcsContractLayout>
+                )}
+            />
+            <ProtectedRoute
+                exact
+                path="/cmcs/home/:budgetId/tab/:tab"
+                component={() => (
+                    <CmcsLayoutV2>
+                        <ProjectBudgetDetailPage />
+                    </CmcsLayoutV2>
                 )}
             />
             <ProtectedRoute
