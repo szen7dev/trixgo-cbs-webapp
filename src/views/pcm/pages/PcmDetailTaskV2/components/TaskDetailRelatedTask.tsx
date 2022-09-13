@@ -12,10 +12,11 @@ import { toast } from "react-toastify";
 
 type Props = {
     task: Task;
+    userId?: string;
     refetchInfo: () => void;
 }
 
-export const TaskDetailRelatedTask: FC<Props> = ({ task, refetchInfo }) => {
+export const TaskDetailRelatedTask: FC<Props> = ({ task, userId, refetchInfo }) => {
     const [showOption, setShowOption] = useState(false);
     const [keyword, setKeyword] = useState('');
 
@@ -61,6 +62,7 @@ export const TaskDetailRelatedTask: FC<Props> = ({ task, refetchInfo }) => {
     }
 
     return (
+        (task.subtype == 4 && task.assignee._id.toString() == userId?.toString()) ?  <></> : 
         <div className={"subtask mt-5 w-2/3"}>
             <div className={"flex items-center"}>
                 <div className={"flex items-center"}>
