@@ -5,6 +5,7 @@ import {AppsMenu} from "../AppsMenu";
 import {UserMenu} from "../UserMenu";
 import {useAuth} from "../../../services/hooks/auth/useAuth";
 import iconHelp from "../../../assets/images/icons8-help-48.svg";
+import iconTrixgo from "../../../assets/images/iconTrixgo.svg";
 
 type HeaderProps = {
     headerTitle: string;
@@ -33,6 +34,7 @@ export const MainHeaderV2:FC<HeaderProps> = ({children, headerTitle}) => {
                     {/* Header: Right side */}
                     <div className="flex items-center">
                         {/* Search menu */}
+                        {/* <img src={iconTrixgo} className="w-10 h-10" /> */}
                         <a title="User Guide/Hướng dẫn sử dụng" href="https://drive.google.com/drive/folders/1NLUsNBK5Zgx_BGZiFhHCx0fKpTbnOJhf?usp=sharing">
                             <img src={iconHelp} alt="Help" className="w-6 h-6 filter-secondary-gray" />
                         </a>

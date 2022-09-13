@@ -275,13 +275,13 @@ const PcmDetailTaskV2: FC = () => {
                         hasPermissionAddSignature={permissions.hasPermissionAddSignature}
                         hasPermissionOpenBidding={permissions.hasPermissionOpenBidding}
                     />
-                    <TaskDetailCompleteStatus task={taskInfo} />
+                    <TaskDetailCompleteStatus task={taskInfo} userId={user?._id}/>
                     <TaskDetailMember task={taskInfo} user={user} />
                     <TaskDetailSignature task={taskInfo} />
                     <TaskDetailOpenedBidding task={taskInfo} />
                     <TaskDetailDescription task={taskInfo} refetchInfo={refetchInfo} />
                     <TaskDetailSubtask task={taskInfo} userId={user?._id} />
-                    <TaskDetailRelatedTask task={taskInfo} refetchInfo={refetchInfo} />
+                    <TaskDetailRelatedTask task={taskInfo} userId={user?._id} refetchInfo={refetchInfo} />
                 </div>
                 <CommentProvider>
                     <TaskDetailComment task={taskInfo} userId={user?._id} refetchInfo={refetchInfo} />
