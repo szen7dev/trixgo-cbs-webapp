@@ -107,8 +107,6 @@ const PcmPrintTaskTypeOne: FC = () => {
 
   const assigneeAndRelated = [taskInfo?.assignee, ...taskInfo?.related];
 
-  // console.log(taskInfo)
-
   return (
     <div className="bg-cbs-gray overflow-auto" style={{ height: '100vh' }}>
       <div className="overflow-auto h-auto py-6">
@@ -136,8 +134,8 @@ const PcmPrintTaskTypeOne: FC = () => {
                   <header>
                     <div className={styles.headerTitle}>
                       <div className="row-span-2 flex space-x-2.5">
-                        {assigneeAndRelated.slice(0, 3).map((item) => (
-                          <div key={item._id} className={styles.headerImageContainer}>
+                        {assigneeAndRelated.slice(0, 3).map((item, index) => (
+                          <div key={`${index}-${item._id}-${Math.random()}`} className={styles.headerImageContainer}>
                             <img
                               src={`${process.env.REACT_APP_URL_S3_COMPANY}/${item.company?.image}`}
                               alt={item.company?.name}
@@ -200,9 +198,9 @@ const PcmPrintTaskTypeOne: FC = () => {
                       <div className="col-span-3 py-2">
                         <p className="space-x-1">
                           Liên quan:
-                          {assigneeAndRelated.map((item) => (
+                          {assigneeAndRelated.map((item, index) => (
                             <span
-                              key={item._id}
+                              key={`${index}-${item._id}`}
                               className="inline-block w-8 h-8 rounded-full overflow-hidden align-middle border-cbs-border border-0.5"
                             >
                               <img

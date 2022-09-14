@@ -1,4 +1,4 @@
-import { FC, HTMLAttributes, useContext, useEffect, useState } from 'react';
+import { FC, HTMLAttributes, memo, useContext, useEffect, useState } from 'react';
 import { toast } from "react-toastify";
 import { captureException } from "@sentry/react";
 import cn from "classnames";
@@ -32,7 +32,7 @@ interface Props {
 	disableReply?: boolean
 }
 
-export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
+export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = memo(({
 	disableReply, comment, small, userID, onClickReply, onClickEdit, onClickImage, renderEndComment: EndComment, renderOptions: Options, ...props
 }) => {
 	const [isOpenModalReactions, setIsOpenModalReactions] = useState(false);
@@ -57,7 +57,7 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 	} = useCommentPcm(paramsReactions)
 
 	useEffect(() => {
-		if(comment.createAt) {
+		if(comment.createAt && !isExpiredInteractComment) {
 			const expireTime = moment(comment.createAt).add(1, 'hours').valueOf();
 			const now 		 = moment().valueOf();
 
@@ -65,7 +65,7 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 				setIsExpiredInteractComment(true);
 			}
 		}
-	}, [comment])
+	}, [comment.createAt])
 
 	const toggleModalReaction = () => {
 		setParamReactions(previousValue => ({
@@ -227,4 +227,6 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 			/>
 		</>
 	)
-}
+})
+
+Comment.displayName = 'Comment'

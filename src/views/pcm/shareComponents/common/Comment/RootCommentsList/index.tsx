@@ -37,12 +37,12 @@ export const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = me
 	useEffect(() => {
 		// if(!comments || !comments.length) return;
 		comments && dispatch({ type: 'SET_COMMENTS', payload: comments.reverse() });
-	}, [JSON.stringify(comments)])
+	}, [comments?.length])
 
 	useEffect(() => {
 		if(totalRecord < limit) return;
 		setAmountComment(totalRecord - limit);
-	}, [totalRecord])
+	}, [totalRecord, limit])
 
 	const handleClickViewMore = async () => {
 		const { error, data } = await TaskRepository.listComments({
@@ -63,7 +63,7 @@ export const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = me
 		_comments = (state.commentsReply[statePost.taskID] || []).filter(Boolean);
 	}
 
-	if(!totalRecord && !_comments?.length) return null;
+	if(!totalRecord) return null;
 
 	return (
 		<>
@@ -78,8 +78,8 @@ export const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = me
 			) : ''}
 			<ul {...props}>
 				{
-					_comments.map((comment: CommentProps) => (
-						<li key={comment._id} className='mt-2.5'>
+					!!_comments.length && _comments.map((comment: CommentProps, index) => (
+						<li key={`${index}-${comment._id}`} className='mt-2.5'>
 							<RootComment
 								comment={comment}
 								limit={limit}
