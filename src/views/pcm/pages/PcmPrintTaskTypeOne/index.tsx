@@ -76,10 +76,10 @@ const PcmPrintTaskTypeOne: FC = () => {
   useEffect(() => {
     if (!isSuccessApp || !taskInfo || !user || isLoadingInfo) return;
 
-    // if (isSuccessApp && !hasPermission) {
-    //   toast.error("Bạn không có quyền truy cập tính năng này!");
-    //   return history.push("/");
-    // }
+    if (isSuccessApp && !hasPermission) {
+      toast.error("Bạn không có quyền truy cập tính năng này!");
+      return history.push("/");
+    }
 
     document.title = `Trixgo-${taskInfo.name}`;
 

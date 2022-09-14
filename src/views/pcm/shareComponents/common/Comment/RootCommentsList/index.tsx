@@ -36,9 +36,8 @@ export const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = me
 
 	useEffect(() => {
 		// if(!comments || !comments.length) return;
-		// comments && dispatch({ type: 'SET_COMMENTS', payload: comments.reverse() });
-		dispatch({ type: 'SET_COMMENTS', payload: comments.reverse() });
-	}, [JSON.stringify(comments)])
+		comments && dispatch({ type: 'SET_COMMENTS', payload: comments.reverse() });
+	}, [comments?.length])
 
 	useEffect(() => {
 		if(totalRecord < limit) return;
