@@ -238,7 +238,16 @@ export const DocumentProjectPage: FC = () => {
         try {
             setStateExport({ isExporting: true });
             const { error, data } = await exportDocumentAsync({
-                filterParams: { departmentID }
+                filterParams: {  
+                    departmentsID: [departmentID],
+                    ...fromToDate,
+                    datahubContactsID,
+                    types,
+                    directions,
+                    contractsID,
+                    storagesID,
+                    keyword: keywordInput 
+                }
             });
 
             if(error) {
@@ -531,7 +540,9 @@ export const DocumentProjectPage: FC = () => {
                 </div>
                 <div className={"flex items-center pb-2"}>
                     <NavigateTab/>
-                    <button className={"flex items-center justify-center mx-3 ml-6"}>
+                    <button className={"flex items-center justify-center mx-3 ml-6"}
+                        onClick={handleExport.bind(null)}
+                    >
                         <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"}/>
                     </button>
                     {

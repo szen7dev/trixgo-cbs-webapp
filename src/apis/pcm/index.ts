@@ -87,6 +87,7 @@ const PcmRepository = {
         const { data } = await API.get<any>(
             `${pcmURL}/pcm_plan_reports/export-task-report?${convertObToUrl(payload)}`
         );
+        console.log({ data })
         return data;
     },
 
