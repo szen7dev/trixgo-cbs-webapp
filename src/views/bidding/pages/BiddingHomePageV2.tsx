@@ -271,7 +271,7 @@ const BiddingHomePageV2: FC<Props> = (props) => {
             </div>
             <div className="flex flex-wrap text-cbs-subtext pt-3 text-medium -mx-2 px-3">
               {Array.from({ length: 10 }).map((record, idx) => (
-                <div key={idx} className="w-3/12 px-2 mb-3" onClick={() => handleChangeRoute()}>
+                <div key={idx} className="w-3/12 px-2 mb-3 cursor-pointer" onClick={() => handleChangeRoute()}>
                   <div
                     // to={generatePath(location.pathname + "/:id", { id: record._id })}
                     className="flex flex-col h-full rounded-cbs-sm overflow-hidden border-cbs-border border-0.5 "
