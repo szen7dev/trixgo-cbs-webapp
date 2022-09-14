@@ -289,7 +289,7 @@ export const SupportGrantPage: FC = () => {
                     />
                   </td>
                   <td className="py-1 px-2">
-                    <Link to={`/support/grant/documents-management/${appCompany.app._id}/${appCompany?.company?._id || appCompany.company}/${appCompany.app.name}`}>
+                    <Link to={`/owner/grant/documents-management/${appCompany.app._id}/${appCompany?.company?._id || appCompany.company}/${appCompany.app.name}`}>
                       {appCompany.app?.name}
                     </Link>
                   </td>

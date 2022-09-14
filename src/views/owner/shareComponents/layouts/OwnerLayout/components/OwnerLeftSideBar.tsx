@@ -27,7 +27,7 @@ export const OwnerLeftSideBar: FC = () => {
                 {/* title */}
                 <div className="t-leftsidebar-title flex items-center py-2 pl-3 pr-3 text-[14px] font-bold">
                     <img src={ownerLogo} alt="Thumbnail" className="w-10 h-10 rounded-full mr-3" />
-                    <span>Quản trị viên doanh nghiệp</span>
+                    <span>Quản trị doanh nghiệp</span>
                 </div>
 
                 {/* menu block */}
@@ -36,13 +36,13 @@ export const OwnerLeftSideBar: FC = () => {
                         <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
                         <span className="truncate">Trang chủ</span>
                     </NavLink>
-                    <NavLink to={`/owner/grant`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
-                        <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-                        <span className="truncate">Cấp phép ứng dụng</span>
-                    </NavLink>
                     <NavLink to={`/owner/members`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
                         <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
                         <span className="truncate">Tài khoản thành viên</span>
+                    </NavLink>
+                    <NavLink to={`/owner/grant`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
+                        <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+                        <span className="truncate">Cấp phép ứng dụng</span>
                     </NavLink>
                 </div>
             </div>

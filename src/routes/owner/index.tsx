@@ -30,19 +30,19 @@ const OwnerRouter: FC = () => {
             />
             <Route
                 exact
-                path="/owner/grant"
+                path="/owner/members"
                 component={() =>
                     <OwnerLayout>
-                        <SupportGrantPage />
+                        <SupportMemberPage />
                     </OwnerLayout>
                 }
             />
             <Route
                 exact
-                path="/owner/members"
+                path="/owner/grant"
                 component={() =>
                     <OwnerLayout>
-                        <SupportMemberPage />
+                        <SupportGrantPage />
                     </OwnerLayout>
                 }
             />
