@@ -12,8 +12,9 @@ import { OwnerLayout } from "views/owner/shareComponents/layouts";
 /*=====5.PAGES/COMPONENTS=====*/
 import ErrorPage from "views/authentication/Error";
 import {
-   OwnerHomePage,
+    OwnerHomePage,
 } from "views/owner/pages";
+import { SupportGrantPage, SupportMemberPage } from "views/support/pages";
 
 const OwnerRouter: FC = () => {
     return (
@@ -24,6 +25,24 @@ const OwnerRouter: FC = () => {
                 component={() =>
                     <OwnerLayout>
                         <OwnerHomePage />
+                    </OwnerLayout>
+                }
+            />
+            <Route
+                exact
+                path="/owner/members"
+                component={() =>
+                    <OwnerLayout>
+                        <SupportMemberPage />
+                    </OwnerLayout>
+                }
+            />
+            <Route
+                exact
+                path="/owner/grant"
+                component={() =>
+                    <OwnerLayout>
+                        <SupportGrantPage />
                     </OwnerLayout>
                 }
             />

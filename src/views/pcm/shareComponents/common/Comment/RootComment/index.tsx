@@ -1,4 +1,4 @@
-import { FC, useState, useContext, useEffect } from 'react';
+import { FC, useState, useContext, useEffect, memo } from 'react';
 
 import { Comment, ReplyCommentField } from '..';
 import { EditButton } from 'shareComponents/common';
@@ -26,7 +26,7 @@ type UpdateCommentProps = {
 	images: FileProps[] | undefined,
 }
 
-export const RootComment: FC<Props> = ({
+export const RootComment: FC<Props> = memo(({
 	disableReply,
 	smallImage,
 	userID,
@@ -57,7 +57,7 @@ export const RootComment: FC<Props> = ({
 				payload: comment.lastestReplyID
 			});
 		}
-	}, [])
+	}, [commentsReply.length, comment.lastestReplyID])
 
 	const handleClickViewMore = async () => {
 		const lastestID = commentsReply.length ? commentsReply[0]._id : null;
@@ -128,8 +128,8 @@ export const RootComment: FC<Props> = ({
 				) : ''}
 				{/* Nested comment */}
 				<ul>
-					{commentsReply.length ? commentsReply.map(commentReply => (
-						<li key={commentReply._id}>
+					{commentsReply.length ? commentsReply.map((commentReply, index) => (
+						<li key={`${index}-${commentReply._id}`}>
 							<div className="pl-11">{NestedComment ? <NestedComment
 								small={smallImage}
 								comment={commentReply}
@@ -202,4 +202,6 @@ export const RootComment: FC<Props> = ({
 				: null}
 		</>
 	)
-}
+})
+
+RootComment.displayName = 'RootComment'

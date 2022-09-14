@@ -20,7 +20,7 @@ const DatahubContractorLayoutDetail: FC = ({ children }) => {
 
 	const params = useParams<{ id: string }>();
 	return (
-		<div id="datahub-contractor-detail" className='h-full w-full overflow-scroll bg-cbs-gray'>
+		<div id="datahub-contractor-detail" className='h-full w-full overflow-scroll bg-white'>
 			<div className='w-full max-w-[1185px] mx-auto space-y-10'>
 				{/* ======= FIRST BLOCK ======= */}
 				<div className='bg-white border-cbs-border border-[0.5px] border-b-0 mx-3.5'>
