@@ -174,13 +174,15 @@ export const ProjectBudgetDetailTab1:FC<Props> = ({ contractInfo }) => {
                         Khởi tạo
                     </td>
                     <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
-                        {contractInfo?.userUpdate.fullname} - {moment(contractInfo?.createAt).format("DD/MM/YYYY HH:mm")}
+                        {contractInfo?.userCreate?.fullname} - {moment(contractInfo?.createAt).format("DD/MM/YYYY HH:mm")}
                     </td>
                     <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
                         Cập nhật
                     </td>
                     <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
-                        {contractInfo?.userUpdate.fullname} - {moment(contractInfo?.modifyAt).format("DD/MM/YYYY HH:mm")}
+                        {
+                            contractInfo.userUpdate ? <>{contractInfo?.userUpdate?.fullname} - {moment(contractInfo?.modifyAt).format("DD/MM/YYYY HH:mm")}</> : <></>
+                        }
                     </td>
                 </tr>
             </tbody>

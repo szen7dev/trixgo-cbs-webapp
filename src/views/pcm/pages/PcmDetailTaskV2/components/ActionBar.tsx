@@ -112,7 +112,7 @@ export const ActionTaskDetailBar:FC<Props> = ({ checkAssigneeBid, task, user, re
                 <img src={iconMember} alt={"----"} className={"w-[24px] mr-2"}/>
                 <span>Chia sẻ</span>
             </button> */}
-            <OtherActions task={task} />
+            <OtherActions task={task} userId={user?._id}/>
         </div>
     )
 }

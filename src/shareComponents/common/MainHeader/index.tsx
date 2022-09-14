@@ -41,7 +41,7 @@ export const MainHeader: FC = () => {
           {/* Header: Right side */}
           <div className="flex items-center">
             {/* Search menu */}
-            <button
+            {/* <button
               aria-controls="search-modal"
               className="w-10 h-10 flex items-center justify-center bg-primary-light hover:bg-secondary-light transition duration-150 rounded-full focus:outline-none ml-6"
               onClick={() =>
@@ -52,8 +52,8 @@ export const MainHeader: FC = () => {
                 )
               }
             >
-              {/* <SearchIcon className="w-4 h-4" /> */}
-            </button>
+              <SearchIcon className="w-4 h-4" />
+            </button> */}
 
             {/* <Link to={`/messages`} className="relative w-10 h-10 flex items-center justify-center bg-primary-light hover:bg-secondary-light transition duration-150 rounded-md focus:outline-none ml-6">
               <img src={iconChat} alt="Filter" className="w-6 h-6" />

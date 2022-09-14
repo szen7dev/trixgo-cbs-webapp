@@ -17,6 +17,8 @@ import { useApp } from 'services/hooks/apps/useApp';
 export const SupportGrantPage: FC = () => {
   const location = useLocation();
   const history = useHistory();
+  const currentUser = localStorage.getItem("currentUser") ?? "{}";
+  const profile = JSON.parse(currentUser);
   const [keywordCompany, setKeywordCompany] = useState('');
   const [companySelected, setCompanySelected] = useState('');
   const [companyName, setCompanyName] = useState('');
@@ -108,6 +110,13 @@ export const SupportGrantPage: FC = () => {
       endTime: endTime
     })
   }
+
+  useEffect(() => {
+    if (location.pathname === '/owner/grant') {
+      setCompanySelected(profile?.company?._id);
+      setCompanyName(`${profile?.company?.name} - ${profile?.company?.sign}`);
+    }
+  }, []);
 
   useEffect(() => {
     if(!companySelected) return;
@@ -202,6 +211,7 @@ export const SupportGrantPage: FC = () => {
           >
             Cập nhật
           </button>
+          {location.pathname !== '/owner/grant' ?
           <DropdownSearchable
             placeholder="Chọn phân vùng để thực hiện"
             className="w-[322px] pl-0 bg-cbs-table-header"
@@ -223,7 +233,7 @@ export const SupportGrantPage: FC = () => {
             onScroll={handleScroll}
             onchangeValue={handleChangeCompany}
             onSearchInputChange={handleSearch}
-          />
+          /> : <></>}
         </div>
 
       </header>

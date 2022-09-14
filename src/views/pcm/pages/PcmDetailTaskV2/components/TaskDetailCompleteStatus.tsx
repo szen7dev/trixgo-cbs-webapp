@@ -5,10 +5,11 @@ import { Link } from "react-router-dom";
 
 type Props = {
     task: Task;
+    userId?: string;
 }
 
-export const TaskDetailCompleteStatus: FC<Props> = ({ task }) => {
-    if(!task.parent) return <></>
+export const TaskDetailCompleteStatus: FC<Props> = ({ task, userId }) => {
+    if(!task.parent || (task.subtype == 4 && task.assignee._id.toString() == userId?.toString())) return <></>
     return (
         <div className={"task-complete flex items-center mt-5"}>
             <span className={"mr-4"}>
