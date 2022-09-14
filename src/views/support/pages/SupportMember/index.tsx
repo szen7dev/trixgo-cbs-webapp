@@ -30,9 +30,12 @@ import { useModal } from "services/hooks/useModal";
 import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import { useQueryListCompany } from 'services/hooks/useCompanies';
 import { UserSystemProps } from "typings/users/userSystem";
+import { useLocation } from "react-router-dom";
 
 export const SupportMemberPage: FC = () => {
   const { closeModal, openModal } = useModal();
+  const currentUser = localStorage.getItem("currentUser") ?? "{}";
+  const profile = JSON.parse(currentUser);
   const LIMIT_PER_PAGE_USER = 20;
   const [companySelected, setCompanySelected] = useState('');
   const [companyName, setCompanyName] = useState('');
@@ -51,8 +54,16 @@ export const SupportMemberPage: FC = () => {
     departmentName: "",
     status: 1
   });
+  const location = useLocation();
 
   const [modalCreateOrUpdateUser, setModalCreateOrUpdateUser] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (location.pathname === '/owner/members') {
+      setCompanySelected(profile?.company?._id);
+      setCompanyName(`${profile?.company?.name} - ${profile?.company?.sign}`);
+    }
+  }, []);
 
   const {
     data: listUsersSystem,
@@ -111,15 +122,15 @@ export const SupportMemberPage: FC = () => {
     const check = usersChecked.find(item => item._id === user._id);
     let newListIDChecked = [];
 
-		if (check) {
+    if (check) {
       newListIDChecked = usersChecked.filter(item => item._id !== user._id)
-			setUsersChecked(newListIDChecked);
-		} else {
-			newListIDChecked = [...usersChecked, user];
-			setUsersChecked(newListIDChecked);
-		};
+      setUsersChecked(newListIDChecked);
+    } else {
+      newListIDChecked = [...usersChecked, user];
+      setUsersChecked(newListIDChecked);
+    };
 
-    if(newListIDChecked.length === 1) {
+    if (newListIDChecked.length === 1) {
       const { _id, fullname, email, department, position, level, status } = newListIDChecked[0];
       setInitialValues({
         userID: _id,
@@ -133,34 +144,34 @@ export const SupportMemberPage: FC = () => {
         departmentName: department?.name,
         status
       });
-    } else{
+    } else {
       clearData();
     }
-	};
+  };
 
   const getStateChecked = useCallback((id: string) => {
     const user = usersChecked.find(item => item._id === id);
-		return user ? true : false;
-	}, [usersChecked]);
+    return user ? true : false;
+  }, [usersChecked]);
 
   const getStateCheckedAll = useCallback(() => {
-		return usersChecked.length == listUsersSystem.length;
-	}, [usersChecked]);
+    return usersChecked.length == listUsersSystem.length;
+  }, [usersChecked]);
 
-	const onClickCheckAll = () => {
-		if (usersChecked.length == listUsersSystem.length) {
-			setUsersChecked([]);
-		} else {
-			setUsersChecked(listUsersSystem);
-		}
-	};
+  const onClickCheckAll = () => {
+    if (usersChecked.length == listUsersSystem.length) {
+      setUsersChecked([]);
+    } else {
+      setUsersChecked(listUsersSystem);
+    }
+  };
 
   const handleConfirmDelete = async () => {
     const ids = usersChecked.map(item => item._id);
     const result = await deleteUserSystemAsync(ids);
 
-    if(result.error) {
-        return toast.error(result?.data?.message);
+    if (result.error) {
+      return toast.error(result?.data?.message);
     }
 
     toast.success('Xoá dữ liệu thành công');
@@ -172,7 +183,7 @@ export const SupportMemberPage: FC = () => {
 
   useEffect(() => {
     companySelected && setInitialValues(previousValue => ({ ...previousValue, companyID: companySelected }));
-  }, [companySelected])
+  }, [companySelected]);
 
   return (
     <main className="relative h-full">
@@ -181,29 +192,30 @@ export const SupportMemberPage: FC = () => {
           <p className="text-lg">
             {companyName}
           </p>
-
-          <DropdownSearchable
-            placeholder="Chọn phân vùng để thực hiện"
-            className="w-[322px] pl-0 bg-cbs-table-header"
-            classNameInput="h-[28px] bg-cbs-table-header"
-            isMultiple={false}
-            allowClearValueSingleInput={false}
-            showTriangle={true}
-            maxWidthInput="max-w-none"
-            renderSelectedItem={(item) => <span>{item.text}</span>}
-            classNameItem="p-0"
-            data={listCompanies}
-            formatItem={{
-              id: "_id",
-              text: "name",
-            }}
-            inlineSearch={false}
-            disableSearch={false}
-            searchInputClassName="h-[40px] w-[322px] px-[46px]"
-            onScroll={handleScroll}
-            onchangeValue={handleChangeCompany}
-            onSearchInputChange={handleSearchCompany}
-          />
+          {location.pathname !== '/owner/members' ?
+            <DropdownSearchable
+              placeholder="Chọn phân vùng để thực hiện"
+              className="w-[322px] pl-0 bg-cbs-table-header"
+              classNameInput="h-[28px] bg-cbs-table-header"
+              isMultiple={false}
+              allowClearValueSingleInput={false}
+              showTriangle={true}
+              maxWidthInput="max-w-none"
+              renderSelectedItem={(item) => <span>{item.text}</span>}
+              classNameItem="p-0"
+              data={listCompanies}
+              formatItem={{
+                id: "_id",
+                text: "name",
+              }}
+              inlineSearch={false}
+              disableSearch={false}
+              searchInputClassName="h-[40px] w-[322px] px-[46px]"
+              onScroll={handleScroll}
+              onchangeValue={handleChangeCompany}
+              onSearchInputChange={handleSearchCompany}
+            /> : <></>
+          }
         </div>
         <div className="h-[50px] border border-primary-border flex items-center justify-between px-5">
           <div className="flex items-center">
@@ -361,14 +373,14 @@ export const SupportMemberPage: FC = () => {
       </ModalContainer>
 
       {hasNextPage && (
-				<div className="w-full flex justify-center my-5">
-					<button onClick={fetchNextPageUser}>
-						<span className="text-primary">
+        <div className="w-full flex justify-center my-5">
+          <button onClick={fetchNextPageUser}>
+            <span className="text-primary">
               {`Xem thêm (${totalRecord - listUsersSystem.length})`}
             </span>
-					</button>
-				</div>
-			)}
+          </button>
+        </div>
+      )}
     </main>
   );
 };

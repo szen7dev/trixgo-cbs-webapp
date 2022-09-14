@@ -21,6 +21,7 @@ export type AppProps = {
     name: string,
     slug: string,
     description: string,
+    show: number,
     image: string,
     companies: any[],
     members: User[],
