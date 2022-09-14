@@ -133,7 +133,7 @@ export const SupportGrantPage: FC = () => {
         appsCompany[appsCompany.length] = {
           app: {
             _id: app._id,
-            name: app.name,
+            name: app.name
           }
         }
       }
@@ -241,7 +241,16 @@ export const SupportGrantPage: FC = () => {
       <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
         <thead className="bg-cbs-table-header h-10 border-b border-primary-border">
           <tr className="text-left text-sm">
-            <th className={cn("py-1 text-center", styles.theadInput)}></th>
+            <th className={cn("py-1 text-center", styles.theadInput)}>
+              <div className="border-r-2 border-gray-300 flex items-center justify-center">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  defaultChecked
+                />
+                {/* <img src={PolygonIcon} alt="Polygon" /> */}
+              </div>
+            </th>
             <th className="w-1/5 py-1">
               <div className="border-r-2 border-gray-300 font-normal pl-2">
                 Ứng dụng
@@ -272,9 +281,15 @@ export const SupportGrantPage: FC = () => {
             if(appCompany._id) {
               return (
                 <tr key={appCompany._id} className="border-b border-primary-border h-10">
-                  <td className="py-1 px-2 text-center"></td>
+                  <td className="py-1 px-2 text-center">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChangeCheckBox(appCompany, e)}
+                    />
+                  </td>
                   <td className="py-1 px-2">
-                    <Link to={`/owner/grant/documents-management/${appCompany.app._id}/${appCompany?.company?._id || appCompany.company}/${appCompany.app.name}`}>
+                    <Link to={`/support/grant/documents-management/${appCompany.app._id}/${appCompany?.company?._id || appCompany.company}/${appCompany.app.name}`}>
                       {appCompany.app?.name}
                     </Link>
                   </td>
@@ -285,6 +300,25 @@ export const SupportGrantPage: FC = () => {
                 </tr>
               )
             }
+
+            return (
+              <tr key={appCompany.app?._id} className="border-b border-primary-border h-10">
+                <td className="py-1 px-2 text-center">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChangeCheckBox(appCompany, e)}
+                  />
+                </td>
+                <td className="py-1 px-2">
+                  {appCompany.app?.name}
+                </td>
+                <td className="py-1 px-2"></td>
+                <td className="py-1 px-2"></td>
+                <td className="py-1 px-2"></td>
+                <td className="py-1 px-2"></td>
+              </tr>
+            )
           }) : <></>}
         </tbody>
       </table>
