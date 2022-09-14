@@ -102,7 +102,7 @@ const BiddingHomePageV2: FC<Props> = (props) => {
           <div className="w-32 h-32 rounded-full p-[30px] bg-cbs-gray mx-auto">
             <img src={iconDatabase} alt="" />
           </div>
-          <p className="text-4x-large font-bold text-center mt-3">Dữ liệu năng lực nhà thầu</p>
+          <p className="text-4x-large font-bold text-center mt-3">DataHub năng lực nhà thầu</p>
           <div className="mt-6">
             <div className="mx-auto max-w-[831px] bg-cbs-gray py-6 px-5 space-x-4 flex items-center">
               <div className="w-4/12 relative">
