@@ -28,6 +28,14 @@ import {
 	DatahubProjectMap,
 	DatahubContact
 } from 'views/datahub/pages'
+
+const navLinks = [
+  { title: "Home", url: 'datahub/contractor/home/:id' },
+  { title: "Dịch vụ", url: 'datahub/contractor/:id/service' },
+  { title: "Tài chính", url: 'datahub/contractor/:id/financial' },
+  { title: "Hợp đồng", url: 'datahub/contractor/:id/contract' },
+  { title: "HSNL", url: 'datahub/contractor/:id/profile' },
+];
 	
 const DatahubRoutes: FC = () => {
 	return (
@@ -59,12 +67,12 @@ const DatahubRoutes: FC = () => {
 					</Route>
 					<Route exact path="/datahub/contractor/home" component={DatahubContractorHome} />
 					<Route exact path="/datahub/contractor/home/:id">
-						<DatahubContractorLayout>
+						<DatahubContractorLayout navLinks={navLinks}>
 							<DatahubContractorDetail />
 						</DatahubContractorLayout>
 					</Route>
 					<Route path="/datahub/contractor/:id">
-						<DatahubContractorLayout>
+						<DatahubContractorLayout navLinks={navLinks}>
 							<Route exact path='/datahub/contractor/:id' component={DatahubContractorDetail} />
 							<Route exact path='/datahub/contractor/:id/service' component={DatahubContractorService} />
 							<Route exact path='/datahub/contractor/:id/financial' component={DatahubContractorFinancial} />

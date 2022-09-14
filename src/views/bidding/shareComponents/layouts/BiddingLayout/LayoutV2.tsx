@@ -7,7 +7,7 @@ import { FC, ReactNode, useState } from "react";
 /*=====3.ICONS=====*/
 // import sendAndReceiveIcon from "assets/images/icons-send-and-receive.svg";
 import fileIcon from "assets/images/icons-file.svg";
-import adminIcon from "assets/images/icons8-user-shield-48.svg";
+import homeImage from "assets/menu/project/icons-project-home.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import { LeftMenu, LeftNavigate, MainHeaderV2 } from "shareComponents/common";
@@ -39,7 +39,7 @@ const listTab: {
 }[] = [
   {
     label: "Trang chủ",
-    icon: adminIcon,
+    icon: homeImage,
     count: 0,
     route: prefix + "/home",
   },
@@ -47,13 +47,13 @@ const listTab: {
     label: "Hồ sơ dự thầu",
     icon: fileIcon,
     count: 0,
-    route: prefix + "/draft",
+    route: prefix + "/bids",
   },
   {
     label: "Hồ sơ mời thầu",
     icon: fileIcon,
     count: 0,
-    route: prefix + "/report",
+    route: prefix + "/invitation",
   },
 ];
 

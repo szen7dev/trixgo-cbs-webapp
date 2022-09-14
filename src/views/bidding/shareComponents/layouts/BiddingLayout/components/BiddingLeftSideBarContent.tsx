@@ -39,24 +39,6 @@ export const BiddingLeftSideBarContent: FC<Props> = ({ tabs }) => {
     );
   };
   return (
-    <>
-      <button
-        onClick={() =>
-          openModal(
-            <div className="t-add-new-task-dialog text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
-              <ModalAddNewTask />
-            </div>
-          )
-        }
-        className={
-          "bg-cbs-blue-button rounded-md flex items-center justify-center text-xl text-primary-gray py-2 px-4"
-        }
-      >
-        <img src={plusIcon} alt={"Tạo mới"} />
-        <span className={"ml-2"}>Tạo mới</span>
-      </button>
-
-      <div className={"mt-4"}>{tabs.map((nav) => renderNav(nav))}</div>
-    </>
+    <div className={"mt-4"}>{tabs.map((nav) => renderNav(nav))}</div>
   );
 };
