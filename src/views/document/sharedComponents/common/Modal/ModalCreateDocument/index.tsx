@@ -221,6 +221,7 @@ export const ModalCreateDocument: React.FC = () => {
 						senderID: values.sender,
 						receiverID: values.receiver,
 						datahubContactID: values.field,
+						contractID: values.contract
 					});
 				} catch (error: unknown) {
 					console.error(error);
