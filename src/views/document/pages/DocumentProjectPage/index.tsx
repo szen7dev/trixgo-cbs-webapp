@@ -391,14 +391,14 @@ export const DocumentProjectPage: FC = () => {
                                 },
                                 {
                                     text: "Cách đây 1 tuần",
-                                    fromDate: moment().format("YYYY-MM-DD"),
-                                    toDate: moment().subtract(7,'d').format("YYYY-MM-DD"),
-                                },
-                                {
+                                    fromDate: moment().subtract(7, "days").format("YYYY-MM-DD h:mm"),
+                                    toDate: moment().add(1, "minutes").format("YYYY-MM-DD h:mm"),
+                                  },
+                                  {
                                     text: "Cách đây 1 tháng",
-                                    fromDate: moment().format("YYYY-MM-DD"),
-                                    toDate: moment().subtract(1,'m').format("YYYY-MM-DD"),
-                                },
+                                    fromDate: moment().subtract(1, "months").format("YYYY-MM-DD h:mm"),
+                                    toDate: moment().add(1, "minutes").format("YYYY-MM-DD h:mm"),
+                                  },
                             ]}
                         />
                         <DropdownSearchableV2

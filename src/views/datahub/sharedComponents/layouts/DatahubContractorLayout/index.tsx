@@ -15,12 +15,15 @@ import iconChat from 'assets/images/icons8-chat-room-100 1.png'
 import iconRss from 'assets/images/icons8-rss-100 (1) 1.png'
 import { ContractorProvider, useContractorCompany } from 'views/datahub/contexts/Company';
 
-const DatahubContractorLayoutDetail: FC = ({ children }) => {
+interface Props {
+  navLinks: { url: string; title: string }[];
+}
+const DatahubContractorLayoutDetail: FC<Props> = ({ children, navLinks }) => {
 	const { data, isLoading } = useContractorCompany();
 
 	const params = useParams<{ id: string }>();
 	return (
-		<div id="datahub-contractor-detail" className='h-full w-full overflow-scroll bg-cbs-gray'>
+		<div id="datahub-contractor-detail" className='h-full w-full overflow-scroll bg-white'>
 			<div className='w-full max-w-[1185px] mx-auto space-y-10'>
 				{/* ======= FIRST BLOCK ======= */}
 				<div className='bg-white border-cbs-border border-[0.5px] border-b-0 mx-3.5'>
@@ -83,11 +86,17 @@ const DatahubContractorLayoutDetail: FC = ({ children }) => {
 				{/* ======= LIST ACTIONS ======= */}
 				<div className='bg-white sticky top-0 flex justify-between px-4 mx-3.5 border-[0.5px] border-cbs-border border-t-0'>
 					<div className='space-x-8'>
-						<NavLink exact className='inline-block py-5 border-b border-transparent' activeClassName='text-cbs-primary border-cbs-primary' to={generatePath('/datahub/contractor/home/:id', params)}>Home</NavLink>
-						<NavLink exact className='inline-block py-5 border-b border-transparent' activeClassName='text-cbs-primary border-cbs-primary' to={generatePath('/datahub/contractor/:id/service', params)}>Dịch vụ</NavLink>
-						<NavLink exact className='inline-block py-5 border-b border-transparent' activeClassName='text-cbs-primary border-cbs-primary' to={generatePath('/datahub/contractor/:id/financial', params)}>Tài chính</NavLink>
-						<NavLink exact className='inline-block py-5 border-b border-transparent' activeClassName='text-cbs-primary border-cbs-primary' to={generatePath('/datahub/contractor/:id/contract', params)}>Hợp đồng</NavLink>
-						<NavLink exact className='inline-block py-5 border-b border-transparent' activeClassName='text-cbs-primary border-cbs-primary' to={generatePath('/datahub/contractor/:id/profile', params)}>HSNL</NavLink>
+            {navLinks.map(({url, title}) => (
+              <NavLink
+                exact
+                key={url}
+                className="inline-block py-5 border-b border-transparent"
+                activeClassName="text-cbs-primary border-cbs-primary"
+                to={generatePath(url, params)}
+              >
+                {title}
+              </NavLink>
+            ))}
 					</div>
 					<div className='space-x-2 flex items-center'>
 						<button className='bg-cbs-active-comment text-cbs-primary p-1.5 rounded-cbs'>
@@ -115,12 +124,14 @@ const DatahubContractorLayoutDetail: FC = ({ children }) => {
 		</div >
 	)
 }
-const DatahubContractorLayout: FC = ({ children }) => {
-	return <ContractorProvider>
-		<DatahubContractorLayoutDetail>
-			{children}
-		</DatahubContractorLayoutDetail>
-	</ContractorProvider>
-}
+const DatahubContractorLayout: FC<Props> = ({ children, navLinks }) => {
+  return (
+    <ContractorProvider>
+      <DatahubContractorLayoutDetail navLinks={navLinks}>
+        {children}
+      </DatahubContractorLayoutDetail>
+    </ContractorProvider>
+  );
+};
 
 export default DatahubContractorLayout

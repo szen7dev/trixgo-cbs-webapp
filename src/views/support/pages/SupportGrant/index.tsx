@@ -6,7 +6,6 @@ import { useHistory, useLocation } from "react-router-dom";
 
 import { DropdownSearchable, ModalContainer } from "shareComponents/common";
 import { ModalCreateOrUpdateAppCompany } from 'views/support/shareComponents/common';
-import { APP_INFO } from "shareComponents/common";
 
 import styles from "views/support/styles/support.module.css";
 import { Link } from "react-router-dom";
@@ -17,8 +16,6 @@ import { useApp } from 'services/hooks/apps/useApp';
 export const SupportGrantPage: FC = () => {
   const location = useLocation();
   const history = useHistory();
-  const currentUser = localStorage.getItem("currentUser") ?? "{}";
-  const profile = JSON.parse(currentUser);
   const [keywordCompany, setKeywordCompany] = useState('');
   const [companySelected, setCompanySelected] = useState('');
   const [companyName, setCompanyName] = useState('');
@@ -65,17 +62,17 @@ export const SupportGrantPage: FC = () => {
     // App đã tồn tại trong công ty
     const hasCheckedAppUpdate = listChecked.filter(item => item._id);
 
-    if(event.currentTarget.checked) {
+    if (event.currentTarget.checked) {
       setListChecked(previousValue => ([...previousValue, appCompany]));
 
-      if(appCompany._id || hasCheckedAppUpdate.length) {
+      if (appCompany._id || hasCheckedAppUpdate.length) {
         setIsUpdate(true);
       }
-    } else{
+    } else {
       const listCheckedNew = listChecked.filter(item => item.app?._id !== appCompany.app?._id);
       setListChecked(listCheckedNew);
 
-      if(hasCheckedAppUpdate.length === 1 && appCompany._id) {
+      if (hasCheckedAppUpdate.length === 1 && appCompany._id) {
         setIsUpdate(false);
       }
     }
@@ -87,12 +84,12 @@ export const SupportGrantPage: FC = () => {
     const { _id, app, company, maxCount, maxData, startTime, endTime } = values;
 
     const listAppsCompanyRefresh = listAppsCompany.map(appCompany => {
-      if(appCompany.app._id === app) {
-        appCompany._id        = _id;
-        appCompany.maxCount   = maxCount;
-        appCompany.maxData    = maxData;
-        appCompany.startTime  = startTime;
-        appCompany.endTime    = endTime;
+      if (appCompany.app._id === app) {
+        appCompany._id = _id;
+        appCompany.maxCount = maxCount;
+        appCompany.maxData = maxData;
+        appCompany.startTime = startTime;
+        appCompany.endTime = endTime;
       }
 
       return appCompany;
@@ -112,14 +109,7 @@ export const SupportGrantPage: FC = () => {
   }
 
   useEffect(() => {
-    if (location.pathname === '/owner/grant') {
-      setCompanySelected(profile?.company?._id);
-      setCompanyName(`${profile?.company?.name} - ${profile?.company?.sign}`);
-    }
-  }, []);
-
-  useEffect(() => {
-    if(!companySelected) return;
+    if (!companySelected) return;
 
     const appsCompany: any[] = [];
 
@@ -127,9 +117,9 @@ export const SupportGrantPage: FC = () => {
     listApps.map(app => {
       const appCompany = dataAppsCompany.find(appCompany => appCompany?.app?._id === app._id);
 
-      if(appCompany) {
+      if (appCompany) {
         appsCompany[appsCompany.length] = appCompany;
-      } else{
+      } else {
         appsCompany[appsCompany.length] = {
           app: {
             _id: app._id,
@@ -143,9 +133,9 @@ export const SupportGrantPage: FC = () => {
   }, [dataAppsCompany.length, companySelected])
 
   useEffect(() => {
-    if(listChecked.length === 1) {
+    if (listChecked.length === 1) {
 
-      if(listChecked[0]._id) {
+      if (listChecked[0]._id) {
         const { _id, app, company, maxCount, maxData, startTime, endTime } = listChecked[0];
 
         setInitialValues({
@@ -157,7 +147,7 @@ export const SupportGrantPage: FC = () => {
           startTime: moment(startTime).format("MM/DD/YYYY"),
           endTime: moment(endTime).format("MM/DD/YYYY")
         })
-      } else{
+      } else {
         const { app } = listChecked[0];
 
         setInitialValues({
@@ -174,7 +164,7 @@ export const SupportGrantPage: FC = () => {
   }, [listChecked.length])
 
   useEffect(() => {
-    if(!location.hash) return;
+    if (!location.hash) return;
 
     try {
       const companyID = location.hash.substring(1);
@@ -182,7 +172,7 @@ export const SupportGrantPage: FC = () => {
 
       companyID && setCompanySelected(companyID);
       companyName && setCompanyName(companyName);
-    } catch (error) {console.error(error)}
+    } catch (error) { console.error(error) }
   }, [location.hash])
 
   return (
@@ -205,13 +195,12 @@ export const SupportGrantPage: FC = () => {
           <button
             className={
               cn("flex items-center justify-center text-primary-light bg-cbs-green px-2 h-8 rounded font-bold mr-2",
-              (listChecked.length === 1 && isUpdate) ? "" : "hidden")
+                (listChecked.length === 1 && isUpdate) ? "" : "hidden")
             }
             onClick={toggleModalCreateOrUpdateAppCompany}
           >
             Cập nhật
           </button>
-          {location.pathname !== '/owner/grant' ?
           <DropdownSearchable
             placeholder="Chọn phân vùng để thực hiện"
             className="w-[322px] pl-0 bg-cbs-table-header"
@@ -233,7 +222,7 @@ export const SupportGrantPage: FC = () => {
             onScroll={handleScroll}
             onchangeValue={handleChangeCompany}
             onSearchInputChange={handleSearch}
-          /> : <></>}
+          />
         </div>
 
       </header>
@@ -278,7 +267,7 @@ export const SupportGrantPage: FC = () => {
         </thead>
         <tbody>
           {listAppsCompany.length ? listAppsCompany.map(appCompany => {
-            if(appCompany._id) {
+            if (appCompany._id) {
               return (
                 <tr key={appCompany._id} className="border-b border-primary-border h-10">
                   <td className="py-1 px-2 text-center">

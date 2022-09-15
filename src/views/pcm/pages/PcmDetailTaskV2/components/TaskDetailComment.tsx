@@ -108,6 +108,7 @@ export const TaskDetailComment: FC<Props> = ({ task, userId, refetchInfo }) => {
     }
 
     const _comments: CommentProps[] = state.comments;
+    console.log({ _comments })
 
     return (
         <div className={"task-comment mt-5"}>

@@ -2,6 +2,7 @@ import React, { FC, Fragment, useState } from 'react'
 import SwiperCore, { Navigation } from 'swiper';
 import { Listbox, Transition } from '@headlessui/react';
 import { debounce } from 'lodash'
+import { useLocation, generatePath } from "react-router-dom";
 
 import { useDatahubCompanies } from 'services/hooks/datahub'
 
@@ -34,6 +35,7 @@ const DatahubContractorHome: FC<Props> = (props) => {
 		limit: 24,
 		keyword: company
 	}, { enable: Boolean(company.length) });
+  const location = useLocation()
 
 	const data = Array.from({ length: 3 }).map((_, index) => ({
 		id: index,
@@ -175,7 +177,7 @@ const DatahubContractorHome: FC<Props> = (props) => {
 										{
 											page.data.listRecords.map((record, idx) => (
 												<div key={record._id} className="w-3/12 px-2 mb-3">
-													<Link to={'/datahub/contractor/home/' + record._id} className="flex flex-col h-full rounded-cbs-md overflow-hidden border-cbs-border border-0.5 ">
+													<Link to={generatePath(location.pathname +'/:id',{ id: record._id} )} className="flex flex-col h-full rounded-cbs-md overflow-hidden border-cbs-border border-0.5 ">
 														<div className='h-36'>
 															<img className="w-full h-full z-0 object-cover" src={`${process.env.REACT_APP_URL_S3_COMPANY}/${record.image}`} alt="News" />
 														</div>
@@ -219,7 +221,7 @@ const DatahubContractorHome: FC<Props> = (props) => {
 									<div className='text-[22px] leading-6'>
 										Lĩnh vực số 1.{item.id}
 									</div>
-									<SliderRow {...item} prefix="/datahub/contractor/home/" />
+									<SliderRow {...item} prefix={location.pathname+'/'} />
 								</div>
 							))
 						}

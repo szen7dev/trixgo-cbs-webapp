@@ -1,5 +1,5 @@
 import React, {FC, useContext, useEffect, useState} from "react";
-import {Loader, DropdownSearchableV2} from "shareComponents/common";
+import { Loader, DropdownSearchableV2 } from "shareComponents/common";
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
 import maleUserIcon from "assets/images/icons8-business-building-48.svg";
 import categoryIcon from "assets/images/icons8-category-48.svg";
@@ -28,24 +28,24 @@ import { createLinkAndClick } from "utils";
 // import {useQueryDetailDocument} from "services/hooks/ppt/useDocument";
 // import {useMutationDocumentChild} from "services/hooks/document/useDocumentChild";
 
-const DocumentHomePageV2:FC = () => {
+const DocumentHomePageV2: FC = () => {
     type PaginateHandle = React.ElementRef<typeof PaginateV2>;
 
     const dispatch = useDispatch();
-    const {keywordInput} = useAppSelector(
+    const { keywordInput } = useAppSelector(
         (state) => state.documentHome.data
     );
 
     useEffect(() => {
         setPageIndex(0);
-        ref.current&&ref.current.resetPaginate();
+        ref.current && ref.current.resetPaginate();
     }, [keywordInput]);
 
     const [recordSelected, setSelectRecord] = useState<any>({});
 
     const ref = React.useRef<PaginateHandle>(null);
     const [pageIndex, setPageIndex] = useState(0);
-    const [fromToDate, setFromToDate] = useState({fromDate: "", toDate: ""})
+    const [fromToDate, setFromToDate] = useState({ fromDate: "", toDate: "" })
 
     const [keywordDatahubContact, setKeywordDatahubContact] = useState("");
     const [datahubContactsID, setDatahubContactsID] = useState<string[]>([]);
@@ -65,8 +65,8 @@ const DocumentHomePageV2:FC = () => {
     });
     const { exportDocumentAsync } = useDocumentCustom({});
     const { data: listDatahubContact } = useDatahubContact({ keyword: keywordDatahubContact }, true, false); // Danh bạ hệ thống
-    const { listProjectsUserIsMember } = useProjectCustom({ paramsProjectsUserIsMember: { keyword: projectKeyword }, isFetchProjectsUserIsMember: true});
-    const { listContracts } = useContractIsMembers({ params: {keyword: contractKeyword, populates: JSON.stringify({"path": "project", "select":"name sign"})}, isFetch: true });
+    const { listProjectsUserIsMember } = useProjectCustom({ paramsProjectsUserIsMember: { keyword: projectKeyword }, isFetchProjectsUserIsMember: true });
+    const { listContracts } = useContractIsMembers({ params: { keyword: contractKeyword, populates: JSON.stringify({ "path": "project", "select": "name sign" }) }, isFetch: true });
 
     const { listDocumentWithPager, isLoading, totalRecord, totalPage, fetchNextPageDocument, hasNextPage, refetchListDocument } = useListFilterDocument({
         params: {
@@ -163,7 +163,7 @@ const DocumentHomePageV2:FC = () => {
                     <DropdownSearchableV2
                         className={"mr-4 border border-primary-border rounded-lg mb-2"}
                         placeholder={"Tổ chức ban hành"}
-                        prefixIcon={<img className={"mr-2"} src={maleUserIcon} alt={"icon"}/>}
+                        prefixIcon={<img className={"mr-2"} src={maleUserIcon} alt={"icon"} />}
                         isMultiple={true}
                         allowClearValueSingleInput={true}
                         data={listDatahubContact}
@@ -179,26 +179,26 @@ const DocumentHomePageV2:FC = () => {
                             const cloneIDs = [...datahubContactsID];
                             cloneIDs.push(item._id);
                             setDatahubContactsID(cloneIDs);
-                            dispatch(setFilterDropdown({keyFilter: "datahubContactsID", dataFilter: cloneIDs}))
+                            dispatch(setFilterDropdown({ keyFilter: "datahubContactsID", dataFilter: cloneIDs }))
 
                             setPageIndex(0);
-                            ref.current&&ref.current.resetPaginate();
+                            ref.current && ref.current.resetPaginate();
                         }}
                         onClearData={() => {
                             setDatahubContactsID([]);
-                            dispatch(setFilterDropdown({keyFilter: "datahubContactsID", dataFilter: []}))
+                            dispatch(setFilterDropdown({ keyFilter: "datahubContactsID", dataFilter: [] }))
 
                             setPageIndex(0);
-                            ref.current&&ref.current.resetPaginate();
+                            ref.current && ref.current.resetPaginate();
                         }}
                         onMultipleRemoveValue={id => {
                             const cloneIDs = [...datahubContactsID];
                             const newList = cloneIDs.filter(selectId => selectId !== id);
                             setDatahubContactsID(newList);
-                            dispatch(setFilterDropdown({keyFilter: "datahubContactsID", dataFilter: newList}))
+                            dispatch(setFilterDropdown({ keyFilter: "datahubContactsID", dataFilter: newList }))
 
                             setPageIndex(0);
-                            ref.current&&ref.current.resetPaginate();
+                            ref.current && ref.current.resetPaginate();
                         }}
                         renderItem={(item) => (
                             <p className={"min-w-[300px]"}>{item.text}</p>
@@ -208,7 +208,7 @@ const DocumentHomePageV2:FC = () => {
                     <DropdownSearchableV2
                         className={"mr-4 border border-primary-border rounded-lg mb-2"}
                         placeholder={"Tính chất hồ sơ"}
-                        prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"}/>}
+                        prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"} />}
                         isMultiple={true}
                         disableSearch={true}
                         allowClearValueSingleInput={true}
@@ -220,26 +220,26 @@ const DocumentHomePageV2:FC = () => {
                             const cloneIDs = [...types];
                             cloneIDs.push(item.value);
                             setTypes(cloneIDs);
-                            dispatch(setFilterDropdown({keyFilter: "types", dataFilter: cloneIDs}))
+                            dispatch(setFilterDropdown({ keyFilter: "types", dataFilter: cloneIDs }))
 
                             setPageIndex(0);
-                            ref.current&&ref.current.resetPaginate();
+                            ref.current && ref.current.resetPaginate();
                         }}
                         onClearData={() => {
                             setTypes([]);
-                            dispatch(setFilterDropdown({keyFilter: "types", dataFilter: []}))
+                            dispatch(setFilterDropdown({ keyFilter: "types", dataFilter: [] }))
 
                             setPageIndex(0);
-                            ref.current&&ref.current.resetPaginate();
+                            ref.current && ref.current.resetPaginate();
                         }}
                         onMultipleRemoveValue={id => {
                             const cloneIDs = [...types];
                             const newList = cloneIDs.filter(selectId => selectId !== id);
                             setTypes(newList);
-                            dispatch(setFilterDropdown({keyFilter: "types", dataFilter: newList}))
+                            dispatch(setFilterDropdown({ keyFilter: "types", dataFilter: newList }))
 
                             setPageIndex(0);
-                            ref.current&&ref.current.resetPaginate();
+                            ref.current && ref.current.resetPaginate();
                         }}
                         renderItem={(item) => (
                             <p className={"min-w-[300px]"}>{item.text}</p>
@@ -249,7 +249,7 @@ const DocumentHomePageV2:FC = () => {
                     <DropdownSearchableV2
                         className={"mr-4 border border-primary-border rounded-lg mb-2"}
                         placeholder={"Dự án"}
-                        prefixIcon={<img className={"mr-2"} src={projectIcon} alt={"icon"}/>}
+                        prefixIcon={<img className={"mr-2"} src={projectIcon} alt={"icon"} />}
                         isMultiple={true}
                         allowClearValueSingleInput={true}
                         data={listProjectsUserIsMember}
@@ -262,26 +262,26 @@ const DocumentHomePageV2:FC = () => {
                             const cloneIDs = [...departmentsID];
                             cloneIDs.push(item._id);
                             setDepartmentsID(cloneIDs);
-                            dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: cloneIDs}))
+                            dispatch(setFilterDropdown({ keyFilter: "departmentsID", dataFilter: cloneIDs }))
 
                             setPageIndex(0);
-                            ref.current&&ref.current.resetPaginate();
+                            ref.current && ref.current.resetPaginate();
                         }}
                         onClearData={() => {
                             setDepartmentsID([]);
-                            dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: []}))
+                            dispatch(setFilterDropdown({ keyFilter: "departmentsID", dataFilter: [] }))
 
                             setPageIndex(0);
-                            ref.current&&ref.current.resetPaginate();
+                            ref.current && ref.current.resetPaginate();
                         }}
                         onMultipleRemoveValue={id => {
                             const cloneIDs = [...departmentsID];
                             const newList = cloneIDs.filter(selectId => selectId !== id);
                             setDepartmentsID(newList);
-                            dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: newList}))
+                            dispatch(setFilterDropdown({ keyFilter: "departmentsID", dataFilter: newList }))
 
                             setPageIndex(0);
-                            ref.current&&ref.current.resetPaginate();
+                            ref.current && ref.current.resetPaginate();
                         }}
                         renderItem={(item) => (
                             <p className={"min-w-[300px]"}>{item.sign}.{item.text}</p>
@@ -297,10 +297,10 @@ const DocumentHomePageV2:FC = () => {
                         iconFront={<img src={timelineIcon} alt={"----"} />}
                         onValueChange={(val) => {
                             setFromToDate(val)
-                            dispatch(setFilterDropdown({keyFilter: "fromDate", dataFilter: val.fromDate}))
-                            dispatch(setFilterDropdown({keyFilter: "toDate", dataFilter: val.toDate}))
+                            dispatch(setFilterDropdown({ keyFilter: "fromDate", dataFilter: val.fromDate }))
+                            dispatch(setFilterDropdown({ keyFilter: "toDate", dataFilter: val.toDate }))
                             setPageIndex(0);
-                            ref.current&&ref.current.resetPaginate();
+                            ref.current && ref.current.resetPaginate();
                         }}
                         options={[
                             {
@@ -310,20 +310,20 @@ const DocumentHomePageV2:FC = () => {
                             },
                             {
                                 text: "Cách đây 1 tuần",
-                                fromDate: moment().format("YYYY-MM-DD"),
-                                toDate: moment().subtract(7,'d').format("YYYY-MM-DD"),
+                                fromDate: moment().subtract(7, "days").format("YYYY-MM-DD h:mm"),
+                                toDate: moment().add(1, "minutes").format("YYYY-MM-DD h:mm"),
                             },
                             {
                                 text: "Cách đây 1 tháng",
-                                fromDate: moment().format("YYYY-MM-DD"),
-                                toDate: moment().subtract(1,'m').format("YYYY-MM-DD"),
+                                fromDate: moment().subtract(1, "months").format("YYYY-MM-DD h:mm"),
+                                toDate: moment().add(1, "minutes").format("YYYY-MM-DD h:mm"),
                             },
                         ]}
                     />
                     <DropdownSearchableV2
                         className={"mr-4 border border-primary-border rounded-lg mb-2"}
                         placeholder={"Hướng hồ sơ"}
-                        prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"}/>}
+                        prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"} />}
                         isMultiple={true}
                         disableSearch={true}
                         allowClearValueSingleInput={true}
@@ -335,26 +335,26 @@ const DocumentHomePageV2:FC = () => {
                             const cloneIDs = [...directions];
                             cloneIDs.push(item.value);
                             setDirections(cloneIDs);
-                            dispatch(setFilterDropdown({keyFilter: "directions", dataFilter: cloneIDs}))
+                            dispatch(setFilterDropdown({ keyFilter: "directions", dataFilter: cloneIDs }))
 
                             setPageIndex(0);
-                            ref.current&&ref.current.resetPaginate();
+                            ref.current && ref.current.resetPaginate();
                         }}
                         onClearData={() => {
                             setDirections([]);
-                            dispatch(setFilterDropdown({keyFilter: "directions", dataFilter: []}))
+                            dispatch(setFilterDropdown({ keyFilter: "directions", dataFilter: [] }))
 
                             setPageIndex(0);
-                            ref.current&&ref.current.resetPaginate();
+                            ref.current && ref.current.resetPaginate();
                         }}
                         onMultipleRemoveValue={id => {
                             const cloneIDs = [...directions];
                             const newList = cloneIDs.filter(selectId => selectId !== id);
                             setDirections(newList);
-                            dispatch(setFilterDropdown({keyFilter: "directions", dataFilter: newList}))
+                            dispatch(setFilterDropdown({ keyFilter: "directions", dataFilter: newList }))
 
                             setPageIndex(0);
-                            ref.current&&ref.current.resetPaginate();
+                            ref.current && ref.current.resetPaginate();
                         }}
                         renderItem={(item) => (
                             <p className={"min-w-[300px]"}>{item.text}</p>
@@ -364,7 +364,7 @@ const DocumentHomePageV2:FC = () => {
                     <DropdownSearchableV2
                         className={"mr-4 border border-primary-border rounded-lg mb-2"}
                         placeholder={"Thuộc hợp đồng"}
-                        prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"}/>}
+                        prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"} />}
                         isMultiple={true}
                         disableSearch={false}
                         allowClearValueSingleInput={true}
@@ -378,26 +378,26 @@ const DocumentHomePageV2:FC = () => {
                             const cloneIDs = [...contractsID];
                             cloneIDs.push(item._id);
                             setContractsID(cloneIDs);
-                            dispatch(setFilterDropdown({keyFilter: "contractsID", dataFilter: cloneIDs}))
+                            dispatch(setFilterDropdown({ keyFilter: "contractsID", dataFilter: cloneIDs }))
 
                             setPageIndex(0);
-                            ref.current&&ref.current.resetPaginate();
+                            ref.current && ref.current.resetPaginate();
                         }}
                         onClearData={() => {
                             setContractsID([]);
-                            dispatch(setFilterDropdown({keyFilter: "contractsID", dataFilter: []}))
+                            dispatch(setFilterDropdown({ keyFilter: "contractsID", dataFilter: [] }))
 
                             setPageIndex(0);
-                            ref.current&&ref.current.resetPaginate();
+                            ref.current && ref.current.resetPaginate();
                         }}
                         onMultipleRemoveValue={id => {
                             const cloneIDs = [...contractsID];
                             const newList = cloneIDs.filter(selectId => selectId !== id);
                             setContractsID(newList);
-                            dispatch(setFilterDropdown({keyFilter: "contractsID", dataFilter: newList}))
+                            dispatch(setFilterDropdown({ keyFilter: "contractsID", dataFilter: newList }))
 
                             setPageIndex(0);
-                            ref.current&&ref.current.resetPaginate();
+                            ref.current && ref.current.resetPaginate();
                         }}
                         renderItem={(item) => (
                             <p className={"min-w-[300px]"}>{item.project.sign}.{item.name}-{item.sign}</p>
@@ -435,10 +435,10 @@ const DocumentHomePageV2:FC = () => {
                         isFetching={isLoading}
                         nextPageAction={() => {
                             fetchNextPageDocument();
-                            setPageIndex(oldState => oldState+1)
+                            setPageIndex(oldState => oldState + 1)
                         }}
                         prevPageAction={() => {
-                            setPageIndex(oldState => oldState-1)
+                            setPageIndex(oldState => oldState - 1)
                         }}
                     />
                 </div>
@@ -446,95 +446,95 @@ const DocumentHomePageV2:FC = () => {
             <div className="flex-1 overflow-y-auto">
                 <table className={"table-fixed border-collapse w-full"}>
                     <thead>
-                    <tr className={"sticky top-0 z-5"}>
-                        <th className={"bg-cbs-table-header text-primary-gray text-center font-normal w-[50px] border-b-0.5 border-primary-border align-middle py-3"}>
-                            <input
-                                className="form-check-input"
-                                type="checkbox"
-                                value=""
-                                id="flexCheckDefault"
-                            />
-                        </th>
-                        <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-1/5 border-b-0.5 border-primary-border align-middle py-3"}>
-                            Nội dung
-                        </th>
-                        <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-1/6 border-b-0.5 border-primary-border align-middle py-3"}>
-                            Chủ thể ban hành
-                        </th>
-                        <th className={"bg-cbs-table-header text-primary-gray text-left font-normal border-b-0.5 border-primary-border align-middle py-3"}>
-                            Mã hiệu
-                        </th>
-                        <th className={"bg-cbs-table-header text-primary-gray text-left font-normal border-b-0.5 border-primary-border align-middle py-3"}>
-                            Ngày văn bản
-                        </th>
-                        <th className={"bg-cbs-table-header text-primary-gray text-left font-normal border-b-0.5 border-primary-border align-middle py-3"}>
-                            Mã hiệu lưu
-                        </th>
-                        <th className={"bg-cbs-table-header w-[70px] text-primary-gray text-center font-normal border-b-0.5 border-primary-border align-middle py-3"}>
-                            Số lượng
-                        </th>
-                        <th className={"bg-cbs-table-header text-primary-gray text-left font-normal border-b-0.5 border-primary-border align-middle py-3"}>
-                            Tình trạng
-                        </th>
-                        <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-1/7 border-b-0.5 border-primary-border align-middle py-3"}>
-                            Ghi chú
-                        </th>
-                        <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-1/7 border-b-0.5 border-primary-border align-middle py-3"}>
-                            Địa chỉ lưu trữ
-                        </th>
-                    </tr>
+                        <tr className={"sticky top-0 z-5"}>
+                            <th className={"bg-cbs-table-header text-primary-gray text-center font-normal w-[50px] border-b-0.5 border-primary-border align-middle py-3"}>
+                                <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    value=""
+                                    id="flexCheckDefault"
+                                />
+                            </th>
+                            <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-1/5 border-b-0.5 border-primary-border align-middle py-3"}>
+                                Nội dung
+                            </th>
+                            <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-1/6 border-b-0.5 border-primary-border align-middle py-3"}>
+                                Chủ thể ban hành
+                            </th>
+                            <th className={"bg-cbs-table-header text-primary-gray text-left font-normal border-b-0.5 border-primary-border align-middle py-3"}>
+                                Mã hiệu
+                            </th>
+                            <th className={"bg-cbs-table-header text-primary-gray text-left font-normal border-b-0.5 border-primary-border align-middle py-3"}>
+                                Ngày văn bản
+                            </th>
+                            <th className={"bg-cbs-table-header text-primary-gray text-left font-normal border-b-0.5 border-primary-border align-middle py-3"}>
+                                Mã hiệu lưu
+                            </th>
+                            <th className={"bg-cbs-table-header w-[70px] text-primary-gray text-center font-normal border-b-0.5 border-primary-border align-middle py-3"}>
+                                Số lượng
+                            </th>
+                            <th className={"bg-cbs-table-header text-primary-gray text-left font-normal border-b-0.5 border-primary-border align-middle py-3"}>
+                                Tình trạng
+                            </th>
+                            <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-1/7 border-b-0.5 border-primary-border align-middle py-3"}>
+                                Ghi chú
+                            </th>
+                            <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-1/7 border-b-0.5 border-primary-border align-middle py-3"}>
+                                Địa chỉ lưu trữ
+                            </th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {
-                        (listDocumentWithPager[pageIndex]??[]).map((document,i) => (
-                            <tr key={i}>
-                                <td className={"border-b-0.5 border-primary-border py-3 text-center"}>
-                                    <input
-                                        className="form-check-input"
-                                        type="checkbox"
-                                        value=""
-                                        id={"flexCheckDefault_" + document._id}
-                                        checked={document._id === recordSelected._id}
-                                        onChange={(e) => {
-                                            if (e.target.checked) {
-                                                setSelectRecord(document);
+                        {
+                            (listDocumentWithPager[pageIndex] ?? []).map((document, i) => (
+                                <tr key={i}>
+                                    <td className={"border-b-0.5 border-primary-border py-3 text-center"}>
+                                        <input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            value=""
+                                            id={"flexCheckDefault_" + document._id}
+                                            checked={document._id === recordSelected._id}
+                                            onChange={(e) => {
+                                                if (e.target.checked) {
+                                                    setSelectRecord(document);
+                                                    return null;
+                                                }
+                                                setSelectRecord({});
                                                 return null;
-                                            }
-                                            setSelectRecord({});
-                                            return null;
-                                        }}
-                                    />
-                                </td>
-                                <td className={"border-b-0.5 border-primary-border py-3"}>
-                                    <Link to={`/document/home/${document._id}`}>{document.name}</Link>
-                                    <p className={"mt-1 text-primary-gray text-xs"}>{document.author?.fullname}-{document.createAt}</p>
-                                </td>
-                                <td className={"border-b-0.5 border-primary-border py-3"}>
-                                    {document.sender?.name}
-                                </td>
-                                <td className={"border-b-0.5 border-primary-border py-3 break-all"}>
-                                    {document.sign}
-                                </td>
-                                <td className={"border-b-0.5 border-primary-border py-3 text-center"}>
-                                    {moment(document.date).format('DD/MM/YYYY')}
-                                </td>
-                                <td className={"border-b-0.5 border-primary-border py-3 break-all"}>
-                                    {document.storeSign}
-                                </td>
-                                <td className={"border-b-0.5 border-primary-border py-3 text-right pr-2"}>
-                                    {document.amount}
-                                </td>
-                                <td className={"border-b-0.5 border-primary-border py-3"}>
-                                    {document.status}
-                                </td>
-                                <td className={"border-b-0.5 border-primary-border py-3"}>
-                                    {document.note}
-                                </td>
-                                <td className={"border-b-0.5 border-primary-border py-3"}>
-                                    {document.storage?.name}
-                                </td>
-                            </tr>
-                        ))}
+                                            }}
+                                        />
+                                    </td>
+                                    <td className={"border-b-0.5 border-primary-border py-3"}>
+                                        <Link to={`/document/home/${document._id}`}>{document.name}</Link>
+                                        <p className={"mt-1 text-primary-gray text-xs"}>{document.author?.fullname}-{document.createAt}</p>
+                                    </td>
+                                    <td className={"border-b-0.5 border-primary-border py-3"}>
+                                        {document.sender?.name}
+                                    </td>
+                                    <td className={"border-b-0.5 border-primary-border py-3 break-all"}>
+                                        {document.sign}
+                                    </td>
+                                    <td className={"border-b-0.5 border-primary-border py-3 text-center"}>
+                                        {moment(document.date).format('DD/MM/YYYY')}
+                                    </td>
+                                    <td className={"border-b-0.5 border-primary-border py-3 break-all"}>
+                                        {document.storeSign}
+                                    </td>
+                                    <td className={"border-b-0.5 border-primary-border py-3 text-right pr-2"}>
+                                        {document.amount}
+                                    </td>
+                                    <td className={"border-b-0.5 border-primary-border py-3"}>
+                                        {document.status}
+                                    </td>
+                                    <td className={"border-b-0.5 border-primary-border py-3"}>
+                                        {document.note}
+                                    </td>
+                                    <td className={"border-b-0.5 border-primary-border py-3"}>
+                                        {document.storage?.name}
+                                    </td>
+                                </tr>
+                            ))}
                     </tbody>
                 </table>
             </div>

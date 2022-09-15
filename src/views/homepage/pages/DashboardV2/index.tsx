@@ -173,6 +173,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
   const [fromExpiredDate, setFromExpiredDate] = useState("1990/01/01");
   const [toExpiredDate, setToExpiredDate] = useState("2999/12/31");
   const [isExpired, setIsExpired] = useState<any>(0);
+  const [isParent, setIsParent] = useState<any>(0);
   const [subtypes, setSubtypes] = useState<string[]>([]);
   const [status, setStatus] = useState<string[]>([]);
 
@@ -185,6 +186,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     authorsID: authors,
     projectsID: project,
     isExpired: isExpired,
+    isParent: isParent,
     subtypes: subtypes,
     status: status,
     ...querySubject,
@@ -252,7 +254,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     }
   }, []);
 
-  const {refetch: refetchPcmPlanTaskNotification} = usePcmPlanTaskNotification({enabled: false});
+  const { refetch: refetchPcmPlanTaskNotification } = usePcmPlanTaskNotification({ enabled: false });
 
   const { updateStatusMultipleAsync } = useTask({
     params: {},
@@ -920,29 +922,23 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               options={[
                 {
                   text: "Tất cả",
-                  fromDate: "1990/01/01",
-                  toDate: "2999/12/31",
+                  fromDate: "",
+                  toDate: "",
                 },
                 {
                   text: "Ngày nay",
-                  fromDate: moment().format("YYYY/MM/DD"),
-                  toDate: moment().format("YYYY/MM/DD"),
+                  fromDate: moment().subtract(1, "days").format("YYYY-MM-DD h:mm"),
+                  toDate: moment().add(1, "minutes").format("YYYY-MM-DD h:mm"),
                 },
                 {
                   text: "Cách đây 1 tuần",
-                  fromDate: moment(
-                    moment().subtract(7, "days").calendar(),
-                    "DD-MM-YYYY"
-                  ).format("YYYY/MM/DD"),
-                  toDate: moment().format("YYYY/MM/DD"),
+                  fromDate: moment().subtract(7, "days").format("YYYY-MM-DD h:mm"),
+                  toDate: moment().add(1, "minutes").format("YYYY-MM-DD h:mm"),
                 },
                 {
                   text: "Cách đây 1 tháng",
-                  fromDate: moment(
-                    moment().subtract(31, "days").calendar(),
-                    "DD-MM-YYYY"
-                  ).format("YYYY/MM/DD"),
-                  toDate: moment().format("YYYY/MM/DD"),
+                  fromDate: moment().subtract(1, "months").format("YYYY-MM-DD h:mm"),
+                  toDate: moment().add(1, "minutes").format("YYYY-MM-DD h:mm"),
                 },
               ]}
             />
@@ -1153,6 +1149,39 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
             />
           )}
 
+          {tabIndex === 2 && (
+            <DropdownSearchableV2
+              selectOneByOne={true}
+              disableSearch={true}
+              reset={reset}
+              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              placeholder={"Phân cấp"}
+              prefixIcon={
+                <img className={"mr-2"} src={categoryIcon} alt={"icon"} />
+              }
+              onchangeValue={(val) => {
+                setIsParent(val.id);
+                dispatch(setTabActive(tabIndex));
+                setPageIndex(0);
+                ref.current && ref.current.resetPaginate();
+              }}
+              data={[
+                {
+                  id: 0,
+                  text: "Tất cả",
+                },
+                {
+                  id: 1,
+                  text: "Việc cha",
+                },
+                {
+                  id: 2,
+                  text: "Việc con",
+                },
+              ]}
+            />
+          )}
+
           <button
             className={"bg-gray-300 rounded text-white px-2 h-[32px] mb-2"}
             onClick={onReset}
@@ -1161,12 +1190,12 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           </button>
 
           {tabIndex === 2 && (
-             <button
-             className={"bg-green-success rounded text-white px-2 h-[32px] ml-2"}
-             onClick={onSaveResultSearch}
-           >
-             Lưu kết quả
-           </button>
+            <button
+              className={"bg-green-success rounded text-white px-2 h-[32px] ml-2"}
+              onClick={onSaveResultSearch}
+            >
+              Lưu kết quả
+            </button>
           )}
 
         </div>
@@ -1231,30 +1260,30 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                 tabActive === 1
                   ? totalRecordResponse
                   : tabActive === 2
-                  ? totalRecordSubject
-                  : totalRecordFile
+                    ? totalRecordSubject
+                    : totalRecordFile
               }
               totalPages={
                 tabActive === 1
                   ? totalPageResponse
                   : tabActive === 2
-                  ? totalPageSubject
-                  : totalPageFile
+                    ? totalPageSubject
+                    : totalPageFile
               }
               limit={50}
               hasNextPage={
                 tabActive === 1
                   ? hasNextPageResponse
                   : tabActive === 2
-                  ? hasNextPageSubject
-                  : hasNextPageFile
+                    ? hasNextPageSubject
+                    : hasNextPageFile
               }
               isFetching={
                 tabActive === 1
                   ? isFetchingResponse
                   : tabActive === 2
-                  ? isFetchingNextPageSubject
-                  : isFetchingFile
+                    ? isFetchingNextPageSubject
+                    : isFetchingFile
               }
               nextPageAction={() => {
                 switch (tabActive) {
@@ -1390,11 +1419,10 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                         <Link to={"/pcm/detail/" + item._id}>
                           <div className={"py-2"}>
                             <img
-                              src={`${process.env.REACT_APP_URL_S3_USER}/${
-                                item.lastComment
-                                  ? item.lastComment.author.image
-                                  : item.author.image
-                              }`}
+                              src={`${process.env.REACT_APP_URL_S3_USER}/${item.lastComment
+                                ? item.lastComment.author.image
+                                : item.author.image
+                                }`}
                               alt={"avatar"}
                               className={
                                 "w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"

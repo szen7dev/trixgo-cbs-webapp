@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, memo } from 'react';
 
 import CommentProvider from 'views/pcm/contexts/comment/comment.provider';
 import { RootCommentsList } from '../RootCommentsList';
@@ -50,7 +50,7 @@ const Comment: FC<Props> = ({
   )
 }
 
-export const CommentFull: FC<Props> = ({ hasLoadProvider = true, ...props }) => {
+export const CommentFull: FC<Props> = memo(({ hasLoadProvider = true, ...props }) => {
   if(hasLoadProvider) {
     return (
       <CommentProvider>
@@ -60,4 +60,6 @@ export const CommentFull: FC<Props> = ({ hasLoadProvider = true, ...props }) => 
   }
 
   return <Comment {...props} />
-}
+})
+
+CommentFull.displayName = 'CommentFull';
