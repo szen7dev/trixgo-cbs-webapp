@@ -87,6 +87,14 @@ const PcmRepository = {
         const { data } = await API.get<any>(
             `${pcmURL}/pcm_plan_reports/export-task-report?${convertObToUrl(payload)}`
         );
+        console.log({ data })
+        return data;
+    },
+
+    async downloadExcelTask(payload: any): Promise<any> {
+        const { data } = await API.get<any>(
+            `${pcmURL}/pcm_plan_tasks/download-excel?${convertObToUrl(payload)}`
+        );
         return data;
     },
 
