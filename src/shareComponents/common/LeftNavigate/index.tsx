@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useRef, useState} from "react";
+import React, { FC, useCallback, useEffect, useRef, useState } from "react";
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
 import mailIcon from "assets/images/icons8-secure-mail-48.svg";
 import chatIcon from "assets/images/icons8-chat-48.svg";
@@ -12,20 +12,20 @@ import { RootState } from "redux/reducer";
 import { setAmountMissMessage } from "redux/reducer/messages/ListConversation";
 import { UseListConversation } from "services/hooks/messages/useListConversation";
 import { usePcmPlanTaskNotification } from "services/hooks/pcm/usePcmDashboardV2";
-import {populates} from "../../../views/messages/shareComponents/layouts/MessagesLayoutV2";
-import {appendMessageToConversation, updateNewMessageToConversation} from "../../../redux/reducer/messages/ListMessage";
-import {pushMoreUnreadMessage} from "../../../redux/reducer/messages/UnreadMessages";
+import { populates } from "../../../views/messages/shareComponents/layouts/MessagesLayoutV2";
+import { appendMessageToConversation, updateNewMessageToConversation } from "../../../redux/reducer/messages/ListMessage";
+import { pushMoreUnreadMessage } from "../../../redux/reducer/messages/UnreadMessages";
 import Favico from "react-favico-js";
-// import { useGetListAppOfUser } from "services/hooks/auth/usePermissions";
+import { useGetListAppOfUser } from "services/hooks/auth/usePermissions";
 
 type Props = {
   handleMenuEvent: () => void;
 };
 export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
-  // const { listAppOfUser, refetchAppUsers } = useGetListAppOfUser();
-  const currentUser = localStorage.getItem("currentUser")??"{}";
+  const { listAppOfUser } = useGetListAppOfUser();
+  const currentUser = localStorage.getItem("currentUser") ?? "{}";
   const profileId = JSON.parse(currentUser)?._id;
-  const audioRef = useRef<HTMLAudioElement>(null)
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   const { pathname } = useLocation();
   const pathBreak = pathname.split("/");
@@ -66,7 +66,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
   const onReceiveMessage = (data: any) => {
     if (data?.infoMessage?.error) {
       // Alert.alert(t('notification'), data.infoMessage.message);
-      getListConversation({keyword: ""});
+      getListConversation({ keyword: "" });
       return;
     }
     dispatch(setAmountMissMessage(data.amountMissMessage))
@@ -96,9 +96,9 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
         }
       }));
       if (currentChat === data?.infoMessage?.conversation) {
-        dispatch(pushMoreUnreadMessage({conversationId: data?.infoMessage?.conversation, messagesId: [data?.infoMessage?._id]}));
+        dispatch(pushMoreUnreadMessage({ conversationId: data?.infoMessage?.conversation, messagesId: [data?.infoMessage?._id] }));
       }
-      if (!inSearchMode && currentChat === data?.infoMessage?.conversation && !isReviewOldMessage){
+      if (!inSearchMode && currentChat === data?.infoMessage?.conversation && !isReviewOldMessage) {
         setTimeout(() => {
           scrollToBottom();
         }, 100)
@@ -118,9 +118,22 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
   const scrollToBottom = () => {
     const conversationMessagesList = document.getElementById("conversation-messages-MessageList");
     if (conversationMessagesList) {
-      conversationMessagesList.scrollTo({top: conversationMessagesList.scrollHeight, behavior: "smooth" });
+      conversationMessagesList.scrollTo({ top: conversationMessagesList.scrollHeight, behavior: "smooth" });
     }
   };
+
+  const checkPermissionApp = useCallback((appID: string) => {
+    let isPermission = false;
+    if (listAppOfUser && listAppOfUser.length) {
+      for (let i = 0; i < listAppOfUser.length; i++) {
+        if (appID === listAppOfUser[i].app?._id) {
+          isPermission = true;
+          break;
+        }
+      }
+    }
+    return isPermission;
+  }, [listAppOfUser]);
 
   return (
     <div
@@ -136,94 +149,101 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
         <img className="w-4" src={menuIcon} alt="Menu" />
       </button>
 
-      <Link to={`/`} className={"flex flex-col items-center mb-3"}>
-        <div
-          className={
-            "px-4 py-1 rounded-full relative " +
+      {checkPermissionApp('5dfe4b9051dc622100bb9d89') ?
+        <Link to={`/`} className={"flex flex-col items-center mb-3"}>
+          <div
+            className={
+              "px-4 py-1 rounded-full relative " +
               ((firstRoute === "" || firstRoute === "pcm")
-              ? "bg-cbs-hightlight-right-navigate"
-              : "")
-          }
-        >
-          <img width={'20px'} src={mailIcon} alt={"Chủ đề"} />
-          {/*{*/}
-          {/*    totalNoti > 0 &&*/}
-          {data?.data?.amountUnreadTask && data?.data?.amountUnreadTask > 0 ? (
-            <span
-              className={
-                "absolute -top-1 right-1 min-w-5 w-5 h-5 text-xs inline-block border-2 text-center border-white rounded-full bg-negative text-white"
-              }
-            >
-              {data?.data?.amountUnreadTask > 10
-                ? "9+"
-                : data?.data?.amountUnreadTask}
-            </span>
-          ) : (
-            <></>
-          )}
-          {/*}*/}
-        </div>
-        <span className={"text-primary-gray mt-1"}>Chủ đề</span>
-      </Link>
-      <Link to={`/pm/projects`} className={"flex flex-col items-center mb-3"}>
-        <div
-          className={
-            "px-4 py-1 rounded-full relative " +
-            (firstRoute === "pm" ? "bg-cbs-hightlight-right-navigate" : "")
-          }
-        >
-          <img width={'20px'} src={projectIcon} alt={"Dự án"} />
-        </div>
-        <span className={"text-primary-gray mt-1"}>Dự án</span>
-      </Link>
-      <Link to={`/cmcs/home`} className={"flex flex-col items-center mb-3"}>
-        <div
-          className={
-            "px-4 py-1 rounded-full relative " +
-            (firstRoute === "cmcs"
-              ? "bg-cbs-hightlight-right-navigate"
-              : "")
-          }
-        >
-          <img width={'20px'} src={contractIcon} alt={"Hợp đồng"} />
-        </div>
-        <span className={"text-primary-gray mt-1"}>Hợp đồng</span>
-      </Link>
-      <Link to={`/document/home`} className={"flex flex-col items-center mb-3"}>
-        <div
-          className={
-            "px-4 py-1 rounded-full relative " +
-            (firstRoute === "document"
-              ? "bg-cbs-hightlight-right-navigate"
-              : "")
-          }
-        >
-          <img width={'20px'} src={fileIcon} alt={"Hồ sơ"} />
-        </div>
-        <span className={"text-primary-gray mt-1"}>Hồ sơ</span>
-      </Link>
-      <Link to={`/messages`} className={"flex flex-col items-center mb-3"}>
-        <div
-          className={
-            "px-4 py-1 rounded-full relative " +
-            (firstRoute === "messages"
-              ? "bg-cbs-hightlight-right-navigate"
-              : "")
-          }
-        >
-          <img width={'20px'} src={chatIcon} alt={"Chat"} />
-          {amountMissMessage > 0 && (
-            <span
-              className={
-                "absolute -top-1 right-1 min-w-5 w-5 h-5 text-xs inline-block border-2 text-center border-white rounded-full bg-negative text-white"
-              }
-            >
-              {amountMissMessage <= 10 ? amountMissMessage : "9+"}
-            </span>
-          )}
-        </div>
-        <span className={"text-primary-gray mt-1"}>Chat</span>
-      </Link>
+                ? "bg-cbs-hightlight-right-navigate"
+                : "")
+            }
+          >
+            <img width={'20px'} src={mailIcon} alt={"Chủ đề"} />
+            {/*{*/}
+            {/*    totalNoti > 0 &&*/}
+            {data?.data?.amountUnreadTask && data?.data?.amountUnreadTask > 0 ? (
+              <span
+                className={
+                  "absolute -top-1 right-1 min-w-5 w-5 h-5 text-xs inline-block border-2 text-center border-white rounded-full bg-negative text-white"
+                }
+              >
+                {data?.data?.amountUnreadTask > 10
+                  ? "9+"
+                  : data?.data?.amountUnreadTask}
+              </span>
+            ) : (
+              <></>
+            )}
+            {/*}*/}
+          </div>
+          <span className={"text-primary-gray mt-1"}>Chủ đề</span>
+        </Link> : <></>
+      }
+      {checkPermissionApp('5dfe4b9051dc622100bb9d89') ?
+        <Link to={`/pm/projects`} className={"flex flex-col items-center mb-3"}>
+          <div
+            className={
+              "px-4 py-1 rounded-full relative " +
+              (firstRoute === "pm" ? "bg-cbs-hightlight-right-navigate" : "")
+            }
+          >
+            <img width={'20px'} src={projectIcon} alt={"Dự án"} />
+          </div>
+          <span className={"text-primary-gray mt-1"}>Dự án</span>
+        </Link> : <></>}
+
+      {checkPermissionApp('6131d6f83f4b736dc93253b2') ?
+        <Link to={`/cmcs/home`} className={"flex flex-col items-center mb-3"}>
+          <div
+            className={
+              "px-4 py-1 rounded-full relative " +
+              (firstRoute === "cmcs"
+                ? "bg-cbs-hightlight-right-navigate"
+                : "")
+            }
+          >
+            <img width={'20px'} src={contractIcon} alt={"Hợp đồng"} />
+          </div>
+          <span className={"text-primary-gray mt-1"}>Hợp đồng</span>
+        </Link> : <></>}
+      {checkPermissionApp('5e47867080019357cce04746') ?
+        <Link to={`/document/home`} className={"flex flex-col items-center mb-3"}>
+          <div
+            className={
+              "px-4 py-1 rounded-full relative " +
+              (firstRoute === "document"
+                ? "bg-cbs-hightlight-right-navigate"
+                : "")
+            }
+          >
+            <img width={'20px'} src={fileIcon} alt={"Hồ sơ"} />
+          </div>
+          <span className={"text-primary-gray mt-1"}>Hồ sơ</span>
+        </Link> : <></>}
+      {checkPermissionApp('5dfe4c1b51dc622100bb9d8f') ?
+        <Link to={`/messages`} className={"flex flex-col items-center mb-3"}>
+          <div
+            className={
+              "px-4 py-1 rounded-full relative " +
+              (firstRoute === "messages"
+                ? "bg-cbs-hightlight-right-navigate"
+                : "")
+            }
+          >
+            <img width={'20px'} src={chatIcon} alt={"Chat"} />
+            {amountMissMessage > 0 && (
+              <span
+                className={
+                  "absolute -top-1 right-1 min-w-5 w-5 h-5 text-xs inline-block border-2 text-center border-white rounded-full bg-negative text-white"
+                }
+              >
+                {amountMissMessage <= 10 ? amountMissMessage : "9+"}
+              </span>
+            )}
+          </div>
+          <span className={"text-primary-gray mt-1"}>Chat</span>
+        </Link> : <></>}
       {/* <Link to={`/human/home`} className={"flex flex-col items-center mb-3"}>
                 <div className={"px-4 py-1 rounded-full relative " + (pathname.includes("/messages") ? "bg-cbs-hightlight-right-navigate" : "")}>
                     <img src={peopleIcon} alt={"Nhân sự"}/>
@@ -237,8 +257,8 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
                 <span className={"text-primary-gray mt-1"}>Media</span>
             </Link> */}
 
-      <audio src={"/sounds/messages/teaser.mp3"} ref={audioRef}/>
-      <Favico counter={amountMissMessage}/>
+      <audio src={"/sounds/messages/teaser.mp3"} ref={audioRef} />
+      <Favico counter={amountMissMessage} />
     </div>
   );
 };

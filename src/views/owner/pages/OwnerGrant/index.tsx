@@ -1,7 +1,6 @@
 import React, { FC, useState, useEffect } from "react";
 import cn from "classnames";
 import moment from "moment";
-import { useLocation } from "react-router-dom";
 
 import { ModalContainer } from "shareComponents/common";
 import { ModalCreateOrUpdateAppCompany } from 'views/support/shareComponents/common';
@@ -12,7 +11,6 @@ import { useAppCompany } from 'services/hooks/apps/useAppCompany';
 import { useApp } from 'services/hooks/apps/useApp';
 
 export const OwnerGrantPage: FC = () => {
-  const location = useLocation();
   const currentUser = localStorage.getItem("currentUser") ?? "{}";
   const profile = JSON.parse(currentUser);
   const [companySelected, setCompanySelected] = useState('');
@@ -20,7 +18,6 @@ export const OwnerGrantPage: FC = () => {
   const [modalCreateOrUpdateAppCompany, setModalCreateOrUpdateAppCompany] = useState<boolean>(false);
   const [listAppsCompany, setListAppsCompany] = useState<any[]>([]);
   const [listChecked, setListChecked] = useState<any[]>([]);
-  const [isUpdate, setIsUpdate] = useState<boolean>(false);
   const [initialValues, setInitialValues] = useState({
     appCompanyID: "",
     company: "",
@@ -38,26 +35,6 @@ export const OwnerGrantPage: FC = () => {
   });
 
   const toggleModalCreateOrUpdateAppCompany = () => setModalCreateOrUpdateAppCompany(!modalCreateOrUpdateAppCompany);
-
-  const handleChangeCheckBox = (appCompany: any, event: React.ChangeEvent<HTMLInputElement>) => {
-    // App đã tồn tại trong công ty
-    const hasCheckedAppUpdate = listChecked.filter(item => item._id);
-
-    if (event.currentTarget.checked) {
-      setListChecked(previousValue => ([...previousValue, appCompany]));
-
-      if (appCompany._id || hasCheckedAppUpdate.length) {
-        setIsUpdate(true);
-      }
-    } else {
-      const listCheckedNew = listChecked.filter(item => item.app?._id !== appCompany.app?._id);
-      setListChecked(listCheckedNew);
-
-      if (hasCheckedAppUpdate.length === 1 && appCompany._id) {
-        setIsUpdate(false);
-      }
-    }
-  }
 
   const handleConfirmCreateOrUpdateAppCompany = (values: any) => {
     const { _id, app, company, maxCount, maxData, startTime, endTime } = values;
