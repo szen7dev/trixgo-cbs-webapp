@@ -50,24 +50,6 @@ export const HomeLeftMenuContent:FC = () => {
         //     route: '/pcm/send'
         // },
         {
-            label: "Thầu và mua sắm",
-            icon: biddingImage,
-            count: 0,
-            route: '/pcm/bidding'
-        },
-        {
-            label: "Báo cáo, giao nộp",
-            icon: deliveryImage,
-            count: 0,
-            route: '/pcm/delivery'
-        },
-        {
-            label: "Thanh toán",
-            icon: paymentImage,
-            count: 0,
-            route: '/pcm/payment'
-        },
-        {
             label: "Việc của tôi",
             icon: mailOutLineIcon,
             count: data?.data?.amountMyTask || 0,
@@ -90,6 +72,24 @@ export const HomeLeftMenuContent:FC = () => {
             icon: linkIcon,
             count: 0,
             route: '/pcm/related'
+        },
+        // {
+        //     label: "Thầu và mua sắm",
+        //     icon: biddingImage,
+        //     count: 0,
+        //     route: '/pcm/bidding'
+        // },
+        {
+            label: "Báo cáo, giao nộp",
+            icon: deliveryImage,
+            count: 0,
+            route: '/pcm/delivery'
+        },
+        {
+            label: "Thanh toán",
+            icon: paymentImage,
+            count: 0,
+            route: '/pcm/payment'
         },
         {
             label: "Việc nháp",
