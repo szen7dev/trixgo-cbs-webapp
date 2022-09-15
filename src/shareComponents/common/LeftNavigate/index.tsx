@@ -126,7 +126,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
     let isPermission = false;
     if (listAppOfUser && listAppOfUser.length) {
       for (let i = 0; i < listAppOfUser.length; i++) {
-        if (appID === listAppOfUser[i].app?._id) {
+        if (appID === listAppOfUser[i]?.app?._id) {
           isPermission = true;
           break;
         }
