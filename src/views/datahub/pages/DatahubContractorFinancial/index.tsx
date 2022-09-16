@@ -4,8 +4,8 @@ import Skeleton from 'react-loading-skeleton';
 
 // ======= HOOKS ========
 import useQueryFinancials from "services/hooks/datahub/financial/useQueryFinancials";
-import { useAuth } from "services/hooks/auth/useAuth";
 import useCheckedList from "services/hooks/ppt/useCheckedList";
+import { useAuth } from "services/hooks/auth/useAuth";
 
 // ======= GLOBAL COMPONENTS ========
 import { ButtonCreate, GroupActions } from "shareComponents/common";

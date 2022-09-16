@@ -5,8 +5,8 @@ import { useContractorCompany } from 'views/datahub/contexts/Company';
 import ModalExtraLarge from 'shareComponents/common/ModalContainer/components/ModalExtraLarge';
 import { DatahubProfile } from 'typings/datahub/profile';
 import { ContextMenu } from 'shareComponents/common/ContextMenu';
-import { useAuth } from "services/hooks/auth/useAuth";
 import { buildDatahubProfilesKey } from 'apis/datahub/profiles';
+import { useAuth } from "services/hooks/auth/useAuth";
 
 type Props = {
 
