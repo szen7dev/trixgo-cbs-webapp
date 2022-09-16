@@ -26,7 +26,7 @@ type DatahubPackage = {
   };
   amount: 1;
 };
-type ParamsGetDatahubPackage = { fieldID?: string; areaID?: string };
+type ParamsGetDatahubPackage = { fieldID?: string; areaID?: string; contractorID?: string };
 async function getDatahubPackageList(
   option: 2,
   params: ParamsGetDatahubPackage

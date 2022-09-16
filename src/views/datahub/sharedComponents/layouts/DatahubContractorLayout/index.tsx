@@ -1,20 +1,17 @@
-import React, { FC, useContext } from 'react'
-import AuthContext from 'services/contexts/Auth'
-import Skeleton from 'react-loading-skeleton';
 import moment from "moment";
+import { FC } from 'react';
+import Skeleton from 'react-loading-skeleton';
 
 //
 import Wallethub from '../../common/Wallethub';
 
 //
-import iconVideoPlaylist from 'assets/images/icons8-video-playlist-90 1.png'
+import iconVideoPlaylist from 'assets/images/icons8-video-playlist-90 1.png';
 import converPage from "assets/images/trx-construction-cover2.svg";
-import { NavLink, useParams, generatePath } from 'react-router-dom';
+import { generatePath, NavLink, useParams } from 'react-router-dom';
 
-import SearchIcon from 'assets/icons/SearchIcon';
-import DotsHorizontalIcon from 'assets/icons/DotsHorizontalIcon';
-import iconChat from 'assets/images/icons8-chat-room-100 1.png'
-import iconRss from 'assets/images/icons8-rss-100 (1) 1.png'
+import DatahubRepository from 'apis/datahub';
+import { useQuery } from 'react-query';
 import { ContractorProvider, useContractorCompany } from 'views/datahub/contexts/Company';
 
 interface Props {
@@ -24,6 +21,14 @@ const DatahubContractorLayoutDetail: FC<Props> = ({ children, navLinks }) => {
 	const { data, isLoading } = useContractorCompany();
 
 	const params = useParams<{ id: string }>();
+  const datahubPackages = useQuery(
+    ["datahub_packages", 2, params.id],
+    () => DatahubRepository.getDatahubPackageList(2, { contractorID: params.id }),
+    {
+      enabled: Boolean(params.id),
+    }
+  );
+
 	return (
 		<div id="datahub-contractor-detail" className='h-full w-full overflow-scroll bg-white'>
 			<div className='w-full max-w-[1185px] mx-auto space-y-10'>
@@ -37,9 +42,9 @@ const DatahubContractorLayoutDetail: FC<Props> = ({ children, navLinks }) => {
 					<div className='flex border-cbs-border border-b-[0.5px]'>
 						<div className='w-4/12'>
 							<div className='flex w-full justify-around items-center h-full'>
-								<Wallethub title="125" description='Dịch vụ' />
-								<Wallethub title="125" description='Dự án' />
-								<Wallethub title="125" description='Hợp đồng' />
+								<Wallethub title={datahubPackages.data?.data.number1||0} description='Dịch vụ' />
+								<Wallethub title={datahubPackages.data?.data.number2||0} description='Dự án' />
+								<Wallethub title={datahubPackages.data?.data.number3||0} description='Hợp đồng' />
 							</div>
 						</div>
 						<div className='w-4/12 pb-4'>
@@ -73,7 +78,7 @@ const DatahubContractorLayoutDetail: FC<Props> = ({ children, navLinks }) => {
 										Xem video giới thiệu
 									</button>
 								</div>
-								<Wallethub title="32" description='Khách hàng' />
+								<Wallethub title={datahubPackages.data?.data.number4||0} description='Khách hàng' />
 							</div>
 						</div>
 					</div>

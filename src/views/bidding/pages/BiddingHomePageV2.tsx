@@ -1,44 +1,22 @@
-import React, { FC, Fragment, useState } from "react";
-import SwiperCore, { Navigation } from "swiper";
-import { Listbox, Transition } from "@headlessui/react";
-import { debounce } from "lodash";
-import iconBack from "assets/images/icon-back-gray.svg";
 import companyIcon from "assets/images/company_default.png";
-import {
-  useLocation,
-  generatePath,
-  useRouteMatch,
-  Link,
-  useHistory,
-  useParams,
-} from "react-router-dom";
+import iconBack from "assets/images/icon-back-gray.svg";
+import { debounce } from "lodash";
+import { FC, Fragment, useState } from "react";
+import { generatePath, Link, useHistory, useParams } from "react-router-dom";
 
-import { useDatahubArea, useDatahubCompanies, useDatahubType } from "services/hooks/datahub";
+import { useDatahubArea, useDatahubCompanies } from "services/hooks/datahub";
 
+import DatahubRepository from "apis/datahub";
 import iconDatabase from "assets/images/icons8-database-96 2.png";
-import classNames from "classnames";
+import { useQuery } from "react-query";
 import useInfiniteDatahubTypes from "services/hooks/datahub/types/useInfiniteDatahubTypes";
-import { DatahubTypes, DatahubTypesBase } from "typings/datahub/datahubtypes";
-import Autocomplete from "shareComponents/common/Form/Autocomplete/Autocomplete";
 import { CustomAutoComplete } from "shareComponents/common/Form/CustomForm";
 import { DatahubArea } from "typings/datahub/area";
-import { useQuery } from "react-query";
-import DatahubRepository from "apis/datahub";
+import { DatahubTypes, DatahubTypesBase } from "typings/datahub/datahubtypes";
 
 type Props = {
   //
 };
-
-SwiperCore.use([Navigation]);
-
-const people = [
-  { name: "Wade Cooper" },
-  { name: "Arlene Mccoy" },
-  { name: "Devon Webb" },
-  { name: "Tom Cook" },
-  { name: "Tanya Fox" },
-  { name: "Hellen Schmidt" },
-];
 
 const IconSearch = (...rest: any) => {
   return (
@@ -110,7 +88,7 @@ const BiddingHomePageV2: FC<Props> = (props) => {
   );
 
   const datahubPackages = useQuery(
-    ["datahub_packages"],
+    ["datahub_packages", 1, type?._id, area?._id],
     () => DatahubRepository.getDatahubPackageList(1, { fieldID: type?._id, areaID: area?._id }),
     {
       enabled: Boolean(id) && Boolean(type || area),
