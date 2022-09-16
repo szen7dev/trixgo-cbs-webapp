@@ -13,8 +13,12 @@ import { useContractorCompany } from "views/datahub/contexts/Company";
 import { useRowSelect, useTable } from "react-table";
 import { TableWithoutContext } from "shareComponents/common/Table";
 import getColumnsContractorContract from "views/datahub/utils/getColumnsContractorContract";
+import { useAuth } from "services/hooks/auth/useAuth";
+
+const supporters = ['hiepnh@pgipartner.com','toannd@trixgo.com','tungtt@pgipartner.com','thupt@pgipartner.com','hapt@pgipartner.com']
 
 const DatahubContractorContract: FC = () => {
+	const { user } = useAuth();
 	const [show, setShow] = useState(false);
 	const [keyword, setKeyword] = useState('');
 
@@ -50,15 +54,20 @@ const DatahubContractorContract: FC = () => {
 						onSelectValue={setPkg}
 					/> */}
 					{/* <DropdownFilterButton /> */}
-					<GroupActions
-						className="flex items-center flex-1"
-						onClickPencil={() => { setShow(true); setSelected(instance.selectedFlatRows[0]) }}
-						disabled={{
-							pencil: instance.selectedFlatRows.length !== 1,
-						}}
-					/>
-
-					<ButtonCreate onClick={() => { setShow(!show); setSelected({}) }} />
+					{supporters.includes(`${user?.email}`) ?
+						<GroupActions
+							className="flex items-center flex-1"
+							onClickPencil={() => { setShow(true); setSelected(instance.selectedFlatRows[0]) }}
+							disabled={{
+								pencil: instance.selectedFlatRows.length !== 1,
+							}}
+						/>
+						: <></>
+					}
+					{supporters.includes(`${user?.email}`) ?
+						<ButtonCreate onClick={() => { setShow(!show); setSelected({}) }} />
+						: <></>
+					}					
 					{/* <ButtonMore /> */}
 				</div>
 				<div className="overflow-auto relative">

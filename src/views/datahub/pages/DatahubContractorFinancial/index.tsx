@@ -5,6 +5,7 @@ import Skeleton from 'react-loading-skeleton';
 // ======= HOOKS ========
 import useQueryFinancials from "services/hooks/datahub/financial/useQueryFinancials";
 import useCheckedList from "services/hooks/ppt/useCheckedList";
+import { useAuth } from "services/hooks/auth/useAuth";
 
 // ======= GLOBAL COMPONENTS ========
 import { ButtonCreate, GroupActions } from "shareComponents/common";
@@ -25,7 +26,10 @@ import iconPageUp from 'assets/images/icons8-upload-document-100 1.png';
 import { DatahubFinancial } from "typings/datahub/financial";
 import { formatNumber } from "utils/ppt";
 
+const supporters = ['hiepnh@pgipartner.com','toannd@trixgo.com','tungtt@pgipartner.com','thupt@pgipartner.com','hapt@pgipartner.com']
+
 const DatahubContractorFinancial: FC = () => {
+	const { user } = useAuth();
 	const [show, setShow] = useState(false);
 	const [selected, setSelected] = useState<DatahubFinancial | Record<string, any>>({});
 
@@ -50,15 +54,21 @@ const DatahubContractorFinancial: FC = () => {
 						onSelectValue={setPkg}
 					/> */}
 					{/* <DropdownFilterButton /> */}
-					<GroupActions
-						className="flex items-center flex-1"
-						onClickPencil={() => { setShow(true); setSelected(checked[0]) }}
-						disabled={{
-							pencil: checked.length !== 1,
-						}}
-					/>
 
-					<ButtonCreate onClick={() => { setShow(!show); setSelected({}) }} />
+					{supporters.includes(`${user?.email}`) ?
+						<GroupActions
+							className="flex items-center flex-1"
+							onClickPencil={() => { setShow(true); setSelected(checked[0]) }}
+							disabled={{
+								pencil: checked.length !== 1,
+							}}
+						/>
+						: <></>
+					}
+					{supporters.includes(`${user?.email}`) ?
+						<ButtonCreate onClick={() => { setShow(!show); setSelected({}) }} />
+						: <></>
+					}					
 					{/* <ButtonMore /> */}
 				</div>
 				<div className="overflow-auto relative">

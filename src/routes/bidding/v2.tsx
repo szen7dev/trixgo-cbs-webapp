@@ -30,7 +30,7 @@ const navLinks = [
   { title: "Dịch vụ", url: prefix + "/home/contractor/:id/service" },
   { title: "Tài chính", url: prefix + "/home/contractor/:id/financial" },
   { title: "Hợp đồng", url: prefix + "/home/contractor/:id/contract" },
-  { title: "HSNL", url: prefix + "/home/contractor/:id/profile" },
+  { title: "Hồ sơ năng lực", url: prefix + "/home/contractor/:id/profile" },
 ];
 
 const BiddingRouter: FC = () => {
