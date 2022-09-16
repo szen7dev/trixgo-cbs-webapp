@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { Fragment, useState, PropsWithChildren, useEffect } from "react";
 import { Listbox, Transition } from "@headlessui/react";
+import useValueOrState from "services/hooks/useValueOrState";
 
 type Props<T extends Record<string, any>> = {
   // title: string;
   // name: string;
   attribute?: string;
-  valueAttribute?: string;
   containerClassName?: string;
   wrapperClassName?: string;
   icon?: React.ElementType;
@@ -18,11 +18,12 @@ type Props<T extends Record<string, any>> = {
   initialData?: string;
   placeholder?: string;
   emptyMessage?: string;
+  value?: T;
   renderValue?: (value: T) => string;
   onChange?: (value: string) => void;
   onChangeValue?: (value: T) => void;
   onScroll?: (e: any) => void;
-} & Omit<React.ComponentProps<"input">, "onChange">;
+} & Omit<React.ComponentProps<"input">, "onChange" | "value">;
 
 const DefaultIcon = () => {
   return (
@@ -47,7 +48,6 @@ function CustomAutoComplete<T extends Record<string, any>>({
   attribute = "name",
   containerClassName = "relative focus-within:border-cbs-primary border-cbs-border border-0.5",
   wrapperClassName,
-  valueAttribute,
   data,
   initialData = "",
   onChange,
@@ -57,12 +57,20 @@ function CustomAutoComplete<T extends Record<string, any>>({
   icon: Icon = DefaultIcon,
   emptyMessage = "Không có dữ liệu phù hợp",
   onFocus,
+  value,
   ...rest
 }: PropsWithChildren<Props<T>>): JSX.Element {
-  const [selected, setSelected] = useState<null | any>();
+  const [selected, setSelected] = useValueOrState<null | any>(value);
+
   const [search, setSearch] = useState(initialData);
   const [isOpen, setIsOpen] = useState(false);
   const ref = React.useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (value) {
+      setSearch((renderValue ? renderValue(value) : value[attribute]) || "");
+    }
+  }, [value, attribute, renderValue]);
 
   const dataFiltered = server
     ? data

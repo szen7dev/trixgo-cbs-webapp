@@ -1,44 +1,24 @@
-import React, { FC, Fragment, useState } from "react";
-import SwiperCore, { Navigation } from "swiper";
-import { Listbox, Transition } from "@headlessui/react";
-import { debounce } from "lodash";
-import iconBack from "assets/images/icon-back-gray.svg";
 import companyIcon from "assets/images/company_default.png";
-import {
-  useLocation,
-  generatePath,
-  useRouteMatch,
-  Link,
-  useHistory,
-  useParams,
-} from "react-router-dom";
+import iconBack from "assets/images/icon-back-gray.svg";
+import { debounce } from "lodash";
+import { FC, Fragment, useState } from "react";
+import { generatePath, Link, useHistory, useLocation, useParams } from "react-router-dom";
 
-import { useDatahubArea, useDatahubCompanies, useDatahubType } from "services/hooks/datahub";
+import { useDatahubArea, useDatahubCompanies } from "services/hooks/datahub";
 
+import DatahubRepository from "apis/datahub";
 import iconDatabase from "assets/images/icons8-database-96 2.png";
-import classNames from "classnames";
+import { useQuery } from "react-query";
 import useInfiniteDatahubTypes from "services/hooks/datahub/types/useInfiniteDatahubTypes";
-import { DatahubTypes, DatahubTypesBase } from "typings/datahub/datahubtypes";
-import Autocomplete from "shareComponents/common/Form/Autocomplete/Autocomplete";
 import { CustomAutoComplete } from "shareComponents/common/Form/CustomForm";
 import { DatahubArea } from "typings/datahub/area";
-import { useQuery } from "react-query";
-import DatahubRepository from "apis/datahub";
+import { DatahubTypes, DatahubTypesBase } from "typings/datahub/datahubtypes";
+import { useEffect } from "react";
+import { DatahubType } from "views/datahub/pages";
 
 type Props = {
   //
 };
-
-SwiperCore.use([Navigation]);
-
-const people = [
-  { name: "Wade Cooper" },
-  { name: "Arlene Mccoy" },
-  { name: "Devon Webb" },
-  { name: "Tom Cook" },
-  { name: "Tanya Fox" },
-  { name: "Hellen Schmidt" },
-];
 
 const IconSearch = (...rest: any) => {
   return (
@@ -60,12 +40,17 @@ const IconSearch = (...rest: any) => {
 const BiddingHomePageV2: FC<Props> = (props) => {
   const { id } = useParams<{ id?: string }>();
   const history = useHistory();
+  const location = useLocation<DatahubTypes>();
 
   const [company, setCompany] = useState("");
   const [searchType, setSearchType] = useState("");
   const [searchArea, setSearchArea] = useState("");
   const [type, setType] = useState<DatahubTypes>();
   const [area, setArea] = useState<DatahubArea>();
+
+  useEffect(() => {
+    if (location.state) setType(location.state);
+  }, [location.state]);
 
   // Important for each page
   const key = id ? ["company", company, id] : ["company", company];
@@ -110,8 +95,8 @@ const BiddingHomePageV2: FC<Props> = (props) => {
   );
 
   const datahubPackages = useQuery(
-    ["datahub_packages"],
-    () => DatahubRepository.getDatahubPackageList(1, { fieldID: type?._id, areaID: area?._id }),
+    ["datahub_packages", 1, id, area?._id],
+    () => DatahubRepository.getDatahubPackageList(1, { fieldID: id, areaID: area?._id }),
     {
       enabled: Boolean(id) && Boolean(type || area),
     }
@@ -119,7 +104,7 @@ const BiddingHomePageV2: FC<Props> = (props) => {
 
   // Handler
   const handleChangeRoute = (d: DatahubTypesBase) => {
-    history.push("/bidding/home/tag/" + d._id);
+    history.push("/bidding/home/tag/" + d._id, d);
   };
 
   const handleSearch = () => {
@@ -167,6 +152,7 @@ const BiddingHomePageV2: FC<Props> = (props) => {
                   server
                   data={datahubTypes.data?.pages.flatMap((p) => p.data.listRecords) || []}
                   onScroll={console.log}
+                  value={type}
                   onChange={debounce((keyword) => {
                     setType(undefined);
                     if (!keyword) {
@@ -174,7 +160,10 @@ const BiddingHomePageV2: FC<Props> = (props) => {
                     }
                     setSearchType(keyword);
                   }, 300)}
-                  onChangeValue={setType}
+                  onChangeValue={(type) => {
+                    setType(type);
+                    history.replace("/bidding/home/tag/" + type._id);
+                  }}
                   renderValue={(v) => v.name}
                   attribute="types"
                   wrapperClassName=""
@@ -272,7 +261,7 @@ const BiddingHomePageV2: FC<Props> = (props) => {
               >
                 <img src={iconBack} alt={"----"} className={"w-[18px]"} />
               </button>
-              <div className="text-[22px] leading-6">Vật liệu hoàn thiện-gạch</div>
+              <div className="text-[22px] leading-6">{type?.name}</div>
             </div>
             <div className="flex flex-wrap text-cbs-subtext pt-1 text-medium pl-3.5 pr-1.5">
               {datahubPackages.data?.data.map((pack, idx) => {
