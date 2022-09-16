@@ -50,12 +50,12 @@ const DatahubContractorFinancial: FC = () => {
 			<div className="bg-white border-cbs-border border-[0.5px]">
 				<div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1">
 					<span className="text-x-large mr-7">Năng lực tài chính</span>
-					<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={() => 1} />
-					<DocumentDropdown
+					{/* <SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={() => 1} /> */}
+					{/* <DocumentDropdown
 						data={pkgs}
 						value={pkg.title}
 						onSelectValue={setPkg}
-					/>
+					/> */}
 					{/* <DropdownFilterButton /> */}
 					<GroupActions
 						className="flex items-center flex-1"
@@ -66,7 +66,7 @@ const DatahubContractorFinancial: FC = () => {
 					/>
 
 					<ButtonCreate onClick={() => { setShow(!show); setSelected({}) }} />
-					<ButtonMore />
+					{/* <ButtonMore /> */}
 				</div>
 				<div className="overflow-auto relative">
 					<table className="text-black text-medium border-separate space-x-0 space-y-0 w-full" style={{ borderSpacing: 0 }}>

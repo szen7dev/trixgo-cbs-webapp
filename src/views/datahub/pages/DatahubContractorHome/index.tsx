@@ -31,7 +31,7 @@ const DatahubContractorHome: FC<Props> = (props) => {
 	const [selected, setSelected] = useState<typeof people[0] | null>(null);
 	const [company, setCompany] = useState('');
 	const { data: listCompanies, fetchNextPage, hasNextPage, isLoading } = useDatahubCompanies(['company', company], {
-		select: '_id name sign image address',
+		select: '_id name sign image address description birthDay',
 		limit: 24,
 		keyword: company
 	}, { enable: Boolean(company.length) });

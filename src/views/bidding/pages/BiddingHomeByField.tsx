@@ -52,7 +52,7 @@ const BiddingHomeByField: FC<Props> = (props) => {
   } = useDatahubCompanies(
     ["company", company],
     {
-      select: "_id name sign image address",
+      select: "_id name sign image address description birthDay",
       limit: 24,
       keyword: company,
     },
