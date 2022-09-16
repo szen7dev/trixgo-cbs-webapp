@@ -14,7 +14,9 @@ import { CustomAutoComplete } from "shareComponents/common/Form/CustomForm";
 import { DatahubArea } from "typings/datahub/area";
 import { DatahubTypes, DatahubTypesBase } from "typings/datahub/datahubtypes";
 import { useEffect } from "react";
-import { DatahubType } from "views/datahub/pages";
+import { buildKeyDatahubPackage } from "apis/datahub/package";
+import { buildDatahubTypeKey } from "apis/datahub/types";
+import { buildDatahubAreaKey } from "apis/datahub/area";
 
 type Props = {
   //
@@ -71,9 +73,9 @@ const BiddingHomePageV2: FC<Props> = (props) => {
   );
 
   const datahubAreas = useDatahubArea(
-    ["area", searchArea],
+    buildDatahubAreaKey({ keyword: searchArea, limit: 20, populates: "multiple" }),
     {
-      select: "_id name parent",
+      select: "_id name parent level",
       limit: 20,
       keyword: searchArea,
       populates: JSON.stringify({
@@ -85,18 +87,24 @@ const BiddingHomePageV2: FC<Props> = (props) => {
     { enable: true }
   );
 
+  const selectTypes = "_id name description numberOfContractors numberOfPosts numverOfViews";
   const datahubTypes = useInfiniteDatahubTypes(
-    ["datahub_types", searchType],
+    buildDatahubTypeKey({ keyword: searchType, select: selectTypes }),
     {
       keyword: searchType,
-      select: "_id name description numberOfContractors numberOfPosts numverOfViews",
+      select: selectTypes,
     },
     { enable: true }
   );
 
   const datahubPackages = useQuery(
-    ["datahub_packages", 1, id, area?._id],
-    () => DatahubRepository.getDatahubPackageList(1, { fieldID: id, areaID: area?._id }),
+    buildKeyDatahubPackage({ mode: 1, areaID: area?._id, fieldID: id, level: area?.level }),
+    () =>
+      DatahubRepository.getDatahubPackageList(1, {
+        fieldID: id,
+        areaID: area?._id,
+        level: area?.level,
+      }),
     {
       enabled: Boolean(id) && Boolean(type || area),
     }
@@ -184,7 +192,9 @@ const BiddingHomePageV2: FC<Props> = (props) => {
                     setSearchArea(keyword);
                   }, 300)}
                   onChangeValue={setArea}
-                  renderValue={(v) => v.name}
+                  renderValue={(v) =>
+                    v.name + ", " + (v.parent as any).name + ", " + (v.parent as any).parent.name
+                  }
                   attribute="area"
                   wrapperClassName=""
                   className="w-full h-full py-2.5 px-3 focus:outline-none text-medium"
@@ -200,7 +210,7 @@ const BiddingHomePageV2: FC<Props> = (props) => {
             </div>
           </div>
         </div>
-        {!company && !id ? (
+        {!company && !type && !area ? (
           <div className="mt-10">
             <div className="flex px-3">
               <div className="pl-12 py-2 pr-1 border border-cbs-border rounded-cbs-sm relative">

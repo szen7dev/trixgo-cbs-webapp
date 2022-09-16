@@ -4,47 +4,20 @@ import API from "../repository";
 // Convert Object sang URL query => khi client truyền lên
 // import { convertObToUrl } from "utils";
 // Khai báo chính xác kiểu trả về nếu biết
-import { ResponseCreate, ResponseData, ResponseList } from "typings/apis/response";
+import { ResponseCreate, ResponseList } from "typings/apis/response";
 import { DatahubPrams } from "typings/datahub/api";
-import { DatahubTypes, DatahubTypesParams, DatahubTypesBody } from "typings/datahub/datahubtypes";
-import { DatahubFinancial, DatahubFinancialBody } from "typings/datahub/financial";
-import { DatahubContract, DatahubContractBody } from "typings/datahub/contract";
-import { DatahubProjects, DatahubProjectsBody } from "typings/datahub/projects";
-import { DatahubProfile, DatahubProfileBody } from "typings/datahub/profile";
-import { DatahubCompanies } from "typings/datahub/company";
 import { DatahubArea } from "typings/datahub/area";
+import { DatahubCompanies } from "typings/datahub/company";
+import { DatahubContract, DatahubContractBody } from "typings/datahub/contract";
+import { DatahubTypes, DatahubTypesBody, DatahubTypesParams } from "typings/datahub/datahubtypes";
+import { DatahubFinancial, DatahubFinancialBody } from "typings/datahub/financial";
+import { DatahubProfile, DatahubProfileBody } from "typings/datahub/profile";
+import { DatahubProjects, DatahubProjectsBody } from "typings/datahub/projects";
 
-type DatahubPackage = {
-  _id: {
-    contractor: {
-      _id: string;
-      name: string;
-      address: string;
-      sign: string;
-      image: string;
-    };
-  };
-  amount: 1;
-};
-type ParamsGetDatahubPackage = { fieldID?: string; areaID?: string; contractorID?: string };
-async function getDatahubPackageList(
-  option: 2,
-  params: ParamsGetDatahubPackage
-): Promise<ResponseData<{ number1: number; number2: number; number3: number; number4: number }>>;
-async function getDatahubPackageList(
-  option: 1,
-  params: ParamsGetDatahubPackage
-): Promise<ResponseData<DatahubPackage[]>>;
-async function getDatahubPackageList(option: number, params: ParamsGetDatahubPackage) {
-  const { data } = await API.get<ResponseData<any>>(
-    `${url}/datahub_packages/get-list-by-property`,
-    { params: { option, ...params } }
-  );
-  return data;
-}
+import { getDatahubPackageList } from "./package";
 
 // Đường dẫn Endpoint
-const url = "/api/datahub";
+export const url = "/api/datahub";
 const DatahubRepository = {
   // ==== DatahubTypes ====
   async getDatahubType<T = undefined>(params: { datahubTypeID: string } & DatahubTypesParams) {

@@ -11,14 +11,10 @@ type Options = {
   refetchOnMount?: boolean;
 };
 
-const useQueryFinancials = (
-  props: Props,
-  options: Options = { refetchOnMount: false }
-) => {
+const useQueryFinancials = (props: Props, options: Options = { refetchOnMount: false }) => {
   return useQueryCustom(
-    ["datahub_financials", props?.keyword],
-    ({ cursor }) =>
-      DatahubRepository.getDatahubFinancialList({ ...props, lastestID: cursor }),
+    ["datahub_financials", props?.keyword, props.contractorID],
+    ({ cursor }) => DatahubRepository.getDatahubFinancialList({ ...props, lastestID: cursor }),
     {
       refetchOnMount: options.refetchOnMount,
       refetchOnWindowFocus: false,
