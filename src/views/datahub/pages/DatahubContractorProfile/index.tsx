@@ -5,12 +5,16 @@ import { useContractorCompany } from 'views/datahub/contexts/Company';
 import ModalExtraLarge from 'shareComponents/common/ModalContainer/components/ModalExtraLarge';
 import { DatahubProfile } from 'typings/datahub/profile';
 import { ContextMenu } from 'shareComponents/common/ContextMenu';
+import { useAuth } from "services/hooks/auth/useAuth";
 
 type Props = {
 
 }
 
+const supporters = ['hiepnh@pgipartner.com','toannd@trixgo.com','tungtt@pgipartner.com','thupt@pgipartner.com','hapt@pgipartner.com']
+
 const DatahubContractorProfile: FC<Props> = (props) => {
+	const { user } = useAuth();
 	const [show, setShow] = useState(false);
 	const { data: company } = useContractorCompany();
 	const [selected, setSelected] = useState<DatahubProfile | Record<string, any>>({});
@@ -62,21 +66,26 @@ const DatahubContractorProfile: FC<Props> = (props) => {
 								</div>
 							</div>
 						</div>
-						)))}
-					<div className='w-3/12 px-2 min-h-[330px]'>
-						<div className='h-full flex justify-center items-center border-cbs-border border-[0.5px] rounded-cbs-md cursor-pointer' onClick={() => { toggle(); setSelected({}) }}>
-							<div>
-								<div className='mx-auto text-cbs-subtext border-cbs-subtext border-[3px] rounded-full w-[50px] h-[50px] flex items-center justify-center'>
-									<svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-									</svg>
+						)))
+					}
+
+					{supporters.includes(`${user?.email}`) ?
+						<div className='w-3/12 px-2 min-h-[330px]'>
+							<div className='h-full flex justify-center items-center border-cbs-border border-[0.5px] rounded-cbs-md cursor-pointer' onClick={() => { toggle(); setSelected({}) }}>
+								<div>
+									<div className='mx-auto text-cbs-subtext border-cbs-subtext border-[3px] rounded-full w-[50px] h-[50px] flex items-center justify-center'>
+										<svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+											<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+										</svg>
+									</div>
+									<p className='text-center text-large mt-5'>
+										Tạo hồ sơ
+									</p>
 								</div>
-								<p className='text-center text-large mt-5'>
-									Tạo hồ sơ
-								</p>
 							</div>
 						</div>
-					</div>
+						: <></>
+					}
 				</div>
 			</div>
 			<ModalExtraLarge show={show}>
