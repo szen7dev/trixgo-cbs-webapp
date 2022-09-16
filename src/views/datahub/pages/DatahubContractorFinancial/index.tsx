@@ -1,21 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FC, useEffect, useState } from "react";
-import Skeleton from 'react-loading-skeleton'
+import Skeleton from 'react-loading-skeleton';
 
 // ======= HOOKS ========
-import useCheckedList from "services/hooks/ppt/useCheckedList";
 import useQueryFinancials from "services/hooks/datahub/financial/useQueryFinancials";
+<<<<<<< HEAD
 import { useAuth } from "services/hooks/auth/useAuth";
+=======
+import useCheckedList from "services/hooks/ppt/useCheckedList";
+>>>>>>> 2c1032152f0320e403f93b113ac0401052e49005
 
 // ======= GLOBAL COMPONENTS ========
-import { GroupActions, ButtonCreate, ButtonMore, SearchInput } from "shareComponents/common";
+import { ButtonCreate, GroupActions } from "shareComponents/common";
 // import DropdownFilterButton from "views/document/components/DocumentFilterButton";
 
 // ======= CONTEXT ========
 import { useContractorCompany } from "views/datahub/contexts/Company";
 
 // ======= COMPONENTS ========
-import { DocumentDropdown } from "views/document/sharedComponents/common"
 
 // ======= MODAL ========
 import ModalExtraLarge from "shareComponents/common/ModalContainer/components/ModalExtraLarge";
@@ -24,19 +26,17 @@ import ModalCreateFinancial from "./components/ModalCreateFinancial";
 // ======= ASSETS ========
 import iconPageUp from 'assets/images/icons8-upload-document-100 1.png';
 
-import { formatNumber } from "utils/ppt";
 import { DatahubFinancial } from "typings/datahub/financial";
-
-const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
-	id: i as string | number,
-	title: "Thẻ lọc chính" as string | number,
-}));
+import { formatNumber } from "utils/ppt";
 
 const supporters = ['hiepnh@pgipartner.com','toannd@trixgo.com','tungtt@pgipartner.com','thupt@pgipartner.com','hapt@pgipartner.com']
 
 const DatahubContractorFinancial: FC = () => {
+<<<<<<< HEAD
 	const { user } = useAuth();
 	const [pkg, setPkg] = useState(pkgs[0]);
+=======
+>>>>>>> 2c1032152f0320e403f93b113ac0401052e49005
 	const [show, setShow] = useState(false);
 	const [selected, setSelected] = useState<DatahubFinancial | Record<string, any>>({});
 

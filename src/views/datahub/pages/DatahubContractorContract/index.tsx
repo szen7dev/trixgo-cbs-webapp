@@ -1,32 +1,36 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FC, useEffect, useMemo, useState } from "react";
 
-import { SearchInput } from "shareComponents/common";
 import ModalCreateContract from "./components/ModalCreateContract";
 
 // import DropdownFilterButton from "views/document/components/DocumentFilterButton";
-import { GroupActions,ButtonCreate, ButtonMore } from "shareComponents/common";
-import { DocumentDropdown } from "views/document/sharedComponents/common";
+import useInfinitePackage from "services/hooks/datahub/package/useInfinitePackage";
+import { ButtonCreate, GroupActions } from "shareComponents/common";
 import ModalExtraLarge from "shareComponents/common/ModalContainer/components/ModalExtraLarge";
 import { DatahubContract } from "typings/datahub/contract";
 import { useContractorCompany } from "views/datahub/contexts/Company";
-import useInfinitePackage from "services/hooks/datahub/package/useInfinitePackage";
 
-import getColumnsContractorContract from "views/datahub/utils/getColumnsContractorContract";
-import { TableWithoutContext } from "shareComponents/common/Table";
 import { useRowSelect, useTable } from "react-table";
+<<<<<<< HEAD
 import { useAuth } from "services/hooks/auth/useAuth";
 
 const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
 	id: i as string | number,
 	title: "Thẻ lọc chính" as string | number,
 }));
+=======
+import { TableWithoutContext } from "shareComponents/common/Table";
+import getColumnsContractorContract from "views/datahub/utils/getColumnsContractorContract";
+>>>>>>> 2c1032152f0320e403f93b113ac0401052e49005
 
 const supporters = ['hiepnh@pgipartner.com','toannd@trixgo.com','tungtt@pgipartner.com','thupt@pgipartner.com','hapt@pgipartner.com']
 
 const DatahubContractorContract: FC = () => {
+<<<<<<< HEAD
 	const { user } = useAuth();
 	const [pkg, setPkg] = useState(pkgs[0]);
+=======
+>>>>>>> 2c1032152f0320e403f93b113ac0401052e49005
 	const [show, setShow] = useState(false);
 	const [keyword, setKeyword] = useState('');
 
@@ -94,7 +98,7 @@ const DatahubContractorContract: FC = () => {
 				<ModalExtraLarge show={show}>
 					<ModalCreateContract
 						contractor={company?.data._id || ''}
-						datahubPackageID={selected._id}
+						datahubPackageID={selected.id}
 
 						toggle={() => setShow(!show)}
 					/>
