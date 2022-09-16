@@ -29,7 +29,7 @@ const DatahubContractorContract: FC = () => {
 	// Get data contractur
 	const { data: company } = useContractorCompany();
 	const { data, isLoading } = useInfinitePackage(
-		['datahub_packages', keyword],
+		['datahub_packages', keyword, company!.data._id],
 		{ keyword, contractorID: company?.data._id || '', populates: JSON.stringify({ path: 'field' }) },
 		{ enable: Boolean(company?.data._id) }
 	);
