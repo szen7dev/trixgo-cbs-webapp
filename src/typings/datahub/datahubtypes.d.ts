@@ -3,6 +3,8 @@ export type DatahubTypesBase = {
   type: 1 | 2;
   level: number;
   numberOfContractors: number;
+  numberOfPosts: number;
+  numberOfViews: number;
   popular: number;
   contractors: Array<any>;
   state: number;

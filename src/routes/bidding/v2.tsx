@@ -30,7 +30,7 @@ const navLinks = [
   { title: "Dịch vụ", url: prefix + "/home/contractor/:id/service" },
   { title: "Tài chính", url: prefix + "/home/contractor/:id/financial" },
   { title: "Hợp đồng", url: prefix + "/home/contractor/:id/contract" },
-  { title: "HSNL", url: prefix + "/home/contractor/:id/profile" },
+  { title: "Hồ sơ năng lực", url: prefix + "/home/contractor/:id/profile" },
 ];
 
 const BiddingRouter: FC = () => {
@@ -38,6 +38,7 @@ const BiddingRouter: FC = () => {
     <BiddingLayout>
       <Switch>
         <Route exact path={prefix + "/home"} component={BiddingHomePage} />
+        <Route exact path={prefix + "/home/tag/:id"} component={BiddingHomePage} />
         <Route path={prefix + "/home/contractor/:id"}>
           <DatahubContractorLayout navLinks={navLinks}>
             <Route exact path={navLinks[0].url} component={BiddingDetailPage} />
@@ -47,7 +48,6 @@ const BiddingRouter: FC = () => {
             <Route exact path={navLinks[4].url} component={BiddingContractorProfile} />
           </DatahubContractorLayout>
         </Route>
-        <Route exact path={prefix + "/home/:id"} component={BiddingHomePage} />
         <Route path="/bidding/*" component={ErrorPage} />
       </Switch>
     </BiddingLayout>

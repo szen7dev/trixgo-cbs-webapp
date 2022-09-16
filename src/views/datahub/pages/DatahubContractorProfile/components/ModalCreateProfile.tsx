@@ -6,8 +6,9 @@ import { object, string } from 'yup';
 import useProfileDetail from 'services/hooks/datahub/profile/useProfileDetail';
 
 import { CustomFieldFormik } from 'shareComponents/common/Form/CustomForm';
-import { useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
+import DatahubRepository from 'apis/datahub';
 
 type Props = {
 	datahubProfileID?: string;
@@ -24,23 +25,36 @@ const ModalCreateProfile: FC<Props> = (props) => {
 	const queryClient = useQueryClient();
 
 	useProfileDetail(props.datahubProfileID, {
-		onSuccess(data) {
-			if (data.status === 200) {
-				setInitialValues({ name: data.data.name })
-			}
-		}
-	});
-	const handleSubmitForm = async (values: typeof initialValues) => {
-		if (props.datahubProfileID) {
-			// toast.info('Cập nhật thành công');
-		} else {
-			// toast.success('Tạo mới thành công');
-		}
-		toast.warning('Chưa ghép API')
-		// queryClient.removeQueries(['datahub_profiles'])
-		// queryClient.refetchQueries(['datahub_profiles'])
-		props.toggle();
-	}
+    onSuccess(data) {
+      if (data.status === 200) {
+        setInitialValues({ name: data.data.name });
+      }
+    },
+  });
+  const createMutationPackage = useMutation(DatahubRepository.createDatahubProfile, {
+    onSuccess() {
+      toast.success("Tạo mới thành công");
+    },
+  });
+  const updateMutationPackage = useMutation(DatahubRepository.updateDatahubProfile, {
+    onSuccess() {
+      toast.info("Cập nhật thành công");
+    },
+  });
+
+  const handleSubmitForm = async (values: typeof initialValues) => {
+    if (props.datahubProfileID) {
+      createMutationPackage.mutate({
+        company: props.datahubProfileID,
+        name: values.name,
+      });
+    } else {
+      // updateMutationPackage.mutate({
+      //   company: props.datahubProfileID
+      // })
+    }
+    props.toggle();
+  };
 
 	return (
 		<Fragment>

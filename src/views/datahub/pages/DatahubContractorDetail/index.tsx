@@ -11,9 +11,11 @@ const DatahubContractorDetail: FC<Props> = (props) => {
 	return (
 		<>
 			{/* ======= LIST PROFILE FEED ======= */}
-			<ProfileFeed className='mx-3.5 flex-grow w-[32rem] max-w-lg' />
+			{/* <ProfileFeed className='mx-3.5 flex-grow w-[32rem] max-w-lg' /> */}
+			<ProfileFeed className='mx-3.5 flex-grow' />
+
 			{/* ======= NEW FEED ======= */}
-			<CompanyFeed className='mx-3.5 flex-1' />
+			{/* <CompanyFeed className='mx-3.5 flex-1' /> */}
 		</>
 	)
 }
