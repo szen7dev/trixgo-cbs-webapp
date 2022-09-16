@@ -13,7 +13,7 @@ import { useGetListAppOfUser } from "services/hooks/auth/usePermissions";
 
 export const APP_INFO = AppInfo;
 export const AppsMenu: FC = () => {
-  const { listAppOfUser, refetchAppUsers } = useGetListAppOfUser();
+  const { listAppOfUser, refetchAppUsers } = useGetListAppOfUser(); 
   const { user } = useAuth();
 
   // console.log(listAppOfUser)

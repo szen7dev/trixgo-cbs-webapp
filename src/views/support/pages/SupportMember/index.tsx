@@ -30,12 +30,9 @@ import { useModal } from "services/hooks/useModal";
 import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import { useQueryListCompany } from 'services/hooks/useCompanies';
 import { UserSystemProps } from "typings/users/userSystem";
-import { useLocation } from "react-router-dom";
 
 export const SupportMemberPage: FC = () => {
   const { closeModal, openModal } = useModal();
-  const currentUser = localStorage.getItem("currentUser") ?? "{}";
-  const profile = JSON.parse(currentUser);
   const LIMIT_PER_PAGE_USER = 20;
   const [companySelected, setCompanySelected] = useState('');
   const [companyName, setCompanyName] = useState('');
@@ -54,16 +51,8 @@ export const SupportMemberPage: FC = () => {
     departmentName: "",
     status: 1
   });
-  const location = useLocation();
 
   const [modalCreateOrUpdateUser, setModalCreateOrUpdateUser] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (location.pathname === '/owner/members') {
-      setCompanySelected(profile?.company?._id);
-      setCompanyName(`${profile?.company?.name} - ${profile?.company?.sign}`);
-    }
-  }, []);
 
   const {
     data: listUsersSystem,
@@ -192,30 +181,28 @@ export const SupportMemberPage: FC = () => {
           <p className="text-lg">
             {companyName}
           </p>
-          {location.pathname !== '/owner/members' ?
-            <DropdownSearchable
-              placeholder="Chọn phân vùng để thực hiện"
-              className="w-[322px] pl-0 bg-cbs-table-header"
-              classNameInput="h-[28px] bg-cbs-table-header"
-              isMultiple={false}
-              allowClearValueSingleInput={false}
-              showTriangle={true}
-              maxWidthInput="max-w-none"
-              renderSelectedItem={(item) => <span>{item.text}</span>}
-              classNameItem="p-0"
-              data={listCompanies}
-              formatItem={{
-                id: "_id",
-                text: "name",
-              }}
-              inlineSearch={false}
-              disableSearch={false}
-              searchInputClassName="h-[40px] w-[322px] px-[46px]"
-              onScroll={handleScroll}
-              onchangeValue={handleChangeCompany}
-              onSearchInputChange={handleSearchCompany}
-            /> : <></>
-          }
+          <DropdownSearchable
+            placeholder="Chọn phân vùng để thực hiện"
+            className="w-[322px] pl-0 bg-cbs-table-header"
+            classNameInput="h-[28px] bg-cbs-table-header"
+            isMultiple={false}
+            allowClearValueSingleInput={false}
+            showTriangle={true}
+            maxWidthInput="max-w-none"
+            renderSelectedItem={(item) => <span>{item.text}</span>}
+            classNameItem="p-0"
+            data={listCompanies}
+            formatItem={{
+              id: "_id",
+              text: "name",
+            }}
+            inlineSearch={false}
+            disableSearch={false}
+            searchInputClassName="h-[40px] w-[322px] px-[46px]"
+            onScroll={handleScroll}
+            onchangeValue={handleChangeCompany}
+            onSearchInputChange={handleSearchCompany}
+          />
         </div>
         <div className="h-[50px] border border-primary-border flex items-center justify-between px-5">
           <div className="flex items-center">

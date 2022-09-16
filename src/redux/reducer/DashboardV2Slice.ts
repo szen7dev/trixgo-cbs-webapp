@@ -20,7 +20,7 @@ const initialState: any = {
     querySubject: {
       companiesOfAssignee: [],
       assigneesID: [],
-      isParent: "1",
+      isParent: 0,
       isActive: "1",
     },
     queryFile: {

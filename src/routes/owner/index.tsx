@@ -14,7 +14,9 @@ import ErrorPage from "views/authentication/Error";
 import {
     OwnerHomePage,
 } from "views/owner/pages";
-import { SupportGrantPage, SupportMemberPage } from "views/support/pages";
+import { OwnerMemberPage } from "views/owner/pages/OwnerMember";
+import { OwnerGrantPage } from "views/owner/pages/OwnerGrant";
+import { OwnerDocsManagementPage } from "views/owner/pages/OwnerDocsManagement";
 
 const OwnerRouter: FC = () => {
     return (
@@ -33,7 +35,7 @@ const OwnerRouter: FC = () => {
                 path="/owner/members"
                 component={() =>
                     <OwnerLayout>
-                        <SupportMemberPage />
+                        <OwnerMemberPage />
                     </OwnerLayout>
                 }
             />
@@ -42,7 +44,16 @@ const OwnerRouter: FC = () => {
                 path="/owner/grant"
                 component={() =>
                     <OwnerLayout>
-                        <SupportGrantPage />
+                        <OwnerGrantPage />
+                    </OwnerLayout>
+                }
+            />
+            <Route
+                exact
+                path="/owner/grant/documents-management/:appID/:companyID/:appName"
+                component={() =>
+                    <OwnerLayout>
+                        <OwnerDocsManagementPage />
                     </OwnerLayout>
                 }
             />
