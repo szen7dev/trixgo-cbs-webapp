@@ -15,6 +15,7 @@ import { DatahubProfile, DatahubProfileBody } from "typings/datahub/profile";
 import { DatahubProjects, DatahubProjectsBody } from "typings/datahub/projects";
 
 import { getDatahubPackageList } from "./package";
+import { getDatahubProfileList } from "./profiles";
 
 // Đường dẫn Endpoint
 export const url = "/api/datahub";
@@ -163,12 +164,7 @@ const DatahubRepository = {
   },
 
   // ==== Datahub Profiles ====
-  async getDatahubProfileList(params: { company: string } & DatahubPrams) {
-    const { data } = await API.get<ResponseList<DatahubProfile>>(`${url}/datahub_profiles`, {
-      params,
-    });
-    return data;
-  },
+  getDatahubProfileList,
   async getDatahubProfile(params: { datahubProfileID: string } & DatahubPrams) {
     const { data } = await API.get<ResponseList<DatahubProfile>>(`${url}/datahub_profiles`, {
       params,

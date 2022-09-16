@@ -24,7 +24,7 @@ const useDatahubPackage = (
   options?: Options<ResponseCreate<DatahubContract>>
 ) => {
   return useQuery(
-    ["datahub_package", datahubPackageID],
+    ["datahub_package", { contractorID, datahubPackageID }],
     () =>
       DatahubRepository.getDatahubContract({
         contractorID,

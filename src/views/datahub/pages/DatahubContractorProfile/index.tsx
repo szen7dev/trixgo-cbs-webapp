@@ -5,6 +5,7 @@ import { useContractorCompany } from 'views/datahub/contexts/Company';
 import ModalExtraLarge from 'shareComponents/common/ModalContainer/components/ModalExtraLarge';
 import { DatahubProfile } from 'typings/datahub/profile';
 import { ContextMenu } from 'shareComponents/common/ContextMenu';
+import { buildDatahubProfilesKey } from 'apis/datahub/profiles';
 
 type Props = {
 
@@ -14,7 +15,11 @@ const DatahubContractorProfile: FC<Props> = (props) => {
 	const [show, setShow] = useState(false);
 	const { data: company } = useContractorCompany();
 	const [selected, setSelected] = useState<DatahubProfile | Record<string, any>>({});
-	const { data } = useInfiniteProfile(['datahub_profiles', company?.data._id], { company: company?.data._id || '' }, { enable: Boolean(company?.data._id) });
+	const { data } = useInfiniteProfile(
+    buildDatahubProfilesKey({ contractorID: company?.data._id }),
+    { contractorID: company?.data._id || "" },
+    { enable: Boolean(company?.data._id) }
+  );
 
 	const toggle = () => setShow(!show);
 	return (

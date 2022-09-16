@@ -13,7 +13,17 @@ type DatahubPackage = {
       image: string;
     };
   };
-  amount: 1;
+  amount: number;
+};
+type DatahubPackage3 = {
+  _id: {
+    field: {
+      _id: string;
+      name: string;
+      description: string;
+    };
+  };
+  amount: number;
 };
 type ParamsGetDatahubPackage = {
   fieldID?: string;
@@ -30,6 +40,10 @@ async function getDatahubPackageList(
   params: ParamsGetDatahubPackage
 ): Promise<ResponseData<DatahubPackage[]>>;
 async function getDatahubPackageList(
+  option: 3,
+  params: ParamsGetDatahubPackage
+): Promise<ResponseData<DatahubPackage3[]>>;
+async function getDatahubPackageList(
   option: number,
   params: ParamsGetDatahubPackage
 ): Promise<ResponseData<any>> {
@@ -41,7 +55,7 @@ async function getDatahubPackageList(
 }
 
 export function buildKeyDatahubPackage(
-  options: { mode: number } & ParamsGetDatahubPackage
+  options: { mode?: number } & ParamsGetDatahubPackage
 ): (string | number)[] {
   return ["datahub_packages", JSON.stringify(options)];
 }

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import DatahubRepository from "apis/datahub";
+import { buildDatahubFinancialKey } from "apis/datahub/financial";
 import useQueryCustom from "services/hooks/useQueryCustom";
 import { ResponseList } from "typings/apis/response";
 import { DatahubPrams } from "typings/datahub/api";
@@ -13,7 +14,10 @@ type Options = {
 
 const useQueryFinancials = (props: Props, options: Options = { refetchOnMount: false }) => {
   return useQueryCustom(
-    ["datahub_financials", props?.keyword, props.contractorID],
+    buildDatahubFinancialKey({
+      contractorID: props.contractorID,
+      keyword: props.keyword,
+    }),
     ({ cursor }) => DatahubRepository.getDatahubFinancialList({ ...props, lastestID: cursor }),
     {
       refetchOnMount: options.refetchOnMount,
