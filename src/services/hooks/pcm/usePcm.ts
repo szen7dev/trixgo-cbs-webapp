@@ -19,7 +19,8 @@ import {
     UpdateTaskReportPayload,
     PcmComment,
     PcmCommentListParams,
-    PcmExportReportPayload
+    PcmExportReportPayload,
+    PcmPlanTaskDownloadExcelPayload
 } from "typings/pcm";
 
 /**
@@ -200,6 +201,27 @@ export const usePcmReportCustom = ({
 
     return {
         exportReportAsync
+    }
+}
+
+type UsePcmPlanTaskCustom = {
+    downloadExcelTaskAsync: (payload: PcmPlanTaskDownloadExcelPayload) => Promise<any>,
+};
+
+type UsePcmPlanTaskCustomParams = {
+    params?: any
+}
+
+export const usePcmPlanTaskCustom = ({
+    params = {}
+}: UsePcmPlanTaskCustomParams) : UsePcmPlanTaskCustom => {
+    const { mutateAsync: downloadExcelTaskAsync } =
+        useMutation((payload: PcmPlanTaskDownloadExcelPayload) =>
+            PcmRepository.downloadExcelTask(payload)
+        );
+
+    return {
+        downloadExcelTaskAsync
     }
 }
 

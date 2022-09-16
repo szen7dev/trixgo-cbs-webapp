@@ -31,7 +31,7 @@ import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFi
 /**
  * Components, Assets
  */
-import { DropdownSearchable } from "shareComponents/common";
+import { DropdownSearchable, Loader } from "shareComponents/common";
 import Close from "assets/icons/Close";
 import fakeThumbnail from "assets/images/avatar.jpg";
 
@@ -76,6 +76,7 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
     const [groupID, setGroupID] = useState(task.group?._id);
     const [isCloneChildTask, setIsCloneChildTask] = useState(false);
     const [isDraftTask, setIsDraftTask] = useState(false);
+    const [isCloning, setIsCloning] = useState(false);
 
     const { copyTaskAsync } = useTask({});
     const { closeModal } = useModal();
@@ -210,6 +211,9 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
             }
             // console.log({ task, values, isCloneChildTask, isDraftTask })
 
+            closeModal();
+            setIsCloning(true);
+
             const { error, data } = await copyTaskAsync({
                 ...values,
                 taskID: task._id,
@@ -219,7 +223,7 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
 
             if (error) return toast.warning(data.message);
 
-            closeModal();
+            setIsCloning(false);
             history.push(`/pcm/detail/${data._id}`);
         } catch (error) {
             if (typeof error === "string") {
@@ -227,6 +231,8 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
             } else if (error instanceof Error) {
                 toast.error(error.message);
             }
+        } finally {
+            setIsCloning(false);
         }
     };
 
@@ -333,6 +339,10 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
         type: task.type,
         subtype: task.subtype,
     };
+
+    if(isCloning) {
+        return <Loader className="border-primary" />
+    }
 
     return (
         <>
@@ -710,7 +720,6 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
                                         onInit={(evt, editor) => {
                                             editorRef.current = editor;
                                         }}
-                                        initialValue={values.description}
                                         // onSaveContent={handleSave}
                                         init={{
                                             height: "350px",
@@ -740,6 +749,9 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
                                                 "insertdatetime media table paste code help wordcount",
                                             ],
                                             fullpage_default_title: "My default page title",
+                                            init_instance_callback(editor) {
+                                                editor.setContent(values.description);
+                                            },
                                             setup(editor) {
                                                 editor.on("Paste input Undo Redo", () => {
                                                     editor.save();

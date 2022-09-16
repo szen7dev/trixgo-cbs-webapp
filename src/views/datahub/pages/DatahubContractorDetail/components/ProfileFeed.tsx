@@ -19,8 +19,8 @@ const ProfileFeed: FC<Props & HTMLAttributes<HTMLDivElement>> = (props, ref) => 
 					<div className='p-4'>
 						<div className='border-b-[0.5px] border-cbs-border pb-5'>
 							<p className='line-clamp-3 text-justify'>
-								{/* {data?.data.into} */}
-								Không có field into
+								{data?.data.description}
+								{/* Không có field into 222 */}
 								{/* Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore aut laboriosam dolorum beatae officia animi voluptatem incidunt veniam suscipit qui repudiandae a, obcaecati perferendis minima doloribus tempore corrupti sit consequatur? */}
 							</p>
 						</div>
@@ -28,15 +28,15 @@ const ProfileFeed: FC<Props & HTMLAttributes<HTMLDivElement>> = (props, ref) => 
 							<ContactInfo value={'Tên: ' + data?.data.name || ''} />
 							<ContactInfo value={'Mã số thuế: ' + data?.data.taxid || ''} />
 							<ContactInfo value={'Địa chỉ: ' + data?.data.address || ''} />
-							<ContactInfo value={data?.data.phone || ''} link='/' />
-							<ContactInfo value={data?.data.email || ''} link='contact@conincopmi.com' />
-							<ContactInfo value={data?.data.website || ''} link='https://conincopmi.vn' />
+							<ContactInfo value={'Điện thoại: ' + data?.data.phone || ''} link='/' />
+							<ContactInfo value={'Email: ' + data?.data.email || ''} link='/' />
+							<ContactInfo value={'Website: ' + data?.data.website || ''} link='/' />
 						</div>
 					</div>
 				</Card>
 
 				{/* ======= LIST IMAGE ======= */}
-				<Card to='/' title='Giới thiệu' className='bg-white pt-4 rounded-cbs-md  border-[0.5px] border-cbs-border mt-2'>
+				{/* <Card to='/' title='Giới thiệu' className='bg-white pt-4 rounded-cbs-md  border-[0.5px] border-cbs-border mt-2'>
 					<div className='flex flex-wrap p-4 -mr-1'>
 						{Array.from({ length: 9 }).map((_, i) => <div key={i} className='w-4/12'>
 							<div className='pr-1 pb-1'>
@@ -48,7 +48,7 @@ const ProfileFeed: FC<Props & HTMLAttributes<HTMLDivElement>> = (props, ref) => 
 							</div>
 						</div>)}
 					</div>
-				</Card>
+				</Card> */}
 			</div>
 		</div>
 	)

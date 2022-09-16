@@ -11,6 +11,9 @@ export type DatahubCompanies = {
   image: string;
   name: string;
   sign: string;
+  description: string;
+  intro: string;
+  birthDay: DateString;
   taxid: string;
   phone: string;
   address: string;

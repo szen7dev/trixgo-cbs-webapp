@@ -3,6 +3,7 @@ import SwiperCore, { Navigation } from "swiper";
 import { Listbox, Transition } from "@headlessui/react";
 import { debounce } from "lodash";
 import iconBack from "assets/images/icon-back-gray.svg";
+import companyIcon from "assets/images/company_default.png";
 import {
   useLocation,
   generatePath,
@@ -70,7 +71,7 @@ const BiddingHomePageV2: FC<Props> = (props) => {
   } = useDatahubCompanies(
     key,
     {
-      select: "_id name sign image address",
+      select: "_id name sign image address description birthDay",
       limit: 24,
       keyword: company,
     },
@@ -85,7 +86,7 @@ const BiddingHomePageV2: FC<Props> = (props) => {
 
   return (
     <div
-      className="h-full w-full overflow-auto bg-cbs-gray"
+      className="h-full w-full overflow-auto"
       onScroll={(e) => {
         if (!company || !hasNextPage) return;
         // FetchNextPage before scrolled to end
@@ -102,7 +103,7 @@ const BiddingHomePageV2: FC<Props> = (props) => {
           <div className="w-32 h-32 rounded-full p-[30px] bg-cbs-gray mx-auto">
             <img src={iconDatabase} alt="" />
           </div>
-          <p className="text-4x-large font-bold text-center mt-3">DataHub</p>
+          <p className="text-4x-large font-bold text-center mt-3">DataHub năng lực nhà thầu</p>
           <div className="mt-6">
             <div className="mx-auto max-w-[831px] bg-cbs-gray py-6 px-5 space-x-4 flex items-center">
               <div className="w-4/12 relative">
@@ -321,6 +322,7 @@ const BiddingHomePageV2: FC<Props> = (props) => {
               <div className="text-[22px] leading-6">Kết quả tìm kiếm</div>
             )}
             <div className="flex flex-wrap text-cbs-subtext pt-1 text-medium pl-3.5 pr-1.5">
+              {/* {console.log(listCompanies)} */}
               {listCompanies?.pages.map((page, idx) => (
                 <Fragment key={idx}>
                   {page.data.listRecords.map((record, idx) => (
@@ -334,7 +336,7 @@ const BiddingHomePageV2: FC<Props> = (props) => {
                         <div className="h-36">
                           <img
                             className="w-full h-full z-0 object-cover"
-                            src={`${process.env.REACT_APP_URL_S3_COMPANY}/${record.image}`}
+                            src={record.image ? `${process.env.REACT_APP_URL_S3_COMPANY}/${record.image}` : companyIcon}
                             alt="News"
                           />
                         </div>
