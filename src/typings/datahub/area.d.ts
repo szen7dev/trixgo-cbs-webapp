@@ -4,7 +4,7 @@ export type DatahubArea = {
   level: number;
   name: string;
   sign: string;
-  parent: string;
+  parent: DatahubArea | string;
   userCreate: string;
   modifyAt: DateString;
   createAt: DateString;

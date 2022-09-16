@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import DatahubRepository from "apis/datahub";
+import { ParamsGetDatahubProfiles } from "apis/datahub/profiles";
 import { useInfiniteQuery } from "react-query";
-import { DatahubPrams } from "typings/datahub/api";
 
-type Props = { company: string } & DatahubPrams;
+type Props = ParamsGetDatahubProfiles;
 
 const useInfiniteProfile = (
   key: string | readonly unknown[],

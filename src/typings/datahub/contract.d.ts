@@ -19,6 +19,7 @@ export type DatahubContractBase = {
   files?: [];
   state: number;
   _id: string;
+  id: string;
   contractor: string;
   project: string | null | DatahubProjects;
   field: string | null | DatahubTypes;

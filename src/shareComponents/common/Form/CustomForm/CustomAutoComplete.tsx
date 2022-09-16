@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { Fragment, useState, PropsWithChildren, useEffect } from "react";
 import { Listbox, Transition } from "@headlessui/react";
-import classNames from "classnames";
+import useValueOrState from "services/hooks/useValueOrState";
 
 type Props<T extends Record<string, any>> = {
   // title: string;
   // name: string;
   attribute?: string;
-  valueAttribute?: string;
   containerClassName?: string;
   wrapperClassName?: string;
   icon?: React.ElementType;
@@ -18,11 +17,13 @@ type Props<T extends Record<string, any>> = {
   error?: React.ComponentType<any>;
   initialData?: string;
   placeholder?: string;
+  emptyMessage?: string;
+  value?: T;
   renderValue?: (value: T) => string;
   onChange?: (value: string) => void;
   onChangeValue?: (value: T) => void;
   onScroll?: (e: any) => void;
-} & React.ComponentProps<"input">;
+} & Omit<React.ComponentProps<"input">, "onChange" | "value">;
 
 const DefaultIcon = () => {
   return (
@@ -45,9 +46,8 @@ function CustomAutoComplete<T extends Record<string, any>>({
   renderValue,
   placeholder,
   attribute = "name",
-  containerClassName,
+  containerClassName = "relative focus-within:border-cbs-primary border-cbs-border border-0.5",
   wrapperClassName,
-  valueAttribute,
   data,
   initialData = "",
   onChange,
@@ -55,12 +55,22 @@ function CustomAutoComplete<T extends Record<string, any>>({
   onScroll,
   server = false,
   icon: Icon = DefaultIcon,
+  emptyMessage = "Không có dữ liệu phù hợp",
+  onFocus,
+  value,
   ...rest
 }: PropsWithChildren<Props<T>>): JSX.Element {
-  const [selected, setSelected] = useState<null | any>();
+  const [selected, setSelected] = useValueOrState<null | any>(value);
+
   const [search, setSearch] = useState(initialData);
   const [isOpen, setIsOpen] = useState(false);
   const ref = React.useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (value) {
+      setSearch((renderValue ? renderValue(value) : value[attribute]) || "");
+    }
+  }, [value, attribute, renderValue]);
 
   const dataFiltered = server
     ? data
@@ -94,6 +104,10 @@ function CustomAutoComplete<T extends Record<string, any>>({
     onChangeValue && onChangeValue(e);
   }
 
+  const handleFocus: React.FocusEventHandler<HTMLInputElement> = (e) => {
+    onFocus?.(e);
+  };
+
   return (
     <Listbox value={selected} onChange={handleChange}>
       <div className={wrapperClassName}>
@@ -102,13 +116,7 @@ function CustomAutoComplete<T extends Record<string, any>>({
             {title} {required && "(*)"}
           </div> */}
           {/* <div onClick={() => setIsOpen(true)} className=""> */}
-          <div
-            className={classNames(
-              "relative focus-within:border-cbs-primary border-cbs-border border-0.5",
-              containerClassName
-            )}
-            ref={ref}
-          >
+          <div className={containerClassName} ref={ref}>
             <input
               type="text"
               className="focus:outline-none bg-white resize-none w-full py-1.5 px-3 text-black"
@@ -116,6 +124,7 @@ function CustomAutoComplete<T extends Record<string, any>>({
               value={search}
               {...rest}
               onClick={() => setIsOpen(!isOpen)}
+              onFocus={handleFocus}
               onChange={(e) => {
                 if (selected) {
                   setSelected(null);
@@ -183,7 +192,7 @@ function CustomAutoComplete<T extends Record<string, any>>({
               ))}
               {dataFiltered.length === 0 && (
                 <li className="text-center italic">
-                  <span>Không có dữ liệu phù hợp</span>
+                  <span>{emptyMessage}</span>
                 </li>
               )}
             </Listbox.Options>

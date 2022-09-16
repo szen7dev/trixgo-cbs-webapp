@@ -1,20 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FC, useEffect, useState } from "react";
-import Skeleton from 'react-loading-skeleton'
+import Skeleton from 'react-loading-skeleton';
 
 // ======= HOOKS ========
-import useCheckedList from "services/hooks/ppt/useCheckedList";
 import useQueryFinancials from "services/hooks/datahub/financial/useQueryFinancials";
+import useCheckedList from "services/hooks/ppt/useCheckedList";
+import { useAuth } from "services/hooks/auth/useAuth";
 
 // ======= GLOBAL COMPONENTS ========
-import { GroupActions, ButtonCreate, ButtonMore, SearchInput } from "shareComponents/common";
+import { ButtonCreate, GroupActions } from "shareComponents/common";
 // import DropdownFilterButton from "views/document/components/DocumentFilterButton";
 
 // ======= CONTEXT ========
 import { useContractorCompany } from "views/datahub/contexts/Company";
 
 // ======= COMPONENTS ========
-import { DocumentDropdown } from "views/document/sharedComponents/common"
 
 // ======= MODAL ========
 import ModalExtraLarge from "shareComponents/common/ModalContainer/components/ModalExtraLarge";
@@ -23,16 +23,13 @@ import ModalCreateFinancial from "./components/ModalCreateFinancial";
 // ======= ASSETS ========
 import iconPageUp from 'assets/images/icons8-upload-document-100 1.png';
 
-import { formatNumber } from "utils/ppt";
 import { DatahubFinancial } from "typings/datahub/financial";
+import { formatNumber } from "utils/ppt";
 
-const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
-	id: i as string | number,
-	title: "Thẻ lọc chính" as string | number,
-}));
+const supporters = ['hiepnh@pgipartner.com','toannd@trixgo.com','tungtt@pgipartner.com','thupt@pgipartner.com','hapt@pgipartner.com']
 
 const DatahubContractorFinancial: FC = () => {
-	const [pkg, setPkg] = useState(pkgs[0]);
+	const { user } = useAuth();
 	const [show, setShow] = useState(false);
 	const [selected, setSelected] = useState<DatahubFinancial | Record<string, any>>({});
 
@@ -57,15 +54,21 @@ const DatahubContractorFinancial: FC = () => {
 						onSelectValue={setPkg}
 					/> */}
 					{/* <DropdownFilterButton /> */}
-					<GroupActions
-						className="flex items-center flex-1"
-						onClickPencil={() => { setShow(true); setSelected(checked[0]) }}
-						disabled={{
-							pencil: checked.length !== 1,
-						}}
-					/>
 
-					<ButtonCreate onClick={() => { setShow(!show); setSelected({}) }} />
+					{supporters.includes(`${user?.email}`) ?
+						<GroupActions
+							className="flex items-center flex-1"
+							onClickPencil={() => { setShow(true); setSelected(checked[0]) }}
+							disabled={{
+								pencil: checked.length !== 1,
+							}}
+						/>
+						: <></>
+					}
+					{supporters.includes(`${user?.email}`) ?
+						<ButtonCreate onClick={() => { setShow(!show); setSelected({}) }} />
+						: <></>
+					}					
 					{/* <ButtonMore /> */}
 				</div>
 				<div className="overflow-auto relative">
