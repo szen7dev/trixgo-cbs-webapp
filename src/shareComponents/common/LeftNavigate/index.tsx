@@ -2,9 +2,11 @@ import React, { FC, useCallback, useEffect, useRef, useState } from "react";
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
 import mailIcon from "assets/images/icons8-secure-mail-48.svg";
 import chatIcon from "assets/images/icons8-chat-48.svg";
+import peopleIcon from "assets/images/icons8-people-64.svg";
 import projectIcon from "assets/images/icons-project.svg";
 import contractIcon from "assets/images/icons8-contract-64.svg";
 import fileIcon from "assets/images/icons-file.svg";
+import biddingImage from "assets/menu/project/icons-project-bidding.svg"
 import { Link, useLocation } from "react-router-dom";
 import { useSocket } from "services/hooks/useSocket";
 import { useDispatch, useSelector } from "react-redux";
@@ -192,7 +194,20 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
           </div>
           <span className={"text-primary-gray mt-1"}>Dự án</span>
         </Link> : <></>}
-
+        {checkPermissionApp('5fe58b7395db3c6e1534ea81') ?
+        <Link to={`/bidding/home`} className={"flex flex-col items-center mb-3"}>
+          <div
+            className={
+              "px-4 py-1 rounded-full relative " +
+              (firstRoute === "bidding"
+                ? "bg-cbs-hightlight-right-navigate"
+                : "")
+            }
+          >
+            <img width={'20px'} src={biddingImage} alt={"Thầu"} />
+          </div>
+          <span className={"text-primary-gray mt-1"}>Thầu</span>
+        </Link> : <></>}
       {checkPermissionApp('6131d6f83f4b736dc93253b2') ?
         <Link to={`/cmcs/home`} className={"flex flex-col items-center mb-3"}>
           <div
@@ -220,6 +235,20 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
             <img width={'20px'} src={fileIcon} alt={"Hồ sơ"} />
           </div>
           <span className={"text-primary-gray mt-1"}>Hồ sơ</span>
+        </Link> : <></>}
+      {checkPermissionApp('61e049c9fdebf77b072d1b13') ?
+        <Link to={`/human/home`} className={"flex flex-col items-center mb-3"}>
+          <div
+            className={
+              "px-4 py-1 rounded-full relative " +
+              (firstRoute === "human"
+                ? "bg-cbs-hightlight-right-navigate"
+                : "")
+            }
+          >
+            <img width={'20px'} src={peopleIcon} alt={"Nhân sự"} />
+          </div>
+          <span className={"text-primary-gray mt-1"}>Nhân sự</span>
         </Link> : <></>}
       {checkPermissionApp('5dfe4c1b51dc622100bb9d8f') ?
         <Link to={`/messages`} className={"flex flex-col items-center mb-3"}>
