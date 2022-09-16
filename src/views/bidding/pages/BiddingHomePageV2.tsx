@@ -3,6 +3,7 @@ import SwiperCore, { Navigation } from "swiper";
 import { Listbox, Transition } from "@headlessui/react";
 import { debounce } from "lodash";
 import iconBack from "assets/images/icon-back-gray.svg";
+import companyIcon from "assets/images/company_default.png";
 import {
   useLocation,
   generatePath,
@@ -70,7 +71,7 @@ const BiddingHomePageV2: FC<Props> = (props) => {
   } = useDatahubCompanies(
     key,
     {
-      select: "_id name sign image address",
+      select: "_id name sign image address description birthDay",
       limit: 24,
       keyword: company,
     },
@@ -321,6 +322,7 @@ const BiddingHomePageV2: FC<Props> = (props) => {
               <div className="text-[22px] leading-6">Kết quả tìm kiếm</div>
             )}
             <div className="flex flex-wrap text-cbs-subtext pt-1 text-medium pl-3.5 pr-1.5">
+              {/* {console.log(listCompanies)} */}
               {listCompanies?.pages.map((page, idx) => (
                 <Fragment key={idx}>
                   {page.data.listRecords.map((record, idx) => (
@@ -334,7 +336,7 @@ const BiddingHomePageV2: FC<Props> = (props) => {
                         <div className="h-36">
                           <img
                             className="w-full h-full z-0 object-cover"
-                            src={`${process.env.REACT_APP_URL_S3_COMPANY}/${record.image}`}
+                            src={record.image ? `${process.env.REACT_APP_URL_S3_COMPANY}/${record.image}` : companyIcon}
                             alt="News"
                           />
                         </div>

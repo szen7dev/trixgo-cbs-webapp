@@ -1,12 +1,14 @@
 import React, { FC, useContext } from 'react'
 import AuthContext from 'services/contexts/Auth'
 import Skeleton from 'react-loading-skeleton';
+import moment from "moment";
 
 //
 import Wallethub from '../../common/Wallethub';
 
 //
 import iconVideoPlaylist from 'assets/images/icons8-video-playlist-90 1.png'
+import converPage from "assets/images/trx-construction-cover2.svg";
 import { NavLink, useParams, generatePath } from 'react-router-dom';
 
 import SearchIcon from 'assets/icons/SearchIcon';
@@ -29,7 +31,7 @@ const DatahubContractorLayoutDetail: FC<Props> = ({ children, navLinks }) => {
 				<div className='bg-white border-cbs-border border-[0.5px] border-b-0 mx-3.5'>
 					{/* ======= BACKGROUND ======= */}
 					<div className='h-[365px]'>
-						<img className='w-full h-full object-cover' src="https://png.pngtree.com/thumb_back/fh260/background/20200714/pngtree-modern-double-color-futuristic-neon-background-image_351866.jpg" alt="" />
+						<img className='w-full h-full object-cover' src={converPage} alt="" />
 					</div>
 					{/* ======= GENERAL INFO ======= */}
 					<div className='flex border-cbs-border border-b-[0.5px]'>
@@ -52,18 +54,14 @@ const DatahubContractorLayoutDetail: FC<Props> = ({ children, navLinks }) => {
 										}
 									</div>
 									<div className='whitespace-nowrap w-4/12 self-end pb-2.5 px-2.5'>
-										<p>Quản lý dự án, Tư vấn giám sát</p>
-										<p><span className='inline-block mr-2 mt-1 bg-cbs-schedule-oneweek rounded-full w-2 h-2'></span>Thành lập 2010 - 12 năm</p>
+										{ data ? `${data.data.description}`: '' }
+										<p><span className='inline-block mr-2 mt-1 bg-cbs-schedule-oneweek rounded-full w-2 h-2'></span>Thành lập {moment(data?.data?.birthDay).format("YYYY")}</p>
 									</div>
 								</div>
 							</div>
 							<div className='pt-16 max-w-xs mx-auto text-2x-large'>
 								<p className='pt-4 line-clamp-2 text-center'>
-									{
-										data
-											? data.data.sign + "." + data.data.name
-											: ''
-									}
+									{ data ? data.data.sign + "." + data.data.name : '' }
 								</p>
 							</div>
 						</div>
@@ -86,19 +84,19 @@ const DatahubContractorLayoutDetail: FC<Props> = ({ children, navLinks }) => {
 				{/* ======= LIST ACTIONS ======= */}
 				<div className='bg-white sticky top-0 flex justify-between px-4 mx-3.5 border-[0.5px] border-cbs-border border-t-0'>
 					<div className='space-x-8'>
-            {navLinks.map(({url, title}) => (
-              <NavLink
-                exact
-                key={url}
-                className="inline-block py-5 border-b border-transparent"
-                activeClassName="text-cbs-primary border-cbs-primary"
-                to={generatePath(url, params)}
-              >
-                {title}
-              </NavLink>
-            ))}
+						{navLinks.map(({url, title}) => (
+							<NavLink
+								exact
+								key={url}
+								className="inline-block py-5 border-b border-transparent"
+								activeClassName="text-cbs-primary border-cbs-primary"
+								to={generatePath(url, params)}
+							>
+								{title}
+							</NavLink>
+						))}
 					</div>
-					<div className='space-x-2 flex items-center'>
+					{/* <div className='space-x-2 flex items-center'>
 						<button className='bg-cbs-active-comment text-cbs-primary p-1.5 rounded-cbs'>
 							<img className='inline-block w-6 h-6 mr-2' src={iconRss} alt="" />
 							Theo dõi
@@ -113,7 +111,7 @@ const DatahubContractorLayoutDetail: FC<Props> = ({ children, navLinks }) => {
 						<button className='bg-cbs-gray text-cbs-subtext p-1.5 rounded-cbs'>
 							<DotsHorizontalIcon className='h-6 w-6' />
 						</button>
-					</div>
+					</div> */}
 				</div>
 			</div>
 			<div className='flex justify-center'>
