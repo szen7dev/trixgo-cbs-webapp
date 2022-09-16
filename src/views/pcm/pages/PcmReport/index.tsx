@@ -101,7 +101,7 @@ const PcmReportPage: FC = () => {
 			setStateExport({ reportId: '', isExporting: false });
 		}
 	}
-
+	
 	const handleConfirmDelete = async () => {
 		try {
 			const { error, data } = await deleteTaskReportAsync(idsChecked);

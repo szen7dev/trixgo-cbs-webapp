@@ -238,7 +238,16 @@ export const DocumentProjectPage: FC = () => {
         try {
             setStateExport({ isExporting: true });
             const { error, data } = await exportDocumentAsync({
-                filterParams: { departmentID }
+                filterParams: {  
+                    departmentsID: [departmentID],
+                    ...fromToDate,
+                    datahubContactsID,
+                    types,
+                    directions,
+                    contractsID,
+                    storagesID,
+                    keyword: keywordInput 
+                }
             });
 
             if(error) {
@@ -382,14 +391,14 @@ export const DocumentProjectPage: FC = () => {
                                 },
                                 {
                                     text: "Cách đây 1 tuần",
-                                    fromDate: moment().format("YYYY-MM-DD"),
-                                    toDate: moment().subtract(7,'d').format("YYYY-MM-DD"),
-                                },
-                                {
+                                    fromDate: moment().subtract(7, "days").format("YYYY-MM-DD h:mm"),
+                                    toDate: moment().add(1, "minutes").format("YYYY-MM-DD h:mm"),
+                                  },
+                                  {
                                     text: "Cách đây 1 tháng",
-                                    fromDate: moment().format("YYYY-MM-DD"),
-                                    toDate: moment().subtract(1,'m').format("YYYY-MM-DD"),
-                                },
+                                    fromDate: moment().subtract(1, "months").format("YYYY-MM-DD h:mm"),
+                                    toDate: moment().add(1, "minutes").format("YYYY-MM-DD h:mm"),
+                                  },
                             ]}
                         />
                         <DropdownSearchableV2
@@ -531,7 +540,9 @@ export const DocumentProjectPage: FC = () => {
                 </div>
                 <div className={"flex items-center pb-2"}>
                     <NavigateTab/>
-                    <button className={"flex items-center justify-center mx-3 ml-6"}>
+                    <button className={"flex items-center justify-center mx-3 ml-6"}
+                        onClick={handleExport.bind(null)}
+                    >
                         <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"}/>
                     </button>
                     {
