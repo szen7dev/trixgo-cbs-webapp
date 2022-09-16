@@ -4,11 +4,8 @@ import Skeleton from 'react-loading-skeleton';
 
 // ======= HOOKS ========
 import useQueryFinancials from "services/hooks/datahub/financial/useQueryFinancials";
-<<<<<<< HEAD
 import { useAuth } from "services/hooks/auth/useAuth";
-=======
 import useCheckedList from "services/hooks/ppt/useCheckedList";
->>>>>>> 2c1032152f0320e403f93b113ac0401052e49005
 
 // ======= GLOBAL COMPONENTS ========
 import { ButtonCreate, GroupActions } from "shareComponents/common";
@@ -32,11 +29,7 @@ import { formatNumber } from "utils/ppt";
 const supporters = ['hiepnh@pgipartner.com','toannd@trixgo.com','tungtt@pgipartner.com','thupt@pgipartner.com','hapt@pgipartner.com']
 
 const DatahubContractorFinancial: FC = () => {
-<<<<<<< HEAD
 	const { user } = useAuth();
-	const [pkg, setPkg] = useState(pkgs[0]);
-=======
->>>>>>> 2c1032152f0320e403f93b113ac0401052e49005
 	const [show, setShow] = useState(false);
 	const [selected, setSelected] = useState<DatahubFinancial | Record<string, any>>({});
 

@@ -11,26 +11,15 @@ import { DatahubContract } from "typings/datahub/contract";
 import { useContractorCompany } from "views/datahub/contexts/Company";
 
 import { useRowSelect, useTable } from "react-table";
-<<<<<<< HEAD
 import { useAuth } from "services/hooks/auth/useAuth";
 
-const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
-	id: i as string | number,
-	title: "Thẻ lọc chính" as string | number,
-}));
-=======
 import { TableWithoutContext } from "shareComponents/common/Table";
 import getColumnsContractorContract from "views/datahub/utils/getColumnsContractorContract";
->>>>>>> 2c1032152f0320e403f93b113ac0401052e49005
 
 const supporters = ['hiepnh@pgipartner.com','toannd@trixgo.com','tungtt@pgipartner.com','thupt@pgipartner.com','hapt@pgipartner.com']
 
 const DatahubContractorContract: FC = () => {
-<<<<<<< HEAD
 	const { user } = useAuth();
-	const [pkg, setPkg] = useState(pkgs[0]);
-=======
->>>>>>> 2c1032152f0320e403f93b113ac0401052e49005
 	const [show, setShow] = useState(false);
 	const [keyword, setKeyword] = useState('');
 
