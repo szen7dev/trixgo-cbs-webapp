@@ -29,22 +29,60 @@ const DatahubContractorContract: FC = () => {
 	// Get data contractur
 	const { data: company } = useContractorCompany();
 	const { data, isLoading, refetch } = useInfinitePackage(
-		['datahub_packages', keyword, company?.data._id||''],
+		['datahub_packages', keyword, company?.data._id || ''],
 		{ keyword, contractorID: company?.data._id || '', populates: JSON.stringify({ path: 'field files' }) },
 		{ enable: Boolean(company?.data._id) }
 	);
 
 	const { addFileToUpload } = useUpload({
-        appID: APP_KEY.DATAHUB,
-        companyID: company?.data._id,
-    });
+		appID: APP_KEY.DATAHUB,
+		companyID: company?.data._id,
+	});
 
 	const [selected, setSelected] = useState<DatahubContract | Record<string, any>>({});
 
-  // Callback
-  const onClickUpload = useCallback((cell: Cell<DatahubContractBase>) => {
-    console.log("row data", cell.row.original);
-  }, []);
+	// Callback
+	const onClickUpload = useCallback(async (filesSelected: FileList | null, cell: Cell<DatahubContractBase>) => {
+		if (!filesSelected) return;
+
+        try {
+			const { _id: datahubPackageID } = cell.row.original;
+
+			const { error, message } = await validateFiles(filesSelected);
+			if (error) return toast.warn(message);
+
+			const files: string[] = [];
+
+			for await (const [key, file] of Object.entries(filesSelected)) {
+				const { _id } = await addFileToUpload({
+					files: file as any,
+					fileType: 2,
+					progress: percentCompleted => {
+						console.log(`${percentCompleted}%`, key);
+					}
+				})
+				_id && files.push(_id);
+			}
+
+			if(!files.length) return toast.warn('Thêm file thất bại');
+
+			const response: any = await DatahubRepository.updateDatahubContract({
+				datahubPackageID,
+				files
+			});
+
+			if(response.error) return toast.warn('Thêm file thất bại')
+
+			refetch();
+			toast.success('Thêm file thành công');
+		} catch(error) {
+			if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
+		}
+	}, []);
 
 	// Table handling
 	const columns = useMemo(() => getColumnsContractorContract({ onClickUpload }), [onClickUpload]);
@@ -93,7 +131,7 @@ const DatahubContractorContract: FC = () => {
 							className: "text-black text-medium border-separate space-x-0 space-y-0 w-full text-left",
 							style: { borderSpacing: 0 }
 						}}
-						// ={{ className: 'text-primary-gray whitespace-nowrap align-middle text-left' }}
+					// ={{ className: 'text-primary-gray whitespace-nowrap align-middle text-left' }}
 					/>
 				</div>
 				{/* <Paginate className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white" /> */}

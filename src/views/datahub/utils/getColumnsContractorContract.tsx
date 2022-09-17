@@ -19,7 +19,7 @@ const DefaultSpan: FC = ({ children }) => (
 );
 
 interface Options<T extends Record<string, any>> {
-  onClickUpload?: (cell: Cell<T>) => void;
+  onClickUpload?: (files: FileList | null, cell: Cell<T>) => void;
 }
 
 function getColumnsContractorContract(
@@ -102,12 +102,16 @@ function getColumnsContractorContract(
       headCellProps,
       cellProps: { className: "pt-2.5 pb-3 px-2 border-b border-cbs-border" },
       Cell: ({ value }) =>
-        value?.map((file, index) => {
+        value?.map((file: any, index) => {
           return (
-            <p key={index} className="text-cbs-primary">
-              {/* {note} */}
-              this is files
-            </p>
+            <a
+              key={`${index}-${file._id}`}
+              href={`${process.env.REACT_APP_URL_S3}${file.path}`}
+              download
+              className="text-cbs-primary break-all"
+            >
+              <p>{file.nameOrg}{index < value.length - 1 && `, `}</p>
+            </a>
           );
         }),
     },
@@ -118,9 +122,16 @@ function getColumnsContractorContract(
       cellProps: { className: "pt-2.5 pb-3 pl-2 pr-4 border-b border-cbs-border" },
       Cell: (cell: Cell<DatahubContractBase>) => {
         return (
-          <button className=" w-6 h-6" onClick={() => options?.onClickUpload?.(cell)}>
+          <label className="w-6 h-6 flex justify-center items-center cursor-pointer mr-2">
             <img src={iconPageUp} alt="" className="inline-block" />
-          </button>
+            <input
+              type="file"
+              name="files"
+              className="hidden"
+              multiple
+              onChange={e => options?.onClickUpload?.(e.target.files, cell)}
+            />
+          </label>
         );
       },
     },
