@@ -129,7 +129,13 @@ const ModalCreateProject: FC<Props> = (props) => {
 		}
 	});
 
-	const handleSubmit = async (values: typeof initialValues, actions: any) => {
+	const handleSubmit = async (values: any, actions: any) => {
+		values = {
+			...values,
+			basementNumber: parseInt(values.basementNumber),
+			floorNumber: parseInt(values.floorNumber),
+			floorArea: parseInt(values.floorArea),
+		}
 		if (props.datahubProjectID) {
 			await updateDatahubProject({ ...values, datahubProjectID: props.datahubProjectID }, {
 				onSuccess(data) {
