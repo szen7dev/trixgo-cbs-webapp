@@ -4,6 +4,13 @@ import { useContractorCompany } from 'views/datahub/contexts/Company';
 import Card from '../../../sharedComponents/common/Card';
 import ContactInfo from '../../../sharedComponents/common/ContactInfo';
 
+import iconName from 'assets/images/datahub-business-name.svg';
+import iconTaxid from 'assets/images/datahub-business-taxid.svg';
+import iconAddress from 'assets/images/datahub-business-address.svg';
+import iconEmail from 'assets/images/datahub-business-email.svg';
+import iconPhone from 'assets/images/datahub-business-phone.svg';
+import iconWebsite from 'assets/images/datahub-business-website.svg';
+
 type Props = {
 }
 
@@ -25,12 +32,12 @@ const ProfileFeed: FC<Props & HTMLAttributes<HTMLDivElement>> = (props, ref) => 
 							</p>
 						</div>
 						<div className='space-y-3 pt-3 pb-2'>
-							<ContactInfo value={'Tên: ' + data?.data.name || ''} />
-							<ContactInfo value={'Mã số thuế: ' + data?.data.taxid || ''} />
-							<ContactInfo value={'Địa chỉ: ' + data?.data.address || ''} />
-							<ContactInfo value={'Điện thoại: ' + data?.data.phone || ''} link='/' />
-							<ContactInfo value={'Email: ' + data?.data.email || ''} link='/' />
-							<ContactInfo value={'Website: ' + data?.data.website || ''} link='/' />
+							<ContactInfo value={'Tên: ' + data?.data.name || ''} imgIcon={iconName}/>
+							<ContactInfo value={'Mã số thuế: ' + data?.data.taxid || ''} imgIcon={iconTaxid} />
+							<ContactInfo value={'Địa chỉ: ' + data?.data.address || ''} imgIcon={iconAddress} />
+							<ContactInfo value={'Điện thoại: ' + data?.data.phone || ''} imgIcon={iconPhone} link='/' />
+							<ContactInfo value={'Email: ' + data?.data.email || ''} imgIcon={iconEmail} link='/' />
+							<ContactInfo value={'Website: ' + data?.data.website || ''} imgIcon={iconWebsite} link='/' />
 						</div>
 					</div>
 				</Card>

@@ -1,7 +1,7 @@
 import companyIcon from "assets/images/company_default.png";
 import iconBack from "assets/images/icon-back-gray.svg";
 import { debounce } from "lodash";
-import { FC, Fragment, useState } from "react";
+import { FC, Fragment, useRef, useState } from "react";
 import { generatePath, Link, useHistory, useLocation, useParams } from "react-router-dom";
 
 import { useDatahubArea, useDatahubCompanies } from "services/hooks/datahub";
@@ -16,7 +16,7 @@ import { DatahubTypes, DatahubTypesBase } from "typings/datahub/datahubtypes";
 import { useEffect } from "react";
 import { buildKeyDatahubPackage } from "apis/datahub/package";
 import { buildDatahubTypeKey } from "apis/datahub/types";
-import { buildDatahubAreaKey } from "apis/datahub/area";
+import { buildDatahubAreaKey, convertAreaToString } from "apis/datahub/area";
 
 type Props = {
   //
@@ -47,9 +47,10 @@ const BiddingHomePageV2: FC<Props> = (props) => {
   const [company, setCompany] = useState("");
   const [searchType, setSearchType] = useState("");
   const [searchArea, setSearchArea] = useState("");
-  const [type, setType] = useState<DatahubTypes>();
-  const [area, setArea] = useState<DatahubArea>();
+  const [type, setType] = useState<DatahubTypes | null>(null);
+  const [area, setArea] = useState<DatahubArea | null>(null);
 
+  const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (location.state) setType(location.state);
   }, [location.state]);
@@ -106,7 +107,7 @@ const BiddingHomePageV2: FC<Props> = (props) => {
         level: area?.level,
       }),
     {
-      enabled: Boolean(id) && Boolean(type || area),
+      enabled: Boolean(id) || Boolean(type || area),
     }
   );
 
@@ -118,6 +119,15 @@ const BiddingHomePageV2: FC<Props> = (props) => {
   const handleSearch = () => {
     if (type) handleChangeRoute(type);
     else refetch();
+  };
+  const handleReset = () => {
+    if (id) history.push("/bidding/home");
+    setType(null);
+    setArea(null);
+    if (inputRef.current) inputRef.current.value = "";
+    setCompany("");
+    setSearchArea("");
+    setSearchArea("");
   };
 
   return (
@@ -150,6 +160,7 @@ const BiddingHomePageV2: FC<Props> = (props) => {
                   <input
                     type="text"
                     placeholder="Tìm kiếm nhà thầu"
+                    ref={inputRef}
                     onChange={debounce((e) => setCompany(e.target.value), 300)}
                     className="pl-10 pr-6 py-2.5 w-full focus:outline-none bg-white placeholder-cbs-subtext text-medium border-[0.5px] border-cbs-border"
                   />
@@ -158,11 +169,12 @@ const BiddingHomePageV2: FC<Props> = (props) => {
               <div className="w-4/12 h-full">
                 <CustomAutoComplete
                   server
+                  showIcon={false}
                   data={datahubTypes.data?.pages.flatMap((p) => p.data.listRecords) || []}
                   onScroll={console.log}
                   value={type}
                   onChange={debounce((keyword) => {
-                    setType(undefined);
+                    setType(null);
                     if (!keyword) {
                       // setUserSelected("");
                     }
@@ -182,21 +194,21 @@ const BiddingHomePageV2: FC<Props> = (props) => {
               <div className="w-4/12 h-full">
                 <CustomAutoComplete
                   server
+                  showIcon={false}
                   data={datahubAreas.data?.pages.flatMap((p) => p.data.listRecords) || []}
                   onScroll={console.log}
                   onChange={debounce((keyword) => {
-                    setArea(undefined);
+                    setArea(null);
                     if (!keyword) {
                       // setUserSelected("");
                     }
                     setSearchArea(keyword);
                   }, 300)}
                   onChangeValue={setArea}
-                  renderValue={(v) =>
-                    v.name + ", " + (v.parent as any).name + ", " + (v.parent as any).parent.name
-                  }
+                  renderValue={convertAreaToString}
                   attribute="area"
                   wrapperClassName=""
+                  dropdownContainerClassName="w-auto"
                   className="w-full h-full py-2.5 px-3 focus:outline-none text-medium"
                   placeholder="Theo khu vực"
                 />
@@ -207,19 +219,27 @@ const BiddingHomePageV2: FC<Props> = (props) => {
               >
                 Tìm kiếm
               </button>
+              <button
+                onClick={handleReset}
+                className="bg-cbs-secondary px-4 py-2 rounded-cbs-sm whitespace-nowrap font-bold text-white"
+              >
+                Reset
+              </button>
             </div>
           </div>
         </div>
         {!company && !type && !area ? (
           <div className="mt-10">
-            <div className="flex px-3">
+
+            {/* <div className="flex px-3">
               <div className="pl-12 py-2 pr-1 border border-cbs-border rounded-cbs-sm relative">
                 <span className="absolute inset-y-0 left-2 flex items-center text-cbs-subtext">
                   <IconSearch />
                 </span>
                 <input className="outline-none" placeholder="Filter by tag name" />
               </div>
-            </div>
+            </div> */}
+
             <div className="flex flex-wrap text-cbs-subtext pt-3 text-medium -mx-2 px-3">
               {datahubTypes.data?.pages.map((page, idx) =>
                 page.data.listRecords.map((record) => (
@@ -234,7 +254,7 @@ const BiddingHomePageV2: FC<Props> = (props) => {
                     >
                       <div className="p-3">
                         <div>
-                          <div className="inline-block bg-[#E1ECF4] border border-cbs-border px-4 py-2 rounded-cbs-sm">
+                          <div className="inline-block bg-[#E1ECF4] text-[#39739D] border border-cbs-border px-4 py-2 rounded-cbs-sm">
                             <h3 className=" line-clamp-1">{record.name}</h3>
                           </div>
                         </div>
@@ -262,7 +282,7 @@ const BiddingHomePageV2: FC<Props> = (props) => {
               )}
             </div>
           </div>
-        ) : id ? (
+        ) : id || type || area ? (
           <div className="mt-10 pl-3.5">
             <div className="flex items-center">
               <button
@@ -295,7 +315,7 @@ const BiddingHomePageV2: FC<Props> = (props) => {
                       </div>
                       <div className="bg-cbs-active-comment text-black text-medium px-3 py-3.5 flex-1 max-h-[60px]">
                         <p className="line-clamp-2">
-                          {sign} {name}
+                          {sign}.{name} ({pack.amount})
                         </p>
                       </div>
                       <div className="text-cbs-subtext text-x-small px-4 py-2.5">

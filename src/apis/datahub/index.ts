@@ -11,7 +11,7 @@ import { DatahubCompanies } from "typings/datahub/company";
 import { DatahubContract, DatahubContractBody } from "typings/datahub/contract";
 import { DatahubTypes, DatahubTypesBody, DatahubTypesParams } from "typings/datahub/datahubtypes";
 import { DatahubFinancial, DatahubFinancialBody } from "typings/datahub/financial";
-import { DatahubProfile, DatahubProfileBody } from "typings/datahub/profile";
+import { DatahubProfile, DatahubProfileBody, DatahubProfileUpdate } from "typings/datahub/profile";
 import { DatahubProjects, DatahubProjectsBody } from "typings/datahub/projects";
 
 import { getDatahubPackageList } from "./package";
@@ -178,7 +178,7 @@ const DatahubRepository = {
     );
     return data;
   },
-  async updateDatahubProfile(body: DatahubProfileBody) {
+  async updateDatahubProfile(body: DatahubProfileUpdate) {
     const { data } = await API.put<ResponseCreate<DatahubProfile>>(`${url}/datahub_profiles`, body);
     return data;
   },

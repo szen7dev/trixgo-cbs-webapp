@@ -9,12 +9,16 @@ import { CustomFieldFormik } from 'shareComponents/common/Form/CustomForm';
 import { useMutation, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import DatahubRepository from 'apis/datahub';
+import { DatahubCompanies } from 'typings/datahub/company';
+import { buildDatahubProfilesKey } from 'apis/datahub/profiles';
+import { DatahubProfile } from 'typings/datahub/profile';
 
 type Props = {
-	datahubProfileID?: string;
+  company?: DatahubCompanies;
+  profile?: DatahubProfile;
 
-	toggle: () => void
-}
+  toggle: () => void;
+};
 
 const DatahubProfileSchema = object().shape({
 	name: string().required(),
@@ -24,7 +28,7 @@ const ModalCreateProfile: FC<Props> = (props) => {
 	const [initialValues, setInitialValues] = useState({ name: '' });
 	const queryClient = useQueryClient();
 
-	useProfileDetail(props.datahubProfileID, {
+	useProfileDetail(props.profile?._id, {
     onSuccess(data) {
       if (data.status === 200) {
         setInitialValues({ name: data.data.name });
@@ -34,24 +38,28 @@ const ModalCreateProfile: FC<Props> = (props) => {
   const createMutationPackage = useMutation(DatahubRepository.createDatahubProfile, {
     onSuccess() {
       toast.success("Tạo mới thành công");
+      queryClient.refetchQueries(buildDatahubProfilesKey({ contractorID: props.company?._id }))
     },
   });
   const updateMutationPackage = useMutation(DatahubRepository.updateDatahubProfile, {
     onSuccess() {
       toast.info("Cập nhật thành công");
+      queryClient.refetchQueries(buildDatahubProfilesKey({ contractorID: props.company?._id }))
     },
   });
 
   const handleSubmitForm = async (values: typeof initialValues) => {
-    if (props.datahubProfileID) {
+    if (props.profile) {
+      updateMutationPackage.mutate({
+        datahubProfileID: props.profile._id,
+        name: values.name,
+        // files: props.profile.files,
+      });
+    } else if (props.company) {
       createMutationPackage.mutate({
-        company: props.datahubProfileID,
+        company: props.company._id,
         name: values.name,
       });
-    } else {
-      // updateMutationPackage.mutate({
-      //   company: props.datahubProfileID
-      // })
     }
     props.toggle();
   };
@@ -68,7 +76,7 @@ const ModalCreateProfile: FC<Props> = (props) => {
 					<div className="flex items-center px-6 py-2.5 justify-between border-b border-secondary-gray border-opacity-30">
 						<Dialog.Title as="h3" className="text-lg leading-6 font-bold">
 							{
-								props.datahubProfileID ? "Cập nhật" : "Tạo mới"
+								props.profile?._id ? "Cập nhật" : "Tạo mới"
 							}
 						</Dialog.Title>
 						<button

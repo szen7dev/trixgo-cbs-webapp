@@ -206,22 +206,28 @@ export const usePcmReportCustom = ({
 
 type UsePcmPlanTaskCustom = {
     downloadExcelTaskAsync: (payload: PcmPlanTaskDownloadExcelPayload) => Promise<any>,
+    downloadTemplateImportExcelTaskAsync: (payload: { projectID: string }) => Promise<any>,
 };
 
 type UsePcmPlanTaskCustomParams = {
     params?: any
 }
 
-export const usePcmPlanTaskCustom = ({
-    params = {}
-}: UsePcmPlanTaskCustomParams) : UsePcmPlanTaskCustom => {
+// custom hook mới cho task
+export const usePcmPlanTaskCustom = ({params = {}}: UsePcmPlanTaskCustomParams) : UsePcmPlanTaskCustom => {
     const { mutateAsync: downloadExcelTaskAsync } =
         useMutation((payload: PcmPlanTaskDownloadExcelPayload) =>
             PcmRepository.downloadExcelTask(payload)
         );
 
+    const { mutateAsync: downloadTemplateImportExcelTaskAsync } =
+    useMutation((payload: { projectID: string }) =>
+        PcmRepository.downloadTemplateImportExcelTask(payload)
+    );
+    
     return {
-        downloadExcelTaskAsync
+        downloadExcelTaskAsync,
+        downloadTemplateImportExcelTaskAsync
     }
 }
 
