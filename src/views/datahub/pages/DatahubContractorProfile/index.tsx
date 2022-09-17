@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import ModalCreateProfile from './components/ModalCreateProfile';
 import useInfiniteProfile from 'services/hooks/datahub/profile/useInfiniteProfile';
 import { useContractorCompany } from 'views/datahub/contexts/Company';
@@ -11,11 +11,14 @@ import { useAuth } from "services/hooks/auth/useAuth";
 // Icons
 import iconPencil from "assets/images/icons8-pencil.svg";
 import { isSupporter } from 'configs';
-// import { useUpload } from 'services/hooks/useUpload';
-// import { validateFiles } from 'validation/file';
-// import { toast } from "react-toastify";
-// import { APP_KEY } from "utils/constants";
-// import DatahubRepository from 'apis/datahub';
+import { toast } from 'react-toastify';
+import { useUpload } from 'services/hooks/useUpload';
+import { validateFiles } from 'validation/file';
+import { APP_KEY } from "utils/constants";
+import DatahubRepository from 'apis/datahub';
+import moment from 'moment';
+import { humanFileSize } from 'utils/converter';
+import { getFileIcon } from 'utils/file';
 
 const DatahubContractorProfile: FC = () => {
 	const { user } = useAuth();
@@ -29,12 +32,52 @@ const DatahubContractorProfile: FC = () => {
 		{ enable: Boolean(company?.data._id) }
 	);
 
-	// const { addFileToUpload } = useUpload({
-	// 	appID: APP_KEY.DATAHUB,
-	// 	companyID: company?.data._id,
-	// });
+	const { addFileToUpload } = useUpload({
+		appID: APP_KEY.DATAHUB,
+		companyID: company?.data._id,
+	});
 
 	const toggle = () => setShow(!show);
+
+	const handleUploadFiles = useCallback(async (filesSelected: FileList | null, datahubProfileID: string) => {
+		if (!filesSelected) return;
+
+        try {
+			const { error, message } = await validateFiles(filesSelected);
+			if (error) return toast.warn(message);
+
+			const files: string[] = [];
+
+			for await (const [key, file] of Object.entries(filesSelected)) {
+				const { _id } = await addFileToUpload({
+					files: file as any,
+					fileType: 2,
+					progress: percentCompleted => {
+						console.log(`${percentCompleted}%`, key);
+					}
+				})
+				_id && files.push(_id);
+			}
+
+			if(!files.length) return toast.warn('Thêm file thất bại');
+
+			const response: any = await DatahubRepository.updateDatahubProfile({
+				datahubProfileID,
+				files
+			});
+
+			if(response.error) return toast.warn('Thêm file thất bại')
+
+			refetch();
+			toast.success('Thêm file thành công');
+		} catch(error) {
+			if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
+		}
+	}, []);
 
 	return (
 		<>
@@ -55,24 +98,42 @@ const DatahubContractorProfile: FC = () => {
 								// showContextMenu?.({ position: { x: e.clientX, y: e.clientY } })
 							}}>
 								<div className='flex'>
-									<div className='bg-[#EDFCFF] px-[18px] py-6 mr-3.5'>
-										<div className='w-9 h-9'>
-											<img src="/images/datahub/icons8-folder-96 5.png" alt="" />
-										</div>
-									</div>
+									<label className='bg-[#EDFCFF] px-[18px] py-6 mr-3.5 cursor-pointer'>
+										<img src="/images/datahub/icons8-folder-96 5.png" alt="" className="inline-block" />
+										<input
+											type="file"
+											name="files"
+											className="hidden"
+											multiple
+											onChange={e => handleUploadFiles(e.target.files, record._id)}
+										/>
+									</label>
 									<p className='flex-shrink font-bold text-large'>{record.name}</p>
 								</div>
 								<div className='pt-2.5'>
-									{record.files.map(file => (
+									{record.files.map((file, index) => (
 										<div key={file._id} className='flex border-b-[0.5px] border-cbs-border pb-2 pt-4'>
-											<img src='/images/CBS-PDF-Icon-48.svg' alt="" className='w-6 h-6 mr-3' />
+											<img
+												src={getFileIcon(file.mimeType)}
+												alt={file.nameOrg}
+												className='w-6 h-6 mr-3'
+											/>
 											<div>
-												<p className='text-small'>2022.CPMI-HSNL-V1.pdf</p>
+												{/* <p className='text-small'>2022.CPMI-HSNL-V1.pdf</p> */}
+												<a
+													key={`${index}-${file._id}`}
+													href={`${process.env.REACT_APP_URL_S3}${file.path}`}
+													download
+													className="text-cbs-primary text-small"
+												>
+													{file.nameOrg}
+												</a>
 												<p className='text-x-small text-cbs-subtext mt-2'>
-													<span>1.2Mb</span>
-													-
-													<span>15/2/2022</span>
-													<span>15:30</span>
+													<span>{humanFileSize(file.size)}</span>
+													{' - '}
+													<span>{moment(file.createdAt).format('DD/MM/YYYY')}</span>
+													{' - '}
+													<span>{moment(file.createdAt).format('HH:mm')}</span>
 												</p>
 											</div>
 										</div>
@@ -84,9 +145,12 @@ const DatahubContractorProfile: FC = () => {
 										setSelected(record);
 										setShow(true)
 									}}>
-									<div className='w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center'>
-										<img src={iconPencil} />
-									</div>
+									{user && isSupporter(user) ?
+										<div className='w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center'>
+											<img src={iconPencil} />
+										</div>
+										: <></>
+									}
 								</button>
 							</div>
 						</div>

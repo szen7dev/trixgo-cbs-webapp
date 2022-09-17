@@ -47,7 +47,6 @@ export type ResponseCreateFailed = {
   message: string;
   code: number;
   type: string;
-  // status: number;
   data: {
     type: string;
     message: string;

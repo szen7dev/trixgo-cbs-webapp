@@ -35,6 +35,7 @@ export const ModalCreateOrUpdateCompany: FC<ModalProps> = ({ toggle, modalType, 
   email: "",
   description: "",
   birthDay: "",
+  website: "",
 } }) => {
   const { user } = useAuth();
   const [keywordArea, setKeywordArea] = useState('');
@@ -68,6 +69,7 @@ export const ModalCreateOrUpdateCompany: FC<ModalProps> = ({ toggle, modalType, 
         phone: values.phone,
         description: values.description,
         birthDay: values.birthDay,
+        website: values.website,
       }
 
       // Handle api here!
@@ -258,6 +260,17 @@ export const ModalCreateOrUpdateCompany: FC<ModalProps> = ({ toggle, modalType, 
                     />
                   <ErrorMessage
                     name="birthDay"
+                    component="span"
+                    className="font-normal leading-7 text-sm text-negative"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtWebsite">
+                    Website
+                  </label>
+                  <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtWebsite" placeholder="Nhập website" {...getFieldProps('website')} />
+                  <ErrorMessage
+                    name="website"
                     component="span"
                     className="font-normal leading-7 text-sm text-negative"
                   />

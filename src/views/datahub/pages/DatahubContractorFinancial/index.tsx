@@ -201,7 +201,7 @@ const DatahubContractorFinancial: FC = () => {
 																download
 																className="text-cbs-primary break-all"
 															>
-																{file.nameOrg}{index < files.length - 1 && `, `}
+																<p>{file.nameOrg}{index < files.length - 1 && `, `}</p>
 															</a>
 														)
 													})
