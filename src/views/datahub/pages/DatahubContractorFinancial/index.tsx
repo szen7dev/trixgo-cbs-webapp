@@ -54,7 +54,7 @@ const DatahubContractorFinancial: FC = () => {
     });
 
 	useEffect(() => {
-		document.title = "CHG.THT-Lựa chọn nhà thầu";
+		document.title = "Thầu và mua sắm";
 	}, []);
 
 	const handleUploadFiles = async (filesSelected: FileList | null, datahubFinreportID: string) => {

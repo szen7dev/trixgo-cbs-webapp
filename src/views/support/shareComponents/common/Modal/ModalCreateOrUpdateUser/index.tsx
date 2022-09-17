@@ -36,6 +36,8 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
     departmentName: "",
     positionName: "",
     status: 1,
+    phone: "",
+    storageUse: 0
   }
 }) => {
   const [keywordDepartment, setKeywordDepartment] = useState('');
@@ -70,7 +72,9 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
       email: values.email,
       fullname: values.fullname,
       level: +values.level,
-      status: +values.status
+      status: +values.status,
+      phone: `${values.phone}`,
+      storageUse: values.storageUse
     }
 
     try {
@@ -180,6 +184,31 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
                     className="font-normal leading-7 text-sm text-negative"
                   />
                 </div>
+
+                <div className="mb-4">
+                  <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="phone">
+                    SĐT
+                  </label>
+                  <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="phone" type="number" placeholder="Nhập SĐT" {...getFieldProps('phone')} />
+                  <ErrorMessage
+                    name="phone"
+                    component="span"
+                    className="font-normal leading-7 text-sm text-negative"
+                  />
+                </div>
+                
+                <div className="mb-4">
+                  <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="storageUse">
+                    Dung lượng đã dùng
+                  </label>
+                  <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="storageUse" type="number" placeholder="Nhập dung lượng đã dùng" {...getFieldProps('storageUse')} />
+                  <ErrorMessage
+                    name="storageUse"
+                    component="span"
+                    className="font-normal leading-7 text-sm text-negative"
+                  />
+                </div>
+
                 <div className="mb-4">
                   <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="startTime">
                     Phòng ban
@@ -250,6 +279,7 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
                     className="font-normal leading-7 text-sm text-negative"
                   />
                 </div>
+
                 <div className='mb-4'>
                   <label className="block text-gray-700 text-sm font-bold mb-2">
                     Phân quyền

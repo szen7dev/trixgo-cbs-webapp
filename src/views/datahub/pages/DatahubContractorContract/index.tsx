@@ -48,7 +48,7 @@ const DatahubContractorContract: FC = () => {
 	const instance = useTable({ columns, data: _data, getRowId: (row) => row._id }, useRowSelect);
 
 	useEffect(() => {
-		document.title = "CHG.THT-Lựa chọn nhà thầu";
+		document.title = "Thầu và mua sắm";
 	}, []);
 
 	return (
