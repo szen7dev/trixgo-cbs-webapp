@@ -50,5 +50,6 @@ export type CompanyPayload = {
     areaName?: string,
     description?: string,
     birthDay?: string,
-    image?: string
+    image?: string,
+    website?: string
 }
