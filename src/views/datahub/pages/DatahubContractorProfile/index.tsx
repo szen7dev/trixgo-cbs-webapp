@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import ModalCreateProfile from './components/ModalCreateProfile';
 import useInfiniteProfile from 'services/hooks/datahub/profile/useInfiniteProfile';
 import { useContractorCompany } from 'views/datahub/contexts/Company';
@@ -28,6 +28,10 @@ const DatahubContractorProfile: FC<Props> = (props) => {
   );
 
 	const toggle = () => setShow(!show);
+  const onClickFolder = useCallback((data: DatahubProfile) => {
+    console.log("click folder", data);
+  }, []);
+
 	return (
 		<>
 			<div className='bg-white w-full mx-3.5 pt-4 pb-[50px]'>
@@ -47,7 +51,7 @@ const DatahubContractorProfile: FC<Props> = (props) => {
 								// showContextMenu?.({ position: { x: e.clientX, y: e.clientY } })
 							}}>
 								<div className='flex'>
-									<div className='bg-[#EDFCFF] px-[18px] py-6 mr-3.5'>
+									<div className='bg-[#EDFCFF] px-[18px] py-6 mr-3.5 cursor-pointer' onClick={()=>onClickFolder(record)}>
 										<div className='w-9 h-9'>
 											<img src="/images/datahub/icons8-folder-96 5.png" alt="" />
 										</div>
