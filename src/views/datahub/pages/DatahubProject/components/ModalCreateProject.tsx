@@ -119,7 +119,7 @@ const ModalCreateProject: FC<Props> = (props) => {
 					})
 					setDefaultValues({
 						client: data.data.client.name,
-						area3: data.data.area3.name + ', ' + (data.data.area3.parent as any).name + ', ' + (data.data.area3.parent as any).parent.name,
+						area3: convertAreaToString(data.data.area3),
 						projectType: data.data.projectType ? PROJECT_TYPES.find(item => item.value === data.data.projectType)?.text || '' : '',
 						buildingType: data.data.buildingType ? BUILDING_TYPES.find(item => item.value === data.data.buildingType)?.text || '' : '',
 						buildingGrade: data.data.buildingGrade ? BUILDING_GRADES.find(item => item.value === data.data.buildingGrade)?.text || '' : '',
