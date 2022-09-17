@@ -4,7 +4,7 @@ const useValueOrState = <T>(
   value?: T
 ): [T | undefined, React.Dispatch<React.SetStateAction<T | undefined>>] => {
   const [state, setState] = useState<T | undefined>(value);
-  return [value ?? state, setState];
+  return [typeof value !== "undefined" ? value : state, setState];
 };
 
 export default useValueOrState;
