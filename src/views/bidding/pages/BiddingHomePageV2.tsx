@@ -1,7 +1,7 @@
 import companyIcon from "assets/images/company_default.png";
 import iconBack from "assets/images/icon-back-gray.svg";
 import { debounce } from "lodash";
-import { FC, Fragment, useState } from "react";
+import { FC, Fragment, useRef, useState } from "react";
 import { generatePath, Link, useHistory, useLocation, useParams } from "react-router-dom";
 
 import { useDatahubArea, useDatahubCompanies } from "services/hooks/datahub";
@@ -47,9 +47,10 @@ const BiddingHomePageV2: FC<Props> = (props) => {
   const [company, setCompany] = useState("");
   const [searchType, setSearchType] = useState("");
   const [searchArea, setSearchArea] = useState("");
-  const [type, setType] = useState<DatahubTypes>();
-  const [area, setArea] = useState<DatahubArea>();
+  const [type, setType] = useState<DatahubTypes | null>(null);
+  const [area, setArea] = useState<DatahubArea | null>(null);
 
+  const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (location.state) setType(location.state);
   }, [location.state]);
@@ -119,6 +120,15 @@ const BiddingHomePageV2: FC<Props> = (props) => {
     if (type) handleChangeRoute(type);
     else refetch();
   };
+  const handleReset = () => {
+    if (id) history.push("/bidding/home");
+    setType(null);
+    setArea(null);
+    if (inputRef.current) inputRef.current.value = "";
+    setCompany("");
+    setSearchArea("");
+    setSearchArea("");
+  };
 
   return (
     <div
@@ -150,6 +160,7 @@ const BiddingHomePageV2: FC<Props> = (props) => {
                   <input
                     type="text"
                     placeholder="Tìm kiếm nhà thầu"
+                    ref={inputRef}
                     onChange={debounce((e) => setCompany(e.target.value), 300)}
                     className="pl-10 pr-6 py-2.5 w-full focus:outline-none bg-white placeholder-cbs-subtext text-medium border-[0.5px] border-cbs-border"
                   />
@@ -162,7 +173,7 @@ const BiddingHomePageV2: FC<Props> = (props) => {
                   onScroll={console.log}
                   value={type}
                   onChange={debounce((keyword) => {
-                    setType(undefined);
+                    setType(null);
                     if (!keyword) {
                       // setUserSelected("");
                     }
@@ -185,7 +196,7 @@ const BiddingHomePageV2: FC<Props> = (props) => {
                   data={datahubAreas.data?.pages.flatMap((p) => p.data.listRecords) || []}
                   onScroll={console.log}
                   onChange={debounce((keyword) => {
-                    setArea(undefined);
+                    setArea(null);
                     if (!keyword) {
                       // setUserSelected("");
                     }
@@ -206,6 +217,12 @@ const BiddingHomePageV2: FC<Props> = (props) => {
                 className="bg-cbs-green px-4 py-2 rounded-cbs-sm whitespace-nowrap font-bold text-white"
               >
                 Tìm kiếm
+              </button>
+              <button
+                onClick={handleReset}
+                className="bg-cbs-secondary px-4 py-2 rounded-cbs-sm whitespace-nowrap font-bold text-white"
+              >
+                Reset
               </button>
             </div>
           </div>
@@ -234,7 +251,7 @@ const BiddingHomePageV2: FC<Props> = (props) => {
                     >
                       <div className="p-3">
                         <div>
-                          <div className="inline-block bg-[#E1ECF4] border border-cbs-border px-4 py-2 rounded-cbs-sm">
+                          <div className="inline-block bg-[#E1ECF4] text-[#39739D] border border-cbs-border px-4 py-2 rounded-cbs-sm">
                             <h3 className=" line-clamp-1">{record.name}</h3>
                           </div>
                         </div>

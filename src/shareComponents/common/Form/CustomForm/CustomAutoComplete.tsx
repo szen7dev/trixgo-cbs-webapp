@@ -18,7 +18,7 @@ type Props<T extends Record<string, any>> = {
   initialData?: string;
   placeholder?: string;
   emptyMessage?: string;
-  value?: T;
+  value?: T|null;
   renderValue?: (value: T) => string;
   onChange?: (value: string) => void;
   onChangeValue?: (value: T) => void;
@@ -69,6 +69,8 @@ function CustomAutoComplete<T extends Record<string, any>>({
   useEffect(() => {
     if (value) {
       setSearch((renderValue ? renderValue(value) : value[attribute]) || "");
+    } else {
+      setSearch("");
     }
   }, [value, attribute, renderValue]);
 
