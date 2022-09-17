@@ -3,11 +3,13 @@ import iconWallet from "assets/images/icons8-wallet-100.png";
 
 type Props = {
   title: string | number;
+  imgIcon?: string,
   description: string;
 };
 
 const Wallethub: FC<Props & Omit<React.HTMLAttributes<HTMLDivElement>, "title">> = ({
   title,
+  imgIcon,
   description,
   ...props
 }) => {
