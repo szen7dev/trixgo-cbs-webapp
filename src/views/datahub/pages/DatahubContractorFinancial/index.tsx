@@ -208,16 +208,19 @@ const DatahubContractorFinancial: FC = () => {
 												}
 											</td>
 											<td className="pt-2.5 pb-3 px-3 border-b border-cbs-border text-right">
-												<label className="w-6 h-6 flex justify-center items-center cursor-pointer mr-2">
-													<img src={iconPageUp} alt="" className="inline-block" />
-													<input
-														type="file"
-														name="files"
-														className="hidden"
-														multiple
-														onChange={e => handleUploadFiles(e.target.files, _id)}
-													/>
-												</label>
+												{user && isSupporter(user) ?
+													<label className="w-6 h-6 flex justify-center items-center cursor-pointer mr-2">
+														<img src={iconPageUp} alt="" className="inline-block" />
+														<input
+															type="file"
+															name="files"
+															className="hidden"
+															multiple
+															onChange={e => handleUploadFiles(e.target.files, _id)}
+														/>
+													</label>
+													: <></>
+												}
 											</td>
 										</tr>
 									)

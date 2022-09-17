@@ -100,13 +100,16 @@ const DatahubContractorProfile: FC = () => {
 								<div className='flex'>
 									<label className='bg-[#EDFCFF] px-[18px] py-6 mr-3.5 cursor-pointer'>
 										<img src="/images/datahub/icons8-folder-96 5.png" alt="" className="inline-block" />
-										<input
-											type="file"
-											name="files"
-											className="hidden"
-											multiple
-											onChange={e => handleUploadFiles(e.target.files, record._id)}
-										/>
+										{user && isSupporter(user) ?
+											<input
+												type="file"
+												name="files"
+												className="hidden"
+												multiple
+												onChange={e => handleUploadFiles(e.target.files, record._id)}
+											/>
+											: <></>
+										}
 									</label>
 									<p className='flex-shrink font-bold text-large'>{record.name}</p>
 								</div>
