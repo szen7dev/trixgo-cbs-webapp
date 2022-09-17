@@ -84,9 +84,12 @@ const DatahubContractorProfile: FC = () => {
 										setSelected(record);
 										setShow(true)
 									}}>
-									<div className='w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center'>
-										<img src={iconPencil} />
-									</div>
+									{user && isSupporter(user) ?
+										<div className='w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center'>
+											<img src={iconPencil} />
+										</div>
+										: <></>
+									}
 								</button>
 							</div>
 						</div>

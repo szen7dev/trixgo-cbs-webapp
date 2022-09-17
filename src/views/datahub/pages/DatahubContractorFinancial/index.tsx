@@ -195,14 +195,16 @@ const DatahubContractorFinancial: FC = () => {
 												{
 													files.map((file: any, index) => {
 														return (
-															<a
-																key={`${index}-${file._id}`}
-																href={`${process.env.REACT_APP_URL_S3}${file.path}`}
-																download
-																className="text-cbs-primary break-all"
-															>
-																{file.nameOrg}{index < files.length - 1 && `, `}
-															</a>
+															<p>
+																<a
+																	key={`${index}-${file._id}`}
+																	href={`${process.env.REACT_APP_URL_S3}${file.path}`}
+																	download
+																	className="text-cbs-primary break-all"
+																>
+																	{file.nameOrg}{index < files.length - 1 && `, `}
+																</a>
+															</p>
 														)
 													})
 												}
