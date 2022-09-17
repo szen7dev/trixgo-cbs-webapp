@@ -40,12 +40,15 @@ export interface CompaniesResponse {
 
 export type CompanyPayload = {
     companyID?: string,
-    name: string,
-    sign: string,
-    taxid: string,
-    address: string,
-    area: string,
+    name?: string,
+    sign?: string,
+    taxid?: string,
+    address?: string,
+    area?: string,
     email?: string,
     phone?: string,
-    areaName?: string
+    areaName?: string,
+    description?: string,
+    birthDay?: string,
+    image?: string
 }

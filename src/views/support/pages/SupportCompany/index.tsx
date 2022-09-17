@@ -1,4 +1,4 @@
-import { FC, useState, useCallback } from "react";
+import { FC, useState, useCallback, ChangeEvent, useEffect } from "react";
 import cn from "classnames";
 import moment from "moment";
 import debounce from 'lodash/debounce';
@@ -10,17 +10,22 @@ import CompanyLogo from "assets/images/thumbnail1.jpg";
 import DeleteIcon from "assets/images/icons8-remove.svg";
 import iconPencil from 'assets/images/icons8-pencil-96 1.png';
 import ThreeDotVerticalIcon from "assets/images/icon-3dots-vertical-gray.svg";
+import CameraIcon from "assets/images/camera-icon.svg";
 
 import styles from "views/support/styles/support.module.css";
 import { useQueryListCompany } from 'services/hooks/useCompanies';
 import { useModal } from "services/hooks/useModal";
 import { CompanyItem } from "typings/companies";
+import { useUpload } from 'services/hooks/useUpload';
+import { useCompany } from 'services/hooks/useCompanies';
 
 export const SupportCompanyPage: FC = () => {
 	const { closeModal, openModal } = useModal();
 	const [keyword, setKeyword] = useState('');
 	const [modalCreateCompany, setModalCreateCompany] = useState<boolean>(false);
 	const [companiesChecked, setCompaniesChecked] = useState<Array<any>>([]);
+    const [imgaeCompanyName, setImageCompanyName] = useState("");
+
 	const [initialValues, setInitialValues] = useState({
 		companyID: "",
 		name: "",
@@ -30,8 +35,15 @@ export const SupportCompanyPage: FC = () => {
 		areaName: "",
 		area: "",
 		phone: "",
-		email: ""
+		email: "",
+		description: "",
+		birthDay: "",
+	})
+	
+	const { addFileToUpload } = useUpload({
+		typeUpload: 'company'
 	});
+
 	const {
 		data: dataListCompanies,
 		loading: isLoading,
@@ -40,6 +52,7 @@ export const SupportCompanyPage: FC = () => {
 		refetch,
 		fetchNextPage,
 	} = useQueryListCompany({ keyword });
+	const { createCompanyAsync, updateCompanyAsync } = useCompany();
 
 	const toggleModalCreateOrUpdateCompany = () => setModalCreateCompany(!modalCreateCompany);
 	// const prevPageAction = () => fetchPreviousPage();
@@ -58,7 +71,9 @@ export const SupportCompanyPage: FC = () => {
 			area: "",
 			areaName: "",
 			phone: "",
-			email: ""
+			email: "",
+			description: "",
+			birthDay: "",
 		})
 	}
 
@@ -75,7 +90,7 @@ export const SupportCompanyPage: FC = () => {
 		};
 
 		if(newListIDChecked.length === 1) {
-			const { _id, name, sign, taxid, address, area, phone, email } = newListIDChecked[0];
+			const { _id, name, sign, taxid, address, area, phone, email, description, birthDay } = newListIDChecked[0];
 			setInitialValues({
 				companyID: _id,
 				areaName: area?.name,
@@ -85,7 +100,9 @@ export const SupportCompanyPage: FC = () => {
 				taxid,
 				address,
 				phone,
-				email
+				email,
+				description,
+				birthDay,
 			});
 		} else{
 			clearData();
@@ -116,6 +133,26 @@ export const SupportCompanyPage: FC = () => {
 
 	if (isLoading) {
 		return <Loader className="border-primary" />
+	}
+
+	const handleChangeLogo = async (event: ChangeEvent<HTMLInputElement>) => {
+		const files = event.target.files;
+		if(!files || !files.length) return toast.warning("Vui lòng chọn ảnh công ty");
+
+		const { name } = await addFileToUpload({
+			files: files[0] as any,
+			fileType: 1,
+			useCompress: true
+		});
+
+		if(name){
+			const companyID = event.target.name;
+			// Cập nhật hình ảnh
+			const { error, message } = await updateCompanyAsync({ companyID, image: name });
+			setTimeout(() => {
+				refetch();
+			}, 1000);
+		}
 	}
 
 	return (
@@ -257,7 +294,10 @@ export const SupportCompanyPage: FC = () => {
 								<td className="py-1 px-2">{company.name}</td>
 								<td className="py-1 px-2">{company.sign}</td>
 								<td className="py-1 px-2">
-									<img src={company.image ? `${process.env.REACT_APP_URL_S3_COMPANY}/${company.image}` : CompanyLogo} alt="Company" className="w-10 h-10" />
+									<span>
+										<img src={company.image ? `${process.env.REACT_APP_URL_S3_COMPANY}/${company.image}` : CompanyLogo} alt="Company" className="w-10 h-10" />
+										<input type="file" name={company._id}  accept="image/*"  onChange={handleChangeLogo} />
+									</span>
 								</td>
 								<td className="py-1 px-2">
 									{company.address}
