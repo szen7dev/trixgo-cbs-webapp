@@ -263,16 +263,16 @@ const BiddingHomePageV2: FC<Props> = (props) => {
                         </div>
                         <div className="flex justify-between mt-4">
                           <div className="flex-1 leading-5">
-                            <div className="text-black">{record.numberOfContractors}</div>
-                            <div className="text-cbs-subtext text-sm">đơn vị</div>
+                            <div className="text-black text-xs">{record.numberOfContractors}</div>
+                            <div className="text-cbs-subtext text-xs">đơn vị</div>
                           </div>
                           <div className="flex-1 leading-5">
-                            <div className="text-black">{record.numberOfContracts || 0}</div>
-                            <div className="text-cbs-subtext text-sm">hợp đồng</div>
+                            <div className="text-black text-xs">{record.numberOfContracts || 0}</div>
+                            <div className="text-cbs-subtext text-xs">hợp đồng</div>
                           </div>
                           <div className="leading-5">
-                            <div className="text-black">{record.numberOfViews || 0}</div>
-                            <div className="text-cbs-subtext text-sm">lượt xem</div>
+                            <div className="text-black text-xs">{record.numberOfViews || 0}</div>
+                            <div className="text-cbs-subtext text-xs">lượt xem</div>
                           </div>
                         </div>
                       </div>
