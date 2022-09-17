@@ -87,13 +87,20 @@ const PcmRepository = {
         const { data } = await API.get<any>(
             `${pcmURL}/pcm_plan_reports/export-task-report?${convertObToUrl(payload)}`
         );
-        console.log({ data })
         return data;
     },
 
     async downloadExcelTask(payload: any): Promise<any> {
         const { data } = await API.get<any>(
             `${pcmURL}/pcm_plan_tasks/download-excel?${convertObToUrl(payload)}`
+        );
+        return data;
+    },
+
+    // Api tải mẫu để import công việc
+    async downloadTemplateImportExcelTask(payload: any): Promise<any> {
+        const { data } = await API.get<any>(
+            `${pcmURL}/pcm_plan_tasks/download-template-import-excel?${convertObToUrl(payload)}`
         );
         return data;
     },

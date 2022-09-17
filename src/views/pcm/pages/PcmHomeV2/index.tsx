@@ -136,7 +136,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
 			setStateExport({ isExporting: false });
 		}
 	}
-
+    
     if(stateExport.isExporting) {
         return <Loader className="border-primary" />
     }
