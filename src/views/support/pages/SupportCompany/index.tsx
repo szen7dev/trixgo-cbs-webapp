@@ -38,6 +38,7 @@ export const SupportCompanyPage: FC = () => {
 		email: "",
 		description: "",
 		birthDay: "",
+		website: "",
 	})
 	
 	const { addFileToUpload } = useUpload({
@@ -74,6 +75,7 @@ export const SupportCompanyPage: FC = () => {
 			email: "",
 			description: "",
 			birthDay: "",
+			website: ""
 		})
 	}
 
@@ -90,7 +92,7 @@ export const SupportCompanyPage: FC = () => {
 		};
 
 		if(newListIDChecked.length === 1) {
-			const { _id, name, sign, taxid, address, area, phone, email, description, birthDay } = newListIDChecked[0];
+			const { _id, name, sign, taxid, address, area, phone, email, description, birthDay, website } = newListIDChecked[0];
 			setInitialValues({
 				companyID: _id,
 				areaName: area?.name,
@@ -103,6 +105,7 @@ export const SupportCompanyPage: FC = () => {
 				email,
 				description,
 				birthDay,
+				website
 			});
 		} else{
 			clearData();
