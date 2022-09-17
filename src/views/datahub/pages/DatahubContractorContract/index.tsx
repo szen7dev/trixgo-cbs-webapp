@@ -15,6 +15,11 @@ import { TableWithoutContext } from "shareComponents/common/Table";
 import getColumnsContractorContract from "views/datahub/utils/getColumnsContractorContract";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { isSupporter } from "configs";
+import { useUpload } from 'services/hooks/useUpload';
+import { validateFiles } from 'validation/file';
+import { toast } from "react-toastify";
+import { APP_KEY } from "utils/constants";
+import DatahubRepository from 'apis/datahub';
 
 const DatahubContractorContract: FC = () => {
 	const { user } = useAuth();
@@ -23,11 +28,16 @@ const DatahubContractorContract: FC = () => {
 
 	// Get data contractur
 	const { data: company } = useContractorCompany();
-	const { data, isLoading } = useInfinitePackage(
+	const { data, isLoading, refetch } = useInfinitePackage(
 		['datahub_packages', keyword, company?.data._id||''],
-		{ keyword, contractorID: company?.data._id || '', populates: JSON.stringify({ path: 'field' }) },
+		{ keyword, contractorID: company?.data._id || '', populates: JSON.stringify({ path: 'field files' }) },
 		{ enable: Boolean(company?.data._id) }
 	);
+
+	const { addFileToUpload } = useUpload({
+        appID: APP_KEY.DATAHUB,
+        companyID: company?.data._id,
+    });
 
 	const [selected, setSelected] = useState<DatahubContract | Record<string, any>>({});
 
@@ -38,7 +48,7 @@ const DatahubContractorContract: FC = () => {
 	const instance = useTable({ columns, data: _data, getRowId: (row) => row._id }, useRowSelect);
 
 	useEffect(() => {
-		document.title = "Thầu và mua sắm";
+		document.title = "Thầu và mua sắm | Trixgo";
 	}, []);
 
 	return (
@@ -66,7 +76,7 @@ const DatahubContractorContract: FC = () => {
 					{user && isSupporter(user) ?
 						<ButtonCreate onClick={() => { setShow(!show); setSelected({}) }} />
 						: <></>
-					}					
+					}
 					{/* <ButtonMore /> */}
 				</div>
 				<div className="overflow-auto relative">
@@ -86,7 +96,6 @@ const DatahubContractorContract: FC = () => {
 					<ModalCreateContract
 						contractor={company?.data._id || ''}
 						datahubPackageID={selected.id}
-
 						toggle={() => setShow(!show)}
 					/>
 				</ModalExtraLarge>

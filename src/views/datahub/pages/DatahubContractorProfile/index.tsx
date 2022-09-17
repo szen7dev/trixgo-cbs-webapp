@@ -11,23 +11,31 @@ import { useAuth } from "services/hooks/auth/useAuth";
 // Icons
 import iconPencil from "assets/images/icons8-pencil.svg";
 import { isSupporter } from 'configs';
+// import { useUpload } from 'services/hooks/useUpload';
+// import { validateFiles } from 'validation/file';
+// import { toast } from "react-toastify";
+// import { APP_KEY } from "utils/constants";
+// import DatahubRepository from 'apis/datahub';
 
-type Props = {
-
-}
-
-const DatahubContractorProfile: FC<Props> = (props) => {
+const DatahubContractorProfile: FC = () => {
 	const { user } = useAuth();
 	const [show, setShow] = useState(false);
 	const { data: company } = useContractorCompany();
 	const [selected, setSelected] = useState<DatahubProfile>();
-	const { data } = useInfiniteProfile(
-    buildDatahubProfilesKey({ contractorID: company?.data._id }),
-    { contractorID: company?.data._id || "" },
-    { enable: Boolean(company?.data._id) }
-  );
+
+	const { data, refetch } = useInfiniteProfile(
+		buildDatahubProfilesKey({ contractorID: company?.data._id }),
+		{ contractorID: company?.data._id || "", populates: JSON.stringify({ path: 'files' }) },
+		{ enable: Boolean(company?.data._id) }
+	);
+
+	// const { addFileToUpload } = useUpload({
+	// 	appID: APP_KEY.DATAHUB,
+	// 	companyID: company?.data._id,
+	// });
 
 	const toggle = () => setShow(!show);
+
 	return (
 		<>
 			<div className='bg-white w-full mx-3.5 pt-4 pb-[50px]'>
@@ -70,22 +78,25 @@ const DatahubContractorProfile: FC<Props> = (props) => {
 										</div>
 									))}
 								</div>
-                <button
-                  className='group-hover:block hidden absolute right-2 top-2'
-                  onClick={()=>{
-    								setSelected(record);
-                    setShow(true)
-                  }}>
-                  <div className='w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center'>
-                    <img src={iconPencil} />
-                  </div>
-                </button>
+								<button
+									className='group-hover:block hidden absolute right-2 top-2'
+									onClick={() => {
+										setSelected(record);
+										setShow(true)
+									}}>
+									{user && isSupporter(user) ?
+										<div className='w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center'>
+											<img src={iconPencil} />
+										</div>
+										: <></>
+									}
+								</button>
 							</div>
 						</div>
 						)))
 					}
 
-					{ user && isSupporter(user) ?
+					{user && isSupporter(user) ?
 						<div className='w-3/12 px-2 min-h-[330px]'>
 							<div className='h-full flex justify-center items-center border-cbs-border border-[0.5px] rounded-cbs-md cursor-pointer' onClick={() => { toggle(); setSelected(undefined) }}>
 								<div>

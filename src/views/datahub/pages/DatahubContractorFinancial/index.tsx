@@ -26,6 +26,11 @@ import iconPageUp from 'assets/images/icons8-upload-document-100 1.png';
 import { DatahubFinancial } from "typings/datahub/financial";
 import { formatNumber } from "utils/ppt";
 import { isSupporter } from "configs";
+import { useUpload } from 'services/hooks/useUpload';
+import { validateFiles } from 'validation/file';
+import { toast } from "react-toastify";
+import { APP_KEY } from "utils/constants";
+import DatahubRepository from 'apis/datahub';
 
 const DatahubContractorFinancial: FC = () => {
 	const { user } = useAuth();
@@ -33,13 +38,64 @@ const DatahubContractorFinancial: FC = () => {
 	const [selected, setSelected] = useState<DatahubFinancial | Record<string, any>>({});
 
 	const { data: company } = useContractorCompany();
-	const { data, isLoading } = useQueryFinancials({ contractorID: company?.data._id || '' });
+	const { data, isLoading, refetch } = useQueryFinancials({
+		contractorID: company?.data._id || '',
+		populates: JSON.stringify({
+			path: 'files',
+			select: '_id nameOrg path size'
+		})
+	});
 
 	const { assigned, checked, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data?.data.listRecords || []);
 
+	const { addFileToUpload } = useUpload({
+        appID: APP_KEY.DATAHUB,
+        companyID: company?.data._id,
+    });
+
 	useEffect(() => {
-		document.title = "Thầu và mua sắm";
+		document.title = "Thầu và mua sắm | Trixgo";
 	}, []);
+
+	const handleUploadFiles = async (filesSelected: FileList | null, datahubFinreportID: string) => {
+		if (!filesSelected) return;
+
+        try {
+			const { error, message } = await validateFiles(filesSelected);
+			if (error) return toast.warn(message);
+
+			const files: string[] = [];
+
+			for await (const [key, file] of Object.entries(filesSelected)) {
+				const { _id } = await addFileToUpload({
+					files: file as any,
+					fileType: 2,
+					progress: percentCompleted => {
+						console.log(`${percentCompleted}%`, key);
+					}
+				})
+				_id && files.push(_id);
+			}
+
+			if(!files.length) return toast.warn('Thêm file thất bại');
+
+			const response: any = await DatahubRepository.updateDatahubFinancial({
+				datahubFinreportID,
+				files
+			});
+
+			if(response.error) return toast.warn('Thêm file thất bại')
+
+			refetch();
+			toast.success('Thêm file thành công');
+		} catch(error) {
+			if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
+		}
+	}
 
 	return (
 		<div className="w-full px-3.5 ">
@@ -67,7 +123,7 @@ const DatahubContractorFinancial: FC = () => {
 					{user && isSupporter(user) ?
 						<ButtonCreate onClick={() => { setShow(!show); setSelected({}) }} />
 						: <></>
-					}					
+					}
 					{/* <ButtonMore /> */}
 				</div>
 				<div className="overflow-auto relative">
@@ -135,20 +191,33 @@ const DatahubContractorFinancial: FC = () => {
 											<td className="pt-2.5 pb-3 pl-3 border-b border-cbs-border text-right">{formatNumber(grossRevenue)}</td>
 											<td className="pt-2.5 pb-3 pl-3 border-b border-cbs-border text-right">{formatNumber(grossConstructionRevenue)}</td>
 											<td className="pt-2.5 pb-3 pl-3 border-b border-cbs-border text-right">{formatNumber(grossProfit)}</td>
-											<td className="pt-2.5 pb-3 pl-3 border-b border-cbs-border">
+											<td className="pt-2.5 pb-3 pl-3 max-w-[300px] border-b border-cbs-border">
 												{
-													files.map((file, index) => {
-														return <p key={index} className="text-cbs-primary">
-															{/* {note} */}
-															this is fiel
-														</p>
+													files.map((file: any, index) => {
+														return (
+															<a
+																key={`${index}-${file._id}`}
+																href={`${process.env.REACT_APP_URL_S3}${file.path}`}
+																download
+																className="text-cbs-primary break-all"
+															>
+																<p>{file.nameOrg}{index < files.length - 1 && `, `}</p>
+															</a>
+														)
 													})
 												}
 											</td>
 											<td className="pt-2.5 pb-3 px-3 border-b border-cbs-border text-right">
-												<button className=" w-6 h-6">
+												<label className="w-6 h-6 flex justify-center items-center cursor-pointer mr-2">
 													<img src={iconPageUp} alt="" className="inline-block" />
-												</button>
+													<input
+														type="file"
+														name="files"
+														className="hidden"
+														multiple
+														onChange={e => handleUploadFiles(e.target.files, _id)}
+													/>
+												</label>
 											</td>
 										</tr>
 									)
