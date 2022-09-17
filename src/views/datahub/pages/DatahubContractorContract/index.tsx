@@ -14,8 +14,7 @@ import { useRowSelect, useTable } from "react-table";
 import { TableWithoutContext } from "shareComponents/common/Table";
 import getColumnsContractorContract from "views/datahub/utils/getColumnsContractorContract";
 import { useAuth } from "services/hooks/auth/useAuth";
-
-const supporters = ['hiepnh@pgipartner.com','toannd@trixgo.com','tungtt@pgipartner.com','thupt@pgipartner.com','hapt@pgipartner.com']
+import { isSupporter } from "configs";
 
 const DatahubContractorContract: FC = () => {
 	const { user } = useAuth();
@@ -54,7 +53,7 @@ const DatahubContractorContract: FC = () => {
 						onSelectValue={setPkg}
 					/> */}
 					{/* <DropdownFilterButton /> */}
-					{supporters.includes(`${user?.email}`) ?
+					{user && isSupporter(user) ?
 						<GroupActions
 							className="flex items-center flex-1"
 							onClickPencil={() => { setShow(true); setSelected(instance.selectedFlatRows[0]) }}
@@ -64,7 +63,7 @@ const DatahubContractorContract: FC = () => {
 						/>
 						: <></>
 					}
-					{supporters.includes(`${user?.email}`) ?
+					{user && isSupporter(user) ?
 						<ButtonCreate onClick={() => { setShow(!show); setSelected({}) }} />
 						: <></>
 					}					

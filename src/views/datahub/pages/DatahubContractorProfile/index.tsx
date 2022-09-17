@@ -10,12 +10,11 @@ import { useAuth } from "services/hooks/auth/useAuth";
 
 // Icons
 import iconPencil from "assets/images/icons8-pencil.svg";
+import { isSupporter } from 'configs';
 
 type Props = {
 
 }
-
-const supporters = ['hiepnh@pgipartner.com','toannd@trixgo.com','tungtt@pgipartner.com','thupt@pgipartner.com','hapt@pgipartner.com']
 
 const DatahubContractorProfile: FC<Props> = (props) => {
 	const { user } = useAuth();
@@ -42,7 +41,7 @@ const DatahubContractorProfile: FC<Props> = (props) => {
 				<div className='flex flex-wrap gap-y-3.5'>
 					{
 						data?.pages.map((page, i) => page.data.listRecords.map(record => (<div key={record._id} className='w-3/12 px-2 min-h-[330px]'>
-							<div className='group relative before:h-full border-cbs-border border-[0.5px] rounded-cbs-md pl-3.5 pr-3 pt-4 pb-5' onContextMenu={(e) => {
+							<div className='h-full group relative before:h-full border-cbs-border border-[0.5px] rounded-cbs-md pl-3.5 pr-3 pt-4 pb-5' onContextMenu={(e) => {
 								e.stopPropagation();
 								e.preventDefault();
 								// showContextMenu?.({ position: { x: e.clientX, y: e.clientY } })
@@ -86,7 +85,7 @@ const DatahubContractorProfile: FC<Props> = (props) => {
 						)))
 					}
 
-					{supporters.includes(`${user?.email}`) ?
+					{ user && isSupporter(user) ?
 						<div className='w-3/12 px-2 min-h-[330px]'>
 							<div className='h-full flex justify-center items-center border-cbs-border border-[0.5px] rounded-cbs-md cursor-pointer' onClick={() => { toggle(); setSelected(undefined) }}>
 								<div>

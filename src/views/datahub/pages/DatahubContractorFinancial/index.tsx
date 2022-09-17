@@ -25,8 +25,7 @@ import iconPageUp from 'assets/images/icons8-upload-document-100 1.png';
 
 import { DatahubFinancial } from "typings/datahub/financial";
 import { formatNumber } from "utils/ppt";
-
-const supporters = ['hiepnh@pgipartner.com','toannd@trixgo.com','tungtt@pgipartner.com','thupt@pgipartner.com','hapt@pgipartner.com']
+import { isSupporter } from "configs";
 
 const DatahubContractorFinancial: FC = () => {
 	const { user } = useAuth();
@@ -55,7 +54,7 @@ const DatahubContractorFinancial: FC = () => {
 					/> */}
 					{/* <DropdownFilterButton /> */}
 
-					{supporters.includes(`${user?.email}`) ?
+					{user && isSupporter(user) ?
 						<GroupActions
 							className="flex items-center flex-1"
 							onClickPencil={() => { setShow(true); setSelected(checked[0]) }}
@@ -65,7 +64,7 @@ const DatahubContractorFinancial: FC = () => {
 						/>
 						: <></>
 					}
-					{supporters.includes(`${user?.email}`) ?
+					{user && isSupporter(user) ?
 						<ButtonCreate onClick={() => { setShow(!show); setSelected({}) }} />
 						: <></>
 					}					
