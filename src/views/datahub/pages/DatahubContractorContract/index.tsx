@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
 
 import ModalCreateContract from "./components/ModalCreateContract";
 
@@ -7,10 +7,10 @@ import ModalCreateContract from "./components/ModalCreateContract";
 import useInfinitePackage from "services/hooks/datahub/package/useInfinitePackage";
 import { ButtonCreate, GroupActions } from "shareComponents/common";
 import ModalExtraLarge from "shareComponents/common/ModalContainer/components/ModalExtraLarge";
-import { DatahubContract } from "typings/datahub/contract";
+import { DatahubContract, DatahubContractBase } from "typings/datahub/contract";
 import { useContractorCompany } from "views/datahub/contexts/Company";
 
-import { useRowSelect, useTable } from "react-table";
+import { Cell, useRowSelect, useTable } from "react-table";
 import { TableWithoutContext } from "shareComponents/common/Table";
 import getColumnsContractorContract from "views/datahub/utils/getColumnsContractorContract";
 import { useAuth } from "services/hooks/auth/useAuth";
@@ -31,8 +31,13 @@ const DatahubContractorContract: FC = () => {
 
 	const [selected, setSelected] = useState<DatahubContract | Record<string, any>>({});
 
+  // Callback
+  const onClickUpload = useCallback((cell: Cell<DatahubContractBase>) => {
+    console.log("row data", cell.row.original);
+  }, []);
+
 	// Table handling
-	const columns = useMemo(getColumnsContractorContract, []);
+	const columns = useMemo(() => getColumnsContractorContract({ onClickUpload }), [onClickUpload]);
 	const _data = useMemo(() => data?.pages.flatMap(p => p.data.listRecords) || [], [data]);
 
 	const instance = useTable({ columns, data: _data, getRowId: (row) => row._id }, useRowSelect);

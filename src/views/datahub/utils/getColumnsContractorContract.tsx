@@ -1,31 +1,49 @@
+import iconPageUp from "assets/images/icons8-upload-document-100 1.png";
 import moment from "moment";
 import { FC } from "react";
-import { TableOptions } from "react-table";
+import { Cell, TableOptions } from "react-table";
 import { DatahubContractBase } from "typings/datahub/contract";
-import iconPageUp from "assets/images/icons8-upload-document-100 1.png";
 
 // Constants
 import { BUILDING_GRADES, BUILDING_TYPES, PROJECT_TYPES } from "apis/localdb";
-import { formatNumber } from "utils/ppt";
 import { SelectionColumn } from "shareComponents/common/Table/components/SelectionColumn";
+import { formatNumber } from "utils/ppt";
 
-const headCellProps = { className: "py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" };
+const headCellProps = {
+  className:
+    "py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border",
+};
 
-const DefaultSpan: FC = ({ children }) => <span className="pl-2 border-l border-cbs-border">{children}</span>;
+const DefaultSpan: FC = ({ children }) => (
+  <span className="pl-2 border-l border-cbs-border">{children}</span>
+);
 
-function getColumnsContractorContract(): TableOptions<DatahubContractBase>["columns"] {
+interface Options<T extends Record<string, any>> {
+  onClickUpload?: (cell: Cell<T>) => void;
+}
+
+function getColumnsContractorContract(
+  options?: Options<DatahubContractBase>
+): TableOptions<DatahubContractBase>["columns"] {
   return [
     SelectionColumn({
-      tableHeadSelectorProps: { className: "px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border w-1" },
+      tableHeadSelectorProps: {
+        className:
+          "px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border w-1",
+      },
       tableHeadSelectorInputProps: { className: "cbs-checkbox" },
-      tableCellSelectorProps: { className: "pt-2.5 pb-3 px-2 border-b border-cbs-border text-center" },
+      tableCellSelectorProps: {
+        className: "pt-2.5 pb-3 px-2 border-b border-cbs-border text-center",
+      },
       tableCellSelectorInputProps: { className: "cbs-checkbox" },
     }),
     {
       accessor: "name",
       Header: <DefaultSpan>Hợp đồng</DefaultSpan>,
       headCellProps,
-      cellProps: { className: "pt-2.5 pb-3 px-2 border-b border-cbs-border group-hover:text-cbs-primary" },
+      cellProps: {
+        className: "pt-2.5 pb-3 px-2 border-b border-cbs-border group-hover:text-cbs-primary",
+      },
       // Cell: ({ row, value }: any) => navigate ? <Link to={'/datahub/inspection/' + row.id}>{value}</Link> : value
     },
     {
@@ -97,9 +115,9 @@ function getColumnsContractorContract(): TableOptions<DatahubContractBase>["colu
       Header: <span className="pl-2 border-l border-cbs-border"></span>,
       headCellProps,
       cellProps: { className: "pt-2.5 pb-3 pl-2 pr-4 border-b border-cbs-border" },
-      Cell: ({ row }: any) => {
+      Cell: (cell: Cell<DatahubContractBase>) => {
         return (
-          <button className=" w-6 h-6">
+          <button className=" w-6 h-6" onClick={() => options?.onClickUpload?.(cell)}>
             <img src={iconPageUp} alt="" className="inline-block" />
           </button>
         );
