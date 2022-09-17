@@ -106,7 +106,7 @@ const BiddingHomePageV2: FC<Props> = (props) => {
         level: area?.level,
       }),
     {
-      enabled: Boolean(id) && Boolean(type || area),
+      enabled: Boolean(id) || Boolean(type || area),
     }
   );
 
@@ -262,7 +262,7 @@ const BiddingHomePageV2: FC<Props> = (props) => {
               )}
             </div>
           </div>
-        ) : id ? (
+        ) : id || type || area ? (
           <div className="mt-10 pl-3.5">
             <div className="flex items-center">
               <button
