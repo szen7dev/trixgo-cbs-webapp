@@ -16,30 +16,39 @@ const DefaultSpan: FC = ({ children }) => <span className="pl-2 border-l border-
 function getColumnsContractorContract(): TableOptions<DatahubContractBase>["columns"] {
   return [
     SelectionColumn({
-      tableHeadSelectorProps: { className: "px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border w-1" },
+      tableHeadSelectorProps: { className: "px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" },
       tableHeadSelectorInputProps: { className: "cbs-checkbox" },
       tableCellSelectorProps: { className: "pt-2.5 pb-3 px-2 border-b border-cbs-border text-center" },
       tableCellSelectorInputProps: { className: "cbs-checkbox" },
     }),
     {
       accessor: "name",
-      Header: <DefaultSpan>Hợp đồng</DefaultSpan>,
+      Header: "Hợp đồng",
       headCellProps,
       cellProps: { className: "pt-2.5 pb-3 px-2 border-b border-cbs-border group-hover:text-cbs-primary" },
-      // Cell: ({ row, value }: any) => navigate ? <Link to={'/datahub/inspection/' + row.id}>{value}</Link> : value
+      Cell: ({ row }) => (
+        <>
+          <p>{row.original.name}</p>
+          {/* <p>{row.original.project?.name}</p> */}
+        </>
+      ),
     },
     {
       accessor: "field",
-      Header: <DefaultSpan>Lĩnh vực</DefaultSpan>,
+      Header: "Lĩnh vực",
       headCellProps,
 
       cellProps: { className: "pt-2.5 pb-3 px-2 border-b border-cbs-border" },
-      Cell: ({ row, value }) => (value && typeof value !== "string" ? value.name : ""),
+      Cell: ({ row, value }) => (
+        <>
+          <p>{value && typeof value !== "string" ? value.name : ""}</p>
+        </>
+      ),
     },
     {
       id: "projectType",
       accessor: "projectType",
-      Header: <DefaultSpan>Quy mô, tính chất</DefaultSpan>,
+      Header: "Quy mô, tính chất",
       headCellProps,
       cellProps: { className: "pt-2.5 pb-3 px-2 border-b border-cbs-border" },
       Cell: ({ row, value }) => (
@@ -53,7 +62,7 @@ function getColumnsContractorContract(): TableOptions<DatahubContractBase>["colu
     {
       id: "number",
       accessor: "basementArea",
-      Header: <DefaultSpan>Thông số</DefaultSpan>,
+      Header: "Thông số",
       headCellProps,
       cellProps: { className: "pt-2.5 pb-3 px-2 border-b border-cbs-border" },
       Cell: ({ row }) => (
@@ -65,21 +74,21 @@ function getColumnsContractorContract(): TableOptions<DatahubContractBase>["colu
     },
     {
       accessor: "value",
-      Header: <DefaultSpan>Giá trị ký</DefaultSpan>,
+      Header: "Giá trị ký",
       headCellProps,
       cellProps: { className: "pt-2.5 pb-3 px-2 border-b border-cbs-border" },
       Cell: ({ row, value }) => formatNumber(value + row.original.vatValue),
     },
     {
       accessor: "date",
-      Header: <DefaultSpan>Ngày ký</DefaultSpan>,
+      Header: "Ngày ký",
       headCellProps,
       cellProps: { className: "pt-2.5 pb-3 px-2 border-b border-cbs-border" },
       Cell: ({ value }) => moment(value).format("DD/MM/yyyy"),
     },
     {
       accessor: "files",
-      Header: <DefaultSpan>Tài liệu xác nhận</DefaultSpan>,
+      Header: "Tài liệu",
       headCellProps,
       cellProps: { className: "pt-2.5 pb-3 px-2 border-b border-cbs-border" },
       Cell: ({ value }) =>

@@ -4,11 +4,16 @@ import Skeleton from 'react-loading-skeleton';
 
 //
 import Wallethub from '../../common/Wallethub';
+import { generatePath, NavLink, useParams } from 'react-router-dom';
 
 //
 import iconVideoPlaylist from 'assets/images/icons8-video-playlist-90 1.png';
 import converPage from "assets/images/trx-construction-cover2.svg";
-import { generatePath, NavLink, useParams } from 'react-router-dom';
+
+import iconContract from 'assets/images/datahub-business-contract.svg';
+import iconCustomber from 'assets/images/datahub-business-customer.svg';
+import iconProject from 'assets/images/datahub-business-project.svg';
+import iconService from 'assets/images/datahub-business-service.svg';
 
 import DatahubRepository from 'apis/datahub';
 import { useQuery } from 'react-query';
@@ -42,9 +47,12 @@ const DatahubContractorLayoutDetail: FC<Props> = ({ children, navLinks }) => {
 					<div className='flex border-cbs-border border-b-[0.5px]'>
 						<div className='w-4/12'>
 							<div className='flex w-full justify-around items-center h-full'>
-								<Wallethub title={datahubPackages.data?.data.number1||0} description='Dịch vụ' />
-								<Wallethub title={datahubPackages.data?.data.number2||0} description='Dự án' />
-								<Wallethub title={datahubPackages.data?.data.number3||0} description='Hợp đồng' />
+								{/* <Wallethub title={datahubPackages.data?.data.number1||0} description='Dịch vụ' imgIcon={iconService}/>
+								<Wallethub title={datahubPackages.data?.data.number2||0} description='Dự án' imgIcon={iconProject}/>
+								<Wallethub title={datahubPackages.data?.data.number3||0} description='Hợp đồng' imgIcon={iconContract}/> */}
+								<Wallethub title={datahubPackages.data?.data.number1||0} description='Dịch vụ'/>
+								<Wallethub title={datahubPackages.data?.data.number2||0} description='Dự án'/>
+								<Wallethub title={datahubPackages.data?.data.number3||0} description='Hợp đồng'/>
 							</div>
 						</div>
 						<div className='w-4/12 pb-4'>
@@ -78,7 +86,8 @@ const DatahubContractorLayoutDetail: FC<Props> = ({ children, navLinks }) => {
 										Xem video giới thiệu
 									</button>
 								</div>
-								<Wallethub title={datahubPackages.data?.data.number4||0} description='Khách hàng' />
+								{/* <Wallethub title={datahubPackages.data?.data.number4||0} description='Khách hàng' imgIcon={iconCustomber}/> */}
+								<Wallethub title={datahubPackages.data?.data.number4||0} description='Khách hàng'/>
 							</div>
 						</div>
 					</div>
