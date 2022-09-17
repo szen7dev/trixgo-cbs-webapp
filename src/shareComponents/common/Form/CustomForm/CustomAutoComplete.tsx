@@ -2,6 +2,7 @@
 import React, { Fragment, useState, PropsWithChildren, useEffect } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import useValueOrState from "services/hooks/useValueOrState";
+import classNames from "classnames";
 
 type Props<T extends Record<string, any>> = {
   // title: string;
@@ -18,7 +19,9 @@ type Props<T extends Record<string, any>> = {
   initialData?: string;
   placeholder?: string;
   emptyMessage?: string;
-  value?: T|null;
+  value?: T | null;
+  showIcon?: boolean;
+  dropdownContainerClassName?: string;
   renderValue?: (value: T) => string;
   onChange?: (value: string) => void;
   onChangeValue?: (value: T) => void;
@@ -41,6 +44,7 @@ function CustomAutoComplete<T extends Record<string, any>>({
   // name,
   // title,
   required,
+  showIcon = true,
   error,
   children,
   renderValue,
@@ -56,6 +60,7 @@ function CustomAutoComplete<T extends Record<string, any>>({
   server = false,
   icon: Icon = DefaultIcon,
   emptyMessage = "Không có dữ liệu phù hợp",
+  dropdownContainerClassName = "w-full",
   onFocus,
   value,
   ...rest
@@ -149,16 +154,21 @@ function CustomAutoComplete<T extends Record<string, any>>({
             show={isOpen}
           >
             <Listbox.Options
-              className="absolute w-full py-1 mt-1 overflow-auto bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none"
+              className={classNames(
+                dropdownContainerClassName,
+                "absolute py-1 mt-1 overflow-auto bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none"
+              )}
               onScroll={onScroll}
             >
               {dataFiltered.map((item, personIdx) => (
                 <Listbox.Option
                   key={personIdx}
                   className={({ active, selected }) =>
-                    `hover:text-cbs-primary hover:bg-cbs-gray cursor-pointer select-none relative py-2 pl-10 pr-4 ${
-                      selected ? "text-cbs-primary" : "text-gray-900"
-                    }`
+                    classNames(
+                      `hover:text-cbs-primary hover:bg-cbs-gray cursor-pointer select-none relative py-2 pr-4`,
+                      selected ? "text-cbs-primary" : "text-gray-900",
+                      showIcon ? "pl-10" : "pl-2"
+                    )
                   }
                   value={item}
                 >
@@ -170,7 +180,7 @@ function CustomAutoComplete<T extends Record<string, any>>({
                       >
                         {renderValue ? renderValue(item) : item[attribute]}
                       </span>
-                      {selected ? (
+                      {showIcon && selected ? (
                         <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
