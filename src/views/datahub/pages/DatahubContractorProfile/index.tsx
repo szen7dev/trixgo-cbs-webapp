@@ -4,9 +4,12 @@ import useInfiniteProfile from 'services/hooks/datahub/profile/useInfiniteProfil
 import { useContractorCompany } from 'views/datahub/contexts/Company';
 import ModalExtraLarge from 'shareComponents/common/ModalContainer/components/ModalExtraLarge';
 import { DatahubProfile } from 'typings/datahub/profile';
-import { ContextMenu } from 'shareComponents/common/ContextMenu';
+// import { ContextMenu } from 'shareComponents/common/ContextMenu';
 import { buildDatahubProfilesKey } from 'apis/datahub/profiles';
 import { useAuth } from "services/hooks/auth/useAuth";
+
+// Icons
+import iconPencil from "assets/images/icons8-pencil.svg";
 
 type Props = {
 
@@ -18,7 +21,7 @@ const DatahubContractorProfile: FC<Props> = (props) => {
 	const { user } = useAuth();
 	const [show, setShow] = useState(false);
 	const { data: company } = useContractorCompany();
-	const [selected, setSelected] = useState<DatahubProfile | Record<string, any>>({});
+	const [selected, setSelected] = useState<DatahubProfile>();
 	const { data } = useInfiniteProfile(
     buildDatahubProfilesKey({ contractorID: company?.data._id }),
     { contractorID: company?.data._id || "" },
@@ -29,20 +32,19 @@ const DatahubContractorProfile: FC<Props> = (props) => {
 	return (
 		<>
 			<div className='bg-white w-full mx-3.5 pt-4 pb-[50px]'>
-				<ContextMenu>
+				{/* <ContextMenu>
 					<div className='bg-white border-0.5 border-cbs-border rounded-cbs-sm shadow-cbs-md'>
 						<button onClick={toggle}>
-							Sửa {selected.name}
+							Sửa {selected?.name}
 						</button>
 					</div>
-				</ContextMenu>
+				</ContextMenu> */}
 				<div className='flex flex-wrap gap-y-3.5'>
 					{
 						data?.pages.map((page, i) => page.data.listRecords.map(record => (<div key={record._id} className='w-3/12 px-2 min-h-[330px]'>
-							<div className='h-full border-cbs-border border-[0.5px] rounded-cbs-md pl-3.5 pr-3 pt-4 pb-5' onContextMenu={(e) => {
+							<div className='group relative before:h-full border-cbs-border border-[0.5px] rounded-cbs-md pl-3.5 pr-3 pt-4 pb-5' onContextMenu={(e) => {
 								e.stopPropagation();
 								e.preventDefault();
-								setSelected(record);
 								// showContextMenu?.({ position: { x: e.clientX, y: e.clientY } })
 							}}>
 								<div className='flex'>
@@ -69,6 +71,16 @@ const DatahubContractorProfile: FC<Props> = (props) => {
 										</div>
 									))}
 								</div>
+                <button
+                  className='group-hover:block hidden absolute right-2 top-2'
+                  onClick={()=>{
+    								setSelected(record);
+                    setShow(true)
+                  }}>
+                  <div className='w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center'>
+                    <img src={iconPencil} />
+                  </div>
+                </button>
 							</div>
 						</div>
 						)))
@@ -76,7 +88,7 @@ const DatahubContractorProfile: FC<Props> = (props) => {
 
 					{supporters.includes(`${user?.email}`) ?
 						<div className='w-3/12 px-2 min-h-[330px]'>
-							<div className='h-full flex justify-center items-center border-cbs-border border-[0.5px] rounded-cbs-md cursor-pointer' onClick={() => { toggle(); setSelected({}) }}>
+							<div className='h-full flex justify-center items-center border-cbs-border border-[0.5px] rounded-cbs-md cursor-pointer' onClick={() => { toggle(); setSelected(undefined) }}>
 								<div>
 									<div className='mx-auto text-cbs-subtext border-cbs-subtext border-[3px] rounded-full w-[50px] h-[50px] flex items-center justify-center'>
 										<svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -94,7 +106,7 @@ const DatahubContractorProfile: FC<Props> = (props) => {
 				</div>
 			</div>
 			<ModalExtraLarge show={show}>
-				<ModalCreateProfile datahubProfileID={selected._id} toggle={toggle} />
+				<ModalCreateProfile profile={selected} company={company?.data} toggle={toggle} />
 			</ModalExtraLarge>
 		</>
 	)

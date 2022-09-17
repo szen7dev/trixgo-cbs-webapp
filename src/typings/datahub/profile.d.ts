@@ -13,12 +13,15 @@ export type DatahubProfileBase = {
   updatedAt: DateString;
 };
 
-export type DatahubProfile<T = keyof DatahubProfileBase> = Pick<
-  DatahubProfileBase,
-  T
->;
+export type DatahubProfile<T = keyof DatahubProfileBase> = Pick<DatahubProfileBase, T>;
 
 export type DatahubProfileBody = {
   company: string;
   name: string;
+};
+
+export type DatahubProfileUpdate = {
+  datahubProfileID: string;
+  name?: string;
+  files?: Array<string>;
 };
