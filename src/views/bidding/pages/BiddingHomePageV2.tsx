@@ -16,7 +16,7 @@ import { DatahubTypes, DatahubTypesBase } from "typings/datahub/datahubtypes";
 import { useEffect } from "react";
 import { buildKeyDatahubPackage } from "apis/datahub/package";
 import { buildDatahubTypeKey } from "apis/datahub/types";
-import { buildDatahubAreaKey } from "apis/datahub/area";
+import { buildDatahubAreaKey, convertAreaToString } from "apis/datahub/area";
 
 type Props = {
   //
@@ -169,6 +169,7 @@ const BiddingHomePageV2: FC<Props> = (props) => {
               <div className="w-4/12 h-full">
                 <CustomAutoComplete
                   server
+                  showIcon={false}
                   data={datahubTypes.data?.pages.flatMap((p) => p.data.listRecords) || []}
                   onScroll={console.log}
                   value={type}
@@ -193,6 +194,7 @@ const BiddingHomePageV2: FC<Props> = (props) => {
               <div className="w-4/12 h-full">
                 <CustomAutoComplete
                   server
+                  showIcon={false}
                   data={datahubAreas.data?.pages.flatMap((p) => p.data.listRecords) || []}
                   onScroll={console.log}
                   onChange={debounce((keyword) => {
@@ -203,11 +205,10 @@ const BiddingHomePageV2: FC<Props> = (props) => {
                     setSearchArea(keyword);
                   }, 300)}
                   onChangeValue={setArea}
-                  renderValue={(v) =>
-                    v.name + ", " + (v.parent as any).name + ", " + (v.parent as any).parent?.name
-                  }
+                  renderValue={convertAreaToString}
                   attribute="area"
                   wrapperClassName=""
+                  dropdownContainerClassName="w-auto"
                   className="w-full h-full py-2.5 px-3 focus:outline-none text-medium"
                   placeholder="Theo khu vực"
                 />

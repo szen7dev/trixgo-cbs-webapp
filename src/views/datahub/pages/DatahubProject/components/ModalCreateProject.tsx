@@ -14,6 +14,7 @@ import { useCreateDatahubProject, useUpdateDatahubProject, useDatahubProject, us
 // ======== Typings ========
 import { ResponseCreateSuccess } from "typings/apis/response";
 import { DatahubProjects } from 'typings/datahub/projects';
+import { convertAreaToString } from 'apis/datahub/area';
 
 type Props = {
 	type: 'create' | 'edit'
@@ -222,7 +223,7 @@ const ModalCreateProject: FC<Props> = (props) => {
 										data={listAddress3?.pages.flatMap(p => p.data.listRecords) || []}
 										valueAttribute="_id"
 										initialData={defaultValues.area3}
-										renderValue={(item) => item.name + ', ' + (item.parent as any).name + ', ' + (item.parent as any).parent.name}
+										renderValue={convertAreaToString}
 										onScroll={e => { hasNextArea && (e.target.scrollTop + e.target.offsetHeight + 100 > e.target.scrollHeight) && fetchNextArea() }}
 									/>
 									<CustomFieldFormik name='location' title='Địa chỉ theo GG map' />
