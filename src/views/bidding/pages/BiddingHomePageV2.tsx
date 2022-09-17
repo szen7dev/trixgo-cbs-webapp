@@ -246,14 +246,14 @@ const BiddingHomePageV2: FC<Props> = (props) => {
                             <div className="text-black">{record.numberOfContractors}</div>
                             <div className="text-cbs-subtext">đơn vị</div>
                           </div>
-                          <div className="flex-1 leading-5">
+                          {/* <div className="flex-1 leading-5">
                             <div className="text-black">{record.numberOfPosts}</div>
                             <div className="text-cbs-subtext">bài viết</div>
                           </div>
                           <div className="leading-5">
                             <div className="text-black">{record.numberOfViews || 0}</div>
                             <div className="text-cbs-subtext">lượt xem</div>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     </div>
