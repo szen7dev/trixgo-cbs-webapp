@@ -37,6 +37,8 @@ export type UserSystemPayload = {
     positionID: string,
     level: number,
     status: number,
+    phone?: string,
+    storageUse?: number,
 }
 
 export type UserSystemProps = {
@@ -57,7 +59,7 @@ export type UserSystemProps = {
         sign: string
     },
     email: string,
-    phone: string,
+    phone?: string,
     image: string,
     fullname: string,
     bizfullname: string,
@@ -68,6 +70,7 @@ export type UserSystemProps = {
     numLog: number,
     lang: string,
     imgUrl?: string;
+    storageUse?: number | undefined;
 }
 
 interface ModalProps {
@@ -85,6 +88,8 @@ interface ModalProps {
         departmentName?: string,
         positionName?: string,
         status: number
+        storageUse?: number;
+        phone?: string;
     }
     onConfirm?(): void
 }
