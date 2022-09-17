@@ -31,7 +31,7 @@ const DatahubContractorService: FC<Props> = (props) => {
               <div className="flex flex-col h-full rounded-cbs-sm overflow-hidden border-cbs-border border-0.5 ">
                 <div className="p-3">
                   <div>
-                    <div className="inline-block bg-[#E1ECF4] border border-cbs-border px-4 py-2 rounded-cbs-sm">
+                    <div className="inline-block bg-[#E1ECF4] text-[#39739D] border border-cbs-border px-4 py-2 rounded-cbs-sm">
                       <h3 className=" line-clamp-1">{name}</h3>
                     </div>
                   </div>
