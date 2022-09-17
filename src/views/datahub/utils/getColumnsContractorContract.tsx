@@ -8,6 +8,9 @@ import { DatahubContractBase } from "typings/datahub/contract";
 import { BUILDING_GRADES, BUILDING_TYPES, PROJECT_TYPES } from "apis/localdb";
 import { SelectionColumn } from "shareComponents/common/Table/components/SelectionColumn";
 import { formatNumber } from "utils/ppt";
+import { isSupporter } from 'configs';
+import { useAuth } from "services/hooks/auth/useAuth";
+// const { user } = useAuth();
 
 const headCellProps = {
   className:
@@ -121,20 +124,27 @@ function getColumnsContractorContract(
       headCellProps,
       cellProps: { className: "pt-2.5 pb-3 pl-2 pr-4 border-b border-cbs-border" },
       Cell: (cell: Cell<DatahubContractBase>) => {
+        const { user } = useAuth();
         return (
+          
           <label className="w-6 h-6 flex justify-center items-center cursor-pointer mr-2">
             <img src={iconPageUp} alt="" className="inline-block" />
-            <input
-              type="file"
-              name="files"
-              className="hidden"
-              multiple
-              onChange={e => options?.onClickUpload?.(e.target.files, cell)}
-            />
+            {user && isSupporter(user) ?
+              <input
+                type="file"
+                name="files"
+                className="hidden"
+                multiple
+                onChange={e => options?.onClickUpload?.(e.target.files, cell)}
+              />
+              : <></>
+            },
+           
           </label>
         );
       },
     },
   ];
 }
+
 export default getColumnsContractorContract;
