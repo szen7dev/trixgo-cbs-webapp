@@ -193,7 +193,7 @@ const BiddingHomePageV2: FC<Props> = (props) => {
                   }, 300)}
                   onChangeValue={setArea}
                   renderValue={(v) =>
-                    v.name + ", " + (v.parent as any).name + ", " + (v.parent as any).parent.name
+                    v.name + ", " + (v.parent as any).name + ", " + (v.parent as any).parent?.name
                   }
                   attribute="area"
                   wrapperClassName=""
