@@ -48,7 +48,9 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
 		}
 	}
 
-    // Xử lý import excel
+    /**
+     * Xử lý import excel (đọc file)
+     */
     const handleImport = ($event: any) => {
         const files = $event.target.files;
         if (files.length) {
@@ -59,14 +61,17 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                 const sheets = wb.SheetNames;
 
                 if (sheets.length) {
-                    const rows: any = utils.sheet_to_json(wb.Sheets[sheets[1]]);
+                    const rows: any = utils.sheet_to_json(wb.Sheets[sheets[1]]); // Index=1 (tức Sheet số 2 từ trái sang)
+                    console.log(rows)
+
                     setDataImport(rows)
                 }
             }
             reader.readAsArrayBuffer(file);
         }
     }
-    
+
+    // Gọi tới API để đẩy data lên
     useEffect(() => {
         if(dataImport){
             const fetchData = async () => {
