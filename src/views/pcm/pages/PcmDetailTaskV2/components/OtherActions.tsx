@@ -152,13 +152,13 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                         >
                             Tải mẫu import excel
                         </button>
-                        
-                        <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
+                    
+                        {/* <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
                         >
                             <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
                                 accept=".xlsx, .xlsm, .xls, .csv"/>
                             <label className="custom-file-label" htmlFor="inputGroupFile">Import excel tạo việc con</label>
-                        </button>
+                        </button> */}
                         {/* <Link
                             className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header block"}
                             to={`/pcm/detail/${task._id}/print/4`}
