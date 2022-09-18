@@ -5,10 +5,10 @@ export type DatahubFinancialBase = {
   liabilitiy: number;
   netWorth: number;
   currentAsset: number;
-  shortTermLiabilitiy: number;
+  shortTermLiabilitiy: number;//
   workingCapital: number;
   grossRevenue: number;
-  grossConstructionRevenue: number;
+  grossConstructionRevenue: number;//
   grossProfit: number;
   grossProfitAfterTax: number;
   files: [];
@@ -35,10 +35,10 @@ export type DatahubFinancialBody = {
   liabilitiy?: number;
   netWorth?: number;
   currentAsset?: number;
-  shortTermLiabilitiy?: number;
+  shortTermLiabilitiy?: number;//
   workingCapital?: number;
   grossRevenue?: number;
-  grossConstructionRevenue?: number;
+  grossConstructionRevenue?: number;//
   grossProfit?: number;
   grossProfitAfterTax?: number;
 };
