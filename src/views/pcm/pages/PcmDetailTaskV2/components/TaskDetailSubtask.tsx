@@ -1,4 +1,4 @@
-import React, {FC, useState} from "react";
+import React, {FC, useState, useEffect} from "react";
 import iconTickBox from "assets/images/icons8-tick-box-48.svg";
 // import iconClock from "assets/images/icons8-clock-48.svg";
 // import taskUserAvt from "assets/images/task-user.svg";
@@ -16,7 +16,6 @@ type Props = {
 export const TaskDetailSubtask:FC<Props> = ({ task, userId }) => {
     const progress = task.percentage;
     const [showCreateNewSubTask, setShowCreateNewSubTask] = useState(false);
-
     const {
         listTasks: listSubTasks,
         refetchListTask,
@@ -31,6 +30,10 @@ export const TaskDetailSubtask:FC<Props> = ({ task, userId }) => {
         },
         isFetch: true,
     });
+
+    useEffect(()=> {
+        console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+    }, [])
 
     return (
         (task.subtype == 4 && task.assignee._id.toString() == userId?.toString()) ?  <></> : 
@@ -63,7 +66,7 @@ export const TaskDetailSubtask:FC<Props> = ({ task, userId }) => {
                 {listSubTasks && listSubTasks.map((subtask, index) => (
                     <SubtaskItem key={subtask._id} task={subtask} index={index} />
                 ))}
-
+    
                 {showCreateNewSubTask &&
                     <CreateNewSubTask
                         task={task}

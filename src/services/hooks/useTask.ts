@@ -139,6 +139,7 @@ export const useTask = ({
       },
       refetchOnWindowFocus: false,
       enabled: isFetch ?? false,
+      // cacheTime: 0
     }
   );
 
