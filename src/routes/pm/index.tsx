@@ -474,14 +474,14 @@ const PCMRouter: FC = () => {
                             {
                               id: "1",
                               title: "Tất cả",
-                              path: "/pcm/project/:id/inspection",
+                              path: "/pm/project/:id/inspection",
                               navExact: true,
                             },
-                            { id: "2", title: "Gói thầu", path: "/pcm/project/:id/inspection/tabs2" },
+                            { id: "2", title: "Gói thầu", path: "/pm/project/:id/inspection/tabs2" },
                             {
                               id: "3",
                               title: "Báo cáo quản trị",
-                              path: "/pcm/project/:id/inspection/tabs3",
+                              path: "/pm/project/:id/inspection/tabs3",
                             },
                           ]}
                       >
