@@ -1076,7 +1076,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               selectOneByOne={true}
               reset={reset}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
-              placeholder={"Phân loại"}
+              placeholder={"Loại"}
               prefixIcon={
                 <img className={"mr-2"} src={categoryIcon} alt={"icon"} />
               }
@@ -1155,7 +1155,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               disableSearch={true}
               reset={reset}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
-              placeholder={"Phân cấp"}
+              placeholder={"Cấp"}
               prefixIcon={
                 <img className={"mr-2"} src={categoryIcon} alt={"icon"} />
               }
@@ -1194,7 +1194,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               className={"bg-green-success rounded text-white px-2 h-[32px] ml-2"}
               onClick={onSaveResultSearch}
             >
-              Lưu kết quả
+              Lưu
             </button>
           )}
 
