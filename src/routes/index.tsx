@@ -12,6 +12,11 @@ import RightClickMenuProvider from "services/providers/RightClickMenu";
 /*=====3.LAYOUTS=====*/
 import { FullPageLayout } from "shareComponents/layouts";
 import Policy from "views/authentication/Policy";
+import { HomePage } from "views/financial/pages/HomePage";
+import { FinancialLayoutV2 } from "views/financial/sharedComponents/layoutsV2";
+import { HumanHomePage } from "views/human/pages";
+import HumanRouterV2 from "./human/indexV2";
+// import FinancialRouterV2 from "./financial/indexV2";
 
 // import { Loader } from "shareComponents/common";
 /*=====4.CONFIG ROUTE=====*/
@@ -22,10 +27,12 @@ const SampleRouter = lazy(() => import("./sample"));
 const BiddingRouter = lazy(() => import("./bidding/v2"));
 const CmcsRouter = lazy(() => import("./cmcs"));
 const DatahubRouter = lazy(() => import("./datahub"));
+const DatahubRouterV2 = lazy(() => import("./datahub/indexV2"));
 // const DocumentRouter = lazy(() => import("./document"));
 const DocumentV2Router = lazy(() => import("./documentV2"));
 // const PPTRouter = lazy(() => import("./ppt"));
 const FinancialRouter = lazy(() => import("./financial"));
+const FinancialRouterV2 = lazy(() => import("./financial/indexV2"));
 const HumanRouter = lazy(() => import("./human"));
 const MarketRouter = lazy(() => import("./market"));
 const MediaRouter = lazy(() => import("./media"));
@@ -41,19 +48,20 @@ const ReeRouter = lazy(() => import("./ree"));
 const SupportRouter = lazy(() => import("./support"));
 const TimesheetRouter = lazy(() => import("./timesheet"));
 const ItemRouter = lazy(() => import("./item"));
+const ItemRouterV2 = lazy(() => import("./item/indexV2"));
 const BudgetRouter = lazy(() => import("./budget"));
 
 /*=====5.PAGES=====*/
 const ErrorPage = lazy(() => import("views/authentication/Error"));
 const HomeLayout = lazy(() => import("shareComponents/layouts"));
 const HumanLayout = lazy(() => import("views/human/shareComponents/layouts"));
+const NewHumanLayout = lazy(() => import("views/human/shareComponents/layoutsV2"));
 // const DocumentLayout = lazy(() => import('views/document/sharedComponents/layouts'));
 const AccountingLayout = lazy(() => import('views/accounting/shareComponents/layouts'));
-
-const PcmPrintTaskTypeOnePage     = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeOne'));
-const PcmPrintTaskTypeTwoPage     = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeTwo'));
-const PcmPrintTaskTypeThreePage   = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeThree'));
-const PcmPrintTaskTypeFourPage    = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeFour'));
+const PcmPrintTaskTypeOnePage = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeOne'));
+const PcmPrintTaskTypeTwoPage = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeTwo'));
+const PcmPrintTaskTypeThreePage = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeThree'));
+const PcmPrintTaskTypeFourPage = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeFour'));
 
 const Routes: FC = () => {
     useEffect(() => {
@@ -156,6 +164,26 @@ const Routes: FC = () => {
                                     <HumanLayout>
                                         <HumanRouter />
                                     </HumanLayout>
+                                </Route>
+
+                                {/* =====CONVERT===== */}
+                                {/* =====HUMAN===== */}
+                                <Route path="/convert/human">
+                                    <NewHumanLayout>
+                                        <HumanRouterV2 />
+                                    </NewHumanLayout>
+                                </Route>
+                                {/* =====financial===== */}
+                                <Route path="/convert/financial">
+                                        <FinancialRouterV2 />
+                                </Route>
+                                {/* =====ITEM===== */}
+                                <Route path="/convert/item">
+                                    <ItemRouterV2 />
+                                </Route>
+                                {/* =====DATHUB===== */}
+                                <Route path="/convert/datahub">
+                                    <DatahubRouterV2 />
                                 </Route>
 
                                 {/* =====MARKET===== */}

@@ -339,6 +339,12 @@ button {
   padding-left: 240px;
   top: 0;
 }
+.home-main-content-v2{
+  width: 100%;
+  height: calc(100vh - 55px);
+  padding-left: 240px;
+  top: 0;
+}
 .home-layout.active-right .home-main-content {
   width: calc(100% - 240px);
 }
@@ -432,6 +438,9 @@ button {
 .home-layout.collapse-left .home-main-content {
   width: calc(100% - 55px);
   padding-left: 0;
+}
+.home-layout.collapse-left .home-main-content-v2{
+  width: 100%;
 }
 .home-layout.active-right.collapse-left .home-main-content {
   width: 100%;

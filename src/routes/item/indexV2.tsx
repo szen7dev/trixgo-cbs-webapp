@@ -1,0 +1,151 @@
+/*=====1.LIBRARY=====*/
+import { FC } from "react";
+import { Route, Switch, Redirect } from "react-router-dom";
+
+/*=====3.LAYOUTS=====*/
+import { ItemLayout } from "views/item/shareComponents/layouts";
+import { ProtectedRoute } from "routes/components";
+
+/*=====4.HOOK=====*/
+
+/*=====5.PAGES/COMPONENTS=====*/
+import ErrorPage from "views/authentication/Error";
+import {
+    ItemHomePage,
+    ItemChildPage,
+    ItemCustomerPage,
+    ItemStoragePage,
+} from "views/item/pages";
+import { ItemLayoutV2 } from "views/item/shareComponents/layoutsV2";
+
+const ItemRouterV2: FC = () => {
+    return (
+        <ItemLayoutV2>
+            <Switch>
+                <ProtectedRoute exact path="/convert/item/contact" component={ItemCustomerPage} />
+                <ProtectedRoute exact path="/convert/item/contact/:parentID" component={ItemCustomerPage} />
+                <ProtectedRoute exact path="/convert/item/storage" component={ItemStoragePage} />
+                <ProtectedRoute exact path="/convert/item/storage/:parentID" component={ItemStoragePage} />
+                <ProtectedRoute
+                    exact
+                    path="/convert/item/home"
+                    component={() => <Redirect to="/convert/item/home/1" />}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/convert/item/home/1"
+                    component={() => <ItemHomePage type={1} />}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/convert/item/home/2"
+                    component={() => <ItemHomePage type={2} />}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/convert/item/home/3"
+                    component={() => <ItemHomePage type={3} />}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/convert/item/home/4"
+                    component={() => <ItemHomePage type={4} />}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/convert/item/home/5"
+                    component={() => <ItemHomePage type={5} />}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/convert/item/home/6"
+                    component={() => <ItemHomePage type={6} />}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/convert/item/home/7"
+                    component={() => <ItemHomePage type={7} />}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/convert/item/home/8"
+                    component={() => <ItemHomePage type={8} />}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/convert/item/home/9"
+                    component={() => <ItemHomePage type={9} />}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/convert/item/home/10"
+                    component={() => <ItemHomePage type={10} />}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/convert/item/home/11"
+                    component={() => <ItemHomePage type={11} />}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/convert/item/home/12"
+                    component={() => <ItemHomePage type={12} />}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/convert/item/home/13"
+                    component={() => <ItemHomePage type={13} />}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/convert/item/home/14"
+                    component={() => <ItemHomePage type={14} />}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/convert/item/home/15"
+                    component={() => <ItemHomePage type={15} />}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/convert/item/home/16"
+                    component={() => <ItemHomePage type={16} />}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/convert/item/home/17"
+                    component={() => <ItemHomePage type={17} />}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/convert/item/home/18"
+                    component={() => <ItemHomePage type={18} />}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/convert/item/home/19"
+                    component={() => <ItemHomePage type={19} />}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/convert/item/home/20"
+                    component={() => <ItemHomePage type={20} />}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/convert/item/home/21"
+                    component={() => <ItemHomePage type={21} />}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/convert/item/home/:type/:parentId"
+                    component={() => <ItemChildPage />}
+                />
+                <ProtectedRoute path="/convert/item/*" component={ErrorPage} />
+            </Switch>
+        </ItemLayoutV2>
+
+    )
+};
+
+export default ItemRouterV2;
