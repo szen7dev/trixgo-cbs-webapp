@@ -99,7 +99,7 @@ const PcmRepository = {
 
     // Api tải mẫu để import công việc
     async downloadTemplateImportExcelTask(payload: any): Promise<any> {
-        const { data } = await API.post<any>(
+        const { data } = await API.get<any>(
             `${pcmURL}/pcm_plan_tasks/download-template-import-excel?${convertObToUrl(payload)}`
         );
         return data;
