@@ -1,5 +1,6 @@
 import iconPageUp from "assets/images/icons8-upload-document-100 1.png";
 import moment from "moment";
+import { Link } from "react-router-dom";
 import { FC } from "react";
 import { Cell, TableOptions } from "react-table";
 import { DatahubContractBase } from "typings/datahub/contract";
@@ -10,7 +11,6 @@ import { SelectionColumn } from "shareComponents/common/Table/components/Selecti
 import { formatNumber } from "utils/ppt";
 import { isSupporter } from 'configs';
 import { useAuth } from "services/hooks/auth/useAuth";
-// const { user } = useAuth();
 
 const headCellProps = {
   className:
@@ -44,6 +44,18 @@ function getColumnsContractorContract(
       cellProps: {
         className: "pt-2.5 pb-3 px-2 border-b border-cbs-border group-hover:text-cbs-primary",
       },
+      Cell: ({ row, value }: any) => (
+        <div>
+          <Link to={'/datahub/inspection/' + row.id}>{value}</Link>
+          <p className="text-small my-2 text-gray-500">{row.original?.project?.name}</p>
+          <p className="text-small my-2 text-gray-500">{row.original?.client?.name}</p>
+          <p className="text-small my-2 text-gray-500">
+            {row.original?.area3?.name && `${row.original?.area3?.name}, `}
+            {row.original?.area2?.name && `${row.original?.area2?.name}, `}
+            {row.original?.area1?.name}
+          </p>
+        </div>
+      )
       // Cell: ({ row, value }: any) => navigate ? <Link to={'/datahub/inspection/' + row.id}>{value}</Link> : value
     },
     {
@@ -126,7 +138,6 @@ function getColumnsContractorContract(
       Cell: (cell: Cell<DatahubContractBase>) => {
         const { user } = useAuth();
         return (
-          
           <label className="w-6 h-6 flex justify-center items-center cursor-pointer mr-2">
             <img src={iconPageUp} alt="" className="inline-block" />
             {user && isSupporter(user) ?
@@ -139,7 +150,6 @@ function getColumnsContractorContract(
               />
               : <></>
             },
-           
           </label>
         );
       },

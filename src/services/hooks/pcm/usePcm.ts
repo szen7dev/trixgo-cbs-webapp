@@ -207,6 +207,7 @@ export const usePcmReportCustom = ({
 type UsePcmPlanTaskCustom = {
     downloadExcelTaskAsync: (payload: PcmPlanTaskDownloadExcelPayload) => Promise<any>,
     downloadTemplateImportExcelTaskAsync: (payload: { projectID: string }) => Promise<any>,
+    importTaskFromExcelAsync: (payload: any) => Promise<any>,
 };
 
 type UsePcmPlanTaskCustomParams = {
@@ -215,6 +216,7 @@ type UsePcmPlanTaskCustomParams = {
 
 // custom hook mới cho task
 export const usePcmPlanTaskCustom = ({params = {}}: UsePcmPlanTaskCustomParams) : UsePcmPlanTaskCustom => {
+    
     const { mutateAsync: downloadExcelTaskAsync } =
         useMutation((payload: PcmPlanTaskDownloadExcelPayload) =>
             PcmRepository.downloadExcelTask(payload)
@@ -225,9 +227,15 @@ export const usePcmPlanTaskCustom = ({params = {}}: UsePcmPlanTaskCustomParams) 
         PcmRepository.downloadTemplateImportExcelTask(payload)
     );
     
+    const { mutateAsync: importTaskFromExcelAsync } =
+    useMutation((payload: { taskID?: string, dataImport: string }) =>
+        PcmRepository.importTaskFromExcel(payload)
+    );
+    
     return {
         downloadExcelTaskAsync,
-        downloadTemplateImportExcelTaskAsync
+        downloadTemplateImportExcelTaskAsync,
+        importTaskFromExcelAsync
     }
 }
 
