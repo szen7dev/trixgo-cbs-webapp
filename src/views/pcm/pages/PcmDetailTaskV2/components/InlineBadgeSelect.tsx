@@ -4,7 +4,8 @@ type Props = {
     defaultValue: string|number
     options: {
         id: string|number,
-        text: string
+        text: string,
+        color: string
     }[]
     placeholder: string
     onValueChange: (value: {
@@ -32,7 +33,10 @@ const InlineBadgeSelect:FC<Props> = ({defaultValue, options, placeholder, onValu
     }
     return (
         <div className={`relative z-5 inline-block ${wrapperClassName}`}>
-            <button onClick={() => setShowOption(!showOption)} className={className}>{placeholder}: {itemSelected()?.text}</button>
+            <button onClick={() => setShowOption(!showOption)} 
+                className={className}
+                style={{backgroundColor: itemSelected()?.color}}
+                >{placeholder}: {itemSelected()?.text}</button>
             {
                 showOption &&
                 <div className={"absolute z-20 bg-white w-[335px] shadow-lg rounded-md text-primary-gray"}>
