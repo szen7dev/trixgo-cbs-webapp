@@ -34,7 +34,7 @@ const navLinks = [
   { title: "Dịch vụ", url: 'datahub/contractor/:id/service' },
   { title: "Tài chính", url: 'datahub/contractor/:id/financial' },
   { title: "Hợp đồng", url: 'datahub/contractor/:id/contract' },
-  { title: "HSNL", url: 'datahub/contractor/:id/profile' },
+  { title: "Hồ sơ năng lực", url: 'datahub/contractor/:id/profile' },
 ];
 	
 const DatahubRoutes: FC = () => {

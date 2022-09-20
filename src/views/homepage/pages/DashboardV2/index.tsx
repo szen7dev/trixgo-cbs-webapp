@@ -173,12 +173,12 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
   const [fromExpiredDate, setFromExpiredDate] = useState("1990/01/01");
   const [toExpiredDate, setToExpiredDate] = useState("2999/12/31");
   const [isExpired, setIsExpired] = useState<any>(0);
-  const [isParent, setIsParent] = useState<any>(0);
+  const [isParent, setIsParent] = useState<any>(-1);
   const [subtypes, setSubtypes] = useState<string[]>([]);
   const [status, setStatus] = useState<string[]>([]);
 
   // Danh sách các subject theo keyword
-
+  
   const querySearchTask: any = {
     keyword: keywordForSubject,
     fromDate: fromExpiredDate,
@@ -191,7 +191,6 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     status: status,
     ...querySubject,
   };
-
   if (filter !== "all") {
     querySearchTask.read = filter === "read" ? 2 : 1;
   }
@@ -236,6 +235,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     settoCreateDate("2999/12/31");
     setProject([]);
     setAuthors([]);
+    setIsParent(-1);
     setFromExpiredDate("1990/01/01");
     setToExpiredDate("2999/12/31");
     setIsExpired(0);
@@ -491,11 +491,11 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                 },
                 {
                   text: "1 tuần tới",
-                  fromDate: moment().format("YYYY/MM/DD"),
+                  fromDate: moment().format("YYYY/MM/DD 00:00"),
                   toDate: moment(
                     moment().add(7, "days").calendar(),
                     "DD-MM-YYYY"
-                  ).format("YYYY/MM/DD"),
+                  ).format("YYYY/MM/DD 23:59"),
                 },
                 {
                   text: "> 7 ngày tiếp theo",
@@ -927,18 +927,18 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                 },
                 {
                   text: "Ngày nay",
-                  fromDate: moment().subtract(1, "days").format("YYYY-MM-DD h:mm"),
-                  toDate: moment().add(1, "minutes").format("YYYY-MM-DD h:mm"),
+                  fromDate: moment().format("YYYY-MM-DD 00:00"),
+                  toDate: moment().format("YYYY-MM-DD 23:59"),
                 },
                 {
                   text: "Cách đây 1 tuần",
-                  fromDate: moment().subtract(7, "days").format("YYYY-MM-DD h:mm"),
-                  toDate: moment().add(1, "minutes").format("YYYY-MM-DD h:mm"),
+                  fromDate: moment().subtract(7, "days").format("YYYY-MM-DD 00:00"),
+                  toDate: moment().format("YYYY-MM-DD HH:mm"),
                 },
                 {
                   text: "Cách đây 1 tháng",
-                  fromDate: moment().subtract(1, "months").format("YYYY-MM-DD h:mm"),
-                  toDate: moment().add(1, "minutes").format("YYYY-MM-DD h:mm"),
+                  fromDate: moment().subtract(1, "months").format("YYYY-MM-DD 00:00"),
+                  toDate: moment().format("YYYY-MM-DD HH:mm"),
                 },
               ]}
             />
@@ -1076,7 +1076,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               selectOneByOne={true}
               reset={reset}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
-              placeholder={"Phân loại"}
+              placeholder={"Loại"}
               prefixIcon={
                 <img className={"mr-2"} src={categoryIcon} alt={"icon"} />
               }
@@ -1155,7 +1155,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               disableSearch={true}
               reset={reset}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
-              placeholder={"Phân cấp"}
+              placeholder={"Cấp"}
               prefixIcon={
                 <img className={"mr-2"} src={categoryIcon} alt={"icon"} />
               }
@@ -1194,7 +1194,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               className={"bg-green-success rounded text-white px-2 h-[32px] ml-2"}
               onClick={onSaveResultSearch}
             >
-              Lưu kết quả
+              Lưu
             </button>
           )}
 

@@ -16,6 +16,9 @@ import ModalUpdateDepartmentDirectory from "../../../ppt/pages/ProjectDirectoryP
 import useCheckedList from "services/hooks/ppt/useCheckedList";
 import { useProject } from 'services/hooks/items/useProject';
 
+// Phân trang
+import PaginateV2 from "shareComponents/common/PaginateV2";
+
 const DEPARTMENT_DIRECTORY_TYPE = [
     { id: 1, text: "Trợ lý viên" },
     { id: 2, text: "Chủ đầu tư" },
@@ -38,6 +41,8 @@ const ProjectDirectoryPageV2:FC = () => {
 
     const { data: listCompanies, fetchNextPage } = useQueryListCompany({ keyword: keywordCompany, limit: 20 });
     const {
+        isLoading,
+        hasNextPage,
         list: listDepartmentDirectory, 
         totalRecord,
         totalPage,
@@ -45,7 +50,6 @@ const ProjectDirectoryPageV2:FC = () => {
         refetch,
         nextCursor
     } = useDepartmentDirectory({ params: { companyID: companySelected, projectID, limit: 10, lastestID: pageParam }, isFetchList: true });
-    // console.log({ nextCursor });
 
     const { info: projectInfo } = useProject({
 		params: {
@@ -116,6 +120,10 @@ const ProjectDirectoryPageV2:FC = () => {
     //       </div>
     //     );
     //   };
+    // Phân trang
+    type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+    const ref = React.useRef<PaginateHandle>(null);
+    const [pageIndex, setPageIndex] = useState(0);
 
     return (
         <div className={"project-directory"}>
@@ -155,17 +163,23 @@ const ProjectDirectoryPageV2:FC = () => {
                         trash: !Object.values(assigned).some((value) => value),
                     }}
                 />
-                {/* <div className={"flex-1 flex items-center justify-end"}> */}
-                    {/* <span className={"text-primary-gray"}>1-50 trong số 2.358</span>
-                    <button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"} disabled={true}>
-                        <img src={nextIcon} alt={"----"} className={"rotate-180"}/>
-                    </button>
-                    <button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"}>
-                        <img src={nextIcon} alt={"----"}/>
-                    </button> */}
-                    {/* XỬ LÝ PHẤN TRANG */}
-                    <Paginate totalPages={totalPage} totalRecord={totalRecord} hasNextPage prevPageAction={() => prevPageAction()} nextPageAction={() => nextPageAction()} />
-                {/* </div> */}
+        
+                {/* XỬ LÝ PHẤN TRANG */}
+                <PaginateV2
+                    ref={ref}
+                    totalRecord={totalRecord}
+                    totalPages={totalPage}
+                    limit={10}
+                    hasNextPage={hasNextPage}
+                    isFetching={isLoading}
+                    nextPageAction={() => {
+                        fetchNextPageDepartmentDirectory();
+                        setPageIndex(oldState => oldState+1)
+                    }}
+                    prevPageAction={() => {
+                        setPageIndex(oldState => oldState-1)
+                    }}
+                />
               
             </div>
 

@@ -49,7 +49,9 @@ export const SupportMemberPage: FC = () => {
     level: 1,
     positionName: "",
     departmentName: "",
-    status: 1
+    status: 1,
+    phone: "",
+    storageUse: 0
   });
 
   const [modalCreateOrUpdateUser, setModalCreateOrUpdateUser] = useState<boolean>(false);
@@ -103,7 +105,9 @@ export const SupportMemberPage: FC = () => {
       level: -1,
       positionName: "",
       departmentName: "",
-      status: 1
+      status: 1,
+      phone: "",
+      storageUse: 0
     }))
   }
 
@@ -120,7 +124,7 @@ export const SupportMemberPage: FC = () => {
     };
 
     if (newListIDChecked.length === 1) {
-      const { _id, fullname, email, department, position, level, status } = newListIDChecked[0];
+      const { _id, fullname, email, department, position, level, status, phone, storageUse } = newListIDChecked[0];
       setInitialValues({
         userID: _id,
         companyID: companySelected,
@@ -131,7 +135,9 @@ export const SupportMemberPage: FC = () => {
         level: level,
         positionName: position?.name,
         departmentName: department?.name,
-        status
+        status,
+        phone: phone || "",
+        storageUse: storageUse || 0
       });
     } else {
       clearData();

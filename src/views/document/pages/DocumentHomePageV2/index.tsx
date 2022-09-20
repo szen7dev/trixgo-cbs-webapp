@@ -1,5 +1,5 @@
-import React, { FC, useContext, useEffect, useState } from "react";
-import { DropdownSearchableV2 } from "shareComponents/common";
+import React, {FC, useContext, useEffect, useState} from "react";
+import { Loader, DropdownSearchableV2 } from "shareComponents/common";
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
 import maleUserIcon from "assets/images/icons8-business-building-48.svg";
 import categoryIcon from "assets/images/icons8-category-48.svg";
@@ -9,18 +9,20 @@ import contractIcon from "assets/images/icons8-contract-64-blue.svg";
 import downloadIcon from "assets/images/icons8-download-96.svg";
 import projectIcon from "assets/images/icons8-project-50.svg";
 import iconPencil from "assets/images/icons8-pencil-96 1.png";
-import { useListFilterDocument } from "services/hooks/document/useDocument";
+import { useDocumentCustom, useListFilterDocument} from "services/hooks/document/useDocument";
 import moment from "moment";
 import PaginateV2 from "shareComponents/common/PaginateV2";
-import { DOCUMENT_TYPES, DIRECTION_TYPES } from "apis/localdb";
-import { useDatahubContact } from "services/hooks/datahub/contact/useDatahubContact";
-import { useProjectCustom } from "services/hooks/items/useProject";
-import { debounce } from "lodash";
-import { useContractIsMembers } from "services/hooks/items/useContract";
-import { Link } from "react-router-dom";
-import { useAppSelector } from "redux/reducer";
-import { setFilterDropdown } from "redux/reducer/DocumentHomeSlice";
-import { useDispatch } from "react-redux";
+import {DOCUMENT_TYPES, DIRECTION_TYPES} from "apis/localdb";
+import {useDatahubContact} from "services/hooks/datahub/contact/useDatahubContact";
+import {useProjectCustom} from "services/hooks/items/useProject";
+import {debounce} from "lodash";
+import {useContractIsMembers} from "services/hooks/items/useContract";
+import {Link} from "react-router-dom";
+import {useAppSelector} from "redux/reducer";
+import {setFilterDropdown} from "redux/reducer/DocumentHomeSlice";
+import {useDispatch} from "react-redux";
+import { toast } from "react-toastify";
+import { createLinkAndClick } from "utils";
 
 // import {ModalContext} from "../../contexts/modal";
 // import {useQueryDetailDocument} from "services/hooks/ppt/useDocument";
@@ -58,6 +60,10 @@ const DocumentHomePageV2: FC = () => {
     const [contractKeyword, setContractKeyword] = useState("");
     const [contractsID, setContractsID] = useState<string[]>([]);
 
+    const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+        isExporting: false,
+    });
+    const { exportDocumentAsync } = useDocumentCustom({});
     const { data: listDatahubContact } = useDatahubContact({ keyword: keywordDatahubContact }, true, false); // Danh bạ hệ thống
     const { listProjectsUserIsMember } = useProjectCustom({ paramsProjectsUserIsMember: { keyword: projectKeyword }, isFetchProjectsUserIsMember: true });
     const { listContracts } = useContractIsMembers({ params: { keyword: contractKeyword, populates: JSON.stringify({ "path": "project", "select": "name sign" }) }, isFetch: true });
@@ -74,6 +80,33 @@ const DocumentHomePageV2: FC = () => {
         },
         isFetchList: true
     });
+
+    const handleExport = async () => {
+        try {
+            setStateExport({ isExporting: true });
+            const { error, data } = await exportDocumentAsync({
+                filterParams: {  
+                    ...fromToDate,
+                    datahubContactsID,
+                    types,
+                    departmentsID,
+                    directions,
+                    contractsID,
+                    keyword: keywordInput
+                }
+            });
+
+            if(error) {
+                return toast.warn(data?.message);
+            }
+
+            data && createLinkAndClick(data, '_self');
+        } catch (error: any) {
+            toast.error(error.message)
+        } finally {
+            setStateExport({ isExporting: false });
+        }
+    }
 
     // const { toggleModal, updateModal } = useContext(ModalContext);
     // const { onFetchDetailDocumentAsync }   = useQueryDetailDocument();
@@ -120,6 +153,9 @@ const DocumentHomePageV2: FC = () => {
     //     ]
     // );
 
+    if(stateExport.isExporting) {
+        return <Loader className="border-primary" />
+    }
     return (
         <div className="flex flex-1 flex-col overflow-hidden h-full">
             <div className={"sticky top-0 z-10"}>
@@ -377,8 +413,10 @@ const DocumentHomePageV2: FC = () => {
                         id="flexCheckDefault"
                     />
                     <span className={"text-lg mx-4"}>Kết quả tìm kiếm</span>
-                    <button className={"flex items-center justify-center mx-3 ml-6"}>
-                        <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"} />
+                    <button className={"flex items-center justify-center mx-3 ml-6"}
+                        onClick={handleExport.bind(null)}
+                    >
+                        <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"}/>
                     </button>
                     {/*{*/}
                     {/*    recordSelected._id&&*/}

@@ -70,7 +70,7 @@ export const BiddingOtherPage: FC = () => {
 					<div className={"flex items-center border-b py-2 px-6"}>
 						<div className={"flex items-center flex-1"}>
 							<div className={"text-lg text-black"}>Năng lực tài chính</div>
-							<SearchInput classNameWrapper={"ml-4 mr-6 min-w-[296px]"} onChange={event => console.log(event.target.value)}/>
+							{/* <SearchInput classNameWrapper={"ml-4 mr-6 min-w-[296px]"} onChange={event => console.log(event.target.value)}/>
 							<button className="flex items-center mr-5 min-w-max">
 								<img className="w-[24px] h-[24px]" alt="icon" src={DownloadIcon}/>
 							</button>
@@ -95,9 +95,9 @@ export const BiddingOtherPage: FC = () => {
 							<button className={"bg-gray-50 flex items-center justify-center ml-3 px-3 h-[30px] rounded hover:bg-blue-100"}>
 								<img src={SortingIcon} alt={"icon sorting icon"}/>
 								<span className={"ml-2 text-gray-500"}>Filter</span>
-							</button>
+							</button> */}
 						</div>
-						<button className={"bg-green-success h-[32px] text-white rounded px-5"}>Tạo mới</button>
+						<button className={"bg-green-success h-[32px] text-white rounded px-5"}>Tạo mới 222</button>
 						<button className="rounded-full h-10 w-10 flex items-center justify-center bg-gray-100 ml-5">
 							<img alt={"Icon"} src={ThreeDotsVertical}/>
 						</button>

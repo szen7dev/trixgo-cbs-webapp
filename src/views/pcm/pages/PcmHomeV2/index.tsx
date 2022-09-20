@@ -1,10 +1,11 @@
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, useState } from "react";
 // import { DropdownSearchable, DropdownSearchableV2 } from "shareComponents/common";
 // import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
 import moment from "moment";
 import parse from "html-react-parser";
 import { Link, useParams } from "react-router-dom";
 import { Loader } from "shareComponents/common";
+import { toast } from "react-toastify";
 
 // import userIcon from "assets/images/icon-user-avatar.svg";
 // import maleUserIcon from "assets/images/icons8-male-user-64.svg";
@@ -28,6 +29,9 @@ import { PcmHomeTab7 } from "./components/PcmHomeTab7";
 import { PcmHomeTab8 } from "./components/PcmHomeTab8";
 import PaginateV2 from "shareComponents/common/PaginateV2";
 import { useTask } from "services/hooks/useTask";
+import { createLinkAndClick } from 'utils';
+import { usePcmPlanTaskCustom } from "services/hooks/pcm/usePcm";
+import downloadIcon from "assets/images/icons8-download-96.svg";
 
 type Props = {
     type?: number,
@@ -41,7 +45,9 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
     type PaginateHandle = React.ElementRef<typeof PaginateV2>;
     const ref = React.useRef<PaginateHandle>(null);
     const [pageIndex, setPageIndex] = React.useState(0);
-
+	const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+		isExporting: false,
+	});
     // Khai báo active Tab
     const { tab } = useParams<{ tab: string }>();
     // console.log({tab})
@@ -72,7 +78,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
 
     /**
      * Danh sách công việc của tôi (type=1)
-     * - Trạng thái chưa hoàn thành
+     * -Trạng thái chưa hoàn thành
      */
     const {
         listTasksWithPager,
@@ -106,6 +112,34 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
                 : removeHtmlTag;
         return result;
     };
+
+	const { downloadExcelTaskAsync } = usePcmPlanTaskCustom({});
+
+	const handleDownloadExcel = async () => {
+		try {
+			setStateExport({ isExporting: true });
+			const { error, data } = await downloadExcelTaskAsync({ 
+                conditionDownload: JSON.stringify({
+                    type, draft, subtype, typeStatus, statusNe: "3",
+                })
+            });
+
+			if(error) {
+				return toast.warn(data?.message);
+			}
+
+			data && createLinkAndClick(data, '_self');
+		} catch (error) {
+			if(error instanceof Error)
+				toast.error(error.message)
+		} finally {
+			setStateExport({ isExporting: false });
+		}
+	}
+    
+    if(stateExport.isExporting) {
+        return <Loader className="border-primary" />
+    }
 
     return (
         <div className={"task-home"}>
@@ -149,6 +183,11 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
                         <PcmHomeTab8 tab={tab} />
                     }
                 </div>
+                <button className={"flex items-center justify-center mx-3 ml-6"}
+                    onClick={handleDownloadExcel.bind(null)}
+                >
+                    <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"}/>
+                </button>
                 {/* <button className={"flex items-center justify-center mx-3"}>
                     <img src={downloadIcon} alt={"-----"}/>
                 </button> */}
@@ -173,7 +212,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
                     />
                 </div>
             </div>
-
+            
             <div className={"table-task-sheet"}>
                 <table className={"w-full table-fixed tasks border-collapse"}>
 

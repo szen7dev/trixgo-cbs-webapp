@@ -19,7 +19,8 @@ import {
     UpdateTaskReportPayload,
     PcmComment,
     PcmCommentListParams,
-    PcmExportReportPayload
+    PcmExportReportPayload,
+    PcmPlanTaskDownloadExcelPayload
 } from "typings/pcm";
 
 /**
@@ -200,6 +201,41 @@ export const usePcmReportCustom = ({
 
     return {
         exportReportAsync
+    }
+}
+
+type UsePcmPlanTaskCustom = {
+    downloadExcelTaskAsync: (payload: PcmPlanTaskDownloadExcelPayload) => Promise<any>,
+    downloadTemplateImportExcelTaskAsync: (payload: { projectID: string }) => Promise<any>,
+    importTaskFromExcelAsync: (payload: any) => Promise<any>,
+};
+
+type UsePcmPlanTaskCustomParams = {
+    params?: any
+}
+
+// custom hook mới cho task
+export const usePcmPlanTaskCustom = ({params = {}}: UsePcmPlanTaskCustomParams) : UsePcmPlanTaskCustom => {
+    
+    const { mutateAsync: downloadExcelTaskAsync } =
+        useMutation((payload: PcmPlanTaskDownloadExcelPayload) =>
+            PcmRepository.downloadExcelTask(payload)
+        );
+
+    const { mutateAsync: downloadTemplateImportExcelTaskAsync } =
+    useMutation((payload: { projectID: string }) =>
+        PcmRepository.downloadTemplateImportExcelTask(payload)
+    );
+    
+    const { mutateAsync: importTaskFromExcelAsync } =
+    useMutation((payload: { taskID?: string, dataImport: string }) =>
+        PcmRepository.importTaskFromExcel(payload)
+    );
+    
+    return {
+        downloadExcelTaskAsync,
+        downloadTemplateImportExcelTaskAsync,
+        importTaskFromExcelAsync
     }
 }
 

@@ -30,11 +30,11 @@ export const CmcsLeftMenuContent:FC = () => {
     }
     return (
         <>
-            <button
+            {/* <button
                 className={"bg-cbs-blue-button rounded-md flex items-center justify-center text-xl text-primary-gray py-2 px-4"}>
                 <img src={contractIcon} alt={"Tạo mới"}/>
                 <span className={"ml-2"}>Tạo mới</span>
-            </button>
+            </button> */}
 
             <div className={"mt-4"}>
                 {hasPermission && dataUserAccess?.level == 0 ?

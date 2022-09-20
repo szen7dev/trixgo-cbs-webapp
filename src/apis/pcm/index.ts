@@ -90,6 +90,29 @@ const PcmRepository = {
         return data;
     },
 
+    async downloadExcelTask(payload: any): Promise<any> {
+        const { data } = await API.get<any>(
+            `${pcmURL}/pcm_plan_tasks/download-excel?${convertObToUrl(payload)}`
+        );
+        return data;
+    },
+
+    // Api tải mẫu để import công việc
+    async downloadTemplateImportExcelTask(payload: any): Promise<any> {
+        const { data } = await API.get<any>(
+            `${pcmURL}/pcm_plan_tasks/download-template-import-excel?${convertObToUrl(payload)}`
+        );
+        return data;
+    },
+
+    // Import task từ dữ liệu file excel
+    async importTaskFromExcel(payload: any): Promise<any> {
+        const { data } = await API.post<any>(
+            `${pcmURL}/pcm_plan_tasks/import-task-from-excel`, payload
+        );
+        return data;
+    },
+
     async listFilesPcm(payload: ListFilesPcmPayload): Promise<any> {
         const { data } = await API.get<any>(
             `${pcmURL}/pcm_files?${convertObToUrl({

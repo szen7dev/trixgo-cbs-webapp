@@ -1,36 +1,26 @@
-import React, { FC, Fragment, useState } from "react";
-import SwiperCore, { Navigation } from "swiper";
-import { Listbox, Transition } from "@headlessui/react";
-import { debounce } from "lodash";
+import companyIcon from "assets/images/company_default.png";
 import iconBack from "assets/images/icon-back-gray.svg";
-import {
-  useLocation,
-  generatePath,
-  useRouteMatch,
-  Link,
-  useHistory,
-  useParams,
-} from "react-router-dom";
+import { debounce } from "lodash";
+import { FC, Fragment, useRef, useState } from "react";
+import { generatePath, Link, useHistory, useLocation, useParams } from "react-router-dom";
 
-import { useDatahubCompanies } from "services/hooks/datahub";
+import { useDatahubArea, useDatahubCompanies } from "services/hooks/datahub";
 
+import DatahubRepository from "apis/datahub";
 import iconDatabase from "assets/images/icons8-database-96 2.png";
-import classNames from "classnames";
+import { useQuery } from "react-query";
+import useInfiniteDatahubTypes from "services/hooks/datahub/types/useInfiniteDatahubTypes";
+import { CustomAutoComplete } from "shareComponents/common/Form/CustomForm";
+import { DatahubArea } from "typings/datahub/area";
+import { DatahubTypes, DatahubTypesBase } from "typings/datahub/datahubtypes";
+import { useEffect } from "react";
+import { buildKeyDatahubPackage } from "apis/datahub/package";
+import { buildDatahubTypeKey } from "apis/datahub/types";
+import { buildDatahubAreaKey, convertAreaToString } from "apis/datahub/area";
 
 type Props = {
   //
 };
-
-SwiperCore.use([Navigation]);
-
-const people = [
-  { name: "Wade Cooper" },
-  { name: "Arlene Mccoy" },
-  { name: "Devon Webb" },
-  { name: "Tom Cook" },
-  { name: "Tanya Fox" },
-  { name: "Hellen Schmidt" },
-];
 
 const IconSearch = (...rest: any) => {
   return (
@@ -50,15 +40,20 @@ const IconSearch = (...rest: any) => {
 };
 
 const BiddingHomePageV2: FC<Props> = (props) => {
-  const location = useLocation();
   const { id } = useParams<{ id?: string }>();
   const history = useHistory();
-  const match = useRouteMatch();
+  const location = useLocation<DatahubTypes>();
 
-  console.log({ location, match });
-
-  const [selected, setSelected] = useState<typeof people[0] | null>(null);
   const [company, setCompany] = useState("");
+  const [searchType, setSearchType] = useState("");
+  const [searchArea, setSearchArea] = useState("");
+  const [type, setType] = useState<DatahubTypes | null>(null);
+  const [area, setArea] = useState<DatahubArea | null>(null);
+
+  const inputRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (location.state) setType(location.state);
+  }, [location.state]);
 
   // Important for each page
   const key = id ? ["company", company, id] : ["company", company];
@@ -67,20 +62,72 @@ const BiddingHomePageV2: FC<Props> = (props) => {
     data: listCompanies,
     fetchNextPage,
     hasNextPage,
+    refetch,
   } = useDatahubCompanies(
     key,
     {
-      select: "_id name sign image address",
+      select: "_id name sign image address description birthDay",
       limit: 24,
       keyword: company,
     },
     { enable: Boolean(company.length) }
   );
 
+  const datahubAreas = useDatahubArea(
+    buildDatahubAreaKey({ keyword: searchArea, limit: 20, populates: "multiple" }),
+    {
+      select: "_id name parent level",
+      limit: 20,
+      keyword: searchArea,
+      populates: JSON.stringify({
+        path: "parent",
+        select: "name sign parent level",
+        populate: { path: "parent", select: "name sign parent level" },
+      }),
+    },
+    { enable: true }
+  );
+
+  const selectTypes = "_id name description numberOfContractors numberOfPosts numberOfViews numberOfContracts";
+  const datahubTypes = useInfiniteDatahubTypes(
+    buildDatahubTypeKey({ keyword: searchType, select: selectTypes }),
+    {
+      keyword: searchType,
+      select: selectTypes,
+    },
+    { enable: true }
+  );
+
+  const datahubPackages = useQuery(
+    buildKeyDatahubPackage({ mode: 1, areaID: area?._id, fieldID: id, level: area?.level }),
+    () =>
+      DatahubRepository.getDatahubPackageList(1, {
+        fieldID: id,
+        areaID: area?._id,
+        level: area?.level,
+      }),
+    {
+      enabled: Boolean(id) || Boolean(type || area),
+    }
+  );
+
   // Handler
-  const handleChangeRoute = () => {
-    // location.
-    history.push("/bidding/home/test");
+  const handleChangeRoute = (d: DatahubTypesBase) => {
+    history.push("/bidding/home/tag/" + d._id, d);
+  };
+
+  const handleSearch = () => {
+    if (type) handleChangeRoute(type);
+    else refetch();
+  };
+  const handleReset = () => {
+    if (id) history.push("/bidding/home");
+    setType(null);
+    setArea(null);
+    if (inputRef.current) inputRef.current.value = "";
+    setCompany("");
+    setSearchArea("");
+    setSearchArea("");
   };
 
   return (
@@ -113,214 +160,178 @@ const BiddingHomePageV2: FC<Props> = (props) => {
                   <input
                     type="text"
                     placeholder="Tìm kiếm nhà thầu"
+                    ref={inputRef}
                     onChange={debounce((e) => setCompany(e.target.value), 300)}
                     className="pl-10 pr-6 py-2.5 w-full focus:outline-none bg-white placeholder-cbs-subtext text-medium border-[0.5px] border-cbs-border"
                   />
                 </label>
               </div>
               <div className="w-4/12 h-full">
-                <Listbox value={selected} onChange={setSelected}>
-                  <div className="relative h-full z-2">
-                    <Listbox.Button className="text-left px-3 py-2.5 h-full relative w-full bg-white placeholder-cbs-subtext text-medium border-[0.5px] border-cbs-border">
-                      {selected ? selected.name : "Theo lĩnh vực"}
-                    </Listbox.Button>
-                    <Transition
-                      as={Fragment}
-                      leave="transition ease-in duration-100"
-                      leaveFrom="opacity-100"
-                      leaveTo="opacity-0"
-                    >
-                      <Listbox.Options className="absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                        {people.map((person, personIdx) => (
-                          <Listbox.Option
-                            key={personIdx}
-                            className={({ active }) =>
-                              classNames(
-                                "cursor-default select-none relative py-2 pl-10 pr-4",
-                                active ? "text-yellow-900 bg-yellow-100" : "text-gray-900"
-                              )
-                            }
-                            value={person}
-                          >
-                            {({ selected, active }) => (
-                              <>
-                                <span
-                                  className={classNames(
-                                    selected ? "font-medium" : "font-normal",
-                                    "block truncate"
-                                  )}
-                                >
-                                  {person.name}
-                                </span>
-                                {selected ? (
-                                  <span
-                                    className={classNames(
-                                      active ? "text-yellow-600" : "text-yellow-600",
-                                      "absolute inset-y-0 left-0 flex items-center pl-3"
-                                    )}
-                                  >
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      className="h-5 w-5"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                      stroke="currentColor"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M5 13l4 4L19 7"
-                                      />
-                                    </svg>
-                                  </span>
-                                ) : null}
-                              </>
-                            )}
-                          </Listbox.Option>
-                        ))}
-                      </Listbox.Options>
-                    </Transition>
-                  </div>
-                </Listbox>
+                <CustomAutoComplete
+                  server
+                  showIcon={false}
+                  data={datahubTypes.data?.pages.flatMap((p) => p.data.listRecords) || []}
+                  onScroll={console.log}
+                  value={type}
+                  onChange={debounce((keyword) => {
+                    setType(null);
+                    if (!keyword) {
+                      // setUserSelected("");
+                    }
+                    setSearchType(keyword);
+                  }, 300)}
+                  onChangeValue={(type) => {
+                    setType(type);
+                    history.replace("/bidding/home/tag/" + type._id);
+                  }}
+                  renderValue={(v) => v.name}
+                  attribute="types"
+                  wrapperClassName=""
+                  className="w-full h-full py-2.5 px-3 focus:outline-none text-medium"
+                  placeholder="Theo lĩnh vực"
+                />
               </div>
               <div className="w-4/12 h-full">
-                <Listbox value={selected} onChange={setSelected}>
-                  <div className="relative h-full z-2">
-                    <Listbox.Button className="text-left px-3 py-2.5 h-full relative w-full bg-white placeholder-cbs-subtext text-medium border-[0.5px] border-cbs-border">
-                      {selected ? selected.name : "Theo khu vực"}
-                    </Listbox.Button>
-                    <Transition
-                      as={Fragment}
-                      leave="transition ease-in duration-100"
-                      leaveFrom="opacity-100"
-                      leaveTo="opacity-0"
-                    >
-                      <Listbox.Options className="absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                        {people.map((person, personIdx) => (
-                          <Listbox.Option
-                            key={personIdx}
-                            className={({ active }) =>
-                              classNames(
-                                "cursor-default select-none relative py-2 pl-10 pr-4",
-                                active ? "text-yellow-900 bg-yellow-100" : "text-gray-900"
-                              )
-                            }
-                            value={person}
-                          >
-                            {({ selected, active }) => (
-                              <>
-                                <span
-                                  className={classNames(
-                                    selected ? "font-medium" : "font-normal",
-                                    "block truncate"
-                                  )}
-                                >
-                                  {person.name}
-                                </span>
-                                {selected ? (
-                                  <span
-                                    className={classNames(
-                                      active ? "text-yellow-600" : "text-yellow-600",
-                                      "absolute inset-y-0 left-0 flex items-center pl-3"
-                                    )}
-                                  >
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      className="h-5 w-5"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                      stroke="currentColor"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M5 13l4 4L19 7"
-                                      />
-                                    </svg>
-                                  </span>
-                                ) : null}
-                              </>
-                            )}
-                          </Listbox.Option>
-                        ))}
-                      </Listbox.Options>
-                    </Transition>
-                  </div>
-                </Listbox>
+                <CustomAutoComplete
+                  server
+                  showIcon={false}
+                  data={datahubAreas.data?.pages.flatMap((p) => p.data.listRecords) || []}
+                  onScroll={console.log}
+                  onChange={debounce((keyword) => {
+                    setArea(null);
+                    if (!keyword) {
+                      // setUserSelected("");
+                    }
+                    setSearchArea(keyword);
+                  }, 300)}
+                  onChangeValue={setArea}
+                  renderValue={convertAreaToString}
+                  attribute="area"
+                  wrapperClassName=""
+                  dropdownContainerClassName="w-auto"
+                  className="w-full h-full py-2.5 px-3 focus:outline-none text-medium"
+                  placeholder="Theo khu vực"
+                />
               </div>
               <button
-                onClick={() => null}
+                onClick={handleSearch}
                 className="bg-cbs-green px-4 py-2 rounded-cbs-sm whitespace-nowrap font-bold text-white"
               >
                 Tìm kiếm
               </button>
+              <button
+                onClick={handleReset}
+                className="bg-cbs-secondary px-4 py-2 rounded-cbs-sm whitespace-nowrap font-bold text-white"
+              >
+                Reset
+              </button>
             </div>
           </div>
         </div>
-        {!company && !id ? (
+        {!company && !type && !area ? (
           <div className="mt-10">
-            <div className="flex px-3">
+
+            {/* <div className="flex px-3">
               <div className="pl-12 py-2 pr-1 border border-cbs-border rounded-cbs-sm relative">
                 <span className="absolute inset-y-0 left-2 flex items-center text-cbs-subtext">
                   <IconSearch />
                 </span>
                 <input className="outline-none" placeholder="Filter by tag name" />
               </div>
-            </div>
+            </div> */}
+
             <div className="flex flex-wrap text-cbs-subtext pt-3 text-medium -mx-2 px-3">
-              {Array.from({ length: 10 }).map((record, idx) => (
-                <div key={idx} className="w-3/12 px-2 mb-3 cursor-pointer" onClick={() => handleChangeRoute()}>
+              {datahubTypes.data?.pages.map((page, idx) =>
+                page.data.listRecords.map((record) => (
                   <div
-                    // to={generatePath(location.pathname + "/:id", { id: record._id })}
-                    className="flex flex-col h-full rounded-cbs-sm overflow-hidden border-cbs-border border-0.5 "
+                    key={record._id}
+                    className="w-3/12 px-2 mb-3 cursor-pointer"
+                    onClick={() => handleChangeRoute(record)}
                   >
-                    <div className="p-3">
-                      <div>
-                        <div className="inline-block bg-cbs-hightlight-right-navigate border border-cbs-border px-4 py-2 rounded-cbs-sm">
-                          <h3 className=" line-clamp-1">Vật liệu hoàn thiện - gạch</h3>
+                    <div
+                      // to={generatePath(location.pathname + "/:id", { id: record._id })}
+                      className="flex flex-col h-full rounded-cbs-sm overflow-hidden border-cbs-border border-0.5 "
+                    >
+                      <div className="p-3">
+                        <div>
+                          <div className="inline-block bg-[#E1ECF4] text-[#39739D] border border-cbs-border px-4 py-2 rounded-cbs-sm">
+                            <h3 className=" line-clamp-1">{record.name}</h3>
+                          </div>
                         </div>
-                      </div>
-                      <div className="mt-4">
-                        <p>
-                          For questions regarding programming in ECMAScript (JavaScript/JS) and its
-                          various dialects/implementations (excluding ActionScript). Note...
-                        </p>
-                      </div>
-                      <div className="flex justify-between mt-4">
-                        <div className="flex-1 leading-5">
-                          <div className="text-black">125</div>
-                          <div className="text-cbs-subtext">đơn vị</div>
+                        <div className="mt-4">
+                          <p>{record.description}</p>
                         </div>
-                        <div className="flex-1 leading-5">
-                          <div className="text-black">666</div>
-                          <div className="text-cbs-subtext">bài viết</div>
-                        </div>
-                        <div className="leading-5">
-                          <div className="text-black">9 tỷ</div>
-                          <div className="text-cbs-subtext">lượt xem</div>
+                        <div className="flex justify-between mt-4">
+                          <div className="flex-1 leading-5">
+                            <div className="text-black text-xs">{record.numberOfContractors}</div>
+                            <div className="text-cbs-subtext text-xs">đơn vị</div>
+                          </div>
+                          <div className="flex-1 leading-5">
+                            <div className="text-black text-xs">{record.numberOfContracts || 0}</div>
+                            <div className="text-cbs-subtext text-xs">hợp đồng</div>
+                          </div>
+                          <div className="leading-5">
+                            <div className="text-black text-xs">{record.numberOfViews || 0}</div>
+                            <div className="text-cbs-subtext text-xs">lượt xem</div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))
+              )}
+            </div>
+          </div>
+        ) : id || type || area ? (
+          <div className="mt-10 pl-3.5">
+            <div className="flex items-center">
+              <button
+                className="rounded-full bg-cbs-gray p-3 mr-2"
+                onClick={() => history.goBack()}
+              >
+                <img src={iconBack} alt={"----"} className={"w-[18px]"} />
+              </button>
+              <div className="text-[22px] leading-6">{type?.name}</div>
+            </div>
+            <div className="flex flex-wrap text-cbs-subtext pt-1 text-medium pl-3.5 pr-1.5">
+              {datahubPackages.data?.data.map((pack, idx) => {
+                const { _id, address, image, name, sign } = pack._id.contractor;
+                return (
+                  <div key={_id} className="w-3/12 px-2 mb-3">
+                    <Link
+                      to={generatePath("/bidding/home/contractor/:id", {
+                        id: _id,
+                      })}
+                      className="flex flex-col h-full rounded-cbs-md overflow-hidden border-cbs-border border-0.5 "
+                    >
+                      <div className="h-36">
+                        <img
+                          className="w-full h-full z-0 object-cover"
+                          src={
+                            image ? `${process.env.REACT_APP_URL_S3_COMPANY}/${image}` : companyIcon
+                          }
+                          alt="News"
+                        />
+                      </div>
+                      <div className="bg-cbs-active-comment text-black text-medium px-3 py-3.5 flex-1 max-h-[60px]">
+                        <p className="line-clamp-2">
+                          {sign}.{name} ({pack.amount})
+                        </p>
+                      </div>
+                      <div className="text-cbs-subtext text-x-small px-4 py-2.5">
+                        <p className="line-clamp-2">{address}</p>
+                      </div>
+                    </Link>
+                  </div>
+                );
+              })}
             </div>
           </div>
         ) : (
           <div className="mt-10 pl-3.5">
-            {id ? (
-              <div className="flex items-center">
-                <button className="rounded-full bg-cbs-gray p-3 mr-2">
-                  <img src={iconBack} alt={"----"} className={"w-[18px]"} />
-                </button>
-                <div className="text-[22px] leading-6">Vật liệu hoàn thiện-gạch</div>
-              </div>
-            ) : (
-              <div className="text-[22px] leading-6">Kết quả tìm kiếm</div>
-            )}
+            <div className="text-[22px] leading-6">Kết quả tìm kiếm</div>
             <div className="flex flex-wrap text-cbs-subtext pt-1 text-medium pl-3.5 pr-1.5">
+              {/* {console.log(listCompanies)} */}
               {listCompanies?.pages.map((page, idx) => (
                 <Fragment key={idx}>
                   {page.data.listRecords.map((record, idx) => (
@@ -334,7 +345,11 @@ const BiddingHomePageV2: FC<Props> = (props) => {
                         <div className="h-36">
                           <img
                             className="w-full h-full z-0 object-cover"
-                            src={`${process.env.REACT_APP_URL_S3_COMPANY}/${record.image}`}
+                            src={
+                              record.image
+                                ? `${process.env.REACT_APP_URL_S3_COMPANY}/${record.image}`
+                                : companyIcon
+                            }
                             alt="News"
                           />
                         </div>

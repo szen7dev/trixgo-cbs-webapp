@@ -14,6 +14,7 @@ import { useCreateDatahubProject, useUpdateDatahubProject, useDatahubProject, us
 // ======== Typings ========
 import { ResponseCreateSuccess } from "typings/apis/response";
 import { DatahubProjects } from 'typings/datahub/projects';
+import { convertAreaToString } from 'apis/datahub/area';
 
 type Props = {
 	type: 'create' | 'edit'
@@ -118,7 +119,7 @@ const ModalCreateProject: FC<Props> = (props) => {
 					})
 					setDefaultValues({
 						client: data.data.client.name,
-						area3: data.data.area3.name + ', ' + (data.data.area3.parent as any).name + ', ' + (data.data.area3.parent as any).parent.name,
+						area3: convertAreaToString(data.data.area3),
 						projectType: data.data.projectType ? PROJECT_TYPES.find(item => item.value === data.data.projectType)?.text || '' : '',
 						buildingType: data.data.buildingType ? BUILDING_TYPES.find(item => item.value === data.data.buildingType)?.text || '' : '',
 						buildingGrade: data.data.buildingGrade ? BUILDING_GRADES.find(item => item.value === data.data.buildingGrade)?.text || '' : '',
@@ -129,7 +130,13 @@ const ModalCreateProject: FC<Props> = (props) => {
 		}
 	});
 
-	const handleSubmit = async (values: typeof initialValues, actions: any) => {
+	const handleSubmit = async (values: any, actions: any) => {
+		values = {
+			...values,
+			basementNumber: parseInt(values.basementNumber),
+			floorNumber: parseInt(values.floorNumber),
+			floorArea: parseInt(values.floorArea),
+		}
 		if (props.datahubProjectID) {
 			await updateDatahubProject({ ...values, datahubProjectID: props.datahubProjectID }, {
 				onSuccess(data) {
@@ -222,7 +229,7 @@ const ModalCreateProject: FC<Props> = (props) => {
 										data={listAddress3?.pages.flatMap(p => p.data.listRecords) || []}
 										valueAttribute="_id"
 										initialData={defaultValues.area3}
-										renderValue={(item) => item.name + ', ' + (item.parent as any).name + ', ' + (item.parent as any).parent.name}
+										renderValue={convertAreaToString}
 										onScroll={e => { hasNextArea && (e.target.scrollTop + e.target.offsetHeight + 100 > e.target.scrollHeight) && fetchNextArea() }}
 									/>
 									<CustomFieldFormik name='location' title='Địa chỉ theo GG map' />

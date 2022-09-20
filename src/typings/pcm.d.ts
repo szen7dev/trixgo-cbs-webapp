@@ -63,6 +63,10 @@ export type PcmExportReportPayload = {
   reportID: string
 }
 
+export type PcmPlanTaskDownloadExcelPayload = {
+  conditionDownload: string
+}
+
 /**
  * ============================ ************* ===============================
  * ============================ 	 PCM TASK   ===============================

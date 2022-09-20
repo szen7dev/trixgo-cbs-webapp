@@ -7,6 +7,8 @@ import { Form, Formik, Field, ErrorMessage } from 'formik';
 import { string, object } from 'yup';
 import { toast } from 'react-toastify';
 import debounce from 'lodash/debounce';
+import DayPickerInput from "react-day-picker/DayPickerInput";
+import moment from 'moment';
 
 /**
  * Assets, Components
@@ -31,6 +33,9 @@ export const ModalCreateOrUpdateCompany: FC<ModalProps> = ({ toggle, modalType, 
   area: "",
   phone: "",
   email: "",
+  description: "",
+  birthDay: "",
+  website: "",
 } }) => {
   const { user } = useAuth();
   const [keywordArea, setKeywordArea] = useState('');
@@ -62,6 +67,9 @@ export const ModalCreateOrUpdateCompany: FC<ModalProps> = ({ toggle, modalType, 
         address: values.address,
         email: values.email,
         phone: values.phone,
+        description: values.description,
+        birthDay: values.birthDay,
+        website: values.website,
       }
 
       // Handle api here!
@@ -81,7 +89,7 @@ export const ModalCreateOrUpdateCompany: FC<ModalProps> = ({ toggle, modalType, 
           if (error) {
             return toast.warning(message);
           }
-
+          
           toast.success('Cập nhật công ty thành công');
           break;
         }
@@ -232,6 +240,48 @@ export const ModalCreateOrUpdateCompany: FC<ModalProps> = ({ toggle, modalType, 
                   <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtEmail" placeholder="Nhập email" {...getFieldProps('email')} />
                   <ErrorMessage
                     name="email"
+                    component="span"
+                    className="font-normal leading-7 text-sm text-negative"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtBirthDay">
+                    Ngày thành lập
+                  </label>
+                  <DayPickerInput
+                      value={values.birthDay && moment(values.birthDay).format("DD/MM/YYYY")}
+                      onDayChange={(day) => setFieldValue("birthDay", moment(day).format("MM/DD/YYYY"))}
+                      inputProps={{
+                        className: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                        placeholder: "Ngày thành lập",
+                        readOnly: true,
+                      }}
+											style={{ width: "100%" }}
+                    />
+                  <ErrorMessage
+                    name="birthDay"
+                    component="span"
+                    className="font-normal leading-7 text-sm text-negative"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtWebsite">
+                    Website
+                  </label>
+                  <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtWebsite" placeholder="Nhập website" {...getFieldProps('website')} />
+                  <ErrorMessage
+                    name="website"
+                    component="span"
+                    className="font-normal leading-7 text-sm text-negative"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtEmail">
+                    Mô tả
+                  </label>
+                  <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtDescription" placeholder="Nhập mô tả" {...getFieldProps('description')} />
+                  <ErrorMessage
+                    name="description"
                     component="span"
                     className="font-normal leading-7 text-sm text-negative"
                   />

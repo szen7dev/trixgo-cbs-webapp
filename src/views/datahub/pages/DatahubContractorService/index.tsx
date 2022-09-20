@@ -1,99 +1,62 @@
-import React, { FC } from 'react'
+import DatahubRepository from "apis/datahub";
+import { buildKeyDatahubPackage } from "apis/datahub/package";
+import React, { FC } from "react";
+import { useQuery } from "react-query";
+import { useParams } from "react-router-dom";
 
 type Props = {
-
-}
+  //
+};
 
 const DatahubContractorService: FC<Props> = (props) => {
-	return (
-		<div className='bg-white w-full mx-3.5 py-9'>
-			<div className='flex flex-wrap gap-y-16'>
-				<div className='w-4/12'>
-					<div className='max-w-[275px] w-full mx-auto'>
-						<div className='px-2.5 h-36'>
-							<img className='w-full h-full object-cover' src='https://png.pngtree.com/thumb_back/fh260/background/20200714/pngtree-modern-double-color-futuristic-neon-background-image_351866.jpg' alt="" />
-						</div>
-						<div className='mt-8'>
-							<p className='text-large font-bold'>Tư vấn Quản lý dự án</p>
-							<p className='text-medium mt-2'>
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem aliquam possimus expedita animi consequuntur. Ad quos porro libero maiores eveniet nihil qui officiis et eius repudiandae? Dolorum iste veritatis iure!
-							</p>
-						</div>
-					</div>
-				</div>
-				<div className='w-4/12'>
-					<div className='max-w-[275px] w-full mx-auto'>
-						<div className='px-2.5 h-36'>
-							<img className='w-full h-full object-cover' src='https://png.pngtree.com/thumb_back/fh260/background/20200714/pngtree-modern-double-color-futuristic-neon-background-image_351866.jpg' alt="" />
-						</div>
-						<div className='mt-8'>
-							<p className='text-large font-bold'>Tư vấn Quản lý dự án</p>
-							<p className='text-medium mt-2'>
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem aliquam possimus expedita animi consequuntur. Ad quos porro libero maiores eveniet nihil qui officiis et eius repudiandae? Dolorum iste veritatis iure!
-							</p>
-						</div>
-					</div>
-				</div>
-				<div className='w-4/12'>
-					<div className='max-w-[275px] w-full mx-auto'>
-						<div className='px-2.5 h-36'>
-							<img className='w-full h-full object-cover' src='https://png.pngtree.com/thumb_back/fh260/background/20200714/pngtree-modern-double-color-futuristic-neon-background-image_351866.jpg' alt="" />
-						</div>
-						<div className='mt-8'>
-							<p className='text-large font-bold'>Tư vấn Quản lý dự án</p>
-							<p className='text-medium mt-2'>
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem aliquam possimus expedita animi consequuntur. Ad quos porro libero maiores eveniet nihil qui officiis et eius repudiandae? Dolorum iste veritatis iure!
-							</p>
-						</div>
-					</div>
-				</div>
-				<div className='w-4/12'>
-					<div className='max-w-[275px] w-full mx-auto'>
-						<div className='px-2.5 h-36'>
-							<img className='w-full h-full object-cover' src='https://png.pngtree.com/thumb_back/fh260/background/20200714/pngtree-modern-double-color-futuristic-neon-background-image_351866.jpg' alt="" />
-						</div>
-						<div className='mt-8'>
-							<p className='text-large font-bold'>Tư vấn Quản lý dự án</p>
-							<p className='text-medium mt-2'>
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem aliquam possimus expedita animi consequuntur. Ad quos porro libero maiores eveniet nihil qui officiis et eius repudiandae? Dolorum iste veritatis iure!
-							</p>
-						</div>
-					</div>
-				</div>
-				<div className='w-4/12'>
-					<div className='max-w-[275px] w-full mx-auto'>
-						<div className='px-2.5 h-36'>
-							<img className='w-full h-full object-cover' src='https://png.pngtree.com/thumb_back/fh260/background/20200714/pngtree-modern-double-color-futuristic-neon-background-image_351866.jpg' alt="" />
-						</div>
-						<div className='mt-8'>
-							<p className='text-large font-bold'>Tư vấn Quản lý dự án</p>
-							<p className='text-medium mt-2'>
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem aliquam possimus expedita animi consequuntur. Ad quos porro libero maiores eveniet nihil qui officiis et eius repudiandae? Dolorum iste veritatis iure!
-							</p>
-						</div>
-					</div>
-				</div>
-				<div className='w-4/12'>
-					<div className='max-w-[275px] w-full mx-auto'>
-						<div className='px-2.5 h-36'>
-							<img className='w-full h-full object-cover' src='https://png.pngtree.com/thumb_back/fh260/background/20200714/pngtree-modern-double-color-futuristic-neon-background-image_351866.jpg' alt="" />
-						</div>
-						<div className='mt-8'>
-							<p className='text-large font-bold'>Tư vấn Quản lý dự án</p>
-							<p className='text-medium mt-2'>
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem aliquam possimus expedita animi consequuntur. Ad quos porro libero maiores eveniet nihil qui officiis et eius repudiandae? Dolorum iste veritatis iure!
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div className='text-center mt-6 mb-1'>
+  const { id } = useParams<{ id?: string }>();
+
+  const datahubPackages = useQuery(
+    buildKeyDatahubPackage({ mode: 3, contractorID: id }),
+    () =>
+      DatahubRepository.getDatahubPackageList(3, {
+        contractorID: id,
+      }),
+    {
+      enabled: Boolean(id),
+    }
+  );
+  return (
+    <div className="bg-white w-full py-2 mx-3.5 border-cbs-border border-0.5">
+      <div className="flex flex-wrap text-cbs-subtext pt-1 text-medium px-2">
+        {datahubPackages.data?.data.map((record, idx) => {
+          const { _id, name, description } = record._id.field;
+          return (
+            <div key={_id} className="w-3/12 px-2 mb-3">
+              <div className="flex flex-col h-full rounded-cbs-sm overflow-hidden border-cbs-border border-0.5 ">
+                <div className="p-3">
+                  <div>
+                    <div className="inline-block bg-[#E1ECF4] text-[#39739D] border border-cbs-border px-4 py-2 rounded-cbs-sm">
+                      <h3 className=" line-clamp-1">{name}</h3>
+                    </div>
+                  </div>
+                  <div className="mt-4">
+                    <p>{description}</p>
+                  </div>
+                  <div className="flex mt-4">
+                    <div className="flex-1 leading-5">
+                      <div className="text-black">{record.amount}</div>
+                      <div className="text-cbs-subtext">hợp đồng</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      {/* <div className='text-center mt-6 mb-1'>
 				<button className='text-cbs-primary border-cbs-border border w-40 py-2.5 rounded-cbs-sm text-large'>
 					Xem thêm
 				</button>
-			</div>
-		</div>
-	)
-}
+			</div> */}
+    </div>
+  );
+};
 
-export default DatahubContractorService
+export default DatahubContractorService;

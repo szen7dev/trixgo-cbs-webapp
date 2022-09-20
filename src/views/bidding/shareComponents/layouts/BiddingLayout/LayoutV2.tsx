@@ -43,18 +43,18 @@ const listTab: {
     count: 0,
     route: prefix + "/home",
   },
-  {
-    label: "Hồ sơ dự thầu",
-    icon: fileIcon,
-    count: 0,
-    route: prefix + "/bids",
-  },
-  {
-    label: "Hồ sơ mời thầu",
-    icon: fileIcon,
-    count: 0,
-    route: prefix + "/invitation",
-  },
+  // {
+  //   label: "Hồ sơ dự thầu",
+  //   icon: fileIcon,
+  //   count: 0,
+  //   route: prefix + "/bids",
+  // },
+  // {
+  //   label: "Hồ sơ mời thầu",
+  //   icon: fileIcon,
+  //   count: 0,
+  //   route: prefix + "/invitation",
+  // },
 ];
 
 const BiddingLayout: FC<Props> = ({ children }) => {

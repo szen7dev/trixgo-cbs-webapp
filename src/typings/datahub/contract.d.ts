@@ -19,6 +19,7 @@ export type DatahubContractBase = {
   files?: [];
   state: number;
   _id: string;
+  id: string;
   contractor: string;
   project: string | null | DatahubProjects;
   field: string | null | DatahubTypes;
@@ -46,16 +47,17 @@ type test = DatahubContract<string>;
 
 export type DatahubContractBody = {
   datahubPackageID?: string;
-  contractor: string;
-  project: string;
-  field: string;
-  name: string;
+  contractor?: string;
+  project?: string;
+  field?: string;
+  files?: string[];
+  name?: string;
   sign?: string;
   note?: string;
-  value: number;
-  vatValue: number;
+  value?: number;
+  vatValue?: number;
   date?: string;
   startTime?: string;
   endTime?: string;
-  status: number;
+  status?: number;
 };

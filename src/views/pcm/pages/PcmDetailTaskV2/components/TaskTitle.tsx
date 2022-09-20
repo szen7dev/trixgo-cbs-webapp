@@ -70,38 +70,45 @@ export const TaskDetailTitle: FC<Props> = ({ task }) => {
                     <img src={iconStar} alt={"bookmark"} className={"w-[18px] h-[18px]"} />
                 </button>
             </span>
-            <InlineBadgeSelect
+            <InlineBadgeSelect 
                 wrapperClassName={"-translate-y-1"}
                 className={`text-xs rounded-full text-white px-2 py-1 mx-1 ${PCM_STATUS_TASK[currentStatus - 1]?.class}`}
                 defaultValue={task.status}
                 options={[
                     {
                         id: 1,
-                        text: "Khởi tạo"
+                        text: "Khởi tạo",
+                        color: "#ff0000"
                     },
                     {
                         id: 2,
-                        text: "Đang triển khai"
+                        text: "Đang triển khai",
+                        color: "#00aaff"
                     },
                     {
                         id: 3,
-                        text: "Hoàn thành"
+                        text: "Hoàn thành",
+                        color: "#5fba7d"
                     },
                     {
                         id: 4,
-                        text: "Treo lại"
+                        text: "Treo lại",
+                        color: "#8f1aac"
                     },
                     {
                         id: 5,
-                        text: "Chờ người khác giải quyết"
+                        text: "Chờ người khác giải quyết",
+                        color: "#4d4dff"
                     },
                     {
                         id: 6,
-                        text: "Tiếp tục theo dõi"
+                        text: "Tiếp tục theo dõi",
+                        color: "#5bc0de"
                     },
                     {
                         id: 7,
-                        text: "Khóa đóng"
+                        text: "Khóa đóng",
+                        color: "#f6bb29"
                     },
                 ]}
                 placeholder={"Trạng thái"}
@@ -114,15 +121,18 @@ export const TaskDetailTitle: FC<Props> = ({ task }) => {
                 options={[
                     {
                         id: 1,
-                        text: "Thấp"
+                        text: "Thấp",
+                        color: "#808080"
                     },
                     {
                         id: 2,
-                        text: "Bình thường"
+                        text: "Bình thường",
+                        color: "#5bc0de"
                     },
                     {
                         id: 3,
-                        text: "Cao"
+                        text: "Cao",
+                        color: "#ff0000"
                     },
                 ]}
                 placeholder={"Ưu tiên"}

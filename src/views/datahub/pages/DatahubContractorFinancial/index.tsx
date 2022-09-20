@@ -1,20 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FC, useEffect, useState } from "react";
-import Skeleton from 'react-loading-skeleton'
+import Skeleton from 'react-loading-skeleton';
 
 // ======= HOOKS ========
-import useCheckedList from "services/hooks/ppt/useCheckedList";
 import useQueryFinancials from "services/hooks/datahub/financial/useQueryFinancials";
+import useCheckedList from "services/hooks/ppt/useCheckedList";
+import { useAuth } from "services/hooks/auth/useAuth";
 
 // ======= GLOBAL COMPONENTS ========
-import { GroupActions, ButtonCreate, ButtonMore, SearchInput } from "shareComponents/common";
+import { ButtonCreate, GroupActions } from "shareComponents/common";
 // import DropdownFilterButton from "views/document/components/DocumentFilterButton";
 
 // ======= CONTEXT ========
 import { useContractorCompany } from "views/datahub/contexts/Company";
 
 // ======= COMPONENTS ========
-import { DocumentDropdown } from "views/document/sharedComponents/common"
 
 // ======= MODAL ========
 import ModalExtraLarge from "shareComponents/common/ModalContainer/components/ModalExtraLarge";
@@ -23,50 +23,108 @@ import ModalCreateFinancial from "./components/ModalCreateFinancial";
 // ======= ASSETS ========
 import iconPageUp from 'assets/images/icons8-upload-document-100 1.png';
 
-import { formatNumber } from "utils/ppt";
 import { DatahubFinancial } from "typings/datahub/financial";
-
-const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
-	id: i as string | number,
-	title: "Thẻ lọc chính" as string | number,
-}));
+import { formatNumber } from "utils/ppt";
+import { isSupporter } from "configs";
+import { useUpload } from 'services/hooks/useUpload';
+import { validateFiles } from 'validation/file';
+import { toast } from "react-toastify";
+import { APP_KEY } from "utils/constants";
+import DatahubRepository from 'apis/datahub';
 
 const DatahubContractorFinancial: FC = () => {
-	const [pkg, setPkg] = useState(pkgs[0]);
+	const { user } = useAuth();
 	const [show, setShow] = useState(false);
 	const [selected, setSelected] = useState<DatahubFinancial | Record<string, any>>({});
 
 	const { data: company } = useContractorCompany();
-	const { data, isLoading } = useQueryFinancials({ contractorID: company?.data._id || '' });
+	const { data, isLoading, refetch } = useQueryFinancials({
+		contractorID: company?.data._id || '',
+		populates: JSON.stringify({
+			path: 'files',
+			select: '_id nameOrg path size'
+		})
+	});
 
 	const { assigned, checked, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data?.data.listRecords || []);
 
+	const { addFileToUpload } = useUpload({
+        appID: APP_KEY.DATAHUB,
+        companyID: company?.data._id,
+    });
+
 	useEffect(() => {
-		document.title = "CHG.THT-Lựa chọn nhà thầu";
+		document.title = "Thầu và mua sắm | Trixgo";
 	}, []);
+
+	const handleUploadFiles = async (filesSelected: FileList | null, datahubFinreportID: string) => {
+		if (!filesSelected) return;
+
+        try {
+			const { error, message } = await validateFiles(filesSelected);
+			if (error) return toast.warn(message);
+
+			const files: string[] = [];
+
+			for await (const [key, file] of Object.entries(filesSelected)) {
+				const { _id } = await addFileToUpload({
+					files: file as any,
+					fileType: 2,
+					progress: percentCompleted => {
+						console.log(`${percentCompleted}%`, key);
+					}
+				})
+				_id && files.push(_id);
+			}
+
+			if(!files.length) return toast.warn('Thêm file thất bại');
+
+			const response: any = await DatahubRepository.updateDatahubFinancial({
+				datahubFinreportID,
+				files
+			});
+
+			if(response.error) return toast.warn('Thêm file thất bại')
+
+			refetch();
+			toast.success('Thêm file thành công');
+		} catch(error) {
+			if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
+		}
+	}
 
 	return (
 		<div className="w-full px-3.5 ">
 			<div className="bg-white border-cbs-border border-[0.5px]">
 				<div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1">
 					<span className="text-x-large mr-7">Năng lực tài chính</span>
-					<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={() => 1} />
-					<DocumentDropdown
+					{/* <SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={() => 1} /> */}
+					{/* <DocumentDropdown
 						data={pkgs}
 						value={pkg.title}
 						onSelectValue={setPkg}
-					/>
+					/> */}
 					{/* <DropdownFilterButton /> */}
-					<GroupActions
-						className="flex items-center flex-1"
-						onClickPencil={() => { setShow(true); setSelected(checked[0]) }}
-						disabled={{
-							pencil: checked.length !== 1,
-						}}
-					/>
 
-					<ButtonCreate onClick={() => { setShow(!show); setSelected({}) }} />
-					<ButtonMore />
+					{user && isSupporter(user) ?
+						<GroupActions
+							className="flex items-center flex-1"
+							onClickPencil={() => { setShow(true); setSelected(checked[0]) }}
+							disabled={{
+								pencil: checked.length !== 1,
+							}}
+						/>
+						: <></>
+					}
+					{user && isSupporter(user) ?
+						<ButtonCreate onClick={() => { setShow(!show); setSelected({}) }} />
+						: <></>
+					}
+					{/* <ButtonMore /> */}
 				</div>
 				<div className="overflow-auto relative">
 					<table className="text-black text-medium border-separate space-x-0 space-y-0 w-full" style={{ borderSpacing: 0 }}>
@@ -133,20 +191,36 @@ const DatahubContractorFinancial: FC = () => {
 											<td className="pt-2.5 pb-3 pl-3 border-b border-cbs-border text-right">{formatNumber(grossRevenue)}</td>
 											<td className="pt-2.5 pb-3 pl-3 border-b border-cbs-border text-right">{formatNumber(grossConstructionRevenue)}</td>
 											<td className="pt-2.5 pb-3 pl-3 border-b border-cbs-border text-right">{formatNumber(grossProfit)}</td>
-											<td className="pt-2.5 pb-3 pl-3 border-b border-cbs-border">
+											<td className="pt-2.5 pb-3 pl-3 max-w-[300px] border-b border-cbs-border">
 												{
-													files.map((file, index) => {
-														return <p key={index} className="text-cbs-primary">
-															{/* {note} */}
-															this is fiel
-														</p>
+													files.map((file: any, index) => {
+														return (
+															<a
+																key={`${index}-${file._id}`}
+																href={`${process.env.REACT_APP_URL_S3}${file.path}`}
+																download
+																className="text-cbs-primary break-all"
+															>
+																<p>{file.nameOrg}{index < files.length - 1 && `, `}</p>
+															</a>
+														)
 													})
 												}
 											</td>
 											<td className="pt-2.5 pb-3 px-3 border-b border-cbs-border text-right">
-												<button className=" w-6 h-6">
-													<img src={iconPageUp} alt="" className="inline-block" />
-												</button>
+												{user && isSupporter(user) ?
+													<label className="w-6 h-6 flex justify-center items-center cursor-pointer mr-2">
+														<img src={iconPageUp} alt="" className="inline-block" />
+														<input
+															type="file"
+															name="files"
+															className="hidden"
+															multiple
+															onChange={e => handleUploadFiles(e.target.files, _id)}
+														/>
+													</label>
+													: <></>
+												}
 											</td>
 										</tr>
 									)
