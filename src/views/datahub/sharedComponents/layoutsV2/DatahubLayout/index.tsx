@@ -47,7 +47,7 @@ const DatahubLayoutV2: FC<Props> = ({ children }) => {
 				<section className={"main-content-wrapper flex-1"}>
 					{/*  Main header */}
 					<MainHeaderV2 headerTitle={"Datahub"}>
-						<HomeHeaderContent />
+						<HomeHeaderContent/>
 					</MainHeaderV2>
 
 					{/* Left navigation */}
