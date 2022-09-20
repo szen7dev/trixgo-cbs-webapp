@@ -24,10 +24,10 @@ const DatahubFinancialSchema = object().shape({
 	liabilitiy: number(),
 	netWorth: number(),
 	currentAsset: number(),
-	shortTermLiabilitiy: number(),
+	shortTermLiabilitiy: number(),//
 	workingCapital: number(),
 	grossRevenue: number().required('Required'),
-	grossConstructionRevenue: number().required('Required'),
+	grossConstructionRevenue: number().required('Required'),//
 	grossProfit: number().required('Required'),
 	fiscalYear: date().required('Required'),
 });
@@ -39,10 +39,10 @@ const ModalCreateFinancial: FC<Props> = (props) => {
 		liabilitiy: 0,
 		netWorth: 0,
 		currentAsset: 0,
-		shortTermLiabilitiy: 0,
+		shortTermLiabilitiy: 0,//
 		workingCapital: 0,
 		grossRevenue: 0,
-		grossConstructionRevenue: 0,
+		grossConstructionRevenue: 0,//
 		grossProfit: 0,
 		grossProfitAfterTax: 0,
 	})
@@ -62,16 +62,17 @@ const ModalCreateFinancial: FC<Props> = (props) => {
 
 	const queryClient = useQueryClient();
 	const handleSubmit = async (values: typeof initialValues) => {
+		console.log(values)
 		const body: DatahubFinancialBody = {
 			fiscalYear: values.fiscalYear?.getFullYear(),
 			asset: Number(values.asset),
 			liabilitiy: Number(values.liabilitiy),
 			netWorth: Number(values.netWorth),
 			currentAsset: Number(values.currentAsset),
-			shortTermLiabilitiy: Number(values.shortTermLiabilitiy),
+			shortTermLiabilitiy: Number(values.shortTermLiabilitiy),//
 			workingCapital: Number(values.workingCapital),
 			grossRevenue: Number(values.grossRevenue),
-			grossConstructionRevenue: Number(values.grossConstructionRevenue),
+			grossConstructionRevenue: Number(values.grossConstructionRevenue),//
 			grossProfit: Number(values.grossProfit),
 			grossProfitAfterTax: Number(values.grossProfitAfterTax),
 			contractor: props.contractor,
@@ -137,10 +138,10 @@ const ModalCreateFinancial: FC<Props> = (props) => {
 								<CustomFieldFormik name='liabilitiy' title='Tổng nợ' />
 								<CustomFieldFormik name='netWorth' title='Giá trị tài sản ròng' />
 								<CustomFieldFormik name='currentAsset' title='Tài sản ngắn hạn' />
-								<CustomFieldFormik name='shortTermLiabilitiy' title='Nợ ngắn hạn' />
+								<CustomFieldFormik name='shortTermLiabilitiy' title='Nợ ngắn hạn--' />
 								<CustomFieldFormik name='workingCapital' title='Vốn lưu động' />
 								<CustomFieldFormik name='grossRevenue' title='Tổng doanh thu' required />
-								<CustomFieldFormik name='grossConstructionRevenue' title='Tổng doanh thu trong lĩnh vực xây dựng' required />
+								<CustomFieldFormik name='grossConstructionRevenue' title='Tổng doanh thu trong lĩnh vực xây dựng--' required />
 								<CustomFieldFormik name='grossProfit' title='Lợi nhuận trước thuế' required />
 								<CustomFieldFormik name='grossProfitAfterTax' title='Lợi nhuận sau thuế' />
 							</div>

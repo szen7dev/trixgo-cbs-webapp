@@ -5,6 +5,7 @@ export type DatahubTypesBase = {
   numberOfContractors: number;
   numberOfPosts: number;
   numberOfViews: number;
+  numberOfContracts: number;
   popular: number;
   contractors: Array<any>;
   state: number;

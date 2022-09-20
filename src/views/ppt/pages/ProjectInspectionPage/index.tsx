@@ -11,15 +11,15 @@ const ProjectInspectionPage: FC = () => {
 	const match = useRouteMatch<{ id: string }>();
 
 	useEffect(() => {
-		document.title = "CHG.THT-Nghiệm thu chất lượng"
+		document.title = "Nghiệm thu | Trixgo"
 	}, []);
 
 	return (
 		<LayoutSecondary
 			pages={[
-				{ id: '1', title: 'Tất cả', path: '/pcm/project/:id/inspection', navExact: true },
-				{ id: '2', title: 'Gói thầu', path: '/pcm/project/:id/inspection/tabs2' },
-				{ id: '3', title: 'Báo cáo quản trị', path: '/pcm/project/:id/inspection/tabs3' },
+				{ id: '1', title: 'Tất cả', path: '/pm/project/:id/inspection', navExact: true },
+				{ id: '2', title: 'Gói thầu', path: '/pm/project/:id/inspection/tabs2' },
+				{ id: '3', title: 'Báo cáo quản trị', path: '/pm/project/:id/inspection/tabs3' },
 			]}
 			rightHeader={() => <div className="flex items-center">
 				<ButtonCreate onClick={() => setIsShow(true)} />
@@ -44,7 +44,7 @@ const ProjectInspectionPage: FC = () => {
 							Array.from({ length: 2 }).map((_, i) => (
 								<Fragment key={i}>
 									<div className="pt-2 pb-3">
-										<Link to={generatePath("/pcm/project/:id/inspection/:path", { id: match.params.id, path: i })} className="hover:text-cbs-primary">
+										<Link to={generatePath("/pm/project/:id/inspection/:path", { id: match.params.id, path: i })} className="hover:text-cbs-primary">
 											Kiểm tra cốt thép trục A1, A2 khu vực nhà A2
 										</Link>
 										<p className="text-cbs-subtext"><i>Khởi tạo: Đào Nguyễn Duy Tùng-TNC 15:30 12/8/2021</i></p>

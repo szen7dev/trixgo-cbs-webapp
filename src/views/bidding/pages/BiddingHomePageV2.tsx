@@ -88,7 +88,7 @@ const BiddingHomePageV2: FC<Props> = (props) => {
     { enable: true }
   );
 
-  const selectTypes = "_id name description numberOfContractors numberOfPosts numverOfViews";
+  const selectTypes = "_id name description numberOfContractors numberOfPosts numberOfViews numberOfContracts";
   const datahubTypes = useInfiniteDatahubTypes(
     buildDatahubTypeKey({ keyword: searchType, select: selectTypes }),
     {
@@ -263,17 +263,17 @@ const BiddingHomePageV2: FC<Props> = (props) => {
                         </div>
                         <div className="flex justify-between mt-4">
                           <div className="flex-1 leading-5">
-                            <div className="text-black">{record.numberOfContractors}</div>
-                            <div className="text-cbs-subtext">đơn vị</div>
+                            <div className="text-black text-xs">{record.numberOfContractors}</div>
+                            <div className="text-cbs-subtext text-xs">đơn vị</div>
                           </div>
-                          {/* <div className="flex-1 leading-5">
-                            <div className="text-black">{record.numberOfPosts}</div>
-                            <div className="text-cbs-subtext">bài viết</div>
+                          <div className="flex-1 leading-5">
+                            <div className="text-black text-xs">{record.numberOfContracts || 0}</div>
+                            <div className="text-cbs-subtext text-xs">hợp đồng</div>
                           </div>
                           <div className="leading-5">
-                            <div className="text-black">{record.numberOfViews || 0}</div>
-                            <div className="text-cbs-subtext">lượt xem</div>
-                          </div> */}
+                            <div className="text-black text-xs">{record.numberOfViews || 0}</div>
+                            <div className="text-cbs-subtext text-xs">lượt xem</div>
+                          </div>
                         </div>
                       </div>
                     </div>

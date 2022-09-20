@@ -105,6 +105,14 @@ const PcmRepository = {
         return data;
     },
 
+    // Import task từ dữ liệu file excel
+    async importTaskFromExcel(payload: any): Promise<any> {
+        const { data } = await API.post<any>(
+            `${pcmURL}/pcm_plan_tasks/import-task-from-excel`, payload
+        );
+        return data;
+    },
+
     async listFilesPcm(payload: ListFilesPcmPayload): Promise<any> {
         const { data } = await API.get<any>(
             `${pcmURL}/pcm_files?${convertObToUrl({

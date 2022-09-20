@@ -8,6 +8,7 @@ import { Task } from "typings/task";
 import { useTask } from 'services/hooks/useTask';
 import moment from "moment";
 import { Link } from "react-router-dom";
+import { PCM_STATUS_TASK, PCM_PRIORITY_TASK } from 'apis/localdb';
 
 type Props = {
     task: Task;
@@ -57,7 +58,7 @@ export const SubtaskItem:FC<Props> = ({ task, index }) => {
                 </p>
             </div>
             <div className={"flex items-center"}>
-                <div className={"flex items-center justify-center px-4 py-1 rounded text-white bg-cbs-completed mr-2"}>
+                <div className={`flex items-center justify-center px-4 py-1 rounded text-white ${PCM_STATUS_TASK[task.status - 1]?.class} mr-2`}>
                     <img src={iconClock} alt={"----"} className={"mr-2"}/>
                     <span className="text-[13px]">{moment(task.expiredTime).format('DD/M/YYYY')}</span>
                 </div>
