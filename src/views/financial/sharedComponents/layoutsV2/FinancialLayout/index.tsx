@@ -11,9 +11,10 @@ import chevronUpIcon from "assets/images/icon-chevron-up.png";
 import iconChat from "assets/images/icons8-chat-96.png";
 
 /*=====4.PAGES/COMPONENTS=====*/
-import { LeftNavigate, MainHeader } from "shareComponents/common";
+import { LeftNavigate, MainHeader, MainHeaderV2 } from "shareComponents/common";
 import { FinancialLeftSideBar } from './components';
 import { HomeRightSideBar } from "shareComponents/layouts";
+import { HomeHeaderContent } from "shareComponents/layouts/HomeLayout/components";
 
 /*=====5.TYPINGS=====*/
 
@@ -71,13 +72,11 @@ export const FinancialLayoutV2: FC<Props> = ({ children }) => {
         <LeftNavigate handleMenuEvent={handleMenuEvent} />
         <section className={"main-content-wrapper flex-1"}>
           {/*  Main header */}
-          <MainHeader />
+          <MainHeaderV2 headerTitle={"Tài chính"}>
+            <HomeHeaderContent />
+          </MainHeaderV2>
 
           {/* Left navigation */}
-
-          {/* <LeftMenu>
-            <PmProjectLeftMenuContent />
-          </LeftMenu> */}
           <FinancialLeftSideBar />
 
           {/* Content area */}

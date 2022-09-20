@@ -3,12 +3,13 @@ import cn from "classnames";
 import 'react-loading-skeleton/dist/skeleton.css';
 
 import { HomeRightSideBar } from "shareComponents/layouts";
-import { LeftNavigate, MainHeader } from "shareComponents/common";
+import { LeftNavigate, MainHeader, MainHeaderV2 } from "shareComponents/common";
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
 
 import chevronRightIcon from "assets/images/icon-chevron-right.png";
 import chevronUpIcon from "assets/images/icon-chevron-up.png";
 import DatahubLeftSideBar from "./components/DatahubLeftSideBar";
+import { HomeHeaderContent } from "shareComponents/layouts/HomeLayout/components";
 
 type Props = {
 	children: ReactNode;
@@ -45,7 +46,9 @@ const DatahubLayoutV2: FC<Props> = ({ children }) => {
 				<LeftNavigate handleMenuEvent={handleMenuEvent} />
 				<section className={"main-content-wrapper flex-1"}>
 					{/*  Main header */}
-					<MainHeader />
+					<MainHeaderV2 headerTitle={"Datahub"}>
+						<HomeHeaderContent />
+					</MainHeaderV2>
 
 					{/* Left navigation */}
 					<DatahubLeftSideBar />

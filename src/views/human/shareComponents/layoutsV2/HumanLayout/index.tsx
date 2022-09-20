@@ -10,10 +10,11 @@ import chevronRightIcon from "assets/images/icon-chevron-right.png";
 import chevronUpIcon from "assets/images/icon-chevron-up.png";
 
 /*=====4.PAGES/COMPONENTS=====*/
-import { LeftMenu, LeftNavigate, MainHeader } from "shareComponents/common";
+import { LeftMenu, LeftNavigate, MainHeader, MainHeaderV2 } from "shareComponents/common";
 import { HomeRightSideBar } from "shareComponents/layouts";
 import { HumanLeftSideBar } from './components';
 import { PmProjectLeftMenuContent } from "shareComponents/layouts/PmLayout/components";
+import { HomeHeaderContent } from "shareComponents/layouts/HomeLayout/components";
 
 /*=====5.TYPINGS=====*/
 
@@ -55,13 +56,12 @@ export const HumanLayout: FC<Props> = ({ children }) => {
         <LeftNavigate handleMenuEvent={handleMenuEvent} />
         <section className={"main-content-wrapper flex-1"}>
           {/*  Main header */}
-          <MainHeader />
+          <MainHeaderV2 headerTitle={"Nhân sự"}>
+            <HomeHeaderContent />
+          </MainHeaderV2>
 
           {/* Left navigation */}
 
-          {/* <LeftMenu>
-            <PmProjectLeftMenuContent />
-          </LeftMenu> */}
           <HumanLeftSideBar />
 
           {/* Content area */}

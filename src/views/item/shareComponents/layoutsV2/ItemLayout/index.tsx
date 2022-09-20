@@ -10,9 +10,10 @@ import chevronRightIcon from "assets/images/icon-chevron-right.png";
 import chevronUpIcon from "assets/images/icon-chevron-up.png";
 
 /*=====4.PAGES/COMPONENTS=====*/
-import { LeftNavigate, MainHeader } from "shareComponents/common";
+import { LeftNavigate, MainHeader, MainHeaderV2 } from "shareComponents/common";
 import { ItemLeftSideBar } from './components';
 import { HomeRightSideBar } from "shareComponents/layouts";
+import { HomeHeaderContent } from "shareComponents/layouts/HomeLayout/components";
 
 /*=====5.TYPINGS=====*/
 
@@ -56,7 +57,9 @@ export const ItemLayoutV2: FC<Props> = ({ children }) => {
         <LeftNavigate handleMenuEvent={handleMenuEvent} />
         <section className={"main-content-wrapper flex-1"}>
           {/*  Main header */}
-          <MainHeader />
+          <MainHeaderV2 headerTitle={"Quản lý"}>
+            <HomeHeaderContent />
+          </MainHeaderV2>
 
           {/* Left navigation */}
           <ItemLeftSideBar />
