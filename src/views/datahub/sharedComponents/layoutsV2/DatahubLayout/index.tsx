@@ -51,7 +51,7 @@ const DatahubLayoutV2: FC<Props> = ({ children }) => {
 					</MainHeaderV2>
 
 					{/* Left navigation */}
-					<DatahubLeftSideBar />
+					<DatahubLeftSideBar/>
 
 					{/* Content area */}
 					<main className="home-main-content home-main-content-v2 transition-all duration-500 ease-out overflow-auto relative">
