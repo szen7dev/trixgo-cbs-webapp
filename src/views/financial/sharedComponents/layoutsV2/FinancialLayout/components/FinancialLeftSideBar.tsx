@@ -39,7 +39,7 @@ export const FinancialLeftSideBar: FC = () => {
         <div className="t-link-menu-container">
         {hasPermission && dataUserAccess?.level == 0 ?
             <NavLink
-              to={`/convert/financial/admin`}
+              to={`/financial/admin`}
               className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3"
             >
               <img className="w-6 h-6 object-contain mr-3" src={'/images/pcm/admin.png'} alt="Menu item" />
@@ -47,7 +47,7 @@ export const FinancialLeftSideBar: FC = () => {
             </NavLink> : <></>
           }
           <NavLink
-            to={`/convert/financial/home`}
+            to={`/financial/home`}
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3"
           >
             <img
@@ -66,7 +66,7 @@ export const FinancialLeftSideBar: FC = () => {
                   return (
                     <NavLink
                       key={index}
-                      to={`/convert/financial/${item.slug}`}
+                      to={`/financial/${item.slug}`}
                       className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3"
                     >
                       <img

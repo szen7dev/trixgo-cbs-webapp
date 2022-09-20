@@ -22,126 +22,126 @@ const ItemRouterV2: FC = () => {
     return (
         <ItemLayoutV2>
             <Switch>
-                <ProtectedRoute exact path="/convert/item/contact" component={ItemCustomerPage} />
-                <ProtectedRoute exact path="/convert/item/contact/:parentID" component={ItemCustomerPage} />
-                <ProtectedRoute exact path="/convert/item/storage" component={ItemStoragePage} />
-                <ProtectedRoute exact path="/convert/item/storage/:parentID" component={ItemStoragePage} />
+                <ProtectedRoute exact path="/item/contact" component={ItemCustomerPage} />
+                <ProtectedRoute exact path="/item/contact/:parentID" component={ItemCustomerPage} />
+                <ProtectedRoute exact path="/item/storage" component={ItemStoragePage} />
+                <ProtectedRoute exact path="/item/storage/:parentID" component={ItemStoragePage} />
                 <ProtectedRoute
                     exact
-                    path="/convert/item/home"
-                    component={() => <Redirect to="/convert/item/home/1" />}
+                    path="/item/home"
+                    component={() => <Redirect to="/item/home/1" />}
                 />
                 <ProtectedRoute
                     exact
-                    path="/convert/item/home/1"
+                    path="/item/home/1"
                     component={() => <ItemHomePage type={1} />}
                 />
                 <ProtectedRoute
                     exact
-                    path="/convert/item/home/2"
+                    path="/item/home/2"
                     component={() => <ItemHomePage type={2} />}
                 />
                 <ProtectedRoute
                     exact
-                    path="/convert/item/home/3"
+                    path="/item/home/3"
                     component={() => <ItemHomePage type={3} />}
                 />
                 <ProtectedRoute
                     exact
-                    path="/convert/item/home/4"
+                    path="/item/home/4"
                     component={() => <ItemHomePage type={4} />}
                 />
                 <ProtectedRoute
                     exact
-                    path="/convert/item/home/5"
+                    path="/item/home/5"
                     component={() => <ItemHomePage type={5} />}
                 />
                 <ProtectedRoute
                     exact
-                    path="/convert/item/home/6"
+                    path="/item/home/6"
                     component={() => <ItemHomePage type={6} />}
                 />
                 <ProtectedRoute
                     exact
-                    path="/convert/item/home/7"
+                    path="/item/home/7"
                     component={() => <ItemHomePage type={7} />}
                 />
                 <ProtectedRoute
                     exact
-                    path="/convert/item/home/8"
+                    path="/item/home/8"
                     component={() => <ItemHomePage type={8} />}
                 />
                 <ProtectedRoute
                     exact
-                    path="/convert/item/home/9"
+                    path="/item/home/9"
                     component={() => <ItemHomePage type={9} />}
                 />
                 <ProtectedRoute
                     exact
-                    path="/convert/item/home/10"
+                    path="/item/home/10"
                     component={() => <ItemHomePage type={10} />}
                 />
                 <ProtectedRoute
                     exact
-                    path="/convert/item/home/11"
+                    path="/item/home/11"
                     component={() => <ItemHomePage type={11} />}
                 />
                 <ProtectedRoute
                     exact
-                    path="/convert/item/home/12"
+                    path="/item/home/12"
                     component={() => <ItemHomePage type={12} />}
                 />
                 <ProtectedRoute
                     exact
-                    path="/convert/item/home/13"
+                    path="/item/home/13"
                     component={() => <ItemHomePage type={13} />}
                 />
                 <ProtectedRoute
                     exact
-                    path="/convert/item/home/14"
+                    path="/item/home/14"
                     component={() => <ItemHomePage type={14} />}
                 />
                 <ProtectedRoute
                     exact
-                    path="/convert/item/home/15"
+                    path="/item/home/15"
                     component={() => <ItemHomePage type={15} />}
                 />
                 <ProtectedRoute
                     exact
-                    path="/convert/item/home/16"
+                    path="/item/home/16"
                     component={() => <ItemHomePage type={16} />}
                 />
                 <ProtectedRoute
                     exact
-                    path="/convert/item/home/17"
+                    path="/item/home/17"
                     component={() => <ItemHomePage type={17} />}
                 />
                 <ProtectedRoute
                     exact
-                    path="/convert/item/home/18"
+                    path="/item/home/18"
                     component={() => <ItemHomePage type={18} />}
                 />
                 <ProtectedRoute
                     exact
-                    path="/convert/item/home/19"
+                    path="/item/home/19"
                     component={() => <ItemHomePage type={19} />}
                 />
                 <ProtectedRoute
                     exact
-                    path="/convert/item/home/20"
+                    path="/item/home/20"
                     component={() => <ItemHomePage type={20} />}
                 />
                 <ProtectedRoute
                     exact
-                    path="/convert/item/home/21"
+                    path="/item/home/21"
                     component={() => <ItemHomePage type={21} />}
                 />
                 <ProtectedRoute
                     exact
-                    path="/convert/item/home/:type/:parentId"
+                    path="/item/home/:type/:parentId"
                     component={() => <ItemChildPage />}
                 />
-                <ProtectedRoute path="/convert/item/*" component={ErrorPage} />
+                <ProtectedRoute path="/item/*" component={ErrorPage} />
             </Switch>
         </ItemLayoutV2>
 

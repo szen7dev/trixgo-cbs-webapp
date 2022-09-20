@@ -55,7 +55,7 @@ const BudgetRouter = lazy(() => import("./budget"));
 const ErrorPage = lazy(() => import("views/authentication/Error"));
 const HomeLayout = lazy(() => import("shareComponents/layouts"));
 const HumanLayout = lazy(() => import("views/human/shareComponents/layouts"));
-const NewHumanLayout = lazy(() => import("views/human/shareComponents/layoutsV2"));
+const HumanLayoutV2 = lazy(() => import("views/human/shareComponents/layoutsV2"));
 // const DocumentLayout = lazy(() => import('views/document/sharedComponents/layouts'));
 const AccountingLayout = lazy(() => import('views/accounting/shareComponents/layouts'));
 const PcmPrintTaskTypeOnePage = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeOne'));
@@ -128,9 +128,9 @@ const Routes: FC = () => {
                                 </Route>
 
                                 {/* =====DATHUB===== */}
-                                <Route path="/datahub">
+                                {/* <Route path="/datahub">
                                     <DatahubRouter />
-                                </Route>
+                                </Route> */}
 
                                 {/* =====DOCUMENT===== */}
                                 {/* <Route path="/document">
@@ -155,36 +155,37 @@ const Routes: FC = () => {
                                 </Route>
 
                                 {/* =====FINANCIAL===== */}
-                                <Route path="/financial">
+                                {/* <Route path="/financial">
                                     <FinancialRouter />
-                                </Route>
+                                </Route> */}
 
                                 {/* =====HUMAN===== */}
-                                <Route path="/human">
+                                {/* <Route path="/human">
                                     <HumanLayout>
                                         <HumanRouter />
                                     </HumanLayout>
-                                </Route>
+                                </Route> */}
 
-                                {/* =====CONVERT===== */}
+                                {/* =====V2===== */}
                                 {/* =====HUMAN===== */}
-                                <Route path="/convert/human">
-                                    <NewHumanLayout>
+                                <Route path="/human">
+                                    <HumanLayoutV2>
                                         <HumanRouterV2 />
-                                    </NewHumanLayout>
+                                    </HumanLayoutV2>
                                 </Route>
                                 {/* =====financial===== */}
-                                <Route path="/convert/financial">
+                                <Route path="/financial">
                                         <FinancialRouterV2 />
                                 </Route>
                                 {/* =====ITEM===== */}
-                                <Route path="/convert/item">
+                                <Route path="/item">
                                     <ItemRouterV2 />
                                 </Route>
                                 {/* =====DATHUB===== */}
-                                <Route path="/convert/datahub">
+                                <Route path="/datahub">
                                     <DatahubRouterV2 />
                                 </Route>
+                                {/* =====end V2===== */}
 
                                 {/* =====MARKET===== */}
                                 <Route path="/market">
@@ -234,9 +235,9 @@ const Routes: FC = () => {
                                 </Route>
 
                                 {/* =====ITEM===== */}
-                                <Route path="/item">
+                                {/* <Route path="/item">
                                     <ItemRouter />
-                                </Route>
+                                </Route> */}
 
                                 {/* =====WORKSHOP===== */}
                                 <Route path="/workshop">

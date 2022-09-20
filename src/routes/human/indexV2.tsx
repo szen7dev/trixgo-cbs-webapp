@@ -29,34 +29,34 @@ import {
 const HumanRouterV2: FC = () => {
     return (
         <Switch>
-            <ProtectedRoute exact path="/convert/human/home" component={HumanHomePage} />
-            <ProtectedRoute exact path="/convert/human/partner" component={HumanPartnerPage} />
-            <ProtectedRoute exact path="/convert/human/capacity" component={HumanCapacityPage} />
+            <ProtectedRoute exact path="/human/home" component={HumanHomePage} />
+            <ProtectedRoute exact path="/human/partner" component={HumanPartnerPage} />
+            <ProtectedRoute exact path="/human/capacity" component={HumanCapacityPage} />
             {/* <ProtectedRoute exact path="/human/home" component={HumanDepartment} /> */}
             {/* <ProtectedRoute exact path="/human/project/:id/contacts" component={HumanHomePage} /> */}
-            <ProtectedRoute exact path="/convert/human/certificate" component={HumanCertificatePage} />
-            <ProtectedRoute exact path="/convert/human/other" component={HumanOtherFilterPage} />
+            <ProtectedRoute exact path="/human/certificate" component={HumanCertificatePage} />
+            <ProtectedRoute exact path="/human/other" component={HumanOtherFilterPage} />
             {/* <ProtectedRoute exact path="/human/expired" component={HumanExpiredPage} /> */}
             <ProtectedRoute
-                path="/convert/human/expired"
+                path="/human/expired"
                 component={() => (
                     <Switch>
-                        <Route path="/convert/human/expired">
+                        <Route path="/human/expired">
                             <LayoutSecondary pages={[
-                                { id: '1', title: 'Thời hạn hợp đồng nhỏ hơn 4 tháng', path: '/convert/human/expired', navExact: true },
+                                { id: '1', title: 'Thời hạn hợp đồng nhỏ hơn 4 tháng', path: '/human/expired', navExact: true },
                                 {
-                                    id: '2', title: 'Thời hạn chứng chỉ nhỏ hơn 5 tháng', path: '/convert/human/expired/2', 
+                                    id: '2', title: 'Thời hạn chứng chỉ nhỏ hơn 5 tháng', path: '/human/expired/2', 
                                 }
                             ]}>
-                                <Route exact path="/convert/human/expired" component={HumanExpiredPage} />
-                                <Route exact path="/convert/human/expired/2" component={HumanCertificateExpiredPage} />
+                                <Route exact path="/human/expired" component={HumanExpiredPage} />
+                                <Route exact path="/human/expired/2" component={HumanCertificateExpiredPage} />
                             </LayoutSecondary>
                         </Route>
                     </Switch>
                 )}
             />
-            <ProtectedRoute exact path="/convert/human/home/hid=:id" component={HumanInfo} />
-            <Route path="/convert/human/*" component={ErrorPage} />
+            <ProtectedRoute exact path="/human/home/hid=:id" component={HumanInfo} />
+            <Route path="/human/*" component={ErrorPage} />
         </Switch>
     )
 };

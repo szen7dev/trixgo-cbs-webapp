@@ -43,73 +43,73 @@ const DatahubRoutesV2: FC = () => {
 		<>
 			<DatahubLayoutV2>
 				<Switch>
-					<Route exact path="/convert/datahub/home" component={DatahubHome} />
-					<Route exact path="/convert/datahub/home/:id" component={DatahubHomeDetail} />
-					<Route path="/convert/datahub/type">
+					<Route exact path="/datahub/home" component={DatahubHome} />
+					<Route exact path="/datahub/home/:id" component={DatahubHomeDetail} />
+					<Route path="/datahub/type">
 						<LayoutSecondary pages={[
-							{ id: '1', path: '/convert/datahub/type', navExact: true, title: 'Lĩnh vực' },
-							{ id: '2', path: '/convert/datahub/type/2', title: 'Chủ đề cộng đồng' },
+							{ id: '1', path: '/datahub/type', navExact: true, title: 'Lĩnh vực' },
+							{ id: '2', path: '/datahub/type/2', title: 'Chủ đề cộng đồng' },
 						]}>
 							<Switch>
-								<Route exact path='/convert/datahub/type' component={DatahubType} />
-								<Route exact path='/convert/datahub/type/2' component={DatahubType2} />
-								<Route path='/convert/datahub/type/:id' component={DatahubTypeDetail} />
+								<Route exact path='/datahub/type' component={DatahubType} />
+								<Route exact path='/datahub/type/2' component={DatahubType2} />
+								<Route path='/datahub/type/:id' component={DatahubTypeDetail} />
 							</Switch>
 						</LayoutSecondary>
 					</Route>
-					<Route path="/convert/datahub/project">
+					<Route path="/datahub/project">
 						<LayoutSecondary pages={[
-							{ id: '1', path: '/convert/datahub/project', navExact: true, title: 'Danh sách' },
-							{ id: '2', path: '/convert/datahub/project/map', title: 'Bản đồ' },
+							{ id: '1', path: '/datahub/project', navExact: true, title: 'Danh sách' },
+							{ id: '2', path: '/datahub/project/map', title: 'Bản đồ' },
 						]}>
-							<Route exact path='/convert/datahub/project' component={DatahubProject} />
-							<Route exact path='/convert/datahub/project/map' component={DatahubProjectMap} />
+							<Route exact path='/datahub/project' component={DatahubProject} />
+							<Route exact path='/datahub/project/map' component={DatahubProjectMap} />
 						</LayoutSecondary>
 					</Route>
-					<Route exact path="/convert/datahub/contractor/home" component={DatahubContractorHome} />
-					<Route exact path="/convert/datahub/contractor/home/:id">
+					<Route exact path="/datahub/contractor/home" component={DatahubContractorHome} />
+					<Route exact path="/datahub/contractor/home/:id">
 						<DatahubContractorLayout navLinks={navLinks}>
 							<DatahubContractorDetail />
 						</DatahubContractorLayout>
 					</Route>
-					<Route path="/convert/datahub/contractor/:id">
+					<Route path="/datahub/contractor/:id">
 						<DatahubContractorLayout navLinks={navLinks}>
-							<Route exact path='/convert/datahub/contractor/:id' component={DatahubContractorDetail} />
-							<Route exact path='/convert/datahub/contractor/:id/service' component={DatahubContractorService} />
-							<Route exact path='/convert/datahub/contractor/:id/financial' component={DatahubContractorFinancial} />
-							<Route exact path='/convert/datahub/contractor/:id/contract' component={DatahubContractorContract} />
-							<Route exact path='/convert/datahub/contractor/:id/profile' component={DatahubContractorProfile} />
+							<Route exact path='/datahub/contractor/:id' component={DatahubContractorDetail} />
+							<Route exact path='/datahub/contractor/:id/service' component={DatahubContractorService} />
+							<Route exact path='/datahub/contractor/:id/financial' component={DatahubContractorFinancial} />
+							<Route exact path='/datahub/contractor/:id/contract' component={DatahubContractorContract} />
+							<Route exact path='/datahub/contractor/:id/profile' component={DatahubContractorProfile} />
 						</DatahubContractorLayout>
 					</Route>
-					<Route path="/convert/datahub/inspection">
+					<Route path="/datahub/inspection">
 						<LayoutSecondary pages={[
-							{ id: '1', path: '/convert/datahub/inspection', navExact: true, title: 'Kết cấu' },
-							{ id: '2', path: '/convert/datahub/inspection/1', title: 'Kiến trúc' },
-							{ id: '3', path: '/convert/datahub/inspection/2', title: 'Cơ điện' },
-							{ id: '4', path: '/convert/datahub/inspection/3', title: 'Hạ tầng' },
-							{ id: '5', path: '/convert/datahub/inspection/4', title: 'Cảnh quan' },
+							{ id: '1', path: '/datahub/inspection', navExact: true, title: 'Kết cấu' },
+							{ id: '2', path: '/datahub/inspection/1', title: 'Kiến trúc' },
+							{ id: '3', path: '/datahub/inspection/2', title: 'Cơ điện' },
+							{ id: '4', path: '/datahub/inspection/3', title: 'Hạ tầng' },
+							{ id: '5', path: '/datahub/inspection/4', title: 'Cảnh quan' },
 						]}>
 							<Switch>
-								<Route exact path='/convert/datahub/inspection' component={()=><DatahubInspection type={1} />} />
-								<Route exact path='/convert/datahub/inspection/1' component={()=><DatahubInspection type={2} />} />
-								<Route exact path='/convert/datahub/inspection/2' component={()=><DatahubInspection type={3} />} />
-								<Route exact path='/convert/datahub/inspection/3' component={()=><DatahubInspection type={4} />} />
-								<Route exact path='/convert/datahub/inspection/4' component={()=><DatahubInspection type={5} />} />
-								<Route exact path='/convert/datahub/inspection/:id' component={DatahubInspectionDetail} />
+								<Route exact path='/datahub/inspection' component={()=><DatahubInspection type={1} />} />
+								<Route exact path='/datahub/inspection/1' component={()=><DatahubInspection type={2} />} />
+								<Route exact path='/datahub/inspection/2' component={()=><DatahubInspection type={3} />} />
+								<Route exact path='/datahub/inspection/3' component={()=><DatahubInspection type={4} />} />
+								<Route exact path='/datahub/inspection/4' component={()=><DatahubInspection type={5} />} />
+								<Route exact path='/datahub/inspection/:id' component={DatahubInspectionDetail} />
 							</Switch>
 						</LayoutSecondary>
 					</Route>
-					<Route exact path="/convert/datahub/price" component={DatahubPrice} />
-					<Route path="/convert/datahub/contact">
+					<Route exact path="/datahub/price" component={DatahubPrice} />
+					<Route path="/datahub/contact">
 						<LayoutSecondary pages={[
-							{ id: '1', path: '/convert/datahub/contact', navExact: true, title: 'Danh bạ hệ thống' },
+							{ id: '1', path: '/datahub/contact', navExact: true, title: 'Danh bạ hệ thống' },
 						]}>
 							<Switch>
-								<Route exact path='/convert/datahub/contact' component={DatahubContact} />
+								<Route exact path='/datahub/contact' component={DatahubContact} />
 							</Switch>
 						</LayoutSecondary>
 					</Route> 
-					<Route exact path="/convert/datahub/price" component={DatahubPrice} />
+					<Route exact path="/datahub/price" component={DatahubPrice} />
 				</Switch>
 			</DatahubLayoutV2>
 		</>

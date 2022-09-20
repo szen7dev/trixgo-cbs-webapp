@@ -27,7 +27,7 @@ export const ItemLeftSideBar: FC = () => {
         {/* menu block */}
         <div className="t-link-menu-container">
           <NavLink
-            to="/convert/item/contact"
+            to="/item/contact"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
             title="Danh bạ"
           >
@@ -39,7 +39,7 @@ export const ItemLeftSideBar: FC = () => {
             <span className="truncate">Danh bạ công ty</span>
           </NavLink>
           <NavLink
-            to="/convert/item/storage"
+            to="/item/storage"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
             title="Danh bạ"
           >
@@ -51,7 +51,7 @@ export const ItemLeftSideBar: FC = () => {
             <span className="truncate">Dụng cụ lưu trữ</span>
           </NavLink>
           <NavLink
-            to="/convert/item/home/1"
+            to="/item/home/1"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
             title="Lĩnh vực hồ sơ"
           >
@@ -63,7 +63,7 @@ export const ItemLeftSideBar: FC = () => {
             <span className="truncate">Lĩnh vực hồ sơ</span>
           </NavLink>
           <NavLink
-            to="/convert/item/home/2"
+            to="/item/home/2"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
             title="Tính chất hồ sơ"
           >
@@ -75,7 +75,7 @@ export const ItemLeftSideBar: FC = () => {
             <span className="truncate">Tính chất hồ sơ</span>
           </NavLink>
           <NavLink
-            to="/convert/item/home/3"
+            to="/item/home/3"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
             title="Lĩnh vực kinh doanh"
           >
@@ -87,7 +87,7 @@ export const ItemLeftSideBar: FC = () => {
             <span className="truncate">Lĩnh vực kinh doanh</span>
           </NavLink>
           <NavLink
-            to="/convert/item/home/4"
+            to="/item/home/4"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
             title="Phân loại khách hàng"
           >
@@ -99,7 +99,7 @@ export const ItemLeftSideBar: FC = () => {
             <span className="truncate">Phân loại khách hàng</span>
           </NavLink>
           <NavLink
-            to="/convert/item/home/5"
+            to="/item/home/5"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
             title="Phân loại công việc"
           >
@@ -111,7 +111,7 @@ export const ItemLeftSideBar: FC = () => {
             <span className="truncate">Phân loại công việc</span>
           </NavLink>
           <NavLink
-            to="/convert/item/home/6"
+            to="/item/home/6"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
             title="Trình độ nhân sự"
           >
@@ -123,7 +123,7 @@ export const ItemLeftSideBar: FC = () => {
             <span className="truncate">Trình độ nhân sự</span>
           </NavLink>
           <NavLink
-            to="/convert/item/home/7"
+            to="/item/home/7"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
             title="Chuyên ngành nhân sự"
           >
@@ -135,7 +135,7 @@ export const ItemLeftSideBar: FC = () => {
             <span className="truncate">Chuyên ngành nhân sự</span>
           </NavLink>
           <NavLink
-            to="/convert/item/home/8"
+            to="/item/home/8"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
             title="Loại hợp đồng lao động"
           >
@@ -147,7 +147,7 @@ export const ItemLeftSideBar: FC = () => {
             <span className="truncate">Loại hợp đồng lao động</span>
           </NavLink>
           <NavLink
-            to="/convert/item/home/9"
+            to="/item/home/9"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
             title="Tình trạng làm việc"
           >
@@ -159,7 +159,7 @@ export const ItemLeftSideBar: FC = () => {
             <span className="truncate">Tình trạng làm việc</span>
           </NavLink>
           <NavLink
-            to="/convert/item/home/10"
+            to="/item/home/10"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
             title="Thâm niên công tác"
           >
@@ -171,7 +171,7 @@ export const ItemLeftSideBar: FC = () => {
             <span className="truncate">Thâm niên công tác</span>
           </NavLink>
           <NavLink
-            to="/convert/item/home/11"
+            to="/item/home/11"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
             title="Phân loại giai đoạn CRM"
           >
@@ -183,7 +183,7 @@ export const ItemLeftSideBar: FC = () => {
             <span className="truncate">Phân loại giai đoạn CRM</span>
           </NavLink>
           <NavLink
-            to="/convert/item/home/12"
+            to="/item/home/12"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
             title="Hồ sơ chi tiết CRM"
           >
@@ -195,7 +195,7 @@ export const ItemLeftSideBar: FC = () => {
             <span className="truncate">Hồ sơ chi tiết CRM</span>
           </NavLink>
           <NavLink
-            to="/convert/item/home/13"
+            to="/item/home/13"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
             title="Chức vụ nhân sự"
           >
@@ -207,7 +207,7 @@ export const ItemLeftSideBar: FC = () => {
             <span className="truncate">Chức vụ nhân sự</span>
           </NavLink>
           <NavLink
-            to="/convert/item/home/14"
+            to="/item/home/14"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
             title="Loại chứng chỉ nhân sự"
           >
@@ -219,7 +219,7 @@ export const ItemLeftSideBar: FC = () => {
             <span className="truncate">Loại chứng chỉ nhân sự</span>
           </NavLink>
           <NavLink
-            to="/convert/item/home/15"
+            to="/item/home/15"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
             title="Nội dung chứng chỉ nhân sự"
           >
@@ -231,7 +231,7 @@ export const ItemLeftSideBar: FC = () => {
             <span className="truncate">Nội dung chứng chỉ nhân sự</span>
           </NavLink>
           <NavLink
-            to="/convert/item/home/16"
+            to="/item/home/16"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
             title="Công nợ hợp đồng"
           >
@@ -243,7 +243,7 @@ export const ItemLeftSideBar: FC = () => {
             <span className="truncate">Công nợ hợp đồng</span>
           </NavLink>
           <NavLink
-            to="/convert/item/home/17"
+            to="/item/home/17"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
             title="Nguyên nhân phát sinh"
           >
@@ -255,7 +255,7 @@ export const ItemLeftSideBar: FC = () => {
             <span className="truncate">Nguyên nhân phát sinh</span>
           </NavLink>
           <NavLink
-            to="/convert/item/home/18"
+            to="/item/home/18"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
             title="Nguyên nhân thất bại"
           >
@@ -267,7 +267,7 @@ export const ItemLeftSideBar: FC = () => {
             <span className="truncate">Nguyên nhân thất bại</span>
           </NavLink>
           <NavLink
-            to="/convert/item/home/19"
+            to="/item/home/19"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
             title="Các lỗi hay gặp"
           >
@@ -279,7 +279,7 @@ export const ItemLeftSideBar: FC = () => {
             <span className="truncate">Các lỗi hay gặp</span>
           </NavLink>
           <NavLink
-            to="/convert/item/home/20"
+            to="/item/home/20"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
             title="Đánh giá chất lượng"
           >
@@ -291,7 +291,7 @@ export const ItemLeftSideBar: FC = () => {
             <span className="truncate">Đánh giá chất lượng</span>
           </NavLink>
           <NavLink
-            to="/convert/item/home/21"
+            to="/item/home/21"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
             title="NPS-Điểm số"
           >
