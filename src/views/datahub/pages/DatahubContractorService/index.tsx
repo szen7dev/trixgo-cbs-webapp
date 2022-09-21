@@ -16,6 +16,9 @@ const DatahubContractorService: FC<Props> = (props) => {
     () =>
       DatahubRepository.getDatahubPackageList(3, {
         contractorID: id,
+        populates: JSON.stringify({
+          path: 'field'
+        })
       }),
     {
       enabled: Boolean(id),
@@ -25,7 +28,8 @@ const DatahubContractorService: FC<Props> = (props) => {
     <div className="bg-white w-full py-2 mx-3.5 border-cbs-border border-0.5">
       <div className="flex flex-wrap text-cbs-subtext pt-1 text-medium px-2">
         {datahubPackages.data?.data.map((record, idx) => {
-          const { _id, name, description } = record._id.field;
+          if (!record?._id) return <></>;
+          const { _id, name, description } = record?._id?.field;
           return (
             <div key={_id} className="w-3/12 px-2 mb-3">
               <div className="flex flex-col h-full rounded-cbs-sm overflow-hidden border-cbs-border border-0.5 ">

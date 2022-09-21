@@ -24,13 +24,19 @@ import DatahubRepository from 'apis/datahub';
 const DatahubContractorContract: FC = () => {
 	const { user } = useAuth();
 	const [show, setShow] = useState(false);
-	const [keyword, setKeyword] = useState('');
+	const [keyword] = useState('');
 
 	// Get data contractur
 	const { data: company } = useContractorCompany();
 	const { data, isLoading, refetch } = useInfinitePackage(
 		['datahub_packages', keyword, company?.data._id || ''],
-		{ keyword, contractorID: company?.data._id || '', populates: JSON.stringify({ path: 'field files' }) },
+		{
+			keyword,
+			contractorID: company?.data._id || '',
+			populates: JSON.stringify({
+				path: 'field files project client area1 area2 area3'
+			})
+		},
 		{ enable: Boolean(company?.data._id) }
 	);
 
