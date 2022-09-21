@@ -46,6 +46,7 @@ export type Task = {
   status: number;
   priority: number;
   risk: number;
+  draft: number;
   expiredTime: string;
   typeStatus: number;
   checklist: string;

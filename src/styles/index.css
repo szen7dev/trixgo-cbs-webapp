@@ -250,6 +250,11 @@ button {
   padding: 15px 10px 10px;
   background-color: #f5f6f9;
 }
+.t-leftsidebar-navigation-container-v2 {
+  height: 100%;
+  padding: 15px 10px 10px;
+  background-color: #FFFFFF;
+}
 .t-leftsidebar-user-text {
   width: calc(100% - 60px);
   color: #000;

@@ -30,6 +30,7 @@ type ParamsGetDatahubPackage = {
   areaID?: string;
   contractorID?: string;
   level?: number;
+  populates?: string;
 };
 async function getDatahubPackageList(
   option: 2,
