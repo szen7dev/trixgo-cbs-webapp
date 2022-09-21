@@ -2,6 +2,7 @@ import React, {FC, useEffect, useState} from "react";
 import adminIcon from "assets/images/icons8-user-shield-48.svg"
 import plusIcon from "assets/images/icons8-plus-math-96.svg"
 import sendAndReceiveIcon from "assets/images/icons-send-and-receive.svg"
+import tagIcon from "assets/images/icons8-tag-100.svg"
 import mailOutLineIcon from "assets/images/icons-mail-outline.svg"
 import uploadIcon from "assets/images/icons-upload.svg"
 import starIcon from "assets/images/icons-star-outline.svg"
@@ -45,15 +46,9 @@ export const HomeLeftMenuContent:FC = () => {
         },
         {
             label: "Phân loại dữ liệu",
-            icon: sendAndReceiveIcon,
+            icon: tagIcon,
             count: 0,
             route: '/pcm/tags'
-        },
-        {
-            label: "Báo cáo động",
-            icon: fileIcon,
-            count: 0,
-            route: '/pcm/report'
         },
         // {
         //     label: "Outbox",
@@ -78,6 +73,12 @@ export const HomeLeftMenuContent:FC = () => {
             icon: starIcon,
             count: 0,
             route: '/pcm/bookmark'
+        },
+        {
+            label: "Báo cáo động",
+            icon: fileIcon,
+            count: 0,
+            route: '/pcm/report'
         },
         // {
         //     label: "Thầu và mua sắm",
