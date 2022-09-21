@@ -43,6 +43,12 @@ export const HomeLeftMenuContent:FC = () => {
             count: data?.data?.amountUnreadTask || 0,
             route: '/pcm/home'
         },
+        {
+            label: "Phân loại dữ liệu",
+            icon: sendAndReceiveIcon,
+            count: 0,
+            route: '/pcm/tags'
+        },
         // {
         //     label: "Outbox",
         //     icon: sendAndReceiveIcon,
@@ -67,12 +73,6 @@ export const HomeLeftMenuContent:FC = () => {
             count: 0,
             route: '/pcm/bookmark'
         },
-        {
-            label: "Việc liên quan",
-            icon: linkIcon,
-            count: 0,
-            route: '/pcm/related'
-        },
         // {
         //     label: "Thầu và mua sắm",
         //     icon: biddingImage,
@@ -80,16 +80,22 @@ export const HomeLeftMenuContent:FC = () => {
         //     route: '/pcm/bidding'
         // },
         {
+            label: "Hồ sơ thanh toán",
+            icon: paymentImage,
+            count: 0,
+            route: '/pcm/payment'
+        },
+        {
             label: "Báo cáo, giao nộp",
             icon: deliveryImage,
             count: 0,
             route: '/pcm/delivery'
         },
         {
-            label: "Thanh toán",
-            icon: paymentImage,
+            label: "Việc liên quan",
+            icon: linkIcon,
             count: 0,
-            route: '/pcm/payment'
+            route: '/pcm/related'
         },
         {
             label: "Việc nháp",
