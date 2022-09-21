@@ -45,7 +45,7 @@ export const HomeLeftMenuContent:FC = () => {
             route: '/pcm/home'
         },
         {
-            label: "Phân theo dự án",
+            label: "Phân loại theo dự án",
             icon: tagIcon,
             count: 0,
             route: '/pcm/tags'
