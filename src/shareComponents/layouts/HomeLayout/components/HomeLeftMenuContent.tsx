@@ -49,6 +49,12 @@ export const HomeLeftMenuContent:FC = () => {
             count: 0,
             route: '/pcm/tags'
         },
+        {
+            label: "Báo cáo động",
+            icon: fileIcon,
+            count: 0,
+            route: '/pcm/report'
+        },
         // {
         //     label: "Outbox",
         //     icon: sendAndReceiveIcon,
@@ -102,12 +108,6 @@ export const HomeLeftMenuContent:FC = () => {
             icon: fileIcon,
             count: 0,
             route: '/pcm/draft'
-        },
-        {
-            label: "Báo cáo động",
-            icon: fileIcon,
-            count: 0,
-            route: '/pcm/report'
         },
     ];
 
