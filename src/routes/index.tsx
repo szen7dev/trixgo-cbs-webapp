@@ -35,21 +35,29 @@ const FinancialRouter = lazy(() => import("./financial"));
 const FinancialRouterV2 = lazy(() => import("./financial/indexV2"));
 const HumanRouter = lazy(() => import("./human"));
 const MarketRouter = lazy(() => import("./market"));
+const MarketRouterV2 = lazy(() => import("./market/indexV2"));
 const MediaRouter = lazy(() => import("./media"));
 const MessagesRouter = lazy(() => import("./messages"));
 const OperationRouter = lazy(() => import("./operation"));
+const OperationRouterV2 = lazy(() => import("./operation/indexV2"));
 const OwnerRouter = lazy(() => import('./owner'));
+const OwnerRouterV2 = lazy(() => import('./owner/indexV2'));
 const PcmRouter = lazy(() => import('./pcm'));
 const PmRouter = lazy(() => import('./pm'));
 const WorkshopRouter = lazy(() => import('./workshop'));
+const WorkshopRouterV2 = lazy(() => import('./workshop/indexV2'));
 const PersonalRouter = lazy(() => import("./personal"));
 const QrcodeRouter = lazy(() => import("./qrcode"));
+const QrcodeRouterV2 = lazy(() => import("./qrcode/indexV2"));
 const ReeRouter = lazy(() => import("./ree"));
+const ReeRouterV2 = lazy(() => import("./ree/indexV2"));
 const SupportRouter = lazy(() => import("./support"));
 const TimesheetRouter = lazy(() => import("./timesheet"));
+const TimesheetRouterV2 = lazy(() => import("./timesheet/indexV2"));
 const ItemRouter = lazy(() => import("./item"));
 const ItemRouterV2 = lazy(() => import("./item/indexV2"));
 const BudgetRouter = lazy(() => import("./budget"));
+const BudgetRouterV2 = lazy(() => import("./budget/indexV2"));
 
 /*=====5.PAGES=====*/
 const ErrorPage = lazy(() => import("views/authentication/Error"));
@@ -113,9 +121,9 @@ const Routes: FC = () => {
                                 </Route>
 
                                 {/* =====BUDGET===== */}
-                                <Route path="/budget">
+                                {/* <Route path="/budget">
                                     <BudgetRouter />
-                                </Route>
+                                </Route> */}
 
                                 {/* =====BIDDING===== */}
                                 <Route path="/bidding">
@@ -175,7 +183,7 @@ const Routes: FC = () => {
                                 </Route>
                                 {/* =====financial===== */}
                                 <Route path="/financial">
-                                        <FinancialRouterV2 />
+                                    <FinancialRouterV2 />
                                 </Route>
                                 {/* =====ITEM===== */}
                                 <Route path="/item">
@@ -185,12 +193,43 @@ const Routes: FC = () => {
                                 <Route path="/datahub">
                                     <DatahubRouterV2 />
                                 </Route>
+                                {/* =====OWNER===== */}
+                                <Route path="/owner">
+                                    <OwnerRouterV2 />
+                                </Route>
+                                <Route path="/budget">
+                                    <BudgetRouterV2 />
+                                </Route>
+                                {/* =====TIMESHEET===== */}
+                                <Route path="/timesheet">
+                                    <TimesheetRouterV2 />
+                                </Route>
+                                {/* =====WORKSHOP===== */}
+                                <Route path="/workshop">
+                                    <WorkshopRouterV2 />
+                                </Route>
+                                {/* =====MARKET===== */}
+                                <Route path="/market">
+                                    <MarketRouterV2 />
+                                </Route>
+                                {/* =====QRCODE===== */}
+                                <Route path="/qrcode">
+                                    <QrcodeRouterV2 />
+                                </Route>
+                                {/* =====OPERATION===== */}
+                                <Route path="/operation">
+                                    <OperationRouterV2 />
+                                </Route>
+                                {/* =====REE===== */}
+                                <Route path="/ree">
+                                    <ReeRouterV2 />
+                                </Route>
                                 {/* =====end V2===== */}
 
                                 {/* =====MARKET===== */}
-                                <Route path="/market">
+                                {/* <Route path="/market">
                                     <MarketRouter />
-                                </Route>
+                                </Route> */}
 
                                 {/* =====MEDIA===== */}
                                 <Route path="/media">
@@ -199,20 +238,15 @@ const Routes: FC = () => {
                                     </HomeLayout>
                                 </Route>
 
-                                {/* =====MARKET===== */}
-                                <Route path="/market">
-                                    <MarketRouter />
-                                </Route>
-
                                 {/* =====OPERATION===== */}
-                                <Route path="/operation">
+                                {/* <Route path="/operation">
                                     <OperationRouter />
-                                </Route>
+                                </Route> */}
 
                                 {/* =====OWNER===== */}
-                                <Route path="/owner">
+                                {/* <Route path="/owner">
                                     <OwnerRouter />
-                                </Route>
+                                </Route> */}
 
                                 {/* =====PERSONAL===== */}
                                 <Route path="/personal">
@@ -220,14 +254,14 @@ const Routes: FC = () => {
                                 </Route>
 
                                 {/* =====QRCODE===== */}
-                                <Route path="/qrcode">
+                                {/* <Route path="/qrcode">
                                     <QrcodeRouter />
-                                </Route>
+                                </Route> */}
 
                                 {/* =====REE===== */}
-                                <Route path="/ree">
+                                {/* <Route path="/ree">
                                     <ReeRouter />
-                                </Route>
+                                </Route> */}
 
                                 {/* =====SUPPORT===== */}
                                 <Route path="/support">
@@ -240,9 +274,9 @@ const Routes: FC = () => {
                                 </Route> */}
 
                                 {/* =====WORKSHOP===== */}
-                                <Route path="/workshop">
+                                {/* <Route path="/workshop">
                                     <WorkshopRouter />
-                                </Route>
+                                </Route> */}
 
                                 {/* =====MESSAGES===== */}
                                 <Route path="/messages">
@@ -250,9 +284,9 @@ const Routes: FC = () => {
                                 </Route>
 
                                 {/* =====TIMESHEET===== */}
-                                <Route path="/timesheet">
+                                {/* <Route path="/timesheet">
                                     <TimesheetRouter />
-                                </Route>
+                                </Route> */}
 
                                 {/* =====POLICY===== */}
                                 <Route
