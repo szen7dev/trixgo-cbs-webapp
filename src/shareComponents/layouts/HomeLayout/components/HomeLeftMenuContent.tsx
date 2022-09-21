@@ -50,6 +50,12 @@ export const HomeLeftMenuContent:FC = () => {
             count: 0,
             route: '/pcm/tags'
         },
+        {
+            label: "Tổng hợp theo nhân sự",
+            icon: tagIcon,
+            count: 0,
+            route: '/pcm/users'
+        },
         // {
         //     label: "Outbox",
         //     icon: sendAndReceiveIcon,
@@ -73,12 +79,6 @@ export const HomeLeftMenuContent:FC = () => {
             icon: starIcon,
             count: 0,
             route: '/pcm/bookmark'
-        },
-        {
-            label: "Báo cáo động",
-            icon: fileIcon,
-            count: 0,
-            route: '/pcm/report'
         },
         // {
         //     label: "Thầu và mua sắm",
@@ -109,6 +109,12 @@ export const HomeLeftMenuContent:FC = () => {
             icon: fileIcon,
             count: 0,
             route: '/pcm/draft'
+        },
+        {
+            label: "Báo cáo động",
+            icon: fileIcon,
+            count: 0,
+            route: '/pcm/report'
         },
     ];
 
