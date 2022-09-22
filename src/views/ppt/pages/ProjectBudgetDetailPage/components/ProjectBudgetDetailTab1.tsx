@@ -160,7 +160,7 @@ export const ProjectBudgetDetailTab1:FC<Props> = ({ contractInfo }) => {
                         Thông tin người bán/Tài khoản
                     </td>
                     <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
-                    {contractInfo?.sellerInfo?.name}{contractInfo?.sellerBank}
+                        {contractInfo?.sellerInfo?.name}{contractInfo?.sellerBank}
                     </td>
                     <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
                         Bảo lãnh thực hiện hợp đồng
@@ -183,6 +183,20 @@ export const ProjectBudgetDetailTab1:FC<Props> = ({ contractInfo }) => {
                         {
                             contractInfo.userUpdate ? <>{contractInfo?.userUpdate?.fullname} - {moment(contractInfo?.modifyAt).format("DD/MM/YYYY HH:mm")}</> : <></>
                         }
+                    </td>
+                </tr>
+                <tr>
+                    <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
+                        Số lượt xem
+                    </td>
+                    <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
+                        {contractInfo?.numberOfViews || 0}
+                    </td>
+                    <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
+                       
+                    </td>
+                    <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
+                        
                     </td>
                 </tr>
             </tbody>
