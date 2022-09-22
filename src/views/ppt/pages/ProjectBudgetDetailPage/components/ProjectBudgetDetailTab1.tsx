@@ -266,9 +266,9 @@ export const ProjectBudgetDetailTab1:FC<Props> = ({ contractInfo }) => {
             </tbody>
         </table>
 
-        {/* <div className={"px-4 mb-2 mt-4 text-lg text-primary-gray"}>
+        <div className={"px-4 mb-2 mt-4 text-lg text-primary-gray"}>
             Hồ sơ đính kèm
-        </div> */}
+        </div>
 
         <table className={"table-fixed border-collapse w-full"}>
             <tbody>
