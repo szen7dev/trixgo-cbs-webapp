@@ -2,6 +2,7 @@ import React, {FC, useEffect, useState} from "react";
 import adminIcon from "assets/images/icons8-user-shield-48.svg"
 import plusIcon from "assets/images/icons8-plus-math-96.svg"
 import sendAndReceiveIcon from "assets/images/icons-send-and-receive.svg"
+import tagIcon from "assets/images/icons8-tag-100.svg"
 import mailOutLineIcon from "assets/images/icons-mail-outline.svg"
 import uploadIcon from "assets/images/icons-upload.svg"
 import starIcon from "assets/images/icons-star-outline.svg"
@@ -43,6 +44,18 @@ export const HomeLeftMenuContent:FC = () => {
             count: data?.data?.amountUnreadTask || 0,
             route: '/pcm/home'
         },
+        {
+            label: "Phân loại theo dự án",
+            icon: tagIcon,
+            count: 0,
+            route: '/pcm/tags'
+        },
+        {
+            label: "Tổng hợp theo nhân sự",
+            icon: tagIcon,
+            count: 0,
+            route: '/pcm/users'
+        },
         // {
         //     label: "Outbox",
         //     icon: sendAndReceiveIcon,
@@ -67,12 +80,6 @@ export const HomeLeftMenuContent:FC = () => {
             count: 0,
             route: '/pcm/bookmark'
         },
-        {
-            label: "Việc liên quan",
-            icon: linkIcon,
-            count: 0,
-            route: '/pcm/related'
-        },
         // {
         //     label: "Thầu và mua sắm",
         //     icon: biddingImage,
@@ -80,16 +87,22 @@ export const HomeLeftMenuContent:FC = () => {
         //     route: '/pcm/bidding'
         // },
         {
+            label: "Hồ sơ thanh toán",
+            icon: paymentImage,
+            count: 0,
+            route: '/pcm/payment'
+        },
+        {
             label: "Báo cáo, giao nộp",
             icon: deliveryImage,
             count: 0,
             route: '/pcm/delivery'
         },
         {
-            label: "Thanh toán",
-            icon: paymentImage,
+            label: "Việc liên quan",
+            icon: linkIcon,
             count: 0,
-            route: '/pcm/payment'
+            route: '/pcm/related'
         },
         {
             label: "Việc nháp",

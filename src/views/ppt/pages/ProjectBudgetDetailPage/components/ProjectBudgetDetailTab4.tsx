@@ -164,7 +164,7 @@ export const ProjectBudgetDetailTab4:FC<Props> = ({ contractInfo }) => {
                     <th className={"w-[50px] bg-cbs-table-header p-2 border-0.5 border-primary-border align-middle"}>
                         <input className="form-check-input line mr-2" type="checkbox" value="" id="check"/>
                     </th>
-                    <th className={"w-3/12 bg-cbs-table-header p-2 border-0.5 border-primary-border text-primary-gray font-normal text-left"}>
+                    <th className={"w-2/12 bg-cbs-table-header p-2 border-0.5 border-primary-border text-primary-gray font-normal text-left"}>
                         Nội dung
                     </th>
                     <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-primary-gray font-normal text-left"}>
@@ -180,9 +180,9 @@ export const ProjectBudgetDetailTab4:FC<Props> = ({ contractInfo }) => {
                         Phân loại
                     </th>
                     <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-primary-gray font-normal text-left"}>
-                        Giá trị giải ngân
+                        Giá trị giải ngân (tạm ứng/thanh toán)
                     </th>
-                    <th className={"w-3/12 bg-cbs-table-header p-2 border-0.5 border-primary-border text-primary-gray font-normal text-left"}>
+                    <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-primary-gray font-normal text-left"}>
                         Ghi chú
                     </th>
                 </tr>
@@ -202,7 +202,7 @@ export const ProjectBudgetDetailTab4:FC<Props> = ({ contractInfo }) => {
                     <td className={"border-0.5 border-primary-border p-2 bg-cbs-table-highlight font-bold text-primary-gray"}>
                     </td>
                     <td className={"border-0.5 border-primary-border p-2 bg-cbs-table-highlight font-bold text-primary-gray text-right"}>
-                        {contractInfo?.amountPaid}
+                        {formatNumberMoney(contractInfo?.advancePaymentPaid + contractInfo?.amountPaid)}
                     </td>
                     <td className={"border-0.5 border-primary-border p-2 bg-cbs-table-highlight"}>
                     </td>
@@ -211,20 +211,19 @@ export const ProjectBudgetDetailTab4:FC<Props> = ({ contractInfo }) => {
                     (listContractPaymentWithPager[pageIndex]??[]).map((item:any, i: number) => (
                         <tr key={i}>
                             <td className={"border-0.5 border-primary-border p-2 text-center align-middle"}>
-                            <input
-                                className="form-check-input mr-2"
-                                type="checkbox"
-                                value=""
-                                id="flexCheckDefault"
-                                checked={itemChecked === item._id}
-                                onChange={() => setItemChecked(item._id)}
-                            />
-                                {/* <input className="form-check-input line mr-2" type="checkbox" value="" id="check"/> */}
+                                <input
+                                    className="form-check-input mr-2"
+                                    type="checkbox"
+                                    value=""
+                                    id="flexCheckDefault"
+                                    checked={itemChecked === item._id}
+                                    onChange={() => setItemChecked(item._id)}
+                                />
                             </td>
                             <td className={"border-0.5 border-primary-border p-2"}>
                                 {item?.name}
                             </td>
-                            <td className={"border-0.5 border-primary-border p-2"}>
+                            <td className={"border-0.5 border-primary-border p-2 text-right"}>
                                 {moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}
                             </td>
                             <td className={"border-0.5 border-primary-border p-2"}>
@@ -234,9 +233,9 @@ export const ProjectBudgetDetailTab4:FC<Props> = ({ contractInfo }) => {
                                 {item.ipc.name}
                             </td>
                             <td className={"border-0.5 border-primary-border p-2 text-right"}>
-                            {
-                                item.type && CONTRACT_IPC_TYPES[item.type-1].text
-                            }
+                                {
+                                    item.type && CONTRACT_IPC_TYPES[item.type-1].text
+                                }
                             </td>
                             <td className={"border-0.5 border-primary-border p-2 text-right"}>
                                 {formatNumberMoney((item.value || 0))}

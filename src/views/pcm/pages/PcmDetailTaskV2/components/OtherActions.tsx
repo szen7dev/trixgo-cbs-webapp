@@ -1,7 +1,7 @@
 import React, {FC, useRef, useState, useEffect} from "react";
 import DotsVerticalIcon from "assets/icons/DotsVertical";
 import Close from "assets/icons/Close";
-import {useOnClickOutside} from "services/hooks/useOnclickOutside";
+import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import { Link } from 'react-router-dom';
 import { Task } from "typings/task";
 import { usePcmPlanTaskCustom } from "services/hooks/pcm/usePcm";
@@ -9,6 +9,8 @@ import { Loader } from "shareComponents/common";
 import { toast } from "react-toastify";
 import { createLinkAndClick } from 'utils';
 import { read, utils, writeFile } from 'xlsx';
+import { useModal } from "services/hooks/useModal";
+import { ModalUpdateTaskNameDraft } from "./ModalUpdateTaskNameDraft";
 
 type Props = {
     task: Task;
@@ -17,6 +19,7 @@ type Props = {
 }
 
 export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
+    const { openModal } = useModal();
     const wrapperClass = useRef<HTMLDivElement>(null)
     const [showOption, setShowOption] = useState(false);
     const [dataImport, setDataImport] = useState([]);
@@ -31,7 +34,7 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
     const handleDownloadTemplateImportExcel = async () => {
 		try {
 			setStateExport({ isExporting: true });
-			const { error, data } = await downloadTemplateImportExcelTaskAsync({ 
+			const { error, data } = await downloadTemplateImportExcelTaskAsync({
                projectID: task.project._id
             });
 
@@ -87,7 +90,7 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
     }
 
     return (
-        (task.subtype == 4 && task.assignee._id.toString() == userId?.toString()) ?  <></> : 
+        (task.subtype == 4 && task.assignee._id.toString() == userId?.toString()) ?  <></> :
         <div ref={wrapperClass} className={"relative z-5 inline-block"}>
             <button onClick={() => setShowOption(!showOption)} className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] bg-cbs-form-input-bg mr-3"}>
                 <DotsVerticalIcon/>
@@ -146,9 +149,27 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                         >
                             In ấn - Mẫu phụ lục ảnh
                         </Link>
-                      
+
+                        {task.draft === 1 && (
+                            <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
+                                onClick={() => {
+                                    openModal(
+                                    <div
+                                        className={
+                                        "inline-block w-[521px] h-[200px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
+                                        }
+                                    >
+                                        <ModalUpdateTaskNameDraft taskId={task._id} onConfirm={refetchTaskInfo} />
+                                    </div>
+                                    )
+                                }}
+                            >
+                                Cập nhật tiêu đề công việc (việc nháp)
+                            </button>
+                        )}
+
                         <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
-                            onClick={handleDownloadTemplateImportExcel.bind(null)}
+                            onClick={handleDownloadTemplateImportExcel}
                         >
                             Tải mẫu import excel
                         </button>
