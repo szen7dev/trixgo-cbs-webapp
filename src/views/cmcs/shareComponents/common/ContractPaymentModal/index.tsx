@@ -73,7 +73,6 @@ export const ContractPaymentModal: FC<NewContractIPCModalProps> = ({ defaultValu
 
   const handleSubmit = async (values: any) => {
       const { contractPaymentID,ipcID, ipc, name, sign, description, date, value } = values;
-      alert(JSON.stringify(values))
       if(!ipcID || !name || !date)
         return toast.error("Vui lòng nhập những nội dung bắt buộc (*)");
       if(contractPaymentID){
