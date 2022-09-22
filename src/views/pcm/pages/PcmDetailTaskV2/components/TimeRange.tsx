@@ -89,7 +89,7 @@ const TimeRange:FC<Props> = ({fromDateDefault, toDateDefault, toTimeDefault, rem
                                     overlay: "w-full rounded",
                                     overlayWrapper: "absolute bg-white w-full right-0 z-200"
                                 }}
-                                onDayChange={(day) => setFromDateTemp(moment(day).format("DD/MM/YYYY"))}
+                                onDayChange={(day) => setFromDateTemp(moment(day).format("MM/DD/YYYY"))}
                                 inputProps={{
                                     className: "h-[36px] outline-none pl-3",
                                     placeholder: "Bắt đầu",
@@ -107,7 +107,7 @@ const TimeRange:FC<Props> = ({fromDateDefault, toDateDefault, toTimeDefault, rem
                                         overlay: "w-full rounded",
                                         overlayWrapper: "absolute bg-white w-full right-0 z-200"
                                     }}
-                                    onDayChange={(day) => setToDateTemp(moment(day).format("DD/MM/YYYY"))}
+                                    onDayChange={(day) => setToDateTemp(moment(day).format("MM/DD/YYYY"))}
                                     inputProps={{
                                         className: "h-[36px] outline-none pl-3",
                                         placeholder: "Kết thúc",

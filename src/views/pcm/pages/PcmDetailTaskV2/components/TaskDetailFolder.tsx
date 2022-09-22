@@ -1,7 +1,6 @@
-import React, { FC, useState, useMemo, useCallback, useEffect } from "react";
+import { FC, useState, useMemo, useCallback, useEffect } from "react";
 import iconFolder from "assets/images/icons8-folder-48.svg";
 import iconCheckmark from "assets/images/icons8-checkmark-yes-64.svg";
-import iconSnooze from "assets/images/icons8-snooze-48.svg";
 import TimeRange from "./TimeRange";
 import moment from "moment";
 import { Link } from 'react-router-dom';
@@ -22,6 +21,7 @@ type Props = {
     onOpenBidding?: () => void;
     hasPermissionAddSignature?: boolean;
     hasPermissionOpenBidding?: boolean;
+    refetchInfo?: () => void;
 }
 
 export const TaskDetailFolder: FC<Props> = ({
@@ -31,6 +31,7 @@ export const TaskDetailFolder: FC<Props> = ({
     hasPermissionOpenBidding = true,
     onConfirmSign,
     onOpenBidding,
+    refetchInfo
 }) => {
     const isOpened = useMemo(() => {
         return task.openedUsers?.find(u => u._id === user?._id);
@@ -42,7 +43,7 @@ export const TaskDetailFolder: FC<Props> = ({
 
     const { updateTaskAsync } = useTask({});
     const [isCurrentUserOpened, setCurrentUserOpened] = useState(isOpened !== undefined);
-    const [usersOpened, setUsersOpened] = useState(usersTaskOpened);
+    const [, setUsersOpened] = useState(usersTaskOpened);
     const { current: socket }: any = useSocket();
     const { openModal, closeModal } = useModal();
 
@@ -181,6 +182,31 @@ export const TaskDetailFolder: FC<Props> = ({
         }
     }, [hasPermissionOpenBidding, task._id])
 
+    const handleUpdateExpireTime = async (time: any) => {
+        try {
+            const { error, data } = await updateTaskAsync({
+                taskID: task._id,
+                actualStartTime: time.fromDate,
+                actualFinishTime: time.toDate,
+                expiredHour: time.toTime,
+            })
+
+            if (error) {
+                return toast.warning(data.message);
+            }
+
+            refetchInfo?.();
+            toast.success('Cập nhật thành công');
+        } catch (error) {
+            captureException(error);
+            if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
+        }
+    }
+
     return (
         <div className={"task-folder flex items-center text-primary-gray mt-5"}>
             <div className={"flex items-center flex-1"}>
@@ -223,10 +249,10 @@ export const TaskDetailFolder: FC<Props> = ({
                 </div> */}
 
                 <TimeRange
-                    fromDateDefault={moment(task.actualStartTime).format('DD/M/YY')}
-                    toDateDefault={moment(task.actualFinishTime).format('DD/M/YY')}
+                    fromDateDefault={moment(task.actualStartTime).format('MM/DD/YYYY')}
+                    toDateDefault={moment(task.actualFinishTime).format('MM/DD/YYYY')}
                     toTimeDefault={moment(task.actualFinishTime).format('HH:mm')}
-                    onApplyNewTime={time => console.log(time)}
+                    onApplyNewTime={handleUpdateExpireTime}
                 />
             </div>
         </div>
