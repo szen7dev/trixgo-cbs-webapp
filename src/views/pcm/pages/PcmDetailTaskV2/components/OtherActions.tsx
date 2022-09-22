@@ -76,10 +76,14 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
 
     // Gọi tới API để đẩy data lên
     useEffect(() => {
-        if(dataImport){
+        if(dataImport.length){
             const fetchData = async () => {
                 const data = await importTaskFromExcelAsync({ taskID: task._id, dataImport: JSON.stringify(dataImport) });
                 refetchTaskInfo?.()
+                if(!data.error){
+                    return toast.success("Import thành công");
+                }
+                return toast.success("Import thất bại");
             }
             fetchData();
         }
