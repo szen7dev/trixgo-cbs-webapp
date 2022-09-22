@@ -60,13 +60,14 @@ export const ProjectBudgetDetailTab1:FC<Props> = ({ contractInfo }) => {
     const { listDocumentWithPager, isLoading, totalRecord, totalPage, hasNextPage, fetchNextPageDocument } = useListDocument({
         params: {
             contractID: contractInfo?._id,
+            // type: "[2, 11]",
             limit: "20",
         },
         isFetchList: true
     }); 
 
     // console.log({ contractInfo })
-    // console.log({ listDocument })
+    // console.log({ listDocumentWithPager })
 
     return (
         <>
