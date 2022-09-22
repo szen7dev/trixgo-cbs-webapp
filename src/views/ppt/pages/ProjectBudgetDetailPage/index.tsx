@@ -1,19 +1,18 @@
-import React, {FC, useCallback} from "react";
-import iconBack from "assets/images/icon-back-gray.svg";
-import {useHistory, useParams} from "react-router-dom";
+import {FC, useCallback} from "react";
+import {useParams} from "react-router-dom";
 import {ProjectBudgetDetailTab1} from "./components/ProjectBudgetDetailTab1";
 import {ProjectBudgetDetailTab2} from "./components/ProjectBudgetDetailTab2";
 import {ProjectBudgetDetailTab3} from "./components/ProjectBudgetDetailTab3";
 import {ProjectBudgetDetailTab4} from "./components/ProjectBudgetDetailTab4";
 // hook backend
 import { useContract } from 'services/hooks/items/useContract';
-import {ContractProduceModal} from "../../../cmcs/shareComponents/common";
-import {
-    UseContractProduceList,
-    useCreateContractProduceMutation,
-    useUpdateContractProduceMutation
-} from "services/hooks/cmcs/useContractProduce";
-import {useModal} from "services/hooks/useModal";
+// import {ContractProduceModal} from "../../../cmcs/shareComponents/common";
+// import {
+//     UseContractProduceList,
+//     useCreateContractProduceMutation,
+//     useUpdateContractProduceMutation
+// } from "services/hooks/cmcs/useContractProduce";
+// import {useModal} from "services/hooks/useModal";
 
 const ProjectBudgetDetailPage:FC = () => {
     const { budgetId, tab } = useParams<{ id: string , type: string, budgetId: string, tab: string}>();

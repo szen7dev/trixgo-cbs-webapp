@@ -11,6 +11,8 @@ import { createLinkAndClick } from 'utils';
 import { read, utils, writeFile } from 'xlsx';
 import { useModal } from "services/hooks/useModal";
 import { ModalUpdateTaskNameDraft } from "./ModalUpdateTaskNameDraft";
+import { ModalConfirm } from "shareComponents/common";
+import { useTask } from "services/hooks/useTask";
 
 type Props = {
     task: Task;
@@ -19,15 +21,17 @@ type Props = {
 }
 
 export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
-    const { openModal } = useModal();
+    const { openModal, closeModal } = useModal();
     const wrapperClass = useRef<HTMLDivElement>(null)
     const [showOption, setShowOption] = useState(false);
     const [dataImport, setDataImport] = useState([]);
-
-    useOnClickOutside(wrapperClass, () => setShowOption(false));
-	const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+    const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
 		isExporting: false,
 	});
+
+    const { updateTaskAsync } = useTask({});
+
+    useOnClickOutside(wrapperClass, () => setShowOption(false));
 
 	const { downloadTemplateImportExcelTaskAsync, importTaskFromExcelAsync } = usePcmPlanTaskCustom({});
 
@@ -74,12 +78,38 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
         }
     }
 
+    // Cập nhật việc nháp sang chính thức
+    const handleUpdateToOffical = async () => {
+        try {
+			const { error, data } = await updateTaskAsync({
+               taskID: task._id,
+               draft: 0
+            });
+
+			if(error) {
+				return toast.warn(data?.message);
+			}
+
+			refetchTaskInfo?.();
+            toast.success('Cập nhật thành công');
+		} catch (error) {
+			if(error instanceof Error)
+				toast.error(error.message)
+		} finally {
+            closeModal();
+        }
+    }
+
     // Gọi tới API để đẩy data lên
     useEffect(() => {
-        if(dataImport){
+        if(dataImport.length){
             const fetchData = async () => {
                 const data = await importTaskFromExcelAsync({ taskID: task._id, dataImport: JSON.stringify(dataImport) });
                 refetchTaskInfo?.()
+                if(!data.error){
+                    return toast.success("Import thành công");
+                }
+                return toast.success("Import thất bại");
             }
             fetchData();
         }
@@ -151,21 +181,44 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                         </Link>
 
                         {task.draft === 1 && (
-                            <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
-                                onClick={() => {
-                                    openModal(
-                                    <div
-                                        className={
-                                        "inline-block w-[521px] h-[200px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
-                                        }
-                                    >
-                                        <ModalUpdateTaskNameDraft taskId={task._id} onConfirm={refetchTaskInfo} />
-                                    </div>
-                                    )
-                                }}
-                            >
-                                Cập nhật tiêu đề công việc (việc nháp)
-                            </button>
+                            <>
+                                <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
+                                    onClick={() => {
+                                        openModal(
+                                        <div
+                                            className={
+                                            "inline-block w-[521px] h-[200px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
+                                            }
+                                        >
+                                            <ModalUpdateTaskNameDraft taskId={task._id} onConfirm={refetchTaskInfo} />
+                                        </div>
+                                        )
+                                    }}
+                                >
+                                    Cập nhật tiêu đề công việc (việc nháp)
+                                </button>
+                                <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
+                                    onClick={() => {
+                                        openModal(
+                                            <div
+                                              className={
+                                                "inline-block w-[521px] h-[240px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+                                              }
+                                            >
+                                              <ModalConfirm
+                                                title="Bạn có muốn chuyển thành việc chính thức không?"
+                                                description="Bạn sẽ không thể chuyển từ việc chính thức sang việc nháp"
+                                                onConfirm={handleUpdateToOffical}
+                                                defaultText={false}
+                                                onCancel={closeModal}
+                                              />
+                                            </div>
+                                        );
+                                    }}
+                                >
+                                    Cập nhật thành việc chính thức
+                                </button>
+                            </>
                         )}
 
                         <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
@@ -173,13 +226,13 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                         >
                             Tải mẫu import excel
                         </button>
-
-                        {/* <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
+                    
+                        <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
                         >
                             <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
                                 accept=".xlsx, .xlsm, .xls, .csv"/>
                             <label className="custom-file-label" htmlFor="inputGroupFile">Import excel tạo việc con</label>
-                        </button> */}
+                        </button>
                         {/* <Link
                             className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header block"}
                             to={`/pcm/detail/${task._id}/print/4`}
