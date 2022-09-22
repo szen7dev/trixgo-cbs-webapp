@@ -34,7 +34,7 @@ export const ProjectBudgetDetailTab4:FC<Props> = ({ contractInfo }) => {
 
     const { openModal } = useModal();
     const params: any = useParams();
-  
+
     const {
         listContractPaymentWithPager,
         totalRecord,
@@ -47,7 +47,7 @@ export const ProjectBudgetDetailTab4:FC<Props> = ({ contractInfo }) => {
     const { createContractPaymentMutateAsync } = useCreateContractPaymentMutation();
     const { updateContractPaymentMutateAsync } = useUpdateContractPaymentMutation();
     const { deleteContractPaymentMutateAsync } = useDeleteContractPaymentMutation();
-  
+
     const { openDeleteConfirm } = useDeleteConfirm();
 
     const handleDeleteAction = async () => {
@@ -100,7 +100,7 @@ export const ProjectBudgetDetailTab4:FC<Props> = ({ contractInfo }) => {
         }
         return false;
     }, [listContractPaymentWithPager]);
-  
+
     return (
         <>
             <div className={"sticky top-0 bg-white"}>

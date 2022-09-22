@@ -60,13 +60,14 @@ export const ProjectBudgetDetailTab1:FC<Props> = ({ contractInfo }) => {
     const { listDocumentWithPager, isLoading, totalRecord, totalPage, hasNextPage, fetchNextPageDocument } = useListDocument({
         params: {
             contractID: contractInfo?._id,
+            // type: "[2, 11]",
             limit: "20",
         },
         isFetchList: true
     }); 
 
     // console.log({ contractInfo })
-    // console.log({ listDocument })
+    // console.log({ listDocumentWithPager })
 
     return (
         <>
@@ -266,9 +267,9 @@ export const ProjectBudgetDetailTab1:FC<Props> = ({ contractInfo }) => {
             </tbody>
         </table>
 
-        {/* <div className={"px-4 mb-2 mt-4 text-lg text-primary-gray"}>
+        <div className={"px-4 mb-2 mt-4 text-lg text-primary-gray"}>
             Hồ sơ đính kèm
-        </div> */}
+        </div>
 
         <table className={"table-fixed border-collapse w-full"}>
             <tbody>

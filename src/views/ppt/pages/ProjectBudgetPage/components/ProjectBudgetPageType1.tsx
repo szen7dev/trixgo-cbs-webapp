@@ -70,9 +70,9 @@ export const ProjectBudgetPageType1:FC<Props> = ({projectInfo, collapse, toggleC
                             data={[]}
                         />
                     </div>
-                    <button className={"h-[32px] rounded bg-cbs-green text-white font-bold px-4"}>
+                    {/* <button className={"h-[32px] rounded bg-cbs-green text-white font-bold px-4"}>
                         Tạo mới
-                    </button>
+                    </button> */}
                 </div>
                 <div className={"flex items-center pb-2"}>
                     <NavigateTabBudgetPage/>
@@ -82,7 +82,7 @@ export const ProjectBudgetPageType1:FC<Props> = ({projectInfo, collapse, toggleC
                     <button className={"flex items-center justify-center mx-3 ml-6"}>
                         <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"}/>
                     </button>
-                    <div className={"flex-1 flex items-center justify-end"}>
+                    {/* <div className={"flex-1 flex items-center justify-end"}>
                         <span className={"text-primary-gray"}>1-50 trong số 2.358</span>
                         <button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"} disabled={true}>
                             <img src={nextIcon} alt={"----"} className={"rotate-180"}/>
@@ -90,7 +90,7 @@ export const ProjectBudgetPageType1:FC<Props> = ({projectInfo, collapse, toggleC
                         <button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"}>
                             <img src={nextIcon} alt={"----"}/>
                         </button>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <div className="flex-1 overflow-y-auto">
