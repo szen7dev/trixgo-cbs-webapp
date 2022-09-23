@@ -184,7 +184,7 @@ const DatahubRepository = {
   },
 
   // ==== DatahubCompanies ====
-  async companiesList(params?: DatahubPrams) {
+  async companiesList(params?: any) {
     const { data } = await API.get<ResponseList<DatahubCompanies>>("/api/auth/companies", {
       params,
     });
