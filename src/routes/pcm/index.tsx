@@ -71,6 +71,7 @@ import ProjectAdminProjectDetail from "views/ppt/pages/ProjectAdminPage/pages/Pr
 import ProjectAdminProjectTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminProjectTab";
 import ProjectAdminPositionTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminPositionTab";
 const PcmDetailTaskV2             = lazy(() => import('views/pcm/pages/PcmDetailTaskV2'));
+const PcmTagPage             = lazy(() => import('views/pcm/pages/PcmTagPage'));
 
 const PcmHomePage                 = lazy(() => import('views/pcm/pages/PcmHomeV2'));
 const PcmReportPage               = lazy(() => import('views/pcm/pages/PcmReport'));
@@ -170,7 +171,7 @@ const PCMRouter: FC = () => {
                 <Route exact path="/pcm/report" component={PcmReportPage} />
                 <Route exact path="/pcm/report/:reportID" component={PcmTasksReportPage} />
                 <Route exact path="/pcm/detail/:id" component={PcmDetailTaskV2} />
-
+                <Route exact path="/pcm/tags/:tab?" component={PcmTagPage} />
               </Switch>
             </HomeLayout>
 
