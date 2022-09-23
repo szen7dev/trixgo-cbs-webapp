@@ -22,15 +22,14 @@ const PcmTagPage: FC = () => {
 	return (
 		<main className="h-full overflow-auto">
 			{(isLoading || isLoading2) && <Loader className="border-primary" />}
-			<MenuTab tab={tab} />
-
+			{/* <MenuTab tab={tab} />
 			<GroupComponent
 				tab={tab}
 				listDataProject={listDataProject}
 				listDataProject2={listDataProject2}
 				listDataProjectCompanyAuthor={listDataProjectCompanyAuthor}
 				listDataProjectCompany={listDataProjectCompany}
-			/>
+			/> */}
 		</main>
 	);
 };

@@ -46,10 +46,10 @@ const ProjectSubjectPage: FC = () => {
 			let totalMoreThan7DaysAll: any = 0
 			let totalFinishAll: any = 0
 			const data: any = listCompany.map((item: any)=> {
-				const totalOverdueWork: any = listCompanyAndTaskOverdueWork.find((item1: any) => item1._id == item._id)
-				const totalNextWeekWork: any = listCompanyAndTaskNextWeekWork.find((item1: any) => item1._id == item._id)
-				const totalMoreThan7Days: any = listCompanyAndTaskMoreThan7Days.find((item1: any) => item1._id == item._id)
-				const totalFinish: any = listCompanyAndTaskFinish.find((item1: any) => item1._id == item._id)
+				const totalOverdueWork: any = listCompanyAndTaskOverdueWork?.find((item1: any) => item1._id == item._id)
+				const totalNextWeekWork: any = listCompanyAndTaskNextWeekWork?.find((item1: any) => item1._id == item._id)
+				const totalMoreThan7Days: any = listCompanyAndTaskMoreThan7Days?.find((item1: any) => item1._id == item._id)
+				const totalFinish: any = listCompanyAndTaskFinish?.find((item1: any) => item1._id == item._id)
 				// Tính tổng số lượng task
 				totalOverdueWorkAll +=totalOverdueWork?.count || 0;
 				totalNextWeekWorkAll+=totalNextWeekWork?.count || 0;
