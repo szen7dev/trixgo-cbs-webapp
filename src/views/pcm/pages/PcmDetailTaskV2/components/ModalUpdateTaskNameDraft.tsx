@@ -6,11 +6,12 @@ import { usePcmReport } from "services/hooks/pcm/usePcm";
 import { useTask } from "services/hooks/useTask";
 
 type Props = {
-    taskId: string
-    onConfirm?: () => void
+    taskId: string;
+    taskName: string;
+    onConfirm?: () => void;
 }
 
-export const ModalUpdateTaskNameDraft: FC<Props> = ({ taskId, onConfirm }) => {
+export const ModalUpdateTaskNameDraft: FC<Props> = ({ taskId, taskName, onConfirm }) => {
   const { closeModal } = useModal();
   const [name, setName] = useState("");
   const { updateTaskAsync } = useTask({});
@@ -63,6 +64,7 @@ export const ModalUpdateTaskNameDraft: FC<Props> = ({ taskId, onConfirm }) => {
           type="text"
           placeholder="Nhập nội dung"
           name="name"
+          defaultValue={taskName}
           className="h-12 w-full border border-primary-border outline-none px-8"
           onChange={onChange}
         />
