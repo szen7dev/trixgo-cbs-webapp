@@ -94,22 +94,42 @@ const PcmTagPage: FC = () => {
 							<p className="text-lg text-primary-gray mb-2">
 								{item._id?.project?.sign}.{item._id?.project?.name} ({item?.amount})
 							</p>
-							<div className="gap-3">
+							{tab !== "4" ? 
+								<div className="gap-3">
 								{(listDataProjectCompany || []).map((item: any, index: number) => (
 									<div className="flex rounded-lg py-1" key={index}>
 										<img
-											src={item._id?.companyOfAuthor?.image ? `${process.env.REACT_APP_URL_S3_COMPANY}/${item._id?.companyOfAuthor?.image}` : FakeUser}
+											src={
+												item._id?.companyOfAuthor?.image ? `${process.env.REACT_APP_URL_S3_COMPANY}/${item._id?.companyOfAuthor?.image}` : FakeUser}
 											alt="User"
 											className="w-[60px] h-[60px] rounded-full mr-2"
 										/>
 										<div className="ml-2">
 											<p className="text-[15px]">{item._id?.companyOfAuthor?.sign}.{item._id?.companyOfAuthor?.name}</p>
-											<p className="text-primary-gray">{item.amount || 0} thông báo</p>
+											<p className="text-primary-gray">{item.amount || 0} công việc</p>
 										</div>
 									</div>
 								))
 								}
-							</div>
+							</div> : 
+							<div className="gap-3">
+							{(listDataProjectCompany || []).map((item: any, index: number) => (
+								<div className="flex rounded-lg py-1" key={index}>
+									<img
+										src={
+											item._id?.companyOfAssignee?.image ? `${process.env.REACT_APP_URL_S3_COMPANY}/${item._id?.companyOfAssignee?.image}` : FakeUser}
+										alt="User"
+										className="w-[60px] h-[60px] rounded-full mr-2"
+									/>
+									<div className="ml-2">
+										<p className="text-[15px]">{item._id?.companyOfAssignee?.sign}.{item._id?.companyOfAssignee?.name}</p>
+										<p className="text-primary-gray">{item.amount || 0} công việc</p>
+									</div>
+								</div>
+							))
+							}
+						</div>
+							}
 						</div>
 					</div>
 				)
