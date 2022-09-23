@@ -96,6 +96,7 @@ const PcmUserPage: FC = () => {
 			setRotalTaskFinish(totalFinishAll)
 		}
 	}, [tabActive, listUserOfCompany, listProjectOfCompany]);
+	
 	useEffect(() => {
 		document.title = `Tổng hợp theo nhân sự`
 	}, []);
