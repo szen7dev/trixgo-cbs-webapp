@@ -151,35 +151,35 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
             <div className={"header-table flex px-4 w-full top-0 bg-white pb-4 flex-wrap"}>
                 <div className={"border-0.5 border-primary-border flex items-center"}>
                     {
-                        option == 1 &&
+                        option === 1 &&
                         <PcmHomeTab1 tab={tab} />
                     }
                     {
-                        option == 2 &&
+                        option === 2 &&
                         <PcmHomeTab2 tab={tab} />
                     }
                     {
-                        option == 3 &&
+                        option === 3 &&
                         <PcmHomeTab3 tab={tab} />
                     }
                     {
-                        option == 4 &&
+                        option === 4 &&
                         <PcmHomeTab4 tab={tab} />
                     }
                     {
-                        option == 5 &&
+                        option === 5 &&
                         <PcmHomeTab5 tab={tab} />
                     }
                     {
-                        option == 6 &&
+                        option === 6 &&
                         <PcmHomeTab6 tab={tab} />
                     }
                     {
-                        option == 7 &&
+                        option === 7 &&
                         <PcmHomeTab7 tab={tab} />
                     }
                     {
-                        option == 8 &&
+                        option === 8 &&
                         <PcmHomeTab8 tab={tab} />
                     }
                 </div>
