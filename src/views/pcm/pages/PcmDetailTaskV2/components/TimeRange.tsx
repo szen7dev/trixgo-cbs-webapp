@@ -6,6 +6,7 @@ import DayPickerInput from "react-day-picker/DayPickerInput";
 import {DropdownSearchable} from "../../../../../shareComponents/common";
 
 type Props = {
+    isOfficalTask: boolean,
     fromDateDefault: string,
     toDateDefault: string,
     toTimeDefault: string,
@@ -38,7 +39,7 @@ const remindOptions = [
         text: "Trước 2 ngày"
     },
 ]
-const TimeRange:FC<Props> = ({fromDateDefault, toDateDefault, toTimeDefault, remindDefault, onApplyNewTime}) => {
+const TimeRange:FC<Props> = ({isOfficalTask, fromDateDefault, toDateDefault, toTimeDefault, remindDefault, onApplyNewTime}) => {
     const [fromDate, setFromDate] = useState(fromDateDefault);
     const [toDate, setToDate] = useState(toDateDefault);
     const [toTime, setToTime] = useState(toTimeDefault);
@@ -136,9 +137,11 @@ const TimeRange:FC<Props> = ({fromDateDefault, toDateDefault, toTimeDefault, rem
                             />
                         </div>
 
-                        <button onClick={() => applyNewTime()} className={"bg-primary rounded text-white w-full h-[36px] mt-4"}>
-                            Lưu
-                        </button>
+                        {!isOfficalTask && (
+                            <button onClick={() => applyNewTime()} className={"bg-primary rounded text-white w-full h-[36px] mt-4"}>
+                                Lưu
+                            </button>
+                        )}
                     </div>
                 </div>
             }
