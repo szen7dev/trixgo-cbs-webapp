@@ -195,7 +195,7 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                                         )
                                     }}
                                 >
-                                    Cập nhật tiêu đề công việc (việc nháp)
+                                    Cập nhật tiêu đề công việc
                                 </button>
                                 <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
                                     onClick={() => {
