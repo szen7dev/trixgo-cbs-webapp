@@ -2,13 +2,21 @@ import { FC, useCallback } from "react";
 import { Link } from "react-router-dom";
 import FakeUser from "assets/images/fake-user.png";
 
-const GroupComponent: FC = ({
+type Props = {
+    tab: string,
+    listDataProject: any,
+    listDataProject2: any,
+    listDataProjectCompanyAuthor: any,
+    listDataProjectCompany: any,
+}
+
+const GroupComponent: FC<Props> = ({
     tab,
     listDataProject,
     listDataProject2,
     listDataProjectCompanyAuthor,
     listDataProjectCompany
-}: any) => {
+}) => {
 
     const getListDataProjectCompany = useCallback((id: string) => {
         const data = listDataProjectCompanyAuthor.filter((item: any) => item._id?.project === id);

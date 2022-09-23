@@ -190,7 +190,7 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                                             "inline-block w-[521px] h-[200px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
                                             }
                                         >
-                                            <ModalUpdateTaskNameDraft taskId={task._id} onConfirm={refetchTaskInfo} />
+                                            <ModalUpdateTaskNameDraft taskId={task._id} taskName={task.name} onConfirm={refetchTaskInfo} />
                                         </div>
                                         )
                                     }}
