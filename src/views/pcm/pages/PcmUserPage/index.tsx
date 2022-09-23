@@ -123,7 +123,10 @@ const PcmUserPage: FC = () => {
 						Nhân sự
 					</th>
 					<th className="py-2.5 px-3 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
-						Bộ phận
+						Phòng ban
+					</th>
+					<th className="py-2.5 px-3 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
+						Vị trí
 					</th>
 					<th className="py-2.5 px-3 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
 						<div className="flex justify-between">
@@ -168,9 +171,14 @@ const PcmUserPage: FC = () => {
 								</td>
 								<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">
 									{/* <Link to={``}> */}
-										{userPcm.fullname}
+										<div className="flex items-center">
+											<img src={`${process.env.REACT_APP_URL_S3_USER}/${userPcm?.image}`} alt="----" className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px] max-w-[24px] max-h-[24px] rounded-full overflow-hidden"}
+											/>
+											<div className="ml-2">{userPcm.fullname}</div>
+										</div>
 									{/* </Link> */}
 								</td>
+								<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">{userPcm?.department?.name}</td>
 								<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">{userPcm?.position?.name}</td>
 								<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border text-right cursor-auto" style={{ minWidth: "155px", fontSize: '10px' }} onClick={e => e.stopPropagation()}>
 									<div className="flex w-full h-3 mt-2">
