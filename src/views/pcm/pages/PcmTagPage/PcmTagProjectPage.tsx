@@ -51,9 +51,9 @@ const PcmTagProjectPage: FC = () => {
         });
 
     return (
-        <main className="h-full overflow-auto">
+        <main className="h-full overflow-auto relative z-11">
             {(isLoadingResponse || isFetchingResponse) && <Loader className="border-primary" />}
-            <div className={"header-table flex w-full top-0 bg-white pt-4 pb-2"}>
+            <div className={"header-table sticky z-10 top-0	 flex w-full top-0 bg-white pt-4 pb-2"}>
                 <button onClick={() => history.goBack()} className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg "}>
                     <img src={iconBack} alt={"----"} className={"w-[18px]"} />
                 </button>
