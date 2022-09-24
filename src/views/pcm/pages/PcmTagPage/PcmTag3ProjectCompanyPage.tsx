@@ -78,9 +78,9 @@ const PcmTag3ProjectCompanyPage: FC = () => {
                                 return (
                                     <tr
                                         key={index}
-                                        className={"border-b-0.5 border-primary-border hover:shadow-md hover:z-2 hover:relative"}
+                                        className={"border-b-0.5 leading-6 border-primary-border hover:shadow-md hover:z-2 hover:relative"}
                                     >
-                                        <td className={"w-[55px] py-3 px-2"}>
+                                        <td className={"w-[55px] pt-4 pb-3 px-2"}>
                                             <img
                                                 src={tagIcon}
                                                 alt={"tags"}
@@ -89,14 +89,14 @@ const PcmTag3ProjectCompanyPage: FC = () => {
                                                 }
                                             />
                                         </td>
-                                        <td className={"py-3"}>
+                                        <td className={"pt-4 pb-3"}>
                                             <Link to={"/pcm/detail/" + item.task?._id}>
                                                 <p className={"text-[14px]"}>
                                                     {item.text}
                                                 </p>
                                             </Link>
                                         </td>
-                                        <td>
+                                        <td className={"pt-4 pb-3"}>
                                             <div
                                                 className={
                                                     "task-date text-right pr-20"
