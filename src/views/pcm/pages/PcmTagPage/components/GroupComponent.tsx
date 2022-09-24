@@ -29,21 +29,26 @@ const GroupComponent: FC<Props> = ({
     }, [listDataProject, listDataProjectCompany]);
 
     return (
-        <div className="h-full overflow-auto">
+        <div className="h-full">
             {(!tab || tab === "1" || tab === "2" ? listDataProject : listDataProject2).map((item: any, index: number) => {
                 const listDataProjectCompany = !tab || tab === "1" || tab === "2" ? getListDataProjectCompany(item?._id?.project?._id) : getListDataProjectCompany2(item?._id?.project?._id);
                 return (
                     <div className="gap-7" key={index}>
                         <div className="px-4 mb-4">
-                            <Link to={(!tab || tab === "1" || tab === "2") ? `/pcm/tags/project/${item._id?.project?._id}` : './'} key={index}>
+                            {(!tab || tab === "1" || tab === "2") ?
+                                <Link to={`/pcm/tags/project/${item._id?.project?._id}`} key={index}>
+                                    <p className="text-lg text-primary-gray mb-2">
+                                        {item._id?.project?.sign}.{item._id?.project?.name} ({item?.amount})
+                                    </p>
+                                </Link> :
                                 <p className="text-lg text-primary-gray mb-2">
                                     {item._id?.project?.sign}.{item._id?.project?.name} ({item?.amount})
                                 </p>
-                            </Link>
+                            }
                             {tab !== "4" ?
                                 <div className="gap-3">
                                     {(listDataProjectCompany || []).map((item2: any, index: number) => (
-                                        <Link to={(!tab || tab === "1" || tab === "2") ? `/pcm/tags/project/${item._id?.project?._id}/company/${item2._id?.companyOfAuthor?._id}` : './'} key={index}>
+                                        <Link to={(!tab || tab === "1" || tab === "2") ? `/pcm/tags/project/${item._id?.project?._id}/company/${item2._id?.companyOfAuthor?._id}` : `/pcm/tags/3/${item._id?.project?._id}/${item2._id?.companyOfAuthor?._id}`} key={index}>
                                             <div className="flex rounded-lg py-1">
                                                 <img
                                                     src={
@@ -62,7 +67,7 @@ const GroupComponent: FC<Props> = ({
                                 </div> :
                                 <div className="gap-3">
                                     {(listDataProjectCompany || []).map((item2: any, index: number) => (
-                                        <Link to={'./'} key={index}>
+                                        <Link to={`/pcm/tags/4/${item._id?.project?._id}/${item2._id?.companyOfAssignee?._id}`} key={index}>
                                             <div className="flex rounded-lg py-1">
                                                 <img
                                                     src={

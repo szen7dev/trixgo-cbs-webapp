@@ -69,13 +69,13 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
 
                 if (sheets.length) {
                     const rows: any = utils.sheet_to_json(wb.Sheets[sheets[1]]); // Index=1 (tức Sheet số 2 từ trái sang)
-                    console.log(rows)
-
                     setDataImport(rows)
                 }
             }
             reader.readAsArrayBuffer(file);
         }
+        // Đọc xong thì xóa value trong input đi
+        $event.target.value = null;
     }
 
     // Cập nhật việc nháp sang chính thức
@@ -90,7 +90,7 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
 				return toast.warn(data?.message);
 			}
 
-			refetchTaskInfo?.();
+			refetchTaskInfo?.();    
             toast.success('Cập nhật thành công');
 		} catch (error) {
 			if(error instanceof Error)
@@ -105,11 +105,13 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
         if(dataImport.length){
             const fetchData = async () => {
                 const data = await importTaskFromExcelAsync({ taskID: task._id, dataImport: JSON.stringify(dataImport) });
+                setDataImport([]);
                 refetchTaskInfo?.()
+
                 if(!data.error){
                     return toast.success("Import thành công");
                 }
-                return toast.success("Import thất bại");
+                return toast.error(data.message);
             }
             fetchData();
         }

@@ -1,46 +1,31 @@
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useParams, Link } from 'react-router-dom';
 
 // Hook
-import useCheckedList from 'services/hooks/ppt/useCheckedList';
-import { useQueryListCompanyOfAssigneeAndAmountTask } from "services/hooks/pcm/useStatistical";
 import classNames from "classnames";
-
-import {SearchInput, GroupActions, ButtonMore, DropdownSearchableV2} from "shareComponents/common";
-import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
-// import DropdownFilterButton from "views/pages/document/components/DocumentFilterButton";
+import { Loader } from "shareComponents/common";
 import ModalInformation from "./components/ModalInformation";
-// import CaretDownIcon from "assets/images/icon-caret-down.png";
-// import debounce from "lodash/debounce";
-// import userIcon from "assets/images/icon-user-avatar.svg";
-// import maleUserIcon from "assets/images/icons8-male-user-64.svg";
-// import TriangleDown from "assets/icons/TriangleDown";
-// import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
-// import projectIcon from "assets/images/icons8-project-50.svg";
-// import timeTableIcon from "assets/images/icons8-timetable-48.svg";
-// import categoryIcon from "assets/images/icons8-category-48.svg";
-// import downloadIcon from "assets/images/icons8-download-96.svg";
-// import sendMailIcon from "assets/images/icons8-send-email-96.svg";
-// import nextIcon from "assets/images/icons-arrow-next.svg";
 
-import { useProject } from 'services/hooks/items/useProject';
+import { useQueryListCompanyOfAssigneeAndAmountTask } from "services/hooks/pcm/useStatistical";
+
 const categories = [
 	{ id: 1, name: "Tất cả" },
 	{ id: 2, name: "Theo dự án, phòng ban" },
 ];
+let totalOverdueWorkMain = 0;
+let totalNextWeekWorkMain = 0;
+let totalMoreThan7DaysMain = 0;
+let totalFinishMain = 0;
+
 const PcmUserPage: FC = () => {
 	const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
 	const [data, setData] = useState<{ id: number, [key: string]: any }[]>([])
 	const [dataMain, setDataMain] = useState([]);
 	const [companyPopup, setCompanyPopup] = useState();
+	const [projectPopup, setProjectPopup] = useState();
 	const [typeStatusPopup, setTypeStatusPopup] = useState();
-	const [totalTaskOverdueWork, setTotalTaskOverdueWork] = useState();
-	const [totalTaskNextWeekWork, setTotalTaskNextWeekWork] = useState();
-	const [totalTaskMoreThan7Days, setTotalTaskMoreThan7Days] = useState();
-	const [totalTaskFinish, setRotalTaskFinish] = useState();
-	const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data)
+	const [assigneePopup, setAssigneePopup] = useState();
 	const { id: projectID } = useParams<{ id: string }>();
-	const [keyword, setKeyword] = useState("");
 	const [tabActive, settabActive] = useState(categories[0].id);
 
 	const { 
@@ -56,23 +41,22 @@ const PcmUserPage: FC = () => {
 	});
 
 	useEffect(() => {
+		totalOverdueWorkMain = 0;
+		totalNextWeekWorkMain = 0;
+		totalMoreThan7DaysMain = 0;
+		totalFinishMain = 0;
 		if(listUserOfCompany?.length || listProjectOfCompany?.length){
-			let totalOverdueWorkAll: any = 0
-			let totalNextWeekWorkAll: any = 0
-			let totalMoreThan7DaysAll: any = 0
-			let totalFinishAll: any = 0;
 			const dataOption = listUserOfCompany || listProjectOfCompany;
 			const data: any = dataOption?.map((item: any)=> {
 				const totalOverdueWork: any = listTaskOverdueWork?.find((item1: any) => item1._id == item._id)
 				const totalNextWeekWork: any = listTaskNextWeekWork?.find((item1: any) => item1._id == item._id)
 				const totalMoreThan7Days: any = listTaskMoreThan7Days?.find((item1: any) => item1._id == item._id)
 				const totalFinish: any = listTaskFinish?.find((item1: any) => item1._id == item._id)
-				// Tính tổng số lượng task
-				totalOverdueWorkAll +=totalOverdueWork?.count || 0;
-				totalNextWeekWorkAll+=totalNextWeekWork?.count || 0;
-				totalMoreThan7DaysAll+=totalMoreThan7Days?.count || 0;
-				totalFinishAll+=totalFinish?.count || 0;
-
+				// Tổng
+				totalOverdueWorkMain 	+= Number(totalOverdueWork?.count) || 0;
+				totalNextWeekWorkMain 	+= Number(totalNextWeekWork?.count) || 0;
+				totalMoreThan7DaysMain 	+= Number(totalMoreThan7Days?.count) || 0;
+				totalFinishMain 		+= Number(totalFinish?.count) || 0;
 				// Tính số phần trăm các việc của công ty
 				const percent = totalOverdueWork?.count || 0 + totalNextWeekWork?.count || 0 + totalMoreThan7Days?.count || 0;
 				const overdueWorkPercent = (totalOverdueWork?.count || 0/percent)*100 || 0;
@@ -90,10 +74,6 @@ const PcmUserPage: FC = () => {
 				}
 			})
 			setDataMain(data);
-			setTotalTaskOverdueWork(totalOverdueWorkAll)
-			setTotalTaskNextWeekWork(totalNextWeekWorkAll)
-			setTotalTaskMoreThan7Days(totalMoreThan7DaysAll)
-			setRotalTaskFinish(totalFinishAll)
 		}
 	}, [tabActive, listUserOfCompany, listProjectOfCompany]);
 	
@@ -101,10 +81,12 @@ const PcmUserPage: FC = () => {
 		document.title = `Tổng hợp theo nhân sự`
 	}, []);
 
-	const toggleVisible = ({ company, typeStatus }: any) => {
+	const toggleVisible = ({ company, typeStatus, assigneeID, projectID }: any) => {
 		setVisibleDrawer(!visibleDrawer)
 		setCompanyPopup(company)
+		setAssigneePopup(assigneeID)
 		setTypeStatusPopup(typeStatus)
+		setProjectPopup(projectID)
 	};
 
 	const handleChangeTab = (tabId: number) => settabActive(tabId);
@@ -137,27 +119,27 @@ const PcmUserPage: FC = () => {
 								<div className="flex items-center">
 									<div className="w-3 h-3 bg-cbs-schedule-expired" />
 									<span className="ml-1 text-primary-gray font-normal">
-										Quá hạn
+										Quá hạn({totalOverdueWorkMain})
 									</span>
 								</div>
 								<div className="flex items-center">
 									<div className="w-3 h-3 bg-cbs-schedule-nextweek" />
 									<span className="ml-1 text-primary-gray font-normal">
-										Tuần tới
+										Tuần tới({totalNextWeekWorkMain})
 									</span>
 								</div>
 								<div className="flex items-center">
 									<div className="w-3 h-3 bg-cbs-schedule-after-7days" />
 									<span className="ml-1 text-primary-gray font-normal">
 										{" "}
-										{">7 ngày"}
+										{">7 ngày"}({totalMoreThan7DaysMain})
 									</span>
 								</div>
 							</div>
 						</div>
 					</th>
 					<th className="py-2.5 px-3 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
-						Hoàn thành
+						Hoàn thành({totalFinishMain})
 					</th>
 				</tr>
 			</thead>
@@ -185,7 +167,7 @@ const PcmUserPage: FC = () => {
 										<button
 											className="flex items-center justify-center bg-red-500"
 											style={{ width: `${userPcm?.overdueWorkPercent}%` }}
-											onClick={() => toggleVisible({ userPcm: userPcm._id, typeStatus: "1"}) }>
+											onClick={() => toggleVisible({ assigneeID: userPcm._id, typeStatus: "1"}) }>
 											<span className="text-white">
 												{userPcm?.totalOverdueWork ||""}
 											</span>
@@ -193,7 +175,7 @@ const PcmUserPage: FC = () => {
 										<button
 											className="flex items-center justify-center bg-yellow-500"
 											style={{ width: `${userPcm?.nextWeekWorkPercent}%` }}
-											onClick={() => toggleVisible({ userPcm: userPcm._id, typeStatus: "2"}) }>
+											onClick={() => toggleVisible({ assigneeID: userPcm._id, typeStatus: "2"}) }>
 											<span className="text-white">
 												{userPcm?.totalNextWeekWork ||""}
 											</span>
@@ -201,7 +183,7 @@ const PcmUserPage: FC = () => {
 										<button
 											className="flex items-center justify-center bg-green-500"
 											style={{ width: `${userPcm?.moreThan7DaysPercent}%` }}
-											onClick={() => toggleVisible({ userPcm: userPcm._id, typeStatus: "3"}) }>
+											onClick={() => toggleVisible({ assigneeID: userPcm._id, typeStatus: "3"}) }>
 
 											<span className="text-white">
 												{userPcm?.totalMoreThan7Days ||""}
@@ -211,7 +193,8 @@ const PcmUserPage: FC = () => {
 								</td>
 								<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border text-right text-white cursor-auto" style={{ fontSize: '10px' }} onClick={e => e.stopPropagation()}>
 									{userPcm?.totalFinish ? 
-										<div className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2" >{userPcm?.totalFinish}</div> : 
+										<button className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2" 
+										onClick={() => toggleVisible({ assigneeID: userPcm._id, typeStatus: "4"}) }>{userPcm?.totalFinish}</button> : 
 										<></>
 									}
 								</td>
@@ -245,27 +228,27 @@ const PcmUserPage: FC = () => {
 								<div className="flex items-center">
 									<div className="w-3 h-3 bg-cbs-schedule-expired" />
 									<span className="ml-1 text-primary-gray font-normal">
-										Quá hạn
+										Quá hạn({totalOverdueWorkMain})
 									</span>
 								</div>
 								<div className="flex items-center">
 									<div className="w-3 h-3 bg-cbs-schedule-nextweek" />
 									<span className="ml-1 text-primary-gray font-normal">
-										Tuần tới
+										Tuần tới({totalNextWeekWorkMain})
 									</span>
 								</div>
 								<div className="flex items-center">
 									<div className="w-3 h-3 bg-cbs-schedule-after-7days" />
 									<span className="ml-1 text-primary-gray font-normal">
 										{" "}
-										{">7 ngày"}
+										{">7 ngày"}({totalMoreThan7DaysMain})
 									</span>
 								</div>
 							</div>
 						</div>
 					</th>
 					<th className="py-2.5 px-3 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
-						Hoàn thành
+						Hoàn thành({totalFinishMain})
 					</th>
 				</tr>
 			</thead>
@@ -278,9 +261,9 @@ const PcmUserPage: FC = () => {
 									{index+1}
 								</td>
 								<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">
-									{/* <Link to={``}> */}
+									<Link to={`/pcm/users/project/${userPcm._id}`}>
 										{userPcm.name}
-									{/* </Link> */}
+									</Link>
 								</td>
 								<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">{userPcm?.sign}</td>
 								<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border text-right cursor-auto" style={{ minWidth: "155px", fontSize: '10px' }} onClick={e => e.stopPropagation()}>
@@ -288,7 +271,7 @@ const PcmUserPage: FC = () => {
 										<button
 											className="flex items-center justify-center bg-red-500"
 											style={{ width: `${userPcm?.overdueWorkPercent}%` }}
-											onClick={() => toggleVisible({ userPcm: userPcm._id, typeStatus: "1"}) }>
+											onClick={() => toggleVisible({ projectID: userPcm._id, typeStatus: "1"}) }>
 											<span className="text-white">
 												{userPcm?.totalOverdueWork ||""}
 											</span>
@@ -296,7 +279,7 @@ const PcmUserPage: FC = () => {
 										<button
 											className="flex items-center justify-center bg-yellow-500"
 											style={{ width: `${userPcm?.nextWeekWorkPercent}%` }}
-											onClick={() => toggleVisible({ userPcm: userPcm._id, typeStatus: "2"}) }>
+											onClick={() => toggleVisible({ projectID: userPcm._id, typeStatus: "2"}) }>
 											<span className="text-white">
 												{userPcm?.totalNextWeekWork ||""}
 											</span>
@@ -304,7 +287,7 @@ const PcmUserPage: FC = () => {
 										<button
 											className="flex items-center justify-center bg-green-500"
 											style={{ width: `${userPcm?.moreThan7DaysPercent}%` }}
-											onClick={() => toggleVisible({ userPcm: userPcm._id, typeStatus: "3"}) }>
+											onClick={() => toggleVisible({ projectID: userPcm._id, typeStatus: "3"}) }>
 											<span className="text-white">
 												{userPcm?.totalMoreThan7Days ||""}
 											</span>
@@ -313,7 +296,8 @@ const PcmUserPage: FC = () => {
 								</td>
 								<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border text-right text-white cursor-auto" style={{ fontSize: '10px' }} onClick={e => e.stopPropagation()}>
 									{userPcm?.totalFinish ? 
-										<div className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2" >{userPcm?.totalFinish}</div> : 
+										<button className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2" 
+										onClick={() => toggleVisible({ projectID: userPcm._id, typeStatus: "4"}) }>{userPcm?.totalFinish}</button> : 
 										<></>
 									}
 								</td>
@@ -325,16 +309,18 @@ const PcmUserPage: FC = () => {
 		</table>
 	}
 	return (
+		
 		<div className="flex flex-col h-full overflow-hidden">
+			{(isLoading) && <Loader className="border-primary" />}
 			<div className={"sticky top-0 bg-white z-10"}>
-				<div className={"header-table flex px-4 w-full top-0 bg-white pb-4"}>
-				<div className="flex items-center  pt-3">
+				<div className={"header-table flex w-full top-0 bg-white pb-4"}>
+				<div className="flex items-center pt-3">
 					{categories.map(item => (
 						<span
 							key={item.id}
 							tabIndex={0}
 							className={classNames(
-							"cursor-pointer px-3.5 py-2 mr-2 transition-colors hover:bg-cbs-primary hover:text-white hover:border-cbs-primary border-0.5 rounded-full select-none",
+							"cursor-pointer px-3.5 py-1 mr-2 transition-colors hover:bg-cbs-primary hover:text-white hover:border-cbs-primary border-0.5 rounded-full select-none",
 							tabActive === item.id
 								? "bg-cbs-primary border-cbs-primary text-white"
 								: "text-cbs-subtext border-cbs-border"
@@ -349,7 +335,7 @@ const PcmUserPage: FC = () => {
 			</div>
 			<div className="flex-1 overflow-y-auto">
 				{ contentTable }
-				{/* <ModalInformation open={visibleDrawer} onClose={toggleVisible} dataPopup={{ companyPopup, typeStatusPopup, projectID }}/> */}
+				<ModalInformation open={visibleDrawer} onClose={toggleVisible} dataPopup={{ companyPopup, typeStatusPopup, projectID, assigneePopup, projectPopup }}/>
 			</div>
 		</div >
 	);

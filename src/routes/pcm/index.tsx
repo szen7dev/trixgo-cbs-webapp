@@ -73,9 +73,12 @@ import ProjectAdminPositionTab from "views/ppt/pages/ProjectAdminPage/pages/Proj
 const PcmDetailTaskV2             = lazy(() => import('views/pcm/pages/PcmDetailTaskV2'));
 const PcmTagPage                  = lazy(() => import('views/pcm/pages/PcmTagPage'));
 const PcmTagProjectPage           = lazy(() => import('views/pcm/pages/PcmTagPage/PcmTagProjectPage'));
+const PcmTag3ProjectCompanyPage           = lazy(() => import('views/pcm/pages/PcmTagPage/PcmTag3ProjectCompanyPage'));
+const PcmTag3ProjectCompanySubTypePage           = lazy(() => import('views/pcm/pages/PcmTagPage/PcmTag3ProjectCompanySubTypePage'));
 
 const PcmHomePage                 = lazy(() => import('views/pcm/pages/PcmHomeV2'));
 const PcmUserPage                 = lazy(() => import('views/pcm/pages/PcmUserPage'));
+const PcmUserProjectPage          = lazy(() => import('views/pcm/pages/PcmUserProjectPage'));
 const PcmReportPage               = lazy(() => import('views/pcm/pages/PcmReport'));
 const PcmTasksReportPage          = lazy(() => import('views/pcm/pages/PcmTasksReport'));
 // const PcmReportQuickPage          = lazy(() => import('views/pcm/pages/PcmReportQuick'));
@@ -163,6 +166,7 @@ const PCMRouter: FC = () => {
                 </Route>
 
                 <Route exact path="/pcm/users/:tab?" component={() => <PcmUserPage />} />
+                <Route exact path="/pcm/users/project/:projectID" component={() => <PcmUserProjectPage />} />
                 <Route exact path="/pcm/bidding/:tab?" component={() => <PcmHomePage subtype={4} option={1} draft={0}/>} />
                 <Route exact path="/pcm/delivery/:tab?" component={() => <PcmHomePage subtype={9} type={2} option={2} draft={0}/>} />
                 <Route exact path="/pcm/payment/:tab?" component={() => <PcmHomePage subtype={3} type={2} option={3} draft={0}/>} />
@@ -177,6 +181,8 @@ const PCMRouter: FC = () => {
                 <Route exact path="/pcm/tags/:tab?" component={PcmTagPage} />
                 <Route exact path="/pcm/tags/project/:projectID" component={PcmTagProjectPage} />
                 <Route exact path="/pcm/tags/project/:projectID/company/:companyID" component={PcmTagProjectPage} />
+                <Route exact path="/pcm/tags/:tab/:projectID/:companyID" component={PcmTag3ProjectCompanyPage} />
+                <Route exact path="/pcm/tags/:tab/:projectID/:companyID/:subtype" component={PcmTag3ProjectCompanySubTypePage} />
               </Switch>
             </HomeLayout>
 
