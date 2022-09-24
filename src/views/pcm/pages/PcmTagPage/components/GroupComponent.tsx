@@ -2,7 +2,7 @@ import { FC, useCallback } from "react";
 import { Link } from "react-router-dom";
 import FakeUser from "assets/images/fake-user.png";
 
-const GroupComponent: FC = ({
+const GroupComponent: FC<any> = ({
     tab,
     listDataProject,
     listDataProject2,
