@@ -3,7 +3,6 @@ import { Link, useHistory, useParams } from "react-router-dom";
 import { Loader } from "shareComponents/common";
 import tagIcon from "assets/images/icons8-tag-100.svg"
 
-import PaginateV2 from "shareComponents/common/PaginateV2";
 import iconBack from "assets/images/icon-back-gray.svg";
 import { DepartmentRepository } from "apis/item";
 import { useQuery } from "react-query";
@@ -12,12 +11,9 @@ import { PCM_PROPOSAL_TASK } from "apis/localdb/index";
 import { usePcmPlanTaskGetListByProperty } from "services/hooks/pcm/usePcmDashboardV2";
 
 const PcmTag3ProjectCompanyPage: FC = () => {
-    type PaginateHandle = React.ElementRef<typeof PaginateV2>;
-    const ref = useRef<PaginateHandle>(null);
     const { tab } = useParams<{ tab: string }>();
     const { projectID } = useParams<{ projectID: string }>();
     const { companyID } = useParams<{ companyID: string }>();
-    const [pageIndex, setPageIndex] = useState(0);
     const history = useHistory();
     // Danh sách các response
 
@@ -90,7 +86,7 @@ const PcmTag3ProjectCompanyPage: FC = () => {
                                             />
                                         </td>
                                         <td className={"pt-4 pb-3"}>
-                                            <Link to={"/pcm/detail/" + item.task?._id}>
+                                            <Link to={`/pcm/tags/${tab}/${projectID}/${companyID}/${item.value}`}>
                                                 <p className={"text-[14px]"}>
                                                     {item.text}
                                                 </p>
