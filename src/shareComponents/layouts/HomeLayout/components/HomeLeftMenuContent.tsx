@@ -8,7 +8,7 @@ import uploadIcon from "assets/images/icons-upload.svg"
 import starIcon from "assets/images/icons-star-outline.svg"
 import linkIcon from "assets/images/icons-link.svg"
 import fileIcon from "assets/images/icons-file.svg"
-import biddingImage from "assets/menu/project/icons-project-bidding.svg"
+import humanIcon from "assets/images/icons8-people-64.svg"
 import paymentImage from "assets/menu/project/icons-project-payment.svg"
 import deliveryImage from "assets/menu/project/icons-project-delivery.svg"
 
@@ -45,14 +45,14 @@ export const HomeLeftMenuContent:FC = () => {
             route: '/pcm/home'
         },
         {
-            label: "Phân loại theo dự án",
+            label: "Báo cáo theo dự án",
             icon: tagIcon,
             count: 0,
             route: '/pcm/tags'
         },
         {
-            label: "Tổng hợp theo nhân sự",
-            icon: tagIcon,
+            label: "Báo cáo theo nhân sự",
+            icon: humanIcon,
             count: 0,
             route: '/pcm/users'
         },
