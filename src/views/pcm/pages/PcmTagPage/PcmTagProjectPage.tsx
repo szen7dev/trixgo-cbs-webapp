@@ -9,10 +9,12 @@ import iconBack from "assets/images/icon-back-gray.svg";
 import { DepartmentRepository } from "apis/item";
 import { useQuery } from "react-query";
 import DatahubRepository from "apis/datahub";
+import moment from "moment";
 
 const PcmTagProjectPage: FC = () => {
     type PaginateHandle = React.ElementRef<typeof PaginateV2>;
     const ref = useRef<PaginateHandle>(null);
+    const { tab } = useParams<{ tab: string }>();
     const { projectID } = useParams<{ projectID: string }>();
     const { companyID } = useParams<{ companyID: string }>();
     const [pageIndex, setPageIndex] = useState(0);
@@ -24,8 +26,10 @@ const PcmTagProjectPage: FC = () => {
         isGroup: 0,
         isParent: 0,
         projectsID: [projectID],
-        companyOfAuthorsID: companyID ? [companyID] : "",
+        companyOfAuthorsID: companyID ? [companyID] : [],
         enabled: true,
+        fromDate: tab === "2" ? moment().format("YYYY-MM-DD 00:00") : "",
+		toDate: tab === "2" ?  moment().format("YYYY-MM-DD 23:59") : "",
     };
 
     const {
