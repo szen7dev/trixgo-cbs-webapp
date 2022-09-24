@@ -20,7 +20,11 @@ const PcmTagProjectPage: FC = () => {
     // Danh sách các response
     const query: any = {
         draft: 0,
+        isActive: 0,
+        isGroup: 0,
+        isParent: 0,
         projectsID: [projectID],
+        companyID: companyID ? [companyID] : "",
         enabled: true,
     };
 
