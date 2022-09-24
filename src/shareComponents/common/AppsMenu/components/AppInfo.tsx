@@ -176,4 +176,11 @@ export const APP_INFO = new Map([
         icon: budgetLogo,
         route: '/budget/home'
     }],
+    /* Ứng dụng Tư vấn giám sát */
+    ['5dfe4bf251dc622100bb9d8c', {
+        key: "5dfe4bf251dc622100bb9d8c",
+        name: "Tư vấn giám sát",
+        icon: budgetLogo,
+        route: '/inspection/home'
+    }],
 ]);

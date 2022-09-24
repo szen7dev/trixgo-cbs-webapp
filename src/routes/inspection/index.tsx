@@ -5,15 +5,15 @@ import { Route, Switch } from "react-router-dom";
 /*=====2.PROVIDERS=====*/
 
 /*=====3.LAYOUTS=====*/
-import { ReeLayoutV2 } from "views/ree/shareComponents/layoutsV2";
+import { InspectionLayout } from "views/inspection/shareComponents/layouts";
 
 /*=====4.CONFIG ROUTE=====*/
 
 /*=====5.PAGES/COMPONENTS=====*/
 import ErrorPage from "views/authentication/Error";
 import {
-   ReeHomePage,
-} from "views/ree/pages";
+    InspectionHomePage,
+} from "views/inspection/pages";
 
 const InspectionRouter: FC = () => {
     return (
@@ -22,9 +22,9 @@ const InspectionRouter: FC = () => {
                 exact
                 path="/inspection/home"
                 component={() =>
-                    <ReeLayoutV2>
-                        <ReeHomePage />
-                    </ReeLayoutV2>
+                    <InspectionLayout>
+                        <InspectionHomePage />
+                    </InspectionLayout>
                 }
             />
             <Route path="/ree/*" component={ErrorPage} />

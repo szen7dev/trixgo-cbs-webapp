@@ -234,7 +234,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
                 : "")
             }
           >
-            <img width={'20px'} src={contractIcon} alt={"Hợp đồng"} />
+            <img width={'20px'} src={contractIcon} alt={"TVGS"} />
           </div>
           <span className={"text-primary-gray mt-1"}>TVGS</span>
         </Link> : <></>}
