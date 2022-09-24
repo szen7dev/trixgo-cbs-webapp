@@ -48,7 +48,7 @@ const GroupComponent: FC<Props> = ({
                             {tab !== "4" ?
                                 <div className="gap-3">
                                     {(listDataProjectCompany || []).map((item2: any, index: number) => (
-                                        <Link to={(!tab || tab === "1" || tab === "2") ? `/pcm/tags/project/${item._id?.project?._id}/company/${item2._id?.companyOfAuthor?._id}` : './'} key={index}>
+                                        <Link to={(!tab || tab === "1" || tab === "2") ? `/pcm/tags/project/${item._id?.project?._id}/company/${item2._id?.companyOfAuthor?._id}` : `/pcm/tags/3/${item._id?.project?._id}/${item2._id?.companyOfAuthor?._id}`} key={index}>
                                             <div className="flex rounded-lg py-1">
                                                 <img
                                                     src={
@@ -67,7 +67,7 @@ const GroupComponent: FC<Props> = ({
                                 </div> :
                                 <div className="gap-3">
                                     {(listDataProjectCompany || []).map((item2: any, index: number) => (
-                                        <Link to={'./'} key={index}>
+                                        <Link to={`/pcm/tags/4/${item._id?.project?._id}/${item2._id?.companyOfAssignee?._id}`} key={index}>
                                             <div className="flex rounded-lg py-1">
                                                 <img
                                                     src={
