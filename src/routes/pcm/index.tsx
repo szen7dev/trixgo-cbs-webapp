@@ -179,8 +179,8 @@ const PCMRouter: FC = () => {
                 <Route exact path="/pcm/report/:reportID" component={PcmTasksReportPage} />
                 <Route exact path="/pcm/detail/:id" component={PcmDetailTaskV2} />
                 <Route exact path="/pcm/tags/:tab?" component={PcmTagPage} />
-                <Route exact path="/pcm/tags/project/:projectID" component={PcmTagProjectPage} />
-                <Route exact path="/pcm/tags/project/:projectID/company/:companyID" component={PcmTagProjectPage} />
+                <Route exact path="/pcm/tags/:tab?/project/:projectID/detail" component={PcmTagProjectPage} />
+                <Route exact path="/pcm/tags/:tab?/project/:projectID/company/:companyID" component={PcmTagProjectPage} />
                 <Route exact path="/pcm/tags/:tab/:projectID/:companyID" component={PcmTag3ProjectCompanyPage} />
                 <Route exact path="/pcm/tags/:tab/:projectID/:companyID/:subtype" component={PcmTag3ProjectCompanySubTypePage} />
               </Switch>

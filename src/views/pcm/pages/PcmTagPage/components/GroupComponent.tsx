@@ -36,7 +36,7 @@ const GroupComponent: FC<Props> = ({
                     <div className="gap-7" key={index}>
                         <div className="px-4 mb-4">
                             {(!tab || tab === "1" || tab === "2") ?
-                                <Link to={`/pcm/tags/project/${item._id?.project?._id}`} key={index}>
+                                <Link to={tab === "2" ? `/pcm/tags/2/project/${item._id?.project?._id}/detail` : `/pcm/tags/project/${item._id?.project?._id}/detail`} key={index}>
                                     <p className="text-lg text-primary-gray mb-2">
                                         {item._id?.project?.sign}.{item._id?.project?.name} ({item?.amount})
                                     </p>
@@ -48,7 +48,14 @@ const GroupComponent: FC<Props> = ({
                             {tab !== "4" ?
                                 <div className="gap-3">
                                     {(listDataProjectCompany || []).map((item2: any, index: number) => (
-                                        <Link to={(!tab || tab === "1" || tab === "2") ? `/pcm/tags/project/${item._id?.project?._id}/company/${item2._id?.companyOfAuthor?._id}` : `/pcm/tags/3/${item._id?.project?._id}/${item2._id?.companyOfAuthor?._id}`} key={index}>
+                                        <Link 
+                                            to={
+                                                (!tab || tab === "1" || tab === "2") ? 
+                                                tab === "2" ? `/pcm/tags/2/project/${item._id?.project?._id}/company/${item2._id?.companyOfAuthor?._id}` :
+                                                `/pcm/tags/project/${item._id?.project?._id}/company/${item2._id?.companyOfAuthor?._id}` : 
+                                                `/pcm/tags/3/${item._id?.project?._id}/${item2._id?.companyOfAuthor?._id}`} 
+                                            
+                                            key={index}>
                                             <div className="flex rounded-lg py-1">
                                                 <img
                                                     src={

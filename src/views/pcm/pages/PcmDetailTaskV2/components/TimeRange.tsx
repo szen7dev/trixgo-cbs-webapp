@@ -10,36 +10,44 @@ type Props = {
     fromDateDefault: string,
     toDateDefault: string,
     toTimeDefault: string,
-    onApplyNewTime: (timer: {fromDate: string, toDate: string, toTime: string, remind: string|number|undefined}) => void,
+    onApplyNewTime: (timer: {fromDate: string, toDate: string, toTime: string, remind: string|number|undefined, isOfficalTask: boolean}) => void,
     remindDefault?: string|number,
 }
 const remindOptions = [
     {
-        id: 1,
+        id: 0,
         text: "Không"
     },
     {
-        id: 2,
+        id: 0.4,
         text: "Trước 15 phút"
     },
     {
-        id: 3,
+        id: 1,
         text: "Trước 1 giờ"
     },
     {
-        id: 4,
+        id: 2,
         text: "Trước 2 giờ"
     },
     {
-        id: 5,
+        id: 24,
         text: "Trước 1 ngày"
     },
     {
-        id: 6,
+        id: 48,
         text: "Trước 2 ngày"
     },
 ]
-const TimeRange:FC<Props> = ({isOfficalTask, fromDateDefault, toDateDefault, toTimeDefault, remindDefault, onApplyNewTime}) => {
+
+const TimeRange:FC<Props> = ({
+    isOfficalTask,
+    fromDateDefault,
+    toDateDefault,
+    toTimeDefault,
+    remindDefault,
+    onApplyNewTime
+}) => {
     const [fromDate, setFromDate] = useState(fromDateDefault);
     const [toDate, setToDate] = useState(toDateDefault);
     const [toTime, setToTime] = useState(toTimeDefault);
@@ -60,7 +68,7 @@ const TimeRange:FC<Props> = ({isOfficalTask, fromDateDefault, toDateDefault, toT
         setToDate(toDateTemp);
         setFromDate(fromDateTemp);
 
-        onApplyNewTime({fromDate: fromDateTemp, toTime: toTimeTemp, toDate: toDateTemp, remind});
+        onApplyNewTime({fromDate: fromDateTemp, toTime: toTimeTemp, toDate: toDateTemp, remind, isOfficalTask});
         setShowOption(false);
     }
 
@@ -81,48 +89,54 @@ const TimeRange:FC<Props> = ({isOfficalTask, fromDateDefault, toDateDefault, toT
                         </button>
                     </div>
                     <div className={"options"}>
-                        <div className={"mt-4"}>
-                            <div className={"font-bold text-primary-gray mb-2"}>Bắt đầu</div>
-                            <DayPickerInput
-                                value={fromDateTemp}
-                                classNames={{
-                                    container: "border-0.5 border-primary-border rounded w-fit",
-                                    overlay: "w-full rounded",
-                                    overlayWrapper: "absolute bg-white w-full right-0 z-200"
-                                }}
-                                onDayChange={(day) => setFromDateTemp(moment(day).format("MM/DD/YYYY"))}
-                                inputProps={{
-                                    className: "h-[36px] outline-none pl-3",
-                                    placeholder: "Bắt đầu",
-                                    readOnly: true,
-                                }}
-                            />
-                        </div>
-                        <div className={"mt-4"}>
-                            <div className={"font-bold text-primary-gray mb-2"}>Kết thúc</div>
-                            <div className={"flex items-center"}>
-                                <DayPickerInput
-                                    value={toDateTemp}
-                                    classNames={{
-                                        container: "border-0.5 border-primary-border rounded w-fit",
-                                        overlay: "w-full rounded",
-                                        overlayWrapper: "absolute bg-white w-full right-0 z-200"
-                                    }}
-                                    onDayChange={(day) => setToDateTemp(moment(day).format("MM/DD/YYYY"))}
-                                    inputProps={{
-                                        className: "h-[36px] outline-none pl-3",
-                                        placeholder: "Kết thúc",
-                                        readOnly: true,
-                                    }}
-                                />
-                                <input
-                                    value={toTimeTemp}
-                                    className={"h-[36px] px-2 overflow-hidden ml-2 border-0.5 border-primary-border rounded w-fit focus:outline-none focus:ring-none"}
-                                    type="time"
-                                    onChange={(e) => setToTimeTemp(e.target.value)}
-                                />
-                            </div>
-                        </div>
+
+                        {!isOfficalTask && (
+                            <>
+                                <div className={"mt-4"}>
+                                    <div className={"font-bold text-primary-gray mb-2"}>Bắt đầu</div>
+                                    <DayPickerInput
+                                        value={fromDateTemp}
+                                        classNames={{
+                                            container: "border-0.5 border-primary-border rounded w-fit",
+                                            overlay: "w-full rounded",
+                                            overlayWrapper: "absolute bg-white w-full right-0 z-200"
+                                        }}
+                                        onDayChange={(day) => setFromDateTemp(moment(day).format("MM/DD/YYYY"))}
+                                        inputProps={{
+                                            className: "h-[36px] outline-none pl-3",
+                                            placeholder: "Bắt đầu",
+                                            readOnly: true,
+                                        }}
+                                    />
+                                </div>
+                                <div className={"mt-4"}>
+                                    <div className={"font-bold text-primary-gray mb-2"}>Kết thúc</div>
+                                    <div className={"flex items-center"}>
+                                        <DayPickerInput
+                                            value={toDateTemp}
+                                            classNames={{
+                                                container: "border-0.5 border-primary-border rounded w-fit",
+                                                overlay: "w-full rounded",
+                                                overlayWrapper: "absolute bg-white w-full right-0 z-200"
+                                            }}
+                                            onDayChange={(day) => setToDateTemp(moment(day).format("MM/DD/YYYY"))}
+                                            inputProps={{
+                                                className: "h-[36px] outline-none pl-3",
+                                                placeholder: "Kết thúc",
+                                                readOnly: true,
+                                            }}
+                                        />
+                                        <input
+                                            value={toTimeTemp}
+                                            className={"h-[36px] px-2 overflow-hidden ml-2 border-0.5 border-primary-border rounded w-fit focus:outline-none focus:ring-none"}
+                                            type="time"
+                                            onChange={(e) => setToTimeTemp(e.target.value)}
+                                        />
+                                    </div>
+                                </div>
+                            </>
+                        )}
+
                         <div className={"mt-4"}>
                             <div className={"font-bold text-primary-gray mb-2"}>Nhắc nhở thời hạn</div>
                             <DropdownSearchable
@@ -137,11 +151,9 @@ const TimeRange:FC<Props> = ({isOfficalTask, fromDateDefault, toDateDefault, toT
                             />
                         </div>
 
-                        {!isOfficalTask && (
-                            <button onClick={() => applyNewTime()} className={"bg-primary rounded text-white w-full h-[36px] mt-4"}>
-                                Lưu
-                            </button>
-                        )}
+                        <button onClick={() => applyNewTime()} className={"bg-primary rounded text-white w-full h-[36px] mt-4"}>
+                            Lưu
+                        </button>
                     </div>
                 </div>
             }

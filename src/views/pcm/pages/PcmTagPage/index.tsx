@@ -4,14 +4,15 @@ import { Loader } from "shareComponents/common";
 import { usePcmCommentGetListByProperty, usePcmPlanTaskGetListByProperty } from "services/hooks/pcm/usePcmDashboardV2";
 import MenuTab from "./components/MenuTab";
 import GroupComponent from "./components/GroupComponent";
+import moment from "moment";
 
 const PcmTagPage: FC = () => {
 	const { tab } = useParams<{ tab: string }>();
 	const { isLoading, listDataProject, listDataProjectCompanyAuthor } = usePcmCommentGetListByProperty({
 		option: 1,
 		enabled: !tab || tab === "1" || tab === "2",
-		fromDate: tab === "2" ? "00:00" : "",
-		toDate: tab === "2" ? "23:59" : "",
+		fromDate: tab === "2" ? moment().format("YYYY-MM-DD 00:00") : "",
+		toDate: tab === "2" ?  moment().format("YYYY-MM-DD 23:59") : "",
 	});
 
 	const { isLoading: isLoading2, listDataProject: listDataProject2, listDataProjectCompany } = usePcmPlanTaskGetListByProperty({
