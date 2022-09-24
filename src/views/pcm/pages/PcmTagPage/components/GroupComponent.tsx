@@ -29,7 +29,7 @@ const GroupComponent: FC<Props> = ({
     }, [listDataProject, listDataProjectCompany]);
 
     return (
-        <div className="h-full overflow-auto">
+        <div className="h-full">
             {(!tab || tab === "1" || tab === "2" ? listDataProject : listDataProject2).map((item: any, index: number) => {
                 const listDataProjectCompany = !tab || tab === "1" || tab === "2" ? getListDataProjectCompany(item?._id?.project?._id) : getListDataProjectCompany2(item?._id?.project?._id);
                 return (
