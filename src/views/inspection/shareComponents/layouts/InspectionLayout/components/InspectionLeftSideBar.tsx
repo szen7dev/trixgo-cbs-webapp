@@ -32,7 +32,7 @@ export const InspectionLeftSideBar: FC = () => {
 
               {/* menu block */}
               <div className="t-link-menu-container">
-                  <Link to={`/ree/home`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px] active">
+                  <Link to={`/inspection/home`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px] active">
                       <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
                       <span className="truncate">Trang chủ</span>
                   </Link>
