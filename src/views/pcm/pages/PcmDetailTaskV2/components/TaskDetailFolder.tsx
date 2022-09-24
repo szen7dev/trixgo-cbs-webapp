@@ -189,6 +189,7 @@ export const TaskDetailFolder: FC<Props> = ({
                 actualStartTime: time.fromDate,
                 actualFinishTime: time.toDate,
                 expiredHour: time.toTime,
+                alert: time.remind,
             })
 
             if (error) {

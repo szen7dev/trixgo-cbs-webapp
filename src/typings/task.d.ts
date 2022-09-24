@@ -120,6 +120,7 @@ export interface updateTaskPayload {
   actualStartTime?: string;
   actualFinishTime?: string;
   expiredHour?: string;
+  alert?: string | number;
   isAddSignature?: boolean;
   isOpenBidding?: boolean;
   flags?: Array<string>;

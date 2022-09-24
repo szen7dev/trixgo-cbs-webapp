@@ -15,31 +15,39 @@ type Props = {
 }
 const remindOptions = [
     {
-        id: 1,
+        id: 0,
         text: "Không"
     },
     {
-        id: 2,
+        id: 0.4,
         text: "Trước 15 phút"
     },
     {
-        id: 3,
+        id: 1,
         text: "Trước 1 giờ"
     },
     {
-        id: 4,
+        id: 2,
         text: "Trước 2 giờ"
     },
     {
-        id: 5,
+        id: 24,
         text: "Trước 1 ngày"
     },
     {
-        id: 6,
+        id: 48,
         text: "Trước 2 ngày"
     },
 ]
-const TimeRange:FC<Props> = ({isOfficalTask, fromDateDefault, toDateDefault, toTimeDefault, remindDefault, onApplyNewTime}) => {
+
+const TimeRange:FC<Props> = ({
+    isOfficalTask,
+    fromDateDefault,
+    toDateDefault,
+    toTimeDefault,
+    remindDefault,
+    onApplyNewTime
+}) => {
     const [fromDate, setFromDate] = useState(fromDateDefault);
     const [toDate, setToDate] = useState(toDateDefault);
     const [toTime, setToTime] = useState(toTimeDefault);
@@ -123,6 +131,15 @@ const TimeRange:FC<Props> = ({isOfficalTask, fromDateDefault, toDateDefault, toT
                                 />
                             </div>
                         </div>
+
+                        {/* {!isOfficalTask && (
+                            <div className="flex justify-end">
+                                <button onClick={() => applyNewTime()} className={"bg-primary rounded text-white w-[100px] h-[36px] mt-4"}>
+                                    Xác nhận
+                                </button>
+                            </div>
+                        )} */}
+
                         <div className={"mt-4"}>
                             <div className={"font-bold text-primary-gray mb-2"}>Nhắc nhở thời hạn</div>
                             <DropdownSearchable
