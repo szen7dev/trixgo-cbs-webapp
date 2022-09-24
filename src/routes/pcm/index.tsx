@@ -74,6 +74,7 @@ const PcmDetailTaskV2             = lazy(() => import('views/pcm/pages/PcmDetail
 const PcmTagPage                  = lazy(() => import('views/pcm/pages/PcmTagPage'));
 const PcmTagProjectPage           = lazy(() => import('views/pcm/pages/PcmTagPage/PcmTagProjectPage'));
 const PcmTag3ProjectCompanyPage           = lazy(() => import('views/pcm/pages/PcmTagPage/PcmTag3ProjectCompanyPage'));
+const PcmTag3ProjectCompanySubTypePage           = lazy(() => import('views/pcm/pages/PcmTagPage/PcmTag3ProjectCompanySubTypePage'));
 
 const PcmHomePage                 = lazy(() => import('views/pcm/pages/PcmHomeV2'));
 const PcmUserPage                 = lazy(() => import('views/pcm/pages/PcmUserPage'));
@@ -179,6 +180,7 @@ const PCMRouter: FC = () => {
                 <Route exact path="/pcm/tags/project/:projectID" component={PcmTagProjectPage} />
                 <Route exact path="/pcm/tags/project/:projectID/company/:companyID" component={PcmTagProjectPage} />
                 <Route exact path="/pcm/tags/:tab/:projectID/:companyID" component={PcmTag3ProjectCompanyPage} />
+                <Route exact path="/pcm/tags/:tab/:projectID/:companyID/:subtype" component={PcmTag3ProjectCompanySubTypePage} />
               </Switch>
             </HomeLayout>
 
