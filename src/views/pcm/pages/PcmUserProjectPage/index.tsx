@@ -1,39 +1,24 @@
-import React, { FC, useEffect, useState } from "react";
-import { useParams, Link, useHistory } from 'react-router-dom';
+import { FC, useEffect, useState } from "react";
+import { useParams, useHistory } from 'react-router-dom';
+
+import iconBack from "assets/images/icon-back-gray.svg";
+import ModalInformation from "./components/ModalInformation";
+import { Loader } from "shareComponents/common";
 
 // Hook
-import useCheckedList from 'services/hooks/ppt/useCheckedList';
 import { useQueryListCompanyOfAssigneeAndAmountTask } from "services/hooks/pcm/useStatistical";
-import classNames from "classnames";
-import iconBack from "assets/images/icon-back-gray.svg";
-
-import {SearchInput, GroupActions, ButtonMore, DropdownSearchableV2} from "shareComponents/common";
-import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
-// import DropdownFilterButton from "views/pages/document/components/DocumentFilterButton";
-import ModalInformation from "./components/ModalInformation";
 import { useProject } from 'services/hooks/items/useProject';
-const categories = [
-	{ id: 1, name: "Tất cả" },
-	{ id: 2, name: "Theo dự án, phòng ban" },
-];
+
 const PcmUserProjectPage: FC = () => {
+	document.title = `Báo cáo nhân sự theo dự án`
+    const history = useHistory();
 	const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
-	const [data, setData] = useState<{ id: number, [key: string]: any }[]>([])
 	const [dataMain, setDataMain] = useState([]);
 	const [companyPopup, setCompanyPopup] = useState();
 	const [projectPopup, setProjectPopup] = useState();
 	const [typeStatusPopup, setTypeStatusPopup] = useState();
 	const [assigneePopup, setAssigneePopup] = useState();
-	const [totalTaskOverdueWork, setTotalTaskOverdueWork] = useState();
-	const [totalTaskNextWeekWork, setTotalTaskNextWeekWork] = useState();
-	const [totalTaskMoreThan7Days, setTotalTaskMoreThan7Days] = useState();
-	const [totalTaskFinish, setRotalTaskFinish] = useState();
-	const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data)
 	const { projectID } = useParams<{ projectID: string }>();
-	const [keyword, setKeyword] = useState("");
-	const [tabActive, settabActive] = useState(categories[0].id);
-    const history = useHistory();
-
 	const { info: projectInfo } = useProject({
 		params: {
 			departmentID: projectID
@@ -55,21 +40,12 @@ const PcmUserProjectPage: FC = () => {
 
 	useEffect(() => {
 		if(listUserOfCompany?.length || listProjectOfCompany?.length){
-			let totalOverdueWorkAll: any = 0
-			let totalNextWeekWorkAll: any = 0
-			let totalMoreThan7DaysAll: any = 0
-			let totalFinishAll: any = 0;
 			const dataOption = listUserOfCompany || listProjectOfCompany;
 			const data: any = dataOption?.map((item: any)=> {
 				const totalOverdueWork: any = listTaskOverdueWork?.find((item1: any) => item1._id == item._id)
 				const totalNextWeekWork: any = listTaskNextWeekWork?.find((item1: any) => item1._id == item._id)
 				const totalMoreThan7Days: any = listTaskMoreThan7Days?.find((item1: any) => item1._id == item._id)
 				const totalFinish: any = listTaskFinish?.find((item1: any) => item1._id == item._id)
-				// Tính tổng số lượng task
-				totalOverdueWorkAll +=totalOverdueWork?.count || 0;
-				totalNextWeekWorkAll+=totalNextWeekWork?.count || 0;
-				totalMoreThan7DaysAll+=totalMoreThan7Days?.count || 0;
-				totalFinishAll+=totalFinish?.count || 0;
 
 				// Tính số phần trăm các việc của công ty
 				const percent = totalOverdueWork?.count || 0 + totalNextWeekWork?.count || 0 + totalMoreThan7Days?.count || 0;
@@ -88,16 +64,8 @@ const PcmUserProjectPage: FC = () => {
 				}
 			})
 			setDataMain(data);
-			setTotalTaskOverdueWork(totalOverdueWorkAll)
-			setTotalTaskNextWeekWork(totalNextWeekWorkAll)
-			setTotalTaskMoreThan7Days(totalMoreThan7DaysAll)
-			setRotalTaskFinish(totalFinishAll)
 		}
-	}, [tabActive, listUserOfCompany, listProjectOfCompany]);
-	
-	useEffect(() => {
-		document.title = `Tổng hợp theo nhân sự`
-	}, []);
+	}, [listUserOfCompany, listProjectOfCompany]);
 
 	const toggleVisible = ({ company, typeStatus, assigneeID, projectID }: any) => {
 		setVisibleDrawer(!visibleDrawer)
@@ -107,227 +75,9 @@ const PcmUserProjectPage: FC = () => {
 		setProjectPopup(projectID)
 	};
 
-	const handleChangeTab = (tabId: number) => settabActive(tabId);
-
-	let contentTable;
-	if(tabActive == 1){
-		// User
-		contentTable = 
-		<table className="text-black text-medium border-collapse space-x-0 space-y-0 w-full" style={{ borderSpacing: 0 }}>
-			<thead className="">
-				<tr className="text-primary-gray whitespace-nowrap align-middle text-left">
-					<th className="px-3 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border w-1">
-						TT
-					</th>
-					<th className="py-2.5 px-3 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
-						Nhân sự
-					</th>
-					<th className="py-2.5 px-3 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
-						Phòng ban
-					</th>
-					<th className="py-2.5 px-3 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
-						Vị trí
-					</th>
-					<th className="py-2.5 px-3 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
-						<div className="flex justify-between">
-							<span>
-								Đang triển khai
-							</span>
-							<div className="flex space-x-5 px-2">
-								<div className="flex items-center">
-									<div className="w-3 h-3 bg-cbs-schedule-expired" />
-									<span className="ml-1 text-primary-gray font-normal">
-										Quá hạn
-									</span>
-								</div>
-								<div className="flex items-center">
-									<div className="w-3 h-3 bg-cbs-schedule-nextweek" />
-									<span className="ml-1 text-primary-gray font-normal">
-										Tuần tới
-									</span>
-								</div>
-								<div className="flex items-center">
-									<div className="w-3 h-3 bg-cbs-schedule-after-7days" />
-									<span className="ml-1 text-primary-gray font-normal">
-										{" "}
-										{">7 ngày"}
-									</span>
-								</div>
-							</div>
-						</div>
-					</th>
-					<th className="py-2.5 px-3 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
-						Hoàn thành
-					</th>
-				</tr>
-			</thead>
-			<tbody className="">
-				{
-					dataMain?.map((userPcm: any, index) => {
-						return (
-							<tr key={userPcm._id} className="text-left hover:bg-cbs-table-header cursor-pointer">
-								<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border text-center" onClick={e => e.stopPropagation()}>
-									{index+1}
-								</td>
-								<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">
-									{/* <Link to={``}> */}
-										<div className="flex items-center">
-											<img src={`${process.env.REACT_APP_URL_S3_USER}/${userPcm?.image}`} alt="----" className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px] max-w-[24px] max-h-[24px] rounded-full overflow-hidden"}
-											/>
-											<div className="ml-2">{userPcm.fullname}</div>
-										</div>
-									{/* </Link> */}
-								</td>
-								<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">{userPcm?.department?.name}</td>
-								<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">{userPcm?.position?.name}</td>
-								<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border text-right cursor-auto" style={{ minWidth: "155px", fontSize: '10px' }} onClick={e => e.stopPropagation()}>
-									<div className="flex w-full h-3 mt-2">
-										<button
-											className="flex items-center justify-center bg-red-500"
-											style={{ width: `${userPcm?.overdueWorkPercent}%` }}
-											onClick={() => toggleVisible({ assigneeID: userPcm._id, typeStatus: "1"}) }>
-											<span className="text-white">
-												{userPcm?.totalOverdueWork ||""}
-											</span>
-										</button>
-										<button
-											className="flex items-center justify-center bg-yellow-500"
-											style={{ width: `${userPcm?.nextWeekWorkPercent}%` }}
-											onClick={() => toggleVisible({ assigneeID: userPcm._id, typeStatus: "2"}) }>
-											<span className="text-white">
-												{userPcm?.totalNextWeekWork ||""}
-											</span>
-										</button>
-										<button
-											className="flex items-center justify-center bg-green-500"
-											style={{ width: `${userPcm?.moreThan7DaysPercent}%` }}
-											onClick={() => toggleVisible({ assigneeID: userPcm._id, typeStatus: "3"}) }>
-
-											<span className="text-white">
-												{userPcm?.totalMoreThan7Days ||""}
-											</span>
-										</button>
-									</div>
-								</td>
-								<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border text-right text-white cursor-auto" style={{ fontSize: '10px' }} onClick={e => e.stopPropagation()}>
-									{userPcm?.totalFinish ? 
-										<button className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2" 
-										onClick={() => toggleVisible({ assigneeID: userPcm._id, typeStatus: "4"}) }>{userPcm?.totalFinish}</button> : 
-										<></>
-									}
-								</td>
-							</tr>
-						)
-					})
-				}
-			</tbody>
-		</table>
-	}else{
-		// Project
-		contentTable = 
-		<table className="text-black text-medium border-collapse space-x-0 space-y-0 w-full" style={{ borderSpacing: 0 }}>
-			<thead className="">
-				<tr className="text-primary-gray whitespace-nowrap align-middle text-left">
-					<th className="px-3 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border w-1">
-						TT
-					</th>
-					<th className="py-2.5 px-3 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
-						Dự án
-					</th>
-					<th className="py-2.5 px-3 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
-						Mã hiệu
-					</th>
-					<th className="py-2.5 px-3 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
-						<div className="flex justify-between">
-							<span>
-								Đang triển khai
-							</span>
-							<div className="flex space-x-5 px-2">
-								<div className="flex items-center">
-									<div className="w-3 h-3 bg-cbs-schedule-expired" />
-									<span className="ml-1 text-primary-gray font-normal">
-										Quá hạn
-									</span>
-								</div>
-								<div className="flex items-center">
-									<div className="w-3 h-3 bg-cbs-schedule-nextweek" />
-									<span className="ml-1 text-primary-gray font-normal">
-										Tuần tới
-									</span>
-								</div>
-								<div className="flex items-center">
-									<div className="w-3 h-3 bg-cbs-schedule-after-7days" />
-									<span className="ml-1 text-primary-gray font-normal">
-										{" "}
-										{">7 ngày"}
-									</span>
-								</div>
-							</div>
-						</div>
-					</th>
-					<th className="py-2.5 px-3 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
-						Hoàn thành
-					</th>
-				</tr>
-			</thead>
-			<tbody className="">
-				{
-					dataMain?.map((userPcm: any, index) => {
-						return (
-							<tr key={userPcm._id} className="text-left hover:bg-cbs-table-header cursor-pointer">
-								<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border text-center" onClick={e => e.stopPropagation()}>
-									{index+1}
-								</td>
-								<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">
-									<Link to={`/pcm/users/project/${userPcm._id}`}>
-										{userPcm.name}
-									</Link>
-								</td>
-								<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">{userPcm?.sign}</td>
-								<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border text-right cursor-auto" style={{ minWidth: "155px", fontSize: '10px' }} onClick={e => e.stopPropagation()}>
-									<div className="flex w-full h-3 mt-2">
-										<button
-											className="flex items-center justify-center bg-red-500"
-											style={{ width: `${userPcm?.overdueWorkPercent}%` }}
-											onClick={() => toggleVisible({ projectID: userPcm._id, typeStatus: "1"}) }>
-											<span className="text-white">
-												{userPcm?.totalOverdueWork ||""}
-											</span>
-										</button>
-										<button
-											className="flex items-center justify-center bg-yellow-500"
-											style={{ width: `${userPcm?.nextWeekWorkPercent}%` }}
-											onClick={() => toggleVisible({ projectID: userPcm._id, typeStatus: "2"}) }>
-											<span className="text-white">
-												{userPcm?.totalNextWeekWork ||""}
-											</span>
-										</button>
-										<button
-											className="flex items-center justify-center bg-green-500"
-											style={{ width: `${userPcm?.moreThan7DaysPercent}%` }}
-											onClick={() => toggleVisible({ projectID: userPcm._id, typeStatus: "3"}) }>
-											<span className="text-white">
-												{userPcm?.totalMoreThan7Days ||""}
-											</span>
-										</button>
-									</div>
-								</td>
-								<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border text-right text-white cursor-auto" style={{ fontSize: '10px' }} onClick={e => e.stopPropagation()}>
-									{userPcm?.totalFinish ? 
-										<button className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2" 
-										onClick={() => toggleVisible({ projectID: userPcm._id, typeStatus: "4"}) }>{userPcm?.totalFinish}</button> : 
-										<></>
-									}
-								</td>
-							</tr>
-						)
-					})
-				}
-			</tbody>
-		</table>
-	}
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
+			{(isLoading) && <Loader className="border-primary" />}
 			<div className={"sticky top-0 bg-white z-10"}>
 				<div className={"header-table flex w-full top-0 bg-white pb-2"}>
 					<button
@@ -343,7 +93,115 @@ const PcmUserProjectPage: FC = () => {
 				</div>
 			</div>
 			<div className="flex-1 overflow-y-auto">
-				{ contentTable }
+				<table className="text-black text-medium border-collapse space-x-0 space-y-0 w-full" style={{ borderSpacing: 0 }}>
+					<thead className="">
+						<tr className="text-primary-gray whitespace-nowrap align-middle text-left">
+							<th className="px-3 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border w-1">
+								TT
+							</th>
+							<th className="py-2.5 px-3 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
+								Nhân sự
+							</th>
+							<th className="py-2.5 px-3 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
+								Phòng ban
+							</th>
+							<th className="py-2.5 px-3 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
+								Vị trí
+							</th>
+							<th className="py-2.5 px-3 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
+								<div className="flex justify-between">
+									<span>
+										Đang triển khai
+									</span>
+									<div className="flex space-x-5 px-2">
+										<div className="flex items-center">
+											<div className="w-3 h-3 bg-cbs-schedule-expired" />
+											<span className="ml-1 text-primary-gray font-normal">
+												Quá hạn
+											</span>
+										</div>
+										<div className="flex items-center">
+											<div className="w-3 h-3 bg-cbs-schedule-nextweek" />
+											<span className="ml-1 text-primary-gray font-normal">
+												Tuần tới
+											</span>
+										</div>
+										<div className="flex items-center">
+											<div className="w-3 h-3 bg-cbs-schedule-after-7days" />
+											<span className="ml-1 text-primary-gray font-normal">
+												{" "}
+												{">7 ngày"}
+											</span>
+										</div>
+									</div>
+								</div>
+							</th>
+							<th className="py-2.5 px-3 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
+								Hoàn thành
+							</th>
+						</tr>
+					</thead>
+					<tbody className="">
+						{
+							dataMain?.map((userPcm: any, index) => {
+								return (
+									<tr key={userPcm._id} className="text-left hover:bg-cbs-table-header cursor-pointer">
+										<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border text-center" onClick={e => e.stopPropagation()}>
+											{index+1}
+										</td>
+										<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">
+											{/* <Link to={``}> */}
+												<div className="flex items-center">
+													<img src={`${process.env.REACT_APP_URL_S3_USER}/${userPcm?.image}`} alt="----" className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px] max-w-[24px] max-h-[24px] rounded-full overflow-hidden"}
+													/>
+													<div className="ml-2">{userPcm.fullname}</div>
+												</div>
+											{/* </Link> */}
+										</td>
+										<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">{userPcm?.department?.name}</td>
+										<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">{userPcm?.position?.name}</td>
+										<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border text-right cursor-auto" style={{ minWidth: "155px", fontSize: '10px' }} onClick={e => e.stopPropagation()}>
+											<div className="flex w-full h-3 mt-2">
+												<button
+													className="flex items-center justify-center bg-red-500"
+													style={{ width: `${userPcm?.overdueWorkPercent}%` }}
+													onClick={() => toggleVisible({ assigneeID: userPcm._id, typeStatus: "1"}) }>
+													<span className="text-white">
+														{userPcm?.totalOverdueWork ||""}
+													</span>
+												</button>
+												<button
+													className="flex items-center justify-center bg-yellow-500"
+													style={{ width: `${userPcm?.nextWeekWorkPercent}%` }}
+													onClick={() => toggleVisible({ assigneeID: userPcm._id, typeStatus: "2"}) }>
+													<span className="text-white">
+														{userPcm?.totalNextWeekWork ||""}
+													</span>
+												</button>
+												<button
+													className="flex items-center justify-center bg-green-500"
+													style={{ width: `${userPcm?.moreThan7DaysPercent}%` }}
+													onClick={() => toggleVisible({ assigneeID: userPcm._id, typeStatus: "3"}) }>
+
+													<span className="text-white">
+														{userPcm?.totalMoreThan7Days ||""}
+													</span>
+												</button>
+											</div>
+										</td>
+										<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border text-right text-white cursor-auto" style={{ fontSize: '10px' }} onClick={e => e.stopPropagation()}>
+											{userPcm?.totalFinish ? 
+												<button className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2" 
+												onClick={() => toggleVisible({ assigneeID: userPcm._id, typeStatus: "4"}) }>{userPcm?.totalFinish}</button> : 
+												<></>
+											}
+										</td>
+									</tr>
+								)
+							})
+						}
+					</tbody>
+				</table>
 				<ModalInformation open={visibleDrawer} onClose={toggleVisible} dataPopup={{ companyPopup, typeStatusPopup, projectID, assigneePopup, projectPopup }}/>
 			</div>
 		</div >

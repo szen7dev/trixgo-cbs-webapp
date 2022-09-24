@@ -1,29 +1,13 @@
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useParams, Link } from 'react-router-dom';
 
 // Hook
-import useCheckedList from 'services/hooks/ppt/useCheckedList';
-import { useQueryListCompanyOfAssigneeAndAmountTask } from "services/hooks/pcm/useStatistical";
 import classNames from "classnames";
-
-import {SearchInput, GroupActions, ButtonMore, DropdownSearchableV2} from "shareComponents/common";
-import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
-// import DropdownFilterButton from "views/pages/document/components/DocumentFilterButton";
+import { Loader } from "shareComponents/common";
 import ModalInformation from "./components/ModalInformation";
-// import CaretDownIcon from "assets/images/icon-caret-down.png";
-// import debounce from "lodash/debounce";
-// import userIcon from "assets/images/icon-user-avatar.svg";
-// import maleUserIcon from "assets/images/icons8-male-user-64.svg";
-// import TriangleDown from "assets/icons/TriangleDown";
-// import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
-// import projectIcon from "assets/images/icons8-project-50.svg";
-// import timeTableIcon from "assets/images/icons8-timetable-48.svg";
-// import categoryIcon from "assets/images/icons8-category-48.svg";
-// import downloadIcon from "assets/images/icons8-download-96.svg";
-// import sendMailIcon from "assets/images/icons8-send-email-96.svg";
-// import nextIcon from "assets/images/icons-arrow-next.svg";
 
-import { useProject } from 'services/hooks/items/useProject';
+import { useQueryListCompanyOfAssigneeAndAmountTask } from "services/hooks/pcm/useStatistical";
+
 const categories = [
 	{ id: 1, name: "Tất cả" },
 	{ id: 2, name: "Theo dự án, phòng ban" },
@@ -36,13 +20,7 @@ const PcmUserPage: FC = () => {
 	const [projectPopup, setProjectPopup] = useState();
 	const [typeStatusPopup, setTypeStatusPopup] = useState();
 	const [assigneePopup, setAssigneePopup] = useState();
-	const [totalTaskOverdueWork, setTotalTaskOverdueWork] = useState();
-	const [totalTaskNextWeekWork, setTotalTaskNextWeekWork] = useState();
-	const [totalTaskMoreThan7Days, setTotalTaskMoreThan7Days] = useState();
-	const [totalTaskFinish, setRotalTaskFinish] = useState();
-	const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data)
 	const { id: projectID } = useParams<{ id: string }>();
-	const [keyword, setKeyword] = useState("");
 	const [tabActive, settabActive] = useState(categories[0].id);
 
 	const { 
@@ -59,21 +37,12 @@ const PcmUserPage: FC = () => {
 
 	useEffect(() => {
 		if(listUserOfCompany?.length || listProjectOfCompany?.length){
-			let totalOverdueWorkAll: any = 0
-			let totalNextWeekWorkAll: any = 0
-			let totalMoreThan7DaysAll: any = 0
-			let totalFinishAll: any = 0;
 			const dataOption = listUserOfCompany || listProjectOfCompany;
 			const data: any = dataOption?.map((item: any)=> {
 				const totalOverdueWork: any = listTaskOverdueWork?.find((item1: any) => item1._id == item._id)
 				const totalNextWeekWork: any = listTaskNextWeekWork?.find((item1: any) => item1._id == item._id)
 				const totalMoreThan7Days: any = listTaskMoreThan7Days?.find((item1: any) => item1._id == item._id)
 				const totalFinish: any = listTaskFinish?.find((item1: any) => item1._id == item._id)
-				// Tính tổng số lượng task
-				totalOverdueWorkAll +=totalOverdueWork?.count || 0;
-				totalNextWeekWorkAll+=totalNextWeekWork?.count || 0;
-				totalMoreThan7DaysAll+=totalMoreThan7Days?.count || 0;
-				totalFinishAll+=totalFinish?.count || 0;
 
 				// Tính số phần trăm các việc của công ty
 				const percent = totalOverdueWork?.count || 0 + totalNextWeekWork?.count || 0 + totalMoreThan7Days?.count || 0;
@@ -92,10 +61,6 @@ const PcmUserPage: FC = () => {
 				}
 			})
 			setDataMain(data);
-			setTotalTaskOverdueWork(totalOverdueWorkAll)
-			setTotalTaskNextWeekWork(totalNextWeekWorkAll)
-			setTotalTaskMoreThan7Days(totalMoreThan7DaysAll)
-			setRotalTaskFinish(totalFinishAll)
 		}
 	}, [tabActive, listUserOfCompany, listProjectOfCompany]);
 	
@@ -331,7 +296,9 @@ const PcmUserPage: FC = () => {
 		</table>
 	}
 	return (
+		
 		<div className="flex flex-col h-full overflow-hidden">
+			{(isLoading) && <Loader className="border-primary" />}
 			<div className={"sticky top-0 bg-white z-10"}>
 				<div className={"header-table flex w-full top-0 bg-white pb-4"}>
 				<div className="flex items-center pt-3">
