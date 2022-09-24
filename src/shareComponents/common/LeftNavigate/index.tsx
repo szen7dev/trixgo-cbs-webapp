@@ -224,6 +224,20 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
           </div>
           <span className={"text-primary-gray mt-1"}>Hợp đồng</span>
         </Link> : <></>}
+        {checkPermissionApp('5dfe4bf251dc622100bb9d8c') ?
+        <Link to={`/inspection/home`} className={"flex flex-col items-center mb-3"}>
+          <div
+            className={
+              "px-4 py-1 rounded-full relative " +
+              (firstRoute === "inspection"
+                ? "bg-cbs-hightlight-right-navigate"
+                : "")
+            }
+          >
+            <img width={'20px'} src={contractIcon} alt={"Hợp đồng"} />
+          </div>
+          <span className={"text-primary-gray mt-1"}>TVGS</span>
+        </Link> : <></>}
       {checkPermissionApp('5e47867080019357cce04746') ?
         <Link to={`/document/home`} className={"flex flex-col items-center mb-3"}>
           <div
