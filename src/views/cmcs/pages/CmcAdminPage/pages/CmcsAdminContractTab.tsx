@@ -1,4 +1,4 @@
-import { FC, useCallback, useState, useEffect } from "react";
+import React, { FC, useCallback, useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import debounce from "lodash/debounce";
 import { SearchInput, ModalContainer } from "shareComponents/common";
@@ -14,20 +14,31 @@ import { APP_ID, CONTRACT_COME_IN_STATUS, DATE_FORMAT } from "apis/localdb";
 import { useCmcs } from 'services/hooks/useCmcs';
 import { useAuth } from "services/hooks/auth/useAuth";
 import { formatNumberMoney } from "utils/cmcs";
+import PaginateV2 from "shareComponents/common/PaginateV2";
 
 const CmcsAdminContractTab: FC = () => {
+	// Phân trang
+	type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+	const ref = React.useRef<PaginateHandle>(null);
+	const [pageIndex, setPageIndex] = React.useState(0);
+	const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+		isExporting: false,
+	});
+
 	const history = useHistory();
 	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.CMCS.id });
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
 	const { user } = useAuth();
 	const {
+		totalPages,
 		listContracts,
 		totalRecord,
 		nextPageListContracts,
 		hasNextPage,
-		refetchListContracts
-	} = useCmcs({ companyID: user?.company._id, keyword: keyword });
+		refetchListContracts,
+		isFetchingListContract
+	} = useCmcs({ companyID: user?.company._id, keyword: keyword, limit: 20 });
 
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
@@ -97,6 +108,23 @@ const CmcsAdminContractTab: FC = () => {
 						<img src={Vertical3Dots} alt="3Dots" />
 					</button>
 				</div>
+				<div className={"flex-1 flex items-center justify-end"}>
+                    <PaginateV2
+                        ref={ref}
+                        totalRecord={totalRecord}
+                        totalPages={totalPages}
+                        limit={20}
+                        hasNextPage={hasNextPage}
+                        isFetching={isFetchingListContract}
+                        nextPageAction={() => {
+                            nextPageListContracts();
+                            setPageIndex((oldState) => oldState + 1);
+                        }}
+                        prevPageAction={() => {
+                            setPageIndex((oldState) => oldState - 1);
+                        }}
+                    />
+                </div>
 			</header>
 
 			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
@@ -191,14 +219,6 @@ const CmcsAdminContractTab: FC = () => {
 				}
 
 			</table>
-			{hasNextPage && (
-				<div className="w-full flex justify-center my-5">
-					<button onClick={() => nextPageListContracts()}>
-						<span className="text-primary">{`Xem thêm (${totalRecord - listContracts.length
-							})`}</span>
-					</button>
-				</div>
-			)}
 		</main>
 	);
 };

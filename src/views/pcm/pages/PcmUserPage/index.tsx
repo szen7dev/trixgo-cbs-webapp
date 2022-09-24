@@ -283,9 +283,9 @@ const PcmUserPage: FC = () => {
 									{index+1}
 								</td>
 								<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">
-									{/* <Link to={``}> */}
+									<Link to={`/pcm/users/project/${userPcm._id}`}>
 										{userPcm.name}
-									{/* </Link> */}
+									</Link>
 								</td>
 								<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">{userPcm?.sign}</td>
 								<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border text-right cursor-auto" style={{ minWidth: "155px", fontSize: '10px' }} onClick={e => e.stopPropagation()}>
