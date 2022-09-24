@@ -449,7 +449,8 @@ const ProjectSubjectPage: FC = () => {
 										</td>
 										<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border text-right text-white cursor-auto" style={{ fontSize: '10px' }} onClick={e => e.stopPropagation()}>
 											{company?.totalFinish ? 
-												<div className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2" >{company?.totalFinish}</div> : 
+												<button className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2" 
+												onClick={() => toggleVisible({ company: company._id, typeStatus: "4"}) }>{company?.totalFinish}</button> : 
 												<></>
 											}
 										</td>

@@ -4,6 +4,7 @@ import moment from "moment";
 
 import useCheckedList from 'services/hooks/ppt/useCheckedList';
 import { useTask } from "services/hooks/useTask";
+import { useAuth } from "services/hooks/auth/useAuth";
 
 import XIcon from 'assets/icons/X';
 import CaretDownIcon from "assets/images/icon-caret-down.png";
@@ -19,9 +20,22 @@ interface Props {
 	dataPopup: any,
 }
 const ModalInformation: FC<Props> = ({ open, onClose, dataPopup }) => {
+	const { user } = useAuth();
 	const [data, setData] = useState<Array<number>>([])
 	const { assigned, checked, checkboxRef, handleChangeCheckbox, handleCheckAll } = useCheckedList(data);
-	const { companyPopup, typeStatusPopup, projectID } =dataPopup;
+	const { companyPopup, typeStatusPopup, assigneePopup, projectPopup } = dataPopup;
+	let { projectID } = dataPopup;
+	let companyOfAssignee;
+	if(projectPopup){
+		projectID = projectPopup;
+	}
+
+	if(companyPopup){
+		companyOfAssignee = companyPopup;
+	}else{
+		companyOfAssignee = user?.company?._id
+	}
+
 	useEffect(() => {
 		const _data = Array.from({ length: 10 }).map((_, i) => i);
 		setData(_data);
@@ -36,7 +50,8 @@ const ModalInformation: FC<Props> = ({ open, onClose, dataPopup }) => {
         hasNextPage,
 	} = useTask({
 		params: {
-			projectID, companyOfAssignee: companyPopup, isPassPermision: "1", typeStatus: typeStatusPopup, statusNe: "3"
+			projectID, companyOfAssignee, isPassPermision: "1", typeStatus: typeStatusPopup, statusNe: "3",
+			assigneeID: assigneePopup
 		},
 		isFetch: true
 	});
@@ -141,6 +156,11 @@ const ModalInformation: FC<Props> = ({ open, onClose, dataPopup }) => {
 											if(typeStatusPopup == 3){
 												colorActualFinishTime  = `green`;
 												textActualFinishTime  = `>7 ngày`;
+											}
+											
+											if(typeStatusPopup == 4){
+												colorActualFinishTime  = `blue`;
+												textActualFinishTime  = `Hoàn thành`;
 											}
 
 											return (

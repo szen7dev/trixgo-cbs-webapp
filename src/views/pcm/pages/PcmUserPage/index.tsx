@@ -33,7 +33,9 @@ const PcmUserPage: FC = () => {
 	const [data, setData] = useState<{ id: number, [key: string]: any }[]>([])
 	const [dataMain, setDataMain] = useState([]);
 	const [companyPopup, setCompanyPopup] = useState();
+	const [projectPopup, setProjectPopup] = useState();
 	const [typeStatusPopup, setTypeStatusPopup] = useState();
+	const [assigneePopup, setAssigneePopup] = useState();
 	const [totalTaskOverdueWork, setTotalTaskOverdueWork] = useState();
 	const [totalTaskNextWeekWork, setTotalTaskNextWeekWork] = useState();
 	const [totalTaskMoreThan7Days, setTotalTaskMoreThan7Days] = useState();
@@ -101,10 +103,12 @@ const PcmUserPage: FC = () => {
 		document.title = `Tổng hợp theo nhân sự`
 	}, []);
 
-	const toggleVisible = ({ company, typeStatus }: any) => {
+	const toggleVisible = ({ company, typeStatus, assigneeID, projectID }: any) => {
 		setVisibleDrawer(!visibleDrawer)
 		setCompanyPopup(company)
+		setAssigneePopup(assigneeID)
 		setTypeStatusPopup(typeStatus)
+		setProjectPopup(projectID)
 	};
 
 	const handleChangeTab = (tabId: number) => settabActive(tabId);
@@ -185,7 +189,7 @@ const PcmUserPage: FC = () => {
 										<button
 											className="flex items-center justify-center bg-red-500"
 											style={{ width: `${userPcm?.overdueWorkPercent}%` }}
-											onClick={() => toggleVisible({ userPcm: userPcm._id, typeStatus: "1"}) }>
+											onClick={() => toggleVisible({ assigneeID: userPcm._id, typeStatus: "1"}) }>
 											<span className="text-white">
 												{userPcm?.totalOverdueWork ||""}
 											</span>
@@ -193,7 +197,7 @@ const PcmUserPage: FC = () => {
 										<button
 											className="flex items-center justify-center bg-yellow-500"
 											style={{ width: `${userPcm?.nextWeekWorkPercent}%` }}
-											onClick={() => toggleVisible({ userPcm: userPcm._id, typeStatus: "2"}) }>
+											onClick={() => toggleVisible({ assigneeID: userPcm._id, typeStatus: "2"}) }>
 											<span className="text-white">
 												{userPcm?.totalNextWeekWork ||""}
 											</span>
@@ -201,7 +205,7 @@ const PcmUserPage: FC = () => {
 										<button
 											className="flex items-center justify-center bg-green-500"
 											style={{ width: `${userPcm?.moreThan7DaysPercent}%` }}
-											onClick={() => toggleVisible({ userPcm: userPcm._id, typeStatus: "3"}) }>
+											onClick={() => toggleVisible({ assigneeID: userPcm._id, typeStatus: "3"}) }>
 
 											<span className="text-white">
 												{userPcm?.totalMoreThan7Days ||""}
@@ -211,7 +215,8 @@ const PcmUserPage: FC = () => {
 								</td>
 								<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border text-right text-white cursor-auto" style={{ fontSize: '10px' }} onClick={e => e.stopPropagation()}>
 									{userPcm?.totalFinish ? 
-										<div className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2" >{userPcm?.totalFinish}</div> : 
+										<button className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2" 
+										onClick={() => toggleVisible({ assigneeID: userPcm._id, typeStatus: "4"}) }>{userPcm?.totalFinish}</button> : 
 										<></>
 									}
 								</td>
@@ -288,7 +293,7 @@ const PcmUserPage: FC = () => {
 										<button
 											className="flex items-center justify-center bg-red-500"
 											style={{ width: `${userPcm?.overdueWorkPercent}%` }}
-											onClick={() => toggleVisible({ userPcm: userPcm._id, typeStatus: "1"}) }>
+											onClick={() => toggleVisible({ projectID: userPcm._id, typeStatus: "1"}) }>
 											<span className="text-white">
 												{userPcm?.totalOverdueWork ||""}
 											</span>
@@ -296,7 +301,7 @@ const PcmUserPage: FC = () => {
 										<button
 											className="flex items-center justify-center bg-yellow-500"
 											style={{ width: `${userPcm?.nextWeekWorkPercent}%` }}
-											onClick={() => toggleVisible({ userPcm: userPcm._id, typeStatus: "2"}) }>
+											onClick={() => toggleVisible({ projectID: userPcm._id, typeStatus: "2"}) }>
 											<span className="text-white">
 												{userPcm?.totalNextWeekWork ||""}
 											</span>
@@ -304,7 +309,7 @@ const PcmUserPage: FC = () => {
 										<button
 											className="flex items-center justify-center bg-green-500"
 											style={{ width: `${userPcm?.moreThan7DaysPercent}%` }}
-											onClick={() => toggleVisible({ userPcm: userPcm._id, typeStatus: "3"}) }>
+											onClick={() => toggleVisible({ projectID: userPcm._id, typeStatus: "3"}) }>
 											<span className="text-white">
 												{userPcm?.totalMoreThan7Days ||""}
 											</span>
@@ -313,7 +318,8 @@ const PcmUserPage: FC = () => {
 								</td>
 								<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border text-right text-white cursor-auto" style={{ fontSize: '10px' }} onClick={e => e.stopPropagation()}>
 									{userPcm?.totalFinish ? 
-										<div className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2" >{userPcm?.totalFinish}</div> : 
+										<button className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2" 
+										onClick={() => toggleVisible({ projectID: userPcm._id, typeStatus: "4"}) }>{userPcm?.totalFinish}</button> : 
 										<></>
 									}
 								</td>
@@ -327,14 +333,14 @@ const PcmUserPage: FC = () => {
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
 			<div className={"sticky top-0 bg-white z-10"}>
-				<div className={"header-table flex px-4 w-full top-0 bg-white pb-4"}>
-				<div className="flex items-center  pt-3">
+				<div className={"header-table flex w-full top-0 bg-white pb-4"}>
+				<div className="flex items-center pt-3">
 					{categories.map(item => (
 						<span
 							key={item.id}
 							tabIndex={0}
 							className={classNames(
-							"cursor-pointer px-3.5 py-2 mr-2 transition-colors hover:bg-cbs-primary hover:text-white hover:border-cbs-primary border-0.5 rounded-full select-none",
+							"cursor-pointer px-3.5 py-1 mr-2 transition-colors hover:bg-cbs-primary hover:text-white hover:border-cbs-primary border-0.5 rounded-full select-none",
 							tabActive === item.id
 								? "bg-cbs-primary border-cbs-primary text-white"
 								: "text-cbs-subtext border-cbs-border"
@@ -349,7 +355,7 @@ const PcmUserPage: FC = () => {
 			</div>
 			<div className="flex-1 overflow-y-auto">
 				{ contentTable }
-				{/* <ModalInformation open={visibleDrawer} onClose={toggleVisible} dataPopup={{ companyPopup, typeStatusPopup, projectID }}/> */}
+				<ModalInformation open={visibleDrawer} onClose={toggleVisible} dataPopup={{ companyPopup, typeStatusPopup, projectID, assigneePopup, projectPopup }}/>
 			</div>
 		</div >
 	);
