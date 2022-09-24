@@ -23,7 +23,6 @@ const PcmTagPage: FC = () => {
 		<main className="h-full overflow-auto">
 			{(isLoading || isLoading2) && <Loader className="border-primary" />}
 			<MenuTab tab={tab} />
-
 			<GroupComponent
 				tab={tab}
 				listDataProject={listDataProject}

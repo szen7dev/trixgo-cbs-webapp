@@ -19,6 +19,7 @@ type UseCmcs = {
     totalRecord: number, // Tổng số mẩu tin (theo phân trang con trỏ)
     totalPages: number | undefined, // Tổng số trang (sau không dùng)
     hasNextPage: boolean | undefined // Kiểm tra còn trang tiếp theo hay không
+    isFetchingListContract: boolean
 };
 
 // Export ra để sử dụng
@@ -31,13 +32,14 @@ export const useCmcs = (params?: ListContractsPayload) : UseCmcs => {
         data: dataReturnFromAPI, // dataListContracts
         fetchNextPage: nextPageListContracts,
         fetchPreviousPage: prevPageListContracts,
-        hasNextPage: hasNextPage
+        hasNextPage: hasNextPage,
+        isFetching: isFetchingListContract
     } =
         useInfiniteQuery(
             ["list_contacts", params?.keyword], 
-            async ({ pageParams }: any) => 
+            async ({ pageParam }: any) => 
             ContractRepository.getListContract({ 
-                lastestID: pageParams ? pageParams : "",
+                lastestID: pageParam || "",
                 filter: JSON.stringify({ 
                     _id: 1,
                     name: 1,
@@ -51,8 +53,8 @@ export const useCmcs = (params?: ListContractsPayload) : UseCmcs => {
                 ...params
             }),
             {
-                getNextPageParam: ({ nextCursor }: any) => {
-                    return nextCursor || undefined;
+                getNextPageParam: ({ data }: any) => {
+                    return data?.nextCursor || undefined;
                 },
                 refetchOnWindowFocus: false,
                 enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
@@ -69,6 +71,7 @@ export const useCmcs = (params?: ListContractsPayload) : UseCmcs => {
         refetchListContracts,
         nextPageListContracts,
         prevPageListContracts,
+        isFetchingListContract,
         totalRecord,
         totalPages,
         hasNextPage

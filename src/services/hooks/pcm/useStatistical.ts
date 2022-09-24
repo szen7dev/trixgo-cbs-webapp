@@ -17,11 +17,19 @@ interface UseQueryListProjectWithListAmountTask {
 }
 
 interface useQueryListCompanyOfAssigneeAndAmountTaskResponse {
-    listCompany: [];
-    listCompanyAndTaskOverdueWork: [];
-    listCompanyAndTaskNextWeekWork: [];
-    listCompanyAndTaskMoreThan7Days: [];
-    listCompanyAndTaskFinish: [],
+    listCompany?: [];
+    listCompanyAndTaskOverdueWork?: [];
+    listCompanyAndTaskNextWeekWork?: [];
+    listCompanyAndTaskMoreThan7Days?: [];
+    listCompanyAndTaskFinish?: [],
+
+    listUserOfCompany?: [],
+    listTaskOverdueWork?: [],
+    listTaskNextWeekWork?: [],
+    listTaskMoreThan7Days?: [],
+    listTaskFinish?: [],
+
+    listProjectOfCompany?: [],
     isLoading: boolean;
 }
 
@@ -35,10 +43,11 @@ interface useQueryAmountTaskMilestoneResponse {
 }
 
 interface listCompanyOfAssigneeAndAmountTaskPayload {
-    projectID: string;
+    projectID?: string;
     isPassPermision?: number,
     keyword?: string,
     subtype?: string
+    option?: number
 }
 
 export const useQueryListProjectWithListAmountTask = (params: ListProjectWithListAmountTaskPayload): UseQueryListProjectWithListAmountTask => {
@@ -80,6 +89,14 @@ export const useQueryListCompanyOfAssigneeAndAmountTask = (params: listCompanyOf
         listCompanyAndTaskNextWeekWork: data?.data?.listCompanyAndTaskNextWeekWork,
         listCompanyAndTaskMoreThan7Days: data?.data?.listCompanyAndTaskMoreThan7Days,
         listCompanyAndTaskFinish: data?.data?.listCompanyAndTaskFinish,
+
+        listUserOfCompany: data?.data?.listUserOfCompany,
+        listTaskOverdueWork: data?.data?.listTaskOverdueWork,
+        listTaskNextWeekWork: data?.data?.listTaskNextWeekWork,
+        listTaskMoreThan7Days: data?.data?.listTaskMoreThan7Days,
+        listTaskFinish: data?.data?.listTaskFinish,
+
+        listProjectOfCompany: data?.data?.listProjectOfCompany,
         isLoading,
     }
 }

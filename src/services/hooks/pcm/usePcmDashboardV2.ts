@@ -278,5 +278,6 @@ export const usePcmPlanTaskGetListByProperty = (payload: any): any => {
     isLoading: data.isLoading,
     listDataProject: data.data?.data?.listDataProject || [],
     listDataProjectCompany: data.data?.data?.listDataProjectCompany || [],
+    dataTotal: data?.data
   }
 };
