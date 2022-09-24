@@ -80,7 +80,7 @@ const PcmTag3ProjectCompanyPage: FC = () => {
                                         key={index}
                                         className={"border-b-0.5 border-primary-border hover:shadow-md hover:z-2 hover:relative"}
                                     >
-                                        <td className={"w-[55px]"}>
+                                        <td className={"w-[55px] py-3 px-2"}>
                                             <img
                                                 src={tagIcon}
                                                 alt={"tags"}
@@ -89,7 +89,7 @@ const PcmTag3ProjectCompanyPage: FC = () => {
                                                 }
                                             />
                                         </td>
-                                        <td>
+                                        <td className={"py-3"}>
                                             <Link to={"/pcm/detail/" + item.task?._id}>
                                                 <p className={"text-[14px]"}>
                                                     {item.text}
