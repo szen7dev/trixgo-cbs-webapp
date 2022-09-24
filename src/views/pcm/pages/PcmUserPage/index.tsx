@@ -12,6 +12,11 @@ const categories = [
 	{ id: 1, name: "Tất cả" },
 	{ id: 2, name: "Theo dự án, phòng ban" },
 ];
+let totalOverdueWorkMain = 0;
+let totalNextWeekWorkMain = 0;
+let totalMoreThan7DaysMain = 0;
+let totalFinishMain = 0;
+
 const PcmUserPage: FC = () => {
 	const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
 	const [data, setData] = useState<{ id: number, [key: string]: any }[]>([])
@@ -36,6 +41,10 @@ const PcmUserPage: FC = () => {
 	});
 
 	useEffect(() => {
+		totalOverdueWorkMain = 0;
+		totalNextWeekWorkMain = 0;
+		totalMoreThan7DaysMain = 0;
+		totalFinishMain = 0;
 		if(listUserOfCompany?.length || listProjectOfCompany?.length){
 			const dataOption = listUserOfCompany || listProjectOfCompany;
 			const data: any = dataOption?.map((item: any)=> {
@@ -43,7 +52,11 @@ const PcmUserPage: FC = () => {
 				const totalNextWeekWork: any = listTaskNextWeekWork?.find((item1: any) => item1._id == item._id)
 				const totalMoreThan7Days: any = listTaskMoreThan7Days?.find((item1: any) => item1._id == item._id)
 				const totalFinish: any = listTaskFinish?.find((item1: any) => item1._id == item._id)
-
+				// Tổng
+				totalOverdueWorkMain 	+= Number(totalOverdueWork?.count) || 0;
+				totalNextWeekWorkMain 	+= Number(totalNextWeekWork?.count) || 0;
+				totalMoreThan7DaysMain 	+= Number(totalMoreThan7Days?.count) || 0;
+				totalFinishMain 		+= Number(totalFinish?.count) || 0;
 				// Tính số phần trăm các việc của công ty
 				const percent = totalOverdueWork?.count || 0 + totalNextWeekWork?.count || 0 + totalMoreThan7Days?.count || 0;
 				const overdueWorkPercent = (totalOverdueWork?.count || 0/percent)*100 || 0;
@@ -106,27 +119,27 @@ const PcmUserPage: FC = () => {
 								<div className="flex items-center">
 									<div className="w-3 h-3 bg-cbs-schedule-expired" />
 									<span className="ml-1 text-primary-gray font-normal">
-										Quá hạn
+										Quá hạn({totalOverdueWorkMain})
 									</span>
 								</div>
 								<div className="flex items-center">
 									<div className="w-3 h-3 bg-cbs-schedule-nextweek" />
 									<span className="ml-1 text-primary-gray font-normal">
-										Tuần tới
+										Tuần tới({totalNextWeekWorkMain})
 									</span>
 								</div>
 								<div className="flex items-center">
 									<div className="w-3 h-3 bg-cbs-schedule-after-7days" />
 									<span className="ml-1 text-primary-gray font-normal">
 										{" "}
-										{">7 ngày"}
+										{">7 ngày"}({totalMoreThan7DaysMain})
 									</span>
 								</div>
 							</div>
 						</div>
 					</th>
 					<th className="py-2.5 px-3 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
-						Hoàn thành
+						Hoàn thành({totalFinishMain})
 					</th>
 				</tr>
 			</thead>
@@ -215,27 +228,27 @@ const PcmUserPage: FC = () => {
 								<div className="flex items-center">
 									<div className="w-3 h-3 bg-cbs-schedule-expired" />
 									<span className="ml-1 text-primary-gray font-normal">
-										Quá hạn
+										Quá hạn({totalOverdueWorkMain})
 									</span>
 								</div>
 								<div className="flex items-center">
 									<div className="w-3 h-3 bg-cbs-schedule-nextweek" />
 									<span className="ml-1 text-primary-gray font-normal">
-										Tuần tới
+										Tuần tới({totalNextWeekWorkMain})
 									</span>
 								</div>
 								<div className="flex items-center">
 									<div className="w-3 h-3 bg-cbs-schedule-after-7days" />
 									<span className="ml-1 text-primary-gray font-normal">
 										{" "}
-										{">7 ngày"}
+										{">7 ngày"}({totalMoreThan7DaysMain})
 									</span>
 								</div>
 							</div>
 						</div>
 					</th>
 					<th className="py-2.5 px-3 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
-						Hoàn thành
+						Hoàn thành({totalFinishMain})
 					</th>
 				</tr>
 			</thead>
