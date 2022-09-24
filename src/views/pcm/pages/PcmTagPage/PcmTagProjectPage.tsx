@@ -24,7 +24,7 @@ const PcmTagProjectPage: FC = () => {
         isGroup: 0,
         isParent: 0,
         projectsID: [projectID],
-        companyID: companyID ? [companyID] : "",
+        companyOfAuthorsID: companyID ? [companyID] : "",
         enabled: true,
     };
 
