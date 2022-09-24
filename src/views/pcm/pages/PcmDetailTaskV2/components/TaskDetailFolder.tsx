@@ -249,6 +249,7 @@ export const TaskDetailFolder: FC<Props> = ({
                 </div> */}
 
                 <TimeRange
+                    isOfficalTask={task.draft === 0}
                     fromDateDefault={moment(task.actualStartTime).format('MM/DD/YYYY')}
                     toDateDefault={moment(task.actualFinishTime).format('MM/DD/YYYY')}
                     toTimeDefault={moment(task.actualFinishTime).format('HH:mm')}

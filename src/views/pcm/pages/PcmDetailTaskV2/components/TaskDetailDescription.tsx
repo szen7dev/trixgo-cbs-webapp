@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import iconNote from "assets/images/icons8-note-48.svg";
 import { Editor } from "@tinymce/tinymce-react";
 import { Editor as EditorType } from "tinymce";
@@ -21,6 +21,7 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
 
     const editorRef = useRef<EditorType>();
     const [editDescription, setEditDescription] = useState(false);
+    const [isHasPermissionUpdateDescription, setIsPermissionUpdateDescription] = useState(false);
 
     const { updateTaskAsync } = useTask({});
 
@@ -38,6 +39,14 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
         }
     }
 
+    useEffect(() => {
+        if(task.subtype === 9 || task.subtype === 11) {
+            setIsPermissionUpdateDescription(true);
+        } else {
+            setIsPermissionUpdateDescription(task.draft === 1);
+        }
+    }, [task.subtype, task.draft])
+
     return (
         <div className={"task-description flex items-start mt-5"}>
             <span className={"mr-4"}>
@@ -50,13 +59,13 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                 }} />
                 <div className={"mt-2 editor"}>
                     {
-                        (!editDescription && !task.description) ?
+                        (!editDescription && isHasPermissionUpdateDescription) ?
                             <div
                                 onClick={() => setEditDescription(true)}
                                 className={"bg-cbs-form-input-bg border-0.5 border-primary-border px-4 pt-2 h-[60px] cursor-pointer rounded text-primary-gray"}>
                                 Biên soạn nội dung mô tả...
                             </div> : (
-                                !task.description ? (
+                                isHasPermissionUpdateDescription ? (
                                     <>
                                         <Editor
                                             onInit={(evt, editor) => {
@@ -149,7 +158,7 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                                                 {file.nameOrg} ({humanFileSize(file.size)})
                                             </a>
                                             <p className={"text-primary-gray text-xs"}>
-                                                {file.author?.bizfullname} - 
+                                                {file.author?.bizfullname} -
                                                  {moment(file.createAt).format('DD/MM/YYYY HH:mm')} {moment(file.createAt).fromNow()}
                                             </p>
                                         </div>
@@ -207,7 +216,7 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                                                 {file.nameOrg} ({humanFileSize(file.size)})
                                             </a>
                                             <p className={"text-primary-gray text-xs"}>
-                                                {file.author?.bizfullname} - 
+                                                {file.author?.bizfullname} -
                                                  {moment(file.createAt).format('DD/MM/YYYY HH:mm')} {moment(file.createAt).fromNow()}
                                             </p>
                                         </div>

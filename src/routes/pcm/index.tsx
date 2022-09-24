@@ -71,10 +71,11 @@ import ProjectAdminProjectDetail from "views/ppt/pages/ProjectAdminPage/pages/Pr
 import ProjectAdminProjectTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminProjectTab";
 import ProjectAdminPositionTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminPositionTab";
 const PcmDetailTaskV2             = lazy(() => import('views/pcm/pages/PcmDetailTaskV2'));
-const PcmTagPage             = lazy(() => import('views/pcm/pages/PcmTagPage'));
-const PcmTagProjectPage             = lazy(() => import('views/pcm/pages/PcmTagPage/PcmTagProjectPage'));
+const PcmTagPage                  = lazy(() => import('views/pcm/pages/PcmTagPage'));
+const PcmTagProjectPage           = lazy(() => import('views/pcm/pages/PcmTagPage/PcmTagProjectPage'));
 
 const PcmHomePage                 = lazy(() => import('views/pcm/pages/PcmHomeV2'));
+const PcmUserPage                 = lazy(() => import('views/pcm/pages/PcmUserPage'));
 const PcmReportPage               = lazy(() => import('views/pcm/pages/PcmReport'));
 const PcmTasksReportPage          = lazy(() => import('views/pcm/pages/PcmTasksReport'));
 // const PcmReportQuickPage          = lazy(() => import('views/pcm/pages/PcmReportQuick'));
@@ -161,6 +162,7 @@ const PCMRouter: FC = () => {
                   </LayoutSecondary>
                 </Route>
 
+                <Route exact path="/pcm/users/:tab?" component={() => <PcmUserPage />} />
                 <Route exact path="/pcm/bidding/:tab?" component={() => <PcmHomePage subtype={4} option={1} draft={0}/>} />
                 <Route exact path="/pcm/delivery/:tab?" component={() => <PcmHomePage subtype={9} type={2} option={2} draft={0}/>} />
                 <Route exact path="/pcm/payment/:tab?" component={() => <PcmHomePage subtype={3} type={2} option={3} draft={0}/>} />
@@ -179,243 +181,6 @@ const PCMRouter: FC = () => {
             </HomeLayout>
 
           </ProtectedRoute>
-
-          {/* <ProtectedRoute path="/pcm/project/:id">
-            <LayoutProjectSecondary>
-              <Switch>
-                <Route
-                  exact
-                  path="/pcm/project/:id/admin/:tab"
-                  component={ProjectAdminManagementPage}
-                />
-                <Route
-                  exact
-                  path="/pcm/project/:id/admin/:tab/:itemID"
-                  component={ProjectAdminManagementPage}
-                />
-                <Route
-                  exact
-                  path="/pcm/project/:id/admin/:tab/:itemID/members"
-                  component={ProjectAdminManagementPage}
-                />
-                <Route exact path="/pcm/project/:id/home" component={ProjectHomePage} />
-                <Route exact path="/pcm/project/:id/dashboard" component={ProjectDashboardPage} />
-                <Route exact path="/pcm/project/:id/responses" component={PcmReportQuickPage} />
-                <Route exact path="/pcm/project/:id/milestone/:milestoneID" component={ProjectMilestonePage} />
-                <Route exact path="/pcm/project/:id/folder" component={ProjectFolderPage} />
-                <Route exact path="/pcm/project/:id/folder/:groupID" component={ProjectFolderPage} />
-                <Route exact path="/pcm/project/:id/schedule" component={ProjectSchedulePage} />
-                <Route path="/pcm/project/:id/(budget|cash-flow|cash-flow-1|cash-flow-2)">
-                  <LayoutSecondary
-                    pages={[
-                      {
-                        id: "1",
-                        title: "Ngân sách",
-                        path: "/pcm/project/:id/budget",
-                        navExact: true,
-                      },
-                      {
-                        id: "2",
-                        title: "Kế hoạch thu",
-                        path: "/pcm/project/:id/cash-flow-1"
-                      },
-                      {
-                        id: "3",
-                        title: "Kế hoạch chi",
-                        path: "/pcm/project/:id/cash-flow-2"
-                      },
-                    ]}
-                  >
-                    <Route exact path="/pcm/project/:id/budget" component={ProjectBudgetPage} />
-                    <Route
-                      exact
-                      path="/pcm/project/:id/cash-flow-1"
-                      component={() => <ProjectCashFlowPlanPage outin={1} />}
-                    />
-                    <Route
-                      exact
-                      path="/pcm/project/:id/cash-flow-2"
-                      component={() => <ProjectCashFlowPlanPage outin={2} />}
-                    />
-                    <Route exact path="/pcm/project/:id/cash-flow/:cashFlowID/:outin" component={ProjectCashFlowPlanChildPage} />
-                  </LayoutSecondary>
-                </Route>
-                <Route exact path={["/pcm/project/:id/bidding", "/pcm/project/:id/bidding/(2|3)"]}>
-                  <LayoutSecondary
-                    pages={[
-                    ]}
-                  >
-                    <Route exact path="/pcm/project/:id/bidding" component={ProjectBiddingPage} />
-                    <Route
-                      exact
-                      path="/pcm/project/:id/bidding/2"
-                      component={() => <>Sample Data</>}
-                    />
-                    <Route
-                      exact
-                      path="/pcm/project/:id/bidding/3"
-                      component={() => <>Sample Data</>}
-                    />
-                  </LayoutSecondary>
-                </Route>
-                <Route exact path="/pcm/project/:id/payment" component={ProjectPaymentPage} />
-                <Route exact path="/pcm/project/:id/payment/company/:companyID/subtype/:subtype" component={ProjectSubjectCompanyOfAuthorPage} />
-                <Route exact path="/pcm/project/:id/subject" component={ProjectSubjectPage} />
-                <Route exact path="/pcm/project/:id/subject/company/:companyID" component={ProjectSubjectCompanyOfAssigneePage} />
-                <Route
-                  exact
-                  path={["/pcm/project/:id/document", "/pcm/project/:id/document/(1|2|3|4)"]}
-                >
-                  <LayoutSecondary
-                    pages={[
-                      {
-                        id: "1",
-                        title: "Danh sách",
-                        path: "/pcm/project/:id/document",
-                        navExact: true,
-                      },
-                      { id: "2", title: "Phân loại", path: "/pcm/project/:id/document/1" },
-                      { id: "3", title: "Danh bạ hệ thống", path: "/pcm/project/:id/document/2" },
-                      { id: "4", title: "Gói thầu", path: "/pcm/project/:id/document/3" },
-                    ]}
-                  >
-                    <ModalProvider>
-                      <Switch>
-                        <Route
-                          exact
-                          path="/pcm/project/:id/document"
-                          component={DocumentProjectPage}
-                        />
-                        <Route
-                          exact
-                          path="/pcm/project/:id/document/1"
-                          component={DocumentProfilePage}
-                        />
-                        <Route
-                          exact
-                          path="/pcm/project/:id/document/2"
-                          component={DocumenDatahubContactPage}
-                        />
-                        <Route
-                          exact
-                          path="/pcm/project/:id/document/3"
-                          component={DocumentFolderPage}
-                        />
-                      </Switch>
-                      <ModalCreateDocument />
-                    </ModalProvider>
-                  </LayoutSecondary>
-                </Route>
-                <Route
-                  exact
-                  path="/pcm/project/:id/document/1/type/:type"
-                  component={DocumentOfTypePage}
-                />
-                <Route
-                  exact
-                  path="/pcm/project/:id/document/1/datahubContact/:datahubContactID"
-                  component={DocumentOfTypePage}
-                />
-                <Route
-                  exact
-                  path="/pcm/project/:id/package/:packageID"
-                  component={DocumentOfPackagePage}
-                />
-                <Route exact path="/pcm/project/:id/group" component={PcmGroupPage} />
-                <Route exact path="/pcm/project/:id/group/:groupID" component={PcmTaskGroupPage} />
-                <Route exact path="/pcm/project/:id/document/:docID" component={DocumentDetailPage} />
-                <Route exact path="/pcm/project/:id/photo" component={ProjectPhotoPage} />
-                <Route
-                  exact
-                  path="/pcm/project/:id/photo/contract/:contractID"
-                  component={ProjectPhotoContractPage}
-                />
-                <Route path="/pcm/project/:id/drawing">
-                  <LayoutSecondary
-                    pages={[
-                      { id: "1", title: "Bản vẽ", path: "/pcm/project/:id/drawing", navExact: true },
-                    ]}
-                  >
-                    <Route exact path="/pcm/project/:id/drawing" component={ProjectDrawingPage} />
-                    <Route
-                      exact
-                      path="/pcm/project/:id/drawing/:documentID"
-                      component={ProjectDrawingPage}
-                    />
-                    <Route
-                      exact
-                      path="/pcm/project/:id/drawing/1"
-                      component={() => <>Sample Data</>}
-                    />
-                    <Route exact path="/pcm/project/:id/drawing/2" component={ProjectDrawing2Page} />
-                  </LayoutSecondary>
-                </Route>
-                <Route path="/pcm/project/:id/resource">
-                  <LayoutSecondary
-                    pages={[
-                      { id: "1", title: "Danh sách", path: "/pcm/project/:id/resource/1" },
-                      {
-                        id: "2",
-                        title: "Gói thầu",
-                        path: "/pcm/project/:id/resource",
-                        navExact: true,
-                      },
-                      { id: "3", title: "Báo cáo quản trị", path: "/pcm/project/:id/resource/2" },
-                    ]}
-                  >
-                    <Route exact path="/pcm/project/:id/resource" component={ProjectResourcePage} />
-                    <Route
-                      exact
-                      path="/pcm/project/:id/resource/1"
-                      component={() => <>Sample Data</>}
-                    />
-                    <Route
-                      exact
-                      path="/pcm/project/:id/resource/2"
-                      component={() => <>Sample Data</>}
-                    />
-                  </LayoutSecondary>
-                </Route>
-                <Route exact path="/pcm/project/:id/inspection" component={ProjectInspectionPage} />
-                <Route exact path="/pcm/project/:id/inspection/(tabs2|tabs3)">
-                  <LayoutSecondary
-                    pages={[
-                      {
-                        id: "1",
-                        title: "Tất cả",
-                        path: "/pcm/project/:id/inspection",
-                        navExact: true,
-                      },
-                      { id: "2", title: "Gói thầu", path: "/pcm/project/:id/inspection/tabs2" },
-                      {
-                        id: "3",
-                        title: "Báo cáo quản trị",
-                        path: "/pcm/project/:id/inspection/tabs3",
-                      },
-                    ]}
-                  >
-                    <Route
-                      exact
-                      path="/pcm/project/:id/inspection/tabs2"
-                      component={ProjectInspectionTab2Page}
-                    />
-                    <Route
-                      exact
-                      path="/pcm/project/:id/inspection/tabs3"
-                      component={ProjectInspectionTab3Page}
-                    />
-                  </LayoutSecondary>
-                </Route>
-                <Route exact path="/pcm/project/:id/directory" component={ProjectDirectoryPage} />
-                <Route
-                  exact
-                  path="/pcm/project/:id/inspection/:item"
-                  component={ProjectInspectionDetailPage}
-                />
-              </Switch>
-            </LayoutProjectSecondary>
-          </ProtectedRoute> */}
-          
         </Switch>
       </ProviderModalPcm>
     </ProviderModalMedia>
