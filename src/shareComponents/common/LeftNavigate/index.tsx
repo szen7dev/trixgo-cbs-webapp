@@ -2,7 +2,7 @@ import React, { FC, useCallback, useEffect, useRef, useState } from "react";
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
 import mailIcon from "assets/images/icons8-secure-mail-48.svg";
 import chatIcon from "assets/images/icons8-chat-48.svg";
-import iconSuppervision from "assets/images/iconstrx-suppervision-v1.svg";
+import iconInspection from "assets/images/icons-inspection.svg";
 import humanIcon from "assets/images/icons8-people-64.svg";
 import mediaIcon from "assets/images/icons8-commercial-64.svg";
 import financialIcon from "assets/images/icons8-financial-64.svg";
@@ -235,7 +235,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
                 : "")
             }
           >
-            <img width={'20px'} src={iconSuppervision} alt={"TVGS"} />
+            <img width={'20px'} src={iconInspection} alt={"TVGS"} />
           </div>
           <span className={"text-primary-gray mt-1"}>TVGS</span>
         </Link> : <></>}
