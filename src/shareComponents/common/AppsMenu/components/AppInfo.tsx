@@ -12,6 +12,7 @@ import operationLogo from "assets/logos/operation.png";
 import ownerLogo from "assets/logos/owner.png";
 import paymentLogo from "assets/logos/payment.png";
 import pcmLogo from "assets/logos/pcm.png";
+import projectLogo from "assets/logos/project.png";
 // import profileLogo from "assets/logos/profile.png";
 import qrcodeLogo from "assets/logos/qrcode.png";
 import reeLogo from "assets/logos/ree.png";
@@ -21,6 +22,7 @@ import workshopLogo from "assets/logos/workshop.png";
 import personalLogo from "assets/logos/personal.png";
 import messagesLogo from "assets/logos/messages.png";
 import budgetLogo from "assets/logos/budget.png";
+import inspectionLogo from "assets/logos/inspection.png";
 import defaultLogo from "assets/logos/default.png";
 
 /* createdAt:1/13/2022, 10:49:33 PM 
@@ -135,17 +137,17 @@ export const APP_INFO = new Map([
         route: '/financial/home'
     }],
     /* Ứng dụng Quản lý công việc */
-    ['5dfe4b9051dc622100bb9d89', {
-        key: "5dfe4b9051dc622100bb9d89",
+    ['5eabfdc72171391e5f6a0468', {
+        key: "5eabfdc72171391e5f6a0468",
         name: "Quản lý công việc",
         icon: pcmLogo,
         route: '/pcm/home'
     }],
     /* Ứng dụng Quản lý dự án */
-    ['5eabfdc72171391e5f6a0468', {
-        key: "5eabfdc72171391e5f6a0468",
+    ['5dfe4b9051dc622100bb9d89', {
+        key: "5dfe4b9051dc622100bb9d89",
         name: "Quản lý dự án",
-        icon: pcmLogo,
+        icon: projectLogo,
         route: '/pm/home'
     }],
     /* Ứng dụng Truyền thông */
@@ -175,5 +177,12 @@ export const APP_INFO = new Map([
         name: "Ngân sách",
         icon: budgetLogo,
         route: '/budget/home'
+    }],
+    /* Ứng dụng Tư vấn giám sát */
+    ['5dfe4bf251dc622100bb9d8c', {
+        key: "5dfe4bf251dc622100bb9d8c",
+        name: "Tư vấn giám sát",
+        icon: inspectionLogo,
+        route: '/inspection/home'
     }],
 ]);
