@@ -63,7 +63,7 @@ const BudgetRouterV2 = lazy(() => import("./budget/indexV2"));
 /*=====5.PAGES=====*/
 const ErrorPage = lazy(() => import("views/authentication/Error"));
 const HomeLayout = lazy(() => import("shareComponents/layouts"));
-const HumanLayout = lazy(() => import("views/human/shareComponents/layouts"));
+// const HumanLayout = lazy(() => import("views/human/shareComponents/layouts"));
 const HumanLayoutV2 = lazy(() => import("views/human/shareComponents/layoutsV2"));
 // const DocumentLayout = lazy(() => import('views/document/sharedComponents/layouts'));
 const AccountingLayout = lazy(() => import('views/accounting/shareComponents/layouts'));

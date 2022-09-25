@@ -72,7 +72,7 @@ export const BudgetLayoutV2: FC<Props> = ({ children }) => {
         <LeftNavigate handleMenuEvent={handleMenuEvent} />
         <section className={"main-content-wrapper flex-1"}>
           {/*  Main header */}
-          <MainHeaderV2 headerTitle={" "}>
+          <MainHeaderV2 headerTitle={"Quản lý ngân sách"}>
             <HomeHeaderContent />
           </MainHeaderV2>
 

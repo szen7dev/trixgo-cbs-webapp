@@ -27,35 +27,35 @@ export const FinancialLeftSideBar: FC = () => {
   const { listAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.FINANCIAL.id, type: "1" });
 
   return (
-    <div className="t-leftsidebar-navigation t-leftsidebar-navigation-v2 t-leftsidebar-navigation-type2 fixed left-64px top-14 bottom-0 transition-all duration-500 ease-out border-r border-secondary-light z-10 bg-primary-light">
-      <div className="t-leftsidebar-navigation-container overflow-auto transition-all duration-500 ease-out">
+    <div className="t-leftsidebar-navigation t-leftsidebar-navigation-v2 t-leftsidebar-navigation-type2 fixed left-64px top-14 bottom-0 transition-all duration-500 ease-out border-secondary-light z-10 bg-primary-light">
+      <div className="t-leftsidebar-navigation-container-v2  overflow-auto transition-all duration-500 ease-out p-3">
         {/* title */}
-        <div className="t-leftsidebar-title flex items-center py-2 pl-3 pr-3 font-bold">
+        {/* <div className="t-leftsidebar-title flex items-center py-2 pl-3 pr-3 font-bold">
           <img src={financialLogo } alt="Thumbnail" className="w-10 h-10 rounded-full mr-3" />
           <span>Quản trị tài chính</span>
-        </div>
+        </div> */}
 
         {/* menu block */}
         <div className="t-link-menu-container">
         {hasPermission && dataUserAccess?.level == 0 ?
             <NavLink
               to={`/financial/admin`}
-              className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3"
+              className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
             >
-              <img className="w-6 h-6 object-contain mr-3" src={'/images/pcm/admin.png'} alt="Menu item" />
-              <span className="truncate">Quản trị viên</span>
+              <img width={'20px'} src={'/images/pcm/admin.png'} alt="Menu item" />
+              <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản trị viên</span>
             </NavLink> : <></>
           }
           <NavLink
             to={`/financial/home`}
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3"
+            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
           >
             <img
-              className="w-6 h-6 object-contain mr-3"
+              width={'20px'}
               src={iconFolder}
               alt="Menu item"
             />
-            <span className="truncate">Trang chủ</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Trang chủ</span>
           </NavLink>
           
           {listAppMenu && listAppMenu.length ?
@@ -67,14 +67,14 @@ export const FinancialLeftSideBar: FC = () => {
                     <NavLink
                       key={index}
                       to={`/financial/${item.slug}`}
-                      className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3"
+                      className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
                     >
                       <img
-                        className="w-6 h-6 object-contain mr-3"
+                        width={'20px'}
                         src={iconFolder}
                         alt="Menu item"
                       />
-                      <span className="truncate">{item.name}</span>
+                      <span className={"flex-1 ml-2 text-left text-[14px]"}>{item.name}</span>
                     </NavLink>
                   )
                 };
