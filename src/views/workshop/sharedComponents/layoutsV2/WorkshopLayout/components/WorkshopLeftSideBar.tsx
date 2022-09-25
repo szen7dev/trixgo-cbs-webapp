@@ -34,7 +34,7 @@ const WorkshopLeftSideBar: FC = () => {
 
   return (
     <div className="t-leftsidebar-navigation t-leftsidebar-navigation-v2 t-leftsidebar-navigation-type2 fixed left-64px top-14 bottom-0 transition-all duration-500 ease-out border-secondary-light z-10 bg-primary-light">
-      <div className="t-leftsidebar-navigation-container-v2 t-leftsidebar-navigation-container overflow-auto transition-all duration-500 ease-out">
+      <div className="t-leftsidebar-navigation-container-v2  overflow-auto transition-all duration-500 ease-out p-3">
         {/* title */}
         <div className="flex items-center py-2 px-8 text-[14px] font-bold">
           <img

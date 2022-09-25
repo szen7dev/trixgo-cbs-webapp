@@ -23,18 +23,13 @@ export const MarketLeftSideBar: FC = () => {
 
   return (
       <div className="t-leftsidebar-navigation t-leftsidebar-navigation-v2 t-leftsidebar-navigation-type2 fixed left-64px top-14 bottom-0 transition-all duration-500 ease-out border-secondary-light z-10 bg-primary-light">
-          <div className="t-leftsidebar-navigation-container-v2 t-leftsidebar-navigation-container overflow-auto transition-all duration-500 ease-out">
-              {/* title */}
-              <div className="t-leftsidebar-title flex items-center py-2 pl-3 pr-3 text-[14px] font-bold">
-                  <img src={marketLogo} alt="Thumbnail" className="w-10 h-10 rounded-full mr-3" />
-                  <span>Thị trường</span>
-              </div>
+          <div className="t-leftsidebar-navigation-container-v2  overflow-auto transition-all duration-500 ease-out p-3">
 
               {/* menu block */}
               <div className="t-link-menu-container">
                   <Link to={`/market/home`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px] active">
-                      <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-                      <span className="truncate">Trang chủ</span>
+                      <img width={'20px'} src={iconFolder} alt="Menu item" />
+                      <span className={"flex-1 ml-2 text-left text-[14px]"}>Trang chủ</span>
                   </Link>
               </div>
           </div>
