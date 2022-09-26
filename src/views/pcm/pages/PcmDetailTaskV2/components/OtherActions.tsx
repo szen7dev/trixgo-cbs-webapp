@@ -8,11 +8,12 @@ import { usePcmPlanTaskCustom } from "services/hooks/pcm/usePcm";
 import { Loader } from "shareComponents/common";
 import { toast } from "react-toastify";
 import { createLinkAndClick } from 'utils';
-import { read, utils, writeFile } from 'xlsx';
+import { read, utils } from 'xlsx';
 import { useModal } from "services/hooks/useModal";
 import { ModalUpdateTaskNameDraft } from "./ModalUpdateTaskNameDraft";
 import { ModalConfirm } from "shareComponents/common";
 import { useTask } from "services/hooks/useTask";
+import { ModalMoveTaskToParent } from "./ModalMoveTaskToParent";
 
 type Props = {
     task: Task;
@@ -90,7 +91,7 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
 				return toast.warn(data?.message);
 			}
 
-			refetchTaskInfo?.();    
+			refetchTaskInfo?.();
             toast.success('Cập nhật thành công');
 		} catch (error) {
 			if(error instanceof Error)
@@ -182,6 +183,27 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                             In ấn - Mẫu phụ lục ảnh
                         </Link>
 
+                        <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
+                            onClick={() => {
+                                openModal(
+                                <div
+                                    className={
+                                    "inline-block w-[521px] my-8 text-left align-middle transition-all transform bg-primary-light shadow-xl"
+                                    }
+                                >
+                                    <ModalMoveTaskToParent
+                                        taskID={task._id}
+                                        projectID={task.project?._id}
+                                        closeModal={closeModal}
+                                        onConfirm={refetchTaskInfo}
+                                    />
+                                </div>
+                                )
+                            }}
+                        >
+                            Di chuyển đến công việc cha
+                        </button>
+
                         {task.draft === 1 && (
                             <>
                                 <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
@@ -228,7 +250,7 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                         >
                             Tải mẫu import excel
                         </button>
-                    
+
                         <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
                         >
                             <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
