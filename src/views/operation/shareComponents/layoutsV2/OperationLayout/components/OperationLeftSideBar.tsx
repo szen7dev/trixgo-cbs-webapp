@@ -1,6 +1,6 @@
 /*=====1.LIBRARY=====*/
 import { FC } from "react";
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 /*=====2.CSS=====*/
 
@@ -27,10 +27,10 @@ export const OperationLeftSideBar: FC = () => {
 
               {/* menu block */}
               <div className="t-link-menu-container">
-                  <Link to={`/operation/home`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                  <NavLink to={`/operation/home`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                       <img width={'20px'} src={iconFolder} alt="Menu item" />
                       <span className={"flex-1 ml-2 text-left text-[14px]"}>Trang chủ</span>
-                  </Link>
+                  </NavLink>
               </div>
           </div>
       </div>

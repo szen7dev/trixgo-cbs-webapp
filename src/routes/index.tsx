@@ -46,7 +46,8 @@ const PcmRouter = lazy(() => import('./pcm'));
 const PmRouter = lazy(() => import('./pm'));
 // const WorkshopRouter = lazy(() => import('./workshop'));
 const WorkshopRouterV2 = lazy(() => import('./workshop/indexV2'));
-const PersonalRouter = lazy(() => import("./personal"));
+// const PersonalRouter = lazy(() => import("./personal"));
+const PersonalRouterV2 = lazy(() => import("./personal/indexV2"));
 // const QrcodeRouter = lazy(() => import("./qrcode"));
 const QrcodeRouterV2 = lazy(() => import("./qrcode/indexV2"));
 // const ReeRouter = lazy(() => import("./ree"));
@@ -66,7 +67,8 @@ const HomeLayout = lazy(() => import("shareComponents/layouts"));
 // const HumanLayout = lazy(() => import("views/human/shareComponents/layouts"));
 const HumanLayoutV2 = lazy(() => import("views/human/shareComponents/layoutsV2"));
 // const DocumentLayout = lazy(() => import('views/document/sharedComponents/layouts'));
-const AccountingLayout = lazy(() => import('views/accounting/shareComponents/layouts'));
+// const AccountingLayout = lazy(() => import('views/accounting/shareComponents/layouts'));
+const AccountingLayoutV2 = lazy(() => import('views/accounting/shareComponents/layoutsV2'));
 const PcmPrintTaskTypeOnePage = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeOne'));
 const PcmPrintTaskTypeTwoPage = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeTwo'));
 const PcmPrintTaskTypeThreePage = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeThree'));
@@ -116,9 +118,9 @@ const Routes: FC = () => {
 
                                 {/* =====ACCOUNTING===== */}
                                 <Route path="/accounting/:fundaID">
-                                    <AccountingLayout>
+                                    <AccountingLayoutV2>
                                         <AccountingRouter />
-                                    </AccountingLayout>
+                                    </AccountingLayoutV2>
                                 </Route>
 
                                 {/* =====BIDDING===== */}
@@ -216,7 +218,7 @@ const Routes: FC = () => {
 
                                 {/* =====PERSONAL===== */}
                                 <Route path="/personal">
-                                    <PersonalRouter />
+                                    <PersonalRouterV2 />
                                 </Route>
 
                                 {/* =====SUPPORT===== */}
