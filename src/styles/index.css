@@ -446,7 +446,7 @@ button {
 }
 .home-layout.collapse-left .home-main-content-v2{
   width: 100%;
-  padding-left: 256px;
+  /* padding-left: 256px; */
 }
 .home-layout.active-right.collapse-left .home-main-content {
   width: 100%;
