@@ -54,13 +54,8 @@ const DatahubLeftSideBar: FC = () => {
 	const { user } = useAuth();
 
 	return (
-		<div className="t-leftsidebar-navigation t-leftsidebar-navigation-v2 t-leftsidebar-navigation-type2 fixed left-64px top-14 bottom-0 transition-all duration-500 ease-out border-r border-secondary-light z-10 bg-primary-light">
-			<div className="t-leftsidebar-navigation-container overflow-auto transition-all duration-500 ease-out">
-				{/* title */}
-				<div className="t-leftsidebar-title flex items-center py-2 pl-3 pr-3 text-[14px] font-bold">
-					<img src={user?.image ? `${process.env.REACT_APP_URL_S3_USER}/${user?.image}` : fakeThumbnail} alt="Thumbnail" className="w-10 h-10 rounded-full mr-3" />
-					<span>Datahub</span>
-				</div>
+		<div className="t-leftsidebar-navigation t-leftsidebar-navigation-v2 t-leftsidebar-navigation-type2 fixed left-64px top-14 bottom-0 transition-all duration-500 ease-out border-secondary-light z-10 bg-primary-light">
+			<div className="t-leftsidebar-navigation-container-v2  overflow-auto transition-all duration-500 ease-out p-3">
 
 				{/* menu block */}
 				<div className="t-link-menu-container">
@@ -73,10 +68,10 @@ const DatahubLeftSideBar: FC = () => {
 									exact={route.exact}
 									strict={route.strict}
 									isActive={route.isActive}
-									className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
+									className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
 								>
-									<img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-									<span className="truncate">{route.name}</span>
+									<img width={'20px'} src={iconFolder} alt="Menu item" />
+									<span className={"flex-1 ml-2 text-left text-[14px]"}>{route.name}</span>
 								</NavLink>
 							)
 						})
