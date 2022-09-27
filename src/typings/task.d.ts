@@ -91,6 +91,7 @@ export type Task = {
   createAt: string;
   author: Author;
   message?: string;
+  keyError?: string;
 };
 
 export interface addTaskPayload {
