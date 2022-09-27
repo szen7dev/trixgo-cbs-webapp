@@ -139,7 +139,7 @@ const CmcDashboardPage: FC = () => {
             </div>
           </div>
 
-          <p className="w-1/6 text-primary text-sm px-4">82%</p>
+          <p className="w-1/6 text-primary text-sm px-4 pt-3">82%</p>
         </div>
       </div>
       {/* end filter by year */}
@@ -149,9 +149,9 @@ const CmcDashboardPage: FC = () => {
         <div className="w-3/5 flex flex-col gap-2">
 
           <div className="flex justify-between gap-2">
-            <div className="w-1/3"><TotalRevenueReport /></div>
-            <div className="w-1/3"><AcceptanceReport /></div>
-            <div className="w-1/3"><MoneyBackReport /></div>
+            <div className="w-1/3 border	"><TotalRevenueReport /></div>
+            <div className="w-1/3 border	"><AcceptanceReport /></div>
+            <div className="w-1/3 border	"><MoneyBackReport /></div>
           </div>
 
           <div className="">
