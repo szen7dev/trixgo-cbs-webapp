@@ -20,6 +20,7 @@ interface UseContract {
     refetch: () => void;
     fetchNextPage: () => void;
     statisticalStatusByOntimeOnbudget?:any;
+    isFetching: boolean;
 }
 
 type Props = {
@@ -46,7 +47,8 @@ export const useContract = ({
         data,
         refetch,
         fetchNextPage,
-        hasNextPage
+        hasNextPage,
+        isFetching
     } = useInfiniteQuery(
         ['contracts', params],
         async ({ pageParam }: any) =>
@@ -90,7 +92,8 @@ export const useContract = ({
         hasNextPage,
         refetch,
         fetchNextPage,
-        statisticalStatusByOntimeOnbudget: statisticalStatusByOntimeOnbudgetInfo
+        statisticalStatusByOntimeOnbudget: statisticalStatusByOntimeOnbudgetInfo,
+        isFetching
     }
 }
 
@@ -110,7 +113,8 @@ export const useContractIsMembers = ({
         data,
         refetch,
         fetchNextPage,
-        hasNextPage
+        hasNextPage,
+        isFetching
     } = useInfiniteQuery(
         ['contracts', params],
         async ({ pageParam }: any) =>
@@ -146,7 +150,8 @@ export const useContractIsMembers = ({
         totalPage,
         hasNextPage,
         refetch,
-        fetchNextPage
+        fetchNextPage,
+        isFetching
     }
 }
 

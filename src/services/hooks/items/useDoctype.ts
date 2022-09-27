@@ -17,6 +17,7 @@ interface UseDoctype {
     insertAsync: (params: any) => Promise<any>;
     updateAsync: (params: any) => Promise<any>;
     deleteManyAsync: (ids: Array<string>) => Promise<any>;
+    isFetching: boolean;
 }
 
 type UseDocTypeParams = {
@@ -49,7 +50,8 @@ export const useDoctype = ({
         data,
         refetch,
         fetchNextPage,
-        hasNextPage
+        hasNextPage,
+        isFetching
     } = useInfiniteQuery(
         ['doctype--list', params],
         async ({ pageParam }: any) =>
@@ -83,6 +85,7 @@ export const useDoctype = ({
         insertAsync,
         updateAsync,
         deleteManyAsync,
+        isFetching
     }
 }
 
