@@ -270,7 +270,8 @@ export const useGetUsersBySystem = (companyID: string, keyword: string): any => 
                 return AuthenticationRepository.getListUsersBySystem({
                     lastestID: pageParam?.pageParam ? pageParam?.pageParam : "",
                     select: "bizfullname image",
-                    keyword: keyword
+                    keyword: keyword,
+                    companyID: companyID || ""
                 })
             },
             {

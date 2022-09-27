@@ -14,13 +14,14 @@ import { toast } from "react-toastify";
 type Props = {
   appID: string,
   companyID: string,
+  onlyUserCompany?: boolean;
 }
 
-export const ModalCreateMember: FC<Props> = ({ appID, companyID }) => {
+export const ModalCreateMember: FC<Props> = ({ appID, companyID, onlyUserCompany }) => {
   const LIMIT_PER_USER_APP = 20;
   const { closeModal } = useModal();
   const [keyword, setKeyword] = useState("");
-  const { listMembers, nextPageGetUsersBySystem, hasnextPageGetUsersBySystem, totalRecord } = useGetUsersBySystem(companyID, keyword);
+  const { listMembers, nextPageGetUsersBySystem, hasnextPageGetUsersBySystem, totalRecord } = useGetUsersBySystem(onlyUserCompany ? "" : companyID, keyword);
   const { addMemberToAppUserAsync, refetch } = useAppUser({ appID, companyID, limit: LIMIT_PER_USER_APP });
 
   const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
