@@ -91,6 +91,7 @@ export type Task = {
   createAt: string;
   author: Author;
   message?: string;
+  timeImportExcel?: string;
 };
 
 export interface addTaskPayload {
