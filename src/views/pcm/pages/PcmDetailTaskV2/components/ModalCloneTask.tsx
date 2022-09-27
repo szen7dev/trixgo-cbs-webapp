@@ -99,7 +99,8 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
     const {
         data: listDepartments,
         fetchNextPage: fetchNextPageListDepartment,
-        hasNextPage: hasNextPageListDepartment
+        hasNextPage: hasNextPageListDepartment,
+        isFetching: isFetchingListDepartment
     } = useQueryListDepartmentsIsMember({
         limit: 50,
         keyword: searchDepartmentValue,
@@ -109,7 +110,8 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
     const {
         data: listGroup,
         hasNextPage: hasNextPageListGroup,
-        fetchNextPage: fetchNextPageListGroup
+        fetchNextPage: fetchNextPageListGroup,
+        isFetching: isFetchingListGroup
     } = useQueryListGroup({
         keyword: searchGroupName,
         projectID: projectID,
@@ -120,6 +122,7 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
         listContracts: listContract,
         hasNextPage: hasNextPageListContract,
         fetchNextPage: fetchNextPageListContract,
+        isFetching: isFetchingListContract
     } = useContract({
         params: {
             contractID: task.contract?._id,
@@ -132,7 +135,8 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
     const {
         data: listUsersProject,
         hasNextPage: hasNextPageUsersProject,
-        fetchNextPage: fetchNextPageUsersProject
+        fetchNextPage: fetchNextPageUsersProject,
+        isFetching: isFetchingPageUsersProject
     } = useUserSystem({
         projectID,
         keyword: searchFriendName
@@ -297,21 +301,20 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
 
     const handleScroll = (e: UIEvent<HTMLDivElement>, type: 'project' | 'group' | 'contract' | 'user' | 'field') => {
         const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
-        const bottom = scrollHeight - scrollTop === clientHeight;
-
+        const bottom = scrollHeight - scrollTop >= clientHeight - 10;
         if (!bottom) return;
 
         switch (true) {
-            case (type === 'project' && hasNextPageListDepartment):
+            case (type === 'project' && hasNextPageListDepartment && !isFetchingListDepartment):
                 fetchNextPageListDepartment();
                 break;
-            case (type === 'group' && hasNextPageListGroup):
+            case (type === 'group' && hasNextPageListGroup && !isFetchingListGroup):
                 fetchNextPageListGroup();
                 break;
-            case (type === 'contract' && hasNextPageListContract):
+            case (type === 'contract' && hasNextPageListContract && !isFetchingListContract):
                 fetchNextPageListContract();
                 break;
-            case (type === 'user' && hasNextPageUsersProject):
+            case (type === 'user' && hasNextPageUsersProject && !isFetchingPageUsersProject):
                 fetchNextPageUsersProject();
                 break;
             default:

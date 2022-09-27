@@ -11,6 +11,7 @@ interface UseQueryListGroup {
     totalRecord: number;
     refetch: () => void;
     fetchNextPage: () => void;
+    isFetching: boolean;
 }
 
 export const useQueryListGroup = (params?: QueryParam, isFetch?: boolean): UseQueryListGroup => {
@@ -34,7 +35,8 @@ export const useQueryListGroup = (params?: QueryParam, isFetch?: boolean): UseQu
         data,
         refetch,
         fetchNextPage,
-        hasNextPage
+        hasNextPage,
+        isFetching
     } = result;
 
     const listGroup = []
@@ -51,6 +53,7 @@ export const useQueryListGroup = (params?: QueryParam, isFetch?: boolean): UseQu
         totalPages,
         totalRecord,
         refetch,
-        fetchNextPage
+        fetchNextPage,
+        isFetching
     }
 }

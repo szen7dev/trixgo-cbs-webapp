@@ -15,6 +15,7 @@ interface UseUserSystem {
     createUserSystemAsync: (payload: UserSystemPayload) => Promise<any>;
     updateUserSystemAsync: (payload: UserSystemPayload) => Promise<any>;
     deleteUserSystemAsync: (usersID: string[]) => Promise<any>;
+    isFetching: boolean;
 }
 
 export const useUserSystem = (params?: QueryParam, isFetch?: boolean): UseUserSystem => {
@@ -38,7 +39,8 @@ export const useUserSystem = (params?: QueryParam, isFetch?: boolean): UseUserSy
         data,
         refetch,
         fetchNextPage,
-        hasNextPage
+        hasNextPage,
+        isFetching
     } = useInfiniteQuery(
         ['list_users_system', params]
         , async ({ pageParam }: any) =>
@@ -71,7 +73,8 @@ export const useUserSystem = (params?: QueryParam, isFetch?: boolean): UseUserSy
         fetchNextPage,
         createUserSystemAsync,
         updateUserSystemAsync,
-        deleteUserSystemAsync
+        deleteUserSystemAsync,
+        isFetching
     }
 }
 

@@ -109,7 +109,7 @@ const PcmDetailTask: FC = () => {
   const { dispatch: responseDispatch } = useContext(ResponseContext);
   const { dispatch: commentDispatch } = useContext(CommentContext);
 
-  const { updateTaskAsync, copyTaskAsync } = useTask({});
+  const { updateTaskAsync } = useTask({});
 
   const { data: infoTask, refetch: refetchInfoTask, isLoading } = useQuery(`task_info.${id}`, () =>
     TaskRepository.taskInfo({ taskID: id }),
