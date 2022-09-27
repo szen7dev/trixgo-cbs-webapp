@@ -92,6 +92,7 @@ export type Task = {
   author: Author;
   message?: string;
   timeImportExcel?: string;
+  keyError?: string;
 };
 
 export interface addTaskPayload {

@@ -17,6 +17,9 @@ import CommentProvider from 'views/pcm/contexts/comment/comment.provider';
 import { toast } from "react-toastify";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { TaskDetailOpenedBidding } from "./components/TaskDetailOpenedBidding";
+import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
+import { useHistoryTraffics } from "services/hooks/auth/useAuth";
+import { APP_ID } from 'apis/localdb';
 
 const PcmDetailTaskV2: FC = () => {
     const [collapse, setCollapse] = useState(false);
@@ -40,6 +43,9 @@ const PcmDetailTaskV2: FC = () => {
         hasPermissionViewBidding: false,
     });
 
+    const { createHistoryTraffics } = useHistoryTraffics();
+    const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
+
     const { id: taskId } = useParams<{ id: string }>();
 
     const history = useHistory();
@@ -53,6 +59,12 @@ const PcmDetailTaskV2: FC = () => {
     });
 
     useEffect(() => {
+        createHistoryTraffics({
+            appID: APP_ID.PCM.id,
+            menuID: APP_ID.PCM.menuPcmProject.subject.id,
+            type: 1,
+        });
+
         (async () => {
             await updateStatusMultipleAsync({
                 taskIDs: [taskId],
@@ -62,11 +74,17 @@ const PcmDetailTaskV2: FC = () => {
     }, [])
 
     useEffect(() => {
-        if (taskInfo?.message === "permission_denied") {
+        if (!isSuccessApp || !taskInfo) return;
+        if (isSuccessApp && !hasPermission) {
+            toast.error("Bạn không có quyền truy cập tính năng này!");
+            return history.push("/");
+        };
+
+        if (taskInfo?.message === "permission_denied" || taskInfo?.keyError === "permission_denied") {
             toast.warn('Bạn không có quyền truy cập công việc này');
             return history.push(`/pcm/home`);
         }
-    }, [taskInfo?.message]);
+    }, [taskInfo, isSuccessApp, hasPermission])
 
     useEffect(() => {
         if (!taskInfo || !user) return;
