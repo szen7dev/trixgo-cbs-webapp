@@ -75,7 +75,7 @@ const CmcExpensePage: FC = () => {
   const handleFinishForm = useCallback(async (values, isEdit = false) => {
     let res: any
     if (isEdit) {
-      res = await updateContractExpenseAsync({ ...values, outin: 2 });
+      res = await updateContractExpenseAsync({ ...values });
     } else {
       res = await insertContractExpenseAsync({ ...values, outin: 2 });
     }
@@ -83,7 +83,7 @@ const CmcExpensePage: FC = () => {
     if (res.code && res.code !== 200) {
       return false;
     }
-
+    
     if (!res.error) {
       refetchContractsExpense()
       return true;

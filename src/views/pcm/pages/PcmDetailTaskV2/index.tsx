@@ -17,7 +17,6 @@ import CommentProvider from 'views/pcm/contexts/comment/comment.provider';
 import { toast } from "react-toastify";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { TaskDetailOpenedBidding } from "./components/TaskDetailOpenedBidding";
-import { calculateExpireTime } from 'utils/time';
 
 const PcmDetailTaskV2: FC = () => {
     const [collapse, setCollapse] = useState(false);
