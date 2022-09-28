@@ -104,7 +104,7 @@ export const ModalAddNewTask: FC = () => {
     fetchNextPage: fetchNextPageListDepartment,
     hasNextPage: hasNextPageListDepartment
   } = useQueryListDepartmentsIsMember({
-    limit: 50,
+    limit: 10,
     keyword: searchDepartmentValue,
     isFetch: true
   })
@@ -129,6 +129,7 @@ export const ModalAddNewTask: FC = () => {
     isFetching: isFetchingListGroup,
     fetchNextPage: fetchNextPageListGroup
   } = useQueryListGroup({
+    limit: 10,
     keyword: searchGroupName,
     projectID: projectID,
     isShowParentAndChild: true
@@ -141,6 +142,7 @@ export const ModalAddNewTask: FC = () => {
     isFetching: isFetchingListContract
   } = useContract({
     params: {
+      limit: 10,
       contractID: "",
       keyword: searchContract,
       projectID,
@@ -154,6 +156,7 @@ export const ModalAddNewTask: FC = () => {
     fetchNextPage: fetchNextPageUsersProject,
     isFetching: isFetchingPageUsersProject
   } = useUserSystem({
+    limit: 10,
     projectID,
     keyword: searchFriendName
   }, true);
