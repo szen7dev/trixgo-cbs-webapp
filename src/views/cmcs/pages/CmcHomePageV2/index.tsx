@@ -2,13 +2,17 @@ import React, {FC, useEffect, useState} from "react";
 import projectIcon from "assets/images/icons8-project-50.svg";
 import timetableIcon from "assets/images/icons8-timetable-48.svg";
 import {debounce} from "lodash";
-import {DropdownSearchableV2} from "shareComponents/common";
+import { createLinkAndClick } from 'utils';
+import { toast } from "react-toastify";
+import {DropdownSearchableV2, Loader} from "shareComponents/common";
 import {setFilterDropdown} from "redux/reducer/CmcsHomeSlice";
 import {useProjectCustom} from "services/hooks/items/useProject";
 import {useDispatch} from "react-redux";
 import PaginateV2 from "shareComponents/common/PaginateV2";
 import {useAppSelector} from "redux/reducer";
 import {useListAccessByContract, useListFilterContract} from "services/hooks/cmcs/useContract";
+// Hook dùng để export excel
+import { useContractCustom } from "services/hooks/cmcs/useContractIncome";
 import TriangleDown from "assets/icons/TriangleDown";
 import moment from "moment";
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
@@ -57,6 +61,10 @@ const CmcHomePageV2:FC = () => {
     const [ ontimes, setOntimes ]  = useState<string[]>([]);
     const [ onbudgets, setOnbudgets ]  = useState<string[]>([]);
 
+    const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+		isExporting: false,
+	});
+
     const {isLoading, totalRecord, totalPage, hasNextPage, listCmcsByFilterWithPager, fetchNextPageListCmcsByFilter} = useListFilterContract({
         params: {
             ...fromToDate,
@@ -70,6 +78,41 @@ const CmcHomePageV2:FC = () => {
         },
         isFetchList: true
     })
+
+    //Down load excel
+    const { exportContractAsync } = useContractCustom({});
+    const handleExportReport = async () => {
+        try {
+                setStateExport({ isExporting: true });
+                const { error, data } = await exportContractAsync({
+                    filterParams: {
+                        ...fromToDate,
+                        projectsID,
+                        buyerInfosID,
+                        sellerInfosID,
+                        statuss,
+                        ontimes,
+                        onbudgets,
+                        keyword: keywordInput
+                    },
+                    type: 'all'
+                });
+                if(error) {
+                    return toast.warn(data?.message);
+                }
+    
+                data && createLinkAndClick(data, '_self');
+            } catch (error: any) {
+          toast.error(error.message)
+            } finally {
+                setStateExport({ isExporting: false });
+            }
+      }
+    
+      if(stateExport.isExporting) {
+        return <Loader className="border-primary" />
+      }
+    
     return (
         <div className="cmcs-home flex flex-col h-full overflow-hidden">
             <div className={"sticky top-0 bg-white z-10"}>
@@ -379,8 +422,8 @@ const CmcHomePageV2:FC = () => {
 
                 <div className={"flex items-center"}>
                     <span className={"text-lg mx-4"}>Kết quả tìm kiếm</span>
-                    <button className={"flex items-center justify-center mx-3 ml-6"}>
-                        <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"}/>
+                    <button className={"flex items-center justify-center mx-3 ml-6"} onClick={handleExportReport}>
+                        <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"} />
                     </button>
                     {
                         recordSelected._id&&
