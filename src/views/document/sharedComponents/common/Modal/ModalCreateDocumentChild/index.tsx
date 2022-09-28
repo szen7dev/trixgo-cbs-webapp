@@ -164,9 +164,9 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 			},
 			{ title: "Cá nhân ban hành", data: listContactSender, name: "sender" },
 			{ title: "Nhận", data: listContactReceiver, name: "receiver" },
-			{ title: "Tính chất (*)", data: properties, name: "property" },
+			{ title: "Phân loại", data: properties, name: "property" },
 			{
-				title: "Phân loại (*)",
+				title: "Tính chất (*)",
 				data: DOCUMENT_TYPES.map((elm) => ({
 					_id: elm.value,
 					name: elm.text,
@@ -542,11 +542,11 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 										</div>
 
 										<div className="py-1.5 h-[30px] box-content">
-											<p className="py-1.5">Tổ chức ban hành</p>
+											<p className="py-1.5">Tổ chức ban hành (*)</p>
 										</div>
 										<div className="py-0.5 h-[30px] box-content px-2">
 											<DropdownSearchable
-												placeholder={"Tổ chức ban hành"}
+												placeholder={"Tổ chức ban hành (*)"}
 												className={"w-full flex-1"}
 												showTriangle={false}
 												maxWidthInput={"max-w-none"}

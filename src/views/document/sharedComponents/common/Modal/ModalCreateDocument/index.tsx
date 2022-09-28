@@ -172,9 +172,9 @@ export const ModalCreateDocument: React.FC = () => {
 			},
 			{ title: "Cá nhân ban hành", data: listContactSender, name: "sender" },
 			{ title: "Nhận", data: listContactReceiver, name: "receiver" },
-			{ title: "Tính chất (*)", data: properties, name: "property" },
+			{ title: "Phân loại", data: properties, name: "property" },
 			{
-				title: "Phân loại (*)",
+				title: "Tính chất (*)",
 				data: DOCUMENT_TYPES.map((elm) => ({
 					_id: elm.value,
 					name: elm.text,
