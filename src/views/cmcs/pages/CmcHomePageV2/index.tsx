@@ -542,7 +542,7 @@ const CmcHomePageV2:FC = () => {
                                     />
                                 </td>
                                 <td className={"border-0.5 border-primary-border py-3 px-2"}>
-                                    <Link to={`/cmcs/home/${cmcs._id}/tab/1`}>{cmcs.project.sign}.{cmcs.name} - {cmcs.sign}</Link>
+                                    <Link to={`/cmcs/home/${cmcs._id}/tab/1`}>{cmcs.project?.sign}.{cmcs?.name} - {cmcs?.sign}</Link>
                                 </td>
                                 <td className={"border-0.5 border-primary-border py-3 px-2"}>
                                     {moment(cmcs.date).format('DD/MM/YYYY')}
