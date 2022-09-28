@@ -20,6 +20,7 @@ import FilterIcon from "assets/images/icons8-filter.svg";
 // Import data từ API
 import { useCmcs } from 'services/hooks/useCmcs';
 import { useAuth } from "services/hooks/auth/useAuth";
+import CustomMap from "./components/CustomMap";
 const CmcDashboardPage: FC = () => {
 
   // --------- Check phân quyền
@@ -156,15 +157,15 @@ const CmcDashboardPage: FC = () => {
 
           <div className="">
             {/* biểu đồ */}
-            <RevenueOverTimeReport/>
+            <RevenueOverTimeReport />
           </div>
 
           <div className="flex gap-2">
             <div className="w-2/3">
               <RevenueBySectorReport />
             </div>
-            <div className="w-1/3">
-              công nợ
+            <div className="w-1/3 bg-primary-light px-3 py-2">
+              <div className="font-bold text-primary-gray text-lg">Công nợ</div>
             </div>
           </div>
 
@@ -173,11 +174,18 @@ const CmcDashboardPage: FC = () => {
         {/* right */}
         <div className="w-2/5 flex flex-col gap-2">
           {/* map */}
-          <div className="h-40">map here</div>
+          <div className="h-full bg-primary-light px-3 py-2">
+            <div className="font-bold text-primary-gray text-lg">Khu vực triển khai</div>
+            <CustomMap />
+          </div>
           {/* end map */}
           <div className="flex gap-2">
-            <div className="w-1/2 h-40">Bảo lãnh tạm ứng</div>
-            <div className="w-1/2 h-40">Bảo lãnh thực hiện hợp đồng</div>
+            <div className="w-1/2 h-40 bg-primary-light px-3 py-2">
+              <div className="font-bold text-primary-gray text-lg">Bảo lãnh tạm ứng</div>
+            </div>
+            <div className="w-1/2 h-40 bg-primary-light px-3 py-2">
+              <div className="font-bold text-primary-gray text-lg">Bảo lãnh thực hiện hợp đồng</div>
+            </div>
           </div>
         </div>
         {/* end right */}

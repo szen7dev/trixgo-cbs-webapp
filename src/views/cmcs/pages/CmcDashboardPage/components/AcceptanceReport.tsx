@@ -19,10 +19,6 @@ const AcceptanceReport: FC = () => {
               <span className="font-bold text-2xl">68 tỷ </span>
               <span className="text-xs text-primary-gray">(68%)</span>
             </div>
-            <div className="text-xs">
-              <span className="text-primary-gray">Mục tiêu: </span>
-              <span className="text-primary font-bold">100 tỷ</span>
-            </div>
           </div>
         </div>
       </div>
