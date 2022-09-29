@@ -239,3 +239,45 @@ export const useListFileFromSearch = (payload: any): any => {
     isFetching,
   };
 };
+
+export const usePcmCommentGetListByProperty = (payload: any): any => {
+  const data = useQuery(
+    [`usePcmCommentGetListByProperty`, payload],
+    async () => {
+      return pcmDashboardV2.pcmCommentGetListByProperty({
+        ...payload,
+      });
+    },
+    {
+      refetchOnWindowFocus: false,
+      enabled: payload.enabled === true ? true : false
+    }
+  );
+
+  return {
+    isLoading: data.isLoading,
+    listDataProject: data.data?.data?.listDataProject || [],
+    listDataProjectCompanyAuthor: data.data?.data?.listDataProjectCompanyAuthor || [],
+  }
+};
+
+export const usePcmPlanTaskGetListByProperty = (payload: any): any => {
+  const data = useQuery(
+    [`usePcmPlanTaskGetListByProperty`, payload],
+    async () => {
+      return pcmDashboardV2.pcmPlanTaskGetListByProperty({
+        ...payload,
+      });
+    },
+    {
+      refetchOnWindowFocus: false,
+      enabled: payload.enabled === true ? true : false
+    }
+  );
+  return {
+    isLoading: data.isLoading,
+    listDataProject: data.data?.data?.listDataProject || [],
+    listDataProjectCompany: data.data?.data?.listDataProjectCompany || [],
+    dataTotal: data?.data
+  }
+};

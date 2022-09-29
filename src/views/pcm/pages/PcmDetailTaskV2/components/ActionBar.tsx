@@ -52,7 +52,7 @@ export const ActionTaskDetailBar: FC<Props> = ({ checkAssigneeBid, task, user, r
             <div className={"flex items-center flex-1"}>
                 <button
                     className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mr-3"}
-                    onClick={() => history.push(`/pcm/home`)}
+                    onClick={() => history.goBack()}
                 >
                     <img src={iconBack} alt={"----"} className={"w-[18px]"} />
                 </button>

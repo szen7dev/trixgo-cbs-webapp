@@ -70,6 +70,7 @@ interface UseQueryListDepartmentIsMember {
     data: Array<Department.Department>;
     refetch: () => void;
     fetchNextPage: () => void;
+    isFetching: boolean;
 }
 
 type ListDepartmentIsMemberProps = {
@@ -102,7 +103,8 @@ export const useQueryListDepartmentsIsMember = (params?: ListDepartmentIsMemberP
         data,
         refetch,
         fetchNextPage,
-        hasNextPage
+        hasNextPage,
+        isFetching
     } = res;
 
     const listDepartments = []
@@ -122,7 +124,8 @@ export const useQueryListDepartmentsIsMember = (params?: ListDepartmentIsMemberP
         hasNextPage,
         nextCursor,
         refetch,
-        fetchNextPage
+        fetchNextPage,
+        isFetching
     }
 }
 

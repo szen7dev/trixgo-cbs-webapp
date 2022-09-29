@@ -8,11 +8,12 @@ import { usePcmPlanTaskCustom } from "services/hooks/pcm/usePcm";
 import { Loader } from "shareComponents/common";
 import { toast } from "react-toastify";
 import { createLinkAndClick } from 'utils';
-import { read, utils, writeFile } from 'xlsx';
+import { read, utils } from 'xlsx';
 import { useModal } from "services/hooks/useModal";
 import { ModalUpdateTaskNameDraft } from "./ModalUpdateTaskNameDraft";
 import { ModalConfirm } from "shareComponents/common";
 import { useTask } from "services/hooks/useTask";
+import { ModalMoveTaskToParent } from "./ModalMoveTaskToParent";
 
 type Props = {
     task: Task;
@@ -69,13 +70,13 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
 
                 if (sheets.length) {
                     const rows: any = utils.sheet_to_json(wb.Sheets[sheets[1]]); // Index=1 (tức Sheet số 2 từ trái sang)
-                    console.log(rows)
-
                     setDataImport(rows)
                 }
             }
             reader.readAsArrayBuffer(file);
         }
+        // Đọc xong thì xóa value trong input đi
+        $event.target.value = null;
     }
 
     // Cập nhật việc nháp sang chính thức
@@ -105,11 +106,12 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
         if(dataImport.length){
             const fetchData = async () => {
                 const data = await importTaskFromExcelAsync({ taskID: task._id, dataImport: JSON.stringify(dataImport) });
+                setDataImport([]);
                 refetchTaskInfo?.()
                 if(!data.error){
                     return toast.success("Import thành công");
                 }
-                return toast.success("Import thất bại");
+                return toast.error(data.message);
             }
             fetchData();
         }
@@ -180,6 +182,27 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                             In ấn - Mẫu phụ lục ảnh
                         </Link>
 
+                        <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
+                            onClick={() => {
+                                openModal(
+                                <div
+                                    className={
+                                    "inline-block w-[521px] my-8 text-left align-middle transition-all transform bg-primary-light shadow-xl"
+                                    }
+                                >
+                                    <ModalMoveTaskToParent
+                                        taskID={task._id}
+                                        projectID={task.project?._id}
+                                        closeModal={closeModal}
+                                        onConfirm={refetchTaskInfo}
+                                    />
+                                </div>
+                                )
+                            }}
+                        >
+                            Di chuyển đến công việc cha
+                        </button>
+
                         {task.draft === 1 && (
                             <>
                                 <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
@@ -190,12 +213,12 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                                             "inline-block w-[521px] h-[200px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
                                             }
                                         >
-                                            <ModalUpdateTaskNameDraft taskId={task._id} onConfirm={refetchTaskInfo} />
+                                            <ModalUpdateTaskNameDraft taskId={task._id} taskName={task.name} onConfirm={refetchTaskInfo} />
                                         </div>
                                         )
                                     }}
                                 >
-                                    Cập nhật tiêu đề công việc (việc nháp)
+                                    Cập nhật tiêu đề công việc
                                 </button>
                                 <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
                                     onClick={() => {
@@ -226,7 +249,7 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                         >
                             Tải mẫu import excel
                         </button>
-                    
+
                         <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
                         >
                             <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}

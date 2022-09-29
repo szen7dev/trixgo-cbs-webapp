@@ -13,7 +13,7 @@ import FolderIcon from "assets/images/icons8-folder.svg";
 import DownloadIcon from "assets/images/icons8-download-96.svg";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
-import { Create, Update, DeleteGroup } from "../../modal";
+import { Create, UpdateGroup, DeleteGroup } from "../../modal";
 import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
 import moment from "moment";
 
@@ -43,7 +43,11 @@ const FunctionalTab: FC = () => {
 		parentID: groupID,
 		projectID,
 		isShowAll: "1",
-		keyword
+		keyword,
+		populates: JSON.stringify({
+			path: 'contract',
+			select: '_id name sign'
+		})
 	}, true, false);
 
 	const { openModal } = useModal();
@@ -112,9 +116,9 @@ const FunctionalTab: FC = () => {
 					/>
 					{(idsChecked && idsChecked.length) ? (
 						<div className="flex items-center gap-2 border-l-2 border-primary-border px-4 ml-4">
-							<div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
+							{/* <div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
 								<img src={DownloadIcon} alt="Download" />
-							</div>
+							</div> */}
 							{idsChecked.length == 1 ?
 								<div
 									className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
@@ -122,11 +126,12 @@ const FunctionalTab: FC = () => {
 										openModal(
 											<div
 												className={
-													"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
+													"inline-block w-[521px] h-[360px] my-8 text-left align-middle transition-all transform bg-primary-light shadow-xl"
 												}
 											>
-												<Update 
-													item={listPcmPlanGroup.find((e: any)=> e._id == idsChecked[0])} 
+												<UpdateGroup
+													item={listPcmPlanGroup.find((e: any)=> e._id == idsChecked[0])}
+													projectID={projectID}
 													onConfirm={refetchPcmPlanGroup}
 												/>
 											</div>
@@ -145,7 +150,7 @@ const FunctionalTab: FC = () => {
 												"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
 											}
 										>
-											<DeleteGroup 
+											<DeleteGroup
 												idsChecked={idsChecked}
 												onConfirm={refetchPcmPlanGroup}
 											/>
@@ -168,8 +173,8 @@ const FunctionalTab: FC = () => {
 										"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
 									}
 								>
-									<Create 
-										projectID={projectID} 
+									<Create
+										projectID={projectID}
 										parentID={groupID}
 										onConfirm={refetchPcmPlanGroup}
 									/>

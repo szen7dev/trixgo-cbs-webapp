@@ -25,7 +25,7 @@ export const usePcmPlanGroup = (params: any, isFetch?: boolean, isFetchInfo?: bo
         enabled: isFetchInfo ?? false,
         refetchOnWindowFocus: false,
     });
-    
+
     // Danh sách group
     const {
         isLoading,

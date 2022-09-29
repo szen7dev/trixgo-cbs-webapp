@@ -2,6 +2,7 @@ import React, { FC, useCallback, useEffect, useRef, useState } from "react";
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
 import mailIcon from "assets/images/icons8-secure-mail-48.svg";
 import chatIcon from "assets/images/icons8-chat-48.svg";
+import iconInspection from "assets/images/icons-inspection.svg";
 import humanIcon from "assets/images/icons8-people-64.svg";
 import mediaIcon from "assets/images/icons8-commercial-64.svg";
 import financialIcon from "assets/images/icons8-financial-64.svg";
@@ -223,6 +224,20 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
             <img width={'20px'} src={contractIcon} alt={"Hợp đồng"} />
           </div>
           <span className={"text-primary-gray mt-1"}>Hợp đồng</span>
+        </Link> : <></>}
+        {checkPermissionApp('5dfe4bf251dc622100bb9d8c') ?
+        <Link to={`/inspection/home`} className={"flex flex-col items-center mb-3"}>
+          <div
+            className={
+              "px-4 py-1 rounded-full relative " +
+              (firstRoute === "inspection"
+                ? "bg-cbs-hightlight-right-navigate"
+                : "")
+            }
+          >
+            <img width={'20px'} src={iconInspection} alt={"TVGS"} />
+          </div>
+          <span className={"text-primary-gray mt-1"}>TVGS</span>
         </Link> : <></>}
       {checkPermissionApp('5e47867080019357cce04746') ?
         <Link to={`/document/home`} className={"flex flex-col items-center mb-3"}>

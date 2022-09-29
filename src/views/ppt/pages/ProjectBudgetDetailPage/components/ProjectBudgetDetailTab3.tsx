@@ -2,7 +2,7 @@ import React, { FC, useCallback, useState } from "react";
 
 import { useModal } from "services/hooks/useModal";
 import moment from "moment";
-import { DATE_FORMAT } from "apis/localdb/index";
+import { DATE_FORMAT, CONTRACT_IPC_TYPES } from "apis/localdb/index";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import { ContractIpcModal, ActionMenuTopBar } from "views/cmcs/shareComponents/common";
 import { formatNumberMoney } from "utils/cmcs"
@@ -252,6 +252,11 @@ export const ProjectBudgetDetailTab3:FC<Props> = ({ contractInfo }) => {
                                 </td>
                                 <td className={"border-0.5 border-primary-border p-2"}>
                                     {item.name}
+                                    <p>
+                                        <i className="text-primary-gray">{
+                                            item.type && CONTRACT_IPC_TYPES[item.type-1].text
+                                        }</i>
+                                    </p>
                                 </td>
                                 <td className={"border-0.5 border-primary-border p-2 text-right"}>
                                     {moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}

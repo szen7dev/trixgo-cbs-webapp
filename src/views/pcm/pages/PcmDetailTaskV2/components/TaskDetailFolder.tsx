@@ -1,5 +1,6 @@
 import { FC, useState, useMemo, useCallback, useEffect } from "react";
 import iconFolder from "assets/images/icons8-folder-48.svg";
+import iconSnooze from "assets/images/icons8-snooze-48.svg";
 import iconCheckmark from "assets/images/icons8-checkmark-yes-64.svg";
 import TimeRange from "./TimeRange";
 import moment from "moment";
@@ -44,12 +45,35 @@ export const TaskDetailFolder: FC<Props> = ({
     const { updateTaskAsync } = useTask({});
     const [isCurrentUserOpened, setCurrentUserOpened] = useState(isOpened !== undefined);
     const [, setUsersOpened] = useState(usersTaskOpened);
+    const [timeReminder, setTimeReminder] = useState("");
     const { current: socket }: any = useSocket();
     const { openModal, closeModal } = useModal();
 
     const isSigned = useMemo(() => {
         return task.signatures?.find(({ author }) => author._id === user?._id)
     }, [task.signatures, user?._id])
+
+    useEffect(() => {
+        switch (task.alert) {
+            case 0.4:
+                setTimeReminder("15 phút");
+                break;
+            case 1:
+                setTimeReminder("1 tiếng");
+                break;
+            case 2:
+                setTimeReminder("2 tiếng");
+                break;
+            case 24:
+                setTimeReminder("1 ngày");
+                break;
+            case 48:
+                setTimeReminder("2 ngày");
+                break;
+            default:
+                break;
+        }
+    }, [task.alert])
 
     useEffect(() => {
         const onEventOpenBidding = (result: any) => {
@@ -184,12 +208,18 @@ export const TaskDetailFolder: FC<Props> = ({
 
     const handleUpdateExpireTime = async (time: any) => {
         try {
-            const { error, data } = await updateTaskAsync({
-                taskID: task._id,
-                actualStartTime: time.fromDate,
-                actualFinishTime: time.toDate,
-                expiredHour: time.toTime,
-            })
+            let dataUpdate: any = { taskID: task._id, alert: time.remind };
+
+            if(!time.isOfficalTask) {
+                dataUpdate = {
+                    ...dataUpdate,
+                    actualStartTime: time.fromDate,
+                    actualFinishTime: time.toDate,
+                    expiredHour: time.toTime,
+                }
+            }
+
+            const { error, data } = await updateTaskAsync(dataUpdate);
 
             if (error) {
                 return toast.warning(data.message);
@@ -243,12 +273,15 @@ export const TaskDetailFolder: FC<Props> = ({
                     </button>
                 )}
 
-                {/* <div className={"flex items-center mx-6 text-primary-gray"}>
-                    <img src={iconSnooze} alt={"----"} className={"mr-2"} />
-                    <span>1 day</span>
-                </div> */}
+                {task.alert && (
+                    <div className={"flex items-center mx-5 text-primary-gray"}>
+                        <img src={iconSnooze} alt={"----"} className={"mr-1"} />
+                        <span>{timeReminder}</span>
+                    </div>
+                )}
 
                 <TimeRange
+                    isOfficalTask={task.draft === 0}
                     fromDateDefault={moment(task.actualStartTime).format('MM/DD/YYYY')}
                     toDateDefault={moment(task.actualFinishTime).format('MM/DD/YYYY')}
                     toTimeDefault={moment(task.actualFinishTime).format('HH:mm')}

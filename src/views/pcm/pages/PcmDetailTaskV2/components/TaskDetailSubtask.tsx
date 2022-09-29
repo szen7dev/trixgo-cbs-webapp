@@ -31,9 +31,9 @@ export const TaskDetailSubtask:FC<Props> = ({ task, userId }) => {
         isFetch: true,
     });
 
-    // useEffect(()=> {
-    //     console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-    // }, [])
+    useEffect(()=> {
+        refetchListTask();
+    }, [task.timeImportExcel])
 
     return (
         (task.subtype == 4 && task.assignee._id.toString() == userId?.toString()) ?  <></> : 

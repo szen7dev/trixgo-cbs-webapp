@@ -5,8 +5,7 @@ import { Route, Switch, matchPath } from "react-router-dom";
 /*=====2.PROVIDERS=====*/
 
 /*=====3.LAYOUTS=====*/
-import { BudgetLayout } from "views/budget/shareComponents/layouts";
-
+import { BudgetLayoutV2 } from "views/budget/shareComponents/layoutsV2";
 /*=====4.CONFIG ROUTE=====*/
 
 /*=====5.PAGES/COMPONENTS=====*/
@@ -19,7 +18,6 @@ import LayoutSecondary from "views/ppt/sharedComponents/layouts/LayoutSecondary"
 import BudgetAdminFunctionalTab from "views/budget/pages/BudgetAdminPage/pages/BudgetAdminFunctionalTab";
 import BudgetAdminDetail from "views/budget/pages/BudgetAdminPage/pages/BudgetAdminDetail";
 import BudgetAdminAuthorTab from "views/budget/pages/BudgetAdminPage/pages/BudgetAdminAuthorTab";
-import { BudgetLayoutV2 } from "views/budget/shareComponents/layoutsV2";
 
 const BudgetRouterV2: FC = () => {
     return (

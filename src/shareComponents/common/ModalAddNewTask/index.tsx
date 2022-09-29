@@ -100,10 +100,11 @@ export const ModalAddNewTask: FC = () => {
 
   const {
     data: listDepartments,
+    isFetching: isFetchingListDepartment,
     fetchNextPage: fetchNextPageListDepartment,
     hasNextPage: hasNextPageListDepartment
   } = useQueryListDepartmentsIsMember({
-    limit: 50,
+    limit: 10,
     keyword: searchDepartmentValue,
     isFetch: true
   })
@@ -111,7 +112,8 @@ export const ModalAddNewTask: FC = () => {
   const {
     // list: listDoctypes,
     hasNextPage: hasNextPageDoctypes,
-    fetchNextPage: fetchNextPageDoctypes
+    fetchNextPage: fetchNextPageDoctypes,
+    isFetching: isFetchingPageDoctypes
   } = useDoctype({
     params: {
       type: 2,
@@ -124,8 +126,10 @@ export const ModalAddNewTask: FC = () => {
   const {
     data: listGroup,
     hasNextPage: hasNextPageListGroup,
+    isFetching: isFetchingListGroup,
     fetchNextPage: fetchNextPageListGroup
   } = useQueryListGroup({
+    limit: 10,
     keyword: searchGroupName,
     projectID: projectID,
     isShowParentAndChild: true
@@ -135,8 +139,10 @@ export const ModalAddNewTask: FC = () => {
     listContracts,
     hasNextPage: hasNextPageListContract,
     fetchNextPage: fetchNextPageListContract,
+    isFetching: isFetchingListContract
   } = useContract({
     params: {
+      limit: 10,
       contractID: "",
       keyword: searchContract,
       projectID,
@@ -147,8 +153,10 @@ export const ModalAddNewTask: FC = () => {
   const {
     data: listUsersProject,
     hasNextPage: hasNextPageUsersProject,
-    fetchNextPage: fetchNextPageUsersProject
+    fetchNextPage: fetchNextPageUsersProject,
+    isFetching: isFetchingPageUsersProject
   } = useUserSystem({
+    limit: 10,
     projectID,
     keyword: searchFriendName
   }, true);
@@ -281,24 +289,23 @@ export const ModalAddNewTask: FC = () => {
 
   const handleScroll = (e: UIEvent<HTMLDivElement>, type: 'project' | 'group' | 'contract' | 'user' | 'field') => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
-    const bottom = scrollHeight - scrollTop === clientHeight;
-
+    const bottom = scrollHeight - scrollTop >= clientHeight - 10;
     if (!bottom) return;
 
     switch (true) {
-      case (type === 'project' && hasNextPageListDepartment):
+      case (type === 'project' && hasNextPageListDepartment && !isFetchingListDepartment):
         fetchNextPageListDepartment();
         break;
-      case (type === 'group' && hasNextPageListGroup):
+      case (type === 'group' && hasNextPageListGroup && !isFetchingListGroup):
         fetchNextPageListGroup();
         break;
-      case (type === 'contract' && hasNextPageListContract):
+      case (type === 'contract' && hasNextPageListContract && !isFetchingListContract):
         fetchNextPageListContract();
         break;
-      case (type === 'user' && hasNextPageUsersProject):
+      case (type === 'user' && hasNextPageUsersProject && !isFetchingPageUsersProject):
         fetchNextPageUsersProject();
         break;
-      case (type === 'field' && hasNextPageDoctypes):
+      case (type === 'field' && hasNextPageDoctypes && !isFetchingPageDoctypes):
         fetchNextPageDoctypes();
         break;
       default:

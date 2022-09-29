@@ -20,6 +20,7 @@ interface UseContract {
     refetch: () => void;
     fetchNextPage: () => void;
     statisticalStatusByOntimeOnbudget?:any;
+    isFetching: boolean;
 }
 
 type Props = {
@@ -40,13 +41,14 @@ export const useContract = ({
             refetchOnWindowFocus: false,
             enabled: isFetchInfo,
         });
-    
+
     const {
         isLoading,
         data,
         refetch,
         fetchNextPage,
-        hasNextPage
+        hasNextPage,
+        isFetching
     } = useInfiniteQuery(
         ['contracts', params],
         async ({ pageParam }: any) =>
@@ -62,7 +64,7 @@ export const useContract = ({
             enabled: isFetch
         }
     );
-    
+
     const listContracts = []
         .concat(...(data?.pages || [])
         .map((d: any) => d.data?.listRecords))
@@ -78,7 +80,7 @@ export const useContract = ({
         refetchOnWindowFocus: false,
         enabled: isFetchStatisticalStatusByOntimeOnbudget,
     });
-    
+
     const statisticalStatusByOntimeOnbudgetInfo = statisticalStatusByOntimeOnbudget?.data;
     return {
         contractInfo,
@@ -90,7 +92,8 @@ export const useContract = ({
         hasNextPage,
         refetch,
         fetchNextPage,
-        statisticalStatusByOntimeOnbudget: statisticalStatusByOntimeOnbudgetInfo
+        statisticalStatusByOntimeOnbudget: statisticalStatusByOntimeOnbudgetInfo,
+        isFetching
     }
 }
 
@@ -104,13 +107,14 @@ export const useContractIsMembers = ({
             refetchOnWindowFocus: false,
             enabled: isFetchInfo,
         });
-    
+
     const {
         isLoading,
         data,
         refetch,
         fetchNextPage,
-        hasNextPage
+        hasNextPage,
+        isFetching
     } = useInfiniteQuery(
         ['contracts', params],
         async ({ pageParam }: any) =>
@@ -126,7 +130,7 @@ export const useContractIsMembers = ({
             enabled: isFetch
         }
     );
-    
+
     const listContracts = []
         .concat(...(data?.pages || [])
         .map((d: any) => d.data?.listRecords))
@@ -146,7 +150,8 @@ export const useContractIsMembers = ({
         totalPage,
         hasNextPage,
         refetch,
-        fetchNextPage
+        fetchNextPage,
+        isFetching
     }
 }
 
@@ -214,7 +219,7 @@ interface UseQueryDetailContract {
 export const useQueryDetailContract = (params?: InfoContractPayload): UseQueryDetailContract => {
     const [detailContract, setDetailContract] = React.useState<any>({});
     const [loading, setLoading] = React.useState(false);
-    
+
     const onFetchDetailContract = React.useCallback(async (_params: InfoContractPayload): Promise<any> => {
         try {
             setLoading(true)

@@ -9,7 +9,7 @@ import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 import DownloadIcon from "assets/images/icons8-download-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
 import MemberIcon from "assets/images/member-icon.svg";
-import { CreateNewAdminMember, DeleteMembers, DeleteMembersGroup } from "../../modal";
+import { DeleteMembersGroup } from "../../modal";
 import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
 import { APP_ID } from "apis/localdb";
 

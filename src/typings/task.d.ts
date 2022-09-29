@@ -47,6 +47,7 @@ export type Task = {
   priority: number;
   risk: number;
   draft: number;
+  alert: number;
   expiredTime: string;
   typeStatus: number;
   checklist: string;
@@ -90,6 +91,8 @@ export type Task = {
   createAt: string;
   author: Author;
   message?: string;
+  timeImportExcel?: string;
+  keyError?: string;
 };
 
 export interface addTaskPayload {
@@ -120,6 +123,7 @@ export interface updateTaskPayload {
   actualStartTime?: string;
   actualFinishTime?: string;
   expiredHour?: string;
+  alert?: string | number;
   isAddSignature?: boolean;
   isOpenBidding?: boolean;
   flags?: Array<string>;

@@ -270,7 +270,50 @@ export const useGetUsersBySystem = (companyID: string, keyword: string): any => 
                 return AuthenticationRepository.getListUsersBySystem({
                     lastestID: pageParam?.pageParam ? pageParam?.pageParam : "",
                     select: "bizfullname image",
-                    keyword: keyword
+                    keyword: keyword,
+                })
+            },
+            {
+                getNextPageParam: ({ data }) => {
+                    return data?.nextCursor || undefined;
+                },
+                refetchOnWindowFocus: false,
+                enabled: true,
+            }
+        );
+    const listMembers = [].concat(...(dataGetUsersBySystem?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
+    const totalRecord = dataGetUsersBySystem?.pages[0]?.data?.totalRecord;
+    const totalPage = dataGetUsersBySystem?.pages[0]?.data?.totalPage;
+
+    return {
+        listMembers,
+        isLoadingGetUsersBySystem,
+        refetchGetUsersBySystem,
+        nextPageGetUsersBySystem,
+        hasnextPageGetUsersBySystem,
+        isFetchingGetUsersBySystem,
+        totalRecord,
+        totalPage,
+    };
+};
+
+export const useGetUsersByCompany = (companyID: string, keyword: string): any => {
+    const {
+        isLoading: isLoadingGetUsersBySystem,
+        refetch: refetchGetUsersBySystem,
+        data: dataGetUsersBySystem,
+        fetchNextPage: nextPageGetUsersBySystem,
+        hasNextPage: hasnextPageGetUsersBySystem,
+        isFetching: isFetchingGetUsersBySystem
+    } =
+        useInfiniteQuery(
+            [`users?companyID=${companyID}`, keyword],
+            async (pageParam: any) => {
+                return AuthenticationRepository.getListUsersBySystem({
+                    lastestID: pageParam?.pageParam ? pageParam?.pageParam : "",
+                    select: "bizfullname image",
+                    keyword: keyword,
+                    companyID: companyID || ""
                 })
             },
             {

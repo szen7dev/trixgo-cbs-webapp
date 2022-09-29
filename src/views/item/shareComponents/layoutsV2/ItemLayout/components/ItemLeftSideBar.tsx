@@ -8,299 +8,286 @@ export const ItemLeftSideBar: FC = () => {
   const { user } = useAuth();
 
   return (
-    <div className="t-leftsidebar-navigation t-leftsidebar-navigation-v2 t-leftsidebar-navigation-type2 fixed left-64px top-14 bottom-0 transition-all duration-500 ease-out border-r border-secondary-light z-10 bg-primary-light">
-      <div className="t-leftsidebar-navigation-container overflow-auto transition-all duration-500 ease-out">
-        {/* title */}
-        <div className="t-leftsidebar-title flex items-center py-2 pl-3 pr-3 text-[14px] font-bold">
-          <img
-            src={
-              user?.image
-                ? `${process.env.REACT_APP_URL_S3_USER}/${user?.image}`
-                : fakeThumbnail
-            }
-            alt="Thumbnail"
-            className="w-10 h-10 rounded-full mr-3"
-          />
-          <span>{user?.bizfullname}</span>
-        </div>
+    <div className="t-leftsidebar-navigation t-leftsidebar-navigation-v2 t-leftsidebar-navigation-type2 fixed left-64px top-14 bottom-0 transition-all duration-500 ease-out border-secondary-light z-10 bg-primary-light">
+      <div className="t-leftsidebar-navigation-container-v2  overflow-auto transition-all duration-500 ease-out p-3">
 
         {/* menu block */}
         <div className="t-link-menu-container">
           <NavLink
             to="/item/contact"
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
+            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
             title="Danh bạ"
           >
             <img
-              className="w-6 h-6 object-contain mr-3"
+              width={'20px'}
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className="truncate">Danh bạ công ty</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Danh bạ công ty</span>
           </NavLink>
           <NavLink
             to="/item/storage"
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
+            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
             title="Danh bạ"
           >
             <img
-              className="w-6 h-6 object-contain mr-3"
+              width={'20px'}
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className="truncate">Dụng cụ lưu trữ</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Dụng cụ lưu trữ</span>
           </NavLink>
           <NavLink
             to="/item/home/1"
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
+            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
             title="Lĩnh vực hồ sơ"
           >
             <img
-              className="w-6 h-6 object-contain mr-3"
+              width={'20px'}
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className="truncate">Lĩnh vực hồ sơ</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Lĩnh vực hồ sơ</span>
           </NavLink>
           <NavLink
             to="/item/home/2"
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
-            title="Tính chất hồ sơ"
+            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
+            title="Phân loại hồ sơ"
           >
             <img
-              className="w-6 h-6 object-contain mr-3"
+              width={'20px'}
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className="truncate">Tính chất hồ sơ</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Phân loại hồ sơ</span>
           </NavLink>
           <NavLink
             to="/item/home/3"
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
+            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
             title="Lĩnh vực kinh doanh"
           >
             <img
-              className="w-6 h-6 object-contain mr-3"
+              width={'20px'}
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className="truncate">Lĩnh vực kinh doanh</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Lĩnh vực kinh doanh</span>
           </NavLink>
           <NavLink
             to="/item/home/4"
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
+            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
             title="Phân loại khách hàng"
           >
             <img
-              className="w-6 h-6 object-contain mr-3"
+              width={'20px'}
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className="truncate">Phân loại khách hàng</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Phân loại khách hàng</span>
           </NavLink>
           <NavLink
             to="/item/home/5"
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
-            title="Phân loại công việc"
+            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
+            title="Tính chất công việc"
           >
             <img
-              className="w-6 h-6 object-contain mr-3"
+              width={'20px'}
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className="truncate">Phân loại công việc</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Tính chất công việc</span>
           </NavLink>
           <NavLink
             to="/item/home/6"
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
+            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
             title="Trình độ nhân sự"
           >
             <img
-              className="w-6 h-6 object-contain mr-3"
+              width={'20px'}
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className="truncate">Trình độ nhân sự</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Trình độ nhân sự</span>
           </NavLink>
           <NavLink
             to="/item/home/7"
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
+            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
             title="Chuyên ngành nhân sự"
           >
             <img
-              className="w-6 h-6 object-contain mr-3"
+              width={'20px'}
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className="truncate">Chuyên ngành nhân sự</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Chuyên ngành nhân sự</span>
           </NavLink>
           <NavLink
             to="/item/home/8"
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
+            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
             title="Loại hợp đồng lao động"
           >
             <img
-              className="w-6 h-6 object-contain mr-3"
+              width={'20px'}
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className="truncate">Loại hợp đồng lao động</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Loại hợp đồng lao động</span>
           </NavLink>
           <NavLink
             to="/item/home/9"
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
+            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
             title="Tình trạng làm việc"
           >
             <img
-              className="w-6 h-6 object-contain mr-3"
+              width={'20px'}
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className="truncate">Tình trạng làm việc</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Tình trạng làm việc</span>
           </NavLink>
           <NavLink
             to="/item/home/10"
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
+            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
             title="Thâm niên công tác"
           >
             <img
-              className="w-6 h-6 object-contain mr-3"
+              width={'20px'}
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className="truncate">Thâm niên công tác</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Thâm niên công tác</span>
           </NavLink>
           <NavLink
             to="/item/home/11"
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
+            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
             title="Phân loại giai đoạn CRM"
           >
             <img
-              className="w-6 h-6 object-contain mr-3"
+              width={'20px'}
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className="truncate">Phân loại giai đoạn CRM</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Phân loại giai đoạn CRM</span>
           </NavLink>
           <NavLink
             to="/item/home/12"
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
+            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
             title="Hồ sơ chi tiết CRM"
           >
             <img
-              className="w-6 h-6 object-contain mr-3"
+              width={'20px'}
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className="truncate">Hồ sơ chi tiết CRM</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Hồ sơ chi tiết CRM</span>
           </NavLink>
           <NavLink
             to="/item/home/13"
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
+            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
             title="Chức vụ nhân sự"
           >
             <img
-              className="w-6 h-6 object-contain mr-3"
+              width={'20px'}
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className="truncate">Chức vụ nhân sự</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Chức vụ nhân sự</span>
           </NavLink>
           <NavLink
             to="/item/home/14"
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
+            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
             title="Loại chứng chỉ nhân sự"
           >
             <img
-              className="w-6 h-6 object-contain mr-3"
+              width={'20px'}
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className="truncate">Loại chứng chỉ nhân sự</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Loại chứng chỉ nhân sự</span>
           </NavLink>
           <NavLink
             to="/item/home/15"
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
+            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
             title="Nội dung chứng chỉ nhân sự"
           >
             <img
-              className="w-6 h-6 object-contain mr-3"
+              width={'20px'}
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className="truncate">Nội dung chứng chỉ nhân sự</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Nội dung chứng chỉ nhân sự</span>
           </NavLink>
           <NavLink
             to="/item/home/16"
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
+            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
             title="Công nợ hợp đồng"
           >
             <img
-              className="w-6 h-6 object-contain mr-3"
+              width={'20px'}
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className="truncate">Công nợ hợp đồng</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Công nợ hợp đồng</span>
           </NavLink>
           <NavLink
             to="/item/home/17"
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
+            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
             title="Nguyên nhân phát sinh"
           >
             <img
-              className="w-6 h-6 object-contain mr-3"
+              width={'20px'}
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className="truncate">Nguyên nhân phát sinh</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Nguyên nhân phát sinh</span>
           </NavLink>
           <NavLink
             to="/item/home/18"
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
+            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
             title="Nguyên nhân thất bại"
           >
             <img
-              className="w-6 h-6 object-contain mr-3"
+              width={'20px'}
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className="truncate">Nguyên nhân thất bại</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Nguyên nhân thất bại</span>
           </NavLink>
           <NavLink
             to="/item/home/19"
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
+            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
             title="Các lỗi hay gặp"
           >
             <img
-              className="w-6 h-6 object-contain mr-3"
+              width={'20px'}
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className="truncate">Các lỗi hay gặp</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Các lỗi hay gặp</span>
           </NavLink>
           <NavLink
             to="/item/home/20"
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
+            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
             title="Đánh giá chất lượng"
           >
             <img
-              className="w-6 h-6 object-contain mr-3"
+              width={'20px'}
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className="truncate">Đánh giá chất lượng</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Đánh giá chất lượng</span>
           </NavLink>
           <NavLink
             to="/item/home/21"
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
+            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
             title="NPS-Điểm số"
           >
             <img
-              className="w-6 h-6 object-contain mr-3"
+              width={'20px'}
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className="truncate">NPS-Dịch vụ</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>NPS-Dịch vụ</span>
           </NavLink>
         </div>
       </div>

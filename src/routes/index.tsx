@@ -26,46 +26,49 @@ const SampleRouter = lazy(() => import("./sample"));
 // const BiddingRouter = lazy(() => import("./bidding"));
 const BiddingRouter = lazy(() => import("./bidding/v2"));
 const CmcsRouter = lazy(() => import("./cmcs"));
-const DatahubRouter = lazy(() => import("./datahub"));
+// const DatahubRouter = lazy(() => import("./datahub"));
 const DatahubRouterV2 = lazy(() => import("./datahub/indexV2"));
 // const DocumentRouter = lazy(() => import("./document"));
 const DocumentV2Router = lazy(() => import("./documentV2"));
 // const PPTRouter = lazy(() => import("./ppt"));
-const FinancialRouter = lazy(() => import("./financial"));
+// const FinancialRouter = lazy(() => import("./financial"));
 const FinancialRouterV2 = lazy(() => import("./financial/indexV2"));
-const HumanRouter = lazy(() => import("./human"));
-const MarketRouter = lazy(() => import("./market"));
+// const HumanRouter = lazy(() => import("./human"));
+// const MarketRouter = lazy(() => import("./market"));
 const MarketRouterV2 = lazy(() => import("./market/indexV2"));
 const MediaRouter = lazy(() => import("./media"));
 const MessagesRouter = lazy(() => import("./messages"));
-const OperationRouter = lazy(() => import("./operation"));
+// const OperationRouter = lazy(() => import("./operation"));
 const OperationRouterV2 = lazy(() => import("./operation/indexV2"));
-const OwnerRouter = lazy(() => import('./owner'));
+// const OwnerRouter = lazy(() => import('./owner'));
 const OwnerRouterV2 = lazy(() => import('./owner/indexV2'));
 const PcmRouter = lazy(() => import('./pcm'));
 const PmRouter = lazy(() => import('./pm'));
-const WorkshopRouter = lazy(() => import('./workshop'));
+// const WorkshopRouter = lazy(() => import('./workshop'));
 const WorkshopRouterV2 = lazy(() => import('./workshop/indexV2'));
-const PersonalRouter = lazy(() => import("./personal"));
-const QrcodeRouter = lazy(() => import("./qrcode"));
+// const PersonalRouter = lazy(() => import("./personal"));
+const PersonalRouterV2 = lazy(() => import("./personal/indexV2"));
+// const QrcodeRouter = lazy(() => import("./qrcode"));
 const QrcodeRouterV2 = lazy(() => import("./qrcode/indexV2"));
-const ReeRouter = lazy(() => import("./ree"));
+// const ReeRouter = lazy(() => import("./ree"));
 const ReeRouterV2 = lazy(() => import("./ree/indexV2"));
+const InspectionRouter = lazy(() => import("./inspection/index"));
 const SupportRouter = lazy(() => import("./support"));
-const TimesheetRouter = lazy(() => import("./timesheet"));
+// const TimesheetRouter = lazy(() => import("./timesheet"));
 const TimesheetRouterV2 = lazy(() => import("./timesheet/indexV2"));
-const ItemRouter = lazy(() => import("./item"));
+// const ItemRouter = lazy(() => import("./item"));
 const ItemRouterV2 = lazy(() => import("./item/indexV2"));
-const BudgetRouter = lazy(() => import("./budget"));
+// const BudgetRouter = lazy(() => import("./budget"));
 const BudgetRouterV2 = lazy(() => import("./budget/indexV2"));
 
 /*=====5.PAGES=====*/
 const ErrorPage = lazy(() => import("views/authentication/Error"));
 const HomeLayout = lazy(() => import("shareComponents/layouts"));
-const HumanLayout = lazy(() => import("views/human/shareComponents/layouts"));
+// const HumanLayout = lazy(() => import("views/human/shareComponents/layouts"));
 const HumanLayoutV2 = lazy(() => import("views/human/shareComponents/layoutsV2"));
 // const DocumentLayout = lazy(() => import('views/document/sharedComponents/layouts'));
-const AccountingLayout = lazy(() => import('views/accounting/shareComponents/layouts'));
+// const AccountingLayout = lazy(() => import('views/accounting/shareComponents/layouts'));
+const AccountingLayoutV2 = lazy(() => import('views/accounting/shareComponents/layoutsV2'));
 const PcmPrintTaskTypeOnePage = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeOne'));
 const PcmPrintTaskTypeTwoPage = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeTwo'));
 const PcmPrintTaskTypeThreePage = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeThree'));
@@ -92,7 +95,7 @@ const Routes: FC = () => {
 
                         <ModalProvider>
                             <Switch>
-
+                                {/* =====PRINT===== */}
                                 <Route exact path="/pcm/detail/:id/print/1" component={PcmPrintTaskTypeOnePage} />
                                 <Route exact path="/pcm/detail/:id/print/2" component={PcmPrintTaskTypeTwoPage} />
                                 <Route exact path="/pcm/detail/:id/print/3" component={PcmPrintTaskTypeThreePage} />
@@ -115,15 +118,10 @@ const Routes: FC = () => {
 
                                 {/* =====ACCOUNTING===== */}
                                 <Route path="/accounting/:fundaID">
-                                    <AccountingLayout>
+                                    <AccountingLayoutV2>
                                         <AccountingRouter />
-                                    </AccountingLayout>
+                                    </AccountingLayoutV2>
                                 </Route>
-
-                                {/* =====BUDGET===== */}
-                                {/* <Route path="/budget">
-                                    <BudgetRouter />
-                                </Route> */}
 
                                 {/* =====BIDDING===== */}
                                 <Route path="/bidding">
@@ -134,18 +132,6 @@ const Routes: FC = () => {
                                 <Route path="/cmcs">
                                     <CmcsRouter />
                                 </Route>
-
-                                {/* =====DATHUB===== */}
-                                {/* <Route path="/datahub">
-                                    <DatahubRouter />
-                                </Route> */}
-
-                                {/* =====DOCUMENT===== */}
-                                {/* <Route path="/document">
-                                    <DocumentLayout>
-                                        <DocumentRouter />
-                                    </DocumentLayout>
-                                </Route> */}
 
                                 {/* =====DOCUMENT V2===== */}
                                 <Route path="/document">
@@ -162,74 +148,66 @@ const Routes: FC = () => {
                                     <PmRouter />
                                 </Route>
 
-                                {/* =====FINANCIAL===== */}
-                                {/* <Route path="/financial">
-                                    <FinancialRouter />
-                                </Route> */}
-
-                                {/* =====HUMAN===== */}
-                                {/* <Route path="/human">
-                                    <HumanLayout>
-                                        <HumanRouter />
-                                    </HumanLayout>
-                                </Route> */}
-
-                                {/* =====V2===== */}
                                 {/* =====HUMAN===== */}
                                 <Route path="/human">
                                     <HumanLayoutV2>
                                         <HumanRouterV2 />
                                     </HumanLayoutV2>
                                 </Route>
-                                {/* =====financial===== */}
+
+                                {/* =====FINANCIAL===== */}
                                 <Route path="/financial">
                                     <FinancialRouterV2 />
                                 </Route>
+
                                 {/* =====ITEM===== */}
                                 <Route path="/item">
                                     <ItemRouterV2 />
                                 </Route>
+
                                 {/* =====DATHUB===== */}
                                 <Route path="/datahub">
                                     <DatahubRouterV2 />
                                 </Route>
+
                                 {/* =====OWNER===== */}
                                 <Route path="/owner">
                                     <OwnerRouterV2 />
                                 </Route>
+
                                 <Route path="/budget">
                                     <BudgetRouterV2 />
                                 </Route>
+
                                 {/* =====TIMESHEET===== */}
                                 <Route path="/timesheet">
                                     <TimesheetRouterV2 />
                                 </Route>
+
                                 {/* =====WORKSHOP===== */}
                                 <Route path="/workshop">
                                     <WorkshopRouterV2 />
                                 </Route>
+
                                 {/* =====MARKET===== */}
                                 <Route path="/market">
                                     <MarketRouterV2 />
                                 </Route>
+
                                 {/* =====QRCODE===== */}
                                 <Route path="/qrcode">
                                     <QrcodeRouterV2 />
                                 </Route>
+
                                 {/* =====OPERATION===== */}
                                 <Route path="/operation">
                                     <OperationRouterV2 />
                                 </Route>
+
                                 {/* =====REE===== */}
                                 <Route path="/ree">
                                     <ReeRouterV2 />
                                 </Route>
-                                {/* =====end V2===== */}
-
-                                {/* =====MARKET===== */}
-                                {/* <Route path="/market">
-                                    <MarketRouter />
-                                </Route> */}
 
                                 {/* =====MEDIA===== */}
                                 <Route path="/media">
@@ -238,55 +216,25 @@ const Routes: FC = () => {
                                     </HomeLayout>
                                 </Route>
 
-                                {/* =====OPERATION===== */}
-                                {/* <Route path="/operation">
-                                    <OperationRouter />
-                                </Route> */}
-
-                                {/* =====OWNER===== */}
-                                {/* <Route path="/owner">
-                                    <OwnerRouter />
-                                </Route> */}
-
                                 {/* =====PERSONAL===== */}
                                 <Route path="/personal">
-                                    <PersonalRouter />
+                                    <PersonalRouterV2 />
                                 </Route>
-
-                                {/* =====QRCODE===== */}
-                                {/* <Route path="/qrcode">
-                                    <QrcodeRouter />
-                                </Route> */}
-
-                                {/* =====REE===== */}
-                                {/* <Route path="/ree">
-                                    <ReeRouter />
-                                </Route> */}
 
                                 {/* =====SUPPORT===== */}
                                 <Route path="/support">
                                     <SupportRouter />
                                 </Route>
 
-                                {/* =====ITEM===== */}
-                                {/* <Route path="/item">
-                                    <ItemRouter />
-                                </Route> */}
-
-                                {/* =====WORKSHOP===== */}
-                                {/* <Route path="/workshop">
-                                    <WorkshopRouter />
-                                </Route> */}
-
                                 {/* =====MESSAGES===== */}
                                 <Route path="/messages">
                                     <MessagesRouter />
                                 </Route>
 
-                                {/* =====TIMESHEET===== */}
-                                {/* <Route path="/timesheet">
-                                    <TimesheetRouter />
-                                </Route> */}
+                                {/* =====SUPPERVISION===== */}
+                                <Route path="/inspection">
+                                    <InspectionRouter />
+                                </Route>
 
                                 {/* =====POLICY===== */}
                                 <Route

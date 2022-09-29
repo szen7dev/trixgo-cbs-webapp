@@ -26,6 +26,24 @@ const pcmDashboardV2 = {
     );
     return data;
   },
+  async pcmCommentGetListByProperty(payload: any): Promise<any> {
+    const { data } = await API.get<any>(
+      `${pcmURL}/pcm_comments/get-list-by-property`,
+      {
+        params: payload,
+      }
+    );
+    return data;
+  },
+  async pcmPlanTaskGetListByProperty(payload: any): Promise<any> {
+    const { data } = await API.get<any>(
+      `${pcmURL}/pcm_plan_tasks/get-list-by-property`,
+      {
+        params: payload,
+      }
+    );
+    return data;
+  },
 };
 
 export default pcmDashboardV2;

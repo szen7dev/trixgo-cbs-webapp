@@ -130,11 +130,11 @@ const TaskRepository = {
     );
     return data;
   },
-
+  
   async taskInfo(payload: TaskInfoParams): Promise<any> {
     const { data } = await API.get<any>(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl({
-        select: "name description type typeStatus status draft priority project contract parent checklist createAt field group author assignee related expiredTime startTime actualStartTime actualFinishTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures openedUsers comments amountComment amountResponse amountMarkedResponse startTime subtype flags milestone links openedStatus amountCurrentStatus amountSolution amountResponseOther accessUsers",
+        select: "name description type typeStatus status draft alert priority project contract parent checklist createAt field group author assignee related expiredTime startTime actualStartTime actualFinishTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures openedUsers comments amountComment amountResponse amountMarkedResponse startTime subtype flags milestone links openedStatus amountCurrentStatus amountSolution amountResponseOther accessUsers timeImportExcel",
         populates: populatesTask,
         ...payload
       })}`

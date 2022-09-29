@@ -139,7 +139,7 @@ export const SupportDocsManagementPage: FC = () => {
                     "inline-block w-[600px] h-[630px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded-lg"
                   }
                 >
-                  <ModalCreateMember appID={appID} companyID={companyID} />
+                  <ModalCreateMember appID={appID} companyID={companyID} onlyUserCompany/>
                 </div>
               )
             }

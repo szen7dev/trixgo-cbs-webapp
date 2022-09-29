@@ -19,6 +19,8 @@ import { toast } from "react-toastify";
 // import nextIcon from "assets/images/icons-arrow-next.svg";
 // import userAvt from "assets/images/task-user.svg";
 
+import { PCM_PROPOSAL_TASK, PCM_STATUS_TASK } from "apis/localdb/index";
+
 import { PcmHomeTab1 } from "./components/PcmHomeTab1";
 import { PcmHomeTab2 } from "./components/PcmHomeTab2";
 import { PcmHomeTab3 } from "./components/PcmHomeTab3";
@@ -151,35 +153,35 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
             <div className={"header-table flex px-4 w-full top-0 bg-white pb-4 flex-wrap"}>
                 <div className={"border-0.5 border-primary-border flex items-center"}>
                     {
-                        option == 1 &&
+                        option === 1 &&
                         <PcmHomeTab1 tab={tab} />
                     }
                     {
-                        option == 2 &&
+                        option === 2 &&
                         <PcmHomeTab2 tab={tab} />
                     }
                     {
-                        option == 3 &&
+                        option === 3 &&
                         <PcmHomeTab3 tab={tab} />
                     }
                     {
-                        option == 4 &&
+                        option === 4 &&
                         <PcmHomeTab4 tab={tab} />
                     }
                     {
-                        option == 5 &&
+                        option === 5 &&
                         <PcmHomeTab5 tab={tab} />
                     }
                     {
-                        option == 6 &&
+                        option === 6 &&
                         <PcmHomeTab6 tab={tab} />
                     }
                     {
-                        option == 7 &&
+                        option === 7 &&
                         <PcmHomeTab7 tab={tab} />
                     }
                     {
-                        option == 8 &&
+                        option === 8 &&
                         <PcmHomeTab8 tab={tab} />
                     }
                 </div>
@@ -222,7 +224,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
                                 <input className="form-check-input" type="checkbox" value="" id="check" />
                             </div>
                         </th>
-                        <th className={"w-4/12"}>
+                        <th className={"w-3/12"}>
                             Nội dung công việc
                         </th>
                         <th className={"w-1/12"}>
@@ -230,6 +232,9 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
                         </th>
                         <th className={"w-2/12"}>
                             Thực hiện
+                        </th>
+                        <th className={"w-1/12"}>
+                            Trạng thái
                         </th>
                         <th className={"w-1/12"}>
                             Tiến trình
@@ -261,6 +266,9 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
                                             <img src={`${process.env.REACT_APP_URL_S3_USER}/${item.assignee.image}`} alt={"----"} className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px] max-w-[24px] max-h-[24px] rounded-full overflow-hidden"} />
                                             <div className={"ml-2"}>{item.assignee.fullname ?? item.assignee.fullname}</div>
                                         </div>
+                                    </td>
+                                    <td className={"break-all"} style={{color: `#${PCM_STATUS_TASK[item.status - 1].backgroud}`}}>
+                                        {PCM_STATUS_TASK[item.status - 1].text}
                                     </td>
                                     <td>
                                         <p className={"mb-1 text-right text-secondary-gray"}>{item.percentage}%</p>

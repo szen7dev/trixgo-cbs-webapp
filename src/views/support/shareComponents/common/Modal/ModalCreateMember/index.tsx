@@ -6,7 +6,7 @@ import CloseIcon from "assets/images/icon-small-bold-close.svg";
 import SearchIcon from "assets/images/icons8-search.svg";
 import PolygonIcon from "assets/images/icon-polygon.svg";
 import MemberIcon from "assets/images/member-icon.svg";
-import { useGetUsersBySystem } from "services/hooks/auth/useAdmin";
+import { useGetUsersByCompany } from "services/hooks/auth/useAdmin";
 import { useAppUser } from 'services/hooks/apps/useAppUser';
 import debounce from "lodash/debounce";
 import { toast } from "react-toastify";
@@ -14,13 +14,14 @@ import { toast } from "react-toastify";
 type Props = {
   appID: string,
   companyID: string,
+  onlyUserCompany?: boolean;
 }
 
-export const ModalCreateMember: FC<Props> = ({ appID, companyID }) => {
+export const ModalCreateMember: FC<Props> = ({ appID, companyID, onlyUserCompany }) => {
   const LIMIT_PER_USER_APP = 20;
   const { closeModal } = useModal();
   const [keyword, setKeyword] = useState("");
-  const { listMembers, nextPageGetUsersBySystem, hasnextPageGetUsersBySystem, totalRecord } = useGetUsersBySystem(companyID, keyword);
+  const { listMembers, nextPageGetUsersBySystem, hasnextPageGetUsersBySystem, totalRecord } = useGetUsersByCompany(onlyUserCompany ? "" : companyID, keyword);
   const { addMemberToAppUserAsync, refetch } = useAppUser({ appID, companyID, limit: LIMIT_PER_USER_APP });
 
   const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
