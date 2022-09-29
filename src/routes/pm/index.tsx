@@ -32,8 +32,14 @@ import {
   ProjectInspectionTab2Page,
   ProjectInspectionTab3Page,
   ProjectInspectionDetailPage,
-
+  ProjectDashboardPortfolioPage,
+  ProjectDashboardTaskPage,
+  ProjectMarketPage,
 } from "views/ppt/pages";
+
+import {
+  DocumentDashboardPage,
+} from "views/document/pages";
 
 import ProjectAdminFunctionalTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminFunctionalTab";
 import ProjectAdminDetail from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminDetail";
@@ -135,6 +141,24 @@ const PCMRouter: FC = () => {
                 <Route exact path="/pm/projects/:tab?">
                   <PmLayout>
                     <ProjectCategoryPage/>
+                  </PmLayout>
+                </Route>
+
+                <Route exact path="/pm/dashboard-portfolio" >
+                  <PmLayout>
+                    <ProjectDashboardPortfolioPage/>
+                  </PmLayout>
+                </Route>
+
+                <Route exact path="/pm/dashboard-task" >
+                  <PmLayout>
+                    <ProjectDashboardTaskPage/>
+                  </PmLayout>
+                </Route>
+
+                <Route exact path="/pm/dashboard-document" >
+                  <PmLayout>
+                    <DocumentDashboardPage/>
                   </PmLayout>
                 </Route>
 

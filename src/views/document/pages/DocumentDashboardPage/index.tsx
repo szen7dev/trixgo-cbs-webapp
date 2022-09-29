@@ -146,24 +146,7 @@ export const DocumentDashboardPage: FC = () => {
 		fromDate: '2021-01-01',
 		toDate: '2099-01-01'
 	});
-	// const data: Array<IData> = Array.from(Array(30).keys()).map((_, i) => ({
-	// 	id: i,
-	// 	name: 'MAR.HAR.Court Yard By Marriott Ha Long Bay',
-	// 	director: 'Lê Lưu Phong-CPMI',
-	// 	secretary: 'Cao Thu Linh-CPMI',
-	// 	actions: {
-	// 		type: getType(i % 2),
-	// 		updateAt: getDate(i),
-	// 		name: 'Linh-CPMI'
-	// 	},
-	// 	comment: {
-	// 		user: 'Phùng Thị Hà-PGI',
-	// 		message: 'Hồ sơ dự án sao lâu không thấy cập nhật vậy chị Ngọc ơi, có vướng gì không?'
-	// 	},
-	// 	mediaId: i % 2 ? '61c6caf6f92c4e0d68779554' : '61c1ff7102022f1f1274edfb'
-	// }))
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const handleChange = (e: any) => {
 		setType(e.target.value);
 	};
@@ -176,7 +159,7 @@ export const DocumentDashboardPage: FC = () => {
 				<div className="flex flex-col bg-white text-cbs-subtext mt-4" style={{ height: "250px" }}>
 					<div className="flex justify-between flex-wrap items-center pl-6 pr-2.5">
 						<h3 className="text-x-large mt-2.5">Thống kê hồ sơ theo dự án/phòng ban</h3>
-						<div className="flex items-center mt-2.5">
+						{/* <div className="flex items-center mt-2.5">
 							<ul className="flex text-x-small" onChange={handleChange.bind(this)}>
 								<li className="pr-3 pl-1">
 									<label>
@@ -204,7 +187,7 @@ export const DocumentDashboardPage: FC = () => {
 								</li>
 							</ul>
 							<button className="rounded-md border border-cbs-border p-2">Chọn thời gian</button>
-						</div>
+						</div> */}
 					</div>
 					<div className="flex-1">
 						<StatisticalChart listProject={listProject} listAmountDocument={listAmountDocument}/>
