@@ -303,19 +303,6 @@ const PCMRouter: FC = () => {
                     </PmProjectLayout>
                   </Route>
 
-                  {/*<Route*/}
-                  {/*    exact*/}
-                  {/*    path="/pm/project/:id/document"*/}
-                  {/*    render={({match}) => <Redirect to={`/pm/project/${match.params.id}/document/type/1`}/>}*/}
-                  {/*/>*/}
-                  {/*<Route*/}
-                  {/*    exact*/}
-                  {/*    path="/pm/project/:id/document/type/:type"*/}
-                  {/*>*/}
-                  {/*  <PmProjectLayout>*/}
-                  {/*    <DocumentProjectPage/>*/}
-                  {/*  </PmProjectLayout>*/}
-                  {/*</Route>*/}
                   <Route
                     exact
                     path={["/pm/project/:id/document", "/pm/project/:id/document/:type(1|2|3|4)"]}
@@ -347,8 +334,6 @@ const PCMRouter: FC = () => {
                               }
                             }}
                           />
-                          {/* <Route exact path='/pcm/project/:id/document/3' component={DocumentReportPage} />
-                        <Route exact path='/pcm/project/:id/document/4' component={DocumentHistoryPage} /> */}
                         </Switch>
                         <ModalCreateDocument />
                       </PmProjectLayout>
@@ -404,8 +389,6 @@ const PCMRouter: FC = () => {
                             path="/pm/project/:id/document-v2/2/profile-type/:typeId"
                             component={DocumentProjectPublishOrgByProfileType}
                           />
-                          {/* <Route exact path='/pcm/project/:id/document/3' component={DocumentReportPage} />
-                        <Route exact path='/pcm/project/:id/document/4' component={DocumentHistoryPage} /> */}
                         </Switch>
                         <ModalCreateDocument />
                       </PmProjectLayout>
@@ -460,11 +443,6 @@ const PCMRouter: FC = () => {
                       <ProjectDrawingPageV2 />
                     </PmProjectLayout>
                   </Route>
-                  {/* <Route path="/pm/project/:id/drawing/:drawingID" render={(props) => (
-                        <PmProjectLayout>
-                          <ProjectDrawingPageV2 {...props}/>
-                        </PmProjectLayout>
-                    )}/> */}
 
                   <Route path="/pm/project/:id/resource">
                     <LayoutSecondary
@@ -494,12 +472,12 @@ const PCMRouter: FC = () => {
                   </Route>
 
                   <Route exact path="/pm/project/:id/inspection" component={ProjectInspectionPage}>
-                    <LayoutProjectSecondaryV2>
+                    <PmProjectLayout>
                       <ProjectInspectionPage />
-                    </LayoutProjectSecondaryV2>
+                    </PmProjectLayout>
                   </Route>
                   <Route exact path="/pm/project/:id/inspection/(tabs2|tabs3)">
-                    <LayoutProjectSecondaryV2>
+                    <PmProjectLayout>
                       <LayoutSecondary
                         pages={[
                           {
@@ -527,7 +505,7 @@ const PCMRouter: FC = () => {
                           component={ProjectInspectionTab3Page}
                         />
                       </LayoutSecondary>
-                    </LayoutProjectSecondaryV2>
+                    </PmProjectLayout>
                   </Route>
                   <Route exact path="/pm/project/:id/directory">
                     <PmProjectLayout>
