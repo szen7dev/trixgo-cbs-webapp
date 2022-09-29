@@ -11,7 +11,7 @@ const ProjectInspectionDetailPage: FC = () => {
 	}, []);
 
 	return (
-		<div className="flex flex-col overflow-hidden bg-cbs-gray h-full">
+		<div className="flex flex-col overflow-auto bg-cbs-gray h-full">
 			<div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1 shadow-cbs-md">
 				<button
 					type="button"
@@ -37,7 +37,7 @@ const ProjectInspectionDetailPage: FC = () => {
 				{/* <DropdownFilterButton /> */}
 				<GroupActions className="flex items-center flex-1" />
 			</div>
-			<div className="flex-1 overflow-y-auto pb-2">
+			<div className=" overflow-y-auto pb-2">
 				<div className="max-w-[791px] mx-auto py-4">
 					<div id="printarea" className="bg-white h-[970px] shadow-cbs-md">
 						<section className="text-large text-center px-6 pt-4">
