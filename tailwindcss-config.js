@@ -106,6 +106,8 @@ module.exports = {
                 "cbs-light-blue": "#E7F3FF",
                 "cbs-pink": "#FDF3F5",
                 "cbs-green-bg": "#EBFAF2",
+                "cbs-blue": "#1A97F5",
+                "cbs-bold-blue": "#206EC3",
                 "cbs-indeterminate": "#F7AF22",
                 "cbs-form-input-bg": "#F4F4F5",
                 "cbs-right-navigate-bg": "#eaf1fb",
