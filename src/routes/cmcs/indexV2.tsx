@@ -84,6 +84,15 @@ const CmcsRouterV2: FC = () => {
             />
             <ProtectedRoute
                 exact
+                path="/cmcs/dashboard"
+                component={() => (
+                    <CmcsLayoutV2>
+                        <CmcDashboardPage/>
+                    </CmcsLayoutV2>
+                )}
+            />
+            <ProtectedRoute
+                exact
                 path="/cmcs/income"
                 component={() => (
                     <CmcsLayoutV2>
@@ -192,15 +201,6 @@ const CmcsRouterV2: FC = () => {
                     <CmcsContractLayout>
                         <ContractAdminPage />
                     </CmcsContractLayout>
-                )}
-            />
-            <ProtectedRoute
-                exact
-                path="/cmcs/dashboard"
-                component={() => (
-                    <CmcsLayout>
-                        <CmcDashboardPage/>
-                    </CmcsLayout>
                 )}
             />
             <ProtectedRoute
