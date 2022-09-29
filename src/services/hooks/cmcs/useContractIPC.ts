@@ -2,7 +2,7 @@ import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 
 import ContractIPCRepository from 'apis/cmcs/contractIPC';
 import HumanRepository from 'apis/human';
-import ContractProduceRepository from "../../../apis/cmcs/contractProduce";
+import ContractProduceRepository from "apis/cmcs/contractProduce";
 
 type UseContractIPCProp = {
     listContractIPC: Array<any>;
@@ -174,3 +174,26 @@ export const useDetailContractIPCMutation = (id: string): any => {
         refetch: res.refetch,
     }
 }
+
+// Bắt đầu tạo hook download excel
+type UseContractCustom = {
+    exportContractIpcAsync: (payload: any) => Promise<any>,
+};
+
+type UseContractCustomParams = {
+    params?: any
+}
+
+export const useContractIpcCustom = ({
+    params = {}
+}: UseContractCustomParams) : UseContractCustom => {
+    const { mutateAsync: exportContractIpcAsync } =
+        useMutation((payload: any) =>
+            ContractIPCRepository.exportContractIpc(payload)
+        );
+
+    return {
+        exportContractIpcAsync
+    }
+}
+// Kết thúc tạo hook download excel

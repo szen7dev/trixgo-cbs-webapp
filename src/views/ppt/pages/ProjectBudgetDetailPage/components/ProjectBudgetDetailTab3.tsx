@@ -2,6 +2,9 @@ import React, { FC, useCallback, useState } from "react";
 
 import { useModal } from "services/hooks/useModal";
 import moment from "moment";
+import { toast } from "react-toastify";
+import downloadIcon from "assets/images/icons8-download-96.svg";
+
 import { DATE_FORMAT, CONTRACT_IPC_TYPES } from "apis/localdb/index";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import { ContractIpcModal, ActionMenuTopBar } from "views/cmcs/shareComponents/common";
@@ -10,18 +13,24 @@ import {useHistory, useLocation, useParams} from "react-router-dom";
 import {
     useCreateContractIPCMutation,
     useUpdateContractIPCMutation,
-    useDeleteContractIPCMutation, UseContractIPCListWithPager,
+    useDeleteContractIPCMutation, 
+    UseContractIPCListWithPager,
+    useContractIpcCustom
 } from "services/hooks/cmcs/useContractIPC";
 import {NavigateTabBudgetDetail} from "./NavigateTabBudgetDetail";
 import PaginateV2 from "shareComponents/common/PaginateV2";
 import iconBack from "assets/images/icon-back-gray.svg";
-
+import { createLinkAndClick } from 'utils';
+import {  Loader } from "shareComponents/common";
 interface Props {
     contractInfo: any
 };
 
 export const ProjectBudgetDetailTab3:FC<Props> = ({ contractInfo }) => {
-    // console.log(contractInfo)
+    const { exportContractIpcAsync } = useContractIpcCustom({});
+    const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+		isExporting: false,
+	});
 
     const { id: projectID, type, budgetId, tab } = useParams<{ id: string , type: string, budgetId: string, tab: string}>();
     const history = useHistory();
@@ -105,6 +114,31 @@ export const ProjectBudgetDetailTab3:FC<Props> = ({ contractInfo }) => {
         return false;
     }, [listContractIPCWithPager]);
 
+    const handleExportReport = async () => {
+        try {
+            setStateExport({ isExporting: true });
+            let conditionDownload;
+            if(itemChecked){
+                conditionDownload = { option: "1", ipcID: itemChecked };
+            }else{
+                conditionDownload = { option: "1", contractID: contractInfo._id  };
+            }
+            const { error, data } = await exportContractIpcAsync(conditionDownload);
+            if(error) {
+                return toast.warn(data?.message);
+            }
+            data && createLinkAndClick(data, '_self');
+        } catch (error: any) {
+            toast.error(error.message)
+        } finally {
+            setStateExport({ isExporting: false });
+        }
+    }
+    
+    if(stateExport.isExporting) {
+        return <Loader className="border-primary" />
+    }
+
     return (
         <>
             <div className={"sticky top-0 bg-white"}>
@@ -145,6 +179,9 @@ export const ProjectBudgetDetailTab3:FC<Props> = ({ contractInfo }) => {
                     {itemChecked && (
                         <ActionMenuTopBar deleteAction={handleDeleteAction} editAction={handleEditAction} updatePermission={true} deletePermission={true}/>
                     )}
+                     <button className={"flex items-center justify-center mx-3 ml-6"} onClick={handleExportReport}>
+                        <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"} />
+                    </button>
                     <PaginateV2
                         ref={ref}
                         totalRecord={totalRecord}
