@@ -106,11 +106,11 @@ const mappingData = (data: any, isDataPayLoad = false) => {
 
     budget: Number(data.budget) || 0,
     managementFee: Number(data.managementFee) || 0,
-    budgetVAT: Number(data.budgetVAT) || 0,
+    vatBudget: Number(data.vatBudget) || 0,
     subcontractFee: Number(data.subcontractFee) || 0,
     forecastBudget: Number(data.forecastBudget) || 0,
     expenses: Number(data.expenses) || 0,
-    forecastBudgetVAT: Number(data.forecastBudgetVAT) || 0,
+    forecastVatBudget: Number(data.forecastVatBudget) || 0,
     profit: Number(data.profit) || 0,
 
     cgValue: Number(data.cgValue) || 0,
@@ -1893,7 +1893,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                     </p>
                     <Field
                       type="text"
-                      name="budgetVAT"
+                      name="vatBudget"
                       className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="VAT ngân sách..."
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
@@ -1941,7 +1941,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                     <p className="text-primary-gray text-xs mb-2">VAT dự báo</p>
                     <Field
                       type="text"
-                      name="forecastBudgetVAT"
+                      name="forecastVatBudget"
                       className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="VAT dự báo..."
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
