@@ -90,6 +90,7 @@ export type Task = {
   amountCurrentStatus: number;
   amountResponseOther: number;
   createAt: string;
+  modifyAt: string;
   author: Author;
   message?: string;
   timeImportExcel?: string;
