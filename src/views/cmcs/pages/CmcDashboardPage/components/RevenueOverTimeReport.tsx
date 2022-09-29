@@ -69,7 +69,6 @@ const options = {
   layout: {
     padding: {
       top: 30,
-      right: 100,
     },
   },
   scales: {
