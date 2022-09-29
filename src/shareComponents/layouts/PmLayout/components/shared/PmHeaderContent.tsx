@@ -21,12 +21,12 @@ export const PmHeaderContent:FC = () => {
     return (
         <>
             <div ref={wrapperClass} className={"w-[600px] relative"}>
-                <div className={"absolute left-0 flex items-center px-4 justify-center h-full"}>
+                {/* <div className={"absolute left-0 flex items-center px-4 justify-center h-full"}>
                     <img src={searchIcon} alt={"search icon"}/>
                 </div>
                 <input
                     onChange={e => handleSearchChange(e)}
-                    className={"pl-12 w-full h-[45px] bg-cbs-bg-input-search rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-none focus:bg-white focus:shadow-md transition-all"} placeholder={"Tìm kiếm dự án"}/>
+                    className={"pl-12 w-full h-[45px] bg-cbs-bg-input-search rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-none focus:bg-white focus:shadow-md transition-all"} placeholder={"Tìm kiếm dự án"}/> */}
 
                 {
                     showResult &&
