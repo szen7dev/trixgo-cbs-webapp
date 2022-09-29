@@ -47,6 +47,8 @@ export const ActionTaskDetailBar: FC<Props> = ({ checkAssigneeBid, task, user, r
         setActiveCopyTextTooltip(false);
     }
 
+    if(!user) return null;
+
     return (
         <div className={"action-bar z-10 bg-white flex items-center px-2 py-1 border-b-0.5 border-primary-border sticky top-0"}>
             <div className={"flex items-center flex-1"}>

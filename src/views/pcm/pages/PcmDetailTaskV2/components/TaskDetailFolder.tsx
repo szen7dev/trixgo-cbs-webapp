@@ -273,7 +273,7 @@ export const TaskDetailFolder: FC<Props> = ({
                     </button>
                 )}
 
-                {task.alert && (
+                {task.alert > 0 && (
                     <div className={"flex items-center mx-5 text-primary-gray"}>
                         <img src={iconSnooze} alt={"----"} className={"mr-1"} />
                         <span>{timeReminder}</span>

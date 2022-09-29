@@ -21,6 +21,10 @@ import FilterIcon from "assets/images/icons8-filter.svg";
 import { useCmcs } from 'services/hooks/useCmcs';
 import { useAuth } from "services/hooks/auth/useAuth";
 import CustomMap from "./components/CustomMap";
+import DebtChart from "./components/DebtChart";
+import { AdvanceGuarantee } from "./components/AdvanceGuarantee";
+import { ContractPerformanceGuarantee } from "./components/ContractPerformanceGuarantee";
+import FilterDropdown from "./components/FilterDropdown";
 const CmcDashboardPage: FC = () => {
 
   // --------- Check phân quyền
@@ -61,7 +65,7 @@ const CmcDashboardPage: FC = () => {
               Công ty Cổ phần CONINCO Quản lý dự án và đầu tư
             </span>
             <div className="w-14 h-10 flex items-center justify-center rounded ml-2">
-              <img src={FilterIcon} alt="Filter" />
+              <FilterDropdown/>
             </div>
           </div>
         </div>
@@ -73,7 +77,7 @@ const CmcDashboardPage: FC = () => {
           <button
             // onClick={() => setFilter("all")}
             className={
-              "py-1 px-4 mx-2 rounded-full border border-primary-border "
+              "py-1 px-4 mx-2 rounded-full border border-primary-border text-white bg-cbs-secondary border-none"
               // +
               // (filter === "all"
               //   ? "text-white bg-cbs-secondary border-none"
@@ -160,12 +164,15 @@ const CmcDashboardPage: FC = () => {
             <RevenueOverTimeReport />
           </div>
 
-          <div className="flex gap-2 m-h-[222px]">
+          <div className="flex gap-2 h-[222px]">
             <div className="w-2/3">
               <RevenueBySectorReport />
             </div>
-            <div className="w-1/3 bg-primary-light px-3 py-2">
+            <div className="w-1/3 bg-primary-light px-6 py-4">
               <div className="font-bold text-primary-gray text-lg">Công nợ</div>
+              <div className="w-full">
+                <DebtChart />
+              </div>
             </div>
           </div>
 
@@ -174,17 +181,23 @@ const CmcDashboardPage: FC = () => {
         {/* right */}
         <div className="w-2/5 flex flex-col gap-2">
           {/* map */}
-          <div className="h-full bg-primary-light px-3 py-2">
+          <div className="h-full bg-primary-light px-6 py-4 flex	flex-col gap-4">
             <div className="font-bold text-primary-gray text-lg">Khu vực triển khai</div>
             <CustomMap />
           </div>
           {/* end map */}
-          <div className="flex gap-2 m-h-[222px]">
-            <div className="w-1/2 h-40 bg-primary-light px-3 py-2">
+          <div className="flex gap-2">
+            <div className="w-1/2  h-[222px] bg-primary-light px-6 py-4">
               <div className="font-bold text-primary-gray text-lg">Bảo lãnh tạm ứng</div>
+              <div>
+                <AdvanceGuarantee />
+              </div>
             </div>
-            <div className="w-1/2 h-40 bg-primary-light px-3 py-2">
+            <div className="w-1/2 h-[222px] bg-primary-light px-6 py-4">
               <div className="font-bold text-primary-gray text-lg">Bảo lãnh thực hiện hợp đồng</div>
+              <div>
+                <ContractPerformanceGuarantee />
+              </div>
             </div>
           </div>
         </div>

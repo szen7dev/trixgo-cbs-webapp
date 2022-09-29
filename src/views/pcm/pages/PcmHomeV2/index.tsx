@@ -240,6 +240,9 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
                             Tiến trình
                         </th>
                         <th className={""}>
+                            Cập nhật gần nhất
+                        </th>
+                        <th className={""}>
                             Mô tả
                         </th>
                     </thead>
@@ -275,6 +278,9 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
                                         <div className={"relative w-full h-[4px] rounded-full border-0.5 border-primary-border bg-cbs-task-assign-progress-bg"}>
                                             <div className={"absolute h-full left-0 top-0 bg-cbs-schedule-expired"} style={{ width: `${item.percentage}%` }}></div>
                                         </div>
+                                    </td>
+                                    <td className="text-[14px]">
+                                        {moment(item.modifyAt).format("DD/MM/YYYY HH:mm")}
                                     </td>
                                     <td className={"break-all"}>
                                         {subContentHtml(item.description)}
