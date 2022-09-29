@@ -160,7 +160,7 @@ const CmcDashboardPage: FC = () => {
             <RevenueOverTimeReport />
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex gap-2 m-h-[222px]">
             <div className="w-2/3">
               <RevenueBySectorReport />
             </div>
@@ -179,7 +179,7 @@ const CmcDashboardPage: FC = () => {
             <CustomMap />
           </div>
           {/* end map */}
-          <div className="flex gap-2">
+          <div className="flex gap-2 m-h-[222px]">
             <div className="w-1/2 h-40 bg-primary-light px-3 py-2">
               <div className="font-bold text-primary-gray text-lg">Bảo lãnh tạm ứng</div>
             </div>
