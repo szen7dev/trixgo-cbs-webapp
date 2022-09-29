@@ -765,7 +765,7 @@ export const APP_ID = {
         menuCmcsApp: {
             id: "623f22b1e998e94feda0cd8b",                   // type = 1
             dashboard: {
-                id: "623f22c2e998e94feda0cd90",
+                id: "6334e682e3fbde2ef11b7925",
                 name: "Báo cáo quản trị"
             },
             income: {

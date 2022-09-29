@@ -64,7 +64,7 @@ export const HomeHeaderContent: FC = () => {
     useSearchTask({
       params: {
         keyword: keywordSearchForSubject,
-        isParent: "1",
+        isParent: "0",
         isActive: "1",
       },
       isFetch: keywordSearchForSubject ? true : false,

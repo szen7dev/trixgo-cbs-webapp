@@ -25,7 +25,8 @@ const AuthenticationRouter = lazy(() => import("./authentication"));
 const SampleRouter = lazy(() => import("./sample"));
 // const BiddingRouter = lazy(() => import("./bidding"));
 const BiddingRouter = lazy(() => import("./bidding/v2"));
-const CmcsRouter = lazy(() => import("./cmcs"));
+// const CmcsRouter = lazy(() => import("./cmcs/index"));
+const CmcsRouterV2 = lazy(() => import("./cmcs/indexV2"));
 // const DatahubRouter = lazy(() => import("./datahub"));
 const DatahubRouterV2 = lazy(() => import("./datahub/indexV2"));
 // const DocumentRouter = lazy(() => import("./document"));
@@ -130,7 +131,7 @@ const Routes: FC = () => {
 
                                 {/* =====CMCS===== */}
                                 <Route path="/cmcs">
-                                    <CmcsRouter />
+                                    <CmcsRouterV2/>
                                 </Route>
 
                                 {/* =====DOCUMENT V2===== */}

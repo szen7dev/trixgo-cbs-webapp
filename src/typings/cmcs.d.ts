@@ -55,7 +55,7 @@ export type Contract = {
     sign: string
   },
   budget: number,
-  budgetVAT: number,
+  vatBudget: number,
   value: number,
   vatValue: number,
   plus: number,
@@ -178,9 +178,9 @@ export type InsertContractPayload = {
   advancePaymentOverage: number;
   finalValue: number;
   budget: number;
-  budgetVAT: number;
+  vatBudget: number;
   forecastBudget: number;
-  forecastBudgetVAT: number;
+  forecastVatBudget: number;
   managementFee: number;
   subcontractFee: number;
   expenses: number;
@@ -244,9 +244,9 @@ export type UpdateContractPayload = {
   advancePaymentOverage: number;
   finalValue: number;
   budget: number;
-  budgetVAT: number;
+  vatBudget: number;
   forecastBudget: number;
-  forecastBudgetVAT: number;
+  forecastVatBudget: number;
   managementFee: number;
   subcontractFee: number;
   expenses: number;

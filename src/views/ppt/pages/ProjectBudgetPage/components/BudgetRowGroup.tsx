@@ -45,7 +45,7 @@ const BugetRowGroup: FC<{ row: Contract, show: boolean }> = ({ row, show }) => {
 					<NavLink className='text-cbs-highlight-color' to={`/cmcs/contract/${row._id}/home`}>{row.name}</NavLink>
 					<p className='text-primary-gray text-[12px]'><i>{row.sellerInfo.name}</i></p>
 				</td>
-				<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{formatNumberMoney(row.budget || 0 + row.budgetVAT || 0)}</td>
+				<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{formatNumberMoney(row.budget || 0 + row.vatBudget || 0)}</td>
 				<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{formatNumberMoney(row.value || 0 + row.vatValue || 0 + row.plus || 0 + row.vatPlus || 0)}</td>
 				<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{formatNumberMoney(row.advancePaymentPaid || 0)}</td>
 				<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{formatNumberMoney(row.produce || 0 + row.vatProduce || 0 + row.plusProduce || 0 + row.vatPlusProduce || 0)}</td>
