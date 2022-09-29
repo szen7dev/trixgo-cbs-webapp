@@ -239,6 +239,9 @@ button {
 
 /*__________________________________________________________________________*/
 /* ___________Customized layout styles ___________________*/
+.bg-gray-custom{
+	background: #F5F7FB;
+}
 .t-leftsidebar-navigation {
   width: 240px;
 }
