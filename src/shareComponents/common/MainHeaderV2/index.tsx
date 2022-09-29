@@ -34,11 +34,7 @@ export const MainHeaderV2:FC<HeaderProps> = ({children, headerTitle}) => {
                     {/* Header: Right side */}
                     <div className="flex items-center">
                         {/* Search menu */}
-                        {/* <img src={iconTrixgo} className="w-10 h-10" /> */}
-                        <a title="User Guide/Hướng dẫn sử dụng" href="">
-                            <img src={iconHelp} alt="Help" className="w-6 h-6 filter-secondary-gray" />
-                        </a>
-                        <Link to={`/https://app.trixgo.com/workshop/home`} title="User Guide/Hướng dẫn sử dụng">
+                        <Link to={`/workshop/home`} title="User Guide/Hướng dẫn sử dụng">
                             <img src={iconHelp} alt="Help" className="w-6 h-6 filter-secondary-gray" />
                         </Link>
                         <AppsMenu />
