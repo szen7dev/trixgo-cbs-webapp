@@ -128,7 +128,7 @@ const options = {
 const RevenueOverTimeReport: FC = () => {
   return (
     <div className="bg-primary-light px-6 py-4">
-      <div className="bg-primary-light h-[300px]">
+      <div className="bg-primary-light h-[240px]">
         <div className="">
           <p className="font-bold text-primary-gray text-lg">
             Tổng thể
