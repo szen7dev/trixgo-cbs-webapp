@@ -41,7 +41,7 @@ export const useContract = ({
             refetchOnWindowFocus: false,
             enabled: isFetchInfo,
         });
-    
+
     const {
         isLoading,
         data,
@@ -64,7 +64,7 @@ export const useContract = ({
             enabled: isFetch
         }
     );
-    
+
     const listContracts = []
         .concat(...(data?.pages || [])
         .map((d: any) => d.data?.listRecords))
@@ -80,7 +80,7 @@ export const useContract = ({
         refetchOnWindowFocus: false,
         enabled: isFetchStatisticalStatusByOntimeOnbudget,
     });
-    
+
     const statisticalStatusByOntimeOnbudgetInfo = statisticalStatusByOntimeOnbudget?.data;
     return {
         contractInfo,
@@ -107,7 +107,7 @@ export const useContractIsMembers = ({
             refetchOnWindowFocus: false,
             enabled: isFetchInfo,
         });
-    
+
     const {
         isLoading,
         data,
@@ -130,7 +130,7 @@ export const useContractIsMembers = ({
             enabled: isFetch
         }
     );
-    
+
     const listContracts = []
         .concat(...(data?.pages || [])
         .map((d: any) => d.data?.listRecords))
@@ -219,7 +219,7 @@ interface UseQueryDetailContract {
 export const useQueryDetailContract = (params?: InfoContractPayload): UseQueryDetailContract => {
     const [detailContract, setDetailContract] = React.useState<any>({});
     const [loading, setLoading] = React.useState(false);
-    
+
     const onFetchDetailContract = React.useCallback(async (_params: InfoContractPayload): Promise<any> => {
         try {
             setLoading(true)

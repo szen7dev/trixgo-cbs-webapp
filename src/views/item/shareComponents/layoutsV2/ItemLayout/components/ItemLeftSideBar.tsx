@@ -52,14 +52,14 @@ export const ItemLeftSideBar: FC = () => {
           <NavLink
             to="/item/home/2"
             className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
-            title="Tính chất hồ sơ"
+            title="Phân loại hồ sơ"
           >
             <img
               width={'20px'}
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className={"flex-1 ml-2 text-left text-[14px]"}>Tính chất hồ sơ</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Phân loại hồ sơ</span>
           </NavLink>
           <NavLink
             to="/item/home/3"
@@ -88,14 +88,14 @@ export const ItemLeftSideBar: FC = () => {
           <NavLink
             to="/item/home/5"
             className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
-            title="Phân loại công việc"
+            title="Tính chất công việc"
           >
             <img
               width={'20px'}
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className={"flex-1 ml-2 text-left text-[14px]"}>Phân loại công việc</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Tính chất công việc</span>
           </NavLink>
           <NavLink
             to="/item/home/6"
