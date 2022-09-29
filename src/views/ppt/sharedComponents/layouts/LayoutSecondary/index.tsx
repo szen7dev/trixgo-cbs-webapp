@@ -26,7 +26,7 @@ const LayoutSecondary: FC<HTMLAttributes<HTMLDivElement> & Props> = ({ pages, ch
   return (
     <div className="flex flex-col text-sm text-black overflow-hidden h-full" {...props}>
       {/* Header */}
-      <div className="px-4 flex justify-between w-full text-primary-gray bg-white border-b border-cbs-border">
+      <div className="flex justify-between w-full text-primary-gray pb-1 bg-white border-cbs-border">
         <div className="flex flex-1 text-medium">
           {pages.map((page) => {
             if (page.isPrivate) return null;
