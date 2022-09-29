@@ -21,6 +21,7 @@ import FilterIcon from "assets/images/icons8-filter.svg";
 import { useCmcs } from 'services/hooks/useCmcs';
 import { useAuth } from "services/hooks/auth/useAuth";
 import CustomMap from "./components/CustomMap";
+import DebtChart from "./components/DebtChart";
 const CmcDashboardPage: FC = () => {
 
   // --------- Check phân quyền
@@ -166,6 +167,9 @@ const CmcDashboardPage: FC = () => {
             </div>
             <div className="w-1/3 bg-primary-light px-3 py-2">
               <div className="font-bold text-primary-gray text-lg">Công nợ</div>
+              <div>
+                <DebtChart />
+              </div>
             </div>
           </div>
 
