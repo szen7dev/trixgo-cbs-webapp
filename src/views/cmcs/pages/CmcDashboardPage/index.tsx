@@ -77,7 +77,7 @@ const CmcDashboardPage: FC = () => {
           <button
             // onClick={() => setFilter("all")}
             className={
-              "py-1 px-4 mx-2 rounded-full border border-primary-border "
+              "py-1 px-4 mx-2 rounded-full border border-primary-border text-white bg-cbs-secondary border-none"
               // +
               // (filter === "all"
               //   ? "text-white bg-cbs-secondary border-none"
@@ -186,14 +186,14 @@ const CmcDashboardPage: FC = () => {
             <CustomMap />
           </div>
           {/* end map */}
-          <div className="flex gap-2 h-[222px]">
-            <div className="w-1/2 bg-primary-light px-6 py-4">
+          <div className="flex gap-2">
+            <div className="w-1/2  h-[222px] bg-primary-light px-6 py-4">
               <div className="font-bold text-primary-gray text-lg">Bảo lãnh tạm ứng</div>
               <div>
                 <AdvanceGuarantee />
               </div>
             </div>
-            <div className="w-1/2 bg-primary-light px-6 py-4">
+            <div className="w-1/2 h-[222px] bg-primary-light px-6 py-4">
               <div className="font-bold text-primary-gray text-lg">Bảo lãnh thực hiện hợp đồng</div>
               <div>
                 <ContractPerformanceGuarantee />
