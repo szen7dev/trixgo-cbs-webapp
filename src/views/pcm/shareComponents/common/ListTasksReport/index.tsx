@@ -7,6 +7,7 @@ import cn from "classnames";
 import styles from "views/pcm/styles/pcm_task.module.css";
 import { ListProgress, Executor } from "views/pcm/shareComponents/common";
 import { SearchListRecord } from "typings/main-search";
+import { PCM_PROPOSAL_TASK, PCM_STATUS_TASK } from "apis/localdb/index";
 
 type Props = {
     tasks: Array<SearchListRecord>;
@@ -69,7 +70,13 @@ export const ListTasksReport: FC<Props> = memo(({
                             Thực hiện
                         </th>
                         <th className="px-2 py-2 text-[13px]  font-normal border w-1/12 text-left">
+                            Trạng thái
+                        </th>
+                        <th className="px-2 py-2 text-[13px]  font-normal border w-1/12 text-left">
                             Tiến trình
+                        </th>
+                        <th className="px-2 py-2 text-[13px] font-normal border text-left">
+                            Cập nhật gần nhất
                         </th>
                         <th className="px-2 py-2 text-[13px] font-normal border text-left">
                             Mô tả
@@ -80,29 +87,35 @@ export const ListTasksReport: FC<Props> = memo(({
                     {(tasks && tasks.length) ?
                         tasks.map((taskOutDate, index) => (
                             <tr key={taskOutDate._id}>
-                            <td className="p-2 border">{index + 1}</td>
-                            <td
-                                className="p-2 border cursor-pointer"
-                                onClick={() => handleClickTask(taskOutDate._id)}
-                            >
-                                {`${taskOutDate.project.sign}.${taskOutDate.name}`}
-                            </td>
-                            <td className="p-2 border">
-                                {moment(taskOutDate.actualFinishTime).format("DD/MM/YYYY")}
-                            </td>
-                            <td className="p-2 border">
-                                <Executor color="bg-red-500" assignee={taskOutDate.assignee} />
-                            </td>
-                            <td className="p-2 border">
-                                <ListProgress
-                                color="bg-red-500"
-                                checklist={taskOutDate.checklist}
-                                percentage={taskOutDate.percentage}
-                                />
-                            </td>
-                            <td className={cn(styles["dont-break-out"], "p-2 border")}>
-                                {subContentHtml(taskOutDate.description)}
-                            </td>
+                                <td className="p-2 border">{index + 1}</td>
+                                <td
+                                    className="p-2 border cursor-pointer"
+                                    onClick={() => handleClickTask(taskOutDate._id)}
+                                >
+                                    {`${taskOutDate.project.sign}.${taskOutDate.name}`}
+                                </td>
+                                <td className="p-2 border">
+                                    {moment(taskOutDate.actualFinishTime).format("DD/MM/YYYY")}
+                                </td>
+                                <td className="p-2 border">
+                                    <Executor color="bg-red-500" assignee={taskOutDate.assignee} />
+                                </td>
+                                <td className="p-2 border" style={{color: `#${PCM_STATUS_TASK[taskOutDate.status - 1].backgroud}`}}>
+                                    {PCM_STATUS_TASK[taskOutDate.status - 1].text}
+                                </td>
+                                <td className="p-2 border">
+                                    <ListProgress
+                                    color="bg-red-500"
+                                    checklist={taskOutDate.checklist}
+                                    percentage={taskOutDate.percentage}
+                                    />
+                                </td>
+                                <td className="p-2 border">
+                                    {moment(taskOutDate.modifyAt).format("DD/MM/YYYY HH:mm")}
+                                </td>
+                                <td className={cn(styles["dont-break-out"], "p-2 border")}>
+                                    {subContentHtml(taskOutDate.description)}
+                                </td>
                             </tr>
                         )) : <></>}
                 </tbody>

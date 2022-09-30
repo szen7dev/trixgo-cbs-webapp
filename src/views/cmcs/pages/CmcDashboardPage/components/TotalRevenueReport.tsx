@@ -3,12 +3,12 @@ import { FC } from "react";
 import ArrowUpBoldIcon from "assets/images/icons8-arrow-top-bold-green.svg";
 import MushroomIcon from "assets/images/icons8-mushroom.svg";
 
-const TotalRevenueReport: FC = () => {
+const TotalRevenueReport: FC<any> = ({contractAmountByMonthAll}) => {
   return (
     <div className="bg-primary-light h-full">
       <div className="px-6 py-4">
         <p className="font-bold text-primary-gray text-lg">
-          Tổng doanh thu 2021
+          Giá trị ký
         </p>
         <div className="flex items-center mt-4">
           <div className="w-12 h-12 rounded-full bg-secondary-light flex items-center justify-center">
@@ -16,12 +16,8 @@ const TotalRevenueReport: FC = () => {
           </div>
           <div className="ml-4">
             <div>
-              <span className="font-bold text-2xl">68 tỷ </span>
+              <span className="font-bold text-2xl">{contractAmountByMonthAll} tỷ </span>
               <span className="text-xs text-primary-gray">(68%)</span>
-            </div>
-            <div className="text-xs">
-              <span className="text-primary-gray">Mục tiêu: </span>
-              <span className="text-primary font-bold">100 tỷ</span>
             </div>
           </div>
         </div>

@@ -36,7 +36,7 @@ export const TaskDetailSubtask:FC<Props> = ({ task, userId }) => {
     }, [task.timeImportExcel])
 
     return (
-        (task.subtype == 4 && task.assignee._id.toString() == userId?.toString()) ?  <></> : 
+        (task.subtype == 4 && task.assignee._id.toString() == userId?.toString()) ?  <></> :
         <div className={"subtask mt-5 w-2/3"}>
             <div className={"flex items-center"}>
                 <div className={"flex items-center"}>
@@ -66,7 +66,7 @@ export const TaskDetailSubtask:FC<Props> = ({ task, userId }) => {
                 {listSubTasks && listSubTasks.map((subtask, index) => (
                     <SubtaskItem key={subtask._id} task={subtask} index={index} />
                 ))}
-    
+
                 {showCreateNewSubTask &&
                     <CreateNewSubTask
                         task={task}

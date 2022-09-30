@@ -30,7 +30,7 @@ const BugetRowGroupTemp: FC<{ row: Contract, index: number, show: boolean, _pid:
 				</p>
 				{/* <p className='text-primary-gray text-[12px]'><i>{row.sellerInfo?.name}</i></p> */}
 			</td>
-			<td className='text-right py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 md:text-xs'>{formatNumberMoney(row.budget || 0 + row.budgetVAT || 0)}</td>
+			<td className='text-right py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 md:text-xs'>{formatNumberMoney(row.budget || 0 + row.vatBudget || 0)}</td>
 			<td className='text-right py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 md:text-xs'>{formatNumberMoney(0)}</td>
 			<td className='text-right py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 md:text-xs'>{formatNumberMoney(row.value || 0 + row.vatValue || 0 + row.plus || 0 + row.vatPlus || 0)}</td>
 			<td className='text-right py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 md:text-xs'>{formatNumberMoney(row.advancePaymentPaid || 0)}</td>

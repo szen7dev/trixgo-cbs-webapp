@@ -69,6 +69,14 @@ const ContractRepository = {
     );
     return data;
   },
+
+  async getAmountByMonth(payload: any) {
+    const { data } = await API.get(
+      `${cmcsURL}/contracts/get-amount-by-month?${convertObToUrl(payload)}`
+    );
+    return data;
+  },
+
 };
 
 export default ContractRepository;

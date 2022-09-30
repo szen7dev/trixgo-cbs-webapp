@@ -29,7 +29,7 @@ export const MainHeaderPm:FC = ({children}) => {
                     {/* Header: Right side */}
                     <div className="flex items-center">
                         {/* Search menu */}
-                        <Link to={`/https://app.trixgo.com/workshop/home`} title="User Guide/Hướng dẫn sử dụng">
+                        <Link to={`/workshop/home`} title="User Guide/Hướng dẫn sử dụng">
                             <img src={iconHelp} alt="Help" className="w-6 h-6 filter-secondary-gray" />
                         </Link>
                         <AppsMenu />

@@ -9,14 +9,25 @@ import ProfileAndProductReport from "./components/ProfileAndProductReport";
 import CmcImagesReport from "./components/CmcImagesReport";
 import PaymentPlanReport from "./components/PaymentPlanReport";
 import TotalRevenueReport from "./components/TotalRevenueReport";
+import AcceptanceReport from "./components/AcceptanceReport";
 import MoneyBackReport from "./components/MoneyBackReport";
 import CompanyPreviewReport from "./components/CompanyPreviewReport";
 import QuickReport from "./components/QuickReport";
 import StatusReport from "./components/StatusReport";
 
+import FilterIcon from "assets/images/icons8-filter.svg";
+
 // Import data từ API
 import { useCmcs } from 'services/hooks/useCmcs';
 import { useAuth } from "services/hooks/auth/useAuth";
+import { useContractDashboard } from 'services/hooks/items/useContract';
+import { useCmcsDashboard } from 'services/hooks/cmcs/useContractIPC';
+
+import CustomMap from "./components/CustomMap";
+import DebtChart from "./components/DebtChart";
+import { AdvanceGuarantee } from "./components/AdvanceGuarantee";
+import { ContractPerformanceGuarantee } from "./components/ContractPerformanceGuarantee";
+import FilterDropdown from "./components/FilterDropdown";
 const CmcDashboardPage: FC = () => {
 
   // --------- Check phân quyền
@@ -29,66 +40,196 @@ const CmcDashboardPage: FC = () => {
 
   const { user } = useAuth();
   const { listContracts } = useCmcs({ companyID: user?.company._id });
+  // Giá trị ký
+  const { contractAmountByMonth } = useContractDashboard({ params: { outin: 1 } });
+  let contractAmountByMonthAll = 0;
+  contractAmountByMonth?.forEach((item: any) => {
+    contractAmountByMonthAll += item?.amount;
+  });
+  contractAmountByMonthAll = +(contractAmountByMonthAll/1000000000).toFixed(3);
 
+  // Nghiệm thu
+  const { cmcsContractIPCAmountByMonth, cmcsContractPaymentAmountByMonth } = useCmcsDashboard({});
+  let cmcsContractIPCAmountByMonthAll = 0;
+  cmcsContractIPCAmountByMonth?.forEach((item: any) => {
+    cmcsContractIPCAmountByMonthAll += item?.amount;
+  });
+  cmcsContractIPCAmountByMonthAll = +(cmcsContractIPCAmountByMonthAll/1000000000).toFixed(3);
+  
+  //Tiền về/Giải ngân
+  let cmcsContractPaymentAmountByMonthAll = 0;
+  cmcsContractPaymentAmountByMonth?.forEach((item: any) => {
+    cmcsContractPaymentAmountByMonthAll += item?.amount;
+  });
+  cmcsContractPaymentAmountByMonthAll = +(cmcsContractPaymentAmountByMonthAll/1000000000).toFixed(3);
   return (
-    <main className="flex w-full bg-cbs-gray h-max p-3">
-      <div className="w-2/3 h-full mr-">
-        <CompanyPreviewReport />
+    <section className=" w-full">
+      <div className="sticky top-0 z-10 bg-white	">
+        {/* tab */}
+        <div className="flex justify-between px-2">
+          <div><ul className="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
+            <li className="mr-2" role="presentation">
+              <button className="inline-block p-2 rounded-t-lg border-b-2 text-blue-600 hover:text-blue-600 dark:text-blue-500 dark:hover:text-blue-500 border-blue-600 dark:border-blue-500" id="profile-tab" data-tabs-target="#sell" type="button" role="tab" aria-controls="profile" aria-selected="true">
+                Bán ra
+              </button>
+            </li>
+            <li className="mr-2" role="presentation">
+              <button className="inline-block p-2 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400  dark:border-gray-700" id="dashboard-tab" data-tabs-target="#" type="button" role="tab" aria-controls="dashboard" aria-selected="false">
+                Mua vào
+              </button>
+            </li>
+            <li className="mr-2" role="presentation">
+              <button className="inline-block p-2 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400  dark:border-gray-700" id="settings-tab" data-tabs-target="#" type="button" role="tab" aria-controls="settings" aria-selected="false">
+                Công nợ khách
+              </button>
+            </li>
+          </ul></div>
+          <div>
+            <div className=" flex items-center">
+              <span className="text-primary text-sm">
+                Công ty Cổ phần CONINCO Quản lý dự án và đầu tư
+              </span>
+              <div className="w-14 h-10 flex items-center justify-center rounded ml-2">
+                <FilterDropdown />
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* end tab */}
+        <div className="flex justify-between">
+          {/* filter by year */}
+          <div className={"header-table flex py-4 w-full top-0 bg-white"}>
+            <button
+              // onClick={() => setFilter("all")}
+              className={
+                "py-1 px-4 mx-2 rounded-full border border-primary-border text-white bg-cbs-secondary border-none"
+                // +
+                // (filter === "all"
+                //   ? "text-white bg-cbs-secondary border-none"
+                //   : "text-primary-gray bg-white")
+              }
+            >
+              Tất cả
+            </button>
+            <button
+              // onClick={() => setFilter("unread")}
+              className={
+                "py-1 px-4 mx-2 rounded-full border border-primary-border "
+                // +
+                // (filter === "unread"
+                //   ? "text-white bg-cbs-secondary border-none"
+                //   : "text-primary-gray bg-white")
+              }
+            >
+              2022
+            </button>
+            <button
+              // onClick={() => setFilter("read")}
+              className={
+                "py-1 px-4 mx-2 rounded-full border border-primary-border "
+                // +
+                // (filter === "read"
+                //   ? "text-white bg-cbs-secondary border-none"
+                //   : "text-primary-gray bg-white")
+              }
+            >
+              2021
+            </button>
+            <button
+              // onClick={() => setFilter("read")}
+              className={
+                "py-1 px-4 mx-2 rounded-full border border-primary-border "
+                // +
+                // (filter === "read"
+                //   ? "text-white bg-cbs-secondary border-none"
+                //   : "text-primary-gray bg-white")
+              }
+            >
+              2020
+            </button>
+          </div>
+          <div className="w-1/4 flex items-center">
+            <div className="w-5/6 flex flex-col gap-3">
+              <div className="flex justify-between text-xs">
+                <div>
+                  <span className="text-primary-gray">Bắt đầu: </span>
+                  <span><b>1/1/21</b></span>
+                </div>
+                <div>
+                  <span className="text-primary-gray">Kết thúc: </span>
+                  <span><b>31/12/21</b></span>
+                </div>
+              </div>
 
-        <div className="h-[176px] w-full flex mb-3">
-          <div className="w-3/5 flex gap-3">
-            <div className="w-1/2 flex flex-col justify-between">
-              <TotalRevenueReport />
+              <div className="w-full border h-2">
+                <div
+                  className="bg-primary"
+                  style={{ width: "82%", marginTop: -0.25, height: 7 }}
+                ></div>
+              </div>
             </div>
 
-            <div className="w-1/2 flex flex-col justify-between">
-              <MoneyBackReport />
+            <p className="w-1/6 text-primary text-sm px-4 pt-3">82%</p>
+          </div>
+        </div>
+        {/* end filter by year */}
+      </div>
+      {/* content */}
+      <div className="flex bg-gray-custom gap-2 justify-around p-3">
+        {/* left */}
+        <div className="w-3/5 flex flex-col gap-2">
+
+          <div className="flex justify-between gap-2">
+            <div className="w-1/3 border	"><TotalRevenueReport contractAmountByMonthAll={contractAmountByMonthAll}/></div>
+            <div className="w-1/3 border	"><AcceptanceReport cmcsContractIPCAmountByMonthAll = { cmcsContractIPCAmountByMonthAll }/></div>
+            <div className="w-1/3 border	"><MoneyBackReport cmcsContractPaymentAmountByMonthAll={cmcsContractPaymentAmountByMonthAll}/></div>
+          </div>
+
+          <div className="">
+            {/* biểu đồ */}
+            <RevenueOverTimeReport data={{ contractAmountByMonth, cmcsContractIPCAmountByMonth, cmcsContractPaymentAmountByMonth }}/>
+          </div>
+
+          <div className="flex gap-2 h-[222px]">
+            <div className="w-2/3">
+              <RevenueBySectorReport />
+            </div>
+            <div className="w-1/3 bg-primary-light px-6 py-4">
+              <div className="font-bold text-primary-gray text-lg">Công nợ</div>
+              <div className="w-full">
+                <DebtChart />
+              </div>
             </div>
           </div>
 
-          <div className="w-2/5 mr-3 ml-3">
-            <PaymentPlanReport />
+        </div>
+        {/* end left */}
+        {/* right */}
+        <div className="w-2/5 flex flex-col gap-2">
+          {/* map */}
+          <div className="h-full bg-primary-light px-6 py-4 flex	flex-col gap-4">
+            <div className="font-bold text-primary-gray text-lg">Khu vực triển khai</div>
+            <CustomMap />
+          </div>
+          {/* end map */}
+          <div className="flex gap-2">
+            <div className="w-1/2  h-[222px] bg-primary-light px-6 py-4">
+              <div className="font-bold text-primary-gray text-lg">Bảo lãnh tạm ứng</div>
+              <div>
+                <AdvanceGuarantee />
+              </div>
+            </div>
+            <div className="w-1/2 h-[222px] bg-primary-light px-6 py-4">
+              <div className="font-bold text-primary-gray text-lg">Bảo lãnh thực hiện hợp đồng</div>
+              <div>
+                <ContractPerformanceGuarantee />
+              </div>
+            </div>
           </div>
         </div>
-
-        <div className="h-[222px] w-full flex mb-3">
-          <div className="w-2/5 mr-3">
-            <RevenueBySectorReport />
-          </div>
-          <div className="w-3/5 mr-3">
-            <RevenueOverTimeReport />
-          </div>
-        </div>
-
-        <div className="mr-3 mb-3">
-          <CmcImagesReport />
-        </div>
-
-        <div className="w-full h-64 flex">
-          <div className="w-3/5 mr-3">
-            <CashFlowManagementReport />
-          </div>
-
-          <div className="w-1/5 mr-3">
-            <ReceivableReport />
-          </div>
-
-          <div className="w-1/5 mr-3">
-            <ProfileAndProductReport />
-          </div>
-        </div>
+        {/* end right */}
       </div>
-
-      <div className="w-1/3 h-full">
-        <div className="h-[640px] overflow-scroll mb-3 bg-primary-light">
-          <StatusReport listContracts={listContracts} />
-        </div>
-
-        <div className="bg-primary-light px-6 h-64">
-          <QuickReport />
-        </div>
-      </div>
-    </main>
+    </section>
   );
 };
 export default CmcDashboardPage;

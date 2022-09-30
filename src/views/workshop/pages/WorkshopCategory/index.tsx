@@ -58,10 +58,10 @@ const WorkshopCategory: FC = () => {
   return (
     <div className="w-full max-w-[1185px] mx-auto bg-white min-h-full space-y-10 py-9 px-[90px]">
       <div className="flex flex-col items-center">
-        <h1 className="text-[60px] leading-[70px] font-bold max-w-3xl text-center mb-3.5">Tìm hiểu mọi lúc, mọi nơi và tăng tốc tương lai</h1>
+        {/* <h1 className="text-[60px] leading-[70px] font-bold max-w-3xl text-center mb-3.5">Tìm hiểu mọi lúc, mọi nơi và tăng tốc tương lai</h1>
         <p className="text-large text-cbs-subtext font-bold max-w-xl  text-center mt-4 mb-1">
           Ai cũng có khả năng sáng tạo. Trixgo Workshop là một nơi mà có thể giúp mọi người phát triển tiềm năng của chính mình
-        </p>
+        </p> */}
         <label className="relative align-middle border-cbs-border border-0.5 rounded-full  max-w-xl w-full mt-10">
           <span className="absolute inset-y-0 left-[1.375rem] flex items-center text-cbs-subtext">
             <SearchIcon className="h-6 w-6" />

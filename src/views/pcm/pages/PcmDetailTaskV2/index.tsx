@@ -77,12 +77,12 @@ const PcmDetailTaskV2: FC = () => {
         if (!isSuccessApp || !taskInfo) return;
         if (isSuccessApp && !hasPermission) {
             toast.error("Bạn không có quyền truy cập tính năng này!");
-            return history.push("/");
+            // return history.push("/");
         };
 
         if (taskInfo?.message === "permission_denied" || taskInfo?.keyError === "permission_denied") {
             toast.warn('Bạn không có quyền truy cập công việc này');
-            return history.push(`/pcm/home`);
+            // return history.push(`/pcm/home`);
         }
     }, [taskInfo, isSuccessApp, hasPermission])
 
@@ -272,6 +272,10 @@ const PcmDetailTaskV2: FC = () => {
         return <Redirect to='/pcm/home' />
     }
 
+    if(!user) {
+        return <Loader className="border-primary" />
+    }
+
     return (
         <div className={"task-detail"}>
             <ActionTaskDetailBar
@@ -283,7 +287,7 @@ const PcmDetailTaskV2: FC = () => {
             />
             <div className={"task-content p-4"}>
                 <div className={collapse ? "hidden" : "block"}>
-                    <TaskDetailTitle task={taskInfo} />
+                    <TaskDetailTitle task={taskInfo} userId={user._id} />
                     <TaskDetailFolder
                         task={taskInfo}
                         user={user}

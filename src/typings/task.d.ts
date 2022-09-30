@@ -72,6 +72,7 @@ export type Task = {
     author: User;
     createAt: string
   }>;
+  flags?: Array<string>;
   authorAttachs: Array<FileProps>;
   assigneeAttachs: Array<FileProps>;
   accessUsers: Array<User>;
@@ -89,6 +90,7 @@ export type Task = {
   amountCurrentStatus: number;
   amountResponseOther: number;
   createAt: string;
+  modifyAt: string;
   author: Author;
   message?: string;
   timeImportExcel?: string;

@@ -39,7 +39,7 @@ const ReportImage: React.FC<Props> = ({ projectInfo, ...props }) => {
 
 	return (
 		<div {...props}>
-			<div className='bg-white relative w-full mt-4 py-2 flex px-3'>
+			<div className='bg-white relative w-full py-2 flex px-3'>
 				<Carousel
 					itemsToShow={5}
 					isRTL={false}

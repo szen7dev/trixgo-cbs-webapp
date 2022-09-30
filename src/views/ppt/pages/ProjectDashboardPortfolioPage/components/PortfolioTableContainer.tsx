@@ -91,7 +91,7 @@ const PortfolioTableContainer: FC = () => {
 												<tr key={record._id}>
 													<td className="border-r-0.5 border-t-0.5 border-cbs-border pt-4 pb-3 pl-3.5 pr-4">
 														<div className="text-black text-medium">
-															<Link to={generatePath("/pcm/project/:id/home", { id: record._id })}>
+															<Link to={generatePath("/pm/project/:id/home", { id: record._id })}>
 																{record.sign}.{record.name}
 																{/* CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây */}
 															</Link>
