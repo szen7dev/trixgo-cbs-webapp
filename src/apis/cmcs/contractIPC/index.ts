@@ -70,6 +70,20 @@ async function exportContractIpc<T>(params: any): Promise<T> {
     return data;
 }
 
+async function cmcsContractIPCAmountByMonth(params: any) {
+    const { data } = await API.get<any>(
+        `${APP_CMCS}/contract_ipcs/get-amount-by-month`, { params }
+    );
+    return data;
+}
+
+async function cmcsContractPaymentAmountByMonth(params: any) {
+    const { data } = await API.get<any>(
+        `${APP_CMCS}/contract_payments/get-amount-by-month`, { params }
+    );
+    return data;
+}
+
 const ContractIPCRepository = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fetchList: async (params: any): Promise<any> => fetchList<any>(params),
@@ -80,7 +94,9 @@ const ContractIPCRepository = {
     requestUpdateContract,
     requestDeleteContract,
     requestHistoryTraffics,
-    exportContractIpc
+    exportContractIpc,
+    cmcsContractIPCAmountByMonth,
+    cmcsContractPaymentAmountByMonth
 };
 
 export default ContractIPCRepository

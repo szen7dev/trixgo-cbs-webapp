@@ -3,7 +3,7 @@ import { FC } from "react";
 import ArrowUpBoldIcon from "assets/images/icons8-arrow-top-bold-green.svg";
 import MushroomIcon from "assets/images/icons8-mushroom.svg";
 
-const TotalRevenueReport: FC = () => {
+const TotalRevenueReport: FC<any> = ({contractAmountByMonthAll}) => {
   return (
     <div className="bg-primary-light h-full">
       <div className="px-6 py-4">
@@ -16,7 +16,7 @@ const TotalRevenueReport: FC = () => {
           </div>
           <div className="ml-4">
             <div>
-              <span className="font-bold text-2xl">68 tỷ </span>
+              <span className="font-bold text-2xl">{contractAmountByMonthAll} tỷ </span>
               <span className="text-xs text-primary-gray">(68%)</span>
             </div>
           </div>

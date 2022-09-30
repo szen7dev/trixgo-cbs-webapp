@@ -20,6 +20,9 @@ import FilterIcon from "assets/images/icons8-filter.svg";
 // Import data từ API
 import { useCmcs } from 'services/hooks/useCmcs';
 import { useAuth } from "services/hooks/auth/useAuth";
+import { useContractDashboard } from 'services/hooks/items/useContract';
+import { useCmcsDashboard } from 'services/hooks/cmcs/useContractIPC';
+
 import CustomMap from "./components/CustomMap";
 import DebtChart from "./components/DebtChart";
 import { AdvanceGuarantee } from "./components/AdvanceGuarantee";
@@ -37,7 +40,28 @@ const CmcDashboardPage: FC = () => {
 
   const { user } = useAuth();
   const { listContracts } = useCmcs({ companyID: user?.company._id });
+  // Giá trị ký
+  const { contractAmountByMonth } = useContractDashboard({ params: { outin: 1 } });
+  let contractAmountByMonthAll = 0;
+  contractAmountByMonth?.forEach((item: any) => {
+    contractAmountByMonthAll += item?.amount;
+  });
+  contractAmountByMonthAll = +(contractAmountByMonthAll/1000000000).toFixed(3);
 
+  // Nghiệm thu
+  const { cmcsContractIPCAmountByMonth, cmcsContractPaymentAmountByMonth } = useCmcsDashboard({});
+  let cmcsContractIPCAmountByMonthAll = 0;
+  cmcsContractIPCAmountByMonth?.forEach((item: any) => {
+    cmcsContractIPCAmountByMonthAll += item?.amount;
+  });
+  cmcsContractIPCAmountByMonthAll = +(cmcsContractIPCAmountByMonthAll/1000000000).toFixed(3);
+  
+  //Tiền về/Giải ngân
+  let cmcsContractPaymentAmountByMonthAll = 0;
+  cmcsContractPaymentAmountByMonth?.forEach((item: any) => {
+    cmcsContractPaymentAmountByMonthAll += item?.amount;
+  });
+  cmcsContractPaymentAmountByMonthAll = +(cmcsContractPaymentAmountByMonthAll/1000000000).toFixed(3);
   return (
     <section className=" w-full">
       {/* tab */}
@@ -154,14 +178,14 @@ const CmcDashboardPage: FC = () => {
         <div className="w-3/5 flex flex-col gap-2">
 
           <div className="flex justify-between gap-2">
-            <div className="w-1/3 border	"><TotalRevenueReport /></div>
-            <div className="w-1/3 border	"><AcceptanceReport /></div>
-            <div className="w-1/3 border	"><MoneyBackReport /></div>
+            <div className="w-1/3 border	"><TotalRevenueReport contractAmountByMonthAll={contractAmountByMonthAll}/></div>
+            <div className="w-1/3 border	"><AcceptanceReport cmcsContractIPCAmountByMonthAll = { cmcsContractIPCAmountByMonthAll }/></div>
+            <div className="w-1/3 border	"><MoneyBackReport cmcsContractPaymentAmountByMonthAll={cmcsContractPaymentAmountByMonthAll}/></div>
           </div>
 
           <div className="">
             {/* biểu đồ */}
-            <RevenueOverTimeReport />
+            <RevenueOverTimeReport data={{ contractAmountByMonth, cmcsContractIPCAmountByMonth, cmcsContractPaymentAmountByMonth }}/>
           </div>
 
           <div className="flex gap-2 h-[222px]">
