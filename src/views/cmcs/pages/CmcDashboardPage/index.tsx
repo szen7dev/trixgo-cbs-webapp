@@ -41,15 +41,17 @@ const CmcDashboardPage: FC = () => {
   const { user } = useAuth();
   const { listContracts } = useCmcs({ companyID: user?.company._id });
   // Giá trị ký
-  const { contractAmountByMonth } = useContractDashboard({ params: { outin: 1 } });
+  const { contractAmountByMonth } = useContractDashboard({ params: { outin: 1, year: 2022 } });
   let contractAmountByMonthAll = 0;
   contractAmountByMonth?.forEach((item: any) => {
     contractAmountByMonthAll += item?.amount;
   });
+  // console.log(contractAmountByMonth)
+
   contractAmountByMonthAll = +(contractAmountByMonthAll/1000000000).toFixed(3);
 
   // Nghiệm thu
-  const { cmcsContractIPCAmountByMonth, cmcsContractPaymentAmountByMonth } = useCmcsDashboard({});
+  const { cmcsContractIPCAmountByMonth, cmcsContractPaymentAmountByMonth } = useCmcsDashboard({params: { outin: 1, year: 2022 }});
   let cmcsContractIPCAmountByMonthAll = 0;
   cmcsContractIPCAmountByMonth?.forEach((item: any) => {
     cmcsContractIPCAmountByMonthAll += item?.amount;
@@ -78,11 +80,11 @@ const CmcDashboardPage: FC = () => {
                 Mua vào
               </button>
             </li>
-            <li className="mr-2" role="presentation">
+            {/* <li className="mr-2" role="presentation">
               <button className="inline-block p-2 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400  dark:border-gray-700" id="settings-tab" data-tabs-target="#" type="button" role="tab" aria-controls="settings" aria-selected="false">
-                Công nợ khách
+                Công nợ khách hàng
               </button>
-            </li>
+            </li> */}
           </ul></div>
           <div>
             <div className=" flex items-center">
@@ -100,21 +102,9 @@ const CmcDashboardPage: FC = () => {
           {/* filter by year */}
           <div className={"header-table flex py-4 w-full top-0 bg-white"}>
             <button
-              // onClick={() => setFilter("all")}
-              className={
-                "py-1 px-4 mx-2 rounded-full border border-primary-border text-white bg-cbs-secondary border-none"
-                // +
-                // (filter === "all"
-                //   ? "text-white bg-cbs-secondary border-none"
-                //   : "text-primary-gray bg-white")
-              }
-            >
-              Tất cả
-            </button>
-            <button
               // onClick={() => setFilter("unread")}
               className={
-                "py-1 px-4 mx-2 rounded-full border border-primary-border "
+                "py-1 px-4 mx-2 rounded-full border border-primary-border text-white bg-cbs-secondary border-none"
                 // +
                 // (filter === "unread"
                 //   ? "text-white bg-cbs-secondary border-none"
