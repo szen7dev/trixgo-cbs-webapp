@@ -357,7 +357,7 @@ const ReportChart: React.FC<Props> = ({ projectInfo, ...props }) => {
 						},
 					]
 				}}
-				height={"415px"}
+				height={"375px"}
 			/>
 		</div>
 	)

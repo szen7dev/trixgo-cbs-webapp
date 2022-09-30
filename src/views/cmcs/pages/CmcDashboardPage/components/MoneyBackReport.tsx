@@ -1,9 +1,10 @@
 import { FC } from "react";
+import {formatNumberMoney} from "utils";
 
 import ArrowDownBoldIcon from "assets/images/icons8-arrow-down-bold-red.svg";
 import CashIcon from "assets/images/icons8-cash.svg";
 
-const MoneyBackReport: FC = () => {
+const MoneyBackReport: FC <any> = ({cmcsContractPaymentAmountByMonthAll}) => {
   return (
     <div className="bg-primary-light h-full">
       <div className="px-6 py-4">
@@ -14,7 +15,7 @@ const MoneyBackReport: FC = () => {
           </div>
           <div className="ml-4">
             <div>
-              <span className="font-bold text-2xl">42 tỷ </span>
+              <span className="font-bold text-2xl">{formatNumberMoney(cmcsContractPaymentAmountByMonthAll)} tỷ </span>
               <span className="text-xs text-primary-gray">(62%)</span>
             </div>
           </div>

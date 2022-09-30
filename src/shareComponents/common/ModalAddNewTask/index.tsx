@@ -179,6 +179,7 @@ export const ModalAddNewTask: FC = () => {
         values.authorAttachs = files;
       }
 
+      closeModal();
       const { error, data } = await addTaskAsync({
         ...values,
         isNotiEmail
@@ -186,7 +187,6 @@ export const ModalAddNewTask: FC = () => {
 
       if (error) return toast.warning(data.message);
 
-      closeModal();
       history.push(`/pcm/detail/${data._id}`);
     } catch (error) {
       if (typeof error === "string") {

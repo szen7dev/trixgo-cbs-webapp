@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState, useContext, useMemo } from "react";
+import React, { ClipboardEvent, FC, useEffect, useRef, useState, useContext, useMemo } from "react";
 import Axios from 'axios';
 import { captureException } from "@sentry/react";
 import { Editor } from "@tinymce/tinymce-react";
@@ -263,9 +263,20 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
         onCancelCreateResponse();
     }
 
+    const handlePasteFile = (event: any) => {
+		event.preventDefault();
+
+		if(event.clipboardData?.files?.length) {
+		  return handleSetFiles(event.clipboardData.files)
+		}
+
+		const text = event.clipboardData.getData('text/plain');
+		text && window.document.execCommand('insertText', false, text);
+	}
+
     return (
         <>
-            <div className={"mt-2 editor ml-12 border border-primary-border rounded"}>
+            <div className={"mt-2 editor ml-12 border border-primary-border rounded"} id="input-comment">
                 <div className={"px-2 py-4"}>
                     <SendToMultiSelected
                         projectId={task.project?._id}
@@ -277,8 +288,9 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
                     onInit={(evt, editor) => {
                         editorRef.current = editor;
                     }}
+                    onPaste={handlePasteFile}
                     apiKey={process.env.REACT_APP_TINYMCE_API_KEY}
-                    // onSaveContent={handleSave}
+                    id='input-comment'
                     init={{
                         height: "350px",
                         force_br_newlines: true,
@@ -333,6 +345,24 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
                                     editor.save({ immediate: true });
                                 },
                                 icon: "save",
+                            });
+
+                            editor.on('dragover', function(e) {
+                                e.stopPropagation();
+                                e.preventDefault();
+                            });
+
+                            editor.on('drop', function(e) {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                if (e.dataTransfer) {
+                                    tokens.map(token => {
+                                        token?.source?.cancel('Operation request canceled by the user.');
+                                    })
+
+                                    removeAllFiles();
+                                    handleSetFiles(e.dataTransfer.files);
+                                }
                             });
                         },
                     }}

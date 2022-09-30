@@ -124,7 +124,7 @@ const options = {
   },
 };
 
-const RevenueOverTimeReport: FC = () => {
+const RevenueOverTimeReport: FC<any> = () => {
   return (
     <div className="bg-primary-light px-6 py-4">
       <div className="bg-primary-light h-[240px]">

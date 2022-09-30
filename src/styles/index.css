@@ -1809,3 +1809,13 @@ img {
 .tox .tox-editor-header {
   z-index: 0 !important;
 }
+.comment-text table td {
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  padding: 5px;
+}
+.comment-text table th {
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  padding: 5px;
+}

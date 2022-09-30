@@ -6,11 +6,11 @@ import { toArray } from 'lodash';
 import { toast } from "react-toastify";
 import { captureException } from "@sentry/react";
 
-import iconFace from 'assets/images/icons8-grinning-face-64.png';
-import iconAttach from 'assets/images/icons8-attach-50.png';
-import iconEmailSend from 'assets/images/icon-email-send.png';
+// import iconFace from 'assets/images/icons8-grinning-face-64.png';
+// import iconAttach from 'assets/images/icons8-attach-50.png';
+// import iconEmailSend from 'assets/images/icon-email-send.png';
+// import { nl2p } from 'utils';
 import { PostImage, PostFile } from 'shareComponents/common';
-import { nl2p } from 'utils';
 import { APP_KEY } from 'utils/constants';
 import { validateFiles } from 'validation/file';
 
@@ -183,16 +183,16 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 		}
 	}
 
-	const handlePasteFile = (event: ClipboardEvent<HTMLTextAreaElement>) => {
-		event.preventDefault();
+	// const handlePasteFile = (event: ClipboardEvent<HTMLTextAreaElement>) => {
+	// 	event.preventDefault();
 
-		if(event.clipboardData?.files?.length) {
-		  return handleSetFiles(event.clipboardData.files)
-		}
+	// 	if(event.clipboardData?.files?.length) {
+	// 	  return handleSetFiles(event.clipboardData.files)
+	// 	}
 
-		const text = event.clipboardData.getData('text/plain');
-		text && window.document.execCommand('insertText', false, text);
-	}
+	// 	const text = event.clipboardData.getData('text/plain');
+	// 	text && window.document.execCommand('insertText', false, text);
+	// }
 
 	const handleSubmit = async () => {
 		let images: string[] = [];

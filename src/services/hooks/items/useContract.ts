@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useQuery } from "react-query";
+import { useInfiniteQuery, useQuery, useMutation } from "react-query";
 import React from "react";
 
 import { ContractRepository } from 'apis/item';
@@ -216,6 +216,7 @@ interface UseQueryDetailContract {
     loading: boolean,
     onFetchDetailContractAsync: (params: InfoContractPayload) => Promise<Contract>
 }
+
 export const useQueryDetailContract = (params?: InfoContractPayload): UseQueryDetailContract => {
     const [detailContract, setDetailContract] = React.useState<any>({});
     const [loading, setLoading] = React.useState(false);
@@ -247,5 +248,20 @@ export const useQueryDetailContract = (params?: InfoContractPayload): UseQueryDe
         detailContract,
         loading,
         onFetchDetailContractAsync: onFetchDetailContract,
+    }
+}
+
+//======================================== Hook báo cáo hợp đồng
+export const useContractDashboard = ({ params = {}}) => {
+
+    const { data: contractAmountByMonth } = 
+        useQuery("contractAmountByMonth", () => 
+            ContractRepository.getAmountByMonth(params), {
+                refetchOnWindowFocus: false,
+                enabled: true,
+            });
+
+    return {
+        contractAmountByMonth: contractAmountByMonth?.data
     }
 }

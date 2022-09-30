@@ -197,3 +197,24 @@ export const useContractIpcCustom = ({
     }
 }
 // Kết thúc tạo hook download excel
+
+export const useCmcsDashboard = ({ params = {}}) => {
+    const { data: cmcsContractIPCAmountByMonth } = 
+        useQuery("cmcsContractIPCAmountByMonth", () => 
+            ContractIPCRepository.cmcsContractIPCAmountByMonth(params), {
+                refetchOnWindowFocus: false,
+                enabled: true,
+            });
+
+    const { data: cmcsContractPaymentAmountByMonth } = 
+    useQuery("cmcsContractPaymentAmountByMonth", () => 
+        ContractIPCRepository.cmcsContractPaymentAmountByMonth(params), {
+            refetchOnWindowFocus: false,
+            enabled: true,
+        });
+
+    return {
+        cmcsContractIPCAmountByMonth: cmcsContractIPCAmountByMonth?.data,
+        cmcsContractPaymentAmountByMonth: cmcsContractPaymentAmountByMonth?.data
+    }
+}
