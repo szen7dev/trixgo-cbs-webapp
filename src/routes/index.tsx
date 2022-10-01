@@ -11,6 +11,7 @@ import RightClickMenuProvider from "services/providers/RightClickMenu";
 
 /*=====3.LAYOUTS=====*/
 import { FullPageLayout } from "shareComponents/layouts";
+import { MediaLayout } from "shareComponents/layouts/MediaLayout";
 import Policy from "views/authentication/Policy";
 import { HomePage } from "views/financial/pages/HomePage";
 import { FinancialLayoutV2 } from "views/financial/sharedComponents/layoutsV2";
@@ -212,9 +213,9 @@ const Routes: FC = () => {
 
                                 {/* =====MEDIA===== */}
                                 <Route path="/media">
-                                    <HomeLayout>
+                                    <MediaLayout>
                                         <MediaRouter />
-                                    </HomeLayout>
+                                    </MediaLayout>
                                 </Route>
 
                                 {/* =====PERSONAL===== */}

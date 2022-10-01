@@ -105,15 +105,15 @@ export const MediaHomePage: FC = () => {
 						/>
 					</div>
 				</div>
-				<button className="button-newpost flex" onClick={() => toggleCreateModal()}>
+				{/* <button className="button-newpost flex" onClick={() => toggleCreateModal()}>
 					<img src={iconPencil} alt="icon pencil" />
-				</button>
+				</button> */}
 			</div>
-			<ModalContainer isModalOpen={isShowCreateModal} toggle={() => ''}>
+			{/* <ModalContainer isModalOpen={isShowCreateModal} toggle={() => ''}>
 				<div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl">
 					<ModalCreateArticle show={isShowCreateModal} toggle={toggleCreateModal} modalType="create" />
 				</div>
-			</ModalContainer>
+			</ModalContainer> */}
 		</>
 	);
 };
