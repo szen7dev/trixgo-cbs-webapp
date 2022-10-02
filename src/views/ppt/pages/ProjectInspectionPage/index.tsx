@@ -19,7 +19,8 @@ const ProjectInspectionPage: FC = () => {
 			pages={[
 				{ id: '1', title: 'Tất cả', path: '/pm/project/:id/inspection', navExact: true },
 				{ id: '2', title: 'Gói thầu', path: '/pm/project/:id/inspection/tabs2' },
-				{ id: '3', title: 'Báo cáo quản trị', path: '/pm/project/:id/inspection/tabs3' },
+				{ id: '3', title: 'Báo cáo gói thầu', path: '/pm/project/:id/inspection/tabs3' },
+				{ id: '4', title: 'Báo cáo quản trị', path: '/pm/project/:id/inspection/tabs4' },
 			]}
 			rightHeader={() => <div className="flex items-center">
 				<ButtonCreate onClick={() => setIsShow(true)} />
