@@ -53,7 +53,9 @@ const DebtChart: FC<Props> = ({ companyID = "" }) => {
                 <div className="mb-3">
                     <div className="text-black">
                         <span className="w-32 text-primary-gray">Tổng:
-                            <span className="text-base"> {convertCurrency(total)}</span>
+                            <span className="text-base">{` `}
+                                {(total / 1_000_000_000).toFixed(3)}
+                            </span>
                         </span>
                     </div>
                     <div className="w-full  h-2">
@@ -71,7 +73,9 @@ const DebtChart: FC<Props> = ({ companyID = "" }) => {
                 <div className="w-full mb-3">
                     <div className="text-black">
                         <span className="w-32 text-primary-gray">Trong kỳ:
-                            <span className="text-base"> {convertCurrency(total - totalOutDate)}</span>
+                            <span className="text-base">{` `}
+                                {(total - totalOutDate) && ((total - totalOutDate) / 1_000_000_000).toFixed(3)}
+                            </span>
                         </span>
                     </div>
                     <div className="relative w-full  h-2">
@@ -93,12 +97,13 @@ const DebtChart: FC<Props> = ({ companyID = "" }) => {
                 <div className="mb-3">
                     <div className="text-black">
                         <span className="w-32 text-primary-gray">Quá hạn:
-                            <span className="text-base"> {convertCurrency(totalOutDate)}</span>
+                            <span className="text-base">{` `}
+                                {(totalOutDate / 1_000_000_000).toFixed(3)}
+                            </span>
                         </span>
                     </div>
                     <div className="relative w-full  h-2">
                         <div
-                            className=""
                             style={{
                                 width: `${(total / totalOutDate) * 100}%`,
                                 marginTop: -0.75,

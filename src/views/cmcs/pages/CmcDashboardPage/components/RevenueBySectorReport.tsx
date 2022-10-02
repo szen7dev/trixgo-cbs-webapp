@@ -66,11 +66,6 @@ const RevenueBySectorReport: FC<Props> = ({ companyID, year = 2022 }) => {
     }
   }, [contractIPCAmountByProperty, isLoadingAmountByProperty])
 
-  console.log({
-    totalAmount,
-    data: contractIPCAmountByProperty?.data
-  })
-
   return (
     <div className="bg-primary-light py-4 px-6 h-full">
       <p className="font-bold text-primary-gray text-lg">

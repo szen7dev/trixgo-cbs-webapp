@@ -1,4 +1,5 @@
-import { FC } from "react";
+import { FC, useState } from "react";
+import classnames from "classnames";
 import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
 import RevenueBySectorReport from "./components/RevenueBySectorReport";
@@ -30,13 +31,14 @@ import { ContractPerformanceGuarantee } from "./components/ContractPerformanceGu
 import FilterDropdown from "./components/FilterDropdown";
 
 const CmcDashboardPage: FC = () => {
+  const [yearSelected, setYearSelected] = useState(2022);
 
   // --------- Check phân quyền
-  // useCheckPerAccessScreen({
-  //   appID: APP_ID.CMCS.id,
-  //   menuID: APP_ID.CMCS.menuCmcsApp.dashboard.id,
-  //   type: "1"
-  // });
+  useCheckPerAccessScreen({
+    appID: APP_ID.CMCS.id,
+    menuID: APP_ID.CMCS.menuCmcsApp.dashboard.id,
+    type: "1"
+  });
   // ---------
 
   const { user } = useAuth();
@@ -48,23 +50,24 @@ const CmcDashboardPage: FC = () => {
     contractAmountByMonthAll += item?.amount;
   });
 
-  contractAmountByMonthAll = +(contractAmountByMonthAll/1000000000).toFixed(3);
+  contractAmountByMonthAll = +(contractAmountByMonthAll / 1000000000).toFixed(3);
 
   // Nghiệm thu
-  const { cmcsContractIPCAmountByMonth, cmcsContractPaymentAmountByMonth } = useCmcsDashboard({params: { outin: 1, year: 2022 }});
+  const { cmcsContractIPCAmountByMonth, cmcsContractPaymentAmountByMonth } = useCmcsDashboard({ params: { outin: 1, year: 2022 } });
 
   let cmcsContractIPCAmountByMonthAll = 0;
   cmcsContractIPCAmountByMonth?.forEach((item: any) => {
     cmcsContractIPCAmountByMonthAll += item?.amount;
   });
-  cmcsContractIPCAmountByMonthAll = +(cmcsContractIPCAmountByMonthAll/1000000000).toFixed(3);
+  cmcsContractIPCAmountByMonthAll = +(cmcsContractIPCAmountByMonthAll / 1000000000).toFixed(3);
 
   //Tiền về/Giải ngân
   let cmcsContractPaymentAmountByMonthAll = 0;
   cmcsContractPaymentAmountByMonth?.forEach((item: any) => {
     cmcsContractPaymentAmountByMonthAll += item?.amount;
   });
-  cmcsContractPaymentAmountByMonthAll = +(cmcsContractPaymentAmountByMonthAll/1000000000).toFixed(3);
+  cmcsContractPaymentAmountByMonthAll = +(cmcsContractPaymentAmountByMonthAll / 1000000000).toFixed(3);
+
   return (
     <section className=" w-full">
       <div className="sticky top-0 z-10 bg-white	">
@@ -90,7 +93,7 @@ const CmcDashboardPage: FC = () => {
           <div>
             <div className=" flex items-center">
               <span className="text-primary text-sm">
-                Công ty Cổ phần CONINCO Quản lý dự án và đầu tư
+                {user?.company?.name}
               </span>
               <div className="w-14 h-10 flex items-center justify-center rounded ml-2">
                 <FilterDropdown />
@@ -103,37 +106,31 @@ const CmcDashboardPage: FC = () => {
           {/* filter by year */}
           <div className={"header-table flex py-4 w-full top-0 bg-white"}>
             <button
-              // onClick={() => setFilter("unread")}
+              onClick={() => setYearSelected(2022)}
               className={
-                "py-1 px-4 mx-2 rounded-full border border-primary-border text-white bg-cbs-secondary border-none"
-                // +
-                // (filter === "unread"
-                //   ? "text-white bg-cbs-secondary border-none"
-                //   : "text-primary-gray bg-white")
+                classnames("py-1 px-4 mx-2 rounded-full border border-primary-border", {
+                  "text-white bg-cbs-secondary border-none": yearSelected === 2022
+                })
               }
             >
               2022
             </button>
             <button
-              // onClick={() => setFilter("read")}
+              onClick={() => setYearSelected(2021)}
               className={
-                "py-1 px-4 mx-2 rounded-full border border-primary-border "
-                // +
-                // (filter === "read"
-                //   ? "text-white bg-cbs-secondary border-none"
-                //   : "text-primary-gray bg-white")
+                classnames("py-1 px-4 mx-2 rounded-full border border-primary-border", {
+                  "text-white bg-cbs-secondary border-none": yearSelected === 2021
+                })
               }
             >
               2021
             </button>
             <button
-              // onClick={() => setFilter("read")}
+              onClick={() => setYearSelected(2020)}
               className={
-                "py-1 px-4 mx-2 rounded-full border border-primary-border "
-                // +
-                // (filter === "read"
-                //   ? "text-white bg-cbs-secondary border-none"
-                //   : "text-primary-gray bg-white")
+                classnames("py-1 px-4 mx-2 rounded-full border border-primary-border", {
+                  "text-white bg-cbs-secondary border-none": yearSelected === 2020
+                })
               }
             >
               2020
@@ -171,20 +168,26 @@ const CmcDashboardPage: FC = () => {
         <div className="w-3/5 flex flex-col gap-2">
 
           <div className="flex justify-between gap-2">
-            <div className="w-1/3 border	"><TotalRevenueReport contractAmountByMonthAll={contractAmountByMonthAll}/></div>
-            <div className="w-1/3 border	"><AcceptanceReport cmcsContractIPCAmountByMonthAll = { cmcsContractIPCAmountByMonthAll }/></div>
-            <div className="w-1/3 border	"><MoneyBackReport cmcsContractPaymentAmountByMonthAll={cmcsContractPaymentAmountByMonthAll}/></div>
+            <div className="w-1/3 border">
+              <TotalRevenueReport contractAmountByMonthAll={contractAmountByMonthAll} />
+            </div>
+            <div className="w-1/3 border">
+              <AcceptanceReport cmcsContractIPCAmountByMonthAll={cmcsContractIPCAmountByMonthAll} />
+            </div>
+            <div className="w-1/3 border">
+              <MoneyBackReport cmcsContractPaymentAmountByMonthAll={cmcsContractPaymentAmountByMonthAll} />
+            </div>
           </div>
 
-          <div className="">
+          <div>
             {/* biểu đồ */}
-            <RevenueOverTimeReport data={{ contractAmountByMonth, cmcsContractIPCAmountByMonth, cmcsContractPaymentAmountByMonth }}/>
+            <RevenueOverTimeReport data={{ contractAmountByMonth, cmcsContractIPCAmountByMonth, cmcsContractPaymentAmountByMonth }} />
           </div>
 
           <div className="flex gap-2 h-[222px]">
             <div className="w-2/3">
               <RevenueBySectorReport
-                year={2022}
+                year={yearSelected}
                 companyID={user?.company?._id}
               />
             </div>
@@ -205,7 +208,7 @@ const CmcDashboardPage: FC = () => {
           {/* map */}
           <div className="h-full bg-primary-light px-6 py-4 flex	flex-col gap-4">
             <div className="font-bold text-primary-gray text-lg">Khu vực triển khai</div>
-            {/* <CustomMap /> */}
+            <CustomMap />
           </div>
           {/* end map */}
           <div className="flex gap-2">
