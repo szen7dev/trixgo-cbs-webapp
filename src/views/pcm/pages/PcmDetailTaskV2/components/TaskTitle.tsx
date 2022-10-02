@@ -8,11 +8,13 @@ import { toast } from "react-toastify";
 
 type Props = {
     task: Task;
+    userId: string;
 }
 
-export const TaskDetailTitle: FC<Props> = ({ task }) => {
+export const TaskDetailTitle: FC<Props> = ({ task, userId }) => {
     const [currentStatus, setCurrentStatus] = useState(task.status);
     const [currentPriority, setCurrentPriority] = useState(task.priority);
+    const [isMarkInterest, setIsMarkInterest] = useState(task?.flags?.includes(userId))
 
     const { updateTaskAsync } = useTask({});
 
@@ -60,17 +62,39 @@ export const TaskDetailTitle: FC<Props> = ({ task }) => {
         }
     }
 
+    const handleMarkInterest = async () => {
+        try {
+          const { error, data } = await updateTaskAsync({
+            taskID: task._id,
+            ...isMarkInterest ? { flagsRemoves: [userId] } : { flags: [userId] }
+          })
+
+          if(error) return toast.warn(data?.message);
+
+          setIsMarkInterest(!isMarkInterest);
+        } catch (error) {
+          if(error instanceof Error)
+            toast.error(error.message);
+          if(typeof error === 'string')
+            toast.error(error);
+        }
+    }
+
     return (
         <div className={"task-detail-title"}>
-            <span className={"text-xl "}>
+            <span className={"text-xl"}>
                 {task.name}
             </span>
-            <span className={"inline-block ml-2"}>
-                <button>
-                    <img src={iconStar} alt={"bookmark"} className={"w-[18px] h-[18px]"} />
+            <span className={"inline-block ml-2 mx-2"}>
+                <button onClick={handleMarkInterest}>
+                    <img
+                        className="inline h-[22px] w-[22px]"
+                        src={`/images/common/${isMarkInterest ? 'icons8-star-96.png' : 'icon-star-filled.png'}`}
+                        alt="Star"
+                    />
                 </button>
             </span>
-            <InlineBadgeSelect 
+            <InlineBadgeSelect
                 wrapperClassName={"-translate-y-1"}
                 className={`text-xs rounded-full text-white px-2 py-1 mx-1 ${PCM_STATUS_TASK[currentStatus - 1]?.class}`}
                 defaultValue={task.status}

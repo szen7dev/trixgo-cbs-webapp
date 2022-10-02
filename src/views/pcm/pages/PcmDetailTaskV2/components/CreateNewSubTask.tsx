@@ -104,6 +104,7 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
             }
         } finally {
             cancelCreateNewSubTask();
+            setSelectedUser([]);
         }
     }
 

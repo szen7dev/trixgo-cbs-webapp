@@ -239,6 +239,9 @@ button {
 
 /*__________________________________________________________________________*/
 /* ___________Customized layout styles ___________________*/
+.bg-gray-custom{
+	background: #F5F7FB;
+}
 .t-leftsidebar-navigation {
   width: 240px;
 }
@@ -1805,4 +1808,14 @@ img {
 }
 .tox .tox-editor-header {
   z-index: 0 !important;
+}
+.comment-text table td {
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  padding: 5px;
+}
+.comment-text table th {
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  padding: 5px;
 }

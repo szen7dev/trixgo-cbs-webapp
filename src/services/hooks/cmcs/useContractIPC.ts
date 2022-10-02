@@ -2,7 +2,7 @@ import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 
 import ContractIPCRepository from 'apis/cmcs/contractIPC';
 import HumanRepository from 'apis/human';
-import ContractProduceRepository from "../../../apis/cmcs/contractProduce";
+import ContractProduceRepository from "apis/cmcs/contractProduce";
 
 type UseContractIPCProp = {
     listContractIPC: Array<any>;
@@ -172,5 +172,49 @@ export const useDetailContractIPCMutation = (id: string): any => {
         message: 'Ok',
         loading: res.isLoading,
         refetch: res.refetch,
+    }
+}
+
+// Bắt đầu tạo hook download excel
+type UseContractCustom = {
+    exportContractIpcAsync: (payload: any) => Promise<any>,
+};
+
+type UseContractCustomParams = {
+    params?: any
+}
+
+export const useContractIpcCustom = ({
+    params = {}
+}: UseContractCustomParams) : UseContractCustom => {
+    const { mutateAsync: exportContractIpcAsync } =
+        useMutation((payload: any) =>
+            ContractIPCRepository.exportContractIpc(payload)
+        );
+
+    return {
+        exportContractIpcAsync
+    }
+}
+// Kết thúc tạo hook download excel
+
+export const useCmcsDashboard = ({ params = {}}) => {
+    const { data: cmcsContractIPCAmountByMonth } = 
+        useQuery("cmcsContractIPCAmountByMonth", () => 
+            ContractIPCRepository.cmcsContractIPCAmountByMonth(params), {
+                refetchOnWindowFocus: false,
+                enabled: true,
+            });
+
+    const { data: cmcsContractPaymentAmountByMonth } = 
+    useQuery("cmcsContractPaymentAmountByMonth", () => 
+        ContractIPCRepository.cmcsContractPaymentAmountByMonth(params), {
+            refetchOnWindowFocus: false,
+            enabled: true,
+        });
+
+    return {
+        cmcsContractIPCAmountByMonth: cmcsContractIPCAmountByMonth?.data,
+        cmcsContractPaymentAmountByMonth: cmcsContractPaymentAmountByMonth?.data
     }
 }

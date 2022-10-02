@@ -11,6 +11,7 @@ import RightClickMenuProvider from "services/providers/RightClickMenu";
 
 /*=====3.LAYOUTS=====*/
 import { FullPageLayout } from "shareComponents/layouts";
+import { MediaLayout } from "shareComponents/layouts/MediaLayout";
 import Policy from "views/authentication/Policy";
 import { HomePage } from "views/financial/pages/HomePage";
 import { FinancialLayoutV2 } from "views/financial/sharedComponents/layoutsV2";
@@ -25,7 +26,8 @@ const AuthenticationRouter = lazy(() => import("./authentication"));
 const SampleRouter = lazy(() => import("./sample"));
 // const BiddingRouter = lazy(() => import("./bidding"));
 const BiddingRouter = lazy(() => import("./bidding/v2"));
-const CmcsRouter = lazy(() => import("./cmcs"));
+// const CmcsRouter = lazy(() => import("./cmcs/index"));
+const CmcsRouterV2 = lazy(() => import("./cmcs/indexV2"));
 // const DatahubRouter = lazy(() => import("./datahub"));
 const DatahubRouterV2 = lazy(() => import("./datahub/indexV2"));
 // const DocumentRouter = lazy(() => import("./document"));
@@ -130,7 +132,7 @@ const Routes: FC = () => {
 
                                 {/* =====CMCS===== */}
                                 <Route path="/cmcs">
-                                    <CmcsRouter />
+                                    <CmcsRouterV2/>
                                 </Route>
 
                                 {/* =====DOCUMENT V2===== */}
@@ -211,9 +213,9 @@ const Routes: FC = () => {
 
                                 {/* =====MEDIA===== */}
                                 <Route path="/media">
-                                    <HomeLayout>
+                                    <MediaLayout>
                                         <MediaRouter />
-                                    </HomeLayout>
+                                    </MediaLayout>
                                 </Route>
 
                                 {/* =====PERSONAL===== */}

@@ -258,7 +258,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
           <div
             className={
               "px-4 py-1 rounded-full relative " +
-              (firstRoute === "financial-"
+              (firstRoute === "financial"
                 ? "bg-cbs-hightlight-right-navigate"
                 : "")
             }

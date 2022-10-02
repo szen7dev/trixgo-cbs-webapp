@@ -75,6 +75,10 @@ const ProjectDashboardTaskPage: FC = () => {
 	});
 	// ---------
 
+	useEffect(() => {
+		document.title = "Trixgo | Báo cáo công việc";
+	}, []);
+
 	const [type, setType] = useState<string>('all');
 	const [open, setOpen] = useState<{ show: boolean, mediaId: string }>({ show: false, mediaId: '' });
 
@@ -123,7 +127,7 @@ const ProjectDashboardTaskPage: FC = () => {
 				<div className="flex flex-col bg-white text-cbs-subtext mt-4" style={{ height: "250px" }}>
 					<div className="flex justify-between flex-wrap items-center pl-6 pr-2.5">
 						<h3 className="text-x-large mt-2.5">Thống kê công việc theo dự án/phòng ban</h3>
-						<div className="flex items-center mt-2.5">
+						{/* <div className="flex items-center mt-2.5">
 							<ul className="flex text-x-small" onChange={handleChange.bind(this)}>
 								<li className="pr-3 pl-1">
 									<label>
@@ -151,7 +155,7 @@ const ProjectDashboardTaskPage: FC = () => {
 								</li>
 							</ul>
 							<button className="rounded-md border border-cbs-border p-2">Chọn thời gian</button>
-						</div>
+						</div> */}
 					</div>
 					<div className="flex-1">
 						<StatisticalChart listProject={listProject} listAmountTask={listAmountTask}/>
@@ -175,10 +179,10 @@ const ProjectDashboardTaskPage: FC = () => {
 								</th>
 								<th className="font-normal pr-3">
 									<span className="pl-2 border-l border-cbs-border">
-										Dự án
+										Dự án/Phòng ban
 									</span>
 								</th>
-								<th className="font-normal pl-4 pr-3">Chủ đầu tư</th>
+								{/* <th className="font-normal pl-4 pr-3">Chủ đầu tư</th> */}
 								<th className="font-normal pl-4 pr-3">
 									<div className="flex justify-between">
 										<span>
@@ -234,14 +238,14 @@ const ProjectDashboardTaskPage: FC = () => {
 										</td>
 										<td className="pb-2 pl-2.5 pr-4 pt-2.5 border border-l-0 border-cbs-border min-w-[360px]">
 											{/* { project.sign }{ project.name } */}
-											<Link to={generatePath("/pcm/project/:id/subject", { id: project._id })}>
+											<Link to={generatePath("/pm/project/:id/subject", { id: project._id })}>
 												{project.sign}.{project.name}
 												{/* CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây */}
 											</Link>
 										</td>
-										<td className="pb-2 pl-5 pr-4 pt-2.5 border border-cbs-border">
+										{/* <td className="pb-2 pl-5 pr-4 pt-2.5 border border-cbs-border">
 											{ project?.company?.name || '' }
-										</td>
+										</td> */}
 										<td className="pb-2 px-3 pt-2 border border-r-0 border-cbs-border align-middle" style={{ minWidth: "155px", fontSize: '10px' }}>
 											<div className="flex w-full h-3 mt-2">
 												<button

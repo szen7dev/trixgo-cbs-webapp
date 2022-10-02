@@ -17,6 +17,7 @@ import styles from 'views/cmcs/styles/styles.module.css';
 
 import ListIcon from "assets/images/icon-bulleted-list.svg";
 import PolygonIcon from "assets/images/icon-polygon.svg";
+import CircleIcon from "assets/images/icon-circle.svg";
 
 ChartJS.register(
   CategoryScale,
@@ -45,8 +46,18 @@ const data = {
   ],
   datasets: [
     {
-      data: [300, 150, 202, 188, 228, 205, 233, 174, 206, 222, 245, 268],
-      backgroundColor: "#1A97F5",
+      data: [300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300],
+      backgroundColor: "#206EC3",
+      barThickness: 12,
+    },
+    {
+      data: [250, 250, 250, 250, 250, 250, 250, 250, 250, 250, 250, 250],
+      backgroundColor: "#4A9CDE",
+      barThickness: 12,
+    },
+    {
+      data: [200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200],
+      backgroundColor: "#5DB908",
       barThickness: 12,
     },
   ],
@@ -57,7 +68,7 @@ const options = {
   maintainAspectRatio: false,
   layout: {
     padding: {
-      top: 21,
+      top: 30,
     },
   },
   scales: {
@@ -105,7 +116,7 @@ const options = {
       enabled: false,
     },
     datalabels: {
-      display: true,
+      display: false,
       color: "#798295",
       align: "top" as const,
       anchor: "end" as const,
@@ -113,45 +124,27 @@ const options = {
   },
 };
 
-const RevenueOverTimeReport: FC = () => {
+const RevenueOverTimeReport: FC<any> = () => {
   return (
-    <div className="bg-primary-light px-6 py-4 h-full">
-      <div className="flex items-center justify-between">
-        <p className="font-bold text-primary-gray text-lg">
-          Doanh thu theo thời gian
-        </p>
+    <div className="bg-primary-light px-6 py-4">
+      <div className="bg-primary-light h-[240px]">
+        <div className="">
+          <p className="font-bold text-primary-gray text-lg">
+            Tổng thể
+          </p>
+        </div>
 
-        <div className="flex items-center">
-          <div className="flex items-center">
-            <div
-              className={cn(
-                "flex items-center justify-around h-8 w-20 rounded-l cursor-pointer",
-                styles.bgMonth
-              )}
-            >
-              <img src={ListIcon} alt="List" />
-              <span className="text-sm text-primary">Tháng</span>
-            </div>
-
-            <div
-              className={cn(
-                "flex items-center justify-around h-8 w-20 rounded-r cursor-pointer",
-                styles.bgQuarter
-              )}
-            >
-              <img src={ListIcon} alt="List" />
-              <span className="text-sm text-secondary-gray">Quý</span>
-            </div>
-          </div>
-          <button className="flex items-center justify-around w-28 h-8 border border-secondary-gray ml-3 rounded">
-            <img src={PolygonIcon} alt="Polygon" />
-            <span className="text-sm text-secondary-gray">Năm 2021</span>
-          </button>
+        <div className={styles.barChart}>
+          <Bar options={options} data={data} />
         </div>
       </div>
-
-      <div className={styles.barChart}>
-        <Bar options={options} data={data} />
+      <div className="flex mt-3">
+        <div className="flex gap-3 flex-1 justify-center">
+          <div className="flex items-center	"><img className="pr-1" src={CircleIcon} alt="icon" /> Ký: 100</div>
+          <div className="flex items-center	"><img className="pr-1" src={CircleIcon} alt="icon" /> Nghiệm thu: 80</div>
+          <div className="flex items-center	"><img className="pr-1" src={CircleIcon} alt="icon" /> Tiền về: 60</div>
+        </div>
+        <div><span className="text-gray-500	">Đơn vị tính: Tỷ đồng</span></div>
       </div>
     </div>
   );
