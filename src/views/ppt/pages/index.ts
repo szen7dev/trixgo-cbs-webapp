@@ -30,6 +30,7 @@ export { default as ProjectSchedulePage } from "./ProjectSchedulePage";
 export { default as ProjectInspectionPage } from "./ProjectInspectionPage";
 export { default as ProjectInspectionTab2Page } from "./ProjectInspectionTab2Page";
 export { default as ProjectInspectionTab3Page } from "./ProjectInspectionTab3Page";
+export { default as ProjectInspectionTab4Page } from "./ProjectInspectionTab4Page";
 export { default as ProjectInspectionDetailPage } from "./ProjectInspectionDetailPage";
 export { default as ProjectSubjectCompanyOfAssigneePage } from "./ProjectSubjectCompanyOfAssigneePage";
 export { default as ProjectSubjectCompanyOfAuthorPage } from "./ProjectSubjectCompanyOfAuthorPage";

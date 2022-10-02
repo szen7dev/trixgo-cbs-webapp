@@ -31,6 +31,7 @@ import {
   ProjectInspectionPage,
   ProjectInspectionTab2Page,
   ProjectInspectionTab3Page,
+  ProjectInspectionTab4Page,
   ProjectInspectionDetailPage,
   ProjectDashboardPortfolioPage,
   ProjectDashboardTaskPage,
@@ -476,22 +477,14 @@ const PCMRouter: FC = () => {
                       <ProjectInspectionPage />
                     </PmProjectLayout>
                   </Route>
-                  <Route exact path="/pm/project/:id/inspection/(tabs2|tabs3)">
+                  <Route exact path="/pm/project/:id/inspection/(tabs2|tabs3|tabs4)">
                     <PmProjectLayout>
                       <LayoutSecondary
                         pages={[
-                          {
-                            id: "1",
-                            title: "Tất cả",
-                            path: "/pm/project/:id/inspection",
-                            navExact: true,
-                          },
-                          { id: "2", title: "Gói thầu", path: "/pm/project/:id/inspection/tabs2" },
-                          {
-                            id: "3",
-                            title: "Báo cáo quản trị",
-                            path: "/pm/project/:id/inspection/tabs3",
-                          },
+                          { id: '1', title: 'Tất cả', path: '/pm/project/:id/inspection', navExact: true },
+                          { id: '2', title: 'Gói thầu', path: '/pm/project/:id/inspection/tabs2' },
+                          { id: '3', title: 'Báo cáo gói thầu', path: '/pm/project/:id/inspection/tabs3' },
+                          { id: '4', title: 'Báo cáo quản trị', path: '/pm/project/:id/inspection/tabs4' },
                         ]}
                       >
                         <Route
@@ -503,6 +496,11 @@ const PCMRouter: FC = () => {
                           exact
                           path="/pm/project/:id/inspection/tabs3"
                           component={ProjectInspectionTab3Page}
+                        />
+                        <Route
+                          exact
+                          path="/pm/project/:id/inspection/tabs4"
+                          component={ProjectInspectionTab4Page}
                         />
                       </LayoutSecondary>
                     </PmProjectLayout>

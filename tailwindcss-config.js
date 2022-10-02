@@ -104,6 +104,7 @@ module.exports = {
                 "cbs-down-text": "#F44336",
                 "cbs-nav-text": "#00B9F2",
                 "cbs-light-blue": "#E7F3FF",
+                "cbs-bg-light-blue-bar": "#8EB4E3",
                 "cbs-pink": "#FDF3F5",
                 "cbs-green-bg": "#EBFAF2",
                 "cbs-blue": "#1A97F5",
