@@ -2,7 +2,7 @@ import React, { ElementType } from 'react'
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 
-import image from 'assets/images/media/image 177.png';
+import image from 'assets/images/media/mediaDefault.png';
 import { MediaProps } from 'typings/media';
 
 type Props = {
