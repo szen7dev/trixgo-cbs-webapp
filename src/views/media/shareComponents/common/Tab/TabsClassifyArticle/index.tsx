@@ -49,7 +49,7 @@ export const TabsClassifyArticle: FC<TransitionEvents & Props> = ({ show, toggle
 						<img src={iconChecked} alt="icon Checked" />
 					</div>
 					<div>
-						<p className="text-black text-base leading-5">Nội bộ công ty</p>
+						<p className="text-black text-base leading-5">Nội bộ công ty </p>
 						<p className="text-secondary-gray text-sm leading-4">Nội bộ công ty</p>
 					</div>
 				</label>

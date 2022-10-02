@@ -32,7 +32,7 @@ export const MediaLeftMenuContent: FC = () => {
                 <NavLink to={`/media/home`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
                 >
                     <img width={'20px'} src={socialIcon} alt="Menu item" />
-                    <span className={"flex-1 ml-2 text-left text-[14px]"}>Nội bộ công ty</span>
+                    <span className={"flex-1 ml-2 text-left text-[14px]"}>Trang chủ</span>
                 </NavLink>
                 <NavLink to={`/media/2`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray">
                     <img width={'20px'} src={socialIcon} alt="Menu item" />
