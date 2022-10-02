@@ -25,7 +25,7 @@ const AccountingRouter = lazy(() => import("./accounting"));
 const AuthenticationRouter = lazy(() => import("./authentication"));
 const SampleRouter = lazy(() => import("./sample"));
 // const BiddingRouter = lazy(() => import("./bidding"));
-const BiddingRouter = lazy(() => import("./bidding/v2"));
+const BiddingRouter = lazy(() => import("./bidding/indexV2"));
 // const CmcsRouter = lazy(() => import("./cmcs/index"));
 const CmcsRouterV2 = lazy(() => import("./cmcs/indexV2"));
 // const DatahubRouter = lazy(() => import("./datahub"));

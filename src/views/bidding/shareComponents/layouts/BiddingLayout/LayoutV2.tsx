@@ -43,6 +43,12 @@ const listTab: {
     count: 0,
     route: prefix + "/home",
   },
+  {
+    label: "Báo cáo số liệu",
+    icon: fileIcon,
+    count: 0,
+    route: prefix + "/report",
+  },
   // {
   //   label: "Hồ sơ dự thầu",
   //   icon: fileIcon,
