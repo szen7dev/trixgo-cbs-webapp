@@ -16,6 +16,7 @@ import folderImage from "assets/menu/project/icons-project-folder.svg";
 import homeImage from "assets/menu/project/icons-project-home.svg";
 import paymentImage from "assets/menu/project/icons-project-payment.svg";
 import photoImage from "assets/menu/project/icons-project-photo.svg";
+import inspectionImage from "assets/menu/project/icons-project-inspection.svg";
 import scheduleImage from "assets/menu/project/icons-project-schedule.svg";
 import subjectImage from "assets/menu/project/icons-project-subject.svg";
 // import resourceImage from "assets/menu/project/resource.png";
@@ -53,6 +54,8 @@ export const PmProjectLeftMenuContent:FC = () => {
                 return paymentImage;
             case 'photo':
                 return photoImage;
+            case 'inspection':
+                return inspectionImage;                
             // case 'resource':
             //     return resourceImage;
             case 'schedule':
