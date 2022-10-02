@@ -38,7 +38,6 @@ const CmcHomePageV2:FC = () => {
     type PaginateHandle = React.ElementRef<typeof PaginateV2>;
     const ref = React.useRef<PaginateHandle>(null);
     const [pageIndex, setPageIndex] = useState(0);
-
     const [recordSelected, setSelectRecord] = useState<any>({});
 
     const [fromToDate, setFromToDate] = useState({fromDate: "", toDate: ""})
@@ -61,10 +60,6 @@ const CmcHomePageV2:FC = () => {
     const [ ontimes, setOntimes ]  = useState<string[]>([]);
     const [ onbudgets, setOnbudgets ]  = useState<string[]>([]);
 
-    const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
-		isExporting: false,
-	});
-
     const {isLoading, totalRecord, totalPage, hasNextPage, listCmcsByFilterWithPager, fetchNextPageListCmcsByFilter} = useListFilterContract({
         params: {
             ...fromToDate,
@@ -80,6 +75,10 @@ const CmcHomePageV2:FC = () => {
     })
 
     //Down load excel
+    const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+		isExporting: false,
+	});
+
     const { exportContractAsync } = useContractCustom({});
     const handleExportReport = async () => {
         try {
@@ -107,11 +106,11 @@ const CmcHomePageV2:FC = () => {
             } finally {
                 setStateExport({ isExporting: false });
             }
-      }
+    }
     
-      if(stateExport.isExporting) {
+    if(stateExport.isExporting) {
         return <Loader className="border-primary" />
-      }
+    }
     
     return (
         <div className="cmcs-home flex flex-col h-full overflow-hidden">

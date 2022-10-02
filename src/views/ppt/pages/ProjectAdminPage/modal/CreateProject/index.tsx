@@ -20,6 +20,7 @@ const CreateProject: FC<any> = ({ toggle, modalType, onConfirm, initialValues = 
     type: "",
     name: "",
     sign: "",
+    location: "",
     startTime: "",
     expiredTime: "",
     milestones: "",
@@ -35,6 +36,7 @@ const CreateProject: FC<any> = ({ toggle, modalType, onConfirm, initialValues = 
     contractAdvancePaymentPaid: "",
     contractAmountPaid: ""
 } }) => {
+    console.log({ initialValues })
     const { createProjectMutateAsync, refetchPcmProject, updateProjectMutateAsync } = usePcmProject({ keyword: "" });
 
     const companySchema = object().shape({
@@ -164,6 +166,17 @@ const CreateProject: FC<any> = ({ toggle, modalType, onConfirm, initialValues = 
                                     <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtSign" placeholder="Nhập mã hiệu" {...getFieldProps('sign')} />
                                     <ErrorMessage
                                         name="sign"
+                                        component="span"
+                                        className="font-normal leading-7 text-sm text-negative"
+                                    />
+                                </div>
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtLocation">
+                                        Location
+                                    </label>
+                                    <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtLocation" placeholder="Địa chỉ theo google map" {...getFieldProps('location')} />
+                                    <ErrorMessage
+                                        name="location"
                                         component="span"
                                         className="font-normal leading-7 text-sm text-negative"
                                     />

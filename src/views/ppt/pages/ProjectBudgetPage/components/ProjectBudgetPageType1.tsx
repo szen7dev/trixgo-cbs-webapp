@@ -1,6 +1,6 @@
 import React, {FC, useState} from "react";
 import chervUpIcon from "assets/images/icon-cherv-up.svg";
-import {DropdownSearchableV2, RightClickMenuWrapper} from "shareComponents/common";
+import {DropdownSearchableV2, RightClickMenuWrapper, Loader} from "shareComponents/common";
 import MenuChildRow from "./MenuChildRow";
 import {formatNumberMoney} from "utils/cmcs";
 import BugetRowGroupTemp from "./BudgetRowGroupTemp";
@@ -13,6 +13,9 @@ import {NavigateTabBudgetPage} from "./NavigateTabBudgetPage";
 import downloadIcon from "assets/images/icons8-download-64.svg";
 import iconPencil from "assets/images/icons8-pencil-96 1.png";
 import nextIcon from "assets/images/icons-arrow-next.svg";
+import { createLinkAndClick } from 'utils';
+import { toast } from "react-toastify";
+import { useContractCustom } from "services/hooks/cmcs/useContractIncome";
 
 type Props = {
     collapse: boolean;
@@ -31,6 +34,36 @@ export const ProjectBudgetPageType1:FC<Props> = ({projectInfo, collapse, toggleC
     } = usePcmProjectBudget({
         projectID
     });
+
+    const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+		isExporting: false,
+	});
+
+    const { exportContractAsync } = useContractCustom({});
+    const handleExportReport = async () => {
+        try {
+            setStateExport({ isExporting: true });
+            const { error, data } = await exportContractAsync({
+                filterParams: {
+                    projectID
+                },
+                type: 'project'
+            });
+            if(error) {
+                return toast.warn(data?.message);
+            }
+
+            data && createLinkAndClick(data, '_self');
+        } catch (error: any) {
+            toast.error(error.message)
+        } finally {
+            setStateExport({ isExporting: false });
+        }
+    }
+    
+    if(stateExport.isExporting) {
+        return <Loader className="border-primary" />
+    }
 
     return (
         <>
@@ -76,12 +109,12 @@ export const ProjectBudgetPageType1:FC<Props> = ({projectInfo, collapse, toggleC
                 </div>
                 <div className={"flex items-center pb-2"}>
                     <NavigateTabBudgetPage/>
-                    <button className={"flex items-center justify-center mx-3 ml-6"}>
+                    <button className={"flex items-center justify-center mx-3 ml-6"} onClick={handleExportReport}>
                         <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"}/>
                     </button>
-                    <button className={"flex items-center justify-center mx-3 ml-6"}>
+                    {/* <button className={"flex items-center justify-center mx-3 ml-6"}>
                         <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"}/>
-                    </button>
+                    </button> */}
                     {/* <div className={"flex-1 flex items-center justify-end"}>
                         <span className={"text-primary-gray"}>1-50 trong số 2.358</span>
                         <button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"} disabled={true}>
