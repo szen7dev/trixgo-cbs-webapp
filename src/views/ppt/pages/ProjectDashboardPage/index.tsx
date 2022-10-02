@@ -237,11 +237,9 @@ const ProjectDashboardPortfolioPage: FC = () => {
 							</div>
 						</div>
 						<div className="w-4/12 pl-4">
-							{/* Multiple Chart */}
-							{/* <ReportMultipleChart className='bg-white h-full pl-5 pr-12 pb-3 w-full mt-4' projectInfo={projectInfo}/> */}
-
-							{/* Quick report */}
-							<ReportQuickReport className={cn(styles['quick-report'], 'bg-white pt-4 px-6 pb-6 w-full h-[222px]')} projectID={projectID} />
+							<div className="h-[222px] bg-primary-light">
+									<ReportContractor className={cn(styles['contractor-wrapper'], "bg-white   flex-1")} projectID={projectID} />
+							</div>
 						</div>
 					</div>
 
