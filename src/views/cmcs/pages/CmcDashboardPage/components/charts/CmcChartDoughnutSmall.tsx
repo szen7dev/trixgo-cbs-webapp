@@ -47,14 +47,17 @@ const ChartDoughnutSmall: React.FC<Props> = ({
   rotation,
 }) => {
   const plugins = React.useMemo(
-    () =>
-      getPlugins(title, subtitle, {
+    () => {
+      return getPlugins(title, subtitle, {
         titleSize: 24,
         subtitleSize: 10,
         bold: false,
-      }),
-    [subtitle, title]
+      })
+    },
+    [title, subtitle]
   );
+
+  if(title === '0') return <></>;
 
   return (
     <Doughnut

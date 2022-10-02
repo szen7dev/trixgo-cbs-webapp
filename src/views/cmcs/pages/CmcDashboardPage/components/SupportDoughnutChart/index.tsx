@@ -54,6 +54,10 @@ const ChartDoughnutSmall: React.FC<Props> = ({
     [title]
   );
 
+  // const isEveryZero = _data.datasets[0]?.data?.every((item: number) => item === 0)
+
+  // if(isEveryZero) return <></>;
+
   return (
     <Doughnut
       key={Math.random()}

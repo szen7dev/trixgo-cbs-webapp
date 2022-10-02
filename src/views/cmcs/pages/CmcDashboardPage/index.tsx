@@ -1,24 +1,24 @@
 import { FC } from "react";
 import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
-import { ReceivableReport } from "./components/";
 import RevenueBySectorReport from "./components/RevenueBySectorReport";
 import RevenueOverTimeReport from "./components/RevenueOverTimeReport";
-import CashFlowManagementReport from "./components/CashFlowManagementReport";
-import ProfileAndProductReport from "./components/ProfileAndProductReport";
-import CmcImagesReport from "./components/CmcImagesReport";
-import PaymentPlanReport from "./components/PaymentPlanReport";
+// import { ReceivableReport } from "./components/";
+// import CashFlowManagementReport from "./components/CashFlowManagementReport";
+// import ProfileAndProductReport from "./components/ProfileAndProductReport";
+// import CmcImagesReport from "./components/CmcImagesReport";
+// import PaymentPlanReport from "./components/PaymentPlanReport";
 import TotalRevenueReport from "./components/TotalRevenueReport";
 import AcceptanceReport from "./components/AcceptanceReport";
 import MoneyBackReport from "./components/MoneyBackReport";
-import CompanyPreviewReport from "./components/CompanyPreviewReport";
-import QuickReport from "./components/QuickReport";
-import StatusReport from "./components/StatusReport";
+// import CompanyPreviewReport from "./components/CompanyPreviewReport";
+// import QuickReport from "./components/QuickReport";
+// import StatusReport from "./components/StatusReport";
 
-import FilterIcon from "assets/images/icons8-filter.svg";
+// import FilterIcon from "assets/images/icons8-filter.svg";
 
 // Import data từ API
-import { useCmcs } from 'services/hooks/useCmcs';
+// import { useCmcs } from 'services/hooks/useCmcs';
 import { useAuth } from "services/hooks/auth/useAuth";
 import { useContractDashboard } from 'services/hooks/items/useContract';
 import { useCmcsDashboard } from 'services/hooks/cmcs/useContractIPC';
@@ -28,36 +28,37 @@ import DebtChart from "./components/DebtChart";
 import { AdvanceGuarantee } from "./components/AdvanceGuarantee";
 import { ContractPerformanceGuarantee } from "./components/ContractPerformanceGuarantee";
 import FilterDropdown from "./components/FilterDropdown";
+
 const CmcDashboardPage: FC = () => {
 
   // --------- Check phân quyền
-  useCheckPerAccessScreen({
-    appID: APP_ID.CMCS.id,
-    menuID: APP_ID.CMCS.menuCmcsApp.dashboard.id,
-    type: "1"
-  });
+  // useCheckPerAccessScreen({
+  //   appID: APP_ID.CMCS.id,
+  //   menuID: APP_ID.CMCS.menuCmcsApp.dashboard.id,
+  //   type: "1"
+  // });
   // ---------
 
   const { user } = useAuth();
-  const { listContracts } = useCmcs({ companyID: user?.company._id });
+  // const { listContracts } = useCmcs({ companyID: user?.company._id });
   // Giá trị ký
   const { contractAmountByMonth } = useContractDashboard({ params: { outin: 1, year: 2022 } });
   let contractAmountByMonthAll = 0;
   contractAmountByMonth?.forEach((item: any) => {
     contractAmountByMonthAll += item?.amount;
   });
-  // console.log(contractAmountByMonth)
 
   contractAmountByMonthAll = +(contractAmountByMonthAll/1000000000).toFixed(3);
 
   // Nghiệm thu
   const { cmcsContractIPCAmountByMonth, cmcsContractPaymentAmountByMonth } = useCmcsDashboard({params: { outin: 1, year: 2022 }});
+
   let cmcsContractIPCAmountByMonthAll = 0;
   cmcsContractIPCAmountByMonth?.forEach((item: any) => {
     cmcsContractIPCAmountByMonthAll += item?.amount;
   });
   cmcsContractIPCAmountByMonthAll = +(cmcsContractIPCAmountByMonthAll/1000000000).toFixed(3);
-  
+
   //Tiền về/Giải ngân
   let cmcsContractPaymentAmountByMonthAll = 0;
   cmcsContractPaymentAmountByMonth?.forEach((item: any) => {
@@ -182,12 +183,17 @@ const CmcDashboardPage: FC = () => {
 
           <div className="flex gap-2 h-[222px]">
             <div className="w-2/3">
-              <RevenueBySectorReport />
+              <RevenueBySectorReport
+                year={2022}
+                companyID={user?.company?._id}
+              />
             </div>
             <div className="w-1/3 bg-primary-light px-6 py-4">
               <div className="font-bold text-primary-gray text-lg">Công nợ</div>
               <div className="w-full">
-                <DebtChart />
+                <DebtChart
+                  companyID={user?.company?._id}
+                />
               </div>
             </div>
           </div>
@@ -199,7 +205,7 @@ const CmcDashboardPage: FC = () => {
           {/* map */}
           <div className="h-full bg-primary-light px-6 py-4 flex	flex-col gap-4">
             <div className="font-bold text-primary-gray text-lg">Khu vực triển khai</div>
-            <CustomMap />
+            {/* <CustomMap /> */}
           </div>
           {/* end map */}
           <div className="flex gap-2">
