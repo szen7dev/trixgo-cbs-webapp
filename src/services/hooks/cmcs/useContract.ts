@@ -1,4 +1,4 @@
-import {useInfiniteQuery} from "react-query";
+import {useInfiniteQuery, useQuery} from "react-query";
 import CmcsRepository from "apis/cmcs";
 import {CmcsListAccessByContractQueryPayload, CmcsListByFilterQueryPayload, Contract} from "typings/cmcs";
 
@@ -146,5 +146,32 @@ export const useListAccessByContract = ({ params = {},  isFetchList = false }: C
         refetchListAccessByContract: refetch,
         fetchNextPageListAccessByContract: fetchNextPage,
         fetchPrevPageListAccessByContract: fetchPreviousPage
+    }
+}
+
+type UseContractCustom = {
+    listGuarantee: any,
+    isLoadingListGuarantee: boolean,
+};
+
+type UseContractCustomParams = {
+    params?: any,
+    isFetchListGuarantee?: boolean
+}
+
+export const useContractCustom = ({
+    params = {},
+    isFetchListGuarantee = false
+}: UseContractCustomParams) : UseContractCustom => {
+    const { data: listGuarantee, isLoading: isLoadingListGuarantee } =
+        useQuery(["cmcsListGuarantee", params], () =>
+        CmcsRepository.getListGuarantee(params), {
+            refetchOnWindowFocus: false,
+            enabled: isFetchListGuarantee,
+        });
+
+    return {
+        listGuarantee,
+        isLoadingListGuarantee
     }
 }

@@ -27,7 +27,7 @@ export const ContractPerformanceGuarantee: FC = () => {
                 <div className="flex py-1 items-center justify-between">
                     <div className="flex items-center justify-between">
                         <div className="bg-cbs-green w-2 h-2 rounded-full mr-3" />
-                        <span>Tuần tới <span>15</span></span>
+                        <span>Tuần tới: <span>15</span></span>
                     </div>
                 </div>
 

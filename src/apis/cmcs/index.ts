@@ -90,7 +90,14 @@ const CmcsRepository = {
       )
 
      return data;
-   }
+   },
+
+   async getListGuarantee(payload: any): Promise<any> {
+    const { data } = await API.get(
+      `${cmcsURL}/contracts/get-list-guarantee?${convertObToUrl(payload)}`
+    );
+    return data;
+  },
 };
 
 export default CmcsRepository;
