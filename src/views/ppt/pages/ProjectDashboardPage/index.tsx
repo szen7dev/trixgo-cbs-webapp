@@ -2,7 +2,7 @@ import { FC, useContext, useEffect } from "react";
 import SwiperCore, { Navigation } from 'swiper';
 import { useParams } from 'react-router-dom';
 import { useQueryAmountTaskMilestone } from "services/hooks/pcm/useStatistical";
-
+import moment from "moment";
 import cn from "classnames";
 import 'chartjs-adapter-moment';
 import 'moment/locale/vi';
@@ -37,11 +37,21 @@ import { ContextModalPost } from "views/media/contexts/post";
 import { APP_ID } from 'apis/localdb';
 import FilterDropdown from "views/cmcs/pages/CmcDashboardPage/components/FilterDropdown";
 import TotalInvestment from "./components/TotalInvestment";
+import TotalSignValue from "./components/TotalSignValue";
+import TotalAcceptance from "./components/TotalAcceptance";
+import TotalDisbursement from "./components/TotalDisbursement";
 import DebtChart from "./components/DebtChart";
 import { AdvanceGuarantee } from "./components/AdvanceGuarantee";
 import { ContractPerformanceGuarantee } from "./components/ContractPerformanceGuarantee";
 
 SwiperCore.use([Navigation]);
+
+function percentageBetweenTwoDate(start: any, end: any){
+	const today:any = new Date();
+	const q = Math.abs(today-start);
+	const d = Math.abs(end-start);
+	return Math.round((q/d)*100)
+}
 
 const ProjectDashboardPortfolioPage: FC = () => {
 	const { state, toggleModal } = useContext(ContextModalPost);
@@ -67,8 +77,8 @@ const ProjectDashboardPortfolioPage: FC = () => {
 	})
 
 	useEffect(() => {
-		document.title = `${projectInfo.sign} | Báo cáo quản trị`;
-	}, []);
+		document.title = `${projectInfo?.sign} | Báo cáo quản trị`;
+	}, [projectInfo.sign]);
 
 	const {
 		taskOverdueWork,
@@ -160,23 +170,23 @@ const ProjectDashboardPortfolioPage: FC = () => {
 								<div className="flex justify-between text-xs">
 									<div>
 										<span className="text-primary-gray">Bắt đầu: </span>
-										<span><b>1/1/21</b></span>
+										<span><b>{moment(projectInfo.startTime).format("L")}</b></span>
 									</div>
 									<div>
 										<span className="text-primary-gray">Kết thúc: </span>
-										<span><b>31/12/21</b></span>
+										<span><b>{moment(projectInfo.expiredTime).format("L")}</b></span>
 									</div>
 								</div>
 
 								<div className="w-full border h-2">
 									<div
 										className="bg-primary"
-										style={{ width: "82%", marginTop: -0.25, height: 7 }}
+										style={{ width: `${percentageBetweenTwoDate(new Date(projectInfo.startTime), new Date(projectInfo.expiredTime))}%`, marginTop: -0.25, height: 7 }}
 									></div>
 								</div>
 							</div>
 
-							<p className="w-1/6 text-primary text-sm px-4 pt-3"><b>82%</b></p>
+							<p className="w-1/6 text-primary text-sm px-4 pt-3"><b>{percentageBetweenTwoDate(new Date(projectInfo.startTime), new Date(projectInfo.expiredTime))}%</b></p>
 						</div>
 					</div>
 					{/* end filter by year */}
@@ -187,14 +197,13 @@ const ProjectDashboardPortfolioPage: FC = () => {
 						<div className="w-8/12">
 							<div className="flex flex-wrap w-full">
 								<div className="w-full flex gap-4">
-									<TotalInvestment />
-									<TotalInvestment />
-									<TotalInvestment />
-									<TotalInvestment />
+									<TotalInvestment infoProject = {projectInfo}/>
+									<TotalSignValue projectID = {projectID} infoProject={projectInfo}/>
+									<TotalAcceptance projectID = {projectID}/>
+									<TotalDisbursement projectID = {projectID}/>	
 								</div>
 								{/* Chartjs */}
 								<ReportChart className='bg-white w-full mt-4' projectInfo={projectInfo} />
-
 							</div>
 						</div>
 						<div className="w-4/12">
@@ -219,19 +228,19 @@ const ProjectDashboardPortfolioPage: FC = () => {
 								<div className="w-1/3 bg-primary-light px-6 py-4">
 									<div className="font-bold text-primary-gray text-lg">Công nợ</div>
 									<div className="w-full">
-										<DebtChart />
+										<DebtChart projectID={projectID}/>
 									</div>
 								</div>
 								<div className="w-1/2  h-[222px] bg-primary-light px-6 py-4">
 									<div className="font-bold text-primary-gray text-lg">Bảo lãnh tạm ứng</div>
 									<div>
-										<AdvanceGuarantee />
+										<AdvanceGuarantee projectID={projectID}/>
 									</div>
 								</div>
 								<div className="w-1/2 h-[222px] bg-primary-light px-6 py-4">
 									<div className="font-bold text-primary-gray text-lg">Bảo lãnh thực hiện hợp đồng</div>
 									<div>
-										<ContractPerformanceGuarantee />
+										<ContractPerformanceGuarantee projectID={projectID}/>
 									</div>
 								</div>
 							</div>
