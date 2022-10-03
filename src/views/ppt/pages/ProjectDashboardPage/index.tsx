@@ -107,12 +107,12 @@ const ProjectDashboardPortfolioPage: FC = () => {
 							<ul className="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
 								<li className="mr-2" role="presentation">
 									<button className="inline-block p-2 rounded-t-lg border-b-2 text-blue-600 hover:text-blue-600 dark:text-blue-500 dark:hover:text-blue-500 border-blue-600 dark:border-blue-500" id="profile-tab" data-tabs-target="#sell" type="button" role="tab" aria-controls="profile" aria-selected="true">
-										Bán ra
+										Mua vào
 									</button>
 								</li>
 								<li className="mr-2" role="presentation">
 									<button className="inline-block p-2 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400  dark:border-gray-700" id="dashboard-tab" data-tabs-target="#" type="button" role="tab" aria-controls="dashboard" aria-selected="false">
-										Mua vào
+										Bán ra
 									</button>
 								</li>
 							</ul>
@@ -132,7 +132,7 @@ const ProjectDashboardPortfolioPage: FC = () => {
 							>
 								Tất cả
 							</button>
-							<button
+							{/* <button
 								onClick={() => setYearSelected(yearMax)}
 								className={
 									classnames("py-1 px-4 mx-2 rounded-full border border-primary-border", {
@@ -184,7 +184,7 @@ const ProjectDashboardPortfolioPage: FC = () => {
 								}
 							>
 								{yearMax-4}
-							</button>
+							</button> */}
 						</div>
 						<div className="w-1/4 flex items-center">
 							<div className="w-5/6 flex flex-col gap-3">
