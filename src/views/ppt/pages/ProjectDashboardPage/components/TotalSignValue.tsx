@@ -4,7 +4,7 @@ import ArrowDownBoldIcon from "assets/images/icons8-arrow-down-bold-red.svg";
 import CashIcon from "assets/images/icons8-cash.svg";
 import { useContractDashboard } from 'services/hooks/items/useContract';
 
-const TotalSignValue: FC<any> = ({ projectID ,infoProject}) => {
+const TotalSignValue: FC<any> = ({ projectID ,infoProject, year}) => {
   // Giá trị ký
   const { contractAmountByMonth } = useContractDashboard({ params: { outin: 2, projectID } });
 

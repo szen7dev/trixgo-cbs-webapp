@@ -5,7 +5,7 @@ import CashIcon from "assets/images/icons8-cash.svg";
 import { useCmcsDashboard } from 'services/hooks/cmcs/useContractIPC';
 import { useContractDashboard } from 'services/hooks/items/useContract';
 
-const TotalAcceptance: FC<any> = ({ projectID }) => {
+const TotalAcceptance: FC<any> = ({ projectID, year }) => {
    // Nghiệm thu
    const { cmcsContractIPCAmountByMonth } = useCmcsDashboard({ params: { outin: 2, projectID } });
 

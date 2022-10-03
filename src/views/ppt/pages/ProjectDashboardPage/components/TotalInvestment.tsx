@@ -3,7 +3,7 @@ import { FC } from "react";
 import ArrowDownBoldIcon from "assets/images/icons8-arrow-down-bold-red.svg";
 import CashIcon from "assets/images/icons8-cash.svg";
 
-const TotalInvestment: FC<any> = ({ infoProject }) => {
+const TotalInvestment: FC<any> = ({ infoProject, year }) => {
   return (
     <div className="bg-primary-light h-full w-full">
       <div className="px-6 py-4">

@@ -1,4 +1,4 @@
-import { FC, useContext, useEffect } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import SwiperCore, { Navigation } from 'swiper';
 import { useParams } from 'react-router-dom';
 import { useQueryAmountTaskMilestone } from "services/hooks/pcm/useStatistical";
@@ -6,6 +6,7 @@ import moment from "moment";
 import cn from "classnames";
 import 'chartjs-adapter-moment';
 import 'moment/locale/vi';
+import classnames from "classnames";
 
 /**
  * Hooks, Typings
@@ -53,8 +54,13 @@ function percentageBetweenTwoDate(start: any, end: any){
 	return Math.round((q/d)*100)
 }
 
+const yearCurrent = new Date().getFullYear();
+const yearMax = yearCurrent;
+const yearMin = yearCurrent-5;
+
 const ProjectDashboardPortfolioPage: FC = () => {
 	const { state, toggleModal } = useContext(ContextModalPost);
+	const [yearSelected, setYearSelected] = useState<number>(0);
 
 	//_____Start history traffict
 	const payloadHistoryTraffic: any = {
@@ -117,52 +123,67 @@ const ProjectDashboardPortfolioPage: FC = () => {
 						{/* filter by year */}
 						<div className={"header-table flex py-4 w-full top-0 bg-white"}>
 							<button
-								// onClick={() => setFilter("all")}
+								onClick={() => setYearSelected(0)}
 								className={
-									"py-1 px-4 mx-2 rounded-full border border-primary-border text-white bg-cbs-secondary border-none"
-									// +
-									// (filter === "all"
-									//   ? "text-white bg-cbs-secondary border-none"
-									//   : "text-primary-gray bg-white")
+									classnames("py-1 px-4 mx-2 rounded-full border border-primary-border", {
+									"text-white bg-cbs-secondary border-none": yearSelected === 0
+									})
 								}
 							>
 								Tất cả
 							</button>
 							<button
-								// onClick={() => setFilter("unread")}
+								onClick={() => setYearSelected(yearMax)}
 								className={
-									"py-1 px-4 mx-2 rounded-full border border-primary-border "
-									// +
-									// (filter === "unread"
-									//   ? "text-white bg-cbs-secondary border-none"
-									//   : "text-primary-gray bg-white")
+									classnames("py-1 px-4 mx-2 rounded-full border border-primary-border", {
+									"text-white bg-cbs-secondary border-none": yearSelected === yearMax
+									})
 								}
 							>
-								2022
+								{yearMax}
 							</button>
 							<button
-								// onClick={() => setFilter("read")}
+								onClick={() => setYearSelected(yearMax-1)}
 								className={
-									"py-1 px-4 mx-2 rounded-full border border-primary-border "
-									// +
-									// (filter === "read"
-									//   ? "text-white bg-cbs-secondary border-none"
-									//   : "text-primary-gray bg-white")
+									classnames("py-1 px-4 mx-2 rounded-full border border-primary-border", {
+									"text-white bg-cbs-secondary border-none": yearSelected === yearMax-1
+									})
 								}
 							>
-								2021
+								{yearMax-1}
 							</button>
+
 							<button
-								// onClick={() => setFilter("read")}
+								onClick={() => setYearSelected(yearMax-2)}
 								className={
-									"py-1 px-4 mx-2 rounded-full border border-primary-border "
-									// +
-									// (filter === "read"
-									//   ? "text-white bg-cbs-secondary border-none"
-									//   : "text-primary-gray bg-white")
+									classnames("py-1 px-4 mx-2 rounded-full border border-primary-border", {
+									"text-white bg-cbs-secondary border-none": yearSelected === yearMax-2
+									})
 								}
 							>
-								2020
+								{yearMax-2}
+							</button>
+
+							<button
+								onClick={() => setYearSelected(yearMax-3)}
+								className={
+									classnames("py-1 px-4 mx-2 rounded-full border border-primary-border", {
+									"text-white bg-cbs-secondary border-none": yearSelected === yearMax-3
+									})
+								}
+							>
+								{yearMax-3}
+							</button>
+
+							<button
+								onClick={() => setYearSelected(yearMax-4)}
+								className={
+									classnames("py-1 px-4 mx-2 rounded-full border border-primary-border", {
+									"text-white bg-cbs-secondary border-none": yearSelected === yearMax-4
+									})
+								}
+							>
+								{yearMax-4}
 							</button>
 						</div>
 						<div className="w-1/4 flex items-center">
@@ -197,10 +218,10 @@ const ProjectDashboardPortfolioPage: FC = () => {
 						<div className="w-8/12">
 							<div className="flex flex-wrap w-full">
 								<div className="w-full flex gap-4">
-									<TotalInvestment infoProject = {projectInfo}/>
-									<TotalSignValue projectID = {projectID} infoProject={projectInfo}/>
-									<TotalAcceptance projectID = {projectID}/>
-									<TotalDisbursement projectID = {projectID}/>	
+									<TotalInvestment infoProject = {projectInfo} year={yearSelected}/>
+									<TotalSignValue projectID = {projectID} infoProject={projectInfo} year={yearSelected}/>
+									<TotalAcceptance projectID = {projectID} year={yearSelected} />
+									<TotalDisbursement projectID = {projectID} year={yearSelected}/>	
 								</div>
 								{/* Chartjs */}
 								<ReportChart className='bg-white w-full mt-4' projectInfo={projectInfo} />

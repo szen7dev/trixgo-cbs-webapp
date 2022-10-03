@@ -4,7 +4,7 @@ import ArrowDownBoldIcon from "assets/images/icons8-arrow-down-bold-red.svg";
 import CashIcon from "assets/images/icons8-cash.svg";
 import { useCmcsDashboard } from 'services/hooks/cmcs/useContractIPC';
 
-const TotalDisbursement: FC<any> = ({ projectID }) => {
+const TotalDisbursement: FC<any> = ({ projectID, year }) => {
 
   //Tiền về/Giải ngân
   const { cmcsContractPaymentAmountByMonth } = useCmcsDashboard({ params: { outin: 2, projectID } });
