@@ -51,6 +51,7 @@ import ProjectAdminPositionTab from "views/ppt/pages/ProjectAdminPage/pages/Proj
 import { PmProjectLayout } from "../../shareComponents/layouts/PmLayout/PmProjectLayout";
 import { PmHeaderContent } from "../../shareComponents/layouts/PmLayout/components";
 import LayoutProjectSecondaryV2 from "views/ppt/sharedComponents/layouts/LayoutProjectSecondaryV2";
+import { PmProjectLayoutV2 } from "shareComponents/layouts/PmLayout/PmProjectLayoutV2";
 // import {DocumentProjectLayout} from "views/document/sharedComponents/layouts/DocumentProjectLayout";
 
 const DocumentOfPackagePage = lazy(() => import("views/document/pages/DocumentOfPackagePage"))
@@ -478,7 +479,7 @@ const PCMRouter: FC = () => {
                     </PmProjectLayout>
                   </Route>
                   <Route exact path="/pm/project/:id/inspection/(tabs2|tabs3|tabs4)">
-                    <PmProjectLayout>
+                    <PmProjectLayoutV2>
                       <LayoutSecondary
                         pages={[
                           { id: '1', title: 'Tất cả', path: '/pm/project/:id/inspection', navExact: true },
@@ -503,7 +504,7 @@ const PCMRouter: FC = () => {
                           component={ProjectInspectionTab4Page}
                         />
                       </LayoutSecondary>
-                    </PmProjectLayout>
+                    </PmProjectLayoutV2>
                   </Route>
                   <Route exact path="/pm/project/:id/directory">
                     <PmProjectLayout>
