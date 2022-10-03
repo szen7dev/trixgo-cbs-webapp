@@ -5,7 +5,7 @@ import useScrollSticky from "services/hooks/datahub/useScrollSticky";
 import useCheckedList from "services/hooks/ppt/useCheckedList";
 import ChartReportByTime from "./components/ChartReportByTime";
 
-const ProjectInspectionTab2Page: FC = () => {
+const ProjectInspectionTab3Page: FC = () => {
 	const [data, setData] = useState<{ id: number, [key: string]: any }[]>([]);
 	const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data);
 	const { innerRef, sticky } = useScrollSticky('#scroller')
@@ -206,4 +206,4 @@ const ProjectInspectionTab2Page: FC = () => {
 		</div>
 	);
 };
-export default ProjectInspectionTab2Page;
+export default ProjectInspectionTab3Page;
