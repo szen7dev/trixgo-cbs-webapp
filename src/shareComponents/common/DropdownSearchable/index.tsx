@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useEffect, useRef, useState, UIEvent } from "react";
+import React, { FC, ReactNode, useEffect, useRef, useState, UIEvent, useImperativeHandle, forwardRef } from "react";
 import { map as _map } from "lodash";
 import classNames from "classnames";
 // import API from "../../apis/repository";
@@ -53,10 +53,11 @@ type Props = {
   bordered?: boolean;
 };
 
-// type Params = {
-//     [key: string]: string;
-// }
-export const DropdownSearchable: FC<Props> = ({
+type DropdownSearchableHandle = {
+  setValueRef: (value: any) => void
+}
+
+export const DropdownSearchable = forwardRef<DropdownSearchableHandle, Props>(({
   data,
   // searchUrl,
   // searchParam,
@@ -86,7 +87,7 @@ export const DropdownSearchable: FC<Props> = ({
   onSearchInputChange,
   onScroll,
   bordered = true,
-}) => {
+}, dropdownsearchRef) => {
   const [value, setValue] = useState<Item>();
   const [values, setValues] = useState<Array<Item>>();
   const [displayData, setDisplayData] = useState<Array<Item>>([]);
@@ -98,6 +99,12 @@ export const DropdownSearchable: FC<Props> = ({
   const inputSearchRef = useRef<HTMLInputElement>(null);
 
   useOnClickOutside(wrapperRef, () => setShowOption(false));
+
+  useImperativeHandle(dropdownsearchRef, () => ({
+    setValueRef(value) {
+      setValue(value);
+    }
+  }));
 
   const readDataValue = React.useCallback(
     (item: Item | undefined, key: string) => {
@@ -125,9 +132,9 @@ export const DropdownSearchable: FC<Props> = ({
   const handleSetValue = (item: Item) => {
     setSearchTerm("");
     if (isMultiple) {
-      const existThatItem = (values??[]).findIndex(i => readDataValue(i, "id") === readDataValue(item, "id"));
+      const existThatItem = (values ?? []).findIndex(i => readDataValue(i, "id") === readDataValue(item, "id"));
       if (existThatItem > -1) {
-        const oldValues = (values??[]);
+        const oldValues = (values ?? []);
         oldValues.splice(existThatItem, 1);
         setValues([...oldValues]);
         if (onMultipleRemoveValue) {
@@ -144,7 +151,7 @@ export const DropdownSearchable: FC<Props> = ({
       }
     } else {
       setShowOption(false);
-      if (value&&readDataValue(value, "id") === readDataValue(item,"id")) {
+      if (value && readDataValue(value, "id") === readDataValue(item, "id")) {
         setValue(undefined);
         onClearData && onClearData();
       } else {
@@ -195,7 +202,7 @@ export const DropdownSearchable: FC<Props> = ({
       onClearData && onClearData();
     }
   };
-  
+
   const handleRemoveItemSingle = () => {
     setValue(undefined);
     onClearData && onClearData();
@@ -506,7 +513,8 @@ export const DropdownSearchable: FC<Props> = ({
       ) : null}
     </div>
   );
-};
+})
+
 const defaultProps: Props = {
   isMultiple: false,
   showTriangle: true,
@@ -514,3 +522,4 @@ const defaultProps: Props = {
   disabled: false,
 };
 DropdownSearchable.defaultProps = defaultProps;
+DropdownSearchable.displayName = "DropdownSearchable";
