@@ -1,7 +1,7 @@
 /**
  * Libraries
  */
-import React, { ChangeEvent, FC, UIEvent, useRef, useState } from "react";
+import React, { ChangeEvent, FC, UIEvent, useEffect, useRef, useState } from "react";
 import { Formik, Form, ErrorMessage } from "formik";
 import { useHistory } from 'react-router-dom';
 import { object, string } from "yup";
@@ -65,6 +65,8 @@ export const ModalAddNewTask: FC = () => {
   const { closeModal } = useModal();
   const editorRef = useRef<EditorType>();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  type DropdownSearchableHandle = React.ElementRef<typeof DropdownSearchable>;
+  const groupDropdownsearchRef = useRef<DropdownSearchableHandle>(null);
 
   const [tokens, setTokens] = useState<any[]>([]);
   const [searchDepartmentValue, setSearchDepartmentValue] = useState("");
@@ -135,6 +137,18 @@ export const ModalAddNewTask: FC = () => {
     projectID: projectID,
     isShowParentAndChild: true
   }, !!projectID);
+
+  useEffect(() => {
+    console.log("projectID", projectID);
+    if (projectID && listGroup && listGroup.length) {
+      groupDropdownsearchRef?.current?.setValueRef({
+        label: `${listGroup[0].sign}.${listGroup[0].name}`,
+        value: listGroup[0]._id,
+      });
+    } else {
+      groupDropdownsearchRef?.current?.setValueRef(null);
+    }
+  }, [listGroup]);
 
   const {
     listContracts,
@@ -378,6 +392,7 @@ export const ModalAddNewTask: FC = () => {
                             setGroupID("");
                             setFieldValue("assigneeID", "");
                             setFieldValue("relatedIDs", []);
+                            setProjectID("");
                           }}
                           onSearchInputChange={
                             debounce(
@@ -420,6 +435,7 @@ export const ModalAddNewTask: FC = () => {
                       <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Nhóm (*)</div>
                       <div className={"flex-1 max-w-4/5 w-4/5"}>
                         <DropdownSearchable
+                          ref={groupDropdownsearchRef}
                           disabled={values.projectID.length <= 0}
                           onchangeValue={(item: any) => {
                             setFieldValue("groupID", item.value);
