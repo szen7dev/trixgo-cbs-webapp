@@ -242,6 +242,9 @@ button {
 .bg-gray-custom{
 	background: #F5F7FB;
 }
+.border-color-jade{
+  border-color: #00CA99; 
+}
 .t-leftsidebar-navigation {
   width: 240px;
 }
