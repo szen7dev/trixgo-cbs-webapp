@@ -5,6 +5,7 @@ export { default as ProjectCashFlowPlanPage } from "./ProjectCashFlowPlanPage";
 export { default as ProjectCashFlowPlanChildPage } from "./ProjectCashFlowPlanChildPage";
 export { default as ProjectCategoryPage } from "./ProjectCategoryPage";
 export { default as ProjectDashboardPage } from "./ProjectDashboardPage";
+export { default as ProjectDashboardDebtPage } from "./ProjectDashboardDebtPage";
 export { default as ProjectDashboardPortfolioPage } from "./ProjectDashboardPortfolioPage";
 export { default as ProjectDashboardTaskPage } from "./ProjectDashboardTaskPage";
 export { default as ProjectDirectoryPage } from "./ProjectDirectoryPage";
