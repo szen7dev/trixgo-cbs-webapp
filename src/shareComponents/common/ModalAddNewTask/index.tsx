@@ -141,15 +141,18 @@ export const ModalAddNewTask: FC = () => {
   const [isChangeProjectID, setIsChangeProjectID] = useState(false);
   useEffect(() => {
     if (isChangeProjectID) {
-      if (projectID && listGroup && listGroup.length) {
+      if (listGroup && listGroup.length) {
         groupDropdownsearchRef?.current?.setValueRef({
           label: `${listGroup[0].sign}.${listGroup[0].name}`,
           value: listGroup[0]._id,
         });
+        setIsChangeProjectID(false);
       } else {
-        groupDropdownsearchRef?.current?.setValueRef(null);
+        if (!projectID) {
+          groupDropdownsearchRef?.current?.setValueRef(null);
+          setIsChangeProjectID(false);
+        }
       }
-      setIsChangeProjectID(false);
     }
   }, [listGroup, isChangeProjectID]);
 
