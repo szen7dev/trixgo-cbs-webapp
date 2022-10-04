@@ -138,17 +138,20 @@ export const ModalAddNewTask: FC = () => {
     isShowParentAndChild: true
   }, !!projectID);
 
+  const [isChangeProjectID, setIsChangeProjectID] = useState(false);
   useEffect(() => {
-    console.log("projectID", projectID);
-    if (projectID && listGroup && listGroup.length) {
-      groupDropdownsearchRef?.current?.setValueRef({
-        label: `${listGroup[0].sign}.${listGroup[0].name}`,
-        value: listGroup[0]._id,
-      });
-    } else {
-      groupDropdownsearchRef?.current?.setValueRef(null);
+    if (isChangeProjectID) {
+      if (projectID && listGroup && listGroup.length) {
+        groupDropdownsearchRef?.current?.setValueRef({
+          label: `${listGroup[0].sign}.${listGroup[0].name}`,
+          value: listGroup[0]._id,
+        });
+      } else {
+        groupDropdownsearchRef?.current?.setValueRef(null);
+      }
+      setIsChangeProjectID(false);
     }
-  }, [listGroup]);
+  }, [listGroup, isChangeProjectID]);
 
   const {
     listContracts,
@@ -379,6 +382,7 @@ export const ModalAddNewTask: FC = () => {
                             setCompanyID(value.companyId)
                             setFieldValue("projectID", value?.id);
                             setProjectID(`${value?.id}`);
+                            setIsChangeProjectID(true);
                             setSearchDepartmentValue("");
                             setGroupID("");
                             setFieldValue("groupID", "");
@@ -393,6 +397,7 @@ export const ModalAddNewTask: FC = () => {
                             setFieldValue("assigneeID", "");
                             setFieldValue("relatedIDs", []);
                             setProjectID("");
+                            setIsChangeProjectID(true);
                           }}
                           onSearchInputChange={
                             debounce(
