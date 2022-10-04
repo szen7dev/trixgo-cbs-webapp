@@ -130,7 +130,6 @@ export const ModalAddNewTask: FC = () => {
     hasNextPage: hasNextPageListGroup,
     isFetching: isFetchingListGroup,
     fetchNextPage: fetchNextPageListGroup,
-    loading: isLoadingListGroup
   } = useQueryListGroup({
     limit: 10,
     keyword: searchGroupName,

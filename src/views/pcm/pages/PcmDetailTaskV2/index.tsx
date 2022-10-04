@@ -77,12 +77,12 @@ const PcmDetailTaskV2: FC = () => {
         if (!isSuccessApp || !taskInfo) return;
         if (isSuccessApp && !hasPermission) {
             toast.error("Bạn không có quyền truy cập tính năng này!");
-            // return history.push("/");
+            return history.push("/");
         };
 
         if (taskInfo?.message === "permission_denied" || taskInfo?.keyError === "permission_denied") {
             toast.warn('Bạn không có quyền truy cập công việc này');
-            // return history.push(`/pcm/home`);
+            return history.push(`/pcm/home`);
         }
     }, [taskInfo, isSuccessApp, hasPermission])
 
