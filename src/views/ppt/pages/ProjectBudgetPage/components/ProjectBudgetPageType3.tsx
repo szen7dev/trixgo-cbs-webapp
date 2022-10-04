@@ -12,7 +12,7 @@ export const ProjectBudgetPageType3:FC = () => {
         <>
             <div className={"sticky top-0 z-10 block"}>
                 <div className={"flex items-center px-4 py-2"}>
-                    <div className={"flex items-center flex-1"}>
+                    {/* <div className={"flex items-center flex-1"}>
                         <DropdownSearchableV2
                             className={"mr-4 border border-primary-border rounded-lg mb-2"}
                             placeholder={"Loại gói thầu"}
@@ -48,7 +48,7 @@ export const ProjectBudgetPageType3:FC = () => {
                     </div>
                     <button className={"h-[32px] rounded bg-cbs-green text-white font-bold px-4"}>
                         Tạo mới
-                    </button>
+                    </button> */}
                 </div>
                 <div className={"flex items-center pb-2"}>
                     <NavigateTabBudgetPage/>
