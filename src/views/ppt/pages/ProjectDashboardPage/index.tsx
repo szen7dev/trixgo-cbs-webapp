@@ -7,6 +7,7 @@ import cn from "classnames";
 import 'chartjs-adapter-moment';
 import 'moment/locale/vi';
 import classnames from "classnames";
+import { Link } from "react-router-dom";
 
 /**
  * Hooks, Typings
@@ -246,12 +247,14 @@ const ProjectDashboardPortfolioPage: FC = () => {
 					<div className="flex ">
 						<div className="w-8/12">
 							<div className="flex w-full gap-4">
-								<div className="w-1/3 bg-primary-light px-6 py-4">
-									<div className="font-bold text-primary-gray text-lg">Công nợ</div>
-									<div className="w-full">
-										<DebtChart projectID={projectID}/>
+									<div className="w-1/3 bg-primary-light px-6 py-4">
+										<Link to={`/pm/project/${projectID}/dashboard/debt/outin/2`}>
+											<div className="font-bold text-primary-gray text-lg">Công nợ</div>
+											<div className="w-full">
+												<DebtChart projectID={projectID}/>
+											</div>
+										</Link>
 									</div>
-								</div>
 								<div className="w-1/2  h-[222px] bg-primary-light px-6 py-4">
 									<div className="font-bold text-primary-gray text-lg">Bảo lãnh tạm ứng</div>
 									<div>
