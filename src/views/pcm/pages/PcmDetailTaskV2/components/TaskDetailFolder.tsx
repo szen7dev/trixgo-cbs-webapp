@@ -244,7 +244,7 @@ export const TaskDetailFolder: FC<Props> = ({
                     <img src={iconFolder} alt={'-----'} />
                 </span>
                 <div className={"flex"}>
-                    {task?.project?.sign} {">"}{" "}
+                    Nhóm dữ liệu: {task?.project?.sign} {">"}{" "}
                     <Link to={`/pm/project/${task?.project?._id}/folder/${task?.group?._id}`}>
                         {getGroupTitle(task?.group)}
                     </Link>
