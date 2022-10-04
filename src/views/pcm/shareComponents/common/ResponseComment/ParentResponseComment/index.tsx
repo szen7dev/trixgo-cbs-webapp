@@ -1,6 +1,6 @@
 import {FC, useContext, useEffect, useMemo, useRef, useState} from "react";
 import trigangleDown from "assets/images/triangle-down.svg";
-import iconUpload from "assets/images/icons8-upload-48.svg";
+// import iconUpload from "assets/images/icons8-upload-48.svg";
 import iconLink from "assets/images/icons8-link-96-v3.svg";
 import iconReply from "assets/images/icons8-reply-arrow-48.svg";
 import taskUserAvt from "assets/images/task-user.svg";
@@ -66,8 +66,8 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
     const [uploads, {
         setIDImageUploaded,
         setIDFileUploaded,
-        // setUploadImage,
-        // setUploadFile,
+        setUploadImage,
+        setUploadFile,
         // setUploadImageProgress,
         // setUploadFileProgress,
         // removeUploadedImage,
@@ -147,8 +147,10 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
         const filesID: string[] = [];
         const imagesID: string[] = [];
 
-        // setUploadImage(images);
-        // setUploadFile(files);
+        setUploadImage(images);
+        setUploadFile(files);
+
+        toast.info('File đang được upload vui lòng không reload trang');
 
         // Upload images
         for (const [key, { file }] of Object.entries(images)) {
@@ -199,6 +201,8 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
             if(error) {
                 return toast.warn(data?.message || 'Cập nhật bình luận thất bại')
             }
+
+            toast.success('File upload thành công');
 
             dispatch({
                 type: 'UPDATE_COMMENT',

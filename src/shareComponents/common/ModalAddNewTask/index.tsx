@@ -145,10 +145,12 @@ export const ModalAddNewTask: FC = () => {
           label: `${listGroup[0].sign}.${listGroup[0].name}`,
           value: listGroup[0]._id,
         });
+        setGroupID(listGroup[0]._id);
         setIsChangeProjectID(false);
       } else {
         if (!projectID) {
           groupDropdownsearchRef?.current?.setValueRef(null);
+          setGroupID("");
           setIsChangeProjectID(false);
         }
       }
@@ -196,6 +198,10 @@ export const ModalAddNewTask: FC = () => {
 
       if(files.length) {
         values.authorAttachs = files;
+      }
+
+      if(!values.groupID) {
+        values.groupID = groupID;
       }
 
       closeModal();
@@ -341,7 +347,7 @@ export const ModalAddNewTask: FC = () => {
 
   const initialValues: InitialValues = {
     projectID: "",
-    groupID: "",
+    groupID,
     fieldID: "",
     assigneeID: "",
     name: "",
