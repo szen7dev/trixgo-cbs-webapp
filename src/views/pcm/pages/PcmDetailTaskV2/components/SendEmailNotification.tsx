@@ -21,9 +21,11 @@ type Props = {
 
 export const SendEmailNotification: FC<Props> = ({ task, userId = '' }) => {
     const accessUsersID = useMemo(() => {
+        if(!task || task.keyError) return [];
+
         let accessUsersID = [];
         if(task.accessUsers && task.accessUsers?.length) {
-            accessUsersID = task.accessUsers.map(user => user._id);
+            accessUsersID = task.accessUsers?.map(user => user._id);
         } else{
             accessUsersID = task.related?.map(user => user._id) || [];
 
@@ -36,11 +38,11 @@ export const SendEmailNotification: FC<Props> = ({ task, userId = '' }) => {
             }
         }
 
-        return accessUsersID.filter(userID => userID !== userId);
-    }, [task._id]);
+        return accessUsersID?.filter(userID => userID !== userId);
+    }, [task?._id]);
 
     const accessUsers = useMemo(() => {
-        if(!task) return [];
+        if(!task || task.keyError) return [];
 
         if (task.accessUsers && task.accessUsers?.length) {
             return task.accessUsers;
@@ -138,6 +140,10 @@ export const SendEmailNotification: FC<Props> = ({ task, userId = '' }) => {
                 toast.error(error.message);
             }
         }
+    }
+
+    if(!task || task.keyError) {
+        return <></>
     }
 
     return (

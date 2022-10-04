@@ -47,7 +47,9 @@ export const PmProjectLayoutV2: FC<Props> = ({ children, headerSearch }) => {
             <PmTabHeaderContent/>
           </MainHeaderPm>
           {/* Left navigation */}
-          <PmProjectTabLeftSideBar/>
+          <LeftMenu>
+            <PmProjectLeftMenuContent/>
+          </LeftMenu>
 
           {/* Content area */}
           <main className="main-route-content transition-all duration-500 ease-out overflow-auto relative h-left-over-content max-h-left-over-content min-h-left-over-content">

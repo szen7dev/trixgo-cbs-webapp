@@ -14,6 +14,7 @@ import { useTask } from "services/hooks/useTask";
 import { useSocket } from "services/hooks/useSocket";
 import type { User } from "typings/user";
 import { ModalConfirm } from "shareComponents/common";
+import { PCM_PROPOSAL_TASK } from 'apis/localdb';
 
 type Props = {
     task: Task;
@@ -244,9 +245,11 @@ export const TaskDetailFolder: FC<Props> = ({
                     <img src={iconFolder} alt={'-----'} />
                 </span>
                 <div className={"flex"}>
-                    {task?.project?.sign} {">"}{" "}
+                    Nhóm dữ liệu: {task?.project?.sign} {">"}{" "}
                     <Link to={`/pm/project/${task?.project?._id}/folder/${task?.group?._id}`}>
-                        {getGroupTitle(task?.group)}
+                        {/* {getGroupTitle(task?.group)} */}
+                        {task?.group?.sign}.{task?.group?.name}{">"}{" "}
+                        {PCM_PROPOSAL_TASK[task.subtype]?.text}
                     </Link>
                     {/* {
                         folders.map((folder, index) => (

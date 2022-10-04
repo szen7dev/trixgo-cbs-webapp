@@ -130,7 +130,6 @@ export const ModalAddNewTask: FC = () => {
     hasNextPage: hasNextPageListGroup,
     isFetching: isFetchingListGroup,
     fetchNextPage: fetchNextPageListGroup,
-    loading: isLoadingListGroup
   } = useQueryListGroup({
     limit: 10,
     keyword: searchGroupName,
@@ -141,15 +140,20 @@ export const ModalAddNewTask: FC = () => {
   const [isChangeProjectID, setIsChangeProjectID] = useState(false);
   useEffect(() => {
     if (isChangeProjectID) {
-      if (projectID && listGroup && listGroup.length) {
+      if (listGroup && listGroup.length) {
         groupDropdownsearchRef?.current?.setValueRef({
           label: `${listGroup[0].sign}.${listGroup[0].name}`,
           value: listGroup[0]._id,
         });
+        setGroupID(listGroup[0]._id);
+        setIsChangeProjectID(false);
       } else {
-        groupDropdownsearchRef?.current?.setValueRef(null);
+        if (!projectID) {
+          groupDropdownsearchRef?.current?.setValueRef(null);
+          setGroupID("");
+          setIsChangeProjectID(false);
+        }
       }
-      setIsChangeProjectID(false);
     }
   }, [listGroup, isChangeProjectID]);
 
@@ -194,6 +198,10 @@ export const ModalAddNewTask: FC = () => {
 
       if(files.length) {
         values.authorAttachs = files;
+      }
+
+      if(!values.groupID) {
+        values.groupID = groupID;
       }
 
       closeModal();
@@ -339,7 +347,7 @@ export const ModalAddNewTask: FC = () => {
 
   const initialValues: InitialValues = {
     projectID: "",
-    groupID: "",
+    groupID,
     fieldID: "",
     assigneeID: "",
     name: "",
