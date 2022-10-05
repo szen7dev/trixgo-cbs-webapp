@@ -141,10 +141,6 @@ export const PmProjectLeftMenuContent: FC = () => {
                         }
                     </> : <></>
                 }
-                <NavLink to={`/pm/project/${projectID}/legal`} className={"left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray text-[14px]"}>
-                    <img width={'20px'} src={folderImage} />
-                    <span className={"flex-1 ml-2 text-left"}>Pháp lý</span>
-                </NavLink>
             </div>
         </>
     )

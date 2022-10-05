@@ -295,14 +295,14 @@ export const CONTRACT_LOCK = [
 
 // CONTRACT ONTIME
 export const CONTRACT_ONTIME = [
-    { value: 1, text: 'Ontime' },
-    { value: 2, text: 'Offtime' },
+    { value: 1, text: 'Đúng tiến độ' },
+    { value: 2, text: 'Chậm tiến độ' },
 ]
 
 // CONTRACT ONBUDGET
 export const CONTRACT_ONBUDGET = [
-    { value: 1, text: 'Onbudget' },
-    { value: 2, text: 'Offbudget' },
+    { value: 1, text: 'Đúng ngân sách' },
+    { value: 2, text: 'Vượt ngân sách' },
 ]
 
 // HỢP ĐỒNG THỰC/ẢO-GỬI DẤU
