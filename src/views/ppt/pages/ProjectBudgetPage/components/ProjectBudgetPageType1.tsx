@@ -134,9 +134,9 @@ export const ProjectBudgetPageType1:FC<Props> = ({projectInfo, collapse, toggleC
                             <button className="inline-block text-white rounded bg-gray-600 w-5 h-5" onClick={() => setShow(!show)}>{show ? '+' : '-'}</button>
                         </th> */}
                         <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2 w-[38px]">TT</th>
-                        <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2 min-w-[200px] w-[300px]">Gói thầu/Hợp đồng</th>
+                        <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2 min-w-[200px] w-[300px]">Hợp đồng</th>
                         <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '122px' }}>Ngân sách</th>
-                        <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '122px' }}>Dự báo</th>
+                        {/* <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '122px' }}>Dự báo</th> */}
                         <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '122px' }}>Ký hợp đồng</th>
                         <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '122px' }}>Đã tạm ứng</th>
                         <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '125px' }}>Sản lượng</th>
@@ -174,9 +174,9 @@ export const ProjectBudgetPageType1:FC<Props> = ({projectInfo, collapse, toggleC
                             <th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border md:text-xs">
                                 {formatNumberMoney(projectInfo.budget + projectInfo.vatBudget)}
                             </th>
-                            <th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border md:text-xs">
+                            {/* <th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border md:text-xs">
                                 {formatNumberMoney(projectInfo.forecastBudget + projectInfo.vatForecastBudget)}
-                            </th>
+                            </th> */}
                             <th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border md:text-xs">
                                 {formatNumberMoney(
                                     projectInfo.contractValue + projectInfo.contractVatValue +

@@ -114,8 +114,8 @@ export const TaskDetailTitle: FC<Props> = ({ task, userId }) => {
     ];
 
     if
-        (([1, 2, 3, 4].includes(task?.subtype) && task?.author?._id === userId) ||
-        ([5, 6, 7, 8, 9, 10, 11].includes(task?.subtype) && task?.assignee?._id === userId)) {
+        (([0,1,4,6,7,7,9,10,11].includes(task?.subtype) && task?.author?._id === userId) ||
+        ([2,3,5].includes(task?.subtype) && task?.assignee?._id === userId)) {
         options = [
             {
                 id: 1,
