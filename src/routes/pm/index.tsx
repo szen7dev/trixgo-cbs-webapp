@@ -517,6 +517,11 @@ const PCMRouter: FC = () => {
                       <ProjectDirectoryPageV2 />
                     </PmProjectLayout>
                   </Route>
+                  <Route exact path="/pm/project/:id/legal">
+                    <PmProjectLayout>
+                      <ProjectMilestonePage />
+                    </PmProjectLayout>
+                  </Route>
                   <Route
                     exact
                     path="/pm/project/:id/inspection/:item"

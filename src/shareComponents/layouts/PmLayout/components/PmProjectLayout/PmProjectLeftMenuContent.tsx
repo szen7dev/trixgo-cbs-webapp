@@ -1,7 +1,7 @@
-import React, {FC} from "react";
-import {useModal} from "services/hooks/useModal";
-import {ModalAddNewTask} from "../../../../common";
-import {NavLink, useParams, useRouteMatch, generatePath} from 'react-router-dom';
+import React, { FC } from "react";
+import { useModal } from "services/hooks/useModal";
+import { ModalAddNewTask } from "../../../../common";
+import { NavLink, useParams, useRouteMatch, generatePath } from 'react-router-dom';
 import projectIcon from "assets/images/icons-project.svg";
 import shieldIcon from "assets/images/icons8-user-shield-48.svg";
 import reportIcon from "assets/images/icons8-report.svg";
@@ -28,7 +28,7 @@ import { useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/auth/us
 import { APP_ID } from "apis/localdb";
 import projectImage from "assets/images/project.jpg";
 
-export const PmProjectLeftMenuContent:FC = () => {
+export const PmProjectLeftMenuContent: FC = () => {
 
     const { user } = useAuth();
 
@@ -55,7 +55,7 @@ export const PmProjectLeftMenuContent:FC = () => {
             case 'photo':
                 return photoImage;
             case 'inspection':
-                return inspectionImage;                
+                return inspectionImage;
             // case 'resource':
             //     return resourceImage;
             case 'schedule':
@@ -68,29 +68,29 @@ export const PmProjectLeftMenuContent:FC = () => {
     };
 
     const { openModal } = useModal();
-    const {id} = useParams<{id: string}>();
+    const { id } = useParams<{ id: string }>();
 
     // Cây menu project
     const match = useRouteMatch<{ id: string }>();
 
     // Gọi lại hook department
-	const { onFetchDetailDepartmentAsync, detailDepartment } = useQueryDetailDepartment();
-	const { id: projectID } = useParams<{ id: string }>();
+    const { onFetchDetailDepartmentAsync, detailDepartment } = useQueryDetailDepartment();
+    const { id: projectID } = useParams<{ id: string }>();
 
-	const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.PCM.id, parentID: APP_ID.PCM.menuPcmProject.id });
-	const { listAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.PCM.id, type: "2", companyID: detailDepartment?.company?._id }, detailDepartment?.company?._id ? true : false); 
-	
-	React.useEffect(() => {
-		if (projectID) {
-			onFetchDetailDepartmentAsync(projectID);
-		}
-	}, [onFetchDetailDepartmentAsync, projectID]);
+    const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.PCM.id, parentID: APP_ID.PCM.menuPcmProject.id });
+    const { listAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.PCM.id, type: "2", companyID: detailDepartment?.company?._id }, detailDepartment?.company?._id ? true : false);
+
+    React.useEffect(() => {
+        if (projectID) {
+            onFetchDetailDepartmentAsync(projectID);
+        }
+    }, [onFetchDetailDepartmentAsync, projectID]);
 
     const imgUrl = detailDepartment?.image
-	? (detailDepartment?.image?.startsWith('files/db')
-		? `${process.env.REACT_APP_URL_S3}/${detailDepartment?.image}`
-		: `${process.env.REACT_APP_URL_S3_PROJECT}/${detailDepartment?.image}`)
-	: projectImage;
+        ? (detailDepartment?.image?.startsWith('files/db')
+            ? `${process.env.REACT_APP_URL_S3}/${detailDepartment?.image}`
+            : `${process.env.REACT_APP_URL_S3_PROJECT}/${detailDepartment?.image}`)
+        : projectImage;
 
     return (
         <>
@@ -116,12 +116,12 @@ export const PmProjectLeftMenuContent:FC = () => {
             <div className={"mt-1"}>
                 {!detailDepartment?.admins?.includes(user?._id || "") ? <></> :
                     <NavLink to={`/pm/project/${projectID}/admin`} className={"left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray text-[14px]"}>
-                        <img width={'20px'} src={adminIcon}/>
+                        <img width={'20px'} src={adminIcon} />
                         <span className={"flex-1 ml-2 text-left"}>Quản trị viên dự án</span>
                     </NavLink>
-				}
+                }
                 <NavLink to={`/pm/project/${projectID}/home`} className={"left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray text-[14px]"}>
-                    <img width={'20px'} src={getIconFromSlug('home')}/>
+                    <img width={'20px'} src={getIconFromSlug('home')} />
                     <span className={"flex-1 ml-2 text-left"}>Home</span>
                 </NavLink>
                 {listAppMenu && listAppMenu.length ?
@@ -131,7 +131,7 @@ export const PmProjectLeftMenuContent:FC = () => {
                             if (roleApp && roleApp.read >= 1) {
                                 return (
                                     <NavLink key={index} to={{ pathname: generatePath(`/pm/project/:id/${item.slug}`, match.params) }} className={"left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray text-[14px]"}>
-                                        <img width={'20px'} src={getIconFromSlug(item.slug)}/>
+                                        <img width={'20px'} src={getIconFromSlug(item.slug)} />
                                         <span className={"flex-1 ml-2 text-left"}>{item.name}</span>
                                     </NavLink>
                                 )

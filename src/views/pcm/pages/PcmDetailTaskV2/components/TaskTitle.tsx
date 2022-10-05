@@ -80,10 +80,85 @@ export const TaskDetailTitle: FC<Props> = ({ task, userId }) => {
         }
     }
 
+    let options = [
+        {
+            id: 1,
+            text: "Khởi tạo",
+            color: "#ff0000"
+        },
+        {
+            id: 2,
+            text: "Đang triển khai",
+            color: "#00aaff"
+        },
+        {
+            id: 4,
+            text: "Treo lại",
+            color: "#8f1aac"
+        },
+        {
+            id: 5,
+            text: "Chờ người khác giải quyết",
+            color: "#4d4dff"
+        },
+        {
+            id: 6,
+            text: "Tiếp tục theo dõi",
+            color: "#5bc0de"
+        },
+        {
+            id: 7,
+            text: "Khóa đóng",
+            color: "#f6bb29"
+        },
+    ];
+
+    if
+        (([1,4,6,7,7,9,10,11].includes(task?.subtype) && task?.author?._id === userId) ||
+        ([2,3,5].includes(task?.subtype) && task?.assignee?._id === userId)) {
+        options = [
+            {
+                id: 1,
+                text: "Khởi tạo",
+                color: "#ff0000"
+            },
+            {
+                id: 2,
+                text: "Đang triển khai",
+                color: "#00aaff"
+            },
+            {
+                id: 3,
+                text: "Hoàn thành",
+                color: "#5fba7d"
+            },
+            {
+                id: 4,
+                text: "Treo lại",
+                color: "#8f1aac"
+            },
+            {
+                id: 5,
+                text: "Chờ người khác giải quyết",
+                color: "#4d4dff"
+            },
+            {
+                id: 6,
+                text: "Tiếp tục theo dõi",
+                color: "#5bc0de"
+            },
+            {
+                id: 7,
+                text: "Khóa đóng",
+                color: "#f6bb29"
+            },
+        ];
+    }
+
     return (
         <div className={"task-detail-title"}>
             <span className={"text-xl"}>
-                {task.name}
+                {task.name} 
             </span>
             <span className={"inline-block ml-2 mx-2"}>
                 <button onClick={handleMarkInterest}>
@@ -98,43 +173,7 @@ export const TaskDetailTitle: FC<Props> = ({ task, userId }) => {
                 wrapperClassName={"-translate-y-1"}
                 className={`text-xs rounded-full text-white px-2 py-1 mx-1 ${PCM_STATUS_TASK[currentStatus - 1]?.class}`}
                 defaultValue={task.status}
-                options={[
-                    {
-                        id: 1,
-                        text: "Khởi tạo",
-                        color: "#ff0000"
-                    },
-                    {
-                        id: 2,
-                        text: "Đang triển khai",
-                        color: "#00aaff"
-                    },
-                    {
-                        id: 3,
-                        text: "Hoàn thành",
-                        color: "#5fba7d"
-                    },
-                    {
-                        id: 4,
-                        text: "Treo lại",
-                        color: "#8f1aac"
-                    },
-                    {
-                        id: 5,
-                        text: "Chờ người khác giải quyết",
-                        color: "#4d4dff"
-                    },
-                    {
-                        id: 6,
-                        text: "Tiếp tục theo dõi",
-                        color: "#5bc0de"
-                    },
-                    {
-                        id: 7,
-                        text: "Khóa đóng",
-                        color: "#f6bb29"
-                    },
-                ]}
+                options={options}
                 placeholder={"Trạng thái"}
                 onValueChange={handleChangeStatus}
             />
