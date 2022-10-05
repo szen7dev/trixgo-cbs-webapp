@@ -8,14 +8,16 @@ import { Task } from "typings/task";
 import { useTask } from 'services/hooks/useTask';
 import moment from "moment";
 import { Link } from "react-router-dom";
-import { PCM_STATUS_TASK, PCM_PRIORITY_TASK } from 'apis/localdb';
+import { PCM_STATUS_TASK } from 'apis/localdb';
+import { toast } from "react-toastify";
 
 type Props = {
     task: Task;
+    userId: string | undefined;
     index: number;
 }
 
-export const SubtaskItem:FC<Props> = ({ task, index }) => {
+export const SubtaskItem:FC<Props> = ({ task, userId, index }) => {
     const wrapperClass = useRef<HTMLDivElement>(null)
     const [showOption, setShowOption] = useState(false);
     const [isChecked, setisChecked] = useState(task.status === 3);
@@ -27,14 +29,18 @@ export const SubtaskItem:FC<Props> = ({ task, index }) => {
     const handleUpdateStatusTask = async () => {
         if(task.status === 3) return;
 
+        if(userId !== task.assignee?._id) {
+            return toast.warn('Bạn không có quyền check hoàn thành');
+        }
+
         try {
-            updateTaskAsync({
+            setisChecked(true);
+            await updateTaskAsync({
                 taskID: task._id,
                 status: 3
             });
-            setisChecked(true);
-        } catch(error) {
-            console.log(error);
+        } catch(error: any) {
+            toast.error(error?.message);
         }
     }
 

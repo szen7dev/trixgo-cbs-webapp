@@ -64,7 +64,12 @@ export const TaskDetailSubtask:FC<Props> = ({ task, userId }) => {
             </div>
             <div className={"list-subtask mt-4"}>
                 {listSubTasks && listSubTasks.map((subtask, index) => (
-                    <SubtaskItem key={subtask._id} task={subtask} index={index} />
+                    <SubtaskItem
+                        key={subtask._id}
+                        task={subtask}
+                        userId={userId}
+                        index={index}
+                    />
                 ))}
 
                 {showCreateNewSubTask &&
