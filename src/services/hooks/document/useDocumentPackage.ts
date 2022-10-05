@@ -27,7 +27,7 @@ export const useDocumentPackage = (params: any, isFetchList?: boolean, isFetchIn
     });
     
     // Danh sách package
-    const { isLoading, refetch, data, fetchNextPage, hasNextPage } =
+    const { isLoading, refetch, data, fetchNextPage, hasNextPage, isFetching } =
         useInfiniteQuery(
             [`list_document_package`, params],
             async ({ pageParam }: any) => {
@@ -58,6 +58,7 @@ export const useDocumentPackage = (params: any, isFetchList?: boolean, isFetchIn
         hasNextPage,
         totalRecord,
         totalPage,
+        isFetching,
         // create update remove
         createDocumentPackageMutateAsync,
         updateDocumentPackageMutateAsync,
