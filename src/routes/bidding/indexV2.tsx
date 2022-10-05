@@ -13,6 +13,7 @@ import BiddingLayout from "views/bidding/shareComponents/layouts/BiddingLayout/L
 import ErrorPage from "views/authentication/Error";
 import { prefix } from "views/bidding/configs";
 import DatahubContractorLayout from "views/datahub/sharedComponents/layouts/DatahubContractorLayout";
+import { BiddingReportPage } from "views/bidding/pages/BiddingReportPage";
 
 const BiddingHomePage = lazy(() => import("views/bidding/pages/BiddingHomePageV2"));
 const BiddingDetailPage = lazy(() => import("views/datahub/pages/DatahubContractorDetail"));
@@ -48,6 +49,7 @@ const BiddingRouter: FC = () => {
             <Route exact path={navLinks[4].url} component={BiddingContractorProfile} />
           </DatahubContractorLayout>
         </Route>
+        <Route exact path={prefix + "/report"} component={BiddingReportPage} />
         <Route path="/bidding/*" component={ErrorPage} />
       </Switch>
     </BiddingLayout>
