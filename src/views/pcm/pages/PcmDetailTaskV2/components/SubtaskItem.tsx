@@ -8,14 +8,16 @@ import { Task } from "typings/task";
 import { useTask } from 'services/hooks/useTask';
 import moment from "moment";
 import { Link } from "react-router-dom";
-import { PCM_STATUS_TASK, PCM_PRIORITY_TASK } from 'apis/localdb';
+import { PCM_STATUS_TASK } from 'apis/localdb';
+import { toast } from "react-toastify";
 
 type Props = {
     task: Task;
+    userId: string | undefined;
     index: number;
 }
 
-export const SubtaskItem:FC<Props> = ({ task, index }) => {
+export const SubtaskItem:FC<Props> = ({ task, userId, index }) => {
     const wrapperClass = useRef<HTMLDivElement>(null)
     const [showOption, setShowOption] = useState(false);
     const [isChecked, setisChecked] = useState(task.status === 3);
@@ -27,14 +29,18 @@ export const SubtaskItem:FC<Props> = ({ task, index }) => {
     const handleUpdateStatusTask = async () => {
         if(task.status === 3) return;
 
+        if(userId !== task.assignee?._id) {
+            return toast.warn('Bạn không có quyền check hoàn thành');
+        }
+
         try {
-            updateTaskAsync({
+            setisChecked(true);
+            await updateTaskAsync({
                 taskID: task._id,
                 status: 3
             });
-            setisChecked(true);
-        } catch(error) {
-            console.log(error);
+        } catch(error: any) {
+            toast.error(error?.message);
         }
     }
 
@@ -45,7 +51,7 @@ export const SubtaskItem:FC<Props> = ({ task, index }) => {
                 type="checkbox"
                 defaultChecked={isChecked}
                 disabled={isChecked}
-                onChange={handleUpdateStatusTask}
+                // onChange={handleUpdateStatusTask}
             />
             <div className="mx-2 px-2 w-full">
                 <p className="text-[14px]">
@@ -76,13 +82,13 @@ export const SubtaskItem:FC<Props> = ({ task, index }) => {
                         showOption &&
                         <div className={"absolute left-0 z-20 bg-white w-[335px] shadow-lg rounded-md text-primary-gray"}>
                             <div className={"flex h-[30px] items-center mx-4 py-2 border-b-0.5 border-primary-border"}>
-                                <div className={"flex-1"}>Thao tác</div>
+                                <div className={"flex-1"}>Chức năng khác</div>
                                 <button onClick={() => setShowOption(false)}>
                                     <Close/>
                                 </button>
                             </div>
 
-                            <div className={"mb-4"}>
+                            {/* <div className={"mb-4"}>
                                 <button
                                     className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
                                 >
@@ -93,7 +99,7 @@ export const SubtaskItem:FC<Props> = ({ task, index }) => {
                                 >
                                     Cập nhật trạng thái
                                 </button>
-                            </div>
+                            </div> */}
                         </div>
                     }
                 </div>
