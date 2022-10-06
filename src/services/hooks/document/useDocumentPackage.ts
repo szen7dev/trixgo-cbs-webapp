@@ -45,7 +45,13 @@ export const useDocumentPackage = (params: any, isFetchList?: boolean, isFetchIn
             }
         );
 
-    const listDocumentPackage = [].concat(...(data?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
+    const listDocumentPackage = []
+        .concat(...(data?.pages || [])
+        .map((d: any) => d.data?.listRecords))
+        .filter(Boolean);
+    // const listDocumentPackage = [].concat(...(data?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
+    const listDocumentPackageWithPager = (data?.pages || []).map((d: any) => d.data?.listRecords);
+
     const totalRecord = data?.pages[0]?.data?.totalRecord;
     const totalPage = data?.pages[0]?.data?.totalPage;
     
@@ -54,6 +60,7 @@ export const useDocumentPackage = (params: any, isFetchList?: boolean, isFetchIn
         isLoading,
         refetch,
         data: listDocumentPackage,
+        listDocumentPackageWithPager,
         fetchNextPage,
         hasNextPage,
         totalRecord,
