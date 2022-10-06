@@ -187,7 +187,7 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                             Di chuyển đến công việc cha
                         </button>
 
-                        {/* <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
+                        <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
                             onClick={() => {
                                 openModal(
                                     <div
@@ -207,9 +207,9 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                             }}
                         >
                             Di chuyển đến nhóm dữ liệu
-                        </button> */}
+                        </button>
 
-                        <button
+                        {/* <button
                             className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
                             onClick={() => {
                                 openModal(
@@ -230,7 +230,7 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                             Gán phân loại cột mốc
                         </button>
 
-                        {/* <button
+                        <button
                             className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
                             onClick={() => {
                                 openModal(
@@ -248,10 +248,10 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                                 )
                             }}
                         >
-                            Cập nhật thông tin sán lượng
+                            Cập nhật giá trị thực hiện
                         </button> */}
 
-                        {/* <button
+                        <button
                             className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
                             onClick={() => {
                                 openModal(
@@ -270,7 +270,7 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                             }}
                         >
                             Cập nhật thông tin đánh giá
-                        </button> */}
+                        </button>
 
                         {task.draft === 1 && (
                             <>
