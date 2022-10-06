@@ -283,7 +283,7 @@ export const DocumentProjectPage: FC = () => {
                         <DropdownSearchableV2
                             ref={datahubRef}
                             className={"mr-4 border border-primary-border rounded-lg mb-2"}
-                            placeholder={"Tổ chức ban hành"}
+                            placeholder={"Đơn vị ban hành"}
                             prefixIcon={<img className={"mr-2"} src={maleUserIcon} alt={"icon"}/>}
                             isMultiple={true}
                             allowClearValueSingleInput={true}
@@ -595,7 +595,7 @@ export const DocumentProjectPage: FC = () => {
                                 Nội dung
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '15%' }}>
-                                Chủ thể ban hành
+                                Đơn vị ban hành
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '10%' }}>
                                 Mã hiệu
@@ -664,7 +664,7 @@ export const DocumentProjectPage: FC = () => {
                                         </Link>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
-                                        {document?.sender?.name}
+                                        {document?.datahubContact?.name}
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
                                         {document?.sign}

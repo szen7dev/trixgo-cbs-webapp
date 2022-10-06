@@ -19,7 +19,7 @@ export const TableGeneralInformation: FC<TableGeneralInformationProps> = ({
   const table = React.useMemo(
     () => [
       { title: "Mã hiệu", value: docInfo.sign },
-      { title: "Chủ thể ban hành", value: docInfo.sender?.name },
+      { title: "Cá nhân ban hành", value: docInfo.sender?.name },
       { title: "Mã hiệu hồ sơ lưu", value: docInfo.storeSign },
       { title: "Gói thầu, hạng mục", value: docInfo.package?.name },
       {
@@ -46,7 +46,7 @@ export const TableGeneralInformation: FC<TableGeneralInformationProps> = ({
       { title: "Nhận dạng", value: docInfo.style },
       { title: "Chủ thể nhận", value: docInfo.receiver?.name },
       { title: "Tình trạng", value: docInfo.status },
-      { title: "Tổ chức ban hành", value: docInfo.datahubContact?.name },
+      { title: "Đơn vị ban hành", value: docInfo.datahubContact?.name },
       { title: "Số lượng", value: docInfo.amount },
       { title: "Tính chất văn bản", value: docInfo.property?.name },
       { title: "Số lượng giao", value: docInfo.amountDelivery || 0 },
