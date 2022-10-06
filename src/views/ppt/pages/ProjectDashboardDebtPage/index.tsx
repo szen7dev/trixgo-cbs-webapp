@@ -45,7 +45,7 @@ const ProjectDashboardDebtPage: FC = () => {
 					companyID
 				})
 				// listData.push({ key: item?._id?.sellerInfo?.name, total: item.amount, expires: data.data[0].amount   })
-				listData = [...listData, { key: item?._id?.sellerInfo?.name, trongKy: Number(item.amount-data.data[0].amount), expires: data.data[0].amount }]
+				listData = [...listData, { key: item?._id?.sellerInfo?.name, trongKy: Number(item.amount-data.data[0].amount/1000000000), expires:  Number(data.data[0].amount/1000000000) }]
 			}
 			if(listData.length && !dataDebt.length){
 				setDataDebt(listData);

@@ -248,12 +248,12 @@ const ProjectDashboardPortfolioPage: FC = () => {
 						<div className="w-8/12">
 							<div className="flex w-full gap-4">
 									<div className="w-1/3 bg-primary-light px-6 py-4">
-										<Link to={`/pm/project/${projectID}/dashboard/debt/outin/2`}>
+										{/* <Link to={`/pm/project/${projectID}/dashboard/debt/outin/2`}> */}
 											<div className="font-bold text-primary-gray text-lg">Công nợ</div>
 											<div className="w-full">
 												<DebtChart projectID={projectID}/>
 											</div>
-										</Link>
+										{/* </Link> */}
 									</div>
 								<div className="w-1/2  h-[222px] bg-primary-light px-6 py-4">
 									<div className="font-bold text-primary-gray text-lg">Bảo lãnh tạm ứng</div>

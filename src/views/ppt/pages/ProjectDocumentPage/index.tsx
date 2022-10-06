@@ -56,7 +56,7 @@ const ProjectBiddingPage: FC = () => {
 							</th>
 							<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
 								<span className="pl-2 border-l border-cbs-border">
-									Chủ thể ban hành
+									Đơn vị ban hành
 								</span>
 							</th>
 							<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">

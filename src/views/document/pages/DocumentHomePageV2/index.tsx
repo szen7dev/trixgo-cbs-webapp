@@ -162,7 +162,7 @@ const DocumentHomePageV2: FC = () => {
                 <div className={"flex flex-wrap items-center px-4 py-2"}>
                     <DropdownSearchableV2
                         className={"mr-4 border border-primary-border rounded-lg mb-2"}
-                        placeholder={"Tổ chức ban hành"}
+                        placeholder={"Đơn vị ban hành"}
                         prefixIcon={<img className={"mr-2"} src={maleUserIcon} alt={"icon"} />}
                         isMultiple={true}
                         allowClearValueSingleInput={true}
@@ -459,7 +459,7 @@ const DocumentHomePageV2: FC = () => {
                                 Nội dung
                             </th>
                             <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-1/6 border-b-0.5 border-primary-border align-middle py-3"}>
-                                Chủ thể ban hành
+                               Đơn vị ban hành
                             </th>
                             <th className={"bg-cbs-table-header text-primary-gray text-left font-normal border-b-0.5 border-primary-border align-middle py-3"}>
                                 Mã hiệu

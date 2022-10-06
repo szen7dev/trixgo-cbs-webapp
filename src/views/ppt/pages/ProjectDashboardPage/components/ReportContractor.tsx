@@ -16,6 +16,7 @@ type Props = {
 
 const ReportContractor: React.FC<Props> = ({ projectID, ...props }) => {
 	const [isFetchContractorSelection, setIsFetchContractorSelection] = useState(false);
+	
 	const { contractorSelection } = useBiddingPlan({
 		params: { projectID },
 		isFetchContractorSelection

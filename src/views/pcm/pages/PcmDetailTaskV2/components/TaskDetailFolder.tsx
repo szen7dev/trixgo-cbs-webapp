@@ -284,6 +284,8 @@ export const TaskDetailFolder: FC<Props> = ({
                 )}
 
                 <TimeRange
+                    userId={user?._id}
+                    task={task}
                     isOfficalTask={task.draft === 0}
                     fromDateDefault={moment(task.actualStartTime).format('MM/DD/YYYY')}
                     toDateDefault={moment(task.actualFinishTime).format('MM/DD/YYYY')}

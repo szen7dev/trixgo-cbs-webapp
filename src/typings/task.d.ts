@@ -22,7 +22,8 @@ export type Project = {
   sign: string;
   address: string;
   company: string | Company,
-  startTime: string
+  startTime: string,
+  admins: any[]
 };
 
 export type Group = {
@@ -126,6 +127,7 @@ export interface updateTaskPayload {
   description?: string;
   contractID?: string;
   groupID?: string;
+  assigneeID?: string;
   name?: string;
   status?: number;
   priority?: number;

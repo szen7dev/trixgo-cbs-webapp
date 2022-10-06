@@ -90,7 +90,7 @@ const FormFilter: FC<FormFilterProps> = ({
 
   const listFieldDropdown = React.useMemo(() => {
     return [
-      { title: "Chủ thể ban hành", data: listContact, name: "senderID" },
+      { title: "Cá nhân ban hành", data: listContact, name: "senderID" },
       { title: "Hợp đồng", data: listContracts, name: "contractID" },
       { title: "Tính chất văn bản", data: properties, name: "propertyID" },
       {

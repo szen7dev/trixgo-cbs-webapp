@@ -48,7 +48,7 @@ export const TableSubtextProfile: FC<TableSubtextProfileProps> = ({
               Ngày tháng
             </th>
             <th className="font-normal text-cbs-subtext px-3 py-2.5">
-              Chủ thể ban hành
+              Đơn vị ban hành
             </th>
             <th className="font-normal text-cbs-subtext px-3 py-2.5">
               Ghi chú
@@ -68,7 +68,7 @@ export const TableSubtextProfile: FC<TableSubtextProfileProps> = ({
                 </td>
               <td className="py-3 px-3">{doc.sign || ''}</td>
               <td className="py-3 px-3">{moment(doc.date).isValid() && moment(doc.date).format('DD/MM/YYYY') || ''}</td>
-              <td className="py-3 px-3">{doc.sender?.name || ''}</td>
+              <td className="py-3 px-3">{doc.datahubContact?.name || ''}</td>
               <td className="py-3 px-3">{doc.note || ''}</td>
               <td className="py-3 px-3">{doc.storage?.name || ''}</td>
             </tr>
