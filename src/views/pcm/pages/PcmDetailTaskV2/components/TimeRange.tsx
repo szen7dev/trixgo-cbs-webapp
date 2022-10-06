@@ -1,18 +1,24 @@
-import React, {FC, useCallback, useState} from "react";
+import React, {FC, useCallback, useEffect, useState} from "react";
 import TriangleDown from "assets/icons/TriangleDown";
 import Close from "../../../../../assets/icons/Close";
 import moment from "moment";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import {DropdownSearchable} from "../../../../../shareComponents/common";
+import { Task } from "typings/task";
 
 type Props = {
     isOfficalTask: boolean,
     fromDateDefault: string,
     toDateDefault: string,
     toTimeDefault: string,
-    onApplyNewTime: (timer: {fromDate: string, toDate: string, toTime: string, remind: string|number|undefined, isOfficalTask: boolean}) => void,
+    onApplyNewTime: (timer: {
+        fromDate: string, toDate: string, toTime: string, remind: string|number|undefined, isOfficalTask: boolean
+    }) => void,
     remindDefault?: string|number,
+    userId?: string,
+    task: Task;
 }
+
 const remindOptions = [
     {
         id: 0,
@@ -41,6 +47,8 @@ const remindOptions = [
 ]
 
 const TimeRange:FC<Props> = ({
+    task,
+    userId,
     isOfficalTask,
     fromDateDefault,
     toDateDefault,
@@ -55,6 +63,18 @@ const TimeRange:FC<Props> = ({
     const [fromDateTemp, setFromDateTemp] = useState(fromDateDefault);
     const [toDateTemp, setToDateTemp] = useState(toDateDefault);
     const [toTimeTemp, setToTimeTemp] = useState(toTimeDefault);
+
+    const [hasPermissionUpdateExpire, setHasPermissionUpdateExpire] = useState(false);
+
+    useEffect(() => {
+        if(!task) return;
+
+        const admins = task.project?.admins;
+
+        if(admins?.includes?.(userId) || !isOfficalTask) {
+            setHasPermissionUpdateExpire(true);
+        }
+    }, [task?.project?.admins, userId, isOfficalTask])
 
     const remindDefaultItem = useCallback(() => {
         return remindOptions.find(option => option.id === remindDefault);
@@ -90,7 +110,7 @@ const TimeRange:FC<Props> = ({
                     </div>
                     <div className={"options"}>
 
-                        {!isOfficalTask && (
+                        {hasPermissionUpdateExpire && (
                             <>
                                 <div className={"mt-4"}>
                                     <div className={"font-bold text-primary-gray mb-2"}>Bắt đầu</div>

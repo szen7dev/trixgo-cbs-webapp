@@ -1,16 +1,27 @@
-import React, { FC } from "react";
+import { FC, useState } from "react";
+import moment from "moment";
 import iconAddGroup from "assets/images/icons8-add-user-group-man-man-64.svg";
 import taskUserAvt from "assets/images/task-user.svg";
 import { Task } from "typings/task";
-import moment from "moment";
 import { User } from "typings/user";
+import { ModalUpdateTaskAssignee } from './ModalUpdateTaskAssignee';
 
 type Props = {
     task: Task;
     user: User | null;
+    refetchInfo: () => void;
 }
 
-export const TaskDetailMember: FC<Props> = ({ task, user }) => {
+export const TaskDetailMember: FC<Props> = ({ task, user, refetchInfo }) => {
+    const [isShow, setIsShow] = useState(false);
+
+    const openModalUpdateAssignee = () => {
+        const isAdmin = task.project?.admins?.includes?.(user?._id);
+        if(isAdmin || task.draft === 1) {
+            setIsShow(true);
+        }
+    }
+
     return (
         <div className={"task-member flex items-start mt-5"}>
             <span className={"mr-4"}>
@@ -26,13 +37,19 @@ export const TaskDetailMember: FC<Props> = ({ task, user }) => {
                             <p className={"text-primary-gray text-xs"}>Tạo việc {moment(task.createAt).format('HH:mm DD/M/YYYY')}</p>
                         </div>
                     </div>
-                    <div className={"assigned-user flex items-center ml-4 mr-4"}>
+                    <div className={"assigned-user flex items-center ml-4 mr-4 cursor-pointer"} onClick={openModalUpdateAssignee}>
                         <img alt={"----"} src={task?.assignee?.image ? `${process.env.REACT_APP_URL_S3_USER}/${task?.assignee?.image}` : taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] border-0.5 border-primary-border"} />
                         <div className={"flex-1 ml-2"}>
                             <p>{task.assignee?.bizfullname}</p>
                             <p className={"text-primary-gray text-xs"}>Người thực hiện</p>
                         </div>
                     </div>
+                    <ModalUpdateTaskAssignee
+                        task={task}
+                        isShow={isShow}
+                        onClose={() => setIsShow(false)}
+                        onConfirm={refetchInfo}
+                    />
 
                     {
                         (task.subtype == 4 && task.assignee._id.toString() == user?._id.toString()) ?  <></> : 
@@ -53,7 +70,6 @@ export const TaskDetailMember: FC<Props> = ({ task, user }) => {
                             </button> */}
                         </div>
                     }
-                    
                 </div>
                 {/*UI DEMO*/}
                 {/* <div className={"flex items-center flex-wrap mt-2"}>

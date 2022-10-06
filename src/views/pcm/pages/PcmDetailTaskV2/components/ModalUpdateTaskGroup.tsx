@@ -31,7 +31,7 @@ export const ModalUpdateTaskGroup: FC<Props> = ({ taskID, projectID, group, clos
 		keyword,
 		projectID: projectID,
 		isShowParentAndChild: true
-	  }, !!projectID);
+	  }, true);
 
 	const handleConfirm = async () => {
 		if(!groupID) return toast.warn('Vui lòng chọn nhóm dữ liệu', TOAST_DEFAULT_OPTIONS);
