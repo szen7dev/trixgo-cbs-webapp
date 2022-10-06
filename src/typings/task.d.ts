@@ -55,6 +55,14 @@ export type Task = {
   lastLog?: LastLog;
   assignee: Assignee;
   percentage: number;
+  milestone: number;
+  unit: number;
+  unitPrice: number;
+  quantity: number;
+  amountoftime: number;
+  ontime: number;
+  quality: number;
+  judgement: string;
   project: Project;
   company: Company,
   group: Group,
@@ -117,6 +125,7 @@ export interface updateTaskPayload {
   taskID: string;
   description?: string;
   contractID?: string;
+  groupID?: string;
   name?: string;
   status?: number;
   priority?: number;
@@ -126,6 +135,7 @@ export interface updateTaskPayload {
   actualFinishTime?: string;
   expiredHour?: string;
   alert?: string | number;
+  milestone?: number;
   isAddSignature?: boolean;
   isOpenBidding?: boolean;
   flags?: Array<string>;

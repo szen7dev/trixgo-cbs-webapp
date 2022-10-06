@@ -10,7 +10,7 @@ import { TOAST_DEFAULT_OPTIONS } from 'utils/constants';
 
 type Props = {
 	closeModal: () => void,
-  onConfirm?: () => void,
+  	onConfirm?: () => void,
 	taskID: string,
 	projectID: string,
 }

@@ -42,7 +42,7 @@ const DocumentPackageRepository = {
     async listPackage(payload: any): Promise<any> {
         const { data } = await API.get<any>(
             `${PACKAGE_URL}/document_packages?${convertObToUrl({
-                select: 'name sign project userCreate createAt modifyAt members',
+                select: 'id project name sign type packagePrice startTime finishTime form contractType duration status bidder note userCreate percentOfCompletedPackage createAt members',
                 ...payload,
             })}`
         );
@@ -77,7 +77,7 @@ const DocumentPackageRepository = {
     async infoPackage(payload: any): Promise<any> {
         const { data } = await API.get<any>(
             `${PACKAGE_URL}/document_packages?${convertObToUrl({
-                select: "name sign members userUpdate project",
+                // select: "name sign members userUpdate project",
                 populates: JSON.stringify({
                     path: "members",
                     select: "_id bizfullname email level image"

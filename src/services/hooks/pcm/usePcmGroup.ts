@@ -3,17 +3,17 @@ import PcmRepository from 'apis/pcm';
 
 export const usePcmPlanGroup = (params: any, isFetch?: boolean, isFetchInfo?: boolean): any => {
     // Tạo group
-    const { mutateAsync: createPcmPlanGroupMutateAsync, isLoading: isLoadingCreatePcmPlanGroup } =
+    const { mutateAsync: createPcmPlanGroupMutateAsync } =
         useMutation((payload: any) => PcmRepository.insertPcmPlanGroup(payload)
     );
 
     // Sửa group
-    const { mutateAsync: updatePcmPlanGroupMutateAsync, isLoading: isLoadingUpdatePcmPlanGroup } =
+    const { mutateAsync: updatePcmPlanGroupMutateAsync } =
         useMutation((payload: any) =>PcmRepository.updatePcmPlanGroup(payload)
     );
 
     // Xoá group
-    const { mutateAsync: removeManyPcmPlanGroupMutateAsync, isLoading: isManyAppRole } =
+    const { mutateAsync: removeManyPcmPlanGroupMutateAsync } =
         useMutation((payload: any) => PcmRepository.removeManyPcmPlanGroup(payload)
     );
 

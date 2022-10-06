@@ -13,7 +13,7 @@ async function fetchListDepartment(params: any) {
         params: {
             populates: {
                 "path": "members",
-                "select": "fullname bizfullname name sign image"
+                "select": "fullname bizfullname name sign image location"
             },
             filter: { "name": 1, "description": 1, "sign": 1, "members": 0 },
             ...params
@@ -27,7 +27,7 @@ async function fetchListDepartmentIsMember(params: any) {
     const { data } = await API.get(
         `${ITEM_URL}/list-department-is-members`, {
         params: {
-            select: "name description sign company image startTime expiredTime milestones numberOfDocs completedMilestones stage createAt members owner budget vatBudget numberOfPackage numberOfUnexecutedPackage numberOfExecutedPackage numberOfCompletedPackage amountOfCompletedPackage",
+            select: "name description sign company image startTime expiredTime milestones numberOfDocs completedMilestones stage createAt members owner budget vatBudget numberOfPackage numberOfUnexecutedPackage numberOfExecutedPackage numberOfCompletedPackage amountOfCompletedPackage location",
             populates: {
                 "path": "members company",
                 "select": "_id fullname bizfullname name sign image"
@@ -43,7 +43,7 @@ async function fetchDetailDepartment(params: any) {
     const { data } = await API.get(
         `${ITEM_URL}/departments`, {
             params: {
-                select: 'name sign description contracts company admins members image startTime',
+                select: 'name sign description contracts company admins members image startTime location',
                 populates: {
                     path: 'company',
                     select: '_id name sign',

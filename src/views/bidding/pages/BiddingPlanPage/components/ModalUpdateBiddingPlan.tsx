@@ -22,7 +22,10 @@ import { BIDDING_PLAN_CONTRACT_TYPE, BIDDING_PLAN_FORM, BIDDING_PLAN_STATUS, FIN
  */
 import { useBiddingPlan } from 'services/hooks/bidding/useBiddingPlan';
 import { BiddingPlanRepository } from 'apis/bidding';
+import packageRepository  from 'apis/document/Package';
+
 import { useQueryListCompany } from "services/hooks/useCompanies";
+import { useDocumentPackage } from "services/hooks/document/useDocumentPackage";
 
 interface ModalProps {
 	biddingPlanID: string;
@@ -39,8 +42,8 @@ const ModalUpdateBiddingPlan: FC<ModalProps> = ({ biddingPlanID, toggle, onConfi
 		if(!biddingPlanID) return;
 
 		(async () => {
-			const { error, data } = await BiddingPlanRepository.fetchDetailBiddingPlan({
-				planID: biddingPlanID
+			const { error, data } = await packageRepository.infoPackage({
+				packageID: biddingPlanID
 			})
 			if(error) return;
 
@@ -66,13 +69,18 @@ const ModalUpdateBiddingPlan: FC<ModalProps> = ({ biddingPlanID, toggle, onConfi
 		name: string().required("Bạn cần nhập nội dung"),
 	});
 
+	const {   
+		updateDocumentPackageMutateAsync,
+		refetch
+	  } = useDocumentPackage({ }, false, false);
+
 	const handleSubmit = async (values: any) => {
 		try {
-			const { error, data } = await updateAsync({
-				planID: biddingPlanID,
+			const { error, data } = await updateDocumentPackageMutateAsync({
+				packageID: biddingPlanID,
 				...values
 			});
-
+			
 			if(error) {
                 return toast.warn(data?.message);
             }

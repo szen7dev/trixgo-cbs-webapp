@@ -15,9 +15,10 @@ export const TaskDetailCompleteStatus: FC<Props> = ({ task, userId }) => {
             <span className={"mr-4"}>
                 <img src={iconTaskCompleted} alt={'-----'} />
             </span>
+            
             <div className={"flex text-cbs-highlight-color"}>
                 <Link to={`/pcm/detail/${task.parent?._id}`}>
-                    {task.parent?.name}
+                    Việc cha: {task.parent?.name}
                 </Link>
             </div>
         </div>

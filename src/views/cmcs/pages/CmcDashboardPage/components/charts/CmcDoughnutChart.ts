@@ -46,6 +46,12 @@ const getPlugins = (
         ctx.save();
       },
     },
+    // {
+    //   id: "beforeDraw",
+    //   afterDraw: (chart: IChart) => {
+    //     const ctx = chart.ctx;
+    //   }
+    // }
   ];
 };
 

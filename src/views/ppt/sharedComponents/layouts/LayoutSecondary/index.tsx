@@ -34,7 +34,7 @@ const LayoutSecondary: FC<HTMLAttributes<HTMLDivElement> & Props> = ({ pages, ch
               <NavLink
                 key={page.id}
                 className="flex items-center justify-center border-b-2 border-transparent mx-2 leading-4 py-3"
-                activeClassName="border-cbs-primary text-black font-bold"
+                activeClassName="border-cbs-primary text-cbs-primary font-bold"
                 to={page.location ? page.location : { pathname: generatePath(page.path as string, { ...match.params }) }}
                 isActive={page.isActive}
                 exact={page.navExact}

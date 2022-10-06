@@ -178,36 +178,49 @@ export const useDetailContractIPCMutation = (id: string): any => {
 // Bắt đầu tạo hook download excel
 type UseContractCustom = {
     exportContractIpcAsync: (payload: any) => Promise<any>,
+    contractIPCAmountByProperty: any,
+    isLoadingAmountByProperty: boolean,
 };
 
 type UseContractCustomParams = {
-    params?: any
+    params?: any,
+    isFetchAmountByProperty?: boolean
 }
 
 export const useContractIpcCustom = ({
-    params = {}
+    params = {},
+    isFetchAmountByProperty = false
 }: UseContractCustomParams) : UseContractCustom => {
     const { mutateAsync: exportContractIpcAsync } =
         useMutation((payload: any) =>
             ContractIPCRepository.exportContractIpc(payload)
         );
 
+    const { data: contractIPCAmountByProperty, isLoading: isLoadingAmountByProperty } =
+    useQuery(["cmcsContractIPCAmountByProperty", params], () =>
+        ContractIPCRepository.fetchAmountByProperty(params), {
+            refetchOnWindowFocus: false,
+            enabled: isFetchAmountByProperty,
+        });
+
     return {
-        exportContractIpcAsync
+        exportContractIpcAsync,
+        contractIPCAmountByProperty,
+        isLoadingAmountByProperty
     }
 }
 // Kết thúc tạo hook download excel
 
 export const useCmcsDashboard = ({ params = {}}) => {
-    const { data: cmcsContractIPCAmountByMonth } = 
-        useQuery("cmcsContractIPCAmountByMonth", () => 
+    const { data: cmcsContractIPCAmountByMonth } =
+        useQuery("cmcsContractIPCAmountByMonth", () =>
             ContractIPCRepository.cmcsContractIPCAmountByMonth(params), {
                 refetchOnWindowFocus: false,
                 enabled: true,
             });
 
-    const { data: cmcsContractPaymentAmountByMonth } = 
-    useQuery("cmcsContractPaymentAmountByMonth", () => 
+    const { data: cmcsContractPaymentAmountByMonth } =
+    useQuery("cmcsContractPaymentAmountByMonth", () =>
         ContractIPCRepository.cmcsContractPaymentAmountByMonth(params), {
             refetchOnWindowFocus: false,
             enabled: true,

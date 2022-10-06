@@ -239,8 +239,17 @@ button {
 
 /*__________________________________________________________________________*/
 /* ___________Customized layout styles ___________________*/
+.width-200{
+  width: 200px;
+}
+.height-250{
+  height: 250px;
+}
 .bg-gray-custom{
 	background: #F5F7FB;
+}
+.border-color-jade{
+  border-color: #00CA99; 
 }
 .t-leftsidebar-navigation {
   width: 240px;

@@ -21,6 +21,7 @@ import { BIDDING_PLAN_CONTRACT_TYPE, BIDDING_PLAN_FORM, BIDDING_PLAN_STATUS, FIN
  */
 import { useBiddingPlan } from 'services/hooks/bidding/useBiddingPlan';
 import { useQueryListCompany } from "services/hooks/useCompanies";
+import { useDocumentPackage } from "services/hooks/document/useDocumentPackage";
 
 interface ModalProps {
 	toggle: () => void;
@@ -29,8 +30,11 @@ interface ModalProps {
 }
 
 const ModalCreateBiddingPlan: FC<ModalProps> = ({ toggle, onConfirm, projectID }) => {
-	const { insertAsync } = useBiddingPlan({});
-
+	// const { insertAsync } = useBiddingPlan({});
+	const {
+		createDocumentPackageMutateAsync,
+		refetch
+	  } = useDocumentPackage({ departmentID: projectID, isShowAll: "1" }, false, false);
 	const financialSchema = object().shape({
 		name: string().required("Bạn cần nhập nội dung"),
 	});
@@ -44,7 +48,8 @@ const ModalCreateBiddingPlan: FC<ModalProps> = ({ toggle, onConfirm, projectID }
 
 	const handleSubmit = async (values: any) => {
 		try {
-			const { error, data } = await insertAsync(values);
+			// const { error, data } = await insertAsync(values);
+			const { error, data } = await createDocumentPackageMutateAsync(values);
 
 			if(error) {
                 return toast.warn(data?.message);

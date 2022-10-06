@@ -59,10 +59,12 @@ export const PROJECT_ROLES = [
 export const PROJECT_PARTIES = [
     { value: 0, text: 'Trợ lý viên', key: '' },
     { value: 1, text: 'Chủ đầu tư', key: '' },
-    { value: 2, text: 'Tư vấn QLDA', key: '' },
+    { value: 2, text: 'Tư vấn Quản lý dự án', key: '' },
     { value: 3, text: 'Tư vấn giám sát', key: '' },
     { value: 4, text: 'Tư vấn thiết kế', key: '' },
     { value: 5, text: 'Nhà thầu thi công', key: '' },
+    { value: 6, text: 'Tư vấn thẩm tra', key: '' },
+    { value: 7, text: 'Tư vấn khác', key: '' },
 ]
 
 // For CNC only
@@ -295,14 +297,14 @@ export const CONTRACT_LOCK = [
 
 // CONTRACT ONTIME
 export const CONTRACT_ONTIME = [
-    { value: 1, text: 'Ontime' },
-    { value: 2, text: 'Offtime' },
+    { value: 1, text: 'Đúng tiến độ' },
+    { value: 2, text: 'Chậm tiến độ' },
 ]
 
 // CONTRACT ONBUDGET
 export const CONTRACT_ONBUDGET = [
-    { value: 1, text: 'Onbudget' },
-    { value: 2, text: 'Offbudget' },
+    { value: 1, text: 'Đúng ngân sách' },
+    { value: 2, text: 'Vượt ngân sách' },
 ]
 
 // HỢP ĐỒNG THỰC/ẢO-GỬI DẤU
@@ -602,10 +604,12 @@ export const REACTION_TYPES = [
 export const PCM_MEMBER_POSITION_TYPE = [
     { value: 0, text: 'Trợ lý viên' },
     { value: 1, text: 'Chủ đầu tư' },
-    { value: 2, text: 'Tư vấn QLDA' },
+    { value: 2, text: 'Tư vấn Quản lý dự án' },
     { value: 3, text: 'Tư vấn giám sát' },
     { value: 4, text: 'Tư vấn thiết kế' },
     { value: 5, text: 'Nhà thầu thi công' },
+    { value: 6, text: 'Tư vấn thẩm tra' },
+    { value: 7, text: 'Tư vấn khác' },
 ]
 
 /**
