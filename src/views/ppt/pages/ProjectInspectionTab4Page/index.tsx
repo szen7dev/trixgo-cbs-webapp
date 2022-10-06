@@ -229,7 +229,7 @@ const ProjectInspectionTab4Page: FC = () => {
 						</div>
 						<div className="grid grid-cols-2 gap-4">
 							<div className="bg-green-success h-[50px] flex justify-between px-2  items-center rounded">
-								<div className="text-[13px] text-white  w-52">
+								<div className="text-[13px] text-white  w-4/5 text-ellipsis line-clamp-2	">
 									Công tác xây tường bao và tường ngăn giữa các khu vực/căn hộ
 								</div>
 								<div className="text-medium font-bold cbs-radial-progress w-10 h-10" style={{ '--value': '33.33', '--primary': '#4781CF', '--secondary': '#F0F0F0' } as React.CSSProperties}>
@@ -237,7 +237,7 @@ const ProjectInspectionTab4Page: FC = () => {
 								</div>
 							</div>
 							<div className="bg-cbs-bg-light-blue-bar h-[50px] flex justify-between px-2  items-center rounded">
-								<div className="text-[13px] text-white  w-52">
+								<div className="text-[13px] text-white  w-4/5 text-ellipsis line-clamp-2	">
 									Công tác hoàn thiện nhà vệ sinh
 								</div>
 								<div className="text-medium font-bold cbs-radial-progress w-10 h-10" style={{ '--value': '33.33', '--primary': '#4781CF', '--secondary': '#F0F0F0' } as React.CSSProperties}>
@@ -245,7 +245,7 @@ const ProjectInspectionTab4Page: FC = () => {
 								</div>
 							</div>
 							<div className="bg-cbs-dirt h-[50px] flex justify-between px-2  items-center rounded">
-								<div className="text-[13px] text-white  w-52">
+								<div className="text-[13px] text-white  w-4/5 text-ellipsis	line-clamp-2 ">
 									Công tác xây tường bao và tường ngăn giữa các khu vực/căn hộ
 								</div>
 								<div className="text-medium font-bold cbs-radial-progress w-10 h-10" style={{ '--value': '33.33', '--primary': '#4781CF', '--secondary': '#F0F0F0' } as React.CSSProperties}>
@@ -253,7 +253,7 @@ const ProjectInspectionTab4Page: FC = () => {
 								</div>
 							</div>
 							<div className=" bg-pink-warning h-[50px] flex justify-between px-2  items-center rounded">
-								<div className="text-[13px] text-white  w-52">
+								<div className="text-[13px] text-white  w-4/5 text-ellipsis line-clamp-2	">
 									Công tác hoàn thiện nhà vệ sinh
 								</div>
 								<div className="text-medium font-bold cbs-radial-progress w-10 h-10" style={{ '--value': '33.33', '--primary': '#4781CF', '--secondary': '#F0F0F0' } as React.CSSProperties}>
