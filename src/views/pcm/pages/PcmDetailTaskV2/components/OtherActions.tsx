@@ -209,7 +209,7 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                             Di chuyển đến nhóm dữ liệu
                         </button>
 
-                        <button
+                        {/* <button
                             className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
                             onClick={() => {
                                 openModal(
@@ -249,7 +249,7 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                             }}
                         >
                             Cập nhật giá trị thực hiện
-                        </button>
+                        </button> */}
 
                         <button
                             className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
