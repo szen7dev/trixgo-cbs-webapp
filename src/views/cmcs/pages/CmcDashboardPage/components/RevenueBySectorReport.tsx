@@ -12,12 +12,13 @@ const colors = ["#2C86ED", "#00CA99", "#9B59B6", "#E03B56", "#DBE7F2"]
 type Props = {
   companyID?: string;
   year: number;
+  outin: number;
 }
 
-const RevenueBySectorReport: FC<Props> = ({ companyID, year = 2022 }) => {
+const RevenueBySectorReport: FC<Props> = ({ companyID, outin, year = 2022 }) => {
   const { contractIPCAmountByProperty, isLoadingAmountByProperty } = useContractIpcCustom({
     params: {
-      outin: 1,
+      outin,
       option: 1,
       optionTime: 1,
       year,
