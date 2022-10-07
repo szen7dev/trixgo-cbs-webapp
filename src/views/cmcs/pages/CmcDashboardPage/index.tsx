@@ -30,8 +30,11 @@ import { AdvanceGuarantee } from "./components/AdvanceGuarantee";
 import { ContractPerformanceGuarantee } from "./components/ContractPerformanceGuarantee";
 import FilterDropdown from "./components/FilterDropdown";
 
+const reportYears = [2022, 2021, 2020, 2019, 2018];
+
 const CmcDashboardPage: FC = () => {
   const [yearSelected, setYearSelected] = useState(2022);
+  const [outinSelected, setOutinSelected] = useState(1);
 
   // --------- Check phân quyền
   useCheckPerAccessScreen({
@@ -44,7 +47,7 @@ const CmcDashboardPage: FC = () => {
   const { user } = useAuth();
   // const { listContracts } = useCmcs({ companyID: user?.company._id });
   // Giá trị ký
-  const { contractAmountByMonth } = useContractDashboard({ params: { outin: 1, year: 2022 } });
+  const { contractAmountByMonth } = useContractDashboard({ params: { outin: outinSelected, year: 2022 } });
   let contractAmountByMonthAll = 0;
   contractAmountByMonth?.forEach((item: any) => {
     contractAmountByMonthAll += item?.amount;
@@ -53,7 +56,7 @@ const CmcDashboardPage: FC = () => {
   contractAmountByMonthAll = +(contractAmountByMonthAll / 1000000000).toFixed(3);
 
   // Nghiệm thu
-  const { cmcsContractIPCAmountByMonth, cmcsContractPaymentAmountByMonth } = useCmcsDashboard({ params: { outin: 1, year: 2022 } });
+  const { cmcsContractIPCAmountByMonth, cmcsContractPaymentAmountByMonth } = useCmcsDashboard({ params: { outin: outinSelected, year: 2022 } });
 
   let cmcsContractIPCAmountByMonthAll = 0;
   cmcsContractIPCAmountByMonth?.forEach((item: any) => {
@@ -70,17 +73,25 @@ const CmcDashboardPage: FC = () => {
 
   return (
     <section className=" w-full">
-      <div className="sticky top-0 z-10 bg-white	">
+      <div className="sticky top-0 z-10 bg-white">
         {/* tab */}
         <div className="flex justify-between px-2">
           <div><ul className="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
             <li className="mr-2" role="presentation">
-              <button className="inline-block p-2 rounded-t-lg border-b-2 text-blue-600 hover:text-blue-600 dark:text-blue-500 dark:hover:text-blue-500 border-blue-600 dark:border-blue-500" id="profile-tab" data-tabs-target="#sell" type="button" role="tab" aria-controls="profile" aria-selected="true">
+              <button
+                className={classnames("inline-block p-2 rounded-t-lg border-b-2 hover:text-blue-600 dark:text-blue-500 dark:hover:text-blue-500", {
+                  "border-blue-600 dark:border-blue-500 text-blue-600": outinSelected === 1
+                })}
+                id="profile-tab" data-tabs-target="#sell" type="button" role="tab" aria-controls="profile" aria-selected={false} onClick={() => setOutinSelected(1)}>
                 Bán ra
               </button>
             </li>
             <li className="mr-2" role="presentation">
-              <button className="inline-block p-2 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400  dark:border-gray-700" id="dashboard-tab" data-tabs-target="#" type="button" role="tab" aria-controls="dashboard" aria-selected="false">
+              <button
+                className={classnames("inline-block p-2 rounded-t-lg border-b-2 hover:text-blue-600 dark:text-blue-500 dark:hover:text-blue-500", {
+                  "border-blue-600 dark:border-blue-500 text-blue-600": outinSelected === 2
+                })}
+                id="dashboard-tab" data-tabs-target="#buy" type="button" role="tab" aria-controls="dashboard" aria-selected={true} onClick={() => setOutinSelected(2)}>
                 Mua vào
               </button>
             </li>
@@ -105,36 +116,19 @@ const CmcDashboardPage: FC = () => {
         <div className="flex justify-between">
           {/* filter by year */}
           <div className={"header-table flex py-4 w-full top-0 bg-white"}>
-            <button
-              onClick={() => setYearSelected(2022)}
-              className={
-                classnames("py-1 px-4 mx-2 rounded-full border border-primary-border", {
-                  "text-white bg-cbs-secondary border-none": yearSelected === 2022
-                })
-              }
-            >
-              2022
-            </button>
-            <button
-              onClick={() => setYearSelected(2021)}
-              className={
-                classnames("py-1 px-4 mx-2 rounded-full border border-primary-border", {
-                  "text-white bg-cbs-secondary border-none": yearSelected === 2021
-                })
-              }
-            >
-              2021
-            </button>
-            <button
-              onClick={() => setYearSelected(2020)}
-              className={
-                classnames("py-1 px-4 mx-2 rounded-full border border-primary-border", {
-                  "text-white bg-cbs-secondary border-none": yearSelected === 2020
-                })
-              }
-            >
-              2020
-            </button>
+            {reportYears.map(year => (
+              <button
+                key={year}
+                onClick={() => setYearSelected(year)}
+                className={
+                  classnames("py-1 px-4 mx-2 rounded-full border border-primary-border", {
+                    "text-white bg-cbs-secondary border-none": yearSelected === year
+                  })
+                }
+              >
+                {year}
+              </button>
+            ))}
           </div>
           <div className="w-1/4 flex items-center">
             <div className="w-5/6 flex flex-col gap-3">
@@ -181,13 +175,20 @@ const CmcDashboardPage: FC = () => {
 
           <div>
             {/* biểu đồ */}
-            <RevenueOverTimeReport data={{ contractAmountByMonth, cmcsContractIPCAmountByMonth, cmcsContractPaymentAmountByMonth }} />
+            <RevenueOverTimeReport
+              data={{
+                contractAmountByMonth,
+                cmcsContractIPCAmountByMonth,
+                cmcsContractPaymentAmountByMonth,
+              }}
+            />
           </div>
 
           <div className="flex gap-2 h-[222px]">
             <div className="w-2/3">
               <RevenueBySectorReport
                 year={yearSelected}
+                outin={outinSelected}
                 companyID={user?.company?._id}
               />
             </div>
@@ -195,6 +196,7 @@ const CmcDashboardPage: FC = () => {
               <div className="font-bold text-primary-gray text-lg">Công nợ</div>
               <div className="w-full">
                 <DebtChart
+                  outin={outinSelected}
                   companyID={user?.company?._id}
                 />
               </div>
@@ -208,20 +210,20 @@ const CmcDashboardPage: FC = () => {
           {/* map */}
           <div className="h-full bg-primary-light px-6 py-4 flex	flex-col gap-4">
             <div className="font-bold text-primary-gray text-lg">Khu vực triển khai</div>
-            <CustomMap />
+            {/* <CustomMap /> */}
           </div>
           {/* end map */}
           <div className="flex gap-2">
             <div className="w-1/2  h-[222px] bg-primary-light px-6 py-4">
               <div className="font-bold text-primary-gray text-lg">Bảo lãnh tạm ứng</div>
               <div>
-                <AdvanceGuarantee />
+                <AdvanceGuarantee outin={outinSelected} />
               </div>
             </div>
             <div className="w-1/2 h-[222px] bg-primary-light px-6 py-4">
               <div className="font-bold text-primary-gray text-lg">Bảo lãnh thực hiện hợp đồng</div>
               <div>
-                <ContractPerformanceGuarantee />
+                <ContractPerformanceGuarantee outin={outinSelected} />
               </div>
             </div>
           </div>

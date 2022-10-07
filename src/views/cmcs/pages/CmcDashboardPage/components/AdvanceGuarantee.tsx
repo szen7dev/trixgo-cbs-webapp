@@ -2,11 +2,15 @@ import { FC, useMemo } from "react";
 import ChartDoughnutSmall from "./SupportDoughnutChart";
 import { useContractCustom } from 'services/hooks/cmcs/useContract';
 
-export const AdvanceGuarantee: FC = () => {
+type Props = {
+    outin: number;
+}
+
+export const AdvanceGuarantee: FC<Props> = ({ outin = 1 }) => {
     const { listGuarantee } = useContractCustom({
         params: {
             guaranteeType: 1,
-            outin: 1,
+            outin,
             option: 1
         },
         isFetchListGuarantee: true
