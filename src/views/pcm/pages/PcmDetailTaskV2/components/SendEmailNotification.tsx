@@ -207,12 +207,14 @@ export const SendEmailNotification: FC<Props> = ({ task, userId = '' }) => {
                                     <input
                                         className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
                                         placeholder={"Tiêu đề email"}
+                                        defaultValue={task.name}
                                         onChange={e => setTitle(e.target.value)}
                                     />
                                     <textarea
                                         placeholder={"Nội dung email"}
                                         rows={3}
                                         className={"w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
+                                        defaultValue={task.description}
                                         onChange={e => setContent(e.target.value)}
                                     ></textarea>
                                     <textarea
