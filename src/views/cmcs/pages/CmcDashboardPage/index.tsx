@@ -210,7 +210,7 @@ const CmcDashboardPage: FC = () => {
           {/* map */}
           <div className="h-full bg-primary-light px-6 py-4 flex	flex-col gap-4">
             <div className="font-bold text-primary-gray text-lg">Khu vực triển khai</div>
-            {/* <CustomMap /> */}
+            <CustomMap />
           </div>
           {/* end map */}
           <div className="flex gap-2">
