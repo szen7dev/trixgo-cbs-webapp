@@ -762,7 +762,7 @@ export const ModalAddNewTask: FC = () => {
                       />
                       <input
                         type="time"
-                        defaultValue="00:00"
+                        defaultValue="09:00"
                         onChange={(e) => setFieldValue("expiredHour", e.target.value)}
                       />
                     </div>
