@@ -245,7 +245,7 @@ export const TaskDetailFolder: FC<Props> = ({
                     <img src={iconFolder} alt={'-----'} />
                 </span>
                 <div className={"flex"}>
-                    Nhóm dữ liệu: {task?.project?.sign} {">"}{" "}
+                    Nhóm: {task?.project?.sign} {">"}{" "}
                     <Link to={`/pm/project/${task?.project?._id}/folder/${task?.group?._id}`}>
                         {/* {getGroupTitle(task?.group)} */}
                         {task?.group?.sign}.{task?.group?.name}{">"}{" "}
@@ -287,8 +287,8 @@ export const TaskDetailFolder: FC<Props> = ({
                     userId={user?._id}
                     task={task}
                     isOfficalTask={task.draft === 0}
-                    fromDateDefault={moment(task.actualStartTime).format('MM/DD/YYYY')}
-                    toDateDefault={moment(task.actualFinishTime).format('MM/DD/YYYY')}
+                    fromDateDefault={moment(task.actualStartTime).format('DD/MM/YYYY')}
+                    toDateDefault={moment(task.actualFinishTime).format('DD/MM/YYYY')}
                     toTimeDefault={moment(task.actualFinishTime).format('HH:mm')}
                     onApplyNewTime={handleUpdateExpireTime}
                 />
