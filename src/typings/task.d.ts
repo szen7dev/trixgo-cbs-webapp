@@ -76,6 +76,7 @@ export type Task = {
   subtype: number,
   type: number,
   related: Array<User>;
+  viewedUsers: Array<User>;
   signatures: Array<{
     _id: string;
     author: User;

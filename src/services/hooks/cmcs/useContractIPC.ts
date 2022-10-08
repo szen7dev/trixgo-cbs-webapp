@@ -213,14 +213,14 @@ export const useContractIpcCustom = ({
 
 export const useCmcsDashboard = ({ params = {}}) => {
     const { data: cmcsContractIPCAmountByMonth } =
-        useQuery("cmcsContractIPCAmountByMonth", () =>
+        useQuery(["cmcsContractIPCAmountByMonth", params], () =>
             ContractIPCRepository.cmcsContractIPCAmountByMonth(params), {
                 refetchOnWindowFocus: false,
                 enabled: true,
             });
 
     const { data: cmcsContractPaymentAmountByMonth } =
-    useQuery("cmcsContractPaymentAmountByMonth", () =>
+    useQuery(["cmcsContractPaymentAmountByMonth", params], () =>
         ContractIPCRepository.cmcsContractPaymentAmountByMonth(params), {
             refetchOnWindowFocus: false,
             enabled: true,

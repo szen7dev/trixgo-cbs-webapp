@@ -55,8 +55,8 @@ export const SendEmailNotification: FC<Props> = ({ task, userId = '' }) => {
 
     const [isShow, setIsShow] = useState(false);
     const [keyword, setKeyword] = useState('');
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
+    const [title, setTitle] = useState(task.name);
+    const [content, setContent] = useState(task.description);
     const [emails, setEmails] = useState('');
     const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 

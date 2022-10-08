@@ -1,24 +1,27 @@
-import { FC, useState } from "react";
+import { FC, useMemo, useState } from "react";
+import moment from "moment";
 import classnames from "classnames";
 import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
 import RevenueBySectorReport from "./components/RevenueBySectorReport";
 import RevenueOverTimeReport from "./components/RevenueOverTimeReport";
+
+import TotalRevenueReport from "./components/TotalRevenueReport";
+import AcceptanceReport from "./components/AcceptanceReport";
+import MoneyBackReport from "./components/MoneyBackReport";
+
 // import { ReceivableReport } from "./components/";
 // import CashFlowManagementReport from "./components/CashFlowManagementReport";
 // import ProfileAndProductReport from "./components/ProfileAndProductReport";
 // import CmcImagesReport from "./components/CmcImagesReport";
 // import PaymentPlanReport from "./components/PaymentPlanReport";
-import TotalRevenueReport from "./components/TotalRevenueReport";
-import AcceptanceReport from "./components/AcceptanceReport";
-import MoneyBackReport from "./components/MoneyBackReport";
+
 // import CompanyPreviewReport from "./components/CompanyPreviewReport";
 // import QuickReport from "./components/QuickReport";
 // import StatusReport from "./components/StatusReport";
 
 // import FilterIcon from "assets/images/icons8-filter.svg";
 
-// Import data từ API
 // import { useCmcs } from 'services/hooks/useCmcs';
 import { useAuth } from "services/hooks/auth/useAuth";
 import { useContractDashboard } from 'services/hooks/items/useContract';
@@ -29,6 +32,8 @@ import DebtChart from "./components/DebtChart";
 import { AdvanceGuarantee } from "./components/AdvanceGuarantee";
 import { ContractPerformanceGuarantee } from "./components/ContractPerformanceGuarantee";
 import FilterDropdown from "./components/FilterDropdown";
+
+import { getRangeDate } from 'utils/time';
 
 const reportYears = [2022, 2021, 2020, 2019, 2018];
 
@@ -46,30 +51,63 @@ const CmcDashboardPage: FC = () => {
 
   const { user } = useAuth();
   // const { listContracts } = useCmcs({ companyID: user?.company._id });
-  // Giá trị ký
-  const { contractAmountByMonth } = useContractDashboard({ params: { outin: outinSelected, year: 2022 } });
-  let contractAmountByMonthAll = 0;
-  contractAmountByMonth?.forEach((item: any) => {
-    contractAmountByMonthAll += item?.amount;
+
+  const { contractAmountByMonth } = useContractDashboard({
+    params: { outin: outinSelected, year: yearSelected }
   });
 
-  contractAmountByMonthAll = +(contractAmountByMonthAll / 1000000000).toFixed(3);
+  // Giá trị ký
+  const contractAmountByMonthAll = useMemo(() => {
+    if(!contractAmountByMonth || !contractAmountByMonth.length) return 0;
+
+    let contractAmountByMonthAll = 0;
+    contractAmountByMonth?.forEach((item: any) => {
+      contractAmountByMonthAll += item?.amount;
+    });
+
+    contractAmountByMonthAll = +(contractAmountByMonthAll / 1000000000).toFixed(3);
+
+    return contractAmountByMonthAll;
+  }, [contractAmountByMonth])
+
+  const { cmcsContractIPCAmountByMonth, cmcsContractPaymentAmountByMonth } = useCmcsDashboard({
+    params: { outin: outinSelected, year: yearSelected }
+  });
 
   // Nghiệm thu
-  const { cmcsContractIPCAmountByMonth, cmcsContractPaymentAmountByMonth } = useCmcsDashboard({ params: { outin: outinSelected, year: 2022 } });
+  const cmcsContractIPCAmountByMonthAll = useMemo(() => {
+    if(!cmcsContractIPCAmountByMonth || !cmcsContractIPCAmountByMonth.length) return 0;
 
-  let cmcsContractIPCAmountByMonthAll = 0;
-  cmcsContractIPCAmountByMonth?.forEach((item: any) => {
-    cmcsContractIPCAmountByMonthAll += item?.amount;
-  });
-  cmcsContractIPCAmountByMonthAll = +(cmcsContractIPCAmountByMonthAll / 1000000000).toFixed(3);
+    let cmcsContractIPCAmountByMonthAll = 0;
+    cmcsContractIPCAmountByMonth?.forEach((item: any) => {
+      cmcsContractIPCAmountByMonthAll += item?.amount;
+    });
+    cmcsContractIPCAmountByMonthAll = +(cmcsContractIPCAmountByMonthAll / 1000000000).toFixed(3);
 
-  //Tiền về/Giải ngân
-  let cmcsContractPaymentAmountByMonthAll = 0;
-  cmcsContractPaymentAmountByMonth?.forEach((item: any) => {
-    cmcsContractPaymentAmountByMonthAll += item?.amount;
-  });
-  cmcsContractPaymentAmountByMonthAll = +(cmcsContractPaymentAmountByMonthAll / 1000000000).toFixed(3);
+    return cmcsContractIPCAmountByMonthAll;
+  }, [cmcsContractIPCAmountByMonth])
+
+  // Tiền về
+  const cmcsContractPaymentAmountByMonthAll = useMemo(() => {
+    if(!cmcsContractPaymentAmountByMonth || !cmcsContractPaymentAmountByMonth.length) return 0;
+
+    let cmcsContractPaymentAmountByMonthAll = 0;
+    cmcsContractPaymentAmountByMonth?.forEach((item: any) => {
+      cmcsContractPaymentAmountByMonthAll += item?.amount;
+    });
+    cmcsContractPaymentAmountByMonthAll = +(cmcsContractPaymentAmountByMonthAll / 1000000000).toFixed(3);
+
+    return cmcsContractPaymentAmountByMonthAll;
+  }, [cmcsContractPaymentAmountByMonth])
+
+  const calProgress = useMemo(() => {
+    const firstDateInYear = moment().startOf('years').format();
+    const currentDate = moment().format();
+
+    const totalDays = getRangeDate(firstDateInYear, currentDate, 'days');
+
+    return Math.ceil((totalDays / 365) * 100);
+  }, [])
 
   return (
     <section className=" w-full">
@@ -135,23 +173,23 @@ const CmcDashboardPage: FC = () => {
               <div className="flex justify-between text-xs">
                 <div>
                   <span className="text-primary-gray">Bắt đầu: </span>
-                  <span><b>1/1/21</b></span>
+                  <span><b>{moment().startOf('years').format('DD/MM/YY')}</b></span>
                 </div>
                 <div>
                   <span className="text-primary-gray">Kết thúc: </span>
-                  <span><b>31/12/21</b></span>
+                  <span><b>{moment().endOf('years').format('DD/MM/YY')}</b></span>
                 </div>
               </div>
 
               <div className="w-full border h-2">
                 <div
                   className="bg-primary"
-                  style={{ width: "82%", marginTop: -0.25, height: 7 }}
+                  style={{ width: `${calProgress}%`, marginTop: -0.25, height: 7 }}
                 ></div>
               </div>
             </div>
 
-            <p className="w-1/6 text-primary text-sm px-4 pt-3">82%</p>
+            <p className="w-1/6 text-primary text-sm px-4 pt-3">{calProgress}%</p>
           </div>
         </div>
         {/* end filter by year */}
@@ -163,13 +201,28 @@ const CmcDashboardPage: FC = () => {
 
           <div className="flex justify-between gap-2">
             <div className="w-1/3 border">
-              <TotalRevenueReport contractAmountByMonthAll={contractAmountByMonthAll} />
+              <TotalRevenueReport
+                contractAmountByMonthAll={contractAmountByMonthAll}
+                contractAmountByMonth={contractAmountByMonth}
+                outinSelected={outinSelected}
+                yearSelected={yearSelected}
+              />
             </div>
             <div className="w-1/3 border">
-              <AcceptanceReport cmcsContractIPCAmountByMonthAll={cmcsContractIPCAmountByMonthAll} />
+              <AcceptanceReport
+                cmcsContractIPCAmountByMonthAll={cmcsContractIPCAmountByMonthAll}
+                cmcsContractIPCAmountByMonth={cmcsContractIPCAmountByMonth}
+                outinSelected={outinSelected}
+                yearSelected={yearSelected}
+              />
             </div>
             <div className="w-1/3 border">
-              <MoneyBackReport cmcsContractPaymentAmountByMonthAll={cmcsContractPaymentAmountByMonthAll} />
+              <MoneyBackReport
+                cmcsContractPaymentAmountByMonthAll={cmcsContractPaymentAmountByMonthAll}
+                cmcsContractPaymentAmountByMonth={cmcsContractPaymentAmountByMonth}
+                outinSelected={outinSelected}
+                yearSelected={yearSelected}
+              />
             </div>
           </div>
 

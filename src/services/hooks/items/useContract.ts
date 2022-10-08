@@ -253,9 +253,8 @@ export const useQueryDetailContract = (params?: InfoContractPayload): UseQueryDe
 
 //======================================== Hook báo cáo hợp đồng
 export const useContractDashboard = ({ params = {}}) => {
-
     const { data: contractAmountByMonth } = 
-        useQuery("contractAmountByMonth", () => 
+        useQuery(["contractAmountByMonth", params], () => 
             ContractRepository.getAmountByMonth(params), {
                 refetchOnWindowFocus: false,
                 enabled: true,

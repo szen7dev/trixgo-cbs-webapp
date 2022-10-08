@@ -709,7 +709,7 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
                                             />
                                             <input
                                                 type="time"
-                                                defaultValue={values.expiredTime ? moment(values.expiredTime).format('HH:mm') : "00:00"}
+                                                defaultValue={"09:00"}
                                                 onChange={(e) => setFieldValue("expiredHour", e.target.value)}
                                             />
                                         </div>

@@ -22,6 +22,8 @@ export const TaskDetailMember: FC<Props> = ({ task, user, refetchInfo }) => {
         }
     }
 
+    console.log(task.viewedUsers)
+
     return (
         <div className={"task-member flex items-start mt-5"}>
             <span className={"mr-4"}>
@@ -38,7 +40,11 @@ export const TaskDetailMember: FC<Props> = ({ task, user, refetchInfo }) => {
                         </div>
                     </div>
                     <div className={"assigned-user flex items-center ml-4 mr-4 cursor-pointer"} onClick={openModalUpdateAssignee}>
-                        <img alt={"----"} src={task?.assignee?.image ? `${process.env.REACT_APP_URL_S3_USER}/${task?.assignee?.image}` : taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] border-0.5 border-primary-border"} />
+
+                        {
+                            (task.viewedUsers.map(vuser=>vuser._id).includes?.(task.assignee?._id)) ?  <img alt={"----"} src={task?.assignee?.image ? `${process.env.REACT_APP_URL_S3_USER}/${task?.assignee?.image}` : taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] border-0.5 border-primary-border border-2 border-pink-600"} />  : <img alt={"----"} src={task?.assignee?.image ? `${process.env.REACT_APP_URL_S3_USER}/${task?.assignee?.image}` : taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] border-0.5 border-primary-border"} />
+                        }
+
                         <div className={"flex-1 ml-2"}>
                             <p>{task.assignee?.bizfullname}</p>
                             <p className={"text-primary-gray text-xs"}>Người thực hiện</p>
@@ -55,7 +61,7 @@ export const TaskDetailMember: FC<Props> = ({ task, user, refetchInfo }) => {
                         (task.subtype == 4 && task.assignee._id.toString() == user?._id.toString()) ?  <></> : 
                         <div className={"flex items-center flex-1 justify-start"}>
                             {!!task.related?.length && task.related.slice(0, 10).map(item => (
-                                <img key={item._id} alt={"----"} src={item?.image ? `${process.env.REACT_APP_URL_S3_USER}/${item?.image}` : taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1 border-0.5 border-primary-border"} />
+                              (task.viewedUsers.map(vuser=>vuser._id).includes?.(item._id)) ? <img title={item.bizfullname} key={item._id} alt={"----"} src={item?.image ? `${process.env.REACT_APP_URL_S3_USER}/${item?.image}` : taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1 border-0.5 border-primary-border border-2 border-pink-600"} />  : <img title={item.bizfullname} key={item._id} alt={"----"} src={item?.image ? `${process.env.REACT_APP_URL_S3_USER}/${item?.image}` : taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1 border-0.5 border-primary-border"} />
                             ))}
 
                             {/* <img alt={"----"} src={taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1"} /> */}

@@ -33,7 +33,7 @@ import {
 import { convertObToUrl } from "utils";
 
 const populatesTask = JSON.stringify({
-  path: "group contract author assignee related parent project company field approver authorAttachs assigneeAttachs signatures openedUsers links accessUsers",
+  path: "group contract author assignee related parent project company field approver authorAttachs assigneeAttachs signatures openedUsers links accessUsers viewedUsers",
   select: "_id name fullname bizfullname image sign signature _id name nameOrg description size path mimeType type author assignee createAt members admins company expiredTime project openedStatus",
   populate: {
     path: "author assignee project",
@@ -134,7 +134,7 @@ const TaskRepository = {
   async taskInfo(payload: TaskInfoParams): Promise<any> {
     const { data } = await API.get<any>(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl({
-        select: "name description type typeStatus status draft alert priority project contract parent checklist createAt field group author assignee related expiredTime startTime actualStartTime actualFinishTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures openedUsers comments amountComment amountResponse amountMarkedResponse startTime subtype flags milestone links openedStatus amountCurrentStatus amountSolution amountResponseOther accessUsers timeImportExcel milestone unit unitPrice quantity amountoftime judgement ontime quality",
+        select: "name description type typeStatus status draft alert priority project contract parent checklist createAt field group author assignee related expiredTime startTime actualStartTime actualFinishTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures openedUsers comments amountComment amountResponse amountMarkedResponse startTime subtype flags milestone links openedStatus amountCurrentStatus amountSolution amountResponseOther accessUsers timeImportExcel milestone unit unitPrice quantity amountoftime judgement ontime quality viewedUsers",
         populates: populatesTask,
         ...payload
       })}`
