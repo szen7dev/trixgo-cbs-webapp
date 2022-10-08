@@ -84,12 +84,12 @@ const RevenueBySectorReport: FC<Props> = ({ companyID, outin, year = 2022 }) => 
 
         <div className="w-full h-full flex flex-col gap-1 mt-2 text-primary-gray">
           {contractIPCAmountByProperty?.data?.map((item: any, index: number) => (
-            <div className="flex justify-between" key={item._id}>
+            <div className="flex justify-between" key={`${index}-${item._id}-${Math.random()}`}>
               <div className="flex items-center">
                 <div className="h-3 w-3 mr-2" style={{ background: colors[index] }} />
                 <p>
                   {item._id?.field?.name} {` `}
-                  ({Math.ceil(+((item.amount / totalAmount.totalOrigin) * 100).toPrecision(2))}%)
+                  ({totalAmount.totalOrigin === 0 ? 0 : Math.ceil(+((item.amount / totalAmount.totalOrigin) * 100).toPrecision(2))}%)
                 </p>
               </div>
               <p>{(item.amount / 1_000_000_000).toFixed(2)}</p>
