@@ -47,7 +47,7 @@ export const TaskDetailSubtask:FC<Props> = ({ task, userId }) => {
                 </div>
                 <div className={"flex-1 flex items-center justify-end"}>
                     <button className={"bg-cbs-form-input-bg py-2 px-4 rounded mr-4 text-primary-gray"}>
-                        Hiện việc hoàn thành ({totalTaskDone})
+                        Việc hoàn thành ({totalTaskDone})
                     </button>
                     {hasNextPage && (
                         <button className={"bg-cbs-form-input-bg py-2 px-4 rounded text-primary-gray"} onClick={nextPageListTask}>

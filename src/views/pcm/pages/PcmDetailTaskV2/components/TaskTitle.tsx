@@ -84,7 +84,7 @@ export const TaskDetailTitle: FC<Props> = ({ task, userId }) => {
         {
             id: 1,
             text: "Khởi tạo",
-            color: "#ff0000"
+            color: "#ffb3b3"
         },
         {
             id: 2,
@@ -120,7 +120,7 @@ export const TaskDetailTitle: FC<Props> = ({ task, userId }) => {
             {
                 id: 1,
                 text: "Khởi tạo",
-                color: "#ff0000"
+                color: "#ffb3b3"
             },
             {
                 id: 2,

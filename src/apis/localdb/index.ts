@@ -411,7 +411,7 @@ export const DOCUMENT_TYPES = [
 
 // TRẠNG THÁI TRIỂN KHAI CÔNG VIỆC
 export const PCM_STATUS_TASK = [
-    { value: 1, text: 'Khởi tạo', class: 'bg-red-400', backgroud: 'ff0000', key: 'open' },
+    { value: 1, text: 'Khởi tạo', class: 'bg-red-400', backgroud: 'ffb3b3', key: 'open' },
     { value: 2, text: 'Đang triển khai', class: 'bg-blue-400', backgroud: '00aaff', key: 'in_progress' },
     { value: 3, text: 'Hoàn thành', class: 'bg-green-400', backgroud: '5fba7d', key: 'completed' },
     { value: 4, text: 'Treo lại', class: 'bg-purple-400', backgroud: '8f1aac', key: 'deferred' },
@@ -422,7 +422,7 @@ export const PCM_STATUS_TASK = [
 
 // TRẠNG THÁI CHECKLIST
 export const PCM_STATUS_CHECKLIST = [
-    { value: 0, text: 'Khởi tạo', class: 'bg-red-400', backgroud: 'ff0000', key: 'open' },
+    { value: 0, text: 'Khởi tạo', class: 'bg-red-400', backgroud: 'ffb3b3', key: 'open' },
     { value: 1, text: 'Hoàn thành', class: 'bg-green-400', backgroud: '5fba7d', key: 'completed' },
     { value: 2, text: 'Đang triển khai', class: 'bg-blue-400', backgroud: '00aaff', key: 'in_progress' },
     { value: 3, text: 'Treo lại', class: 'bg-purple-400', backgroud: '8f1aac', key: 'deferred' },
@@ -432,8 +432,8 @@ export const PCM_STATUS_CHECKLIST = [
 export const PCM_PRIORITY_TASK = [
     { value: 1, text: 'Thấp', class: 'bg-gray-400', backgroud: '808080', key: 'low' },
     { value: 2, text: 'Trung bình', class: 'bg-blue', backgroud: '5bc0de', key: 'normal' },
-    { value: 3, text: 'Cao', class: 'bg-red', backgroud: 'ff0000', key: 'high' },
-    { value: 4, text: 'Siêu quan trọng', class: 'bg-red', backgroud: 'ff0000', key: 'supperhigh' }
+    { value: 3, text: 'Cao', class: 'bg-red', backgroud: 'ffb3b3', key: 'high' },
+    { value: 4, text: 'Siêu quan trọng', class: 'bg-red', backgroud: 'ffb3b3', key: 'supperhigh' }
 ]
 
 // MỨC ĐỘ CẤP BÁCH
