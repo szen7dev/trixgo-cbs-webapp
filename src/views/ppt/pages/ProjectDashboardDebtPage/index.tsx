@@ -36,16 +36,19 @@ const ProjectDashboardDebtPage: FC = () => {
 	if(contractIPCAmountByProperty){
 		const contractIPCAmountByPropertyFunction = async () =>{
 			for (const item of contractIPCAmountByProperty?.data) {
-				const companyID = item?._id?.sellerInfo?.company;
 				const data = await ContractIPCRepository.fetchAmountByProperty({ 
-					outin: 1,
+					outin: 2,
 					option: 2,
 					debt: 2,
 					optionTime: 1,
-					companyID
-				})
-				// listData.push({ key: item?._id?.sellerInfo?.name, total: item.amount, expires: data.data[0].amount   })
-				listData = [...listData, { key: item?._id?.sellerInfo?.name, trongKy: Number(item.amount-data.data[0].amount/1000000000), expires:  Number(data.data[0].amount/1000000000) }]
+					projectID
+				});
+				console.log({ Tong_tien: item.amount, qua_han: data.data[0], trong_ky: item.amount-data.data[0].amount });
+				listData = [...listData, { 
+					key: item?._id?.sellerInfo?.name, 
+					trongKy: item.amount-data.data[0].amount.toFixed(2), 
+					expires: data.data[0].amount.toFixed(2) }
+				]
 			}
 			if(listData.length && !dataDebt.length){
 				setDataDebt(listData);
@@ -72,7 +75,7 @@ const ProjectDashboardDebtPage: FC = () => {
 		setCompanyPopup(company)
 		setTypeStatusPopup(typeStatus)
 	};
-	console.log({ dataDebt });
+
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
 			<div className={"sticky top-0 bg-white z-10"}>
@@ -127,7 +130,6 @@ const ProjectDashboardDebtPage: FC = () => {
 					<tbody className="">
 						{
 							dataDebt?.map((company: any, index: any) => {
-								console.log({ company })
 								return (
 									<tr key={company._id} className="text-left hover:bg-cbs-table-header cursor-pointer">
 										<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border text-center" onClick={e => e.stopPropagation()}>
@@ -146,7 +148,7 @@ const ProjectDashboardDebtPage: FC = () => {
 													// onClick={() => toggleVisible({ company: company._id, typeStatus: "1"}) }
 													>
 													<span className="text-white">
-														{company?.expires ||""}
+														{company?.expires || ""}
 													</span>
 												</button>
 												<button
@@ -155,7 +157,7 @@ const ProjectDashboardDebtPage: FC = () => {
 													// onClick={() => toggleVisible({ company: company._id, typeStatus: "3"}) }
 													>
 													<span className="text-white">
-														{company?.trongKy ||""}
+														{company?.trongKy || ""}
 													</span>
 												</button>
 											</div>
