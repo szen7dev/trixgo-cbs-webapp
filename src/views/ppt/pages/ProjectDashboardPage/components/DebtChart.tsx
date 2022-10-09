@@ -82,7 +82,7 @@ const DebtChart: FC<Props> = ({ projectID = "" }) => {
                         <div
                             className="bg-[#00CA99] h-[7px] w-[65%] mt-[-0.75]"
                             style={{
-                                width: `${(total - totalOutDate) && (total / (total - totalOutDate)) * 100}%`,
+                                width: `${(total - totalOutDate) && ((total - totalOutDate)/total ) * 100}%`,
                                 marginTop: -0.75,
                                 height: 7,
                                 background: "#00CA99",
@@ -105,7 +105,7 @@ const DebtChart: FC<Props> = ({ projectID = "" }) => {
                     <div className="relative w-full  h-2">
                         <div
                             style={{
-                                width: `${(total / totalOutDate) * 100}%`,
+                                width: `${(totalOutDate/total) * 100}%`,
                                 marginTop: -0.75,
                                 height: 7,
                                 background: "#F55F5F",

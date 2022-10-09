@@ -35,7 +35,7 @@ const MoneyBackReport: FC <any> = ({
   return (
     <div className="bg-primary-light h-full">
       <div className="px-6 py-4">
-        <p className="font-bold text-primary-gray text-lg">Tiền về 2021</p>
+        <p className="font-bold text-primary-gray text-lg">Tiền về/Giải ngân</p>
         <div className="flex items-center mt-4">
           <div className="w-12 h-12 rounded-full bg-secondary-light flex items-center justify-center">
             <img src={CashIcon} alt="CashIcon" />
