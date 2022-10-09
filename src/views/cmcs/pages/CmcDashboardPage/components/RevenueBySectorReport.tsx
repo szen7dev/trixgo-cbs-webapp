@@ -70,7 +70,7 @@ const RevenueBySectorReport: FC<Props> = ({ companyID, outin, year = 2022 }) => 
   return (
     <div className="bg-primary-light py-4 px-6 h-full">
       <p className="font-bold text-primary-gray text-lg">
-        Doanh thu theo lĩnh vực
+        Nghiệm thu theo lĩnh vực
       </p>
       <div className="flex gap-9 h-full">
         <div className="w-[110px]">

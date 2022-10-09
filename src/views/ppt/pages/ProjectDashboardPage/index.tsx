@@ -262,7 +262,7 @@ const ProjectDashboardPortfolioPage: FC = () => {
 									</div>
 								</div>
 								<div className="w-1/2 h-[222px] bg-primary-light px-6 py-4">
-									<div className="font-bold text-primary-gray text-lg">Bảo lãnh thực hiện hợp đồng</div>
+									<div className="font-bold text-primary-gray text-lg">Bảo lãnh hợp đồng</div>
 									<div>
 										<ContractPerformanceGuarantee projectID={projectID}/>
 									</div>
