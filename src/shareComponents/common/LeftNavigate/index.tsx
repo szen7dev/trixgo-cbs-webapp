@@ -235,9 +235,9 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
                 : "")
             }
           >
-            <img width={'20px'} src={iconInspection} alt={"TVGS"} />
+            <img width={'20px'} src={iconInspection} alt={"Nghiệm thu"} />
           </div>
-          <span className={"text-primary-gray mt-1"}>TVGS</span>
+          <span className={"text-primary-gray mt-1"}>Nghiệm thu</span>
         </Link> : <></>}
       {checkPermissionApp('5e47867080019357cce04746') ?
         <Link to={`/document/home`} className={"flex flex-col items-center mb-3"}>

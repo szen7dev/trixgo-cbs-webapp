@@ -69,7 +69,7 @@ export const APP_INFO = new Map([
     /* Ứng dụng Human */
     ['61e049c9fdebf77b072d1b13', {
         key: "61e049c9fdebf77b072d1b13",
-        name: "Quản lý nhân sự",
+        name: "Nhân sự",
         icon: humanLogo,
         route: '/human/home'
     }],
