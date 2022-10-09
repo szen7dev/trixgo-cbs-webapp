@@ -25,13 +25,14 @@ import {
         HumanDepartment,
         HumanCertificateExpiredPage
     } from "views/human/pages";
+    
 import { HumanHomePageV2 } from "views/human/pages/HumanHomePage/indexV2";
 
 const HumanRouterV2: FC = () => {
     return (
         <Switch>
             {/* <ProtectedRoute exact path="/human/home" component={HumanHomePage} /> */}
-            <ProtectedRoute exact path="/human/home" component={HumanHomePageV2} />
+            <ProtectedRoute exact path="/human/home" component={HumanHomePage} />
             <ProtectedRoute exact path="/human/partner" component={HumanPartnerPage} />
             <ProtectedRoute exact path="/human/capacity" component={HumanCapacityPage} />
             {/* <ProtectedRoute exact path="/human/home" component={HumanDepartment} /> */}

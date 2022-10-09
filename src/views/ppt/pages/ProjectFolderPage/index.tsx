@@ -46,7 +46,9 @@ const IconArrowRight = () => (
 const FolderIcon: FC<{ type: string }> = ({ type }) => {
 	switch (type) {
 		case "file":
-			return <img src={iconFile} alt="file" className="inline-block mr-3" />;
+			return <></>;
+			// return <img src={iconFile} alt="file" className="inline-block mr-3" />;
+
 		default:
 			return (
 				<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 inline text-cbs-subtext mr-3" viewBox="0 0 20 20" fill="currentColor">
@@ -233,32 +235,29 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 					<table className="text-black text-medium border-separate space-x-0 space-y-0 w-full" style={{ borderSpacing: 0 }}>
 						<thead className="">
 							<tr className="text-primary-gray whitespace-nowrap align-middle text-left">
-								<th className="px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-									<input className="cbs-checkbox" type="checkbox" value="checkAll" id="flexCheckDefault" ref={checkboxRef} onClick={handleCheckAll} />
-								</th>
 								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-									<span className="pl-2 border-l border-cbs-border">
+									<span className="pl-2 border-cbs-border">
 										Nội dung
 									</span>
 								</th>
 								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-									<span className="pl-2 border-l border-cbs-border">
-										Thời hạn
+									<span className="pl-2 border-cbs-border">
+										
 									</span>
 								</th>
-								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-									<span className="pl-2 border-l border-cbs-border">
-										Thực hiện
-									</span>
-								</th>
-								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-									<span className="pl-2 border-l border-cbs-border">
-										Trạng thái
+								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "175px" }}>
+									<span className="pl-2 border-cbs-border">
+										
 									</span>
 								</th>
 								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
-									<span className="pl-2 border-l border-cbs-border">
-										Người được truy cập
+									<span className="pl-2 border-cbs-border">
+										
+									</span>
+								</th>
+								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
+									<span className="pl-2 border-cbs-border">
+										
 									</span>
 								</th>
 							</tr>
@@ -273,14 +272,6 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 									}
 									return (
 										<tr key={props._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
-											<td className="px-4 py-2 w-[1px]">
-												<input 
-												className="cbs-checkbox" 
-												type="checkbox" 
-												value={props._id}
-												checked={getStateChecked(props._id)}
-												onChange={() => onClickCheckButton(props._id)} />
-											</td>
 											<td className="px-2 py-2">
 												<Link to={`/pm/project/${projectID}/folder/${props._id}`} className="align-top">
 													<FolderIcon type="folder" />
@@ -313,9 +304,6 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 									const percent =  ((props.amountFinishedChecklist / props.amountChecklist) || 0) * 100;
 									return (
 										<tr key={props._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
-											<td className="px-4 py-2 w-[1px]">
-												<input className="cbs-checkbox" type="checkbox" />
-											</td>
 											<td className="px-2 py-2">
 												<Link to={`/pcm/detail/${props._id}`}  className="align-top">
 													<FolderIcon type="file" />

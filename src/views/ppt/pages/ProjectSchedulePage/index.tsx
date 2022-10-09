@@ -1,11 +1,11 @@
 import { FC, useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom"
 
-import image from 'assets/images/icons8-stacked-organizational-chart-highlighted-first-node-96 1.png';
-import avatar from 'assets/images/avatar.jpg';
+// import image from 'assets/images/icons8-stacked-organizational-chart-highlighted-first-node-96 1.png';
+// import avatar from 'assets/images/avatar.jpg';
 import Gantt from "./components/Gantt";
 import { usePcmProject } from "services/hooks/pcm/usePcmProject";
-import { PCM_MILESTONE } from "apis/localdb/index";
+// import { PCM_MILESTONE } from "apis/localdb/index";
 import { useTask } from "services/hooks/useTask";
 import { Link } from "react-router-dom";
 
@@ -28,9 +28,6 @@ const getTimeBetween = function (time1: any, time2: any) {
 const ProjectSchedulePage: FC = () => {
 	const history = useHistory();
 	const { id: departmentID } = useParams<{ id: string }>();
-	useEffect(() => {
-		document.title = "CHG.THT-Quản lý tiến độ"
-	}, []);
 
 	const [dataGrantt, setGranttInint] = useState<any>({
 		data: dataGranttInint,
@@ -61,6 +58,8 @@ const ProjectSchedulePage: FC = () => {
 	
 	useEffect(() => {
 		listTasks?.forEach((task:any) => {
+			const taskUrl = <Link to={`/pcm/detail/${task._id}`}>{task.name}</Link>
+
 			if(task.milestone){
 				const actualStartTime  = new Date(task.actualStartTime);
 				const actualFinishTime =  new Date(task.actualFinishTime);
@@ -68,6 +67,7 @@ const ProjectSchedulePage: FC = () => {
 					...dataGranttInint, {
 						id: task._id, 
 						text: `<a href="/pcm/detail/${task._id}">${task.name} (${(task.percentage)} %)</a>`, 
+						// text: taskUrl, 
 						start_date: actualStartTime, 
 						end_date: actualFinishTime,
 						parent: task.milestone, 
@@ -113,4 +113,5 @@ const ProjectSchedulePage: FC = () => {
 		</div>
 	);
 };
+
 export default ProjectSchedulePage;
