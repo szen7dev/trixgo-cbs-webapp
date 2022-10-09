@@ -5,6 +5,13 @@ import { toast } from "react-toastify";
 import { useTask } from "services/hooks/useTask";
 import { TOAST_DEFAULT_OPTIONS } from 'utils/constants';
 import { Task } from 'typings/task';
+import { DropdownSearchable } from "shareComponents/common";
+import _ from 'lodash';
+
+const dataProgress = [
+	{ value: 1, label: 'Đạt' },
+	{ value: 2, label: 'Chậm' }
+]
 
 type Props = {
 	closeModal: () => void,
@@ -13,8 +20,8 @@ type Props = {
 }
 
 export const ModalUpdateTaskEvaluate: FC<Props> = ({ task, closeModal, onConfirm }) => {
+	const [progressAssessment, setProgressAssessment] = useState(1);
 	const [formData, setFormData] = useState({
-		ontime: task.ontime,
 		quality: task.quality,
 		judgement: task.judgement,
 	});
@@ -23,9 +30,9 @@ export const ModalUpdateTaskEvaluate: FC<Props> = ({ task, closeModal, onConfirm
 
 	const handleConfirm = async () => {
 		try {
-			return toast.info('Tính năng đang phát triển', TOAST_DEFAULT_OPTIONS);
 			const { error, data } = await updateTaskAsync({
 				taskID: task._id,
+				ontime: progressAssessment,
 				...formData
 			});
 
@@ -82,16 +89,26 @@ export const ModalUpdateTaskEvaluate: FC<Props> = ({ task, closeModal, onConfirm
 
 			<div className='px-[30px] mt-2'>
 				<div className='relative'>
-					<input
-						className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 mb-3 placeholder-primary-gray bg-cbs-table-header"}
-						placeholder={"Đánh giá tiến độ"}
-						name='ontime'
-						defaultValue={task.ontime}
-						onChange={handleChange}
+					<DropdownSearchable
+						onchangeValue={(item: any) => setProgressAssessment(item.value)}
+						className={"w-full flex-1 focus:outline-none placeholder-primary-gray bg-cbs-table-header mb-3"}
+						placeholder="Đánh giá tiến độ"
+						isMultiple={false}
+						allowClearValueSingleInput={false}
+						showTriangle={true}
+						maxWidthInput="max-w-none"
+						data={dataProgress}
+						initialValue={dataProgress[task?.ontime - 1]}
+						formatItem={{
+							id: "value",
+							text: "label",
+						}}
+						inlineSearch={true}
 					/>
 					<input
 						className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 mb-3 placeholder-primary-gray bg-cbs-table-header"}
 						placeholder={"Đánh giá chất lượng"}
+						type="number"
 						name='quality'
 						defaultValue={task.quality}
 						onChange={handleChange}

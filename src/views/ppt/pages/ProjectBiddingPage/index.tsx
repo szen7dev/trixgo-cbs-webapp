@@ -151,6 +151,8 @@ const ProjectBiddingPage: FC = () => {
     // }
   };
 
+  // console.log(listDocumentPackageWithPager)
+
   return (
     <div className={"flex flex-col relative h-full"}>
       <div className={"sticky top-0 z-10"}>
@@ -297,6 +299,7 @@ const ProjectBiddingPage: FC = () => {
           <tbody className="text-small">
               {
                 (listDocumentPackageWithPager[pageIndex] ?? []).map((item: any) => {
+                  console.log(item)
                   return (
                     <tr key={item._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
                       <td
