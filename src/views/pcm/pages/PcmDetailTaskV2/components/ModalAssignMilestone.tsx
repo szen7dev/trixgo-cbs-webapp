@@ -1,11 +1,9 @@
-import { FC, UIEvent, useState } from 'react';
+import { FC, useState } from 'react';
 
 import { captureException } from "@sentry/react";
-import debounce from 'lodash/debounce';
 import { toast } from "react-toastify";
 import { useTask } from "services/hooks/useTask";
 import { DropdownSearchable } from "shareComponents/common";
-import { Task } from 'typings/task';
 import { TOAST_DEFAULT_OPTIONS } from 'utils/constants';
 import { PCM_MILESTONE } from 'apis/localdb';
 

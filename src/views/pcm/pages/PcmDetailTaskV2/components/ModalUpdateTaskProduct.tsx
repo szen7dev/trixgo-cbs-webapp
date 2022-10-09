@@ -92,6 +92,7 @@ export const ModalUpdateTaskProduct: FC<Props> = ({ task, closeModal, onConfirm 
 					<input
 						className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 mb-3 placeholder-primary-gray bg-cbs-table-header"}
 						placeholder={"Khối lượng"}
+						type="number"
 						name='quantity'
 						defaultValue={task.quantity}
 						onChange={handleChange}
@@ -99,6 +100,7 @@ export const ModalUpdateTaskProduct: FC<Props> = ({ task, closeModal, onConfirm 
 					<input
 						className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 mb-3 placeholder-primary-gray bg-cbs-table-header"}
 						placeholder={"Đơn giá"}
+						type="number"
 						name='unitPrice'
 						defaultValue={task.unitPrice}
 						onChange={handleChange}
@@ -106,6 +108,7 @@ export const ModalUpdateTaskProduct: FC<Props> = ({ task, closeModal, onConfirm 
 					<input
 						className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 mb-3 placeholder-primary-gray bg-cbs-table-header"}
 						placeholder={"Dự kiến thời lượng (giờ)"}
+						type="number"
 						name='amountoftime'
 						defaultValue={task.amountoftime}
 						onChange={handleChange}

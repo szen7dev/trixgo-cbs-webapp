@@ -18,6 +18,7 @@ import { ModalUpdateTaskGroup } from "./ModalUpdateTaskGroup";
 import { ModalUpdateTaskProduct } from "./ModalUpdateTaskProduct";
 import { ModalUpdateTaskEvaluate } from "./ModalUpdateTaskEvaluate";
 import { ModalAssignMilestone } from "./ModalAssignMilestone";
+import { ModalDocLinkTask } from "./ModalDocLinkTask";
 
 type Props = {
     task: Task;
@@ -167,6 +168,8 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                             In ấn - Mẫu phụ lục ảnh
                         </Link>
 
+                        <hr style={{ opacity: '.3', width: '90%', display: 'flex', alignContent: 'center', alignItems: 'center', margin: 2 }} />
+
                         <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
                             onClick={() => {
                                 openModal(
@@ -231,7 +234,31 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                             Gán phân loại cột mốc
                         </button>
 
-                        {/* <button
+                        <button
+                            className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
+                            onClick={() => {
+                                openModal(
+                                    <div
+                                        className={
+                                        "inline-block w-[521px] my-8 text-left align-middle transition-all transform bg-primary-light shadow-xl"
+                                        }
+                                    >
+                                        <ModalDocLinkTask
+                                            taskID={task._id}
+                                            projectID={task.project?._id}
+                                            linksDocs={task.linksDocs}
+                                            closeModal={closeModal}
+                                        />
+                                    </div>
+                                )
+                            }}
+                        >
+                            Link tới hồ sơ văn bản
+                        </button>
+
+                        <hr style={{ opacity: '.3', width: '90%', display: 'flex', alignContent: 'center', alignItems: 'center', margin: 2 }} />
+
+                        <button
                             className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
                             onClick={() => {
                                 openModal(
@@ -250,9 +277,9 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                             }}
                         >
                             Cập nhật giá trị thực hiện
-                        </button> */}
+                        </button>
 
-                        {/* <button
+                        <button
                             className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
                             onClick={() => {
                                 openModal(
@@ -271,7 +298,7 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                             }}
                         >
                             Cập nhật thông tin đánh giá
-                        </button> */}
+                        </button>
 
                         {task.draft === 1 || task.project.admins.map(item=>item.toString()).includes(userId?.toString()) && (
                             <>
@@ -313,6 +340,8 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                                 </button>
                             </>
                         )}
+
+                        <hr style={{ opacity: '.3', width: '90%', display: 'flex', alignContent: 'center', alignItems: 'center', margin: 2 }} />
 
                         <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
                             onClick={handleDownloadTemplateImportExcel}

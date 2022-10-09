@@ -57,7 +57,7 @@ export type Task = {
   assignee: Assignee;
   percentage: number;
   milestone: number;
-  unit: number;
+  unit: string;
   unitPrice: number;
   quantity: number;
   amountoftime: number;
@@ -87,6 +87,7 @@ export type Task = {
   assigneeAttachs: Array<FileProps>;
   accessUsers: Array<User>;
   openedUsers: Array<User>;
+  linksDocs: Array<string>;
   openedStatus: number;
   actualStartTime: string;
   actualFinishTime: string;
@@ -132,6 +133,13 @@ export interface updateTaskPayload {
   name?: string;
   status?: number;
   priority?: number;
+  ontime?: number;
+  quality?: number;
+  judgement?: string;
+  unit?: string;
+  unitPrice?: number;
+  quantity?: number;
+  amountoftime?: number;
   draft?: number;
   milestone?: number;
   actualStartTime?: string;
@@ -146,6 +154,7 @@ export interface updateTaskPayload {
   authorAttachs?: Array<string>;
   assigneeAttachs?: Array<string>;
   tasksLink?: Array<string>;
+  linksDocs?: Array<string>;
   isUpdateNews?: boolean;
 }
 
