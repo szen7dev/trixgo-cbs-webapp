@@ -1,6 +1,6 @@
 import API from "../repository";
 
-import { 
+import {
     UpdateUser, UpdatePasswordUser, PostResponse, ListFriendsPayload, ListUserResponse, UserCodeResponse, CheckCodeUser, CheckCodeResponse, AddFriendPayLoad, UnFriendPayLoad, UpdateAvatarUser, AcceptRequestFriend, RemoveRequestFriend, ListRequestsPayload
 } from "typings/user";
 import { convertObToUrl } from "utils";
@@ -13,7 +13,7 @@ const UserRepository = {
     /**
      * MEDIA
      * @param payload
-     * @returns 
+     * @returns
      */
     async updateUser(payload: UpdateUser): Promise<PostResponse> {
         const { data } = await API.put<PostResponse>(
@@ -84,6 +84,25 @@ const UserRepository = {
     async removeRequestFriend(payload: RemoveRequestFriend): Promise<any> {
         const { data } = await API.put(
             `${userURL}`,
+            payload
+        );
+        return data;
+    },
+    async recoverPassword(payload: any): Promise<any> {
+        const { data } = await API.get(
+            `${userURL}/recover-password?email=${payload.email}`,
+        );
+        return data;
+    },
+    async checkOTPRecoverPassword(payload: any): Promise<any> {
+        const { data } = await API.get(
+            `${userURL}/check-otp-recover-password?email=${payload.email}&codeReset=${payload.codeReset}`,
+        );
+        return data;
+    },
+    async updatePasswordRecover(payload: any): Promise<any> {
+        const { data } = await API.post(
+            `${userURL}/update-password-recover`,
             payload
         );
         return data;

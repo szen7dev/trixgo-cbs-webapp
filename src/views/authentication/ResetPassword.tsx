@@ -6,6 +6,8 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import cn from "classnames";
 
+import UserRepository from "apis/user";
+
 import SignInImage from "assets/images/signin-image.svg";
 import BackIcon from "assets/images/icon-back.svg";
 import MailIcon from "assets/images/icon-email-open.svg";
@@ -14,6 +16,7 @@ import EyeCloseIcon from "assets/images/icon-eye-close.svg";
 import EyeOpenIcon from "assets/images/icon-eye-open.svg";
 
 import "styles/common.css";
+import { toast } from "react-toastify";
 
 const step = {
   step1: "stepResetPassword",
@@ -63,6 +66,41 @@ const ResetPasswordPage: FC = () => {
             .required("Confirm password required!"),
         });
 
+  const handleSubmit = async (values: any) => {
+    const { email, otp, confirmPassword } = values;
+
+    switch (currentStep) {
+      case step1:
+        if(!email) break;
+        await UserRepository.recoverPassword({ email });
+
+        setCurrentStep(step2);
+        break;
+      case step2:
+        if(!otp) break;
+        await UserRepository.checkOTPRecoverPassword({ email, codeReset: otp });
+
+        setCurrentStep(step3);
+        break;
+      case step3: {
+        if(!confirmPassword) break;
+        const updatePassword = await UserRepository.updatePasswordRecover({ email, newPassword: confirmPassword });
+
+        if(!updatePassword.error) {
+          toast.success('Reset mật khẩu thành công', { autoClose: 2000 });
+
+          setTimeout(() => {
+            history.push('/login');
+          }, 2200);
+        }
+
+        break;
+      }
+      default:
+        break;
+    }
+  }
+
   return (
     <section className="flex h-full w-full">
       <div className="w-7/12">
@@ -70,10 +108,7 @@ const ResetPasswordPage: FC = () => {
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
-            onSubmit={() => {
-              currentStep === step1 && setCurrentStep(step2);
-              currentStep === step2 && setCurrentStep(step3);
-            }}
+            onSubmit={handleSubmit}
           >
             {(formik) => {
               const { handleBlur, dirty, isValid, values } = formik;
@@ -202,14 +237,14 @@ const ResetPasswordPage: FC = () => {
                         />
                       </div>
 
-                      <div className="p-5 flex">
+                      {/* <div className="p-5 flex">
                         <img src={ResendIcon} alt="Resend" />
                         <span className="pl-2 text-sm text-primary">
                           {t("resetPassword:resendOTP")}
                         </span>
-                      </div>
+                      </div> */}
 
-                      <div className="px-5 flex justify-end">
+                      <div className="px-5 flex justify-end mt-3">
                         <button
                           type="submit"
                           className="h-11 w-28 bg-primary rounded text-primary-light hover:opacity-90"
