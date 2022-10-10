@@ -65,7 +65,7 @@ export const TaskDetailEvaluate: FC<Props> = ({ task }) => {
                     </span>
                 </div>
             </div>
-            <div className="flex">
+            <div className="flex ml-6">
                 <div className="w-1/2">
                     <div className="flex items-end mb-4	">
                         <div className="w-[200px] text-primary-gray">Đơn vị tính</div>
@@ -139,7 +139,7 @@ export const TaskDetailEvaluate: FC<Props> = ({ task }) => {
                     </div>
                 </div>
             </div>
-            <div>
+            <div className="ml-6">
                 <button className={"bg-cbs-form-input-bg rounded px-4 py-2 text-primary-gray mt-4 ml-6"}>
                     Cập nhật đánh giá
                 </button>

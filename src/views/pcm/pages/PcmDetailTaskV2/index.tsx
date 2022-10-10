@@ -21,6 +21,7 @@ import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 import { APP_ID } from 'apis/localdb';
 import { TaskDetailEvaluate } from "./components/TaskDetailEvaluate";
+import { TaskDetailAddCV } from "./components/TaskDetailAddCV";
 
 const PcmDetailTaskV2: FC = () => {
     const [collapse, setCollapse] = useState(false);
@@ -305,6 +306,7 @@ const PcmDetailTaskV2: FC = () => {
                     <TaskDetailSubtask task={taskInfo} userId={user?._id} />
                     <TaskDetailRelatedTask task={taskInfo} userId={user?._id} refetchInfo={refetchInfo} />
                     <TaskDetailEvaluate task={taskInfo} userId={user?._id} refetchInfo={refetchInfo}/>
+                    <TaskDetailAddCV task={taskInfo} userId={user?._id} refetchInfo={refetchInfo}/>
                 </div>
                 <CommentProvider>
                     <TaskDetailComment task={taskInfo} />
