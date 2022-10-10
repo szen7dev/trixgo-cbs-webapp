@@ -306,7 +306,7 @@ const PcmDetailTaskV2: FC = () => {
                     <TaskDetailSubtask task={taskInfo} userId={user?._id} />
                     <TaskDetailRelatedTask task={taskInfo} userId={user?._id} refetchInfo={refetchInfo} />
                     <TaskDetailEvaluate task={taskInfo} userId={user?._id} refetchInfo={refetchInfo}/>
-                    <TaskDetailAddCV task={taskInfo} userId={user?._id} refetchInfo={refetchInfo}/>
+                    {/* <TaskDetailAddCV task={taskInfo} userId={user?._id} refetchInfo={refetchInfo}/> */}
                 </div>
                 <CommentProvider>
                     <TaskDetailComment task={taskInfo} />

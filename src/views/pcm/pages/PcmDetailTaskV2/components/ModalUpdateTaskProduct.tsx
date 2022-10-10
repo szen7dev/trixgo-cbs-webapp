@@ -82,6 +82,7 @@ export const ModalUpdateTaskProduct: FC<Props> = ({ task, closeModal, onConfirm 
 
 			<div className='px-[30px] mt-2'>
 				<div className='relative'>
+					<p className='mb-2'>Đơn vị tính</p>
 					<input
 						className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 mb-3 placeholder-primary-gray bg-cbs-table-header"}
 						placeholder={"Đơn vị tính"}
@@ -89,6 +90,7 @@ export const ModalUpdateTaskProduct: FC<Props> = ({ task, closeModal, onConfirm 
 						defaultValue={task.unit}
 						onChange={handleChange}
 					/>
+					<p className='mb-2'>Khối lượng</p>
 					<input
 						className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 mb-3 placeholder-primary-gray bg-cbs-table-header"}
 						placeholder={"Khối lượng"}
@@ -97,6 +99,7 @@ export const ModalUpdateTaskProduct: FC<Props> = ({ task, closeModal, onConfirm 
 						defaultValue={task.quantity}
 						onChange={handleChange}
 					/>
+					<p className='mb-2'>Đơn giá</p>
 					<input
 						className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 mb-3 placeholder-primary-gray bg-cbs-table-header"}
 						placeholder={"Đơn giá"}
@@ -105,6 +108,7 @@ export const ModalUpdateTaskProduct: FC<Props> = ({ task, closeModal, onConfirm 
 						defaultValue={task.unitPrice}
 						onChange={handleChange}
 					/>
+					<p className='mb-2'>Dự kiến thời lượng</p>
 					<input
 						className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 mb-3 placeholder-primary-gray bg-cbs-table-header"}
 						placeholder={"Dự kiến thời lượng (giờ)"}
