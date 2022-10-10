@@ -153,8 +153,8 @@ const LoginPage: FC = () => {
                       </div>
                     </div>
 
-                    {/* <div className="flex justify-between max-w-lg mt-14">
-                      <div>
+                    <div className="flex justify-between max-w-lg mt-14">
+                      {/* <div>
                         <span className="text-secondary-gray">
                           {t("signIn:registerQuestion")}{" "}
                         </span>
@@ -168,13 +168,13 @@ const LoginPage: FC = () => {
                           showRegister={showRegister}
                           handleClickShowRegister={handleClickShowRegister}
                         />
-                      </div>
+                      </div> */}
                       <Link to="/authentication/reset-password">
                         <p className="text-secondary">
                           {t("signIn:forgotPassword")}
                         </p>
                       </Link>
-                    </div> */}
+                    </div>
 
                     <div className="flex justify-between max-w-lg mt-14">
                       <button
