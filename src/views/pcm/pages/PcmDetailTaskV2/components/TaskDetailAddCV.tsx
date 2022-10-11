@@ -1,20 +1,27 @@
+// library
 import React, { ChangeEvent, FC, UIEvent, useState } from "react";
+import { debounce } from 'lodash';
+import { toast } from "react-toastify";
+import { Button, Checkbox, FormControlLabel, Rating, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import moment from 'moment';
+//
+import { ReleatedTaskItem } from "./ReleatedTaskItem";
+import { useTask } from "services/hooks/useTask";
+import { humanFileSize } from 'utils/converter';
+import { Comment as CommentType, CommentPayload, CommentProps, Task } from "typings/task";
+import {useFileCore} from 'services/hooks/useFileCore';
+// icon
+import IconNote from 'assets/images/icons8-document-100 4.svg';
+import IconAttach from 'assets/images/icons8-attach-96 1.svg';
+import iconAttach from "assets/images/icons8-attach-48.svg";
+import iconLink from "assets/images/icons8-link-96-v3.svg";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 // import iconClock from "assets/images/icons8-clock-48.svg";
 // import taskUserAvt from "assets/images/task-user.svg";
 // import iconHorizontalDots from "assets/images/three-dots-horizontal-v2.svg";
 import iconMessageLink from "assets/images/icons8-message-link-48.svg";
 import iconRateStar from "assets/images/icons8-review-100 (1) 1.svg";
 import Close from "assets/icons/Close";
-import { ReleatedTaskItem } from "./ReleatedTaskItem";
-import { Task } from "typings/task";
-import { useTask } from "services/hooks/useTask";
-import { debounce } from 'lodash';
-import { toast } from "react-toastify";
-import { Button, Checkbox, FormControlLabel, Rating, ToggleButton, ToggleButtonGroup } from "@mui/material";
-import { makeStyles } from '@mui/styles';
-import IconNote from 'assets/images/icons8-document-100 4.svg';
-import IconAttach from 'assets/images/icons8-attach-96 1.svg';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 type Props = {
     task: Task;
@@ -23,6 +30,19 @@ type Props = {
 }
 
 export const TaskDetailAddCV: FC<Props> = ({ task }) => {
+
+    const handleCopyLinkAttachment = (path: string) => {
+        const copyText = `${process.env.REACT_APP_URL_S3}${path}`;
+        navigator.clipboard.writeText(copyText);
+        toast.info('Đã copy link vào clipboard', { autoClose: 1000 });
+    }
+    const { updateFileAsync } = useFileCore();
+    const handleUpdateDescriptionFile = debounce(async (e: any) => {
+		await updateFileAsync({
+			fileID: e.target.dataset.fileid,
+			description: e.target.value
+		});
+	}, 1000)
 
     return (
         <div className={"subtask mt-5"}>
@@ -50,24 +70,54 @@ export const TaskDetailAddCV: FC<Props> = ({ task }) => {
                     <div className="my-1">
                         <a href="">
                             <div className="flex justify-between">
-                                <div className="flex text-black"><img src={IconAttach} className="mr-1" />CBS.A25.ChiTietChaoGia-CHG.pdf</div>
-                                <div className="text-primary-gray">Trần Thị Ngân-CPMI</div>
+                                <div className="flex text-black w-1/2"><img src={IconAttach} className="mr-1" />CBS.A25.ChiTietChaoGia-CHG.pdf</div>
+                                <div className="flex justify-between text-primary-gray w-1/2">
+                                    <div className="w-[200px]">
+                                        Trần Thị Ngân-CPMI
+                                    </div>
+                                    <div className="w-[200px]">
+                                        07/12/2021 15:38
+                                    </div>
+                                    <div className="w-[200px]">
+                                        356 KB
+                                    </div>
+                                </div>
                             </div>
                         </a>
                     </div>
                     <div className="my-1">
                         <a href="">
                             <div className="flex justify-between">
-                                <div className="flex text-black"><img src={IconAttach} className="mr-1" />CBS.A25.ChiTietChaoGia-CHG.pdf</div>
-                                <div className="text-primary-gray">Trần Thị Ngân-CPMI</div>
+                                <div className="flex text-black w-1/2"><img src={IconAttach} className="mr-1" />CBS.A25.ChiTietChaoGia-CHG.pdf</div>
+                                <div className="flex justify-between text-primary-gray w-1/2">
+                                    <div className="w-[200px]">
+                                        Trần Thị Ngân-CPMI
+                                    </div>
+                                    <div className="w-[200px]">
+                                        07/12/2021 15:38
+                                    </div>
+                                    <div className="w-[200px]">
+                                        356 KB
+                                    </div>
+                                </div>
                             </div>
                         </a>
                     </div>
                     <div className="my-1">
                         <a href="">
                             <div className="flex justify-between">
-                                <div className="flex text-black"><img src={IconAttach} className="mr-1" />CBS.A25.ChiTietChaoGia-CHG.pdf</div>
-                                <div className="text-primary-gray">Trần Thị Ngân-CPMI</div>
+                                <div className="flex text-black w-1/2"><img src={IconAttach} className="mr-1" />CBS.A25.ChiTietChaoGia-CHG.pdf</div>
+                                <div className="flex justify-between text-primary-gray w-1/2">
+                                    <div className="w-[200px]">
+                                        Trần Thị Ngân-CPMI
+                                    </div>
+                                    <div className="w-[200px]">
+                                        07/12/2021 15:38
+                                    </div>
+                                    <div className="w-[200px]">
+                                        356 KB
+                                    </div>
+                                </div>
                             </div>
                         </a>
                     </div>

@@ -248,6 +248,9 @@ button {
 .max-height-20{
   max-height: 20px;
 }
+.outlineNone{
+  outline: none;
+}
 .bg-gray-custom{
 	background: #F5F7FB;
 }
