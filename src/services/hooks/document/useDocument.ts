@@ -58,6 +58,7 @@ export interface UseQueryListDocument {
     refetchListDocument: () => void;
     fetchNextPageDocument: () => void;
     fetchPrevPageDocument: () => void;
+    isFetching: boolean;
 }
 
 export const useListDocument = ({ params = {},  isFetchList = false }: DocumentQueryPayload): UseQueryListDocument => {
@@ -83,6 +84,7 @@ export const useListDocument = ({ params = {},  isFetchList = false }: DocumentQ
         fetchNextPage,
         fetchPreviousPage,
         hasNextPage,
+        isFetching
     } = res;
 
     const listDocument = []
@@ -106,7 +108,8 @@ export const useListDocument = ({ params = {},  isFetchList = false }: DocumentQ
         nextCursor,
         refetchListDocument: refetch,
         fetchNextPageDocument: fetchNextPage,
-        fetchPrevPageDocument: fetchPreviousPage
+        fetchPrevPageDocument: fetchPreviousPage,
+        isFetching
     }
 }
 
@@ -123,6 +126,7 @@ export const useListFilterDocument = ({ params = {},  isFetchList = false }: Doc
                 return data?.nextCursor || undefined;
             },
             refetchOnWindowFocus: false,
+            cacheTime: 0,
             enabled: isFetchList ?? true, // https://react-query.tanstack.com/guides/disabling-queries
         }
     );
@@ -133,6 +137,7 @@ export const useListFilterDocument = ({ params = {},  isFetchList = false }: Doc
         fetchNextPage,
         fetchPreviousPage,
         hasNextPage,
+        isFetching
     } = res;
 
     const listDocument = []
@@ -156,6 +161,7 @@ export const useListFilterDocument = ({ params = {},  isFetchList = false }: Doc
         nextCursor,
         refetchListDocument: refetch,
         fetchNextPageDocument: fetchNextPage,
-        fetchPrevPageDocument: fetchPreviousPage
+        fetchPrevPageDocument: fetchPreviousPage,
+        isFetching
     }
 }

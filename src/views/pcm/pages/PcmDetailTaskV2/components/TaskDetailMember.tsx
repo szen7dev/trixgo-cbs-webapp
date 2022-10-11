@@ -66,9 +66,9 @@ export const TaskDetailMember: FC<Props> = ({ task, user, refetchInfo }) => {
 
                             {/* <img alt={"----"} src={taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1"} /> */}
 
-                            {task.related?.length > 11 && (
+                            {task.related?.length > 16 && (
                                 <div className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1 bg-cbs-form-input-bg border-0.5 border-primary-border flex items-center justify-center text-primary-gray"}>
-                                    {task.related?.length - 10}+
+                                    {task.related?.length - 15}+
                                 </div>
                             )}
                             {/* <button className={"text-xl rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1 bg-cbs-form-input-bg border-0.5 border-primary-border flex items-center justify-center text-primary-gray"}>
