@@ -4,7 +4,7 @@ import businessBuilding from "assets/images/icons8-business-building-48.svg";
 import debounce from 'lodash/debounce';
 import downloadIcon from "assets/images/icons8-download-64.svg";
 import pencilIcon from "assets/images/icons8-pencil-96.svg";
-import {DropdownSearchableV2, ModalContainer, GroupActions, Paginate} from "shareComponents/common";
+import {DropdownSearchableV2, ModalContainer, GroupActions, SearchInput} from "shareComponents/common";
 
 import nextIcon from "assets/images/icons-arrow-next.svg";
 import userAvatar from "assets/images/task-user.svg";
@@ -41,6 +41,7 @@ const ProjectDirectoryPageV2:FC = () => {
     const [companySelected, setCompanySelected] = useState('');
 	const { id: projectID } = useParams<{ id: string }>();
     const [pageParam, setPageParam] = useState("");
+    const [keyword, setKeyword] = useState("");
     const [prevCursor, setPrevCursor] = useState([null]);
 
     const { data: listCompanies, fetchNextPage } = useQueryListCompany({ keyword: keywordCompany, limit: 20 });
@@ -54,7 +55,7 @@ const ProjectDirectoryPageV2:FC = () => {
         fetchNextPage: fetchNextPageDepartmentDirectory,
         refetch,
         nextCursor
-    } = useDepartmentDirectory({ params: { companyID: companySelected, projectID, limit: 10 }, isFetchList: true });
+    } = useDepartmentDirectory({ params: { keyword, companyID: companySelected, projectID, limit: 10 }, isFetchList: true });
 
     const { info: projectInfo } = useProject({
 		params: {
@@ -158,6 +159,11 @@ const ProjectDirectoryPageV2:FC = () => {
                     </button>
                 </div> */}
                 {/* <div className={"mr-3 w-4 border-r border-gray-400 h-[16px]"} /> */}
+				<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={
+                        debounce(
+							(event: any) => setKeyword(event.target.value),
+							500
+						)} />
                 <GroupActions
                     className="flex items-center flex-1"
                     // onClickTrash={toggleDeleteModal}
