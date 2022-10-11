@@ -23,6 +23,7 @@ import downloadIcon from "assets/images/icons8-download-64.svg";
 import iconBack from "assets/images/icon-back-gray.svg";
 import userAvt from "assets/images/task-user.svg";
 import iconFolder from "assets/images/icons8-folder-96 4.svg";
+import iconAddNew from "assets/images/Frame 4048.svg";
 
 interface IData {
 	id: number,
@@ -187,9 +188,12 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 							<span className="truncate max-w-[132px]">{infoGroup?.data?.parent?.parent?.sign}</span>
 						</div>
 					</Link>
-					{/* <button className={"ml-6"}>
+					<button className={"ml-6"}>
+						<img src={iconAddNew} alt={"-----"} className={"h-[24px] w-[24px]"}/>
+					</button>
+					<button className={"ml-6"}>
 						<img src={downloadIcon} alt={"-----"} className={"h-[24px] w-[24px]"}/>
-					</button> */}
+					</button>
 				</div>
 
 				{/* <div className={"table-folder-project"}>
