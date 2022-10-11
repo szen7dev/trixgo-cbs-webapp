@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 const optionsSubtype = PCM_SUBTYPE.map(subtype => ({
     id: subtype.value,
     text: subtype.text,
-    color: 'black'
+    color: 'gray'
 }))
 
 type Props = {
