@@ -2,21 +2,21 @@ import React, {ChangeEvent, FC, useEffect, useRef, useState} from "react";
 import {useOnClickOutside} from "services/hooks/useOnclickOutside";
 import searchIcon from "assets/images/icons8-search-120.png";
 import { useListFilterDocument} from "services/hooks/document/useDocument";
-import {Link} from "react-router-dom";
 import {Oval} from "react-loader-spinner";
 import {useDispatch} from "react-redux";
 import {useAppSelector} from "redux/reducer";
-import {setKeyword} from "redux/reducer/DocumentHomeSlice";
+import {setKeyword} from "redux/reducer/DocumentProjectSlice";
+import { useParams, Link } from "react-router-dom";
 
 export const PmHeaderContent:FC = () => {
     const inputRef = useRef<HTMLInputElement>(null);
     const wrapperClass = useRef<HTMLDivElement>(null);
     const [search, setSearch] = useState("");
     const [showResult, setShowResult] = useState(false);
-
+    const { id: departmentID } = useParams<{ id: string }>();
     const dispatch = useDispatch();
     const {filterDropdown, keywordInput} = useAppSelector(
-        (state) => state.documentHome.data
+        (state) => state.documentProject.data
     );
 
     useEffect(() => {
@@ -53,11 +53,12 @@ export const PmHeaderContent:FC = () => {
         params: {
             keyword: search,
             limit: 10,
+            departmentsID: [departmentID],
             ...filterDropdown,
         },
         isFetchList: showResult
     });
-
+ 
     return (
         <>
             <div ref={wrapperClass} className={"w-[600px] relative"}>

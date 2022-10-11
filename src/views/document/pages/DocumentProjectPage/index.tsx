@@ -132,7 +132,7 @@ export const DocumentProjectPage: FC = () => {
     const { listContracts } = useContractIsMembers({ params: {keyword: contractKeyword, populates: JSON.stringify({"path": "project", "select":"name sign"})}, isFetch: true });
     const { list: listStorages } = useStorage({ params: { companyID: typeof projectInfo.company === "string" ? projectInfo.company : "", keyword: storageKeyword,}, isFetchList: (!isloadingProjectInfo && typeof projectInfo._id === "string")});
 
-    const { listDocumentWithPager, isLoading, totalRecord, totalPage, fetchNextPageDocument, hasNextPage, refetchListDocument } = useListFilterDocument({
+    const { listDocumentWithPager, isLoading, isFetching, totalRecord, totalPage, fetchNextPageDocument, hasNextPage, refetchListDocument,  } = useListFilterDocument({
         params: {
             departmentsID: [departmentID],
             ...fromToDate,
@@ -557,7 +557,7 @@ export const DocumentProjectPage: FC = () => {
                         ref={ref}
                         totalRecord={totalRecord}
                         totalPages={totalPage}
-                        limit={30}
+                        limit={20}
                         hasNextPage={hasNextPage}
                         isFetching={isLoading}
                         nextPageAction={() => {
@@ -572,8 +572,8 @@ export const DocumentProjectPage: FC = () => {
             </div>
             <div className="flex-1 overflow-y-auto">
                 {/* Content */}
-                {isLoading && <Loader absolute={true} className="border-primary" />}
-                {(!listDocumentWithPager[pageIndex] || listDocumentWithPager[pageIndex].length === 0) && (
+                {isLoading || isFetching && <Loader absolute={true} className="border-primary" />}
+                {(!listDocumentWithPager[pageIndex] || listDocumentWithPager[pageIndex].length === 0) && !isLoading && !isFetching && (
                     <h2 className="text-center">Không có kết quả được trả về</h2>
                 )}
                 {!isLoading && listDocumentWithPager[pageIndex] && listDocumentWithPager[pageIndex].length > 0 && (
