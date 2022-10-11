@@ -89,6 +89,7 @@ export const ModalUpdateTaskEvaluate: FC<Props> = ({ task, closeModal, onConfirm
 
 			<div className='px-[30px] mt-2'>
 				<div className='relative'>
+					<p className='mb-2'>Đánh giá tiến độ</p>
 					<DropdownSearchable
 						onchangeValue={(item: any) => setProgressAssessment(item.value)}
 						className={"w-full flex-1 focus:outline-none placeholder-primary-gray bg-cbs-table-header mb-3"}
@@ -105,6 +106,7 @@ export const ModalUpdateTaskEvaluate: FC<Props> = ({ task, closeModal, onConfirm
 						}}
 						inlineSearch={true}
 					/>
+					<p className='mb-2'>Đánh giá chất lượng</p>
 					<input
 						className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 mb-3 placeholder-primary-gray bg-cbs-table-header"}
 						placeholder={"Đánh giá chất lượng"}
@@ -113,9 +115,10 @@ export const ModalUpdateTaskEvaluate: FC<Props> = ({ task, closeModal, onConfirm
 						defaultValue={task.quality}
 						onChange={handleChange}
 					/>
+					<p className='mb-2'>Đánh giá khác</p>
 					<input
 						className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 mb-3 placeholder-primary-gray bg-cbs-table-header"}
-						placeholder={"Đánh giá chung"}
+						placeholder={"Đánh giá khác"}
 						name='judgement'
 						defaultValue={task.judgement}
 						onChange={handleChange}

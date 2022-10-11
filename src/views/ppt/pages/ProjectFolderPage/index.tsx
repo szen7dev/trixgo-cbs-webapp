@@ -22,6 +22,7 @@ import nextIcon from "assets/images/icons-arrow-next.svg";
 import downloadIcon from "assets/images/icons8-download-64.svg";
 import iconBack from "assets/images/icon-back-gray.svg";
 import userAvt from "assets/images/task-user.svg";
+import iconFolder from "assets/images/icons8-folder-96 4.svg";
 
 interface IData {
 	id: number,
@@ -47,7 +48,7 @@ const FolderIcon: FC<{ type: string }> = ({ type }) => {
 	switch (type) {
 		case "file":
 			return <></>;
-			// return <img src={iconFile} alt="file" className="inline-block mr-3" />;
+		// return <img src={iconFile} alt="file" className="inline-block mr-3" />;
 
 		default:
 			return (
@@ -70,8 +71,8 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 	// 	createHistoryTraffics({...payloadHistoryTraffic, type: 1});
 	// }, []);
 	//_____End history traffict
-    const history = useHistory();
-	const location 	= useLocation();
+	const history = useHistory();
+	const location = useLocation();
 	const [data, setData] = useState<IData[]>([]);
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const { openModal } = useModal();
@@ -81,35 +82,35 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 	const { dataUserInfo, refetchDataUserInfo, user } = useAuth();
 	const [keyword, setKeyword] = useState("");
 
-	const {  
+	const {
 		isLoading,
-        refetch,
-        data: listPcmPlanGroup,
-        fetchNextPage,
-        hasNextPage,
-        totalRecord,
-        totalPage,
-        // refetchInfoGroup
-	} = usePcmPlanGroup({ 
-		projectID, 
+		refetch,
+		data: listPcmPlanGroup,
+		fetchNextPage,
+		hasNextPage,
+		totalRecord,
+		totalPage,
+		// refetchInfoGroup
+	} = usePcmPlanGroup({
+		projectID,
 		parentID: groupID,
 		keyword,
-		populates: JSON.stringify({ 
-			path: "members", 
+		populates: JSON.stringify({
+			path: "members",
 			select: "image"
 		})
 	}, true);
 
-	const {  
+	const {
 		infoGroup,
 		refetchInfoGroup
-	} = usePcmPlanGroup({ 
-		groupID, 
-		populates: JSON.stringify({ 
-			path: "parent", 
+	} = usePcmPlanGroup({
+		groupID,
+		populates: JSON.stringify({
+			path: "parent",
 			select: "parent sign",
 			populate: {
-				path: "parent", 
+				path: "parent",
 				select: "parent sign"
 			}
 		})
@@ -140,7 +141,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 			setIdsChecked(newList);
 		};
 	};
-	
+
 	useEffect(() => {
 		document.title = `${infoDepartment?.data?.sign}-Thư mục dữ liệu`;
 	}, [location?.pathname]);
@@ -155,27 +156,36 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 
 	return (
 		<>
-			 {/* Content  */}
+			{/* Content  */}
 			<div className="flex flex-col h-full overflow-hidden">
 				<div className={"nav-drawing flex items-center text-lg p-4 text-primary-gray"}>
 					<button className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mr-3"}
 						onClick={history.goBack}
 					>
-						<img src={iconBack} alt={"----"} className={"w-[18px]"}/>
+						<img src={iconBack} alt={"----"} className={"w-[18px]"} />
 					</button>
-					{ infoGroup?.data?.sign && <img src={nextIcon} alt={"-----"} className={"mx-4 h-[12px] w-[12px]"}/> }
-					<Link to={`/pm/project/${projectID}/folder/${ infoGroup?.data?._id}`}>
-						<span className="truncate max-w-[132px]">{infoGroup?.data?.sign}</span>
+					{infoGroup?.data?.sign && <img src={nextIcon} alt={"-----"} className={"mx-4 h-[12px] w-[12px]"} />}
+					<Link to={`/pm/project/${projectID}/folder/${infoGroup?.data?._id}`}>
+						<div className="flex gap-2">
+							<img src={iconFolder} alt={"----"} className={"w-[18px]"} />
+							<span className="truncate max-w-[132px]">{infoGroup?.data?.sign}</span>
+						</div>
 					</Link>
 
-					{ infoGroup?.data?.parent?.sign && <img src={nextIcon} alt={"-----"} className={"mx-4 h-[12px] w-[12px]"}/>}
-					<Link to={`/pm/project/${projectID}/folder/${ infoGroup?.data?.parent?._id}`}>
-						<span className="truncate max-w-[132px]">{infoGroup?.data?.parent?.sign}</span>
+					{infoGroup?.data?.parent?.sign && <img src={nextIcon} alt={"-----"} className={"mx-4 h-[12px] w-[12px]"} />}
+					<Link to={`/pm/project/${projectID}/folder/${infoGroup?.data?.parent?._id}`}>
+						<div className="flex gap-2">
+							<img src={iconFolder} alt={"----"} className={"w-[18px]"} />
+							<span className="truncate max-w-[132px]">{infoGroup?.data?.parent?.sign}</span>
+						</div>
 					</Link>
 
-					{ infoGroup?.data?.parent?.parent?.sign && <img src={nextIcon} alt={"-----"} className={"mx-4 h-[12px] w-[12px]"}/> }
-					<Link to={`/pm/project/${projectID}/folder/${ infoGroup?.data?.parent?.parent?._id}`}>
-						<span className="truncate max-w-[132px]">{infoGroup?.data?.parent?.parent?.sign}</span>
+					{infoGroup?.data?.parent?.parent?.sign && <img src={nextIcon} alt={"-----"} className={"mx-4 h-[12px] w-[12px]"} />}
+					<Link to={`/pm/project/${projectID}/folder/${infoGroup?.data?.parent?.parent?._id}`}>
+						<div className="flex gap-2">
+							{/* <img src={iconFolder} alt={"----"} className={"w-[18px]"} /> */}
+							<span className="truncate max-w-[132px]">{infoGroup?.data?.parent?.parent?.sign}</span>
+						</div>
 					</Link>
 					{/* <button className={"ml-6"}>
 						<img src={downloadIcon} alt={"-----"} className={"h-[24px] w-[24px]"}/>
@@ -230,7 +240,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 						</tbody>
 					</table>
 				</div> */}
-				
+
 				<div className="flex-1 overflow-y-auto">
 					<table className="text-black text-medium border-separate space-x-0 space-y-0 w-full" style={{ borderSpacing: 0 }}>
 						<thead className="">
@@ -242,32 +252,32 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 								</th>
 								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
 									<span className="pl-2 border-cbs-border">
-										
+
 									</span>
 								</th>
 								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "175px" }}>
 									<span className="pl-2 border-cbs-border">
-										
+
 									</span>
 								</th>
 								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
 									<span className="pl-2 border-cbs-border">
-										
+
 									</span>
 								</th>
 								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
 									<span className="pl-2 border-cbs-border">
-										
+
 									</span>
 								</th>
 							</tr>
 						</thead>
-						
+
 						<tbody className="">
 							{
 								listPcmPlanGroup.map((props: any, index: any) => {
 									let isGroupDefault = false;
-									if(dataUserInfo?.data?.groupDefault?.toString() == props._id?.toString()){
+									if (dataUserInfo?.data?.groupDefault?.toString() == props._id?.toString()) {
 										isGroupDefault = true;
 									}
 									return (
@@ -276,7 +286,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 												<Link to={`/pm/project/${projectID}/folder/${props._id}`} className="align-top">
 													<FolderIcon type="folder" />
 													{props.name} ({props.amountTasks})  {isGroupDefault && <img src={GroupDefaultIcon} alt="file" className="inline-block mr-3" title="Group default" />}
-												</Link> 
+												</Link>
 											</td>
 											<td className="py-2 px-2"></td>
 											<td className="py-2 px-2"></td>
@@ -284,10 +294,10 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 											<td className="py-2 px-2">
 												<div className="flex">
 													{props.members.map((member: any, index1: any) => {
-														if(index1 < 5){
+														if (index1 < 5) {
 															return <img src={`${process.env.REACT_APP_URL_S3_USER}/${member?.image}`} key={index1} alt="" className="w-6 h-6 rounded-full" />
 														}
-														if(index1 == 5){
+														if (index1 == 5) {
 															return <div key={index1} className="h-6 w-6 rounded-full -ml-1.5 bg-cbs-border text-white flex justify-center items-center" style={{ fontSize: "10px" }}>+{props.members.length - 5}</div>
 														}
 													})}
@@ -297,15 +307,15 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 									)
 								})
 							}
-							
+
 							{/* Danh sách task */}
 							{
 								listTasks.map(props => {
-									const percent =  ((props.amountFinishedChecklist / props.amountChecklist) || 0) * 100;
+									const percent = ((props.amountFinishedChecklist / props.amountChecklist) || 0) * 100;
 									return (
 										<tr key={props._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
 											<td className="px-2 py-2">
-												<Link to={`/pcm/detail/${props._id}`}  className="align-top">
+												<Link to={`/pcm/detail/${props._id}`} className="align-top">
 													<FolderIcon type="file" />
 													{props.name}
 												</Link>
@@ -332,17 +342,17 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 							}
 						</tbody>
 					</table>
-					 {hasNextPage && (
+					{hasNextPage && (
 						<div className="w-full flex justify-center my-5">
 							<button onClick={fetchNextPage}>
 								<span className="text-primary">
 									{`Xem thêm (${totalRecord - listPcmPlanGroup.length})`}
 								</span>
 							</button>
-						 </div>
+						</div>
 					)}
-				</div> 
-				 
+				</div>
+
 				{/* <Paginate className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white" /> */}
 			</div>
 		</>
