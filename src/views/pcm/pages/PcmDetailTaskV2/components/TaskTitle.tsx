@@ -1,17 +1,24 @@
 import React, { FC, useState } from "react";
-import iconStar from "assets/images/icon-star.svg";
+// import iconStar from "assets/images/icon-star.svg";
 import InlineBadgeSelect from "./InlineBadgeSelect";
 import { Task } from "typings/task";
-import { PCM_STATUS_TASK, PCM_PRIORITY_TASK } from 'apis/localdb';
+import { PCM_STATUS_TASK, PCM_PRIORITY_TASK, PCM_SUBTYPE } from 'apis/localdb';
 import { useTask } from 'services/hooks/useTask';
 import { toast } from "react-toastify";
+
+const optionsSubtype = PCM_SUBTYPE.map(subtype => ({
+    id: subtype.value,
+    text: subtype.text,
+    color: 'black'
+}))
 
 type Props = {
     task: Task;
     userId: string;
+    refetchInfo: () => void;
 }
 
-export const TaskDetailTitle: FC<Props> = ({ task, userId }) => {
+export const TaskDetailTitle: FC<Props> = ({ task, userId, refetchInfo }) => {
     const [currentStatus, setCurrentStatus] = useState(task.status);
     const [currentPriority, setCurrentPriority] = useState(task.priority);
     const [isMarkInterest, setIsMarkInterest] = useState(task?.flags?.includes(userId))
@@ -53,6 +60,28 @@ export const TaskDetailTitle: FC<Props> = ({ task, userId }) => {
 
             setCurrentPriority(value.id);
             toast.success('Cập nhật độ ưu tiên thành công', { autoClose: 1500 })
+        } catch (error) {
+            if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
+        }
+    }
+
+    const handleChangeSubtype = async (value: any) => {
+        try {
+            const { error, message } = await updateTaskAsync({
+                taskID: task._id,
+                subType: value.id
+            });
+
+            if (error) {
+                return toast.warning(message);
+            }
+
+            refetchInfo?.();
+            toast.success('Cập nhật tính chất thành công', { autoClose: 1500 })
         } catch (error) {
             if (typeof error === "string") {
                 toast.error(error);
@@ -200,6 +229,14 @@ export const TaskDetailTitle: FC<Props> = ({ task, userId }) => {
                 ]}
                 placeholder={"Ưu tiên"}
                 onValueChange={handleChangePriority}
+            />
+            <InlineBadgeSelect
+                wrapperClassName={"-translate-y-1"}
+                className={`text-xs rounded-full text-white px-2 py-1 mx-1`}
+                defaultValue={task.subtype}
+                options={optionsSubtype}
+                placeholder={"Tính chất"}
+                onValueChange={handleChangeSubtype}
             />
             {/* <InlineBadgeSelect
                 wrapperClassName={"-translate-y-1"}

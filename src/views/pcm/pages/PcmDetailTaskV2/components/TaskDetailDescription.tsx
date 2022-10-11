@@ -7,7 +7,7 @@ import { useTask } from "services/hooks/useTask";
 import { humanFileSize } from 'utils/converter';
 import iconAttach from "assets/images/icons8-attach-48.svg";
 import iconLink from "assets/images/icons8-link-96-v3.svg";
-import imageDemo from "assets/images/task-detail-image.png";
+// import imageDemo from "assets/images/task-detail-image.png";
 import moment from "moment";
 
 type Props = {
@@ -16,9 +16,6 @@ type Props = {
 }
 
 export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
-    // console.log(task)
-    // console.log(task.authorAttachs.length)
-
     const editorRef = useRef<EditorType>();
     const [editDescription, setEditDescription] = useState(false);
     const [isHasPermissionUpdateDescription, setIsPermissionUpdateDescription] = useState(false);

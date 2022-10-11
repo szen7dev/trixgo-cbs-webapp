@@ -289,7 +289,7 @@ const PcmDetailTaskV2: FC = () => {
             />
             <div className={"task-content p-4"}>
                 <div className={collapse ? "hidden" : "block"}>
-                    <TaskDetailTitle task={taskInfo} userId={user._id} />
+                    <TaskDetailTitle task={taskInfo} userId={user._id} refetchInfo={refetchInfo} />
                     <TaskDetailFolder
                         task={taskInfo}
                         user={user}
