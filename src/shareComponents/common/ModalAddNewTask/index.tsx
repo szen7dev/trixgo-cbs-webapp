@@ -89,11 +89,11 @@ export const ModalAddNewTask: FC = () => {
   });
 
   const [uploads, {
-    // setUploadImageProgress,
+    setUploadImageProgress,
     setUploadFileProgress,
-    // setIDImageUploaded,
+    setIDImageUploaded,
     setIDFileUploaded,
-    // setUploadImage,
+    setUploadImage,
     setUploadFile,
     removeUploadedImage,
     removeUploadedFile,
@@ -138,6 +138,7 @@ export const ModalAddNewTask: FC = () => {
   }, !!projectID);
 
   const [isChangeProjectID, setIsChangeProjectID] = useState(false);
+
   useEffect(() => {
     if (isChangeProjectID) {
       if (listGroup && listGroup.length) {
@@ -241,7 +242,7 @@ export const ModalAddNewTask: FC = () => {
   const handleUploadAttach = async (filesSelected: FileList | null) => {
     if (!filesSelected || !filesSelected.length) return;
 
-    if(!projectID || !groupID) {
+    if (!projectID || !groupID) {
       // Clear input file
       if(fileInputRef.current) {
         fileInputRef.current.value = '';
@@ -253,12 +254,12 @@ export const ModalAddNewTask: FC = () => {
     const validation = await validateFiles(filesSelected);
     if (validation.error) return toast.warn(validation.message);
 
-    const [files] = modifyUploadedFilesV2({
+    const [files, images] = modifyUploadedFilesV2({
       imgLastKey: Object.keys(uploads.images).length || null,
       fileLastKey: Object.keys(uploads.files).length || null,
     }, filesSelected);
 
-    // setUploadImage(images);
+    setUploadImage(images);
     setUploadFile(files);
     setIsUploading(true);
 
@@ -268,19 +269,19 @@ export const ModalAddNewTask: FC = () => {
     }
 
     // Upload images
-    // for (const [key, { file }] of Object.entries(images)) {
-    //   const source = getCancelTokenRequest(key, file);
-    //   const { _id } = await addFileToUpload({
-    //     files: file,
-    //     fileType: 1,
-    //     source,
-    //     progress: percentCompleted => {
-    //       console.log(`${percentCompleted}%`, key);
-    //       setUploadImageProgress(key, percentCompleted)
-    //     }
-    //   })
-    //   setIDImageUploaded(key, _id);
-    // }
+    for (const [key, { file }] of Object.entries(images)) {
+      const source = getCancelTokenRequest(key, file);
+      const { _id } = await addFileToUpload({
+        files: file,
+        fileType: 1,
+        source,
+        progress: percentCompleted => {
+          console.log(`${percentCompleted}%`, key);
+          setUploadImageProgress(key, percentCompleted)
+        }
+      })
+      setIDImageUploaded(key, _id);
+    }
 
     // Upload files
     for (const [key, { file }] of Object.entries(files)) {
@@ -842,7 +843,8 @@ export const ModalAddNewTask: FC = () => {
                 </div>
 
                 <div className="px-6 mb-3">
-                  {!!Object.keys(uploads.files).length && toArray(uploads.files).map(file => {
+                  {(!!Object.keys(uploads.files).length || !!Object.keys(uploads.images).length) &&
+                  [...toArray(uploads.files), ...toArray(uploads.images)].map(file => {
                     if(!file || Object.keys(file).length === 1) return;
 
                     const { file: fileInfo, progress, id } = file;
