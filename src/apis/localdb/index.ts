@@ -494,20 +494,20 @@ export const PCM_PROPOSAL_TASK = [
     { value: 11, text: 'Họp', sign: 'MOM', key: 'mom' },
 ]
 
-// export const PCM_SUBTYPE = [
-//     { value: 0, text: 'Việc thông thường' },
-//     { value: 1, text: 'Đề nghị cấp thông tin' },
-//     { value: 2, text: 'Đề nghị phê duyệt' },
-//     { value: 3, text: 'Thanh toán' },
-//     { value: 4, text: 'Thầu và mua sắm' },
-//     { value: 5, text: 'Nghiệm thu chất lượng' },
-//     { value: 6, text: 'Yều cầu sửa chữa' },
-//     { value: 7, text: 'Yều cầu thay đổi' },
-//     { value: 8, text: 'Yều cầu thực hiện' },
-//     { value: 9, text: 'Báo cáo' },
-//     { value: 10, text: 'Tiến độ' },
-//     { value: 11, text: 'Biên bản họp' },
-// ]
+export const PCM_SUBTYPE = [
+    { value: 0, text: 'Việc thông thường' },
+    { value: 1, text: 'Đề nghị cấp thông tin' },
+    { value: 2, text: 'Đề nghị phê duyệt' },
+    { value: 3, text: 'Thanh toán' },
+    { value: 4, text: 'Thầu và mua sắm' },
+    { value: 5, text: 'Nghiệm thu chất lượng' },
+    { value: 6, text: 'Yều cầu sửa chữa' },
+    { value: 7, text: 'Yều cầu thay đổi' },
+    { value: 8, text: 'Yều cầu thực hiện' },
+    { value: 9, text: 'Báo cáo' },
+    { value: 10, text: 'Tiến độ' },
+    { value: 11, text: 'Biên bản họp' },
+]
 
 // MỐC TIẾN ĐỘ
 export const PCM_MILESTONE = [

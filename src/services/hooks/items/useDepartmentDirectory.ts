@@ -8,6 +8,7 @@ import type { DepartmentDirectory } from 'typings/items';
 /*=====3.INTERFACE DEFINE=====*/
 interface useDepartmentDirectory {
     isLoading: boolean;
+    isFetching: boolean;
     totalRecord: number;
     totalPage: number;
     nextCursor: string | null,
@@ -68,6 +69,7 @@ export const useDepartmentDirectory = ({
         data,
         refetch,
         fetchNextPage,
+        isFetching,
         hasNextPage
     } = useInfiniteQuery(
         ['department_directory__list', params],
@@ -91,7 +93,7 @@ export const useDepartmentDirectory = ({
         .filter(Boolean);
     const listDepartmentDirectoryWithPager = (data?.pages || []).map((d: any) => d.data?.listRecords);
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
-    const totalPage = data?.pages[0]?.data?.totalPages || 0;
+    const totalPage = data?.pages[0]?.data?.totalPage || 0;
     const nextCursor = data?.pages[0]?.data?.nextCursor || null;
     // Return data
     return {
@@ -107,6 +109,7 @@ export const useDepartmentDirectory = ({
         insertAsync,
         updateAsync,
         deleteAsync,
-        nextCursor
+        nextCursor,
+        isFetching
     }
 }
