@@ -43,15 +43,6 @@ const ProjectDirectoryPageV2:FC = () => {
     const [pageParam, setPageParam] = useState("");
     const [prevCursor, setPrevCursor] = useState([null]);
 
-    const {keywordInput} = useAppSelector(
-        (state) => state.documentProject.data
-    );
-
-    useEffect(() => {
-        setPageIndex(0);
-        ref.current&&ref.current.resetPaginate();
-    }, [keywordInput]);
-
     const { data: listCompanies, fetchNextPage } = useQueryListCompany({ keyword: keywordCompany, limit: 20 });
     const {
         isLoading,
@@ -63,7 +54,7 @@ const ProjectDirectoryPageV2:FC = () => {
         fetchNextPage: fetchNextPageDepartmentDirectory,
         refetch,
         nextCursor
-    } = useDepartmentDirectory({ params: { companyID: companySelected, projectID, limit: 10, lastestID: pageParam }, isFetchList: true });
+    } = useDepartmentDirectory({ params: { companyID: companySelected, projectID, limit: 10 }, isFetchList: true });
 
     const { info: projectInfo } = useProject({
 		params: {
