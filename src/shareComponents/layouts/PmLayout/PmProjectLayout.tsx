@@ -8,7 +8,7 @@ import cn from "classnames";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import {LeftMenu, MainHeaderV2, LeftNavigate} from "../../common";
-import {PmHeaderContent, PmLeftMenuContent, PmProjectLeftMenuContent} from "./components";
+import { PmProjectLeftMenuContent} from "./components";
 import {MainHeaderPm} from "./components/shared/MainHeaderPm";
 
 /*=====5.TYPINGS=====*/
@@ -43,7 +43,6 @@ export const PmProjectLayout: FC<Props> = ({ children, headerSearch }) => {
           {/*  Main header */}
           <MainHeaderPm>
             {/* {headerSearch} */}
-            <PmHeaderContent/>
           </MainHeaderPm>
           {/* Left navigation */}
           <LeftMenu>

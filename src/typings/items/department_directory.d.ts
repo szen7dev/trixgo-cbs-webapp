@@ -21,7 +21,7 @@ export type DepartmentDirectoryQueryResponse = APIResponse & {
         listRecords: DepartmentDirectory[];
         limit: number;
         totalRecord: number;
-        totalPages: number;
+        totalPage: number;
         nextCursor: string | null;
     }
 }

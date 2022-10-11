@@ -1,21 +1,21 @@
-import React, {ChangeEvent, FC, useEffect, useRef, useState} from "react";
-import {useOnClickOutside} from "services/hooks/useOnclickOutside";
+import React, { ChangeEvent, FC, useEffect, useRef, useState } from "react";
+import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import searchIcon from "assets/images/icons8-search-120.png";
-import { useListFilterDocument} from "services/hooks/document/useDocument";
-import {Oval} from "react-loader-spinner";
-import {useDispatch} from "react-redux";
-import {useAppSelector} from "redux/reducer";
-import {setKeyword} from "redux/reducer/DocumentProjectSlice";
+import { useListFilterDocument } from "services/hooks/document/useDocument";
+import { Oval } from "react-loader-spinner";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "redux/reducer";
+import { setKeyword } from "redux/reducer/DocumentProjectSlice";
 import { useParams, Link } from "react-router-dom";
 
-export const PmHeaderContent:FC = () => {
+export const PmDocumentHeaderSearchInput: FC = () => {
     const inputRef = useRef<HTMLInputElement>(null);
     const wrapperClass = useRef<HTMLDivElement>(null);
     const [search, setSearch] = useState("");
     const [showResult, setShowResult] = useState(false);
     const { id: departmentID } = useParams<{ id: string }>();
     const dispatch = useDispatch();
-    const {filterDropdown, keywordInput} = useAppSelector(
+    const { filterDropdown, keywordInput } = useAppSelector(
         (state) => state.documentProject.data
     );
 
@@ -58,18 +58,18 @@ export const PmHeaderContent:FC = () => {
         },
         isFetchList: showResult
     });
- 
+
     return (
         <>
-            <div ref={wrapperClass} className={"w-[600px] relative"}>
+            <div ref={wrapperClass} className={"w-[600px] relative z-30"}>
                 <div className={"absolute left-0 flex items-center px-4 justify-center h-full"}>
-                    <img src={searchIcon} alt={"search icon"}/>
+                    <img src={searchIcon} alt={"search icon"} />
                 </div>
                 <input
                     onKeyDown={onKeyDown}
                     ref={inputRef}
                     onChange={e => handleSearchChange(e)}
-                    className={"pl-12 w-full h-[45px] bg-cbs-bg-input-search rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-none focus:bg-white focus:shadow-md transition-all"} placeholder={"Tìm kiếm hồ sơ"}/>
+                    className={"pl-12 w-full h-[45px] bg-cbs-bg-input-search rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-none focus:bg-white focus:shadow-md transition-all"} placeholder={"Tìm kiếm hồ sơ"} />
 
                 {
                     showResult &&
@@ -109,10 +109,10 @@ export const PmHeaderContent:FC = () => {
                                         setSearch("");
                                         setShowResult(false)
                                     }}
-                                    to={`/document/home/${document._id}`}
+                                    to={`/pm/project/${departmentID}/document/${document._id}`}
                                     key={document._id} className={"flex items-center py-2"}>
                                     <div className={"w-[36px] min-w-[36px] flex items-center justify-center"}>
-                                        <img src={searchIcon} alt={"----"} className={"w-[18px] h-[18px]"}/>
+                                        <img src={searchIcon} alt={"----"} className={"w-[18px] h-[18px]"} />
                                     </div>
                                     <p className={"ml-4"}>{document.project.sign}.{document.name} {document.sign} {document.storeSign}</p>
                                 </Link>

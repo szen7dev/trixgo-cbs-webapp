@@ -49,7 +49,6 @@ import ProjectAdminProjectDetail from "views/ppt/pages/ProjectAdminPage/pages/Pr
 import ProjectAdminProjectTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminProjectTab";
 import ProjectAdminPositionTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminPositionTab";
 import { PmProjectLayout } from "../../shareComponents/layouts/PmLayout/PmProjectLayout";
-import { PmHeaderContent } from "../../shareComponents/layouts/PmLayout/components";
 import LayoutProjectSecondaryV2 from "views/ppt/sharedComponents/layouts/LayoutProjectSecondaryV2";
 import { PmProjectLayoutV2 } from "shareComponents/layouts/PmLayout/PmProjectLayoutV2";
 // import {DocumentProjectLayout} from "views/document/sharedComponents/layouts/DocumentProjectLayout";
@@ -200,7 +199,7 @@ const PCMRouter: FC = () => {
                   </Route>
                   <Route exact path="/pm/project/:id/home" >
                     <PmProjectLayout
-                      headerSearch={<PmHeaderContent />}
+                      headerSearch={<></>}
                     >
                       <ProjectHomePageV2 />
                     </PmProjectLayout>
