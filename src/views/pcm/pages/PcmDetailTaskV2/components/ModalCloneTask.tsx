@@ -475,7 +475,7 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
                                             </div>
                                         </div>
                                         <div className={"w-1/4 flex items-start pl-3"}>
-                                            <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Phân loại (*)</div>
+                                            <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Tính chất (*)</div>
                                             <div className={"flex-1 max-w-4/5 w-4/5"}>
                                                 <DropdownSearchable
                                                     onchangeValue={(value: any) =>
