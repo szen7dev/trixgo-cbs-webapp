@@ -270,11 +270,11 @@ const PcmDetailTaskV2: FC = () => {
         return <Loader className="border-primary" />
     }
 
-    if(!taskInfo) {
+    if (!taskInfo) {
         return <Redirect to='/pcm/home' />
     }
 
-    if(!user) {
+    if (!user) {
         return <Loader className="border-primary" />
     }
 
@@ -298,15 +298,15 @@ const PcmDetailTaskV2: FC = () => {
                         hasPermissionAddSignature={permissions.hasPermissionAddSignature}
                         hasPermissionOpenBidding={permissions.hasPermissionOpenBidding}
                     />
-                    <TaskDetailCompleteStatus task={taskInfo} userId={user?._id}/>
+                    <TaskDetailCompleteStatus task={taskInfo} userId={user?._id} />
                     <TaskDetailMember task={taskInfo} user={user} refetchInfo={refetchInfo} />
                     <TaskDetailSignature task={taskInfo} />
                     <TaskDetailOpenedBidding task={taskInfo} />
                     <TaskDetailDescription task={taskInfo} refetchInfo={refetchInfo} />
                     <TaskDetailSubtask task={taskInfo} userId={user?._id} />
                     <TaskDetailRelatedTask task={taskInfo} userId={user?._id} refetchInfo={refetchInfo} />
-                    <TaskDetailEvaluate task={taskInfo} userId={user?._id} refetchInfo={refetchInfo}/>
-                    {/* <TaskDetailAddCV task={taskInfo} userId={user?._id} refetchInfo={refetchInfo}/> */}
+                    <TaskDetailEvaluate task={taskInfo} userId={user?._id} refetchInfo={refetchInfo} />
+                    <TaskDetailAddCV task={taskInfo} userId={user?._id} refetchInfo={refetchInfo}/>
                 </div>
                 <CommentProvider>
                     <TaskDetailComment task={taskInfo} />
