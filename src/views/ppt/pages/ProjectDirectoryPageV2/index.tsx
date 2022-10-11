@@ -138,7 +138,7 @@ const ProjectDirectoryPageV2:FC = () => {
                         debounce(
 							(event: any) => setKeyword(event.target.value),
 							500
-						)} placeholder={"Tìm kiếm chức vụ trong dự án"} />
+						)}/>
                 <GroupActions
                     className="flex items-center flex-1"
                     // onClickTrash={toggleDeleteModal}
