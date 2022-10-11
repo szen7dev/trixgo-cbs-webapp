@@ -68,7 +68,7 @@ const DocumentHomePageV2: FC = () => {
     const { listProjectsUserIsMember } = useProjectCustom({ paramsProjectsUserIsMember: { keyword: projectKeyword }, isFetchProjectsUserIsMember: true });
     const { listContracts } = useContractIsMembers({ params: { keyword: contractKeyword, populates: JSON.stringify({ "path": "project", "select": "name sign" }) }, isFetch: true });
 
-    const { listDocumentWithPager, isLoading, totalRecord, totalPage, fetchNextPageDocument, hasNextPage, refetchListDocument } = useListFilterDocument({
+    const { listDocumentWithPager, isLoading, totalRecord, totalPage, fetchNextPageDocument, hasNextPage, refetchListDocument, isFetching } = useListFilterDocument({
         params: {
             ...fromToDate,
             datahubContactsID,
@@ -158,6 +158,7 @@ const DocumentHomePageV2: FC = () => {
     }
     return (
         <div className="flex flex-1 flex-col overflow-hidden h-full">
+            {isLoading || isFetching && <Loader absolute={true} className="border-primary" />}
             <div className={"sticky top-0 z-10"}>
                 <div className={"flex flex-wrap items-center px-4 py-2"}>
                     <DropdownSearchableV2
@@ -430,7 +431,7 @@ const DocumentHomePageV2: FC = () => {
                         ref={ref}
                         totalRecord={totalRecord}
                         totalPages={totalPage}
-                        limit={30}
+                        limit={20}
                         hasNextPage={hasNextPage}
                         isFetching={isLoading}
                         nextPageAction={() => {
@@ -444,99 +445,105 @@ const DocumentHomePageV2: FC = () => {
                 </div>
             </div>
             <div className="flex-1 overflow-y-auto">
-                <table className={"table-fixed border-collapse w-full"}>
-                    <thead>
-                        <tr className={"sticky top-0 z-5"}>
-                            <th className={"bg-cbs-table-header text-primary-gray text-center font-normal w-[50px] border-b-0.5 border-primary-border align-middle py-3"}>
-                                <input
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    value=""
-                                    id="flexCheckDefault"
-                                />
-                            </th>
-                            <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-1/5 border-b-0.5 border-primary-border align-middle py-3"}>
-                                Nội dung
-                            </th>
-                            <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-1/6 border-b-0.5 border-primary-border align-middle py-3"}>
-                               Đơn vị ban hành
-                            </th>
-                            <th className={"bg-cbs-table-header text-primary-gray text-left font-normal border-b-0.5 border-primary-border align-middle py-3"}>
-                                Mã hiệu
-                            </th>
-                            <th className={"bg-cbs-table-header text-primary-gray text-left font-normal border-b-0.5 border-primary-border align-middle py-3"}>
-                                Ngày văn bản
-                            </th>
-                            <th className={"bg-cbs-table-header text-primary-gray text-left font-normal border-b-0.5 border-primary-border align-middle py-3"}>
-                                Mã hiệu lưu
-                            </th>
-                            <th className={"bg-cbs-table-header w-[70px] text-primary-gray text-center font-normal border-b-0.5 border-primary-border align-middle py-3"}>
-                                Số lượng
-                            </th>
-                            <th className={"bg-cbs-table-header text-primary-gray text-left font-normal border-b-0.5 border-primary-border align-middle py-3"}>
-                                Tình trạng
-                            </th>
-                            <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-1/7 border-b-0.5 border-primary-border align-middle py-3"}>
-                                Ghi chú
-                            </th>
-                            <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-1/7 border-b-0.5 border-primary-border align-middle py-3"}>
-                                Địa chỉ lưu trữ
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            (listDocumentWithPager[pageIndex] ?? []).map((document, i) => (
-                                <tr key={i}>
-                                    <td className={"border-b-0.5 border-primary-border py-3 text-center"}>
-                                        <input
-                                            className="form-check-input"
-                                            type="checkbox"
-                                            value=""
-                                            id={"flexCheckDefault_" + document._id}
-                                            checked={document._id === recordSelected._id}
-                                            onChange={(e) => {
-                                                if (e.target.checked) {
-                                                    setSelectRecord(document);
+                {(!listDocumentWithPager[pageIndex] || listDocumentWithPager[pageIndex].length === 0) && !isLoading && !isFetching && (
+                    <h2 className="text-center">Không có kết quả được trả về</h2>
+                )}
+
+                {!isLoading && listDocumentWithPager[pageIndex] && listDocumentWithPager[pageIndex].length > 0 && (
+                    <table className={"table-fixed border-collapse w-full"}>
+                        <thead>
+                            <tr className={"sticky top-0 z-5"}>
+                                <th className={"bg-cbs-table-header text-primary-gray text-center font-normal w-[50px] border-b-0.5 border-primary-border align-middle py-3"}>
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        value=""
+                                        id="flexCheckDefault"
+                                    />
+                                </th>
+                                <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-1/5 border-b-0.5 border-primary-border align-middle py-3"}>
+                                    Nội dung
+                                </th>
+                                <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-1/6 border-b-0.5 border-primary-border align-middle py-3"}>
+                                    Đơn vị ban hành
+                                </th>
+                                <th className={"bg-cbs-table-header text-primary-gray text-left font-normal border-b-0.5 border-primary-border align-middle py-3"}>
+                                    Mã hiệu
+                                </th>
+                                <th className={"bg-cbs-table-header text-primary-gray text-left font-normal border-b-0.5 border-primary-border align-middle py-3"}>
+                                    Ngày văn bản
+                                </th>
+                                <th className={"bg-cbs-table-header text-primary-gray text-left font-normal border-b-0.5 border-primary-border align-middle py-3"}>
+                                    Mã hiệu lưu
+                                </th>
+                                <th className={"bg-cbs-table-header w-[70px] text-primary-gray text-center font-normal border-b-0.5 border-primary-border align-middle py-3"}>
+                                    Số lượng
+                                </th>
+                                <th className={"bg-cbs-table-header text-primary-gray text-left font-normal border-b-0.5 border-primary-border align-middle py-3"}>
+                                    Tình trạng
+                                </th>
+                                <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-1/7 border-b-0.5 border-primary-border align-middle py-3"}>
+                                    Ghi chú
+                                </th>
+                                <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-1/7 border-b-0.5 border-primary-border align-middle py-3"}>
+                                    Địa chỉ lưu trữ
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                (listDocumentWithPager[pageIndex] ?? []).map((document, i) => (
+                                    <tr key={i}>
+                                        <td className={"border-b-0.5 border-primary-border py-3 text-center"}>
+                                            <input
+                                                className="form-check-input"
+                                                type="checkbox"
+                                                value=""
+                                                id={"flexCheckDefault_" + document._id}
+                                                checked={document._id === recordSelected._id}
+                                                onChange={(e) => {
+                                                    if (e.target.checked) {
+                                                        setSelectRecord(document);
+                                                        return null;
+                                                    }
+                                                    setSelectRecord({});
                                                     return null;
-                                                }
-                                                setSelectRecord({});
-                                                return null;
-                                            }}
-                                        />
-                                    </td>
-                                    <td className={"border-b-0.5 border-primary-border py-3"}>
-                                        <Link to={`/document/home/${document._id}`}>{document.name}</Link>
-                                        <p className={"mt-1 text-primary-gray text-xs"}>{document.author?.fullname}-{document.createAt}</p>
-                                    </td>
-                                    <td className={"border-b-0.5 border-primary-border py-3"}>
-                                        {document.sender?.name}
-                                    </td>
-                                    <td className={"border-b-0.5 border-primary-border py-3 break-all"}>
-                                        {document.sign}
-                                    </td>
-                                    <td className={"border-b-0.5 border-primary-border py-3 text-center"}>
-                                        {moment(document.date).format('DD/MM/YYYY')}
-                                    </td>
-                                    <td className={"border-b-0.5 border-primary-border py-3 break-all"}>
-                                        {document.storeSign}
-                                    </td>
-                                    <td className={"border-b-0.5 border-primary-border py-3 text-right pr-2"}>
-                                        {document.amount}
-                                    </td>
-                                    <td className={"border-b-0.5 border-primary-border py-3"}>
-                                        {document.status}
-                                    </td>
-                                    <td className={"border-b-0.5 border-primary-border py-3"}>
-                                        {document.note}
-                                    </td>
-                                    <td className={"border-b-0.5 border-primary-border py-3"}>
-                                        {document.storage?.name}
-                                    </td>
-                                </tr>
-                            ))}
-                    </tbody>
-                </table>
+                                                }}
+                                            />
+                                        </td>
+                                        <td className={"border-b-0.5 border-primary-border py-3"}>
+                                            <Link to={`/document/home/${document._id}`}>{document.name}</Link>
+                                            <p className={"mt-1 text-primary-gray text-xs"}>{document.author?.fullname}-{document.createAt}</p>
+                                        </td>
+                                        <td className={"border-b-0.5 border-primary-border py-3"}>
+                                            {document.sender?.name}
+                                        </td>
+                                        <td className={"border-b-0.5 border-primary-border py-3 break-all"}>
+                                            {document.sign}
+                                        </td>
+                                        <td className={"border-b-0.5 border-primary-border py-3 text-center"}>
+                                            {moment(document.date).format('DD/MM/YYYY')}
+                                        </td>
+                                        <td className={"border-b-0.5 border-primary-border py-3 break-all"}>
+                                            {document.storeSign}
+                                        </td>
+                                        <td className={"border-b-0.5 border-primary-border py-3 text-right pr-2"}>
+                                            {document.amount}
+                                        </td>
+                                        <td className={"border-b-0.5 border-primary-border py-3"}>
+                                            {document.status}
+                                        </td>
+                                        <td className={"border-b-0.5 border-primary-border py-3"}>
+                                            {document.note}
+                                        </td>
+                                        <td className={"border-b-0.5 border-primary-border py-3"}>
+                                            {document.storage?.name}
+                                        </td>
+                                    </tr>
+                                ))}
+                        </tbody>
+                    </table>
+                )}
             </div>
         </div>
     )
