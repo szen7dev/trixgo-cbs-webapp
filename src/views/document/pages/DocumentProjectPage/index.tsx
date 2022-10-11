@@ -106,13 +106,6 @@ export const DocumentProjectPage: FC = () => {
     const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
         isExporting: false,
     });
-
-    // const { listDocumentWithPager, totalRecord, totalPages, loading, refetch, fetchNextPage, hasNextPage } = useQueryListDocument(
-    //     departmentID,
-    //     {},
-    //     ""
-    // );
-
     const [fromToDate, setFromToDate] = useState({fromDate: "", toDate: ""})
 
     const [keywordDatahubContact, setKeywordDatahubContact] = useState("");

@@ -13,6 +13,7 @@ interface useDepartmentDirectory {
     nextCursor: string | null,
     hasNextPage: boolean | undefined;
     list: Array<DepartmentDirectory.DepartmentDirectory>;
+    listDepartmentDirectoryWithPager: any;
     info: DepartmentDirectory.DepartmentDirectory | undefined;
     refetch: () => void;
     fetchNextPage: () => void;
@@ -88,7 +89,7 @@ export const useDepartmentDirectory = ({
         .concat(...(data?.pages || [])
         .map((d: any) => d.data?.listRecords))
         .filter(Boolean);
-
+    const listDepartmentDirectoryWithPager = (data?.pages || []).map((d: any) => d.data?.listRecords);
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPage = data?.pages[0]?.data?.totalPages || 0;
     const nextCursor = data?.pages[0]?.data?.nextCursor || null;
@@ -96,6 +97,7 @@ export const useDepartmentDirectory = ({
     return {
         isLoading,
         list,
+        listDepartmentDirectoryWithPager,
         info,
         totalRecord,
         totalPage,

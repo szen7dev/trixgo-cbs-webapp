@@ -18,6 +18,8 @@ import { useProject } from 'services/hooks/items/useProject';
 
 // Phân trang
 import PaginateV2 from "shareComponents/common/PaginateV2";
+import { AnyARecord } from "dns";
+import {useAppSelector} from "redux/reducer";
 
 const DEPARTMENT_DIRECTORY_TYPE = [
     { id: 1, text: "Trợ lý viên" },
@@ -41,11 +43,21 @@ const ProjectDirectoryPageV2:FC = () => {
     const [pageParam, setPageParam] = useState("");
     const [prevCursor, setPrevCursor] = useState([null]);
 
+    const {keywordInput} = useAppSelector(
+        (state) => state.documentProject.data
+    );
+
+    useEffect(() => {
+        setPageIndex(0);
+        ref.current&&ref.current.resetPaginate();
+    }, [keywordInput]);
+
     const { data: listCompanies, fetchNextPage } = useQueryListCompany({ keyword: keywordCompany, limit: 20 });
     const {
         isLoading,
         hasNextPage,
         list: listDepartmentDirectory, 
+        listDepartmentDirectoryWithPager,
         totalRecord,
         totalPage,
         fetchNextPage: fetchNextPageDepartmentDirectory,
@@ -98,18 +110,18 @@ const ProjectDirectoryPageV2:FC = () => {
         }));
     };
 
-    const prevPageAction = () => {
-        if (!nextCursor) {
-          setPageParam(prevCursor[prevCursor.length - 2] || '')
-        } else {
-          const prev = prevCursor.findIndex(item => item === nextCursor)
-          setPageParam(prevCursor[prev - 2] || '')
-        }
-      };
+    // const prevPageAction = () => {
+    //     if (!nextCursor) {
+    //       setPageParam(prevCursor[prevCursor.length - 2] || '')
+    //     } else {
+    //       const prev = prevCursor.findIndex(item => item === nextCursor)
+    //       setPageParam(prevCursor[prev - 2] || '')
+    //     }
+    //   };
 
-    const nextPageAction = () => {
-        setPageParam(nextCursor || "")
-    }
+    // const nextPageAction = () => {
+    //     setPageParam(nextCursor || "")
+    // }
      
     // const toggleDeleteModal = () => {
     //     openModal(
@@ -215,7 +227,7 @@ const ProjectDirectoryPageV2:FC = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {listDepartmentDirectory?.map((departmentDirectory: any, i) => (
+                    {listDepartmentDirectoryWithPager[pageIndex]?.map((departmentDirectory: any, i: any) => (
                             <tr key={i}>
                                 <td
                                     className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border text-center"
