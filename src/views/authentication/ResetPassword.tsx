@@ -70,18 +70,25 @@ const ResetPasswordPage: FC = () => {
     const { email, otp, confirmPassword } = values;
 
     switch (currentStep) {
-      case step1:
+      case step1: {
         if(!email) break;
         await UserRepository.recoverPassword({ email });
 
         setCurrentStep(step2);
         break;
-      case step2:
+      }
+      case step2: {
         if(!otp) break;
-        await UserRepository.checkOTPRecoverPassword({ email, codeReset: otp });
+        const checkOTP = await UserRepository.checkOTPRecoverPassword({ email, codeReset: otp });
 
-        setCurrentStep(step3);
+        if(!checkOTP.error) {
+          setCurrentStep(step3);
+        } else{
+          toast.warn('OTP không hợp lệ', { autoClose: 1500 });
+        }
+
         break;
+      }
       case step3: {
         if(!confirmPassword) break;
         const updatePassword = await UserRepository.updatePasswordRecover({ email, newPassword: confirmPassword });

@@ -134,6 +134,7 @@ export interface updateTaskPayload {
   status?: number;
   priority?: number;
   ontime?: number;
+  subType?: number;
   quality?: number;
   judgement?: string;
   unit?: string;
