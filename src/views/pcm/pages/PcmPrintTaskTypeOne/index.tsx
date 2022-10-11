@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import styles from "../../styles/pcm_print.module.css";
 import { CommentFull } from "views/pcm/shareComponents/common";
 import { CheckList } from "views/pcm/pages/PcmDetailTask/components";
-import { PCM_SUBTYPE, APP_ID } from "apis/localdb";
+import { PCM_PROPOSAL_TASK, APP_ID } from "apis/localdb";
 
 /**
  * Hooks, Typings
@@ -155,7 +155,7 @@ const PcmPrintTaskTypeOne: FC = () => {
                         </div>
                       </div>
                       <div className="text-large align-middle text-cbs-secondary uppercase font-bold">
-                        {PCM_SUBTYPE[taskInfo.subtype].text}
+                        {PCM_PROPOSAL_TASK[taskInfo.subtype].text}
                       </div>
                     </div>
                     <div className={styles.headerInfo}>
