@@ -234,7 +234,7 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                             Gán phân loại cột mốc
                         </button>
 
-                        {/* <button
+                        <button
                             className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
                             onClick={() => {
                                 openModal(
@@ -254,7 +254,7 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                             }}
                         >
                             Link tới hồ sơ văn bản
-                        </button> */}
+                        </button>
 
                         <hr style={{ opacity: '.3', width: '90%', display: 'flex', alignContent: 'center', alignItems: 'center', margin: 2 }} />
 
@@ -322,6 +322,11 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                                 >
                                     Cập nhật tiêu đề công việc
                                 </button>
+                            </>
+                        )}
+
+                        {task.draft === 1 && (
+                            <>
                                 <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
                                     onClick={() => {
                                         openModal(
