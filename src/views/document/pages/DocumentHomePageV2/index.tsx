@@ -12,7 +12,7 @@ import iconPencil from "assets/images/icons8-pencil-96 1.png";
 import { useDocumentCustom, useListFilterDocument} from "services/hooks/document/useDocument";
 import moment from "moment";
 import PaginateV2 from "shareComponents/common/PaginateV2";
-import {DOCUMENT_TYPES, DIRECTION_TYPES} from "apis/localdb";
+import {DOCUMENT_TYPES, DIRECTION_TYPES, DOCUMENT_TYPES_SORT} from "apis/localdb";
 import {useDatahubContact} from "services/hooks/datahub/contact/useDatahubContact";
 import {useProjectCustom} from "services/hooks/items/useProject";
 import {debounce} from "lodash";
@@ -213,7 +213,7 @@ const DocumentHomePageV2: FC = () => {
                         isMultiple={true}
                         disableSearch={true}
                         allowClearValueSingleInput={true}
-                        data={DOCUMENT_TYPES}
+                        data={DOCUMENT_TYPES_SORT}
                         formatItem={{
                             "id": "value"
                         }}

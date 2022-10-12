@@ -2,7 +2,7 @@ import React, { FC, Fragment, HTMLAttributes } from "react";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
 
-import { DIRECTION_TYPES, DOCUMENT_TYPES } from "apis/localdb";
+import { DIRECTION_TYPES, DOCUMENT_TYPES, DOCUMENT_TYPES_SORT } from "apis/localdb";
 
 import type { Document } from "typings/ppt/Document";
 
@@ -48,12 +48,12 @@ export const TableGeneralInformation: FC<TableGeneralInformationProps> = ({
       { title: "Tình trạng", value: docInfo.status },
       { title: "Đơn vị ban hành", value: docInfo.datahubContact?.name },
       { title: "Số lượng", value: docInfo.amount },
-      { title: "Tính chất văn bản", value: docInfo.property?.name },
+      { title: "Phân loại khác", value: docInfo.property?.name },
       { title: "Số lượng giao", value: docInfo.amountDelivery || 0 },
       {
-        title: "Phân loại khác",
+        title: "Tính chất văn bản",
         value:
-          DOCUMENT_TYPES.filter((elm) => elm.value === docInfo.type)[0]?.text ||
+        DOCUMENT_TYPES_SORT.filter((elm) => elm.value === docInfo.type)[0]?.text ||
           "",
       },
       {
