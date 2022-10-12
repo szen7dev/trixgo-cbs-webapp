@@ -405,7 +405,7 @@ export const DOCUMENT_TYPES = [
     { value: 28, text: 'Sổ tay', key: 'key' },
     { value: 29, text: 'Checklist', key: 'key' },
     { value: 30, text: 'Thiết kế', key: 'key' },
-    { value: 31, text: 'Thiết kế', key: 'key' },
+    { value: 31, text: 'Vật liệu', key: 'key' },
     { value: 32, text: 'Dữ liệu', key: 'key' },
 ]
 
