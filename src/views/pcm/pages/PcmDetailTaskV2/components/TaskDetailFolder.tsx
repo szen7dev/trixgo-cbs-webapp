@@ -213,14 +213,14 @@ export const TaskDetailFolder: FC<Props> = ({
         try {
             let dataUpdate: any = { taskID: task._id, alert: time.remind };
 
-            if(!time.isOfficalTask) {
+            // if(!time.isOfficalTask) {
                 dataUpdate = {
                     ...dataUpdate,
                     actualStartTime: time.fromDate,
                     actualFinishTime: time.toDate,
                     expiredHour: time.toTime,
                 }
-            }
+            // }
 
             const { error, data } = await updateTaskAsync(dataUpdate);
 

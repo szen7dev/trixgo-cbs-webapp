@@ -30,19 +30,20 @@ type Props = {
 }
 
 export const TaskDetailAddCV: FC<Props> = ({ task }) => {
-
-    const handleCopyLinkAttachment = (path: string) => {
-        const copyText = `${process.env.REACT_APP_URL_S3}${path}`;
-        navigator.clipboard.writeText(copyText);
-        toast.info('Đã copy link vào clipboard', { autoClose: 1000 });
-    }
-    const { updateFileAsync } = useFileCore();
-    const handleUpdateDescriptionFile = debounce(async (e: any) => {
-		await updateFileAsync({
-			fileID: e.target.dataset.fileid,
-			description: e.target.value
-		});
-	}, 1000)
+    // const handleCopyLinkAttachment = (path: string) => {
+    //     const copyText = `${process.env.REACT_APP_URL_S3}${path}`;
+    //     navigator.clipboard.writeText(copyText);
+    //     toast.info('Đã copy link vào clipboard', { autoClose: 1000 });
+    // }
+    // const { updateFileAsync } = useFileCore();
+    // const handleUpdateDescriptionFile = debounce(async (e: any) => {
+	// 	await updateFileAsync({
+	// 		fileID: e.target.dataset.fileid,
+	// 		description: e.target.value
+	// 	});
+	// }, 1000)
+    const linksDocs = task.linksDocs;
+    console.log({ linksDocs })
 
     return (
         <div className={"subtask mt-5"}>
@@ -55,15 +56,19 @@ export const TaskDetailAddCV: FC<Props> = ({ task }) => {
                 </div>
             </div>
             <div className="ml-6">
-                <div className="flex mb-6">
-                    <div className="">
-                        <div className="border-b-0.5 border-cbs-form-input-bg pb-3">
-                            <div>Giấy chứng nhận Đăng ký doanh nghiệp (thay đổi lần thứ 2 ngày 17/05/2021)</div>
-                            <div className="text-primary-gray ">Phùng Thị Hà-PGI-20/07/2021</div>
+                { linksDocs?.map((item: any, index: any) => {
+                    return (
+                        <div className="flex mb-6" key={index}>
+                            <div className="">
+                                <div className="border-b-0.5 border-cbs-form-input-bg pb-3">
+                                    <div>{item?.name} - {item?.sign} - {moment(item?.date).format("L")} - {item?.storage?.name}</div>
+                                    <div className="text-primary-gray ">{item?.author?.bizfullname}-{moment(item?.createAt).format("L")}</div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div>
+                    )
+                })}
+                {/* <div>
                     <div className="text-primary font-bold mb-4">
                         <a href="">Xem 15 tài liệu trước</a>
                     </div>
@@ -121,7 +126,7 @@ export const TaskDetailAddCV: FC<Props> = ({ task }) => {
                             </div>
                         </a>
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     );
