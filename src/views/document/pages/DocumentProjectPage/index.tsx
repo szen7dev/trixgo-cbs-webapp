@@ -26,7 +26,7 @@ import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 import {useDocumentCustom, useListFilterDocument} from "services/hooks/document/useDocument";
 
 // ========== Utils ==========
-import {APP_ID, DIRECTION_TYPES, DOCUMENT_TYPES} from 'apis/localdb';
+import {APP_ID, DIRECTION_TYPES, DOCUMENT_TYPES, DOCUMENT_TYPES_SORT} from 'apis/localdb';
 import { createLinkAndClick } from "utils";
 
 import {useProject, useProjectCustom} from "services/hooks/items/useProject";
@@ -329,7 +329,7 @@ export const DocumentProjectPage: FC = () => {
                             isMultiple={true}
                             disableSearch={true}
                             allowClearValueSingleInput={true}
-                            data={DOCUMENT_TYPES}
+                            data={DOCUMENT_TYPES_SORT}
                             formatItem={{
                                 "id": "value"
                             }}

@@ -12,7 +12,7 @@ type Props = {
     toDateDefault: string,
     toTimeDefault: string,
     onApplyNewTime: (timer: {
-        fromDate: string, toDate: string, toTime: string, remind: string|number|undefined, isOfficalTask: boolean
+        fromDate: Date, toDate: Date, toTime: string, remind: string|number|undefined, isOfficalTask: boolean
     }) => void,
     remindDefault?: string|number,
     userId?: string,
@@ -57,8 +57,8 @@ const TimeRange:FC<Props> = ({
     onApplyNewTime
 }) => {
     const [fromDate, setFromDate] = useState(fromDateDefault);
-    const [toDate, setToDate] = useState(toDateDefault);
-    const [toTime, setToTime] = useState(toTimeDefault);
+    const [toDate, setToDate]     = useState(toDateDefault);
+    const [toTime, setToTime]     = useState(toTimeDefault);
 
     const [fromDateTemp, setFromDateTemp] = useState(fromDateDefault);
     const [toDateTemp, setToDateTemp] = useState(toDateDefault);
@@ -84,11 +84,11 @@ const TimeRange:FC<Props> = ({
     const [showOption, setShowOption] = useState(false);
 
     const applyNewTime = () => {
+        console.log({ toTimeTemp, fromDateTemp, toDateTemp })
         setToTime(toTimeTemp);
         setToDate(toDateTemp);
         setFromDate(fromDateTemp);
-
-        onApplyNewTime({fromDate: fromDateTemp, toTime: toTimeTemp, toDate: toDateTemp, remind, isOfficalTask});
+        onApplyNewTime({ fromDate: new Date(fromDateTemp), toTime: toTime, toDate: new Date(toDateTemp), remind, isOfficalTask });
         setShowOption(false);
     }
 

@@ -51,7 +51,7 @@ export const SubtaskItem:FC<Props> = ({ task, userId, index }) => {
                 type="checkbox"
                 defaultChecked={isChecked}
                 disabled={isChecked}
-                // onChange={handleUpdateStatusTask}
+                onChange={handleUpdateStatusTask}
             />
             <div className="mx-2 px-2 w-full">
                 <p className="text-[14px]">
