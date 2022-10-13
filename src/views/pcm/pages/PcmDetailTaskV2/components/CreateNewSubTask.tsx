@@ -199,7 +199,7 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
                                 </div>
                             </div>
 
-                            <div className="flex w-full px-4 pb-4 mt-1">
+                            {/* <div className="flex w-full px-4 pb-4 mt-1">
                                 <div className="w-3/6">
                                     <span
                                         className="text-red-500"
@@ -311,7 +311,7 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
 
                             <div className={"flex items-center justify-between pt-0 p-4"}>
                                 <div className="flex gap-3 items-center">
@@ -339,6 +339,7 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
                                     </button>
                                 </div>
                             </div>
+                            
                         </>
                     );
                 }}

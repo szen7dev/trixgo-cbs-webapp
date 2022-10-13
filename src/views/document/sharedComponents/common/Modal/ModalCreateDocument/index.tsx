@@ -18,7 +18,7 @@ import { useQueryListDoctype } from "services/hooks/items/useDoctype";
 import { useDatahubContact } from "services/hooks/datahub/contact/useDatahubContact";
 import { useStorage } from "services/hooks/items/useStorage";
 import { useQueryItemContract } from "services/hooks/items/useContract";
-import { DIRECTION_TYPES, DOCUMENT_TYPES } from "apis/localdb";
+import { DIRECTION_TYPES, DOCUMENT_TYPES, DOCUMENT_TYPES_SORT } from "apis/localdb";
 
 const fieldInputByRow = [
 	{ title: "Số lượng", name: "amount", type: "text" },
@@ -175,7 +175,7 @@ export const ModalCreateDocument: React.FC = () => {
 			{ title: "Phân loại", data: properties, name: "property" },
 			{
 				title: "Tính chất (*)",
-				data: DOCUMENT_TYPES.map((elm) => ({
+				data: DOCUMENT_TYPES_SORT.map((elm) => ({
 					_id: elm.value,
 					name: elm.text,
 				})),

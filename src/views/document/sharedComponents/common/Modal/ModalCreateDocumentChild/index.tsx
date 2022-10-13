@@ -18,7 +18,7 @@ import { useQueryContact } from "services/hooks/items/useContact";
 import { useQueryListDoctype } from "services/hooks/items/useDoctype";
 import { useStorage } from "services/hooks/items/useStorage";
 import { useQueryItemContract } from "services/hooks/items/useContract";
-import { DIRECTION_TYPES, DOCUMENT_TYPES } from "apis/localdb";
+import { DIRECTION_TYPES, DOCUMENT_TYPES, DOCUMENT_TYPES_SORT } from "apis/localdb";
 import { Document } from "typings/ppt";
 import { useMutationDocumentChild }  from "services/hooks/document/useDocumentChild"
 import { toast } from "react-toastify";
@@ -167,7 +167,7 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 			{ title: "Phân loại", data: properties, name: "property" },
 			{
 				title: "Tính chất (*)",
-				data: DOCUMENT_TYPES.map((elm) => ({
+				data: DOCUMENT_TYPES_SORT.map((elm) => ({
 					_id: elm.value,
 					name: elm.text,
 				})),
