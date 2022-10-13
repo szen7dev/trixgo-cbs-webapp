@@ -12,7 +12,7 @@ type Props = {
     toDateDefault: string,
     toTimeDefault: string,
     onApplyNewTime: (timer: {
-        fromDate: Date, toDate: Date, toTime: string, remind: string|number|undefined, isOfficalTask: boolean
+        fromDate: string, toDate: string, toTime: string, remind: string|number|undefined, isOfficalTask: boolean
     }) => void,
     remindDefault?: string|number,
     userId?: string,
@@ -61,8 +61,8 @@ const TimeRange:FC<Props> = ({
     const [toTime, setToTime]     = useState(toTimeDefault);
 
     const [fromDateTemp, setFromDateTemp] = useState(fromDateDefault);
-    const [toDateTemp, setToDateTemp] = useState(toDateDefault);
-    const [toTimeTemp, setToTimeTemp] = useState(toTimeDefault);
+    const [toDateTemp, setToDateTemp]     = useState(toDateDefault);
+    const [toTimeTemp, setToTimeTemp]     = useState(toTimeDefault);
 
     const [hasPermissionUpdateExpire, setHasPermissionUpdateExpire] = useState(false);
 
@@ -84,11 +84,16 @@ const TimeRange:FC<Props> = ({
     const [showOption, setShowOption] = useState(false);
 
     const applyNewTime = () => {
-        console.log({ toTimeTemp, fromDateTemp, toDateTemp })
+        // console.log({ toTimeTemp, fromDateTemp, toDateTemp })
         setToTime(toTimeTemp);
         setToDate(toDateTemp);
         setFromDate(fromDateTemp);
-        onApplyNewTime({ fromDate: new Date(fromDateTemp), toTime: toTime, toDate: new Date(toDateTemp), remind, isOfficalTask });
+        const toDateTempArr = toDateTemp.split("/");
+        const fromDateTempArr = fromDateTemp.split("/");
+        
+        const fromDateTemp1 = `${fromDateTempArr[2]}-${fromDateTempArr[1]}-${fromDateTempArr[0]}`
+        const toTimeTemp1 = `${toDateTempArr[2]}-${toDateTempArr[1]}-${toDateTempArr[0]}`
+        onApplyNewTime({ fromDate: fromDateTemp1, toTime: toTimeTemp, toDate: toTimeTemp1, remind, isOfficalTask });
         setShowOption(false);
     }
 
@@ -121,7 +126,7 @@ const TimeRange:FC<Props> = ({
                                             overlay: "w-full rounded",
                                             overlayWrapper: "absolute bg-white w-full right-0 z-200"
                                         }}
-                                        onDayChange={(day) => setFromDateTemp(moment(day).format("MM/DD/YYYY"))}
+                                        onDayChange={(day) => setFromDateTemp(moment(day).format("DD/MM/YYYY"))}
                                         inputProps={{
                                             className: "h-[36px] outline-none pl-3",
                                             placeholder: "Bắt đầu",
@@ -139,7 +144,7 @@ const TimeRange:FC<Props> = ({
                                                 overlay: "w-full rounded",
                                                 overlayWrapper: "absolute bg-white w-full right-0 z-200"
                                             }}
-                                            onDayChange={(day) => setToDateTemp(moment(day).format("MM/DD/YYYY"))}
+                                            onDayChange={(day) => setToDateTemp(moment(day).format("DD/MM/YYYY"))}
                                             inputProps={{
                                                 className: "h-[36px] outline-none pl-3",
                                                 placeholder: "Kết thúc",

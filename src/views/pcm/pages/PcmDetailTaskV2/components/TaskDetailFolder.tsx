@@ -212,7 +212,7 @@ export const TaskDetailFolder: FC<Props> = ({
     const handleUpdateExpireTime = async (time: any) => {
         try {
             let dataUpdate: any = { taskID: task._id, alert: time.remind };
-
+            console.log({ time });
             // if(!time.isOfficalTask) {
                 dataUpdate = {
                     ...dataUpdate,
