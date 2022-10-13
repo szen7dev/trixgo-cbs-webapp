@@ -96,30 +96,25 @@ export const TaskDetailMember: FC<Props> = ({ task, user, refetchInfo }) => {
                                 <div>
                                     <div className="border-b-0.5 border-cbs-border	 flex gap-5 p-3 ">
                                         <div>
-                                            <img alt={"----"} src={taskUserAvt} className={" rounded-full overflow-hidden h-[60px] w-[60px] min-h-[36px] min-w-[36px] max-h-[60px] max-w-[60px] mx-1"} />
+                                            <img alt={"----"} src={task?.author?.image ? `${process.env.REACT_APP_URL_S3_USER}/${task?.author?.image}` : taskUserAvt} className={" rounded-full overflow-hidden h-[60px] w-[60px] min-h-[36px] min-w-[36px] max-h-[60px] max-w-[60px] mx-1"} />
                                         </div>
                                         <div>
-                                            <div className="text-lg	">Nguyễn Văn Quang-TRX</div>
-                                            <div className="text-primary-gray">quangnv@trx.com</div>
-                                            <div className="text-primary-gray">0988226333</div>
+                                            <div className="text-lg	">{task?.author?.fullname}</div>
+                                            <div className="text-primary-gray">{task?.author?.email}</div>
+                                            <div className="text-primary-gray">{task?.author?.phone}</div>
                                         </div>
                                     </div>
                                     <div className="flex py-2 px-3 items-center	justify-between	">
-                                        <div className="text-cbs-primary bg-cbs-sub-primary rounded p-3">Giám đốc Ban QLDA</div>
+                                        <div className="text-cbs-primary bg-cbs-sub-primary rounded p-3">{task?.author?.position?.name}</div>
                                         <div className="flex gap-2 items-center	">
-                                            <a href=""><img src={iconChat} alt="" /></a>
-                                            <a href=""><img src={iconTrash} alt="" /></a>
+                                            {/* <a href=""><img src={iconChat} alt="" /></a>
+                                            <a href=""><img src={iconTrash} alt="" /></a> */}
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </Popover>
 
-                        {task.related?.length > 16 && (
-                            <div className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1 bg-cbs-form-input-bg border-0.5 border-primary-border flex items-center justify-center text-primary-gray"}>
-                                {task.related?.length - 15}+
-                            </div>
-                        )}
                         <div className={"flex-1 ml-2"}>
                             <p>{task.author?.bizfullname}</p>
                             <p className={"text-primary-gray text-xs"}>Tạo việc {moment(task.createAt).format('HH:mm DD/M/YYYY')}</p>
@@ -156,8 +151,6 @@ export const TaskDetailMember: FC<Props> = ({ task, user, refetchInfo }) => {
                             {!!task.related?.length && task.related.slice(0, 10).map(item => (
                               (task.viewedUsers?.map(vuser=>vuser._id).includes?.(item._id)) ? <img title={item.bizfullname+" - Đã truy cập công việc"} key={item._id} alt={"----"} src={item?.image ? `${process.env.REACT_APP_URL_S3_USER}/${item?.image}` : taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1 border-0.5 border-primary-border border-2 border-pink-600"} />  : <img title={item.bizfullname} key={item._id} alt={"----"} src={item?.image ? `${process.env.REACT_APP_URL_S3_USER}/${item?.image}` : taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1 border-0.5 border-primary-border"} />
                             ))}
-
-                            {/* <img alt={"----"} src={taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1"} /> */}
 
                             <ModalLarge
                                 show={isShowModalUsersRelated}
