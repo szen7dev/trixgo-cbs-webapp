@@ -79,6 +79,7 @@ module.exports = {
                 "pink-warning": "#D88183",
 
                 "cbs-primary": "#0060E1",
+                "cbs-sub-primary" : "#E8F0FE",
                 "cbs-highlight-color": "#111E6C",
                 "cbs-secondary": "#4781CF",
                 "cbs-gray": "#F0F0F0",

@@ -243,7 +243,7 @@ export const DocumentOfTypePage: FC = () => {
                   </th>
                   <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
                     <span className="pl-2 border-l border-cbs-border">
-                      Chủ thể ban hành
+                      Đơn vị ban hành
                     </span>
                   </th>
                   <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
@@ -327,7 +327,7 @@ export const DocumentOfTypePage: FC = () => {
                         </Link>
                       </td>
                       <td className="py-2.5 border-b border-cbs-border px-2 w-[150px]">
-                        {document?.sender?.name}
+                        {document?.datahubContact?.name}
                       </td>
                       <td className="py-2.5 border-b border-cbs-border px-2 w-[166px]">
                         {document.sign}

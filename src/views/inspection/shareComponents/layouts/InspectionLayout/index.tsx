@@ -71,7 +71,7 @@ export const InspectionLayout: FC<Props> = ({ children }) => {
         <LeftNavigate handleMenuEvent={handleMenuEvent} />
         <section className={"main-content-wrapper flex-1"}>
           {/*  Main header */}
-          <MainHeaderV2 headerTitle={"TVGS"}>
+          <MainHeaderV2 headerTitle={"Nghiệm thu"}>
             <HomeHeaderContent />
           </MainHeaderV2>
 

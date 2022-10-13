@@ -8,11 +8,13 @@ import type { DepartmentDirectory } from 'typings/items';
 /*=====3.INTERFACE DEFINE=====*/
 interface useDepartmentDirectory {
     isLoading: boolean;
+    isFetching: boolean;
     totalRecord: number;
     totalPage: number;
     nextCursor: string | null,
     hasNextPage: boolean | undefined;
     list: Array<DepartmentDirectory.DepartmentDirectory>;
+    listDepartmentDirectoryWithPager: any;
     info: DepartmentDirectory.DepartmentDirectory | undefined;
     refetch: () => void;
     fetchNextPage: () => void;
@@ -67,6 +69,7 @@ export const useDepartmentDirectory = ({
         data,
         refetch,
         fetchNextPage,
+        isFetching,
         hasNextPage
     } = useInfiniteQuery(
         ['department_directory__list', params],
@@ -88,14 +91,15 @@ export const useDepartmentDirectory = ({
         .concat(...(data?.pages || [])
         .map((d: any) => d.data?.listRecords))
         .filter(Boolean);
-
+    const listDepartmentDirectoryWithPager = (data?.pages || []).map((d: any) => d.data?.listRecords);
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
-    const totalPage = data?.pages[0]?.data?.totalPages || 0;
+    const totalPage = data?.pages[0]?.data?.totalPage || 0;
     const nextCursor = data?.pages[0]?.data?.nextCursor || null;
     // Return data
     return {
         isLoading,
         list,
+        listDepartmentDirectoryWithPager,
         info,
         totalRecord,
         totalPage,
@@ -105,6 +109,7 @@ export const useDepartmentDirectory = ({
         insertAsync,
         updateAsync,
         deleteAsync,
-        nextCursor
+        nextCursor,
+        isFetching
     }
 }

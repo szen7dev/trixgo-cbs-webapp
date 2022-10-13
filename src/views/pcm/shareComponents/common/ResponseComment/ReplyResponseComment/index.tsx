@@ -161,8 +161,6 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
 
         const contentRaw = editorRef.current?.getContent({ format: 'raw' });
         const contentText = editorRef.current?.getContent({ format: 'text' });
-        const content = editorRef.current?.getContent();
-        console.log({ content, contentRaw, contentText })
 
         let images: string[] = [];
         let files: string[] = [];

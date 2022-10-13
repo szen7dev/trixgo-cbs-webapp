@@ -12,12 +12,13 @@ const colors = ["#2C86ED", "#00CA99", "#9B59B6", "#E03B56", "#DBE7F2"]
 type Props = {
   companyID?: string;
   year: number;
+  outin: number;
 }
 
-const RevenueBySectorReport: FC<Props> = ({ companyID, year = 2022 }) => {
+const RevenueBySectorReport: FC<Props> = ({ companyID, outin, year = 2022 }) => {
   const { contractIPCAmountByProperty, isLoadingAmountByProperty } = useContractIpcCustom({
     params: {
-      outin: 1,
+      outin,
       option: 1,
       optionTime: 1,
       year,
@@ -69,7 +70,7 @@ const RevenueBySectorReport: FC<Props> = ({ companyID, year = 2022 }) => {
   return (
     <div className="bg-primary-light py-4 px-6 h-full">
       <p className="font-bold text-primary-gray text-lg">
-        Doanh thu theo lĩnh vực
+        Nghiệm thu theo lĩnh vực
       </p>
       <div className="flex gap-9 h-full">
         <div className="w-[110px]">
@@ -83,12 +84,12 @@ const RevenueBySectorReport: FC<Props> = ({ companyID, year = 2022 }) => {
 
         <div className="w-full h-full flex flex-col gap-1 mt-2 text-primary-gray">
           {contractIPCAmountByProperty?.data?.map((item: any, index: number) => (
-            <div className="flex justify-between" key={item._id}>
+            <div className="flex justify-between" key={`${index}-${item._id}-${Math.random()}`}>
               <div className="flex items-center">
                 <div className="h-3 w-3 mr-2" style={{ background: colors[index] }} />
                 <p>
                   {item._id?.field?.name} {` `}
-                  ({Math.ceil(+((item.amount / totalAmount.totalOrigin) * 100).toPrecision(2))}%)
+                  ({totalAmount.totalOrigin === 0 ? 0 : Math.ceil(+((item.amount / totalAmount.totalOrigin) * 100).toPrecision(2))}%)
                 </p>
               </div>
               <p>{(item.amount / 1_000_000_000).toFixed(2)}</p>

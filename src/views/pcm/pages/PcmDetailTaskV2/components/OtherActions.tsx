@@ -18,6 +18,7 @@ import { ModalUpdateTaskGroup } from "./ModalUpdateTaskGroup";
 import { ModalUpdateTaskProduct } from "./ModalUpdateTaskProduct";
 import { ModalUpdateTaskEvaluate } from "./ModalUpdateTaskEvaluate";
 import { ModalAssignMilestone } from "./ModalAssignMilestone";
+import { ModalDocLinkTask } from "./ModalDocLinkTask";
 
 type Props = {
     task: Task;
@@ -26,6 +27,7 @@ type Props = {
 }
 
 export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
+    // console.log(task)
     const { openModal, closeModal } = useModal();
     const wrapperClass = useRef<HTMLDivElement>(null)
     const [showOption, setShowOption] = useState(false);
@@ -166,6 +168,8 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                             In ấn - Mẫu phụ lục ảnh
                         </Link>
 
+                        <hr style={{ opacity: '.3', width: '90%', display: 'flex', alignContent: 'center', alignItems: 'center', margin: 2 }} />
+
                         <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
                             onClick={() => {
                                 openModal(
@@ -187,27 +191,52 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                             Di chuyển đến công việc cha
                         </button>
 
-                        {/* <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
-                            onClick={() => {
-                                openModal(
-                                    <div
-                                        className={
-                                        "inline-block w-[521px] my-8 text-left align-middle transition-all transform bg-primary-light shadow-xl"
-                                        }
-                                    >
-                                        <ModalUpdateTaskGroup
-                                            taskID={task._id}
-                                            projectID={task.project?._id}
-                                            group={task.group}
-                                            closeModal={closeModal}
-                                            onConfirm={refetchTaskInfo}
-                                        />
-                                    </div>
-                                )
-                            }}
-                        >
-                            Di chuyển đến nhóm dữ liệu
-                        </button> */}
+                        {(task.project.admins.map(item=>item.toString()).includes(userId?.toString())) && (
+                            <>
+                                <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
+                                    onClick={() => {
+                                        openModal(
+                                            <div
+                                                className={
+                                                "inline-block w-[521px] my-8 text-left align-middle transition-all transform bg-primary-light shadow-xl"
+                                                }
+                                            >
+                                                <ModalUpdateTaskGroup
+                                                    taskID={task._id}
+                                                    projectID={task.project?._id}
+                                                    group={task.group}
+                                                    closeModal={closeModal}
+                                                    onConfirm={refetchTaskInfo}
+                                                />
+                                            </div>
+                                        )
+                                    }}
+                                >
+                                    Di chuyển đến nhóm dữ liệu
+                                </button>
+
+                                <button
+                                    className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
+                                    onClick={() => {
+                                        openModal(
+                                            <div
+                                                className={
+                                                "inline-block w-[521px] my-8 text-left align-middle transition-all transform bg-primary-light shadow-xl"
+                                                }
+                                            >
+                                                <ModalAssignMilestone
+                                                    taskID={task._id}
+                                                    milestone={task.milestone}
+                                                    closeModal={closeModal}
+                                                />
+                                            </div>
+                                        )
+                                    }}
+                                >
+                                    Gán phân loại cột mốc
+                                </button>
+                            </>
+                        )}
 
                         <button
                             className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
@@ -218,61 +247,69 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                                         "inline-block w-[521px] my-8 text-left align-middle transition-all transform bg-primary-light shadow-xl"
                                         }
                                     >
-                                        <ModalAssignMilestone
+                                        <ModalDocLinkTask
                                             taskID={task._id}
-                                            milestone={task.milestone}
+                                            projectID={task.project?._id}
+                                            linksDocs={task.linksDocs}
                                             closeModal={closeModal}
                                         />
                                     </div>
                                 )
                             }}
                         >
-                            Gán phân loại cột mốc
+                            Link tới hồ sơ văn bản
                         </button>
 
-                        {/* <button
-                            className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
-                            onClick={() => {
-                                openModal(
-                                    <div
-                                        className={
-                                        "inline-block w-[521px] my-8 text-left align-middle transition-all transform bg-primary-light shadow-xl"
-                                        }
-                                    >
-                                        <ModalUpdateTaskProduct
-                                            task={task}
-                                            closeModal={closeModal}
-                                            onConfirm={refetchTaskInfo}
-                                        />
-                                    </div>
-                                )
-                            }}
-                        >
-                            Cập nhật thông tin sán lượng
-                        </button> */}
+                        <hr style={{ opacity: '.3', width: '90%', display: 'flex', alignContent: 'center', alignItems: 'center', margin: 2 }} />
 
-                        {/* <button
-                            className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
-                            onClick={() => {
-                                openModal(
-                                    <div
-                                        className={
-                                        "inline-block w-[521px] my-8 text-left align-middle transition-all transform bg-primary-light shadow-xl"
-                                        }
-                                    >
-                                        <ModalUpdateTaskEvaluate
-                                            task={task}
-                                            closeModal={closeModal}
-                                            onConfirm={refetchTaskInfo}
-                                        />
-                                    </div>
-                                )
-                            }}
-                        >
-                            Cập nhật thông tin đánh giá
-                        </button> */}
+                        {task.author._id.toString() == userId?.toString() && (
+                            <>
+                                <button
+                                    className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
+                                    onClick={() => {
+                                        openModal(
+                                            <div
+                                                className={
+                                                "inline-block w-[521px] my-8 text-left align-middle transition-all transform bg-primary-light shadow-xl"
+                                                }
+                                            >
+                                                <ModalUpdateTaskProduct
+                                                    task={task}
+                                                    closeModal={closeModal}
+                                                    onConfirm={refetchTaskInfo}
+                                                />
+                                            </div>
+                                        )
+                                    }}
+                                >
+                                    Cập nhật giá trị thực hiện
+                                </button>
 
-                        {task.draft === 1 && (
+                                <button
+                                    className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
+                                    onClick={() => {
+                                        openModal(
+                                            <div
+                                                className={
+                                                "inline-block w-[521px] my-8 text-left align-middle transition-all transform bg-primary-light shadow-xl"
+                                                }
+                                            >
+                                                <ModalUpdateTaskEvaluate
+                                                    task={task}
+                                                    closeModal={closeModal}
+                                                    onConfirm={refetchTaskInfo}
+                                                />
+                                            </div>
+                                        )
+                                    }}
+                                >
+                                    Cập nhật thông tin đánh giá
+                                </button>
+
+                            </>
+                        )}
+
+                        {(task.draft === 1 || task.project.admins.map(item=>item.toString()).includes(userId?.toString())) && (
                             <>
                                 <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
                                     onClick={() => {
@@ -289,6 +326,11 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                                 >
                                     Cập nhật tiêu đề công việc
                                 </button>
+                            </>
+                        )}
+
+                        {task.draft === 1 && (
+                            <>
                                 <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
                                     onClick={() => {
                                         openModal(
@@ -312,6 +354,8 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                                 </button>
                             </>
                         )}
+
+                        <hr style={{ opacity: '.3', width: '90%', display: 'flex', alignContent: 'center', alignItems: 'center', margin: 2 }} />
 
                         <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
                             onClick={handleDownloadTemplateImportExcel}

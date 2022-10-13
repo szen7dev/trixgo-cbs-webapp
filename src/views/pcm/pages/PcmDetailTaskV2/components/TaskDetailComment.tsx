@@ -1,6 +1,6 @@
 import { FC, useState, useContext, useEffect } from "react";
 import iconForum from "assets/images/icons8-discussion-forum-64.svg";
-import taskUserAvt from "assets/images/task-user.svg";
+// import taskUserAvt from "assets/images/task-user.svg";
 
 import CollapseShow from "assets/images/CBS-Collapse-Show.svg";
 import CollapseHide from "assets/images/CBS-Collapse-Hide.svg";

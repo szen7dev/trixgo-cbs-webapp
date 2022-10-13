@@ -7,8 +7,10 @@ import { useTask } from "services/hooks/useTask";
 import { humanFileSize } from 'utils/converter';
 import iconAttach from "assets/images/icons8-attach-48.svg";
 import iconLink from "assets/images/icons8-link-96-v3.svg";
-import imageDemo from "assets/images/task-detail-image.png";
+// import imageDemo from "assets/images/task-detail-image.png";
 import moment from "moment";
+import { ModalZoomView } from "shareComponents/common";
+import { ImageProps } from "typings/common";
 
 type Props = {
     task: Task;
@@ -16,12 +18,16 @@ type Props = {
 }
 
 export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
-    // console.log(task)
-    // console.log(task.authorAttachs.length)
-
     const editorRef = useRef<EditorType>();
     const [editDescription, setEditDescription] = useState(false);
     const [isHasPermissionUpdateDescription, setIsPermissionUpdateDescription] = useState(false);
+    const [isShowImageFullScreen, setIsShowImageFullScreen] = useState(false);
+    const [defaultState, setDefaultState] = useState({
+        mediaID: '',
+        images: [] as ImageProps[],
+        index: 0,
+        createAt: ""
+    });
 
     const { updateTaskAsync } = useTask({});
 
@@ -38,6 +44,20 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
             setEditDescription(false);
         }
     }
+
+    const handleClickImage = (file: any, index: number) => {
+        const images = task.authorAttachs?.filter((file: any) => file.type == 1);
+
+		if (images?.length) {
+            setDefaultState({
+                mediaID: file._id,
+                images: images,
+                index,
+                createAt: file.createAt
+            });
+            setIsShowImageFullScreen(true);
+        }
+	}
 
     useEffect(() => {
         if(task.subtype === 9 || task.subtype === 11) {
@@ -177,12 +197,12 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                         <div className={"user-images mt-4"}>
                             <div className={"grid grid-cols-6 gap-4"}>
                                 {
-                                    task.authorAttachs?.map(file => {
+                                    task.authorAttachs?.map((file, index) => {
                                         if(file.type == '2') return;
 
                                         return (
                                             <div key={file._id} className={" border-0.5 border-primary-border bg-cbs-form-input-bg mb-2"}>
-                                                <div className={"relative"}>
+                                                <div className={"relative"} onClick={() => handleClickImage(file, index)}>
                                                     <img
                                                         className={"h-[120px] max-h-[120px] min-h-[120px] object-cover w-full"}
                                                         src={`${process.env.REACT_APP_URL_S3}${file.path}`}
@@ -235,7 +255,7 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                         <div className={"user-images mt-4"}>
                             <div className={"grid grid-cols-6 gap-4"}>
                                 {
-                                    task.assigneeAttachs?.map(file => {
+                                    task.assigneeAttachs?.map((file, index) => {
                                         if(file.type == '2') return;
 
                                         return (
@@ -247,7 +267,7 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                                                         alt={file.nameOrg}
                                                     />
                                                     <div className={"text-white px-2 py-4 bg-black opacity-60 absolute text-xs bottom-0 w-full truncate"}>
-                                                        {moment(file.createAt).format('DD/MM/YYYY HH:mm')} {moment(file.createAt).fromNow()}
+                                                        asdasd{moment(file.createAt).format('DD/MM/YYYY HH:mm')} {moment(file.createAt).fromNow()}
                                                     </div>
                                                 </div>
                                                 <textarea className={"p-2 w-full text-xs h-[60px] min-h-[60px] max-h-[60px] bg-cbs-form-input-bg"} placeholder={"Nhập nội dung ghi chú"}>
@@ -261,6 +281,12 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                     </div>
                 ) : <></>}
             </div>
+
+            <ModalZoomView
+                isShow={isShowImageFullScreen}
+                toggle={() => setIsShowImageFullScreen(!isShowImageFullScreen)}
+                initialData={defaultState}
+            />
         </div>
     )
 }

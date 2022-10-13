@@ -21,6 +21,11 @@ const ProjectDashboardDebtPage: FC = () => {
 	const { id: projectID } = useParams<{ id: string }>();
 	const [keyword, setKeyword] = useState("");
     const history = useHistory();
+	const [totalOverdueDebts1, setTotalOverdueDebts1] = useState(0);
+	const [totalPeriodDebts1, setTotalPeriodDebts1] = useState(0);
+
+	let totalOverdueDebts = 0;
+	let totalPeriodDebts = 0;
 
 	const { contractIPCAmountByProperty } = useContractIpcCustom({
         params: {
@@ -33,25 +38,48 @@ const ProjectDashboardDebtPage: FC = () => {
         isFetchAmountByProperty: true
     });
 	let listData: any = [];
+
 	if(contractIPCAmountByProperty){
 		const contractIPCAmountByPropertyFunction = async () =>{
 			for (const item of contractIPCAmountByProperty?.data) {
-				const companyID = item?._id?.sellerInfo?.company;
+				// Tổng công nợ
 				const data = await ContractIPCRepository.fetchAmountByProperty({ 
-					outin: 1,
-					option: 2,
+					outin: 2,
+					option: 3,
 					debt: 2,
 					optionTime: 1,
-					companyID
+					projectID
+				});
+
+				let listDataTemp: any = { key: item?._id?.sellerInfo?.name, trongKy: (item.amount/1000000000).toFixed(2), phanTramQuaHan: 0, phanTramTrongKy: 100 };
+				totalPeriodDebts = item.amount;
+				// Tổng công nợ quá hạn
+				data.data.map((infoData: any) => {
+					if(item?._id?.sellerInfo?._id == infoData._id.sellerInfo._id){
+						const phanTramQuaHan = (infoData.amount/item.amount)*100;
+						listDataTemp = { 
+							...listDataTemp, 
+							trongKy: (Number(item.amount-infoData.amount)/1000000000).toFixed(2),
+							quaHan: (infoData.amount/1000000000).toFixed(2),
+							phanTramQuaHan,
+							phanTramTrongKy: 100 - phanTramQuaHan
+						}
+						totalOverdueDebts += infoData.amount;
+						totalPeriodDebts -= infoData.amount;
+					}
 				})
-				// listData.push({ key: item?._id?.sellerInfo?.name, total: item.amount, expires: data.data[0].amount   })
-				listData = [...listData, { key: item?._id?.sellerInfo?.name, trongKy: Number(item.amount-data.data[0].amount), expires: data.data[0].amount }]
+
+				listData = [...listData, listDataTemp]
 			}
+			setTotalOverdueDebts1(totalOverdueDebts);
+			setTotalPeriodDebts1(totalPeriodDebts);
+			// console.log({ totalOverdueDebts, totalPeriodDebts });
+
 			if(listData.length && !dataDebt.length){
 				setDataDebt(listData);
 			}
 		}
-		contractIPCAmountByPropertyFunction()
+		contractIPCAmountByPropertyFunction();
 	}
 
 	const { info: projectInfo } = useProject({
@@ -72,7 +100,7 @@ const ProjectDashboardDebtPage: FC = () => {
 		setCompanyPopup(company)
 		setTypeStatusPopup(typeStatus)
 	};
-	console.log({ dataDebt });
+
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
 			<div className={"sticky top-0 bg-white z-10"}>
@@ -108,7 +136,7 @@ const ProjectDashboardDebtPage: FC = () => {
 										<div className="flex items-center">
 											<div className="w-3 h-3 bg-cbs-schedule-expired" />
 											<span className="ml-1 text-primary-gray font-normal">
-												Quá hạn(0)
+												Quá hạn({(totalOverdueDebts1/1000000000).toFixed(2)} Tỷ)
 											</span>
 										</div>
 										
@@ -116,7 +144,7 @@ const ProjectDashboardDebtPage: FC = () => {
 											<div className="w-3 h-3 bg-cbs-schedule-after-7days" />
 											<span className="ml-1 text-primary-gray font-normal">
 												{" "}
-												{"Trong kỳ"}(0)
+												{"Trong kỳ"}({(totalPeriodDebts1/1000000000).toFixed(2)} Tỷ)
 											</span>
 										</div>
 									</div>
@@ -127,7 +155,6 @@ const ProjectDashboardDebtPage: FC = () => {
 					<tbody className="">
 						{
 							dataDebt?.map((company: any, index: any) => {
-								console.log({ company })
 								return (
 									<tr key={company._id} className="text-left hover:bg-cbs-table-header cursor-pointer">
 										<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border text-center" onClick={e => e.stopPropagation()}>
@@ -142,20 +169,20 @@ const ProjectDashboardDebtPage: FC = () => {
 											<div className="flex w-full h-3 mt-2">
 												<button
 													className="flex items-center justify-center bg-red-500"
-													style={{ width: `50%` }}
+													style={{ width: `${company.phanTramQuaHan}%` }}
 													// onClick={() => toggleVisible({ company: company._id, typeStatus: "1"}) }
 													>
 													<span className="text-white">
-														{company?.expires ||""}
+														{company?.quaHan || 0} tỷ
 													</span>
 												</button>
 												<button
 													className="flex items-center justify-center bg-green-500"
-													style={{ width: `50%` }}
+													style={{ width: `${company.phanTramTrongKy}%` }}
 													// onClick={() => toggleVisible({ company: company._id, typeStatus: "3"}) }
 													>
 													<span className="text-white">
-														{company?.trongKy ||""}
+														{company?.trongKy || 0} tỷ
 													</span>
 												</button>
 											</div>

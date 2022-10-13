@@ -1,6 +1,6 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 
-import cn from "classnames";
+// import cn from "classnames";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -15,8 +15,8 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 
 import styles from 'views/cmcs/styles/styles.module.css';
 
-import ListIcon from "assets/images/icon-bulleted-list.svg";
-import PolygonIcon from "assets/images/icon-polygon.svg";
+// import ListIcon from "assets/images/icon-bulleted-list.svg";
+// import PolygonIcon from "assets/images/icon-polygon.svg";
 import CircleIcon from "assets/images/icon-circle.svg";
 
 ChartJS.register(
@@ -28,40 +28,6 @@ ChartJS.register(
   Legend,
   ChartDataLabels
 );
-
-const data = {
-  labels: [
-    "T1",
-    "T2",
-    "T3",
-    "T4",
-    "T5",
-    "T6",
-    "T7",
-    "T8",
-    "T9",
-    "T10",
-    "T11",
-    "T12",
-  ],
-  datasets: [
-    {
-      data: [300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300],
-      backgroundColor: "#206EC3",
-      barThickness: 12,
-    },
-    {
-      data: [250, 250, 250, 250, 250, 250, 250, 250, 250, 250, 250, 250],
-      backgroundColor: "#4A9CDE",
-      barThickness: 12,
-    },
-    {
-      data: [200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200],
-      backgroundColor: "#5DB908",
-      barThickness: 12,
-    },
-  ],
-};
 
 const options = {
   responsive: true,
@@ -124,7 +90,112 @@ const options = {
   },
 };
 
-const RevenueOverTimeReport: FC<any> = () => {
+const arrMonths = Array.from({ length: 12 }, () => 0);
+
+const RevenueOverTimeReport: FC<any> = ({ data }) => {
+  const dataContract = useMemo(() => {
+    if(!data?.contractAmountByMonth) {
+      return {
+        data: arrMonths,
+        totalAmount: 0
+      }
+    }
+
+    const dataAmountContract = arrMonths.map((_, index) => {
+      const haveMoney = data.contractAmountByMonth?.find((item: any) => item._id?.month === (index + 1));
+      return haveMoney ? haveMoney.amount : 0;
+    })
+
+    const totalAmount = data.contractAmountByMonth?.reduce((total: number, item: any) =>
+      total += item.amount
+    , 0)
+
+    return {
+      data: dataAmountContract,
+      totalAmount: (totalAmount / 1_000_000_000).toFixed(1)
+    };
+  }, [data?.contractAmountByMonth])
+
+  const dataContractIPC = useMemo(() => {
+    if(!data?.cmcsContractIPCAmountByMonth) {
+      return {
+        data: arrMonths,
+        totalAmount: 0
+      }
+    }
+
+    const dataAmountContract = arrMonths.map((_, index) => {
+      const haveMoney = data.cmcsContractIPCAmountByMonth?.find((item: any) => item._id?.month === (index + 1));
+      return haveMoney ? haveMoney.amount : 0;
+    })
+
+    const totalAmount = data.cmcsContractIPCAmountByMonth?.reduce((total: number, item: any) =>
+      total += item.amount
+    , 0)
+
+    return {
+      data: dataAmountContract,
+      totalAmount: (totalAmount / 1_000_000_000).toFixed(1)
+    };
+  }, [data?.cmcsContractIPCAmountByMonth])
+
+  const dataContractPayment = useMemo(() => {
+    if(!data?.cmcsContractPaymentAmountByMonth) {
+      return {
+        data: arrMonths,
+        totalAmount: 0
+      }
+    }
+
+    const dataAmountContract = arrMonths.map((_, index) => {
+      const haveMoney = data.cmcsContractPaymentAmountByMonth?.find((item: any) => item._id?.month === (index + 1));
+      return haveMoney ? haveMoney.amount : 0;
+    })
+
+    const totalAmount = data.cmcsContractPaymentAmountByMonth?.reduce((total: number, item: any) =>
+      total += item.amount
+    , 0)
+
+    return {
+      data: dataAmountContract,
+      totalAmount: (totalAmount / 1_000_000_000).toFixed(1)
+    };
+  }, [data?.cmcsContractPaymentAmountByMonth])
+
+  const dataChart = {
+    labels: [
+      "T1",
+      "T2",
+      "T3",
+      "T4",
+      "T5",
+      "T6",
+      "T7",
+      "T8",
+      "T9",
+      "T10",
+      "T11",
+      "T12",
+    ],
+    datasets: [
+      {
+        data: dataContract.data,
+        backgroundColor: "#206EC3",
+        barThickness: 12,
+      },
+      {
+        data: dataContractIPC.data,
+        backgroundColor: "#4A9CDE",
+        barThickness: 12,
+      },
+      {
+        data: dataContractPayment.data,
+        backgroundColor: "#5DB908",
+        barThickness: 12,
+      },
+    ],
+  };
+
   return (
     <div className="bg-primary-light px-6 py-4">
       <div className="bg-primary-light h-[240px]">
@@ -135,14 +206,24 @@ const RevenueOverTimeReport: FC<any> = () => {
         </div>
 
         <div className={styles.barChart}>
-          <Bar options={options} data={data} />
+          <Bar options={options} data={dataChart} />
         </div>
       </div>
+
       <div className="flex mt-3">
         <div className="flex gap-3 flex-1 justify-center">
-          <div className="flex items-center	"><img className="pr-1" src={CircleIcon} alt="icon" /> Ký: 100</div>
-          <div className="flex items-center	"><img className="pr-1" src={CircleIcon} alt="icon" /> Nghiệm thu: 80</div>
-          <div className="flex items-center	"><img className="pr-1" src={CircleIcon} alt="icon" /> Tiền về: 60</div>
+          <div className="flex items-center">
+            <span className="rounded-full h-3 w-3 flex items-center justify-center mr-1" style={{ backgroundColor: '#206EC3' }} />
+            Ký: {dataContract.totalAmount}
+          </div>
+          <div className="flex items-center">
+            <span className="rounded-full h-3 w-3 flex items-center justify-center mr-1" style={{ backgroundColor: '#4A9CDE' }} />
+            Nghiệm thu: {dataContractIPC.totalAmount}
+          </div>
+          <div className="flex items-center">
+            <span className="rounded-full h-3 w-3 flex items-center justify-center mr-1" style={{ backgroundColor: '#5DB908' }} />
+            Tiền về: {dataContractPayment.totalAmount}
+          </div>
         </div>
         <div><span className="text-gray-500	">Đơn vị tính: Tỷ đồng</span></div>
       </div>

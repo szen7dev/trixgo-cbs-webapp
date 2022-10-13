@@ -69,25 +69,10 @@ const ProjectBiddingPage: FC = () => {
     create: false,
     update: false,
   });
-
   const [keyword, setKeyword] = useState("");
-
-  // const {
-  //   list: listBiddingPlan,
-  //   hasNextPage,
-  //   refetch,
-  //   fetchNextPage,
-  //   totalRecord,
-  // } = useBiddingPlan({
-  //   params: {
-  //     keyword,
-  //     projectID
-  //   },
-  //   isFetchList: true,
-  // });
-
   const {
 		data: listBiddingPlan,
+    listDocumentPackageWithPager,
 		fetchNextPage,
 		hasNextPage,
 		totalRecord,
@@ -98,8 +83,14 @@ const ProjectBiddingPage: FC = () => {
 		// parentID: packageID,
 		departmentID: projectID,
 		isShowAll: "1",
-		keyword
+		keyword,
+    limit: "20"
 	}, true, false);
+
+  useEffect(() => {
+    ref.current && ref.current.resetPaginate();
+    setPageIndex(0);
+  }, []);
 
   const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } =
     useCheckedList(listBiddingPlan);
@@ -159,6 +150,8 @@ const ProjectBiddingPage: FC = () => {
     //   }
     // }
   };
+
+  // console.log(listDocumentPackageWithPager)
 
   return (
     <div className={"flex flex-col relative h-full"}>
@@ -304,62 +297,67 @@ const ProjectBiddingPage: FC = () => {
             </tr>
           </thead>
           <tbody className="text-small">
-            {(listBiddingPlan && listBiddingPlan.length) ?
-              listBiddingPlan.map((item: any) => (
-                <tr key={item._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
-                  <td
-                    className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border text-center"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <input
-                      className="cbs-checkbox"
-                      type="checkbox"
-                      value={item._id}
-                      checked={Boolean(assigned[item._id])}
-                      onChange={(e) => handleChangeCheckbox(e, item)}
-                    />
-                  </td>
-                  <td
-                    className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    {/* <NavLink to={`/bidding/plan/${projectID}/${item._id}`}>{item.name}</NavLink> */}
-                    {item.name}
-                    <p className={"mt-1 text-gray-500"}>
-                      {item.userCreate?.bizfullname}
-                      {moment(item.createAt).format("DD/MM/YYYY HH:mm")}
-                    </p>
-                  </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
-                    {BIDDING_PLAN_TYPE[item.type-1]?.text}
-                  </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
-                    {convertCurrency(item.packagePrice)}
-                  </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
-                    { moment(item.startTime).format("L")}
-                  </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
-                    { moment(item.finishTime).format("L")}
-                  </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
-                    {BIDDING_PLAN_FORM[item.form -1]?.text}
-                  </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
-                    {BIDDING_PLAN_CONTRACT_TYPE[item.contractType -1]?.text}
-                  </td>
+              {
+                (listDocumentPackageWithPager[pageIndex] ?? []).map((item: any) => {
+                  console.log(item)
+                  return (
+                    <tr key={item._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
+                      <td
+                        className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border text-center"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <input
+                          className="cbs-checkbox"
+                          type="checkbox"
+                          value={item._id}
+                          checked={Boolean(assigned[item._id])}
+                          onChange={(e) => handleChangeCheckbox(e, item)}
+                        />
+                      </td>
+                      <td
+                        className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {/* <NavLink to={`/bidding/plan/${projectID}/${item._id}`}>{item.name}</NavLink> */}
+                        {item.name}
+                        <p className={"mt-1 text-gray-500"}>
+                          {item.userCreate?.bizfullname}
+                          {moment(item.createAt).format("DD/MM/YYYY HH:mm")}
+                        </p>
+                      </td>
+                      <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
+                        {BIDDING_PLAN_TYPE[item.type-1]?.text}
+                      </td>
+                      <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
+                        {convertCurrency(item.packagePrice)}
+                      </td>
+                      <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
+                        { moment(item.startTime).format("L")}
+                      </td>
+                      <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
+                        { moment(item.finishTime).format("L")}
+                      </td>
+                      <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
+                        {BIDDING_PLAN_FORM[item.form -1]?.text}
+                      </td>
+                      <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
+                        {BIDDING_PLAN_CONTRACT_TYPE[item.contractType -1]?.text}
+                      </td>
 
-                  <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
-                    {item.duration} Ngày
-                  </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
-                    {BIDDING_PLAN_STATUS[item.status -1]?.text}
-                  </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
-                    {item?.bidder?.name}
-                  </td>
-                </tr>
-              )) : <></>}
+                      <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
+                        {item.duration} Ngày
+                      </td>
+                      <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
+                        {BIDDING_PLAN_STATUS[item.status -1]?.text}
+                      </td>
+                      <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
+                        {item?.bidder?.name}
+                      </td>
+                    </tr>
+                  )
+                })
+              }
+
           </tbody>
         </table>
       </div>

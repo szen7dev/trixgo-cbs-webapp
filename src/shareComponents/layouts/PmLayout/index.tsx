@@ -8,7 +8,7 @@ import cn from "classnames";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import {LeftMenu, MainHeaderV2, LeftNavigate} from "../../common";
-import {PmHeaderContent, PmLeftMenuContent} from "./components";
+import { PmLeftMenuContent} from "./components";
 
 /*=====5.TYPINGS=====*/
 
@@ -52,7 +52,7 @@ export const PmLayout: FC<Props> = ({ children }) => {
           <MainHeaderV2
             headerTitle={"Dự án"}
           >
-            <PmHeaderContent/>
+            
           </MainHeaderV2>
 
           {/* Left navigation */}

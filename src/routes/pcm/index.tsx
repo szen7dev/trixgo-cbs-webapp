@@ -185,7 +185,6 @@ const PCMRouter: FC = () => {
                 <Route exact path="/pcm/tags/:tab/:projectID/:companyID/:subtype" component={PcmTag3ProjectCompanySubTypePage} />
               </Switch>
             </HomeLayout>
-
           </ProtectedRoute>
         </Switch>
       </ProviderModalPcm>

@@ -1,7 +1,4 @@
 import { FC, useState, useMemo, useCallback, useEffect } from "react";
-import iconFolder from "assets/images/icons8-folder-48.svg";
-import iconSnooze from "assets/images/icons8-snooze-48.svg";
-import iconCheckmark from "assets/images/icons8-checkmark-yes-64.svg";
 import TimeRange from "./TimeRange";
 import moment from "moment";
 import { Link } from 'react-router-dom';
@@ -15,6 +12,11 @@ import { useSocket } from "services/hooks/useSocket";
 import type { User } from "typings/user";
 import { ModalConfirm } from "shareComponents/common";
 import { PCM_PROPOSAL_TASK } from 'apis/localdb';
+
+import iconFolder from "assets/images/icons8-folder-48.svg";
+import iconSnooze from "assets/images/icons8-snooze-48.svg";
+import iconCheckmark from "assets/images/icons8-checkmark-yes-64.svg";
+// import PencilIcon from "assets/images/icons8-pencil-96.svg";
 
 type Props = {
     task: Task;
@@ -210,15 +212,15 @@ export const TaskDetailFolder: FC<Props> = ({
     const handleUpdateExpireTime = async (time: any) => {
         try {
             let dataUpdate: any = { taskID: task._id, alert: time.remind };
-
-            if(!time.isOfficalTask) {
+            console.log({ time });
+            // if(!time.isOfficalTask) {
                 dataUpdate = {
                     ...dataUpdate,
                     actualStartTime: time.fromDate,
                     actualFinishTime: time.toDate,
                     expiredHour: time.toTime,
                 }
-            }
+            // }
 
             const { error, data } = await updateTaskAsync(dataUpdate);
 
@@ -245,13 +247,14 @@ export const TaskDetailFolder: FC<Props> = ({
                     <img src={iconFolder} alt={'-----'} />
                 </span>
                 <div className={"flex"}>
-                    Nhóm dữ liệu: {task?.project?.sign} {">"}{" "}
+                    Nhóm: {task?.project?.sign} {">"}{" "}
                     <Link to={`/pm/project/${task?.project?._id}/folder/${task?.group?._id}`}>
                         {/* {getGroupTitle(task?.group)} */}
                         {task?.group?.sign}.{task?.group?.name}{">"}{" "}
                         {PCM_PROPOSAL_TASK[task.subtype]?.text}
                     </Link>
-                    {/* {
+                    {/* <img src={PencilIcon} className="ml-3" alt="Pencil" /> */}
+                    {/* {handleChangeStatus
                         folders.map((folder, index) => (
                             <span key={folder}>{folder} {(index < folders.length-1) ? " > " : "" } </span>
                         ))
@@ -284,9 +287,11 @@ export const TaskDetailFolder: FC<Props> = ({
                 )}
 
                 <TimeRange
+                    userId={user?._id}
+                    task={task}
                     isOfficalTask={task.draft === 0}
-                    fromDateDefault={moment(task.actualStartTime).format('MM/DD/YYYY')}
-                    toDateDefault={moment(task.actualFinishTime).format('MM/DD/YYYY')}
+                    fromDateDefault={moment(task.actualStartTime).format('DD/MM/YYYY')}
+                    toDateDefault={moment(task.actualFinishTime).format('DD/MM/YYYY')}
                     toTimeDefault={moment(task.actualFinishTime).format('HH:mm')}
                     onApplyNewTime={handleUpdateExpireTime}
                 />

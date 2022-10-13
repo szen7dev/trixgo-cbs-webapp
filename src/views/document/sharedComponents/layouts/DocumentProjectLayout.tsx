@@ -142,7 +142,7 @@ export const DocumentProjectLayout:FC = ({children}) => {
                     <div className={"flex items-center flex-1"}>
                         <DropdownSearchableV2
                             className={"mr-4 border border-primary-border rounded-lg mb-2"}
-                            placeholder={"Tổ chức ban hành"}
+                            placeholder={"Đơn vị ban hành"}
                             prefixIcon={<img className={"mr-2"} src={maleUserIcon} alt={"icon"}/>}
                             isMultiple={true}
                             disableSearch={true}

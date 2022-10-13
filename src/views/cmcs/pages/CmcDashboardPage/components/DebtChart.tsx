@@ -4,12 +4,13 @@ import { convertCurrency } from 'utils/converter';
 
 type Props = {
     companyID?: string;
+    outin: number
 }
 
-const DebtChart: FC<Props> = ({ companyID = "" }) => {
+const DebtChart: FC<Props> = ({ companyID = "", outin = 1 }) => {
     const { contractIPCAmountByProperty: contractIPCAmountByPropertyDebt1 } = useContractIpcCustom({
         params: {
-            outin: 1,
+            outin,
             option: 2,
             debt: 1,
             companyID
@@ -19,7 +20,7 @@ const DebtChart: FC<Props> = ({ companyID = "" }) => {
 
     const { contractIPCAmountByProperty: contractIPCAmountByPropertyDebt2 } = useContractIpcCustom({
         params: {
-            outin: 1,
+            outin,
             option: 2,
             debt: 2,
             companyID

@@ -405,13 +405,49 @@ export const DOCUMENT_TYPES = [
     { value: 28, text: 'Sổ tay', key: 'key' },
     { value: 29, text: 'Checklist', key: 'key' },
     { value: 30, text: 'Thiết kế', key: 'key' },
-    { value: 31, text: 'Thiết kế', key: 'key' },
+    { value: 31, text: 'Vật liệu', key: 'key' },
     { value: 32, text: 'Dữ liệu', key: 'key' },
+]
+
+// Tính chất hồ sơ sắp xếp theo ABC phục vụ show ra thẻ chọn
+export const DOCUMENT_TYPES_SORT = [
+    { value: 1, text: 'Chung', key: 'key' },
+    { value: 9, text: 'Bản vẽ', key: 'key' },
+    { value: 5, text: 'Báo cáo', key: 'key' },
+    { value: 6, text: 'Báo giá, chào giá', key: 'key' },
+    { value: 18, text: 'Biên bản', key: 'key' },
+    { value: 20, text: 'Biểu mẫu', key: 'key' },
+    { value: 7, text: 'Công văn', key: 'key' },
+    { value: 29, text: 'Checklist', key: 'key' },
+    { value: 24, text: 'Chỉ dẫn', key: 'key' },
+    { value: 32, text: 'Dữ liệu', key: 'key' },
+    { value: 14, text: 'Dự toán', key: 'key' },
+    { value: 15, text: 'Đề cương', key: 'key' },
+    { value: 26, text: 'Hóa đơn', key: 'key' },
+    { value: 4, text: 'Họp', key: 'key' },
+    { value: 19, text: 'Hồ sơ năng lực', key: 'key' },
+    { value: 2, text: 'Hợp đồng', key: 'key' },
+    { value: 27, text: 'Nhiệm vụ', key: 'key' },
+    { value: 25, text: 'Quy chế', key: 'key' },
+    { value: 22, text: 'Quy định', key: 'key' },
+    { value: 23, text: 'Quy trình', key: 'key' },
+    { value: 3, text: 'Quyết định', key: 'key' },
+    { value: 28, text: 'Sổ tay', key: 'key' },
+    { value: 16, text: 'Tiến độ, kế hoạch', key: 'key' },
+    { value: 21, text: 'Tiêu chuẩn, quy chuẩn', key: 'key' },
+    { value: 17, text: 'Tờ trình', key: 'key' },
+    { value: 11, text: 'Thanh toán', key: 'key' },
+    { value: 30, text: 'Thiết kế', key: 'key' },
+    { value: 8, text: 'Thông báo', key: 'key' },
+    { value: 13, text: 'Thuyết minh', key: 'key' },
+    { value: 12, text: 'Thư kỹ thuật', key: 'key' },
+    { value: 31, text: 'Vật liệu', key: 'key' },
+    { value: 10, text: 'Yêu cầu, đề nghị', key: 'key' },
 ]
 
 // TRẠNG THÁI TRIỂN KHAI CÔNG VIỆC
 export const PCM_STATUS_TASK = [
-    { value: 1, text: 'Khởi tạo', class: 'bg-red-400', backgroud: 'ff0000', key: 'open' },
+    { value: 1, text: 'Khởi tạo', class: 'bg-red-400', backgroud: 'ffb3b3', key: 'open' },
     { value: 2, text: 'Đang triển khai', class: 'bg-blue-400', backgroud: '00aaff', key: 'in_progress' },
     { value: 3, text: 'Hoàn thành', class: 'bg-green-400', backgroud: '5fba7d', key: 'completed' },
     { value: 4, text: 'Treo lại', class: 'bg-purple-400', backgroud: '8f1aac', key: 'deferred' },
@@ -422,7 +458,7 @@ export const PCM_STATUS_TASK = [
 
 // TRẠNG THÁI CHECKLIST
 export const PCM_STATUS_CHECKLIST = [
-    { value: 0, text: 'Khởi tạo', class: 'bg-red-400', backgroud: 'ff0000', key: 'open' },
+    { value: 0, text: 'Khởi tạo', class: 'bg-red-400', backgroud: 'ffb3b3', key: 'open' },
     { value: 1, text: 'Hoàn thành', class: 'bg-green-400', backgroud: '5fba7d', key: 'completed' },
     { value: 2, text: 'Đang triển khai', class: 'bg-blue-400', backgroud: '00aaff', key: 'in_progress' },
     { value: 3, text: 'Treo lại', class: 'bg-purple-400', backgroud: '8f1aac', key: 'deferred' },
@@ -432,8 +468,8 @@ export const PCM_STATUS_CHECKLIST = [
 export const PCM_PRIORITY_TASK = [
     { value: 1, text: 'Thấp', class: 'bg-gray-400', backgroud: '808080', key: 'low' },
     { value: 2, text: 'Trung bình', class: 'bg-blue', backgroud: '5bc0de', key: 'normal' },
-    { value: 3, text: 'Cao', class: 'bg-red', backgroud: 'ff0000', key: 'high' },
-    { value: 4, text: 'Siêu quan trọng', class: 'bg-red', backgroud: 'ff0000', key: 'supperhigh' }
+    { value: 3, text: 'Cao', class: 'bg-red', backgroud: 'ffb3b3', key: 'high' },
+    { value: 4, text: 'Siêu quan trọng', class: 'bg-red', backgroud: 'ffb3b3', key: 'supperhigh' }
 ]
 
 // MỨC ĐỘ CẤP BÁCH
@@ -464,7 +500,21 @@ export const PCM_DEADLINE_TYPES = [
     { value: 3, text: 'Sớm', key: 'normal' },
 ]
 
-// PHÂN LOẠI CÔNG VIỆC/TRÌNH DUYỆT
+/**
+ * Phân loại tính chất công việc
+ * 0-Việc thông thường
+ * 1-Yêu cầu thông tin
+ * 2-Yêu cầu phê duyệt
+ * 3-Thanh toán/Chi phí
+ * 4-Đấu thầu
+ * 5-Nghiệm thu chất lượng
+ * 6-Yêu cầu sửa chữa
+ * 7-Yêu cầu thay đổi
+ * 8-Yêu cầu thực hiện
+ * 9-Báo cáo
+ * 10-Tiến độ
+ * 11-Biên bản họp
+ */
 export const PCM_PROPOSAL_TASK = [
     { value: 0, text: 'Việc thông thường', sign: 'Tasks', key: 'task' },
     { value: 1, text: 'Đề nghị cấp thông tin', sign: 'RFis', key: 'rfi' },
@@ -478,6 +528,21 @@ export const PCM_PROPOSAL_TASK = [
     { value: 9, text: 'Báo cáo', sign: 'Report', key: 'report' },
     { value: 10, text: 'Tiến độ, kế hoạch', sign: 'Schedule', key: 'schedule' },
     { value: 11, text: 'Họp', sign: 'MOM', key: 'mom' },
+]
+
+export const PCM_SUBTYPE = [
+    { value: 0, text: 'Việc thông thường' },
+    { value: 1, text: 'Đề nghị cấp thông tin' },
+    { value: 2, text: 'Đề nghị phê duyệt' },
+    { value: 3, text: 'Thanh toán' },
+    { value: 4, text: 'Thầu và mua sắm' },
+    { value: 5, text: 'Nghiệm thu chất lượng' },
+    { value: 6, text: 'Yều cầu sửa chữa' },
+    { value: 7, text: 'Yều cầu thay đổi' },
+    { value: 8, text: 'Yều cầu thực hiện' },
+    { value: 9, text: 'Báo cáo' },
+    { value: 10, text: 'Tiến độ' },
+    { value: 11, text: 'Biên bản họp' },
 ]
 
 // MỐC TIẾN ĐỘ
@@ -625,36 +690,6 @@ export const PCM_MEMBER_POSITION_TYPE = [
     { value: 1, text: 'Sản lượng' },
     { value: 2, text: 'Doanh thu' },
     { value: 3, text: 'Dòng tiền' },
-]
-
-/**
- * Phân loại tính chất công việc
- * 0-Việc thông thường
- * 1-Yêu cầu thông tin
- * 2-Yêu cầu phê duyệt
- * 3-Thanh toán/Chi phí
- * 4-Đấu thầu
- * 5-Nghiệm thu chất lượng
- * 6-Yêu cầu sửa chữa
- * 7-Yêu cầu thay đổi
- * 8-Yêu cầu thực hiện
- * 9-Báo cáo
- * 10-Tiến độ
- * 11-Biên bản họp
- */
-export const PCM_SUBTYPE = [
-    { value: 0, text: 'Việc thông thường' },
-    { value: 1, text: 'Đề nghị cấp thông tin' },
-    { value: 2, text: 'Đề nghị phê duyệt' },
-    { value: 3, text: 'Thanh toán' },
-    { value: 4, text: 'Đấu thầu' },
-    { value: 5, text: 'Nghiệm thu chất lượng' },
-    { value: 6, text: 'Yều cầu sửa chữa' },
-    { value: 7, text: 'Yều cầu thay đổi' },
-    { value: 8, text: 'Yều cầu thực hiện' },
-    { value: 9, text: 'Báo cáo' },
-    { value: 10, text: 'Tiến độ' },
-    { value: 11, text: 'Biên bản họp' },
 ]
 
 export const KEY_ERRORS = {

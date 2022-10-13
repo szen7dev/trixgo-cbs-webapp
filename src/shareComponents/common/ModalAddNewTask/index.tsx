@@ -89,11 +89,11 @@ export const ModalAddNewTask: FC = () => {
   });
 
   const [uploads, {
-    // setUploadImageProgress,
+    setUploadImageProgress,
     setUploadFileProgress,
-    // setIDImageUploaded,
+    setIDImageUploaded,
     setIDFileUploaded,
-    // setUploadImage,
+    setUploadImage,
     setUploadFile,
     removeUploadedImage,
     removeUploadedFile,
@@ -138,6 +138,7 @@ export const ModalAddNewTask: FC = () => {
   }, !!projectID);
 
   const [isChangeProjectID, setIsChangeProjectID] = useState(false);
+
   useEffect(() => {
     if (isChangeProjectID) {
       if (listGroup && listGroup.length) {
@@ -241,7 +242,7 @@ export const ModalAddNewTask: FC = () => {
   const handleUploadAttach = async (filesSelected: FileList | null) => {
     if (!filesSelected || !filesSelected.length) return;
 
-    if(!projectID || !groupID) {
+    if (!projectID || !groupID) {
       // Clear input file
       if(fileInputRef.current) {
         fileInputRef.current.value = '';
@@ -253,12 +254,12 @@ export const ModalAddNewTask: FC = () => {
     const validation = await validateFiles(filesSelected);
     if (validation.error) return toast.warn(validation.message);
 
-    const [files] = modifyUploadedFilesV2({
+    const [files, images] = modifyUploadedFilesV2({
       imgLastKey: Object.keys(uploads.images).length || null,
       fileLastKey: Object.keys(uploads.files).length || null,
     }, filesSelected);
 
-    // setUploadImage(images);
+    setUploadImage(images);
     setUploadFile(files);
     setIsUploading(true);
 
@@ -268,19 +269,19 @@ export const ModalAddNewTask: FC = () => {
     }
 
     // Upload images
-    // for (const [key, { file }] of Object.entries(images)) {
-    //   const source = getCancelTokenRequest(key, file);
-    //   const { _id } = await addFileToUpload({
-    //     files: file,
-    //     fileType: 1,
-    //     source,
-    //     progress: percentCompleted => {
-    //       console.log(`${percentCompleted}%`, key);
-    //       setUploadImageProgress(key, percentCompleted)
-    //     }
-    //   })
-    //   setIDImageUploaded(key, _id);
-    // }
+    for (const [key, { file }] of Object.entries(images)) {
+      const source = getCancelTokenRequest(key, file);
+      const { _id } = await addFileToUpload({
+        files: file,
+        fileType: 1,
+        source,
+        progress: percentCompleted => {
+          console.log(`${percentCompleted}%`, key);
+          setUploadImageProgress(key, percentCompleted)
+        }
+      })
+      setIDImageUploaded(key, _id);
+    }
 
     // Upload files
     for (const [key, { file }] of Object.entries(files)) {
@@ -490,7 +491,7 @@ export const ModalAddNewTask: FC = () => {
                       </div>
                     </div>
                     <div className={"w-1/4 flex items-start pl-3"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Phân loại (*)</div>
+                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Tính chất (*)</div>
                       <div className={"flex-1 max-w-4/5 w-4/5"}>
                         <DropdownSearchable
                           onchangeValue={(value: any) =>
@@ -762,7 +763,7 @@ export const ModalAddNewTask: FC = () => {
                       />
                       <input
                         type="time"
-                        defaultValue="00:00"
+                        defaultValue="09:00"
                         onChange={(e) => setFieldValue("expiredHour", e.target.value)}
                       />
                     </div>
@@ -842,7 +843,8 @@ export const ModalAddNewTask: FC = () => {
                 </div>
 
                 <div className="px-6 mb-3">
-                  {!!Object.keys(uploads.files).length && toArray(uploads.files).map(file => {
+                  {(!!Object.keys(uploads.files).length || !!Object.keys(uploads.images).length) &&
+                  [...toArray(uploads.files), ...toArray(uploads.images)].map(file => {
                     if(!file || Object.keys(file).length === 1) return;
 
                     const { file: fileInfo, progress, id } = file;

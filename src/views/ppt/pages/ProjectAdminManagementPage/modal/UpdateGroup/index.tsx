@@ -47,7 +47,7 @@ const UpdateGroup: FC<Props> = ({ item, projectID, onConfirm }) => {
         const { name, value } = event.target;
         setFormData(previous => ({
             ...previous,
-            [name || 'sign']: value
+            [name]: value
         }))
     }
 
@@ -56,7 +56,6 @@ const UpdateGroup: FC<Props> = ({ item, projectID, onConfirm }) => {
             if (!formData.name || !formData.sign) {
                 return toast.warning("Vui lòng nhập đầy đủ tên nhóm và mã hiệu.");
             }
-
             const result = await updatePcmPlanGroupMutateAsync({
                 groupID: item._id,
                 ...formData
@@ -95,6 +94,7 @@ const UpdateGroup: FC<Props> = ({ item, projectID, onConfirm }) => {
                     placeholder={"Nhập tên nhóm dữ liệu"}
                     defaultValue={item.name}
                     onChange={onChangeInput}
+                    name = "name"
                 />
                 <textarea
                     placeholder={"Nhập mã hiệu"}
@@ -102,6 +102,7 @@ const UpdateGroup: FC<Props> = ({ item, projectID, onConfirm }) => {
                     className={"w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
                     defaultValue={item.sign}
                     onChange={onChangeInput}
+                    name = "sign"
                 ></textarea>
 
                 <DropdownSearchable

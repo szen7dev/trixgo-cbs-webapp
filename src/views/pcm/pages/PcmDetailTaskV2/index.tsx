@@ -20,6 +20,8 @@ import { TaskDetailOpenedBidding } from "./components/TaskDetailOpenedBidding";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 import { APP_ID } from 'apis/localdb';
+import { TaskDetailEvaluate } from "./components/TaskDetailEvaluate";
+import { TaskDetailAddCV } from "./components/TaskDetailAddCV";
 
 const PcmDetailTaskV2: FC = () => {
     const [collapse, setCollapse] = useState(false);
@@ -268,11 +270,11 @@ const PcmDetailTaskV2: FC = () => {
         return <Loader className="border-primary" />
     }
 
-    if(!taskInfo) {
+    if (!taskInfo) {
         return <Redirect to='/pcm/home' />
     }
 
-    if(!user) {
+    if (!user) {
         return <Loader className="border-primary" />
     }
 
@@ -287,7 +289,7 @@ const PcmDetailTaskV2: FC = () => {
             />
             <div className={"task-content p-4"}>
                 <div className={collapse ? "hidden" : "block"}>
-                    <TaskDetailTitle task={taskInfo} userId={user._id} />
+                    <TaskDetailTitle task={taskInfo} userId={user._id} refetchInfo={refetchInfo} />
                     <TaskDetailFolder
                         task={taskInfo}
                         user={user}
@@ -296,16 +298,21 @@ const PcmDetailTaskV2: FC = () => {
                         hasPermissionAddSignature={permissions.hasPermissionAddSignature}
                         hasPermissionOpenBidding={permissions.hasPermissionOpenBidding}
                     />
-                    <TaskDetailCompleteStatus task={taskInfo} userId={user?._id}/>
-                    <TaskDetailMember task={taskInfo} user={user} />
+                    <TaskDetailCompleteStatus task={taskInfo} userId={user?._id} />
+                    <TaskDetailMember task={taskInfo} user={user} refetchInfo={refetchInfo} />
                     <TaskDetailSignature task={taskInfo} />
                     <TaskDetailOpenedBidding task={taskInfo} />
                     <TaskDetailDescription task={taskInfo} refetchInfo={refetchInfo} />
                     <TaskDetailSubtask task={taskInfo} userId={user?._id} />
                     <TaskDetailRelatedTask task={taskInfo} userId={user?._id} refetchInfo={refetchInfo} />
+                    <TaskDetailEvaluate task={taskInfo} userId={user?._id} refetchInfo={refetchInfo} />
+                    {
+                        taskInfo?.linksDocs?.length ? <TaskDetailAddCV task={taskInfo} userId={user?._id} refetchInfo={refetchInfo}/> : <></>
+                    }
+                    {/* <TaskDetailAddCV task={taskInfo} userId={user?._id} refetchInfo={refetchInfo}/> */}
                 </div>
                 <CommentProvider>
-                    <TaskDetailComment task={taskInfo} userId={user?._id} refetchInfo={refetchInfo} />
+                    <TaskDetailComment task={taskInfo} />
                 </CommentProvider>
             </div>
         </div>
