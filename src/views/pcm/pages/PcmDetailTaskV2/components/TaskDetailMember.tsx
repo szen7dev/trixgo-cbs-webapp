@@ -5,6 +5,9 @@ import taskUserAvt from "assets/images/task-user.svg";
 import { Task } from "typings/task";
 import { User } from "typings/user";
 import { ModalUpdateTaskAssignee } from './ModalUpdateTaskAssignee';
+import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
+import useModalPcm from "views/pcm/hooks/useModal";
+import ModalViewUsersRelated from "../../PcmDetailTask/components/Modal/ModalViewUsersRelated";
 
 type Props = {
     task: Task;
@@ -15,14 +18,17 @@ type Props = {
 export const TaskDetailMember: FC<Props> = ({ task, user, refetchInfo }) => {
     const [isShow, setIsShow] = useState(false);
 
+    const [{ isShow: isShowModalUsersRelated }, {
+        toggleModal,
+        openAddUserRelation,
+    }] = useModalPcm();
+
     const openModalUpdateAssignee = () => {
         const isAdmin = task.project?.admins?.includes?.(user?._id);
         if(isAdmin || task.draft === 1) {
             setIsShow(true);
         }
     }
-
-    console.log(task.viewedUsers)
 
     return (
         <div className={"task-member flex items-start mt-5"}>
@@ -58,13 +64,24 @@ export const TaskDetailMember: FC<Props> = ({ task, user, refetchInfo }) => {
                     />
 
                     {
-                        (task.subtype == 4 && task.assignee._id.toString() == user?._id.toString()) ?  <></> : 
-                        <div className={"flex items-center flex-1 justify-start"}>
+                        (task.subtype == 4 && task.assignee._id.toString() == user?._id.toString()) ?  <></> :
+                        <div
+                            className={"flex items-center flex-1 justify-start cursor-pointer"}
+                            onClick={openAddUserRelation}
+                        >
                             {!!task.related?.length && task.related.slice(0, 10).map(item => (
                               (task.viewedUsers?.map(vuser=>vuser._id).includes?.(item._id)) ? <img title={item.bizfullname+" - Đã truy cập công việc"} key={item._id} alt={"----"} src={item?.image ? `${process.env.REACT_APP_URL_S3_USER}/${item?.image}` : taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1 border-0.5 border-primary-border border-2 border-pink-600"} />  : <img title={item.bizfullname} key={item._id} alt={"----"} src={item?.image ? `${process.env.REACT_APP_URL_S3_USER}/${item?.image}` : taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1 border-0.5 border-primary-border"} />
                             ))}
 
                             {/* <img alt={"----"} src={taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1"} /> */}
+
+                            <ModalLarge
+                                show={isShowModalUsersRelated}
+                                toggle={toggleModal}
+                                className="inline-flex flex-col text-black w-[500px] my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[600px] rounded-cbs-md"
+                            >
+                                <ModalViewUsersRelated task={task} toggle={toggleModal} />
+                            </ModalLarge>
 
                             {task.related?.length > 16 && (
                                 <div className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1 bg-cbs-form-input-bg border-0.5 border-primary-border flex items-center justify-center text-primary-gray"}>
