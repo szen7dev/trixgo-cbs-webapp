@@ -191,6 +191,9 @@
 .bg-red {
   background: #ff4242;
 }
+.w-350{
+  width: 350px;
+}
 .filter-red {
   filter: invert(47%) sepia(64%) saturate(4533%) hue-rotate(338deg)
     brightness(94%) contrast(92%);

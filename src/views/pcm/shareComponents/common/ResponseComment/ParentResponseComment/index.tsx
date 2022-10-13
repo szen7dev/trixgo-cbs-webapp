@@ -1,32 +1,36 @@
-import {FC, useContext, useEffect, useMemo, useRef, useState} from "react";
+import { FC, useContext, useEffect, useMemo, useRef, useState } from "react";
 import trigangleDown from "assets/images/triangle-down.svg";
 // import iconUpload from "assets/images/icons8-upload-48.svg";
 import iconLink from "assets/images/icons8-link-96-v3.svg";
 import iconReply from "assets/images/icons8-reply-arrow-48.svg";
 import taskUserAvt from "assets/images/task-user.svg";
 import iconAttach from "assets/images/icons8-attach-48.svg";
+import iconChat from "assets/images/icons8-chat-96 1.svg";
+import iconTrash from "assets/images/icons8-delete-96 1.svg";
 // import imageDemo from "assets/images/task-detail-image.png";
 // import { listEmoji } from "../../../../../messages/pages/MessageHome/sections/ChattingSection";
-import {ChildResponseComment} from "../ChildResponseComment";
-import {Comment as CommentType, CommentPayload, CommentProps, Task} from "typings/task";
+import { ChildResponseComment } from "../ChildResponseComment";
+import { Comment as CommentType, CommentPayload, CommentProps, Task } from "typings/task";
 import moment from 'moment';
-import {debounce} from 'lodash';
-import {nl2p} from 'utils';
-import {APP_KEY} from 'utils/constants';
-import {APP_ID} from "apis/localdb";
-import {humanFileSize} from 'utils/converter';
-import useUploadFile, {modifyUploadedFilesV2} from 'services/hooks/useUploadFile';
-import {validateFiles} from 'validation/file';
-import {useUpload} from "services/hooks/useUpload";
-import {toast} from "react-toastify";
-import {useCommentPcm} from "services/hooks/useTask";
+import { debounce } from 'lodash';
+import { nl2p } from 'utils';
+import { APP_KEY } from 'utils/constants';
+import { APP_ID } from "apis/localdb";
+import { humanFileSize } from 'utils/converter';
+import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
+import { validateFiles } from 'validation/file';
+import { useUpload } from "services/hooks/useUpload";
+import { toast } from "react-toastify";
+import { useCommentPcm } from "services/hooks/useTask";
 import CommentContext from "views/pcm/contexts/comment/comment.context";
-import {ReplyResponseComment} from "../ReplyResponseComment";
-import {captureException} from "@sentry/react";
+import { ReplyResponseComment } from "../ReplyResponseComment";
+import { captureException } from "@sentry/react";
 import TaskRepository from "apis/task";
-import {useFileCore} from 'services/hooks/useFileCore';
-import {useOnClickOutside} from "../../../../../../services/hooks/useOnclickOutside";
-import {OptionsComment} from "../OptionsComment";
+import { useFileCore } from 'services/hooks/useFileCore';
+import { useOnClickOutside } from "../../../../../../services/hooks/useOnclickOutside";
+import { OptionsComment } from "../OptionsComment";
+import { makeStyles } from "@material-ui/styles";
+import { Popover } from "@mui/material";
 
 type Props = {
     userId?: string;
@@ -34,15 +38,37 @@ type Props = {
     comment: CommentProps;
     tab: number;
     socket?: any;
-	onClickImage?: (comment: CommentType, index: number) => void,
+    onClickImage?: (comment: CommentType, index: number) => void,
     onConfirmUpdate?: () => void;
 }
+const useStyles = makeStyles({
+    popover: {
+        pointerEvents: "none"
+    },
+    popoverContent: {
+        pointerEvents: "auto"
+    }
+});
 
 export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, socket, onClickImage, onConfirmUpdate }) => {
+
+    const [openedPopover, setOpenedPopover] = useState(false);
+    const popoverAnchor = useRef(null);
+
+    const classes = useStyles();
+
+    const popoverEnter = () => {
+        setOpenedPopover(true);
+    };
+
+    const popoverLeave = () => {
+        setOpenedPopover(false);
+    };
+
     const [collapseComment, setCollapseComment] = useState(false);
     const [openReply, setOpenReply] = useState(false);
     const [isOfficial, setIsOfficial] = useState(comment.official);
-	const [amountReply, setAmountReply] = useState(
+    const [amountReply, setAmountReply] = useState(
         comment?.amountCommentReply > 0 ? comment?.amountCommentReply - 1 : 0
     );
     const [showDetail, setShowDetail] = useState(false);
@@ -50,8 +76,8 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
 
     useOnClickOutside(detailRef, () => setShowDetail(false));
 
-	const { state, dispatch } = useContext(CommentContext);
-	// const { current: socket }: any = useSocket();
+    const { state, dispatch } = useContext(CommentContext);
+    // const { current: socket }: any = useSocket();
 
     const { addFileToUpload } = useUpload({
         appID: APP_ID.PCM.id,
@@ -60,7 +86,7 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
         groupID: task?.group?._id,
     });
 
-	const { updateFileAsync } = useFileCore();
+    const { updateFileAsync } = useFileCore();
     const { updateCommentAsync } = useCommentPcm({});
 
     const [uploads, {
@@ -77,18 +103,18 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
 
     const commentsReply = (state.commentsReply[comment._id] || []).filter(Boolean);
 
-	useEffect(() => {
-		// Add last reply comment in first time render page
-		if (commentsReply.length === 0 && comment.lastestReplyID) {
-			dispatch({
-				type: 'ADD_COMMENT',
-				payload: comment.lastestReplyID
-			});
-		}
-	}, [])
+    useEffect(() => {
+        // Add last reply comment in first time render page
+        if (commentsReply.length === 0 && comment.lastestReplyID) {
+            dispatch({
+                type: 'ADD_COMMENT',
+                payload: comment.lastestReplyID
+            });
+        }
+    }, [])
 
     const receiversText = useMemo(() => {
-        if(!comment.receivers) return 'Tới';
+        if (!comment.receivers) return 'Tới';
 
         const totalRemainPeople = comment.receivers.length - 2;
         const receiversWillShow = comment.receivers.slice(0, 2);
@@ -96,12 +122,12 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
 
         const str = totalRemainPeople > 0 ? `${receiversName} và ${totalRemainPeople} người khác` : receiversName;
 
-        {/* tới Lê Lưu Phong-CPMI, Nguyễn Đắc Toàn-TRX và 3 người khác */}
+        {/* tới Lê Lưu Phong-CPMI, Nguyễn Đắc Toàn-TRX và 3 người khác */ }
         return `Tới ${str}`;
     }, [comment.receivers]);
 
     const receiversFullText = useMemo(() => {
-        if(!comment.receivers) return '';
+        if (!comment.receivers) return '';
 
         return comment.receivers.map(receiver => receiver.bizfullname).join(', ');
     }, [comment.receivers]);
@@ -116,19 +142,19 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
 
             const { error, data } = await updateCommentAsync(dataUpdate);
 
-            if(error) {
+            if (error) {
                 return toast.warn(data?.message || 'Đánh dấu chính thức thất bại')
             }
 
             setIsOfficial(true);
             onConfirmUpdate?.();
-        } catch(error) {
-			captureException(error);
+        } catch (error) {
+            captureException(error);
             if (typeof error === "string") {
-				toast.error(error);
-			} else if (error instanceof Error) {
-				toast.error(error.message);
-			}
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
         }
     }
 
@@ -198,7 +224,7 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
 
             const { error, data } = await updateCommentAsync(dataUpdate);
 
-            if(error) {
+            if (error) {
                 return toast.warn(data?.message || 'Cập nhật bình luận thất bại')
             }
 
@@ -214,53 +240,53 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
             });
 
             socket?.emit('COMMENT_CSS_ADD_COMMENT', {
-				app: APP_KEY.PCM_PLAN_TASK,
-				objectID: comment.task?._id,
-				method: 'UPDATE',
-				parentID: values?.parentID,
-				commentType: 'COMMENT',
-				infoComment: data,
-				populates: JSON.stringify({
-					path: 'project author'
-				})
-			})
-        } catch(error) {
-			captureException(error);
+                app: APP_KEY.PCM_PLAN_TASK,
+                objectID: comment.task?._id,
+                method: 'UPDATE',
+                parentID: values?.parentID,
+                commentType: 'COMMENT',
+                infoComment: data,
+                populates: JSON.stringify({
+                    path: 'project author'
+                })
+            })
+        } catch (error) {
+            captureException(error);
             if (typeof error === "string") {
-				toast.error(error);
-			} else if (error instanceof Error) {
-				toast.error(error.message);
-			}
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
         }
     }
 
     const handleUpdateDescriptionFile = debounce(async (e: any) => {
-		await updateFileAsync({
-			fileID: e.target.dataset.fileid,
-			description: e.target.value
-		});
-	}, 1000)
+        await updateFileAsync({
+            fileID: e.target.dataset.fileid,
+            description: e.target.value
+        });
+    }, 1000)
 
     const handleClickViewMore = async () => {
-		const lastestID = commentsReply.length ? commentsReply[0]._id : null;
+        const lastestID = commentsReply.length ? commentsReply[0]._id : null;
 
-		const { error, data } = await TaskRepository.listComments({
-			lastestID,
-			taskID: comment.task?._id,
-			parentID: comment._id,
-		});
-		setAmountReply(amountReply - 5);
+        const { error, data } = await TaskRepository.listComments({
+            lastestID,
+            taskID: comment.task?._id,
+            parentID: comment._id,
+        });
+        setAmountReply(amountReply - 5);
 
-		if (!error && data?.listRecords?.length) {
-			dispatch({
-				type: 'VIEW_MORE_COMMENTS_REPLY',
-				payload: {
-					parent: comment._id,
-					comments: data?.listRecords?.reverse()
-				}
-			});
-		}
-	}
+        if (!error && data?.listRecords?.length) {
+            dispatch({
+                type: 'VIEW_MORE_COMMENTS_REPLY',
+                payload: {
+                    parent: comment._id,
+                    comments: data?.listRecords?.reverse()
+                }
+            });
+        }
+    }
 
     const handleCopyLinkAttachment = (path: string) => {
         const copyText = `${process.env.REACT_APP_URL_S3}${path}`;
@@ -269,11 +295,11 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
     }
 
     const handleClickImage = (index: number) => {
-		onClickImage?.(comment, index);
-	}
-    
+        onClickImage?.(comment, index);
+    }
+
     if (!comment) return <></>;
-    
+
     if (task.subtype === 4 && task.openedStatus === 0) {
         const currentTime = new Date().getTime();
         const actualFinishTime = new Date(task.actualFinishTime).getTime();
@@ -292,7 +318,53 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
                 alt={comment.author?.bizfullname}
                 src={comment?.author?.image ? `${process.env.REACT_APP_URL_S3_USER}/${comment?.author?.image}` : taskUserAvt}
                 className={"rounded-full overflow-hidden h-[44px] w-[44px] min-h-[44px] min-w-[44px] max-h-[44px] max-w-[44px] mx-2"}
+                ref={popoverAnchor}
+                aria-owns="mouse-over-popover"
+                aria-haspopup="true"
+                onMouseEnter={popoverEnter}
+                onMouseLeave={popoverLeave}
             />
+            {/* popover */}
+            <Popover
+                id="mouse-over-popover"
+                className={classes.popover}
+                classes={{
+                    paper: classes.popoverContent
+                }}
+                open={openedPopover}
+                anchorEl={popoverAnchor.current}
+                anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "right"
+                }}
+                transformOrigin={{
+                    vertical: "top",
+                    horizontal: "left"
+                }}
+                PaperProps={{ onMouseEnter: popoverEnter, onMouseLeave: popoverLeave }}
+            >
+                <div className="w-350">
+                    <div>
+                        <div className="border-b-0.5 border-cbs-border	 flex gap-5 p-3 ">
+                            <div>
+                                <img alt={"----"} src={taskUserAvt} className={" rounded-full overflow-hidden h-[60px] w-[60px] min-h-[36px] min-w-[36px] max-h-[60px] max-w-[60px] mx-1"} />
+                            </div>
+                            <div>
+                                <div className="text-lg	">Nguyễn Văn Quang-TRX</div>
+                                <div className="text-primary-gray">quangnv@trx.com</div>
+                                <div className="text-primary-gray">0988226333</div>
+                            </div>
+                        </div>
+                        <div className="flex py-2 px-3 items-center	justify-between	">
+                            <div className="text-cbs-primary bg-cbs-sub-primary rounded p-3">Giám đốc Ban QLDA</div>
+                            <div className="flex gap-2 items-center	">
+                                <a href=""><img src={iconChat} alt="" /></a>
+                                <a href=""><img src={iconTrash} alt="" /></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Popover>
             <div className={"comment-content ml-4 flex-1"}>
                 <div className={"comment-content-wrapper"}>
                     <div className={"flex items-center justify-between"}>
@@ -315,30 +387,30 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
                                                 className={"absolute top-full bg-white left-[50%] shadow-lg rounded-md max-w-[600px] min-w-[600px] p-3 z-10"}>
                                                 <table className={"table-fixed w-full"}>
                                                     <tbody>
-                                                    <tr>
-                                                        <td className={"text-primary-gray w-1/6 text-left py-2"}>
-                                                            Từ
-                                                        </td>
-                                                        <td className={"text-left text-black py-2"}>
-                                                            {comment.author?.bizfullname}
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td className={"text-primary-gray w-1/6 text-left py-2"}>
-                                                            Tới
-                                                        </td>
-                                                        <td className={"text-left text-black py-2"}>
-                                                            {receiversFullText}
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td className={"text-primary-gray w-1/6 text-left py-2"}>
-                                                            Ngày tạo
-                                                        </td>
-                                                        <td className={"text-left text-black py-2"}>
-                                                            {moment(comment.createAt).format('HH:mm DD/MM/YYYY')} ({moment(comment.createAt).fromNow()})
-                                                        </td>
-                                                    </tr>
+                                                        <tr>
+                                                            <td className={"text-primary-gray w-1/6 text-left py-2"}>
+                                                                Từ
+                                                            </td>
+                                                            <td className={"text-left text-black py-2"}>
+                                                                {comment.author?.bizfullname}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td className={"text-primary-gray w-1/6 text-left py-2"}>
+                                                                Tới
+                                                            </td>
+                                                            <td className={"text-left text-black py-2"}>
+                                                                {receiversFullText}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td className={"text-primary-gray w-1/6 text-left py-2"}>
+                                                                Ngày tạo
+                                                            </td>
+                                                            <td className={"text-left text-black py-2"}>
+                                                                {moment(comment.createAt).format('HH:mm DD/MM/YYYY')} ({moment(comment.createAt).fromNow()})
+                                                            </td>
+                                                        </tr>
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -354,7 +426,7 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
                             {
                                 !collapseComment && (
                                     <button className={"mx-4"} onClick={() => setOpenReply(!openReply)}>
-                                        <img src={iconReply} alt={"----"} className="h-[18px] w-[18px]"/>
+                                        <img src={iconReply} alt={"----"} className="h-[18px] w-[18px]" />
                                     </button>
                                 )
                             }
