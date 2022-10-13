@@ -80,7 +80,10 @@ export const SendToMultiSelected:FC<Props> = ({ projectId, selectedUser, setSele
                         setSelectedUser([...selectedUser,item])
                     }}
                     onClearData={() => setSelectedUser([])}
-                    onMultipleRemoveValue={id => setSelectedUser(selectedUser.filter(user => user.id !== id))}
+                    onMultipleRemoveValue={id => {
+                        const newSelectedUser = selectedUser.filter(user => user.value !== id);
+                        setSelectedUser(newSelectedUser);
+                    }}
                 />
             }
         </>

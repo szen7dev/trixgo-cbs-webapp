@@ -307,7 +307,7 @@ const PcmDetailTaskV2: FC = () => {
                     <TaskDetailRelatedTask task={taskInfo} userId={user?._id} refetchInfo={refetchInfo} />
                     <TaskDetailEvaluate task={taskInfo} userId={user?._id} refetchInfo={refetchInfo} />
                     {
-                        taskInfo?.linksDocs?.length && <TaskDetailAddCV task={taskInfo} userId={user?._id} refetchInfo={refetchInfo}/>
+                        taskInfo?.linksDocs?.length ? <TaskDetailAddCV task={taskInfo} userId={user?._id} refetchInfo={refetchInfo}/> : <></>
                     }
                     {/* <TaskDetailAddCV task={taskInfo} userId={user?._id} refetchInfo={refetchInfo}/> */}
                 </div>
