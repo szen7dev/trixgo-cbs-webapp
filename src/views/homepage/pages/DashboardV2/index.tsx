@@ -1213,14 +1213,14 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
 
         </div>
         <div className={"header-table flex px-4 w-full top-0 bg-white pb-4"}>
-          <div className={"flex items-center justify-center mr-2"}>
+          {/* <div className={"flex items-center justify-center mr-2"}>
             <input
               className="form-check-input"
               type="checkbox"
               value=""
               id="checkAll"
             />
-          </div>
+          </div> */}
           <button
             onClick={() => setFilter("all")}
             className={
@@ -1332,16 +1332,16 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                       key={index}
                       className={"read border-b-0.5 border-primary-border hover:shadow-md hover:z-2 hover:relative"}
                     >
-                      <td className={"w-[46px]"}>
+                      <td className={"w-[15px]"}>
                         <div
                           className={"flex items-center justify-center py-2"}
                         >
-                          <input
+                          {/* <input
                             className="form-check-input"
                             type="checkbox"
                             value=""
                             id="check"
-                          />
+                          /> */}
                         </div>
                       </td>
                       <td className={"w-[55px]"}>
@@ -1420,16 +1420,16 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                       key={index}
                       className={checkActive(item.news, `${user?._id}`)}
                     >
-                      <td className={"w-[46px]"}>
+                      <td className={"w-[15px]"}>
                         <div
                           className={"flex items-center justify-center py-2"}
                         >
-                          <input
+                          {/* <input
                             className="form-check-input"
                             type="checkbox"
                             value=""
                             id="check"
-                          />
+                          /> */}
                         </div>
                       </td>
                       <td className={"w-[55px]"}>

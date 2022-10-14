@@ -74,25 +74,25 @@ export const TaskDetailSignature: FC<Props> = ({ task }) => {
                             <div>
                                 <div className="border-b-0.5 border-cbs-border	 flex gap-5 p-3 ">
                                     <div>
-                                        <img alt={"----"} src={taskUserAvt} className={" rounded-full overflow-hidden h-[60px] w-[60px] min-h-[36px] min-w-[36px] max-h-[60px] max-w-[60px] mx-1"}
-                                        />
+                                        <img alt={"----"} src={task?.author?.image ? `${process.env.REACT_APP_URL_S3_USER}/${task?.author?.image}` : taskUserAvt} className={" rounded-full overflow-hidden h-[60px] w-[60px] min-h-[36px] min-w-[36px] max-h-[60px] max-w-[60px] mx-1"} />
                                     </div>
                                     <div>
-                                        <div className="text-lg	">Nguyễn Văn Quang-TRX</div>
-                                        <div className="text-primary-gray">quangnv@trx.com</div>
-                                        <div className="text-primary-gray">0988226333</div>
+                                        <div className="text-lg	">{task?.author?.fullname}</div>
+                                        <div className="text-primary-gray">{task?.author?.email}</div>
+                                        <div className="text-primary-gray">{task?.author?.phone}</div>
                                     </div>
                                 </div>
                                 <div className="flex py-2 px-3 items-center	justify-between	">
-                                    <div className="text-cbs-primary bg-cbs-sub-primary rounded p-3">Giám đốc Ban QLDA</div>
+                                    <div className="text-cbs-primary bg-cbs-sub-primary rounded p-3">{task?.author?.position?.name}</div>
                                     <div className="flex gap-2 items-center	">
-                                        <a href=""><img src={iconChat} alt="" /></a>
-                                        <a href=""><img src={iconTrash} alt="" /></a>
+                                        {/* <a href=""><img src={iconChat} alt="" /></a>
+                                            <a href=""><img src={iconTrash} alt="" /></a> */}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </Popover>
+
                     {/* <div className={"user-sign flex items-center mb-2"}>
                         <img alt={"----"} src={taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px]"} />
                         <div className={"flex-1 ml-2"}>
