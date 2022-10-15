@@ -157,7 +157,7 @@ const PcmRepository = {
     async listPcmPlanGroup(payload: any): Promise<any> {
         const { data } = await API.get<any>(
             `${pcmURL}/pcm_plan_groups?${convertObToUrl({
-                select: "name sign members userUpdate amountTasks contract",
+                // select: "name sign members userUpdate amountTasks contract",
                 limit: 20,
                 ...payload,
             })}`

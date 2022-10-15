@@ -150,6 +150,7 @@ export interface updateTaskPayload {
   milestone?: number;
   isAddSignature?: boolean;
   isOpenBidding?: boolean;
+  relatedRemoves?: Array<string>;
   flags?: Array<string>;
   flagsRemoves?: Array<string>;
   authorAttachs?: Array<string>;

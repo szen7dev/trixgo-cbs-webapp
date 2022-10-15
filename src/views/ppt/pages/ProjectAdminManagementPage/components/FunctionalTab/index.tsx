@@ -53,7 +53,7 @@ const FunctionalTab: FC = () => {
 		isShowAll: "1",
 		keyword,
 		populates: JSON.stringify({
-			path: 'contract image',
+			path: 'contract image parent',
 			select: '_id name sign path'
 		})
 	}, true, false);
@@ -168,7 +168,7 @@ const FunctionalTab: FC = () => {
 											openModal(
 												<div
 													className={
-														"inline-block w-[521px] h-[360px] my-8 text-left align-middle transition-all transform bg-primary-light shadow-xl"
+														"inline-block w-[521px] h-[400px] my-8 text-left align-middle transition-all transform bg-primary-light shadow-xl"
 													}
 												>
 													<UpdateGroup

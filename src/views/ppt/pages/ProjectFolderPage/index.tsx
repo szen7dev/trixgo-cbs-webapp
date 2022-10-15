@@ -15,15 +15,16 @@ import { usePcmProject } from "services/hooks/pcm/usePcmProject";
 import { useTask } from "services/hooks/useTask";
 import moment from "moment";
 import { useAuth } from "services/hooks/auth/useAuth";
-import { useHistoryTraffics } from "services/hooks/auth/useAuth";
-import { Paginate, SearchInput } from "shareComponents/common";
-import debounce from "lodash/debounce";
+// import { useHistoryTraffics } from "services/hooks/auth/useAuth";
+// import { Paginate, SearchInput } from "shareComponents/common";
+// import debounce from "lodash/debounce";
 import nextIcon from "assets/images/icons-arrow-next.svg";
 import downloadIcon from "assets/images/icons8-download-64.svg";
 import iconBack from "assets/images/icon-back-gray.svg";
-import userAvt from "assets/images/task-user.svg";
+// import userAvt from "assets/images/task-user.svg";
 import iconFolder from "assets/images/icons8-folder-96 4.svg";
 import iconAddNew from "assets/images/Frame 4048.svg";
+import { ModalAddNewTask } from "shareComponents/common";
 
 interface IData {
 	id: number,
@@ -74,23 +75,23 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 	//_____End history traffict
 	const history = useHistory();
 	const location = useLocation();
-	const [data, setData] = useState<IData[]>([]);
+	// const [data, setData] = useState<IData[]>([]);
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const { openModal } = useModal();
 	const { id: projectID, groupID } = useParams<{ id: string, groupID: string }>();
 	const { infoDepartment } = usePcmProject({ departmentID: projectID });
-	const { assigned, checkboxRef, handleCheckAll, handleChangeCheckbox } = useCheckedList(data);
+	// const { assigned, checkboxRef, handleCheckAll, handleChangeCheckbox } = useCheckedList(data);
 	const { dataUserInfo, refetchDataUserInfo, user } = useAuth();
 	const [keyword, setKeyword] = useState("");
 
 	const {
-		isLoading,
-		refetch,
+		// isLoading,
+		// refetch,
 		data: listPcmPlanGroup,
 		fetchNextPage,
 		hasNextPage,
 		totalRecord,
-		totalPage,
+		// totalPage,
 		// refetchInfoGroup
 	} = usePcmPlanGroup({
 		projectID,
@@ -108,10 +109,10 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 	} = usePcmPlanGroup({
 		groupID,
 		populates: JSON.stringify({
-			path: "parent",
-			select: "parent sign",
+			path: "parent project",
+			select: "parent sign name company",
 			populate: {
-				path: "parent",
+				path: "parent company",
 				select: "parent sign"
 			}
 		})
@@ -188,7 +189,22 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 							<span className="truncate max-w-[132px]">{infoGroup?.data?.parent?.parent?.sign}</span>
 						</div>
 					</Link>
-					<button className={"ml-6"}>
+					<button
+						className={"ml-6"}
+						onClick={() =>
+							openModal(
+								<div className="t-add-new-task-dialog text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
+									<ModalAddNewTask
+										defaultValues={{
+											group: infoGroup?.data,
+											project: infoGroup?.data?.project,
+											company: infoGroup?.data?.project?.company,
+										}}
+									/>
+								</div>
+							)
+						}
+					>
 						<img src={iconAddNew} alt={"-----"} className={"h-[24px] w-[24px]"}/>
 					</button>
 					<button className={"ml-6"}>

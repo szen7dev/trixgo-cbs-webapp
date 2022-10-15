@@ -60,7 +60,11 @@ interface InitialValues {
   expiredHour: string
 }
 
-export const ModalAddNewTask: FC = () => {
+type Props = {
+  defaultValues?: any;
+}
+
+export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
   const history = useHistory();
   const { closeModal } = useModal();
   const editorRef = useRef<EditorType>();
@@ -73,9 +77,9 @@ export const ModalAddNewTask: FC = () => {
   const [searchFriendName, setSearchFriendName] = useState("");
   const [searchGroupName, setSearchGroupName] = useState("");
   const [searchContract, setSearchContract] = useState("");
-  const [companyID, setCompanyID] = useState("");
-  const [projectID, setProjectID] = useState("");
-  const [groupID, setGroupID] = useState("");
+  const [companyID, setCompanyID] = useState(defaultValues?.company?._id || "");
+  const [projectID, setProjectID] = useState(defaultValues?.project?._id || "");
+  const [groupID, setGroupID] = useState(defaultValues?.group?._id || "");
   const [isNotiEmail, setIsNotiEmail] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
 
@@ -347,7 +351,7 @@ export const ModalAddNewTask: FC = () => {
   });
 
   const initialValues: InitialValues = {
-    projectID: "",
+    projectID,
     groupID,
     fieldID: "",
     assigneeID: "",
@@ -432,6 +436,10 @@ export const ModalAddNewTask: FC = () => {
                             value: department._id,
                             companyId: department.company?._id,
                           }))}
+                          initialValue={{
+                            value: defaultValues.project?._id,
+                            label: defaultValues.project?.name,
+                          }}
                           formatItem={{
                             id: "value",
                             text: "label",
@@ -482,6 +490,10 @@ export const ModalAddNewTask: FC = () => {
                             label: `${groupItem.sign}.${groupItem.name}`,
                             value: groupItem._id,
                           }))}
+                          initialValue={{
+                            value: defaultValues.group?._id,
+                            label: defaultValues.group?.name,
+                          }}
                           formatItem={{
                             id: "value",
                             text: "label",
