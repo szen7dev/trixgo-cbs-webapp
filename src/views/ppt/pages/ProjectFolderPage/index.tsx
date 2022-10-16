@@ -305,7 +305,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 											<td className="px-2 py-2">
 												<Link to={`/pm/project/${projectID}/folder/${props._id}`} className="align-top">
 													<FolderIcon type="folder" />
-													{props.name} ({props.amountTasks})  {isGroupDefault && <img src={GroupDefaultIcon} alt="file" className="inline-block mr-3" title="Group default" />}
+													{props.name} {isGroupDefault && <img src={GroupDefaultIcon} alt="file" className="inline-block mr-3" title="Group default" />}
 												</Link>
 											</td>
 											<td className="py-2 px-2"></td>

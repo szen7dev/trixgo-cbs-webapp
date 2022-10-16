@@ -263,7 +263,7 @@ export const ContractPaymentModal: FC<NewContractIPCModalProps> = ({ defaultValu
                    Giá trị giải ngân
                   </span>
                 </div>
-                {openRealizedOutput && (
+                {/* {openRealizedOutput && (
                   <div className="flex items-center justify-end">
                     <div className="flex items-center">
                       <p className="text-primary-gray text-xs mr-5">
@@ -276,7 +276,7 @@ export const ContractPaymentModal: FC<NewContractIPCModalProps> = ({ defaultValu
                       />
                     </div>
                   </div>
-                )}
+                )} */}
               </div>
               {openRealizedOutput && (
                 <div className="mb-8 h-full mx-7 w-2/3">
@@ -294,7 +294,7 @@ export const ContractPaymentModal: FC<NewContractIPCModalProps> = ({ defaultValu
                           await setFieldValue("value", e.currentTarget.value);
                         }}
                       />
-                      <Field
+                      {/* <Field
                         type="number"
                         name="valueUsd"
                         className="pl-3 border border-primary-border rounded w-2/5 h-[32px] outline-none"
@@ -302,7 +302,7 @@ export const ContractPaymentModal: FC<NewContractIPCModalProps> = ({ defaultValu
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
                 </div>
