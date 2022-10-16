@@ -30,7 +30,6 @@ const useStyles = makeStyles({
 });
 
 export const TaskDetailMember: FC<Props> = ({ task, user, refetchInfo }) => {
-
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -125,25 +124,6 @@ export const TaskDetailMember: FC<Props> = ({ task, user, refetchInfo }) => {
                                     />
                                 ))}
 
-                                <ModalLarge
-                                    show={isShowModalUsersRelated}
-                                    toggle={toggleModal}
-                                    className="inline-flex flex-col text-black w-[500px] my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[600px] rounded-cbs-md">
-                                    {!!task.related?.length && task.related.slice(0, 10).map(item => (
-                                        (task.viewedUsers?.map(vuser => vuser._id).includes?.(item._id)) ? <img title={item.bizfullname + " - Đã truy cập công việc"} key={item._id} alt={"----"} src={item?.image ? `${process.env.REACT_APP_URL_S3_USER}/${item?.image}` : taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1 border-0.5 border-primary-border border-2 border-pink-600"}
-                                            aria-owns={open ? "mouse-over-popover" : undefined}
-                                            aria-haspopup="true"
-                                            onMouseEnter={handlePopoverOpen}
-                                            onMouseLeave={handlePopoverClose}
-                                        /> : <img title={item.bizfullname} key={item._id} alt={"----"} src={item?.image ? `${process.env.REACT_APP_URL_S3_USER}/${item?.image}` : taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1 border-0.5 border-primary-border"}
-                                            aria-owns={open ? "mouse-over-popover" : undefined}
-                                            aria-haspopup="true"
-                                            onMouseEnter={handlePopoverOpen}
-                                            onMouseLeave={handlePopoverClose}
-                                        />
-                                    ))}
-                                </ModalLarge>
-
                                 {/* <img alt={"----"} src={taskUserAvt} className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1"} /> */}
 
                                 <ModalLarge
@@ -151,18 +131,23 @@ export const TaskDetailMember: FC<Props> = ({ task, user, refetchInfo }) => {
                                     toggle={toggleModal}
                                     className="inline-flex flex-col text-black w-[500px] my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[600px] rounded-cbs-md"
                                 >
-                                    <ModalViewUsersRelated task={task} toggle={toggleModal} />
+                                    <ModalViewUsersRelated
+                                        task={task}
+                                        currentUserID={user?._id}
+                                        toggle={toggleModal}
+                                        refetchInfo={refetchInfo}
+                                    />
                                 </ModalLarge>
 
-                                {task.related?.length > 16 && (
+                                {task.related?.length > 11 && (
                                     <div className={"rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1 bg-cbs-form-input-bg border-0.5 border-primary-border flex items-center justify-center text-primary-gray"}>
-                                        {task.related?.length - 15}+
+                                        {task.related?.length - 10}+
                                     </div>
                                 )}
                                 {/* <button className={"text-xl rounded-full overflow-hidden h-[36px] w-[36px] min-h-[36px] min-w-[36px] max-h-[36px] max-w-[36px] mx-1 bg-cbs-form-input-bg border-0.5 border-primary-border flex items-center justify-center text-primary-gray"}>
                                 +
                             </button> */}
-                            </div>
+                        </div>
                     }
                 </div>
                 {/* popover */}
@@ -198,8 +183,8 @@ export const TaskDetailMember: FC<Props> = ({ task, user, refetchInfo }) => {
                             <div className="flex py-2 px-3 items-center	justify-between	">
                                 <div className="text-cbs-primary bg-cbs-sub-primary rounded p-3">{task?.author?.position?.name}</div>
                                 <div className="flex gap-2 items-center	">
-                                    {/* <a href=""><img src={iconChat} alt="" /></a>
-                                            <a href=""><img src={iconTrash} alt="" /></a> */}
+                                    <a href=""><img src={iconChat} alt="" /></a>
+                                    <a href=""><img src={iconTrash} alt="" /></a>
                                 </div>
                             </div>
                         </div>

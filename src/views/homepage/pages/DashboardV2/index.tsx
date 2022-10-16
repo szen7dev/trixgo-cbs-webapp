@@ -1634,7 +1634,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
         )}
       </div>
       {/* popover */}
-      <Popover
+      {/* <Popover
         id="mouse-over-popover"
         sx={{
           pointerEvents: "none"
@@ -1673,7 +1673,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
             </div>
           </div>
         </div>
-      </Popover>
+      </Popover> */}
       <UpdateStatusDialog
         showUpdateStatus={showUpdateStatus}
         setShowUpdateStatus={setShowUpdateStatus}

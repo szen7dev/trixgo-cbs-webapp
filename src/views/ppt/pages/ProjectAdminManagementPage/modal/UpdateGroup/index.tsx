@@ -18,12 +18,12 @@ type Props = {
 
 const UpdateGroup: FC<Props> = ({ item, projectID, onConfirm }) => {
     const [keyword, setKeyword] = useState('');
+    const [keywordGroupParent, setKeywordGroupParent] = useState('');
     const [formData, setFormData] = useState({
         name: item.name,
         sign: item.sign
     })
 
-    const { updatePcmPlanGroupMutateAsync } = usePcmPlanGroup({});
     const {
         listContracts,
         hasNextPage,
@@ -33,6 +33,17 @@ const UpdateGroup: FC<Props> = ({ item, projectID, onConfirm }) => {
         isFetch: !!projectID
     })
 
+    const {
+        data: listPcmPlanGroup,
+        fetchNextPage: fetchNextPagePcmPlanGroup,
+        hasNextPage: hasNextPagePcmPlanGroup,
+		updatePcmPlanGroupMutateAsync
+    } = usePcmPlanGroup({
+		projectID,
+		isShowAll: "1",
+		keyword: keywordGroupParent,
+	}, true, false);
+
     const { closeModal } = useModal();
 
     const handleScroll = (e: UIEvent<HTMLDivElement>) => {
@@ -41,6 +52,14 @@ const UpdateGroup: FC<Props> = ({ item, projectID, onConfirm }) => {
         if (!bottom || !hasNextPage) return;
 
         fetchNextPage();
+    }
+
+    const handleScrollGroupParent = (e: UIEvent<HTMLDivElement>) => {
+        const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
+        const bottom = scrollHeight - scrollTop >= clientHeight - 10;
+        if (!bottom || !hasNextPagePcmPlanGroup) return;
+
+        fetchNextPagePcmPlanGroup();
     }
 
     const onChangeInput = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -136,8 +155,53 @@ const UpdateGroup: FC<Props> = ({ item, projectID, onConfirm }) => {
                         value: contract._id,
                     }))}
                     initialValue={{
-                        label: `${item.contract?.sign}.${item.contract?.name}`,
-                        value: item.contract?._id
+                        ...item.contract && ({
+                            label: `${item.contract?.sign}.${item.contract?.name}`,
+                            value: item.contract?._id
+                        })
+                    }}
+                    formatItem={{
+                        id: "value",
+                        text: "label",
+                    }}
+                    inlineSearch={true}
+                />
+
+                <DropdownSearchable
+                    onchangeValue={(value: any) => {
+                        setFormData(previous => ({
+                            ...previous,
+                            parentID: value?.id
+                        }))
+                    }}
+                    onClearData={() => {
+                        setFormData(previous => ({
+                            ...previous,
+                            parentID: ""
+                        }))
+                    }}
+                    onSearchInputChange={debounce((value: any) => setKeywordGroupParent(value), 600)}
+                    onScroll={handleScrollGroupParent}
+                    className="w-full mt-2 rounded-md border border-primary-border px-1 py-1 placeholder-primary-gray bg-cbs-table-header"
+                    placeholder="Tìm kiếm nhóm thư mục cha"
+                    isMultiple={false}
+                    allowClearValueSingleInput={true}
+                    showTriangle={false}
+                    maxWidthInput="max-w-full"
+                    renderSelectedItem={(item: any) => (
+                        <div className="max-w-full">
+                            <p className={"truncate"}>{item.text}</p>
+                        </div>
+                    )}
+                    data={listPcmPlanGroup.map((group: any) => ({
+                        label: `${group.sign}.${group.name}`,
+                        value: group._id,
+                    }))}
+                    initialValue={{
+                        ...item.parent && ({
+                            label: `${item.parent?.sign}.${item.parent?.name}`,
+                            value: item.parent?._id
+                        })
                     }}
                     formatItem={{
                         id: "value",

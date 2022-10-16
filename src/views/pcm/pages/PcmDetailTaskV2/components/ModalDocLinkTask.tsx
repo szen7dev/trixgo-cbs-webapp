@@ -7,6 +7,7 @@ import { DropdownSearchable } from "shareComponents/common";
 import { TOAST_DEFAULT_OPTIONS } from 'utils/constants';
 import { PCM_MILESTONE } from 'apis/localdb';
 import { useListDocument } from 'services/hooks/document/useDocument';
+import debounce from "lodash/debounce";
 
 type Props = {
 	closeModal: () => void,
@@ -18,6 +19,7 @@ type Props = {
 
 export const ModalDocLinkTask: FC<Props> = ({ taskID, projectID, linksDocs, closeModal, onConfirm }) => {
 	const [docSelected, setDocSelected] = useState('');
+	const [keyword, setKeyword] = useState('');
 
 	const { updateTaskAsync } = useTask({});
 
@@ -28,10 +30,11 @@ export const ModalDocLinkTask: FC<Props> = ({ taskID, projectID, linksDocs, clos
 		fetchNextPageDocument
 	} = useListDocument({
         params: {
-            // departmentID: projectID,
+            departmentID: projectID,
+			keyword,
             limit: "20",
         },
-        isFetchList: !!projectID
+        isFetchList: true
     });
 
 	const handleConfirm = async () => {
@@ -67,11 +70,10 @@ export const ModalDocLinkTask: FC<Props> = ({ taskID, projectID, linksDocs, clos
 		}
 	}
 
-	if(!isLoading && (!listDocument || !listDocument.length)) {
-		return <></>
-	}
+	// if(!isLoading && (!listDocument || !listDocument.length)) {
+	// 	return <></>
+	// }
 	console.log({ listDocument })
-
 	return (
 		<div>
 			<div className="flex items-center px-6 py-2.5 justify-between">
@@ -107,6 +109,7 @@ export const ModalDocLinkTask: FC<Props> = ({ taskID, projectID, linksDocs, clos
 					{!!listDocument?.length && (
 						<DropdownSearchable
 							onchangeValue={(item: any) => setDocSelected(item.value)}
+							onSearchInputChange={debounce((value) => setKeyword(value), 1000)}
 							onClearData={() => setDocSelected('')}
 							className={"w-full flex-1 focus:outline-none bg-cbs-table-header"}
 							placeholder="Hồ sơ văn bản"
@@ -114,7 +117,7 @@ export const ModalDocLinkTask: FC<Props> = ({ taskID, projectID, linksDocs, clos
 							allowClearValueSingleInput={false}
 							showTriangle={true}
 							maxWidthInput="max-w-none"
-							onScroll={handleScroll}
+							// onScroll={handleScroll}
 							data={listDocument?.map((doc: any) => ({
 								value: doc._id,
 								label: doc.name
@@ -125,7 +128,28 @@ export const ModalDocLinkTask: FC<Props> = ({ taskID, projectID, linksDocs, clos
 							}}
 							inlineSearch={true}
 						/>
-					)}
+					) || 
+					<DropdownSearchable
+						onchangeValue={(item: any) => setDocSelected(item.value)}
+						onSearchInputChange={debounce((value) => setKeyword(value), 1000)}
+						onClearData={() => setDocSelected('')}
+						className={"w-full flex-1 focus:outline-none bg-cbs-table-header"}
+						placeholder="Hồ sơ văn bản"
+						isMultiple={false}
+						allowClearValueSingleInput={false}
+						showTriangle={true}
+						maxWidthInput="max-w-none"
+						// onScroll={handleScroll}
+						data={[{
+							value: "",
+							label: "Không tìm thấy kết quả"
+						}]}
+						formatItem={{
+							id: "value",
+							text: "label",
+						}}
+						inlineSearch={true}
+					/>}
 				</div>
 				<div className="flex justify-end py-3">
 					<div>
