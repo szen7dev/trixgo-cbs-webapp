@@ -28,7 +28,7 @@ async function fetchListDocumentChild(params : any) {
         params: {
             select: 'name sign author project parent',
             populates: {
-                "path": "author sender storage",
+                "path": "author sender storage publish",
                 "select": "fullname bizfullname sign image name"
             },
             ...params,

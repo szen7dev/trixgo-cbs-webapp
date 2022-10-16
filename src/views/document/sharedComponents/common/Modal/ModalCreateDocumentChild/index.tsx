@@ -18,6 +18,7 @@ import { useQueryContact } from "services/hooks/items/useContact";
 import { useQueryListDoctype } from "services/hooks/items/useDoctype";
 import { useStorage } from "services/hooks/items/useStorage";
 import { useQueryItemContract } from "services/hooks/items/useContract";
+import { useQueryListCompany } from "services/hooks/useCompanies";
 import { DIRECTION_TYPES, DOCUMENT_TYPES, DOCUMENT_TYPES_SORT } from "apis/localdb";
 import { Document } from "typings/ppt";
 import { useMutationDocumentChild }  from "services/hooks/document/useDocumentChild"
@@ -72,8 +73,8 @@ const useInitialValues = (
 	const { listContact: listContactSender } = useQueryContact({ companyID, keyword: keywordSender });
 	const { listContact: listContactReceiver } = useQueryContact({ companyID, keyword: keywordReceiver });
 	// const { listDoctypes: fields } = useQueryListDoctype({ type: 1, companyID, keyword: keywordFields }); // lĩnh vực
-	const { data: listDatahubContact } = useDatahubContact({ keyword: keywordDatahubContact }, true, false); // Danh bạ hệ thống
-
+	// const { data: listDatahubContact } = useDatahubContact({ keyword: keywordDatahubContact }, true, false); // Danh bạ hệ thống
+	const { data: listDatahubContact } = useQueryListCompany({ keyword: keywordDatahubContact }); // Danh bạ hệ thống mới
 	const { listDoctypes: properties } = useQueryListDoctype({
 		keyword: keywordProperty,
 		type: 2,
@@ -243,7 +244,7 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 		}
 
 		if(values.field){
-			formatValues.datahubContactID = values.field;
+			formatValues.publishID = values.field;
 		}
 		if(!formatValues.package)
 			return toast.warning("Vui lòng chọn gói thầu")

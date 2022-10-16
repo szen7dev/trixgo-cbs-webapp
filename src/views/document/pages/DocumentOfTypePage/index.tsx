@@ -327,7 +327,7 @@ export const DocumentOfTypePage: FC = () => {
                         </Link>
                       </td>
                       <td className="py-2.5 border-b border-cbs-border px-2 w-[150px]">
-                        {document?.datahubContact?.name}
+                        {document?.publish?.name}
                       </td>
                       <td className="py-2.5 border-b border-cbs-border px-2 w-[166px]">
                         {document.sign}

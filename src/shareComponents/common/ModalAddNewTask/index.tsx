@@ -358,7 +358,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
     name: "",
     startTime: moment().format('MM/DD/YYYY'),
     expiredTime: moment().format('MM/DD/YYYY'),
-    expiredHour: "00:00",
+    expiredHour: "09:00",
     description: "",
     authorAttachs: [],
     type: 1,
