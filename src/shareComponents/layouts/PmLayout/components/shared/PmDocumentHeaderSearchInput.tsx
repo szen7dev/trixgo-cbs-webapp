@@ -69,7 +69,7 @@ export const PmDocumentHeaderSearchInput: FC = () => {
                     onKeyDown={onKeyDown}
                     ref={inputRef}
                     onChange={e => handleSearchChange(e)}
-                    className={"pl-12 w-full h-[45px] bg-cbs-bg-input-search rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-none focus:bg-white focus:shadow-md transition-all"} placeholder={"Tìm kiếm hồ sơ"} />
+                    className={"pl-12 w-full h-[45px] bg-cbs-bg-input-search border-0.5 border-cbs-border rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-none focus:bg-white focus:shadow-md transition-all"} placeholder={"Tìm kiếm hồ sơ"} />
 
                 {
                     showResult &&

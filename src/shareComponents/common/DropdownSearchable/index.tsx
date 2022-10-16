@@ -381,13 +381,13 @@ export const DropdownSearchable = forwardRef<DropdownSearchableHandle, Props>(({
         {renderSelectedItem
           ? renderSelectedItem(modifyItem(value))
           : readDataValue(value, "text")}
-        {/* <div
+        <div
           className={
             "absolute inset-y-0 right-0 flex items-center justify-center pr-2"
           }
         >
           <Close onClick={() => handleRemoveItemSingle()} />
-        </div> */}
+        </div>
       </div>
     );
   };
@@ -477,6 +477,12 @@ export const DropdownSearchable = forwardRef<DropdownSearchableHandle, Props>(({
   const disabledClass = disabled
     ? `cursor-not-allowed ${disableClassCustom}`
     : "";
+
+  const [isShow, setIsShow] = useState(false);
+
+  const handleClickShowList = (event: React.MouseEvent<HTMLElement>) => {
+    setIsShow(current => !current);
+  };
   return (
     <div
       ref={wrapperRef}
@@ -513,12 +519,18 @@ export const DropdownSearchable = forwardRef<DropdownSearchableHandle, Props>(({
             <img src={iconBack} alt="" />
             <div className="ml-4 text-cbs-subtext">01-TRIXGO</div>
           </div>
-          <div className="select-options-section overflow-y-auto bg-white" onScroll={onScroll}>
-            <div className="truncate flex p-4 hover:bg-cbs-gray">
+          <div className="select-options-section overflow-y-auto bg-white h-[350px]" onScroll={onScroll}>
+            <button className="truncate flex p-4 hover:bg-cbs-gray w-full" onClick={handleClickShowList}>
               <img src={iconFolder} alt="" />
               <div className="ml-4">CHG.THT.QLDA.TT.Thanh toán</div>
+            </button>
+            <div className={isShow ? 'hiden' : 'block'}>
+              {showOption ? (
+                <div>
+                  {renderOptions()}
+                </div>
+              ) : null}
             </div>
-            {renderOptions()}
           </div>
           <div className="absolute bottom-0 p-3 text-right w-full bg-white border-t-0.5 border-cbs-border">
             <button className="bg-primary text-white py-2 px-[20px] rounded">Chọn</button>
