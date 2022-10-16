@@ -30,13 +30,13 @@ export const DocumenDatahubContactPage: FC = () => {
 					{data?.map((elm: any, i) => {
 						const formatData = {
 							...elm,
-							name: elm.datahubContact.name,
+							name: elm.publish.name,
 						};
 						let linkRef;
 						if(location.pathname.includes("/document/project/")){
-							linkRef = `/document/project/${params.id}/document/1/datahubContact/${formatData.datahubContact._id}`
+							linkRef = `/document/project/${params.id}/document/1/datahubContact/${formatData.publish._id}`
 						}else{
-							linkRef = `/pm/project/${params.id}/document/1/datahubContact/${formatData.datahubContact._id}`
+							linkRef = `/pm/project/${params.id}/document/1/datahubContact/${formatData.publish._id}`
 						}
 						return (
 							<Link className="document__card-container" key={i} to={linkRef}>

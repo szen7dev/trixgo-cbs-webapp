@@ -50,6 +50,7 @@ import {useDispatch} from "react-redux";
 import {useAppSelector} from "redux/reducer";
 import {setFilterDropdown, resetAllFilterAndKeyword} from "redux/reducer/DocumentProjectSlice";
 import { PmDocumentHeaderSearchInput } from "shareComponents/layouts/PmLayout/components";
+import { useQueryListCompany } from "services/hooks/useCompanies";
 
 const payloadHistoryTraffic: any = {
     appID: APP_ID.PCM.id,
@@ -95,7 +96,7 @@ export const DocumentProjectPage: FC = () => {
 
     useEffect(() => {
         document.title = `${projectInfo.sign} | Hồ sơ văn bản`;
-    }, []);
+    }, [projectInfo]);
 
     //_____Start history traffict
     const { createHistoryTraffics } = useHistoryTraffics();
@@ -122,7 +123,9 @@ export const DocumentProjectPage: FC = () => {
     const [storageKeyword, setStorageKeyword] = useState("");
     const [storagesID, setStoragesID] = useState<string[]>([]);
 
-    const { data: listDatahubContact } = useDatahubContact({ keyword: keywordDatahubContact }, true, false); // Danh bạ hệ thống
+    // const { data: listDatahubContact } = useDatahubContact({ keyword: keywordDatahubContact }, true, false); // Danh bạ hệ thống
+	const { data: listDatahubContact } = useQueryListCompany({ keyword: keywordDatahubContact }); // Danh bạ hệ thống mới
+
     const { listContracts } = useContractIsMembers({ params: {keyword: contractKeyword, populates: JSON.stringify({"path": "project", "select":"name sign"})}, isFetch: true });
     const { list: listStorages } = useStorage({ params: { companyID: typeof projectInfo.company === "string" ? projectInfo.company : "", keyword: storageKeyword,}, isFetchList: (!isloadingProjectInfo && typeof projectInfo._id === "string")});
 
