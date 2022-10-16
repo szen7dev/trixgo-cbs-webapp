@@ -24,5 +24,7 @@
   "include": [
     "src"
   ],
-	"files": ["src/typings/react-table-config.d.ts"]
+  "files": [
+    "src/typings/react-table-config.d.ts"
+  ]
 }
