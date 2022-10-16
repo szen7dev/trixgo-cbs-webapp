@@ -233,7 +233,7 @@ const PcmPrintTaskTypeFour: FC = () => {
                           </div>
                           <div className="mt-2.5">
                             <div
-                                className="min-h-[300px]"
+                                className=""
                                 dangerouslySetInnerHTML={{
                                   __html: taskInfo?.description?.replace(/\n/g, '<br />')
                                 }}
@@ -345,7 +345,7 @@ const PcmPrintTaskTypeFour: FC = () => {
                         </tr>
                         <tr>
                           <td className={"border-0.5 border-primary-border w-[40px] p-2 text-center"}>
-                            2
+                            
                           </td>
                           <td className={"border-0.5 border-primary-border p-2"}>
                             <PcmPrintTaskComment/>
@@ -357,7 +357,7 @@ const PcmPrintTaskTypeFour: FC = () => {
                         </tr>
                         <tr>
                           <td className={"border-0.5 border-primary-border w-[40px] p-2 text-center"}>
-                            3
+                            2
                           </td>
                           <td className={"border-0.5 border-primary-border p-2"}>
                             Cán bộ thanh toán kiểm tra hồ sơ thanh toán đợt 9 (Tư vấn B.I.M đợt 4)
@@ -373,7 +373,7 @@ const PcmPrintTaskTypeFour: FC = () => {
                         </tr>
                         <tr>
                           <td className={"border-0.5 border-primary-border w-[40px] p-2 text-center"}>
-                            4
+                           3
                           </td>
                           <td className={"border-0.5 border-primary-border p-2"}>
                             Cán bộ thanh toán kiểm tra hồ sơ thanh toán đợt 9 (Tư vấn B.I.M đợt 4)
@@ -448,7 +448,7 @@ const PcmPrintTaskTypeFour: FC = () => {
                     </section>
 
                     {/* Thảo luận */}
-                    <section>
+                    {/* <section>
                       <div className="font-bold">
                         <span>THẢO LUẬN</span>
                       </div>
@@ -471,7 +471,7 @@ const PcmPrintTaskTypeFour: FC = () => {
                             }}
                         />
                       </div>
-                    </section>
+                    </section> */}
                   </main>
                 </td>
               </tr>

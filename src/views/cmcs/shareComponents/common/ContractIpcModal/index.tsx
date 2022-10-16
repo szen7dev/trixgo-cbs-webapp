@@ -273,10 +273,10 @@ export const ContractIpcModal: FC<NewContractIPCModalProps> = ({ defaultValues, 
                     />
                   </div>
                   <span className="text-xl font-bold">
-                    Nghiệm thu hoàn thành (VND & USD)
+                    Nghiệm thu hoàn thành
                   </span>
                 </div>
-                {openRealizedOutput && (
+                {/* {openRealizedOutput && (
                   <div className="flex items-center justify-end">
                     <div className="flex items-center">
                       <p className="text-primary-gray text-xs mr-5">
@@ -289,7 +289,7 @@ export const ContractIpcModal: FC<NewContractIPCModalProps> = ({ defaultValues, 
                       />
                     </div>
                   </div>
-                )}
+                )} */}
               </div>
               {openRealizedOutput && (
                 <div className="mb-8 h-full mx-7 w-2/3">
@@ -308,7 +308,7 @@ export const ContractIpcModal: FC<NewContractIPCModalProps> = ({ defaultValues, 
                           computeRecommendedPayment()
                         }}
                       />
-                      <Field
+                      {/* <Field
                         type="number"
                         name="acceptanceUsd"
                         className="pl-3 border border-primary-border rounded w-2/5 h-[32px] outline-none"
@@ -317,7 +317,7 @@ export const ContractIpcModal: FC<NewContractIPCModalProps> = ({ defaultValues, 
                           handleBlur(e)
                         }
 
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -336,7 +336,7 @@ export const ContractIpcModal: FC<NewContractIPCModalProps> = ({ defaultValues, 
                           computeRecommendedPayment()
                         }}
                       />
-                      <Field
+                      {/* <Field
                         type="number"
                         name="vatAcceptance"
                         className="pl-3 cursor-not-allowed border border-primary-border rounded w-2/5 h-[32px] outline-none"
@@ -345,7 +345,7 @@ export const ContractIpcModal: FC<NewContractIPCModalProps> = ({ defaultValues, 
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -367,7 +367,7 @@ export const ContractIpcModal: FC<NewContractIPCModalProps> = ({ defaultValues, 
                           computeRecommendedPayment()
                         }}
                       />
-                      <Field
+                      {/* <Field
                         type="number"
                         name="plusAcceptance"
                         className="pl-3 border border-primary-border rounded w-2/5 h-[32px] outline-none"
@@ -375,7 +375,7 @@ export const ContractIpcModal: FC<NewContractIPCModalProps> = ({ defaultValues, 
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -397,7 +397,7 @@ export const ContractIpcModal: FC<NewContractIPCModalProps> = ({ defaultValues, 
                           computeRecommendedPayment()
                         }}
                       />
-                      <Field
+                      {/* <Field
                         type="number"
                         name="vatPlusAcceptance"
                         className="pl-3 border border-primary-border rounded w-2/5 h-[32px] outline-none"
@@ -405,7 +405,7 @@ export const ContractIpcModal: FC<NewContractIPCModalProps> = ({ defaultValues, 
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -427,7 +427,7 @@ export const ContractIpcModal: FC<NewContractIPCModalProps> = ({ defaultValues, 
                           computeRecommendedPayment()
                         }}
                       />
-                      <Field
+                      {/* <Field
                         type="number"
                         name="retainedValue"
                         className="pl-3 border border-primary-border rounded w-2/5 h-[32px] outline-none"
@@ -435,7 +435,7 @@ export const ContractIpcModal: FC<NewContractIPCModalProps> = ({ defaultValues, 
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -457,7 +457,7 @@ export const ContractIpcModal: FC<NewContractIPCModalProps> = ({ defaultValues, 
                           computeRecommendedPayment()
                         }}
                       />
-                      <Field
+                      {/* <Field
                         type="number"
                         name="advancePaymentDeduction"
                         className="pl-3 border border-primary-border rounded w-2/5 h-[32px] outline-none"
@@ -465,7 +465,7 @@ export const ContractIpcModal: FC<NewContractIPCModalProps> = ({ defaultValues, 
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -487,7 +487,7 @@ export const ContractIpcModal: FC<NewContractIPCModalProps> = ({ defaultValues, 
                           computeRecommendedPayment()
                         }}
                       />
-                      <Field
+                      {/* <Field
                         type="number"
                         name="otherDeduction"
                         className="pl-3 border border-primary-border rounded w-2/5 h-[32px] outline-none"
@@ -495,7 +495,7 @@ export const ContractIpcModal: FC<NewContractIPCModalProps> = ({ defaultValues, 
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -513,7 +513,7 @@ export const ContractIpcModal: FC<NewContractIPCModalProps> = ({ defaultValues, 
                           handleBlur(e)
                         }
                       />
-                      <Field
+                      {/* <Field
                         type="number"
                         name="recommendedPayment"
                         className="pl-3 border border-primary-border rounded w-2/5 h-[32px] outline-none"
@@ -521,7 +521,7 @@ export const ContractIpcModal: FC<NewContractIPCModalProps> = ({ defaultValues, 
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
                 </div>

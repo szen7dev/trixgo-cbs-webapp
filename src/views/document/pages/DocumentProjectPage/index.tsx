@@ -659,7 +659,7 @@ export const DocumentProjectPage: FC = () => {
                                         </Link>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
-                                        {document?.datahubContact?.name}
+                                        {document?.publish?.name}
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
                                         {document?.sign}

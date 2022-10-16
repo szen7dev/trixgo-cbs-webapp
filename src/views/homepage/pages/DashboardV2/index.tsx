@@ -17,6 +17,9 @@ import projectIcon from "assets/images/icons8-project-50.svg";
 import TriangleDown from "assets/icons/TriangleDown";
 import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
 import businessBuiding from "assets/images/icons8-business-building-48.svg";
+import iconChat from "assets/images/icons8-chat-96 1.svg";
+import iconTrash from "assets/images/icons8-delete-96 1.svg";
+import taskUserAvt from "assets/images/task-user.svg";
 
 import { useUserSystem } from "services/hooks/users/useUserSystem";
 import { useAuth } from "services/hooks/auth/useAuth";
@@ -44,6 +47,7 @@ import { useTask } from "services/hooks/useTask";
 import { useModal } from "services/hooks/useModal";
 import { UpdateStatusDialog } from "./UpdateStatusDialog";
 import { ModalCreateResultSearch } from "./ModalCreateResultSearch";
+import { Popover } from "@mui/material";
 
 type Props = {
   type?: number;
@@ -178,7 +182,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
   const [status, setStatus] = useState<string[]>([]);
 
   // Danh sách các subject theo keyword
-  
+
   const querySearchTask: any = {
     keyword: keywordForSubject,
     fromDate: fromExpiredDate,
@@ -286,6 +290,15 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
       </div>
     )
   }
+  // popover
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+  const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+  const open = Boolean(anchorEl);
 
   return (
     <div className="t-home flex flex-col h-full overflow-hidden">
@@ -1200,14 +1213,14 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
 
         </div>
         <div className={"header-table flex px-4 w-full top-0 bg-white pb-4"}>
-          <div className={"flex items-center justify-center mr-2"}>
+          {/* <div className={"flex items-center justify-center mr-2"}>
             <input
               className="form-check-input"
               type="checkbox"
               value=""
               id="checkAll"
             />
-          </div>
+          </div> */}
           <button
             onClick={() => setFilter("all")}
             className={
@@ -1319,16 +1332,16 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                       key={index}
                       className={"read border-b-0.5 border-primary-border hover:shadow-md hover:z-2 hover:relative"}
                     >
-                      <td className={"w-[46px]"}>
+                      <td className={"w-[15px]"}>
                         <div
                           className={"flex items-center justify-center py-2"}
                         >
-                          <input
+                          {/* <input
                             className="form-check-input"
                             type="checkbox"
                             value=""
                             id="check"
-                          />
+                          /> */}
                         </div>
                       </td>
                       <td className={"w-[55px]"}>
@@ -1344,6 +1357,10 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                               className={
                                 "w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"
                               }
+                              aria-owns={open ? "mouse-over-popover" : undefined}
+                              aria-haspopup="true"
+                              onMouseEnter={handlePopoverOpen}
+                              onMouseLeave={handlePopoverClose}
                             />
                           </div>
                         </Link>
@@ -1403,16 +1420,16 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                       key={index}
                       className={checkActive(item.news, `${user?._id}`)}
                     >
-                      <td className={"w-[46px]"}>
+                      <td className={"w-[15px]"}>
                         <div
                           className={"flex items-center justify-center py-2"}
                         >
-                          <input
+                          {/* <input
                             className="form-check-input"
                             type="checkbox"
                             value=""
                             id="check"
-                          />
+                          /> */}
                         </div>
                       </td>
                       <td className={"w-[55px]"}>
@@ -1427,6 +1444,10 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                               className={
                                 "w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"
                               }
+                              aria-owns={open ? "mouse-over-popover" : undefined}
+                              aria-haspopup="true"
+                              onMouseEnter={handlePopoverOpen}
+                              onMouseLeave={handlePopoverClose}
                             />
                           </div>
                         </Link>
@@ -1612,6 +1633,47 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           <></>
         )}
       </div>
+      {/* popover */}
+      {/* <Popover
+        id="mouse-over-popover"
+        sx={{
+          pointerEvents: "none"
+        }}
+        open={open}
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right"
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "left"
+        }}
+        PaperProps={{ onMouseEnter: handlePopoverOpen, onMouseLeave: handlePopoverClose }}
+      >
+        <div className="w-350">
+          <div>
+            <div className="border-b-0.5 border-cbs-border	 flex gap-5 p-3 ">
+              <div>
+                <img alt={"----"} src={taskUserAvt} className={" rounded-full overflow-hidden h-[60px] w-[60px] min-h-[36px] min-w-[36px] max-h-[60px] max-w-[60px] mx-1"}
+                />
+              </div>
+              <div>
+                <div className="text-lg	">Nguyễn Văn Quang-TRX</div>
+                <div className="text-primary-gray">quangnv@trx.com</div>
+                <div className="text-primary-gray">0988226333</div>
+              </div>
+            </div>
+            <div className="flex py-2 px-3 items-center	justify-between	">
+              <div className="text-cbs-primary bg-cbs-sub-primary rounded p-3">Giám đốc Ban QLDA</div>
+              <div className="flex gap-2 items-center	">
+                <a href=""><img src={iconChat} alt="" /></a>
+                <a href=""><img src={iconTrash} alt="" /></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Popover> */}
       <UpdateStatusDialog
         showUpdateStatus={showUpdateStatus}
         setShowUpdateStatus={setShowUpdateStatus}

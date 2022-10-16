@@ -22,7 +22,7 @@ export const TaskDetailRelatedTask: FC<Props> = ({ task, userId, refetchInfo }) 
 
     const { listTasks, hasNextPage, nextPageListTask, updateTaskAsync } = useTask({
         params: {
-            collection: 1,
+            // collection: 1,
             keyword
         },
         isFetch: true
