@@ -42,8 +42,8 @@ import "react-day-picker/lib/style.css";
 import { Editor } from "@tinymce/tinymce-react";
 import { Editor as EditorType } from "tinymce";
 import iconAttach from "assets/images/icons8-attach-48.svg";
+import IconClock from "assets/images/icons8-snooze-48 1.svg";
 import { FileProp, FilePropsUpload } from "typings/common";
-
 interface InitialValues {
   projectID: string,
   subType: string,

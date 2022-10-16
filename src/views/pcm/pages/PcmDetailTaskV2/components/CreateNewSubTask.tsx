@@ -20,7 +20,7 @@ import taskUserAvt from "assets/images/task-user.svg";
 // import IconPhoto from "assets/images/icon-pic.svg";
 import iconAttach from "assets/images/icons8-attach-50.png";
 import { IconImage } from "views/media/shareComponents/common";
-import { Checkbox } from "@mui/material";
+import { Checkbox, FormControl, FormHelperText, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { FileProps, FilePropsUpload } from "typings/common";
 import { useUpload } from "services/hooks/useUpload";
 import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
