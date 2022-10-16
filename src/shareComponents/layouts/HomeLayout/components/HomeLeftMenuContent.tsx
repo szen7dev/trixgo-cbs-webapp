@@ -65,7 +65,7 @@ export const HomeLeftMenuContent:FC = () => {
         {
             label: "Việc của tôi",
             icon: mailOutLineIcon,
-            count: data?.data?.amountMyTask || 0,
+            count: Number(data?.data?.amountMyTask1 + data?.data?.amountMyTask2+ data?.data?.amountMyTask3) || 0,
             route: '/pcm/mine'
         },
         {

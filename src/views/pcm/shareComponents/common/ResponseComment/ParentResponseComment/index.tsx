@@ -31,6 +31,7 @@ import { useOnClickOutside } from "../../../../../../services/hooks/useOnclickOu
 import { OptionsComment } from "../OptionsComment";
 import { makeStyles } from "@material-ui/styles";
 import { Popover } from "@mui/material";
+import React from "react";
 
 type Props = {
     userId?: string;
@@ -52,18 +53,14 @@ const useStyles = makeStyles({
 
 export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, socket, onClickImage, onConfirmUpdate }) => {
 
-    const [openedPopover, setOpenedPopover] = useState(false);
-    const popoverAnchor = useRef(null);
-
-    const classes = useStyles();
-
-    const popoverEnter = () => {
-        setOpenedPopover(true);
+    const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+    const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
     };
-
-    const popoverLeave = () => {
-        setOpenedPopover(false);
+    const handlePopoverClose = () => {
+        setAnchorEl(null);
     };
+    const open = Boolean(anchorEl);
 
     const [collapseComment, setCollapseComment] = useState(false);
     const [openReply, setOpenReply] = useState(false);
@@ -318,21 +315,19 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
                 alt={comment.author?.bizfullname}
                 src={comment?.author?.image ? `${process.env.REACT_APP_URL_S3_USER}/${comment?.author?.image}` : taskUserAvt}
                 className={"rounded-full overflow-hidden h-[44px] w-[44px] min-h-[44px] min-w-[44px] max-h-[44px] max-w-[44px] mx-2"}
-                ref={popoverAnchor}
-                aria-owns="mouse-over-popover"
+                aria-owns={open ? "mouse-over-popover" : undefined}
                 aria-haspopup="true"
-                onMouseEnter={popoverEnter}
-                onMouseLeave={popoverLeave}
+                onMouseEnter={handlePopoverOpen}
+                onMouseLeave={handlePopoverClose}
             />
             {/* popover */}
             <Popover
                 id="mouse-over-popover"
-                className={classes.popover}
-                classes={{
-                    paper: classes.popoverContent
+                sx={{
+                    pointerEvents: "none"
                 }}
-                open={openedPopover}
-                anchorEl={popoverAnchor.current}
+                open={open}
+                anchorEl={anchorEl}
                 anchorOrigin={{
                     vertical: "bottom",
                     horizontal: "right"
@@ -341,7 +336,7 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
                     vertical: "top",
                     horizontal: "left"
                 }}
-                PaperProps={{ onMouseEnter: popoverEnter, onMouseLeave: popoverLeave }}
+                PaperProps={{ onMouseEnter: handlePopoverOpen, onMouseLeave: handlePopoverClose }}
             >
                 <div className="w-350">
                     <div>
@@ -359,12 +354,13 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
                             <div className="text-cbs-primary bg-cbs-sub-primary rounded p-3">{comment?.author?.position?.name}</div>
                             <div className="flex gap-2 items-center	">
                                 {/* <a href=""><img src={iconChat} alt="" /></a>
-                                <a href=""><img src={iconTrash} alt="" /></a> */}
+                                            <a href=""><img src={iconTrash} alt="" /></a> */}
                             </div>
                         </div>
                     </div>
                 </div>
             </Popover>
+
             <div className={"comment-content ml-4 flex-1"}>
                 <div className={"comment-content-wrapper"}>
                     <div className={"flex items-center justify-between"}>
