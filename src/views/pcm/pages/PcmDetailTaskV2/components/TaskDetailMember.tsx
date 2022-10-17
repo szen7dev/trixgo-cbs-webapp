@@ -230,16 +230,16 @@ export const TaskDetailMember: FC<Props> = ({ task, user, refetchInfo }) => {
                         <div>
                             <div className="border-b-0.5 border-cbs-border	 flex gap-5 p-3 ">
                                 <div>
-                                    <img alt={"----"} src={task?.author?.image ? `${process.env.REACT_APP_URL_S3_USER}/${task?.author?.image}` : taskUserAvt} className={" rounded-full overflow-hidden h-[60px] w-[60px] min-h-[36px] min-w-[36px] max-h-[60px] max-w-[60px] mx-1"} />
+                                    <img alt={"----"} src={task?.assignee?.image ? `${process.env.REACT_APP_URL_S3_USER}/${task?.assignee?.image}` : taskUserAvt} className={" rounded-full overflow-hidden h-[60px] w-[60px] min-h-[36px] min-w-[36px] max-h-[60px] max-w-[60px] mx-1"} />
                                 </div>
                                 <div>
-                                    <div className="text-lg	">nhóm Nhân viên thứ 2</div>
-                                    <div className="text-primary-gray">Mail nhóm nhân viên thứ 2</div>
-                                    <div className="text-primary-gray">{task?.author?.phone}</div>
+                                    <div className="text-lg	">{task?.assignee?.fullname}</div>
+                                    <div className="text-primary-gray">{task?.assignee?.email}</div>
+                                    <div className="text-primary-gray">{task?.assignee?.phone}</div>
                                 </div>
                             </div>
                             <div className="flex py-2 px-3 items-center	justify-between	">
-                                <div className="text-cbs-primary bg-cbs-sub-primary rounded p-3">{task?.author?.position?.name}</div>
+                                <div className="text-cbs-primary bg-cbs-sub-primary rounded p-3">{task?.assignee?.position?.name}</div>
                                 <div className="flex gap-2 items-center	">
                                     <a href=""><img src={iconChat} alt="" /></a>
                                     <a href=""><img src={iconTrash} alt="" /></a>
@@ -249,7 +249,7 @@ export const TaskDetailMember: FC<Props> = ({ task, user, refetchInfo }) => {
                     </div>
                 </Popover>
                 {/* popover 3rd */}
-                <Popover
+                {/* <Popover
                     id="mouse-over-popover-third"
                     sx={{
                         pointerEvents: "none"
@@ -287,7 +287,7 @@ export const TaskDetailMember: FC<Props> = ({ task, user, refetchInfo }) => {
                             </div>
                         </div>
                     </div>
-                </Popover>
+                </Popover> */}
                 {/*UI DEMO*/}
                 {/* <div className={"flex items-center flex-wrap mt-2"}>
                     {

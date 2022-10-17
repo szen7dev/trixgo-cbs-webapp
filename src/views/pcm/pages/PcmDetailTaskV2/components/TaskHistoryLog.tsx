@@ -41,7 +41,7 @@ export const TaskHistoryLog:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
     return (
         <>
             {(isLoading) && <Loader className="border-primary" />}
-            <button onClick={() => setIsShow(!isShow)} className={"rounded bg-cbs-form-input-bg h-[36px] text-primary-gray flex items-center justify-center px-3"}>
+            <button onClick={() => setIsShow(!isShow)} className={"rounded bg-cbs-form-input-bg h-[36px] text-primary-gray flex items-center justify-center px-3 mr-2"}>
                 <img src={iconChecklist} alt={"----"} className={"w-[24px] mr-2"}/>
                 <span>Lịch sử hoạt động</span>
             </button>

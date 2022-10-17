@@ -617,7 +617,7 @@ export const DocumentProjectPage: FC = () => {
                                 className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border"
                                 style={{ width: '10%' }}
                             >
-                                Địa chỉ lưu trữ
+                                Địa chỉ lưu trữ 333
                             </th>
                         </tr>
                         </thead>
@@ -662,7 +662,8 @@ export const DocumentProjectPage: FC = () => {
                                         </Link>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
-                                        {document?.publish?.name}
+                                        {document?.publish?.name ? document?.publish?.name : <p className="text-cbs-highlight-color"><i>{document?.datahubContact?.name}</i></p>}
+                                        {/* <p><i>{document?.datahubContact?.name}</i></p> */}
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
                                         {document?.sign}
