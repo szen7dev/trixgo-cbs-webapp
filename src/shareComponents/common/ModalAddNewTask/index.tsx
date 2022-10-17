@@ -140,8 +140,10 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
     limit: 10,
     keyword: searchGroupName,
     projectID: projectID,
-    isShowParentAndChild: true
+    isShowParentAndChild: false
   }, !!projectID);
+
+  console.log("listGroup", listGroup);
 
   const [isChangeProjectID, setIsChangeProjectID] = useState(false);
 
