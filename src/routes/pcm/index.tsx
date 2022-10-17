@@ -73,9 +73,8 @@ import ProjectAdminPositionTab from "views/ppt/pages/ProjectAdminPage/pages/Proj
 const PcmDetailTaskV2             = lazy(() => import('views/pcm/pages/PcmDetailTaskV2'));
 const PcmTagPage                  = lazy(() => import('views/pcm/pages/PcmTagPage'));
 const PcmTagProjectPage           = lazy(() => import('views/pcm/pages/PcmTagPage/PcmTagProjectPage'));
-const PcmTag3ProjectCompanyPage           = lazy(() => import('views/pcm/pages/PcmTagPage/PcmTag3ProjectCompanyPage'));
-const PcmTag3ProjectCompanySubTypePage           = lazy(() => import('views/pcm/pages/PcmTagPage/PcmTag3ProjectCompanySubTypePage'));
-
+const PcmTag3ProjectCompanyPage   = lazy(() => import('views/pcm/pages/PcmTagPage/PcmTag3ProjectCompanyPage'));
+const PcmTag3ProjectCompanySubTypePage = lazy(() => import('views/pcm/pages/PcmTagPage/PcmTag3ProjectCompanySubTypePage'));
 const PcmHomePage                 = lazy(() => import('views/pcm/pages/PcmHomeV2'));
 const PcmUserPage                 = lazy(() => import('views/pcm/pages/PcmUserPage'));
 const PcmUserProjectPage          = lazy(() => import('views/pcm/pages/PcmUserProjectPage'));

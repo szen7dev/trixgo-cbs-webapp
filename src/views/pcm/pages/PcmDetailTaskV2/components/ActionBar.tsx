@@ -110,7 +110,7 @@ export const ActionTaskDetailBar: FC<Props> = ({ checkAssigneeBid, task, user, r
                 </div>
             </button>
             {/* <TaskHistoryLog/> */}
-            <TaskHistoryLog/>
+            <TaskHistoryLog task={task} userId={user?._id} refetchTaskInfo={refetchTaskInfo}/>
             {/* <button className={"rounded bg-cbs-green-medium h-[36px] text-white flex items-center justify-center px-3 mx-3"}>
                 <img src={iconMember} alt={"----"} className={"w-[24px] mr-2"}/>
                 <span>Chia sẻ</span>
