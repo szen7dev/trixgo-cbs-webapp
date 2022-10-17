@@ -28,6 +28,7 @@ export const useQueryListGroup = (params?: any, isFetch?: boolean): UseQueryList
         },
         refetchOnWindowFocus: false,
         enabled: isFetch ?? false,
+        cacheTime: 0
     });
 
     const {
