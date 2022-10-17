@@ -72,6 +72,8 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
   const { closeModal } = useModal();
   const editorRef = useRef<EditorType>();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  type GroupSearchableHandle = React.ElementRef<typeof GroupSearchable>;
+  const groupSearchableRef = React.useRef<GroupSearchableHandle>(null);
 
   const [tokens, setTokens] = useState<any[]>([]);
   const [searchDepartmentValue, setSearchDepartmentValue] = useState("");
@@ -260,7 +262,6 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
         fileType: 1,
         source,
         progress: percentCompleted => {
-          console.log(`${percentCompleted}%`, key);
           setUploadImageProgress(key, percentCompleted)
         }
       })
@@ -402,6 +403,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                             setFieldValue("assigneeID", "");
                             setFieldValue("relatedIDs", []);
                             setProjectID("");
+                            groupSearchableRef.current&&groupSearchableRef.current.resetGroupSearchable();
                           }}
                           onSearchInputChange={
                             debounce(
@@ -427,10 +429,10 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                             value: department._id,
                             companyId: department.company?._id,
                           }))}
-                          initialValue={{
+                          initialValue={defaultValues.project?._id ? {
                             value: defaultValues.project?._id,
                             label: defaultValues.project?.name,
-                          }}
+                          }: undefined}
                           formatItem={{
                             id: "value",
                             text: "label",
@@ -448,6 +450,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                       <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Nhóm (*)</div>
                       <div className={"flex-1 max-w-4/5 w-4/5"}>
                         <GroupSearchable
+                          ref={groupSearchableRef}
                           disabled={values.projectID.length <= 0}
                           handleSetValue={(item: any) => {
                             setGroupID(item.value);
@@ -466,7 +469,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                           }}
                           onScroll={(e) => handleScroll(e, 'group')}
                           className={"max-w-full flex-1"}
-                          placeholder="Nhóm"
+                          placeholder="Chọn nhóm"
                         />
                       </div>
                     </div>

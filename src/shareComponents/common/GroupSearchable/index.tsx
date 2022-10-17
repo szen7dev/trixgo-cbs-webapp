@@ -25,7 +25,7 @@ type Props = {
 };
 
 type GroupSearchableHandle = {
-    setValueRef: (value: any) => void
+    resetGroupSearchable: () => void
 }
 
 export const GroupSearchable = forwardRef<GroupSearchableHandle, Props>(({
@@ -40,8 +40,8 @@ export const GroupSearchable = forwardRef<GroupSearchableHandle, Props>(({
     groupParentPicker,
     setGroupParentPicker,
     data
-}, dropdownsearchRef) => {
-    const [value, setValue] = useState<any>();
+}, groupSearchableRef) => {
+    const [value, setValue] = useState<any>("");
     const [groupCurrentPicker, setGroupCurrentPicker] = useState<any>({});
     const [groupOldParentPicker, setGroupOldParentPicker] = useState<any>([]);
     const [showOption, setShowOption] = useState(false);
@@ -53,6 +53,18 @@ export const GroupSearchable = forwardRef<GroupSearchableHandle, Props>(({
         handleSetValue(item);
         setShowOption(false);
     });
+
+    useImperativeHandle(groupSearchableRef, () => ({
+        resetGroupSearchable() {
+            handleRemoveItem();
+        }
+    }));
+
+    const handleRemoveItem = () => {
+        setGroupCurrentPicker({});
+        setGroupOldParentPicker([]);
+        setValue("");
+    }
 
     const toggleShowOption = () => {
         if (disabled) return;
@@ -125,14 +137,27 @@ export const GroupSearchable = forwardRef<GroupSearchableHandle, Props>(({
                 className={"relative w-full flex p-1 h-full pl-2 cursor-pointer align-items-center"}
             >
                 {
-                    !value ? (
-                        <div className={"flex-1 flex text-left"}>{placeholder}</div>
+                    !value.label ? (
+                        <div className={"flex-1 flex text-left text-primary-gray"}>{placeholder}</div>
                     ) : (
-                        <div className={"flex-1 flex text-left "}>
+                        <div
+                            className={classNames(
+                                "flex text-left relative py-0.5 pl-2 pr-8 mb-1 mt-1 max-w-full ",
+                                {
+                                    "text-gray-300": !value.label,
+                                    border: true,
+                                    "rounded-full": true,
+                                }
+                            )}
+                            title={value.label}
+                        >
+                            {value.label}
                             <div
-                                title={"asadasdasdasd"}
+                                className={
+                                    "absolute inset-y-0 right-0 flex items-center justify-center pr-2"
+                                }
                             >
-                                {value.label}
+                                <Close onClick={() => handleRemoveItem()}/>
                             </div>
                         </div>
                     )
@@ -170,13 +195,13 @@ export const GroupSearchable = forwardRef<GroupSearchableHandle, Props>(({
                             ) : null}
                         </div>
                     </div>
-                    <div className="absolute bottom-0 p-3 text-right w-full bg-white border-t-0.5 border-cbs-border" 
-                    onClick={() => {
-                        const item = groupCurrentPicker?.value ? groupCurrentPicker : groupParentPicker;
-                        setValue(item);
-                        handleSetValue(item);
-                        setShowOption(false);
-                    }}>
+                    <div className="absolute bottom-0 p-3 text-right w-full bg-white border-t-0.5 border-cbs-border"
+                        onClick={() => {
+                            const item = groupCurrentPicker?.value ? groupCurrentPicker : groupParentPicker;
+                            setValue(item);
+                            handleSetValue(item);
+                            setShowOption(false);
+                        }}>
                         <button type='button' className="bg-primary text-white py-2 px-[20px] rounded">Chọn</button>
                     </div>
                 </div>
