@@ -72,7 +72,8 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
   const { closeModal } = useModal();
   const editorRef = useRef<EditorType>();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  type DropdownSearchableHandle = React.ElementRef<typeof DropdownSearchable>;
+  type GroupSearchableHandle = React.ElementRef<typeof GroupSearchable>;
+  const groupSearchableRef = React.useRef<GroupSearchableHandle>(null);
 
   const [tokens, setTokens] = useState<any[]>([]);
   const [searchDepartmentValue, setSearchDepartmentValue] = useState("");
@@ -140,19 +141,8 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
     limit: 10,
     keyword: "",
     projectID: projectID,
-  }, !!projectID);
-
-  const {
-    data: listGroupChild,
-  } = useQueryListGroup({
-    limit: 10,
-    keyword: "",
-    projectID: projectID,
     parentID: groupParentPicker?.value
-  }, groupParentPicker?.value && projectID ? true : false);
-
-  console.log("value", groupParentPicker?.value);
-  console.log("listGroupChild", listGroupChild);
+  }, !!projectID);
 
   const {
     listContracts,
@@ -272,7 +262,6 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
         fileType: 1,
         source,
         progress: percentCompleted => {
-          console.log(`${percentCompleted}%`, key);
           setUploadImageProgress(key, percentCompleted)
         }
       })
@@ -310,7 +299,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
     }
   }
 
-  const handleScroll = (e: UIEvent<HTMLDivElement>, type: 'project' | 'group' | 'contract' | 'user' | 'field') => {
+  const handleScroll = (e: UIEvent<HTMLDivElement>, type: 'project' | 'group' | 'contract' | 'user' | 'field' | 'groupChild') => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
     const bottom = scrollHeight - scrollTop >= clientHeight - 10;
     if (!bottom) return;
@@ -414,6 +403,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                             setFieldValue("assigneeID", "");
                             setFieldValue("relatedIDs", []);
                             setProjectID("");
+                            groupSearchableRef.current&&groupSearchableRef.current.resetGroupSearchable();
                           }}
                           onSearchInputChange={
                             debounce(
@@ -439,10 +429,10 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                             value: department._id,
                             companyId: department.company?._id,
                           }))}
-                          initialValue={{
+                          initialValue={defaultValues.project?._id ? {
                             value: defaultValues.project?._id,
                             label: defaultValues.project?.name,
-                          }}
+                          }: undefined}
                           formatItem={{
                             id: "value",
                             text: "label",
@@ -460,34 +450,26 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                       <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full"}>Nhóm (*)</div>
                       <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                         <GroupSearchable
+                          ref={groupSearchableRef}
                           disabled={values.projectID.length <= 0}
-                          handleSetValueParent={(item: any) => {
-                            console.log("item", item.value);
-                            setGroupParentPicker(item);
-                          }}
-                          handleSetValueChild={(item: any) => {
+                          handleSetValue={(item: any) => {
                             setGroupID(item.value);
                             setFieldValue("groupID", item.value);
                           }}
-                          dataParent={listGroup.map((groupItem) => ({
-                            label: `${groupItem.sign}.${groupItem.name}`,
-                            value: groupItem._id,
-                          }))}
-                          dataChild={listGroupChild.map((groupItem) => ({
+                          data={listGroup.map((groupItem) => ({
                             label: `${groupItem.sign}.${groupItem.name}`,
                             value: groupItem._id,
                           }))}
                           groupParentPicker={groupParentPicker}
                           setGroupParentPicker={setGroupParentPicker}
                           onClearData={() => {
-                            setFieldValue("groupID", "")
+                            setFieldValue("groupID", "");
                             setGroupParentPicker({});
                             setGroupID("");
                           }}
                           onScroll={(e) => handleScroll(e, 'group')}
                           className={"max-w-full h-full flex-1"}
-                          placeholder="Nhóm"
-                          maxWidthInput="max-w-full"
+                          placeholder="Chọn nhóm"
                         />
                       </div>
                     </div>
@@ -911,12 +893,12 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                       alt="Icon attach"
                       className="h-6 w-6"
                     />
-                    <Button aria-describedby={idPopover} variant="text" 
+                    {/* <Button aria-describedby={idPopover} variant="text" 
                     onClick={handleClickOpenPop}
                     style={{textTransform: 'none', fontSize: '14px'}}
                     >
                       <span className="text-primary-gray">Nhắc trước thời hạn</span>
-                    </Button>
+                    </Button> */}
                     <Popover
                       id={idPopover}
                       open={open}
