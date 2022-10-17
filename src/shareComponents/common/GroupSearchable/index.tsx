@@ -104,11 +104,11 @@ export const GroupSearchable = forwardRef<GroupSearchableHandle, Props>(({
     const renderChildOptions = () => {
         return (
             <div>
-                <div className="flex bg-cbs-gray p-4 truncate sticky">
+                <div className="flex bg-cbs-gray p-4 sticky">
                     <button onClick={() => setGroupParentPicker({})}>
                         <img src={iconBack} alt="" />
                     </button>
-                    <div className="ml-4 text-cbs-subtext">{groupParentPicker?.label}</div>
+                    <div className="ml-4 text-cbs-subtext truncate">{groupParentPicker?.label}</div>
                 </div>
 
                 {dataChild?.length === 0 ?
