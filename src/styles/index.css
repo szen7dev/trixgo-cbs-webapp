@@ -1111,7 +1111,7 @@ button {
   min-height: 32px;
   /*max-width: 240px;*/
   /*max-height: 40px;*/
-  height: auto;
+  /* height: auto; */
 }
 .select-dropdown .select-options-container {
   /*min-width: 240px;*/

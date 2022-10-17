@@ -88,14 +88,14 @@ export const GroupSearchable = forwardRef<GroupSearchableHandle, Props>(({
                 key={option.value}
                 className={
                     (classNameItem ?? "") +
-                    " select-option max-w-full hover:bg-gray-100 transition duration-150 flex cursor-pointer py-3 px-4 "
+                    " select-option w-full hover:bg-gray-100 transition duration-150 flex cursor-pointer py-3 px-4 "
                 }
                 onClick={() => handleSetValueParent(option)}
                 data-option-value={option.value}
             >
-                <button className="truncate flex hover:bg-cbs-gray w-full">
+                <button className=" flex hover:bg-cbs-gray w-full">
                     <img src={iconFolder} alt="" />
-                    <div className="ml-4">{option?.label}</div>
+                    <div className="ml-4 line-clamp-2 text-ellipsis text-left">{option?.label}</div>
                 </button>
             </div>
         ));
@@ -104,11 +104,11 @@ export const GroupSearchable = forwardRef<GroupSearchableHandle, Props>(({
     const renderChildOptions = () => {
         return (
             <div>
-                <div className="flex bg-cbs-gray p-4 sticky">
-                    <button onClick={() => setGroupParentPicker({})}>
-                        <img src={iconBack} alt="" />
+                <div className="flex items-center bg-cbs-gray p-4 sticky">
+                    <button onClick={() => setGroupParentPicker({})} className="w-[24px] h-[24px] items-center absolute left-2	">
+                        <img src={iconBack} alt=""  className="m-auto"/>
                     </button>
-                    <div className="ml-4 text-cbs-subtext truncate">{groupParentPicker?.label}</div>
+                    <div className="ml-4 text-cbs-subtext truncate text-ellipsis">{groupParentPicker?.label}</div>
                 </div>
 
                 {dataChild?.length === 0 ?
@@ -121,13 +121,13 @@ export const GroupSearchable = forwardRef<GroupSearchableHandle, Props>(({
                                 key={option.value}
                                 className={
                                     (classNameItem ?? "") +
-                                    " select-option max-w-full hover:bg-gray-100 transition duration-150 flex cursor-pointer py-3 px-4 "
+                                    " select-option w-full hover:bg-gray-100 transition duration-150 flex cursor-pointer py-3 px-4 "
                                 }
                                 onClick={() => handleSetValueChild(option)}
                                 data-option-value={option.value}
                             >
-                                <button className="truncate flex hover:bg-cbs-gray w-full">
-                                    <div className="ml-4">{option.label}</div>
+                                <button className=" text-left hover:bg-cbs-gray w-full">
+                                    <div className="ml-4 line-clamp-2 text-ellipsis">{option.label}</div>
                                 </button>
                             </div>
                         ))}
@@ -175,14 +175,14 @@ export const GroupSearchable = forwardRef<GroupSearchableHandle, Props>(({
             ref={wrapperRef}
             id={id}
             placeholder={placeholder}
-            className={`${extraClassName} relative select-dropdown flex items-center ${maxHeightClass} ${beingFocusClass} ${disabledClass}`}
+            className={`${extraClassName} relative select-dropdown flex items-center h-full ${maxHeightClass} ${beingFocusClass} ${disabledClass}`}
             data-value={value?.id}
         >
             {renderSelectedValue()}
             {showOption ? (
                 <div
                     className={
-                        "shadow-lg bg-white rounded select-options-container absolute z-100 min-w-[240px] max-w-[400px] w-max rounded-md overflow-hidden left-0"
+                        "shadow-lg bg-white rounded select-options-container absolute z-100 min-w-[240px] max-w-[300px] w-max rounded-md overflow-hidden left-0"
                     }
                 >
                     <div className="select-options-section overflow-y-auto bg-white h-[350px]" onScroll={onScroll}>
