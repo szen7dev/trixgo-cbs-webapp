@@ -6,10 +6,7 @@ import classNames from "classnames";
 import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import Close from "assets/icons/Close";
 import BlueCheck from "assets/images/blue-check.svg";
-import iconBack from "assets/images/VectorArrow.svg";
-import iconFolder from "assets/images/icons8-folder-48 3.svg";
 import TriangleDown from "assets/icons/TriangleDown";
-import { Button } from "@mui/material";
 
 export type Item = {
   id?: string | number;
@@ -311,7 +308,7 @@ export const DropdownSearchable = forwardRef<DropdownSearchableHandle, Props>(({
             {renderSelectedItem
               ? renderSelectedItem(modifyItem(option))
               : readDataValue(option, "text")}
-            {/* <div
+            <div
               className={
                 "absolute inset-y-0 right-0 flex items-center justify-center pr-2"
               }
@@ -319,7 +316,7 @@ export const DropdownSearchable = forwardRef<DropdownSearchableHandle, Props>(({
               <Close
                 onClick={() => handleRemoveItem(readDataValue(option, "id"))}
               />
-            </div> */}
+            </div>
           </div>
         ))}
         {inlineSearch && (
@@ -477,12 +474,6 @@ export const DropdownSearchable = forwardRef<DropdownSearchableHandle, Props>(({
   const disabledClass = disabled
     ? `cursor-not-allowed ${disableClassCustom}`
     : "";
-
-  const [isShow, setIsShow] = useState(false);
-
-  const handleClickShowList = (event: React.MouseEvent<HTMLElement>) => {
-    setIsShow(current => !current);
-  };
   return (
     <div
       ref={wrapperRef}
@@ -515,25 +506,8 @@ export const DropdownSearchable = forwardRef<DropdownSearchableHandle, Props>(({
               />
             </div>
           )}
-          <div className="flex bg-cbs-gray p-4 truncate sticky">
-            <img src={iconBack} alt="" />
-            <div className="ml-4 text-cbs-subtext">01-TRIXGO</div>
-          </div>
-          <div className="select-options-section overflow-y-auto bg-white h-[350px]" onScroll={onScroll}>
-            <button className="truncate flex p-4 hover:bg-cbs-gray w-full" onClick={handleClickShowList}>
-              <img src={iconFolder} alt="" />
-              <div className="ml-4">CHG.THT.QLDA.TT.Thanh toán</div>
-            </button>
-            <div className={isShow ? 'hiden' : 'block'}>
-              {showOption ? (
-                <div>
-                  {renderOptions()}
-                </div>
-              ) : null}
-            </div>
-          </div>
-          <div className="absolute bottom-0 p-3 text-right w-full bg-white border-t-0.5 border-cbs-border">
-            <button className="bg-primary text-white py-2 px-[20px] rounded">Chọn</button>
+          <div className="select-options-section overflow-y-auto bg-white" onScroll={onScroll}>
+            {renderOptions()}
           </div>
         </div>
       ) : null}
