@@ -75,16 +75,18 @@ export const GroupSearchable = forwardRef<GroupSearchableHandle, Props>(({
         return (
             <div>
                 {groupParentPicker?.label ?
-                    <div className="flex bg-cbs-gray p-4 truncate sticky">
+                    <div className="flex items-center bg-cbs-gray p-4 sticky">
                         <button type='button' onClick={() => {
                             setGroupParentPicker(groupOldParentPicker[groupOldParentPicker.length - 1] || {});
                             const oldParent = [...groupOldParentPicker];
                             oldParent.pop();
                             setGroupOldParentPicker(oldParent);
-                        }}>
-                            <img src={iconBack} alt="" />
+                        }}
+                        className="w-[24px] h-[24px] items-center absolute left-2"
+                        >
+                            <img src={iconBack} alt="" className="m-auto" />
                         </button>
-                        <div className="ml-4 text-cbs-subtext">{groupParentPicker?.label}</div>
+                        <div className="ml-4 text-cbs-subtext truncate text-ellipsis">{groupParentPicker?.label}</div>
                     </div> : <></>
                 }
                 {data?.length === 0 ?
@@ -97,7 +99,7 @@ export const GroupSearchable = forwardRef<GroupSearchableHandle, Props>(({
                                 key={option.value}
                                 type='button'
                                 className={
-                                    `select-option max-w-full transition duration-150 flex cursor-pointer py-3 px-4
+                                    `select-option w-full transition duration-150 flex cursor-pointer py-3 px-4
                                     ${option.value === groupCurrentPicker.value ? '' : 'hover:bg-gray-100'}
                                     ${option.value === groupCurrentPicker.value ? 'bg-gray-300' : ''}
                                 `
@@ -112,9 +114,9 @@ export const GroupSearchable = forwardRef<GroupSearchableHandle, Props>(({
                                 }}
                                 data-option-value={option.value}
                             >
-                                <div className="truncate flex w-full">
+                                <div className="flex items-start text-left w-full">
                                     <img src={iconFolder} alt="" />
-                                    <div className="ml-4">{option.label}</div>
+                                    <div className="ml-4 line-clamp-2 text-ellipsis">{option.label}</div>
                                 </div>
                             </button>
                         ))}
@@ -176,14 +178,14 @@ export const GroupSearchable = forwardRef<GroupSearchableHandle, Props>(({
             ref={wrapperRef}
             id={id}
             placeholder={placeholder}
-            className={`${className} relative select-dropdown flex items-center ${disabledClass}`}
+            className={`${className} relative select-dropdown flex items-center h-full ${disabledClass}`}
             data-value={value?.id}
         >
             {renderSelectedValue()}
             {showOption ? (
                 <div
                     className={
-                        "shadow-lg bg-white rounded select-options-container absolute z-100 min-w-[240px] max-w-[400px] w-max rounded-md overflow-hidden left-0"
+                        "shadow-lg bg-white rounded select-options-container absolute z-100 min-w-[240px] max-w-[300px] w-max rounded-md overflow-hidden left-0"
                     }
                 >
                     <div className="select-options-section overflow-y-auto bg-white h-[350px]" onScroll={onScroll}>

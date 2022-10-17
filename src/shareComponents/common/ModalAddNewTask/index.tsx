@@ -378,10 +378,10 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
             return (
               <Form>
                 <div className={"t-add-new-task-dialog-select px-6"}>
-                  <div className={"flex pb-1 pt-2 border-b"}>
+                  <div className={"flex py-2 border-b"}>
                     <div className={"w-1/4 flex items-start"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Dự án (*)</div>
-                      <div className={"flex-1 max-w-4/5 w-4/5"}>
+                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full h-full"}>Dự án (*)</div>
+                      <div className={"flex-1 max-w-4/5 w-4/5 h-full h-full"}>
                         <DropdownSearchable
                           onchangeValue={(value: any) => {
                             setCompanyID(value.companyId)
@@ -411,7 +411,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                               500)
                           }
                           onScroll={(e) => handleScroll(e, 'project')}
-                          className={"max-w-full flex-1"}
+                          className={"max-w-full h-full flex-1"}
                           placeholder="Dự án"
                           isMultiple={false}
                           allowClearValueSingleInput={true}
@@ -447,8 +447,8 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                       </div>
                     </div>
                     <div className={"w-1/4 flex items-start pl-3"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Nhóm (*)</div>
-                      <div className={"flex-1 max-w-4/5 w-4/5"}>
+                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full"}>Nhóm (*)</div>
+                      <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                         <GroupSearchable
                           ref={groupSearchableRef}
                           disabled={values.projectID.length <= 0}
@@ -468,21 +468,21 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                             setGroupID("");
                           }}
                           onScroll={(e) => handleScroll(e, 'group')}
-                          className={"max-w-full flex-1"}
+                          className={"max-w-full h-full flex-1"}
                           placeholder="Chọn nhóm"
                         />
                       </div>
                     </div>
                     <div className={"w-1/4 flex items-start pl-3"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Tính chất (*)</div>
-                      <div className={"flex-1 max-w-4/5 w-4/5"}>
+                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full"}>Tính chất (*)</div>
+                      <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                         <DropdownSearchable
                           onchangeValue={(value: any) =>
                             setFieldValue("subType", value.id)
                           }
                           onClearData={() => setFieldValue("subType", "")}
                           placeholder={"Phân loại"}
-                          className={"max-w-full flex-1"}
+                          className={"max-w-full h-full flex-1"}
                           focusedClass={"border-b border-primary"}
                           allowClearValueSingleInput={true}
                           showTriangle={false}
@@ -507,8 +507,8 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                       </div>
                     </div>
                     <div className={"w-1/4 flex items-start pl-3"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Hợp đồng</div>
-                      <div className={"flex-1 max-w-4/5 w-4/5"}>
+                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full"}>Hợp đồng</div>
+                      <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                         <DropdownSearchable
                           onchangeValue={(item: any) => {
                             setFieldValue("contractID", item.value);
@@ -520,7 +520,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                             500
                           )}
                           onScroll={(e) => handleScroll(e, 'contract')}
-                          className={"max-w-full flex-1"}
+                          className={"max-w-full h-full flex-1"}
                           placeholder="Hợp đồng"
                           isMultiple={false}
                           allowClearValueSingleInput={true}
@@ -546,9 +546,9 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                       </div>
                     </div>
                   </div>
-                  <div className={"flex pb-1 pt-2 border-b"}>
+                  <div className={"flex py-2 border-b"}>
                     <div className={"w-full flex items-start"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Gửi tới (*)</div>
+                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2 "}>Gửi tới (*)</div>
                       <div className={"w-full flex-1"}>
                         <DropdownSearchable
                           onchangeValue={(value: any) => {
@@ -607,7 +607,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                       </div>
                     </div>
                     {/*<div className={"w-full flex items-start pl-3"}>*/}
-                    {/*  <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Tính chất</div>*/}
+                    {/*  <div className={"h-full text-left  text-gray-500 flex items-center mr-2 "}>Tính chất</div>*/}
                     {/*  <DropdownSearchable*/}
                     {/*    onchangeValue={(item: any) => {*/}
                     {/*      setFieldValue("fieldID", item.value);*/}
@@ -657,9 +657,9 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                     {/*  />*/}
                     {/*</div>*/}
                   </div>
-                  <div className={"flex pb-1 pt-2 border-b"}>
+                  <div className={"flex py-2 border-b"}>
                     <div className={"w-full flex items-start"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Liên quan</div>
+                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2 "}>Liên quan</div>
                       <DropdownSearchable
                         onchangeValue={(value: any) => {
                           if (!values.relatedIDs.includes(value.id)) {
@@ -716,9 +716,9 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                       />
                     </div>
                   </div>
-                  <div className={"flex pb-1 pt-2 border-b"}>
+                  <div className={"flex py-2 border-b"}>
                     <div className={"w-3/4 flex items-start"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Tiêu đề (*)</div>
+                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2 "}>Tiêu đề (*)</div>
                       <div className={"w-full flex-1"}>
                         <input
                           placeholder="Tiêu đề"
@@ -733,8 +733,8 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                         />
                       </div>
                     </div>
-                    <div className={"w-1/4 flex items-start"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Thời hạn (*)</div>
+                    <div className={"w-1/4 flex items-center"}>
+                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2 "}>Thời hạn (*)</div>
                       <DayPickerInput
                         value={values.expiredTime ? moment(values.expiredTime).format("MM/DD/YYYY") : moment().format("MM/DD/YYYY")}
                         onDayChange={(day) => setFieldValue("expiredTime", moment(day).format("MM/DD/YYYY"))}
