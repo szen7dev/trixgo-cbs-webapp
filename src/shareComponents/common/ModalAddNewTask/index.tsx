@@ -893,12 +893,12 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                       alt="Icon attach"
                       className="h-6 w-6"
                     />
-                    <Button aria-describedby={idPopover} variant="text" 
+                    {/* <Button aria-describedby={idPopover} variant="text" 
                     onClick={handleClickOpenPop}
                     style={{textTransform: 'none', fontSize: '14px'}}
                     >
                       <span className="text-primary-gray">Nhắc trước thời hạn</span>
-                    </Button>
+                    </Button> */}
                     <Popover
                       id={idPopover}
                       open={open}
