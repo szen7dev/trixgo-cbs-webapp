@@ -23,6 +23,7 @@ import {setFilterDropdown} from "redux/reducer/DocumentHomeSlice";
 import {useDispatch} from "react-redux";
 import { toast } from "react-toastify";
 import { createLinkAndClick } from "utils";
+import { useQueryListCompany } from "services/hooks/useCompanies";
 
 // import {ModalContext} from "../../contexts/modal";
 // import {useQueryDetailDocument} from "services/hooks/ppt/useDocument";
@@ -64,7 +65,9 @@ const DocumentHomePageV2: FC = () => {
         isExporting: false,
     });
     const { exportDocumentAsync } = useDocumentCustom({});
-    const { data: listDatahubContact } = useDatahubContact({ keyword: keywordDatahubContact }, true, false); // Danh bạ hệ thống
+    // const { data: listDatahubContact } = useDatahubContact({ keyword: keywordDatahubContact }, true, false); // Danh bạ hệ thống
+	const { data: listDatahubContact } = useQueryListCompany({ keyword: keywordDatahubContact }); // Danh bạ hệ thống mới
+    
     const { listProjectsUserIsMember } = useProjectCustom({ paramsProjectsUserIsMember: { keyword: projectKeyword }, isFetchProjectsUserIsMember: true });
     const { listContracts } = useContractIsMembers({ params: { keyword: contractKeyword, populates: JSON.stringify({ "path": "project", "select": "name sign" }) }, isFetch: true });
 
@@ -516,7 +519,7 @@ const DocumentHomePageV2: FC = () => {
                                             <p className={"mt-1 text-primary-gray text-xs"}>{document.author?.fullname}-{document.createAt}</p>
                                         </td>
                                         <td className={"border-b-0.5 border-primary-border py-3"}>
-                                            {document.sender?.name}
+                                            {document.publish?.name}
                                         </td>
                                         <td className={"border-b-0.5 border-primary-border py-3 break-all"}>
                                             {document.sign}

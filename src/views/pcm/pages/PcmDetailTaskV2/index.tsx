@@ -309,7 +309,6 @@ const PcmDetailTaskV2: FC = () => {
                     {
                         taskInfo?.linksDocs?.length ? <TaskDetailAddCV task={taskInfo} userId={user?._id} refetchInfo={refetchInfo}/> : <></>
                     }
-                    {/* <TaskDetailAddCV task={taskInfo} userId={user?._id} refetchInfo={refetchInfo}/> */}
                 </div>
                 <CommentProvider>
                     <TaskDetailComment task={taskInfo} />

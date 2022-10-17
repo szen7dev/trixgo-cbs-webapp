@@ -42,6 +42,7 @@ import "react-day-picker/lib/style.css";
 import { Editor } from "@tinymce/tinymce-react";
 import { Editor as EditorType } from "tinymce";
 import iconAttach from "assets/images/icons8-attach-48.svg";
+import taskUserAvt from "assets/images/task-user.svg";
 import { FileProp, FilePropsUpload } from "typings/common";
 import { Button, FormControl, MenuItem, Popover, Select, SelectChangeEvent } from "@mui/material";
 import { borderRadius } from "@mui/system";
@@ -381,6 +382,16 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
   const open = Boolean(anchorEl);
   const idPopover = open ? 'simple-popover' : undefined;
 
+  // popover
+  const [anchorElPopover, setAnchorElPopover] = React.useState<HTMLElement | null>(null);
+  const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElPopover(event.currentTarget);
+  };
+  const handlePopoverClose = () => {
+    setAnchorElPopover(null);
+  };
+  const openPopover = Boolean(anchorElPopover);
+
   return (
     <>
       <div className={"flex flex-col"}>
@@ -402,7 +413,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
               <Form>
                 <div className={"t-add-new-task-dialog-select px-6"}>
                   <div className={"flex pb-1 pt-2 border-b"}>
-                    <div className={"w-1/4 flex items-start"}>
+                    <div className={"w-1/4 flex items-center"}>
                       <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Dự án (*)</div>
                       <div className={"flex-1 max-w-4/5 w-4/5"}>
                         <DropdownSearchable
@@ -468,7 +479,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                         />
                       </div>
                     </div>
-                    <div className={"w-1/4 flex items-start pl-3"}>
+                    <div className={"w-1/4 flex items-center pl-3"}>
                       <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Nhóm (*)</div>
                       <div className={"flex-1 max-w-4/5 w-4/5"}>
                         <DropdownSearchable
@@ -517,8 +528,8 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                         />
                       </div>
                     </div>
-                    <div className={"w-1/4 flex items-start pl-3"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Tính chất (*)</div>
+                    <div className={"w-1/4 flex items-center pl-3"}>
+                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Phân loại (*)</div>
                       <div className={"flex-1 max-w-4/5 w-4/5"}>
                         <DropdownSearchable
                           onchangeValue={(value: any) =>
@@ -550,7 +561,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                         />
                       </div>
                     </div>
-                    <div className={"w-1/4 flex items-start pl-3"}>
+                    <div className={"w-1/4 flex items-center pl-3"}>
                       <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Hợp đồng</div>
                       <div className={"flex-1 max-w-4/5 w-4/5"}>
                         <DropdownSearchable
@@ -616,7 +627,12 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                               style={{ width: 100 }}
                               className="flex items-center"
                             >
-                              <img alt="Thumbnail" src={item.imageUrl || fakeThumbnail} className="mr-1 w-6 h-6 rounded-full" />
+                              <img alt="Thumbnail" src={item.imageUrl || fakeThumbnail} className="mr-1 w-6 h-6 rounded-full"
+                                aria-owns={openPopover ? "mouse-over-popover" : undefined}
+                                aria-haspopup="true"
+                                onMouseEnter={handlePopoverOpen}
+                                onMouseLeave={handlePopoverClose}
+                              />
                               <p
                                 style={{
                                   textOverflow: "ellipsis",
@@ -731,7 +747,12 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                             style={{ width: 100 }}
                             className="flex items-center"
                           >
-                            <img alt="Thumbnail" src={item.imageUrl || fakeThumbnail} className="mr-1 w-6 h-6 rounded-full" />
+                            <img alt="Thumbnail" src={item.imageUrl || fakeThumbnail} className="mr-1 w-6 h-6 rounded-full"
+                              aria-owns={openPopover ? "mouse-over-popover" : undefined}
+                              aria-haspopup="true"
+                              onMouseEnter={handlePopoverOpen}
+                              onMouseLeave={handlePopoverClose}
+                            />
                             <p
                               style={{
                                 textOverflow: "ellipsis",
@@ -758,6 +779,47 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                         }}
                         inlineSearch={true}
                       />
+                      {/* popover */}
+                      <Popover
+                        id="mouse-over-popover"
+                        sx={{
+                          pointerEvents: "none"
+                        }}
+                        open={open}
+                        anchorEl={anchorElPopover}
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "right"
+                        }}
+                        transformOrigin={{
+                          vertical: "top",
+                          horizontal: "left"
+                        }}
+                        PaperProps={{ onMouseEnter: handlePopoverOpen, onMouseLeave: handlePopoverClose }}
+                      >
+                        <div className="w-350">
+                          <div>
+                            <div className="border-b-0.5 border-cbs-border	 flex gap-5 p-3 ">
+                              <div>
+                                <img alt={"----"} src={taskUserAvt} className={" rounded-full overflow-hidden h-[60px] w-[60px] min-h-[36px] min-w-[36px] max-h-[60px] max-w-[60px] mx-1"}
+                                />
+                              </div>
+                              <div>
+                                <div className="text-lg	">Nguyễn Văn Quang-TRX</div>
+                                <div className="text-primary-gray">quangnv@trx.com</div>
+                                <div className="text-primary-gray">0988226333</div>
+                              </div>
+                            </div>
+                            <div className="flex py-2 px-3 items-center	justify-between	">
+                              <div className="text-cbs-primary bg-cbs-sub-primary rounded p-3">Giám đốc Ban QLDA</div>
+                              <div className="flex gap-2 items-center	">
+                                {/* <a href=""><img src={iconChat} alt="" /></a> */}
+                                {/* <a href=""><img src={iconTrash} alt="" /></a> */}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </Popover>
                     </div>
                   </div>
                   <div className={"flex pb-1 pt-2 border-b"}>
@@ -777,7 +839,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                         />
                       </div>
                     </div>
-                    <div className={"w-1/4 flex items-start"}>
+                    <div className={"w-1/4 flex items-center"}>
                       <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Thời hạn (*)</div>
                       <DayPickerInput
                         value={values.expiredTime ? moment(values.expiredTime).format("MM/DD/YYYY") : moment().format("MM/DD/YYYY")}
@@ -809,6 +871,9 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                     // onSaveContent={handleSave}
                     init={{
                       height: "350px",
+                      toolbar: false,
+                      statusbar: false,
+                      content_style: '.tox-tinymce, .tox-menubar {border: none;}',
                       menu: {
                         file: { title: "File", items: "newdocument restoredraft | preview | print | basicitem " },
                         edit: { title: "Edit", items: "undo redo | cut copy paste | selectall | searchreplace" },
@@ -937,9 +1002,9 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                       alt="Icon attach"
                       className="h-6 w-6"
                     />
-                    <Button aria-describedby={idPopover} variant="text" 
-                    onClick={handleClickOpenPop}
-                    style={{textTransform: 'none', fontSize: '14px'}}
+                    <Button aria-describedby={idPopover} variant="text"
+                      onClick={handleClickOpenPop}
+                      style={{ textTransform: 'none', fontSize: '14px' }}
                     >
                       <span className="text-primary-gray">Nhắc trước thời hạn</span>
                     </Button>
@@ -950,7 +1015,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                       onClose={handleClose}
                       anchorOrigin={{ vertical: "top", horizontal: "right" }}
                       transformOrigin={{ vertical: "bottom", horizontal: "center" }}
-                      style={{boxShadow:'none', borderRadius:'3px', border:'0.5px solid #CCCCCC'}}
+                      style={{ boxShadow: 'none', borderRadius: '3px', border: '0.5px solid #CCCCCC' }}
                     >
                       <div className="p-3 w-[300px]">
                         <div className="py-1">

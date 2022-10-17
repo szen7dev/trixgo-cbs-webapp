@@ -6,8 +6,8 @@ import { SendEmailNotification } from "./SendEmailNotification";
 import iconCopy from "assets/images/icons8-copy-96.svg";
 import iconPrint from "assets/images/icons8-print-96.svg";
 // import iconRemove from "assets/images/icons8-remove-96.svg";
-// import {TaskHistoryLog} from "./TaskHistoryLog";
-// import iconMember from "assets/images/icons8-member-48-white.svg";
+import {TaskHistoryLog} from "./TaskHistoryLog";
+import iconMember from "assets/images/icons8-member-48-white.svg";
 // import {SendToChat} from "./SendToChat";
 import { OtherActions } from "./OtherActions";
 import CollapseShow from "assets/images/CBS-Collapse-Show.svg";
@@ -110,6 +110,7 @@ export const ActionTaskDetailBar: FC<Props> = ({ checkAssigneeBid, task, user, r
                 </div>
             </button>
             {/* <TaskHistoryLog/> */}
+            <TaskHistoryLog/>
             {/* <button className={"rounded bg-cbs-green-medium h-[36px] text-white flex items-center justify-center px-3 mx-3"}>
                 <img src={iconMember} alt={"----"} className={"w-[24px] mr-2"}/>
                 <span>Chia sẻ</span>
