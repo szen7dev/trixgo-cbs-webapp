@@ -77,7 +77,7 @@ export const TaskDetailSignature: FC<Props> = ({ task }) => {
                                         <img alt={"----"} src={task?.author?.image ? `${process.env.REACT_APP_URL_S3_USER}/${task?.author?.image}` : taskUserAvt} className={" rounded-full overflow-hidden h-[60px] w-[60px] min-h-[36px] min-w-[36px] max-h-[60px] max-w-[60px] mx-1"} />
                                     </div>
                                     <div>
-                                        <div className="text-lg	">{task?.author?.fullname}</div>
+                                        <div className="text-lg	">Người ký</div>
                                         <div className="text-primary-gray">{task?.author?.email}</div>
                                         <div className="text-primary-gray">{task?.author?.phone}</div>
                                     </div>
