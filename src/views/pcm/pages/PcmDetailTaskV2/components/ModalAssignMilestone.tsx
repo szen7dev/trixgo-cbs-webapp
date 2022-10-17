@@ -18,7 +18,7 @@ export const ModalAssignMilestone: FC<Props> = ({ taskID, milestone, closeModal,
 	const [milestoneSelected, setMilestoneSelected] = useState(0);
 
 	const { updateTaskAsync } = useTask({});
-
+	
 	const handleConfirm = async () => {
 		try {
 			const { error, data } = await updateTaskAsync({
@@ -81,10 +81,19 @@ export const ModalAssignMilestone: FC<Props> = ({ taskID, milestone, closeModal,
 						allowClearValueSingleInput={false}
 						showTriangle={true}
 						maxWidthInput="max-w-none"
-						data={PCM_MILESTONE.map(milestone => ({
-							value: milestone.value,
-							label: milestone.text
-						}))}
+						data={
+							[
+								{
+									value: -1,
+									label: "Hủy chọn"
+								},
+								...PCM_MILESTONE.map(milestone => ({
+									value: milestone.value,
+									label: milestone.text
+								}))
+							]
+							
+						}
 						initialValue={{
 							value: milestone,
 							label: PCM_MILESTONE[milestone]?.text

@@ -486,7 +486,7 @@ export const DropdownSearchable = forwardRef<DropdownSearchableHandle, Props>(({
       {showOption ? (
         <div
           className={
-            "shadow-lg bg-white rounded select-options-container absolute z-100 min-w-[240px] max-w-[400px] w-max rounded-md overflow-hidden left-0"
+            "shadow-lg bg-white rounded select-options-container absolute z-100 min-w-[240px] max-w-[300px] w-max rounded-md overflow-hidden left-0"
           }
         >
           {!inlineSearch && !disableSearch && (

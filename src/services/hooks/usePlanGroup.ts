@@ -14,9 +14,9 @@ interface UseQueryListGroup {
     isFetching: boolean;
 }
 
-export const useQueryListGroup = (params?: QueryParam, isFetch?: boolean): UseQueryListGroup => {
+export const useQueryListGroup = (params?: any, isFetch?: boolean): UseQueryListGroup => {
     const result = useInfiniteQuery(
-        `plan_group.${params?.projectID}${params?.keyword}`, 
+        `plan_group.${params?.projectID}${params?.keyword}${params?.keyword}${params?.parentID}`, 
         async ({ pageParam }: any) =>
         GroupRepository.groupList({
             lastestID: pageParam,
@@ -28,6 +28,7 @@ export const useQueryListGroup = (params?: QueryParam, isFetch?: boolean): UseQu
         },
         refetchOnWindowFocus: false,
         enabled: isFetch ?? false,
+        cacheTime: 0
     });
 
     const {

@@ -16,6 +16,8 @@ import { useQueryListPackage } from "services/hooks/document/usePackage";
 import { useQueryContact } from "services/hooks/items/useContact";
 import { useQueryListDoctype } from "services/hooks/items/useDoctype";
 import { useDatahubContact } from "services/hooks/datahub/contact/useDatahubContact";
+import { useQueryListCompany } from "services/hooks/useCompanies";
+
 import { useStorage } from "services/hooks/items/useStorage";
 import { useQueryItemContract } from "services/hooks/items/useContract";
 import { DIRECTION_TYPES, DOCUMENT_TYPES, DOCUMENT_TYPES_SORT } from "apis/localdb";
@@ -68,7 +70,9 @@ const useInitialValues = (
 	const { listPackage } = useQueryListPackage({ keyword: keywordPackage, departmentID });
 	const { listContact: listContactSender } = useQueryContact({ companyID, keyword: keywordSender });
 	const { listContact: listContactReceiver } = useQueryContact({ companyID, keyword: keywordReceiver });
-	const { data: listDatahubContact } = useDatahubContact({ keyword: keywordDatahubContact }, true, false); // Danh bạ hệ thống
+	// const { data: listDatahubContact } = useDatahubContact({ keyword: keywordDatahubContact }, true, false); // Danh bạ hệ thống
+	const { data: listDatahubContact } = useQueryListCompany({ keyword: keywordDatahubContact }); // Danh bạ hệ thống mới
+	
 	const { listDoctypes: properties } = useQueryListDoctype({
 		keyword: keywordProperty,
 		type: 2,
@@ -111,12 +115,11 @@ const useInitialValues = (
 
 export const ModalCreateDocument: React.FC = () => {
 	const { state, toggleModal, updateModal } = useContext(ModalContext);
-
 	const initialValues = React.useMemo(() => {
 		const obj = { ...state.initialValues };
 		return {
 			...obj,
-			field: state.initialValues?.datahubContact?._id,
+			field: state.initialValues?.publish?._id,
 			package: state.initialValues?.package?._id,
 			project: state.initialValues?.project?._id,
 			receiver: state.initialValues?.receiver?._id,
@@ -220,7 +223,7 @@ export const ModalCreateDocument: React.FC = () => {
 						propertyID: values.property,
 						senderID: values.sender,
 						receiverID: values.receiver,
-						datahubContactID: values.field,
+						publishID: values.field,
 						contractID: values.contract
 					});
 				} catch (error: unknown) {
@@ -525,9 +528,9 @@ export const ModalCreateDocument: React.FC = () => {
 													500
 												)}
 												initialValue={
-													state.initialValues?.datahubContact && {
-														_id: state.initialValues?.datahubContact?._id,
-														name: state.initialValues?.datahubContact?.name
+													state.initialValues?.publish && {
+														_id: state.initialValues?.publish?._id,
+														name: state.initialValues?.publish?.name
 													}
 												}
 												data={uniqBy([...fields, state?.initialValues['field'] || {}].filter(elm => {

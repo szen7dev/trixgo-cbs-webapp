@@ -68,7 +68,7 @@ export const TableSubtextProfile: FC<TableSubtextProfileProps> = ({
                 </td>
               <td className="py-3 px-3">{doc.sign || ''}</td>
               <td className="py-3 px-3">{moment(doc.date).isValid() && moment(doc.date).format('DD/MM/YYYY') || ''}</td>
-              <td className="py-3 px-3">{doc.datahubContact?.name || ''}</td>
+              <td className="py-3 px-3">{doc.publish?.name || ''}</td>
               <td className="py-3 px-3">{doc.note || ''}</td>
               <td className="py-3 px-3">{doc.storage?.name || ''}</td>
             </tr>

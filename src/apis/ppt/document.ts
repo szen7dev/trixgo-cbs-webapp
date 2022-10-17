@@ -13,7 +13,7 @@ interface DocumentRepository {
     fetchListDocument: (params: ListDocumentQueryPayload) => Promise<ListDocumentQueryResponse>;
     fetchDocumentInfo: (params: DocumentInfoQueryPayload) => Promise<DocumentInfoQueryResponse>;
 }
-
+    
 export const documentRepository: DocumentRepository = {
     fetchListDocument: async (params) => fetchListDocument(params),
     fetchDocumentInfo: async (params) => fetchDocumentInfo(params),
@@ -24,10 +24,10 @@ async function fetchDocumentInfo(params: DocumentInfoQueryPayload): Promise<Docu
         `${DOCUMENT_URL}/info-document`, {
             params: {
                 populates: {
-                    "path": "company contract userUpdate files property package project sender receiver author storage field datahubContact parent",
+                    "path": "company contract userUpdate files property package project sender receiver author storage field publish parent",
                     "select": "_id path name sign type fullname members company"
                 },
-                select: 'company userUpdate name sign type description project package approver requestResponse date storage createAt updatedAt receivedDate expiredResponse modifyAt value amount amountDelivery direction storeSign style status receiver property field note parent completeStatus contract',
+                select: 'company userUpdate name sign type description project package approver requestResponse date storage createAt updatedAt receivedDate expiredResponse modifyAt value amount amountDelivery direction storeSign style status receiver property field note parent completeStatus contract publish',
                 ...params,
             }
         }
@@ -40,7 +40,7 @@ async function fetchListDocument(params: ListDocumentQueryPayload): Promise<List
         `${DOCUMENT_URL}/list-document`, {
         params: {
             populates: {
-                "path": "author project sender storage userCreate",
+                "path": "author project sender storage userCreate publish",
                 "select": "fullname bizfullname sign image phone name"
             },
             // select: 'name sign author project sender date storeSign amount status note storage userCreate createAt',

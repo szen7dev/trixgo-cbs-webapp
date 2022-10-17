@@ -55,6 +55,10 @@ export interface DocumentProps extends Omit<DocumentInserPayload, 'parentID' | '
         _id: string;
         name: string;
     };
+    publish?: {
+        _id: string;
+        name: string;
+    };
     property: {
         _id: string;
         name: string;

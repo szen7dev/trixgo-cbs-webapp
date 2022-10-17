@@ -1111,7 +1111,7 @@ button {
   min-height: 32px;
   /*max-width: 240px;*/
   /*max-height: 40px;*/
-  height: auto;
+  /* height: auto; */
 }
 .select-dropdown .select-options-container {
   /*min-width: 240px;*/
@@ -1120,6 +1120,15 @@ button {
 .select-dropdown .select-options-container .select-options-section {
   max-height: 350px;
 }
+.select-dropdown .select-options-container .select-options-section::-webkit-scrollbar {
+  display: none; /* for Chrome, Safari, and Opera */
+}
+.t-add-new-task-dialog .tox.tox-tinymce {
+  border: 0;
+}
+/* .t-add-new-task-dialog .tox.tox-tinymce {
+  border: 0;
+} */
 .alert-warning {
   color: #664d03;
   background-color: #fff3cd;

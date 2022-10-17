@@ -50,6 +50,7 @@ import {useDispatch} from "react-redux";
 import {useAppSelector} from "redux/reducer";
 import {setFilterDropdown, resetAllFilterAndKeyword} from "redux/reducer/DocumentProjectSlice";
 import { PmDocumentHeaderSearchInput } from "shareComponents/layouts/PmLayout/components";
+import { useQueryListCompany } from "services/hooks/useCompanies";
 
 const payloadHistoryTraffic: any = {
     appID: APP_ID.PCM.id,
@@ -95,7 +96,7 @@ export const DocumentProjectPage: FC = () => {
 
     useEffect(() => {
         document.title = `${projectInfo.sign} | Hồ sơ văn bản`;
-    }, []);
+    }, [projectInfo]);
 
     //_____Start history traffict
     const { createHistoryTraffics } = useHistoryTraffics();
@@ -122,7 +123,9 @@ export const DocumentProjectPage: FC = () => {
     const [storageKeyword, setStorageKeyword] = useState("");
     const [storagesID, setStoragesID] = useState<string[]>([]);
 
-    const { data: listDatahubContact } = useDatahubContact({ keyword: keywordDatahubContact }, true, false); // Danh bạ hệ thống
+    // const { data: listDatahubContact } = useDatahubContact({ keyword: keywordDatahubContact }, true, false); // Danh bạ hệ thống
+	const { data: listDatahubContact } = useQueryListCompany({ keyword: keywordDatahubContact }); // Danh bạ hệ thống mới
+
     const { listContracts } = useContractIsMembers({ params: {keyword: contractKeyword, populates: JSON.stringify({"path": "project", "select":"name sign"})}, isFetch: true });
     const { list: listStorages } = useStorage({ params: { companyID: typeof projectInfo.company === "string" ? projectInfo.company : "", keyword: storageKeyword,}, isFetchList: (!isloadingProjectInfo && typeof projectInfo._id === "string")});
 
@@ -614,7 +617,7 @@ export const DocumentProjectPage: FC = () => {
                                 className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border"
                                 style={{ width: '10%' }}
                             >
-                                Địa chỉ lưu trữ
+                                Địa chỉ lưu trữ 333
                             </th>
                         </tr>
                         </thead>
@@ -659,7 +662,8 @@ export const DocumentProjectPage: FC = () => {
                                         </Link>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
-                                        {document?.datahubContact?.name}
+                                        {document?.publish?.name ? document?.publish?.name : <p className="text-cbs-highlight-color"><i>{document?.datahubContact?.name}</i></p>}
+                                        {/* <p><i>{document?.datahubContact?.name}</i></p> */}
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
                                         {document?.sign}

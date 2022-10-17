@@ -30,9 +30,9 @@ export const documentRepository: DocumentRepository = {
 async function fetchListDocument(params : any) {
     const { data } = await API.get(`${DOCUMENT_URL}/list-document`, {
         params: {
-            select: 'name sign author project date createAt description note store amount status storeSign datahubContact',
+            select: 'name sign author project date createAt description note store amount status storeSign publish datahubContact',
             populates: {
-                "path": "author sender storage datahubContact",
+                "path": "author sender storage publish datahubContact",
                 "select": "fullname bizfullname sign image name"
             },
             ...params,
@@ -44,9 +44,9 @@ async function fetchListDocument(params : any) {
 async function fetchFilterListDocument(params : any) {
     const { data } = await API.get(`${DOCUMENT_URL}/filter-document`, {
         params: {
-            select: 'name sign author project date createAt description note store amount status storeSign datahubContact',
+            select: 'name sign author project date createAt description note store amount status storeSign publish datahubContact',
             populates: {
-                "path": "author sender storage project datahubContact",
+                "path": "author sender storage project publish datahubContact",
                 "select": "fullname bizfullname sign image name"
             },
             ...params,

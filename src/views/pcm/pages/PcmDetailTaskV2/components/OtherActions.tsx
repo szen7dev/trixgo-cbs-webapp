@@ -27,7 +27,6 @@ type Props = {
 }
 
 export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
-    // console.log(task)
     const { openModal, closeModal } = useModal();
     const wrapperClass = useRef<HTMLDivElement>(null)
     const [showOption, setShowOption] = useState(false);
@@ -167,6 +166,12 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                         >
                             In ấn - Mẫu phụ lục ảnh
                         </Link>
+                        <Link
+                            className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header block"}
+                            to={`/pcm/detail/${task._id}/print/4`}
+                        >
+                            In ấn - Mẫu đề nghị (RFA, RFI,...)
+                        </Link>
 
                         <hr style={{ opacity: '.3', width: '90%', display: 'flex', alignContent: 'center', alignItems: 'center', margin: 2 }} />
 
@@ -228,6 +233,7 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                                                     taskID={task._id}
                                                     milestone={task.milestone}
                                                     closeModal={closeModal}
+                                                    onConfirm={refetchTaskInfo}
                                                 />
                                             </div>
                                         )

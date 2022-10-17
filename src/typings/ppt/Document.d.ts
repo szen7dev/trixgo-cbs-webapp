@@ -66,6 +66,10 @@ export interface Document {
         _id: string;
         name: string;
     };
+    publish?: {
+        _id: string;
+        name: string;
+    };
     property: {
         _id: string;
         name: string;
