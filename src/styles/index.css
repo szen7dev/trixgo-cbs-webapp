@@ -1126,6 +1126,9 @@ button {
 .t-add-new-task-dialog .tox.tox-tinymce {
   border: 0;
 }
+.home-input-search:focus{
+  outline: 1px solid #CCCCCC;
+}
 /* .t-add-new-task-dialog .tox.tox-tinymce {
   border: 0;
 } */
