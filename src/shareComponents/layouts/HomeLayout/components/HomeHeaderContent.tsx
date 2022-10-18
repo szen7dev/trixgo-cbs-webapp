@@ -272,7 +272,7 @@ export const HomeHeaderContent: FC = () => {
           value={keyword}
           onChange={(e) => handleSearchChange(e)}
           className={
-            "pl-12 w-full h-[45px] bg-cbs-bg-input-search rounded-md p-4 text-primary-gray border-0.5 border-cbs-border placeholder:text-primary-gray placeholder:text-xl focus:outline-none focus:bg-white focus:shadow-md transition-all"
+            "pl-12 w-full h-[45px] bg-cbs-bg-input-search rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-1  focus:outline-cbs-border focus:bg-white focus:shadow-md transition-all home-input-search"
           }
           placeholder={`Tìm trong ${
             tabIndex === 1 ? "phản hồi" : tabIndex === 2 ? "chủ đề" : "file"
