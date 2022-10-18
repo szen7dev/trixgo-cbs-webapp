@@ -83,7 +83,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 	// const { assigned, checkboxRef, handleCheckAll, handleChangeCheckbox } = useCheckedList(data);
 	const { dataUserInfo, refetchDataUserInfo, user } = useAuth();
 	const [keyword, setKeyword] = useState("");
-
+	const [isFetchTask, setIsFetchTask] = useState(false);
 	const {
 		// isLoading,
 		// refetch,
@@ -118,44 +118,23 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 		})
 	}, false, true);
 
-	const { listTasks } = useTask({
+	let { listTasks } = useTask({
 		params: {
 			groupID,
 			keyword
 		},
 		isFetch: !!groupID
-	})
+	});
 
-	// xử lý checked
-	const getStateChecked = useCallback((id: string) => {
-		return idsChecked.includes(id) ? true : false;
-	}, [idsChecked]);
-
-	const onClickCheckButton = (id: string) => {
-		const check = idsChecked.includes(id);
-		if (check) {
-			const newList = [...idsChecked];
-			newList.splice(newList.findIndex((e: any) => e == id), 1);
-			setIdsChecked(newList);
-		} else {
-			const newList = [...idsChecked];
-			newList.push(id);
-			setIdsChecked(newList);
-		};
-	};
-
-	useEffect(() => {
-		document.title = `${infoDepartment?.data?.sign}-Thư mục dữ liệu`;
-	}, [location?.pathname]);
+	if(!groupID){
+		listTasks = []
+	}
 
 	useEffect(() => {
 		refetchInfoGroup()
-	}, [groupID]);
-
-	useEffect(() => {
 		refetchDataUserInfo()
-	}, []);
-
+		document.title = `${infoDepartment?.data?.sign}-Thư mục dữ liệu`;
+	}, [groupID, infoDepartment]);
 	return (
 		<>
 			{/* Content  */}
