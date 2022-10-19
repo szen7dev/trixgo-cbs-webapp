@@ -166,29 +166,35 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 					>
 						<img src={iconBack} alt={"----"} className={"w-[18px]"} />
 					</button>
-					{infoGroup?.data?.sign && <img src={nextIcon} alt={"-----"} className={"mx-4 h-[12px] w-[12px]"} />}
-					<Link to={`/pm/project/${projectID}/folder/${infoGroup?.data?._id}`}>
-						<div className="flex gap-2">
-							<img src={iconFolder} alt={"----"} className={"w-[18px]"} />
-							<span className="truncate max-w-[132px]">{infoGroup?.data?.sign}</span>
-						</div>
-					</Link>
+					{infoGroup?.data?.sign ?
+						<Link to={`/pm/project/${projectID}/folder/${infoGroup?.data?.parent?._id ? infoGroup?.data?.parent?._id : ""}`}>
+							<div className="flex gap-2">
+								<img src={iconFolder} alt={"----"} className={"w-[18px]"} />
+								<span className="truncate max-w-[132px]">{infoGroup?.data?.parent?.name || infoGroup?.data?.name}</span>
+							</div>
+						</Link> : <></>}
 
-					{infoGroup?.data?.parent?.sign && <img src={nextIcon} alt={"-----"} className={"mx-4 h-[12px] w-[12px]"} />}
-					<Link to={`/pm/project/${projectID}/folder/${infoGroup?.data?.parent?._id}`}>
-						<div className="flex gap-2">
-							<img src={iconFolder} alt={"----"} className={"w-[18px]"} />
-							<span className="truncate max-w-[132px]">{infoGroup?.data?.parent?.sign}</span>
-						</div>
-					</Link>
+					{infoGroup?.data?.parent?.sign ? <>
+						<img src={nextIcon} alt={"-----"} className={"mx-4 h-[12px] w-[12px]"} />
+						<Link to={`/pm/project/${projectID}/folder/${infoGroup?.data?.parent?._id}`}>
+							<div className="flex gap-2">
+								<img src={iconFolder} alt={"----"} className={"w-[18px]"} />
+								<span className="truncate max-w-[132px]">{infoGroup?.data?.name}</span>
+							</div>
+						</Link>
+					</> : <></>}
 
-					{infoGroup?.data?.parent?.parent?.sign && <img src={nextIcon} alt={"-----"} className={"mx-4 h-[12px] w-[12px]"} />}
+					{infoGroup?.data?.parent?.parent?.sign ? 
+					<>
+					<img src={nextIcon} alt={"-----"} className={"mx-4 h-[12px] w-[12px]"} />
 					<Link to={`/pm/project/${projectID}/folder/${infoGroup?.data?.parent?.parent?._id}`}>
 						<div className="flex gap-2">
 							{/* <img src={iconFolder} alt={"----"} className={"w-[18px]"} /> */}
-							<span className="truncate max-w-[132px]">{infoGroup?.data?.parent?.parent?.sign}</span>
+							<span className="truncate max-w-[132px]">{infoGroup?.data?.parent?.parent?.name}</span>
 						</div>
 					</Link>
+					</> : <></>}
+					
 					<button
 						className={"ml-6"}
 						onClick={() =>

@@ -22,6 +22,7 @@ type Props = {
     handleSetValue: any,
     groupParentPicker: any,
     setGroupParentPicker: any,
+    initialValue: any
 };
 
 type GroupSearchableHandle = {
@@ -39,10 +40,11 @@ export const GroupSearchable = forwardRef<GroupSearchableHandle, Props>(({
     onClearData,
     groupParentPicker,
     setGroupParentPicker,
-    data
+    data,
+    initialValue
 }, groupSearchableRef) => {
-    const [value, setValue] = useState<any>("");
-    const [groupCurrentPicker, setGroupCurrentPicker] = useState<any>({});
+    const [value, setValue] = useState<any>(initialValue?.value ? initialValue : {});
+    const [groupCurrentPicker, setGroupCurrentPicker] = useState<any>(initialValue?.value ? initialValue : {});
     const [groupOldParentPicker, setGroupOldParentPicker] = useState<any>([]);
     const [showOption, setShowOption] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
@@ -197,7 +199,7 @@ export const GroupSearchable = forwardRef<GroupSearchableHandle, Props>(({
                             ) : null}
                         </div>
                     </div>
-                    <div className="absolute bottom-0 p-3 text-right w-full bg-white border-t-0.5 border-cbs-border"
+                    <div className="bottom-0 p-3 text-right w-full bg-white border-t-0.5 border-cbs-border"
                         onClick={() => {
                             const item = groupCurrentPicker?.value ? groupCurrentPicker : groupParentPicker;
                             setValue(item);
