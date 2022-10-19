@@ -81,8 +81,8 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
   const [searchContract, setSearchContract] = useState("");
   const [companyID, setCompanyID] = useState(defaultValues?.company?._id || "");
   const [projectID, setProjectID] = useState(defaultValues?.project?._id || "");
-  const [groupParentPicker, setGroupParentPicker] = useState<any>({});
   const [groupID, setGroupID] = useState(defaultValues?.group?._id || "");
+  const [groupParentPicker, setGroupParentPicker] = useState<any>({});
   const [isNotiEmail, setIsNotiEmail] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
 
@@ -301,7 +301,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
 
   const handleScroll = (e: UIEvent<HTMLDivElement>, type: 'project' | 'group' | 'contract' | 'user' | 'field' | 'groupChild') => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
-    const bottom = scrollHeight - scrollTop >= clientHeight - 10;
+    const bottom = scrollHeight - scrollTop >= clientHeight - 15;
     if (!bottom) return;
 
     switch (true) {
@@ -470,6 +470,10 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                           onScroll={(e) => handleScroll(e, 'group')}
                           className={"max-w-full h-full flex-1"}
                           placeholder="Chọn nhóm"
+                          initialValue={{
+                            label: `${defaultValues.group?.sign}.${defaultValues.group?.name}`,
+                            value: defaultValues.group?._id,
+                          }}
                         />
                       </div>
                     </div>
