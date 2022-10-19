@@ -140,11 +140,13 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 			{/* Content  */}
 			<div className="flex flex-col h-full overflow-hidden">
 				<div className={"nav-drawing flex items-center text-lg p-4 text-primary-gray"}>
-					<button className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mr-3"}
-						onClick={history.goBack}
-					>
-						<img src={iconBack} alt={"----"} className={"w-[18px]"} />
-					</button>
+					{groupID ?
+						<button className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mr-3"}
+							onClick={history.goBack}
+						>
+							<img src={iconBack} alt={"----"} className={"w-[18px]"} />
+						</button> : <></>
+					}
 					{infoGroup?.data?.sign ?
 						<Link to={`/pm/project/${projectID}/folder/${infoGroup?.data?.parent?._id ? infoGroup?.data?.parent?._id : ""}`}>
 							<div className="flex gap-2">
@@ -163,7 +165,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 						</Link>
 					</> : <></>}
 
-					{infoGroup?.data?.parent?.parent?.sign ? 
+					{infoGroup?.data?.parent?.parent?.name ? 
 					<>
 					<img src={nextIcon} alt={"-----"} className={"mx-4 h-[12px] w-[12px]"} />
 					<Link to={`/pm/project/${projectID}/folder/${infoGroup?.data?.parent?.parent?._id}`}>
@@ -173,8 +175,8 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 						</div>
 					</Link>
 					</> : <></>}
-					
-					<button
+					{groupID ? 
+						<button
 						className={"ml-6"}
 						onClick={() =>
 							openModal(
@@ -191,10 +193,12 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 						}
 					>
 						<img src={iconAddNew} alt={"-----"} className={"h-[24px] w-[24px]"}/>
-					</button>
-					<button className={"ml-6"}>
+					</button> : <></>
+					}
+					
+					{/* <button className={"ml-6"}>
 						<img src={downloadIcon} alt={"-----"} className={"h-[24px] w-[24px]"}/>
-					</button>
+					</button> */}
 				</div>
 
 				{/* <div className={"table-folder-project"}>
