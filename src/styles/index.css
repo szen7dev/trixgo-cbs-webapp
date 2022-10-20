@@ -1106,6 +1106,19 @@ button {
 .select-search:focus {
   outline: none;
 }
+.transition-1s{
+  transition: 1s;
+  -webkit-transition: 1s;
+  -moz-transition: 1s;
+  -ms-transition: 1s;
+  -o-transition: 1s;
+}
+.top-165{
+  top: 165px;
+}
+.toggle-menulist{
+  top: 100%;
+}
 .select-dropdown {
   /*min-width: 160px;*/
   min-height: 32px;
