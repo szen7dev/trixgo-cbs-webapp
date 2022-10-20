@@ -1070,7 +1070,7 @@ export const ExpenseFormModal: FC<ContractExpenseModalProps> = ({ defaultValues,
                     Nghiệm thu và thanh toán
                   </span>
                 </div>
-                {openAcceptancePayment && (
+                {/* {openAcceptancePayment && (
                   <div className="flex items-center justify-between">
                     <p className="font-bold text-xl">USD</p>
                     <div className="flex items-center">
@@ -1084,7 +1084,7 @@ export const ExpenseFormModal: FC<ContractExpenseModalProps> = ({ defaultValues,
                       />
                     </div>
                   </div>
-                )}
+                )} */}
               </div>
               {openAcceptancePayment && (
                 <div className="pb-9 mb-7 h-full border-b mx-7">

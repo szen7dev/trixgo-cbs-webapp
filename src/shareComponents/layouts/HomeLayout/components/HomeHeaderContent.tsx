@@ -56,6 +56,7 @@ export const HomeHeaderContent: FC = () => {
   const [keywordSearchForFile, setKeywordSearchForFile] = useState("");
 
   const { listDataForResponse, isLoadingResponse } = useListResponseFromSearch({
+    isGroup: "1",
     keyword: keywordSearchForResponse,
     enabled: keywordSearchForResponse ? true : false,
   });
@@ -66,6 +67,7 @@ export const HomeHeaderContent: FC = () => {
         keyword: keywordSearchForSubject,
         isParent: "0",
         isActive: "1",
+        isGroup: "1"
       },
       isFetch: keywordSearchForSubject ? true : false,
     });
@@ -74,6 +76,7 @@ export const HomeHeaderContent: FC = () => {
     keyword: keywordSearchForFile,
     enabled: keywordSearchForFile ? true : false,
     limit: "3",
+    isGroup: "1"
   });
 
   const { data: listUsersSystem, loading: isLoadingUserSystem } = useUserSystem(

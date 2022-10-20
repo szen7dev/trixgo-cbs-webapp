@@ -151,12 +151,17 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
   //
 
   // Danh sách các response
+
   const query: any = {
     ...queryResponse,
     keyword: keywordForResponse,
     projectsID: project,
     fromDate: fromCreateDate,
     toDate: toCreateDate,
+    isGroup: (queryResponse.companyOfAuthorsID.length ||
+      queryResponse.authorsID.length ||
+      queryResponse.projectsID.length ||
+      queryResponse.official != 0 || keywordForResponse) ? "1" : "0",
     enabled: tabActive === 1 ? true : false,
   };
 
@@ -193,6 +198,9 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     isParent: isParent,
     subtypes: subtypes,
     status: status,
+    isGroup: (querySubject.companiesOfAssignee.length ||
+      querySubject.assigneesID.length ||
+      keywordForSubject) ? "1" : "0",
     ...querySubject,
   };
   if (filter !== "all") {
@@ -227,6 +235,9 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     fromDate: fromCreateDate,
     toDate: toCreateDate,
     projectsID: project,
+    isGroup: (queryFile.companyOfAuthorsID.length ||
+      queryFile.authorsID.length ||
+      keywordForFile) ? "1" : "0",
     ...queryFile,
     enabled: tabActive === 3 ? true : false,
   });

@@ -286,7 +286,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                     />
                   </div>
                   <span className="text-xl font-bold">
-                    Thông tin quản trị và phân loại
+                    Thông tin phân loại
                   </span>
                 </div>
                 {openManagementInfo && (
@@ -1227,10 +1227,10 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                     />
                   </div>
                   <span className="text-xl font-bold">
-                    Nghiệm thu và thanh toán
+                    Giá trị
                   </span>
                 </div>
-                {openAcceptancePayment && (
+                {/* {openAcceptancePayment && (
                   <div className="flex items-center justify-between">
                     <p className="font-bold text-xl">USD</p>
                     <div className="flex items-center">
@@ -1244,7 +1244,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                       />
                     </div>
                   </div>
-                )}
+                )} */}
               </div>
               {openAcceptancePayment && (
                 <div className="pb-9 mb-7 h-full border-b mx-7">
@@ -1262,7 +1262,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           handleBlur(e)
                         }
                       />
-                      <Field
+                      {/* <Field
                         type="text"
                         name="value"
                         className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
@@ -1270,7 +1270,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -1289,7 +1289,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         }
                         }
                       />
-                      <Field
+                      {/* <Field
                         type="text"
                         name="vatValue"
                         className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
@@ -1297,7 +1297,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -1315,7 +1315,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           handleBlur(e)
                         }
                       />
-                      <Field
+                      {/* <Field
                         type="text"
                         name="plus"
                         className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
@@ -1323,7 +1323,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -1341,7 +1341,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           handleBlur(e)
                         }
                       />
-                      <Field
+                      {/* <Field
                         type="text"
                         name="vatPlus"
                         className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
@@ -1349,7 +1349,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -1367,7 +1367,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           handleBlur(e)
                         }
                       />
-                      <Field
+                      {/* <Field
                         type="text"
                         name="advancePayment"
                         className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
@@ -1375,7 +1375,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -1393,7 +1393,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           handleBlur(e)
                         }
                       />
-                      <Field
+                      {/* <Field
                         type="text"
                         name="produce"
                         className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
@@ -1401,7 +1401,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -1419,7 +1419,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           handleBlur(e)
                         }
                       />
-                      <Field
+                      {/* <Field
                         type="text"
                         name="vatProduce"
                         className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
@@ -1427,7 +1427,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -1445,7 +1445,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           handleBlur(e)
                         }
                       />
-                      <Field
+                      {/* <Field
                         type="text"
                         name="plusProduce"
                         className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
@@ -1453,7 +1453,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -1471,7 +1471,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           handleBlur(e)
                         }
                       />
-                      <Field
+                      {/* <Field
                         type="text"
                         name="vatPlusProduce"
                         className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
@@ -1479,7 +1479,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -1497,7 +1497,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           handleBlur(e)
                         }
                       />
-                      <Field
+                      {/* <Field
                         type="text"
                         name="remainingProduce"
                         className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
@@ -1505,7 +1505,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -1523,7 +1523,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           handleBlur(e)
                         }
                       />
-                      <Field
+                      {/* <Field
                         type="text"
                         name="acceptance"
                         className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
@@ -1531,7 +1531,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -1549,7 +1549,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           handleBlur(e)
                         }
                       />
-                      <Field
+                      {/* <Field
                         type="text"
                         name="vatAcceptance"
                         className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
@@ -1557,7 +1557,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -1575,7 +1575,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           handleBlur(e)
                         }
                       />
-                      <Field
+                      {/* <Field
                         type="text"
                         name="plusAcceptance"
                         className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
@@ -1583,7 +1583,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -1601,7 +1601,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           handleBlur(e)
                         }
                       />
-                      <Field
+                      {/* <Field
                         type="text"
                         name="vatPlusAcceptance"
                         className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
@@ -1609,7 +1609,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -1627,7 +1627,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           handleBlur(e)
                         }
                       />
-                      <Field
+                      {/* <Field
                         type="text"
                         name="retainedValue"
                         className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
@@ -1635,7 +1635,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -1653,7 +1653,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           handleBlur(e)
                         }
                       />
-                      <Field
+                      {/* <Field
                         type="text"
                         name="advancePaymentDeduction"
                         className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
@@ -1661,7 +1661,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -1679,7 +1679,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           handleBlur(e)
                         }
                       />
-                      <Field
+                      {/* <Field
                         type="text"
                         name="otherDeduction"
                         className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
@@ -1687,7 +1687,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -1705,7 +1705,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           handleBlur(e)
                         }
                       />
-                      <Field
+                      {/* <Field
                         type="text"
                         name="recommendedPayment"
                         className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
@@ -1713,7 +1713,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -1731,7 +1731,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           handleBlur(e)
                         }
                       />
-                      <Field
+                      {/* <Field
                         type="text"
                         name="advancePaymentPaid"
                         className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
@@ -1739,7 +1739,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -1757,7 +1757,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           handleBlur(e)
                         }
                       />
-                      <Field
+                      {/* <Field
                         type="text"
                         name="amountPaid"
                         className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
@@ -1765,7 +1765,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -1783,7 +1783,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           handleBlur(e)
                         }
                       />
-                      <Field
+                      {/* <Field
                         type="text"
                         name="remainingPayment"
                         className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
@@ -1791,7 +1791,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -1809,7 +1809,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           handleBlur(e)
                         }
                       />
-                      <Field
+                      {/* <Field
                         type="text"
                         name="advancePaymentOverage"
                         className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
@@ -1817,7 +1817,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -1835,7 +1835,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           handleBlur(e)
                         }
                       />
-                      <Field
+                      {/* <Field
                         type="text"
                         name="vat"
                         className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
@@ -1843,7 +1843,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
                 </div>
