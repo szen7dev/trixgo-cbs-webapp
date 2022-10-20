@@ -227,12 +227,12 @@ export const ProjectBudgetDetailTab2:FC<Props> = ({ contractInfo }) => {
                     <td className={"border-0.5 border-primary-border p-2"}>
                         {item.name}
                     </td>
-                    {/* <td className={"border-0.5 border-primary-border p-2 text-right"}>
+                    <td className={"border-0.5 border-primary-border p-2 text-right"}>
                         {moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}
-                    </td> */}
-                    <td className={"border-0.5 border-primary-border p-2"}>
-                        {item.sign}
                     </td>
+                    {/* <td className={"border-0.5 border-primary-border p-2"}>
+                        {item.sign}
+                    </td> */}
                     <td className={"border-0.5 border-primary-border p-2 text-right"}>
                         {formatNumberMoney((item.produce || 0))}
                     </td>
