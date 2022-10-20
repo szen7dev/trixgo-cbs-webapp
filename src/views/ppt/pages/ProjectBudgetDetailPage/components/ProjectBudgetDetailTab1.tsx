@@ -221,7 +221,7 @@ export const ProjectBudgetDetailTab1:FC<Props> = ({ contractInfo }) => {
                         Sản lượng
                     </td>
                     <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
-                        {formatNumberMoney(contractInfo?.produce+contractInfo?.plusProduce)}
+                        {formatNumberMoney(Number(contractInfo?.produce+contractInfo?.vatProduce+contractInfo?.plusProduce+contractInfo?.vatPlusProduce))}
                     </td>
                 </tr>
                 <tr>
