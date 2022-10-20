@@ -48,6 +48,44 @@ export const HomeLeftMenuContent: FC = () => {
                 route: '/pcm/home'
             },
             {
+                label: "Việc của tôi",
+                icon: mailOutLineIcon,
+                count: Number(data?.data?.amountMyTask1 + data?.data?.amountMyTask2 + data?.data?.amountMyTask3) || 0,
+                route: '/pcm/mine'
+            },
+            {
+                label: "Việc quan tâm",
+                icon: starIcon,
+                count: 0,
+                route: '/pcm/bookmark'
+            },
+            // {
+            //     label: "Đã gửi",
+            //     icon: sendAndReceiveIcon,
+            //     count: 0,
+            //     route: '/pcm/send'
+            // },
+            {
+                label: "Việc nháp",
+                icon: fileIcon,
+                count: 0,
+                route: '/pcm/draft'
+            },
+        ];
+
+    const listTabSub: {
+        label: string,
+        icon: string,
+        count: number,
+        route: string
+    }[] = [
+            {
+                label: "Việc giao người khác",
+                icon: uploadIcon,
+                count: 0,
+                route: '/pcm/assign'
+            },
+            {
                 label: "Báo cáo theo dự án",
                 icon: tagIcon,
                 count: 0,
@@ -59,50 +97,6 @@ export const HomeLeftMenuContent: FC = () => {
                 count: 0,
                 route: '/pcm/users'
             },
-            // {
-            //     label: "Outbox",
-            //     icon: sendAndReceiveIcon,
-            //     count: 0,
-            //     route: '/pcm/send'
-            // },
-            {
-                label: "Việc của tôi",
-                icon: mailOutLineIcon,
-                count: Number(data?.data?.amountMyTask1 + data?.data?.amountMyTask2 + data?.data?.amountMyTask3) || 0,
-                route: '/pcm/mine'
-            },
-            {
-                label: "Việc giao người khác",
-                icon: uploadIcon,
-                count: 0,
-                route: '/pcm/assign'
-            },
-            // {
-            //     label: "Thầu và mua sắm",
-            //     icon: biddingImage,
-            //     count: 0,
-            //     route: '/pcm/bidding'
-            // },
-        ];
-
-    const listTabSub: {
-        label: string,
-        icon: string,
-        count: number,
-        route: string
-    }[] = [
-            {
-                label: "Việc quan tâm",
-                icon: starIcon,
-                count: 0,
-                route: '/pcm/bookmark'
-            },
-            {
-                label: "Hồ sơ thanh toán",
-                icon: paymentImage,
-                count: 0,
-                route: '/pcm/payment'
-            },
             {
                 label: "Báo cáo, giao nộp",
                 icon: deliveryImage,
@@ -110,17 +104,23 @@ export const HomeLeftMenuContent: FC = () => {
                 route: '/pcm/delivery'
             },
             {
+                label: "Thanh toán",
+                icon: paymentImage,
+                count: 0,
+                route: '/pcm/payment'
+            },
+            {
                 label: "Việc liên quan",
                 icon: linkIcon,
                 count: 0,
                 route: '/pcm/related'
             },
-            {
-                label: "Việc nháp",
-                icon: fileIcon,
-                count: 0,
-                route: '/pcm/draft'
-            },
+            // {
+            //     label: "Thầu và mua sắm",
+            //     icon: biddingImage,
+            //     count: 0,
+            //     route: '/pcm/bidding'
+            // },
             {
                 label: "Báo cáo động",
                 icon: fileIcon,
@@ -178,9 +178,9 @@ export const HomeLeftMenuContent: FC = () => {
                 {
                     listTab.map(nav => renderNav(nav))
                 }
-                <div onClick={() => setMenuState(!menuShowList)} className="text-primary-gray px-4 py-1">
+                <div onClick={() => setMenuState(!menuShowList)} className="text-primary-gray px-4 py-1 cursor-pointer hover:bg-slate-200">
                     {(menuShowList ? <ExpandLessIcon className="w-[20px]" fontSize="small"/> : <ExpandMoreIcon className="w-[20px]" fontSize="small"/>)}
-                    <span className="ml-2">{(menuShowList ? 'Danh sách thu dọn' : 'Danh sách mở rộng')}</span>
+                    <span className="ml-2 text-[14px]">{(menuShowList ? 'Thu gọn' : 'Danh sách mở rộng')}</span>
                 </div>
                 <div className={"transition-1s h-0 overflow-hidden " + (menuShowList ? ' h-[300px]' : '')}>
                     {
