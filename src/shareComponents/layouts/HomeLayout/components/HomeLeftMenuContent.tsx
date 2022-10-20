@@ -77,18 +77,26 @@ export const HomeLeftMenuContent: FC = () => {
                 count: 0,
                 route: '/pcm/assign'
             },
-            {
-                label: "Việc quan tâm",
-                icon: starIcon,
-                count: 0,
-                route: '/pcm/bookmark'
-            },
             // {
             //     label: "Thầu và mua sắm",
             //     icon: biddingImage,
             //     count: 0,
             //     route: '/pcm/bidding'
             // },
+        ];
+
+    const listTabSub: {
+        label: string,
+        icon: string,
+        count: number,
+        route: string
+    }[] = [
+            {
+                label: "Việc quan tâm",
+                icon: starIcon,
+                count: 0,
+                route: '/pcm/bookmark'
+            },
             {
                 label: "Hồ sơ thanh toán",
                 icon: paymentImage,
@@ -170,13 +178,14 @@ export const HomeLeftMenuContent: FC = () => {
                 {
                     listTab.map(nav => renderNav(nav))
                 }
-                <div className={"absolute w-full h-full bg-white transition-1s top-165 px-4 pt-2 " +
-                    (menuShowList ? ' toggle-menulist' : '')
-                }>
-                    <button onClick={() => setMenuState(!menuShowList)} className="text-primary-gray"> 
-                        {(menuShowList ? <ExpandLessIcon /> : <ExpandMoreIcon />)}
-                        {(menuShowList ? 'Danh sách thu dọn' : 'Danh sách mở rộng')}
-                    </button>
+                <div onClick={() => setMenuState(!menuShowList)} className="text-primary-gray px-4 py-1">
+                    {(menuShowList ? <ExpandLessIcon className="w-[20px]" fontSize="small"/> : <ExpandMoreIcon className="w-[20px]" fontSize="small"/>)}
+                    <span className="ml-2">{(menuShowList ? 'Danh sách thu dọn' : 'Danh sách mở rộng')}</span>
+                </div>
+                <div className={"transition-1s h-0 overflow-hidden " + (menuShowList ? ' h-[300px]' : '')}>
+                    {
+                        listTabSub.map(nav => renderNav(nav))
+                    }
                 </div>
             </div>
         </>
