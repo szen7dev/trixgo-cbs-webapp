@@ -248,14 +248,13 @@ const PCMRouter: FC = () => {
                       <ProjectBudgetPage />
                     </PmProjectLayout>
                   </Route>
-                  {/* http://localhost:3000/pm/project/60a8cb540400462461cbff9f/budget/type/1/detail/6295600f7ff7d174a2be9d33/tab/1 */}
                   <Route path="/pm/project/:id/budget/type/:type(1)/detail/:budgetId/tab/:tab">
                     <PmProjectLayout>
                       <ProjectBudgetDetailPage />
                     </PmProjectLayout>
                   </Route>
 
-                  <Route path="/pm/project/:id/budget/type/:type(4)/detail/:budgetId">
+                  <Route path="/pm/project/:id/budget/type/:type(5)/detail/:budgetId">
                     <PmProjectLayout>
                       <ProjectBudgetSpendingDetailPage />
                     </PmProjectLayout>
