@@ -8,6 +8,7 @@ import {ProjectBudgetPageType1} from "./components/ProjectBudgetPageType1";
 import {ProjectBudgetPageType2} from "./components/ProjectBudgetPageType2";
 import {ProjectBudgetPageType3} from "./components/ProjectBudgetPageType3";
 import {ProjectBudgetPageType4} from "./components/ProjectBudgetPageType4";
+import {ProjectBudgetPageType5} from "./components/ProjectBudgetPageType5";
 
 const ProjectBudgetPage: FC = () => {
 	const { id: projectID, type } = useParams<{ id: string , type: string}>();
@@ -35,7 +36,7 @@ const ProjectBudgetPage: FC = () => {
 	})
 
 	useEffect(() => {
-		document.title = `${projectInfo.sign} | Ngân sách hợp đồng`
+		document.title = `${projectInfo.sign} | Quản lý hợp đồng`
 	}, []);
 
 	if(!projectInfo) {
@@ -63,6 +64,12 @@ const ProjectBudgetPage: FC = () => {
 			{
 				type === "4" &&
 				<ProjectBudgetPageType4
+					projectInfo={projectInfo}
+				/>
+			}
+			{
+				type === "5" &&
+				<ProjectBudgetPageType5
 					projectInfo={projectInfo}
 				/>
 			}
