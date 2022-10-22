@@ -51,6 +51,7 @@ import ProjectAdminPositionTab from "views/ppt/pages/ProjectAdminPage/pages/Proj
 import { PmProjectLayout } from "../../shareComponents/layouts/PmLayout/PmProjectLayout";
 import LayoutProjectSecondaryV2 from "views/ppt/sharedComponents/layouts/LayoutProjectSecondaryV2";
 import { PmProjectLayoutV2 } from "shareComponents/layouts/PmLayout/PmProjectLayoutV2";
+import ProjectBiddingDetailPage from "views/ppt/pages/ProjectBiddingDetailPage";
 // import {DocumentProjectLayout} from "views/document/sharedComponents/layouts/DocumentProjectLayout";
 
 const DocumentOfPackagePage = lazy(() => import("views/document/pages/DocumentOfPackagePage"))
@@ -287,6 +288,16 @@ const PCMRouter: FC = () => {
                         path="/pm/project/:id/bidding/3"
                         component={() => <>Sample Data</>}
                       />
+                      <Route exact
+                        // path="/pm/project/:id/bidding/:id"
+                        path="/pm/project/:id/bidding/id5"
+                        component={ProjectBiddingDetailPage}
+                      />
+                    </PmProjectLayout>
+                  </Route>
+                  <Route exact path={["/pm/project/:id/bidding/id5", "/pm/project/:id/bidding/:id"]}>
+                    <PmProjectLayout>
+                      <ProjectBiddingDetailPage />
                     </PmProjectLayout>
                   </Route>
                   <Route exact path="/pm/project/:id/payment">
