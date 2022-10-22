@@ -94,15 +94,16 @@ const TaskRepository = {
   async listTask(payload: TaskListParams): Promise<ListTaskResponse> {
     const { data } = await API.get<ListTaskResponse>(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl({
-        select: "assignee lastLog checklist description name expiredTime status percentage project actualStartTime actualFinishTime amountChecklist amountFinishedChecklist milestone startTime amountCurrentStatus amountSolution amountResponseOther accessUsers modifyAt linksDocs",
-        populates: JSON.stringify({
-          path: "assignee lastLog project",
-          select: "name fullname bizfullname email phone position image author content createAt sign",
-          populate: {
-            path: "author position",
-            select: "_id fullname bizfullname image name",
-          }
-        }),
+        select: "author assignee related lastLog checklist description name expiredTime status percentage project actualStartTime actualFinishTime amountChecklist amountFinishedChecklist milestone startTime amountCurrentStatus amountSolution amountResponseOther accessUsers modifyAt linksDocs authorAttachs",
+        populates: populatesTask,
+        // populates: JSON.stringify({
+        //   path: "author assignee lastLog project related",
+        //   select: "name fullname bizfullname email phone position image author content createAt sign",
+        //   populate: {
+        //     path: "author position",
+        //     select: "_id fullname bizfullname image name",
+        //   }
+        // }),
         ...payload
       })}`
     );
@@ -130,9 +131,9 @@ const TaskRepository = {
     );
     return data;
   },
-  
+
   async taskInfo(payload: TaskInfoParams): Promise<any> {
-    const { data } = await API.get<any>(
+    const { data } = await API.get(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl({
         select: "name description type typeStatus status draft alert priority project contract parent checklist createAt field group author assignee related expiredTime startTime actualStartTime actualFinishTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures openedUsers comments amountComment amountResponse amountMarkedResponse startTime subtype flags milestone links openedStatus amountCurrentStatus amountSolution amountResponseOther accessUsers timeImportExcel milestone unit unitPrice quantity amountoftime judgement ontime quality viewedUsers linksDocs",
         populates: populatesTask,

@@ -5,21 +5,26 @@ import { useTranslation } from "react-i18next";
 import { DIRECTION_TYPES, DOCUMENT_TYPES, DOCUMENT_TYPES_SORT } from "apis/localdb";
 
 import type { Document } from "typings/ppt/Document";
+import { number } from "yup";
 
 const DATE_FORMAT = "DD/MM/YYYY";
 interface TableGeneralInformationProps extends HTMLAttributes<HTMLDivElement> {
   docInfo: Document;
 }
+const finishs = [
+  { _id: 1, name: "Đang triển khai" }, 
+  { _id: 2, name: "Hoàn thành" }
+];
 export const TableGeneralInformation: FC<TableGeneralInformationProps> = ({
   docInfo,
   ...props
 }) => {
   const { t } = useTranslation(["document"]);
-
+  console.log({ docInfo })
   const table = React.useMemo(
     () => [
       { title: "Mã hiệu", value: docInfo.sign },
-      { title: "Cá nhân ban hành", value: docInfo.sender?.name },
+      { title: "Hồ sơ hoàn thành", value: finishs[Number(docInfo?.finish)-1]?.name },
       { title: "Mã hiệu hồ sơ lưu", value: docInfo.storeSign },
       { title: "Gói thầu, hạng mục", value: docInfo.package?.name },
       {

@@ -1831,7 +1831,6 @@ export const ExpenseFormModal: FC<ContractExpenseModalProps> = ({ defaultValues,
                         placeholder: "Thời hạn bảo lãnh hợp đồng",
                       }}
                     />
-
                   </div>
 
                   <div>
@@ -1852,6 +1851,7 @@ export const ExpenseFormModal: FC<ContractExpenseModalProps> = ({ defaultValues,
                     />
 
                   </div>
+                  
                 </div>
               )}
               <footer className="absolute -pl-6 bottom-0 h-[60px] w-full border-t border-primary-border flex items-center justify-end">

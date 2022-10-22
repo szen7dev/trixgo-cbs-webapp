@@ -123,7 +123,7 @@ export const ModalCreateDocument: React.FC = () => {
 			package: state.initialValues?.package?._id,
 			project: state.initialValues?.project?._id,
 			receiver: state.initialValues?.receiver?._id,
-			sender: state.initialValues?.sender?._id,
+			finish: state.initialValues?.finish,
 			storage: state.initialValues?.storage?._id,
 			property: state.initialValues?.property?._id,
 			completeStatus: state.initialValues?.completeStatus,
@@ -173,7 +173,7 @@ export const ModalCreateDocument: React.FC = () => {
 				})),
 				name: "direction",
 			},
-			{ title: "Cá nhân ban hành", data: listContactSender, name: "sender" },
+			{ title: "Hồ sơ hoàn thành", data: [{_id: 1, name: "Đang triển khai" }, {  _id: 2, name: "Hoàn thành" }], name: "finish" },
 			{ title: "Nhận", data: listContactReceiver, name: "receiver" },
 			{ title: "Phân loại", data: properties, name: "property" },
 			{
@@ -221,7 +221,7 @@ export const ModalCreateDocument: React.FC = () => {
 						packageID: values.package,
 						storageID: values.storage,
 						propertyID: values.property,
-						senderID: values.sender,
+						finish: values.finish,
 						receiverID: values.receiver,
 						publishID: values.field,
 						contractID: values.contract
@@ -298,9 +298,9 @@ export const ModalCreateDocument: React.FC = () => {
 													return setKeywordPackage(value);
 												}
 
-												if(item.name == "sender"){
-													return setKeywordSender(value);
-												}
+												// if(item.name == "sender"){
+												// 	return setKeywordSender(value);
+												// }
 
 												if(item.name == "receiver"){
 													return setKeywordReceiver(value);
@@ -361,7 +361,7 @@ export const ModalCreateDocument: React.FC = () => {
 																500
 															)}
 															initialValue={
-																['direction', 'type'].includes(item.name)
+																['direction', 'type', 'finish'].includes(item.name)
 																	? item.data.find((elm) => {
 																		return elm._id === state?.initialValues[item.name];
 																	})

@@ -115,8 +115,16 @@ const mappingData = (data: any, isDataPayLoad = false) => {
 
     cgValue: Number(data.cgValue) || 0,
     agValue: Number(data.agValue) || 0,
+    insuranceValue: Number(data.insuranceValue) || 0,
+
     expiredCg: convertDateToString(data.expiredCg),
     expiredAg: convertDateToString(data.expiredAg),
+    expiredInsurance: convertDateToString(data.expiredInsurance),
+
+    alertAg: Number(data.alertAg) || 0,
+    alertCg: Number(data.alertCg) || 0,
+    alertInsurance: Number(data.alertInsurance) || 0,
+
     dependentUnit: isDataPayLoad ? data?.dependentUnit?.value : convertInitialValueDropdown(data?.dependentUnit || ''),
   }
 }
@@ -1974,7 +1982,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                 <span className="text-xl font-bold">Bảo lãnh</span>
               </div>
               {openGuarantee && (
-                <div className="grid grid-cols-2 gap-x-11 gap-y-5 pb-9 mb-7 mx-7">
+                <div className="grid grid-cols-3 gap-x-11 gap-y-5 pb-9 mb-7 mx-7">
                   <div>
                     <p className="text-primary-gray text-xs mb-2">
                       Bảo lãnh hợp đồng
@@ -2001,6 +2009,19 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                     />
                   </div>
 
+                  <div>
+                    <p className="text-primary-gray text-xs mb-2">
+                      Bảo lãnh bảo hành
+                    </p>
+                    <Field
+                      type="text"
+                      name="insuranceValue"
+                      className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
+                      placeholder="Bảo lãnh bảo hành..."
+                      onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
+                    />
+                  </div>
+                
                   <div>
                     <p className="text-primary-gray text-xs mb-2">
                       Thời hạn bảo lãnh hợp đồng
@@ -2037,6 +2058,64 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                       }}
                     />
 
+                  </div>
+
+                  <div>
+                    <p className="text-primary-gray text-xs mb-2">
+                      Thời hạn bảo lãnh bảo hành
+                    </p>
+                    <DayPickerInput
+                      format={DATE_FORMAT}
+                      value={
+                        initialValues.expiredInsurance &&
+                        moment(initialValues.expiredInsurance).format(DATE_FORMAT)
+                      }
+                      onDayChange={(day: any) => setFieldValue("expiredInsurance", day)}
+                      inputProps={{
+                        className: "pl-3 border border-primary-border w-full rounded w-full h-[32px] outline-none",
+                        placeholder: "Thời hạn bảo lãnh bảo hành",
+                      }}
+                    />
+
+                  </div>
+
+                  <div>
+                    <p className="text-primary-gray text-xs mb-2">
+                      Thông báo trước thời hạn(Hợp đồng)
+                    </p>
+                    <Field
+                      type="number"
+                      name="alertAg"
+                      className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
+                      placeholder="Thông báo trước thời hạn..."
+                      onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
+                    />
+                  </div>
+
+                  <div>
+                    <p className="text-primary-gray text-xs mb-2">
+                      Thông báo trước thời hạn(Tạm ứng)
+                    </p>
+                    <Field
+                      type="number"
+                      name="alertCg"
+                      className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
+                      placeholder="Thông báo trước thời hạn..."
+                      onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
+                    />
+                  </div>
+
+                  <div>
+                    <p className="text-primary-gray text-xs mb-2">
+                      Thông báo trước thời hạn(Bảo hành)
+                    </p>
+                    <Field
+                      type="number"
+                      name="alertInsurance"
+                      className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
+                      placeholder="Thông báo trước thời hạn..."
+                      onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
+                    />
                   </div>
                 </div>
               )}
