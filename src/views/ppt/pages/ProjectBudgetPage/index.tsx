@@ -64,7 +64,7 @@ const ProjectBudgetPage: FC = () => {
 			{
 				type === "4" &&
 				<ProjectBudgetPageType4
-					projectInfo={projectInfo}
+					// projectInfo={projectInfo}
 				/>
 			}
 			{

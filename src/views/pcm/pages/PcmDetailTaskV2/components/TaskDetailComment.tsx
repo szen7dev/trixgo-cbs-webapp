@@ -61,7 +61,6 @@ export const TaskDetailComment: FC<Props> = ({ task, userId, refetchInfo }) => {
             const { data, error } = result;
 
             if (error) return;
-
             const { infoObject, infoComment, parentID, method } = data;
 
             if (infoObject?._id !== task._id) return;
