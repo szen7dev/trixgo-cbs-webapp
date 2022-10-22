@@ -172,7 +172,6 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                 <div className={"mt-2"} dangerouslySetInnerHTML={{
                     __html: (editDescription && task.description) ? task.description : task.description?.replace(/\n/g, '<br />')
                 }} />
-                {/*  UI DEMO  */}
                 { task.authorAttachs?.length ? (
                     <div className={"mt-2"}>
                         <div className={"user-attach mt-4"}>
