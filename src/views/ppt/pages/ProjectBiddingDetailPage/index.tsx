@@ -37,13 +37,13 @@ import { useProject } from 'services/hooks/items/useProject';
 import { useBiddingPlan } from "services/hooks/bidding/useBiddingPlan";
 import { useDocumentPackage } from "services/hooks/document/useDocumentPackage";
 
-import categoryIcon from "../../../../assets/images/icons8-category-48.svg";
-import contractIcon from "../../../../assets/images/icons8-contract-64-blue.svg";
-import downloadIcon from "../../../../assets/images/icons8-download-64.svg";
-import iconPencil from "../../../../assets/images/icons8-pencil-96 1.png";
-import nextIcon from "../../../../assets/images/icons-arrow-next.svg";
+import backIcon from "../../../../assets/images/Frame 3707.svg";
 import PaginateV2 from "shareComponents/common/PaginateV2";
 import BiddingStepper from "./Stepper";
+import BiddingTable from "./Table/BiddingTable";
+import BiddingJobList from "./List/BiddingJobList";
+import BiddingDetailList from "./List/BiddingDetailList";
+import BiddingInfro from "./Table/BiddingInfro";
 
 const ProjectBiddingDetailPage: FC = () => {
   // Phân trang
@@ -61,91 +61,35 @@ const ProjectBiddingDetailPage: FC = () => {
   })
 
   return (
-    <div className={"flex flex-col relative h-full"}>
+    <div className={"flex flex-col relative h-full p-4"}>
       <div className="flex justify-between">
-        <div>
-          <a href="/pm/project/:id/bidding">back</a>
-          <div>Cung cấp, thi công lắp đặt cửa nhôm kính, vách nhôm kính</div>
+        <div className="flex items-center	">
+          <a href="/pm/project/:id/bidding"><img src={backIcon} alt="Back" /></a>
+          <div className="pl-3.5 text-lg	text-primary-gray">Cung cấp, thi công lắp đặt cửa nhôm kính, vách nhôm kính</div>
         </div>
         <div>
-          <button>Tạo mới</button>
+          <button className="px-5 py-2 text-primary-light bg-cbs-green rounded font-bold ">
+            Tạo mới
+          </button>
         </div>
       </div>
-      <div>
-        <div>Thông tin chung</div>
-        <div className="flex">
-          <div className="w-1/2">
-            <div className="flex">
-              <div className="w-1/3">Tên gói thầu</div>
-              <div className="w-2/3">Tư vấn Quản lý dự án và Tư vấn giám sát</div>
-            </div>
-            <div className="flex">
-              <div className="w-1/3">Số hiệu</div>
-              <div className="w-2/3">GT01</div>
-            </div>
-            <div className="flex">
-              <div className="w-1/3">Kế hoạch bắt đầu</div>
-              <div className="w-2/3">15/2/2021</div>
-            </div>
-            <div className="flex">
-              <div className="w-1/3">Kế hoạch kết thúc</div>
-              <div className="w-2/3">15/9/2021</div>
-            </div>
-            <div className="flex">
-              <div className="w-1/3">Ngày kết thúc thực tế</div>
-              <div className="w-2/3">18/9/2021 (57 ngày)</div>
-            </div>
-            <div className="flex">
-              <div className="w-1/3">Ngân sách dự kiến</div>
-              <div className="w-2/3">100.000.000.000</div>
-            </div>
-            <div className="flex">
-              <div className="w-1/3">Kế hoạch ký hợp đồng</div>
-              <div className="w-2/3">18/9/2021</div>
-            </div>
-            <div className="flex">
-              <div className="w-1/3">Ghi chú</div>
-              <div className="w-2/3">Đang chờ thương thảo hợp đồng</div>
-            </div>
-          </div>
-          <div className="w-1/2">
-            <div className="flex">
-              <div className="w-1/3">Thuộc dự án</div>
-              <div className="w-2/3">Xây dựng trường Tiểu học và Trung học cơ sở Tây Hồ Tây</div>
-            </div>
-            <div className="flex">
-              <div className="w-1/3">Tình trạng</div>
-              <div className="w-2/3">Đang triển khai</div>
-            </div>
-            <div className="flex">
-              <div className="w-1/3">Hình thức</div>
-              <div className="w-2/3">Chào giá cạnh tranh</div>
-            </div>
-            <div className="flex">
-              <div className="w-1/3">Loại hợp đồng</div>
-              <div className="w-2/3">Đơn giá cố định</div>
-            </div>
-            <div className="flex">
-              <div className="w-1/3">Tiến độ thực hiện hợp đồng</div>
-              <div className="w-2/3">100 ngày</div>
-            </div>
-            <div className="flex">
-              <div className="w-1/3">Số nhà thầu tham gia</div>
-              <div className="w-2/3">08</div>
-            </div>
-            <div className="flex">
-              <div className="w-1/3">Đơn vị trúng thầu</div>
-              <div className="w-2/3">Công ty Cổ phần ABC</div>
-            </div>
-            <div className="flex">
-              <div className="w-1/3">Giá trúng thầu</div>
-              <div className="w-2/3">90.000.000.000</div>
-            </div>
-          </div>
+      <div className="mt-9">
+        <BiddingTable />
+      </div>
+      <div className="py-8">
+        <div className="text-cbs-subtext pb-5 text-lg ml-3">
+          Tiến trình triển khai (4/9 - 45%)
         </div>
+        <BiddingStepper />
       </div>
       <div>
-        <BiddingStepper/>
+        <BiddingInfro />
+      </div>
+      <div>
+        <BiddingJobList />
+      </div>
+      <div>
+        <BiddingDetailList />
       </div>
     </div>
   );

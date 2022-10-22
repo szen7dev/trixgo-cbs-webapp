@@ -295,6 +295,9 @@ const PCMRouter: FC = () => {
                       />
                     </PmProjectLayout>
                   </Route>
+                  {/* url for checking layout /pm/project/:id/bidding/id5 
+                  remove when connect api
+                  */}
                   <Route exact path={["/pm/project/:id/bidding/id5", "/pm/project/:id/bidding/:id"]}>
                     <PmProjectLayout>
                       <ProjectBiddingDetailPage />
