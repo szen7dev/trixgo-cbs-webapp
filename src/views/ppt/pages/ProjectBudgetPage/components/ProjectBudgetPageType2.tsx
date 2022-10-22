@@ -12,47 +12,11 @@ export const ProjectBudgetPageType2:FC = () => {
         <>
             <div className={"sticky top-0 z-10 block"}>
                 <div className={"flex items-center px-4 py-2"}>
-                    {/* <div className={"flex items-center flex-1"}>
-                        <DropdownSearchableV2
-                            className={"mr-4 border border-primary-border rounded-lg mb-2"}
-                            placeholder={"Loại gói thầu"}
-                            prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"}/>}
-                            isMultiple={true}
-                            disableSearch={true}
-                            data={[]}
-                        />
-                        <DropdownSearchableV2
-                            className={"mr-4 border border-primary-border rounded-lg mb-2"}
-                            placeholder={"Hình thức"}
-                            prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"}/>}
-                            isMultiple={true}
-                            disableSearch={true}
-                            data={[]}
-                        />
-                        <DropdownSearchableV2
-                            className={"mr-4 border border-primary-border rounded-lg mb-2"}
-                            placeholder={"Loại hợp đồng"}
-                            prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"}/>}
-                            isMultiple={true}
-                            disableSearch={true}
-                            data={[]}
-                        />
-                        <DropdownSearchableV2
-                            className={"mr-4 border border-primary-border rounded-lg mb-2"}
-                            placeholder={"Trạng thái"}
-                            prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"}/>}
-                            isMultiple={true}
-                            disableSearch={true}
-                            data={[]}
-                        />
-                    </div>
-                    <button className={"h-[32px] rounded bg-cbs-green text-white font-bold px-4"}>
-                        Tạo mới
-                    </button> */}
+                   
                 </div>
                 <div className={"flex items-center pb-2"}>
                     <NavigateTabBudgetPage/>
-                    <button className={"flex items-center justify-center mx-3 ml-6"}>
+                    {/* <button className={"flex items-center justify-center mx-3 ml-6"}>
                         <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"}/>
                     </button>
                     <button className={"flex items-center justify-center mx-3 ml-6"}>
@@ -66,7 +30,7 @@ export const ProjectBudgetPageType2:FC = () => {
                         <button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"}>
                             <img src={nextIcon} alt={"----"}/>
                         </button>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <div className="flex-1 overflow-y-auto">
@@ -94,7 +58,7 @@ export const ProjectBudgetPageType2:FC = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {[...Array(3)].map((e,i) => (
+                    {/* {[...Array(3)].map((e,i) => (
                         <tr key={i}>
                             <td className={"p-2 border-0.5 border-primary-border text-center"}>
                                 <input className="form-check-input line mr-2" type="checkbox" value="" id="check"/>
@@ -116,7 +80,7 @@ export const ProjectBudgetPageType2:FC = () => {
                                 Đang yêu cầu nhà thầu gia hạn
                             </td>
                         </tr>
-                    ))}
+                    ))} */}
                 </tbody>
             </table>
             </div>

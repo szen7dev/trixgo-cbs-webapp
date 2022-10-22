@@ -31,7 +31,7 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
     const profileId = JSON.parse(currentUser)?._id;
     const dispatch = useDispatch();
     const {socketRef} = useContext(context);
-
+    console.log("xxxxxxxxxxxxxxxxxxxxx");
     const inSearchMode = useSelector((state: RootState) => state.searchMessage.data.inSearchMode[currentChat]);
     const amountMissMessage = useSelector((state: RootState) => state.listConversation.data.amountMissMessage);
     const isReviewOldMessage = useSelector((state: RootState) => state.listMessage.data.isReviewOldMessage[currentChat]);
@@ -40,7 +40,7 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
     const {getListPinMessage} = UseConversation();
     const paramsRefetchListMember = {conversationID: currentChat, populates: JSON.stringify({"path": "addedBy member", "select": "_id bizfullname image"})};
     const {refetchListMembers} = UseInformationMessage(paramsRefetchListMember, false, "members");
-
+    
     useEffect(() => {
         if (!socket) return;
         socket.on('CHATTING_SSC_FIRE_MESSAGE', onFireMessage);

@@ -27,7 +27,7 @@ async function fetchDocumentInfo(params: DocumentInfoQueryPayload): Promise<Docu
                     "path": "company contract userUpdate files property package project sender receiver author storage field publish parent",
                     "select": "_id path name sign type fullname members company"
                 },
-                select: 'company userUpdate name sign type description project package approver requestResponse date storage createAt updatedAt receivedDate expiredResponse modifyAt value amount amountDelivery direction storeSign style status receiver property field note parent completeStatus contract publish',
+                select: 'company userUpdate name sign type description project package approver requestResponse date storage createAt updatedAt receivedDate expiredResponse modifyAt value amount amountDelivery direction storeSign style status receiver property field note parent completeStatus contract publish finish',
                 ...params,
             }
         }

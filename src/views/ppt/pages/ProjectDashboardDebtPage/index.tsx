@@ -3,23 +3,13 @@ import { useParams, Link, useHistory } from 'react-router-dom';
 import iconBack from "assets/images/icon-back-gray.svg";
 
 // Hook
-import useCheckedList from 'services/hooks/ppt/useCheckedList';
-import { useQueryListCompanyOfAssigneeAndAmountTask } from "services/hooks/pcm/useStatistical";
 import { useContractIpcCustom } from 'services/hooks/cmcs/useContractIPC';
-
-import {SearchInput, GroupActions, ButtonMore, DropdownSearchableV2} from "shareComponents/common";
-import ModalInformation from "./components/ModalInformation";
 import { useProject } from 'services/hooks/items/useProject';
 import ContractIPCRepository from 'apis/cmcs/contractIPC';
 
 const ProjectDashboardDebtPage: FC = () => {
-	const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
-	const [data, setData] = useState<{ id: number, [key: string]: any }[]>([])
 	const [dataDebt, setDataDebt] = useState([]);
-	const [companyPopup, setCompanyPopup] = useState();
-	const [typeStatusPopup, setTypeStatusPopup] = useState();
 	const { id: projectID } = useParams<{ id: string }>();
-	const [keyword, setKeyword] = useState("");
     const history = useHistory();
 	const [totalOverdueDebts1, setTotalOverdueDebts1] = useState(0);
 	const [totalPeriodDebts1, setTotalPeriodDebts1] = useState(0);
@@ -38,8 +28,8 @@ const ProjectDashboardDebtPage: FC = () => {
         isFetchAmountByProperty: true
     });
 	let listData: any = [];
-
-	if(contractIPCAmountByProperty){
+	if(contractIPCAmountByProperty?.data?.length){
+		
 		const contractIPCAmountByPropertyFunction = async () =>{
 			for (const item of contractIPCAmountByProperty?.data) {
 				// Tổng công nợ
@@ -50,11 +40,10 @@ const ProjectDashboardDebtPage: FC = () => {
 					optionTime: 1,
 					projectID
 				});
-
 				let listDataTemp: any = { key: item?._id?.sellerInfo?.name, trongKy: (item.amount/1000000000).toFixed(2), phanTramQuaHan: 0, phanTramTrongKy: 100 };
 				totalPeriodDebts = item.amount;
 				// Tổng công nợ quá hạn
-				data.data.map((infoData: any) => {
+				data?.data?.map((infoData: any) => {
 					if(item?._id?.sellerInfo?._id == infoData._id.sellerInfo._id){
 						const phanTramQuaHan = (infoData.amount/item.amount)*100;
 						listDataTemp = { 
@@ -73,8 +62,6 @@ const ProjectDashboardDebtPage: FC = () => {
 			}
 			setTotalOverdueDebts1(totalOverdueDebts);
 			setTotalPeriodDebts1(totalPeriodDebts);
-			// console.log({ totalOverdueDebts, totalPeriodDebts });
-
 			if(listData.length && !dataDebt.length){
 				setDataDebt(listData);
 			}
@@ -94,13 +81,7 @@ const ProjectDashboardDebtPage: FC = () => {
 	useEffect(() => {
 		document.title = `${projectInfo.sign} | Công nợ`
 	}, []);
-
-	const toggleVisible = ({ company, typeStatus }: any) => {
-		setVisibleDrawer(!visibleDrawer)
-		setCompanyPopup(company)
-		setTypeStatusPopup(typeStatus)
-	};
-
+	
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
 			<div className={"sticky top-0 bg-white z-10"}>

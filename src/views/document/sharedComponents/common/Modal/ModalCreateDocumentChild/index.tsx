@@ -163,7 +163,7 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 				})),
 				name: "direction",
 			},
-			{ title: "Cá nhân ban hành", data: listContactSender, name: "sender" },
+			{ title: "Hồ sơ hoàn thành", data: [{_id: 1, name: "Đang triển khai" }, {  _id: 2, name: "Hoàn thành" }], name: "finish" },
 			{ title: "Nhận", data: listContactReceiver, name: "receiver" },
 			{ title: "Phân loại", data: properties, name: "property" },
 			{
@@ -231,8 +231,8 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 			formatValues.packageID = values.package;
 		}
 
-		if(values.sender){
-			formatValues.senderID = values.sender;
+		if(values.finish){
+			formatValues.finish = values.finish;
 		}
 
 		if(values.receiver){
@@ -252,8 +252,8 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 		if(!formatValues.direction)
 			return toast.warning("Vui lòng chọn hướng hồ sơ")
 
-		if(!formatValues.sender)
-			return toast.warning("Vui lòng chọn ban hành")
+		// if(!formatValues.sender)
+		// 	return toast.warning("Vui lòng chọn ban hành")
 
 		if(!formatValues.property)
 			return toast.warning("Vui lòng chọn tính chất")
@@ -338,9 +338,9 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 													return setKeywordPackage(value);
 												}
 
-												if(item.name == "sender"){
-													return setKeywordSender(value);
-												}
+												// if(item.name == "sender"){
+												// 	return setKeywordSender(value);
+												// }
 
 												if(item.name == "receiver"){
 													return setKeywordReceiver(value);
@@ -401,7 +401,7 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 																500
 															)}
 															initialValue={
-																['direction', 'type'].includes(item.name)
+																['direction', 'type', 'finish'].includes(item.name)
 																	? item.data.find((elm) => {
 																		return elm._id === state?.initialValues[item.name];
 																	})

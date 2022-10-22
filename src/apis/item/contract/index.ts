@@ -16,7 +16,6 @@ import {
 const cmcsURL = "/api/item";
 
 const ContractRepository = {
-
   async getListContract(payload: ListContractsPayload): Promise<ListContractsResponse> {
     const { data } = await API.get<ListContractsResponse>(
       `${cmcsURL}/contracts?${convertObToUrl(payload)}`
