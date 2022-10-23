@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import { useParams, Link, useHistory } from 'react-router-dom';
 import iconBack from "assets/images/icon-back-gray.svg";
+import {formatNumberMoney} from "utils/cmcs";
 
 // Hook
 import { UseContractIPCListWithPager } from 'services/hooks/cmcs/useContractIPC';
@@ -125,24 +126,24 @@ const ProjectDashboardDebtBuyerInfoPage: FC = () => {
 									{item?.name}
                                 </td>
                                 <td className={"border-0.5 border-primary-border p-2 text-right"}>
-									{(item?.recommendedPayment/1000000000).toFixed(2)}Tỷ
+									{formatNumberMoney(item?.recommendedPayment)}
                                 </td>
                                 <td className={"border-0.5 border-primary-border p-2 text-right"}>
 									{moment(item?.timeForPayment).format("L")}
                                 </td>
                                 <td className={"border-0.5 border-primary-border p-2 text-right"}>
-									{(item?.amountPaid/1000000000).toFixed(2)}Tỷ
+									{formatNumberMoney(item?.amountPaid)}
                                 </td>
 								<td className={"border-0.5 border-primary-border p-2 text-right"}>
-									{(item?.remainingPayment/1000000000).toFixed(2)}Tỷ
+									{formatNumberMoney(item?.remainingPayment)}
                                 </td>
-                                <td className={"border-0.5 border-primary-border p-2 text-right"}>
+                                <td className={"border-0.5 border-primary-border p-2"}>
 									{item?.buyerInfo?.name}
                                 </td>
-                                <td className={"border-0.5 border-primary-border p-2 text-right"}>
+                                <td className={"border-0.5 border-primary-border p-2"}>
 									{item?.sellerInfo?.name}
                                 </td>
-                                <td className={"border-0.5 border-primary-border p-2 text-right"}>
+                                <td className={"border-0.5 border-primary-border p-2"}>
 									{getStatusValue(item?.contract.status)}
                                 </td>
                             </tr>
