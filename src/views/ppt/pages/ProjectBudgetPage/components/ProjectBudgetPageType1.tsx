@@ -137,12 +137,13 @@ export const ProjectBudgetPageType1:FC<Props> = ({projectInfo, collapse, toggleC
                         <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2 min-w-[200px] w-[300px]">Hợp đồng</th>
                         {/* <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '122px' }}>Ngân sách</th> */}
                         {/* <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '122px' }}>Dự báo</th> */}
-                        <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '122px' }}>Ký hợp đồng</th>
-                        <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '122px' }}>Đã tạm ứng</th>
-                        <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '125px' }}>Sản lượng</th>
-                        <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '132px' }}>Nghiệm thu</th>
+                        <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '122px' }}>Giá trị ký</th>
+                        <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '122px' }}>Giá trị phát sinh</th>
+                        <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '122px' }}>Giá trị đã tạm ứng</th>
+                        <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '125px' }}>Sản lượng thực hiện</th>
+                        <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '132px' }}>Nghiệm thu hoàn thành</th>
                         <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '123px' }}>Đã thanh toán</th>
-                        <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '124px' }}>Còn lại phải trả</th>
+                        <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '124px' }}>Còn lại phải trả theo công nợ</th>
                         <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '246px' }}>
                             <div className={"flex items-center"}>
                                 <div className={"flex-1"}>
@@ -179,7 +180,11 @@ export const ProjectBudgetPageType1:FC<Props> = ({projectInfo, collapse, toggleC
                             </th> */}
                             <th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border md:text-xs">
                                 {formatNumberMoney(
-                                    projectInfo.contractValue + projectInfo.contractVatValue +
+                                    projectInfo.contractValue + projectInfo.contractVatValue
+                                )}
+                            </th>
+                            <th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border md:text-xs">
+                                {formatNumberMoney(
                                     projectInfo.contractPlus + projectInfo.contractVatPlus
                                 )}
                             </th>
