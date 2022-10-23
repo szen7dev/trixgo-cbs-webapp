@@ -190,7 +190,7 @@ export const ContractPaymentModal: FC<NewContractIPCModalProps> = ({ defaultValu
                         onDayChange={(day: any) => setFieldValue("date", day)}
                         inputProps={{
                           className: "pl-3 border border-primary-border w-full rounded w-full h-[32px] outline-none",
-                          placeholder: "Thời hạn bảo lãnh tạm ứng",
+                          placeholder: "Ngày tháng",
                         }}
                       />
                       <div>
@@ -282,7 +282,7 @@ export const ContractPaymentModal: FC<NewContractIPCModalProps> = ({ defaultValu
                 <div className="mb-8 h-full mx-7 w-2/3">
                   <div className="mb-4">
                     <p className="text-primary-gray text-xs mb-2">
-                      1 - Giá trị giải ngân
+                      Giá trị giải ngân
                     </p>
                     <div className="flex gap-x-2">
                       <Field

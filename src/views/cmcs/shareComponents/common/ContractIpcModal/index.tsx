@@ -13,7 +13,7 @@ import moment from "moment";
 import { DATE_FORMAT } from "apis/localdb/index";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import {
-  CONTRACT_IPC_TYPES
+  CONTRACT_IPC_TYPES, CONTRACT_IPC_PLANS
 } from "apis/localdb/index";
 
 import {
@@ -39,6 +39,7 @@ interface NewContractIPCModalProps {
 const mappingData = (data: any, isDataPayLoad = false) => {
   return {
     contractIpcID: data.contractIpcID,
+    plan: isDataPayLoad ? data.plan.value : convertInitialValueDropdownForLocalDB(CONTRACT_IPC_PLANS, data.plan),
     type: isDataPayLoad ? data.type.value : convertInitialValueDropdownForLocalDB(CONTRACT_IPC_TYPES, data.type),
     date: convertDateToString(data.date),
     name: data.name || '',
@@ -85,6 +86,8 @@ export const ContractIpcModal: FC<NewContractIPCModalProps> = ({ defaultValues, 
           ...values,
           contractIpcID: detailContract._id
         }
+
+        console.log(formatData)
       }
 
       const isSuccess = await onFinish({ ...mappingData(formatData, true), contractID }, isEdit);
@@ -96,6 +99,7 @@ export const ContractIpcModal: FC<NewContractIPCModalProps> = ({ defaultValues, 
   );
 
   const formValidation = object().shape({
+    plan: object().required(MESSAGE_ERROR.required),
     type: object().required(MESSAGE_ERROR.required),
     date: string().required(MESSAGE_ERROR.required),
     name: string().required(MESSAGE_ERROR.required),
@@ -149,11 +153,44 @@ export const ContractIpcModal: FC<NewContractIPCModalProps> = ({ defaultValues, 
                 {openGeneralInfo && (
                   <div className="pb-4 h-full mx-7">
                     <div className="mb-4">
-                      <p className="text-primary text-xs mb-2">Phân loại (*)</p>
+                      <p className="text-primary-gray text-xs mb-2">Phân loại kế hoạch/thực tế (*)</p>
+                      <DropdownSearchable
+                        onchangeValue={(value: any) => setFieldValue("plan", value)}
+                        onClearData={() => setFieldValue("plan", '')}
+                        placeholder="Kế hoạch/Thực tế"
+                        className="w-2/5 pl-0 -mb-1 outline-none"
+                        classNameInput="border border-primary-border rounded h-[32px]"
+                        isMultiple={false}
+                        allowClearValueSingleInput={false}
+                        showTriangle={true}
+                        maxWidthInput="max-w-none"
+                        renderSelectedItem={(item: any) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 whitespace-normal z-99" >
+                          <p className="text-1-line-clamp">{`${item.text}`}</p>
+                        </Popover>}
+                        initialValue={initialValues?.plan}
+                        data={CONTRACT_IPC_PLANS.map(item => ({
+                          value: item.value,
+                          label: item.text
+                        }))}
+                        formatItem={{
+                          id: "value",
+                          text: "label",
+                        }}
+                        inlineSearch={true}
+                      />
+                      <ErrorMessage
+                        name="plan"
+                        component="span"
+                        className="font-normal leading-7 text-sm text-negative"
+                      />
+                    </div>
+
+                    <div className="mb-4">
+                      <p className="text-primary-gray text-xs mb-2">Phân loại tạm ứng/thanh toán (*)</p>
                       <DropdownSearchable
                         onchangeValue={(value: any) => setFieldValue("type", value)}
                         onClearData={() => setFieldValue("type", '')}
-                        placeholder="Bên bán..."
+                        placeholder="Tạm ứng/Thanh toán"
                         className="w-2/5 pl-0 -mb-1 outline-none"
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
@@ -195,7 +232,7 @@ export const ContractIpcModal: FC<NewContractIPCModalProps> = ({ defaultValues, 
                         onDayChange={(day: any) => setFieldValue("date", day)}
                         inputProps={{
                           className: "pl-3 border border-primary-border w-full rounded w-full h-[32px] outline-none",
-                          placeholder: "Thời hạn bảo lãnh tạm ứng",
+                          placeholder: "Ngày tháng",
                         }}
                       />
                       <div>
@@ -559,7 +596,7 @@ export const ContractIpcModal: FC<NewContractIPCModalProps> = ({ defaultValues, 
                         onDayChange={(day: any) => setFieldValue("timeForPayment", day)}
                         inputProps={{
                           className: "pl-3 border border-primary-border w-full rounded w-full h-[32px] outline-none",
-                          placeholder: "Thời hạn bảo lãnh tạm ứng",
+                          placeholder: "Thời hạn",
                         }}
                       />
                     </div>

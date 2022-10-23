@@ -5,7 +5,7 @@ import moment from "moment";
 import { toast } from "react-toastify";
 import downloadIcon from "assets/images/icons8-download-96.svg";
 
-import { DATE_FORMAT, CONTRACT_IPC_TYPES } from "apis/localdb/index";
+import { DATE_FORMAT, CONTRACT_IPC_TYPES, CONTRACT_IPC_PLANS } from "apis/localdb/index";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import { ContractIpcModal, ActionMenuTopBar } from "views/cmcs/shareComponents/common";
 import { formatNumberMoney } from "utils/cmcs"
@@ -206,6 +206,9 @@ export const ProjectBudgetDetailTab3:FC<Props> = ({ contractInfo }) => {
                         <th className={"w-[50px] bg-cbs-table-header p-2 border-0.5 border-primary-border align-middle"}>
                             <input className="form-check-input line mr-2" type="checkbox" value="" id="check"/>
                         </th>
+                        <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-primary-gray font-normal text-left"}>
+                            Phân loại
+                        </th>
                         <th className={"w-2/12 bg-cbs-table-header p-2 border-0.5 border-primary-border text-primary-gray font-normal text-left"}>
                             Nội dung
                         </th>
@@ -249,6 +252,8 @@ export const ProjectBudgetDetailTab3:FC<Props> = ({ contractInfo }) => {
                         </td>
                         <td className={"border-0.5 border-primary-border p-2 bg-cbs-table-highlight"}>
                         </td>
+                        <td className={"border-0.5 border-primary-border p-2 bg-cbs-table-highlight"}>
+                        </td>
                         <td className={"border-0.5 border-primary-border p-2 bg-cbs-table-highlight font-bold text-primary-gray text-right"}>
                             {formatNumberMoney(contractInfo?.acceptance + contractInfo?.vatAcceptance + contractInfo?.plusAcceptance + contractInfo?.vatPlusAcceptance)}
                         </td>
@@ -286,6 +291,9 @@ export const ProjectBudgetDetailTab3:FC<Props> = ({ contractInfo }) => {
                                     onChange={() => setItemChecked(item._id)}
                                 />
                                     {/* <input className="form-check-input line mr-2" type="checkbox" value="" id="check"/> */}
+                                </td>
+                                <td className={"border-0.5 border-primary-border p-2"}>
+                                    {item.type && CONTRACT_IPC_PLANS[item.plan-1].text}
                                 </td>
                                 <td className={"border-0.5 border-primary-border p-2"}>
                                     {item.name}
