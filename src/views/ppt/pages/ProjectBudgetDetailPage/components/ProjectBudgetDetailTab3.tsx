@@ -44,7 +44,6 @@ export const ProjectBudgetDetailTab3:FC<Props> = ({ contractInfo }) => {
 
     const { openModal } = useModal();
     const params: any = useParams();
-  
     const {
         listContractIPCWithPager,
         totalRecord,

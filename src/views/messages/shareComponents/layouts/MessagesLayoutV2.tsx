@@ -70,7 +70,7 @@ export const MessagesLayoutV2: FC<Props> = ({ children }) => {
       () => ({ currentChat, setCurrentChat , showMenu, setShowMenu, socketRef, editorRef, setEditorRef, showSearch, setShowSearch, isDragOver, setIsDragOver}),
       [currentChat, showMenu, socketRef, editorRef, showSearch, isDragOver]
   );
-
+  
   useEffect(() => {
     currentChat&&setShowMenu(true)
     currentChat&&setShowSearch(false)

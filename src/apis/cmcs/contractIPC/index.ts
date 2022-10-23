@@ -8,10 +8,10 @@ async function fetchList<T>(params: any): Promise<T> {
         `${APP_CMCS}/contract_ipcs`,
         {
             params: {
-                select: "plan type name date sign note description acceptance vatAcceptance plusAcceptance vatPlusAcceptance retainedValue advancePaymentDeduction otherDeduction recommendedPayment timeForPayment amountPaid remainingPayment createAt",
+                select: "plan type name sign date sign note description acceptance vatAcceptance plusAcceptance vatPlusAcceptance retainedValue advancePaymentDeduction otherDeduction recommendedPayment timeForPayment amountPaid remainingPayment createAt",
                 populates: {
-                    "path": "project company",
-                    "select": "name sign"
+                    "path": "project company contract buyerInfo sellerInfo",
+                    "select": "name sign status"
                 },
                 ...params,
             },

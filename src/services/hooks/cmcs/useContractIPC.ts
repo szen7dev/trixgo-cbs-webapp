@@ -54,7 +54,8 @@ export const UseContractIPCListWithPager = (isFetchList = false, param = {}, con
                 limit,
                 lastestID: pageParam || "",
                 contractID,
-                keyword
+                keyword,
+                ...param
             }),
         {
             getNextPageParam: ({ data }: any) => {
