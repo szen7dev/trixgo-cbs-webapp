@@ -29,18 +29,17 @@ const ProjectDashboardDebtPage: FC = () => {
     });
 	let listData: any = [];
 	if(contractIPCAmountByProperty?.data?.length){
-		
 		const contractIPCAmountByPropertyFunction = async () =>{
+			// Tổng công nợ
+			const data = await ContractIPCRepository.fetchAmountByProperty({ 
+				outin: 2,
+				option: 3,
+				debt: 2,
+				optionTime: 1,
+				projectID
+			});
 			for (const item of contractIPCAmountByProperty?.data) {
-				// Tổng công nợ
-				const data = await ContractIPCRepository.fetchAmountByProperty({ 
-					outin: 2,
-					option: 3,
-					debt: 2,
-					optionTime: 1,
-					projectID
-				});
-				let listDataTemp: any = { key: item?._id?.sellerInfo?.name, trongKy: (item.amount/1000000000).toFixed(2), phanTramQuaHan: 0, phanTramTrongKy: 100 };
+				let listDataTemp: any = { key: item?._id?.sellerInfo?.name, _id: item?._id?.sellerInfo?._id, trongKy: (item.amount/1000000000).toFixed(2), phanTramQuaHan: 0, phanTramTrongKy: 100 };
 				totalPeriodDebts = item.amount;
 				// Tổng công nợ quá hạn
 				data?.data?.map((infoData: any) => {
@@ -142,9 +141,9 @@ const ProjectDashboardDebtPage: FC = () => {
 											{index+1}
 										</td>
 										<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">
-											{/* <Link to={`/pm/project/${projectID}/subject/company/${company._id}`}> */}
+											<Link to={`/pm/project/${projectID}/dashboard/debt/outin/2/buyerInfo/${company._id}`}>
 												{company?.key}
-											{/* </Link> */}
+											</Link>
 										</td>
 										<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border text-right cursor-auto" style={{ minWidth: "155px", fontSize: '10px' }} onClick={e => e.stopPropagation()}>
 											<div className="flex w-full h-3 mt-2">

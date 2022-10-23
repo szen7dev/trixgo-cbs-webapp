@@ -1247,6 +1247,9 @@ input::placeholder {
 .column-table-cell {
   display: table-row;
 }
+.bidding-job-list-detail{
+  width: calc(100% - 250px);
+}
 .cell-table-cell {
   display: table-cell;
   -webkit-box-sizing: border-box;

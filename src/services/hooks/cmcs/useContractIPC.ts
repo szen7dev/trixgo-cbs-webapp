@@ -1,8 +1,6 @@
 import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 
 import ContractIPCRepository from 'apis/cmcs/contractIPC';
-import HumanRepository from 'apis/human';
-import ContractProduceRepository from "apis/cmcs/contractProduce";
 
 type UseContractIPCProp = {
     listContractIPC: Array<any>;
@@ -56,7 +54,8 @@ export const UseContractIPCListWithPager = (isFetchList = false, param = {}, con
                 limit,
                 lastestID: pageParam || "",
                 contractID,
-                keyword
+                keyword,
+                ...param
             }),
         {
             getNextPageParam: ({ data }: any) => {

@@ -32,7 +32,8 @@ const BugetRowGroupTemp: FC<{ row: Contract, index: number, show: boolean, _pid:
 			</td>
 			{/* <td className='text-right py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 md:text-xs'>{formatNumberMoney(row.budget || 0 + row.vatBudget || 0)}</td> */}
 			{/* <td className='text-right py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 md:text-xs'>{formatNumberMoney(0)}</td> */}
-			<td className='text-right py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 md:text-xs'>{formatNumberMoney(Number(row.value + row.vatValue + row.plus + row.vatPlus) || 0)}</td>
+			<td className='text-right py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 md:text-xs'>{formatNumberMoney(Number(row.value + row.vatValue) || 0)}</td>
+			<td className='text-right py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 md:text-xs'>{formatNumberMoney(Number(row.plus + row.vatPlus) || 0)}</td>
 			<td className='text-right py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 md:text-xs'>{formatNumberMoney(row.advancePaymentPaid || 0)}</td>
 			<td className='text-right py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 md:text-xs'>{formatNumberMoney(Number(row.produce + row.vatProduce + row.plusProduce + row.vatPlusProduce) || 0)}</td>
 			<td className='text-right py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 md:text-xs'>{formatNumberMoney(Number(row.acceptance + row.vatAcceptance + row.plusAcceptance + row.vatPlusAcceptance) || 0)}</td>

@@ -51,6 +51,7 @@ import ProjectAdminPositionTab from "views/ppt/pages/ProjectAdminPage/pages/Proj
 import { PmProjectLayout } from "../../shareComponents/layouts/PmLayout/PmProjectLayout";
 import LayoutProjectSecondaryV2 from "views/ppt/sharedComponents/layouts/LayoutProjectSecondaryV2";
 import { PmProjectLayoutV2 } from "shareComponents/layouts/PmLayout/PmProjectLayoutV2";
+import ProjectBiddingDetailPage from "views/ppt/pages/ProjectBiddingDetailPage";
 // import {DocumentProjectLayout} from "views/document/sharedComponents/layouts/DocumentProjectLayout";
 
 const DocumentOfPackagePage = lazy(() => import("views/document/pages/DocumentOfPackagePage"))
@@ -80,6 +81,7 @@ const ProjectSubjectPage = lazy(() => import("views/ppt/pages/ProjectSubjectPage
 const ProjectFolderPage = lazy(() => import("views/ppt/pages/ProjectFolderPage"))
 const ProjectDashboardPage = lazy(() => import("views/ppt/pages/ProjectDashboardPage"))
 const ProjectDashboardDebtPage = lazy(() => import("views/ppt/pages/ProjectDashboardDebtPage"))
+const ProjectDashboardDebtBuyerInfoPage = lazy(() => import("views/ppt/pages/ProjectDashboardDebtBuyerInfoPage"))
 const ProjectPhotoContractPageV2 = lazy(() => import("views/ppt/pages/ProjectPhotoContractPageV2"))
 const ProjectPhotoPage = lazy(() => import("views/ppt/pages/ProjectPhotoPage"))
 const ProjectDrawingPageV2 = lazy(() => import("views/ppt/pages/ProjectDrawingPageV2"))
@@ -214,6 +216,11 @@ const PCMRouter: FC = () => {
                       <ProjectDashboardDebtPage />
                     </PmProjectLayout>
                   </Route>
+                  <Route exact path="/pm/project/:id/dashboard/debt/outin/:outinID/buyerInfo/:buyerInfoID">
+                    <PmProjectLayout>
+                      <ProjectDashboardDebtBuyerInfoPage />
+                    </PmProjectLayout>
+                  </Route>
                   <Route exact path="/pm/project/:id/responses">
                     <PmProjectLayout>
                       <PcmReportQuickPage />
@@ -286,6 +293,19 @@ const PCMRouter: FC = () => {
                         path="/pm/project/:id/bidding/3"
                         component={() => <>Sample Data</>}
                       />
+                      <Route exact
+                        // path="/pm/project/:id/bidding/:id"
+                        path="/pm/project/:id/bidding/id5"
+                        component={ProjectBiddingDetailPage}
+                      />
+                    </PmProjectLayout>
+                  </Route>
+                  {/* url for checking layout /pm/project/:id/bidding/id5 
+                  remove when connect api
+                  */}
+                  <Route exact path={["/pm/project/:id/bidding/id5", "/pm/project/:id/bidding/:id"]}>
+                    <PmProjectLayout>
+                      <ProjectBiddingDetailPage />
                     </PmProjectLayout>
                   </Route>
                   <Route exact path="/pm/project/:id/payment">

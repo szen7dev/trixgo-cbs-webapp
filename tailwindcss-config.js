@@ -125,6 +125,7 @@ module.exports = {
 
                 "cbs-purple": "#9B59B6",
                 "cbs-red": "#FF4242",
+                "cbs-orage": "#FB4C2F",
                 "cbs-green-dark": "#008000",
                 "cbs-green-medium": "#198038",
                 "cbs-inline-badge-blue": "#00AAFF",
@@ -190,6 +191,7 @@ module.exports = {
                 "authentication-img": "url('../assets/images/authentication-img.png')",
             },
             borderWidth: {
+                '0.25': '0.25px',
                 '0.5': '0.5px',
                 6: "6px",
             },

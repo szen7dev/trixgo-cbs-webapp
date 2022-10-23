@@ -328,6 +328,11 @@ export const CONTRACT_DEBT_TYPES = [
 ]
 
 // PHÂN LOẠI IPC
+export const CONTRACT_IPC_PLANS = [
+    { value: 1, text: 'Kế hoạch' },
+    { value: 2, text: 'Thực tế' },
+]
+
 export const CONTRACT_IPC_TYPES = [
     { value: 1, text: 'Tạm ứng' },
     { value: 2, text: 'Thanh toán' },
