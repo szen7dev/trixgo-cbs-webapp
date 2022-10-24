@@ -1,4 +1,4 @@
-import React, {FC, useState} from "react";
+import React, {FC, useState, useEffect} from "react";
 import chervUpIcon from "assets/images/icon-cherv-up.svg";
 import {DropdownSearchableV2, RightClickMenuWrapper, Loader} from "shareComponents/common";
 import MenuChildRow from "./MenuChildRow";
@@ -64,7 +64,6 @@ export const ProjectBudgetPageType1:FC<Props> = ({projectInfo, collapse, toggleC
     if(stateExport.isExporting) {
         return <Loader className="border-primary" />
     }
-
     return (
         <>
             <div className={"sticky top-0 z-10 " + (collapse?"hidden":"block")}>

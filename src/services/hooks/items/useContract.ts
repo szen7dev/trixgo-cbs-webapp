@@ -10,12 +10,13 @@ import type {
 } from "typings/cmcs";
 
 interface UseContract {
-    loading: boolean;
+    isLoading: boolean;
     totalRecord: number;
     totalPage: number;
     nextCursor: string | undefined;
     hasNextPage: boolean | undefined;
     listContracts: Array<Contract>;
+    listContractWithPager?: any;
     contractInfo: Contract;
     refetch: () => void;
     fetchNextPage: () => void;
@@ -70,6 +71,7 @@ export const useContract = ({
         .map((d: any) => d.data?.listRecords))
         .filter(Boolean);
 
+    const listContractWithPager = (data?.pages || []).map((d: any) => d.data?.listRecords);
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPage = data?.pages[0]?.data?.totalPage || 0;
     const nextCursor = data?.pages && data?.pages[0]?.data?.nextCursor;
@@ -85,13 +87,14 @@ export const useContract = ({
     return {
         contractInfo,
         listContracts,
-        loading: isLoading,
+        isLoading,
         totalRecord,
         nextCursor,
         totalPage,
         hasNextPage,
         refetch,
         fetchNextPage,
+        listContractWithPager,
         statisticalStatusByOntimeOnbudget: statisticalStatusByOntimeOnbudgetInfo,
         isFetching
     }
@@ -144,7 +147,7 @@ export const useContractIsMembers = ({
     return {
         contractInfo,
         listContracts,
-        loading: isLoading,
+        isLoading,
         totalRecord,
         nextCursor,
         totalPage,
@@ -210,7 +213,6 @@ export const useQueryItemContract = (params?: ListContractsPayload): UseQueryCon
         hasNextPage
     }
 }
-
 interface UseQueryDetailContract {
     detailContract: Contract,
     loading: boolean,
