@@ -1855,12 +1855,12 @@ img {
 .tox .tox-editor-header {
   z-index: 0 !important;
 }
-.task-description table td, .comment-text table td {
+.task-description table td, .comment-text table td, main table td {
   border: 1px solid #ccc;
   border-collapse: collapse;
   padding: 5px;
 }
-.task-description table th, .comment-text table th {
+.task-description table th, .comment-text table th, main table th {
   border: 1px solid #ccc;
   border-collapse: collapse;
   padding: 5px;
