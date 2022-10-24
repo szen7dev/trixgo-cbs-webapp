@@ -172,6 +172,12 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                         >
                             In ấn - Mẫu đề nghị (RFA, RFI,...)
                         </Link>
+                        <Link
+                            className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header block"}
+                            to={`/pcm/detail/${task._id}/print/5`}
+                        >
+                            In ấn - Nhật ký
+                        </Link>
 
                         <hr style={{ opacity: '.3', width: '90%', display: 'flex', alignContent: 'center', alignItems: 'center', margin: 2 }} />
 

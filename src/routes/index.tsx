@@ -75,6 +75,7 @@ const PcmPrintTaskTypeOnePage = lazy(() => import('views/pcm/pages/PcmPrintTaskT
 const PcmPrintTaskTypeTwoPage = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeTwo'));
 const PcmPrintTaskTypeThreePage = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeThree'));
 const PcmPrintTaskTypeFourPage = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeFour'));
+const PcmPrintTaskTypeFivePage = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeFive'));
 
 const Routes: FC = () => {
     useEffect(() => {
@@ -102,6 +103,7 @@ const Routes: FC = () => {
                                 <Route exact path="/pcm/detail/:id/print/2" component={PcmPrintTaskTypeTwoPage} />
                                 <Route exact path="/pcm/detail/:id/print/3" component={PcmPrintTaskTypeThreePage} />
                                 <Route exact path="/pcm/detail/:id/print/4" component={PcmPrintTaskTypeFourPage} />
+                                <Route exact path="/pcm/detail/:id/print/5" component={PcmPrintTaskTypeFivePage} />
 
                                 {/* =====AUTHENTICATION===== */}
                                 <Route path="/(authentication|login)/:path?">
