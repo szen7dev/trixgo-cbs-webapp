@@ -8,21 +8,20 @@ import { toast } from "react-toastify";
  */
 // import IconPlus from "assets/images/icons8-plus-math-100.png";
 import styles from "../../styles/pcm_print.module.css";
-import {CommentFull, PcmPrintTaskComment} from "views/pcm/shareComponents/common";
-import { CheckList } from "views/pcm/pages/PcmDetailTask/components";
-import { PCM_PROPOSAL_TASK, APP_ID } from "apis/localdb";
+import { PcmPrintTaskChild, PcmPrintTaskCommentContainer } from "views/pcm/shareComponents/common";
+import { PCM_PROPOSAL_TASK, PCM_STATUS_TASK, APP_ID } from "apis/localdb";
 
 /**
  * Hooks, Typings
  */
 import { useAuth } from "services/hooks/auth/useAuth";
-import { useTask, useCommentPcm, useCheckList } from "services/hooks/useTask";
+import { useTask } from "services/hooks/useTask";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 
 /**
  * Repositories
  */
-import {DropdownSearchableV2, Loader} from "shareComponents/common";
+import { DropdownSearchableV2, Loader } from "shareComponents/common";
 import moment from "moment";
 import usePrintComponent from "services/hooks/ppt/usePrintComponent";
 import timeTableIcon from "assets/images/icons8-timetable-48.svg";
@@ -34,35 +33,26 @@ const PcmPrintTaskTypeFour: FC = () => {
   const [isExpired, setIsExpired] = useState<any>(0);
   const [status, setStatus] = useState<string[]>([]);
 
-  // const [visibleForm, setVisibleForm] = useState(false);
-  // const [date, setDate] = useState<Date | null>(null);
-  const [taskData, setTaskData] = useState({ amountComment: 0 });
-
-  const [permissions, setPermissions] = useState({
-    hasPermissionCreateCheckList: false,
-    hasPermissionComment: false,
-  });
-
   const { user } = useAuth();
-
   const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 
-  const { listComments, totalRecord, limit } = useCommentPcm({
-    key: `list_comments.${taskId}`,
-    params: { taskID: taskId, type: 1 },
-    isFetchComment: true,
+  const {
+    listTasks: listSubTasks,
+    nextPageListTask,
+    hasNextPage,
+    isLoadingListTask,
+  } = useTask({
+    params: {
+      parentID: taskId,
+      isSortChildTask: '1',
+    },
+    isFetch: !!taskId,
   });
 
   const {
-    listCheckList,
-    totalRecord: totalRecordCheckList,
-    nextPageListCheckList,
-  } = useCheckList({
-    parentID: taskId,
-    isFetchChecklist: true,
-  });
-
-  const { info: taskInfo, isLoadingInfo } = useTask({
+    info: taskInfo,
+    isLoadingInfo,
+  } = useTask({
     params: {
       taskID: taskId,
       populates: JSON.stringify({
@@ -74,7 +64,7 @@ const PcmPrintTaskTypeFour: FC = () => {
         },
       }),
     },
-    isFetchInfo: true,
+    isFetchInfo: !!taskId,
   });
 
   useEffect(() => {
@@ -86,20 +76,6 @@ const PcmPrintTaskTypeFour: FC = () => {
     }
 
     document.title = `Trixgo-${taskInfo.name}`;
-
-    const relatedsID = taskInfo.related?.map((user: any) => user._id) ?? [];
-    const groupMembersID = taskInfo.group?.members?.map((user: any) => user._id) ?? [];
-    const authorAndAssigneeID = [taskInfo.author?._id, taskInfo.assignee?._id].filter(Boolean);
-    const authorAndAssigneeAndRelatedID = [...authorAndAssigneeID, ...relatedsID].filter(Boolean);
-    const hasPermissionCreateCheckList = authorAndAssigneeID.includes(user._id);
-    const hasPermissionComment = [...authorAndAssigneeAndRelatedID, ...groupMembersID].includes(
-        user?._id
-    );
-
-    setPermissions({
-      hasPermissionComment,
-      hasPermissionCreateCheckList,
-    });
   }, [taskInfo, isSuccessApp]);
 
   const componentRef = useRef(null);
@@ -107,11 +83,13 @@ const PcmPrintTaskTypeFour: FC = () => {
 
   if (isLoadingInfo) return <Loader className="border-primary" />;
 
-  if(!taskInfo) return <Redirect to="/pcm/home" />;
+  if(!taskInfo) {
+    return <Redirect to="/pcm/home" />;
+  }
+
+  if(isLoadingListTask) return <Loader className="border-primary" />;
 
   const assigneeAndRelated = [taskInfo?.assignee, ...taskInfo?.related];
-
-  // console.log(taskInfo)
 
   return (
       <div className="bg-cbs-gray overflow-auto" style={{ height: '100vh' }}>
@@ -327,66 +305,73 @@ const PcmPrintTaskTypeFour: FC = () => {
                       </div>
                       <table className="table-fixed w-full mt-2.5">
                         <tbody>
-                        <tr>
-                          <td className={"border-0.5 border-primary-border w-[40px] p-2 text-center"}>
-                            1
-                          </td>
-                          <td className={"border-0.5 border-primary-border p-2"}>
-                            Cán bộ thanh toán kiểm tra hồ sơ thanh toán đợt 9 (Tư vấn B.I.M đợt 4)
-                          </td>
-                          <td className={"border-0.5 border-primary-border p-2"}>
-                            <div className={"flex items-center justify-end"}>
-                              <div className={"p-2 rounded-md bg-cbs-form-input-bg"}>
-                                <span className={"text-primary-gray"}>22/8/2022</span>
-                                <span className={"bg-negative rounded px-2 ml-4 text-white"}>Quá hạn</span>
+                          {!!listSubTasks?.length && listSubTasks?.map?.((task: any, index: number) => {
+                            return (
+                              <>
+                                <tr key={task._id}>
+                                  <td className={"border-0.5 border-primary-border w-[40px] p-2 text-center"}>
+                                    {index + 1}
+                                  </td>
+                                  <td className={"border-0.5 border-primary-border p-2"}>
+                                    {task.name}
+                                  </td>
+                                  <td className={"border-0.5 border-primary-border p-2"}>
+                                    <div className={"flex items-center justify-end"}>
+                                      <div className={"p-2 rounded-md bg-cbs-form-input-bg"}>
+                                        <span className={"text-primary-gray"}>
+                                          {moment(task.actualFinishTime).format('DD/MM/YYYY')}
+                                        </span>
+                                        <span className={`${PCM_STATUS_TASK[task.status - 1]?.class} rounded px-2 ml-4 py-1 text-white`}>
+                                          {PCM_STATUS_TASK[task.status - 1]?.text}
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td className={"border-0.5 border-primary-border w-[40px] p-2 text-center"}></td>
+                                  <td className={"border-0.5 border-primary-border p-2"}>
+                                    <PcmPrintTaskChild task={task} />
+                                  </td>
+                                  <td className={"border-0.5 border-primary-border p-2"}>
+                                    <PcmPrintTaskCommentContainer task={task} />
+                                  </td>
+                                </tr>
+                              </>
+                            )
+                          })}
+                          {/* <tr>
+                            <td className={"border-0.5 border-primary-border w-[40px] p-2 text-center"}>
+                              2
+                            </td>
+                            <td className={"border-0.5 border-primary-border p-2"}>
+                              Cán bộ thanh toán kiểm tra hồ sơ thanh toán đợt 9 (Tư vấn B.I.M đợt 4)
+                            </td>
+                            <td className={"border-0.5 border-primary-border p-2"}>
+                              <div className={"flex items-center justify-end"}>
+                                <div className={"p-2 rounded-md bg-cbs-form-input-bg"}>
+                                  <span className={"text-primary-gray"}>22/8/2022</span>
+                                  <span className={"bg-cbs-inline-badge-blue rounded px-2 ml-4 text-white"}>Đang triển khai</span>
+                                </div>
                               </div>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className={"border-0.5 border-primary-border w-[40px] p-2 text-center"}>
-                            
-                          </td>
-                          <td className={"border-0.5 border-primary-border p-2"}>
-                            <PcmPrintTaskComment/>
-                          </td>
-                          <td className={"border-0.5 border-primary-border p-2"}>
-                            <PcmPrintTaskComment/>
-                            <PcmPrintTaskComment/>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className={"border-0.5 border-primary-border w-[40px] p-2 text-center"}>
-                            2
-                          </td>
-                          <td className={"border-0.5 border-primary-border p-2"}>
-                            Cán bộ thanh toán kiểm tra hồ sơ thanh toán đợt 9 (Tư vấn B.I.M đợt 4)
-                          </td>
-                          <td className={"border-0.5 border-primary-border p-2"}>
-                            <div className={"flex items-center justify-end"}>
-                              <div className={"p-2 rounded-md bg-cbs-form-input-bg"}>
-                                <span className={"text-primary-gray"}>22/8/2022</span>
-                                <span className={"bg-cbs-inline-badge-blue rounded px-2 ml-4 text-white"}>Đang triển khai</span>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className={"border-0.5 border-primary-border w-[40px] p-2 text-center"}>
+                            3
+                            </td>
+                            <td className={"border-0.5 border-primary-border p-2"}>
+                              Cán bộ thanh toán kiểm tra hồ sơ thanh toán đợt 9 (Tư vấn B.I.M đợt 4)
+                            </td>
+                            <td className={"border-0.5 border-primary-border p-2"}>
+                              <div className={"flex items-center justify-end"}>
+                                <div className={"p-2 rounded-md bg-cbs-form-input-bg"}>
+                                  <span className={"text-primary-gray"}>22/8/2022</span>
+                                  <span className={"bg-cbs-completed rounded px-2 ml-4 text-white"}>Hoàn thành</span>
+                                </div>
                               </div>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className={"border-0.5 border-primary-border w-[40px] p-2 text-center"}>
-                           3
-                          </td>
-                          <td className={"border-0.5 border-primary-border p-2"}>
-                            Cán bộ thanh toán kiểm tra hồ sơ thanh toán đợt 9 (Tư vấn B.I.M đợt 4)
-                          </td>
-                          <td className={"border-0.5 border-primary-border p-2"}>
-                            <div className={"flex items-center justify-end"}>
-                              <div className={"p-2 rounded-md bg-cbs-form-input-bg"}>
-                                <span className={"text-primary-gray"}>22/8/2022</span>
-                                <span className={"bg-cbs-completed rounded px-2 ml-4 text-white"}>Hoàn thành</span>
-                              </div>
-                            </div>
-                          </td>
-                        </tr>
+                            </td>
+                          </tr> */}
                         </tbody>
                       </table>
                     </section>

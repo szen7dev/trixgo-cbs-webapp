@@ -36,13 +36,16 @@ import { DropdownSearchable } from "shareComponents/common";
 import Close from "assets/icons/Close";
 import fakeThumbnail from "assets/images/avatar.jpg";
 // import TagIcon from "assets/images/icons8-price-tag-96.svg";
-// import AttachIcon from "assets/images/icons8-attach-50.png";
+import IconClock from "assets/images/icons8-snooze-48 1.svg";
 
 import "react-day-picker/lib/style.css";
 import { Editor } from "@tinymce/tinymce-react";
 import { Editor as EditorType } from "tinymce";
 import iconAttach from "assets/images/icons8-attach-48.svg";
 import { FileProp, FilePropsUpload } from "typings/common";
+import { Button, FormControl, MenuItem, Popover, Select, SelectChangeEvent } from "@mui/material";
+import { borderRadius } from "@mui/system";
+import { GroupSearchable } from "../GroupSearchable";
 
 interface InitialValues {
   projectID: string,
@@ -69,17 +72,17 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
   const { closeModal } = useModal();
   const editorRef = useRef<EditorType>();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  type DropdownSearchableHandle = React.ElementRef<typeof DropdownSearchable>;
-  const groupDropdownsearchRef = useRef<DropdownSearchableHandle>(null);
+  type GroupSearchableHandle = React.ElementRef<typeof GroupSearchable>;
+  const groupSearchableRef = React.useRef<GroupSearchableHandle>(null);
 
   const [tokens, setTokens] = useState<any[]>([]);
   const [searchDepartmentValue, setSearchDepartmentValue] = useState("");
   const [searchFriendName, setSearchFriendName] = useState("");
-  const [searchGroupName, setSearchGroupName] = useState("");
   const [searchContract, setSearchContract] = useState("");
   const [companyID, setCompanyID] = useState(defaultValues?.company?._id || "");
   const [projectID, setProjectID] = useState(defaultValues?.project?._id || "");
   const [groupID, setGroupID] = useState(defaultValues?.group?._id || "");
+  const [groupParentPicker, setGroupParentPicker] = useState<any>({});
   const [isNotiEmail, setIsNotiEmail] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
 
@@ -136,31 +139,10 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
     fetchNextPage: fetchNextPageListGroup,
   } = useQueryListGroup({
     limit: 10,
-    keyword: searchGroupName,
+    keyword: "",
     projectID: projectID,
-    isShowParentAndChild: true
+    parentID: groupParentPicker?.value
   }, !!projectID);
-
-  const [isChangeProjectID, setIsChangeProjectID] = useState(false);
-
-  useEffect(() => {
-    if (isChangeProjectID) {
-      if (listGroup && listGroup.length) {
-        groupDropdownsearchRef?.current?.setValueRef({
-          label: `${listGroup[0].sign}.${listGroup[0].name}`,
-          value: listGroup[0]._id,
-        });
-        setGroupID(listGroup[0]._id);
-        setIsChangeProjectID(false);
-      } else {
-        if (!projectID) {
-          groupDropdownsearchRef?.current?.setValueRef(null);
-          setGroupID("");
-          setIsChangeProjectID(false);
-        }
-      }
-    }
-  }, [listGroup, isChangeProjectID]);
 
   const {
     listContracts,
@@ -201,11 +183,11 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
         _id && (files = [...files, _id]);
       }
 
-      if(files.length) {
+      if (files.length) {
         values.authorAttachs = files;
       }
 
-      if(!values.groupID) {
+      if (!values.groupID) {
         values.groupID = groupID;
       }
 
@@ -248,7 +230,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
 
     if (!projectID || !groupID) {
       // Clear input file
-      if(fileInputRef.current) {
+      if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
 
@@ -268,7 +250,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
     setIsUploading(true);
 
     // Clear input file
-    if(fileInputRef.current) {
+    if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
 
@@ -280,7 +262,6 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
         fileType: 1,
         source,
         progress: percentCompleted => {
-          console.log(`${percentCompleted}%`, key);
           setUploadImageProgress(key, percentCompleted)
         }
       })
@@ -318,9 +299,9 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
     }
   }
 
-  const handleScroll = (e: UIEvent<HTMLDivElement>, type: 'project' | 'group' | 'contract' | 'user' | 'field') => {
+  const handleScroll = (e: UIEvent<HTMLDivElement>, type: 'project' | 'group' | 'contract' | 'user' | 'field' | 'groupChild') => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
-    const bottom = scrollHeight - scrollTop >= clientHeight - 10;
+    const bottom = scrollHeight - scrollTop >= clientHeight - 15;
     if (!bottom) return;
 
     switch (true) {
@@ -366,6 +347,17 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
     subType: '0',
   };
 
+  // nhac thoi han
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const handleClickOpenPop = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const open = Boolean(anchorEl);
+  const idPopover = open ? 'simple-popover' : undefined;
+
   return (
     <>
       <div className={"flex flex-col"}>
@@ -386,18 +378,18 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
             return (
               <Form>
                 <div className={"t-add-new-task-dialog-select px-6"}>
-                  <div className={"flex pb-1 pt-2 border-b"}>
+                  <div className={"flex py-2 border-b"}>
                     <div className={"w-1/4 flex items-start"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Dự án (*)</div>
-                      <div className={"flex-1 max-w-4/5 w-4/5"}>
+                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full h-full"}>Dự án (*)</div>
+                      <div className={"flex-1 max-w-4/5 w-4/5 h-full h-full"}>
                         <DropdownSearchable
                           onchangeValue={(value: any) => {
                             setCompanyID(value.companyId)
                             setFieldValue("projectID", value?.id);
                             setProjectID(`${value?.id}`);
-                            setIsChangeProjectID(true);
                             setSearchDepartmentValue("");
                             setGroupID("");
+                            setGroupParentPicker({});
                             setFieldValue("groupID", "");
                             setFieldValue("assigneeID", "");
                             setFieldValue("relatedIDs", []);
@@ -407,10 +399,11 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                             setFieldValue("projectID", "");
                             setFieldValue("groupID", "");
                             setGroupID("");
+                            setGroupParentPicker({});
                             setFieldValue("assigneeID", "");
                             setFieldValue("relatedIDs", []);
                             setProjectID("");
-                            setIsChangeProjectID(true);
+                            groupSearchableRef.current&&groupSearchableRef.current.resetGroupSearchable();
                           }}
                           onSearchInputChange={
                             debounce(
@@ -418,7 +411,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                               500)
                           }
                           onScroll={(e) => handleScroll(e, 'project')}
-                          className={"max-w-full flex-1"}
+                          className={"max-w-full h-full flex-1"}
                           placeholder="Dự án"
                           isMultiple={false}
                           allowClearValueSingleInput={true}
@@ -436,10 +429,10 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                             value: department._id,
                             companyId: department.company?._id,
                           }))}
-                          initialValue={{
+                          initialValue={defaultValues.project?._id ? {
                             value: defaultValues.project?._id,
                             label: defaultValues.project?.name,
-                          }}
+                          }: undefined}
                           formatItem={{
                             id: "value",
                             text: "label",
@@ -454,64 +447,46 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                       </div>
                     </div>
                     <div className={"w-1/4 flex items-start pl-3"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Nhóm (*)</div>
-                      <div className={"flex-1 max-w-4/5 w-4/5"}>
-                        <DropdownSearchable
-                          ref={groupDropdownsearchRef}
+                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full"}>Nhóm (*)</div>
+                      <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
+                        <GroupSearchable
+                          ref={groupSearchableRef}
                           disabled={values.projectID.length <= 0}
-                          onchangeValue={(item: any) => {
-                            setFieldValue("groupID", item.value);
+                          handleSetValue={(item: any) => {
                             setGroupID(item.value);
-                            setSearchGroupName("");
+                            setFieldValue("groupID", item.value);
                           }}
-                          onClearData={() => {
-                            setFieldValue("groupID", "")
-                            setGroupID("");
-                          }}
-                          onSearchInputChange={debounce(
-                            (value) => setSearchGroupName(value),
-                            500
-                          )}
-                          onScroll={(e) => handleScroll(e, 'group')}
-                          className={"max-w-full flex-1"}
-                          placeholder="Nhóm"
-                          isMultiple={false}
-                          allowClearValueSingleInput={true}
-                          showTriangle={false}
-                          maxWidthInput="max-w-full"
-                          renderSelectedItem={(item: any) => (
-                            <div
-                              className="max-w-full"
-                            >
-                              <p className={"truncate"}>{item.text}</p>
-                            </div>
-                          )}
                           data={listGroup.map((groupItem) => ({
                             label: `${groupItem.sign}.${groupItem.name}`,
                             value: groupItem._id,
                           }))}
+                          groupParentPicker={groupParentPicker}
+                          setGroupParentPicker={setGroupParentPicker}
+                          onClearData={() => {
+                            setFieldValue("groupID", "");
+                            setGroupParentPicker({});
+                            setGroupID("");
+                          }}
+                          onScroll={(e) => handleScroll(e, 'group')}
+                          className={"max-w-full h-full flex-1"}
+                          placeholder="Chọn nhóm"
                           initialValue={{
+                            label: `${defaultValues.group?.sign}.${defaultValues.group?.name}`,
                             value: defaultValues.group?._id,
-                            label: defaultValues.group?.name,
                           }}
-                          formatItem={{
-                            id: "value",
-                            text: "label",
-                          }}
-                          inlineSearch={true}
                         />
                       </div>
                     </div>
                     <div className={"w-1/4 flex items-start pl-3"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Tính chất (*)</div>
-                      <div className={"flex-1 max-w-4/5 w-4/5"}>
+                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full"}>Tính chất (*)</div>
+                      <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                         <DropdownSearchable
                           onchangeValue={(value: any) =>
                             setFieldValue("subType", value.id)
                           }
                           onClearData={() => setFieldValue("subType", "")}
                           placeholder={"Phân loại"}
-                          className={"max-w-full flex-1"}
+                          className={"max-w-full h-full flex-1"}
                           focusedClass={"border-b border-primary"}
                           allowClearValueSingleInput={true}
                           showTriangle={false}
@@ -536,8 +511,8 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                       </div>
                     </div>
                     <div className={"w-1/4 flex items-start pl-3"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Hợp đồng</div>
-                      <div className={"flex-1 max-w-4/5 w-4/5"}>
+                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full"}>Hợp đồng</div>
+                      <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                         <DropdownSearchable
                           onchangeValue={(item: any) => {
                             setFieldValue("contractID", item.value);
@@ -549,7 +524,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                             500
                           )}
                           onScroll={(e) => handleScroll(e, 'contract')}
-                          className={"max-w-full flex-1"}
+                          className={"max-w-full h-full flex-1"}
                           placeholder="Hợp đồng"
                           isMultiple={false}
                           allowClearValueSingleInput={true}
@@ -575,9 +550,9 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                       </div>
                     </div>
                   </div>
-                  <div className={"flex pb-1 pt-2 border-b"}>
+                  <div className={"flex py-2 border-b"}>
                     <div className={"w-full flex items-start"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Gửi tới (*)</div>
+                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2 "}>Gửi tới (*)</div>
                       <div className={"w-full flex-1"}>
                         <DropdownSearchable
                           onchangeValue={(value: any) => {
@@ -636,7 +611,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                       </div>
                     </div>
                     {/*<div className={"w-full flex items-start pl-3"}>*/}
-                    {/*  <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Tính chất</div>*/}
+                    {/*  <div className={"h-full text-left  text-gray-500 flex items-center mr-2 "}>Tính chất</div>*/}
                     {/*  <DropdownSearchable*/}
                     {/*    onchangeValue={(item: any) => {*/}
                     {/*      setFieldValue("fieldID", item.value);*/}
@@ -686,9 +661,9 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                     {/*  />*/}
                     {/*</div>*/}
                   </div>
-                  <div className={"flex pb-1 pt-2 border-b"}>
+                  <div className={"flex py-2 border-b"}>
                     <div className={"w-full flex items-start"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Liên quan</div>
+                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2 "}>Liên quan</div>
                       <DropdownSearchable
                         onchangeValue={(value: any) => {
                           if (!values.relatedIDs.includes(value.id)) {
@@ -745,9 +720,9 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                       />
                     </div>
                   </div>
-                  <div className={"flex pb-1 pt-2 border-b"}>
+                  <div className={"flex py-2 border-b"}>
                     <div className={"w-3/4 flex items-start"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Tiêu đề (*)</div>
+                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2 "}>Tiêu đề (*)</div>
                       <div className={"w-full flex-1"}>
                         <input
                           placeholder="Tiêu đề"
@@ -762,8 +737,8 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                         />
                       </div>
                     </div>
-                    <div className={"w-1/4 flex items-start"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Thời hạn (*)</div>
+                    <div className={"w-1/4 flex items-center"}>
+                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2 "}>Thời hạn (*)</div>
                       <DayPickerInput
                         value={values.expiredTime ? moment(values.expiredTime).format("MM/DD/YYYY") : moment().format("MM/DD/YYYY")}
                         onDayChange={(day) => setFieldValue("expiredTime", moment(day).format("MM/DD/YYYY"))}
@@ -856,29 +831,29 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
 
                 <div className="px-6 mb-3">
                   {(!!Object.keys(uploads.files).length || !!Object.keys(uploads.images).length) &&
-                  [...toArray(uploads.files), ...toArray(uploads.images)].map(file => {
-                    if(!file || Object.keys(file).length === 1) return;
+                    [...toArray(uploads.files), ...toArray(uploads.images)].map(file => {
+                      if (!file || Object.keys(file).length === 1) return;
 
-                    const { file: fileInfo, progress, id } = file;
-                    const isProgress = progress < 100;
+                      const { file: fileInfo, progress, id } = file;
+                      const isProgress = progress < 100;
 
-                    return (
-                      <div key={`${id}-${fileInfo.name}-${fileInfo.size}`} className="bg-cbs-file-upload-bg max-w-[600px] px-2 py-1 mb-3 flex items-center">
-                        <p className={`truncate mr-2 font-bold ${isProgress ? 'text-black' : 'text-primary'}`} title={fileInfo.name}>
-                          {fileInfo.name}
-                        </p>
-                        <span className="mr-2 text-primary-gray font-bold">({humanFileSize(fileInfo.size)})</span>
-                        <div className={`w-1/5 h-[12px] ${isProgress && 'mr-2 border border-primary bg-white relative'}`}>
-                          {isProgress && (
-                            <div style={{ width: `${progress}%` }} className={"bg-primary absolute top-0 left-0 h-full"}></div>
-                          )}
+                      return (
+                        <div key={`${id}-${fileInfo.name}-${fileInfo.size}`} className="bg-cbs-file-upload-bg max-w-[600px] px-2 py-1 mb-3 flex items-center">
+                          <p className={`truncate mr-2 font-bold ${isProgress ? 'text-black' : 'text-primary'}`} title={fileInfo.name}>
+                            {fileInfo.name}
+                          </p>
+                          <span className="mr-2 text-primary-gray font-bold">({humanFileSize(fileInfo.size)})</span>
+                          <div className={`w-1/5 h-[12px] ${isProgress && 'mr-2 border border-primary bg-white relative'}`}>
+                            {isProgress && (
+                              <div style={{ width: `${progress}%` }} className={"bg-primary absolute top-0 left-0 h-full"}></div>
+                            )}
+                          </div>
+                          <button className="ml-auto" onClick={handleRemoveUpload.bind(null, file, 'FILE')}>
+                            <Close />
+                          </button>
                         </div>
-                        <button className="ml-auto" onClick={handleRemoveUpload.bind(null, file, 'FILE')}>
-                          <Close />
-                        </button>
-                      </div>
-                    )
-                  })}
+                      )
+                    })}
 
                   {/* <div key={`${id}-${fileInfo.name}-${fileInfo.size}`} className="bg-cbs-file-upload-bg max-w-[600px] px-2 py-1 mb-3 flex items-center">
                     <p className="truncate mr-2 text-black font-bold" title={fileInfo.name}>{fileInfo.name}</p>
@@ -907,7 +882,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                       onChange={(e: ChangeEvent<HTMLInputElement>) => handleUploadAttach(e.target.files)}
                     />
                   </label>
-                  <div className={"flex items-center ml-4"}>
+                  <div className={"flex items-center ml-4 testclass"}>
                     <input
                       type="checkbox"
                       id="email-notice"
@@ -915,6 +890,46 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                       onChange={e => setIsNotiEmail(e.target.checked)}
                     />
                     <label htmlFor="email-notice" className={"text-left ml-2 whitespace-nowrap"}>Thông báo email</label>
+                  </div>
+                  <div className="flex items-center ml-3">
+                    <img
+                      src={IconClock}
+                      alt="Icon attach"
+                      className="h-6 w-6"
+                    />
+                    {/* <Button aria-describedby={idPopover} variant="text" 
+                    onClick={handleClickOpenPop}
+                    style={{textTransform: 'none', fontSize: '14px'}}
+                    >
+                      <span className="text-primary-gray">Nhắc trước thời hạn</span>
+                    </Button> */}
+                    <Popover
+                      id={idPopover}
+                      open={open}
+                      anchorEl={anchorEl}
+                      onClose={handleClose}
+                      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                      transformOrigin={{ vertical: "bottom", horizontal: "center" }}
+                      style={{boxShadow:'none', borderRadius:'3px', border:'0.5px solid #CCCCCC'}}
+                    >
+                      <div className="p-3 w-[300px]">
+                        <div className="py-1">
+                          Nhắc trước thời hạn
+                        </div>
+                        <div className="py-1">
+                          Nhắc trước thời hạn
+                        </div>
+                        <div className="py-1">
+                          Nhắc trước thời hạn
+                        </div>
+                        <div className="py-1">
+                          Nhắc trước thời hạn
+                        </div>
+                        <div className="py-1">
+                          Nhắc trước thời hạn
+                        </div>
+                      </div>
+                    </Popover>
                   </div>
                   <button type="submit" className="btn btn-primary ml-auto" disabled={isUploading}>Xác nhận</button>
                 </div>

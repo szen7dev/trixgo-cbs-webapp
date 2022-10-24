@@ -24,13 +24,6 @@ import { ProviderModalPost as ProviderModalPcm } from "views/pcm/contexts/post";
 import { DashboardV2 } from "views/homepage/pages";
 import {
   DocumentDashboardPage,
-  // DocumentDetailPage,
-  // DocumentFolderPage,
-  // DocumentProjectPage,
-  // DocumentProfilePage,
-  // DocumenDatahubContactPage,
-  // DocumentOfPackagePage,
-  // DocumentOfTypePage,
 } from "views/document/pages";
 
 import {
@@ -38,30 +31,6 @@ import {
   ProjectDashboardPortfolioPage,
   ProjectDashboardTaskPage,
   ProjectMarketPage,
-  // ProjectAdminManagementPage,
-  // ProjectBiddingPage,
-  // ProjectBudgetPage,
-  // ProjectCashFlowPlanPage,
-  // ProjectCashFlowPlanChildPage,
-  // ProjectDrawing2Page,
-  // ProjectDrawingPage,
-  // ProjectFolderPage,
-  // ProjectHomePage,
-  // ProjectPaymentPage,
-  // ProjectSubjectPage,
-  // ProjectSubjectCompanyOfAssigneePage,
-  // ProjectSubjectCompanyOfAuthorPage,
-  // ProjectPhotoContractPage,
-  // ProjectPhotoPage,
-  // ProjectResourcePage,
-  // ProjectSchedulePage,
-  // ProjectInspectionPage,
-  // ProjectDashboardPage,
-  // ProjectInspectionTab2Page,
-  // ProjectInspectionTab3Page,
-  // ProjectInspectionDetailPage,
-  // ProjectDirectoryPage,
-  // ProjectMilestonePage
 } from "views/ppt/pages";
 
 import ProjectAdminFunctionalTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminFunctionalTab";
@@ -73,22 +42,13 @@ import ProjectAdminPositionTab from "views/ppt/pages/ProjectAdminPage/pages/Proj
 const PcmDetailTaskV2             = lazy(() => import('views/pcm/pages/PcmDetailTaskV2'));
 const PcmTagPage                  = lazy(() => import('views/pcm/pages/PcmTagPage'));
 const PcmTagProjectPage           = lazy(() => import('views/pcm/pages/PcmTagPage/PcmTagProjectPage'));
-const PcmTag3ProjectCompanyPage           = lazy(() => import('views/pcm/pages/PcmTagPage/PcmTag3ProjectCompanyPage'));
-const PcmTag3ProjectCompanySubTypePage           = lazy(() => import('views/pcm/pages/PcmTagPage/PcmTag3ProjectCompanySubTypePage'));
-
+const PcmTag3ProjectCompanyPage   = lazy(() => import('views/pcm/pages/PcmTagPage/PcmTag3ProjectCompanyPage'));
+const PcmTag3ProjectCompanySubTypePage = lazy(() => import('views/pcm/pages/PcmTagPage/PcmTag3ProjectCompanySubTypePage'));
 const PcmHomePage                 = lazy(() => import('views/pcm/pages/PcmHomeV2'));
 const PcmUserPage                 = lazy(() => import('views/pcm/pages/PcmUserPage'));
 const PcmUserProjectPage          = lazy(() => import('views/pcm/pages/PcmUserProjectPage'));
 const PcmReportPage               = lazy(() => import('views/pcm/pages/PcmReport'));
 const PcmTasksReportPage          = lazy(() => import('views/pcm/pages/PcmTasksReport'));
-// const PcmReportQuickPage          = lazy(() => import('views/pcm/pages/PcmReportQuick'));
-// const PcmDetailTaskPage           = lazy(() => import('views/pcm/pages/PcmDetailTask'));
-// const PcmGroupPage                = lazy(() => import('views/pcm/pages/PcmGroup'));
-// const PcmTaskGroupPage            = lazy(() => import('views/pcm/pages/PcmTaskGroup'));
-
-// const PcmPrintTaskTypeOnePage     = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeOne'));
-// const PcmPrintTaskTypeTwoPage     = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeTwo'));
-// const PcmPrintTaskTypeThreePage   = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeThree'));
 
 const PCMRouter: FC = () => {
   return (

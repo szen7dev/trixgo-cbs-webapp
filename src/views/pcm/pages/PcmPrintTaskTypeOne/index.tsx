@@ -227,7 +227,7 @@ const PcmPrintTaskTypeOne: FC = () => {
                         </div>
                         <div className="mt-2.5">
                           <div
-                            className="min-h-[300px]"
+                            className=""
                             dangerouslySetInnerHTML={{
                               __html: taskInfo?.description?.replace(/\n/g, '<br />')
                             }}

@@ -31,3 +31,5 @@ yarn-error.log*
 /.idea/vcs.xml
 /src/styles/output.css
 todo.txt
+
+.vscode

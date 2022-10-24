@@ -42,33 +42,22 @@ const ProjectBudgetDetailPage:FC = () => {
 
     return (
         <div className={"project-budget-detail relative flex flex-col h-full overflow-hidden"}>
-            {/*Thông tin chung*/}
             {
                 activeTab() === "1" &&
                 <ProjectBudgetDetailTab1 contractInfo={contractInfo}/>
             }
-            {/*End Thông tin chung*/}
-
-            {/*Sản lượng*/}
             {
                 activeTab() === "2" &&
                 <ProjectBudgetDetailTab2 contractInfo={contractInfo}/>
             }
-            {/*End sản lượng*/}
-
-            {/*Nghiệm thu*/}
             {
                 activeTab() === "3" &&
                 <ProjectBudgetDetailTab3 contractInfo={contractInfo}/>
             }
-            {/*End nghiệm thu*/}
-
-            {/*Thanh toán*/}
             {
                 activeTab() === "4" &&
                 <ProjectBudgetDetailTab4 contractInfo={contractInfo}/>
             }
-            {/*End thanh toán*/}
         </div>
     )
 }

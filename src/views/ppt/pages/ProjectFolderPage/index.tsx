@@ -83,7 +83,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 	// const { assigned, checkboxRef, handleCheckAll, handleChangeCheckbox } = useCheckedList(data);
 	const { dataUserInfo, refetchDataUserInfo, user } = useAuth();
 	const [keyword, setKeyword] = useState("");
-
+	const [isFetchTask, setIsFetchTask] = useState(false);
 	const {
 		// isLoading,
 		// refetch,
@@ -118,78 +118,65 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 		})
 	}, false, true);
 
-	const { listTasks } = useTask({
+	let { listTasks } = useTask({
 		params: {
 			groupID,
 			keyword
 		},
 		isFetch: !!groupID
-	})
+	});
 
-	// xử lý checked
-	const getStateChecked = useCallback((id: string) => {
-		return idsChecked.includes(id) ? true : false;
-	}, [idsChecked]);
-
-	const onClickCheckButton = (id: string) => {
-		const check = idsChecked.includes(id);
-		if (check) {
-			const newList = [...idsChecked];
-			newList.splice(newList.findIndex((e: any) => e == id), 1);
-			setIdsChecked(newList);
-		} else {
-			const newList = [...idsChecked];
-			newList.push(id);
-			setIdsChecked(newList);
-		};
-	};
-
-	useEffect(() => {
-		document.title = `${infoDepartment?.data?.sign}-Thư mục dữ liệu`;
-	}, [location?.pathname]);
+	if(!groupID){
+		listTasks = []
+	}
 
 	useEffect(() => {
 		refetchInfoGroup()
-	}, [groupID]);
-
-	useEffect(() => {
 		refetchDataUserInfo()
-	}, []);
-
+		document.title = `${infoDepartment?.data?.sign}-Thư mục dữ liệu`;
+	}, [groupID, infoDepartment]);
 	return (
 		<>
 			{/* Content  */}
 			<div className="flex flex-col h-full overflow-hidden">
 				<div className={"nav-drawing flex items-center text-lg p-4 text-primary-gray"}>
-					<button className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mr-3"}
-						onClick={history.goBack}
-					>
-						<img src={iconBack} alt={"----"} className={"w-[18px]"} />
-					</button>
-					{infoGroup?.data?.sign && <img src={nextIcon} alt={"-----"} className={"mx-4 h-[12px] w-[12px]"} />}
-					<Link to={`/pm/project/${projectID}/folder/${infoGroup?.data?._id}`}>
-						<div className="flex gap-2">
-							<img src={iconFolder} alt={"----"} className={"w-[18px]"} />
-							<span className="truncate max-w-[132px]">{infoGroup?.data?.sign}</span>
-						</div>
-					</Link>
+					{groupID ?
+						<button className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mr-3"}
+							onClick={history.goBack}
+						>
+							<img src={iconBack} alt={"----"} className={"w-[18px]"} />
+						</button> : <></>
+					}
+					{infoGroup?.data?.sign ?
+						<Link to={`/pm/project/${projectID}/folder/${infoGroup?.data?.parent?._id ? infoGroup?.data?.parent?._id : ""}`}>
+							<div className="flex gap-2">
+								{/* <img src={iconFolder} alt={"----"} className={"w-[18px]"} /> */}
+								<span className="truncate max-w-[150px]">{infoGroup?.data?.parent?.name || infoGroup?.data?.name}</span>
+							</div>
+						</Link> : <></>}
 
-					{infoGroup?.data?.parent?.sign && <img src={nextIcon} alt={"-----"} className={"mx-4 h-[12px] w-[12px]"} />}
-					<Link to={`/pm/project/${projectID}/folder/${infoGroup?.data?.parent?._id}`}>
-						<div className="flex gap-2">
-							<img src={iconFolder} alt={"----"} className={"w-[18px]"} />
-							<span className="truncate max-w-[132px]">{infoGroup?.data?.parent?.sign}</span>
-						</div>
-					</Link>
+					{infoGroup?.data?.parent?.sign ? <>
+						<img src={nextIcon} alt={"-----"} className={"mx-4 h-[12px] w-[12px]"} />
+						<Link to={`/pm/project/${projectID}/folder/${infoGroup?.data?.parent?._id}`}>
+							<div className="flex gap-2">
+								{/* <img src={iconFolder} alt={"----"} className={"w-[18px]"} /> */}
+								<span className="truncate max-w-[150px]">{infoGroup?.data?.name}</span>
+							</div>
+						</Link>
+					</> : <></>}
 
-					{infoGroup?.data?.parent?.parent?.sign && <img src={nextIcon} alt={"-----"} className={"mx-4 h-[12px] w-[12px]"} />}
+					{infoGroup?.data?.parent?.parent?.name ? 
+					<>
+					<img src={nextIcon} alt={"-----"} className={"mx-4 h-[12px] w-[12px]"} />
 					<Link to={`/pm/project/${projectID}/folder/${infoGroup?.data?.parent?.parent?._id}`}>
 						<div className="flex gap-2">
 							{/* <img src={iconFolder} alt={"----"} className={"w-[18px]"} /> */}
-							<span className="truncate max-w-[132px]">{infoGroup?.data?.parent?.parent?.sign}</span>
+							<span className="truncate max-w-[150px]">{infoGroup?.data?.parent?.parent?.name}</span>
 						</div>
 					</Link>
-					<button
+					</> : <></>}
+					{groupID ? 
+						<button
 						className={"ml-6"}
 						onClick={() =>
 							openModal(
@@ -206,10 +193,12 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 						}
 					>
 						<img src={iconAddNew} alt={"-----"} className={"h-[24px] w-[24px]"}/>
-					</button>
-					<button className={"ml-6"}>
+					</button> : <></>
+					}
+					
+					{/* <button className={"ml-6"}>
 						<img src={downloadIcon} alt={"-----"} className={"h-[24px] w-[24px]"}/>
-					</button>
+					</button> */}
 				</div>
 
 				{/* <div className={"table-folder-project"}>
@@ -262,7 +251,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 				</div> */}
 
 				<div className="flex-1 overflow-y-auto">
-					<table className="text-black text-medium border-separate space-x-0 space-y-0 w-full" style={{ borderSpacing: 0 }}>
+					<table className="text-black text-medium border-separate space-x-0 space-y-0 w-full border-collapse	" style={{ borderSpacing: 0 }}>
 						<thead className="">
 							<tr className="text-primary-gray whitespace-nowrap align-middle text-left">
 								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
@@ -301,17 +290,17 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 										isGroupDefault = true;
 									}
 									return (
-										<tr key={props._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
-											<td className="px-2 py-2">
+										<tr key={props._id} className="text-left hover:bg-cbs-active-comment cursor-pointer border-b-0.5 border-cbs-border">
+											<td className="px-2 py-2 border-b-0.5 border-cbs-border">
 												<Link to={`/pm/project/${projectID}/folder/${props._id}`} className="align-top">
 													<FolderIcon type="folder" />
 													{props.name} {isGroupDefault && <img src={GroupDefaultIcon} alt="file" className="inline-block mr-3" title="Group default" />}
 												</Link>
 											</td>
-											<td className="py-2 px-2"></td>
-											<td className="py-2 px-2"></td>
-											<td className="py-2 px-2 text-cbs-primary"></td>
-											<td className="py-2 px-2">
+											<td className="py-2 px-2 border-b-0.5 border-cbs-border"></td>
+											<td className="py-2 px-2 border-b-0.5 border-cbs-border"></td>
+											<td className="py-2 px-2 border-b-0.5 border-cbs-border text-cbs-primary"></td>
+											<td className="py-2 px-2 border-b-0.5 border-cbs-border">
 												<div className="flex">
 													{props.members.map((member: any, index1: any) => {
 														if (index1 < 5) {
@@ -333,22 +322,22 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 								listTasks.map(props => {
 									const percent = ((props.amountFinishedChecklist / props.amountChecklist) || 0) * 100;
 									return (
-										<tr key={props._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
-											<td className="px-2 py-2">
+										<tr key={props._id} className="text-left hover:bg-cbs-active-comment cursor-pointer border-b-0.5 border-cbs-border">
+											<td className="px-2 py-2 border-b-0.5 border-cbs-border">
 												<Link to={`/pcm/detail/${props._id}`} className="align-top">
 													<FolderIcon type="file" />
 													{props.name}
 												</Link>
 											</td>
-											<td className="py-2 px-2">{moment(props.actualFinishTime).format('L')}</td>
-											<td className="py-2 px-2">
+											<td className="py-2 px-2 border-b-0.5 border-cbs-border">{moment(props.actualFinishTime).format('L')}</td>
+											<td className="py-2 px-2 border-b-0.5 border-cbs-border">
 												<div>
 													<img src={`${process.env.REACT_APP_URL_S3_USER}/${props.assignee?.image}`} alt="" className="w-6 h-6 rounded-full inline-block mr-3" />
 													{props.assignee?.bizfullname}
 												</div>
 											</td>
-											<td className="py-2 px-2 text-cbs-primary">{props.status && PCM_STATUS_TASK[props.status - 1].text}</td>
-											<td className="py-2 px-2">
+											<td className="py-2 px-2 text-cbs-primary border-b-0.5 border-cbs-border">{props.status && PCM_STATUS_TASK[props.status - 1].text}</td>
+											<td className="py-2 px-2 border-b-0.5 border-cbs-border">
 												<div className="pr-4">
 													<p className="text-right">{props.amountChecklist}/{props.amountFinishedChecklist}</p>
 													<div className="rounded border-0.5 border-cbs-border h-1 box-content mt-1">

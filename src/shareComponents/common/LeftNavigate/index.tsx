@@ -197,7 +197,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
           </div>
           <span className={"text-primary-gray mt-1"}>Dự án</span>
         </Link> : <></>}
-        {checkPermissionApp('5fe58b7395db3c6e1534ea81') ?
+        {/* {checkPermissionApp('5fe58b7395db3c6e1534ea81') ?
         <Link to={`/bidding/home`} className={"flex flex-col items-center mb-3"}>
           <div
             className={
@@ -210,7 +210,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
             <img width={'20px'} src={biddingImage} alt={"Thầu"} />
           </div>
           <span className={"text-primary-gray mt-1"}>Thầu</span>
-        </Link> : <></>}
+        </Link> : <></>} */}
       {checkPermissionApp('6131d6f83f4b736dc93253b2') ?
         <Link to={`/cmcs/home`} className={"flex flex-col items-center mb-3"}>
           <div
@@ -224,20 +224,6 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
             <img width={'20px'} src={contractIcon} alt={"Hợp đồng"} />
           </div>
           <span className={"text-primary-gray mt-1"}>Hợp đồng</span>
-        </Link> : <></>}
-        {checkPermissionApp('5dfe4bf251dc622100bb9d8c') ?
-        <Link to={`/inspection/home`} className={"flex flex-col items-center mb-3"}>
-          <div
-            className={
-              "px-4 py-1 rounded-full relative " +
-              (firstRoute === "inspection"
-                ? "bg-cbs-hightlight-right-navigate"
-                : "")
-            }
-          >
-            <img width={'20px'} src={iconInspection} alt={"Nghiệm thu"} />
-          </div>
-          <span className={"text-primary-gray mt-1"}>Nghiệm thu</span>
         </Link> : <></>}
       {checkPermissionApp('5e47867080019357cce04746') ?
         <Link to={`/document/home`} className={"flex flex-col items-center mb-3"}>
@@ -253,7 +239,21 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
           </div>
           <span className={"text-primary-gray mt-1"}>Hồ sơ</span>
         </Link> : <></>}
-        {checkPermissionApp('5dfe4bc751dc622100bb9d8a') ?
+        {checkPermissionApp('5dfe4bf251dc622100bb9d8c') ?
+        <Link to={`/inspection/home`} className={"flex flex-col items-center mb-3"}>
+          <div
+            className={
+              "px-4 py-1 rounded-full relative " +
+              (firstRoute === "inspection"
+                ? "bg-cbs-hightlight-right-navigate"
+                : "")
+            }
+          >
+            <img width={'20px'} src={iconInspection} alt={"Nghiệm thu"} />
+          </div>
+          <span className={"text-primary-gray mt-1"}>Nghiệm thu</span>
+        </Link> : <></>}
+        {/* {checkPermissionApp('5dfe4bc751dc622100bb9d8a') ?
         <Link to={`/financial/home`} className={"flex flex-col items-center mb-3"}>
           <div
             className={
@@ -266,8 +266,8 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
             <img width={'20px'} src={financialIcon} alt={"Tài chính"} />
           </div>
           <span className={"text-primary-gray mt-1"}>Tài chính</span>
-        </Link> : <></>}
-      {checkPermissionApp('61e049c9fdebf77b072d1b13') ?
+        </Link> : <></>} */}
+      {/* {checkPermissionApp('61e049c9fdebf77b072d1b13') ?
         <Link to={`/human/home`} className={"flex flex-col items-center mb-3"}>
           <div
             className={
@@ -280,7 +280,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
             <img width={'20px'} src={humanIcon} alt={"Nhân sự"} />
           </div>
           <span className={"text-primary-gray mt-1"}>Nhân sự</span>
-        </Link> : <></>}
+        </Link> : <></>} */}
       {checkPermissionApp('5dfe4c1b51dc622100bb9d8f') ?
         <Link to={`/messages`} className={"flex flex-col items-center mb-3"}>
           <div

@@ -11,10 +11,21 @@ import iconLink from "assets/images/icons8-link-96-v3.svg";
 import moment from "moment";
 import { ModalZoomView } from "shareComponents/common";
 import { ImageProps } from "typings/common";
+import PencilIcon from "assets/images/icons8-pencil-96.svg";
 
 type Props = {
     task: Task;
     refetchInfo?: () => void;
+}
+
+function checkCreateAtWith60minute(time: any){
+    const timeStartComment = time;
+    const nowDate = moment();
+    if (nowDate.diff(timeStartComment, 'minutes') < 60) { 
+        return true;
+    }else{ 
+        return false;
+    }
 }
 
 export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
@@ -60,12 +71,10 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
 	}
 
     useEffect(() => {
-        if(task.subtype === 9 || task.subtype === 11) {
+        if(checkCreateAtWith60minute(task?.createAt)){
             setIsPermissionUpdateDescription(true);
-        } else {
-            setIsPermissionUpdateDescription(task.draft === 1);
         }
-    }, [task.subtype, task.draft])
+    }, [task?.createAt])
 
     return (
         <div className={"task-description flex items-start mt-5"}>
@@ -73,17 +82,14 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                 <img src={iconNote} alt={'-----'} />
             </span>
             <div className={"flex-1"}>
-                <div className={"text-primary-gray text-[16px] font-bold"}>Mô tả</div>
-                <div className={"mt-2"} dangerouslySetInnerHTML={{
-                    __html: (editDescription && task.description) ? task.description : task.description?.replace(/\n/g, '<br />')
-                }} />
+                <div className={"text-primary-gray text-[16px] font-bold"}>
+                    Mô tả
+                </div>
                 <div className={"mt-2 editor"}>
                     {
                         (!editDescription && isHasPermissionUpdateDescription) ?
-                            <div
-                                onClick={() => setEditDescription(true)}
-                                className={"bg-cbs-form-input-bg border-0.5 border-primary-border px-4 pt-2 h-[60px] cursor-pointer rounded text-primary-gray"}>
-                                Biên soạn nội dung mô tả...
+                            <div onClick={() => setEditDescription(true)} >
+                                <img src={PencilIcon} alt="Pencil" />
                             </div> : (
                                 isHasPermissionUpdateDescription ? (
                                     <>
@@ -163,7 +169,9 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                             )
                     }
                 </div>
-                {/*  UI DEMO  */}
+                <div className={"mt-2"} dangerouslySetInnerHTML={{
+                    __html: (editDescription && task.description) ? task.description : task.description?.replace(/\n/g, '<br />')
+                }} />
                 { task.authorAttachs?.length ? (
                     <div className={"mt-2"}>
                         <div className={"user-attach mt-4"}>

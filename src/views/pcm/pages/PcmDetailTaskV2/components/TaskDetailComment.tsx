@@ -61,7 +61,6 @@ export const TaskDetailComment: FC<Props> = ({ task, userId, refetchInfo }) => {
             const { data, error } = result;
 
             if (error) return;
-
             const { infoObject, infoComment, parentID, method } = data;
 
             if (infoObject?._id !== task._id) return;
@@ -116,6 +115,9 @@ export const TaskDetailComment: FC<Props> = ({ task, userId, refetchInfo }) => {
                 <button onClick={() => setFilter(1)} className={"text-primary-gray text-[16px] " + (filter === 1 ? "font-bold border-b border-primary-gray" : "")}>
                     Phản hồi liên quan ({task.amountResponse || 0})
                 </button>
+                {/* <button onClick={() => setFilter(6)} className={"text-primary-gray text-[16px] mx-4 " + (filter === 6 ? "font-bold border-b border-primary-gray" : "")}>
+                    Fille ({task.authorAttachs || 0})
+                </button> */}
                 {((task.subType === 4 && task.openedStatus === 1) || task.assignee?._id === userId || task.subType !== 4) && (
                     <button onClick={() => setFilter(2)} className={"text-primary-gray text-[16px] mx-4 " + (filter === 2 ? "font-bold border-b border-primary-gray" : "")}>
                         Nội dung chốt ({task.amountMarkedResponse || 0})
