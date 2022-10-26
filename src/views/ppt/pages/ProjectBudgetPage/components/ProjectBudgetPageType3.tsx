@@ -33,7 +33,7 @@ export const ProjectBudgetPageType3:FC<Props> = ({ projectInfo }) => {
         isLoading, totalRecord, totalPage, hasNextPage, listContractWithPager
     } = useContract({
         params: {
-            projectID: projectInfo._id, isExpiredAg: 1, limit: 20,
+            projectID: projectInfo._id, isExpiredCg: 1, limit: 20,
             populates: JSON.stringify({
                 path: 'project',
                 select: 'name sign',
