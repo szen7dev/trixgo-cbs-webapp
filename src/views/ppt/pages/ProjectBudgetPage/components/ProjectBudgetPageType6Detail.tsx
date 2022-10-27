@@ -43,11 +43,17 @@ export const ProjectBudgetPageType6Detail:FC<Props> = ({ projectInfo }) => {
             plan: 1,
             populates:  JSON.stringify({
                 path: "project userCreate contract",
-                select: "name sign fullname"
+                select: "name sign fullname sellerInfo",
+                populate: ({
+                    path: "sellerInfo",
+                    select: "name"
+                })
             }),
         },
         isFetchList: true
     })
+    console.log(listWithPager)
+
     return (
         <>
             <div className={"sticky top-0 z-10 block"}>
@@ -100,7 +106,7 @@ export const ProjectBudgetPageType6Detail:FC<Props> = ({ projectInfo }) => {
                         <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-normal text-left"}>
                             Phân loại
                         </th>
-                        <th className={"w-5/12 bg-cbs-table-header p-2 border-0.5 border-primary-border text-normal text-left"}>
+                        <th className={"w-3/12 bg-cbs-table-header p-2 border-0.5 border-primary-border text-normal text-left"}>
                             Nội dung
                         </th>
                         <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-normal text-left"}>
@@ -135,8 +141,8 @@ export const ProjectBudgetPageType6Detail:FC<Props> = ({ projectInfo }) => {
                                 </td>
                                 <td className={"p-2 border-0.5 border-primary-border"}>
                                     <Link to={`/pm/project/${plan.project._id}/budget/type/1/detail/${plan.contract._id}/tab/3`}>
-                                        {plan.name}
-                                        <p className={"text-primary-gray text-xs"}>{plan.contract.sign}-{plan.contract.name}</p>
+                                        <p className=" text-[14px]">{plan.name}</p>
+                                        <p className={"text-primary-gray text-xs"}>{plan.contract.sign}-{plan.contract.name}-{plan.contract.sellerInfo.name}</p>
                                     </Link>
                                 </td>
                                 <td className={"p-2 border-0.5 border-primary-border"}>
