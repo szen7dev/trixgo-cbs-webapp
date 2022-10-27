@@ -103,13 +103,10 @@ export const ProjectBudgetPageType6Detail:FC<Props> = ({ projectInfo }) => {
                             Ngày tháng
                         </th>
                         <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-normal text-left"}>
-                            Mã hiệu
-                        </th>
-                        <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-normal text-left"}>
                             Đề nghị tạm ứng/thanh toán (1)
                         </th>
                         <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-normal text-left"}>
-                            Thời hạn thanh toán
+                            Thời hạn thanh toán theo kế hoạch
                         </th>
                         <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-normal text-left"}>
                             Đã thanh toán (2)
@@ -127,43 +124,29 @@ export const ProjectBudgetPageType6Detail:FC<Props> = ({ projectInfo }) => {
                         (listWithPager[pageIndex]??[]).map((plan: any,i: number) => (
                             <tr key={plan._id}>
                                 <td className={"p-2 border-0.5 border-primary-border text-center"}>
-                                    {/* <input className="form-check-input line mr-2" type="checkbox"
-                                           checked={plan._id === recordSelected._id}
-                                           onChange={(e) => {
-                                               if (e.target.checked) {
-                                                   setSelectRecord(document);
-                                                   return null;
-                                               }
-                                               setSelectRecord({});
-                                               return null;
-                                           }}
-                                    /> */}
                                     {i+1}
                                 </td>
                                 <td className={"p-2 border-0.5 border-primary-border"}>
-                                    {/* <Link to={`/pm/project/${projectInfo._id}/budget/type/4/detail/${plan._id}`}>{plan.name}</Link> */}
-                                    {plan.name}
-                                    <p className={"text-primary-gray text-xs"}>{plan.contract.name}</p>
+                                    <Link to={`/pm/project/${plan.project._id}/budget/type/1/detail/${plan.contract._id}/tab/3`}>
+                                        {plan.name}
+                                        <p className={"text-primary-gray text-xs"}>{plan.contract.sign}-{plan.contract.name}</p>
+                                    </Link>
                                 </td>
                                 <td className={"p-2 border-0.5 border-primary-border"}>
                                     { moment(plan.timeForPayment).format("L")}
                                 </td>
-                                <td className={"p-2 border-0.5 border-primary-border"}>
-                                    { plan.sign }
-                                </td>
-                                <td className={"p-2 border-0.5 border-primary-border"}>
+                                <td className={"p-2 border-0.5 border-primary-border text-right"}>
                                     {formatNumberMoney(plan.recommendedPayment)}
                                 </td>
                                 <td className={"p-2 border-0.5 border-primary-border"}>
                                     { moment(plan.timeForPayment).format("L")}
                                 </td>
-                                <td className={"p-2 border-0.5 border-primary-border"}>
+                                <td className={"p-2 border-0.5 border-primary-border text-right"}>
                                     {formatNumberMoney(plan.amountPaid)}
                                 </td>
-                                <td className={"p-2 border-0.5 border-primary-border"}>
+                                <td className={"p-2 border-0.5 border-primary-border text-right"}>
                                     {formatNumberMoney(plan.remainingPayment)}
                                 </td>
-
                                 <td className={"p-2 border-0.5 border-primary-border"}>
                                     { plan.note }
                                 </td>
