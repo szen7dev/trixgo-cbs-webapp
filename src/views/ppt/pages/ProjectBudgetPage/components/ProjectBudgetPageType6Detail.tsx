@@ -12,6 +12,7 @@ import moment from "moment";
 import {formatNumberMoney} from "utils/cmcs";
 import {Link, useParams, useHistory} from "react-router-dom";
 import { UseContractIPCGetListByMonthWithPager } from "services/hooks/cmcs/useContractIPC";
+import { CONTRACT_IPC_PLANS } from "apis/localdb/index";
 type Props = {
     projectInfo: Project
 }
@@ -96,6 +97,9 @@ export const ProjectBudgetPageType6Detail:FC<Props> = ({ projectInfo }) => {
                             {/* <input className="form-check-input line mr-2" type="checkbox" value="" id="check"/> */}
                             STT
                         </th>
+                        <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-normal text-left"}>
+                            Phân loại
+                        </th>
                         <th className={"w-5/12 bg-cbs-table-header p-2 border-0.5 border-primary-border text-normal text-left"}>
                             Nội dung
                         </th>
@@ -125,6 +129,9 @@ export const ProjectBudgetPageType6Detail:FC<Props> = ({ projectInfo }) => {
                             <tr key={plan._id}>
                                 <td className={"p-2 border-0.5 border-primary-border text-center"}>
                                     {i+1}
+                                </td>
+                                <td className={"p-2 border-0.5 border-primary-border"}>
+                                    {plan.type && CONTRACT_IPC_PLANS[plan.plan-1].text}
                                 </td>
                                 <td className={"p-2 border-0.5 border-primary-border"}>
                                     <Link to={`/pm/project/${plan.project._id}/budget/type/1/detail/${plan.contract._id}/tab/3`}>
