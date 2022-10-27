@@ -250,6 +250,11 @@ const PCMRouter: FC = () => {
                   <Route exact path="/pm/project/:id/budget"
                     render={({ match }) => <Redirect to={`/pm/project/${match.params.id}/budget/type/1`} />}
                   />
+                  <Route exact path="/pm/project/:id/budget/type/6/month/:month/year/:year">
+                    <PmProjectLayout>
+                      <ProjectBudgetPage />
+                    </PmProjectLayout>
+                  </Route>
                   <Route exact path="/pm/project/:id/budget/type/:type">
                     <PmProjectLayout>
                       <ProjectBudgetPage />
