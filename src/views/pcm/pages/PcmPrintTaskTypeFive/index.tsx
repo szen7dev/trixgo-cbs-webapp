@@ -53,6 +53,10 @@ const PcmPrintTaskTypeFive: FC = () => {
     isFetchComment: true,
   });
 
+  const htmlStripper = (htmlString: string) => {
+    return htmlString?.replace(/<[^>]+>/g, '');
+  }
+
   useEffect(() => {
     if (!isSuccessApp || !taskInfo || !user || isLoadingInfo) return;
 
@@ -76,7 +80,7 @@ const PcmPrintTaskTypeFive: FC = () => {
       <div className="h-full overflow-auto py-6">
         <div className="max-w-[791px] bg-white w-full mx-auto pl-[3.75rem] pr-6 py-6 shadow-cbs-md">
           {listComments?.map((comment, index) => {
-            return (
+            return (htmlStripper(comment?.content) ?
               <div key={index}>
                 <table
                   ref={componentRef}
@@ -143,18 +147,12 @@ const PcmPrintTaskTypeFive: FC = () => {
                       <td>
                         <main className="space-y-5">
                           {/* Nội dung */}
-                          <p
-                            className="mt-0.5 text-[15px] leading-4"
-                            dangerouslySetInnerHTML={{
-                              __html: nl2p(comment?.content)
-                            }}>
-                          </p>
                           <section>
-                            <div className="mt-2.5">
+                            <div className="mt-2.5 mb-5">
                               <div
                                 className=""
                                 dangerouslySetInnerHTML={{
-                                  __html: taskInfo?.description?.replace(/\n/g, '<br />')
+                                  __html: nl2p(comment?.content)
                                 }}
                               />
                             </div>
@@ -173,7 +171,7 @@ const PcmPrintTaskTypeFive: FC = () => {
                     </tr>
                   </tbody>
                 </table>
-              </div>
+              </div> : <div />
             )
           })}
           <tfoot>
