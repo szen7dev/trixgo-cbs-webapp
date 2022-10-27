@@ -9,9 +9,11 @@ import {ProjectBudgetPageType2} from "./components/ProjectBudgetPageType2";
 import {ProjectBudgetPageType3} from "./components/ProjectBudgetPageType3";
 import {ProjectBudgetPageType4} from "./components/ProjectBudgetPageType4";
 import {ProjectBudgetPageType5} from "./components/ProjectBudgetPageType5";
+import {ProjectBudgetPageType6} from "./components/ProjectBudgetPageType6";
+import {ProjectBudgetPageType6Detail} from "./components/ProjectBudgetPageType6Detail";
 
 const ProjectBudgetPage: FC = () => {
-	const { id: projectID, type } = useParams<{ id: string , type: string}>();
+	const { id: projectID, type, month } = useParams<{ id: string , type: string, month: string}>();
 
 	const [collapse, setCollapse] = useState(false);
 	 //_____Start history traffict
@@ -70,6 +72,18 @@ const ProjectBudgetPage: FC = () => {
 			{
 				type === "5" &&
 				<ProjectBudgetPageType5
+					projectInfo={projectInfo}
+				/>
+			}
+			{
+				type === "6" &&
+				<ProjectBudgetPageType6
+					projectInfo={projectInfo}
+				/>
+			}
+			{
+				month &&
+				<ProjectBudgetPageType6Detail
 					projectInfo={projectInfo}
 				/>
 			}

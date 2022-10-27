@@ -91,6 +91,13 @@ async function fetchAmountByProperty(params: any) {
     return data;
 }
 
+async function getListByMonth(params: any) {
+    const { data } = await API.get<any>(
+        `${APP_CMCS}/contract_ipcs/get-list-by-month`, { params }
+    );
+    return data;
+}
+
 const ContractIPCRepository = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fetchList: async (params: any): Promise<any> => fetchList<any>(params),
@@ -104,7 +111,8 @@ const ContractIPCRepository = {
     exportContractIpc,
     cmcsContractIPCAmountByMonth,
     cmcsContractPaymentAmountByMonth,
-    fetchAmountByProperty
+    fetchAmountByProperty,
+    getListByMonth
 };
 
 export default ContractIPCRepository
