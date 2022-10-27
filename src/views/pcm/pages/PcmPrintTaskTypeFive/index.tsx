@@ -122,7 +122,7 @@ const PcmPrintTaskTypeFive: FC = () => {
                             <div className="text-smalll text-center font-normal">
                               <p className="text-large text-cbs-primary font-bold">NHẬT KÝ THI CÔNG</p>
                               <p className="mt-1.5 text-right">
-                                <i>Hà nội, Ngày ... tháng ... năm .........</i>
+                                <i>...., Ngày {moment(comment.createAt).format("DD")} tháng {moment(comment.createAt).format("MM")} năm {moment(comment.createAt).format("YYYY")}</i>
                               </p>
                             </div>
                           </div>
@@ -134,9 +134,9 @@ const PcmPrintTaskTypeFive: FC = () => {
                               {typeof taskInfo.project?.company === "object" &&
                                 taskInfo.project?.company?.name}
                             </div>
-                            <div>Địa điểm xây dựng:</div>
-                            <div>{taskInfo.project?.address}</div>
-                            <div>Gói thầu/Hợp đồng:</div>
+                            {/* <div>Địa điểm xây dựng:</div>
+                            <div>{taskInfo.project?.address}</div> */}
+                            <div>Gói thầu:</div>
                             <div>{taskInfo.contract?.name}</div>
                           </div>
                         </header>
