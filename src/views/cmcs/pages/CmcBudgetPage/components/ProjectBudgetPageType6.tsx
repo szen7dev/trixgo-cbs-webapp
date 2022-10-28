@@ -20,7 +20,7 @@ type Props = {
     projectInfo: Project
 }
 const yearCurrent = new Date().getFullYear();
-const reportYears = [yearCurrent, yearCurrent-1, yearCurrent-2, yearCurrent-3, yearCurrent-4];
+const reportYears = [yearCurrent-3, yearCurrent-2, yearCurrent-1, yearCurrent, yearCurrent+1];
 export const ProjectBudgetPageType6:FC<Props> = ({projectInfo}) => {
     const [recordSelected, setSelectRecord] = useState<any>({});
     const [yearSelected, setYearSelected] = useState(2022);
@@ -29,7 +29,7 @@ export const ProjectBudgetPageType6:FC<Props> = ({projectInfo}) => {
     const { user } = useAuth();
     const { cmcsContractIPCAmountByMonth } = useCmcsDashboard({
         params: { 
-            outin: 2,
+            outin: 1,
             year: yearSelected,
             companyID: user?.company?._id,
             plan: 1

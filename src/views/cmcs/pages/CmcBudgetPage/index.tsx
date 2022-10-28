@@ -4,11 +4,11 @@ import { useParams } from 'react-router-dom';
 import { useProject } from 'services/hooks/items/useProject';
 import { APP_ID } from 'apis/localdb';
 import { useHistoryTraffics } from "services/hooks/auth/useAuth";
-import {ProjectBudgetPageType1} from "./components/ProjectBudgetPageType1";
-import {ProjectBudgetPageType2} from "./components/ProjectBudgetPageType2";
-import {ProjectBudgetPageType3} from "./components/ProjectBudgetPageType3";
-import {ProjectBudgetPageType4} from "./components/ProjectBudgetPageType4";
-import {ProjectBudgetPageType5} from "./components/ProjectBudgetPageType5";
+// import {ProjectBudgetPageType1} from "./components/ProjectBudgetPageType1";
+// import {ProjectBudgetPageType2} from "./components/ProjectBudgetPageType2";
+// import {ProjectBudgetPageType3} from "./components/ProjectBudgetPageType3";
+// import {ProjectBudgetPageType4} from "./components/ProjectBudgetPageType4";
+// import {ProjectBudgetPageType5} from "./components/ProjectBudgetPageType5";
 import {ProjectBudgetPageType6} from "./components/ProjectBudgetPageType6";
 import {ProjectBudgetPageType6Detail} from "./components/ProjectBudgetPageType6Detail";
 
