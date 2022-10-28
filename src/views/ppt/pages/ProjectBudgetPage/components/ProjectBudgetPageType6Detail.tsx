@@ -25,16 +25,6 @@ export const ProjectBudgetPageType6Detail:FC<Props> = ({ projectInfo }) => {
     const ref = React.useRef<PaginateHandle>(null);
     const [pageIndex, setPageIndex] = useState(0);
 
-    // const {isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage} = useCashFlowPlan({
-    //     params: {
-    //         projectID: projectInfo._id,
-    //         outin: 2,
-    //         type: 5,
-    //         property: 3
-    //     },
-    //     isFetchList: true
-    // })
-
     const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage } = UseContractIPCGetListByMonthWithPager({
         params: {
             projectID: projectInfo._id,
@@ -43,7 +33,7 @@ export const ProjectBudgetPageType6Detail:FC<Props> = ({ projectInfo }) => {
             plan: 1,
             populates:  JSON.stringify({
                 path: "project userCreate contract",
-                select: "name sign fullname sellerInfo",
+                select: "name date sign fullname sellerInfo",
                 populate: ({
                     path: "sellerInfo",
                     select: "name"
@@ -142,7 +132,8 @@ export const ProjectBudgetPageType6Detail:FC<Props> = ({ projectInfo }) => {
                                 <td className={"p-2 border-0.5 border-primary-border"}>
                                     <Link to={`/pm/project/${plan.project._id}/budget/type/1/detail/${plan.contract._id}/tab/3`}>
                                         <p className=" text-[14px]">{plan.name}</p>
-                                        <p className={"text-primary-gray text-xs"}>{plan.contract.sign}-{plan.contract.name}-{plan.contract.sellerInfo.name}</p>
+                                        <p className={"text-primary-gray text-xs"}>{plan.contract.sellerInfo.name}</p>
+                                        <p className={"text-primary-gray text-xs"}><i>{plan.contract.name} - {plan.contract.sign} - { moment(plan.contract.date).format("L")}</i></p>
                                     </Link>
                                 </td>
                                 <td className={"p-2 border-0.5 border-primary-border"}>
