@@ -292,13 +292,13 @@ export const ProjectBudgetDetailTab3:FC<Props> = ({ contractInfo }) => {
                                     {/* <input className="form-check-input line mr-2" type="checkbox" value="" id="check"/> */}
                                 </td>
                                 <td className={"border-0.5 border-primary-border p-2"}>
-                                    {item.type && CONTRACT_IPC_PLANS[item.plan-1].text}
+                                    {item.type && CONTRACT_IPC_PLANS[item.plan-1]?.text}
                                 </td>
                                 <td className={"border-0.5 border-primary-border p-2"}>
                                     {item.name}
                                     <p>
                                         <i className="text-primary-gray">{
-                                            item.type && CONTRACT_IPC_TYPES[item.type-1].text
+                                            item.type && CONTRACT_IPC_TYPES[item.type-1]?.text
                                         }</i>
                                     </p>
                                 </td>
