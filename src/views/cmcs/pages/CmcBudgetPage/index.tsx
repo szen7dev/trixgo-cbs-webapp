@@ -38,7 +38,7 @@ const CmcBudgetPage: FC = () => {
 	})
 
 	useEffect(() => {
-		document.title = `${projectInfo.sign} | Quản lý hợp đồng`
+		document.title = `Trixgo | Quản lý hợp đồng`
 	}, []);
 
 	if(!projectInfo) {
