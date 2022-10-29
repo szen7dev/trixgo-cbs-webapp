@@ -220,14 +220,12 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
                 })
             })
 
+            socket?.emit('SUBJECT_PCM_CSS_UPDATE_COUNT_NOTIFICATION', { taskID: task?._id });
+
             // Clear text input
             removeAllFiles();
             onConfirmCreate?.();
             dispatch({ type: 'ADD_COMMENT', payload: data });
-
-            // socket?.emit('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', {
-            // 	receivers: data.receiversNoti
-            // });
         } catch (error) {
             captureException(error);
             if (typeof error === "string") {
