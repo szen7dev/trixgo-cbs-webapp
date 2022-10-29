@@ -40,6 +40,8 @@ import ProjectAdminProjectDetail from "views/ppt/pages/ProjectAdminPage/pages/Pr
 import ProjectAdminProjectTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminProjectTab";
 import ProjectAdminPositionTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminPositionTab";
 import ProjectNew from "views/ppt/pages/ProjectNew";
+import ProjectKpis from "views/ppt/pages/ProjectKpis";
+import UserKpiDetail from "views/ppt/pages/ProjectKpis/UserKpiDetail";
 const PcmDetailTaskV2             = lazy(() => import('views/pcm/pages/PcmDetailTaskV2'));
 const PcmTagPage                  = lazy(() => import('views/pcm/pages/PcmTagPage'));
 const PcmTagProjectPage           = lazy(() => import('views/pcm/pages/PcmTagPage/PcmTagProjectPage'));
@@ -112,6 +114,11 @@ const PCMRouter: FC = () => {
                 <Route exact path="/pcm/projects" component={ProjectCategoryPage} />
                 <Route exact path="/pcm/market" component={ProjectMarketPage} />
                 <Route exact path="/pcm/new" component={ProjectNew} />
+                <Route exact path="/pcm/kpis" component={ProjectKpis} />
+                <Route exact path="/pcm/kpis/:userID" component={UserKpiDetail} />
+                {/* test link */}
+                <Route exact path="/pcm/kpis/userID" component={UserKpiDetail} />
+                {/* end test link */}
                 <Route exact path="/pcm/(dashboard-portfolio|dashboard-task|dashboard-document)">
                   <LayoutSecondary
                     pages={[
