@@ -107,12 +107,17 @@ const DialogComment: React.FC = () => {
                     </div>
                 </div>
             </div>
-            <div className='flex pt-3 pb-4'>
+            <div className='flex pt-3 pb-4 w-full gap-2'>
                 <div className='w-[50px]'>
                     <img src={defaultAva} alt="" className='w-[44px] h-[44px] rounded-full' />
                 </div>
-                <div>
-                    <textarea className="rounded-lg resize-none w-[600px] outline-cbs-border px-3 py-1" placeholder='Add a comment....'></textarea>
+                <div className='w-full'>
+                    <textarea
+                        className="rounded-lg resize-none w-[600px] border-0.5 border-cbs-border px-3 py-1 w-full"
+                        style={{outline: 0, }}
+                        placeholder='Add a comment....'
+                    >
+                    </textarea>
                 </div>
             </div>
         </div>
