@@ -22,7 +22,6 @@ type Props = {
 }
 
 export const TaskDetailEvaluate: FC<Props> = ({ task }) => {
-    console.log(task)
     // const labels: { [index: string]: string } = {
     //     0.5: "Useless",
     //     1: "Useless+",

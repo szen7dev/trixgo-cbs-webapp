@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import adminIcon from "assets/images/icons8-user-shield-48.svg"
 import plusIcon from "assets/images/icons8-plus-math-96.svg"
 import sendAndReceiveIcon from "assets/images/icons-send-and-receive.svg"
@@ -25,6 +25,14 @@ import { APP_ID } from "apis/localdb";
 import { usePcmPlanTaskNotification } from "services/hooks/pcm/usePcmDashboardV2";
 import { useDispatch } from "react-redux";
 import { resetFilterDashboard } from "redux/reducer/DashboardV2Slice";
+import { useSocket } from "services/hooks/useSocket";
+
+type Tab = {
+    label: string,
+    icon: string,
+    count: number,
+    route: string
+}
 
 export const HomeLeftMenuContent: FC = () => {
     const [enabled, setEnabled] = useState(false);
@@ -35,99 +43,130 @@ export const HomeLeftMenuContent: FC = () => {
     const dispatch = useDispatch();
     const [menuShowList, setMenuState] = useState(false);
 
-    const listTab: {
-        label: string,
-        icon: string,
-        count: number,
-        route: string
-    }[] = [
-            {
-                label: "Hoạt động",
-                icon: sendAndReceiveIcon,
-                count: data?.data?.amountUnreadTask || 0,
-                route: '/pcm/home'
-            },
-            {
-                label: "Việc của tôi",
-                icon: mailOutLineIcon,
-                count: Number(data?.data?.amountMyTask1 + data?.data?.amountMyTask2 + data?.data?.amountMyTask3) || 0,
-                route: '/pcm/mine'
-            },
-            {
-                label: "Việc quan tâm",
-                icon: starIcon,
-                count: 0,
-                route: '/pcm/bookmark'
-            },
-            // {
-            //     label: "Đã gửi",
-            //     icon: sendAndReceiveIcon,
-            //     count: 0,
-            //     route: '/pcm/send'
-            // },
-            {
-                label: "Việc nháp",
-                icon: fileIcon,
-                count: 0,
-                route: '/pcm/draft'
-            },
-        ];
+    const [badge, setBadge] = useState({
+        amountUnreadTask: data?.data?.amountUnreadTask,
+        amountMyTask: Number(data?.data?.amountMyTask1 + data?.data?.amountMyTask2 + data?.data?.amountMyTask3),
+    })
 
-    const listTabSub: {
-        label: string,
-        icon: string,
-        count: number,
-        route: string
-    }[] = [
-            {
-                label: "Việc giao người khác",
-                icon: uploadIcon,
-                count: 0,
-                route: '/pcm/assign'
-            },
-            {
-                label: "Báo cáo theo dự án",
-                icon: tagIcon,
-                count: 0,
-                route: '/pcm/tags'
-            },
-            {
-                label: "Báo cáo theo nhân sự",
-                icon: humanIcon,
-                count: 0,
-                route: '/pcm/users'
-            },
-            {
-                label: "Báo cáo, giao nộp",
-                icon: deliveryImage,
-                count: 0,
-                route: '/pcm/delivery'
-            },
-            {
-                label: "Thanh toán",
-                icon: paymentImage,
-                count: 0,
-                route: '/pcm/payment'
-            },
-            {
-                label: "Việc liên quan",
-                icon: linkIcon,
-                count: 0,
-                route: '/pcm/related'
-            },
-            // {
-            //     label: "Thầu và mua sắm",
-            //     icon: biddingImage,
-            //     count: 0,
-            //     route: '/pcm/bidding'
-            // },
-            {
-                label: "Báo cáo động",
-                icon: fileIcon,
-                count: 0,
-                route: '/pcm/report'
-            },
-        ];
+    const amountUnreadTask = useMemo(() => {
+        return badge.amountUnreadTask || data?.data?.amountUnreadTask || 0;
+    }, [data?.data?.amountUnreadTask, badge.amountUnreadTask])
+
+    const amountMyTask = useMemo(() => {
+        return badge.amountMyTask || Number(data?.data?.amountMyTask1 + data?.data?.amountMyTask2 + data?.data?.amountMyTask3) || 0;
+    }, [data?.data, badge.amountMyTask])
+
+    const { current: socket }: any = useSocket();
+
+    useEffect(() => {
+        if (!socket) return;
+
+        const onUpdateBadgeNotification = ({ error, data }: any) => {
+            if(error || !Object.keys(data).length) return;
+
+            const {
+                amountUnreadTask,
+                amountMyTask1,
+                amountMyTask2,
+                amountMyTask3,
+            } = data;
+
+            setBadge({
+                amountUnreadTask,
+                amountMyTask: Number(amountMyTask1 + amountMyTask2 + amountMyTask3) || 0,
+            })
+        }
+
+        socket.on("SUBJECT_PCM_SSC_UPDATE_COUNT_NOTIFICATION", onUpdateBadgeNotification);
+
+        return () => {
+          socket.off("SUBJECT_PCM_SSC_UPDATE_COUNT_NOTIFICATION", onUpdateBadgeNotification);
+        };
+    }, [socket]);
+
+    const listTab: Tab[] = [
+        {
+            label: "Hoạt động",
+            icon: sendAndReceiveIcon,
+            count: amountUnreadTask,
+            route: '/pcm/home'
+        },
+        {
+            label: "Việc của tôi",
+            icon: mailOutLineIcon,
+            count: amountMyTask,
+            route: '/pcm/mine'
+        },
+        {
+            label: "Việc quan tâm",
+            icon: starIcon,
+            count: 0,
+            route: '/pcm/bookmark'
+        },
+        // {
+        //     label: "Đã gửi",
+        //     icon: sendAndReceiveIcon,
+        //     count: 0,
+        //     route: '/pcm/send'
+        // },
+        {
+            label: "Việc nháp",
+            icon: fileIcon,
+            count: 0,
+            route: '/pcm/draft'
+        },
+    ];
+
+    const listTabSub: Tab[] = [
+        {
+            label: "Việc giao người khác",
+            icon: uploadIcon,
+            count: 0,
+            route: '/pcm/assign'
+        },
+        {
+            label: "Báo cáo theo dự án",
+            icon: tagIcon,
+            count: 0,
+            route: '/pcm/tags'
+        },
+        {
+            label: "Báo cáo theo nhân sự",
+            icon: humanIcon,
+            count: 0,
+            route: '/pcm/users'
+        },
+        {
+            label: "Báo cáo, giao nộp",
+            icon: deliveryImage,
+            count: 0,
+            route: '/pcm/delivery'
+        },
+        {
+            label: "Thanh toán",
+            icon: paymentImage,
+            count: 0,
+            route: '/pcm/payment'
+        },
+        {
+            label: "Việc liên quan",
+            icon: linkIcon,
+            count: 0,
+            route: '/pcm/related'
+        },
+        // {
+        //     label: "Thầu và mua sắm",
+        //     icon: biddingImage,
+        //     count: 0,
+        //     route: '/pcm/bidding'
+        // },
+        {
+            label: "Báo cáo động",
+            icon: fileIcon,
+            count: 0,
+            route: '/pcm/report'
+        },
+    ];
 
     useEffect(() => {
         setTimeout(() => {
