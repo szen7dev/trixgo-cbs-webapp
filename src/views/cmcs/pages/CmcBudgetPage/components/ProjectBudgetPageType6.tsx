@@ -24,12 +24,13 @@ const reportYears = [yearCurrent-3, yearCurrent-2, yearCurrent-1, yearCurrent, y
 export const ProjectBudgetPageType6:FC<Props> = ({projectInfo}) => {
     const [recordSelected, setSelectRecord] = useState<any>({});
     const [yearSelected, setYearSelected] = useState(2022);
+    const [outinSelected, setOutinSelected] = useState(1);
     const [dataIPC, setDataIPC] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     type PaginateHandle = React.ElementRef<typeof PaginateV2>;
     const { user } = useAuth();
     const { cmcsContractIPCAmountByMonth } = useCmcsDashboard({
         params: { 
-            outin: 1,
+            outin: outinSelected,
             year: yearSelected,
             companyID: user?.company?._id,
             plan: 1
@@ -59,6 +60,28 @@ export const ProjectBudgetPageType6:FC<Props> = ({projectInfo}) => {
                         </button>
                     }
                 </div>
+                <div>
+                    <ul className="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
+                        <li className="mr-2" role="presentation">
+                        <button
+                            className={classnames("inline-block p-2 rounded-t-lg border-b-2 hover:text-blue-600 dark:text-blue-500 dark:hover:text-blue-500", {
+                            "border-blue-600 dark:border-blue-500 text-blue-600": outinSelected === 1
+                            })}
+                            id="profile-tab" data-tabs-target="#sell" type="button" role="tab" aria-controls="profile" aria-selected={false} onClick={() => setOutinSelected(1)}>
+                            Bán ra
+                        </button>
+                        </li>
+                        <li className="mr-2" role="presentation">
+                        <button
+                            className={classnames("inline-block p-2 rounded-t-lg border-b-2 hover:text-blue-600 dark:text-blue-500 dark:hover:text-blue-500", {
+                            "border-blue-600 dark:border-blue-500 text-blue-600": outinSelected === 2
+                            })}
+                            id="dashboard-tab" data-tabs-target="#buy" type="button" role="tab" aria-controls="dashboard" aria-selected={true} onClick={() => setOutinSelected(2)}>
+                            Mua vào
+                        </button>
+                        </li>
+                    </ul>
+                </div> 
                 {/* end tab */}
                 <div className="flex justify-between">
                     {/* filter by year */}
