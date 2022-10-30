@@ -1,5 +1,6 @@
 import * as React from 'react';
 import JobDialog from '../DialogProjectDetail';
+import {Link} from 'react-router-dom';
 
 import icons8pdf from "assets/images/icons8-pdf-100 1.svg";
 import StarIcon from '@mui/icons-material/Star';
@@ -31,7 +32,7 @@ const FilterItem = ({item}: any) => {
                     </div>
                     <div>
                         <div className="flex">
-                            <a onClick={handleClickOpen}>
+                            <Link to={`/pcm/detail/${item._id}`}>
                                 <div className="flex cursor-pointer	">
                                     {item?.priority === 3 ?
                                         <span className="rounded px-3 py-[1px] text-white bg-cbs-orage mr-[5px] text-sm">Cao</span> :
@@ -39,13 +40,23 @@ const FilterItem = ({item}: any) => {
                                     }
                                     <span className="font-bold text-sm	truncate max-w-4xl  mr-[5px]">{subContentHtml(item?.name)}</span>
                                 </div>
-                            </a>
+                            </Link>
+                            {/* <a onClick={handleClickOpen}>
+                                <div className="flex cursor-pointer	">
+                                    {item?.priority === 3 ?
+                                        <span className="rounded px-3 py-[1px] text-white bg-cbs-orage mr-[5px] text-sm">Cao</span> :
+                                        <></>
+                                    }
+                                    <span className="font-bold text-sm	truncate max-w-4xl  mr-[5px]">{subContentHtml(item?.name)}</span>
+                                </div>
+                            </a> */}
                             <button onClick={() => setSelectStar(!selectStar)}>
                                 {(selectStar ? <StarIcon sx={{ color: '#FFCA28', width: 14, height: 14 }} /> : <StarBorderIcon sx={{ color: '#FFCA28', width: 14, height: 14 }} />)}
                             </button>
                         </div>
                         <div className="my-1 text-primary-gray text-xs truncate max-w-4xl">
-                            {item?.sign} - {item?.project?.sign} - Người tạo: {item?.author?.fullname} - Ngày tạo: {moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
+                            {/* {item?.sign} -  */}
+                            {item?.project?.sign} - Người tạo: {item?.author?.fullname} - Ngày tạo: {moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
                         </div>
                         {item?.lastComment?.author?.fullname ? 
                             <div className="my-1 text-primary-gray text-xs truncate max-w-4xl">

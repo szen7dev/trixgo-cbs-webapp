@@ -39,11 +39,11 @@ const ProjectNew: FC = () => {
                         <span>Tổng quan</span> <img src={arrowDownIcon} alt="" />
                     </div>
                 </a>
-                <a href="" className="mr-[60px]">
+                {/* <a href="" className="mr-[60px]">
                     <div className="flex gap-2 font-bold text-primary-gray">
                         <span>Tổng quan</span> <img src={arrowRightIcon} alt="" />
                     </div>
-                </a>
+                </a> */}
             </div>
             <div className="flex gap-2 mb-3.5">
                 <div className="w-[250px] bg-white py-1 px-2 border-0.5 border-cbs-border rounded-md">
