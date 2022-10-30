@@ -1050,10 +1050,10 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                   id: 6,
                   text: "Tiếp tục theo dõi",
                 },
-                {
-                  id: 7,
-                  text: "Khóa đóng",
-                },
+                // {
+                //   id: 7,
+                //   text: "Khóa đóng",
+                // },
               ]}
             />
           )}
