@@ -139,7 +139,7 @@ const PCMRouter: FC = () => {
                 <Route exact path="/pcm/bidding/:tab?" component={() => <PcmHomePage subtype={4} option={1} draft={0}/>} />
                 <Route exact path="/pcm/delivery/:tab?" component={() => <PcmHomePage subtype={9} type={2} option={2} draft={0}/>} />
                 <Route exact path="/pcm/payment/:tab?" component={() => <PcmHomePage subtype={3} type={2} option={3} draft={0}/>} />
-                <Route exact path="/pcm/mine/:tab?" component={() => <PcmHomePage option={4} draft={0}/>} />
+                <Route exact path="/pcm/mine" component={() => <ProjectNew />} />
                 <Route exact path="/pcm/assign/:tab?" component={() => <PcmHomePage type={2} option={5} draft={0}/>} />
                 <Route exact path="/pcm/bookmark/:tab?" component={() => <PcmHomePage type={3} option={6} draft={0}/>} />
                 <Route exact path="/pcm/related/:tab?" component={() => <PcmHomePage type={5} option={7} draft={0}/>} />

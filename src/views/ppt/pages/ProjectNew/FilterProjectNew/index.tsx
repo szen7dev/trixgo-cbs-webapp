@@ -24,25 +24,15 @@ import icons8pdf from "assets/images/icons8-pdf-100 1.svg";
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import FilterItem from "./FilterItem";
+import { useSearchTask } from "services/hooks/useMainSearch";
 
 const FilterProjectNew: FC = () => {
     const dispatch = useDispatch();
-    const { keywordInput } = useAppSelector(
-        (state) => state.cmcsHome.data
-    );
-
-    useEffect(() => {
-        setPageIndex(0);
-        ref.current && ref.current.resetPaginate();
-    }, [keywordInput]);
-
+   
     type PaginateHandle = React.ElementRef<typeof PaginateV2>;
     const ref = React.useRef<PaginateHandle>(null);
     const [pageIndex, setPageIndex] = useState(0);
-    const [recordSelected, setSelectRecord] = useState<any>({});
-
     const [fromToDate, setFromToDate] = useState({ fromDate: "", toDate: "" })
-
     const [projectKeyword, setProjectKeyword] = useState("");
     const [projectsID, setProjectsID] = useState<string[]>([]);
 
@@ -59,62 +49,36 @@ const FilterProjectNew: FC = () => {
 
     const [statuss, setStatuss] = useState<string[]>([]);
     const [ontimes, setOntimes] = useState<string[]>([]);
-    const [onbudgets, setOnbudgets] = useState<string[]>([]);
 
-    const { isLoading, totalRecord, totalPage, hasNextPage, listCmcsByFilterWithPager, fetchNextPageListCmcsByFilter } = useListFilterContract({
-        params: {
-            ...fromToDate,
-            projectsID,
-            buyerInfosID,
-            sellerInfosID,
-            statuss,
-            ontimes,
-            onbudgets,
-            keyword: keywordInput
-        },
-        isFetchList: true
-    })
+    const keywordForSubject = useAppSelector(
+        (state) => state.dashboardV2.data.keywordForSubject
+    );
+    
+    const querySearchTask: any = {
+        keyword: keywordForSubject,
+        limit: 20,
+        isGroup: "0",
+    };
 
-    //Down load excel
-    const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
-        isExporting: false,
-    });
-
-    const { exportContractAsync } = useContractCustom({});
-    const handleExportReport = async () => {
-        try {
-            setStateExport({ isExporting: true });
-            const { error, data } = await exportContractAsync({
-                filterParams: {
-                    ...fromToDate,
-                    projectsID,
-                    buyerInfosID,
-                    sellerInfosID,
-                    statuss,
-                    ontimes,
-                    onbudgets,
-                    keyword: keywordInput
-                },
-                type: 'all'
-            });
-            if (error) {
-                return toast.warn(data?.message);
-            }
-
-            data && createLinkAndClick(data, '_self');
-        } catch (error: any) {
-            toast.error(error.message)
-        } finally {
-            setStateExport({ isExporting: false });
-        }
-    }
-
-    if (stateExport.isExporting) {
-        return <Loader className="border-primary" />
-    }
+    const {
+        listTasksWithPager: listDataForSubject,
+        nextPageListTask,
+        totalRecord: totalRecordSubject,
+        totalPage: totalPageSubject,
+        hasNextPage: hasNextPageSubject,
+        isLoadingListTask,
+        isFetching,
+        refetchListTask
+      } = useSearchTask({
+        params: querySearchTask,
+        isFetch: true,
+      });
 
     return (
         <div className="cmcs-home flex flex-col h-full overflow-hidden">
+            {isLoadingListTask || isFetching ?
+               <Loader absolute={true} className="border-primary" /> : <></>
+            }
             <div className={"sticky top-0 bg-white z-10"}>
                 <div className={"flex items-center"}>
                     <div className={"filter-bar flex flex-wrap px-4 py-2"}>
@@ -378,13 +342,13 @@ const FilterProjectNew: FC = () => {
                     </div>
                     <PaginateV2
                         ref={ref}
-                        totalRecord={totalRecord}
-                        totalPages={totalPage}
-                        limit={10}
-                        hasNextPage={hasNextPage}
-                        isFetching={isLoading}
+                        totalRecord={totalRecordSubject}
+                        totalPages={totalPageSubject}
+                        limit={20}
+                        hasNextPage={hasNextPageSubject}
+                        isFetching={isLoadingListTask}
                         nextPageAction={() => {
-                            fetchNextPageListCmcsByFilter();
+                            nextPageListTask();
                             setPageIndex(oldState => oldState + 1)
                         }}
                         prevPageAction={() => {
@@ -395,8 +359,12 @@ const FilterProjectNew: FC = () => {
             </div>
 
             <div className="flex-1 overflow-y-auto bg-white px-4 py-2">
-                <FilterItem/>
-                <FilterItem/>
+                {(listDataForSubject[pageIndex] ?? []).map(
+                    (item: any, index: number) => {
+                        return (
+                            <FilterItem item={item} key={index}/>
+                        )
+                    })}
             </div>
         </div>
     )

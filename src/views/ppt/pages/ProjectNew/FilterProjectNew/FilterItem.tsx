@@ -4,13 +4,14 @@ import JobDialog from '../DialogProjectDetail';
 import icons8pdf from "assets/images/icons8-pdf-100 1.svg";
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
+import moment from 'moment';
+import { PCM_PROPOSAL_TASK } from 'apis/localdb';
+import { subContentHtml } from 'views/homepage/pages';
 
-const FilterItem: React.FC = () => {
+const FilterItem = ({item}: any) => {
     const [selectStar, setSelectStar] = React.useState(false)
     // dialog
-    const emails = ['username@gmail.com', 'user02@gmail.com'];
     const [open, setOpen] = React.useState(false);
-    const [selectedValue, setSelectedValue] = React.useState(emails[1]);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -18,8 +19,9 @@ const FilterItem: React.FC = () => {
 
     const handleClose = (value: string) => {
         setOpen(false);
-        // setSelectedValue(value);
     };
+    const files = item?.lastComment?.files && item?.lastComment?.files.length ? item?.lastComment?.files : [];
+    const images = item?.lastComment?.images && item?.lastComment?.images.length ? item?.lastComment?.images : [];
     return (
         <div>
             <div className="flex justify-between gap-6 py-3">
@@ -31,8 +33,11 @@ const FilterItem: React.FC = () => {
                         <div className="flex">
                             <a onClick={handleClickOpen}>
                                 <div className="flex cursor-pointer	">
-                                    <span className="rounded px-3 py-[1px] text-white bg-cbs-orage mr-[5px] text-sm">Cao</span>
-                                    <span className="font-bold text-sm	truncate max-w-4xl  mr-[5px]">Kiểm tra rà soát việc dự thầu các đơn vị gói cọc Marriott và xây dựng giá gói thầu Kiểm tra rà soát việc dự thầu các đơn vị gói cọc Marriott và xây dựng giá gói thầu Kiểm tra rà soát việc dự thầu các đơn vị gói cọc Marriott và xây dựng giá gói thầu</span>
+                                    {item?.priority === 3 ?
+                                        <span className="rounded px-3 py-[1px] text-white bg-cbs-orage mr-[5px] text-sm">Cao</span> :
+                                        <></>
+                                    }
+                                    <span className="font-bold text-sm	truncate max-w-4xl  mr-[5px]">{subContentHtml(item?.name)}</span>
                                 </div>
                             </a>
                             <button onClick={() => setSelectStar(!selectStar)}>
@@ -40,23 +45,42 @@ const FilterItem: React.FC = () => {
                             </button>
                         </div>
                         <div className="my-1 text-primary-gray text-xs truncate max-w-4xl">
-                            BLD-721 - PGI.BLD - Người tạo: Trương Thành Văn-TRX - Ngày tạo: 15/2/2021 15:30
+                            {item?.sign} - {item?.project?.sign} - Người tạo: {item?.author?.fullname} - Ngày tạo: {moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
                         </div>
-                        <div className="my-1 text-primary-gray text-xs truncate max-w-4xl">
-                            Phùng Thị Thu-TRX: Kính gửi anh Hiếu và các anh Chủ đầu tư, Đính kèm là Biên bản họp giao ban tuần 1 tháng 12.2021 ngày 10/12/2021 lúc 2:00 PM giữa Chủ đầu tư và Ban quản lý dự án...
-                        </div>
-                        <div className="flex gap-3 text-sm my-1">
+                        {item?.lastComment?.author?.fullname ? 
+                            <div className="my-1 text-primary-gray text-xs truncate max-w-4xl">
+                            {item?.lastComment?.author?.fullname}: {subContentHtml(item?.lastComment?.content)}
+                        </div> : <></>
+                        }
+                        {images.length ? 
+                            <div className="flex gap-3 text-sm my-1">
                             <button className="rounded-full flex gap-2 border-0.5 border-cbs-border px-3 py-1">
                                 <img src={icons8pdf} alt="" />
-                                <span>2022.09.26.FCT</span>
+                                <span>{images[0]?.nameOrg}</span>
                             </button>
-                            <button className="rounded-full border-0.5 border-cbs-border py-1 px-2">+2</button>
-                        </div>
+                            {images.length - 1 > 0 ?
+                            <button className="rounded-full border-0.5 border-cbs-border py-1 px-2">+{images.length - 1}</button> :
+                            <></>
+                            }
+                        </div> : <></>
+                        }
+                        {files.length ? 
+                            <div className="flex gap-3 text-sm my-1">
+                            <button className="rounded-full flex gap-2 border-0.5 border-cbs-border px-3 py-1">
+                                <img src={icons8pdf} alt="" />
+                                <span>{files[0]?.nameOrg}</span>
+                            </button>
+                            {files.length - 1 > 0 ?
+                            <button className="rounded-full border-0.5 border-cbs-border py-1 px-2">+{files.length - 1}</button> :
+                            <></>
+                            }
+                        </div> : <></>
+                        }
                     </div>
                 </div>
                 <div className="flex text-primary-gray">
-                    <div className="w-[100px]">12/10/2022</div>
-                    <div className="w-[100px]">Đang triển khai</div>
+                    <div className="w-[100px]">{moment(item?.actualFinishTime).format('DD/MM/YYYY')}</div>
+                    <div className="w-[100px]">{PCM_PROPOSAL_TASK[item?.status]?.text}</div>
                 </div>
             </div>
             <JobDialog
