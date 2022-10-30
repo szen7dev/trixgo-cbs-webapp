@@ -135,6 +135,68 @@ export const usePcmPlanTaskNotification = (payload: any): any => {
   };
 };
 
+export const usePcmDynamicReport = (): any => {
+  const { data: dataForCompanies, refetch } = useQuery(
+    [`pcmDynamicReportForCompanies`],
+    async () => {
+      return pcmDashboardV2.pcmDynamicReport({
+        option: 1, 
+        reportType: 1
+      });
+    },
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  const { data: dataForAuthors } = useQuery(
+    [`pcmDynamicReportForAuthors`],
+    async () => {
+      return pcmDashboardV2.pcmDynamicReport({
+        option: 2, 
+        reportType: 1
+      });
+    },
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  const { data: dataForProject } = useQuery(
+    [`pcmDynamicReportForProject`],
+    async () => {
+      return pcmDashboardV2.pcmDynamicReport({
+        option: 5, 
+        reportType: 1
+      });
+    },
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  const { data: dataForProposal } = useQuery(
+    [`pcmDynamicReportForProposal`],
+    async () => {
+      return pcmDashboardV2.pcmDynamicReport({
+        option: 6, 
+        reportType: 1
+      });
+    },
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  return {
+    dataForCompanies,
+    dataForAuthors,
+    dataForProject,
+    dataForProposal,
+    refetch
+  };
+};
+
 export const useListFileFromSearch = (payload: any): any => {
   // Get danh sách
   const {

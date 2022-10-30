@@ -127,17 +127,17 @@ export const ProjectBudgetPageType6Detail:FC<Props> = ({ projectInfo }) => {
                                     {i+1}
                                 </td>
                                 <td className={"p-2 border-0.5 border-primary-border"}>
-                                    {plan.type && CONTRACT_IPC_PLANS[plan.plan-1].text}
+                                    {plan.type && CONTRACT_IPC_PLANS[plan.plan-1]?.text}
                                 </td>
                                 <td className={"p-2 border-0.5 border-primary-border"}>
-                                    <Link to={`/pm/project/${plan.project._id}/budget/type/1/detail/${plan.contract._id}/tab/3`}>
-                                        <p className=" text-[14px]">{plan.name}</p>
-                                        <p className={"text-primary-gray text-xs"}>{plan.contract.sellerInfo.name}</p>
-                                        <p className={"text-primary-gray text-xs"}><i>{plan.contract.name} - {plan.contract.sign} - { moment(plan.contract.date).format("L")}</i></p>
+                                    <Link to={`/pm/project/${plan?.project?._id}/budget/type/1/detail/${plan?.contract?._id}/tab/3`}>
+                                        <p className=" text-[14px]">{plan?.name}</p>
+                                        <p className={"text-primary-gray text-xs"}>{plan?.contract?.sellerInfo?.name}</p>
+                                        <p className={"text-primary-gray text-xs"}><i>{plan?.contract?.name} - {plan?.contract?.sign} - { moment(plan?.contract?.date).format("L")}</i></p>
                                     </Link>
                                 </td>
                                 <td className={"p-2 border-0.5 border-primary-border"}>
-                                    { moment(plan.timeForPayment).format("L")}
+                                    { moment(plan?.timeForPayment).format("L")}
                                 </td>
                                 <td className={"p-2 border-0.5 border-primary-border text-right"}>
                                     {formatNumberMoney(plan.recommendedPayment)}
