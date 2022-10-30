@@ -53,19 +53,37 @@ const options = {
       },
       ticks: {
         min: 0,
-        max: 3,
+        max: 5,
         stepSize: 1,
         color: "#798295",
         callback: function (arr: number | string) {
           switch (arr) {
             case 0:
               return "0";
-            case 100:
-              return "100";
-            case 200:
-              return "200";
-            case 300:
-              return "300";
+            case 500000000:
+              return "500 triệu";
+            case 1000000000:
+              return "1 tỷ";
+            case 10000000000:
+              return "10 tỷ";
+            case 20000000000:
+              return "20 tỷ";
+            case 30000000000:
+              return "30 tỷ";
+            case 40000000000:
+              return "40 tỷ";
+            case 50000000000:
+              return "50 tỷ";
+            case 60000000000:
+              return "60 tỷ";
+            case 70000000000:
+              return "70 tỷ";
+            case 80000000000:
+              return "80 tỷ";
+            case 90000000000:
+              return "90 tỷ";
+            case 100000000000:
+              return "100 tỷ";
           }
         },
       },
@@ -83,14 +101,13 @@ const options = {
       enabled: false,
     },
     datalabels: {
-      display: false,
+      display: true,
       color: "#798295",
       align: "top" as const,
       anchor: "end" as const,
     },
   },
 };
-
 const arrMonths = Array.from({ length: 12 }, () => 0);
 
 const RevenueOverTimeReport: FC<any> = ({ dataIPC }) => {
@@ -113,7 +130,7 @@ const RevenueOverTimeReport: FC<any> = ({ dataIPC }) => {
       {
         data: dataIPC,
         backgroundColor: "#206EC3",
-        barThickness: 12,
+        barThickness: 8,
       },
     ],
   };
