@@ -1,63 +1,72 @@
-import React, { FC, useEffect, useState } from "react";
-import projectIcon from "assets/images/icons8-project-50.svg";
-import timetableIcon from "assets/images/icons8-timetable-48.svg";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { debounce } from "lodash";
-import { createLinkAndClick } from 'utils';
-import { toast } from "react-toastify";
 import { DropdownSearchableV2, Loader } from "shareComponents/common";
-import { setFilterDropdown } from "redux/reducer/CmcsHomeSlice";
-import { useProjectCustom } from "services/hooks/items/useProject";
 import { useDispatch } from "react-redux";
 import PaginateV2 from "shareComponents/common/PaginateV2";
 import { useAppSelector } from "redux/reducer";
-import { useListAccessByContract, useListFilterContract } from "services/hooks/cmcs/useContract";
 // Hook dùng để export excel
-import { useContractCustom } from "services/hooks/cmcs/useContractIncome";
 import TriangleDown from "assets/icons/TriangleDown";
 import moment from "moment";
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
-import iconMaleUser from "assets/images/icons8-male-user-64.svg";
-import { formatNumberMoney } from "utils";
-import { CONTRACT_COME_IN_STATUS } from "apis/localdb";
+import { PCM_STATUS_TASK, PCM_PROPOSAL_TASK } from "apis/localdb";
 import iconSmallBlackDown from "assets/images/iconSmallBlackDown.svg";
-import icons8pdf from "assets/images/icons8-pdf-100 1.svg";
-import StarIcon from '@mui/icons-material/Star';
-import StarBorderIcon from '@mui/icons-material/StarBorder';
 import FilterItem from "./FilterItem";
 import { useSearchTask } from "services/hooks/useMainSearch";
+import { setQueryPcmMine } from "redux/reducer/DashboardV2Slice";
 
-const FilterProjectNew: FC = () => {
+const FilterProjectNew: FC<any> = ({ listDataCompany, listDataUser, listDataProject, listDataSubtype}) => {
     const dispatch = useDispatch();
-   
     type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+    type DropdownSearchableV2Handle = React.ElementRef<typeof DropdownSearchableV2>;
     const ref = React.useRef<PaginateHandle>(null);
     const [pageIndex, setPageIndex] = useState(0);
-    const [fromToDate, setFromToDate] = useState({ fromDate: "", toDate: "" })
-    const [projectKeyword, setProjectKeyword] = useState("");
-    const [projectsID, setProjectsID] = useState<string[]>([]);
+    const companiesOfAuthor: any = useAppSelector(state => state.dashboardV2.data.pcmMine.companiesOfAuthor);
+    const authorsID = useAppSelector(state => state.dashboardV2.data.pcmMine.authorsID);
+    const projectsID = useAppSelector(state => state.dashboardV2.data.pcmMine.projectsID);
+    const status = useAppSelector(state => state.dashboardV2.data.pcmMine.status);
+    const subtypes = useAppSelector(state => state.dashboardV2.data.pcmMine.subtypes);
+    const fromDate = useAppSelector(state => state.dashboardV2.data.pcmMine.fromDate);
+    const toDate = useAppSelector(state => state.dashboardV2.data.pcmMine.toDate);
+    const priority = useAppSelector(state => state.dashboardV2.data.pcmMine.priority);
+    const isExpired = useAppSelector(state => state.dashboardV2.data.pcmMine.isExpired);
 
-    const { listProjectsUserIsMember } = useProjectCustom({ paramsProjectsUserIsMember: { keyword: projectKeyword }, isFetchProjectsUserIsMember: true });
-
-    const [listAccessByContractSellKeyword, setListAccessByContractSellKeyword] = useState("");
-    const [buyerInfosID, setBuyerInfosID] = useState<string[]>([]);
-
-    const [listAccessByContractBuyKeyword, setListAccessByContractBuyKeyword] = useState("");
-    const [sellerInfosID, setSellerInfosID] = useState<string[]>([]);
-
-    const { listAccessByContract: listAccessByContractSell } = useListAccessByContract({ params: { keyword: listAccessByContractSellKeyword, option: 1 }, isFetchList: true });
-    const { listAccessByContract: listAccessByContractBuy } = useListAccessByContract({ params: { keyword: listAccessByContractBuyKeyword, option: 2 }, isFetchList: true });
-
-    const [statuss, setStatuss] = useState<string[]>([]);
-    const [ontimes, setOntimes] = useState<string[]>([]);
+    const companyOfAuthorRef = useRef<DropdownSearchableV2Handle>(null);
+    const authorsIDRef = useRef<DropdownSearchableV2Handle>(null);
+    const projectsIDRef = useRef<DropdownSearchableV2Handle>(null);
+    const subtypesRef = useRef<DropdownSearchableV2Handle>(null);
 
     const keywordForSubject = useAppSelector(
         (state) => state.dashboardV2.data.keywordForSubject
     );
     
+    useEffect(() => {
+        companyOfAuthorRef.current && companyOfAuthorRef.current.setValuesDropdown(companiesOfAuthor);
+    }, [companiesOfAuthor]);
+
+    useEffect(() => {
+        authorsIDRef.current && authorsIDRef.current.setValuesDropdown(authorsID);
+    }, [authorsID]);
+
+    useEffect(() => {
+        projectsIDRef.current && projectsIDRef.current.setValuesDropdown(projectsID);
+    }, [projectsID]);
+
+    useEffect(() => {
+        subtypesRef.current && subtypesRef.current.setValuesDropdown(subtypes);
+    }, [subtypes]);
+
     const querySearchTask: any = {
-        keyword: keywordForSubject,
+        priority: priority,
+        isExpired: isExpired,
+        reportType: "1",
+        companiesOfAuthor: companiesOfAuthor.map((e: any) => e.id),
+        authorsID: authorsID.map((e: any) => e.id),
+        projectsID: projectsID.map((e: any) => e.id),
+        status: status,
+        subtypes: subtypes.map((e: any) => e.id),
+        fromDate: fromDate,
+        toDate: toDate,
         limit: 20,
-        isGroup: "0",
     };
 
     const {
@@ -87,131 +96,114 @@ const FilterProjectNew: FC = () => {
                             <button><img src={iconSmallBlackDown} style={{ width: "9px", height: "5px" }} /></button>
                         </div>
                         <DropdownSearchableV2
+                            ref={companyOfAuthorRef}
                             className={"mr-4 border border-primary-border rounded-lg my-2 text-cbs-subtext"}
                             placeholder={"Đơn vị giao"}
-                            // prefixIcon={<img className={"mr-2"} src={projectIcon} alt={"icon"} />}
                             isMultiple={true}
                             allowClearValueSingleInput={true}
-                            data={listProjectsUserIsMember}
+                            data={listDataCompany.filter((e: any) => e?._id?.companyOfAuthor?._id).map((item: any) => ({
+                                label: `${item?._id?.companyOfAuthor?.sign}.${item?._id?.companyOfAuthor?.name} (${item.amount})`,
+                                id: item?._id?.companyOfAuthor?._id,
+                            }))}
                             formatItem={{
-                                id: "_id",
-                                text: "name"
+                                id: "id",
+                                text: "label"
                             }}
-                            onSearchInputChange={debounce(valueSearch => setProjectKeyword(valueSearch), 500)}
+                            onSearchInputChange={debounce(valueSearch => { return null}, 500)}
                             onchangeValue={item => {
-                                const cloneIDs = [...projectsID];
-                                cloneIDs.push(item._id);
-                                setProjectsID(cloneIDs);
-                                dispatch(setFilterDropdown({ keyFilter: "projectsID", dataFilter: cloneIDs }))
-
+                                const cloneIDs: any = [...companiesOfAuthor];
+                                cloneIDs.push(item);
+                                dispatch(setQueryPcmMine({ key: "companiesOfAuthor", data: cloneIDs }))
                                 setPageIndex(0);
                                 ref.current && ref.current.resetPaginate();
                             }}
                             onClearData={() => {
-                                setProjectsID([]);
-                                dispatch(setFilterDropdown({ keyFilter: "projectsID", dataFilter: [] }))
-
+                                dispatch(setQueryPcmMine({ key: "companiesOfAuthor", data: [] }))
                                 setPageIndex(0);
                                 ref.current && ref.current.resetPaginate();
                             }}
                             onMultipleRemoveValue={id => {
-                                const cloneIDs = [...projectsID];
-                                const newList = cloneIDs.filter(selectId => selectId !== id);
-                                setProjectsID(newList);
-                                dispatch(setFilterDropdown({ keyFilter: "projectsID", dataFilter: newList }))
-
+                                const cloneIDs = [...companiesOfAuthor];
+                                const newList = cloneIDs.filter(selectId => selectId.id !== id);
+                                dispatch(setQueryPcmMine({ key: "companiesOfAuthor", data: newList }))
                                 setPageIndex(0);
                                 ref.current && ref.current.resetPaginate();
                             }}
-                            renderItem={(item) => (
-                                <p className={"min-w-[300px]"}>{item.sign}.{item.text}</p>
-                            )}
                             selectOneByOne={true}
                         />
                         <DropdownSearchableV2
+                            ref={authorsIDRef}
                             className={"mr-4 border border-primary-border rounded-lg my-2 text-cbs-subtext"}
                             placeholder={"Người giao"}
-                            // prefixIcon={<img className={"mr-2"} src={iconMaleUser} alt={"icon"} />}
                             isMultiple={true}
                             allowClearValueSingleInput={true}
-                            data={listAccessByContractBuy}
+                            data={listDataUser.map((item: any) => ({
+                                label: `${item?._id?.author?.fullname} (${item.amount})`,
+                                id: item?._id?.author?._id,
+                            }))}
                             formatItem={{
-                                id: "_id",
-                                text: "name"
+                                id: "id",
+                                text: "label"
                             }}
-                            onSearchInputChange={debounce(valueSearch => setListAccessByContractBuyKeyword(valueSearch), 500)}
+                            onSearchInputChange={debounce(valueSearch => { return null}, 500)}
                             onchangeValue={item => {
-                                const cloneIDs = [...buyerInfosID];
-                                cloneIDs.push(item._id);
-                                setBuyerInfosID(cloneIDs);
-                                dispatch(setFilterDropdown({ keyFilter: "buyerInfosID", dataFilter: cloneIDs }))
-
+                                const cloneIDs: any = [...authorsID];
+                                cloneIDs.push(item);
+                                dispatch(setQueryPcmMine({ key: "authorsID", data: cloneIDs }))
                                 setPageIndex(0);
                                 ref.current && ref.current.resetPaginate();
                             }}
                             onClearData={() => {
-                                setBuyerInfosID([]);
-                                dispatch(setFilterDropdown({ keyFilter: "buyerInfosID", dataFilter: [] }))
-
+                                dispatch(setQueryPcmMine({ key: "authorsID", data: [] }))
                                 setPageIndex(0);
                                 ref.current && ref.current.resetPaginate();
                             }}
                             onMultipleRemoveValue={id => {
-                                const cloneIDs = [...buyerInfosID];
-                                const newList = cloneIDs.filter(selectId => selectId !== id);
-                                setBuyerInfosID(newList);
-                                dispatch(setFilterDropdown({ keyFilter: "buyerInfosID", dataFilter: newList }))
-
+                                const cloneIDs = [...authorsID];
+                                const newList = cloneIDs.filter(selectId => selectId.id !== id);
+                                dispatch(setQueryPcmMine({ key: "authorsID", data: newList }));
                                 setPageIndex(0);
                                 ref.current && ref.current.resetPaginate();
                             }}
-                            renderItem={(item) => (
-                                <p className={"min-w-[300px]"}>{item.company.sign}.{item.text}</p>
-                            )}
                             selectOneByOne={true}
                         />
-                        <DropdownSearchableV2
+                          <DropdownSearchableV2
+                            ref={projectsIDRef}
                             className={"mr-4 border border-primary-border rounded-lg my-2 text-cbs-subtext"}
                             placeholder={"Dự án"}
-                            // prefixIcon={<img className={"mr-2"} src={iconMaleUser} alt={"icon"} />}
                             isMultiple={true}
                             allowClearValueSingleInput={true}
-                            data={listAccessByContractSell}
+                            data={listDataProject.map((item: any) => ({
+                                label: `${item?._id?.project?.sign}.${item?._id?.project?.name} (${item.amount})`,
+                                id: item?._id?.project?._id,
+                            }))}
                             formatItem={{
-                                id: "_id",
-                                text: "name"
+                                id: "id",
+                                text: "label"
                             }}
-                            onSearchInputChange={debounce(valueSearch => setListAccessByContractSellKeyword(valueSearch), 500)}
+                            onSearchInputChange={debounce(valueSearch => { return null}, 500)}
                             onchangeValue={item => {
-                                const cloneIDs = [...sellerInfosID];
-                                cloneIDs.push(item._id);
-                                setSellerInfosID(cloneIDs);
-                                dispatch(setFilterDropdown({ keyFilter: "sellerInfosID", dataFilter: cloneIDs }))
-
+                                const cloneIDs: any = [...projectsID];
+                                cloneIDs.push(item);
+                                dispatch(setQueryPcmMine({ key: "projectsID", data: cloneIDs }));
                                 setPageIndex(0);
                                 ref.current && ref.current.resetPaginate();
                             }}
                             onClearData={() => {
-                                setSellerInfosID([]);
-                                dispatch(setFilterDropdown({ keyFilter: "sellerInfosID", dataFilter: [] }))
-
+                                dispatch(setQueryPcmMine({ key: "projectsID", data: [] }));
                                 setPageIndex(0);
                                 ref.current && ref.current.resetPaginate();
                             }}
                             onMultipleRemoveValue={id => {
-                                const cloneIDs = [...sellerInfosID];
-                                const newList = cloneIDs.filter(selectId => selectId !== id);
-                                setSellerInfosID(newList);
-                                dispatch(setFilterDropdown({ keyFilter: "sellerInfosID", dataFilter: newList }))
-
+                                const cloneIDs = [...projectsID];
+                                const newList = cloneIDs.filter(selectId => selectId.id !== id);
+                                dispatch(setQueryPcmMine({ key: "projectsID", data: newList }));
                                 setPageIndex(0);
                                 ref.current && ref.current.resetPaginate();
                             }}
-                            renderItem={(item) => (
-                                <p className={"min-w-[300px]"}>{item.company.sign}.{item.text}</p>
-                            )}
                             selectOneByOne={true}
                         />
+                        
                         <TimeRangeDropdown
                             className={
                                 "mr-4 border border-primary-border rounded-lg my-2 text-cbs-subtext p-1 pl-2 "
@@ -220,9 +212,8 @@ const FilterProjectNew: FC = () => {
                             iconBack={<TriangleDown />}
                             // iconFront={<img src={timetableIcon} alt={"----"} />}
                             onValueChange={(val) => {
-                                setFromToDate(val)
-                                dispatch(setFilterDropdown({ keyFilter: "fromDate", dataFilter: val.fromDate }))
-                                dispatch(setFilterDropdown({ keyFilter: "toDate", dataFilter: val.toDate }))
+                                dispatch(setQueryPcmMine({ key: "fromDate", data: val.fromDate }))
+                                dispatch(setQueryPcmMine({ key: "toDate", data: val.toDate }))
                                 setPageIndex(0);
                                 ref.current && ref.current.resetPaginate();
                             }}
@@ -259,31 +250,26 @@ const FilterProjectNew: FC = () => {
                             isMultiple={true}
                             disableSearch={true}
                             onchangeValue={item => {
-                                const cloneIDs = [...statuss];
+                                const cloneIDs = [...status];
                                 cloneIDs.push(item.value);
-                                setStatuss(cloneIDs);
-                                dispatch(setFilterDropdown({ keyFilter: "statuss", dataFilter: cloneIDs }))
+                                dispatch(setQueryPcmMine({ key: "status", data: cloneIDs }))
 
                                 setPageIndex(0);
                                 ref.current && ref.current.resetPaginate();
                             }}
                             onClearData={() => {
-                                setStatuss([]);
-                                dispatch(setFilterDropdown({ keyFilter: "statuss", dataFilter: [] }))
-
+                                dispatch(setQueryPcmMine({ key: "status", data: [] }))
                                 setPageIndex(0);
                                 ref.current && ref.current.resetPaginate();
                             }}
                             onMultipleRemoveValue={id => {
-                                const cloneIDs = [...statuss];
+                                const cloneIDs = [...status];
                                 const newList = cloneIDs.filter(selectId => selectId !== id);
-                                setStatuss(newList);
-                                dispatch(setFilterDropdown({ keyFilter: "statuss", dataFilter: newList }))
-
+                                dispatch(setQueryPcmMine({ key: "status", data: newList }))
                                 setPageIndex(0);
                                 ref.current && ref.current.resetPaginate();
                             }}
-                            data={CONTRACT_COME_IN_STATUS}
+                            data={PCM_STATUS_TASK}
                             renderItem={(item) => (
                                 <p className={"min-w-[300px]"}>{item.text}</p>
                             )}
@@ -291,53 +277,41 @@ const FilterProjectNew: FC = () => {
                                 id: "value"
                             }}
                         />
-                        <DropdownSearchableV2
+                        <DropdownSearchableV2  
+                            ref={subtypesRef}
                             selectOneByOne={true}
                             className={"mr-2 border border-primary-border rounded-lg my-2 text-cbs-subtext"}
                             placeholder={"Phân loại"}
-                            // prefixIcon={
-                            //     <img className={"mr-2"} src={categoryIcon} alt={"icon"} />
-                            // }
                             isMultiple={true}
                             disableSearch={true}
                             onchangeValue={item => {
-                                const cloneIDs = [...ontimes];
-                                cloneIDs.push(item.id as string);
-                                setOntimes(cloneIDs);
-                                dispatch(setFilterDropdown({ keyFilter: "ontimes", dataFilter: cloneIDs }))
+                                const cloneIDs = [...subtypes];
+                                cloneIDs.push(item);
+                                dispatch(setQueryPcmMine({ key: "subtypes", data: cloneIDs }))
 
                                 setPageIndex(0);
                                 ref.current && ref.current.resetPaginate();
                             }}
                             onClearData={() => {
-                                setOntimes([]);
-                                dispatch(setFilterDropdown({ keyFilter: "ontimes", dataFilter: [] }))
-
+                                dispatch(setQueryPcmMine({ key: "subtypes", data: [] }))
                                 setPageIndex(0);
                                 ref.current && ref.current.resetPaginate();
                             }}
                             onMultipleRemoveValue={id => {
-                                const cloneIDs = [...ontimes];
-                                const newList = cloneIDs.filter(selectId => selectId !== id);
-                                setOntimes(newList);
-                                dispatch(setFilterDropdown({ keyFilter: "ontimes", dataFilter: newList }))
-
+                                const cloneIDs = [...subtypes];
+                                const newList = cloneIDs.filter(selectId => selectId.id !== id);
+                                dispatch(setQueryPcmMine({ key: "subtypes", data: newList }))
                                 setPageIndex(0);
                                 ref.current && ref.current.resetPaginate();
                             }}
-                            data={[
-                                {
-                                    id: 1,
-                                    text: "Đúng tiến độ"
-                                },
-                                {
-                                    id: 2,
-                                    text: "Chậm tiến độ"
-                                }
-                            ]}
-                            renderItem={(item) => (
-                                <p className={"min-w-[300px]"}>{item.text}</p>
-                            )}
+                            data={listDataSubtype.map((item: any) => ({
+                                label: `${PCM_PROPOSAL_TASK[item?._id?.subtype]?.text} (${item.amount})`,
+                                id: item?._id?.subtype,
+                            }))}
+                            formatItem={{
+                                id: "id",
+                                text: "label"
+                            }}
                         />
                     </div>
                     <PaginateV2
