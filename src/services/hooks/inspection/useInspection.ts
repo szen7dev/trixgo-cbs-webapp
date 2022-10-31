@@ -1,10 +1,15 @@
 // MỤC ĐÍCH: TƯƠNG TÁC VỚI DB
-import { useInfiniteQuery, useMutation, useQuery } from "react-query";
+import { useInfiniteQuery, useMutation } from "react-query";
 import inspection from "apis/inspection/";
-import TaskRepository from "apis/task";
-import DatahubRepository from "apis/datahub";
 
 export const useListCheckList = (payload: any): any => {
+
+  // Create
+  const { mutateAsync: insertAsync } =
+    useMutation((payload: any) =>
+      inspection.createDocs(payload)
+    );
+
   // Get danh sách
   const {
     isLoading,
@@ -29,7 +34,7 @@ export const useListCheckList = (payload: any): any => {
       enabled: true,
     }
   );
- 
+
   const listData = []
     .concat(...(data?.pages || []).map((d: any) => d.data?.listRecords))
     .filter(Boolean);
@@ -50,5 +55,6 @@ export const useListCheckList = (payload: any): any => {
     hasNextPage,
     refetch,
     isFetching,
+    insertAsync,
   };
 };
