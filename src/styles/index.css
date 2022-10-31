@@ -1770,14 +1770,17 @@ img {
 } */
 
 .main-route-content {
-  width: calc(100% - 256px);
+  width: 100%;
+  /* max-width: calc(100% - 256px); */
   height: calc(100vh - 55px);
-  margin-left: 256px;
+  /* margin-left: 256px; */
+  padding-left: 256px;
   top: 0;
 }
 
 .home-layout.collapse-left .main-route-content {
   margin-left: 0;
+  padding-left: 0;
   width: 100%;
 }
 .left-menu-nav.active {

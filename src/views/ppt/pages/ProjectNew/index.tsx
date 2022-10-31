@@ -32,7 +32,7 @@ const ProjectNew: FC = () => {
     const toDate = useAppSelector(state => state.dashboardV2.data.pcmMine.toDate);
 
     return (
-        <div className="py-4 px-3 bg-cbs-bg-gray h-full	">
+        <div className="py-4 px-3 bg-cbs-bg-gray	">
             <div className="flex text-lg mb-5">
                 <a href="" className="mr-[60px]">
                     <div className="flex gap-2 font-bold text-primary-gray">
