@@ -24,6 +24,7 @@ const CmcsAdminContractDetail       = lazy(() => import("views/cmcs/pages/CmcAdm
 const CmcHomePageV2       = lazy(() => import("views/cmcs/pages/CmcHomePageV2"))
 const CmcIncomePage       = lazy(() => import("views/cmcs/pages/CmcIncomePage"))
 const CmcPartnerPage      = lazy(() => import("views/cmcs/pages/CmcPartnerPage"))
+const CmcBudgetPage       = lazy(() => import("views/cmcs/pages/CmcBudgetPage"))
 const CmcGuaranteePage    = lazy(() => import("views/cmcs/pages/CmcGuaranteePage"))
 const ContractHome        = lazy(() => import("views/cmcs/pages/ContractHome"))
 const ContractIpc         = lazy(() => import("views/cmcs/pages/ContractIpc"))
@@ -106,6 +107,24 @@ const CmcsRouterV2: FC = () => {
                 component={() => (
                     <CmcsLayoutV2>
                         <CmcPartnerPage />
+                    </CmcsLayoutV2>
+                )}
+            />
+            <ProtectedRoute
+                exact
+                path="/cmcs/plan"
+                component={() => (
+                    <CmcsLayoutV2>
+                        <CmcBudgetPage />
+                    </CmcsLayoutV2>
+                )}
+            />
+             <ProtectedRoute
+                exact
+                path="/cmcs/plan/month/:month/year/:year"
+                component={() => (
+                    <CmcsLayoutV2>
+                        <CmcBudgetPage />
                     </CmcsLayoutV2>
                 )}
             />

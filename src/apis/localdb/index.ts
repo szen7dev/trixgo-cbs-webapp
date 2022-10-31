@@ -458,7 +458,7 @@ export const PCM_STATUS_TASK = [
     { value: 4, text: 'Treo lại', class: 'bg-purple-400', backgroud: '8f1aac', key: 'deferred' },
     { value: 5, text: 'Chờ người khác giải quyết', class: 'bg-indigo-600', backgroud: '4d4dff', key: 'waiting_on_someone_else' },
     { value: 6, text: 'Tiếp tục theo dõi', class: 'bg-blue-300', backgroud: '5bc0de', key: 'follow_up' },
-    { value: 7, text: 'Khóa đóng', class: 'bg-yellow-300', backgroud: 'f6bb29', key: 'lock' },
+    // { value: 7, text: 'Khóa đóng', class: 'bg-yellow-300', backgroud: 'f6bb29', key: 'lock' },
 ]
 
 // TRẠNG THÁI CHECKLIST
@@ -536,18 +536,18 @@ export const PCM_PROPOSAL_TASK = [
 ]
 
 export const PCM_SUBTYPE = [
-    { value: 0, text: 'Việc thông thường' },
-    { value: 1, text: 'Đề nghị cấp thông tin' },
-    { value: 2, text: 'Đề nghị phê duyệt' },
-    { value: 3, text: 'Thanh toán' },
-    { value: 4, text: 'Thầu và mua sắm' },
-    { value: 5, text: 'Nghiệm thu chất lượng' },
-    { value: 6, text: 'Yều cầu sửa chữa' },
-    { value: 7, text: 'Yều cầu thay đổi' },
-    { value: 8, text: 'Yều cầu thực hiện' },
-    { value: 9, text: 'Báo cáo' },
-    { value: 10, text: 'Tiến độ' },
-    { value: 11, text: 'Biên bản họp' },
+    { value: 0, text: 'Việc thông thường', sign: 'Tasks', key: 'task' },
+    { value: 1, text: 'Đề nghị cấp thông tin', sign: 'RFis', key: 'rfi' },
+    { value: 2, text: 'Đề nghị phê duyệt', sign: 'RFa', key: 'rfa' },
+    { value: 3, text: 'Thanh toán', sign: 'CRFa', key: 'crfa' },
+    { value: 4, text: 'Thầu và mua sắm', sign: 'BRFa', key: 'brfa' },
+    { value: 5, text: 'Nghiệm thu', sign: 'QRFa', key: 'inspection' },
+    { value: 6, text: 'Đề nghị sửa chữa', sign: 'Punch', key: 'punch' },
+    { value: 7, text: 'Đề nghị thay đổi', sign: 'RFc', key: 'rfc' },
+    { value: 8, text: 'Đề nghị thực hiện', sign: 'RFe', key: 'rfe' },
+    { value: 9, text: 'Báo cáo', sign: 'Report', key: 'report' },
+    { value: 10, text: 'Tiến độ, kế hoạch', sign: 'Schedule', key: 'schedule' },
+    { value: 11, text: 'Họp', sign: 'MOM', key: 'mom' },
 ]
 
 // MỐC TIẾN ĐỘ

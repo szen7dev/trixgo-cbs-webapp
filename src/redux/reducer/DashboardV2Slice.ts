@@ -25,6 +25,17 @@ const initialState: any = {
     queryFile: {
       companyOfAuthorsID: [],
       authorsID: [],
+    },
+    pcmMine: {
+      companiesOfAuthor: [],
+      authorsID: [],
+      projectsID: [],
+      status: [],
+      subtypes: [],
+      fromDate: "",
+      toDate: "",
+      priority: "0",
+      isExpired: "0"
     }
   },
 };
@@ -63,6 +74,12 @@ const dashboardV2Slice = createSlice({
     setQueryFile(state, action) {
       state.data.queryFile = action.payload;
     },
+    setQueryPcmMine(state, action) {
+      state.data.pcmMine = {
+        ...state.data.pcmMine,
+        [action.payload.key] :  action.payload.data
+      };
+    },
     resetFilterDashboard(state, action) {
       state.data = {
         ...initialState.data,
@@ -84,6 +101,7 @@ export const {
   setQuerySubject,
   setKeywordForFile,
   setQueryFile,
-  resetFilterDashboard
+  resetFilterDashboard,
+  setQueryPcmMine
 } = dashboardV2Slice.actions;
 export default dashboardV2Slice.reducer;

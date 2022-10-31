@@ -65,7 +65,7 @@ const ModalCreateCashFlow: FC<ModalProps> = ({ toggle, onConfirm }) => {
 			{
 				formik => {
 					return (
-						<Form autoComplete="off">
+						<Form autoComplete="off"  className='h-[700px] relative'>
 							<div className="flex items-center px-6 py-2.5 justify-between bg-cbs-table-header">
 								<Dialog.Title
 									as="h3"
@@ -79,7 +79,7 @@ const ModalCreateCashFlow: FC<ModalProps> = ({ toggle, onConfirm }) => {
 									</svg>
 								</button>
 							</div>
-							<div className="px-6 mt-2 pt-3.5 flex-1 md:h-[500px] text-x-small">
+							<div className="px-6 mt-2 pt-3.5 flex-1 overflow-y-auto text-x-small"  style={{height:"530px"}}>
 								<label className='block'>
 									<div className='mb-1.5'>
 										Nội dung (*)
@@ -121,7 +121,7 @@ const ModalCreateCashFlow: FC<ModalProps> = ({ toggle, onConfirm }) => {
 									<DropdownSearchable
 										onchangeValue={(value: any) => formik.setFieldValue('type', value.id)}
 										onClearData={() => formik.setFieldValue('type', '')}
-										className={"h-32 px-3 bg-cbs-gray w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"}
+										className={"    bg-cbs-gray w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"}
 										placeholder="Phân loại"
 										isMultiple={false}
 										allowClearValueSingleInput={true}
@@ -166,7 +166,7 @@ const ModalCreateCashFlow: FC<ModalProps> = ({ toggle, onConfirm }) => {
 									<DropdownSearchable
 										onchangeValue={(value: any) => formik.setFieldValue('outin', value.id)}
 										onClearData={() => formik.setFieldValue('outin', '')}
-										className={"h-32 px-3 bg-cbs-gray w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"}
+										className={"    bg-cbs-gray w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"}
 										placeholder="Mua vào, bán ra"
 										isMultiple={false}
 										allowClearValueSingleInput={true}
@@ -195,7 +195,7 @@ const ModalCreateCashFlow: FC<ModalProps> = ({ toggle, onConfirm }) => {
 									<DropdownSearchable
 										onchangeValue={(value: any) => formik.setFieldValue('property', value.id)}
 										onClearData={() => formik.setFieldValue('property', '')}
-										className={"h-32 px-3 bg-cbs-gray w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"}
+										className={"    bg-cbs-gray w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"}
 										placeholder="Tính chất"
 										isMultiple={false}
 										allowClearValueSingleInput={true}
@@ -225,7 +225,7 @@ const ModalCreateCashFlow: FC<ModalProps> = ({ toggle, onConfirm }) => {
 									<DropdownSearchable
 										onchangeValue={(value: any) => formik.setFieldValue('status', value.id)}
 										onClearData={() => formik.setFieldValue('status', '')}
-										className={"h-32 px-3 bg-cbs-gray w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"}
+										className={"    bg-cbs-gray w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"}
 										placeholder="Trạng thái"
 										isMultiple={false}
 										allowClearValueSingleInput={true}
@@ -248,7 +248,7 @@ const ModalCreateCashFlow: FC<ModalProps> = ({ toggle, onConfirm }) => {
 									/>
 								</label>
 							</div>
-							<div className="flex justify-end pt-5 px-6 pb-6 mt-6">
+							<div className="flex justify-end py-5 px-6 sticky bottom-0">
 								<div>
 									<button type="submit" className="px-7 py-3.5 rounded-md bg-primary text-white font-bold text-sm leading-4">Xác nhận</button>
 								</div>

@@ -83,6 +83,7 @@ module.exports = {
                 "cbs-highlight-color": "#111E6C",
                 "cbs-secondary": "#4781CF",
                 "cbs-gray": "#F0F0F0",
+                "cbs-bg-gray": "#F6F8FC",
                 "cbs-active-comment": "#E7F3FF",
                 "cbs-green": "#00C614",
                 "cbs-subtext": "#666666",

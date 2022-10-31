@@ -12,6 +12,7 @@ import moment from "moment";
 import {formatNumberMoney} from "utils/cmcs";
 import {Link, useParams, useHistory} from "react-router-dom";
 import { UseContractIPCGetListByMonthWithPager } from "services/hooks/cmcs/useContractIPC";
+import { CONTRACT_IPC_PLANS } from "apis/localdb/index";
 type Props = {
     projectInfo: Project
 }
@@ -24,16 +25,6 @@ export const ProjectBudgetPageType6Detail:FC<Props> = ({ projectInfo }) => {
     const ref = React.useRef<PaginateHandle>(null);
     const [pageIndex, setPageIndex] = useState(0);
 
-    // const {isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage} = useCashFlowPlan({
-    //     params: {
-    //         projectID: projectInfo._id,
-    //         outin: 2,
-    //         type: 5,
-    //         property: 3
-    //     },
-    //     isFetchList: true
-    // })
-
     const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage } = UseContractIPCGetListByMonthWithPager({
         params: {
             projectID: projectInfo._id,
@@ -42,11 +33,17 @@ export const ProjectBudgetPageType6Detail:FC<Props> = ({ projectInfo }) => {
             plan: 1,
             populates:  JSON.stringify({
                 path: "project userCreate contract",
-                select: "name sign fullname"
+                select: "name date sign fullname sellerInfo",
+                populate: ({
+                    path: "sellerInfo",
+                    select: "name"
+                })
             }),
         },
         isFetchList: true
     })
+    console.log(listWithPager)
+
     return (
         <>
             <div className={"sticky top-0 z-10 block"}>
@@ -96,7 +93,10 @@ export const ProjectBudgetPageType6Detail:FC<Props> = ({ projectInfo }) => {
                             {/* <input className="form-check-input line mr-2" type="checkbox" value="" id="check"/> */}
                             STT
                         </th>
-                        <th className={"w-5/12 bg-cbs-table-header p-2 border-0.5 border-primary-border text-normal text-left"}>
+                        <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-normal text-left"}>
+                            Phân loại
+                        </th>
+                        <th className={"w-3/12 bg-cbs-table-header p-2 border-0.5 border-primary-border text-normal text-left"}>
                             Nội dung
                         </th>
                         <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-normal text-left"}>
@@ -127,13 +127,17 @@ export const ProjectBudgetPageType6Detail:FC<Props> = ({ projectInfo }) => {
                                     {i+1}
                                 </td>
                                 <td className={"p-2 border-0.5 border-primary-border"}>
-                                    <Link to={`/pm/project/${plan.project._id}/budget/type/1/detail/${plan.contract._id}/tab/3`}>
-                                        {plan.name}
-                                        <p className={"text-primary-gray text-xs"}>{plan.contract.sign}-{plan.contract.name}</p>
+                                    {plan.type && CONTRACT_IPC_PLANS[plan.plan-1]?.text}
+                                </td>
+                                <td className={"p-2 border-0.5 border-primary-border"}>
+                                    <Link to={`/pm/project/${plan?.project?._id}/budget/type/1/detail/${plan?.contract?._id}/tab/3`}>
+                                        <p className=" text-[14px]">{plan?.name}</p>
+                                        <p className={"text-primary-gray text-xs"}>{plan?.contract?.sellerInfo?.name}</p>
+                                        <p className={"text-primary-gray text-xs"}><i>{plan?.contract?.name} - {plan?.contract?.sign} - { moment(plan?.contract?.date).format("L")}</i></p>
                                     </Link>
                                 </td>
                                 <td className={"p-2 border-0.5 border-primary-border"}>
-                                    { moment(plan.timeForPayment).format("L")}
+                                    { moment(plan?.timeForPayment).format("L")}
                                 </td>
                                 <td className={"p-2 border-0.5 border-primary-border text-right"}>
                                     {formatNumberMoney(plan.recommendedPayment)}

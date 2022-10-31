@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useRef, useState } from "react";
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
 import mailIcon from "assets/images/icons8-secure-mail-48.svg";
 import chatIcon from "assets/images/icons8-chat-48.svg";
@@ -42,6 +42,14 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
 
   const { data } = usePcmPlanTaskNotification({ enabled: enabled });
 
+  const [badge, setBadge] = useState({
+    amountUnreadTask: data?.data?.amountUnreadTask || 0,
+  })
+
+  const amountUnreadTask = useMemo(() => {
+    return badge.amountUnreadTask || data?.data?.amountUnreadTask || 0;
+  }, [data?.data?.amountUnreadTask, badge.amountUnreadTask])
+
   useEffect(() => {
     setTimeout(() => {
       setEnabled(true);
@@ -55,10 +63,13 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
 
   useEffect(() => {
     if (!socket) return;
+
     socket.on("CHATTING_SSC_RECEIVE_MESSAGE", onReceiveMessage);
+    socket.on("SUBJECT_PCM_SSC_UPDATE_COUNT_NOTIFICATION", onUpdateBadgeNotification);
 
     return () => {
       socket.off("CHATTING_SSC_RECEIVE_MESSAGE", onReceiveMessage);
+      socket.off("SUBJECT_PCM_SSC_UPDATE_COUNT_NOTIFICATION", onUpdateBadgeNotification);
     };
   }, [socket]);
 
@@ -67,6 +78,16 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
   const inSearchMode = useSelector((state: RootState) => state.searchMessage.data.inSearchMode[currentChat]);
   const isReviewOldMessage = useSelector((state: RootState) => state.listMessage.data.isReviewOldMessage[currentChat]);
   const { getListConversation } = UseListConversation();
+
+  const onUpdateBadgeNotification = ({ error, data }: any) => {
+    if(error || !Object.keys(data).length) return;
+
+    if(amountUnreadTask > 10) return;
+
+    setBadge({
+        amountUnreadTask: data.amountUnreadTask,
+    })
+  }
 
   const onReceiveMessage = (data: any) => {
     if (data?.infoMessage?.error) {
@@ -165,17 +186,15 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
             }
           >
             <img width={'20px'} src={mailIcon} alt={"Chủ đề"} />
-            {/*{*/}
-            {/*    totalNoti > 0 &&*/}
-            {data?.data?.amountUnreadTask && data?.data?.amountUnreadTask > 0 ? (
+            {amountUnreadTask && amountUnreadTask > 0 ? (
               <span
                 className={
                   "absolute -top-1 right-1 min-w-5 w-5 h-5 text-xs inline-block border-2 text-center border-white rounded-full bg-negative text-white"
                 }
               >
-                {data?.data?.amountUnreadTask > 10
+                {amountUnreadTask > 10
                   ? "9+"
-                  : data?.data?.amountUnreadTask}
+                  : amountUnreadTask}
               </span>
             ) : (
               <></>

@@ -19,7 +19,7 @@ type Props = {
     projectInfo: Project
 }
 const yearCurrent = new Date().getFullYear();
-const reportYears = [yearCurrent, yearCurrent-1, yearCurrent-2, yearCurrent-3, yearCurrent-4];
+const reportYears = [yearCurrent-3, yearCurrent-2, yearCurrent-1, yearCurrent, yearCurrent+1];
 export const ProjectBudgetPageType6:FC<Props> = ({projectInfo}) => {
     const [recordSelected, setSelectRecord] = useState<any>({});
     const [yearSelected, setYearSelected] = useState(2022);
@@ -98,13 +98,13 @@ export const ProjectBudgetPageType6:FC<Props> = ({projectInfo}) => {
                     {
                         cmcsContractIPCAmountByMonth?.map((item: any, i: number) => (
                             <tr key={item._id}>
-                                <td className={"p-2 border-0.5 border-primary-border text-center"}>
+                                <td className={"p-2 border-0.5 border-primary-border text-center text-[14px]"}>
                                    {i+1}
                                 </td>
-                                <td className={"p-2 border-0.5 border-primary-border"}>
+                                <td className={"p-2 border-0.5 border-primary-border text-[14px]"}>
                                     <Link to={`/pm/project/${projectInfo._id}/budget/type/6/month/${item._id.month}/year/${item._id.year}`}>Kế hoạch thanh toán tháng {item._id.month} năm {item._id.year}</Link>
                                 </td>
-                                <td className={"p-2 border-0.5 border-primary-border"}>
+                                <td className={"p-2 border-0.5 border-primary-border text-[14px]"}>
                                     {formatNumberMoney(item.amount)}
                                 </td>
                             </tr>

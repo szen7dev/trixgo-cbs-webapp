@@ -15,19 +15,18 @@ import Axios from "axios";
 /**
  * Hooks, Typings
  */
-import { useDoctype } from "services/hooks/items/useDoctype";
-import { useQueryListGroup } from "services/hooks/usePlanGroup";
-import { useTask } from 'services/hooks/useTask';
 import { useQueryListDepartmentsIsMember } from 'services/hooks/items/useDepartment';
 import { useUserSystem } from "services/hooks/users/useUserSystem";
-import { useContract } from "services/hooks/items/useContract";
+import { useContractIsMembers } from "services/hooks/items/useContract";
 import { useModal } from "services/hooks/useModal";
 import { useUpload } from "services/hooks/useUpload";
 import { validateFiles } from 'validation/file';
-import { PCM_PROPOSAL_TASK } from "apis/localdb";
 import { APP_ID } from "apis/localdb";
 import { humanFileSize } from 'utils/converter';
 import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
+import { useListCheckList } from "services/hooks/inspection/useInspection";
+import { useInspectionAreas } from "services/hooks/inspection/useInspectionAreas";
+import { useInspectionGroups } from "services/hooks/inspection/useInspectionGroups";
 
 /**
  * Components, Assets
@@ -35,29 +34,26 @@ import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFi
 import { DropdownSearchable } from "shareComponents/common";
 import Close from "assets/icons/Close";
 import fakeThumbnail from "assets/images/avatar.jpg";
-// import TagIcon from "assets/images/icons8-price-tag-96.svg";
-// import AttachIcon from "assets/images/icons8-attach-50.png";
 
 import "react-day-picker/lib/style.css";
 import { Editor } from "@tinymce/tinymce-react";
 import { Editor as EditorType } from "tinymce";
 import iconAttach from "assets/images/icons8-attach-48.svg";
-import IconClock from "assets/images/icons8-snooze-48 1.svg";
 import { FileProp, FilePropsUpload } from "typings/common";
 interface InitialValues {
   projectID: string,
-  subType: string,
-  fieldID: string,
+  contractID: string,
+  templateID: string,
+  groupID: string,
+  areaID: string,
   assigneeID: string,
   name: string,
   startTime: string,
   expiredTime: string,
+  expiredHour: string
   description: string,
   authorAttachs: string[],
-  type: number,
-  relatedIDs: string[],
-  groupID: string,
-  expiredHour: string
+  relatedIDs: string[]
 }
 
 export const ModalAddNewTask: FC = () => {
@@ -66,20 +62,25 @@ export const ModalAddNewTask: FC = () => {
   const editorRef = useRef<EditorType>();
   const fileInputRef = useRef<HTMLInputElement>(null);
   type DropdownSearchableHandle = React.ElementRef<typeof DropdownSearchable>;
-  const groupDropdownsearchRef = useRef<DropdownSearchableHandle>(null);
 
   const [tokens, setTokens] = useState<any[]>([]);
-  const [searchDepartmentValue, setSearchDepartmentValue] = useState("");
-  const [searchFriendName, setSearchFriendName] = useState("");
+  const [searchProjectValue, setSearchProjectValue] = useState("");
+  const [searchContractValue, setSearchContractValue] = useState("");
+  const [searchTemplateValue, setSearchTemplateValue] = useState("");
   const [searchGroupName, setSearchGroupName] = useState("");
-  const [searchContract, setSearchContract] = useState("");
-  const [companyID, setCompanyID] = useState("");
+  const [searchAreaValue, setSearchAreaValue] = useState("");
+  const contractDropdownsearchRef = useRef<DropdownSearchableHandle>(null);
+  const groupDropdownsearchRef = useRef<DropdownSearchableHandle>(null);
+  const areaDropdownsearchRef = useRef<DropdownSearchableHandle>(null);
   const [projectID, setProjectID] = useState("");
+  const [companyID, setCompanyID] = useState("");
+  const [contractID, setContractID] = useState("");
+  const [templateID, setTemplateID] = useState("");
   const [groupID, setGroupID] = useState("");
+  const [areaID, setAreaID] = useState("");
+  const [searchFriendName, setSearchFriendName] = useState("");
   const [isNotiEmail, setIsNotiEmail] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-
-  const { addTaskAsync } = useTask({});
 
   const { addFileToUpload } = useUpload({
     appID: APP_ID.PCM.id,
@@ -100,79 +101,78 @@ export const ModalAddNewTask: FC = () => {
     // removeAllFiles
   }] = useUploadFile({});
 
+  //API for Dự án
   const {
-    data: listDepartments,
-    isFetching: isFetchingListDepartment,
-    fetchNextPage: fetchNextPageListDepartment,
-    hasNextPage: hasNextPageListDepartment
+    data: listProject,
+    isFetching: isFetchingListProject,
+    fetchNextPage: fetchNextPageListProject,
+    hasNextPage: hasNextPageListProject
   } = useQueryListDepartmentsIsMember({
     limit: 10,
-    keyword: searchDepartmentValue,
+    keyword: searchProjectValue,
+    isFetch: true,
+    type: 2,
+    isBudget: 1
+  })
+
+  //API for Gói thầu
+  const {
+    listContracts: listContractIsMembers,
+    isFetching: isFetchingContractIsMembers,
+    fetchNextPage: fetchNextPageContractIsMembers,
+    hasNextPage: hasNextPageContractIsMembers
+  } = useContractIsMembers({
+    params: {
+      keyword: searchContractValue,
+      projectID: projectID,
+      populates: JSON.stringify({ "path": "project", "select": "name sign" })
+    },
     isFetch: true
-  })
-
-  const {
-    // list: listDoctypes,
-    hasNextPage: hasNextPageDoctypes,
-    fetchNextPage: fetchNextPageDoctypes,
-    isFetching: isFetchingPageDoctypes
-  } = useDoctype({
-    params: {
-      type: 2,
-      companyID,
-      // keyword: searchOtherField
-    },
-    isFetchList: false // !!companyID
-  })
-
-  const {
-    data: listGroup,
-    hasNextPage: hasNextPageListGroup,
-    isFetching: isFetchingListGroup,
-    fetchNextPage: fetchNextPageListGroup,
-  } = useQueryListGroup({
-    limit: 10,
-    keyword: searchGroupName,
-    projectID: projectID,
-    isShowParentAndChild: true
-  }, !!projectID);
-
-  const [isChangeProjectID, setIsChangeProjectID] = useState(false);
-
-  useEffect(() => {
-    if (isChangeProjectID) {
-      if (listGroup && listGroup.length) {
-        groupDropdownsearchRef?.current?.setValueRef({
-          label: `${listGroup[0].sign}.${listGroup[0].name}`,
-          value: listGroup[0]._id,
-        });
-        setGroupID(listGroup[0]._id);
-        setIsChangeProjectID(false);
-      } else {
-        if (!projectID) {
-          groupDropdownsearchRef?.current?.setValueRef(null);
-          setGroupID("");
-          setIsChangeProjectID(false);
-        }
-      }
-    }
-  }, [listGroup, isChangeProjectID]);
-
-  const {
-    listContracts,
-    hasNextPage: hasNextPageListContract,
-    fetchNextPage: fetchNextPageListContract,
-    isFetching: isFetchingListContract
-  } = useContract({
-    params: {
-      limit: 10,
-      contractID: "",
-      keyword: searchContract,
-      projectID,
-    },
-    isFetch: !!projectID
   });
 
+  //API for Phân loại
+  const {
+    listData: listDataTemplate,
+    fetchNextPage: fetchNextPageTemplate,
+    hasNextPage: hasNextPageTemplate,
+    isFetching: isFetchingTemplate,
+    insertAsync: createInspectionDocsAsync
+  } = useListCheckList({
+    keyword: searchTemplateValue,
+    belongSystem: 2
+  });
+
+  //API for Khu vực
+  const {
+    list: listInspectionAreas,
+    isFetching: isFetchingInspectionAreas,
+    fetchNextPage: fetchNextPageInspectionAreas,
+    hasNextPage: hasNextPageInspectionAreas
+  } = useInspectionAreas({
+    isFetchList: projectID ? true : false,
+    payload: {
+      keyword: searchAreaValue,
+      option: 1,
+      projectID: projectID
+    }
+  });
+
+  //API for Nhóm công tác
+  const {
+    list: listInspectionGroups,
+    isFetching: isFetchingInspectionGroups,
+    fetchNextPage: fetchNextPageInspectionGroups,
+    hasNextPage: hasNextPageInspectionGroups
+  } = useInspectionGroups({
+    isFetchList: projectID ? true : false,
+    payload: {
+      keyword: searchGroupName,
+      option: 1,
+      projectID: projectID
+    }
+  });
+
+  //API for Liên quan
   const {
     data: listUsersProject,
     hasNextPage: hasNextPageUsersProject,
@@ -180,9 +180,27 @@ export const ModalAddNewTask: FC = () => {
     isFetching: isFetchingPageUsersProject
   } = useUserSystem({
     limit: 10,
-    projectID,
+    projectID: projectID,
     keyword: searchFriendName
   }, true);
+
+  // Trigger when projectID is changed, used to automatically set first value for listGroup
+  const [isChangeProjectID, setIsChangeProjectID] = useState(false);
+
+  useEffect(() => {
+    if (isChangeProjectID) {
+      if (!projectID) {
+        setContractID("");
+        setGroupID("");
+        setAreaID("");
+        setCompanyID("");
+        setIsChangeProjectID(false);
+        contractDropdownsearchRef?.current?.setValueRef(null);
+        groupDropdownsearchRef?.current?.setValueRef(null);
+        areaDropdownsearchRef?.current?.setValueRef(null);
+      }
+    }
+  }, [isChangeProjectID, projectID]);
 
   const onSubmitFilterData = async (values: any) => {
     try {
@@ -201,19 +219,21 @@ export const ModalAddNewTask: FC = () => {
         values.authorAttachs = files;
       }
 
-      if (!values.groupID) {
-        values.groupID = groupID;
-      }
+      if (!values.projectID) { values.projectID = projectID; }
+      if (!values.contractID) { values.contractID = contractID; }
+      if (!values.templateID) { values.templateID = templateID; }
+      if (!values.groupID) { values.groupID = groupID; }
+      if (!values.areaID) { values.areaID = areaID; }
 
       closeModal();
-      const { error, data } = await addTaskAsync({
+      const { error, data } = await createInspectionDocsAsync({
         ...values,
         isNotiEmail
       });
 
       if (error) return toast.warning(data.message);
 
-      history.push(`/pcm/detail/${data._id}`);
+      //history.push(`/pcm/detail/${data._id}`);
     } catch (error) {
       if (typeof error === "string") {
         toast.error(error);
@@ -276,7 +296,6 @@ export const ModalAddNewTask: FC = () => {
         fileType: 1,
         source,
         progress: percentCompleted => {
-          console.log(`${percentCompleted}%`, key);
           setUploadImageProgress(key, percentCompleted)
         }
       })
@@ -296,60 +315,67 @@ export const ModalAddNewTask: FC = () => {
       })
       setIDFileUploaded(key, _id);
     }
-
     setIsUploading(false);
   }
 
   const handleRemoveUpload = (file: FileProp | FilePropsUpload, type: 'FILE' | 'IMAGE') => {
     if ('id' in file) {
-      const token = tokens.find(item => (item.key == file.id) && (item?.file?.name === file?.file?.name))
+      const token = tokens.find(item => (item.key === file.id) && (item?.file?.name === file?.file?.name))
       token && token?.source?.cancel('Operation request canceled by the user.');
-
       type === 'IMAGE' ? removeUploadedImage(file.id) : removeUploadedFile(file.id);
     } else {
-      const token = tokens.find(item => (item.key == file._id) && (item?.file?.name === file?.name))
+      const token = tokens.find(item => (item.key === file._id) && (item?.file?.name === file?.name))
       token && token?.source?.cancel('Operation request canceled by the user.');
-
       type === 'IMAGE' ? removeUploadedImage(file._id) : removeUploadedFile(file._id);
     }
   }
 
-  const handleScroll = (e: UIEvent<HTMLDivElement>, type: 'project' | 'group' | 'contract' | 'user' | 'field') => {
+  const handleScroll = (e: UIEvent<HTMLDivElement>, type: 'project' | 'group' | 'contract' | 'user' | 'template' | 'area') => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
     const bottom = scrollHeight - scrollTop >= clientHeight - 10;
     if (!bottom) return;
 
     switch (true) {
-      case (type === 'project' && hasNextPageListDepartment && !isFetchingListDepartment):
-        fetchNextPageListDepartment();
+      case (type === 'project' && hasNextPageListProject && !isFetchingListProject):
+        fetchNextPageListProject();
         break;
-      case (type === 'group' && hasNextPageListGroup && !isFetchingListGroup):
-        fetchNextPageListGroup();
+      case (type === 'contract' && hasNextPageContractIsMembers && !isFetchingContractIsMembers):
+        fetchNextPageContractIsMembers();
         break;
-      case (type === 'contract' && hasNextPageListContract && !isFetchingListContract):
-        fetchNextPageListContract();
+      case (type === 'template' && hasNextPageTemplate && !isFetchingTemplate):
+        fetchNextPageTemplate();
+        break;
+      case (type === 'area' && hasNextPageInspectionAreas && !isFetchingInspectionAreas):
+        fetchNextPageInspectionAreas();
+        break;
+      case (type === 'group' && hasNextPageInspectionGroups && !isFetchingInspectionGroups):
+        fetchNextPageInspectionGroups();
         break;
       case (type === 'user' && hasNextPageUsersProject && !isFetchingPageUsersProject):
         fetchNextPageUsersProject();
-        break;
-      case (type === 'field' && hasNextPageDoctypes && !isFetchingPageDoctypes):
-        fetchNextPageDoctypes();
         break;
       default:
         break;
     }
   }
 
+  // For showing error message
   const addTaskSchema = object().shape({
-    projectID: string().required("Vui lòng nhập tên dự án!"),
-    assigneeID: string().required("Vui lòng nhập tên người nhận!"),
+    projectID: string().required("Vui lòng nhập dự án!"),
+    contractID: string().required("Vui lòng nhập gói thầu!"),
+    templateID: string().required("Vui lòng nhập phân loại!"),
+    areaID: string().required("Vui lòng nhập khu vực!"),
+    groupID: string().required("Vui lòng nhập nhóm công tác!"),
+    assigneeID: string().required("Vui lòng nhập người nhận!"),
     name: string().required("Vui lòng nhập tiêu đề!"),
   });
 
   const initialValues: InitialValues = {
     projectID: "",
-    groupID,
-    fieldID: "",
+    contractID: "",
+    templateID: "",
+    groupID: "",
+    areaID: "",
     assigneeID: "",
     name: "",
     startTime: moment().format('MM/DD/YYYY'),
@@ -357,9 +383,7 @@ export const ModalAddNewTask: FC = () => {
     expiredHour: "00:00",
     description: "",
     authorAttachs: [],
-    type: 1,
     relatedIDs: [],
-    subType: '0',
   };
 
   return (
@@ -383,34 +407,45 @@ export const ModalAddNewTask: FC = () => {
               <Form>
                 <div className={"t-add-new-task-dialog-select px-6"}>
                   <div className={"flex pb-1 pt-2 border-b"}>
-                    <div className={"w-1/4 flex items-start"}>
+                    <div className={"w-1/3 flex items-start"}>
                       <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Dự án (*)</div>
                       <div className={"flex-1 max-w-4/5 w-4/5"}>
                         <DropdownSearchable
                           onchangeValue={(value: any) => {
-                            setCompanyID(value.companyId)
-                            setFieldValue("projectID", value?.id);
-                            setProjectID(`${value?.id}`);
                             setIsChangeProjectID(true);
-                            setSearchDepartmentValue("");
+                            setSearchProjectValue("");
+
+                            setProjectID(`${value?.id}`);
+                            setCompanyID(value.companyId)
+                            setContractID("");
+                            setAreaID("");
                             setGroupID("");
+
+                            setFieldValue("projectID", value?.id);
+                            setFieldValue("contractID", "");
+                            setFieldValue("areaID", "");
                             setFieldValue("groupID", "");
                             setFieldValue("assigneeID", "");
                             setFieldValue("relatedIDs", []);
                           }}
                           onClearData={() => {
+                            setProjectID("");
                             setCompanyID("");
-                            setFieldValue("projectID", "");
-                            setFieldValue("groupID", "");
+                            setContractID("");
+                            setAreaID("");
                             setGroupID("");
+
+                            setFieldValue("projectID", "");
+                            setFieldValue("contractID", "");
+                            setFieldValue("areaID", "");
+                            setFieldValue("groupID", "");
                             setFieldValue("assigneeID", "");
                             setFieldValue("relatedIDs", []);
-                            setProjectID("");
                             setIsChangeProjectID(true);
                           }}
                           onSearchInputChange={
                             debounce(
-                              (value) => setSearchDepartmentValue(value),
+                              (value) => setSearchProjectValue(value),
                               500)
                           }
                           onScroll={(e) => handleScroll(e, 'project')}
@@ -421,16 +456,14 @@ export const ModalAddNewTask: FC = () => {
                           showTriangle={false}
                           maxWidthInput="max-w-full"
                           renderSelectedItem={(item: any) => (
-                            <div
-                              className="max-w-full"
-                            >
+                            <div className="max-w-full">
                               <p className={"truncate"}>{item.text}</p>
                             </div>
                           )}
-                          data={listDepartments.map((department) => ({
-                            label: `${department.sign}.${department.name}`,
-                            value: department._id,
-                            companyId: department.company?._id,
+                          data={listProject.map((project) => ({
+                            label: `${project.sign}.${project.name}`,
+                            value: project._id,
+                            companyId: project.company?._id,
                           }))}
                           formatItem={{
                             id: "value",
@@ -445,191 +478,38 @@ export const ModalAddNewTask: FC = () => {
                         />
                       </div>
                     </div>
-                    {/* <div className={"w-1/4 flex items-start pl-3"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Nhóm (*)</div>
-                      <div className={"flex-1 max-w-4/5 w-4/5"}>
-                        <DropdownSearchable
-                          ref={groupDropdownsearchRef}
-                          disabled={values.projectID.length <= 0}
-                          onchangeValue={(item: any) => {
-                            setFieldValue("groupID", item.value);
-                            setGroupID(item.value);
-                            setSearchGroupName("");
-                          }}
-                          onClearData={() => {
-                            setFieldValue("groupID", "")
-                            setGroupID("");
-                          }}
-                          onSearchInputChange={debounce(
-                            (value) => setSearchGroupName(value),
-                            500
-                          )}
-                          onScroll={(e) => handleScroll(e, 'group')}
-                          className={"max-w-full flex-1"}
-                          placeholder="Nhóm"
-                          isMultiple={false}
-                          allowClearValueSingleInput={true}
-                          showTriangle={false}
-                          maxWidthInput="max-w-full"
-                          renderSelectedItem={(item: any) => (
-                            <div
-                              className="max-w-full"
-                            >
-                              <p className={"truncate"}>{item.text}</p>
-                            </div>
-                          )}
-                          data={listGroup.map((groupItem) => ({
-                            label: `${groupItem.sign}.${groupItem.name}`,
-                            value: groupItem._id,
-                          }))}
-                          formatItem={{
-                            id: "value",
-                            text: "label",
-                          }}
-                          inlineSearch={true}
-                        />
-                      </div>
-                    </div> */}
-                    <div className={"w-1/4 flex items-start pl-3"}>
+                    <div className={"w-1/3 flex items-start pl-3"}>
                       <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Gói thầu (*)</div>
                       <div className={"flex-1 max-w-4/5 w-4/5"}>
                         <DropdownSearchable
-                          ref={groupDropdownsearchRef}
+                          ref={contractDropdownsearchRef}
                           disabled={values.projectID.length <= 0}
                           onchangeValue={(item: any) => {
-                            setFieldValue("groupID", item.value);
-                            setGroupID(item.value);
-                            setSearchGroupName("");
+                            setFieldValue("contractID", item.value);
+                            setContractID(item.value);
+                            setSearchContractValue("");
                           }}
                           onClearData={() => {
-                            setFieldValue("groupID", "")
-                            setGroupID("");
+                            setFieldValue("contractID", "")
+                            setContractID("");
                           }}
                           onSearchInputChange={debounce(
-                            (value) => setSearchGroupName(value),
-                            500
-                          )}
-                          onScroll={(e) => handleScroll(e, 'group')}
-                          className={"max-w-full flex-1"}
-                          placeholder="Nhóm"
-                          isMultiple={false}
-                          allowClearValueSingleInput={true}
-                          showTriangle={false}
-                          maxWidthInput="max-w-full"
-                          renderSelectedItem={(item: any) => (
-                            <div
-                              className="max-w-full"
-                            >
-                              <p className={"truncate"}>{item.text}</p>
-                            </div>
-                          )}
-                          data={listGroup.map((groupItem) => ({
-                            label: `${groupItem.sign}.${groupItem.name}`,
-                            value: groupItem._id,
-                          }))}
-                          formatItem={{
-                            id: "value",
-                            text: "label",
-                          }}
-                          inlineSearch={true}
-                        />
-                      </div>
-                    </div>
-                    {/* <div className={"w-1/3 flex items-start pl-3"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Tính chất (*)</div>
-                      <div className={"flex-1 max-w-4/5 w-4/5"}>
-                        <DropdownSearchable
-                          onchangeValue={(value: any) =>
-                            setFieldValue("subType", value.id)
-                          }
-                          onClearData={() => setFieldValue("subType", "")}
-                          placeholder={"Phân loại"}
-                          className={"max-w-full flex-1"}
-                          focusedClass={"border-b border-primary"}
-                          allowClearValueSingleInput={true}
-                          showTriangle={false}
-                          maxWidthInput="max-w-full"
-                          renderSelectedItem={(item: any) => (
-                            <div className="max-w-full">
-                              <p className={"truncate"}>{item.text}</p>
-                            </div>
-                          )}
-                          data={PCM_PROPOSAL_TASK}
-                          formatItem={{
-                            id: "value",
-                            text: "text",
-                          }}
-                          initialValue={{
-                            id: 0,
-                            value: 0,
-                            text: "Việc thông thường"
-                          }}
-                          inlineSearch={true}
-                        />
-                      </div>
-                    </div> */}
-                    <div className={"w-1/3 flex items-start pl-3"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Phân loại (*)</div>
-                      <div className={"flex-1 max-w-4/5 w-4/5"}>
-                        <DropdownSearchable
-                          onchangeValue={(value: any) =>
-                            setFieldValue("subType", value.id)
-                          }
-                          onClearData={() => setFieldValue("subType", "")}
-                          placeholder={"Phân loại"}
-                          className={"max-w-full flex-1"}
-                          focusedClass={"border-b border-primary"}
-                          allowClearValueSingleInput={true}
-                          showTriangle={false}
-                          maxWidthInput="max-w-full"
-                          renderSelectedItem={(item: any) => (
-                            <div className="max-w-full">
-                              <p className={"truncate"}>{item.text}</p>
-                            </div>
-                          )}
-                          data={PCM_PROPOSAL_TASK}
-                          formatItem={{
-                            id: "value",
-                            text: "text",
-                          }}
-                          initialValue={{
-                            id: 0,
-                            value: 0,
-                            text: "Việc thông thường"
-                          }}
-                          inlineSearch={true}
-                        />
-                      </div>
-                    </div>
-                    {/* <div className={"w-1/4 flex items-start pl-3"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Hợp đồng</div>
-                      <div className={"flex-1 max-w-4/5 w-4/5"}>
-                        <DropdownSearchable
-                          onchangeValue={(item: any) => {
-                            setFieldValue("contractID", item.value);
-                            setSearchContract("");
-                          }}
-                          onClearData={() => setFieldValue("contractID", "")}
-                          onSearchInputChange={debounce(
-                            (value) => setSearchContract(value),
-                            500
+                            (value) => setSearchContractValue(value), 500
                           )}
                           onScroll={(e) => handleScroll(e, 'contract')}
                           className={"max-w-full flex-1"}
-                          placeholder="Hợp đồng"
+                          placeholder="Gói thầu"
                           isMultiple={false}
                           allowClearValueSingleInput={true}
                           showTriangle={false}
                           maxWidthInput="max-w-full"
                           renderSelectedItem={(item: any) => (
-                            <div
-                              className="max-w-full"
-                            >
+                            <div className="max-w-full">
                               <p className={"truncate"}>{item.text}</p>
                             </div>
                           )}
-                          data={listContracts.map((contract) => ({
-                            label: `${contract.sign}.${contract.name}`,
+                          data={listContractIsMembers.map((contract) => ({
+                            label: `${contract.name}`,
                             value: contract._id,
                           }))}
                           formatItem={{
@@ -638,8 +518,162 @@ export const ModalAddNewTask: FC = () => {
                           }}
                           inlineSearch={true}
                         />
+                        <ErrorMessage
+                          name="contractID"
+                          component="div"
+                          className="font-normal text-xs text-negative pl-3"
+                        />
                       </div>
-                    </div> */}
+                    </div>
+                    <div className={"w-1/3 flex items-start pl-3"}>
+                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Phân loại (*)</div>
+                      <div className={"flex-1 max-w-4/5 w-4/5"}>
+                        <DropdownSearchable
+                          ref={groupDropdownsearchRef}
+                          disabled={false}
+                          onchangeValue={(item: any) => {
+                            setFieldValue("templateID", item.value);
+                            setTemplateID(item.value);
+                            setSearchTemplateValue("");
+                          }}
+                          onClearData={() => {
+                            setFieldValue("templateID", "")
+                            setTemplateID("");
+                          }}
+                          onSearchInputChange={debounce(
+                            (value) => setSearchTemplateValue(value),
+                            500
+                          )}
+                          onScroll={(e) => handleScroll(e, 'template')}
+                          className={"max-w-full flex-1"}
+                          placeholder="Phân loại"
+                          isMultiple={false}
+                          allowClearValueSingleInput={true}
+                          showTriangle={false}
+                          maxWidthInput="max-w-full"
+                          renderSelectedItem={(item: any) => (
+                            <div
+                              className="max-w-full"
+                            >
+                              <p className={"truncate"}>{item.text}</p>
+                            </div>
+                          )}
+                          data={listDataTemplate.map((contract: { name: any; _id: any; }) => ({
+                            label: `${contract.name}`,
+                            value: contract._id,
+                          }))}
+                          formatItem={{
+                            id: "value",
+                            text: "label",
+                          }}
+                          inlineSearch={true}
+                        />
+                        <ErrorMessage
+                          name="templateID"
+                          component="div"
+                          className="font-normal text-xs text-negative pl-3"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className={"flex pb-1 pt-2 border-b"}>
+                    <div className={"w-1/3 flex items-start"}>
+                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Khu vực (*)</div>
+                      <div className={"flex-1 max-w-4/5 w-4/5"}>
+                        <DropdownSearchable
+                          ref={areaDropdownsearchRef}
+                          disabled={values.projectID.length <= 0}
+                          onchangeValue={(item: any) => {
+                            setFieldValue("areaID", item.value);
+                            setAreaID(item.value);
+                            setSearchAreaValue("");
+                          }}
+                          onClearData={() => {
+                            setFieldValue("areaID", "")
+                            setAreaID("");
+                          }}
+                          onSearchInputChange={debounce(
+                            (value) => setSearchAreaValue(value),
+                            500
+                          )}
+                          onScroll={(e) => handleScroll(e, 'area')}
+                          className={"max-w-full flex-1"}
+                          placeholder="Khu vực"
+                          isMultiple={false}
+                          allowClearValueSingleInput={true}
+                          showTriangle={false}
+                          maxWidthInput="max-w-full"
+                          renderSelectedItem={(item: any) => (
+                            <div
+                              className="max-w-full"
+                            >
+                              <p className={"truncate"}>{item.text}</p>
+                            </div>
+                          )}
+                          data={listInspectionAreas.map((groupItem) => ({
+                            label: `${groupItem.name}`,
+                            value: groupItem._id,
+                          }))}
+                          formatItem={{
+                            id: "value",
+                            text: "label",
+                          }}
+                          inlineSearch={true}
+                        />
+                        <ErrorMessage
+                          name="areaID"
+                          component="div"
+                          className="font-normal text-xs text-negative pl-3"
+                        />
+                      </div>
+                    </div>
+                    <div className={"w-1/3 flex items-start pl-3"}>
+                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/4"}>Nhóm công tác (*)</div>
+                      <div className={"flex-1 max-w-4/5 w-4/5"}>
+                        <DropdownSearchable
+                          ref={groupDropdownsearchRef}
+                          disabled={values.projectID.length <= 0}
+                          onchangeValue={(item: any) => {
+                            setFieldValue("groupID", item.value);
+                            setGroupID(item.value);
+                            setSearchGroupName("");
+                          }}
+                          onClearData={() => {
+                            setFieldValue("groupID", "")
+                            setGroupID("");
+                          }}
+                          onSearchInputChange={debounce(
+                            (value) => setSearchGroupName(value), 500
+                          )}
+                          onScroll={(e) => handleScroll(e, 'group')}
+                          className={"max-w-full flex-1"}
+                          placeholder="Nhóm công tác"
+                          isMultiple={false}
+                          allowClearValueSingleInput={true}
+                          showTriangle={false}
+                          maxWidthInput="max-w-full"
+                          renderSelectedItem={(item: any) => (
+                            <div className="max-w-full">
+                              <p className={"truncate"}>{item.text}</p>
+                            </div>
+                          )}
+                          data={listInspectionGroups.map((groupItem) => ({
+                            label: `${groupItem.name}`,
+                            value: groupItem._id,
+                          }))}
+                          formatItem={{
+                            id: "value",
+                            text: "label",
+                          }}
+                          inlineSearch={true}
+                        />
+                        <ErrorMessage
+                          name="groupID"
+                          component="div"
+                          className="font-normal text-xs text-negative pl-3"
+                        />
+                      </div>
+                    </div>
                   </div>
                   <div className={"flex pb-1 pt-2 border-b"}>
                     <div className={"w-full flex items-start"}>
@@ -874,7 +908,6 @@ export const ModalAddNewTask: FC = () => {
                   {(!!Object.keys(uploads.files).length || !!Object.keys(uploads.images).length) &&
                     [...toArray(uploads.files), ...toArray(uploads.images)].map(file => {
                       if (!file || Object.keys(file).length === 1) return;
-
                       const { file: fileInfo, progress, id } = file;
                       const isProgress = progress < 100;
 
@@ -895,16 +928,6 @@ export const ModalAddNewTask: FC = () => {
                         </div>
                       )
                     })}
-
-                  {/* <div key={`${id}-${fileInfo.name}-${fileInfo.size}`} className="bg-cbs-file-upload-bg max-w-[600px] px-2 py-1 mb-3 flex items-center">
-                    <p className="truncate mr-2 text-black font-bold" title={fileInfo.name}>{fileInfo.name}</p>
-                    <span className="mr-2 text-primary-gray font-bold">({humanFileSize(fileInfo.size)})</span>
-                    <div className="w-1/5 mr-2 border border-primary bg-white h-[12px] relative">
-                      <div style={{ width: `${progress}%` }} className={"bg-primary absolute top-0 left-0 h-full"}></div>
-                    </div>
-                    <button className="ml-auto"><Close /></button>
-                  </div> */}
-
                 </div>
                 <div className={"flex items-center border-t py-3 px-6"}>
                   <label>

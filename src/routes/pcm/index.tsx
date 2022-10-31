@@ -39,6 +39,9 @@ import ProjectAdminAuthorTab from "views/ppt/pages/ProjectAdminPage/pages/Projec
 import ProjectAdminProjectDetail from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminProjectDetail";
 import ProjectAdminProjectTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminProjectTab";
 import ProjectAdminPositionTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminPositionTab";
+import ProjectNew from "views/ppt/pages/ProjectNew";
+import ProjectKpis from "views/ppt/pages/ProjectKpis";
+import UserKpiDetail from "views/ppt/pages/ProjectKpis/UserKpiDetail";
 const PcmDetailTaskV2             = lazy(() => import('views/pcm/pages/PcmDetailTaskV2'));
 const PcmTagPage                  = lazy(() => import('views/pcm/pages/PcmTagPage'));
 const PcmTagProjectPage           = lazy(() => import('views/pcm/pages/PcmTagPage/PcmTagProjectPage'));
@@ -110,6 +113,12 @@ const PCMRouter: FC = () => {
 
                 <Route exact path="/pcm/projects" component={ProjectCategoryPage} />
                 <Route exact path="/pcm/market" component={ProjectMarketPage} />
+                <Route exact path="/pcm/new" component={ProjectNew} />
+                <Route exact path="/pcm/kpis" component={ProjectKpis} />
+                <Route exact path="/pcm/kpis/:userID" component={UserKpiDetail} />
+                {/* test link */}
+                <Route exact path="/pcm/kpis/userID" component={UserKpiDetail} />
+                {/* end test link */}
                 <Route exact path="/pcm/(dashboard-portfolio|dashboard-task|dashboard-document)">
                   <LayoutSecondary
                     pages={[
@@ -130,7 +139,7 @@ const PCMRouter: FC = () => {
                 <Route exact path="/pcm/bidding/:tab?" component={() => <PcmHomePage subtype={4} option={1} draft={0}/>} />
                 <Route exact path="/pcm/delivery/:tab?" component={() => <PcmHomePage subtype={9} type={2} option={2} draft={0}/>} />
                 <Route exact path="/pcm/payment/:tab?" component={() => <PcmHomePage subtype={3} type={2} option={3} draft={0}/>} />
-                <Route exact path="/pcm/mine/:tab?" component={() => <PcmHomePage option={4} draft={0}/>} />
+                <Route exact path="/pcm/mine" component={() => <ProjectNew />} />
                 <Route exact path="/pcm/assign/:tab?" component={() => <PcmHomePage type={2} option={5} draft={0}/>} />
                 <Route exact path="/pcm/bookmark/:tab?" component={() => <PcmHomePage type={3} option={6} draft={0}/>} />
                 <Route exact path="/pcm/related/:tab?" component={() => <PcmHomePage type={5} option={7} draft={0}/>} />

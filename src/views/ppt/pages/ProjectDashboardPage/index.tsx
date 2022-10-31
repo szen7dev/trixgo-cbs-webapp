@@ -61,7 +61,7 @@ const yearMin = yearCurrent-5;
 
 const ProjectDashboardPortfolioPage: FC = () => {
 	const { state, toggleModal } = useContext(ContextModalPost);
-	const [yearSelected, setYearSelected] = useState<number>(0);
+	const [yearSelected, setYearSelected] = useState<number>(2022);
 
 	//_____Start history traffict
 	const payloadHistoryTraffic: any = {
