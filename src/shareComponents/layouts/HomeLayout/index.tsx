@@ -7,8 +7,8 @@ import cn from "classnames";
 /*=====3.ICONS=====*/
 
 /*=====4.PAGES/COMPONENTS=====*/
-import {LeftMenu, MainHeaderV2, LeftNavigate} from "../../common";
-import {HomeHeaderContent, HomeLeftMenuContent} from "./components";
+import { LeftMenu, MainHeaderV2, LeftNavigate } from "../../common";
+import { HomeHeaderContent, HomeLeftMenuContent } from "./components";
 // import MiniChatbox from "shareComponents/common/MiniChat/components/MiniChatBox";
 
 /*=====5.TYPINGS=====*/
@@ -47,24 +47,25 @@ export const HomeLayout: FC<Props> = ({ children }) => {
       {/* Collapse menu button */}
 
       <div className={"flex"}>
-        <LeftNavigate handleMenuEvent={handleMenuEvent}/>
+        <LeftNavigate handleMenuEvent={handleMenuEvent} />
         <section className={"main-content-wrapper flex-1"}>
           {/*  Main header */}
           <MainHeaderV2
             headerTitle={"Chủ đề"}
           >
-            <HomeHeaderContent/>
+            <HomeHeaderContent />
           </MainHeaderV2>
+          <div className="flex w-full">
+            {/* Left navigation */}
+            <LeftMenu>
+              <HomeLeftMenuContent />
+            </LeftMenu>
 
-          {/* Left navigation */}
-          <LeftMenu>
-            <HomeLeftMenuContent/>
-          </LeftMenu>
-
-          {/* Content area */}
-          <main className="main-route-content transition-all duration-500 ease-out overflow-auto relative h-left-over-content max-h-left-over-content min-h-left-over-content">
-            {children}
-          </main>
+            {/* Content area */}
+            <main className="main-route-content transition-all duration-500 ease-out overflow-auto relative h-left-over-content max-h-left-over-content min-h-left-over-content">
+              {children}
+            </main>
+          </div>
         </section>
       </div>
     </section>
