@@ -75,6 +75,13 @@ const ContractRepository = {
     );
     return data;
   },
+  
+  async getListByMonth(payload: any) {
+    const { data } = await API.get(
+      `${cmcsURL}/contracts/get-list-by-month?${convertObToUrl(payload)}`
+    );
+    return data;
+  },
 
 };
 

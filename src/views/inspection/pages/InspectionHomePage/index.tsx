@@ -45,7 +45,7 @@ export const InspectionHomePage: FC = () => {
 		refetch,
 		isFetching,
 	} = useListCheckList({});
-	console.log(listDataForWithPager);
+	console.log("listDataForWithPager", listDataForWithPager);
 	const [pageIndex, setPageIndex] = useState(0);
 	useEffect(() => {
 		document.title = "Trixgo | Note"
@@ -54,26 +54,26 @@ export const InspectionHomePage: FC = () => {
 
 	// trạng thái
 	// const getStateTime = () => {
-    //     const now = new Date().getTime();
-    //     const expiredTime = new Date(listDataForWithPager.item.expiredTime).getTime();
-    //     if (expiredTime - now <= 604800000 && expiredTime - now > 0) {
-    //         return {
-    //             label: "Tuần tới",
-    //             background: "bg-cbs-schedule-nextweek"
-    //         }
-    //     }
-    //     if (expiredTime - now <= 0) {
-    //         return {
-    //             label: "Quá hạn",
-    //             background: "bg-cbs-schedule-expired"
-    //         }
-    //     }
-    //     return {
-    //         label: ">7 ngày tiếp theo",
-    //         background: "bg-cbs-schedule-after-7days"
-    //     }
-    // };
-    // const timeState = getStateTime();
+	//     const now = new Date().getTime();
+	//     const expiredTime = new Date(listDataForWithPager.item.expiredTime).getTime();
+	//     if (expiredTime - now <= 604800000 && expiredTime - now > 0) {
+	//         return {
+	//             label: "Tuần tới",
+	//             background: "bg-cbs-schedule-nextweek"
+	//         }
+	//     }
+	//     if (expiredTime - now <= 0) {
+	//         return {
+	//             label: "Quá hạn",
+	//             background: "bg-cbs-schedule-expired"
+	//         }
+	//     }
+	//     return {
+	//         label: ">7 ngày tiếp theo",
+	//         background: "bg-cbs-schedule-after-7days"
+	//     }
+	// };
+	// const timeState = getStateTime();
 
 	// popover
 	const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
@@ -123,7 +123,10 @@ export const InspectionHomePage: FC = () => {
 										</div>
 										<div className="">
 											<div className="flex gap-1 text-primary-gray">Thực hiện:
-												<img src={item.assignee.image} alt="avatar"
+												<img
+													src={`${process.env.REACT_APP_URL_S3_USER}/${item.assignee.image}`}
+													alt="avatar"
+													className="w-5 h-5 rounded-full"
 													aria-owns={open ? "mouse-over-popover" : undefined}
 													aria-haspopup="true"
 													onMouseEnter={handlePopoverOpen}
@@ -210,8 +213,8 @@ export const InspectionHomePage: FC = () => {
 						<div className="flex py-2 px-3 items-center	justify-between	">
 							<div className="text-cbs-primary bg-cbs-sub-primary rounded p-3">Giám đốc Ban QLDA</div>
 							<div className="flex gap-2 items-center	">
-								<a href=""><img src={iconChat} alt=""/></a>
-								<a href=""><img src={iconTrash} alt=""/></a>
+								<a href=""><img src={iconChat} alt="" /></a>
+								<a href=""><img src={iconTrash} alt="" /></a>
 							</div>
 						</div>
 					</div>

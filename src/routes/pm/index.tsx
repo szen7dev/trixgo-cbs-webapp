@@ -81,6 +81,8 @@ const ProjectSubjectPage = lazy(() => import("views/ppt/pages/ProjectSubjectPage
 const ProjectFolderPage = lazy(() => import("views/ppt/pages/ProjectFolderPage"))
 const ProjectDashboardPage = lazy(() => import("views/ppt/pages/ProjectDashboardPage"))
 const ProjectDashboardDebtPage = lazy(() => import("views/ppt/pages/ProjectDashboardDebtPage"))
+const ProjectDashboardTab2Page = lazy(() => import("views/ppt/pages/ProjectDashboardTab2Page"))
+const ProjectDashboardTab2DetailPage = lazy(() => import("views/ppt/pages/ProjectDashboardTab2DetailPage"))
 const ProjectDashboardDebtBuyerInfoPage = lazy(() => import("views/ppt/pages/ProjectDashboardDebtBuyerInfoPage"))
 const ProjectPhotoContractPageV2 = lazy(() => import("views/ppt/pages/ProjectPhotoContractPageV2"))
 const ProjectPhotoPage = lazy(() => import("views/ppt/pages/ProjectPhotoPage"))
@@ -209,6 +211,16 @@ const PCMRouter: FC = () => {
                   <Route exact path="/pm/project/:id/dashboard">
                     <PmProjectLayout>
                       <ProjectDashboardPage />
+                    </PmProjectLayout>
+                  </Route>
+                  <Route exact path="/pm/project/:id/dashboard/tab/:tabID">
+                    <PmProjectLayout>
+                      <ProjectDashboardTab2Page />
+                    </PmProjectLayout>
+                  </Route>
+                  <Route exact path="/pm/project/:id/dashboard/tab/:tabID/month/:month/year/:year">
+                    <PmProjectLayout>
+                      <ProjectDashboardTab2DetailPage />
                     </PmProjectLayout>
                   </Route>
                   <Route exact path="/pm/project/:id/dashboard/debt/outin/:outinID">

@@ -257,6 +257,26 @@ button {
 .max-height-20{
   max-height: 20px;
 }
+.showScrollBar::-webkit-scrollbar{
+  height: 5px;
+}
+.showScrollBar::-webkit-scrollbar-track{
+  height: 5px;
+  width: 15px;
+  background: #f1f1f1;
+  /* border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%; */
+}
+.showScrollBar::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+.showScrollBar::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
 .outlineNone{
   outline: none;
 }
@@ -1770,14 +1790,17 @@ img {
 } */
 
 .main-route-content {
-  width: calc(100% - 256px);
+  width: 100%;
+  /* max-width: calc(100% - 256px); */
   height: calc(100vh - 55px);
-  margin-left: 256px;
+  /* margin-left: 256px; */
+  padding-left: 256px;
   top: 0;
 }
 
 .home-layout.collapse-left .main-route-content {
   margin-left: 0;
+  padding-left: 0;
   width: 100%;
 }
 .left-menu-nav.active {

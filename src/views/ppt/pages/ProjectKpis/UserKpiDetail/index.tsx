@@ -143,16 +143,16 @@ const UserKpiDetail: React.FC = () => {
                 <thead>
                     <tr className='font-bold text-left text-[13px] leading-4'>
                         <th className="border-0.5 border-cbs-border px-[5px] w-[50px] py-3 text-center px-2">TT</th>
-                        <th className="border-0.5 border-cbs-border px-[5px] py-3 px-2" style={{ width: "108px" }}>Dự án</th>
-                        <th className="border-0.5 border-cbs-border px-[5px] py-3 px-2" style={{ width: "357px" }}>Công việc</th>
-                        <th className="border-0.5 border-cbs-border px-[5px] py-3" style={{ width: "130px" }}>Kế hoạch kết thúc</th>
-                        <th className="border-0.5 border-cbs-border px-[5px] py-3" style={{ width: "130px" }}>Thực tế kết thúc</th>
-                        <th className="border-0.5 border-cbs-border px-[5px] py-3" style={{ width: "85px" }}>Đơn vị tính</th>
-                        <th className="border-0.5 border-cbs-border px-[5px] py-3" style={{ width: "100px" }}>Khối lượng</th>
-                        <th className="border-0.5 border-cbs-border px-[5px] py-3" style={{ width: "100px" }}>Đơn giá</th>
-                        <th className="border-0.5 border-cbs-border px-[5px] py-3" style={{ width: "110px" }}>Thành tiền</th>
-                        <th className="border-0.5 border-cbs-border px-[5px] py-3" style={{ width: "230px" }}>Xác nhận</th>
-                        <th className="border-0.5 border-cbs-border px-[5px] py-3" style={{ width: "230px" }}>Ghi chú</th>
+                        <th className="border-0.5 border-cbs-border w-full px-[5px] py-3 px-2" style={{ maxWidth: "108px" }}>Dự án</th>
+                        <th className="border-0.5 border-cbs-border w-full px-[5px] py-3 px-2" style={{ maxWidth: "357px" }}>Công việc</th>
+                        <th className="border-0.5 border-cbs-border w-full px-[5px] py-3" style={{ maxWidth: "130px" }}>Kế hoạch kết thúc</th>
+                        <th className="border-0.5 border-cbs-border w-full px-[5px] py-3" style={{ maxWidth: "130px" }}>Thực tế kết thúc</th>
+                        <th className="border-0.5 border-cbs-border w-full px-[5px] py-3" style={{ maxWidth: "85px" }}>Đơn vị tính</th>
+                        <th className="border-0.5 border-cbs-border w-full px-[5px] py-3" style={{ maxWidth: "100px" }}>Khối lượng</th>
+                        <th className="border-0.5 border-cbs-border w-full px-[5px] py-3" style={{ maxWidth: "100px" }}>Đơn giá</th>
+                        <th className="border-0.5 border-cbs-border w-full px-[5px] py-3" style={{ maxWidth: "110px" }}>Thành tiền</th>
+                        <th className="border-0.5 border-cbs-border w-full px-[5px] py-3" style={{ maxWidth: "230px" }}>Xác nhận</th>
+                        <th className="border-0.5 border-cbs-border w-full px-[5px] py-3" style={{ maxWidth: "230px" }}>Ghi chú</th>
                     </tr>
                 </thead>
                 <tbody>

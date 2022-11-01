@@ -18,25 +18,25 @@ const FilterItem: React.FC = () => {
         // setSelectedValue(value);
     };
     return (
-        <div>
-            <table className="border-collapse border-0.5 border-cbs-border text-[13px] leading-4">
-                <thead>
+        <div className='w-full px-1 overflow-x-auto absolute showScrollBar' >
+            <table className="border-collapse border-0.5 border-cbs-border text-[13px] leading-4 w-full table-auto">
+                <thead className=''>
                     <tr className='font-bold text-left text-[13px] leading-4'>
-                        <th className="border-0.5 border-cbs-border px-[5px] w-[50px] py-3 text-center px-2">TT</th>
-                        <th className="border-0.5 border-cbs-border px-[5px] w-[258px] py-3 px-2" style={{ width: "258px" }}>Nhân sự</th>
-                        <th className="border-0.5 border-cbs-border px-[5px] w-[132px] py-3 px-2" style={{ width: "132px" }}>Phòng ban</th>
-                        <th className="border-0.5 border-cbs-border px-[5px] w-90 py-3">Tháng 1/22</th>
-                        <th className="border-0.5 border-cbs-border px-[5px] w-90 py-3">Tháng 2/22</th>
-                        <th className="border-0.5 border-cbs-border px-[5px] w-90 py-3">Tháng 3/22</th>
-                        <th className="border-0.5 border-cbs-border px-[5px] w-90 py-3">Tháng 4/22</th>
-                        <th className="border-0.5 border-cbs-border px-[5px] w-90 py-3">Tháng 5/22</th>
-                        <th className="border-0.5 border-cbs-border px-[5px] w-90 py-3">Tháng 6/22</th>
-                        <th className="border-0.5 border-cbs-border px-[5px] w-90 py-3">Tháng 7/22</th>
-                        <th className="border-0.5 border-cbs-border px-[5px] w-90 py-3">Tháng 8/22</th>
-                        <th className="border-0.5 border-cbs-border px-[5px] w-90 py-3">Tháng 9/22</th>
-                        <th className="border-0.5 border-cbs-border px-[5px] w-90 py-3">Tháng 10/22</th>
-                        <th className="border-0.5 border-cbs-border px-[5px] w-90 py-3">Tháng 11/22</th>
-                        <th className="border-0.5 border-cbs-border px-[5px] w-90 py-3">Tháng 12/22</th>
+                        <th className="border-0.5 border-cbs-border px-[5px] py-3 text-center" style={{ width:"3%", maxWidth:"50px" }}>TT</th>
+                        <th className="border-0.5 border-cbs-border px-[5px] py-3" style={{ minWidth: "100px", maxWidth: "232px" }}>Nhân sự</th>
+                        <th className="border-0.5 border-cbs-border px-[5px] py-3" style={{ minWidth: "100px", maxWidth: "135px" }}>Phòng ban</th>
+                        <th className="border-0.5 border-cbs-border px-[5px] w-[90px] py-3">Tháng 1/22</th>
+                        <th className="border-0.5 border-cbs-border px-[5px] w-[90px] py-3">Tháng 2/22</th>
+                        <th className="border-0.5 border-cbs-border px-[5px] w-[90px] py-3">Tháng 3/22</th>
+                        <th className="border-0.5 border-cbs-border px-[5px] w-[90px] py-3">Tháng 4/22</th>
+                        <th className="border-0.5 border-cbs-border px-[5px] w-[90px] py-3">Tháng 5/22</th>
+                        <th className="border-0.5 border-cbs-border px-[5px] w-[90px] py-3">Tháng 6/22</th>
+                        <th className="border-0.5 border-cbs-border px-[5px] w-[90px] py-3">Tháng 7/22</th>
+                        <th className="border-0.5 border-cbs-border px-[5px] w-[90px] py-3">Tháng 8/22</th>
+                        <th className="border-0.5 border-cbs-border px-[5px] w-[90px] py-3">Tháng 9/22</th>
+                        <th className="border-0.5 border-cbs-border px-[5px] w-[90px] py-3">Tháng 10/22</th>
+                        <th className="border-0.5 border-cbs-border px-[5px] w-[90px] py-3">Tháng 11/22</th>
+                        <th className="border-0.5 border-cbs-border px-[5px] w-[90px] py-3">Tháng 12/22</th>
                         <th className="border-0.5 border-cbs-border px-[5px] w-[100px] py-3">Tổng</th>
                     </tr>
                 </thead>
