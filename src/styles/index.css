@@ -257,6 +257,26 @@ button {
 .max-height-20{
   max-height: 20px;
 }
+.showScrollBar::-webkit-scrollbar{
+  height: 5px;
+}
+.showScrollBar::-webkit-scrollbar-track{
+  height: 5px;
+  width: 15px;
+  background: #f1f1f1;
+  /* border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%; */
+}
+.showScrollBar::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+.showScrollBar::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
 .outlineNone{
   outline: none;
 }
