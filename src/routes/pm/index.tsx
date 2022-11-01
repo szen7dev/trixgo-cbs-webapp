@@ -213,7 +213,7 @@ const PCMRouter: FC = () => {
                       <ProjectDashboardPage />
                     </PmProjectLayout>
                   </Route>
-                  <Route exact path="/pm/project/:id/dashboard/tab/:tabID/year/:year">
+                  <Route exact path="/pm/project/:id/dashboard/tab/:tabID">
                     <PmProjectLayout>
                       <ProjectDashboardTab2Page />
                     </PmProjectLayout>

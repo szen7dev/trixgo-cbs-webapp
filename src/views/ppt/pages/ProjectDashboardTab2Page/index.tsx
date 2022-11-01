@@ -10,7 +10,7 @@ import ContractIPCRepository from 'apis/cmcs/contractIPC';
 import { useContractDashboard } from 'services/hooks/items/useContract';
 
 const ProjectDashboardTab2Page: FC<any> = () => {
-	const { id: projectID, year } = useParams<{ id: string, year: string }>();
+	const { id: projectID } = useParams<{ id: string }>();
     const history = useHistory();
 	const { info: projectInfo } = useProject({
 		params: {
@@ -22,7 +22,7 @@ const ProjectDashboardTab2Page: FC<any> = () => {
 	})
 
 	const { contractAmountByMonth } = useContractDashboard({
-		params: { projectID, year }
+		params: { projectID }
 	});
 
 	useEffect(() => {
@@ -40,7 +40,7 @@ const ProjectDashboardTab2Page: FC<any> = () => {
                     </button>
 					<div className="flex-1 flex items-center text-[15px] ml-2">
 						<p className="text-lg text-primary-gray">
-							Giá trị ký dự án {projectInfo?.name} năm { year }
+							Giá trị ký dự án {projectInfo?.name}
 						</p>
 					</div>
 				</div>

@@ -19,7 +19,7 @@ const TotalSignValue: FC<any> = ({ projectID ,infoProject, year}) => {
 
   contractAmountByMonthAll = +(contractAmountByMonthAll / 1000000000).toFixed(3);
   return (
-    <Link to={`/pm/project/${projectID}/dashboard/tab/2/year/${year}`}>
+    <Link to={`/pm/project/${projectID}/dashboard/tab/2`}>
       <div className="bg-primary-light h-full w-full">
         <div className="px-6 py-4">
           <p className="font-bold text-primary-gray text-lg"> Giá trị ký</p>
