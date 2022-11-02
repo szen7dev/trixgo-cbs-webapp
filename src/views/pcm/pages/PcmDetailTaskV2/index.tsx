@@ -66,7 +66,7 @@ const PcmDetailTaskV2: FC = () => {
             menuID: APP_ID.PCM.menuPcmProject.subject.id,
             type: 1,
         });
-
+        
         (async () => {
             await updateStatusMultipleAsync({
                 taskIDs: [taskId],
