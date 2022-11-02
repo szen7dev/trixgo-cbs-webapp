@@ -609,7 +609,15 @@ button {
 }
 
 /*______________________________home page___________________________*/
-
+.t-dashboard-sum-item-text {
+  width: calc(100% - 4rem);
+  word-break: break-word;
+}
+@media screen and (max-width: 1540px) {
+  .t-dashboard-sum-item-text {
+    width: 100%;
+  }
+}
 .t-home-col-left-wrapper {
   width: 760px;
 }
