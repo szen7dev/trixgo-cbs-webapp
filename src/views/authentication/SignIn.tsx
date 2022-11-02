@@ -69,9 +69,9 @@ const LoginPage: FC = () => {
   return (
     <>
       {isLoading && <Loader className="border-primary" />}
-      <section className="flex h-full w-full">
-        <div className="w-7/12 flex h-full justify-center my-24">
-          <div className="w-3/5 ml-10">
+      <section className="flex min-h-full w-full">
+        <div className="w-7/12 flex justify-center items-center">
+          <div className="w-3/5 ml-10 mt-8 my-16">
             <Formik
               initialValues={initialValues}
               validationSchema={signInSchema}
