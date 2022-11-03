@@ -120,7 +120,7 @@ const ProjectNew: FC = () => {
                                     onChange={(value) => {
                                         if (value.target.checked) {
                                             dispatch(setQueryPcmMine({ key: "fromDate", data: moment().add(8, "days").format("YYYY-MM-DD 00:00") }))
-                                            dispatch(setQueryPcmMine({ key: "toDate", data: moment().add(365, "days").format("YYYY-MM-DD 23:59") }))
+                                            dispatch(setQueryPcmMine({ key: "toDate", data: moment().add(36500, "days").format("YYYY-MM-DD 23:59") }))
                                         } else {
                                             dispatch(setQueryPcmMine({ key: "fromDate", data: "" }))
                                             dispatch(setQueryPcmMine({ key: "toDate", data: "" }))
