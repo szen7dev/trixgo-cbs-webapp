@@ -94,7 +94,8 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
         setUploadFile,
         removeUploadedImage,
         removeUploadedFile,
-    }] = useUploadFile({ files: task.authorAttachs });
+    }] = useUploadFile({ files: [] });
+    // }] = useUploadFile({ files: task.authorAttachs });
 
     const {
         data: listDepartments,
@@ -337,7 +338,8 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
         startTime: moment(task.startTime).format('MM/DD/YYYY'),
         expiredTime: moment(task.expiredTime).format('MM/DD/YYYY'),
         description: task.description,
-        authorAttachs: task.authorAttachs?.map(file => file._id),
+        // authorAttachs: task.authorAttachs?.map(file => file._id),
+        authorAttachs: [],
         relatedIDs: task.related.map(user => user._id),
         type: task.type,
         subtype: task.subtype,
@@ -776,8 +778,9 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
                                     />
                                 </div>
 
-                                <div className="px-6 mb-3">
+                                {/* <div className="px-6 mb-3">
                                     {!!Object.keys(uploads.files).length && toArray(uploads.files).map(file => {
+                                        console.log({ file })
                                         if (!file || Object.keys(file).length === 1) return;
 
                                         let fileInfo, id, progress = 100;
@@ -810,7 +813,7 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
                                             </div>
                                         )
                                     })}
-                                </div>
+                                </div> */}
                                 <div className={"flex items-center border-t py-3 px-6"}>
                                     <label>
                                         <img

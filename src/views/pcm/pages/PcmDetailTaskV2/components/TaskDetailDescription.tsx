@@ -7,11 +7,15 @@ import { useTask } from "services/hooks/useTask";
 import { humanFileSize } from 'utils/converter';
 import iconAttach from "assets/images/icons8-attach-48.svg";
 import iconLink from "assets/images/icons8-link-96-v3.svg";
+import { debounce } from "lodash";
+import { toast } from "react-toastify";
+
 // import imageDemo from "assets/images/task-detail-image.png";
 import moment from "moment";
 import { ModalZoomView } from "shareComponents/common";
 import { ImageProps } from "typings/common";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
+import { useFileCore } from 'services/hooks/useFileCore';
 
 type Props = {
     task: Task;
@@ -29,6 +33,7 @@ function checkCreateAtWith60minute(time: any){
 }
 
 export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
+    const { updateFileAsync } = useFileCore();
     const editorRef = useRef<EditorType>();
     const [editDescription, setEditDescription] = useState(false);
     const [isHasPermissionUpdateDescription, setIsPermissionUpdateDescription] = useState(false);
@@ -76,6 +81,13 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
         }
     }, [task?.createAt])
 
+    const handleChangeDescriptionFile = debounce(async(e: any) => {
+        await updateFileAsync({
+            fileID: e.target.name,
+            description: e.target.value
+        });
+		toast.success('Cập nhật ghi chú thành công', { autoClose: 2000 });
+    }, 1000);
     return (
         <div className={"task-description flex items-start mt-5"}>
             <span className={"mr-4"}>
@@ -177,7 +189,7 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                         <div className={"user-attach mt-4"}>
                             {task.authorAttachs?.map(file => {
                                 if (file.type == '1') return;
-
+                                // console.log({ file })
                                 return (
                                     <div key={file._id} className={"comment-attach-item flex items-start justify-between mb-2"}>
                                         <img src={iconAttach} alt={"---"} />
@@ -187,11 +199,16 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                                             </a>
                                             <p className={"text-primary-gray text-xs"}>
                                                 {file.author?.bizfullname} -
-                                                 {moment(file.createAt).format('DD/MM/YYYY HH:mm')} {moment(file.createAt).fromNow()}
+                                                {moment(file.createAt).format('DD/MM/YYYY HH:mm')} {moment(file.createAt).fromNow()}
                                             </p>
                                         </div>
                                         <input
+                                            type="text"
+                                            // name="description"
                                             className={"flex-1 text-primary-gray text-center focus:outline-none focus:ring-none"}
+                                            name={file._id}
+                                            defaultValue={ file.description }
+                                            onChange={handleChangeDescriptionFile}
                                             placeholder={"Nhập nội dung ghi chú"}
                                         />
                                         <button>
@@ -220,7 +237,13 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                                                         {moment(file.createAt).format('DD/MM/YYYY HH:mm')} {moment(file.createAt).fromNow()}
                                                     </div>
                                                 </div>
-                                                <textarea className={"p-2 w-full text-xs h-[60px] min-h-[60px] max-h-[60px] bg-cbs-form-input-bg"} placeholder={"Nhập nội dung ghi chú"}>
+                                                <textarea 
+                                                    className={"p-2 w-full text-xs h-[60px] min-h-[60px] max-h-[60px] bg-cbs-form-input-bg"} 
+                                                    placeholder={"Nhập nội dung ghi chú"}
+                                                    name={file._id}
+                                                    defaultValue={ file.description }
+                                                    onChange={handleChangeDescriptionFile}
+                                                    >
                                                 </textarea>
                                             </div>
                                         )
@@ -245,11 +268,16 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                                             </a>
                                             <p className={"text-primary-gray text-xs"}>
                                                 {file.author?.bizfullname} -
-                                                 {moment(file.createAt).format('DD/MM/YYYY HH:mm')} {moment(file.createAt).fromNow()}
+                                                {moment(file.createAt).format('DD/MM/YYYY HH:mm')} {moment(file.createAt).fromNow()}
                                             </p>
                                         </div>
                                         <input
+                                            type="text"
+                                            // name="description"
                                             className={"flex-1 text-primary-gray text-center focus:outline-none focus:ring-none"}
+                                            name={file._id}
+                                            defaultValue={ file.description }
+                                            onChange={handleChangeDescriptionFile}
                                             placeholder={"Nhập nội dung ghi chú"}
                                         />
                                         <button>
@@ -278,7 +306,13 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                                                         asdasd{moment(file.createAt).format('DD/MM/YYYY HH:mm')} {moment(file.createAt).fromNow()}
                                                     </div>
                                                 </div>
-                                                <textarea className={"p-2 w-full text-xs h-[60px] min-h-[60px] max-h-[60px] bg-cbs-form-input-bg"} placeholder={"Nhập nội dung ghi chú"}>
+                                                <textarea 
+                                                    className={"p-2 w-full text-xs h-[60px] min-h-[60px] max-h-[60px] bg-cbs-form-input-bg"} 
+                                                    placeholder={"Nhập nội dung ghi chú"}
+                                                    name={file._id}
+                                                    defaultValue={ file.description }
+                                                    onChange={handleChangeDescriptionFile}
+                                                    >
                                                 </textarea>
                                             </div>
                                         )
