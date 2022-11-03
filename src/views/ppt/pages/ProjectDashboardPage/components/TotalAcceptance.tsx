@@ -26,14 +26,14 @@ const TotalAcceptance: FC<any> = ({ projectID, year }) => {
    cmcsContractIPCAmountByMonthAll = +(cmcsContractIPCAmountByMonthAll / 1000000000).toFixed(3);
 
   return (
-    <div className="bg-primary-light h-full w-full">
+    <div className="bg-primary-light w-1/4">
       <div className="px-6 py-4">
         <p className="font-bold text-primary-gray text-lg">Nghiệm thu</p>
-        <div className="flex items-center mt-4">
-          <div className="w-12 h-12 rounded-full bg-secondary-light flex items-center justify-center">
+        <div className="flex items-center mt-4 flex-wrap">
+          <div className="w-12 h-12 rounded-full bg-secondary-light flex items-center justify-center mr-4">
             <img src={CashIcon} alt="CashIcon" />
           </div>
-          <div className="ml-4">
+          <div className="t-dashboard-sum-item-text">
             <div>
               <span className="font-bold text-2xl text-black	">{cmcsContractIPCAmountByMonthAll} tỷ </span>
               <span className="text-xs text-primary-gray">({percentAcceptance}%)</span>
