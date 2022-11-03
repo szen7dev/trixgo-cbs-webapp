@@ -14,7 +14,7 @@ import FilterItem from "./FilterItem";
 import { useSearchTask } from "services/hooks/useMainSearch";
 import { setQueryPcmMine } from "redux/reducer/DashboardV2Slice";
 
-const FilterProjectNew: FC<any> = ({ listDataCompany, listDataUser, listDataProject, listDataSubtype}) => {
+const FilterProjectNew: FC<any> = ({ listDataCompany, listDataUser, listDataProject, listDataSubtype, listDataStatus}) => {
     const dispatch = useDispatch();
     type PaginateHandle = React.ElementRef<typeof PaginateV2>;
     type DropdownSearchableV2Handle = React.ElementRef<typeof DropdownSearchableV2>;
@@ -34,6 +34,7 @@ const FilterProjectNew: FC<any> = ({ listDataCompany, listDataUser, listDataProj
     const authorsIDRef = useRef<DropdownSearchableV2Handle>(null);
     const projectsIDRef = useRef<DropdownSearchableV2Handle>(null);
     const subtypesRef = useRef<DropdownSearchableV2Handle>(null);
+    const statusRef = useRef<DropdownSearchableV2Handle>(null);
 
     const keywordForSubject = useAppSelector(
         (state) => state.dashboardV2.data.keywordForSubject
@@ -55,6 +56,10 @@ const FilterProjectNew: FC<any> = ({ listDataCompany, listDataUser, listDataProj
         subtypesRef.current && subtypesRef.current.setValuesDropdown(subtypes);
     }, [subtypes]);
 
+    useEffect(() => {
+        statusRef.current && statusRef.current.setValuesDropdown(status);
+    }, [status]);
+
     const querySearchTask: any = {
         priority: priority,
         isExpired: isExpired,
@@ -62,7 +67,7 @@ const FilterProjectNew: FC<any> = ({ listDataCompany, listDataUser, listDataProj
         companiesOfAuthor: companiesOfAuthor.map((e: any) => e.id),
         authorsID: authorsID.map((e: any) => e.id),
         projectsID: projectsID.map((e: any) => e.id),
-        status: status,
+        status: status.map((e: any) => e.id),
         subtypes: subtypes.map((e: any) => e.id),
         fromDate: fromDate,
         toDate: toDate,
@@ -241,19 +246,16 @@ const FilterProjectNew: FC<any> = ({ listDataCompany, listDataUser, listDataProj
                             ]}
                         />
                         <DropdownSearchableV2
+                            ref={statusRef}
                             selectOneByOne={true}
                             className={"mr-2 border border-primary-border rounded-lg my-2 text-cbs-subtext"}
                             placeholder={"Trạng thái"}
-                            // prefixIcon={
-                            //     <img className={"mr-2"} src={categoryIcon} alt={"icon"} />
-                            // }
                             isMultiple={true}
                             disableSearch={true}
                             onchangeValue={item => {
                                 const cloneIDs = [...status];
-                                cloneIDs.push(item.value);
+                                cloneIDs.push(item);
                                 dispatch(setQueryPcmMine({ key: "status", data: cloneIDs }))
-
                                 setPageIndex(0);
                                 ref.current && ref.current.resetPaginate();
                             }}
@@ -264,18 +266,46 @@ const FilterProjectNew: FC<any> = ({ listDataCompany, listDataUser, listDataProj
                             }}
                             onMultipleRemoveValue={id => {
                                 const cloneIDs = [...status];
-                                const newList = cloneIDs.filter(selectId => selectId !== id);
+                                const newList = cloneIDs.filter(selectId => selectId.id !== id);
                                 dispatch(setQueryPcmMine({ key: "status", data: newList }))
                                 setPageIndex(0);
                                 ref.current && ref.current.resetPaginate();
                             }}
-                            data={PCM_STATUS_TASK}
-                            renderItem={(item) => (
-                                <p className={"min-w-[300px]"}>{item.text}</p>
-                            )}
+                            data={PCM_STATUS_TASK.map((item: any) => {
+                                const itemFromAPI: any = listDataStatus.find((e: any) => e._id?.status === item.value);
+                                return {
+                                    label: `${item.text} (${itemFromAPI?.amount || 0})`,
+                                    id: item.value,
+                                }
+                            })}
                             formatItem={{
-                                id: "value"
+                                text: "label",
+                                id: "id",
                             }}
+                            initialValue={
+                                [
+                                    {
+                                        label: `${PCM_STATUS_TASK[0]?.text}`,
+                                        id: 1,
+                                    },
+                                    {
+                                        label: `${PCM_STATUS_TASK[1]?.text}`,
+                                        id: 2,
+                                    },
+                                    {
+                                        label: `${PCM_STATUS_TASK[3]?.text}`,
+                                        id: 4,
+                                    },
+                                    {
+                                        label: `${PCM_STATUS_TASK[4]?.text}`,
+                                        id: 5,
+                                    },
+                                    {
+                                        label: `${PCM_STATUS_TASK[5]?.text}`,
+                                        id: 6,
+                                    }
+                                ]
+                            }
                         />
                         <DropdownSearchableV2  
                             ref={subtypesRef}
