@@ -336,7 +336,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 													{props.assignee?.bizfullname}
 												</div>
 											</td>
-											<td className="py-2 px-2 text-cbs-primary border-b-0.5 border-cbs-border">{props.status && PCM_STATUS_TASK[props.status - 1].text}</td>
+											<td className="py-2 px-2 text-cbs-primary border-b-0.5 border-cbs-border">{props.status && PCM_STATUS_TASK[props.status - 1]?.text}</td>
 											<td className="py-2 px-2 border-b-0.5 border-cbs-border">
 												<div className="pr-4">
 													<p className="text-right">{props.amountChecklist}/{props.amountFinishedChecklist}</p>
