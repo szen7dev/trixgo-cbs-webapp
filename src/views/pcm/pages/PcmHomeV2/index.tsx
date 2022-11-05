@@ -270,8 +270,8 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
                                             <div className={"ml-2"}>{item.assignee.fullname ?? item.assignee.fullname}</div>
                                         </div>
                                     </td>
-                                    <td className={"break-all"} style={{color: `#${PCM_STATUS_TASK[item.status - 1].backgroud}`}}>
-                                        {PCM_STATUS_TASK[item.status - 1].text}
+                                    <td className={"break-all"} style={{color: `#${PCM_STATUS_TASK[item.status - 1]?.backgroud}`}}>
+                                        {PCM_STATUS_TASK[item.status - 1]?.text}
                                     </td>
                                     <td>
                                         <p className={"mb-1 text-right text-secondary-gray"}>{item.percentage}%</p>

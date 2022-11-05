@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { PCM_STATUS_TASK } from "apis/localdb";
 
 const initialState: any = {
   data: {
@@ -30,7 +31,28 @@ const initialState: any = {
       companiesOfAuthor: [],
       authorsID: [],
       projectsID: [],
-      status: [],
+      status: [
+        {
+          label: `${PCM_STATUS_TASK[0]?.text}`,
+          id: 1,
+        },
+        {
+          label: `${PCM_STATUS_TASK[1]?.text}`,
+          id: 2,
+        },
+        {
+          label: `${PCM_STATUS_TASK[3]?.text}`,
+          id: 4,
+        },
+        {
+          label: `${PCM_STATUS_TASK[4]?.text}`,
+          id: 5,
+        },
+        {
+          label: `${PCM_STATUS_TASK[5]?.text}`,
+          id: 6,
+        }
+      ],
       subtypes: [],
       fromDate: "",
       toDate: "",
