@@ -114,10 +114,10 @@ const FilterProjectKpis: FC = () => {
     }
 
     return (
-        <div className="cmcs-home h-full overflow-hidden">
+        <div className="cmcs-home h-screen w-full bg-white relative overflow-hidden px-4">
             <div className={"sticky top-0 bg-white z-10"}>
                 <div className={"flex items-center"}>
-                    <div className={"filter-bar flex flex-wrap px-4 py-2"}>
+                    <div className={"filter-bar flex flex-wrap py-2"}>
                         <TimeRangeDropdown
                             className={
                                 "mr-4 border border-primary-border rounded-lg my-2 text-cbs-subtext p-1 pl-2 "
@@ -300,7 +300,7 @@ const FilterProjectKpis: FC = () => {
                 </div>
             </div>
 
-            <div className="overflow-auto bg-white px-4 py-2">
+            <div className="bg-white py-2 relative h-full w-full">
                 <FilterItem />
             </div>
         </div>

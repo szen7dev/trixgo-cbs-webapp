@@ -69,9 +69,9 @@ const LoginPage: FC = () => {
   return (
     <>
       {isLoading && <Loader className="border-primary" />}
-      <section className="flex h-full w-full">
-        <div className="w-7/12 flex h-full justify-center my-24">
-          <div className="w-3/5 ml-10">
+      <section className="flex min-h-full w-full">
+        <div className="w-7/12 flex justify-center items-center">
+          <div className="w-3/5 ml-10 mt-8 my-16">
             <Formik
               initialValues={initialValues}
               validationSchema={signInSchema}
@@ -207,14 +207,14 @@ const LoginPage: FC = () => {
         </div>
 
         <div className="w-5/12 z-0 bg-primary">
-          <div className="relative">
+          <div className="relative h-full">
             <img
               className="object-fill h-screen w-full"
               src={SignInImage}
               alt="Logo"
             />
 
-            <div className="absolute top-0 my-80 mx-44 md:my-60 md:mx-20 lg:my-72 lg:mx-24 xl:my-72 xl:mx-32 2xl:my-80 2xl:mx-44">
+            <div className="absolute top-0 mx-44 md:mx-20 lg:mx-24 xl:mx-32 2xl:mx-44 bottom-0 flex items-center">
               <p className="font-bold text-5xl max-w-md leading-tight text-primary-light">
                 {t("signIn:target")}
               </p>

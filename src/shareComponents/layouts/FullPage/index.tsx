@@ -11,7 +11,7 @@ export const FullPageLayout: FC<Props> = ({ children, isAuthentication = false }
   return (
     <div
       className={cn(
-        "h-screen flex items-center justify-center",
+        "h-screen items-center justify-center overflow-auto",
         {
           "bg-cover bg-no-repeat": isAuthentication,
         }

@@ -92,7 +92,7 @@ export const SubtaskItem: FC<Props> = ({ task, userId, index }) => {
             <div className={"flex items-center"}>
                 <div className={`flex items-center justify-center px-4 py-1 rounded text-white ${PCM_STATUS_TASK[task.status - 1]?.class} mr-2`}>
                     <img src={iconClock} alt={"----"} className={"mr-2"} />
-                    <span className="text-[13px]">{moment(task.expiredTime).format('DD/M/YYYY')}</span>
+                    <span className="text-[13px]">{moment(task.actualFinishTime).format('DD/M/YYYY')}</span>
                 </div>
                 <img
                     alt={task.assignee?.bizfullname}
