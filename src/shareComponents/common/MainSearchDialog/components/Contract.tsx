@@ -149,7 +149,7 @@ const Contract: FC<ContractProps> = (props) => {
   const instance = useTable({ columns, data: dataContract, getRowId: (row: any) => row._id }, useRowSelect);
   // Danh sách hợp đồng
   const {
-    listContracts, loading: isLoading, totalRecord, totalPage, nextCursor
+    listContracts, isLoading, totalRecord, totalPage, nextCursor
   } = useContractIsMembers({ params: paramsSearch, isFetch: true });
 
   const { listDepartments } = useQueryListDepartments({ select:  "name", limit: 20 }, true);

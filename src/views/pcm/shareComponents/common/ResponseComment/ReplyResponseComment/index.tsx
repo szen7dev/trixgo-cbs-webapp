@@ -34,7 +34,7 @@ type Props = {
 export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, socket, onCancelCreateResponse, onConfirmCreate }) => {
     const refDivFile = useRef<HTMLDivElement | null>(null);
     const editorRef = useRef<EditorType>();
-    const [rawContent, setRawContent] = useState('');
+    // const [rawContent, setRawContent] = useState('');
 
     const initUsersSelected = useMemo(() => {
         let arr = [];
@@ -161,8 +161,6 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
 
         const contentRaw = editorRef.current?.getContent({ format: 'raw' });
         const contentText = editorRef.current?.getContent({ format: 'text' });
-        const content = editorRef.current?.getContent();
-        console.log({ content, contentRaw, contentText })
 
         let images: string[] = [];
         let files: string[] = [];
@@ -222,14 +220,12 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
                 })
             })
 
+            socket?.emit('SUBJECT_PCM_CSS_UPDATE_COUNT_NOTIFICATION', { taskID: task?._id });
+
             // Clear text input
             removeAllFiles();
             onConfirmCreate?.();
             dispatch({ type: 'ADD_COMMENT', payload: data });
-
-            // socket?.emit('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', {
-            // 	receivers: data.receiversNoti
-            // });
         } catch (error) {
             captureException(error);
             if (typeof error === "string") {
@@ -264,7 +260,7 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
     }
 
     const handlePasteFile = (event: any) => {
-		event.preventDefault();
+		// event.preventDefault();
 
 		if(event.clipboardData?.files?.length) {
 		  return handleSetFiles(event.clipboardData.files)
@@ -290,7 +286,6 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
                     }}
                     onPaste={handlePasteFile}
                     apiKey={process.env.REACT_APP_TINYMCE_API_KEY}
-                    id='input-comment'
                     init={{
                         height: "350px",
                         force_br_newlines: true,
@@ -322,19 +317,6 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
                             "insertdatetime media table paste code help wordcount",
                         ],
                         fullpage_default_title: "My default page title",
-
-                        // images_upload_url: "/api/upload/image",
-                        // file_picker_types: "image",
-                        // images_upload_handler: imagesUploadHandler,
-                        // menubar: user?.email === 'contact@trixgo.com',
-                        // toolbar: user?.email === 'contact@trixgo.com' ?
-                        //     "undo redo | formatselect | " +
-                        //     "bold italic backcolor | alignleft aligncenter " +
-                        //     "alignright alignjustify | bullist numlist outdent indent | " +
-                        //     "removeformat | help | image" : false,
-                        // content_style: "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                        // content_css: "document",
-                        // save_enablewhendirty: true,
                         setup(editor) {
                             editor.on("Paste input Undo Redo", () => {
                                 editor.save();

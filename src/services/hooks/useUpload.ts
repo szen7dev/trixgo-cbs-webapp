@@ -175,12 +175,23 @@ export const useUpload = ({
                 const newFile: any = blobToFile(blob, files.name);
                 files = newFile;
             }
+
             //QuangTT bổ sung check file type để upload
-            const realFileType = files.type.includes("image/") ? 1 : 2;
-            const { signedUrl, file, fileName, result } = await generateLinkS3({ file: files, fileType: realFileType });
+            let realFileType = 2;
+
+            if(files.type?.includes?.('image/') && files.type !== 'image/vnd.dwg') {
+                realFileType = 1; // Hình ảnh
+            } else{
+                realFileType = 2; // File
+            }
+
+            const { signedUrl, file, fileName, result } = await generateLinkS3({
+                file: files,
+                fileType: realFileType
+            });
 
             // Handle images
-            if (file.type.includes("image/") && useCompress && files.type !== 'image/gif') {
+            if (file.type?.includes?.("image/") && useCompress && files.type !== 'image/gif') {
                 new Compressor(file, {
                     ...compressConfig,
 

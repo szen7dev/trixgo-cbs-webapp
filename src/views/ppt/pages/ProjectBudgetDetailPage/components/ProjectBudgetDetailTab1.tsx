@@ -164,7 +164,7 @@ export const ProjectBudgetDetailTab1:FC<Props> = ({ contractInfo }) => {
                         {contractInfo?.sellerInfo?.name}{contractInfo?.sellerBank}
                     </td>
                     <td className={"w-2/12 border-0.5 border-primary-border text-primary-gray px-4 py-2"}>
-                        Bảo lãnh thực hiện hợp đồng
+                        Bảo lãnh hợp đồng
                     </td>
                     <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
                         Thời hạn {moment(contractInfo?.expiredCg).format("DD/MM/YYYY")}
@@ -221,7 +221,7 @@ export const ProjectBudgetDetailTab1:FC<Props> = ({ contractInfo }) => {
                         Sản lượng
                     </td>
                     <td className={"w-4/12 border-0.5 border-primary-border text-cbs-highlight-color px-4 py-2"}>
-                        {formatNumberMoney(contractInfo?.produce+contractInfo?.plusProduce)}
+                        {formatNumberMoney(Number(contractInfo?.produce+contractInfo?.vatProduce+contractInfo?.plusProduce+contractInfo?.vatPlusProduce))}
                     </td>
                 </tr>
                 <tr>

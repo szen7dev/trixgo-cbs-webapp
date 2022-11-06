@@ -10,7 +10,7 @@ export const NavigateTabV2:FC = () => {
                 Danh sách
             </Link>
             <Link to={`/pm/project/${departmentID}/document-v2/1`} className={"px-4 py-2 border-r-0.5 border-primary-border " + (type === "1" ? "bg-cbs-soft-blue text-primary" : "bg-white text-primary-gray")}>
-                Chủ thể ban hành
+                Đơn vị ban hành
             </Link>
             <Link to={`/pm/project/${departmentID}/document-v2/2`} className={"px-4 py-2 border-r-0.5 border-primary-border " + (type === "2" ? "bg-cbs-soft-blue text-primary" : "bg-white text-primary-gray")}>
                 Loại hồ sơ

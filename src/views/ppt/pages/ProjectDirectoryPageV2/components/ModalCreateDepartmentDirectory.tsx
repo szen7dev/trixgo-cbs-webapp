@@ -35,10 +35,12 @@ interface ModalProps {
 const DEPARTMENT_DIRECTORY_TYPE = [
     { id: 1, text: "Trợ lý viên" },
     { id: 2, text: "Chủ đầu tư" },
-    { id: 3, text: "Tư vấn QLDA" },
+    { id: 3, text: "Tư vấn Quản lý dự án" },
     { id: 4, text: "Tư vấn giám sát" },
     { id: 5, text: "Tư vấn thiết kế" },
     { id: 6, text: "Nhà thầu thi công" },
+    { id: 7, text: "Tư vấn thẩm tra" },
+    { id: 8, text: "Tư vấn khác" },
 ]
 
 const DEPARTMENT_DIRECTORY_LOCK = [

@@ -1,0 +1,182 @@
+import React, { FC, useEffect, useState } from "react";
+import { useParams, Link, useHistory } from 'react-router-dom';
+import iconBack from "assets/images/icon-back-gray.svg";
+
+// Hook
+import { useContractIpcCustom } from 'services/hooks/cmcs/useContractIPC';
+import { useProject } from 'services/hooks/items/useProject';
+import ContractIPCRepository from 'apis/cmcs/contractIPC';
+
+const ProjectDashboardDebtPage: FC = () => {
+	const [dataDebt, setDataDebt] = useState([]);
+	const { id: projectID } = useParams<{ id: string }>();
+    const history = useHistory();
+	const [totalOverdueDebts1, setTotalOverdueDebts1] = useState(0);
+	const [totalPeriodDebts1, setTotalPeriodDebts1] = useState(0);
+
+	let totalOverdueDebts = 0;
+	let totalPeriodDebts = 0;
+
+	const { contractIPCAmountByProperty } = useContractIpcCustom({
+        params: {
+            outin: 2,
+            option: 3,
+            debt: 1,
+			optionTime: 1,
+            projectID
+        },
+        isFetchAmountByProperty: true
+    });
+	let listData: any = [];
+	if(contractIPCAmountByProperty?.data?.length){
+		const contractIPCAmountByPropertyFunction = async () =>{
+			// Tổng công nợ
+			const data = await ContractIPCRepository.fetchAmountByProperty({ 
+				outin: 2,
+				option: 3,
+				debt: 2,
+				optionTime: 1,
+				projectID
+			});
+			for (const item of contractIPCAmountByProperty?.data) {
+				let listDataTemp: any = { key: item?._id?.sellerInfo?.name, _id: item?._id?.sellerInfo?._id, trongKy: (item.amount/1000000000).toFixed(2), phanTramQuaHan: 0, phanTramTrongKy: 100 };
+				totalPeriodDebts = item.amount;
+				// Tổng công nợ quá hạn
+				data?.data?.map((infoData: any) => {
+					if(item?._id?.sellerInfo?._id == infoData._id.sellerInfo._id){
+						const phanTramQuaHan = (infoData.amount/item.amount)*100;
+						listDataTemp = { 
+							...listDataTemp, 
+							trongKy: (Number(item.amount-infoData.amount)/1000000000).toFixed(2),
+							quaHan: (infoData.amount/1000000000).toFixed(2),
+							phanTramQuaHan,
+							phanTramTrongKy: 100 - phanTramQuaHan
+						}
+						totalOverdueDebts += infoData.amount;
+						totalPeriodDebts -= infoData.amount;
+					}
+				})
+
+				listData = [...listData, listDataTemp]
+			}
+			setTotalOverdueDebts1(totalOverdueDebts);
+			setTotalPeriodDebts1(totalPeriodDebts);
+			if(listData.length && !dataDebt.length){
+				setDataDebt(listData);
+			}
+		}
+		contractIPCAmountByPropertyFunction();
+	}
+
+	const { info: projectInfo } = useProject({
+		params: {
+			departmentID: projectID,
+			select: "name sign",
+			populates: ""
+		},
+		isFetchInfo: true
+	})
+
+	useEffect(() => {
+		document.title = `${projectInfo.sign} | Công nợ`
+	}, []);
+	
+	return (
+		<div className="flex flex-col h-full overflow-hidden">
+			<div className={"sticky top-0 bg-white z-10"}>
+			<div className={"header-table flex w-full top-0 bg-white pb-2"}>
+					<button
+                        onClick={history.goBack}
+                        className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[30px] max-h-[30px] min-w-[30px] min-h-[40px] hover:bg-cbs-form-input-bg mr-3"}>
+                        <img src={iconBack} alt={"----"} className={"w-[18px]"}/>
+                    </button>
+					<div className="flex-1 flex items-center text-[15px] ml-2">
+						<p className="text-lg text-primary-gray">
+							Công nợ
+						</p>
+					</div>
+				</div>
+			</div>
+			<div className="flex-1 overflow-y-auto">
+				<table className="text-black text-medium border-collapse space-x-0 space-y-0 w-full" style={{ borderSpacing: 0 }}>
+					<thead className="">
+						<tr className="text-primary-gray whitespace-nowrap align-middle text-left">
+							<th className="px-3 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border w-1">
+								TT
+							</th>
+							<th className="py-2.5 px-3 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
+								Mã Khách
+							</th>
+							<th className="py-2.5 px-3 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
+								<div className="flex justify-between">
+									<span>
+										Công nợ
+									</span>
+									<div className="flex space-x-5 px-2">
+										<div className="flex items-center">
+											<div className="w-3 h-3 bg-cbs-schedule-expired" />
+											<span className="ml-1 text-primary-gray font-normal">
+												Quá hạn({(totalOverdueDebts1/1000000000).toFixed(2)} Tỷ)
+											</span>
+										</div>
+										
+										<div className="flex items-center">
+											<div className="w-3 h-3 bg-cbs-schedule-after-7days" />
+											<span className="ml-1 text-primary-gray font-normal">
+												{" "}
+												{"Trong kỳ"}({(totalPeriodDebts1/1000000000).toFixed(2)} Tỷ)
+											</span>
+										</div>
+									</div>
+								</div>
+							</th>
+						</tr>	
+					</thead>
+					<tbody className="">
+						{
+							dataDebt?.map((company: any, index: any) => {
+								return (
+									<tr key={company._id} className="text-left hover:bg-cbs-table-header cursor-pointer">
+										<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border text-center" onClick={e => e.stopPropagation()}>
+											{index+1}
+										</td>
+										<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">
+											<Link to={`/pm/project/${projectID}/dashboard/debt/outin/2/buyerInfo/${company._id}`}>
+												{company?.key}
+											</Link>
+										</td>
+										<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border text-right cursor-auto" style={{ minWidth: "155px", fontSize: '10px' }} onClick={e => e.stopPropagation()}>
+											<div className="flex w-full h-3 mt-2">
+												<button
+													className="flex items-center justify-center bg-red-500"
+													style={{ width: `${company.phanTramQuaHan}%` }}
+													// onClick={() => toggleVisible({ company: company._id, typeStatus: "1"}) }
+													>
+													<span className="text-white">
+														{company?.quaHan || 0} tỷ
+													</span>
+												</button>
+												<button
+													className="flex items-center justify-center bg-green-500"
+													style={{ width: `${company.phanTramTrongKy}%` }}
+													// onClick={() => toggleVisible({ company: company._id, typeStatus: "3"}) }
+													>
+													<span className="text-white">
+														{company?.trongKy || 0} tỷ
+													</span>
+												</button>
+											</div>
+										</td>
+									</tr>
+								)
+							})
+						}
+					</tbody>
+				</table>
+				{/* <ModalInformation open={visibleDrawer} onClose={toggleVisible} dataPopup={{ companyPopup, typeStatusPopup, projectID }}/> */}
+			</div>
+		</div >
+	);
+};
+
+export default ProjectDashboardDebtPage;

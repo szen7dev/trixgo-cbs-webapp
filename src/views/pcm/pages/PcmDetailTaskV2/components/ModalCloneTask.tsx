@@ -94,7 +94,8 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
         setUploadFile,
         removeUploadedImage,
         removeUploadedFile,
-    }] = useUploadFile({ files: task.authorAttachs });
+    }] = useUploadFile({ files: [] });
+    // }] = useUploadFile({ files: task.authorAttachs });
 
     const {
         data: listDepartments,
@@ -337,7 +338,8 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
         startTime: moment(task.startTime).format('MM/DD/YYYY'),
         expiredTime: moment(task.expiredTime).format('MM/DD/YYYY'),
         description: task.description,
-        authorAttachs: task.authorAttachs?.map(file => file._id),
+        // authorAttachs: task.authorAttachs?.map(file => file._id),
+        authorAttachs: [],
         relatedIDs: task.related.map(user => user._id),
         type: task.type,
         subtype: task.subtype,
@@ -475,7 +477,7 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
                                             </div>
                                         </div>
                                         <div className={"w-1/4 flex items-start pl-3"}>
-                                            <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Phân loại (*)</div>
+                                            <div className={"text-left text-gray-500 flex items-center mr-2 mt-1 w-1/5"}>Tính chất (*)</div>
                                             <div className={"flex-1 max-w-4/5 w-4/5"}>
                                                 <DropdownSearchable
                                                     onchangeValue={(value: any) =>
@@ -709,7 +711,7 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
                                             />
                                             <input
                                                 type="time"
-                                                defaultValue={values.expiredTime ? moment(values.expiredTime).format('HH:mm') : "00:00"}
+                                                defaultValue={"09:00"}
                                                 onChange={(e) => setFieldValue("expiredHour", e.target.value)}
                                             />
                                         </div>
@@ -776,8 +778,9 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
                                     />
                                 </div>
 
-                                <div className="px-6 mb-3">
+                                {/* <div className="px-6 mb-3">
                                     {!!Object.keys(uploads.files).length && toArray(uploads.files).map(file => {
+                                        console.log({ file })
                                         if (!file || Object.keys(file).length === 1) return;
 
                                         let fileInfo, id, progress = 100;
@@ -810,7 +813,7 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
                                             </div>
                                         )
                                     })}
-                                </div>
+                                </div> */}
                                 <div className={"flex items-center border-t py-3 px-6"}>
                                     <label>
                                         <img

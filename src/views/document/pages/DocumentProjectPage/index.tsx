@@ -26,7 +26,7 @@ import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 import {useDocumentCustom, useListFilterDocument} from "services/hooks/document/useDocument";
 
 // ========== Utils ==========
-import {APP_ID, DIRECTION_TYPES, DOCUMENT_TYPES} from 'apis/localdb';
+import {APP_ID, DIRECTION_TYPES, DOCUMENT_TYPES, DOCUMENT_TYPES_SORT} from 'apis/localdb';
 import { createLinkAndClick } from "utils";
 
 import {useProject, useProjectCustom} from "services/hooks/items/useProject";
@@ -49,6 +49,8 @@ import {useStorage} from "services/hooks/items/useStorage";
 import {useDispatch} from "react-redux";
 import {useAppSelector} from "redux/reducer";
 import {setFilterDropdown, resetAllFilterAndKeyword} from "redux/reducer/DocumentProjectSlice";
+import { PmDocumentHeaderSearchInput } from "shareComponents/layouts/PmLayout/components";
+import { useQueryListCompany } from "services/hooks/useCompanies";
 
 const payloadHistoryTraffic: any = {
     appID: APP_ID.PCM.id,
@@ -94,7 +96,7 @@ export const DocumentProjectPage: FC = () => {
 
     useEffect(() => {
         document.title = `${projectInfo.sign} | Hồ sơ văn bản`;
-    }, []);
+    }, [projectInfo]);
 
     //_____Start history traffict
     const { createHistoryTraffics } = useHistoryTraffics();
@@ -106,13 +108,6 @@ export const DocumentProjectPage: FC = () => {
     const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
         isExporting: false,
     });
-
-    // const { listDocumentWithPager, totalRecord, totalPages, loading, refetch, fetchNextPage, hasNextPage } = useQueryListDocument(
-    //     departmentID,
-    //     {},
-    //     ""
-    // );
-
     const [fromToDate, setFromToDate] = useState({fromDate: "", toDate: ""})
 
     const [keywordDatahubContact, setKeywordDatahubContact] = useState("");
@@ -128,11 +123,13 @@ export const DocumentProjectPage: FC = () => {
     const [storageKeyword, setStorageKeyword] = useState("");
     const [storagesID, setStoragesID] = useState<string[]>([]);
 
-    const { data: listDatahubContact } = useDatahubContact({ keyword: keywordDatahubContact }, true, false); // Danh bạ hệ thống
+    // const { data: listDatahubContact } = useDatahubContact({ keyword: keywordDatahubContact }, true, false); // Danh bạ hệ thống
+	const { data: listDatahubContact } = useQueryListCompany({ keyword: keywordDatahubContact }); // Danh bạ hệ thống mới
+
     const { listContracts } = useContractIsMembers({ params: {keyword: contractKeyword, populates: JSON.stringify({"path": "project", "select":"name sign"})}, isFetch: true });
     const { list: listStorages } = useStorage({ params: { companyID: typeof projectInfo.company === "string" ? projectInfo.company : "", keyword: storageKeyword,}, isFetchList: (!isloadingProjectInfo && typeof projectInfo._id === "string")});
 
-    const { listDocumentWithPager, isLoading, totalRecord, totalPage, fetchNextPageDocument, hasNextPage, refetchListDocument } = useListFilterDocument({
+    const { listDocumentWithPager, isLoading, isFetching, totalRecord, totalPage, fetchNextPageDocument, hasNextPage, refetchListDocument,  } = useListFilterDocument({
         params: {
             departmentsID: [departmentID],
             ...fromToDate,
@@ -277,13 +274,14 @@ export const DocumentProjectPage: FC = () => {
 
     return (
         <div className="flex flex-1 flex-col overflow-hidden h-full">
+            <PmDocumentHeaderSearchInput />
             <div className={"sticky top-0 z-10"}>
                 <div className={"flex flex-wrap items-center px-4 py-2"}>
                     <div className={"flex items-center flex-1"}>
                         <DropdownSearchableV2
                             ref={datahubRef}
                             className={"mr-4 border border-primary-border rounded-lg mb-2"}
-                            placeholder={"Tổ chức ban hành"}
+                            placeholder={"Đơn vị ban hành"}
                             prefixIcon={<img className={"mr-2"} src={maleUserIcon} alt={"icon"}/>}
                             isMultiple={true}
                             allowClearValueSingleInput={true}
@@ -334,7 +332,7 @@ export const DocumentProjectPage: FC = () => {
                             isMultiple={true}
                             disableSearch={true}
                             allowClearValueSingleInput={true}
-                            data={DOCUMENT_TYPES}
+                            data={DOCUMENT_TYPES_SORT}
                             formatItem={{
                                 "id": "value"
                             }}
@@ -557,7 +555,7 @@ export const DocumentProjectPage: FC = () => {
                         ref={ref}
                         totalRecord={totalRecord}
                         totalPages={totalPage}
-                        limit={30}
+                        limit={20}
                         hasNextPage={hasNextPage}
                         isFetching={isLoading}
                         nextPageAction={() => {
@@ -572,8 +570,8 @@ export const DocumentProjectPage: FC = () => {
             </div>
             <div className="flex-1 overflow-y-auto">
                 {/* Content */}
-                {isLoading && <Loader absolute={true} className="border-primary" />}
-                {(!listDocumentWithPager[pageIndex] || listDocumentWithPager[pageIndex].length === 0) && (
+                {isLoading || isFetching && <Loader absolute={true} className="border-primary" />}
+                {(!listDocumentWithPager[pageIndex] || listDocumentWithPager[pageIndex].length === 0) && !isLoading && !isFetching && (
                     <h2 className="text-center">Không có kết quả được trả về</h2>
                 )}
                 {!isLoading && listDocumentWithPager[pageIndex] && listDocumentWithPager[pageIndex].length > 0 && (
@@ -595,7 +593,7 @@ export const DocumentProjectPage: FC = () => {
                                 Nội dung
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '15%' }}>
-                                Chủ thể ban hành
+                                Đơn vị ban hành
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '10%' }}>
                                 Mã hiệu
@@ -619,7 +617,7 @@ export const DocumentProjectPage: FC = () => {
                                 className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border"
                                 style={{ width: '10%' }}
                             >
-                                Địa chỉ lưu trữ
+                                Địa chỉ lưu trữ 333
                             </th>
                         </tr>
                         </thead>
@@ -664,7 +662,8 @@ export const DocumentProjectPage: FC = () => {
                                         </Link>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
-                                        {document?.sender?.name}
+                                        {document?.publish?.name ? document?.publish?.name : <p className="text-cbs-highlight-color"><i>{document?.datahubContact?.name}</i></p>}
+                                        {/* <p><i>{document?.datahubContact?.name}</i></p> */}
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
                                         {document?.sign}

@@ -190,7 +190,7 @@ export const ContractPaymentModal: FC<NewContractIPCModalProps> = ({ defaultValu
                         onDayChange={(day: any) => setFieldValue("date", day)}
                         inputProps={{
                           className: "pl-3 border border-primary-border w-full rounded w-full h-[32px] outline-none",
-                          placeholder: "Thời hạn bảo lãnh tạm ứng",
+                          placeholder: "Ngày tháng",
                         }}
                       />
                       <div>
@@ -263,7 +263,7 @@ export const ContractPaymentModal: FC<NewContractIPCModalProps> = ({ defaultValu
                    Giá trị giải ngân
                   </span>
                 </div>
-                {openRealizedOutput && (
+                {/* {openRealizedOutput && (
                   <div className="flex items-center justify-end">
                     <div className="flex items-center">
                       <p className="text-primary-gray text-xs mr-5">
@@ -276,13 +276,13 @@ export const ContractPaymentModal: FC<NewContractIPCModalProps> = ({ defaultValu
                       />
                     </div>
                   </div>
-                )}
+                )} */}
               </div>
               {openRealizedOutput && (
                 <div className="mb-8 h-full mx-7 w-2/3">
                   <div className="mb-4">
                     <p className="text-primary-gray text-xs mb-2">
-                      1 - Giá trị giải ngân
+                      Giá trị giải ngân
                     </p>
                     <div className="flex gap-x-2">
                       <Field
@@ -294,7 +294,7 @@ export const ContractPaymentModal: FC<NewContractIPCModalProps> = ({ defaultValu
                           await setFieldValue("value", e.currentTarget.value);
                         }}
                       />
-                      <Field
+                      {/* <Field
                         type="number"
                         name="valueUsd"
                         className="pl-3 border border-primary-border rounded w-2/5 h-[32px] outline-none"
@@ -302,7 +302,7 @@ export const ContractPaymentModal: FC<NewContractIPCModalProps> = ({ defaultValu
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
                 </div>

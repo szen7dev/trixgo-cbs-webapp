@@ -8,7 +8,7 @@ import debounce from "lodash/debounce";
 import { InputClearable } from "../InputClearable";
 import { DropdownSearchable } from "shareComponents/common";
 import { useDatahubContact } from "services/hooks/datahub/contact/useDatahubContact";
-import { DIRECTION_TYPES, DOCUMENT_TYPES } from "apis/localdb/index";
+import { DIRECTION_TYPES, DOCUMENT_TYPES, DOCUMENT_TYPES_SORT } from "apis/localdb/index";
 
 import SortingIcon from "assets/images/icons8-sorting-100.svg";
 import TagIcon from "assets/images/icons8-price-tag-96.svg";
@@ -82,7 +82,7 @@ const FormFilter: FC<FormFilterProps> = ({
   });
 
   const DIRECTION_TYPES_FORMAT = DIRECTION_TYPES.map(item => ({_id: item.value, name: item.text }));
-  const DOCUMENT_TYPES_FORMAT = DOCUMENT_TYPES.map(item => ({_id: item.value, name: item.text }));
+  const DOCUMENT_TYPES_FORMAT = DOCUMENT_TYPES_SORT.map(item => ({_id: item.value, name: item.text }));
 
   const {
     data: listDatahubContact,
@@ -90,7 +90,7 @@ const FormFilter: FC<FormFilterProps> = ({
 
   const listFieldDropdown = React.useMemo(() => {
     return [
-      { title: "Chủ thể ban hành", data: listContact, name: "senderID" },
+      { title: "Cá nhân ban hành", data: listContact, name: "senderID" },
       { title: "Hợp đồng", data: listContracts, name: "contractID" },
       { title: "Tính chất văn bản", data: properties, name: "propertyID" },
       {
@@ -103,7 +103,7 @@ const FormFilter: FC<FormFilterProps> = ({
       },
       { title: "Địa chỉ lưu trữ", data: listStorages, name: "storageID" },
       { title: "Hướng văn bản", data: DIRECTION_TYPES_FORMAT, name: "direction" },
-      { title: "Phân loại văn bản", data: DOCUMENT_TYPES_FORMAT, name: "type" },
+      { title: "Tính chất văn bản", data: DOCUMENT_TYPES_FORMAT, name: "type" },
       { title: "Danh bạ hệ thống", data: listDatahubContact, name: "datahubContactID" },
     ];
   }, [listContact, listContracts, listStorages, properties, listDatahubContact]);

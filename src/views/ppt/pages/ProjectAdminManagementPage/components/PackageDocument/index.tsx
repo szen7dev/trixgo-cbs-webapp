@@ -226,7 +226,7 @@ const PackageDocument: FC = () => {
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
 									<Link to={`/pm/project/${projectID}/admin/packages/${item._id}/members`}>
-										{item?.members.length}
+										{item?.members?.length}
 									</Link>
 								</td>
 								<td className="py-1 px-2 text-primary-gray">

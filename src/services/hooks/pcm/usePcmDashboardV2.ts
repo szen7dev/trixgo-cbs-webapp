@@ -135,6 +135,100 @@ export const usePcmPlanTaskNotification = (payload: any): any => {
   };
 };
 
+export const usePcmDynamicReport = ({status}: any): any => {
+  const { data } = useQuery(
+    [`pcmDynamicReportForMyJob`, status],
+    async () => {
+      return pcmDashboardV2.pcmDynamicReport({
+        reportType: 1,
+        status
+      });
+    },
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  const { data: dataForCompanies, refetch } = useQuery(
+    [`pcmDynamicReportForCompanies`, status],
+    async () => {
+      return pcmDashboardV2.pcmDynamicReport({
+        option: 1, 
+        reportType: 1,
+        status
+      });
+    },
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  const { data: dataForAuthors } = useQuery(
+    [`pcmDynamicReportForAuthors`, status],
+    async () => {
+      return pcmDashboardV2.pcmDynamicReport({
+        option: 2, 
+        reportType: 1, 
+        status
+      });
+    },
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  const { data: dataForProject } = useQuery(
+    [`pcmDynamicReportForProject`, status],
+    async () => {
+      return pcmDashboardV2.pcmDynamicReport({
+        option: 5, 
+        reportType: 1, 
+        status
+      });
+    },
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  const { data: dataForProposal } = useQuery(
+    [`pcmDynamicReportForProposal`, status],
+    async () => {
+      return pcmDashboardV2.pcmDynamicReport({
+        option: 6, 
+        reportType: 1,
+        status
+      });
+    },
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  const { data: dataForStatus } = useQuery(
+    [`pcmDynamicReportForStatus`],
+    async () => {
+      return pcmDashboardV2.pcmDynamicReport({
+        option: 7, 
+        reportType: 1
+      });
+    },
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  return {
+    data,
+    dataForCompanies,
+    dataForAuthors,
+    dataForProject,
+    dataForProposal,
+    dataForStatus,
+    refetch
+  };
+};
+
 export const useListFileFromSearch = (payload: any): any => {
   // Get danh sách
   const {

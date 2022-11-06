@@ -1,11 +1,13 @@
-import { FC, useContext, useEffect } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import SwiperCore, { Navigation } from 'swiper';
 import { useParams } from 'react-router-dom';
 import { useQueryAmountTaskMilestone } from "services/hooks/pcm/useStatistical";
-
+import moment from "moment";
 import cn from "classnames";
 import 'chartjs-adapter-moment';
 import 'moment/locale/vi';
+import classnames from "classnames";
+import { Link } from "react-router-dom";
 
 /**
  * Hooks, Typings
@@ -37,14 +39,29 @@ import { ContextModalPost } from "views/media/contexts/post";
 import { APP_ID } from 'apis/localdb';
 import FilterDropdown from "views/cmcs/pages/CmcDashboardPage/components/FilterDropdown";
 import TotalInvestment from "./components/TotalInvestment";
+import TotalSignValue from "./components/TotalSignValue";
+import TotalAcceptance from "./components/TotalAcceptance";
+import TotalDisbursement from "./components/TotalDisbursement";
 import DebtChart from "./components/DebtChart";
 import { AdvanceGuarantee } from "./components/AdvanceGuarantee";
 import { ContractPerformanceGuarantee } from "./components/ContractPerformanceGuarantee";
 
 SwiperCore.use([Navigation]);
 
+function percentageBetweenTwoDate(start: any, end: any){
+	const today:any = new Date();
+	const q = Math.abs(today-start);
+	const d = Math.abs(end-start);
+	return Math.round((q/d)*100)
+}
+
+const yearCurrent = new Date().getFullYear();
+const yearMax = yearCurrent;
+const yearMin = yearCurrent-5;
+
 const ProjectDashboardPortfolioPage: FC = () => {
 	const { state, toggleModal } = useContext(ContextModalPost);
+	const [yearSelected, setYearSelected] = useState<number>(2022);
 
 	//_____Start history traffict
 	const payloadHistoryTraffic: any = {
@@ -67,8 +84,8 @@ const ProjectDashboardPortfolioPage: FC = () => {
 	})
 
 	useEffect(() => {
-		document.title = `${projectInfo.sign} | Báo cáo quản trị`;
-	}, []);
+		document.title = `${projectInfo?.sign} | Báo cáo quản trị`;
+	}, [projectInfo.sign]);
 
 	const {
 		taskOverdueWork,
@@ -91,12 +108,12 @@ const ProjectDashboardPortfolioPage: FC = () => {
 							<ul className="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
 								<li className="mr-2" role="presentation">
 									<button className="inline-block p-2 rounded-t-lg border-b-2 text-blue-600 hover:text-blue-600 dark:text-blue-500 dark:hover:text-blue-500 border-blue-600 dark:border-blue-500" id="profile-tab" data-tabs-target="#sell" type="button" role="tab" aria-controls="profile" aria-selected="true">
-										Bán ra
+										Mua vào
 									</button>
 								</li>
 								<li className="mr-2" role="presentation">
 									<button className="inline-block p-2 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400  dark:border-gray-700" id="dashboard-tab" data-tabs-target="#" type="button" role="tab" aria-controls="dashboard" aria-selected="false">
-										Mua vào
+										Bán ra
 									</button>
 								</li>
 							</ul>
@@ -107,76 +124,91 @@ const ProjectDashboardPortfolioPage: FC = () => {
 						{/* filter by year */}
 						<div className={"header-table flex py-4 w-full top-0 bg-white"}>
 							<button
-								// onClick={() => setFilter("all")}
+								onClick={() => setYearSelected(0)}
 								className={
-									"py-1 px-4 mx-2 rounded-full border border-primary-border text-white bg-cbs-secondary border-none"
-									// +
-									// (filter === "all"
-									//   ? "text-white bg-cbs-secondary border-none"
-									//   : "text-primary-gray bg-white")
+									classnames("py-1 px-4 mx-2 rounded-full border border-primary-border", {
+									"text-white bg-cbs-secondary border-none": yearSelected === 0
+									})
 								}
 							>
 								Tất cả
 							</button>
-							<button
-								// onClick={() => setFilter("unread")}
+							{/* <button
+								onClick={() => setYearSelected(yearMax)}
 								className={
-									"py-1 px-4 mx-2 rounded-full border border-primary-border "
-									// +
-									// (filter === "unread"
-									//   ? "text-white bg-cbs-secondary border-none"
-									//   : "text-primary-gray bg-white")
+									classnames("py-1 px-4 mx-2 rounded-full border border-primary-border", {
+									"text-white bg-cbs-secondary border-none": yearSelected === yearMax
+									})
 								}
 							>
-								2022
+								{yearMax}
 							</button>
 							<button
-								// onClick={() => setFilter("read")}
+								onClick={() => setYearSelected(yearMax-1)}
 								className={
-									"py-1 px-4 mx-2 rounded-full border border-primary-border "
-									// +
-									// (filter === "read"
-									//   ? "text-white bg-cbs-secondary border-none"
-									//   : "text-primary-gray bg-white")
+									classnames("py-1 px-4 mx-2 rounded-full border border-primary-border", {
+									"text-white bg-cbs-secondary border-none": yearSelected === yearMax-1
+									})
 								}
 							>
-								2021
+								{yearMax-1}
 							</button>
+
 							<button
-								// onClick={() => setFilter("read")}
+								onClick={() => setYearSelected(yearMax-2)}
 								className={
-									"py-1 px-4 mx-2 rounded-full border border-primary-border "
-									// +
-									// (filter === "read"
-									//   ? "text-white bg-cbs-secondary border-none"
-									//   : "text-primary-gray bg-white")
+									classnames("py-1 px-4 mx-2 rounded-full border border-primary-border", {
+									"text-white bg-cbs-secondary border-none": yearSelected === yearMax-2
+									})
 								}
 							>
-								2020
+								{yearMax-2}
 							</button>
+
+							<button
+								onClick={() => setYearSelected(yearMax-3)}
+								className={
+									classnames("py-1 px-4 mx-2 rounded-full border border-primary-border", {
+									"text-white bg-cbs-secondary border-none": yearSelected === yearMax-3
+									})
+								}
+							>
+								{yearMax-3}
+							</button>
+
+							<button
+								onClick={() => setYearSelected(yearMax-4)}
+								className={
+									classnames("py-1 px-4 mx-2 rounded-full border border-primary-border", {
+									"text-white bg-cbs-secondary border-none": yearSelected === yearMax-4
+									})
+								}
+							>
+								{yearMax-4}
+							</button> */}
 						</div>
 						<div className="w-1/4 flex items-center">
 							<div className="w-5/6 flex flex-col gap-3">
 								<div className="flex justify-between text-xs">
 									<div>
 										<span className="text-primary-gray">Bắt đầu: </span>
-										<span><b>1/1/21</b></span>
+										<span><b>{moment(projectInfo.startTime).format("L")}</b></span>
 									</div>
 									<div>
 										<span className="text-primary-gray">Kết thúc: </span>
-										<span><b>31/12/21</b></span>
+										<span><b>{moment(projectInfo.expiredTime).format("L")}</b></span>
 									</div>
 								</div>
 
 								<div className="w-full border h-2">
 									<div
 										className="bg-primary"
-										style={{ width: "82%", marginTop: -0.25, height: 7 }}
+										style={{ width: `${percentageBetweenTwoDate(new Date(projectInfo.startTime), new Date(projectInfo.expiredTime))}%`, marginTop: -0.25, height: 7 }}
 									></div>
 								</div>
 							</div>
 
-							<p className="w-1/6 text-primary text-sm px-4 pt-3"><b>82%</b></p>
+							<p className="w-1/6 text-primary text-sm px-4 pt-3"><b>{percentageBetweenTwoDate(new Date(projectInfo.startTime), new Date(projectInfo.expiredTime))}%</b></p>
 						</div>
 					</div>
 					{/* end filter by year */}
@@ -187,14 +219,13 @@ const ProjectDashboardPortfolioPage: FC = () => {
 						<div className="w-8/12">
 							<div className="flex flex-wrap w-full">
 								<div className="w-full flex gap-4">
-									<TotalInvestment />
-									<TotalInvestment />
-									<TotalInvestment />
-									<TotalInvestment />
+									<TotalInvestment infoProject = {projectInfo} year={yearSelected}/>
+									<TotalSignValue projectID = {projectID} infoProject={projectInfo} year={yearSelected}/>
+									<TotalAcceptance projectID = {projectID} year={yearSelected} />
+									<TotalDisbursement projectID = {projectID} year={yearSelected}/>	
 								</div>
 								{/* Chartjs */}
 								<ReportChart className='bg-white w-full mt-4' projectInfo={projectInfo} />
-
 							</div>
 						</div>
 						<div className="w-4/12">
@@ -216,32 +247,32 @@ const ProjectDashboardPortfolioPage: FC = () => {
 					<div className="flex ">
 						<div className="w-8/12">
 							<div className="flex w-full gap-4">
-								<div className="w-1/3 bg-primary-light px-6 py-4">
-									<div className="font-bold text-primary-gray text-lg">Công nợ</div>
-									<div className="w-full">
-										<DebtChart />
+									<div className="w-1/3 bg-primary-light px-6 py-4">
+										<Link to={`/pm/project/${projectID}/dashboard/debt/outin/2`}>
+											<div className="font-bold text-primary-gray text-lg">Công nợ</div>
+											<div className="w-full">
+												<DebtChart projectID={projectID}/>
+											</div>
+										</Link>
 									</div>
-								</div>
 								<div className="w-1/2  h-[222px] bg-primary-light px-6 py-4">
 									<div className="font-bold text-primary-gray text-lg">Bảo lãnh tạm ứng</div>
 									<div>
-										<AdvanceGuarantee />
+										<AdvanceGuarantee projectID={projectID}/>
 									</div>
 								</div>
 								<div className="w-1/2 h-[222px] bg-primary-light px-6 py-4">
-									<div className="font-bold text-primary-gray text-lg">Bảo lãnh thực hiện hợp đồng</div>
+									<div className="font-bold text-primary-gray text-lg">Bảo lãnh hợp đồng</div>
 									<div>
-										<ContractPerformanceGuarantee />
+										<ContractPerformanceGuarantee projectID={projectID}/>
 									</div>
 								</div>
 							</div>
 						</div>
 						<div className="w-4/12 pl-4">
-							{/* Multiple Chart */}
-							{/* <ReportMultipleChart className='bg-white h-full pl-5 pr-12 pb-3 w-full mt-4' projectInfo={projectInfo}/> */}
-
-							{/* Quick report */}
-							<ReportQuickReport className={cn(styles['quick-report'], 'bg-white pt-4 px-6 pb-6 w-full h-[222px]')} projectID={projectID} />
+							<div className="h-[222px] bg-primary-light">
+									<ReportContractor className={cn(styles['contractor-wrapper'], "bg-white   flex-1")} projectID={projectID} />
+							</div>
 						</div>
 					</div>
 

@@ -14,4 +14,5 @@ export * from './ClassifyDrawer';
 export * from './ClassifyProgress';
 export * from './ClassifyTable';
 
+export * from './PcmPrintTaskChild';
 export * from './PcmPrintTaskComment';

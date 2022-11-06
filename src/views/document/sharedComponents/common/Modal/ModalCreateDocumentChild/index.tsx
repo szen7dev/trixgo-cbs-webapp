@@ -18,7 +18,8 @@ import { useQueryContact } from "services/hooks/items/useContact";
 import { useQueryListDoctype } from "services/hooks/items/useDoctype";
 import { useStorage } from "services/hooks/items/useStorage";
 import { useQueryItemContract } from "services/hooks/items/useContract";
-import { DIRECTION_TYPES, DOCUMENT_TYPES } from "apis/localdb";
+import { useQueryListCompany } from "services/hooks/useCompanies";
+import { DIRECTION_TYPES, DOCUMENT_TYPES, DOCUMENT_TYPES_SORT } from "apis/localdb";
 import { Document } from "typings/ppt";
 import { useMutationDocumentChild }  from "services/hooks/document/useDocumentChild"
 import { toast } from "react-toastify";
@@ -72,8 +73,8 @@ const useInitialValues = (
 	const { listContact: listContactSender } = useQueryContact({ companyID, keyword: keywordSender });
 	const { listContact: listContactReceiver } = useQueryContact({ companyID, keyword: keywordReceiver });
 	// const { listDoctypes: fields } = useQueryListDoctype({ type: 1, companyID, keyword: keywordFields }); // lĩnh vực
-	const { data: listDatahubContact } = useDatahubContact({ keyword: keywordDatahubContact }, true, false); // Danh bạ hệ thống
-
+	// const { data: listDatahubContact } = useDatahubContact({ keyword: keywordDatahubContact }, true, false); // Danh bạ hệ thống
+	const { data: listDatahubContact } = useQueryListCompany({ keyword: keywordDatahubContact }); // Danh bạ hệ thống mới
 	const { listDoctypes: properties } = useQueryListDoctype({
 		keyword: keywordProperty,
 		type: 2,
@@ -162,12 +163,12 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 				})),
 				name: "direction",
 			},
-			{ title: "Cá nhân ban hành", data: listContactSender, name: "sender" },
+			{ title: "Hồ sơ hoàn thành", data: [{_id: 1, name: "Đang triển khai" }, {  _id: 2, name: "Hoàn thành" }], name: "finish" },
 			{ title: "Nhận", data: listContactReceiver, name: "receiver" },
 			{ title: "Phân loại", data: properties, name: "property" },
 			{
 				title: "Tính chất (*)",
-				data: DOCUMENT_TYPES.map((elm) => ({
+				data: DOCUMENT_TYPES_SORT.map((elm) => ({
 					_id: elm.value,
 					name: elm.text,
 				})),
@@ -230,8 +231,8 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 			formatValues.packageID = values.package;
 		}
 
-		if(values.sender){
-			formatValues.senderID = values.sender;
+		if(values.finish){
+			formatValues.finish = values.finish;
 		}
 
 		if(values.receiver){
@@ -243,7 +244,7 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 		}
 
 		if(values.field){
-			formatValues.datahubContactID = values.field;
+			formatValues.publishID = values.field;
 		}
 		if(!formatValues.package)
 			return toast.warning("Vui lòng chọn gói thầu")
@@ -251,8 +252,8 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 		if(!formatValues.direction)
 			return toast.warning("Vui lòng chọn hướng hồ sơ")
 
-		if(!formatValues.sender)
-			return toast.warning("Vui lòng chọn ban hành")
+		// if(!formatValues.sender)
+		// 	return toast.warning("Vui lòng chọn ban hành")
 
 		if(!formatValues.property)
 			return toast.warning("Vui lòng chọn tính chất")
@@ -337,9 +338,9 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 													return setKeywordPackage(value);
 												}
 
-												if(item.name == "sender"){
-													return setKeywordSender(value);
-												}
+												// if(item.name == "sender"){
+												// 	return setKeywordSender(value);
+												// }
 
 												if(item.name == "receiver"){
 													return setKeywordReceiver(value);
@@ -400,7 +401,7 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 																500
 															)}
 															initialValue={
-																['direction', 'type'].includes(item.name)
+																['direction', 'type', 'finish'].includes(item.name)
 																	? item.data.find((elm) => {
 																		return elm._id === state?.initialValues[item.name];
 																	})
@@ -542,11 +543,11 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 										</div>
 
 										<div className="py-1.5 h-[30px] box-content">
-											<p className="py-1.5">Tổ chức ban hành (*)</p>
+											<p className="py-1.5">Đơn vị ban hành (*)</p>
 										</div>
 										<div className="py-0.5 h-[30px] box-content px-2">
 											<DropdownSearchable
-												placeholder={"Tổ chức ban hành (*)"}
+												placeholder={"Đơn vị ban hành (*)"}
 												className={"w-full flex-1"}
 												showTriangle={false}
 												maxWidthInput={"max-w-none"}

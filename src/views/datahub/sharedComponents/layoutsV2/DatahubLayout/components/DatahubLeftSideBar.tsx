@@ -28,25 +28,20 @@ export const routes: Array<RouteItem> = [
 		name: 'Danh mục dự án',
 	},
 	{
-		path: '/datahub/contractor/home',
-		exact: true,
-		name: 'Năng lực nhà thầu',
-		isActive(match: any, location: any): boolean {
-			if (match) return true;
-			return location.pathname.includes('/datahub/contractor/');
-		}
-	},
-	{
 		path: '/datahub/inspection',
 		name: 'Biểu mẫu nghiệm thu',
 	},
 	{
-		path: '/datahub/contact',
-		name: 'Danh bạ hệ thống'
+		path: '/datahub/spec',
+		name: 'Yêu cầu kỹ thuật'
 	},
 	{
-		path: '/datahub/price',
-		name: 'Datahub giá'
+		path: '/datahub/order',
+		name: 'Định mức xây lắp'
+	},
+	{
+		path: '/datahub/product',
+		name: 'Danh mục vật tư'
 	},
 ]
 

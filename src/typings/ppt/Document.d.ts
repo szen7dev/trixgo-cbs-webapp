@@ -66,6 +66,10 @@ export interface Document {
         _id: string;
         name: string;
     };
+    publish?: {
+        _id: string;
+        name: string;
+    };
     property: {
         _id: string;
         name: string;
@@ -82,7 +86,8 @@ export interface Document {
         name: string;
         sign: string;
     },
-    amountDocumentChild?:number 
+    amountDocumentChild?:number,
+    finish?: number;
 }
 
 export interface ListDocumentQueryPayload extends QueryParam {

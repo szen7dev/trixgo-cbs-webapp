@@ -114,15 +114,6 @@ const ContractIpc: FC = () => {
     return false;
   }, [contractIPC]);
 
-  // const handleOnFilter = useCallback((values) => {
-  //   // setPageParam(() => ({ ...values }));
-  //   return true;
-  // }, []);
-
-  // const handleOnCancelFilter = useCallback(() => {
-  //   // setPageParam({});
-  // }, []);
-
   return (
     <main className="relative min-h-full">
       <header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-12 px-6 border border-primary-border">
@@ -240,6 +231,7 @@ const ContractIpc: FC = () => {
                     onChange={() => setItemChecked(item._id)}
                   />
                 </td>
+                <td></td>
                 <td className="py-1 px-2">
                   {item.name}
                 </td>

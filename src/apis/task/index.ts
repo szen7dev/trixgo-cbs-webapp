@@ -33,11 +33,11 @@ import {
 import { convertObToUrl } from "utils";
 
 const populatesTask = JSON.stringify({
-  path: "group contract author assignee related parent project company field approver authorAttachs assigneeAttachs signatures openedUsers links accessUsers",
-  select: "_id name fullname bizfullname image sign signature _id name nameOrg description size path mimeType type author assignee createAt members company expiredTime project openedStatus",
+  path: "group contract author assignee related parent project company field approver authorAttachs assigneeAttachs signatures openedUsers links accessUsers viewedUsers linksDocs",
+  select: "_id name fullname bizfullname position email phone image sign signature _id name nameOrg description size path mimeType type author assignee createAt members admins company expiredTime project openedStatus date",
   populate: {
-    path: "author assignee project",
-    select: "_id bizfullname image sign signature"
+    path: "author assignee project storage position",
+    select: "_id bizfullname image sign signature name email phone"
   }
 })
 
@@ -46,15 +46,15 @@ const populatesResponse = JSON.stringify({
   select: "_id bizfullname image position name nameOrg path size mimeType description author createAt",
   populate: {
     path: "author position",
-    select: "_id bizfullname image name sign"
+    select: "_id bizfullname image name sign email phone"
   }
 });
 
 const populatesComment = JSON.stringify({
   path: 'author lastestReplyID files images task receivers',
-  select: '_id bizfullname image name nameOrg description path mimeType size author type parent content files images amountCommentReply amountReaction createAt task company project group receivers',
+  select: '_id bizfullname fullname phone email position image name nameOrg description path mimeType size author type parent content files images amountCommentReply amountReaction createAt task company project group receivers',
   populate: {
-      path: 'author lastestReplyID files images task receivers',
+      path: 'author position lastestReplyID files images task receivers',
       select: '_id bizfullname image name nameOrg description path mimeType size author type parent content files images amountCommentReply amountReaction createAt task company project group receivers'
   }
 });
@@ -94,15 +94,16 @@ const TaskRepository = {
   async listTask(payload: TaskListParams): Promise<ListTaskResponse> {
     const { data } = await API.get<ListTaskResponse>(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl({
-        select: "assignee lastLog checklist description name expiredTime status percentage project actualStartTime actualFinishTime amountChecklist amountFinishedChecklist milestone startTime amountCurrentStatus amountSolution amountResponseOther accessUsers modifyAt",
-        populates: JSON.stringify({
-          path: "assignee lastLog project",
-          select: "name fullname bizfullname image author content createAt sign",
-          populate: {
-            path: "author",
-            select: "_id fullname bizfullname image",
-          }
-        }),
+        select: "author assignee related lastLog checklist description name expiredTime status percentage project actualStartTime actualFinishTime amountChecklist amountFinishedChecklist milestone startTime amountCurrentStatus amountSolution amountResponseOther accessUsers modifyAt linksDocs authorAttachs",
+        populates: populatesTask,
+        // populates: JSON.stringify({
+        //   path: "author assignee lastLog project related",
+        //   select: "name fullname bizfullname email phone position image author content createAt sign",
+        //   populate: {
+        //     path: "author position",
+        //     select: "_id fullname bizfullname image name",
+        //   }
+        // }),
         ...payload
       })}`
     );
@@ -130,11 +131,11 @@ const TaskRepository = {
     );
     return data;
   },
-  
+
   async taskInfo(payload: TaskInfoParams): Promise<any> {
-    const { data } = await API.get<any>(
+    const { data } = await API.get(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl({
-        select: "name description type typeStatus status draft alert priority project contract parent checklist createAt field group author assignee related expiredTime startTime actualStartTime actualFinishTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures openedUsers comments amountComment amountResponse amountMarkedResponse startTime subtype flags milestone links openedStatus amountCurrentStatus amountSolution amountResponseOther accessUsers timeImportExcel",
+        select: "name description type typeStatus status draft alert priority project contract parent checklist createAt field group author assignee related expiredTime startTime actualStartTime actualFinishTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures openedUsers comments amountComment amountResponse amountMarkedResponse startTime subtype flags milestone links openedStatus amountCurrentStatus amountSolution amountResponseOther accessUsers timeImportExcel milestone unit unitPrice quantity amountoftime judgement ontime quality viewedUsers linksDocs",
         populates: populatesTask,
         ...payload
       })}`

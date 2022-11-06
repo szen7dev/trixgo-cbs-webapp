@@ -9,55 +9,63 @@ import { SearchInput } from "shareComponents/common";
 
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 // import iconArrowRight from "assets/images/icon-arrow-right.svg";
+// import DownloadIcon from "assets/images/icons8-download-96.svg";
+import UploadFileIcon from "assets/images/icons8-upload-48.svg";
 import FolderIcon from "assets/images/icons8-folder.svg";
-import DownloadIcon from "assets/images/icons8-download-96.svg";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
 import { Create, UpdateGroup, DeleteGroup } from "../../modal";
 import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
 import moment from "moment";
-
-// const IconArrowRight = () => (
-// 	<div className="">
-// 		<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-// 			<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-// 		</svg>
-// 	</div>
-// )
+import { toast } from "react-toastify";
+import { validateFiles } from 'validation/file';
+import { useUpload } from "services/hooks/useUpload";
+import { APP_KEY } from 'utils/constants';
+import { useAuth } from "services/hooks/auth/useAuth";
 
 const FunctionalTab: FC = () => {
 	const { id: projectID, itemID: groupID } = useParams<{ id: string, itemID: string }>();
+    const { user } = useAuth();
+
 	const { pathname } = useLocation();
 	const history = useHistory();
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
 	const [breadcrumb, setBreadcrumb] = useState<{ _id: string, name: string }[]>([]);
+	const [paramsUpload, setParamsUpload] = useState({
+		appID: APP_KEY.PCM_PLAN_TASK,
+		companyID: user?.company?._id,
+		projectID,
+	})
+
+	const { addFileToUpload } = useUpload(paramsUpload);
 
 	const {
         data: listPcmPlanGroup,
         fetchNextPage: fetchNextPagePcmPlanGroup,
         hasNextPage: hasNextPagePcmPlanGroup,
         totalRecord,
-		refetch: refetchPcmPlanGroup
+		refetch: refetchPcmPlanGroup,
+		updatePcmPlanGroupMutateAsync
     } = usePcmPlanGroup({
 		parentID: groupID,
 		projectID,
 		isShowAll: "1",
 		keyword,
 		populates: JSON.stringify({
-			path: 'contract',
-			select: '_id name sign'
+			path: 'contract image parent',
+			select: '_id name sign path'
 		})
 	}, true, false);
 
 	const { openModal } = useModal();
 
 	const getStateChecked = useCallback((id: string) => {
-		return idsChecked.includes(id) ? true : false;
+		return idsChecked?.includes?.(id) ? true : false;
 	}, [idsChecked]);
 
 	const onClickCheckButton = (id: string) => {
-		const check = idsChecked.includes(id);
+		const check = idsChecked?.includes?.(id);
 		if (check) {
 			const newList = [...idsChecked];
 			newList.splice(newList.findIndex((e: any) => e == id), 1);
@@ -66,6 +74,11 @@ const FunctionalTab: FC = () => {
 			const newList = [...idsChecked];
 			newList.push(id);
 			setIdsChecked(newList);
+
+			setParamsUpload(prev => ({
+				...prev,
+				groupID: id
+			}))
 		};
 	};
 
@@ -88,6 +101,34 @@ const FunctionalTab: FC = () => {
 			{ _id, name }
 		]))
 		history.push(`/pm/project/${projectID}/admin/groups/${_id}`);
+	}
+
+	const handleUploadIcon = async (e: React.ChangeEvent<HTMLInputElement>) => {
+		try {
+			if (!e.target.files || !idsChecked.length) return;
+
+			const { error, message } = await validateFiles(e.target.files);
+			if(error) return toast.warn(message);
+
+			const file = e.target.files[0];
+			const { _id } = await addFileToUpload({
+				files: file as any,
+				fileType: 2,
+				progress: (percentCompleted: any) => {
+					console.log({ progress: `${percentCompleted}%` })
+				},
+			});
+
+			await updatePcmPlanGroupMutateAsync({
+				groupID: idsChecked[0],
+				image: _id
+			})
+
+			refetchPcmPlanGroup();
+			toast.success('Thay đổi icon thành công');
+		} catch(err: any) {
+			toast.error(err.message);
+		}
 	}
 
 	return (
@@ -120,28 +161,49 @@ const FunctionalTab: FC = () => {
 								<img src={DownloadIcon} alt="Download" />
 							</div> */}
 							{idsChecked.length == 1 ?
-								<div
-									className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
-									onClick={() =>
-										openModal(
-											<div
-												className={
-													"inline-block w-[521px] h-[360px] my-8 text-left align-middle transition-all transform bg-primary-light shadow-xl"
-												}
-											>
-												<UpdateGroup
-													item={listPcmPlanGroup.find((e: any)=> e._id == idsChecked[0])}
-													projectID={projectID}
-													onConfirm={refetchPcmPlanGroup}
-												/>
-											</div>
-										)
-									}
-								>
-									<img src={PencilIcon} alt="Pencil" />
-								</div> : <></>
+								<>
+									<div
+										className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
+										onClick={() =>
+											openModal(
+												<div
+													className={
+														"inline-block w-[521px] h-[400px] my-8 text-left align-middle transition-all transform bg-primary-light shadow-xl"
+													}
+												>
+													<UpdateGroup
+														item={listPcmPlanGroup.find((e: any)=> e._id == idsChecked[0])}
+														projectID={projectID}
+														onConfirm={refetchPcmPlanGroup}
+													/>
+												</div>
+											)
+										}
+									>
+										<img src={PencilIcon} alt="Pencil" />
+									</div>
+									<label
+										className="w-10 h-10 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray block"
+										htmlFor="icon-group"
+									>
+										<img
+											src={UploadFileIcon}
+											alt="Upload"
+										/>
+										<input
+											// ref={inputRef}
+											type="file"
+											name="files"
+											id="icon-group"
+											accept="image/*"
+											className="hidden"
+											onChange={handleUploadIcon}
+										/>
+									</label>
+								</>
+								: <></>
 							}
-							<div
+							{/* <div
 								className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
 								onClick={() =>
 									openModal(
@@ -159,7 +221,7 @@ const FunctionalTab: FC = () => {
 								}
 							>
 								<img src={TrashIcon} alt="Trash" />
-							</div>
+							</div> */}
 						</div>
 					) : <></>}
 				</div>
@@ -243,7 +305,7 @@ const FunctionalTab: FC = () => {
 								<td className="py-1 px-2">
 									<button onClick={() => onClickGroup(item._id, item.name)}>
 										<div className="flex text-left">
-											<img src={FolderIcon} alt="Folder" className="w-6 h-6 mr-2" />
+											<img src={item.image ? `${process.env.REACT_APP_URL_S3}${item.image?.path}` : FolderIcon} alt="Folder" className="w-6 h-6 mr-2" />
 											<p>{item.name}</p>
 										</div>
 									</button>

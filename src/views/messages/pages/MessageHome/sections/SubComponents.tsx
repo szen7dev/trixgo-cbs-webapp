@@ -16,7 +16,7 @@ import {NotificationMutePopup} from "./SettingMessageDetail/components/Notificat
 
 export const SubComponents:FC = () => {
     const {currentChat} = useContext(MessageContext);
-
+    
     return (
         <>
             <SocketController currentChat={currentChat} context={MessageContext}/>

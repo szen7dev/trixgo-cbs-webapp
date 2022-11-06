@@ -22,7 +22,8 @@ export type Project = {
   sign: string;
   address: string;
   company: string | Company,
-  startTime: string
+  startTime: string,
+  admins: any[]
 };
 
 export type Group = {
@@ -55,6 +56,14 @@ export type Task = {
   lastLog?: LastLog;
   assignee: Assignee;
   percentage: number;
+  milestone: number;
+  unit: string;
+  unitPrice: number;
+  quantity: number;
+  amountoftime: number;
+  ontime: number;
+  quality: number;
+  judgement: string;
   project: Project;
   company: Company,
   group: Group,
@@ -67,6 +76,7 @@ export type Task = {
   subtype: number,
   type: number,
   related: Array<User>;
+  viewedUsers: Array<User>;
   signatures: Array<{
     _id: string;
     author: User;
@@ -77,6 +87,7 @@ export type Task = {
   assigneeAttachs: Array<FileProps>;
   accessUsers: Array<User>;
   openedUsers: Array<User>;
+  linksDocs: Array<string>;
   openedStatus: number;
   actualStartTime: string;
   actualFinishTime: string;
@@ -117,22 +128,35 @@ export interface updateTaskPayload {
   taskID: string;
   description?: string;
   contractID?: string;
+  groupID?: string;
+  assigneeID?: string;
   name?: string;
   status?: number;
   priority?: number;
+  ontime?: number;
+  subType?: number;
+  quality?: number;
+  judgement?: string;
+  unit?: string;
+  unitPrice?: number;
+  quantity?: number;
+  amountoftime?: number;
   draft?: number;
   milestone?: number;
   actualStartTime?: string;
   actualFinishTime?: string;
   expiredHour?: string;
   alert?: string | number;
+  milestone?: number;
   isAddSignature?: boolean;
   isOpenBidding?: boolean;
+  relatedRemoves?: Array<string>;
   flags?: Array<string>;
   flagsRemoves?: Array<string>;
   authorAttachs?: Array<string>;
   assigneeAttachs?: Array<string>;
   tasksLink?: Array<string>;
+  linksDocs?: Array<string>;
   isUpdateNews?: boolean;
 }
 

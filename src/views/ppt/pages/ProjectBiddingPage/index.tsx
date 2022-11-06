@@ -35,13 +35,21 @@ import useCheckedList from "services/hooks/ppt/useCheckedList";
 import { convertCurrency } from "utils/converter";
 import { useProject } from 'services/hooks/items/useProject';
 import { useBiddingPlan } from "services/hooks/bidding/useBiddingPlan";
+import { useDocumentPackage } from "services/hooks/document/useDocumentPackage";
+
 import categoryIcon from "../../../../assets/images/icons8-category-48.svg";
 import contractIcon from "../../../../assets/images/icons8-contract-64-blue.svg";
 import downloadIcon from "../../../../assets/images/icons8-download-64.svg";
 import iconPencil from "../../../../assets/images/icons8-pencil-96 1.png";
 import nextIcon from "../../../../assets/images/icons-arrow-next.svg";
+import PaginateV2 from "shareComponents/common/PaginateV2";
 
 const ProjectBiddingPage: FC = () => {
+  // Phân trang
+  type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+  const ref = React.useRef<PaginateHandle>(null);
+  const [pageIndex, setPageIndex] = React.useState(0);
+
   const location = useLocation();
   const { id: projectID } = useParams<{ id: string }>();
 	const { info: projectInfo } = useProject({
@@ -61,22 +69,28 @@ const ProjectBiddingPage: FC = () => {
     create: false,
     update: false,
   });
-
   const [keyword, setKeyword] = useState("");
-
   const {
-    list: listBiddingPlan,
-    hasNextPage,
+		data: listBiddingPlan,
+    listDocumentPackageWithPager,
+		fetchNextPage,
+		hasNextPage,
+		totalRecord,
+    totalPages,
     refetch,
-    fetchNextPage,
-    totalRecord,
-  } = useBiddingPlan({
-    params: {
-      keyword,
-      projectID
-    },
-    isFetchList: true,
-  });
+    isFetching
+	} = useDocumentPackage({
+		// parentID: packageID,
+		departmentID: projectID,
+		isShowAll: "1",
+		keyword,
+    limit: "20"
+	}, true, false);
+
+  useEffect(() => {
+    ref.current && ref.current.resetPaginate();
+    setPageIndex(0);
+  }, []);
 
   const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } =
     useCheckedList(listBiddingPlan);
@@ -137,6 +151,8 @@ const ProjectBiddingPage: FC = () => {
     // }
   };
 
+  // console.log(listDocumentPackageWithPager)
+
   return (
     <div className={"flex flex-col relative h-full"}>
       <div className={"sticky top-0 z-10"}>
@@ -196,9 +212,9 @@ const ProjectBiddingPage: FC = () => {
               Hoàn thành
             </button> */}
           </div>
-          <button className={"flex items-center justify-center mx-3 ml-6"}>
+          {/* <button className={"flex items-center justify-center mx-3 ml-6"}>
             <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"}/>
-          </button>
+          </button> */}
           {
               Object.values(assigned).filter(Boolean).length === 1 &&
               <button
@@ -207,7 +223,24 @@ const ProjectBiddingPage: FC = () => {
                 <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"}/>
               </button>
           }
-          <div className={"flex-1 flex items-center justify-end"}>
+            <div className={"flex-1 flex items-center justify-end"}>
+              <PaginateV2
+                  ref={ref}
+                  totalRecord={totalRecord}
+                  totalPages={totalPages}
+                  limit={20}
+                  hasNextPage={hasNextPage}
+                  isFetching={isFetching}
+                  nextPageAction={() => {
+                      fetchNextPage();
+                      setPageIndex((oldState) => oldState + 1);
+                  }}
+                  prevPageAction={() => {
+                      setPageIndex((oldState) => oldState - 1);
+                  }}
+              />
+          </div>
+          {/* <div className={"flex-1 flex items-center justify-end"}>
             <span className={"text-primary-gray"}>1-50 trong số 2.358</span>
             <button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"} disabled={true}>
               <img src={nextIcon} alt={"----"} className={"rotate-180"}/>
@@ -215,7 +248,7 @@ const ProjectBiddingPage: FC = () => {
             <button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"}>
               <img src={nextIcon} alt={"----"}/>
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="flex-1 overflow-y-auto">
@@ -264,67 +297,72 @@ const ProjectBiddingPage: FC = () => {
             </tr>
           </thead>
           <tbody className="text-small">
-            {(listBiddingPlan && listBiddingPlan.length) ?
-              listBiddingPlan.map((item: any) => (
-                <tr key={item._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
-                  <td
-                    className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border text-center"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <input
-                      className="cbs-checkbox"
-                      type="checkbox"
-                      value={item._id}
-                      checked={Boolean(assigned[item._id])}
-                      onChange={(e) => handleChangeCheckbox(e, item)}
-                    />
-                  </td>
-                  <td
-                    className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    {/* <NavLink to={`/bidding/plan/${projectID}/${item._id}`}>{item.name}</NavLink> */}
-                    {item.name}
-                    <p className={"mt-1 text-gray-500"}>
-                      {item.userCreate?.bizfullname}
-                      {moment(item.createAt).format("DD/MM/YYYY HH:mm")}
-                    </p>
-                  </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
-                    {BIDDING_PLAN_TYPE[item.type-1].text}
-                  </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
-                    {convertCurrency(item.packagePrice)}
-                  </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
-                    { moment(item.startTime).format("L")}
-                  </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
-                    { moment(item.finishTime).format("L")}
-                  </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
-                    {BIDDING_PLAN_FORM[item.form -1].text}
-                  </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
-                    {BIDDING_PLAN_CONTRACT_TYPE[item.contractType -1].text}
-                  </td>
+              {
+                (listDocumentPackageWithPager[pageIndex] ?? []).map((item: any) => {
+                  console.log(item)
+                  return (
+                    <tr key={item._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
+                      <td
+                        className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border text-center"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <input
+                          className="cbs-checkbox"
+                          type="checkbox"
+                          value={item._id}
+                          checked={Boolean(assigned[item._id])}
+                          onChange={(e) => handleChangeCheckbox(e, item)}
+                        />
+                      </td>
+                      <td
+                        className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {/* <NavLink to={`/bidding/plan/${projectID}/${item._id}`}>{item.name}</NavLink> */}
+                        {item.name}
+                        <p className={"mt-1 text-gray-500"}>
+                          {item.userCreate?.bizfullname}
+                          {moment(item.createAt).format("DD/MM/YYYY HH:mm")}
+                        </p>
+                      </td>
+                      <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
+                        {BIDDING_PLAN_TYPE[item.type-1]?.text}
+                      </td>
+                      <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
+                        {convertCurrency(item.packagePrice)}
+                      </td>
+                      <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
+                        { moment(item.startTime).format("L")}
+                      </td>
+                      <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
+                        { moment(item.finishTime).format("L")}
+                      </td>
+                      <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
+                        {BIDDING_PLAN_FORM[item.form -1]?.text}
+                      </td>
+                      <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
+                        {BIDDING_PLAN_CONTRACT_TYPE[item.contractType -1]?.text}
+                      </td>
 
-                  <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
-                    {item.duration} Ngày
-                  </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
-                    {BIDDING_PLAN_STATUS[item.status -1].text}
-                  </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
-                    {item?.bidder?.name}
-                  </td>
-                </tr>
-              )) : <></>}
+                      <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
+                        {item.duration} Ngày
+                      </td>
+                      <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
+                        {BIDDING_PLAN_STATUS[item.status -1]?.text}
+                      </td>
+                      <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
+                        {item?.bidder?.name}
+                      </td>
+                    </tr>
+                  )
+                })
+              }
+
           </tbody>
         </table>
       </div>
 
-      {hasNextPage && (
+      {/* {hasNextPage && (
         <div className="w-full flex justify-center my-5">
           <button onClick={fetchNextPage}>
             <span className="text-primary">
@@ -332,7 +370,7 @@ const ProjectBiddingPage: FC = () => {
             </span>
           </button>
         </div>
-      )}
+      )} */}
 
       {/* Modal Create bidding plan */}
       <ModalContainer

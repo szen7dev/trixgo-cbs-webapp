@@ -26,7 +26,7 @@ export default function FilterDropdown() {
             >
                 <img src={FilterIcon} alt="Filter" />
             </Button>
-            <Menu
+            {/* <Menu
                 id="basic-menu"
                 anchorEl={anchorEl}
                 open={open}
@@ -47,7 +47,7 @@ export default function FilterDropdown() {
                     <div><img className='invisible' src={IconCheck} alt="" /></div>
                     <div className='ml-2'>CPMI.Công ty Cổ phần CONINCO Quản...</div>
                 </MenuItem>
-            </Menu>
+            </Menu> */}
         </div>
     );
 }

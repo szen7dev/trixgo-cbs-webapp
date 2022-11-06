@@ -21,7 +21,7 @@ export const OptionsComment:FC<Props> = ({handleUploadAttachments}) => {
             {
                 showOption &&
                 <div className={"absolute right-0 z-20 bg-white w-[335px] shadow-lg rounded-md text-primary-gray"}>
-                    <button className="px-4 py-2 w-full text-left hover:bg-cbs-table-header flex items-center">
+                    {/* <button className="px-4 py-2 w-full text-left hover:bg-cbs-table-header flex items-center">
                         <img
                             src={iconReply}
                             alt="Icon reply"
@@ -36,7 +36,7 @@ export const OptionsComment:FC<Props> = ({handleUploadAttachments}) => {
                             className="h-[18px] w-[18px]"
                         />
                         <span className={"ml-2"}>Trả lời tất cả</span>
-                    </button>
+                    </button> */}
                     <label className="px-4 py-2 w-full text-left hover:bg-cbs-table-header flex items-center">
                         <img
                             src={iconUpload}
@@ -52,12 +52,12 @@ export const OptionsComment:FC<Props> = ({handleUploadAttachments}) => {
                             onChange={e => handleUploadAttachments(e.target.files)}
                         />
                     </label>
-                    <button className="px-4 py-2 w-full text-left hover:bg-cbs-table-header flex items-center">
+                    {/* <button className="px-4 py-2 w-full text-left hover:bg-cbs-table-header flex items-center">
                         <div
                             className="h-[18px] w-[18px] min-h-[18px] min-w-[18px]"
                         />
                         <span className={"ml-2"}>Thông báo email</span>
-                    </button>
+                    </button> */}
                 </div>
             }
         </div>

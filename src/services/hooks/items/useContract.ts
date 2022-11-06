@@ -10,12 +10,13 @@ import type {
 } from "typings/cmcs";
 
 interface UseContract {
-    loading: boolean;
+    isLoading: boolean;
     totalRecord: number;
     totalPage: number;
     nextCursor: string | undefined;
     hasNextPage: boolean | undefined;
     listContracts: Array<Contract>;
+    listContractWithPager?: any;
     contractInfo: Contract;
     refetch: () => void;
     fetchNextPage: () => void;
@@ -70,6 +71,7 @@ export const useContract = ({
         .map((d: any) => d.data?.listRecords))
         .filter(Boolean);
 
+    const listContractWithPager = (data?.pages || []).map((d: any) => d.data?.listRecords);
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPage = data?.pages[0]?.data?.totalPage || 0;
     const nextCursor = data?.pages && data?.pages[0]?.data?.nextCursor;
@@ -85,13 +87,14 @@ export const useContract = ({
     return {
         contractInfo,
         listContracts,
-        loading: isLoading,
+        isLoading,
         totalRecord,
         nextCursor,
         totalPage,
         hasNextPage,
         refetch,
         fetchNextPage,
+        listContractWithPager,
         statisticalStatusByOntimeOnbudget: statisticalStatusByOntimeOnbudgetInfo,
         isFetching
     }
@@ -144,7 +147,7 @@ export const useContractIsMembers = ({
     return {
         contractInfo,
         listContracts,
-        loading: isLoading,
+        isLoading,
         totalRecord,
         nextCursor,
         totalPage,
@@ -210,7 +213,6 @@ export const useQueryItemContract = (params?: ListContractsPayload): UseQueryCon
         hasNextPage
     }
 }
-
 interface UseQueryDetailContract {
     detailContract: Contract,
     loading: boolean,
@@ -253,9 +255,8 @@ export const useQueryDetailContract = (params?: InfoContractPayload): UseQueryDe
 
 //======================================== Hook báo cáo hợp đồng
 export const useContractDashboard = ({ params = {}}) => {
-
     const { data: contractAmountByMonth } = 
-        useQuery("contractAmountByMonth", () => 
+        useQuery(["contractAmountByMonth", params], () => 
             ContractRepository.getAmountByMonth(params), {
                 refetchOnWindowFocus: false,
                 enabled: true,
@@ -265,3 +266,47 @@ export const useContractDashboard = ({ params = {}}) => {
         contractAmountByMonth: contractAmountByMonth?.data
     }
 }
+
+export const useGetListByMonthContract = ({ params = {}, isFetchList = false }): any => {
+    const res = useInfiniteQuery(
+        [`contractGetListByMonth`, { params }],
+        async ({ pageParam }: any) =>
+            ContractRepository.getListByMonth({
+                lastestID: pageParam || "",
+                ...params
+            }),
+        {
+            getNextPageParam: ({ data }: any) => {
+                return data?.nextCursor || undefined;
+            },
+            refetchOnWindowFocus: false,
+            enabled: isFetchList ?? true, // https://react-query.tanstack.com/guides/disabling-queries
+        }
+    );
+
+    const {
+        isLoading,
+        data,
+        refetch,
+        fetchNextPage,
+        fetchPreviousPage,
+        hasNextPage,
+    } = res;
+
+    const listWithPager = (data?.pages || []).map((d: any) => d.data?.listRecords);
+    const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
+    const totalPage = data?.pages[0]?.data?.totalPage || 0;
+    const nextCursor = data?.pages && data?.pages[0]?.data?.nextCursor;
+
+    return {
+        listWithPager,
+        totalRecord,
+        totalPage,
+        nextCursor,
+        refetch,
+        fetchNextPage,
+        fetchPreviousPage,
+        hasNextPage,
+        isLoading
+    }
+};

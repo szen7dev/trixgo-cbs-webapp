@@ -142,7 +142,7 @@ export const DocumentProjectLayout:FC = ({children}) => {
                     <div className={"flex items-center flex-1"}>
                         <DropdownSearchableV2
                             className={"mr-4 border border-primary-border rounded-lg mb-2"}
-                            placeholder={"Tổ chức ban hành"}
+                            placeholder={"Đơn vị ban hành"}
                             prefixIcon={<img className={"mr-2"} src={maleUserIcon} alt={"icon"}/>}
                             isMultiple={true}
                             disableSearch={true}
@@ -219,10 +219,10 @@ export const DocumentProjectLayout:FC = ({children}) => {
                             Danh sách
                         </Link>
                         <Link to={`/pm/project/${departmentID}/document/1`} className={"px-4 py-2 border-r-0.5 border-primary-border " + (type === "1" ? "bg-cbs-soft-blue text-primary" : "bg-white text-primary-gray")}>
-                            Phân loại
+                            Tính chất
                         </Link>
                         <Link to={`/pm/project/${departmentID}/document/2`} className={"px-4 py-2 border-r-0.5 border-primary-border " + (type === "2" ? "bg-cbs-soft-blue text-primary" : "bg-white text-primary-gray")}>
-                            Danh bạ hệ thống
+                            Đơn vị ban hành
                         </Link>
                         <Link to={`/pm/project/${departmentID}/document/3`} className={"px-4 py-2 border-r-0.5 border-primary-border " + (type === "3" ? "bg-cbs-soft-blue text-primary" : "bg-white text-primary-gray")}>
                             Gói thầu

@@ -21,9 +21,11 @@ type Props = {
 
 export const SendEmailNotification: FC<Props> = ({ task, userId = '' }) => {
     const accessUsersID = useMemo(() => {
+        if(!task || task.keyError) return [];
+
         let accessUsersID = [];
         if(task.accessUsers && task.accessUsers?.length) {
-            accessUsersID = task.accessUsers.map(user => user._id);
+            accessUsersID = task.accessUsers?.map(user => user._id);
         } else{
             accessUsersID = task.related?.map(user => user._id) || [];
 
@@ -36,11 +38,11 @@ export const SendEmailNotification: FC<Props> = ({ task, userId = '' }) => {
             }
         }
 
-        return accessUsersID.filter(userID => userID !== userId);
-    }, [task._id]);
+        return accessUsersID?.filter(userID => userID !== userId);
+    }, [task?._id]);
 
     const accessUsers = useMemo(() => {
-        if(!task) return [];
+        if(!task || task.keyError) return [];
 
         if (task.accessUsers && task.accessUsers?.length) {
             return task.accessUsers;
@@ -53,8 +55,8 @@ export const SendEmailNotification: FC<Props> = ({ task, userId = '' }) => {
 
     const [isShow, setIsShow] = useState(false);
     const [keyword, setKeyword] = useState('');
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
+    const [title, setTitle] = useState(task.name);
+    const [content, setContent] = useState(task.description);
     const [emails, setEmails] = useState('');
     const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 
@@ -140,6 +142,10 @@ export const SendEmailNotification: FC<Props> = ({ task, userId = '' }) => {
         }
     }
 
+    if(!task || task.keyError) {
+        return <></>
+    }
+
     return (
         <>
             <button onClick={() => setIsShow(!isShow)} className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mx-3"}>
@@ -201,12 +207,14 @@ export const SendEmailNotification: FC<Props> = ({ task, userId = '' }) => {
                                     <input
                                         className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
                                         placeholder={"Tiêu đề email"}
+                                        defaultValue={task.name}
                                         onChange={e => setTitle(e.target.value)}
                                     />
                                     <textarea
                                         placeholder={"Nội dung email"}
                                         rows={3}
                                         className={"w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
+                                        defaultValue={task.description}
                                         onChange={e => setContent(e.target.value)}
                                     ></textarea>
                                     <textarea

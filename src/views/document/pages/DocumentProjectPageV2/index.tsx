@@ -125,7 +125,7 @@ const DocumentProjectPageV2:FC = () => {
                                 Nội dung
                             </th>
                             <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-1/6 border-b-0.5 border-primary-border align-middle py-3"}>
-                                Chủ thể ban hành
+                                Đơn vị ban hành
                             </th>
                             <th className={"bg-cbs-table-header text-primary-gray text-left font-normal border-b-0.5 border-primary-border align-middle py-3"}>
                                 Mã hiệu

@@ -7,14 +7,41 @@ import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
 import nextIcon from "assets/images/icons-arrow-next.svg";
 import userIcon from "assets/images/icon-user-avatar.svg";
 import TriangleDown from "assets/icons/TriangleDown";
+import { UseHistoryLogs } from "services/hooks/analysis/useHistoryLogs";
+import { Task } from "typings/task";
+import PaginateV2 from "shareComponents/common/PaginateV2";
+import { Loader } from "shareComponents/common";
+import moment from "moment";
+moment.locale('vi');
+type Props = {
+    task: Task;
+    userId?: string;
+    refetchTaskInfo?: ()=> void
+}
+export const TaskHistoryLog:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
+    // Phân trang
+    type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+    const ref = React.useRef<PaginateHandle>(null);
+    const [pageIndex, setPageIndex] = React.useState(0);
 
-export const TaskHistoryLog:FC = () => {
     const [isShow, setIsShow] = useState(false);
     const focusElementRef = useRef<HTMLDivElement>(null);
-
+    const  {   
+        isLoading,
+        list,
+        listHistoryLogsWithPager,
+        totalRecord,
+        totalPage,
+        nextCursor,
+        hasNextPage,
+        refetch,
+        fetchNextPage,
+        isFetching
+    } = UseHistoryLogs({ params: { taskID: task._id, limit: 20 }, isFetchList: true});
     return (
         <>
-            <button onClick={() => setIsShow(!isShow)} className={"rounded bg-cbs-form-input-bg h-[36px] text-primary-gray flex items-center justify-center px-3"}>
+            {(isLoading) && <Loader className="border-primary" />}
+            <button onClick={() => setIsShow(!isShow)} className={"rounded bg-cbs-form-input-bg h-[36px] text-primary-gray flex items-center justify-center px-3 mr-2"}>
                 <img src={iconChecklist} alt={"----"} className={"w-[24px] mr-2"}/>
                 <span>Lịch sử hoạt động</span>
             </button>
@@ -72,7 +99,7 @@ export const TaskHistoryLog:FC = () => {
                                     </button>
                                 </div>
                                 <div className={"history-header flex items-center border-b-0.5 border-primary-border mt-4 pb-2"}>
-                                    <DropdownSearchableV2
+                                    {/* <DropdownSearchableV2
                                         placeholder={"Lọc theo phân loại"}
                                         showTriangle={true}
                                         className={"rounded-full border border-primary-border w-fit"}
@@ -107,8 +134,8 @@ export const TaskHistoryLog:FC = () => {
                                                 text: "Ký xác nhận phê duyệt"
                                             },
                                         ]}
-                                    />
-                                    <TimeRangeDropdown
+                                    /> */}
+                                    {/* <TimeRangeDropdown
                                         className={"rounded-full border border-primary-border w-fit p-1.5 ml-2"}
                                         placeholder={"Lọc theo thời gian"}
                                         iconBack={<TriangleDown/>}
@@ -130,39 +157,41 @@ export const TaskHistoryLog:FC = () => {
                                                 toDate: "12/07/2022"
                                             }
                                         ]}
-                                    />
+                                    /> */}
                                     <div className={"flex-1 flex items-center justify-end"}>
-                                        <span className={"text-primary-gray"}>1-50 trong số 2.358</span>
-                                        <button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"} disabled={true}>
-                                            <img src={nextIcon} alt={"----"} className={"rotate-180"}/>
-                                        </button>
-                                        <button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"}>
-                                            <img src={nextIcon} alt={"----"}/>
-                                        </button>
+                                    <PaginateV2
+                                        ref={ref}
+                                        totalRecord={totalRecord}
+                                        totalPages={totalPage}
+                                        limit={20}
+                                        hasNextPage={hasNextPage}
+                                        isFetching={isFetching}
+                                        nextPageAction={() => {
+                                            fetchNextPage();
+                                            setPageIndex((oldState) => oldState + 1);
+                                        }}
+                                        prevPageAction={() => {
+                                            setPageIndex((oldState) => oldState - 1);
+                                        }}
+                                    />
                                     </div>
                                 </div>
                                 <div className={"max-h-[500px] min-h-[320px] mt-[15px] no-webkit-scrollbar overflow-auto"}>
-                                    <div className={"flex items-center py-2"}>
-                                        <img src={userIcon} alt={"user"} className={"rounded-full overflow-hidden w-[36px] h-[36px] min-w-[36px] min-h-[36px] max-w-[36px] max-h-[36px]"}/>
-                                        <div className={"log-content text-primary-gray pl-4"}>
-                                            <p><b>Vũ Thanh Bình-CPMI</b> thay đổi thời hạn công việc từ 15/2/2020 tới 12/6/2022 ông việc từ ngày hôm đó tới ngày hôm nay</p>
-                                            <p>15:30 22/12/2012 (10 day ago)</p>
-                                        </div>
-                                    </div>
-                                    <div className={"flex items-center py-2"}>
-                                        <img src={userIcon} alt={"user"} className={"rounded-full overflow-hidden w-[36px] h-[36px] min-w-[36px] min-h-[36px] max-w-[36px] max-h-[36px]"}/>
-                                        <div className={"log-content text-primary-gray pl-4"}>
-                                            <p><b>Vũ Thanh Bình-CPMI</b> thay đổi thời hạn công việc từ 15/2/2020 tới 12/6/2022 ông việc từ ngày hôm đó tới ngày hôm nay</p>
-                                            <p>15:30 22/12/2012 (10 day ago)</p>
-                                        </div>
-                                    </div>
-                                    <div className={"flex items-center py-2"}>
-                                        <img src={userIcon} alt={"user"} className={"rounded-full overflow-hidden w-[36px] h-[36px] min-w-[36px] min-h-[36px] max-w-[36px] max-h-[36px]"}/>
-                                        <div className={"log-content text-primary-gray pl-4"}>
-                                            <p><b>Vũ Thanh Bình-CPMI</b> thay đổi thời hạn công việc từ 15/2/2020 tới 12/6/2022 ông việc từ ngày hôm đó tới ngày hôm nay</p>
-                                            <p>15:30 22/12/2012 (10 day ago)</p>
-                                        </div>
-                                    </div>
+                                    {(listHistoryLogsWithPager[pageIndex] ?? []).map((item: any, index: number) => {
+                                        return (
+                                            <div className={"flex items-center py-2"} key={index}>
+                                                <img src={item.userCreate.image ? `${process.env.REACT_APP_URL_S3_USER}/${item?.userCreate?.image}` : userIcon} alt={"user"} className={"rounded-full overflow-hidden w-[36px] h-[36px] min-w-[36px] min-h-[36px] max-w-[36px] max-h-[36px]"}/>
+                                                <div className={"log-content text-primary-gray pl-4"}>
+                                                    <p>
+                                                        <b> {item?.userCreate?.fullname} </b>
+                                                        {item?.content}
+                                                    </p>    
+                                                    <p> {moment(item?.createAt).format("LT")} {moment(item?.createAt).format("L")} ({moment(item?.createAt).startOf('minute').fromNow()})</p>
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                    }
                                 </div>
                             </div>
                         </Transition.Child>

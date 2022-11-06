@@ -1,8 +1,6 @@
 import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 
 import ContractIPCRepository from 'apis/cmcs/contractIPC';
-import HumanRepository from 'apis/human';
-import ContractProduceRepository from "apis/cmcs/contractProduce";
 
 type UseContractIPCProp = {
     listContractIPC: Array<any>;
@@ -56,7 +54,8 @@ export const UseContractIPCListWithPager = (isFetchList = false, param = {}, con
                 limit,
                 lastestID: pageParam || "",
                 contractID,
-                keyword
+                keyword,
+                ...param
             }),
         {
             getNextPageParam: ({ data }: any) => {
@@ -178,36 +177,49 @@ export const useDetailContractIPCMutation = (id: string): any => {
 // Bắt đầu tạo hook download excel
 type UseContractCustom = {
     exportContractIpcAsync: (payload: any) => Promise<any>,
+    contractIPCAmountByProperty: any,
+    isLoadingAmountByProperty: boolean,
 };
 
 type UseContractCustomParams = {
-    params?: any
+    params?: any,
+    isFetchAmountByProperty?: boolean
 }
 
 export const useContractIpcCustom = ({
-    params = {}
+    params = {},
+    isFetchAmountByProperty = false
 }: UseContractCustomParams) : UseContractCustom => {
     const { mutateAsync: exportContractIpcAsync } =
         useMutation((payload: any) =>
             ContractIPCRepository.exportContractIpc(payload)
         );
 
+    const { data: contractIPCAmountByProperty, isLoading: isLoadingAmountByProperty } =
+    useQuery(["cmcsContractIPCAmountByProperty", params], () =>
+        ContractIPCRepository.fetchAmountByProperty(params), {
+            refetchOnWindowFocus: false,
+            enabled: isFetchAmountByProperty,
+        });
+
     return {
-        exportContractIpcAsync
+        exportContractIpcAsync,
+        contractIPCAmountByProperty,
+        isLoadingAmountByProperty
     }
 }
 // Kết thúc tạo hook download excel
 
 export const useCmcsDashboard = ({ params = {}}) => {
-    const { data: cmcsContractIPCAmountByMonth } = 
-        useQuery("cmcsContractIPCAmountByMonth", () => 
+    const { data: cmcsContractIPCAmountByMonth } =
+        useQuery(["cmcsContractIPCAmountByMonth", params], () =>
             ContractIPCRepository.cmcsContractIPCAmountByMonth(params), {
                 refetchOnWindowFocus: false,
                 enabled: true,
             });
 
-    const { data: cmcsContractPaymentAmountByMonth } = 
-    useQuery("cmcsContractPaymentAmountByMonth", () => 
+    const { data: cmcsContractPaymentAmountByMonth } =
+    useQuery(["cmcsContractPaymentAmountByMonth", params], () =>
         ContractIPCRepository.cmcsContractPaymentAmountByMonth(params), {
             refetchOnWindowFocus: false,
             enabled: true,
@@ -218,3 +230,48 @@ export const useCmcsDashboard = ({ params = {}}) => {
         cmcsContractPaymentAmountByMonth: cmcsContractPaymentAmountByMonth?.data
     }
 }
+
+export const UseContractIPCGetListByMonthWithPager = ({ params = {}, isFetchList = false }): any => {
+    console.log({ isFetchList })
+    const res = useInfiniteQuery(
+        [`contractIPCGetListByMonthWithPager`, { params }],
+        async ({ pageParam }: any) =>
+            ContractIPCRepository.getListByMonth({
+                lastestID: pageParam || "",
+                ...params
+            }),
+        {
+            getNextPageParam: ({ data }: any) => {
+                return data?.nextCursor || undefined;
+            },
+            refetchOnWindowFocus: false,
+            enabled: isFetchList ?? true, // https://react-query.tanstack.com/guides/disabling-queries
+        }
+    );
+
+    const {
+        isLoading,
+        data,
+        refetch,
+        fetchNextPage,
+        fetchPreviousPage,
+        hasNextPage,
+    } = res;
+
+    const listWithPager = (data?.pages || []).map((d: any) => d.data?.listRecords);
+    const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
+    const totalPage = data?.pages[0]?.data?.totalPage || 0;
+    const nextCursor = data?.pages && data?.pages[0]?.data?.nextCursor;
+
+    return {
+        listWithPager,
+        totalRecord,
+        totalPage,
+        nextCursor,
+        refetch,
+        fetchNextPage,
+        fetchPreviousPage,
+        hasNextPage,
+        isLoading
+    }
+};

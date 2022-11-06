@@ -1,6 +1,6 @@
-import React, {FC, useState} from "react";
+import React, {FC, useState, useEffect} from "react";
 import chervUpIcon from "assets/images/icon-cherv-up.svg";
-import {DropdownSearchableV2, RightClickMenuWrapper} from "shareComponents/common";
+import {DropdownSearchableV2, RightClickMenuWrapper, Loader} from "shareComponents/common";
 import MenuChildRow from "./MenuChildRow";
 import {formatNumberMoney} from "utils/cmcs";
 import BugetRowGroupTemp from "./BudgetRowGroupTemp";
@@ -13,6 +13,9 @@ import {NavigateTabBudgetPage} from "./NavigateTabBudgetPage";
 import downloadIcon from "assets/images/icons8-download-64.svg";
 import iconPencil from "assets/images/icons8-pencil-96 1.png";
 import nextIcon from "assets/images/icons-arrow-next.svg";
+import { createLinkAndClick } from 'utils';
+import { toast } from "react-toastify";
+import { useContractCustom } from "services/hooks/cmcs/useContractIncome";
 
 type Props = {
     collapse: boolean;
@@ -32,11 +35,40 @@ export const ProjectBudgetPageType1:FC<Props> = ({projectInfo, collapse, toggleC
         projectID
     });
 
+    const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+		isExporting: false,
+	});
+
+    const { exportContractAsync } = useContractCustom({});
+    const handleExportReport = async () => {
+        try {
+            setStateExport({ isExporting: true });
+            const { error, data } = await exportContractAsync({
+                filterParams: {
+                    projectID
+                },
+                type: 'project'
+            });
+            if(error) {
+                return toast.warn(data?.message);
+            }
+
+            data && createLinkAndClick(data, '_self');
+        } catch (error: any) {
+            toast.error(error.message)
+        } finally {
+            setStateExport({ isExporting: false });
+        }
+    }
+    
+    if(stateExport.isExporting) {
+        return <Loader className="border-primary" />
+    }
     return (
         <>
             <div className={"sticky top-0 z-10 " + (collapse?"hidden":"block")}>
                 <div className={"flex items-center px-4 py-2"}>
-                    <div className={"flex items-center flex-1"}>
+                    {/* <div className={"flex items-center flex-1"}>
                         <DropdownSearchableV2
                             className={"mr-4 border border-primary-border rounded-lg mb-2"}
                             placeholder={"Loại gói thầu"}
@@ -69,19 +101,19 @@ export const ProjectBudgetPageType1:FC<Props> = ({projectInfo, collapse, toggleC
                             disableSearch={true}
                             data={[]}
                         />
-                    </div>
+                    </div> */}
                     {/* <button className={"h-[32px] rounded bg-cbs-green text-white font-bold px-4"}>
                         Tạo mới
                     </button> */}
                 </div>
                 <div className={"flex items-center pb-2"}>
                     <NavigateTabBudgetPage/>
-                    <button className={"flex items-center justify-center mx-3 ml-6"}>
+                    <button className={"flex items-center justify-center mx-3 ml-6"} onClick={handleExportReport}>
                         <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"}/>
                     </button>
-                    <button className={"flex items-center justify-center mx-3 ml-6"}>
+                    {/* <button className={"flex items-center justify-center mx-3 ml-6"}>
                         <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"}/>
-                    </button>
+                    </button> */}
                     {/* <div className={"flex-1 flex items-center justify-end"}>
                         <span className={"text-primary-gray"}>1-50 trong số 2.358</span>
                         <button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"} disabled={true}>
@@ -101,15 +133,16 @@ export const ProjectBudgetPageType1:FC<Props> = ({projectInfo, collapse, toggleC
                             <button className="inline-block text-white rounded bg-gray-600 w-5 h-5" onClick={() => setShow(!show)}>{show ? '+' : '-'}</button>
                         </th> */}
                         <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2 w-[38px]">TT</th>
-                        <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2 min-w-[200px] w-[300px]">Gói thầu/Hợp đồng</th>
-                        <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '122px' }}>Ngân sách</th>
-                        <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '122px' }}>Dự báo</th>
-                        <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '122px' }}>Ký hợp đồng</th>
-                        <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '122px' }}>Đã tạm ứng</th>
-                        <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '125px' }}>Sản lượng</th>
-                        <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '132px' }}>Nghiệm thu</th>
+                        <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2 min-w-[200px] w-[300px]">Hợp đồng</th>
+                        {/* <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '122px' }}>Ngân sách</th> */}
+                        {/* <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '122px' }}>Dự báo</th> */}
+                        <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '122px' }}>Giá trị ký</th>
+                        <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '122px' }}>Giá trị phát sinh</th>
+                        <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '122px' }}>Giá trị đã tạm ứng</th>
+                        <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '125px' }}>Sản lượng thực hiện</th>
+                        <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '132px' }}>Nghiệm thu hoàn thành</th>
                         <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '123px' }}>Đã thanh toán</th>
-                        <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '124px' }}>Còn lại phải trả</th>
+                        <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '124px' }}>Còn lại phải trả theo công nợ</th>
                         <th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border px-2" style={{ maxWidth: '246px' }}>
                             <div className={"flex items-center"}>
                                 <div className={"flex-1"}>
@@ -138,15 +171,19 @@ export const ProjectBudgetPageType1:FC<Props> = ({projectInfo, collapse, toggleC
                         </th> */}
                             <th className='py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border text-center'></th>
                             <th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border text-left"></th>
-                            <th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border md:text-xs">
+                            {/* <th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border md:text-xs">
                                 {formatNumberMoney(projectInfo.budget + projectInfo.vatBudget)}
-                            </th>
-                            <th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border md:text-xs">
+                            </th> */}
+                            {/* <th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border md:text-xs">
                                 {formatNumberMoney(projectInfo.forecastBudget + projectInfo.vatForecastBudget)}
+                            </th> */}
+                            <th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border md:text-xs">
+                                {formatNumberMoney(
+                                    projectInfo.contractValue + projectInfo.contractVatValue
+                                )}
                             </th>
                             <th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border md:text-xs">
                                 {formatNumberMoney(
-                                    projectInfo.contractValue + projectInfo.contractVatValue +
                                     projectInfo.contractPlus + projectInfo.contractVatPlus
                                 )}
                             </th>

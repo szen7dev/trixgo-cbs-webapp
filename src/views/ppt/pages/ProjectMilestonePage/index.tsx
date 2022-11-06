@@ -20,6 +20,7 @@ type Props = {
 
 export const ProjectMilestonePage: FC<Props> = ({ type = 1 }) => {
 	const { id: projectID, milestoneID } = useParams<{ id: string, milestoneID: string }>();
+  const milestoneIDState = milestoneID ? milestoneID : "1";
   const [viewMode, setViewMode] = useState("LIST");
   const history = useHistory();
   const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
@@ -33,7 +34,7 @@ export const ProjectMilestonePage: FC<Props> = ({ type = 1 }) => {
     refetchListTask: refetchListTaskOutDate
   } = useTask({
     params: {
-      keyword, projectID, milestone: milestoneID, isPassPermision: "1", typeStatus: "1", statusNe: "3",
+      keyword, projectID, milestone: milestoneIDState, isPassPermision: "1", typeStatus: "1", statusNe: "3",
       sortKey: JSON.stringify(['actualFinishTime__1', 'expiredTime__1'])
     },
     isFetch: true
@@ -48,7 +49,7 @@ export const ProjectMilestonePage: FC<Props> = ({ type = 1 }) => {
     refetchListTask: refetchListTaskNextWeek
   } = useTask({
     params: {
-      keyword, projectID, milestone: milestoneID, isPassPermision: "1", typeStatus: "2", statusNe: "3",
+      keyword, projectID, milestone: milestoneIDState, isPassPermision: "1", typeStatus: "2", statusNe: "3",
       sortKey: JSON.stringify(['actualFinishTime__1', 'expiredTime__1'])
     },
     isFetch: true
@@ -62,7 +63,7 @@ export const ProjectMilestonePage: FC<Props> = ({ type = 1 }) => {
     refetchListTask: refetchListTaskMore
   } = useTask({
     params: {
-      keyword, projectID, milestone: milestoneID, isPassPermision: "1", typeStatus: "3", statusNe: "3",
+      keyword, projectID, milestone: milestoneIDState, isPassPermision: "1", typeStatus: "3", statusNe: "3",
       sortKey: JSON.stringify(['actualFinishTime__1', 'expiredTime__1'])
     },
     isFetch: true
@@ -76,7 +77,7 @@ export const ProjectMilestonePage: FC<Props> = ({ type = 1 }) => {
     refetchListTask: refetchListtasksCompleted
   } = useTask({
     params: {
-      keyword, projectID, milestone: milestoneID, isPassPermision: "1", status: "3",
+      keyword, projectID, milestone: milestoneIDState, isPassPermision: "1", status: "3",
       sortKey: JSON.stringify(['actualFinishTime__1', 'expiredTime__1'])
     },
     isFetch: true
@@ -119,33 +120,34 @@ export const ProjectMilestonePage: FC<Props> = ({ type = 1 }) => {
     document.title = "Quản lý công việc";
   }, [isSuccessApp]);
 
-  if (isLoadingListTask) {
-    return <Loader className="border-primary" />;
-  }
-
   return (
     <>
       <div>
         <header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
 
           <div className="flex items-center">
-          <button onClick={() => history.goBack()}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                />
-              </svg>
-            </button>
-            &ensp;<p className="text-lg">{PCM_MILESTONE[Number(milestoneID)].text}</p>
+            {milestoneID ? 
+            <>
+              <button onClick={() => history.goBack()}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                  />
+                </svg>
+              </button>
+              &ensp;
+              <p className="text-lg">{PCM_MILESTONE[Number(milestoneIDState)].text}</p>
+            </> : <></>
+            }
             <SearchInput
               classNameWrapper="ml-4"
               classNameInput="outline-none w-[296px]"

@@ -8,6 +8,7 @@ import { Link, NavLink } from 'react-router-dom';
 import humanLogo from "assets/logos/human.png";
 import fakeThumbnail from "assets/images/avatar.jpg";
 import iconFolder from "assets/images/icons8-application-window-100.png";
+import iconPeople from "assets/images/icons8-people-64.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
 
@@ -32,24 +33,24 @@ export const HumanLeftSideBar: FC = () => {
                 <div className="t-link-menu-container">
                     <NavLink to={`/human/home`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
                     >
-                        <img width={'20px'} src={iconFolder} alt="Menu item" />
+                        <img width={'20px'} src={iconPeople} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Trang chủ</span>
                     </NavLink>
                     <NavLink to={`/human/partner`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray">
-                        <img width={'20px'} src={iconFolder} alt="Menu item" />
+                        <img width={'20px'} src={iconPeople} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Nhân sự đối tác</span>
                     </NavLink>
                     <NavLink to={`/human/capacity`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray">
-                        <img width={'20px'} src={iconFolder} alt="Menu item" />
+                        <img width={'20px'} src={iconPeople} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Tra cứu năng lực</span>
                     </NavLink>
                     <NavLink to={`/human/certificate`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray">
-                        <img width={'20px'} src={iconFolder} alt="Menu item" />
+                        <img width={'20px'} src={iconPeople} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Tra cứu chứng chỉ</span>
                     </NavLink>
 
                     <NavLink to={`/human/expired`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray">
-                        <img width={'20px'} src={iconFolder} alt="Menu item" />
+                        <img width={'20px'} src={iconPeople} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Theo dõi thời hạn</span>
                     </NavLink>
                     {/* <Link to={`/human/cetificate`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">

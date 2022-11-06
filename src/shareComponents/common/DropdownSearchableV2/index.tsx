@@ -58,7 +58,8 @@ type Props = {
   reset?: boolean;
 };
 type DropdownSearchableV2Handle = {
-  resetDropdown: () => void
+  resetDropdown: () => void;
+  setValuesDropdown: (value: any) => void;
 }
 // type Params = {
 //     [key: string]: string;
@@ -118,6 +119,9 @@ export const DropdownSearchableV2 = forwardRef<DropdownSearchableV2Handle, Props
       if (onClearData) {
         onClearData()
       }
+    },
+    setValuesDropdown(value: any) {
+      setValues(value);
     }
   }));
 

@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from "react";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import adminIcon from "assets/images/icons8-user-shield-48.svg"
 import plusIcon from "assets/images/icons8-plus-math-96.svg"
 import sendAndReceiveIcon from "assets/images/icons-send-and-receive.svg"
@@ -11,9 +11,11 @@ import fileIcon from "assets/images/icons-file.svg"
 import humanIcon from "assets/images/icons8-people-64.svg"
 import paymentImage from "assets/menu/project/icons-project-payment.svg"
 import deliveryImage from "assets/menu/project/icons-project-delivery.svg"
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
-import {useModal} from "../../../../services/hooks/useModal";
-import {ModalAddNewTask} from "../../../common";
+import { useModal } from "../../../../services/hooks/useModal";
+import { ModalAddNewTask } from "../../../common";
 import { NavLink } from 'react-router-dom';
 
 /*=====6.HOOKS/APIS=====*/
@@ -23,26 +25,104 @@ import { APP_ID } from "apis/localdb";
 import { usePcmPlanTaskNotification } from "services/hooks/pcm/usePcmDashboardV2";
 import { useDispatch } from "react-redux";
 import { resetFilterDashboard } from "redux/reducer/DashboardV2Slice";
+import { useSocket } from "services/hooks/useSocket";
 
-export const HomeLeftMenuContent:FC = () => {
+type Tab = {
+    label: string,
+    icon: string,
+    count: number,
+    route: string
+}
+
+export const HomeLeftMenuContent: FC = () => {
     const [enabled, setEnabled] = useState(false);
-    const {data} = usePcmPlanTaskNotification({enabled: enabled});
+    const { data } = usePcmPlanTaskNotification({ enabled: enabled });
     const { openModal } = useModal();
     const { user } = useAuth();
     const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
     const dispatch = useDispatch();
+    const [menuShowList, setMenuState] = useState(false);
 
-    const listTab : {
-        label: string,
-        icon: string,
-        count: number,
-        route: string
-    }[] = [
+    const [badge, setBadge] = useState({
+        amountUnreadTask: data?.data?.amountUnreadTask,
+        amountMyTask: Number(data?.data?.amountMyTask1 + data?.data?.amountMyTask2 + data?.data?.amountMyTask3),
+    })
+
+    const amountUnreadTask = useMemo(() => {
+        return badge.amountUnreadTask || data?.data?.amountUnreadTask || 0;
+    }, [data?.data?.amountUnreadTask, badge.amountUnreadTask])
+
+    const amountMyTask = useMemo(() => {
+        return badge.amountMyTask || Number(data?.data?.amountMyTask1 + data?.data?.amountMyTask2 + data?.data?.amountMyTask3) || 0;
+    }, [data?.data, badge.amountMyTask])
+
+    const { current: socket }: any = useSocket();
+
+    useEffect(() => {
+        if (!socket) return;
+
+        const onUpdateBadgeNotification = ({ error, data }: any) => {
+            if(error || !Object.keys(data).length) return;
+
+            const {
+                amountUnreadTask,
+                amountMyTask1,
+                amountMyTask2,
+                amountMyTask3,
+            } = data;
+
+            setBadge({
+                amountUnreadTask,
+                amountMyTask: Number(amountMyTask1 + amountMyTask2 + amountMyTask3) || 0,
+            })
+        }
+
+        socket.on("SUBJECT_PCM_SSC_UPDATE_COUNT_NOTIFICATION", onUpdateBadgeNotification);
+
+        return () => {
+          socket.off("SUBJECT_PCM_SSC_UPDATE_COUNT_NOTIFICATION", onUpdateBadgeNotification);
+        };
+    }, [socket]);
+
+    const listTab: Tab[] = [
         {
             label: "Hoạt động",
             icon: sendAndReceiveIcon,
-            count: data?.data?.amountUnreadTask || 0,
+            count: amountUnreadTask,
             route: '/pcm/home'
+        },
+        {
+            label: "Việc của tôi",
+            icon: mailOutLineIcon,
+            count: amountMyTask,
+            route: '/pcm/mine'
+        },
+        {
+            label: "Việc quan tâm",
+            icon: starIcon,
+            count: 0,
+            route: '/pcm/bookmark'
+        },
+        // {
+        //     label: "Đã gửi",
+        //     icon: sendAndReceiveIcon,
+        //     count: 0,
+        //     route: '/pcm/send'
+        // },
+        {
+            label: "Việc nháp",
+            icon: fileIcon,
+            count: 0,
+            route: '/pcm/draft'
+        },
+    ];
+
+    const listTabSub: Tab[] = [
+        {
+            label: "Việc giao người khác",
+            icon: uploadIcon,
+            count: 0,
+            route: '/pcm/assign'
         },
         {
             label: "Báo cáo theo dự án",
@@ -56,42 +136,6 @@ export const HomeLeftMenuContent:FC = () => {
             count: 0,
             route: '/pcm/users'
         },
-        // {
-        //     label: "Outbox",
-        //     icon: sendAndReceiveIcon,
-        //     count: 0,
-        //     route: '/pcm/send'
-        // },
-        {
-            label: "Việc của tôi",
-            icon: mailOutLineIcon,
-            count: data?.data?.amountMyTask || 0,
-            route: '/pcm/mine'
-        },
-        {
-            label: "Việc giao người khác",
-            icon: uploadIcon,
-            count: 0,
-            route: '/pcm/assign'
-        },
-        {
-            label: "Việc quan tâm",
-            icon: starIcon,
-            count: 0,
-            route: '/pcm/bookmark'
-        },
-        // {
-        //     label: "Thầu và mua sắm",
-        //     icon: biddingImage,
-        //     count: 0,
-        //     route: '/pcm/bidding'
-        // },
-        {
-            label: "Hồ sơ thanh toán",
-            icon: paymentImage,
-            count: 0,
-            route: '/pcm/payment'
-        },
         {
             label: "Báo cáo, giao nộp",
             icon: deliveryImage,
@@ -99,17 +143,23 @@ export const HomeLeftMenuContent:FC = () => {
             route: '/pcm/delivery'
         },
         {
+            label: "Thanh toán",
+            icon: paymentImage,
+            count: 0,
+            route: '/pcm/payment'
+        },
+        {
             label: "Việc liên quan",
             icon: linkIcon,
             count: 0,
             route: '/pcm/related'
         },
-        {
-            label: "Việc nháp",
-            icon: fileIcon,
-            count: 0,
-            route: '/pcm/draft'
-        },
+        // {
+        //     label: "Thầu và mua sắm",
+        //     icon: biddingImage,
+        //     count: 0,
+        //     route: '/pcm/bidding'
+        // },
         {
             label: "Báo cáo động",
             icon: fileIcon,
@@ -122,7 +172,7 @@ export const HomeLeftMenuContent:FC = () => {
         setTimeout(() => {
             setEnabled(true);
         }, 300);
-    },[]);
+    }, []);
 
     const renderNav = (nav: {
         label: string,
@@ -130,16 +180,16 @@ export const HomeLeftMenuContent:FC = () => {
         count: number,
         route: string
     }) => {
-      return (
-          <NavLink key={nav.route} to={nav.route} className={"left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray"} onClick={() => dispatch(resetFilterDashboard({}))}>
-              <img width={'20px'} src={nav.icon} alt={nav.label}/>
-              <span className={"flex-1 ml-2 text-left text-[14px]"}>{nav.label}</span>
-              {
-                  nav.count > 0 &&
-                  <span>{nav.count}</span>
-              }
-          </NavLink>
-      )
+        return (
+            <NavLink key={nav.route} to={nav.route} className={"left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray"} onClick={() => dispatch(resetFilterDashboard({}))}>
+                <img width={'20px'} src={nav.icon} alt={nav.label} />
+                <span className={"flex-1 ml-2 text-left text-[14px]"}>{nav.label}</span>
+                {
+                    nav.count > 0 &&
+                    <span>{nav.count}</span>
+                }
+            </NavLink>
+        )
     }
     return (
         <>
@@ -152,14 +202,14 @@ export const HomeLeftMenuContent:FC = () => {
                     )
                 }
                 className={"bg-cbs-blue-button rounded-md flex items-center justify-center text-xl text-primary-gray py-2 px-4"}>
-                <img src={plusIcon} alt={"Tạo mới"}/>
+                <img src={plusIcon} alt={"Tạo mới"} />
                 <span className={"ml-2"}>Tạo mới</span>
             </button>
 
-            <div className={"mt-4"}>
+            <div className={"mt-4 pb-1 relative"}>
                 {hasPermission && dataUserAccess?.level == 0 ?
                     <NavLink to={`/pcm/admin`} className={"left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray"}>
-                        <img width={'20px'} src={adminIcon}/>
+                        <img width={'20px'} src={adminIcon} />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản trị viên</span>
                     </NavLink> : <></>
                 }
@@ -167,6 +217,15 @@ export const HomeLeftMenuContent:FC = () => {
                 {
                     listTab.map(nav => renderNav(nav))
                 }
+                <div onClick={() => setMenuState(!menuShowList)} className="text-primary-gray px-4 py-1 cursor-pointer hover:bg-slate-200">
+                    {(menuShowList ? <ExpandLessIcon className="w-[20px]" fontSize="small"/> : <ExpandMoreIcon className="w-[20px]" fontSize="small"/>)}
+                    <span className="ml-2 text-[14px]">{(menuShowList ? 'Thu gọn' : 'Danh sách mở rộng')}</span>
+                </div>
+                <div className={"transition-1s h-0 overflow-hidden " + (menuShowList ? ' h-[300px]' : '')}>
+                    {
+                        listTabSub.map(nav => renderNav(nav))
+                    }
+                </div>
             </div>
         </>
     )

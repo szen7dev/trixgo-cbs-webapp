@@ -22,7 +22,10 @@ import { BIDDING_PLAN_CONTRACT_TYPE, BIDDING_PLAN_FORM, BIDDING_PLAN_STATUS, FIN
  */
 import { useBiddingPlan } from 'services/hooks/bidding/useBiddingPlan';
 import { BiddingPlanRepository } from 'apis/bidding';
+import packageRepository  from 'apis/document/Package';
+
 import { useQueryListCompany } from "services/hooks/useCompanies";
+import { useDocumentPackage } from "services/hooks/document/useDocumentPackage";
 
 interface ModalProps {
 	biddingPlanID: string;
@@ -39,8 +42,8 @@ const ModalUpdateBiddingPlan: FC<ModalProps> = ({ biddingPlanID, toggle, onConfi
 		if(!biddingPlanID) return;
 
 		(async () => {
-			const { error, data } = await BiddingPlanRepository.fetchDetailBiddingPlan({
-				planID: biddingPlanID
+			const { error, data } = await packageRepository.infoPackage({
+				packageID: biddingPlanID
 			})
 			if(error) return;
 
@@ -66,13 +69,18 @@ const ModalUpdateBiddingPlan: FC<ModalProps> = ({ biddingPlanID, toggle, onConfi
 		name: string().required("Bạn cần nhập nội dung"),
 	});
 
+	const {   
+		updateDocumentPackageMutateAsync,
+		refetch
+	  } = useDocumentPackage({ }, false, false);
+
 	const handleSubmit = async (values: any) => {
 		try {
-			const { error, data } = await updateAsync({
-				planID: biddingPlanID,
+			const { error, data } = await updateDocumentPackageMutateAsync({
+				packageID: biddingPlanID,
 				...values
 			});
-
+			
 			if(error) {
                 return toast.warn(data?.message);
             }
@@ -106,7 +114,7 @@ const ModalUpdateBiddingPlan: FC<ModalProps> = ({ biddingPlanID, toggle, onConfi
 				formik => {
 					console.log({ formilk: initValues });
 					return (
-						<Form autoComplete="off">
+						<Form autoComplete="off"  className='h-[700px]'>
 							<div className="flex items-center px-6 py-2.5 justify-between bg-cbs-table-header">
 								<Dialog.Title
 									as="h3"
@@ -120,7 +128,7 @@ const ModalUpdateBiddingPlan: FC<ModalProps> = ({ biddingPlanID, toggle, onConfi
 									</svg>
 								</button>
 							</div>
-							<div className="relative px-6 mt-2 pt-3.5 flex-1 md:h-[800px] text-x-small">
+							<div className="relative px-6 my-3 overflow-y-auto text-x-small" style={{height:"530px"}}>
 								<label className='block'>
 									<div className='mb-1.5'>
 										Nội dung (*)
@@ -229,7 +237,7 @@ const ModalUpdateBiddingPlan: FC<ModalProps> = ({ biddingPlanID, toggle, onConfi
 									<DropdownSearchable
 										onchangeValue={(value: any) => formik.setFieldValue('form', value.id)}
 										onClearData={() => formik.setFieldValue('form', '')}
-										className={"h-32 px-3 w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"}
+										className={"w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"}
 										placeholder="Hình thức"
 										isMultiple={false}
 										allowClearValueSingleInput={true}
@@ -265,7 +273,7 @@ const ModalUpdateBiddingPlan: FC<ModalProps> = ({ biddingPlanID, toggle, onConfi
 									<DropdownSearchable
 										onchangeValue={(value: any) => formik.setFieldValue('contractType', value.id)}
 										onClearData={() => formik.setFieldValue('contractType', '')}
-										className={"h-32 px-3 w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"}
+										className={"w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"}
 										placeholder="Loại hợp đồng"
 										isMultiple={false}
 										allowClearValueSingleInput={true}
@@ -323,7 +331,7 @@ const ModalUpdateBiddingPlan: FC<ModalProps> = ({ biddingPlanID, toggle, onConfi
 										)}
 										onchangeValue={(value: any) => formik.setFieldValue('bidderID', value.id)}
 										onClearData={() => formik.setFieldValue('bidderID', '')}
-										className={"h-32 px-3 w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"}
+										className={" w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"}
 										placeholder="Đơn vị trúng thầu"
 										isMultiple={false}
 										allowClearValueSingleInput={true}
@@ -359,7 +367,7 @@ const ModalUpdateBiddingPlan: FC<ModalProps> = ({ biddingPlanID, toggle, onConfi
 									<DropdownSearchable
 										onchangeValue={(value: any) => formik.setFieldValue('status', value.id)}
 										onClearData={() => formik.setFieldValue('status', '')}
-										className={"h-32 px-3 w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"}
+										className={" w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"}
 										placeholder="Trạng thái triển khai"
 										isMultiple={false}
 										allowClearValueSingleInput={true}
@@ -424,7 +432,7 @@ const ModalUpdateBiddingPlan: FC<ModalProps> = ({ biddingPlanID, toggle, onConfi
 									/>
 								</label>
 							</div>
-							<div className="flex justify-end pt-5 px-6 pb-6 mt-6">
+							<div className="flex justify-end pt-5 px-6 pb-6">
 								<div>
 									<button type="submit" className="px-7 py-3.5 rounded-md bg-primary text-white font-bold text-sm leading-4">Xác nhận</button>
 								</div>

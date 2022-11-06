@@ -29,7 +29,7 @@ function Markers() {
 		select: '_id name location note'
 	}, {
 		onSuccess: (data) => {
-			const locations = data.data.listRecords
+			const locations = data?.data?.listRecords
 				.filter(item => item.location && item.location.split(', ').length === 2)
 				.map(item => item.location.split(', ').map(Number) as [number, number]);
 			map.flyToBounds(locations, { duration: 1 });

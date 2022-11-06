@@ -5,163 +5,119 @@ import contractIcon from "assets/images/icons8-contract-64-blue.svg";
 import {NavigateTabBudgetPage} from "./NavigateTabBudgetPage";
 import downloadIcon from "assets/images/icons8-download-64.svg";
 import iconPencil from "assets/images/icons8-pencil-96 1.png";
-import {useCashFlowPlan} from "services/hooks/financial/useCashFlow";
+import nextIcon from "assets/images/icons-arrow-next.svg";
+import { useContract } from "services/hooks/items/useContract";
 import {Project} from "typings/items/project";
 import PaginateV2 from "shareComponents/common/PaginateV2";
 import moment from "moment";
 import {formatNumberMoney} from "utils/cmcs";
-import {Link} from "react-router-dom";
+
+function daysdifference(currentDate: any, inputDate: any) {
+    const currentDay = new Date(currentDate);
+    const inputDay = new Date(inputDate);
+
+    const millisBetween = inputDay.getTime() - currentDay.getTime();
+    const days = millisBetween / (1000 * 3600 * 24);
+    return Math.round(days);
+}
+
 type Props = {
     projectInfo: Project
 }
-export const ProjectBudgetPageType4:FC<Props> = ({projectInfo}) => {
-    const [recordSelected, setSelectRecord] = useState<any>({});
-
+export const ProjectBudgetPageType4:FC<Props> = ({ projectInfo }) => {
     type PaginateHandle = React.ElementRef<typeof PaginateV2>;
     const ref = React.useRef<PaginateHandle>(null);
     const [pageIndex, setPageIndex] = useState(0);
 
-    const {isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage} = useCashFlowPlan({
+    const {
+        isLoading, totalRecord, totalPage, hasNextPage, listContractWithPager
+    } = useContract({
         params: {
-            projectID: projectInfo._id,
-            outin: 2,
-            type: 5,
-            property: 3
+            projectID: projectInfo._id, isExpiredInsurance: 1, limit: 20,
+            populates: JSON.stringify({
+                path: 'project',
+                select: 'name sign',
+            })
         },
-        isFetchList: true
+        isFetch: true
     })
-
     return (
         <>
             <div className={"sticky top-0 z-10 block"}>
                 <div className={"flex items-center px-4 py-2"}>
-                    <div className={"flex items-center flex-1"}>
-                        <DropdownSearchableV2
-                            className={"mr-4 border border-primary-border rounded-lg mb-2"}
-                            placeholder={"Loại gói thầu"}
-                            prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"}/>}
-                            isMultiple={true}
-                            disableSearch={true}
-                            data={[]}
-                        />
-                        <DropdownSearchableV2
-                            className={"mr-4 border border-primary-border rounded-lg mb-2"}
-                            placeholder={"Hình thức"}
-                            prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"}/>}
-                            isMultiple={true}
-                            disableSearch={true}
-                            data={[]}
-                        />
-                        <DropdownSearchableV2
-                            className={"mr-4 border border-primary-border rounded-lg mb-2"}
-                            placeholder={"Loại hợp đồng"}
-                            prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"}/>}
-                            isMultiple={true}
-                            disableSearch={true}
-                            data={[]}
-                        />
-                        <DropdownSearchableV2
-                            className={"mr-4 border border-primary-border rounded-lg mb-2"}
-                            placeholder={"Trạng thái"}
-                            prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"}/>}
-                            isMultiple={true}
-                            disableSearch={true}
-                            data={[]}
-                        />
-                    </div>
-                    <button className={"h-[32px] rounded bg-cbs-green text-white font-bold px-4"}>
-                        Tạo mới
-                    </button>
+                   
                 </div>
                 <div className={"flex items-center pb-2"}>
                     <NavigateTabBudgetPage/>
-                    <button className={"flex items-center justify-center mx-3 ml-6"}>
+                    {/* <button className={"flex items-center justify-center mx-3 ml-6"}>
                         <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"}/>
                     </button>
-                    {
-                        recordSelected._id&&
-                        <button className={"flex items-center justify-center mx-3 ml-6"}>
-                            <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"}/>
+                    <button className={"flex items-center justify-center mx-3 ml-6"}>
+                        <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"}/>
+                    </button>
+                    <div className={"flex-1 flex items-center justify-end"}>
+                        <span className={"text-primary-gray"}>1-50 trong số 2.358</span>
+                        <button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"} disabled={true}>
+                            <img src={nextIcon} alt={"----"} className={"rotate-180"}/>
                         </button>
-                    }
-                    <PaginateV2
-                        ref={ref}
-                        totalRecord={totalRecord}
-                        totalPages={totalPage}
-                        limit={20}
-                        hasNextPage={hasNextPage}
-                        isFetching={isLoading}
-                        nextPageAction={() => {
-                            fetchNextPage();
-                            setPageIndex(oldState => oldState+1)
-                        }}
-                        prevPageAction={() => {
-                            setPageIndex(oldState => oldState-1)
-                        }}
-                    />
+                        <button className={"w-[36px] h-[36px] rounded-full bg-cbs-left-menu mx-2 disabled:bg-transparent disabled:opacity-50 flex items-center justify-center"}>
+                            <img src={nextIcon} alt={"----"}/>
+                        </button>
+                    </div> */}
                 </div>
             </div>
             <div className="flex-1 overflow-y-auto">
                 <table className="table-fixed border-collapse w-full overflow-auto border-0.5 border-primary-border">
-                    <thead>
+                <thead>
                     <tr className={"sticky top-0"}>
                         <th className={"w-[50px] bg-cbs-table-header p-2 border-0.5 border-primary-border align-middle"}>
                             <input className="form-check-input line mr-2" type="checkbox" value="" id="check"/>
                         </th>
                         <th className={"w-5/12 bg-cbs-table-header p-2 border-0.5 border-primary-border text-normal text-left"}>
-                            Nội dung
+                            Hợp đồng
                         </th>
                         <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-normal text-left"}>
-                            Kế hoạch
+                            Thời hạn bảo lãnh
                         </th>
                         <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-normal text-left"}>
-                            Thực tế
+                            Số ngày còn lại
+                        </th>
+                        <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-normal text-left"}>
+                            Giá trị bảo lãnh
                         </th>
                         <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-normal text-left"}>
                             Ghi chú
                         </th>
-                        <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-normal text-left"}>
-                            Thành viên
-                        </th>
                     </tr>
-                    </thead>
-                    <tbody>
+                </thead>
+                <tbody>
                     {
-                        (listWithPager[pageIndex]??[]).map((plan,i) => (
-                            <tr key={plan._id}>
+                        (listContractWithPager[pageIndex]??[]).map((item: any, index: number) => (
+                            <tr key={index}>
                                 <td className={"p-2 border-0.5 border-primary-border text-center"}>
-                                    <input className="form-check-input line mr-2" type="checkbox"
-                                           checked={plan._id === recordSelected._id}
-                                           onChange={(e) => {
-                                               if (e.target.checked) {
-                                                   setSelectRecord(document);
-                                                   return null;
-                                               }
-                                               setSelectRecord({});
-                                               return null;
-                                           }}
-                                    />
+                                    <input className="form-check-input line mr-2" type="checkbox" value="" id="check"/>
                                 </td>
                                 <td className={"p-2 border-0.5 border-primary-border"}>
-                                    <Link to={`/pm/project/${projectInfo._id}/budget/type/4/detail/${plan._id}`}>{plan.name}</Link>
-                                    <p className={"text-primary-gray text-xs"}>{plan.userCreate.bizfullname} | Ngày ký: {moment(plan.createAt).format("DD/MM/YYYY HH:mm")}</p>
+                                    <p>{item?.project?.sign}.{item?.name}</p>
+                                    <p className={"text-primary-gray text-xs"}>{item?.sign} | Ngày ký: { moment( item?.date).format("L")}</p>
                                 </td>
                                 <td className={"p-2 border-0.5 border-primary-border"}>
-                                    {formatNumberMoney(plan.value)}
+                                    {moment( item?.expiredInsurance).format("L")}
                                 </td>
                                 <td className={"p-2 border-0.5 border-primary-border"}>
-                                    {formatNumberMoney(plan.realValue)}
+                                    {daysdifference(new Date(), new Date(item?.expiredInsurance))  < 0 ? 0 : daysdifference(new Date(), new Date(item?.expiredInsurance)) }
                                 </td>
                                 <td className={"p-2 border-0.5 border-primary-border"}>
-                                    {plan.note}
+                                    {formatNumberMoney(item?.insuranceValue) }
                                 </td>
                                 <td className={"p-2 border-0.5 border-primary-border"}>
-                                    {plan.members.length}
+                                    {item?.note}
                                 </td>
                             </tr>
-                    ))}
-                    </tbody>
-                </table>
+                        ))
+                    } 
+                </tbody>
+            </table>
             </div>
         </>
     )

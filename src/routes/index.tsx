@@ -11,6 +11,7 @@ import RightClickMenuProvider from "services/providers/RightClickMenu";
 
 /*=====3.LAYOUTS=====*/
 import { FullPageLayout } from "shareComponents/layouts";
+import { MediaLayout } from "shareComponents/layouts/MediaLayout";
 import Policy from "views/authentication/Policy";
 import { HomePage } from "views/financial/pages/HomePage";
 import { FinancialLayoutV2 } from "views/financial/sharedComponents/layoutsV2";
@@ -24,7 +25,7 @@ const AccountingRouter = lazy(() => import("./accounting"));
 const AuthenticationRouter = lazy(() => import("./authentication"));
 const SampleRouter = lazy(() => import("./sample"));
 // const BiddingRouter = lazy(() => import("./bidding"));
-const BiddingRouter = lazy(() => import("./bidding/v2"));
+const BiddingRouter = lazy(() => import("./bidding/indexV2"));
 // const CmcsRouter = lazy(() => import("./cmcs/index"));
 const CmcsRouterV2 = lazy(() => import("./cmcs/indexV2"));
 // const DatahubRouter = lazy(() => import("./datahub"));
@@ -74,6 +75,7 @@ const PcmPrintTaskTypeOnePage = lazy(() => import('views/pcm/pages/PcmPrintTaskT
 const PcmPrintTaskTypeTwoPage = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeTwo'));
 const PcmPrintTaskTypeThreePage = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeThree'));
 const PcmPrintTaskTypeFourPage = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeFour'));
+const PcmPrintTaskTypeFivePage = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeFive'));
 
 const Routes: FC = () => {
     useEffect(() => {
@@ -101,6 +103,7 @@ const Routes: FC = () => {
                                 <Route exact path="/pcm/detail/:id/print/2" component={PcmPrintTaskTypeTwoPage} />
                                 <Route exact path="/pcm/detail/:id/print/3" component={PcmPrintTaskTypeThreePage} />
                                 <Route exact path="/pcm/detail/:id/print/4" component={PcmPrintTaskTypeFourPage} />
+                                <Route exact path="/pcm/detail/:id/print/5" component={PcmPrintTaskTypeFivePage} />
 
                                 {/* =====AUTHENTICATION===== */}
                                 <Route path="/(authentication|login)/:path?">
@@ -212,9 +215,9 @@ const Routes: FC = () => {
 
                                 {/* =====MEDIA===== */}
                                 <Route path="/media">
-                                    <HomeLayout>
+                                    <MediaLayout>
                                         <MediaRouter />
-                                    </HomeLayout>
+                                    </MediaLayout>
                                 </Route>
 
                                 {/* =====PERSONAL===== */}

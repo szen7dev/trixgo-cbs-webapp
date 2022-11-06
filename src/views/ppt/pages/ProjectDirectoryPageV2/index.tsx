@@ -4,7 +4,7 @@ import businessBuilding from "assets/images/icons8-business-building-48.svg";
 import debounce from 'lodash/debounce';
 import downloadIcon from "assets/images/icons8-download-64.svg";
 import pencilIcon from "assets/images/icons8-pencil-96.svg";
-import {DropdownSearchableV2, ModalContainer, GroupActions, Paginate} from "shareComponents/common";
+import {DropdownSearchableV2, ModalContainer, GroupActions, SearchInput, Loader} from "shareComponents/common";
 
 import nextIcon from "assets/images/icons-arrow-next.svg";
 import userAvatar from "assets/images/task-user.svg";
@@ -18,14 +18,18 @@ import { useProject } from 'services/hooks/items/useProject';
 
 // Phân trang
 import PaginateV2 from "shareComponents/common/PaginateV2";
+import { AnyARecord } from "dns";
+import {useAppSelector} from "redux/reducer";
 
 const DEPARTMENT_DIRECTORY_TYPE = [
     { id: 1, text: "Trợ lý viên" },
     { id: 2, text: "Chủ đầu tư" },
-    { id: 3, text: "Tư vấn QLDA" },
+    { id: 3, text: "Tư vấn Quản lý dự án" },
     { id: 4, text: "Tư vấn giám sát" },
     { id: 5, text: "Tư vấn thiết kế" },
     { id: 6, text: "Nhà thầu thi công" },
+    { id: 7, text: "Tư vấn thẩm tra" },
+    { id: 8, text: "Tư vấn khác" },
 ]
 
 const DEPARTMENT_DIRECTORY_LOCK = [
@@ -36,20 +40,21 @@ const ProjectDirectoryPageV2:FC = () => {
     const [keywordCompany, setKeywordCompany] = useState('');
     const [companySelected, setCompanySelected] = useState('');
 	const { id: projectID } = useParams<{ id: string }>();
-    const [pageParam, setPageParam] = useState("");
-    const [prevCursor, setPrevCursor] = useState([null]);
+    const [keyword, setKeyword] = useState("");
 
     const { data: listCompanies, fetchNextPage } = useQueryListCompany({ keyword: keywordCompany, limit: 20 });
     const {
         isLoading,
         hasNextPage,
         list: listDepartmentDirectory, 
+        listDepartmentDirectoryWithPager,
         totalRecord,
         totalPage,
+        isFetching,
         fetchNextPage: fetchNextPageDepartmentDirectory,
         refetch,
         nextCursor
-    } = useDepartmentDirectory({ params: { companyID: companySelected, projectID, limit: 10, lastestID: pageParam }, isFetchList: true });
+    } = useDepartmentDirectory({ params: { keyword, companyID: companySelected, projectID, limit: 20 }, isFetchList: true });
 
     const { info: projectInfo } = useProject({
 		params: {
@@ -95,31 +100,6 @@ const ProjectDirectoryPageV2:FC = () => {
             [modalType]: !modalShow[modalType],
         }));
     };
-
-    const prevPageAction = () => {
-        if (!nextCursor) {
-          setPageParam(prevCursor[prevCursor.length - 2] || '')
-        } else {
-          const prev = prevCursor.findIndex(item => item === nextCursor)
-          setPageParam(prevCursor[prev - 2] || '')
-        }
-      };
-
-    const nextPageAction = () => {
-        setPageParam(nextCursor || "")
-    }
-     
-    // const toggleDeleteModal = () => {
-    //     openModal(
-    //       <div
-    //         className={
-    //           "inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
-    //         }
-    //       >
-    //         <ModalConfirm onConfirm={handleConfirmDelete} onCancel={closeModal} />
-    //       </div>
-    //     );
-    //   };
     // Phân trang
     type PaginateHandle = React.ElementRef<typeof PaginateV2>;
     const ref = React.useRef<PaginateHandle>(null);
@@ -127,6 +107,7 @@ const ProjectDirectoryPageV2:FC = () => {
 
     return (
         <div className={"project-directory"}>
+            {isLoading || isFetching && <Loader absolute={true} className="border-primary" />}
             <div className={"flex px-4 py-2 items-center justify-between"}>
                 <DropdownSearchableV2
                     className={"mr-4 border border-primary-border rounded-lg mb-2"}
@@ -153,6 +134,11 @@ const ProjectDirectoryPageV2:FC = () => {
                     </button>
                 </div> */}
                 {/* <div className={"mr-3 w-4 border-r border-gray-400 h-[16px]"} /> */}
+				<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={
+                        debounce(
+							(event: any) => setKeyword(event.target.value),
+							500
+						)}/>
                 <GroupActions
                     className="flex items-center flex-1"
                     // onClickTrash={toggleDeleteModal}
@@ -169,7 +155,7 @@ const ProjectDirectoryPageV2:FC = () => {
                     ref={ref}
                     totalRecord={totalRecord}
                     totalPages={totalPage}
-                    limit={10}
+                    limit={20}
                     hasNextPage={hasNextPage}
                     isFetching={isLoading}
                     nextPageAction={() => {
@@ -213,7 +199,7 @@ const ProjectDirectoryPageV2:FC = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {listDepartmentDirectory?.map((departmentDirectory: any, i) => (
+                    {listDepartmentDirectoryWithPager[pageIndex]?.map((departmentDirectory: any, i: any) => (
                             <tr key={i}>
                                 <td
                                     className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border text-center"

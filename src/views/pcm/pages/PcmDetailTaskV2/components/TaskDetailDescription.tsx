@@ -7,21 +7,43 @@ import { useTask } from "services/hooks/useTask";
 import { humanFileSize } from 'utils/converter';
 import iconAttach from "assets/images/icons8-attach-48.svg";
 import iconLink from "assets/images/icons8-link-96-v3.svg";
-import imageDemo from "assets/images/task-detail-image.png";
+import { debounce } from "lodash";
+import { toast } from "react-toastify";
+
+// import imageDemo from "assets/images/task-detail-image.png";
 import moment from "moment";
+import { ModalZoomView } from "shareComponents/common";
+import { ImageProps } from "typings/common";
+import PencilIcon from "assets/images/icons8-pencil-96.svg";
+import { useFileCore } from 'services/hooks/useFileCore';
 
 type Props = {
     task: Task;
     refetchInfo?: () => void;
 }
 
-export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
-    // console.log(task)
-    // console.log(task.authorAttachs.length)
+function checkCreateAtWith60minute(time: any){
+    const timeStartComment = time;
+    const nowDate = moment();
+    if (nowDate.diff(timeStartComment, 'minutes') < 60) { 
+        return true;
+    }else{ 
+        return false;
+    }
+}
 
+export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
+    const { updateFileAsync } = useFileCore();
     const editorRef = useRef<EditorType>();
     const [editDescription, setEditDescription] = useState(false);
     const [isHasPermissionUpdateDescription, setIsPermissionUpdateDescription] = useState(false);
+    const [isShowImageFullScreen, setIsShowImageFullScreen] = useState(false);
+    const [defaultState, setDefaultState] = useState({
+        mediaID: '',
+        images: [] as ImageProps[],
+        index: 0,
+        createAt: ""
+    });
 
     const { updateTaskAsync } = useTask({});
 
@@ -39,31 +61,47 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
         }
     }
 
-    useEffect(() => {
-        if(task.subtype === 9 || task.subtype === 11) {
-            setIsPermissionUpdateDescription(true);
-        } else {
-            setIsPermissionUpdateDescription(task.draft === 1);
-        }
-    }, [task.subtype, task.draft])
+    const handleClickImage = (file: any, index: number) => {
+        const images = task.authorAttachs?.filter((file: any) => file.type == 1);
 
+		if (images?.length) {
+            setDefaultState({
+                mediaID: file._id,
+                images: images,
+                index,
+                createAt: file.createAt
+            });
+            setIsShowImageFullScreen(true);
+        }
+	}
+
+    useEffect(() => {
+        if(checkCreateAtWith60minute(task?.createAt)){
+            setIsPermissionUpdateDescription(true);
+        }
+    }, [task?.createAt])
+
+    const handleChangeDescriptionFile = debounce(async(e: any) => {
+        await updateFileAsync({
+            fileID: e.target.name,
+            description: e.target.value
+        });
+		toast.success('Cập nhật ghi chú thành công', { autoClose: 2000 });
+    }, 1000);
     return (
         <div className={"task-description flex items-start mt-5"}>
             <span className={"mr-4"}>
                 <img src={iconNote} alt={'-----'} />
             </span>
             <div className={"flex-1"}>
-                <div className={"text-primary-gray text-[16px] font-bold"}>Mô tả</div>
-                <div className={"mt-2"} dangerouslySetInnerHTML={{
-                    __html: (editDescription && task.description) ? task.description : task.description?.replace(/\n/g, '<br />')
-                }} />
+                <div className={"text-primary-gray text-[16px] font-bold"}>
+                    Mô tả
+                </div>
                 <div className={"mt-2 editor"}>
                     {
                         (!editDescription && isHasPermissionUpdateDescription) ?
-                            <div
-                                onClick={() => setEditDescription(true)}
-                                className={"bg-cbs-form-input-bg border-0.5 border-primary-border px-4 pt-2 h-[60px] cursor-pointer rounded text-primary-gray"}>
-                                Biên soạn nội dung mô tả...
+                            <div onClick={() => setEditDescription(true)} >
+                                <img src={PencilIcon} alt="Pencil" />
                             </div> : (
                                 isHasPermissionUpdateDescription ? (
                                     <>
@@ -143,13 +181,15 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                             )
                     }
                 </div>
-                {/*  UI DEMO  */}
+                <div className={"mt-2"} dangerouslySetInnerHTML={{
+                    __html: (editDescription && task.description) ? task.description : task.description?.replace(/\n/g, '<br />')
+                }} />
                 { task.authorAttachs?.length ? (
                     <div className={"mt-2"}>
                         <div className={"user-attach mt-4"}>
                             {task.authorAttachs?.map(file => {
                                 if (file.type == '1') return;
-
+                                // console.log({ file })
                                 return (
                                     <div key={file._id} className={"comment-attach-item flex items-start justify-between mb-2"}>
                                         <img src={iconAttach} alt={"---"} />
@@ -159,11 +199,16 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                                             </a>
                                             <p className={"text-primary-gray text-xs"}>
                                                 {file.author?.bizfullname} -
-                                                 {moment(file.createAt).format('DD/MM/YYYY HH:mm')} {moment(file.createAt).fromNow()}
+                                                {moment(file.createAt).format('DD/MM/YYYY HH:mm')} {moment(file.createAt).fromNow()}
                                             </p>
                                         </div>
                                         <input
+                                            type="text"
+                                            // name="description"
                                             className={"flex-1 text-primary-gray text-center focus:outline-none focus:ring-none"}
+                                            name={file._id}
+                                            defaultValue={ file.description }
+                                            onChange={handleChangeDescriptionFile}
                                             placeholder={"Nhập nội dung ghi chú"}
                                         />
                                         <button>
@@ -177,12 +222,12 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                         <div className={"user-images mt-4"}>
                             <div className={"grid grid-cols-6 gap-4"}>
                                 {
-                                    task.authorAttachs?.map(file => {
+                                    task.authorAttachs?.map((file, index) => {
                                         if(file.type == '2') return;
 
                                         return (
                                             <div key={file._id} className={" border-0.5 border-primary-border bg-cbs-form-input-bg mb-2"}>
-                                                <div className={"relative"}>
+                                                <div className={"relative"} onClick={() => handleClickImage(file, index)}>
                                                     <img
                                                         className={"h-[120px] max-h-[120px] min-h-[120px] object-cover w-full"}
                                                         src={`${process.env.REACT_APP_URL_S3}${file.path}`}
@@ -192,7 +237,13 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                                                         {moment(file.createAt).format('DD/MM/YYYY HH:mm')} {moment(file.createAt).fromNow()}
                                                     </div>
                                                 </div>
-                                                <textarea className={"p-2 w-full text-xs h-[60px] min-h-[60px] max-h-[60px] bg-cbs-form-input-bg"} placeholder={"Nhập nội dung ghi chú"}>
+                                                <textarea 
+                                                    className={"p-2 w-full text-xs h-[60px] min-h-[60px] max-h-[60px] bg-cbs-form-input-bg"} 
+                                                    placeholder={"Nhập nội dung ghi chú"}
+                                                    name={file._id}
+                                                    defaultValue={ file.description }
+                                                    onChange={handleChangeDescriptionFile}
+                                                    >
                                                 </textarea>
                                             </div>
                                         )
@@ -217,11 +268,16 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                                             </a>
                                             <p className={"text-primary-gray text-xs"}>
                                                 {file.author?.bizfullname} -
-                                                 {moment(file.createAt).format('DD/MM/YYYY HH:mm')} {moment(file.createAt).fromNow()}
+                                                {moment(file.createAt).format('DD/MM/YYYY HH:mm')} {moment(file.createAt).fromNow()}
                                             </p>
                                         </div>
                                         <input
+                                            type="text"
+                                            // name="description"
                                             className={"flex-1 text-primary-gray text-center focus:outline-none focus:ring-none"}
+                                            name={file._id}
+                                            defaultValue={ file.description }
+                                            onChange={handleChangeDescriptionFile}
                                             placeholder={"Nhập nội dung ghi chú"}
                                         />
                                         <button>
@@ -235,7 +291,7 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                         <div className={"user-images mt-4"}>
                             <div className={"grid grid-cols-6 gap-4"}>
                                 {
-                                    task.assigneeAttachs?.map(file => {
+                                    task.assigneeAttachs?.map((file, index) => {
                                         if(file.type == '2') return;
 
                                         return (
@@ -247,10 +303,16 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                                                         alt={file.nameOrg}
                                                     />
                                                     <div className={"text-white px-2 py-4 bg-black opacity-60 absolute text-xs bottom-0 w-full truncate"}>
-                                                        {moment(file.createAt).format('DD/MM/YYYY HH:mm')} {moment(file.createAt).fromNow()}
+                                                        asdasd{moment(file.createAt).format('DD/MM/YYYY HH:mm')} {moment(file.createAt).fromNow()}
                                                     </div>
                                                 </div>
-                                                <textarea className={"p-2 w-full text-xs h-[60px] min-h-[60px] max-h-[60px] bg-cbs-form-input-bg"} placeholder={"Nhập nội dung ghi chú"}>
+                                                <textarea 
+                                                    className={"p-2 w-full text-xs h-[60px] min-h-[60px] max-h-[60px] bg-cbs-form-input-bg"} 
+                                                    placeholder={"Nhập nội dung ghi chú"}
+                                                    name={file._id}
+                                                    defaultValue={ file.description }
+                                                    onChange={handleChangeDescriptionFile}
+                                                    >
                                                 </textarea>
                                             </div>
                                         )
@@ -261,6 +323,12 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                     </div>
                 ) : <></>}
             </div>
+
+            <ModalZoomView
+                isShow={isShowImageFullScreen}
+                toggle={() => setIsShowImageFullScreen(!isShowImageFullScreen)}
+                initialData={defaultState}
+            />
         </div>
     )
 }

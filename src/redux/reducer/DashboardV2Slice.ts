@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { PCM_STATUS_TASK } from "apis/localdb";
 
 const initialState: any = {
   data: {
@@ -25,6 +26,38 @@ const initialState: any = {
     queryFile: {
       companyOfAuthorsID: [],
       authorsID: [],
+    },
+    pcmMine: {
+      companiesOfAuthor: [],
+      authorsID: [],
+      projectsID: [],
+      status: [
+        {
+          label: `${PCM_STATUS_TASK[0]?.text}`,
+          id: 1,
+        },
+        {
+          label: `${PCM_STATUS_TASK[1]?.text}`,
+          id: 2,
+        },
+        {
+          label: `${PCM_STATUS_TASK[3]?.text}`,
+          id: 4,
+        },
+        {
+          label: `${PCM_STATUS_TASK[4]?.text}`,
+          id: 5,
+        },
+        {
+          label: `${PCM_STATUS_TASK[5]?.text}`,
+          id: 6,
+        }
+      ],
+      subtypes: [],
+      fromDate: "",
+      toDate: "",
+      priority: "0",
+      isExpired: "0"
     }
   },
 };
@@ -63,6 +96,12 @@ const dashboardV2Slice = createSlice({
     setQueryFile(state, action) {
       state.data.queryFile = action.payload;
     },
+    setQueryPcmMine(state, action) {
+      state.data.pcmMine = {
+        ...state.data.pcmMine,
+        [action.payload.key] :  action.payload.data
+      };
+    },
     resetFilterDashboard(state, action) {
       state.data = {
         ...initialState.data,
@@ -84,6 +123,7 @@ export const {
   setQuerySubject,
   setKeywordForFile,
   setQueryFile,
-  resetFilterDashboard
+  resetFilterDashboard,
+  setQueryPcmMine
 } = dashboardV2Slice.actions;
 export default dashboardV2Slice.reducer;

@@ -172,7 +172,7 @@ export const useCheckPerAccessScreen = (payload: { appID: string, menuID: string
         //     history.push("/");
         // };
         if (isSuccessApp && isSuccessMenu && (!hasPermission)) {
-            toast.error("Bạn không có quyền truy cập tính năng này Neww!");
+            toast.error("Bạn không có quyền truy cập tính năng này!");
             history.push("/");
         };
     }, [isSuccessApp, isSuccessMenu, hasPermission, hasPermissionMenu, permission]);

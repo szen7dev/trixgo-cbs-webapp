@@ -207,7 +207,7 @@ export const ContractProduceModal: FC<NewContractProduceModalProps> = ({ default
                   </div>
                   <span className="text-xl font-bold">Sản lượng thực hiện</span>
                 </div>
-                {openRealizedOutput && (
+                {/* {openRealizedOutput && (
                   <div className="flex items-center justify-end">
                     <div className="flex items-center">
                       <p className="text-primary-gray text-xs mr-5">
@@ -220,7 +220,7 @@ export const ContractProduceModal: FC<NewContractProduceModalProps> = ({ default
                       />
                     </div>
                   </div>
-                )}
+                )} */}
               </div>
               {openRealizedOutput && (
                 <div className="pb-9 mb-7 h-full mx-7 w-2/3">
@@ -238,7 +238,7 @@ export const ContractProduceModal: FC<NewContractProduceModalProps> = ({ default
                           handleBlur(e)
                         }
                       />
-                      <Field
+                      {/* <Field
                         type="number"
                         name="produce"
                         className="pl-3 border border-primary-border rounded w-2/5 h-[32px] outline-none"
@@ -246,7 +246,7 @@ export const ContractProduceModal: FC<NewContractProduceModalProps> = ({ default
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -264,7 +264,7 @@ export const ContractProduceModal: FC<NewContractProduceModalProps> = ({ default
                           handleBlur(e)
                         }
                       />
-                      <Field
+                      {/* <Field
                         type="number"
                         name="vatProduce"
                         className="pl-3 border border-primary-border rounded w-2/5 h-[32px] outline-none"
@@ -272,7 +272,7 @@ export const ContractProduceModal: FC<NewContractProduceModalProps> = ({ default
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -290,7 +290,7 @@ export const ContractProduceModal: FC<NewContractProduceModalProps> = ({ default
                           handleBlur(e)
                         }
                       />
-                      <Field
+                      {/* <Field
                         type="number"
                         name="plusProduce"
                         className="pl-3 border border-primary-border rounded w-2/5 h-[32px] outline-none"
@@ -298,7 +298,7 @@ export const ContractProduceModal: FC<NewContractProduceModalProps> = ({ default
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
 
@@ -316,7 +316,7 @@ export const ContractProduceModal: FC<NewContractProduceModalProps> = ({ default
                           handleBlur(e)
                         }
                       />
-                      <Field
+                      {/* <Field
                         type="number"
                         name="vatPlusProduce"
                         className="pl-3 border border-primary-border rounded w-2/5 h-[32px] outline-none"
@@ -324,7 +324,7 @@ export const ContractProduceModal: FC<NewContractProduceModalProps> = ({ default
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
-                      />
+                      /> */}
                     </div>
                   </div>
                 </div>

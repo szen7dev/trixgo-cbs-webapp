@@ -27,7 +27,7 @@ export const HumanLeftSideBar: FC = () => {
                 {/* title */}
                 <div className="t-leftsidebar-title flex items-center py-2 pl-3 pr-3 text-[14px] font-bold">
                     <img src={humanLogo} alt="Thumbnail" className="w-10 h-10 rounded-full mr-3" />
-                    <span>Quản lý nhân sự</span>
+                    <span>Nhân sự</span>
                 </div>
 
                 {/* menu block */}

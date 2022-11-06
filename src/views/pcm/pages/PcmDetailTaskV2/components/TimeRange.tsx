@@ -1,18 +1,24 @@
-import React, {FC, useCallback, useState} from "react";
+import React, {FC, useCallback, useEffect, useState} from "react";
 import TriangleDown from "assets/icons/TriangleDown";
 import Close from "../../../../../assets/icons/Close";
 import moment from "moment";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import {DropdownSearchable} from "../../../../../shareComponents/common";
+import { Task } from "typings/task";
 
 type Props = {
     isOfficalTask: boolean,
     fromDateDefault: string,
     toDateDefault: string,
     toTimeDefault: string,
-    onApplyNewTime: (timer: {fromDate: string, toDate: string, toTime: string, remind: string|number|undefined, isOfficalTask: boolean}) => void,
+    onApplyNewTime: (timer: {
+        fromDate: string, toDate: string, toTime: string, remind: string|number|undefined, isOfficalTask: boolean
+    }) => void,
     remindDefault?: string|number,
+    userId?: string,
+    task: Task;
 }
+
 const remindOptions = [
     {
         id: 0,
@@ -41,6 +47,8 @@ const remindOptions = [
 ]
 
 const TimeRange:FC<Props> = ({
+    task,
+    userId,
     isOfficalTask,
     fromDateDefault,
     toDateDefault,
@@ -49,12 +57,24 @@ const TimeRange:FC<Props> = ({
     onApplyNewTime
 }) => {
     const [fromDate, setFromDate] = useState(fromDateDefault);
-    const [toDate, setToDate] = useState(toDateDefault);
-    const [toTime, setToTime] = useState(toTimeDefault);
+    const [toDate, setToDate]     = useState(toDateDefault);
+    const [toTime, setToTime]     = useState(toTimeDefault);
 
     const [fromDateTemp, setFromDateTemp] = useState(fromDateDefault);
-    const [toDateTemp, setToDateTemp] = useState(toDateDefault);
-    const [toTimeTemp, setToTimeTemp] = useState(toTimeDefault);
+    const [toDateTemp, setToDateTemp]     = useState(toDateDefault);
+    const [toTimeTemp, setToTimeTemp]     = useState(toTimeDefault);
+
+    const [hasPermissionUpdateExpire, setHasPermissionUpdateExpire] = useState(false);
+
+    useEffect(() => {
+        if(!task) return;
+
+        const admins = task.project?.admins;
+
+        if(admins?.includes?.(userId) || !isOfficalTask) {
+            setHasPermissionUpdateExpire(true);
+        }
+    }, [task?.project?.admins, userId, isOfficalTask])
 
     const remindDefaultItem = useCallback(() => {
         return remindOptions.find(option => option.id === remindDefault);
@@ -64,11 +84,16 @@ const TimeRange:FC<Props> = ({
     const [showOption, setShowOption] = useState(false);
 
     const applyNewTime = () => {
+        // console.log({ toTimeTemp, fromDateTemp, toDateTemp })
         setToTime(toTimeTemp);
         setToDate(toDateTemp);
         setFromDate(fromDateTemp);
-
-        onApplyNewTime({fromDate: fromDateTemp, toTime: toTimeTemp, toDate: toDateTemp, remind, isOfficalTask});
+        const toDateTempArr = toDateTemp.split("/");
+        const fromDateTempArr = fromDateTemp.split("/");
+        
+        const fromDateTemp1 = `${fromDateTempArr[2]}-${fromDateTempArr[1]}-${fromDateTempArr[0]}`
+        const toTimeTemp1 = `${toDateTempArr[2]}-${toDateTempArr[1]}-${toDateTempArr[0]}`
+        onApplyNewTime({ fromDate: fromDateTemp1, toTime: toTimeTemp, toDate: toTimeTemp1, remind, isOfficalTask });
         setShowOption(false);
     }
 
@@ -90,7 +115,7 @@ const TimeRange:FC<Props> = ({
                     </div>
                     <div className={"options"}>
 
-                        {!isOfficalTask && (
+                        {hasPermissionUpdateExpire && (
                             <>
                                 <div className={"mt-4"}>
                                     <div className={"font-bold text-primary-gray mb-2"}>Bắt đầu</div>
@@ -101,7 +126,7 @@ const TimeRange:FC<Props> = ({
                                             overlay: "w-full rounded",
                                             overlayWrapper: "absolute bg-white w-full right-0 z-200"
                                         }}
-                                        onDayChange={(day) => setFromDateTemp(moment(day).format("MM/DD/YYYY"))}
+                                        onDayChange={(day) => setFromDateTemp(moment(day).format("DD/MM/YYYY"))}
                                         inputProps={{
                                             className: "h-[36px] outline-none pl-3",
                                             placeholder: "Bắt đầu",
@@ -119,7 +144,7 @@ const TimeRange:FC<Props> = ({
                                                 overlay: "w-full rounded",
                                                 overlayWrapper: "absolute bg-white w-full right-0 z-200"
                                             }}
-                                            onDayChange={(day) => setToDateTemp(moment(day).format("MM/DD/YYYY"))}
+                                            onDayChange={(day) => setToDateTemp(moment(day).format("DD/MM/YYYY"))}
                                             inputProps={{
                                                 className: "h-[36px] outline-none pl-3",
                                                 placeholder: "Kết thúc",
