@@ -66,7 +66,7 @@ const PcmDetailTaskV2: FC = () => {
             menuID: APP_ID.PCM.menuPcmProject.subject.id,
             type: 1,
         });
-        
+
         (async () => {
             await updateStatusMultipleAsync({
                 taskIDs: [taskId],
@@ -82,7 +82,10 @@ const PcmDetailTaskV2: FC = () => {
             return history.push("/");
         };
 
-        if (taskInfo?.message === "permission_denied" || taskInfo?.keyError === "permission_denied") {
+        if (taskInfo?.message === "permission_denied" ||
+            taskInfo?.keyError === "permission_denied" ||
+            taskInfo.error
+        ) {
             toast.warn('Bạn không có quyền truy cập công việc này');
             return history.push(`/pcm/home`);
         }
