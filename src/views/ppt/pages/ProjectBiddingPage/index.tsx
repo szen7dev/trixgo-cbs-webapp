@@ -158,7 +158,7 @@ const ProjectBiddingPage: FC = () => {
       <div className={"sticky top-0 z-10"}>
         <div className={"flex items-center px-4 py-2"}>
           <div className={"flex items-center flex-1"}>
-            {/* <DropdownSearchableV2
+            <DropdownSearchableV2
                 className={"mr-4 border border-primary-border rounded-lg mb-2"}
                 placeholder={"Loại gói thầu"}
                 prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"}/>}
@@ -189,7 +189,7 @@ const ProjectBiddingPage: FC = () => {
                 isMultiple={true}
                 disableSearch={true}
                 data={[]}
-            /> */}
+            />
           </div>
           <button
               onClick={toggleModalCreateOrUpdate.bind(null, "create")}
@@ -202,7 +202,7 @@ const ProjectBiddingPage: FC = () => {
             <button className={"px-4 py-2 border-r-0.5 border-primary-border bg-cbs-soft-blue text-primary"}>
               Tất cả
             </button>
-            {/* <button className={"px-4 py-2 border-r-0.5 border-primary-border bg-white text-primary-gray"}>
+            <button className={"px-4 py-2 border-r-0.5 border-primary-border bg-white text-primary-gray"}>
               Chưa thực hiện
             </button>
             <button className={"px-4 py-2 border-r-0.5 border-primary-border bg-white text-primary-gray"}>
@@ -210,11 +210,16 @@ const ProjectBiddingPage: FC = () => {
             </button>
             <button className={"px-4 py-2 border-r-0.5 border-primary-border bg-white text-primary-gray"}>
               Hoàn thành
-            </button> */}
+            </button>
           </div>
-          {/* <button className={"flex items-center justify-center mx-3 ml-6"}>
+          <button className={"flex items-center justify-center mx-3 ml-6"}>
             <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"}/>
-          </button> */}
+          </button>
+          <button
+                  onClick={toggleModalCreateOrUpdate.bind(null, "update")}
+                  className={"flex items-center justify-center mx-3 ml-6"}>
+                <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"}/>
+              </button>
           {
               Object.values(assigned).filter(Boolean).length === 1 &&
               <button
@@ -254,8 +259,8 @@ const ProjectBiddingPage: FC = () => {
       <div className="flex-1 overflow-y-auto">
         <table className="text-black text-medium border-separate space-x-0 space-y-0 w-full border-spacing-0">
           <thead className="">
-            <tr className="text-primary-gray whitespace-nowrap align-middle text-left">
-              <th className="px-4 py-2.5 font-normal sticky top-0 border-b-0.5 border-cbs-border w-1">
+            <tr className="bg-cbs-table-header text-primary-gray whitespace-nowrap align-middle text-left sticky top-0">
+              <th className="px-4 py-2.5 font-normal border-b-0.5 border-cbs-border w-1">
                 <input
                   className="cbs-checkbox"
                   type="checkbox"
@@ -264,34 +269,34 @@ const ProjectBiddingPage: FC = () => {
                   ref={checkboxRef}
                 />
               </th>
-              <th className="py-2.5 font-normal sticky top-0 border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
                 Nội dung
               </th>
-              <th className="py-2.5 font-normal sticky top-0 border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
                 Phân loại
               </th>
-              <th className="py-2.5 font-normal sticky top-0 border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
                 Danh sách dự kiến
               </th>
-              <th className="py-2.5 font-normal sticky top-0 border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
                 KH bắt đầu
               </th>
-              <th className="py-2.5 font-normal sticky top-0 border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
                 KH kết thúc
               </th>
-              <th className="py-2.5 font-normal sticky top-0 border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
                 Hình thức
               </th>
-              <th className="py-2.5 font-normal sticky top-0 border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
                 Loại hợp đồng
               </th>
-              <th className="py-2.5 font-normal sticky top-0 border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
                 Tiến độ thực hiện
               </th>
-              <th className="py-2.5 font-normal sticky top-0 border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
                 Trạng thái
               </th>
-              <th className="py-2.5 font-normal sticky top-0 border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
                 Đơn vị trúng thầu
               </th>
             </tr>
