@@ -298,7 +298,7 @@ const PCMRouter: FC = () => {
                     />
                     <Route exact path="/pm/project/:id/cash-flow/:cashFlowID/:outin" component={ProjectCashFlowPlanChildPage} />
                   </Route>
-                  <Route exact path={["/pm/project/:id/bidding", "/pm/project/:id/bidding/(2|3)"]}>
+                  <Route exact path={["/pm/project/:id/bidding", "/pm/project/:id/bidding/subpage", "/pm/project/:id/bidding/(2|3)"]}>
                     <PmProjectLayout>
                       <Route
                         exact
@@ -307,7 +307,7 @@ const PCMRouter: FC = () => {
                       />
                       <Route
                         exact
-                        path="/pm/project/:id/biddingsubpage"
+                        path="/pm/project/:id/bidding/subpage"
                         component={SubProjectBiddingPage}
                       />
                       <Route

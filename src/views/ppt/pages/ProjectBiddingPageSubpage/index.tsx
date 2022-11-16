@@ -44,7 +44,7 @@ import iconPencil from "../../../../assets/images/icons8-pencil-96 1.png";
 import nextIcon from "../../../../assets/images/icons-arrow-next.svg";
 import PaginateV2 from "shareComponents/common/PaginateV2";
 
-const SubProjectBiddingPage:FC = () => {
+const SubProjectBiddingPage: FC = () => {
   // Phân trang
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   const ref = React.useRef<PaginateHandle>(null);
@@ -198,33 +198,14 @@ const SubProjectBiddingPage:FC = () => {
           </button>
         </div>
         <div className={"flex items-center pb-2"}>
-          {/* <div className={"border-0.5 border-primary-border flex items-center"}>
-            <button className={"px-4 py-2 border-r-0.5 border-primary-border bg-cbs-soft-blue text-primary"}>
-              Tất cả
-            </button>
-            <button className={"px-4 py-2 border-r-0.5 border-primary-border bg-white text-primary-gray"}>
-              Chưa thực hiện
-            </button>
-            <button className={"px-4 py-2 border-r-0.5 border-primary-border bg-white text-primary-gray"}>
-              Đang triển khai
-            </button>
-            <button className={"px-4 py-2 border-r-0.5 border-primary-border bg-white text-primary-gray"}>
-              Hoàn thành
-            </button>
-          </div> */}
           <div className={"border-0.5 border-primary-border flex items-center"}>
-            <div className="w-full bg-cbs-gray h-3 ">
-              <div className="bg-cbs-bg-light-blue-bar h-3 text-white"
+            <div className="w-[300px] bg-cbs-gray h-6">
+              <div className="bg-cbs-bg-light-blue-bar h-6 text-white"
                 style={{ width: "30%" }}>30%</div>
             </div>
           </div>
           <button className={"flex items-center justify-center mx-3 ml-6"}>
             <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"} />
-          </button>
-          <button
-            onClick={toggleModalCreateOrUpdate.bind(null, "update")}
-            className={"flex items-center justify-center mx-3 ml-6"}>
-            <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"} />
           </button>
           {
             Object.values(assigned).filter(Boolean).length === 1 &&
@@ -263,10 +244,10 @@ const SubProjectBiddingPage:FC = () => {
         </div>
       </div>
       <div className="flex-1 overflow-y-auto">
-        <table className="text-black text-medium border-separate space-x-0 space-y-0 w-full border-spacing-0">
-          <thead className="">
-            <tr className="bg-cbs-table-header text-primary-gray whitespace-nowrap align-middle text-left sticky top-0">
-              <th className="px-4 py-2.5 font-normal border-b-0.5 border-cbs-border w-1">
+        <table className="text-black text-medium border-collapse space-x-0 space-y-0 w-full border-spacing-0">
+          <thead className="border-0.5 border-cbs-border">
+            <tr className="border-0.5 border-cbs-border bg-cbs-table-header text-primary-gray whitespace-nowrap align-middle text-left">
+              <th className="px-4 py-2.5 font-normal border-0.5 border-cbs-border w-1">
                 <input
                   className="cbs-checkbox"
                   type="checkbox"
@@ -275,70 +256,68 @@ const SubProjectBiddingPage:FC = () => {
                   ref={checkboxRef}
                 />
               </th>
-              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-0.5 border-cbs-border px-2">
                 Nội dung
               </th>
-              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-0.5 border-cbs-border px-2">
                 KH bắt đầu
               </th>
-              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-0.5 border-cbs-border px-2">
                 KH kết thúc
               </th>
-              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-0.5 border-cbs-border px-2">
                 Số ngày
               </th>
-              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-0.5 border-cbs-border px-2">
                 Ghi chú
               </th>
-              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-0.5 border-cbs-border px-2">
                 Trạng thái
               </th>
-              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2" colSpan={9}>
+              <th className="py-2.5 font-normal text-center border-0.5 border-cbs-border px-2" colSpan={9}>
                 Tiến trình
               </th>
             </tr>
-          </thead>
-          <thead className="">
-            <tr className="bg-cbs-table-header text-primary-gray whitespace-nowrap align-middle text-left sticky top-0">
-              <th className="px-4 py-2.5 font-normal border-b-0.5 border-cbs-border w-1">
+            <tr className="border-0.5 border-cbs-border bg-cbs-table-header text-primary-gray whitespace-nowrap align-middle text-left">
+              <th className="px-4 py-2.5 font-normal border-0.5 border-cbs-border w-1">
               </th>
-              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-0.5 border-cbs-border px-2">
               </th>
-              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-0.5 border-cbs-border px-2">
               </th>
-              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-0.5 border-cbs-border px-2">
               </th>
-              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-0.5 border-cbs-border px-2">
               </th>
-              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-0.5 border-cbs-border px-2">
               </th>
-              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-0.5 border-cbs-border px-2">
               </th>
-              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-0.5 border-cbs-border px-2">
                 Bước 1
               </th>
-              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-0.5 border-cbs-border px-2">
                 Bước 2
               </th>
-              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-0.5 border-cbs-border px-2">
                 Bước 3
               </th>
-              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-0.5 border-cbs-border px-2">
                 Bước 4
               </th>
-              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-0.5 border-cbs-border px-2">
                 Bước 5
               </th>
-              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-0.5 border-cbs-border px-2">
                 Bước 6
               </th>
-              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-0.5 border-cbs-border px-2">
                 Bước 7
               </th>
-              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-0.5 border-cbs-border px-2">
                 Bước 8
               </th>
-              <th className="py-2.5 font-normal border-b-0.5 border-cbs-border px-2">
+              <th className="py-2.5 font-normal border-0.5 border-cbs-border px-2">
                 Tổng %
               </th>
             </tr>
@@ -350,7 +329,7 @@ const SubProjectBiddingPage:FC = () => {
                 return (
                   <tr key={item._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
                     <td
-                      className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border text-center"
+                      className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border text-center"
                       onClick={(e) => e.stopPropagation()}
                     >
                       <input
@@ -362,43 +341,87 @@ const SubProjectBiddingPage:FC = () => {
                       />
                     </td>
                     <td
-                      className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border"
+                      className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border"
                       onClick={(e) => e.stopPropagation()}
                     >
                       {/* <NavLink to={`/bidding/plan/${projectID}/${item._id}`}>{item.name}</NavLink> */}
                       {item.name}
-                      <p className={"mt-1 text-gray-500"}>
+                      {/* <p className={"mt-1 text-gray-500"}>
                         {item.userCreate?.bizfullname}
                         {moment(item.createAt).format("DD/MM/YYYY HH:mm")}
+                      </p> */}
+                      <p className={"mt-1 text-gray-500"}>
+                        {item?.contractors?.length ? "Số đơn vị tham gia:" + item?.contractors?.length : ""}
+                      </p>
+                      <p>
+                        {item?.bidder?.name ? "Đơn vị trúng thầu:" + item?.bidder?.name : ""}
                       </p>
                     </td>
-                    <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
-                      {BIDDING_PLAN_TYPE[item.type - 1]?.text}
-                    </td>
-                    <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
-                      {convertCurrency(item.packagePrice)}
-                    </td>
-                    <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
+                    <td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">
                       {moment(item.startTime).format("L")}
                     </td>
-                    <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
+                    <td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">
                       {moment(item.finishTime).format("L")}
                     </td>
-                    <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
-                      {BIDDING_PLAN_FORM[item.form - 1]?.text}
+                    <td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">
+                      {moment.duration((moment(item.finishTime)).diff((moment(item.startTime)))).asDays()}
                     </td>
-                    <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
-                      {BIDDING_PLAN_CONTRACT_TYPE[item.contractType - 1]?.text}
+                    <td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">
+                      {item.note}
                     </td>
-
-                    <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
-                      {item.duration} Ngày
+                    <td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">
+                      <span> {BIDDING_PLAN_STATUS[item.status - 1].text} </span>
                     </td>
-                    <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
-                      {BIDDING_PLAN_STATUS[item.status - 1]?.text}
+                    <td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">
+                      <input
+                        className="cbs-checkbox"
+                        type="checkbox"
+                      />
                     </td>
-                    <td className="pt-2.5 pb-3 px-2 border-b-0.5 border-cbs-border">
-                      {item?.bidder?.name}
+                    <td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">
+                      <input
+                        className="cbs-checkbox"
+                        type="checkbox"
+                      />
+                    </td>
+                    <td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">
+                      <input
+                        className="cbs-checkbox"
+                        type="checkbox"
+                      />
+                    </td>
+                    <td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">
+                      <input
+                        className="cbs-checkbox"
+                        type="checkbox"
+                      />
+                    </td>
+                    <td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">
+                      <input
+                        className="cbs-checkbox"
+                        type="checkbox"
+                      />
+                    </td>
+                    <td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">
+                      <input
+                        className="cbs-checkbox"
+                        type="checkbox"
+                      />
+                    </td>
+                    <td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">
+                      <input
+                        className="cbs-checkbox"
+                        type="checkbox"
+                      />
+                    </td>
+                    <td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">
+                      <input
+                        className="cbs-checkbox"
+                        type="checkbox"
+                      />
+                    </td>
+                    <td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">
+                      {item.percentOfCompletedPackage}
                     </td>
                   </tr>
                 )
