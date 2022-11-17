@@ -25,6 +25,7 @@ import mailIcon from "assets/images/icons8-email-96 1.svg";
 import moreIcon from "assets/images/moreIcon.svg";
 import arrowDown from "assets/images/icon-arrowdown.svg";
 import defaultAva from "assets/images/image 166.jpg";
+import icons8pdf from "assets/images/icons8-pdf-100 1.svg";
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 
@@ -63,8 +64,6 @@ type Props = {
 export const DashboardV2: FC<Props> = ({ type = 0 }) => {
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   const dispatch = useDispatch();
-  const [selectStar, setSelectStar] = React.useState(false)
-  const [editBoxState, setEditBoxState] = useState(false);
   const [popBox1, setpopBox1] = React.useState(false)
   const [popBox2, setpopBox2] = React.useState(false)
   const [filter, setFilter] = useState("all");
@@ -76,6 +75,14 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
   const [showUpdateStatus, setShowUpdateStatus] = useState(false);
   const { openModal } = useModal();
 
+  const StarToggle = () => {
+    const [selectStar, setSelectStar] = React.useState(false)
+    return (
+      <button onClick={() => setSelectStar(!selectStar)} className="h-[16px]">
+        {(selectStar ? <StarIcon sx={{ color: '#FFCA28', width: 16, height: 16 }} /> : <StarBorderIcon sx={{ color: '#FFCA28', width: 16, height: 16 }} />)}
+      </button>
+    )
+  }
   const keywordForResponse = useAppSelector(
     (state) => state.dashboardV2.data.keywordForResponse
   );
@@ -1451,8 +1458,6 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                     <tr
                       key={index}
                       className={"read border-b-0.5 border-primary-border hover:shadow-md hover:z-2 hover:relative"}
-                      onMouseEnter={() => setEditBoxState(true)}
-                      onMouseLeave={() => setEditBoxState(false)}
                     >
                       <td className={"w-[100px]"}>
                         <div
@@ -1463,11 +1468,9 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                             type="checkbox"
                             value=""
                             id="check"
-                            style={{ width: "16px", height: "16px", marginTop:"5px" }}
+                            style={{ width: "16px", height: "16px", marginTop: "5px" }}
                           />
-                          <button onClick={() => setSelectStar(!selectStar)} className="h-[16px]">
-                            {(selectStar ? <StarIcon sx={{ color: '#FFCA28', width: 16, height: 16 }} /> : <StarBorderIcon sx={{ color: '#FFCA28', width: 16, height: 16 }} />)}
-                          </button>
+                          <StarToggle />
                         </div>
                       </td>
                       <td className={"w-[55px]"}>
@@ -1544,9 +1547,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                   return (
                     <tr
                       key={index}
-                      className={checkActive(item.news, `${user?._id}`)}
-                      onMouseEnter={() => setEditBoxState(true)}
-                      onMouseLeave={() => setEditBoxState(false)}
+                      className={checkActive(item.news, `${user?._id}`) + " group"}
                     >
                       <td className={"w-[100px]"}>
                         <div
@@ -1557,11 +1558,9 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                             type="checkbox"
                             value=""
                             id="check"
-                            style={{ width: "13px", height: "13px", marginTop:"5px" }}
+                            style={{ width: "13px", height: "13px", marginTop: "5px" }}
                           />
-                          <button onClick={() => setSelectStar(!selectStar)} className="h-[16px]">
-                            {(selectStar ? <StarIcon sx={{ color: '#FFCA28', width: 16, height: 16 }} /> : <StarBorderIcon sx={{ color: '#FFCA28', width: 16, height: 16 }} />)}
-                          </button>
+                          <StarToggle />
                         </div>
                       </td>
                       <td className={"w-[55px]"}>
@@ -1602,9 +1601,13 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                       </td>
                       <td className={"w-td-dashboard"}>
                         <Link to={"/pcm/detail/" + item._id}>
-                          <p className={"task-title truncate text-[14px] mt-2"}>
+                          <div className={"task-title truncate text-[14px] mt-2"} style={{ lineHeight: "20px" }}>
+                            <span className="bg-cbs-orage text-white mr-1 py-1 px-3 rounded-md">Cao</span>
                             {item.project.sign}.{subContentHtml(item.name)}
-                          </p>
+                          </div>
+                          {/* <p className={"task-title truncate text-[14px] mt-2"}>
+                            {item.project.sign}.{subContentHtml(item.name)}
+                          </p> */}
                           <p
                             className={
                               "crop-text truncate text-xs text-primary-gray py-2"
@@ -1613,27 +1616,28 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                             {subContentHtml(item.lastComment?.content)}
                           </p>
                         </Link>
+                        <div className="flex gap-2 text-primary-gray pb-2">
+                          <div className="border-0.5 border-cbs-border rounded-full px-3 py-1 flex">
+                          <img src={icons8pdf} className="mr-[5px]" />
+                          <span>2022.09.26.FCT</span>
+                          </div>
+                          <div className="border-0.5 border-cbs-border rounded-full py-1 px-2">+2</div>
+                        </div>
                       </td>
                       <td className={"w-[100px] align-middle"}>
 
-                        <div
-                        >
-                          {editBoxState ? (
-                            <div className="flex justify-items-end">
-                              <button className="w-[40px] h-[40px] rounded-full hover:bg-cbs-form-input-bg">
-                                <img src={trashIcon} className="m-auto" />
-                              </button>
-                              <button className="w-[40px] h-[40px] rounded-full hover:bg-cbs-form-input-bg">
-                                <img src={mailIcon} className="m-auto" />
-                              </button>
-                            </div>
-                          ) : (
-                            <div className={
-                              "task-date whitespace-nowrap py-2 text-right pr-4"
-                            }>
-                              {showTime(item.modifyAt)}
-                            </div>
-                          )}
+                        <div className=" justify-items-end absolute ml-[10px] hidden group-hover:block homeboxbutton">
+                          <button className="w-[40px] h-[40px] rounded-full hover:bg-cbs-form-input-bg">
+                            <img src={trashIcon} className="m-auto" />
+                          </button>
+                          <button className="w-[40px] h-[40px] rounded-full hover:bg-cbs-form-input-bg">
+                            <img src={mailIcon} className="m-auto" />
+                          </button>
+                        </div>
+                        <div className={
+                          "task-date whitespace-nowrap py-2 text-right pr-4"
+                        }>
+                          {showTime(item.modifyAt)}
                         </div>
                       </td>
                     </tr>
@@ -1778,47 +1782,6 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           <></>
         )}
       </div>
-      {/* popover */}
-      {/* <Popover
-        id="mouse-over-popover"
-        sx={{
-          pointerEvents: "none"
-        }}
-        open={open}
-        anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right"
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "left"
-        }}
-        PaperProps={{ onMouseEnter: handlePopoverOpen, onMouseLeave: handlePopoverClose }}
-      >
-        <div className="w-350">
-          <div>
-            <div className="border-b-0.5 border-cbs-border	 flex gap-5 p-3 ">
-              <div>
-                <img alt={"----"} src={taskUserAvt} className={" rounded-full overflow-hidden h-[60px] w-[60px] min-h-[36px] min-w-[36px] max-h-[60px] max-w-[60px] mx-1"}
-                />
-              </div>
-              <div>
-                <div className="text-lg	">Nguyễn Văn Quang-TRX</div>
-                <div className="text-primary-gray">quangnv@trx.com</div>
-                <div className="text-primary-gray">0988226333</div>
-              </div>
-            </div>
-            <div className="flex py-2 px-3 items-center	justify-between	">
-              <div className="text-cbs-primary bg-cbs-sub-primary rounded p-3">Giám đốc Ban QLDA</div>
-              <div className="flex gap-2 items-center	">
-                <a href=""><img src={iconChat} alt="" /></a>
-                <a href=""><img src={iconTrash} alt="" /></a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Popover> */}
       <UpdateStatusDialog
         showUpdateStatus={showUpdateStatus}
         setShowUpdateStatus={setShowUpdateStatus}
