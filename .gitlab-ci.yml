@@ -4,6 +4,8 @@ include:
 
 build-docker:
   extends: .build-docker-multiple-stage-template
+  variables:
+    NODE_BUILD_ARGS: "--max-old-space-size=2048"
   tags:
     - docker
   only:
