@@ -6,3 +6,7 @@ build-docker:
   extends: .build-docker-multiple-stage-template
   tags:
     - docker
+  only:
+    refs:
+      - master
+      - staging
