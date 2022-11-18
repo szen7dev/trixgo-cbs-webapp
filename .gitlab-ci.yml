@@ -1,6 +1,8 @@
 include:
-  - project: 'trixgo-vn/devops/gitlab-ci-template'
-    file: '/.Docker.gitlab-ci.yml'
+  - project: "trixgo-vn/devops/gitlab-ci-template"
+    file: "/.Docker.gitlab-ci.yml"
 
 build-docker:
   extends: .build-docker-multiple-stage-template
+  tags:
+    - docker
