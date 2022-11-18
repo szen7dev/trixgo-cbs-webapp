@@ -1,4 +1,4 @@
-ARG NODE_VERSION=18
+ARG NODE_VERSION=14
 FROM node:${NODE_VERSION}-alpine as build
 WORKDIR /webapp
 RUN apk add --no-cache yarn
