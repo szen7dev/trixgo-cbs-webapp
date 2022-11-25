@@ -24,52 +24,33 @@ import HumanRouterV2 from "./human/indexV2";
 const AccountingRouter = lazy(() => import("./accounting"));
 const AuthenticationRouter = lazy(() => import("./authentication"));
 const SampleRouter = lazy(() => import("./sample"));
-// const BiddingRouter = lazy(() => import("./bidding"));
 const BiddingRouter = lazy(() => import("./bidding/indexV2"));
-// const CmcsRouter = lazy(() => import("./cmcs/index"));
 const CmcsRouterV2 = lazy(() => import("./cmcs/indexV2"));
-// const DatahubRouter = lazy(() => import("./datahub"));
 const DatahubRouterV2 = lazy(() => import("./datahub/indexV2"));
-// const DocumentRouter = lazy(() => import("./document"));
 const DocumentV2Router = lazy(() => import("./documentV2"));
-// const PPTRouter = lazy(() => import("./ppt"));
-// const FinancialRouter = lazy(() => import("./financial"));
 const FinancialRouterV2 = lazy(() => import("./financial/indexV2"));
-// const HumanRouter = lazy(() => import("./human"));
-// const MarketRouter = lazy(() => import("./market"));
 const MarketRouterV2 = lazy(() => import("./market/indexV2"));
 const MediaRouter = lazy(() => import("./media"));
 const MessagesRouter = lazy(() => import("./messages"));
-// const OperationRouter = lazy(() => import("./operation"));
 const OperationRouterV2 = lazy(() => import("./operation/indexV2"));
-// const OwnerRouter = lazy(() => import('./owner'));
 const OwnerRouterV2 = lazy(() => import('./owner/indexV2'));
 const PcmRouter = lazy(() => import('./pcm'));
 const PmRouter = lazy(() => import('./pm'));
-// const WorkshopRouter = lazy(() => import('./workshop'));
 const WorkshopRouterV2 = lazy(() => import('./workshop/indexV2'));
-// const PersonalRouter = lazy(() => import("./personal"));
 const PersonalRouterV2 = lazy(() => import("./personal/indexV2"));
-// const QrcodeRouter = lazy(() => import("./qrcode"));
 const QrcodeRouterV2 = lazy(() => import("./qrcode/indexV2"));
-// const ReeRouter = lazy(() => import("./ree"));
 const ReeRouterV2 = lazy(() => import("./ree/indexV2"));
 const InspectionRouter = lazy(() => import("./inspection/index"));
+const FnbRouter = lazy(() => import("./fnb/index"));
 const SupportRouter = lazy(() => import("./support"));
-// const TimesheetRouter = lazy(() => import("./timesheet"));
 const TimesheetRouterV2 = lazy(() => import("./timesheet/indexV2"));
-// const ItemRouter = lazy(() => import("./item"));
 const ItemRouterV2 = lazy(() => import("./item/indexV2"));
-// const BudgetRouter = lazy(() => import("./budget"));
 const BudgetRouterV2 = lazy(() => import("./budget/indexV2"));
 
 /*=====5.PAGES=====*/
 const ErrorPage = lazy(() => import("views/authentication/Error"));
 const HomeLayout = lazy(() => import("shareComponents/layouts"));
-// const HumanLayout = lazy(() => import("views/human/shareComponents/layouts"));
 const HumanLayoutV2 = lazy(() => import("views/human/shareComponents/layoutsV2"));
-// const DocumentLayout = lazy(() => import('views/document/sharedComponents/layouts'));
-// const AccountingLayout = lazy(() => import('views/accounting/shareComponents/layouts'));
 const AccountingLayoutV2 = lazy(() => import('views/accounting/shareComponents/layoutsV2'));
 const PcmPrintTaskTypeOnePage = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeOne'));
 const PcmPrintTaskTypeTwoPage = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeTwo'));
@@ -238,6 +219,11 @@ const Routes: FC = () => {
                                 {/* =====SUPPERVISION===== */}
                                 <Route path="/inspection">
                                     <InspectionRouter />
+                                </Route>
+
+                                {/* =====FNB===== */}
+                                <Route path="/fnb">
+                                    <FnbRouter />
                                 </Route>
 
                                 {/* =====POLICY===== */}
