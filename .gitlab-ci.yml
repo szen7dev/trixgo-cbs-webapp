@@ -2,13 +2,33 @@ include:
   - project: "trixgo-vn/devops/gitlab-ci-template"
     file: "/.Docker.gitlab-ci.yml"
 
-build-docker:
+build-docker-staging:
   extends: .build-docker-multiple-stage-template
   variables:
-    NODE_OPTIONS: "--max-old-space-size=4000"
+    # NODE_OPTIONS: "--max-old-space-size=4000"
+    NODE_ENV: development
+    HTTPS: http
+    PORT: 3000
+    HOST: localhost
+    REACT_APP_ENV: staging
+    REACT_APP_WEBSITE_NAME: "Trixgo | Quản lý dự án"
+    REACT_APP_API_DOMAIN_LOCAL: http://localhost:3003
+    REACT_APP_API_DOMAIN_STAGING: https://trixgo-api-staging.nentangso.me
+    REACT_APP_URL_S3: https://dntdurzwr12tp.cloudfront.net
+    REACT_APP_URL_S3_USER: https://dntdurzwr12tp.cloudfront.net/files/db/users
+    REACT_APP_URL_S3_COMPANY: https://dntdurzwr12tp.cloudfront.net/files/db/companys
+    REACT_APP_URL_S3_CONTACT: https://dntdurzwr12tp.cloudfront.net/files/db/contacts
+    REACT_APP_URL_S3_PROJECT: https://dntdurzwr12tp.cloudfront.net/files/db/projects
+    REACT_APP_URL_SOCKET_LOCAL: http://localhost:4000
+    REACT_APP_URL_SOCKET_STAGING: https://trixgo-ws-staging.nentangso.me
+    REACT_APP_ONESIGNAL_APP_ID_STAGING: 21ce042a-1b27-4072-b719-98a78e75b0ba
+    REACT_APP_ONESIGNAL_APP_ID_LOCAL: 21ce042a-1b27-4072-b719-98a78e75b0ba
+    REACT_APP_PLATFORM: 1
+    REACT_APP_DOMAIN: https://staging.cbs.trixgo.com
+    REACT_APP_TINYMCE_API_KEY: mnhe8mkhfadk24d7pbtvd880370fc3jyxr34fxx0csiks0gt
+    REACT_APP_SENTRY_DSN: https://a6b2135ab06543f58500130a5ea06d09@o1167997.ingest.sentry.io/6294307
   tags:
     - docker
   only:
     refs:
-      - master
       - staging
