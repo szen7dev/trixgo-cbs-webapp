@@ -5,11 +5,10 @@ include:
 build-docker-staging:
   extends: .build-docker-multiple-stage-template
   variables:
-    # NODE_OPTIONS: "--max-old-space-size=4000"
-    NODE_ENV: development
     HTTPS: http
     PORT: 3000
     HOST: localhost
+    NODE_ENV: development
     REACT_APP_ENV: staging
     REACT_APP_WEBSITE_NAME: "Trixgo | Quản lý dự án"
     REACT_APP_API_DOMAIN_LOCAL: http://localhost:3003
