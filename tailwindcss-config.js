@@ -77,6 +77,7 @@ module.exports = {
                 "accent-light": "#E9EAEF",
                 "green-success": "#00C614",
                 "pink-warning": "#D88183",
+                "second-color-border": "#CFCFCF",
 
                 "cbs-primary": "#0060E1",
                 "cbs-sub-primary" : "#E8F0FE",
@@ -123,6 +124,7 @@ module.exports = {
                 "cbs-soft-blue": "#E9F1FE",
                 "cbs-dropdown-hover": "#F2F4F7",
                 "cbs-background-selected": "#C2DBFE",
+                "cbs-fnb-bg": "#005336",
 
                 "cbs-purple": "#9B59B6",
                 "cbs-red": "#FF4242",

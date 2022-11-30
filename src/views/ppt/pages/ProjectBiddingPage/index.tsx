@@ -393,7 +393,7 @@ const ProjectBiddingPage: FC = () => {
                       {item.note}
                     </td>
                     <td className="pt-2.5 pb-3 px-1 border-b-0.5 border-r-0.5 border-cbs-border text-center">
-                      <span className="text-white bg-cbs-inline-badge-blue rounded-full py-1 px-2"> {BIDDING_PLAN_STATUS[item.status - 1].text}
+                      <span className="text-white bg-cbs-inline-badge-blue rounded-full py-1 px-2"> {BIDDING_PLAN_STATUS[item.status - 1]?.text}
                       </span>
                     </td>
                     <td className="pt-2.5 pb-3 px-1 border-b-0.5 border-r-0.5 border-cbs-border text-center">
