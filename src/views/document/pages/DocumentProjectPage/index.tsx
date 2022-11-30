@@ -274,7 +274,6 @@ export const DocumentProjectPage: FC = () => {
 
     return (
         <div className="flex flex-1 flex-col overflow-hidden h-full">
-            <PmDocumentHeaderSearchInput />
             <div className={"sticky top-0 z-10"}>
                 <div className={"flex flex-wrap items-center px-4 py-2"}>
                     <div className={"flex items-center flex-1"}>

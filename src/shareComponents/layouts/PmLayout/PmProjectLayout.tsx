@@ -42,7 +42,7 @@ export const PmProjectLayout: FC<Props> = ({ children, headerSearch }) => {
         <section className={"main-content-wrapper flex-1"}>
           {/*  Main header */}
           <MainHeaderPm>
-            {/* {headerSearch} */}
+            {headerSearch}
           </MainHeaderPm>
           {/* Left navigation */}
           <LeftMenu>
