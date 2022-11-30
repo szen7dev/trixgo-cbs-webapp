@@ -585,6 +585,69 @@ export const DOCRE_SHEET_TYPES = [
 ]
 
 /**
+ * FNB
+ */
+export const FNB_CUSTOMER = [
+    { value: 1, text: 'Học sinh' },
+    { value: 2, text: 'Sinh viên' },
+    { value: 3, text: 'Phụ nữ' },
+    { value: 4, text: 'Đàn ông' },
+    { value: 5, text: 'Khác' },
+]
+
+export const FNB_CAMPAIGN = [
+    { value: 1, text: 'Không bật' },
+    { value: 2, text: 'Bật' },
+]
+
+export const FNB_INTERNAL = [
+    { value: 1, text: 'Trong hệ thống' },
+    { value: 2, text: 'Ngoài hệ thống' },
+]
+
+export const FNB_SEASONS = [
+    { value: 1, text: 'Mùa xuân' },
+    { value: 2, text: 'Mùa hạ' },
+    { value: 3, text: 'Mùa thu' },
+    { value: 4, text: 'Mùa đông' },
+]
+
+export const FNB_SHIFT = [
+    { value: 1, text: 'Ca sáng' },
+    { value: 2, text: 'Ca chiều' },
+    { value: 3, text: 'Ca tối' },
+]
+
+export const FNB_CHANNEL = [
+    { value: 1, text: 'Offline' },
+    { value: 2, text: 'Grab' },
+    { value: 3, text: 'Shopee' },
+    { value: 4, text: 'Gojek' },
+    { value: 5, text: 'Baemin' },
+    { value: 6, text: 'Loship' },
+]
+
+export const FNB_SERVICE = [
+    { value: 1, text: 'Tại quán' },
+    { value: 2, text: 'Mang đi' },
+    { value: 3, text: 'Giao hàng' },
+]
+
+export const FNB_PAYMENT = [
+    { value: 1, text: 'Tiền mặt' },
+    { value: 2, text: 'Chuyển khoản' },
+    { value: 3, text: 'Qua app' },
+]
+
+export const FNB_ORDER_STATUS = [
+    { value: 1, text: 'Đang giao hàng/Phục vụ' },
+    { value: 2, text: 'Hoàn tiền một phần' },
+    { value: 3, text: 'Hoàn tiền toàn bộ' },
+    { value: 4, text: 'Đã hủy (không tính vào doanh số)' },
+    { value: 5, text: 'Hoàn thành' },
+]
+
+/**
  * TÀI CHÍNH DOANH NGHIỆP
  */
 // PHÂN LOẠI KẾ HOẠCH TÀI CHÍNH
