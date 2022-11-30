@@ -35,7 +35,7 @@ export const ItemLeftSideBar: FC = () => {
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className={"flex-1 ml-2 text-left text-[14px]"}>Dụng cụ lưu trữ</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Dụng cụ lưu trữ hồ sơ</span>
           </NavLink>
           <NavLink
             to="/item/goods"
@@ -47,7 +47,7 @@ export const ItemLeftSideBar: FC = () => {
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className={"flex-1 ml-2 text-left text-[14px]"}>Goods</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Hàng hóa, nguyên vật liệu, công cụ dụng cụ, tài sản</span>
           </NavLink>
           <NavLink
             to="/item/home/1"

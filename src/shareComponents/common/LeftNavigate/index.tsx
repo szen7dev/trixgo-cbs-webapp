@@ -205,17 +205,20 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
           <span className={"text-primary-gray mt-1"}>Chủ đề</span>
         </Link> : <></>
       }
-      <Link to={`/fnb/home`} className={"flex flex-col items-center mb-3"}>
-        <div
-          className={
-            "px-4 py-1 rounded-full relative " +
-            (firstRoute === "fnb" ? "bg-cbs-hightlight-right-navigate" : "")
-          }
-        >
-          <img width={'20px'} src={fnbIcon} alt={"FnB"} />
-        </div>
-        <span className={"text-primary-gray mt-1"}>FnB</span>
-      </Link>
+      {checkPermissionApp('61e04971fdebf77b072d1b0f') ?
+        <Link to={`/fnb/home`} className={"flex flex-col items-center mb-3"}>
+          <div
+            className={
+              "px-4 py-1 rounded-full relative " +
+              (firstRoute === "fnb"
+                ? "bg-cbs-hightlight-right-navigate"
+                : "")
+            }
+          >
+            <img width={'20px'} src={fnbIcon} alt={"FnB"} />
+          </div>
+          <span className={"text-primary-gray mt-1"}>FnB</span>
+        </Link> : <></>}
       {checkPermissionApp('5dfe4b9051dc622100bb9d89') ?
         <Link to={`/pm/projects`} className={"flex flex-col items-center mb-3"}>
           <div
@@ -228,20 +231,6 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
           </div>
           <span className={"text-primary-gray mt-1"}>Dự án</span>
         </Link> : <></>}
-        {/* {checkPermissionApp('5fe58b7395db3c6e1534ea81') ?
-        <Link to={`/bidding/home`} className={"flex flex-col items-center mb-3"}>
-          <div
-            className={
-              "px-4 py-1 rounded-full relative " +
-              (firstRoute === "bidding"
-                ? "bg-cbs-hightlight-right-navigate"
-                : "")
-            }
-          >
-            <img width={'20px'} src={biddingImage} alt={"Thầu"} />
-          </div>
-          <span className={"text-primary-gray mt-1"}>Thầu</span>
-        </Link> : <></>} */}
       {checkPermissionApp('6131d6f83f4b736dc93253b2') ?
         <Link to={`/cmcs/home`} className={"flex flex-col items-center mb-3"}>
           <div
