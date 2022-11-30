@@ -104,6 +104,7 @@ export type Task = {
   modifyAt: string;
   author: Author;
   message?: string;
+  error?: boolean;
   timeImportExcel?: string;
   keyError?: string;
 };
