@@ -14,6 +14,8 @@ import ErrorPage from "views/authentication/Error";
 import {
     InspectionHomePage,
 } from "views/inspection/pages";
+import { FnBLayout } from "views/fnb/shareComponents/layouts/FnBLayout";
+import { FnBHomePage } from "views/fnb/pages/FnbHomePage/index";
 
 const FnbRouter: FC = () => {
     return (
@@ -22,9 +24,9 @@ const FnbRouter: FC = () => {
                 exact
                 path="/fnb/home"
                 component={() =>
-                    <InspectionLayout>
-                        <InspectionHomePage />
-                    </InspectionLayout>
+                    <FnBLayout>
+                        <FnBHomePage/>
+                    </FnBLayout>
                 }
             />
             <Route path="/fnb/*" component={ErrorPage} />
