@@ -7,6 +7,7 @@ import humanIcon from "assets/images/icons8-people-64.svg";
 import mediaIcon from "assets/images/icons8-commercial-64.svg";
 import financialIcon from "assets/images/icons8-financial-64.svg";
 import projectIcon from "assets/images/icons-project.svg";
+import fnbIcon from "assets/images/icons-fnb.svg";
 import contractIcon from "assets/images/icons8-contract-64.svg";
 import fileIcon from "assets/images/icons-file.svg";
 import biddingImage from "assets/menu/project/icons-project-bidding.svg"
@@ -204,6 +205,17 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
           <span className={"text-primary-gray mt-1"}>Chủ đề</span>
         </Link> : <></>
       }
+      <Link to={`/fnb/home`} className={"flex flex-col items-center mb-3"}>
+        <div
+          className={
+            "px-4 py-1 rounded-full relative " +
+            (firstRoute === "fnb" ? "bg-cbs-hightlight-right-navigate" : "")
+          }
+        >
+          <img width={'20px'} src={fnbIcon} alt={"FnB"} />
+        </div>
+        <span className={"text-primary-gray mt-1"}>FnB</span>
+      </Link>
       {checkPermissionApp('5dfe4b9051dc622100bb9d89') ?
         <Link to={`/pm/projects`} className={"flex flex-col items-center mb-3"}>
           <div
