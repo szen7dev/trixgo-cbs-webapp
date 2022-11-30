@@ -26,9 +26,12 @@ import { APP_ID } from "apis/localdb";
 /*=====7.OTHER=====*/
 import { IconButton, InputBase, Paper } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
+import { useModal } from "services/hooks/useModal";
+import { ModalAddNewTask } from "./ModalAddNewTask";
 
 export const FnBLeftSideBar: FC = () => {
     const { user } = useAuth();
+    const { openModal } = useModal();
     const [menuShowList, setMenuState] = useState(false);
     const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.BUDGET.id });
 
@@ -40,19 +43,15 @@ export const FnBLeftSideBar: FC = () => {
                 <div>
                     <button
                         className="flex gap-2 items-center justify-center text-primary-gray bg-cbs-blue-button  rounded-md font-bold px-6 py-2 mb-3"
-                    // onClick={() =>
-                    //     openModal(
-                    //         <div
-                    //             className={
-                    //                 "inline-block w-[521px] h-[270px] my-8 overflow-y-auto text-left align-middle transition-all transform bg-primary-light shadow-xl"
-                    //             }
-                    //         >
-                    //             <CreateOrUpdateBudget onConfirm={handleConfirmCreateOrUpdate} />
-                    //         </div>
-                    //     )
-                    // }
+                        onClick={() =>
+                            openModal(
+                                <div className="t-add-new-task-dialog text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
+                                    <ModalAddNewTask />
+                                </div>
+                            )
+                        }
                     >
-                       <img src={iconPlusBlue} alt="" /> Tạo mới
+                        <img src={iconPlusBlue} alt="" /> Tạo mới
                     </button>
                 </div>
                 <div className="t-link-menu-container">
@@ -77,7 +76,7 @@ export const FnBLeftSideBar: FC = () => {
                 <div>
                     <div onClick={() => setMenuState(!menuShowList)} className="flex justify-between text-primary-gray px-4 py-1 cursor-pointer hover:bg-slate-200">
                         <div>
-                            {(menuShowList ? <ExpandLessIcon sx={{ width: "24px", height: "24px" }}  fontSize="small" /> : <ExpandMoreIcon  sx={{ width: "24px", height: "24px"  }} fontSize="small" />)}
+                            {(menuShowList ? <ExpandLessIcon sx={{ width: "24px", height: "24px" }} fontSize="small" /> : <ExpandMoreIcon sx={{ width: "24px", height: "24px" }} fontSize="small" />)}
                             <span className="ml-2 text-[14px] align-middle"> Khách hàng</span>
                         </div>
                         <img src={iconPlus} alt="" />
