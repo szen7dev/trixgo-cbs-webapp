@@ -39,6 +39,16 @@ const FnbRouter: FC = () => {
                     </FnBLayout>
                 }
             />
+            
+            <Route
+                exact
+                path="/fnb/shift"
+                component={() =>
+                    <FnBLayout>
+                        <FnBHomePage/>
+                    </FnBLayout>
+                }
+            />
             <Route path="/fnb/*" component={ErrorPage} />
         </Switch>
     )
