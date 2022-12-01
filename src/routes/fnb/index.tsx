@@ -16,6 +16,7 @@ import {
 } from "views/inspection/pages";
 import { FnBLayout } from "views/fnb/shareComponents/layouts/FnBLayout";
 import { FnBHomePage } from "views/fnb/pages/FnbHomePage/index";
+import { FnBProductPage } from "views/fnb/pages/FnbProductPage/index";
 
 const FnbRouter: FC = () => {
     return (
@@ -26,6 +27,15 @@ const FnbRouter: FC = () => {
                 component={() =>
                     <FnBLayout>
                         <FnBHomePage/>
+                    </FnBLayout>
+                }
+            />
+            <Route
+                exact
+                path="/fnb/product"
+                component={() =>
+                    <FnBLayout>
+                        <FnBProductPage/>
                     </FnBLayout>
                 }
             />
