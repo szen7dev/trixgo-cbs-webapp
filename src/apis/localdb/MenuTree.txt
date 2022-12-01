@@ -50,7 +50,7 @@ MENU ỨNG DỤNG OWNER/menu-owner-app (type=1): 623f216ae998e94feda0cd86
 +++Tài khoản thành viên/members: 623f217ce998e94feda0cd87
 +++Phân quyền ứng dụng/grant: 623f2188e998e94feda0cd88
 
-============PAYMENT: 61e04971fdebf77b072d1b0f
+============FNB: 61e04971fdebf77b072d1b0f
 MENU ỨNG DỤNG PAYMENT/menu-payment-app (type=1): 623f21bce998e94feda0cd89
 +++Báo cáo quản trị/dashboard: 623f21cde998e94feda0cd8a
 

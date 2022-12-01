@@ -299,7 +299,11 @@ const PCMRouter: FC = () => {
                   </Route>
                   <Route exact path={["/pm/project/:id/bidding", "/pm/project/:id/bidding/(2|3)"]}>
                     <PmProjectLayout>
-                      <Route exact path="/pm/project/:id/bidding" component={ProjectBiddingPage} />
+                      <Route
+                        exact
+                        path="/pm/project/:id/bidding"
+                        component={ProjectBiddingPage}
+                      />
                       <Route
                         exact
                         path="/pm/project/:id/bidding/2"

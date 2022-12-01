@@ -20,6 +20,14 @@ import businessBuiding from "assets/images/icons8-business-building-48.svg";
 import iconChat from "assets/images/icons8-chat-96 1.svg";
 import iconTrash from "assets/images/icons8-delete-96 1.svg";
 import taskUserAvt from "assets/images/task-user.svg";
+import trashIcon from "assets/images/icons8-trash-96 1.svg";
+import mailIcon from "assets/images/icons8-email-96 1.svg";
+import moreIcon from "assets/images/moreIcon.svg";
+import arrowDown from "assets/images/icon-arrowdown.svg";
+import defaultAva from "assets/images/image 166.jpg";
+import icons8pdf from "assets/images/icons8-pdf-100 1.svg";
+import StarIcon from '@mui/icons-material/Star';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
 
 import { useUserSystem } from "services/hooks/users/useUserSystem";
 import { useAuth } from "services/hooks/auth/useAuth";
@@ -56,6 +64,8 @@ type Props = {
 export const DashboardV2: FC<Props> = ({ type = 0 }) => {
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   const dispatch = useDispatch();
+  const [popBox1, setpopBox1] = React.useState(false)
+  const [popBox2, setpopBox2] = React.useState(false)
   const [filter, setFilter] = useState("all");
   const { user } = useAuth();
   const [pageIndex, setPageIndex] = useState(0);
@@ -65,6 +75,14 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
   const [showUpdateStatus, setShowUpdateStatus] = useState(false);
   const { openModal } = useModal();
 
+  const StarToggle = () => {
+    const [selectStar, setSelectStar] = React.useState(false)
+    return (
+      <button onClick={() => setSelectStar(!selectStar)} className="h-[16px]">
+        {(selectStar ? <StarIcon sx={{ color: '#FFCA28', width: 16, height: 16 }} /> : <StarBorderIcon sx={{ color: '#FFCA28', width: 16, height: 16 }} />)}
+      </button>
+    )
+  }
   const keywordForResponse = useAppSelector(
     (state) => state.dashboardV2.data.keywordForResponse
   );
@@ -1223,16 +1241,77 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           )}
 
         </div>
-        <div className={"header-table flex px-4 w-full top-0 bg-white pb-4"}>
-          {/* <div className={"flex items-center justify-center mr-2"}>
-            <input
-              className="form-check-input"
-              type="checkbox"
-              value=""
-              id="checkAll"
-            />
-          </div> */}
-          <button
+        <div className={"header-table flex px-4 w-full top-0 bg-white mb-1 pb-2"}>
+          <div className={"flex gap-7 items-center justify-center mr-2"}>
+            <div className="flex gap-2 items-center">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                value=""
+                id="checkAll"
+                style={{ width: "14px", height: "14px" }}
+              />
+              <div>
+                <button onClick={() => setpopBox1(!popBox1)} className="relative w-[20px] h-[20px]">
+                  <img src={arrowDown} className="m-auto" />
+                </button>
+                <div
+                  className={"w-auto rounded flex flex-col bg-white absolute " + (popBox1 ? "block" : "hidden")}
+                  style={{ boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)" }}
+                >
+                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
+                    Tất cả
+                  </button>
+                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
+                    Bỏ chọn tất cả
+                  </button>
+                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
+                    Chủ đề đã đọc
+                  </button>
+                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
+                    Chủ đề chưa đọc
+                  </button>
+                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
+                    Chủ đề quan tâm
+                  </button>
+                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
+                    Chủ đề không quan tâm
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="flex gap-7 items-center">
+              <button><img src={trashIcon} alt="" /></button>
+              <button><img src={mailIcon} alt="" /></button>
+              <button onClick={() => setpopBox2(!popBox2)} className="relative w-[20px] h-[20px]">
+                <img src={moreIcon} className="m-auto" />
+                <div
+                  className={"w-[250px] rounded flex flex-col bg-white absolute " + (popBox2 ? "block" : "hidden")}
+                  style={{ boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)" }}
+                >
+                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
+                    Đánh dấu là đã đọc
+                  </button>
+                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
+                    Đánh dấu là quan trọng
+                  </button>
+                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
+                    Đánh dấu quan tâm
+                  </button>
+                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
+                    Chủ đề chưa đọc
+                  </button>
+                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
+                    Chủ đề quan tâm
+                  </button>
+                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
+                    Chủ đề không quan tâm
+                  </button>
+                </div>
+              </button>
+            </div>
+          </div>
+          {/* <button
             onClick={() => setFilter("all")}
             className={
               "py-1 px-6 mx-2 rounded-full border border-primary-border " +
@@ -1270,7 +1349,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
             onClick={() => setShowUpdateStatus(true)}
           >
             Đánh dấu tất cả đã đọc
-          </button>
+          </button> */}
           {/* <button className={"flex items-center justify-center mx-3"}>
             <img src={downloadIcon} alt={"-----"} />
           </button>
@@ -1331,6 +1410,43 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
             />
           </div>
         </div>
+        {/* <div className="flex justify-between mb-4 border-t-0.5 border-b-0.5 border-cbs-border">
+          <div className="flex gap-3 items-center py-1">
+            <a href="#"><img src={defaultAva} alt="" /></a>
+            <div className="flex gap-3 py-1">
+              <button className="flex gap-5 items-center px-4 rounded-md text-white bg-primary">
+                <span>Việc của tôi</span>
+                <span className="font-bold text-[18px]">100</span>
+              </button>
+              <button className="flex gap-5 items-center px-4 rounded-md text-white bg-cbs-secondary">
+                <span>Quan trọng</span>
+                <span className="font-bold text-[18px]">15</span>
+              </button>
+              <button className="flex gap-5 items-center px-4 rounded-md text-white bg-cbs-schedule-expired">
+                <span>Quá hạn</span>
+                <span className="font-bold text-[18px]">15</span>
+              </button>
+              <button className="flex gap-5 items-center px-4 rounded-md text-white bg-cbs-schedule-nextweek">
+                <span>Tuần tới</span>
+                <span className="font-bold text-[18px]">15</span>
+              </button>
+              <button className="flex gap-5 items-center px-4 rounded-md text-white bg-cbs-schedule-after-7days">
+                <span>Sau tuần tới</span>
+                <span className="font-bold text-[18px]">15</span>
+              </button>
+            </div>
+          </div>
+          <div className="flex">
+            <div className="flex flex-col border-l-0.5 border-cbs-border text-center mx-auto" style={{ width: "80px" }}>
+              <span className="text-cbs-subtext">Công ty</span>
+              <span className="font-bold text-[18px]">123</span>
+            </div>
+            <div className="flex flex-col border-l-0.5 border-cbs-border text-center mx-auto" style={{ width: "80px" }}>
+              <span className="text-cbs-subtext">Đối tác</span>
+              <span className="font-bold text-[18px]">123</span>
+            </div>
+          </div>
+        </div> */}
       </div>
       <div className={"flex-1 overflow-y-auto"}>
         <table className={"w-full table-fixed tasks"}>
@@ -1343,16 +1459,18 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                       key={index}
                       className={"read border-b-0.5 border-primary-border hover:shadow-md hover:z-2 hover:relative"}
                     >
-                      <td className={"w-[15px]"}>
+                      <td className={"w-[100px]"}>
                         <div
-                          className={"flex items-center justify-center py-2"}
+                          className={"flex gap-4 items-center justify-center py-4"}
                         >
-                          {/* <input
+                          <input
                             className="form-check-input"
                             type="checkbox"
                             value=""
                             id="check"
-                          /> */}
+                            style={{ width: "16px", height: "16px", marginTop: "5px" }}
+                          />
+                          <StarToggle />
                         </div>
                       </td>
                       <td className={"w-[55px]"}>
@@ -1429,18 +1547,20 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                   return (
                     <tr
                       key={index}
-                      className={checkActive(item.news, `${user?._id}`)}
+                      className={checkActive(item.news, `${user?._id}`) + " group"}
                     >
-                      <td className={"w-[15px]"}>
+                      <td className={"w-[60px]"}>
                         <div
-                          className={"flex items-center justify-center py-2"}
+                          className={"flex gap-4 items-center justify-center py-4 px-1"}
                         >
-                          {/* <input
-                            className="form-check-input"
+                          <input
+                            className="form-check-input mt-[5px]"
                             type="checkbox"
                             value=""
                             id="check"
-                          /> */}
+                            style={{ width: "13px", height: "13px", marginTop: "5px" }}
+                          />
+                          <StarToggle />
                         </div>
                       </td>
                       <td className={"w-[55px]"}>
@@ -1481,9 +1601,13 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                       </td>
                       <td className={"w-td-dashboard"}>
                         <Link to={"/pcm/detail/" + item._id}>
-                          <p className={"task-title truncate text-[14px] mt-2"}>
+                          <div className={"task-title truncate text-[14px] mt-2"} style={{ lineHeight: "20px" }}>
+                            {/* <span className="bg-cbs-orage text-white mr-1 py-1 px-3 rounded-md">Cao</span> */}
                             {item.project.sign}.{subContentHtml(item.name)}
-                          </p>
+                          </div>
+                          {/* <p className={"task-title truncate text-[14px] mt-2"}>
+                            {item.project.sign}.{subContentHtml(item.name)}
+                          </p> */}
                           <p
                             className={
                               "crop-text truncate text-xs text-primary-gray py-2"
@@ -1492,13 +1616,27 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                             {subContentHtml(item.lastComment?.content)}
                           </p>
                         </Link>
+                        {/* <div className="flex gap-2 text-primary-gray pb-2">
+                          <div className="border-0.5 border-cbs-border rounded-full px-3 py-1 flex">
+                          <img src={icons8pdf} className="mr-[5px]" />
+                          <span>2022.09.26.FCT</span>
+                          </div>
+                          <div className="border-0.5 border-cbs-border rounded-full py-1 px-2">+2</div>
+                        </div> */}
                       </td>
-                      <td className={"w-[100px]"}>
-                        <div
-                          className={
-                            "task-date whitespace-nowrap py-2 text-right pr-4"
-                          }
-                        >
+                      <td className={"w-[100px] align-middle"}>
+
+                        <div className=" justify-items-end absolute ml-[10px] hidden group-hover:block homeboxbutton">
+                          <button className="w-[40px] h-[40px] rounded-full hover:bg-cbs-form-input-bg">
+                            <img src={trashIcon} className="m-auto" />
+                          </button>
+                          <button className="w-[40px] h-[40px] rounded-full hover:bg-cbs-form-input-bg">
+                            <img src={mailIcon} className="m-auto" />
+                          </button>
+                        </div>
+                        <div className={
+                          "task-date whitespace-nowrap py-2 text-right pr-4"
+                        }>
                           {showTime(item.modifyAt)}
                         </div>
                       </td>
@@ -1644,47 +1782,6 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
           <></>
         )}
       </div>
-      {/* popover */}
-      {/* <Popover
-        id="mouse-over-popover"
-        sx={{
-          pointerEvents: "none"
-        }}
-        open={open}
-        anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right"
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "left"
-        }}
-        PaperProps={{ onMouseEnter: handlePopoverOpen, onMouseLeave: handlePopoverClose }}
-      >
-        <div className="w-350">
-          <div>
-            <div className="border-b-0.5 border-cbs-border	 flex gap-5 p-3 ">
-              <div>
-                <img alt={"----"} src={taskUserAvt} className={" rounded-full overflow-hidden h-[60px] w-[60px] min-h-[36px] min-w-[36px] max-h-[60px] max-w-[60px] mx-1"}
-                />
-              </div>
-              <div>
-                <div className="text-lg	">Nguyễn Văn Quang-TRX</div>
-                <div className="text-primary-gray">quangnv@trx.com</div>
-                <div className="text-primary-gray">0988226333</div>
-              </div>
-            </div>
-            <div className="flex py-2 px-3 items-center	justify-between	">
-              <div className="text-cbs-primary bg-cbs-sub-primary rounded p-3">Giám đốc Ban QLDA</div>
-              <div className="flex gap-2 items-center	">
-                <a href=""><img src={iconChat} alt="" /></a>
-                <a href=""><img src={iconTrash} alt="" /></a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Popover> */}
       <UpdateStatusDialog
         showUpdateStatus={showUpdateStatus}
         setShowUpdateStatus={setShowUpdateStatus}
