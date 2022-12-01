@@ -42,6 +42,8 @@ import RadioChecked from "assets/images/icons8-checked-40 (2) 2.svg";
 import ItemSample from "assets/images/image 430.jpg";
 import IconMinus from "assets/images/icons8-reduce-96 1.svg";
 import IconPlus from "assets/images/icons8-add-new-100 1.svg";
+import CheckBoxEmpty from "assets/images/Frame 3548.svg";
+import CheckedBox from "assets/images/Check-All.svg";
 
 import "react-day-picker/lib/style.css";
 import { Editor } from "@tinymce/tinymce-react";
@@ -99,7 +101,14 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
       </button>
     )
   }
-  {/* <StarBorderIcon sx={{ color: '#FFCA28', width: 16, height: 16 }}  */ }
+  const CustomCheckboxToggle = () => {
+    const [selectCheckbox, setSelectCheckbox] = React.useState(false)
+    return (
+      <button onClick={() => setSelectCheckbox(!selectCheckbox)} className="h-[16px]">
+        {(selectCheckbox ? <img src={CheckedBox} alt="" /> : <img src={CheckBoxEmpty} alt="" />)}
+      </button>
+    )
+  }
   const { addTaskAsync } = useTask({});
 
   const { addFileToUpload } = useUpload({
@@ -666,7 +675,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                         <div>
                           <input type="text" placeholder="Tìm kiếm sản phẩm" />
                         </div>
-                        <div className="h-[300px] overflow-y-auto	my-2">
+                        <div className="h-[300px] overflow-y-auto	my-2 ">
                           {/* item */}
                           <div className="flex gap-2 w-full border-b-0.5 pb-2">
                             <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
@@ -674,7 +683,10 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                               <div className="flex justify-between	">
                                 <div>
                                   <p className="font-bold truncate">Trà sữa Matcha - Size M - 100% đường, 100% đá - Topping thạch dừa</p>
-                                  <input type="text" placeholder="Thêm ghi chú ...." />
+                                  <textarea
+                                    className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px]"
+                                    placeholder="Thêm ghi chú ....">
+                                  </textarea>
                                 </div>
                                 <div>25.000</div>
                               </div>
@@ -684,14 +696,17 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                             </div>
                           </div>
                           {/* end item */}
-                                                    {/* item */}
-                                                    <div className="flex gap-2 w-full border-b-0.5 pb-2">
+                          {/* item */}
+                          <div className="flex gap-2 w-full border-b-0.5 pb-2">
                             <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
                             <div className="w-full">
                               <div className="flex justify-between	">
                                 <div>
                                   <p className="font-bold truncate">Trà sữa Matcha - Size M - 100% đường, 100% đá - Topping thạch dừa</p>
-                                  <input type="text" placeholder="Thêm ghi chú ...." />
+                                  <textarea
+                                    className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px]"
+                                    placeholder="Thêm ghi chú ....">
+                                  </textarea>
                                 </div>
                                 <div>25.000</div>
                               </div>
@@ -701,14 +716,17 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                             </div>
                           </div>
                           {/* end item */}
-                                                    {/* item */}
-                                                    <div className="flex gap-2 w-full border-b-0.5 pb-2">
+                          {/* item */}
+                          <div className="flex gap-2 w-full border-b-0.5 pb-2">
                             <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
                             <div className="w-full">
                               <div className="flex justify-between	">
                                 <div>
                                   <p className="font-bold truncate">Trà sữa Matcha - Size M - 100% đường, 100% đá - Topping thạch dừa</p>
-                                  <input type="text" placeholder="Thêm ghi chú ...." />
+                                  <textarea
+                                    className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px]"
+                                    placeholder="Thêm ghi chú ....">
+                                  </textarea>
                                 </div>
                                 <div>25.000</div>
                               </div>
@@ -718,14 +736,17 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                             </div>
                           </div>
                           {/* end item */}
-                                                    {/* item */}
-                                                    <div className="flex gap-2 w-full border-b-0.5 pb-2">
+                          {/* item */}
+                          <div className="flex gap-2 w-full border-b-0.5 pb-2">
                             <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
                             <div className="w-full">
                               <div className="flex justify-between	">
                                 <div>
                                   <p className="font-bold truncate">Trà sữa Matcha - Size M - 100% đường, 100% đá - Topping thạch dừa</p>
-                                  <input type="text" placeholder="Thêm ghi chú ...." />
+                                  <textarea
+                                    className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px]"
+                                    placeholder="Thêm ghi chú ....">
+                                  </textarea>
                                 </div>
                                 <div>25.000</div>
                               </div>
@@ -739,15 +760,18 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                       </div>
                     </div>
                     <div className="boxright w-1/2">
-                      <div className="h-[300px] overflow-y-auto	my-2">
+                      <div className="h-[300px] overflow-y-auto	my-2 border-0.5 ">
                         {/* item */}
-                        <div className="flex gap-2 w-full border-b-0.5 pb-2">
+                        <div className="flex gap-2 w-full border-b-0.5 p-2">
                           <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
                           <div className="w-full">
                             <div className="flex justify-between	">
                               <div>
                                 <p className="font-bold truncate">Trà sữa Matcha - Size M - 100% đường, 100% đá - Topping thạch dừa</p>
-                                <input type="text" placeholder="Thêm ghi chú ...." />
+                                <textarea
+                                  className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px]"
+                                  placeholder="Thêm ghi chú ....">
+                                </textarea>
                               </div>
                               <div>25.000</div>
                             </div>
@@ -755,18 +779,44 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                               <button><img src={IconMinus} alt="" /></button>
                               <span> 1 </span>
                               <button><img src={IconPlus} alt="" /></button>
+                            </div>
+                            <div className="flex flex-wrap w-4/5">
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
                             </div>
                           </div>
                         </div>
                         {/* end item */}
                         {/* item */}
-                        <div className="flex gap-2 w-full border-b-0.5 pb-2">
+                        <div className="flex gap-2 w-full border-b-0.5 p-2">
                           <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
                           <div className="w-full">
                             <div className="flex justify-between	">
                               <div>
                                 <p className="font-bold truncate">Trà sữa Matcha - Size M - 100% đường, 100% đá - Topping thạch dừa</p>
-                                <input type="text" placeholder="Thêm ghi chú ...." />
+                                <textarea
+                                  className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px]"
+                                  placeholder="Thêm ghi chú ....">
+                                </textarea>
                               </div>
                               <div>25.000</div>
                             </div>
@@ -774,18 +824,44 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                               <button><img src={IconMinus} alt="" /></button>
                               <span> 1 </span>
                               <button><img src={IconPlus} alt="" /></button>
+                            </div>
+                            <div className="flex flex-wrap w-4/5">
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
                             </div>
                           </div>
                         </div>
                         {/* end item */}
                         {/* item */}
-                        <div className="flex gap-2 w-full border-b-0.5 pb-2">
+                        <div className="flex gap-2 w-full border-b-0.5 p-2">
                           <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
                           <div className="w-full">
                             <div className="flex justify-between	">
                               <div>
                                 <p className="font-bold truncate">Trà sữa Matcha - Size M - 100% đường, 100% đá - Topping thạch dừa</p>
-                                <input type="text" placeholder="Thêm ghi chú ...." />
+                                <textarea
+                                  className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px]"
+                                  placeholder="Thêm ghi chú ....">
+                                </textarea>
                               </div>
                               <div>25.000</div>
                             </div>
@@ -793,18 +869,44 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                               <button><img src={IconMinus} alt="" /></button>
                               <span> 1 </span>
                               <button><img src={IconPlus} alt="" /></button>
+                            </div>
+                            <div className="flex flex-wrap w-4/5">
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
                             </div>
                           </div>
                         </div>
                         {/* end item */}
                         {/* item */}
-                        <div className="flex gap-2 w-full border-b-0.5 pb-2">
+                        <div className="flex gap-2 w-full border-b-0.5 p-2">
                           <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
                           <div className="w-full">
                             <div className="flex justify-between	">
                               <div>
                                 <p className="font-bold truncate">Trà sữa Matcha - Size M - 100% đường, 100% đá - Topping thạch dừa</p>
-                                <input type="text" placeholder="Thêm ghi chú ...." />
+                                <textarea
+                                  className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px]"
+                                  placeholder="Thêm ghi chú ....">
+                                </textarea>
                               </div>
                               <div>25.000</div>
                             </div>
@@ -812,18 +914,44 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                               <button><img src={IconMinus} alt="" /></button>
                               <span> 1 </span>
                               <button><img src={IconPlus} alt="" /></button>
+                            </div>
+                            <div className="flex flex-wrap w-4/5">
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
                             </div>
                           </div>
                         </div>
                         {/* end item */}
                         {/* item */}
-                        <div className="flex gap-2 w-full border-b-0.5 pb-2">
+                        <div className="flex gap-2 w-full border-b-0.5 p-2">
                           <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
                           <div className="w-full">
                             <div className="flex justify-between	">
                               <div>
                                 <p className="font-bold truncate">Trà sữa Matcha - Size M - 100% đường, 100% đá - Topping thạch dừa</p>
-                                <input type="text" placeholder="Thêm ghi chú ...." />
+                                <textarea
+                                  className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px]"
+                                  placeholder="Thêm ghi chú ....">
+                                </textarea>
                               </div>
                               <div>25.000</div>
                             </div>
@@ -831,6 +959,29 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                               <button><img src={IconMinus} alt="" /></button>
                               <span> 1 </span>
                               <button><img src={IconPlus} alt="" /></button>
+                            </div>
+                            <div className="flex flex-wrap w-4/5">
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
+                              <div className="w-1/4 pb-2 pr-2">
+                                <CustomCheckboxToggle /> Pudding trứng
+                              </div>
                             </div>
                           </div>
                         </div>

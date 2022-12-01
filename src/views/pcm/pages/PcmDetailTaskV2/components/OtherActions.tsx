@@ -36,11 +36,9 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
 	});
 
     const { updateTaskAsync } = useTask({});
-
     useOnClickOutside(wrapperClass, () => setShowOption(false));
-
 	const { downloadTemplateImportExcelTaskAsync, importTaskFromExcelAsync } = usePcmPlanTaskCustom({});
-
+    // Xử lý download template excel
     const handleDownloadTemplateImportExcel = async () => {
 		try {
 			setStateExport({ isExporting: true });
@@ -51,7 +49,7 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
 			if(error) {
 				return toast.warn(data?.message);
 			}
-
+            // Tự động click vào link để download file mẫu
 			data && createLinkAndClick(data, '_self');
 		} catch (error) {
 			if(error instanceof Error)
@@ -75,6 +73,7 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
 
                 if (sheets.length) {
                     const rows: any = utils.sheet_to_json(wb.Sheets[sheets[1]]); // Index=1 (tức Sheet số 2 từ trái sang)
+                    // Xet data để import
                     setDataImport(rows)
                 }
             }
