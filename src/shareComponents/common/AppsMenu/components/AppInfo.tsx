@@ -10,7 +10,8 @@ import mediaLogo from "assets/logos/media.png";
 // import npsLogo from "assets/logos/nps.png";
 import operationLogo from "assets/logos/operation.png";
 import ownerLogo from "assets/logos/owner.png";
-import paymentLogo from "assets/logos/payment.png";
+// import paymentLogo from "assets/logos/payment.png";
+import fnbLogo from "assets/logos/fnb.png";
 import pcmLogo from "assets/logos/pcm.png";
 import projectLogo from "assets/logos/project.png";
 // import profileLogo from "assets/logos/profile.png";
@@ -90,9 +91,9 @@ export const APP_INFO = new Map([
     /* Ứng dụng Payment */
     ['61e04971fdebf77b072d1b0f', {
         key: "61e04971fdebf77b072d1b0f",
-        name: "Payment",
-        icon: paymentLogo,
-        route: '/payment/home'
+        name: "fnb",
+        icon: fnbLogo,
+        route: '/fnb/home'
     }],
     /* Ứng dụng Quản lý hợp đồng */
     ['6131d6f83f4b736dc93253b2', {

@@ -1410,7 +1410,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
             />
           </div>
         </div>
-        <div className="flex justify-between mb-4 border-t-0.5 border-b-0.5 border-cbs-border">
+        {/* <div className="flex justify-between mb-4 border-t-0.5 border-b-0.5 border-cbs-border">
           <div className="flex gap-3 items-center py-1">
             <a href="#"><img src={defaultAva} alt="" /></a>
             <div className="flex gap-3 py-1">
@@ -1446,7 +1446,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               <span className="font-bold text-[18px]">123</span>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
       <div className={"flex-1 overflow-y-auto"}>
         <table className={"w-full table-fixed tasks"}>
@@ -1549,7 +1549,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                       key={index}
                       className={checkActive(item.news, `${user?._id}`) + " group"}
                     >
-                      <td className={"w-[100px]"}>
+                      <td className={"w-[60px]"}>
                         <div
                           className={"flex gap-4 items-center justify-center py-4 px-1"}
                         >
@@ -1602,7 +1602,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                       <td className={"w-td-dashboard"}>
                         <Link to={"/pcm/detail/" + item._id}>
                           <div className={"task-title truncate text-[14px] mt-2"} style={{ lineHeight: "20px" }}>
-                            <span className="bg-cbs-orage text-white mr-1 py-1 px-3 rounded-md">Cao</span>
+                            {/* <span className="bg-cbs-orage text-white mr-1 py-1 px-3 rounded-md">Cao</span> */}
                             {item.project.sign}.{subContentHtml(item.name)}
                           </div>
                           {/* <p className={"task-title truncate text-[14px] mt-2"}>
@@ -1616,13 +1616,13 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                             {subContentHtml(item.lastComment?.content)}
                           </p>
                         </Link>
-                        <div className="flex gap-2 text-primary-gray pb-2">
+                        {/* <div className="flex gap-2 text-primary-gray pb-2">
                           <div className="border-0.5 border-cbs-border rounded-full px-3 py-1 flex">
                           <img src={icons8pdf} className="mr-[5px]" />
                           <span>2022.09.26.FCT</span>
                           </div>
                           <div className="border-0.5 border-cbs-border rounded-full py-1 px-2">+2</div>
-                        </div>
+                        </div> */}
                       </td>
                       <td className={"w-[100px] align-middle"}>
 
