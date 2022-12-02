@@ -202,7 +202,9 @@ export const FnBProductPage: FC = () => {
 								/>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{item?.name}
+								<Link to ={`/fnb/product/${item._id}`}>
+									{item?.name}
+								</Link>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{item?.sign}
