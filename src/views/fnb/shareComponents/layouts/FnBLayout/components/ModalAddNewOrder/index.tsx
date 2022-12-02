@@ -6,10 +6,13 @@ import { Formik, Form, ErrorMessage, Field } from "formik";
 import { useHistory } from 'react-router-dom';
 import { number, object, string } from "yup";
 import { toast } from "react-toastify";
+import debounce from "lodash/debounce";
+import { convertCurrency } from 'utils/converter';
+import { useSocket } from "services/hooks/useSocket";
+import { useAuth } from 'services/hooks/auth/useAuth';
 // import { toArray } from 'lodash';
 // import DayPickerInput from "react-day-picker/DayPickerInput";
 // import moment from "moment";
-// import debounce from "lodash/debounce";
 // import Axios from "axios";
 
 /**
@@ -35,8 +38,8 @@ import { useModal } from "services/hooks/useModal";
 // import IconClock from "assets/images/icons8-snooze-48 1.svg";
 // import RadioEmpty from "assets/images/Ellipse 27.svg";
 // import RadioChecked from "assets/images/icons8-checked-40 (2) 2.svg";
+// import IconMinus from "assets/images/icons8-reduce-96 1.svg";
 import ItemSample from "assets/images/image 430.jpg";
-import IconMinus from "assets/images/icons8-reduce-96 1.svg";
 import IconPlus from "assets/images/icons8-add-new-100 1.svg";
 import CheckBoxEmpty from "assets/images/Frame 3548.svg";
 import CheckedBox from "assets/images/Check-All.svg";
@@ -67,6 +70,8 @@ type Props = {
   defaultValues?: any;
 }
 
+type GroupSearchableHandle = React.ElementRef<typeof GroupSearchable>;
+
 const SEASONS_TYPE = [
   { text: 'Mùa xuân', value: 1 },
   { text: 'Mùa hạ', value: 2 },
@@ -74,11 +79,15 @@ const SEASONS_TYPE = [
   { text: 'Mùa đông', value: 4 },
 ];
 
-export const ModalAddNewOrder: FC<Props> = ({ defaultValues = {} }) => {
-  const history = useHistory();
+export const ModalAddNewOrder: FC<Props> = () => {
   const { closeModal } = useModal();
-  type GroupSearchableHandle = React.ElementRef<typeof GroupSearchable>;
+  const { current: socket }: any = useSocket();
+  const { user } = useAuth();
   const groupSearchableRef = React.useRef<GroupSearchableHandle>(null);
+
+  const [keywordSearchProduct, setKeywordSearchProduct] = useState("");
+  const [totalMoney, setTotalMoney] = useState(0);
+  const [totalPay, setTotalPay] = useState(0);
 
   const [fundaID, setFundaID] = useState("");
   const [shiftID, setShiftID] = useState("");
@@ -86,6 +95,8 @@ export const ModalAddNewOrder: FC<Props> = ({ defaultValues = {} }) => {
   const [groupParentPicker, setGroupParentPicker] = useState<any>({});
   const [fundas, setFundas] = useState<any>([]);
   const [shifts, setShifts] = useState<any>([]);
+  const [products, setProducts] = useState<any>([]);
+  const [productsInCart, setProductsInCart] = useState<any>([]);
 
   useEffect(() => {
     const fetchFundas = async () => {
@@ -119,6 +130,25 @@ export const ModalAddNewOrder: FC<Props> = ({ defaultValues = {} }) => {
     fetchShifts();
   }, [fundaID])
 
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const response = await API.get(
+        `/api/fnb/products?keyword=${keywordSearchProduct}`,
+      );
+      const { data, status } = response?.data;
+
+      if(status !== 200) return;
+
+      setProducts(data.listRecords);
+    }
+
+    fetchProducts();
+  }, [keywordSearchProduct])
+
+  useEffect(() => {
+    calTotalMoney();
+  }, [JSON.stringify(productsInCart)])
+
   const CustomCheckboxToggle = () => {
     const [selectCheckbox, setSelectCheckbox] = React.useState(false)
     return (
@@ -138,15 +168,36 @@ export const ModalAddNewOrder: FC<Props> = ({ defaultValues = {} }) => {
         values[value] = values[value].toString();
       }
 
+      const products = productsInCart.map((p: any) => ({
+        productID: p._id,
+        quantity: p.quantity,
+        note: p.note,
+        upsize: 1,
+        topping: 1,
+      }))
+
+      const dataAddNewOrder: any = {
+        ...values,
+        products,
+        total: totalPay,
+      }
+
       const { data, status } = await API.post(
         `/api/fnb/orders`,
-        values
+        dataAddNewOrder
       );
 
       if(status !== 200) return toast.warning('Yêu cầu tạo đơn thất bại');
       if(data.error) return toast.warning('Tạo đơn thất bại');
 
+      socket?.emit('FNB_CSS_ADD_NEW_ORDER', {
+        companyID: user?.company?._id,
+        fundaID: dataAddNewOrder.fundaID,
+        orderInfo: data?.data,
+      })
+
       closeModal();
+      return toast.success('Tạo đơn thành công');
     } catch (error) {
       if (typeof error === "string") {
         toast.error(error);
@@ -155,6 +206,39 @@ export const ModalAddNewOrder: FC<Props> = ({ defaultValues = {} }) => {
       }
     }
   };
+
+  const handleChangeQuantity = (e: any, product: any) => {
+    const value = Number(e.target.value);
+    if(value < 1) return;
+
+    const newProductsInCart = productsInCart.map((p: any) => {
+      if(p._id === product._id) {
+        return { ...p, quantity: value };
+      }
+      return p;
+    })
+    setProductsInCart(newProductsInCart);
+  }
+
+  const handleChangeNote = (e: any, product: any) => {
+    const value = e.target.value;
+
+    const newProductsInCart = productsInCart.map((p: any) => {
+      if(p._id === product._id) {
+        return { ...p, note: value };
+      }
+      return p;
+    })
+    setProductsInCart(newProductsInCart);
+  }
+
+  const calTotalMoney = () => {
+    const amount = productsInCart.reduce((prev: any, product: any) => {
+      return prev += (product.amount * product.quantity)
+    }, 0)
+    setTotalMoney(amount);
+    setTotalPay(amount);
+  }
 
   const addOrderSchema = object().shape({
     fundaID: string().required("Vui lòng chọn cơ sở"),
@@ -359,27 +443,27 @@ export const ModalAddNewOrder: FC<Props> = ({ defaultValues = {} }) => {
                       <span>Kênh bán hàng</span>
                       <div className="flex flex-wrap mt-2 mb-2">
                         <div className="flex items-center mr-4">
-                            <Field id="saleChannelOffline" type="radio" value={1} name="salesChannel" className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                            <Field id="saleChannelOffline" type="radio" value="1" name="salesChannel" className="w-4 h-4" checked />
                             <label htmlFor="saleChannelOffline" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Offline</label>
                         </div>
                         <div className="flex items-center mr-4">
-                            <Field id="saleChannelGrab" type="radio" value={2} name="salesChannel" className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                            <Field id="saleChannelGrab" type="radio" value="2" name="salesChannel" className="w-4 h-4" />
                             <label htmlFor="saleChannelGrab" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Grab</label>
                         </div>
                         <div className="flex items-center mr-4">
-                            <Field id="saleChannelShopee" type="radio" value={3} name="salesChannel" className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                            <Field id="saleChannelShopee" type="radio" value="3" name="salesChannel" className="w-4 h-4" />
                             <label htmlFor="saleChannelShopee" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Shopee</label>
                         </div>
                         <div className="flex items-center mr-4">
-                            <Field id="saleChannelGojek" type="radio" value={4} name="salesChannel" className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                            <Field id="saleChannelGojek" type="radio" value="4" name="salesChannel" className="w-4 h-4" />
                             <label htmlFor="saleChannelGojek" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Gojek</label>
                         </div>
                         <div className="flex items-center mr-4">
-                            <Field id="saleChannelBaemin" type="radio" value={5} name="salesChannel" className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                            <Field id="saleChannelBaemin" type="radio" value="5" name="salesChannel" className="w-4 h-4" />
                             <label htmlFor="saleChannelBaemin" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Baemin</label>
                         </div>
                         <div className="flex items-center mr-4">
-                            <Field id="saleChannelLoship" type="radio" value={6} name="salesChannel" className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                            <Field id="saleChannelLoship" type="radio" value="6" name="salesChannel" className="w-4 h-4" />
                             <label htmlFor="saleChannelLoship" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Loship</label>
                         </div>
 
@@ -394,13 +478,13 @@ export const ModalAddNewOrder: FC<Props> = ({ defaultValues = {} }) => {
                       <span>Phương thức thanh toán</span>
                       <div className="flex flex-wrap mt-2 mb-2">
                         <div className="flex items-center mr-4">
-                          <Field id="paymentMethod1" type="radio" value={1} name="paymentMethod" className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                          <Field id="paymentMethod1" type="radio" value="1" name="paymentMethod" className="w-4 h-4" checked />
                           <label htmlFor="paymentMethod1" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                             Tiền mặt
                           </label>
                         </div>
                         <div className="flex items-center mr-4">
-                          <Field id="paymentMethod2" type="radio" value={2} name="paymentMethod" className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                          <Field id="paymentMethod2" type="radio" value="2" name="paymentMethod" className="w-4 h-4" />
                           <label htmlFor="paymentMethod2" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                             Chuyển khoản
                           </label>
@@ -416,19 +500,19 @@ export const ModalAddNewOrder: FC<Props> = ({ defaultValues = {} }) => {
                       <span>Hình thức phục vụ</span>
                       <div className="flex flex-wrap mt-2">
                         <div className="flex items-center mr-4">
-                          <Field id="service1" type="radio" value={1} name="service" className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                          <Field id="service1" type="radio" value="1" name="service" className="w-4 h-4" checked />
                           <label htmlFor="service1" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                             Tại quán
                           </label>
                         </div>
                         <div className="flex items-center mr-4">
-                          <Field id="service2" type="radio" value={2} name="service" className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                          <Field id="service2" type="radio" value="2" name="service" className="w-4 h-4" />
                           <label htmlFor="service2" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                             Mang đi
                           </label>
                         </div>
                         <div className="flex items-center mr-4">
-                          <Field id="service3" type="radio" value={3} name="service" className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                          <Field id="service3" type="radio" value="3" name="service" className="w-4 h-4" />
                           <label htmlFor="service3" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                             Giao hàng (app)
                           </label>
@@ -440,7 +524,7 @@ export const ModalAddNewOrder: FC<Props> = ({ defaultValues = {} }) => {
                     <div className="boxlef w-1/2">
                       <div className={"flex py-2 border-b"}>
                         <div className={"w-3/4 flex items-start"}>
-                          <div className={"h-full text-left  text-gray-500 flex items-center mr-2 "}>Tên (*)</div>
+                          <div className={"h-full text-left text-gray-500 flex items-center mr-2 "}>Tên (*)</div>
                           <div className={"w-full flex-1"}>
                             <input
                               placeholder="Tên"
@@ -485,344 +569,109 @@ export const ModalAddNewOrder: FC<Props> = ({ defaultValues = {} }) => {
                       <div>
                         <div>Sản phẩm</div>
                         <div>
-                          <input type="text" placeholder="Tìm kiếm sản phẩm" />
+                          <input
+                            type="text"
+                            placeholder="Tìm kiếm sản phẩm"
+                            onKeyUp={debounce(e => {
+                              setKeywordSearchProduct(e.target.value);
+                            }, 700)}
+                          />
                         </div>
                         <div className="h-[300px] overflow-y-auto	my-2 ">
-                          {/* item */}
-                          <div className="flex gap-2 w-full border-b-0.5 pb-2">
-                            <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
-                            <div className="w-full">
-                              <div className="flex justify-between	">
-                                <div>
-                                  <p className="font-bold truncate">Trà sữa Matcha - Size M - 100% đường, 100% đá - Topping thạch dừa</p>
-                                  <textarea
-                                    className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px]"
-                                    placeholder="Thêm ghi chú ....">
-                                  </textarea>
+                          {!!products.length && products.map((product: any) => (
+                            <div key={product._id} className="flex gap-2 w-full border-b-0.5 pb-2">
+                              <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
+                              <div className="w-full">
+                                <div className="flex justify-between">
+                                  <div>
+                                    <p className="font-bold truncate"> {product.name} </p>
+                                    <textarea
+                                      className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px]"
+                                      placeholder="Thêm ghi chú ...." onChange={e => handleChangeNote(e, product)} defaultValue={product.note}></textarea>
+                                  </div>
+                                  <div> {convertCurrency(product.amount)} </div>
                                 </div>
-                                <div>25.000</div>
-                              </div>
-                              <div className="flex gap-2 justify-end	">
-                                <button><img src={IconPlus} alt="" /></button>
+                                <div className="flex gap-2 justify-end">
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setProductsInCart((prevProducts: any) => {
+                                        const isExists = prevProducts.find((p: any) => p._id === product._id);
+                                        if(isExists) return prevProducts;
+                                        else return [...prevProducts, product];
+                                      });
+                                    }}
+                                  >
+                                    <img src={IconPlus} alt="Add to cart" />
+                                  </button>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                          {/* end item */}
-                          {/* item */}
-                          <div className="flex gap-2 w-full border-b-0.5 pb-2">
-                            <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
-                            <div className="w-full">
-                              <div className="flex justify-between	">
-                                <div>
-                                  <p className="font-bold truncate">Trà sữa Matcha - Size M - 100% đường, 100% đá - Topping thạch dừa</p>
-                                  <textarea
-                                    className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px]"
-                                    placeholder="Thêm ghi chú ....">
-                                  </textarea>
-                                </div>
-                                <div>25.000</div>
-                              </div>
-                              <div className="flex gap-2 justify-end	">
-                                <button><img src={IconPlus} alt="" /></button>
-                              </div>
-                            </div>
-                          </div>
-                          {/* end item */}
-                          {/* item */}
-                          <div className="flex gap-2 w-full border-b-0.5 pb-2">
-                            <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
-                            <div className="w-full">
-                              <div className="flex justify-between	">
-                                <div>
-                                  <p className="font-bold truncate">Trà sữa Matcha - Size M - 100% đường, 100% đá - Topping thạch dừa</p>
-                                  <textarea
-                                    className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px]"
-                                    placeholder="Thêm ghi chú ....">
-                                  </textarea>
-                                </div>
-                                <div>25.000</div>
-                              </div>
-                              <div className="flex gap-2 justify-end	">
-                                <button><img src={IconPlus} alt="" /></button>
-                              </div>
-                            </div>
-                          </div>
-                          {/* end item */}
-                          {/* item */}
-                          <div className="flex gap-2 w-full border-b-0.5 pb-2">
-                            <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
-                            <div className="w-full">
-                              <div className="flex justify-between	">
-                                <div>
-                                  <p className="font-bold truncate">Trà sữa Matcha - Size M - 100% đường, 100% đá - Topping thạch dừa</p>
-                                  <textarea
-                                    className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px]"
-                                    placeholder="Thêm ghi chú ....">
-                                  </textarea>
-                                </div>
-                                <div>25.000</div>
-                              </div>
-                              <div className="flex gap-2 justify-end	">
-                                <button><img src={IconPlus} alt="" /></button>
-                              </div>
-                            </div>
-                          </div>
-                          {/* end item */}
+                          ))}
                         </div>
                       </div>
                     </div>
                     <div className="boxright w-1/2">
                       <div className="h-[300px] overflow-y-auto	my-2 border-0.5 ">
-                        {/* item */}
-                        <div className="flex gap-2 w-full border-b-0.5 p-2">
-                          <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
-                          <div className="w-full">
-                            <div className="flex justify-between	">
-                              <div>
-                                <p className="font-bold truncate">Trà sữa Matcha - Size M - 100% đường, 100% đá - Topping thạch dừa</p>
-                                <textarea
-                                  className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px]"
-                                  placeholder="Thêm ghi chú ....">
-                                </textarea>
+                        {!!productsInCart.length && productsInCart.map((product: any) => (
+                          <div key={product._id} className="flex gap-2 w-full border-b-0.5 p-2">
+                            <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
+                            <div className="w-full">
+                              <div className="flex justify-between">
+                                <div>
+                                  <p className="font-bold truncate">
+                                    {product.name}
+                                  </p>
+                                  <textarea
+                                    className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px]"
+                                    placeholder="Thêm ghi chú ...." onChange={e => handleChangeNote(e, product)} defaultValue={product.note}></textarea>
+                                </div>
+                                <div className="text-blue-400">{convertCurrency(product.amount)}</div>
                               </div>
-                              <div>25.000</div>
-                            </div>
-                            <div className="flex gap-2 justify-end	">
-                              <button><img src={IconMinus} alt="" /></button>
-                              <span> 1 </span>
-                              <button><img src={IconPlus} alt="" /></button>
-                            </div>
-                            <div className="flex flex-wrap w-4/5">
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
+                              {/* <div className="flex gap-2 justify-end"> */}
+                              <div className="flex justify-end">
+                                <span>Số lượng: </span>
+                                <input type="number" min="1" className="ml-2 w-[40px]" defaultValue={1} onChange={e => handleChangeQuantity(e, product)} />
+                                {/* <button><img src={IconMinus} alt="" /></button>
+                                <span> 1 </span>
+                                <button><img src={IconPlus} alt="" /></button> */}
                               </div>
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
+                              {/* <div className="flex flex-wrap w-4/5">
+                                <div className="w-1/4 pb-2 pr-2">
+                                  <CustomCheckboxToggle /> Pudding trứng
+                                </div>
+                                <div className="w-1/4 pb-2 pr-2">
+                                  <CustomCheckboxToggle /> Pudding trứng
+                                </div>
+                              </div> */}
                             </div>
                           </div>
-                        </div>
-                        {/* end item */}
-                        {/* item */}
-                        <div className="flex gap-2 w-full border-b-0.5 p-2">
-                          <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
-                          <div className="w-full">
-                            <div className="flex justify-between	">
-                              <div>
-                                <p className="font-bold truncate">Trà sữa Matcha - Size M - 100% đường, 100% đá - Topping thạch dừa</p>
-                                <textarea
-                                  className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px]"
-                                  placeholder="Thêm ghi chú ....">
-                                </textarea>
-                              </div>
-                              <div>25.000</div>
-                            </div>
-                            <div className="flex gap-2 justify-end	">
-                              <button><img src={IconMinus} alt="" /></button>
-                              <span> 1 </span>
-                              <button><img src={IconPlus} alt="" /></button>
-                            </div>
-                            <div className="flex flex-wrap w-4/5">
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        {/* end item */}
-                        {/* item */}
-                        <div className="flex gap-2 w-full border-b-0.5 p-2">
-                          <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
-                          <div className="w-full">
-                            <div className="flex justify-between	">
-                              <div>
-                                <p className="font-bold truncate">Trà sữa Matcha - Size M - 100% đường, 100% đá - Topping thạch dừa</p>
-                                <textarea
-                                  className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px]"
-                                  placeholder="Thêm ghi chú ....">
-                                </textarea>
-                              </div>
-                              <div>25.000</div>
-                            </div>
-                            <div className="flex gap-2 justify-end	">
-                              <button><img src={IconMinus} alt="" /></button>
-                              <span> 1 </span>
-                              <button><img src={IconPlus} alt="" /></button>
-                            </div>
-                            <div className="flex flex-wrap w-4/5">
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        {/* end item */}
-                        {/* item */}
-                        <div className="flex gap-2 w-full border-b-0.5 p-2">
-                          <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
-                          <div className="w-full">
-                            <div className="flex justify-between	">
-                              <div>
-                                <p className="font-bold truncate">Trà sữa Matcha - Size M - 100% đường, 100% đá - Topping thạch dừa</p>
-                                <textarea
-                                  className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px]"
-                                  placeholder="Thêm ghi chú ....">
-                                </textarea>
-                              </div>
-                              <div>25.000</div>
-                            </div>
-                            <div className="flex gap-2 justify-end	">
-                              <button><img src={IconMinus} alt="" /></button>
-                              <span> 1 </span>
-                              <button><img src={IconPlus} alt="" /></button>
-                            </div>
-                            <div className="flex flex-wrap w-4/5">
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        {/* end item */}
-                        {/* item */}
-                        <div className="flex gap-2 w-full border-b-0.5 p-2">
-                          <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
-                          <div className="w-full">
-                            <div className="flex justify-between	">
-                              <div>
-                                <p className="font-bold truncate">Trà sữa Matcha - Size M - 100% đường, 100% đá - Topping thạch dừa</p>
-                                <textarea
-                                  className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px]"
-                                  placeholder="Thêm ghi chú ....">
-                                </textarea>
-                              </div>
-                              <div>25.000</div>
-                            </div>
-                            <div className="flex gap-2 justify-end	">
-                              <button><img src={IconMinus} alt="" /></button>
-                              <span> 1 </span>
-                              <button><img src={IconPlus} alt="" /></button>
-                            </div>
-                            <div className="flex flex-wrap w-4/5">
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                              <div className="w-1/4 pb-2 pr-2">
-                                <CustomCheckboxToggle /> Pudding trứng
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        {/* end item */}
+                        ))}
                       </div>
                       <div className="border-0.5 p-1">
-                        <div className="flex justify-between	">
+                        <div className="flex justify-between">
                           <div className="font-bold">Tổng tiền</div>
-                          <div>100.000</div>
+                          <div>{convertCurrency(totalMoney)}</div>
                         </div>
-                        <div className="flex justify-between	">
+                        {/* <div className="flex justify-between">
                           <div className="">Triết khấu</div>
                           <div className="flex">
                             <div>25%</div>
                             <div>10.000</div>
                           </div>
                         </div>
-                        <div className="flex justify-between	">
+                        <div className="flex justify-between">
                           <div className="">Giảm giá</div>
                           <div className="flex">
                             <div>25%</div>
                             <div>10.000</div>
                           </div>
-                        </div>
+                        </div> */}
                       </div>
                       <div className="border-0.5 p-1">
-                        <div className="flex justify-between	">
+                        <div className="flex justify-between">
                           <div className="font-bold">Thanh toán</div>
-                          <div className="font-bold">100.000</div>
+                          <div className="font-bold">{convertCurrency(totalPay)}</div>
                         </div>
                       </div>
                       <div className="text-right mb-5" style={{ marginTop: "100px" }}>
