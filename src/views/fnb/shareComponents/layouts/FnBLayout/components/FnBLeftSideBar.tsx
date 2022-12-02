@@ -27,7 +27,7 @@ import { APP_ID } from "apis/localdb";
 import { IconButton, InputBase, Paper } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import { useModal } from "services/hooks/useModal";
-import { ModalAddNewTask } from "./ModalAddNewTask";
+import { ModalAddNewOrder } from "./ModalAddNewOrder";
 
 export const FnBLeftSideBar: FC = () => {
     const { user } = useAuth();
@@ -46,7 +46,7 @@ export const FnBLeftSideBar: FC = () => {
                         onClick={() =>
                             openModal(
                                 <div className="t-add-new-task-dialog text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
-                                    <ModalAddNewTask />
+                                    <ModalAddNewOrder />
                                 </div>
                             )
                         }
