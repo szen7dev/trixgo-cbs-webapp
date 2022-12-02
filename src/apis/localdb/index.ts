@@ -640,11 +640,11 @@ export const FNB_PAYMENT = [
 ]
 
 export const FNB_ORDER_STATUS = [
-    { value: 1, text: 'Đang giao hàng/Phục vụ' },
-    { value: 2, text: 'Hoàn tiền một phần' },
-    { value: 3, text: 'Hoàn tiền toàn bộ' },
-    { value: 4, text: 'Đã hủy (không tính vào doanh số)' },
-    { value: 5, text: 'Hoàn thành' },
+    { value: 1, text: 'Đang giao hàng/Phục vụ', backgroud: '4d4dff' },
+    { value: 2, text: 'Hoàn tiền một phần', backgroud: '4d4dff' },
+    { value: 3, text: 'Hoàn tiền toàn bộ', backgroud: '4d4dff' },
+    { value: 4, text: 'Đã hủy', backgroud: '00aaff' },
+    { value: 5, text: 'Hoàn thành', backgroud: '5fba7d' },
 ]
 
 /**
