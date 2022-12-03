@@ -575,6 +575,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                             onKeyUp={debounce(e => {
                               setKeywordSearchProduct(e.target.value);
                             }, 700)}
+                            className="w-full outline-none h-[40px]"
                           />
                         </div>
                         <div className="h-[300px] overflow-y-auto	my-2 ">
