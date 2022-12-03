@@ -1,61 +1,70 @@
 /*=====1.LIBRARY=====*/
+import React, { FC, useState, UIEvent, useEffect } from "react";
+import { Link } from "react-router-dom";
+import moment from "moment";
+import parse from "html-react-parser";
+import { debounce } from "lodash";
+import { useDispatch } from "react-redux";
+import { formatNumberMoney } from "utils/converter";
 
 /*=====2.CSS=====*/
-
-/*=====3.ICONS=====*/
-
-/*=====4.PAGES/COMPONENTS=====*/
-
-/*=====5.TYPINGS=====*/
-
-/*=====6.HOOKS/APIS=====*/
-
-/*=====7.OTHER=====*/
-
-import React, { FC, useState, UIEvent, useEffect } from "react";
-import moment from "moment";
-import { Link } from "react-router-dom";
-import parse from "html-react-parser";
-import { useQueryListCompany } from "services/hooks/useCompanies";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "views/pcm/styles/pcm.module.css";
 
-import { DropdownSearchableV2, Loader } from "shareComponents/common";
-import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
+/*=====3.ICONS=====*/
 import userIcon from "assets/images/icon-user-avatar.svg";
 import projectIcon from "assets/images/icons8-project-50.svg";
 import TriangleDown from "assets/icons/TriangleDown";
 import businessBuiding from "assets/images/icons8-business-building-48.svg";
-import trashIcon from "assets/images/icons8-trash-96 1.svg";
 import updateIcon from "assets/images/icons8-pencil-96.svg";
 import mailIcon from "assets/images/icons8-email-96 1.svg";
 import moreIcon from "assets/images/moreIcon.svg";
 import arrowDown from "assets/images/icon-arrowdown.svg";
-import arrowDownRed from "assets/images/Arrow 1 (1) 1.svg";
-import dotGreen from "assets/images/Frame 4283.svg";
 import iconShift from "assets/images/icons8-shift-100 1.svg";
 import iconSandtime from "assets/images/icons8-sand-timer-96 1.svg";
 import iconOk from "assets/images/icons8-ok-96 1.svg";
 import iconWarning from "assets/images/icons8-high-risk-96 1.svg";
-import iconCalendar from "assets/images/icons8-calendar-96 2.svg";
 import iconSupport from "assets/images/icons8-online-support-96 1.svg";
 import iconDown from "assets/images/icons8-download-64 1.svg";
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Popover } from "@mui/material";
+import ChartRevenueByHour from "./components/chart";
 
-import { useUserSystem } from "services/hooks/users/useUserSystem";
+import offlineChannelIcon from "assets/images/fnb/offline.svg";
+import grabChannelIcon from "assets/images/fnb/grab.svg";
+import shopeeChannelIcon from "assets/images/fnb/shopee.svg";
+import gojekChannelIcon from "assets/images/fnb/gojek.svg";
+import baemineChannelIcon from "assets/images/fnb/baemin.svg";
+import loshipChannelIcon from "assets/images/fnb/loship.svg";
+
+/*=====4.PAGES/COMPONENTS=====*/
+import { DropdownSearchableV2, Loader } from "shareComponents/common";
+import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
+import PaginateV2 from "shareComponents/common/PaginateV2";
+import { UpdateStatusDialog } from "./UpdateStatusDialog";
+import { ModalCreateResultSearch } from "./ModalCreateResultSearch";
+import { ModalDetailItem } from "./components/ModalDetailItem/index";
+import { ModalErrorDetailItem } from "./components/ModalErrorDetailItem";
+
+/*=====5.TYPINGS=====*/
+
+/*=====6.HOOKS/APIS=====*/
+import { useQueryListCompany } from "services/hooks/useCompanies";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { useAppSelector } from "redux/reducer";
+import { useUserSystem } from "services/hooks/users/useUserSystem";
+import { useQueryListDepartmentsIsMember } from "services/hooks/items/useDepartment";
+import { useSearchTask } from "services/hooks/useMainSearch";
+import { useTask } from "services/hooks/useTask";
+import { useModal } from "services/hooks/useModal";
 import {
   useListFileFromSearch,
   useListResponseFromSearch,
   usePcmPlanTaskNotification,
 } from "services/hooks/pcm/usePcmDashboardV2";
-import { debounce } from "lodash";
-import { useQueryListDepartmentsIsMember } from "services/hooks/items/useDepartment";
-import { useDispatch } from "react-redux";
 import {
   resetFilterDashboard,
   setQueryFile,
@@ -64,23 +73,55 @@ import {
   setTabActive,
   setTabIndex,
 } from "redux/reducer/DashboardV2Slice";
-import { useSearchTask } from "services/hooks/useMainSearch";
-import { humanFileSize } from "utils/converter";
-import PaginateV2 from "shareComponents/common/PaginateV2";
-import { useTask } from "services/hooks/useTask";
-import { useModal } from "services/hooks/useModal";
-import { UpdateStatusDialog } from "./UpdateStatusDialog";
-import { ModalCreateResultSearch } from "./ModalCreateResultSearch";
-import { Popover } from "@mui/material";
-import ChartRevenueByHour from "./components/chart";
-import { ModalDetailItem } from "./components/ModalDetailItem/index";
-import { ModalErrorDetailItem } from "./components/ModalErrorDetailItem";
+
+import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
+
+/*=====7.OTHER=====*/
+import { FNB_CHANNEL, FNB_SERVICE, FNB_PAYMENT, FNB_ORDER_STATUS } from "apis/localdb";
 
 type Props = {
   type?: number;
 };
 
 export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
+
+  const [keyword, setKeyword] = useState("");
+  const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbOrder({ 
+		params: { 
+			keyword: keyword, 
+			// fundaID, 
+			populates: JSON.stringify({
+				path: 'funda', select: "name sign address"
+			}) 
+		}, isFetchList: true, isFetchInfo: false  });
+	// console.log({listWithPager});
+
+  // Hàm trả về icon app
+  const getIconApp = (salesChannel: any) => {
+    switch (salesChannel) {
+      case 1:
+        return offlineChannelIcon
+
+      case 2:
+        return grabChannelIcon
+
+      case 3:
+        return shopeeChannelIcon
+
+      case 4:
+        return gojekChannelIcon
+
+      case 5:
+        return baemineChannelIcon
+
+      case 6:
+        return loshipChannelIcon
+
+      default:
+        return offlineChannelIcon
+    }
+  }
+
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   const dispatch = useDispatch();
   const [popBox1, setpopBox1] = React.useState(false)
@@ -877,115 +918,149 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
         <div>
           <table className={"w-full table-fixed tasks"}>
             <tbody>
-              <tr
-                className={"border-b-0.5 border-primary-border bg-white hover:shadow-md hover:z-2 hover:relative"}
-              >
-                <td className={"w-[85px]"}>
-                  <div
-                    className={"flex gap-4  p-4"}
+            {
+                (listWithPager[pageIndex]??[]).map((item: any, i: any) => (
+                  // <tr key={item._id} className="text-[14px]">
+                  //   <td className={"p-2 border-0.5 border-primary-border text-cente"}>
+                  //     <input
+                  //       className="form-check-input"
+                  //       type="checkbox"
+                  //       checked={getStateChecked(item._id)}
+                  //       onChange={() => onClickCheckButton(item._id)}
+                  //     />
+                  //   </td>
+                  //   <td className={"p-2 border-0.5 border-primary-border"}>
+                  //     {moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
+                  //   </td>
+                  //   <td className={"p-2 border-0.5 border-primary-border"}>
+                  //     {item?.name}
+                  //   </td>
+                  //   <td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
+                  //     <Link to ={`/fnb/shift/${item._id}/material`}>
+                  //       Chi tiết
+                  //     </Link>
+                  //   </td>
+                  //   <td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
+                  //     <Link to ={`/fnb/shift/${item._id}/cash`}>
+                  //       Chi tiết
+                  //     </Link>
+                  //   </td>
+                  //   <td className={"p-2 border-0.5 border-primary-border"}>
+                  //     {item?.note}
+                  //   </td>
+                  // </tr>
+
+                   <tr key={item._id}
+                    className={"border-b-0.5 border-primary-border bg-white hover:shadow-md hover:z-2 hover:relative"}
                   >
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value=""
-                      id="check"
-                      style={{ width: "16px", height: "16px", marginTop: "5px" }}
-                    />
-                    <StarToggle />
-                  </div>
-                </td>
-                <td className={"w-[50px]"}>
-                  <Link to={""}>
-                    <div className={"py-2"}>
-                      <img
-                        src={userIcon}
-                        alt={"avatar"}
-                        className={
-                          "w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"
+                    <td className={"w-[85px]"}>
+                      <div
+                        className={"flex gap-4  p-4"}
+                      >
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          value=""
+                          id="check"
+                          style={{ width: "16px", height: "16px", marginTop: "5px" }}
+                        />
+                        <StarToggle />
+                      </div>
+                    </td>
+                    <td className={"w-[50px]"}>
+                      <Link to={""}>
+                        <div className={"py-2"}>
+                          <img
+                            src={getIconApp(Number(item?.salesChannel))}
+                            alt={"avatar"}
+                            className={
+                              "w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"
+                            }
+                            aria-owns={open ? "mouse-over-popover" : undefined}
+                            aria-haspopup="true"
+                            onMouseEnter={handlePopoverOpen}
+                            onMouseLeave={handlePopoverClose}
+                          />
+                        </div>
+                      </Link>
+                    </td>
+                    <td className={"w-[75px]"}>
+                      <button
+                        onClick={() =>
+                          openModal(
+                            <div className="t-add-new-task-dialog text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
+                              <ModalDetailItem />
+                            </div>
+                          )
                         }
-                        aria-owns={open ? "mouse-over-popover" : undefined}
-                        aria-haspopup="true"
-                        onMouseEnter={handlePopoverOpen}
-                        onMouseLeave={handlePopoverClose}
-                      />
-                    </div>
-                  </Link>
-                </td>
-                <td className={"w-[75px]"}>
-                  <button
-                    onClick={() =>
-                      openModal(
-                        <div className="t-add-new-task-dialog text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
-                          <ModalDetailItem />
+                      >
+                        <div className={"user-infor py-2"}>
+                          <p className={"truncate user-infor-name text-[14px]  text-left"}>
+                            {FNB_CHANNEL[Number(item?.salesChannel)-1]?.text}
+                          </p>
+                          <span className={"text-xs text-primary-gray py-2  text-left"}>{item?.numberOfProducts} mặt hàng</span>
                         </div>
-                      )
-                    }
-                  >
-                    <div className={"user-infor py-2"}>
-                      <p className={"truncate user-infor-name text-[14px]  text-left"}>
-                        Shopee
-                      </p>
-                      <span className={"text-xs text-primary-gray py-2  text-left"}>16 mặt hàng</span>
-                    </div>
-                  </button>
-                </td>
-                <td className={"w-1/4"}>
-                  <button
-                    onClick={() =>
-                      openModal(
-                        <div className="t-add-new-task-dialog text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
-                          <ModalDetailItem />
+                      </button>
+                    </td>
+                    <td className={""}>
+                      <button
+                        onClick={() =>
+                          openModal(
+                            <div className="t-add-new-task-dialog text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
+                              <ModalDetailItem />
+                            </div>
+                          )
+                        }
+                      >
+                        <div className={"user-infor py-2"}>
+                          <p className={"truncate user-infor-name text-[14px]"}>
+                            {/* <span className="rounded-md bg-cbs-orage text-white px-3 py-1 mr-3">
+                              02 lỗi
+                            </span> */}
+                            {FNB_SERVICE[Number(item?.service)-1]?.text} - 
+                            <span className="text-cbs-primary">{item?.name}</span>
+                          </p>
+                          <span className={"truncate text-xs text-primary-gray py-2"}>{item?.note}</span>
                         </div>
-                      )
-                    }
-                  >
-                    <div className={"user-infor py-2"}>
-                      <p className={"truncate user-infor-name text-[14px]"}>
-                        <span className="rounded-md bg-cbs-orage text-white px-3 py-1 mr-3">
-                          02 lỗi
-                        </span>
-                        Đơn mang đi -
-                        <span className="text-cbs-primary">T39882</span>
-                      </p>
-                      <span className={"truncate text-xs  text-primary-gray py-2"}>100% đường, 100% đá, Topping Nha đam...</span>
-                    </div>
-                  </button>
-                </td>
-                <td className={"w-[75px] py-2"}>
-                  <div className="text-cbs-primary">
-                    100003010
-                  </div>
-                </td>
-                <td className={"w-36	py-2"}>
-                  <div>
-                    Winggo Thái Thịnh
-                  </div>
-                </td>
-                <td className={"py-2"}>
-                  <div>
-                    Mang đi
-                  </div>
-                </td>
-                <td className={"px-1 py-2"}>
-                  <div
-                    className={
-                      "task-date whitespace-nowrap"
-                    }
-                  >
-                    23/11/2022 18:25
-                  </div>
-                </td>
-                <td className={"px-1 py-2"}>
-                  <div className="w-[70px] text-center rounded-md bg-cbs-schedule-after-7days text-white" style={{ fontSize: "10px" }}>
-                    Hoàn thành
-                  </div>
-                </td>
-                <td className={"w-[75px] py-2"}>
-                  <div>
-                    25.000đ
-                  </div>
-                </td>
-              </tr>
+                      </button>
+                    </td>
+                    <td className={"py-2"}>
+                      <div className="text-cbs-primary">
+                        {item?.appOrderSign}
+                      </div>
+                    </td>
+                    <td className={"w-36	py-2"}>
+                      <div>
+                        {item?.funda?.name}
+                      </div>
+                    </td>
+                    <td className={"py-2"}>
+                      <div>
+                        {FNB_SERVICE[Number(item?.service)-1]?.text}
+                      </div>
+                    </td>
+                    <td className={"px-1 py-2"}>
+                      <div
+                        className={
+                          "task-date whitespace-nowrap"
+                        }
+                      >
+                        {moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
+                      </div>
+                    </td>
+                    <td className={"px-1 py-2"}>
+                      <div className="w-[70px] text-center rounded-md bg-cbs-schedule-after-7days text-white" style={{ fontSize: "10px" }}>
+                        {FNB_ORDER_STATUS[Number(item?.status)-1]?.text}
+                      </div>
+                    </td>
+                    <td className={"w-[75px] py-2"}>
+                      <div>
+                        {formatNumberMoney(item?.total||0)}
+                      </div>
+                    </td>
+                  </tr>
+              ))}
+             
             </tbody>
 
           </table>

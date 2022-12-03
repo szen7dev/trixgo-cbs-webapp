@@ -51,7 +51,7 @@ export const FnbShiftDetailPage: FC = () => {
 			// 	path: 'goods', select: "name unit"
 			// }) 
 		}, isFetchList: true, isFetchInfo: false  });
-	console.log({listWithPager});
+	// console.log({listWithPager});
 
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
@@ -232,7 +232,6 @@ export const FnbShiftDetailPage: FC = () => {
 							</td>
 						</tr>
 				))}
-
 			</table>
 
 			{/* <ModalContainer isModalOpen={modalCreateProject} toggle={toggleModalCreateProject}>
