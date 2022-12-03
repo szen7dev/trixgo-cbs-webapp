@@ -10,7 +10,10 @@ import type {
     DocumentProps,
 } from 'typings/document/document';
 
+// Khai báo kiểu
 type UseDocumentCustom = {
+    downloadTemplateImportExcelDocumentAsync: (payload: { projectID: string }) => Promise<any>,
+    importDocumentFromExcelAsync: (payload: any) => Promise<any>,
     exportDocumentAsync: (payload: any) => Promise<any>,
 };
 
@@ -18,15 +21,32 @@ type UseDocumentCustomParams = {
     params?: any
 }
 
+// Custom hook mới cho Document
 export const useDocumentCustom = ({
     params = {}
 }: UseDocumentCustomParams) : UseDocumentCustom => {
+
+    // Tải mẫu import excel
+    const { mutateAsync: downloadTemplateImportExcelDocumentAsync } =
+        useMutation((payload: { projectID: string }) =>
+        DocumentRepository.downloadTemplateImportExcelDocument(payload)
+    );
+
+    // Import excel
+    const { mutateAsync: importDocumentFromExcelAsync } =
+        useMutation((payload: { projectID?: string, dataImport: string }) =>
+        DocumentRepository.importDocumentFromExcel(payload)
+    );
+
+    // Export excel
     const { mutateAsync: exportDocumentAsync } =
         useMutation((payload: any) =>
             DocumentRepository.exportDocument(payload)
-        );
+    );
 
     return {
+        downloadTemplateImportExcelDocumentAsync,
+        importDocumentFromExcelAsync,
         exportDocumentAsync
     }
 }

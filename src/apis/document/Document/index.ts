@@ -16,6 +16,8 @@ interface DocumentRepository {
     update: (data: DocumentUpdatePayload) => Promise<DocumentUpdateResponse>;
     fetchList: (data: any) => Promise<DocumentQueryResponse>;
     fetchFilterList: (data: any) => Promise<DocumentQueryResponse>;
+    downloadTemplateImportExcelDocument: (data: any) => Promise<DocumentExportResponse>;
+    importDocumentFromExcel: (data: any) => Promise<DocumentExportResponse>;
     exportDocument: (data: any) => Promise<DocumentExportResponse>;
 }
 
@@ -24,7 +26,9 @@ export const documentRepository: DocumentRepository = {
     update: data => updateDocument(data),
     fetchList: params => fetchListDocument(params),
     fetchFilterList: params => fetchFilterListDocument(params),
-    exportDocument: params => exportDocument(params),
+    downloadTemplateImportExcelDocument: params => downloadTemplateImportExcelDocument(params), 
+    importDocumentFromExcel: params => importDocumentFromExcel(params), 
+    exportDocument: params => exportDocument(params), 
 }
 
 async function fetchListDocument(params : any) {
@@ -62,6 +66,17 @@ async function inserDocument(data: any) {
 
 async function updateDocument(data: any) {
     const { data: result } = await API.put(`${DOCUMENT_URL}/update-document`, data);
+    return result;
+}
+
+async function downloadTemplateImportExcelDocument(data: any) {
+    const { data: result } = await API.post(`${DOCUMENT_URL}/export-document`, data);
+    return result;
+}
+    
+// Import Document từ dữ liệu file excel
+async function importDocumentFromExcel(data: any) {
+    const { data: result } = await API.post(`${DOCUMENT_URL}/import-from-excel`, data);
     return result;
 }
 

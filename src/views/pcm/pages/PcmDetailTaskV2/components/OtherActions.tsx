@@ -31,6 +31,7 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
     const wrapperClass = useRef<HTMLDivElement>(null)
     const [showOption, setShowOption] = useState(false);
     const [dataImport, setDataImport] = useState([]);
+    
     const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
 		isExporting: false,
 	});
@@ -38,7 +39,11 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
     const { updateTaskAsync } = useTask({});
     useOnClickOutside(wrapperClass, () => setShowOption(false));
 	const { downloadTemplateImportExcelTaskAsync, importTaskFromExcelAsync } = usePcmPlanTaskCustom({});
-    // Xử lý download template excel
+    
+    /**
+     * 
+     * Xử lý download template excel
+     */
     const handleDownloadTemplateImportExcel = async () => {
 		try {
 			setStateExport({ isExporting: true });
@@ -73,13 +78,16 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
 
                 if (sheets.length) {
                     const rows: any = utils.sheet_to_json(wb.Sheets[sheets[1]]); // Index=1 (tức Sheet số 2 từ trái sang)
-                    // Xet data để import
+                    
+                    // Set data để Import
                     setDataImport(rows)
                 }
             }
+            
             reader.readAsArrayBuffer(file);
         }
-        // Đọc xong thì xóa value trong input đi
+
+        // Đọc xong thì xóa value trong Input đi
         $event.target.value = null;
     }
 
@@ -380,12 +388,6 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                                 accept=".xlsx, .xlsm, .xls, .csv"/>
                             <label className="custom-file-label" htmlFor="inputGroupFile">Import excel tạo việc con</label>
                         </button>
-                        {/* <Link
-                            className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header block"}
-                            to={`/pcm/detail/${task._id}/print/4`}
-                        >
-                            In ấn - Yêu cầu, đệ trình
-                        </Link> */}
                     </div>
                 </div>
             }
