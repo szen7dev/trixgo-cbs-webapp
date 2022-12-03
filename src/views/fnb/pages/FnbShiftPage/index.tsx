@@ -42,7 +42,7 @@ export const FnbShiftPage: FC = () => {
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
     const { info: infoProduct } = useFnbProduct({ params: { productID }, isFetchList: false, isFetchInfo: true  });
-	console.log({ infoProduct });
+	// console.log({ infoProduct });
 
 	/**
 	 * List mẩu tin
@@ -59,7 +59,7 @@ export const FnbShiftPage: FC = () => {
 		isFetchList: true, 
 		isFetchInfo: false
 	});
-	console.log({listWithPager});
+	// console.log({listWithPager});
 
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
@@ -144,7 +144,7 @@ export const FnbShiftPage: FC = () => {
 				</div>
 				<div className="flex items-center">
 					<button
-						className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold mr-6"
+						className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold ml-6"
 						onClick={() => {
 							setInitialValues(null);
 							toggleModalCreateProject();

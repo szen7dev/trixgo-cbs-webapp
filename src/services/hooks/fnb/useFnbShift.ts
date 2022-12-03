@@ -3,7 +3,7 @@ import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 
 /*=====2.TYPING/APIS=====*/
 import fnbRepository from 'apis/fnb/shift';
-export const useFnbProduct = ({
+export const useFnbShift = ({
     params = {},
     isFetchList = false,
     isFetchInfo = false

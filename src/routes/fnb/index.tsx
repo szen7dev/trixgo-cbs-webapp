@@ -19,6 +19,7 @@ import { FnBHomePage } from "views/fnb/pages/FnbHomePage/index";
 import { FnBProductPage } from "views/fnb/pages/FnbProductPage/index";
 import { FnbProductQuotasPage } from "views/fnb/pages/FnbProductQuotasPage/index";
 import { FnbShiftPage } from "views/fnb/pages/FnbShiftPage/index";
+import { FnbShiftDetailPage } from "views/fnb/pages/FnbShiftDetailPage/index";
 import { FnbReportPage } from "views/fnb/pages/FnbReportPage/index";
 
 const FnbRouter: FC = () => {
@@ -68,7 +69,7 @@ const FnbRouter: FC = () => {
                 path="/fnb/shift/:fundaID"
                 component={() =>
                     <FnbLayout>
-                        <FnbShiftPage/>
+                        <FnbShiftDetailPage/>
                     </FnbLayout>
                 }
             />
