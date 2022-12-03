@@ -105,7 +105,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
       );
       const { data, status } = response?.data;
 
-      if(status !== 200) return;
+      if (status !== 200) return;
 
       setFundas(data.listRecords);
     }
@@ -114,7 +114,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
   }, [])
 
   useEffect(() => {
-    if(!fundaID) return;
+    if (!fundaID) return;
 
     const fetchShifts = async () => {
       const response = await API.get(
@@ -122,7 +122,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
       );
       const { data, status } = response?.data;
 
-      if(status !== 200) return;
+      if (status !== 200) return;
 
       setShifts(data.listRecords);
     }
@@ -137,7 +137,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
       );
       const { data, status } = response?.data;
 
-      if(status !== 200) return;
+      if (status !== 200) return;
 
       setProducts(data.listRecords);
     }
@@ -187,8 +187,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
         dataAddNewOrder
       );
 
-      if(status !== 200) return toast.warning('Yêu cầu tạo đơn thất bại');
-      if(data.error) return toast.warning('Tạo đơn thất bại');
+      if (status !== 200) return toast.warning('Yêu cầu tạo đơn thất bại');
+      if (data.error) return toast.warning('Tạo đơn thất bại');
 
       socket?.emit('FNB_CSS_ADD_NEW_ORDER', {
         companyID: user?.company?._id,
@@ -209,10 +209,10 @@ export const ModalAddNewOrder: FC<Props> = () => {
 
   const handleChangeQuantity = (e: any, product: any) => {
     const value = Number(e.target.value);
-    if(value < 1) return;
+    if (value < 1) return;
 
     const newProductsInCart = productsInCart.map((p: any) => {
-      if(p._id === product._id) {
+      if (p._id === product._id) {
         return { ...p, quantity: value };
       }
       return p;
@@ -224,7 +224,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
     const value = e.target.value;
 
     const newProductsInCart = productsInCart.map((p: any) => {
-      if(p._id === product._id) {
+      if (p._id === product._id) {
         return { ...p, note: value };
       }
       return p;
@@ -372,8 +372,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
                       <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full"}>Mã khách (*)</div>
                       <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                         <DropdownSearchable
-                          onchangeValue={(value: any) => setFieldValue("customerID", value.id) }
-                          onClearData={() => setFieldValue("customerID", "") }
+                          onchangeValue={(value: any) => setFieldValue("customerID", value.id)}
+                          onClearData={() => setFieldValue("customerID", "")}
                           placeholder={"Mã khách hàng"}
                           className={"max-w-full h-full flex-1"}
                           focusedClass={"border-b border-primary"}
@@ -443,28 +443,28 @@ export const ModalAddNewOrder: FC<Props> = () => {
                       <span>Kênh bán hàng</span>
                       <div className="flex flex-wrap mt-2 mb-2">
                         <div className="flex items-center mr-4">
-                            <Field id="saleChannelOffline" type="radio" value="1" name="salesChannel" className="w-4 h-4" checked />
-                            <label htmlFor="saleChannelOffline" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Offline</label>
+                          <Field id="saleChannelOffline" type="radio" value="1" name="salesChannel" className="w-4 h-4" checked />
+                          <label htmlFor="saleChannelOffline" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Offline</label>
                         </div>
                         <div className="flex items-center mr-4">
-                            <Field id="saleChannelGrab" type="radio" value="2" name="salesChannel" className="w-4 h-4" />
-                            <label htmlFor="saleChannelGrab" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Grab</label>
+                          <Field id="saleChannelGrab" type="radio" value="2" name="salesChannel" className="w-4 h-4" />
+                          <label htmlFor="saleChannelGrab" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Grab</label>
                         </div>
                         <div className="flex items-center mr-4">
-                            <Field id="saleChannelShopee" type="radio" value="3" name="salesChannel" className="w-4 h-4" />
-                            <label htmlFor="saleChannelShopee" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Shopee</label>
+                          <Field id="saleChannelShopee" type="radio" value="3" name="salesChannel" className="w-4 h-4" />
+                          <label htmlFor="saleChannelShopee" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Shopee</label>
                         </div>
                         <div className="flex items-center mr-4">
-                            <Field id="saleChannelGojek" type="radio" value="4" name="salesChannel" className="w-4 h-4" />
-                            <label htmlFor="saleChannelGojek" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Gojek</label>
+                          <Field id="saleChannelGojek" type="radio" value="4" name="salesChannel" className="w-4 h-4" />
+                          <label htmlFor="saleChannelGojek" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Gojek</label>
                         </div>
                         <div className="flex items-center mr-4">
-                            <Field id="saleChannelBaemin" type="radio" value="5" name="salesChannel" className="w-4 h-4" />
-                            <label htmlFor="saleChannelBaemin" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Baemin</label>
+                          <Field id="saleChannelBaemin" type="radio" value="5" name="salesChannel" className="w-4 h-4" />
+                          <label htmlFor="saleChannelBaemin" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Baemin</label>
                         </div>
                         <div className="flex items-center mr-4">
-                            <Field id="saleChannelLoship" type="radio" value="6" name="salesChannel" className="w-4 h-4" />
-                            <label htmlFor="saleChannelLoship" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Loship</label>
+                          <Field id="saleChannelLoship" type="radio" value="6" name="salesChannel" className="w-4 h-4" />
+                          <label htmlFor="saleChannelLoship" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Loship</label>
                         </div>
 
                       </div>
@@ -567,14 +567,13 @@ export const ModalAddNewOrder: FC<Props> = () => {
                         </div>
                       </div>
                       <div>
-                        <div>Sản phẩm</div>
+                        <div className="my-3">Sản phẩm</div>
                         <div>
-                          <input
-                            type="text"
-                            placeholder="Tìm kiếm sản phẩm"
+                          <input type="text" placeholder="Tìm kiếm gán lỗi"
                             onKeyUp={debounce(e => {
                               setKeywordSearchProduct(e.target.value);
                             }, 700)}
+                            className="w-full h-[40px] rounded border-0.5 border-cbs-bg-input-search bg-cbs-bg-input-search px-3 py-1 outline-none "
                           />
                         </div>
                         <div className="h-[300px] overflow-y-auto	my-2 ">
@@ -597,7 +596,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                     onClick={() => {
                                       setProductsInCart((prevProducts: any) => {
                                         const isExists = prevProducts.find((p: any) => p._id === product._id);
-                                        if(isExists) return prevProducts;
+                                        if (isExists) return prevProducts;
                                         else return [...prevProducts, product];
                                       });
                                     }}
@@ -623,7 +622,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                     {product.name}
                                   </p>
                                   <textarea
-                                    className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px]"
+                                    className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px] resize-none"
                                     placeholder="Thêm ghi chú ...." onChange={e => handleChangeNote(e, product)} defaultValue={product.note}></textarea>
                                 </div>
                                 <div className="text-blue-400">{convertCurrency(product.amount)}</div>

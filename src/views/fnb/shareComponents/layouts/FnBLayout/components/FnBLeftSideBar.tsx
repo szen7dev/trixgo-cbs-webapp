@@ -28,6 +28,7 @@ import { IconButton, InputBase, Paper } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import { useModal } from "services/hooks/useModal";
 import { ModalAddNewOrder } from "./ModalAddNewOrder";
+import { ModalAddNewContact } from "./ModalAddNewContact";
 
 export const FnbLeftSideBar: FC = () => {
     const { user } = useAuth();
@@ -73,14 +74,25 @@ export const FnbLeftSideBar: FC = () => {
                     </NavLink>
                 </div>
                 <div>
-                    <div onClick={() => setMenuState(!menuShowList)} className="flex justify-between text-primary-gray px-4 py-1 cursor-pointer hover:bg-slate-200">
+                    <div className="flex justify-between text-primary-gray px-4 py-1 cursor-pointer hover:bg-slate-200">
                         <div>
-                            {(menuShowList ? <ExpandLessIcon sx={{ width: "24px", height: "24px" }} fontSize="small" /> : <ExpandMoreIcon sx={{ width: "24px", height: "24px" }} fontSize="small" />)}
+                            <ExpandMoreIcon sx={{ width: "24px", height: "24px" }} fontSize="small" />
                             <span className="ml-2 text-[14px] align-middle"> Khách hàng</span>
                         </div>
-                        <img src={iconPlus} alt="" />
+                        <button
+                            onClick={() =>
+                                openModal(
+                                    <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block"
+                                    style={{width:"600px"}}>
+                                        <ModalAddNewContact />
+                                    </div>
+                                )
+                            }
+                        >
+                            <img src={iconPlus} alt="" />
+                        </button>
                     </div>
-                    <div className={"transition-1s h-0 overflow-hidden " + (menuShowList ? ' h-[300px]' : '')}>
+                    <div className={"transition-1s overflow-hidden "}>
                         <div>
                             <div>
                                 <Paper
