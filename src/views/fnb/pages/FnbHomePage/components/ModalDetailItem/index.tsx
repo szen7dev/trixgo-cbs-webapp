@@ -42,6 +42,7 @@ import { FileProp, FilePropsUpload } from "typings/common";
 import { Button, FormControl, MenuItem, Popover, Select, SelectChangeEvent } from "@mui/material";
 import { borderRadius } from "@mui/system";
 import { GroupSearchable } from "shareComponents/common/GroupSearchable";
+import { ModalErrorDetailItem } from "../ModalErrorDetailItem";
 
 interface InitialValues {
   projectID: string,
@@ -69,6 +70,7 @@ export const ModalDetailItem: FC<Props> = ({ defaultValues = {} }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   type GroupSearchableHandle = React.ElementRef<typeof GroupSearchable>;
   const groupSearchableRef = React.useRef<GroupSearchableHandle>(null);
+  const { openModal } = useModal();
 
   const [tokens, setTokens] = useState<any[]>([]);
   const [projectID, setProjectID] = useState(defaultValues?.project?._id || "");
@@ -269,23 +271,71 @@ export const ModalDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                           <div className={"w-full flex items-baseline	"}>
                             <img src={IconGreenDot} alt="" />
                             <div className={"h-full text-left flex px-1 "}>
-                              <div className="text-gray-500 w-[75px]" style={{minWidth:"75px"}}>Lỗi gặp phải: </div>
+                              <div className="text-gray-500 w-[75px]" style={{ minWidth: "75px" }}>Lỗi gặp phải: </div>
                               <div className="flex flex-wrap gap-2 px-2">
-                                <button className="rounded-md bg-cbs-active-comment px-4 py-1">
+                                <button className="rounded-md bg-cbs-active-comment px-4 py-1"
+                                  onClick={() =>
+                                    openModal(
+                                      <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{ width: "640px" }}>
+                                        <ModalErrorDetailItem />
+                                      </div>
+                                    )
+                                  }
+                                >
                                   Nhầm size
                                 </button>
-                                <button className="rounded-md bg-cbs-active-comment px-4 py-1">
+                                <button className="rounded-md bg-cbs-active-comment px-4 py-1"
+                                  onClick={() =>
+                                    openModal(
+                                      <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{ width: "640px" }}>
+                                        <ModalErrorDetailItem />
+                                      </div>
+                                    )
+                                  }
+                                >
                                   Thiếu ống hút
                                 </button>
-                                <button className="rounded-md bg-cbs-active-comment px-4 py-1">
+                                <button className="rounded-md bg-cbs-active-comment px-4 py-1"
+                                  onClick={() =>
+                                    openModal(
+                                      <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{ width: "640px" }}>
+                                        <ModalErrorDetailItem />
+                                      </div>
+                                    )
+                                  }
+                                >
                                   Pha pudding bị hỏng
                                 </button>
-                                <button className="rounded-md bg-cbs-active-comment px-4 py-1">
+                                <button className="rounded-md bg-cbs-active-comment px-4 py-1"
+                                  onClick={() =>
+                                    openModal(
+                                      <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{ width: "640px" }}>
+                                        <ModalErrorDetailItem />
+                                      </div>
+                                    )
+                                  }
+                                >
                                   Pha pudding bị hỏng
                                 </button>
-                                <button className="rounded-md bg-cbs-active-comment px-4 py-1">Nhầm size
+                                <button className="rounded-md bg-cbs-active-comment px-4 py-1"
+                                  onClick={() =>
+                                    openModal(
+                                      <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{ width: "640px" }}>
+                                        <ModalErrorDetailItem />
+                                      </div>
+                                    )
+                                  }
+                                >Nhầm size
                                 </button>
-                                <button className="rounded-md bg-cbs-active-comment px-4 py-1">Nhầm size
+                                <button className="rounded-md bg-cbs-active-comment px-4 py-1"
+                                  onClick={() =>
+                                    openModal(
+                                      <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{ width: "640px" }}>
+                                        <ModalErrorDetailItem />
+                                      </div>
+                                    )
+                                  }
+                                >Nhầm size
                                 </button>
                               </div>
                             </div>

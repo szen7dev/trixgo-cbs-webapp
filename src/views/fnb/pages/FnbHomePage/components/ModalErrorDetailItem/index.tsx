@@ -37,6 +37,7 @@ import RadioEmpty from "assets/images/Ellipse 27.svg";
 import RadioChecked from "assets/images/icons8-checked-40 (2) 2.svg";
 import AvaSatffSample from "assets/images/image 437.png";
 import ImgDemoUpload from "assets/images/image 434.jpg";
+import DemoUploadBtn from "assets/images/Frame 4389.svg";
 
 import "react-day-picker/lib/style.css";
 import { Editor } from "@tinymce/tinymce-react";
@@ -299,6 +300,9 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                                                                 <div>
                                                                     <img src={ImgDemoUpload} alt="" />
                                                                 </div>
+                                                                <button>
+                                                                <img src={DemoUploadBtn} alt="" />
+                                                                </button>
                                                                 {/* img upload */}
                                                             </div>
                                                         </div>
