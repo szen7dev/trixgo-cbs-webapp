@@ -69,6 +69,8 @@ import { UpdateStatusDialog } from "./UpdateStatusDialog";
 import { ModalCreateResultSearch } from "./ModalCreateResultSearch";
 import { Popover } from "@mui/material";
 import ChartRevenueByHour from "./components/chart";
+import { ModalDetailItem } from "./components/ModalDetailItem/index";
+import { ModalErrorDetailItem } from "./components/ModalErrorDetailItem";
 
 type Props = {
   type?: number;
@@ -809,55 +811,21 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 </div>
               </button>
               <button className="text-cbs-schedule-expired">Hủy đơn</button>
-              <button className="text-cbs-schedule-nextweek">Gán lỗi gặp phải</button>
+              <button
+                className="text-cbs-schedule-nextweek"
+                onClick={() =>
+                  openModal(
+                    <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{width:"640px"}}>
+                      <ModalErrorDetailItem />
+                    </div>
+                  )
+                }
+              >
+                Gán lỗi gặp phải
+              </button>
               <button><img src={iconDown} alt="" /></button>
             </div>
           </div>
-          {/* <button
-            onClick={() => setFilter("all")}
-            className={
-              "py-1 px-6 mx-2 rounded-full border border-primary-border " +
-              (filter === "all"
-                ? "text-white bg-cbs-secondary border-none"
-                : "text-primary-gray bg-white")
-            }
-          >
-            Tất cả
-          </button>
-          <button
-            onClick={() => setFilter("unread")}
-            className={
-              "py-1 px-6 mx-2 rounded-full border border-primary-border " +
-              (filter === "unread"
-                ? "text-white bg-cbs-secondary border-none"
-                : "text-primary-gray bg-white")
-            }
-          >
-            Chưa đọc
-          </button>
-          <button
-            onClick={() => setFilter("read")}
-            className={
-              "py-1 px-6 mx-2 rounded-full border border-primary-border " +
-              (filter === "read"
-                ? "text-white bg-cbs-secondary border-none"
-                : "text-primary-gray bg-white")
-            }
-          >
-            Đã đọc
-          </button>
-          <button
-            className={"text-primary mx-2"}
-            onClick={() => setShowUpdateStatus(true)}
-          >
-            Đánh dấu tất cả đã đọc
-          </button> */}
-          {/* <button className={"flex items-center justify-center mx-3"}>
-            <img src={downloadIcon} alt={"-----"} />
-          </button>
-          <button className={"flex items-center justify-center mx-3"}>
-            <img src={sendMailIcon} alt={"-----"} />
-          </button> */}
           <div className={"flex-1 flex items-center justify-end"}>
             <PaginateV2
               ref={ref}
@@ -952,17 +920,33 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                   </Link>
                 </td>
                 <td className={"w-[75px]"}>
-                  <Link to={""}>
+                  <button
+                    onClick={() =>
+                      openModal(
+                        <div className="t-add-new-task-dialog text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
+                          <ModalDetailItem />
+                        </div>
+                      )
+                    }
+                  >
                     <div className={"user-infor py-2"}>
-                      <p className={"truncate user-infor-name text-[14px]"}>
+                      <p className={"truncate user-infor-name text-[14px]  text-left"}>
                         Shopee
                       </p>
-                      <span className={"text-xs text-primary-gray py-2"}>16 mặt hàng</span>
+                      <span className={"text-xs text-primary-gray py-2  text-left"}>16 mặt hàng</span>
                     </div>
-                  </Link>
+                  </button>
                 </td>
                 <td className={"w-1/4"}>
-                  <Link to={""}>
+                  <button
+                    onClick={() =>
+                      openModal(
+                        <div className="t-add-new-task-dialog text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
+                          <ModalDetailItem />
+                        </div>
+                      )
+                    }
+                  >
                     <div className={"user-infor py-2"}>
                       <p className={"truncate user-infor-name text-[14px]"}>
                         <span className="rounded-md bg-cbs-orage text-white px-3 py-1 mr-3">
@@ -973,7 +957,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                       </p>
                       <span className={"truncate text-xs  text-primary-gray py-2"}>100% đường, 100% đá, Topping Nha đam...</span>
                     </div>
-                  </Link>
+                  </button>
                 </td>
                 <td className={"w-[75px] py-2"}>
                   <div className="text-cbs-primary">
@@ -1002,99 +986,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 <td className={"px-1 py-2"}>
                   <div className="w-[70px] text-center rounded-md bg-cbs-schedule-after-7days text-white" style={{ fontSize: "10px" }}>
                     Hoàn thành
-                  </div>
-                </td>
-                <td className={"w-[75px] py-2"}>
-                  <div>
-                    25.000đ
-                  </div>
-                </td>
-              </tr>
-              <tr
-                className={"border-b-0.5 border-primary-border bg-white hover:shadow-md hover:z-2 hover:relative"}
-              >
-                <td className={"w-[85px]"}>
-                  <div
-                    className={"flex gap-4  p-4"}
-                  >
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value=""
-                      id="check"
-                      style={{ width: "16px", height: "16px", marginTop: "5px" }}
-                    />
-                    <StarToggle />
-                  </div>
-                </td>
-                <td className={"w-[50px]"}>
-                  <Link to={""}>
-                    <div className={"py-2"}>
-                      <img
-                        src={userIcon}
-                        alt={"avatar"}
-                        className={
-                          "w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"
-                        }
-                        aria-owns={open ? "mouse-over-popover" : undefined}
-                        aria-haspopup="true"
-                        onMouseEnter={handlePopoverOpen}
-                        onMouseLeave={handlePopoverClose}
-                      />
-                    </div>
-                  </Link>
-                </td>
-                <td className={"w-[75px]"}>
-                  <Link to={""}>
-                    <div className={"user-infor py-2"}>
-                      <p className={"truncate user-infor-name text-[14px]"}>
-                        Shopee
-                      </p>
-                      <span className={"text-xs text-primary-gray py-2"}>16 mặt hàng</span>
-                    </div>
-                  </Link>
-                </td>
-                <td className={"w-1/4"}>
-                  <Link to={""}>
-                    <div className={"user-infor py-2"}>
-                      <p className={"truncate user-infor-name text-[14px]"}>
-                        <span className="rounded-md bg-cbs-orage text-white px-3 py-1 mr-3">
-                          02 lỗi
-                        </span>
-                        Đơn mang đi -
-                        <span className="text-cbs-primary">T39882</span>
-                      </p>
-                      <span className={"truncate text-xs  text-primary-gray py-2"}>100% đường, 100% đá, Topping Nha đam...</span>
-                    </div>
-                  </Link>
-                </td>
-                <td className={"w-[75px] py-2"}>
-                  <div className="text-cbs-primary">
-                    100003010
-                  </div>
-                </td>
-                <td className={"w-36	py-2"}>
-                  <div>
-                    Winggo Thái Thịnh
-                  </div>
-                </td>
-                <td className={"py-2"}>
-                  <div>
-                    Mang đi
-                  </div>
-                </td>
-                <td className={"px-1 py-2"}>
-                  <div
-                    className={
-                      "task-date whitespace-nowrap"
-                    }
-                  >
-                    23/11/2022 18:25
-                  </div>
-                </td>
-                <td className={"px-1 py-2"}>
-                  <div className="w-[70px] text-center rounded-md bg-cbs-schedule-expired text-white" style={{ fontSize: "10px" }}>
-                    Đã hủy
                   </div>
                 </td>
                 <td className={"w-[75px] py-2"}>
