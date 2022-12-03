@@ -14,7 +14,7 @@ import ErrorPage from "views/authentication/Error";
 import {
     InspectionHomePage,
 } from "views/inspection/pages";
-import { FnbLayout } from "views/fnb/shareComponents/layouts/FnBLayout";
+import { FnbLayout } from "views/fnb/shareComponents/layouts/FnbLayout";
 import { FnBHomePage } from "views/fnb/pages/FnbHomePage/index";
 import { FnBProductPage } from "views/fnb/pages/FnbProductPage/index";
 import { FnbProductQuotasPage } from "views/fnb/pages/FnbProductQuotasPage/index";

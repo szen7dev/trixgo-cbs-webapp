@@ -1,3 +1,17 @@
+/*=====1.LIBRARY=====*/
+
+/*=====2.CSS=====*/
+
+/*=====3.ICONS=====*/
+
+/*=====4.PAGES/COMPONENTS=====*/
+
+/*=====5.TYPINGS=====*/
+
+/*=====6.HOOKS/APIS=====*/
+
+/*=====7.OTHER=====*/
+
 import React, { FC, useState, UIEvent, useEffect } from "react";
 import moment from "moment";
 import { Link } from "react-router-dom";
@@ -14,6 +28,7 @@ import projectIcon from "assets/images/icons8-project-50.svg";
 import TriangleDown from "assets/icons/TriangleDown";
 import businessBuiding from "assets/images/icons8-business-building-48.svg";
 import trashIcon from "assets/images/icons8-trash-96 1.svg";
+import updateIcon from "assets/images/icons8-pencil-96.svg";
 import mailIcon from "assets/images/icons8-email-96 1.svg";
 import moreIcon from "assets/images/moreIcon.svg";
 import arrowDown from "assets/images/icon-arrowdown.svg";
@@ -340,8 +355,8 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             isFetchingResponse ||
             isLoadingFile ||
             isFetchingFile) && <Loader className="border-primary" />}
-          {tabIndex === 1 && (
-            <DropdownSearchableV2
+          
+          <DropdownSearchableV2
               reset={reset}
               selectOneByOne={true}
               countBadge={queryResponse.companyOfAuthorsID.length}
@@ -410,10 +425,8 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
               }
             />
-          )}
 
-          {tabIndex === 1 && (
-            <DropdownSearchableV2
+<DropdownSearchableV2
               selectOneByOne={true}
               reset={reset}
               countBadge={queryResponse.authorsID.length}
@@ -511,9 +524,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 <img className={"mr-2"} src={iconShift} alt={"icon"} />
               }
             />
-          )}
 
-          {(tabIndex === 1) && (
             <DropdownSearchableV2
               selectOneByOne={true}
               reset={reset}
@@ -554,10 +565,8 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               renderItem={(item) => (
                 <p className={"min-w-[300px]"}>{item.text}</p>
               )}
-            />
-          )}
+            />      
 
-          {tabIndex === 1 && (
             <DropdownSearchableV2
               selectOneByOne={true}
               reset={reset}
@@ -594,10 +603,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 ref.current && ref.current.resetPaginate();
               }}
             />
-          )}
-
-          {(tabIndex === 1) && (
-            <TimeRangeDropdown
+          <TimeRangeDropdown
               className={
                 "mr-2 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
               }
@@ -632,9 +638,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 },
               ]}
             />
-          )}
 
-          {tabIndex === 1 && (
             <DropdownSearchableV2
               selectOneByOne={true}
               reset={reset}
@@ -671,9 +675,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 ref.current && ref.current.resetPaginate();
               }}
             />
-          )}
 
-          {tabIndex === 1 && (
             <DropdownSearchableV2
               selectOneByOne={true}
               reset={reset}
@@ -710,7 +712,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 ref.current && ref.current.resetPaginate();
               }}
             />
-          )}
 
           <button
             className={"border-primary border-0.5 bg-cbs-secondary rounded text-white px-4 h-[32px] mb-2"}
@@ -718,16 +719,15 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             Lọc
           </button>
 
-          {tabIndex === 2 && (
-            <button
-              className={"bg-green-success rounded text-white px-2 h-[32px] ml-2"}
+          <button
+              className={"bg-grey rounded px-2 h-[32px] ml-2"}
               onClick={onSaveResultSearch}
             >
               Lưu
             </button>
-          )}
-
         </div>
+
+        {/* Action bar */}
         <div className={"header-table flex px-4 w-full top-0 bg-white mb-1 pb-2"}>
           <div className={"flex gap-7 items-center justify-center mr-2"}>
             <div className="flex gap-2 items-center">
@@ -767,8 +767,9 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 </div>
               </div>
             </div>
+
             <div className="flex gap-7 items-center">
-              <button><img src={trashIcon} alt="" /></button>
+              <button><img src={updateIcon} alt="" /></button>
               <button><img src={mailIcon} alt="" /></button>
               <button onClick={() => setpopBox2(!popBox2)} className="relative w-[20px] h-[20px]">
                 <img src={moreIcon} className="m-auto" />
@@ -812,6 +813,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               <button><img src={iconDown} alt="" /></button>
             </div>
           </div>
+          {/* Chưa rõ chỗ này, hình như để phân trang */}
           <div className={"flex-1 flex items-center justify-end"}>
             <PaginateV2
               ref={ref}
@@ -867,8 +869,12 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
           </div>
         </div>
       </div>
+
+      {/* Dữ liệu chính */}
       <div className={"flex flex-1 overflow-y-auto gap-3 bg-cbs-table-highlight"}>
-        <div className="w-3/4">
+        {/* Danh sách đơn hàng */}
+        {/* <div className="w-3/4"> */}
+        <div>
           <table className={"w-full table-fixed tasks"}>
             <tbody>
               <tr
@@ -984,7 +990,9 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
 
           </table>
         </div>
-        <div className="w-1/4 mt-3">
+
+        {/* Báo cáo quản trị */}
+        {/* <div className="w-1/4 mt-3">
           <div className="bg-white border-0.5 border-second-color-border py-6 px-3">
             <button className="m-auto font-bold text-cbs-fnb-bg flex items-center">Winggo Thái thịnh <ExpandMoreIcon /></button>
             <button className="flex items-center m-auto"><img src={iconCalendar} alt="" />
@@ -1049,8 +1057,9 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               <ChartRevenueByHour />
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
+
       <UpdateStatusDialog
         showUpdateStatus={showUpdateStatus}
         setShowUpdateStatus={setShowUpdateStatus}
