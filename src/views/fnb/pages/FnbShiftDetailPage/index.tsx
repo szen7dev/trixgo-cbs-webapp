@@ -34,6 +34,10 @@ const TYPE_PRODUCT = [
 	{ value: 2, text: "Topping" },
 ]
 export const FnbShiftDetailPage: FC = () => {
+	useEffect(() => {
+		document.title = "Trixgo | FnB";
+	}, []);
+	
 	const history = useHistory();
 	const { fundaID } = useParams<{ fundaID: string }>();
 	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });

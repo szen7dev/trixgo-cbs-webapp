@@ -35,6 +35,10 @@ const TYPE_PRODUCT = [
 ]
 
 export const FnbShiftPage: FC = () => {
+	useEffect(() => {
+		document.title = "Trixgo | FnB";
+	}, []);
+	
 	const history = useHistory();
 	const { productID } = useParams<{ productID: string }>();
 	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });

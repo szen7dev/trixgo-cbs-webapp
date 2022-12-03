@@ -24,6 +24,10 @@ const TYPE_PRODUCT = [
 	{ value: 2, text: "Topping" },
 ]
 export const FnbProductQuotasPage: FC = () => {
+	useEffect(() => {
+		document.title = "Trixgo | FnB";
+	}, []);
+	
 	const history = useHistory();
 	const { productID } = useParams<{ productID: string }>();
 	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });

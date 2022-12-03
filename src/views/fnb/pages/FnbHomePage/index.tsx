@@ -85,9 +85,14 @@ type Props = {
 
 export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
 
+  useEffect(() => {
+		document.title = "Trixgo | FnB";
+	}, []);
+
   const [keyword, setKeyword] = useState("");
   const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbOrder({ 
 		params: { 
+      limit: 50,
 			keyword: keyword, 
 			// fundaID, 
 			populates: JSON.stringify({
@@ -467,7 +472,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               }
             />
 
-<DropdownSearchableV2
+            <DropdownSearchableV2
               selectOneByOne={true}
               reset={reset}
               countBadge={queryResponse.authorsID.length}
@@ -920,38 +925,8 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             <tbody>
             {
                 (listWithPager[pageIndex]??[]).map((item: any, i: any) => (
-                  // <tr key={item._id} className="text-[14px]">
-                  //   <td className={"p-2 border-0.5 border-primary-border text-cente"}>
-                  //     <input
-                  //       className="form-check-input"
-                  //       type="checkbox"
-                  //       checked={getStateChecked(item._id)}
-                  //       onChange={() => onClickCheckButton(item._id)}
-                  //     />
-                  //   </td>
-                  //   <td className={"p-2 border-0.5 border-primary-border"}>
-                  //     {moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
-                  //   </td>
-                  //   <td className={"p-2 border-0.5 border-primary-border"}>
-                  //     {item?.name}
-                  //   </td>
-                  //   <td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
-                  //     <Link to ={`/fnb/shift/${item._id}/material`}>
-                  //       Chi tiết
-                  //     </Link>
-                  //   </td>
-                  //   <td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
-                  //     <Link to ={`/fnb/shift/${item._id}/cash`}>
-                  //       Chi tiết
-                  //     </Link>
-                  //   </td>
-                  //   <td className={"p-2 border-0.5 border-primary-border"}>
-                  //     {item?.note}
-                  //   </td>
-                  // </tr>
-
                    <tr key={item._id}
-                    className={"border-b-0.5 border-primary-border bg-white hover:shadow-md hover:z-2 hover:relative"}
+                    className={"border-b-0.5 border-primary-border bg-white hover:shadow-md hover:z-2 hover:relative text-[14px]"}
                   >
                     <td className={"w-[85px]"}>
                       <div
@@ -984,7 +959,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                         </div>
                       </Link>
                     </td>
-                    <td className={"w-[75px]"}>
+                    <td className={"w-[90px] px-1 py-2"}>
                       <button
                         onClick={() =>
                           openModal(
@@ -998,11 +973,11 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                           <p className={"truncate user-infor-name text-[14px]  text-left"}>
                             {FNB_CHANNEL[Number(item?.salesChannel)-1]?.text}
                           </p>
-                          <span className={"text-xs text-primary-gray py-2  text-left"}>{item?.numberOfProducts} mặt hàng</span>
+                          {/* <span className={"text-xs text-primary-gray py-2  text-left"}>{item?.numberOfProducts} mặt hàng</span> */}
                         </div>
                       </button>
                     </td>
-                    <td className={""}>
+                    <td className={"px-1 py-2 w-1/4"}>
                       <button
                         onClick={() =>
                           openModal(
@@ -1020,21 +995,21 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                             {FNB_SERVICE[Number(item?.service)-1]?.text} - 
                             <span className="text-cbs-primary">{item?.name}</span>
                           </p>
-                          <span className={"truncate text-xs text-primary-gray py-2"}>{item?.note}</span>
+                          {/* <span className={"truncate text-xs text-primary-gray py-2"}>{item?.note}</span> */}
                         </div>
                       </button>
                     </td>
-                    <td className={"py-2"}>
+                    <td className={"px-1 py-2"}>
                       <div className="text-cbs-primary">
                         {item?.appOrderSign}
                       </div>
                     </td>
-                    <td className={"w-36	py-2"}>
+                    <td className={"px-1 py-2"}>
                       <div>
                         {item?.funda?.name}
                       </div>
                     </td>
-                    <td className={"py-2"}>
+                    <td className={"px-1 py-2"}>
                       <div>
                         {FNB_SERVICE[Number(item?.service)-1]?.text}
                       </div>
@@ -1048,14 +1023,14 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                         {moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
                       </div>
                     </td>
-                    <td className={"px-1 py-2"}>
-                      <div className="w-[70px] text-center rounded-md bg-cbs-schedule-after-7days text-white" style={{ fontSize: "10px" }}>
+                    <td className={"px-2 py-2"}>
+                      <div className="w-[70px] text-center rounded-md bg-cbs-schedule-after-7days text-white" style={{ fontSize: "12px" }}>
                         {FNB_ORDER_STATUS[Number(item?.status)-1]?.text}
                       </div>
                     </td>
-                    <td className={"w-[75px] py-2"}>
+                    <td className={"text-right px-2 py-2"}>
                       <div>
-                        {formatNumberMoney(item?.total||0)}
+                        {formatNumberMoney(item?.total||0)} đ
                       </div>
                     </td>
                   </tr>

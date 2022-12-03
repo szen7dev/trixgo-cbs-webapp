@@ -23,6 +23,10 @@ const TYPE_PRODUCT = [
 	{ value: 2, text: "Topping" },
 ]
 export const FnBProductPage: FC = () => {
+	useEffect(() => {
+		document.title = "Trixgo | FnB";
+	}, []);
+	
 	const history = useHistory();
 	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
