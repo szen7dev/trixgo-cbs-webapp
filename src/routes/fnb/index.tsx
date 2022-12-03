@@ -14,7 +14,7 @@ import ErrorPage from "views/authentication/Error";
 import {
     InspectionHomePage,
 } from "views/inspection/pages";
-import { FnBLayout } from "views/fnb/shareComponents/layouts/FnBLayout";
+import { FnbLayout } from "views/fnb/shareComponents/layouts/FnbLayout";
 import { FnBHomePage } from "views/fnb/pages/FnbHomePage/index";
 import { FnBProductPage } from "views/fnb/pages/FnbProductPage/index";
 import { FnbProductQuotasPage } from "views/fnb/pages/FnbProductQuotasPage/index";
@@ -26,18 +26,18 @@ const FnbRouter: FC = () => {
                 exact
                 path="/fnb/home"
                 component={() =>
-                    <FnBLayout>
+                    <FnbLayout>
                         <FnBHomePage/>
-                    </FnBLayout>
+                    </FnbLayout>
                 }
             />
             <Route
                 exact
                 path="/fnb/product"
                 component={() =>
-                    <FnBLayout>
+                    <FnbLayout>
                         <FnBProductPage/>
-                    </FnBLayout>
+                    </FnbLayout>
                 }
             />
 
@@ -45,9 +45,9 @@ const FnbRouter: FC = () => {
                 exact
                 path="/fnb/product/:productID"
                 component={() =>
-                    <FnBLayout>
+                    <FnbLayout>
                         <FnbProductQuotasPage/>
-                    </FnBLayout>
+                    </FnbLayout>
                 }
             />
             
@@ -55,9 +55,9 @@ const FnbRouter: FC = () => {
                 exact
                 path="/fnb/shift"
                 component={() =>
-                    <FnBLayout>
+                    <FnbLayout>
                         <FnBHomePage/>
-                    </FnBLayout>
+                    </FnbLayout>
                 }
             />
             <Route path="/fnb/*" component={ErrorPage} />

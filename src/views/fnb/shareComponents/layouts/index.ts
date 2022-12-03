@@ -1,1 +1,1 @@
-export * from './FnBLayout';
+export * from './FnbLayout';

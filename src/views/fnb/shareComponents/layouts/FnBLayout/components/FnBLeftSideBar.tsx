@@ -29,7 +29,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { useModal } from "services/hooks/useModal";
 import { ModalAddNewOrder } from "./ModalAddNewOrder";
 
-export const FnBLeftSideBar: FC = () => {
+export const FnbLeftSideBar: FC = () => {
     const { user } = useAuth();
     const { openModal } = useModal();
     const [menuShowList, setMenuState] = useState(false);

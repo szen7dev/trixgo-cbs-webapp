@@ -12,7 +12,7 @@ import iconChat from "assets/images/icons8-chat-96.png";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import { LeftNavigate, MainHeader, MainHeaderV2 } from "shareComponents/common";
-import { FnBLeftSideBar } from './components';
+import { FnbLeftSideBar } from './components';
 import { HomeRightSideBar } from "shareComponents/layouts";
 import { HomeHeaderContent } from "shareComponents/layouts/HomeLayout/components";
 
@@ -26,7 +26,7 @@ type Props = {
   children: ReactNode;
 };
 
-export const FnBLayout: FC<Props> = ({ children }) => {
+export const FnbLayout: FC<Props> = ({ children }) => {
   const [isHeaderCollapse, setIsHeaderCollapse] = useState(false);
   const [isLeftMenuCollapse, setIsLeftMenuCollapse] = useState(false);
   const [isRightSideBarCollapse, setIsRightSideBarCollapse] = useState(false);
@@ -78,7 +78,7 @@ export const FnBLayout: FC<Props> = ({ children }) => {
 
           {/* Left navigation */}
 
-          <FnBLeftSideBar />
+          <FnbLeftSideBar />
 
           {/* Content area */}
           <main className="home-main-content home-main-content-v2 transition-all duration-500 ease-out overflow-auto relative">
