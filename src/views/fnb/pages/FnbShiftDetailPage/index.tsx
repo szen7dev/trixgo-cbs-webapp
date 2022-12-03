@@ -166,10 +166,44 @@ export const FnbShiftDetailPage: FC = () => {
 			</header>
 
 			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
+			<thead className="bg-cbs-table-header h-10 border-b border-primary-border">
+					<tr className="text-left text-sm text-primary-gray text-[14px]">
+						<th className="pb-1 pt-1 w-[50px] font-normal">
+							<div className="pl-2">
+								TT
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="pl-2">
+								Thời gian khởi tạo
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="pl-2">
+								Nội dung
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="pl-2">
+								Bàn giao nguyên liệu
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="pl-2">
+								Bàn giao tiền
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="pl-2">
+								Ghi chú
+							</div>
+						</th>
+					</tr>
+				</thead>
 				{
 					(listWithPager[pageIndex]??[]).map((item: any, i: any) => (
 						<tr key={item._id} className="text-[14px]">
-							<td className={"p-2 border-0.5 border-primary-border text-cente w-[75px]"}>
+							<td className={"p-2 border-0.5 border-primary-border text-cente"}>
 								<input
 									className="form-check-input"
 									type="checkbox"
@@ -178,16 +212,19 @@ export const FnbShiftDetailPage: FC = () => {
 								/>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
+								{moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
 								{item?.name}
 							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
+							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
 								<Link to ={`/fnb/shift/${item._id}/material`}>
-									Bàn giao nguyên liệu
+									Chi tiết
 								</Link>
 							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
+							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
 								<Link to ={`/fnb/shift/${item._id}/cash`}>
-									Bàn giao tiền
+									Chi tiết
 								</Link>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
