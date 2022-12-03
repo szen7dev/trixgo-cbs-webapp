@@ -46,17 +46,19 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 To learn React, check out the [React documentation](https://reactjs.org/).
 
 CÁC BƯỚC LÀM VIỆC VỚI MỘT ROUTE CĂN BẢN
-1. Tạo file để định nghĩa kiểu giá trị (Typing)
+1. Khai báo route (layout, view)
+
+2. Tạo file để định nghĩa kiểu giá trị (Typing)
 /src/typings/cmcs.d.ts
 
-2. Tạo file khai báo/quản lý việc lấy dữ liệu/làm việc với API
+3. Tạo file khai báo/quản lý việc lấy dữ liệu/làm việc với API
 src/apis/cmcs/index.ts
 src/apis/item/contract/index.ts => Cho riêng phần hợp đồng
 
-3. Tạo file useCMCS trong thư mục trên cơ sở Import API vào
+4. Tạo file useCMCS trong thư mục trên cơ sở Import API vào
 /src/services/hooks/useCmcs.ts
 
-4. Trở lại file view để đưa data vào
+5. Trở lại file view để đưa data vào
 - Import Hooks
 - Khai báo Data vào file quản lý chung các view con
 - Truyền Data vào view con qua Props

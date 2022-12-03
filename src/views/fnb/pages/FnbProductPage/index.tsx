@@ -29,6 +29,7 @@ export const FnBProductPage: FC = () => {
 	const [keyword, setKeyword] = useState("");
 
     const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbProduct({ params: { keyword: keyword }, isFetchList: true, isFetchInfo: false  });
+	console.log({listWithPager});
 
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
@@ -192,7 +193,7 @@ export const FnBProductPage: FC = () => {
 				</thead>
 				{
 					(listWithPager[pageIndex]??[]).map((item: any, i: any) => (
-						<tr key={item._id}>
+						<tr key={item._id} className="text-[14px]">
 							<td className={"p-2 border-0.5 border-primary-border text-center"}>
 								<input
 									className="form-check-input"
@@ -201,7 +202,7 @@ export const FnBProductPage: FC = () => {
 									onChange={() => onClickCheckButton(item._id)}
 								/>
 							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
+							<td className={"p-2 border-0.5 border-primary-border text-cbs-highlight-color"}>
 								<Link to ={`/fnb/product/${item._id}`}>
 									{item?.name}
 								</Link>

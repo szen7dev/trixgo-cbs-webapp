@@ -18,6 +18,8 @@ import { FnbLayout } from "views/fnb/shareComponents/layouts/FnbLayout";
 import { FnBHomePage } from "views/fnb/pages/FnbHomePage/index";
 import { FnBProductPage } from "views/fnb/pages/FnbProductPage/index";
 import { FnbProductQuotasPage } from "views/fnb/pages/FnbProductQuotasPage/index";
+import { FnbShiftPage } from "views/fnb/pages/FnbShiftPage/index";
+import { FnbReportPage } from "views/fnb/pages/FnbReportPage/index";
 
 const FnbRouter: FC = () => {
     return (
@@ -56,7 +58,27 @@ const FnbRouter: FC = () => {
                 path="/fnb/shift"
                 component={() =>
                     <FnbLayout>
-                        <FnBHomePage/>
+                        <FnbShiftPage/>
+                    </FnbLayout>
+                }
+            />
+
+            <Route
+                exact
+                path="/fnb/shift/:fundaID"
+                component={() =>
+                    <FnbLayout>
+                        <FnbShiftPage/>
+                    </FnbLayout>
+                }
+            />
+
+            <Route
+                exact
+                path="/fnb/report"
+                component={() =>
+                    <FnbLayout>
+                        <FnbReportPage/>
                     </FnbLayout>
                 }
             />

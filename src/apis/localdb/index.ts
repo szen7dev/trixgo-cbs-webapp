@@ -601,8 +601,8 @@ export const FNB_CAMPAIGN = [
 ]
 
 export const FNB_INTERNAL = [
-    { value: 1, text: 'Trong hệ thống' },
-    { value: 2, text: 'Ngoài hệ thống' },
+    { value: 1, text: 'Hệ thống' },
+    { value: 2, text: 'Đối tác nhượng quyền' },
 ]
 
 export const FNB_SEASONS = [
