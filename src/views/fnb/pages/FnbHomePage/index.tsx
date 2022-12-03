@@ -10,26 +10,16 @@ import "views/pcm/styles/pcm.module.css";
 import { DropdownSearchableV2, Loader } from "shareComponents/common";
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
 import userIcon from "assets/images/icon-user-avatar.svg";
-import maleUserIcon from "assets/images/icons8-male-user-64.svg";
-import categoryIcon from "assets/images/icons8-category-48.svg";
-import timeTableIcon from "assets/images/icons8-timetable-48.svg";
 import projectIcon from "assets/images/icons8-project-50.svg";
 import TriangleDown from "assets/icons/TriangleDown";
-import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
 import businessBuiding from "assets/images/icons8-business-building-48.svg";
-import iconChat from "assets/images/icons8-chat-96 1.svg";
-import iconTrash from "assets/images/icons8-delete-96 1.svg";
-import taskUserAvt from "assets/images/task-user.svg";
 import trashIcon from "assets/images/icons8-trash-96 1.svg";
 import mailIcon from "assets/images/icons8-email-96 1.svg";
 import moreIcon from "assets/images/moreIcon.svg";
 import arrowDown from "assets/images/icon-arrowdown.svg";
-import defaultAva from "assets/images/image 166.jpg";
-import icons8pdf from "assets/images/icons8-pdf-100 1.svg";
 import arrowDownRed from "assets/images/Arrow 1 (1) 1.svg";
 import dotGreen from "assets/images/Frame 4283.svg";
 import iconShift from "assets/images/icons8-shift-100 1.svg";
-import iconChannel from "assets/images/icons8-omnichannel-96 1.svg";
 import iconSandtime from "assets/images/icons8-sand-timer-96 1.svg";
 import iconOk from "assets/images/icons8-ok-96 1.svg";
 import iconWarning from "assets/images/icons8-high-risk-96 1.svg";
@@ -39,7 +29,6 @@ import iconDown from "assets/images/icons8-download-64 1.svg";
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 import { useUserSystem } from "services/hooks/users/useUserSystem";
 import { useAuth } from "services/hooks/auth/useAuth";
@@ -139,7 +128,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
   // Người tạo
   const [authors, setAuthors] = useState<string[]>([]);
 
-  ////  Danh sách user
+  // Danh sách user
   const [searchUserSystem, setSearchUserSystem] = useState("");
   const {
     data: listUsersSystem,
@@ -158,7 +147,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
 
   const [fromCreateDate, setFromCreateDate] = useState("1990/01/01");
   const [toCreateDate, settoCreateDate] = useState("2999/12/31");
-  ////  Dự án
+  // Dự án
   const [project, setProject] = useState<string[]>([]);
   const [searchProject, setSearchProject] = useState("");
 
@@ -179,10 +168,8 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
       fetchNextPagePrject();
     }
   };
-  //
 
   // Danh sách các response
-
   const query: any = {
     ...queryResponse,
     keyword: keywordForResponse,
@@ -218,7 +205,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
   const [status, setStatus] = useState<string[]>([]);
 
   // Danh sách các subject theo keyword
-
   const querySearchTask: any = {
     keyword: keywordForSubject,
     fromDate: fromExpiredDate,
