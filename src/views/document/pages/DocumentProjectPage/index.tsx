@@ -3,6 +3,7 @@ import { Link, useParams, useLocation } from "react-router-dom";
 import { Transition } from "@headlessui/react";
 import { toast } from "react-toastify";
 import moment from "moment";
+import { read, utils } from 'xlsx';
 
 // ========== Context ==========
 import { ModalContext } from "views/document/contexts/modal";
@@ -23,7 +24,7 @@ import {
 import { useQueryDetailDepartment } from "services/hooks/items/useDepartment";
 import { useMutationDocumentChild } from "services/hooks/document/useDocumentChild";
 import { useHistoryTraffics } from "services/hooks/auth/useAuth";
-import {useDocumentCustom, useListFilterDocument} from "services/hooks/document/useDocument";
+import { useDocumentCustom, useListFilterDocument } from "services/hooks/document/useDocument";
 
 // ========== Utils ==========
 import {APP_ID, DIRECTION_TYPES, DOCUMENT_TYPES, DOCUMENT_TYPES_SORT} from 'apis/localdb';
@@ -105,9 +106,13 @@ export const DocumentProjectPage: FC = () => {
     const location = useLocation()
     const { id: departmentID } = useParams<{ id: string }>();
     const [isShow, setIsShow] = useState<boolean>(false);
+
+    //_____Import, export excel
+    const [dataImport, setDataImport] = useState([]);
     const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
         isExporting: false,
     });
+
     const [fromToDate, setFromToDate] = useState({fromDate: "", toDate: ""})
 
     const [keywordDatahubContact, setKeywordDatahubContact] = useState("");
@@ -143,7 +148,7 @@ export const DocumentProjectPage: FC = () => {
         isFetchList: true
     });
 
-    const { exportDocumentAsync } = useDocumentCustom({});
+    const { importDocumentFromExcelAsync, exportDocumentAsync } = useDocumentCustom({});
     const { onFetchDetailDepartmentAsync } = useQueryDetailDepartment();
     const { insertDocumentChildAsync, updateDocumentChildAsync } = useMutationDocumentChild();
     const { toggleModal, updateModal } = useContext(ModalContext);
@@ -231,6 +236,42 @@ export const DocumentProjectPage: FC = () => {
         createHistoryTraffics({...payloadHistoryTraffic, type: 1});
     }, []);
 
+    /**
+     * 
+     * Xử lý download template excel
+     */
+    const handleDownloadTemplateImportExcel = async () => {
+		try {
+            setStateExport({ isExporting: true });
+            const { error, data } = await exportDocumentAsync({
+                filterParams: {  
+                    departmentsID: [departmentID],
+                    ...fromToDate,
+                    datahubContactsID,
+                    types,
+                    directions,
+                    contractsID,
+                    storagesID,
+                    keyword: keywordInput 
+                }
+            });
+
+            if(error) {
+                return toast.warn(data?.message);
+            }
+
+            data && createLinkAndClick(data, '_self');
+        } catch (error: any) {
+            toast.error(error.message)
+        } finally {
+            setStateExport({ isExporting: false });
+        }
+	}
+
+    /**
+     * 
+     * Tải dữ liệu excel
+     */
     const handleExport = async () => {
         try {
             setStateExport({ isExporting: true });
@@ -258,6 +299,53 @@ export const DocumentProjectPage: FC = () => {
             setStateExport({ isExporting: false });
         }
     }
+
+    /**
+     * Xử lý import excel (đọc file)
+     */
+    const handleImport = ($event: any) => {
+        const files = $event.target.files;
+        if (files.length) {
+            const file = files[0];
+            const reader = new FileReader();
+            reader.onload = (event: any) => {
+                const wb = read(event.target.result);
+                const sheets = wb.SheetNames;
+
+                if (sheets.length) {
+                    const rows: any = utils.sheet_to_json(wb.Sheets[sheets[1]]); // Index=1 (tức Sheet số 2 từ trái sang)
+                    
+                    // Set data để Import
+                    setDataImport(rows)
+                }
+            }
+            
+            reader.readAsArrayBuffer(file);
+        }
+
+        // Đọc xong thì xóa value trong Input đi
+        $event.target.value = null;
+    }
+
+    // Gọi tới API để đẩy data lên
+    useEffect(() => {
+        if(dataImport.length){
+            const fetchData = async () => {
+                const data = await importDocumentFromExcelAsync({ projectID, dataImport: JSON.stringify(dataImport) });
+                setDataImport([]);
+                // refetchTaskInfo?.()
+
+                if(!data.error){
+                    return toast.success("Import thành công");
+                }
+                return toast.error(data.message);
+            }
+
+            fetchData();
+        }
+        
+        console.log('=========DATA THAY ĐỔI RỒI==============')
+    }, [dataImport])
 
     const resetAllFilter = () => {
         datahubRef.current&&datahubRef.current.resetDropdown();
@@ -542,6 +630,16 @@ export const DocumentProjectPage: FC = () => {
                     >
                         <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"}/>
                     </button>
+                    <button className={"flex items-center justify-center mx-3 ml-3"}
+                            onClick={handleDownloadTemplateImportExcel}
+                        >
+                            Tải mẫu Import Excel
+                    </button>
+                    <button className={"flex items-center justify-center mx-3 ml-3"}>
+                            <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
+                            accept=".xlsx, .xlsm, .xls, .csv"/>
+                            <label className="custom-file-label" htmlFor="inputGroupFile">Import excel tạo hồ sơ</label>
+                    </button>
                     {
                         recordSelected._id&&
                         <button
@@ -573,6 +671,7 @@ export const DocumentProjectPage: FC = () => {
                 {(!listDocumentWithPager[pageIndex] || listDocumentWithPager[pageIndex].length === 0) && !isLoading && !isFetching && (
                     <h2 className="text-center">Không có kết quả được trả về</h2>
                 )}
+
                 {!isLoading && listDocumentWithPager[pageIndex] && listDocumentWithPager[pageIndex].length > 0 && (
                     <table
                         className="text-black text-medium border-separate space-x-0 space-y-0"
@@ -616,7 +715,7 @@ export const DocumentProjectPage: FC = () => {
                                 className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border"
                                 style={{ width: '10%' }}
                             >
-                                Địa chỉ lưu trữ 333
+                                Địa chỉ lưu trữ
                             </th>
                         </tr>
                         </thead>
@@ -749,4 +848,5 @@ export const DocumentProjectPage: FC = () => {
         </div>
     );
 };
+
 export default DocumentProjectPage;

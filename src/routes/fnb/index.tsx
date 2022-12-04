@@ -14,9 +14,13 @@ import ErrorPage from "views/authentication/Error";
 import {
     InspectionHomePage,
 } from "views/inspection/pages";
-import { FnBLayout } from "views/fnb/shareComponents/layouts/FnBLayout";
+import { FnbLayout } from "views/fnb/shareComponents/layouts/FnbLayout";
 import { FnBHomePage } from "views/fnb/pages/FnbHomePage/index";
 import { FnBProductPage } from "views/fnb/pages/FnbProductPage/index";
+import { FnbProductQuotasPage } from "views/fnb/pages/FnbProductQuotasPage/index";
+import { FnbShiftPage } from "views/fnb/pages/FnbShiftPage/index";
+import { FnbShiftDetailPage } from "views/fnb/pages/FnbShiftDetailPage/index";
+import { FnbReportPage } from "views/fnb/pages/FnbReportPage/index";
 
 const FnbRouter: FC = () => {
     return (
@@ -25,18 +29,28 @@ const FnbRouter: FC = () => {
                 exact
                 path="/fnb/home"
                 component={() =>
-                    <FnBLayout>
+                    <FnbLayout>
                         <FnBHomePage/>
-                    </FnBLayout>
+                    </FnbLayout>
                 }
             />
             <Route
                 exact
                 path="/fnb/product"
                 component={() =>
-                    <FnBLayout>
+                    <FnbLayout>
                         <FnBProductPage/>
-                    </FnBLayout>
+                    </FnbLayout>
+                }
+            />
+
+            <Route
+                exact
+                path="/fnb/product/:productID"
+                component={() =>
+                    <FnbLayout>
+                        <FnbProductQuotasPage/>
+                    </FnbLayout>
                 }
             />
             
@@ -44,9 +58,29 @@ const FnbRouter: FC = () => {
                 exact
                 path="/fnb/shift"
                 component={() =>
-                    <FnBLayout>
-                        <FnBHomePage/>
-                    </FnBLayout>
+                    <FnbLayout>
+                        <FnbShiftPage/>
+                    </FnbLayout>
+                }
+            />
+
+            <Route
+                exact
+                path="/fnb/shift/:fundaID"
+                component={() =>
+                    <FnbLayout>
+                        <FnbShiftDetailPage/>
+                    </FnbLayout>
+                }
+            />
+
+            <Route
+                exact
+                path="/fnb/report"
+                component={() =>
+                    <FnbLayout>
+                        <FnbReportPage/>
+                    </FnbLayout>
                 }
             />
             <Route path="/fnb/*" component={ErrorPage} />

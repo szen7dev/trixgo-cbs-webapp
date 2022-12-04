@@ -22,7 +22,7 @@ type Props = {
     handleSetValue: any,
     groupParentPicker: any,
     setGroupParentPicker: any,
-    initialValue: any
+    initialValue?: any
 };
 
 type GroupSearchableHandle = {

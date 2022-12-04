@@ -27,9 +27,10 @@ import { APP_ID } from "apis/localdb";
 import { IconButton, InputBase, Paper } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import { useModal } from "services/hooks/useModal";
-import { ModalAddNewTask } from "./ModalAddNewTask";
+import { ModalAddNewOrder } from "./ModalAddNewOrder";
+import { ModalAddNewContact } from "./ModalAddNewContact";
 
-export const FnBLeftSideBar: FC = () => {
+export const FnbLeftSideBar: FC = () => {
     const { user } = useAuth();
     const { openModal } = useModal();
     const [menuShowList, setMenuState] = useState(false);
@@ -46,7 +47,7 @@ export const FnBLeftSideBar: FC = () => {
                         onClick={() =>
                             openModal(
                                 <div className="t-add-new-task-dialog text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
-                                    <ModalAddNewTask />
+                                    <ModalAddNewOrder />
                                 </div>
                             )
                         }
@@ -59,32 +60,39 @@ export const FnBLeftSideBar: FC = () => {
                         <img width={'20px'} src={iconFolder} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Trang chủ</span>
                     </NavLink>
-                    <a href="#" className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                    <NavLink to={`/fnb/shift`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                         <img width={'20px'} src={iconFolder} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Ca làm việc</span>
-                    </a>
-                    {/* <a href="#" className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"> */}
+                    </NavLink>
                     <NavLink to={`/fnb/product`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                       
                         <img width={'20px'} src={iconFolder} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Thực đơn</span>
-                    {/* </a> */}
                     </NavLink>
-                    <a href="#" className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                    <NavLink to={`/fnb/report`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                         <img width={'20px'} src={iconFolder} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Báo cáo</span>
-                    </a>
-
+                    </NavLink>
                 </div>
                 <div>
-                    <div onClick={() => setMenuState(!menuShowList)} className="flex justify-between text-primary-gray px-4 py-1 cursor-pointer hover:bg-slate-200">
+                    <div className="flex justify-between text-primary-gray px-4 py-1 cursor-pointer hover:bg-slate-200">
                         <div>
-                            {(menuShowList ? <ExpandLessIcon sx={{ width: "24px", height: "24px" }} fontSize="small" /> : <ExpandMoreIcon sx={{ width: "24px", height: "24px" }} fontSize="small" />)}
+                            <ExpandMoreIcon sx={{ width: "24px", height: "24px" }} fontSize="small" />
                             <span className="ml-2 text-[14px] align-middle"> Khách hàng</span>
                         </div>
-                        <img src={iconPlus} alt="" />
+                        <button
+                            onClick={() =>
+                                openModal(
+                                    <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block"
+                                    style={{width:"600px"}}>
+                                        <ModalAddNewContact />
+                                    </div>
+                                )
+                            }
+                        >
+                            <img src={iconPlus} alt="" />
+                        </button>
                     </div>
-                    <div className={"transition-1s h-0 overflow-hidden " + (menuShowList ? ' h-[300px]' : '')}>
+                    <div className={"transition-1s overflow-hidden "}>
                         <div>
                             <div>
                                 <Paper

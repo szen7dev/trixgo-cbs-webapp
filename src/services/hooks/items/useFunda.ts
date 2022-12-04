@@ -9,8 +9,10 @@ import type { Funda } from 'typings/items';
 interface useFunda {
     isLoading: boolean;
     totalRecord: number;
+    totalPage: number;
     hasNextPage: boolean | undefined;
     list: Array<Funda.Funda>;
+    listWithPager: Array<Funda.Funda>;
     info: Funda.Funda | undefined;
     refetch: () => void;
     fetchNextPage: () => void;
@@ -87,14 +89,19 @@ export const useFunda = ({
         .map((d: any) => d.data?.listRecords))
         .filter(Boolean);
 
+    const listWithPager = (data?.pages || []).map((d: any) => d.data?.listRecords);
+
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
+    const totalPage = data?.pages[0]?.data?.totalPages || 0;
 
     // Return data
     return {
         isLoading,
         list,
+        listWithPager,
         info,
         totalRecord,
+        totalPage,
         hasNextPage,
         refetch,
         fetchNextPage,
