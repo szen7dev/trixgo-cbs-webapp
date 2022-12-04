@@ -12,7 +12,7 @@ async function fetchListAndInfo(params: any) {
     const { data } = await API.get(
         `${ITEM_URL}/contacts`, {
         params: {
-            select: 'name type company phone email birthday modifyAt',
+            select: 'name type company phone email birthday modifyAt createAt address',
             populates: {
                 path: 'company position',
                 select: 'sign name'

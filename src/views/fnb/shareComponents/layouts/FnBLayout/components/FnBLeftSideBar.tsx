@@ -1,6 +1,7 @@
 /*=====1.LIBRARY=====*/
 import { FC, useState } from "react";
 import { NavLink } from 'react-router-dom';
+import moment from "moment";
 
 /*=====2.CSS=====*/
 
@@ -22,6 +23,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { useAuth } from "services/hooks/auth/useAuth";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
+import { useContact } from 'services/hooks/items/useContact';
 
 /*=====7.OTHER=====*/
 import { IconButton, InputBase, Paper } from "@mui/material";
@@ -34,7 +36,26 @@ export const FnbLeftSideBar: FC = () => {
     const { user } = useAuth();
     const { openModal } = useModal();
     const [menuShowList, setMenuState] = useState(false);
-    const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.BUDGET.id });
+    const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
+
+    /**
+	 * List mẩu tin
+	 */
+    const [keyword, setKeyword] = useState("");
+    const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useContact({ 
+		params: { 
+			keyword: keyword,  
+			limit: 30,  
+			// productID, 
+			// populates: JSON.stringify({
+			// 	path: 'goods', select: "name unit"
+			// }) 
+		}, 
+		isFetchList: true, 
+		isFetchInfo: false
+	});
+
+    const [pageIndex, setPageIndex] = useState(0);
 
     return (
         <div className="t-leftsidebar-navigation t-leftsidebar-navigation-v2 t-leftsidebar-navigation-type2 fixed left-64px top-14 bottom-0 transition-all duration-500 ease-out border-secondary-light z-10 bg-primary-light">
@@ -112,26 +133,21 @@ export const FnbLeftSideBar: FC = () => {
                                 </Paper>
                             </div>
                             <div>
-                                <div className="flex gap-3 mt-3">
-                                    <img src={sampleAvaT} alt="" />
-                                    <div>
-                                        <div className="flex justify-between">
-                                            <div>Nguyễn Đắc Toàn</div>
-                                            <div className="text-cbs-subtext">15/2/22</div>
+                                {
+                                    (listWithPager[pageIndex]??[]).map((item: any, i: any) => (
+                                        <div key={item._id} className="flex gap-3 mt-3">
+                                            <div className="w-[28px] h-[28px] min-w-[28px] min-h-[28px] rounded-full flex items-center justify-center text-white text-lg min-w-[28px] min-h-[28px]" style={{ background: "#FCC4A2" }}>{item?.name.charAt(0)}</div>
+                                            {/* <img src={sampleAvaT} alt="" /> */}
+                                            <div className="w-full">
+                                                <div className="flex justify-between">
+                                                    <div>{item?.name}</div>
+                                                    <div className="text-cbs-subtext">{moment(item?.createAt).format('DD/MM/YY')}</div>
+                                                </div>
+                                                <div className="text-cbs-subtext">{item?.phone} - {item?.address}</div>
+                                            </div>
                                         </div>
-                                        <div className="text-cbs-subtext">0986777355 - Khách quen</div>
-                                    </div>
-                                </div>
-                                <div className="flex gap-3 mt-3">
-                                    <img src={sampleAvaT} alt="" />
-                                    <div>
-                                        <div className="flex justify-between">
-                                            <div>Nguyễn Đắc Toàn</div>
-                                            <div className="text-cbs-subtext">15/2/22</div>
-                                        </div>
-                                        <div className="text-cbs-subtext">0986777355 - Khách quen</div>
-                                    </div>
-                                </div>
+                                    ))
+                                }
                             </div>
                         </div>
                     </div>

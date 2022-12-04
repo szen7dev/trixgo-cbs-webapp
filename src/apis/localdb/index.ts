@@ -949,5 +949,8 @@ export const APP_ID = {
     },
     ACCOUNTING: {
         id: "61e049aefdebf77b072d1b12"
-    }
+    },
+    FNB: {
+        id: "61e04971fdebf77b072d1b0f",
+    },
 };

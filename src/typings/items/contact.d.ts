@@ -46,6 +46,7 @@ export interface Contact {
     timeMobilize?: number;
     factor?: number;
     phone?: string;
+    map: any; // Chưa rõ cái này để làm gì
 }
 
 /**
