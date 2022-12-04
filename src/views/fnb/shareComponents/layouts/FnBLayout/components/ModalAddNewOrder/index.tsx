@@ -38,7 +38,7 @@ import { useModal } from "services/hooks/useModal";
 // import IconClock from "assets/images/icons8-snooze-48 1.svg";
 // import RadioEmpty from "assets/images/Ellipse 27.svg";
 // import RadioChecked from "assets/images/icons8-checked-40 (2) 2.svg";
-// import IconMinus from "assets/images/icons8-reduce-96 1.svg";
+import IconMinus from "assets/images/icons8-reduce-96 1.svg";
 import ItemSample from "assets/images/image 430.jpg";
 import IconPlus from "assets/images/icons8-add-new-100 1.svg";
 import CheckBoxEmpty from "assets/images/Frame 3548.svg";
@@ -630,19 +630,32 @@ export const ModalAddNewOrder: FC<Props> = () => {
                               {/* <div className="flex gap-2 justify-end"> */}
                               <div className="flex justify-end">
                                 <span>Số lượng: </span>
-                                <input type="number" min="1" className="ml-2 w-[40px]" defaultValue={1} onChange={e => handleChangeQuantity(e, product)} />
-                                {/* <button><img src={IconMinus} alt="" /></button>
-                                <span> 1 </span>
-                                <button><img src={IconPlus} alt="" /></button> */}
+                                <div className="flex gap-2 justify-end">
+                                  <button><img src={IconMinus} alt="" /></button>
+                                  <input type="number" min="1" className="ml-2 w-[40px]" defaultValue={1} onChange={e => handleChangeQuantity(e, product)} />
+                                  <button><img src={IconPlus} alt="" /></button>
+                                </div>
                               </div>
-                              {/* <div className="flex flex-wrap w-4/5">
+                              <div className="flex flex-wrap w-4/5">
                                 <div className="w-1/4 pb-2 pr-2">
                                   <CustomCheckboxToggle /> Pudding trứng
                                 </div>
                                 <div className="w-1/4 pb-2 pr-2">
                                   <CustomCheckboxToggle /> Pudding trứng
                                 </div>
-                              </div> */}
+                                <div className="w-1/4 pb-2 pr-2">
+                                  <CustomCheckboxToggle /> Pudding trứng
+                                </div>
+                                <div className="w-1/4 pb-2 pr-2">
+                                  <CustomCheckboxToggle /> Pudding trứng
+                                </div>
+                                <div className="w-1/4 pb-2 pr-2">
+                                  <CustomCheckboxToggle /> Pudding trứng
+                                </div>
+                                <div className="w-1/4 pb-2 pr-2">
+                                  <CustomCheckboxToggle /> Pudding trứng
+                                </div>
+                              </div>
                             </div>
                           </div>
                         ))}
