@@ -928,7 +928,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                    <tr key={item._id}
                     className={"border-b-0.5 border-primary-border bg-white hover:shadow-md hover:z-2 hover:relative text-[14px]"}
                   >
-                    <td className={"w-[85px]"}>
+                    <td className={"w-[50px]"}>
                       <div
                         className={"flex gap-4  p-4"}
                       >
@@ -939,7 +939,16 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                           id="check"
                           style={{ width: "16px", height: "16px", marginTop: "5px" }}
                         />
-                        <StarToggle />
+                        {/* <StarToggle /> */}
+                      </div>
+                    </td>
+                    <td className={"px-1 py-2"}>
+                      <div
+                        className={
+                          ""
+                        }
+                      >
+                        {moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
                       </div>
                     </td>
                     <td className={"w-[50px]"}>
@@ -1012,15 +1021,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                     <td className={"px-1 py-2"}>
                       <div>
                         {FNB_SERVICE[Number(item?.service)-1]?.text}
-                      </div>
-                    </td>
-                    <td className={"px-1 py-2"}>
-                      <div
-                        className={
-                          "task-date whitespace-nowrap"
-                        }
-                      >
-                        {moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
                       </div>
                     </td>
                     <td className={"px-2 py-2"}>
