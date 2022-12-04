@@ -28,7 +28,7 @@ async function fetchListFunda(params: any) {
     const { data } = await API.get(
         `${ITEM_URL}/fundas`, {
         params: {
-            select: 'name description modifyAt userUpdate amountChilds sign',
+            // select: 'name description modifyAt userUpdate amountChilds sign',
             populates: {
                 path: 'parent userUpdate',
                 select: 'name description bizfullname'

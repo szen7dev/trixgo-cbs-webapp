@@ -1,1 +1,0 @@
-# This Is A Web Application For Core Build Solutions Platform

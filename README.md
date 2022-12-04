@@ -45,20 +45,25 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
-CÁC BƯỚC LÀM VIỆC VỚI API
-1. Tạo file useCMCS trong thư mục 
-/src/services/hooks/useCmcs.ts
+CÁC BƯỚC LÀM VIỆC VỚI MỘT ROUTE CĂN BẢN
+1. Khai báo route (layout, view)
+
 2. Tạo file để định nghĩa kiểu giá trị (Typing)
 /src/typings/cmcs.d.ts
+
 3. Tạo file khai báo/quản lý việc lấy dữ liệu/làm việc với API
 src/apis/cmcs/index.ts
 src/apis/item/contract/index.ts => Cho riêng phần hợp đồng
-4. Quay lại /src/services/hooks/useCmcs.ts để Import thông tin từ Bước 3
-và khai báo các dữ liệu trả về
+
+4. Tạo file useCMCS trong thư mục trên cơ sở Import API vào
+/src/services/hooks/useCmcs.ts
+
 5. Trở lại file view để đưa data vào
 - Import Hooks
 - Khai báo Data vào file quản lý chung các view con
 - Truyền Data vào view con qua Props
+- View: hiển thị mẩu tin, modal thêm sửa mẩu tin
+
 =================
 https://gitlab.com/hiepyen/cbs_webapp/-/commit/14fe624f6da4e93a19966f6a04e341c6b592417d
 1-Vào file src/apis/task/index.ts

@@ -204,6 +204,7 @@ export const usePcmReportCustom = ({
     }
 }
 
+// Khai báo kiểu
 type UsePcmPlanTaskCustom = {
     downloadExcelTaskAsync: (payload: PcmPlanTaskDownloadExcelPayload) => Promise<any>,
     downloadTemplateImportExcelTaskAsync: (payload: { projectID: string }) => Promise<any>,
@@ -214,7 +215,7 @@ type UsePcmPlanTaskCustomParams = {
     params?: any
 }
 
-// custom hook mới cho task
+// Custom hook mới cho Task
 export const usePcmPlanTaskCustom = ({params = {}}: UsePcmPlanTaskCustomParams) : UsePcmPlanTaskCustom => {
     
     const { mutateAsync: downloadExcelTaskAsync } =

@@ -45,6 +45,7 @@ export interface Contact {
     name?: string;
     timeMobilize?: number;
     factor?: number;
+    phone?: string;
 }
 
 /**

@@ -1,57 +1,70 @@
+/*=====1.LIBRARY=====*/
 import React, { FC, useState, UIEvent, useEffect } from "react";
-import moment from "moment";
 import { Link } from "react-router-dom";
+import moment from "moment";
 import parse from "html-react-parser";
-import { useQueryListCompany } from "services/hooks/useCompanies";
+import { debounce } from "lodash";
+import { useDispatch } from "react-redux";
+import { formatNumberMoney } from "utils/converter";
+
+/*=====2.CSS=====*/
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "views/pcm/styles/pcm.module.css";
 
-import { DropdownSearchableV2, Loader } from "shareComponents/common";
-import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
+/*=====3.ICONS=====*/
 import userIcon from "assets/images/icon-user-avatar.svg";
-import maleUserIcon from "assets/images/icons8-male-user-64.svg";
-import categoryIcon from "assets/images/icons8-category-48.svg";
-import timeTableIcon from "assets/images/icons8-timetable-48.svg";
 import projectIcon from "assets/images/icons8-project-50.svg";
 import TriangleDown from "assets/icons/TriangleDown";
-import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
 import businessBuiding from "assets/images/icons8-business-building-48.svg";
-import iconChat from "assets/images/icons8-chat-96 1.svg";
-import iconTrash from "assets/images/icons8-delete-96 1.svg";
-import taskUserAvt from "assets/images/task-user.svg";
-import trashIcon from "assets/images/icons8-trash-96 1.svg";
+import updateIcon from "assets/images/icons8-pencil-96.svg";
 import mailIcon from "assets/images/icons8-email-96 1.svg";
 import moreIcon from "assets/images/moreIcon.svg";
 import arrowDown from "assets/images/icon-arrowdown.svg";
-import defaultAva from "assets/images/image 166.jpg";
-import icons8pdf from "assets/images/icons8-pdf-100 1.svg";
-import arrowDownRed from "assets/images/Arrow 1 (1) 1.svg";
-import dotGreen from "assets/images/Frame 4283.svg";
 import iconShift from "assets/images/icons8-shift-100 1.svg";
-import iconChannel from "assets/images/icons8-omnichannel-96 1.svg";
 import iconSandtime from "assets/images/icons8-sand-timer-96 1.svg";
 import iconOk from "assets/images/icons8-ok-96 1.svg";
 import iconWarning from "assets/images/icons8-high-risk-96 1.svg";
-import iconCalendar from "assets/images/icons8-calendar-96 2.svg";
 import iconSupport from "assets/images/icons8-online-support-96 1.svg";
 import iconDown from "assets/images/icons8-download-64 1.svg";
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import { Popover } from "@mui/material";
+import ChartRevenueByHour from "./components/chart";
 
-import { useUserSystem } from "services/hooks/users/useUserSystem";
+import offlineChannelIcon from "assets/images/fnb/offline.svg";
+import grabChannelIcon from "assets/images/fnb/grab.svg";
+import shopeeChannelIcon from "assets/images/fnb/shopee.svg";
+import gojekChannelIcon from "assets/images/fnb/gojek.svg";
+import baemineChannelIcon from "assets/images/fnb/baemin.svg";
+import loshipChannelIcon from "assets/images/fnb/loship.svg";
+
+/*=====4.PAGES/COMPONENTS=====*/
+import { DropdownSearchableV2, Loader } from "shareComponents/common";
+import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
+import PaginateV2 from "shareComponents/common/PaginateV2";
+import { UpdateStatusDialog } from "./UpdateStatusDialog";
+import { ModalCreateResultSearch } from "./ModalCreateResultSearch";
+import { ModalDetailItem } from "./components/ModalDetailItem/index";
+import { ModalErrorDetailItem } from "./components/ModalErrorDetailItem";
+
+/*=====5.TYPINGS=====*/
+
+/*=====6.HOOKS/APIS=====*/
+import { useQueryListCompany } from "services/hooks/useCompanies";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { useAppSelector } from "redux/reducer";
+import { useUserSystem } from "services/hooks/users/useUserSystem";
+import { useQueryListDepartmentsIsMember } from "services/hooks/items/useDepartment";
+import { useSearchTask } from "services/hooks/useMainSearch";
+import { useTask } from "services/hooks/useTask";
+import { useModal } from "services/hooks/useModal";
 import {
   useListFileFromSearch,
   useListResponseFromSearch,
   usePcmPlanTaskNotification,
 } from "services/hooks/pcm/usePcmDashboardV2";
-import { debounce } from "lodash";
-import { useQueryListDepartmentsIsMember } from "services/hooks/items/useDepartment";
-import { useDispatch } from "react-redux";
 import {
   resetFilterDashboard,
   setQueryFile,
@@ -60,21 +73,60 @@ import {
   setTabActive,
   setTabIndex,
 } from "redux/reducer/DashboardV2Slice";
-import { useSearchTask } from "services/hooks/useMainSearch";
-import { humanFileSize } from "utils/converter";
-import PaginateV2 from "shareComponents/common/PaginateV2";
-import { useTask } from "services/hooks/useTask";
-import { useModal } from "services/hooks/useModal";
-import { UpdateStatusDialog } from "./UpdateStatusDialog";
-import { ModalCreateResultSearch } from "./ModalCreateResultSearch";
-import { Popover } from "@mui/material";
-import ChartRevenueByHour from "./components/chart";
+
+import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
+
+/*=====7.OTHER=====*/
+import { FNB_CHANNEL, FNB_SERVICE, FNB_PAYMENT, FNB_ORDER_STATUS } from "apis/localdb";
 
 type Props = {
   type?: number;
 };
 
 export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
+
+  useEffect(() => {
+		document.title = "Trixgo | FnB";
+	}, []);
+
+  const [keyword, setKeyword] = useState("");
+  const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbOrder({ 
+		params: { 
+      limit: 50,
+			keyword: keyword, 
+			// fundaID, 
+			populates: JSON.stringify({
+				path: 'funda', select: "name sign address"
+			}) 
+		}, isFetchList: true, isFetchInfo: false  });
+	// console.log({listWithPager});
+
+  // Hàm trả về icon app
+  const getIconApp = (salesChannel: any) => {
+    switch (salesChannel) {
+      case 1:
+        return offlineChannelIcon
+
+      case 2:
+        return grabChannelIcon
+
+      case 3:
+        return shopeeChannelIcon
+
+      case 4:
+        return gojekChannelIcon
+
+      case 5:
+        return baemineChannelIcon
+
+      case 6:
+        return loshipChannelIcon
+
+      default:
+        return offlineChannelIcon
+    }
+  }
+
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   const dispatch = useDispatch();
   const [popBox1, setpopBox1] = React.useState(false)
@@ -139,7 +191,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
   // Người tạo
   const [authors, setAuthors] = useState<string[]>([]);
 
-  ////  Danh sách user
+  // Danh sách user
   const [searchUserSystem, setSearchUserSystem] = useState("");
   const {
     data: listUsersSystem,
@@ -158,7 +210,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
 
   const [fromCreateDate, setFromCreateDate] = useState("1990/01/01");
   const [toCreateDate, settoCreateDate] = useState("2999/12/31");
-  ////  Dự án
+  // Dự án
   const [project, setProject] = useState<string[]>([]);
   const [searchProject, setSearchProject] = useState("");
 
@@ -179,10 +231,8 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
       fetchNextPagePrject();
     }
   };
-  //
 
   // Danh sách các response
-
   const query: any = {
     ...queryResponse,
     keyword: keywordForResponse,
@@ -218,7 +268,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
   const [status, setStatus] = useState<string[]>([]);
 
   // Danh sách các subject theo keyword
-
   const querySearchTask: any = {
     keyword: keywordForSubject,
     fromDate: fromExpiredDate,
@@ -352,8 +401,8 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             isFetchingResponse ||
             isLoadingFile ||
             isFetchingFile) && <Loader className="border-primary" />}
-          {tabIndex === 1 && (
-            <DropdownSearchableV2
+          
+          <DropdownSearchableV2
               reset={reset}
               selectOneByOne={true}
               countBadge={queryResponse.companyOfAuthorsID.length}
@@ -422,9 +471,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
               }
             />
-          )}
 
-          {tabIndex === 1 && (
             <DropdownSearchableV2
               selectOneByOne={true}
               reset={reset}
@@ -523,9 +570,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 <img className={"mr-2"} src={iconShift} alt={"icon"} />
               }
             />
-          )}
 
-          {(tabIndex === 1) && (
             <DropdownSearchableV2
               selectOneByOne={true}
               reset={reset}
@@ -566,10 +611,8 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               renderItem={(item) => (
                 <p className={"min-w-[300px]"}>{item.text}</p>
               )}
-            />
-          )}
+            />      
 
-          {tabIndex === 1 && (
             <DropdownSearchableV2
               selectOneByOne={true}
               reset={reset}
@@ -606,10 +649,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 ref.current && ref.current.resetPaginate();
               }}
             />
-          )}
-
-          {(tabIndex === 1) && (
-            <TimeRangeDropdown
+          <TimeRangeDropdown
               className={
                 "mr-2 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
               }
@@ -644,9 +684,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 },
               ]}
             />
-          )}
 
-          {tabIndex === 1 && (
             <DropdownSearchableV2
               selectOneByOne={true}
               reset={reset}
@@ -683,9 +721,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 ref.current && ref.current.resetPaginate();
               }}
             />
-          )}
 
-          {tabIndex === 1 && (
             <DropdownSearchableV2
               selectOneByOne={true}
               reset={reset}
@@ -722,7 +758,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 ref.current && ref.current.resetPaginate();
               }}
             />
-          )}
 
           <button
             className={"border-primary border-0.5 bg-cbs-secondary rounded text-white px-4 h-[32px] mb-2"}
@@ -730,16 +765,15 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             Lọc
           </button>
 
-          {tabIndex === 2 && (
-            <button
-              className={"bg-green-success rounded text-white px-2 h-[32px] ml-2"}
+          <button
+              className={"bg-grey rounded px-2 h-[32px] ml-2"}
               onClick={onSaveResultSearch}
             >
               Lưu
             </button>
-          )}
-
         </div>
+
+        {/* Action bar */}
         <div className={"header-table flex px-4 w-full top-0 bg-white mb-1 pb-2"}>
           <div className={"flex gap-7 items-center justify-center mr-2"}>
             <div className="flex gap-2 items-center">
@@ -779,8 +813,9 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 </div>
               </div>
             </div>
+
             <div className="flex gap-7 items-center">
-              <button><img src={trashIcon} alt="" /></button>
+              <button><img src={updateIcon} alt="" /></button>
               <button><img src={mailIcon} alt="" /></button>
               <button onClick={() => setpopBox2(!popBox2)} className="relative w-[20px] h-[20px]">
                 <img src={moreIcon} className="m-auto" />
@@ -809,55 +844,22 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 </div>
               </button>
               <button className="text-cbs-schedule-expired">Hủy đơn</button>
-              <button className="text-cbs-schedule-nextweek">Gán lỗi gặp phải</button>
+              <button
+                className="text-cbs-schedule-nextweek"
+                onClick={() =>
+                  openModal(
+                    <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{width:"640px"}}>
+                      <ModalErrorDetailItem />
+                    </div>
+                  )
+                }
+              >
+                Gán lỗi gặp phải
+              </button>
               <button><img src={iconDown} alt="" /></button>
             </div>
           </div>
-          {/* <button
-            onClick={() => setFilter("all")}
-            className={
-              "py-1 px-6 mx-2 rounded-full border border-primary-border " +
-              (filter === "all"
-                ? "text-white bg-cbs-secondary border-none"
-                : "text-primary-gray bg-white")
-            }
-          >
-            Tất cả
-          </button>
-          <button
-            onClick={() => setFilter("unread")}
-            className={
-              "py-1 px-6 mx-2 rounded-full border border-primary-border " +
-              (filter === "unread"
-                ? "text-white bg-cbs-secondary border-none"
-                : "text-primary-gray bg-white")
-            }
-          >
-            Chưa đọc
-          </button>
-          <button
-            onClick={() => setFilter("read")}
-            className={
-              "py-1 px-6 mx-2 rounded-full border border-primary-border " +
-              (filter === "read"
-                ? "text-white bg-cbs-secondary border-none"
-                : "text-primary-gray bg-white")
-            }
-          >
-            Đã đọc
-          </button>
-          <button
-            className={"text-primary mx-2"}
-            onClick={() => setShowUpdateStatus(true)}
-          >
-            Đánh dấu tất cả đã đọc
-          </button> */}
-          {/* <button className={"flex items-center justify-center mx-3"}>
-            <img src={downloadIcon} alt={"-----"} />
-          </button>
-          <button className={"flex items-center justify-center mx-3"}>
-            <img src={sendMailIcon} alt={"-----"} />
-          </button> */}
+          {/* Chưa rõ chỗ này, hình như để phân trang */}
           <div className={"flex-1 flex items-center justify-end"}>
             <PaginateV2
               ref={ref}
@@ -913,201 +915,134 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
           </div>
         </div>
       </div>
+
+      {/* Dữ liệu chính */}
       <div className={"flex flex-1 overflow-y-auto gap-3 bg-cbs-table-highlight"}>
-        <div className="w-3/4">
+        {/* Danh sách đơn hàng */}
+        {/* <div className="w-3/4"> */}
+        <div>
           <table className={"w-full table-fixed tasks"}>
             <tbody>
-              <tr
-                className={"border-b-0.5 border-primary-border bg-white hover:shadow-md hover:z-2 hover:relative"}
-              >
-                <td className={"w-[85px]"}>
-                  <div
-                    className={"flex gap-4  p-4"}
+            {
+                (listWithPager[pageIndex]??[]).map((item: any, i: any) => (
+                   <tr key={item._id}
+                    className={"border-b-0.5 border-primary-border bg-white hover:shadow-md hover:z-2 hover:relative text-[14px]"}
                   >
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value=""
-                      id="check"
-                      style={{ width: "16px", height: "16px", marginTop: "5px" }}
-                    />
-                    <StarToggle />
-                  </div>
-                </td>
-                <td className={"w-[50px]"}>
-                  <Link to={""}>
-                    <div className={"py-2"}>
-                      <img
-                        src={userIcon}
-                        alt={"avatar"}
+                    <td className={"w-[50px]"}>
+                      <div
+                        className={"flex gap-4  p-4"}
+                      >
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          value=""
+                          id="check"
+                          style={{ width: "16px", height: "16px", marginTop: "5px" }}
+                        />
+                        {/* <StarToggle /> */}
+                      </div>
+                    </td>
+                    <td className={"px-1 py-2"}>
+                      <div
                         className={
-                          "w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"
+                          ""
                         }
-                        aria-owns={open ? "mouse-over-popover" : undefined}
-                        aria-haspopup="true"
-                        onMouseEnter={handlePopoverOpen}
-                        onMouseLeave={handlePopoverClose}
-                      />
-                    </div>
-                  </Link>
-                </td>
-                <td className={"w-[75px]"}>
-                  <Link to={""}>
-                    <div className={"user-infor py-2"}>
-                      <p className={"truncate user-infor-name text-[14px]"}>
-                        Shopee
-                      </p>
-                      <span className={"text-xs text-primary-gray py-2"}>16 mặt hàng</span>
-                    </div>
-                  </Link>
-                </td>
-                <td className={"w-1/4"}>
-                  <Link to={""}>
-                    <div className={"user-infor py-2"}>
-                      <p className={"truncate user-infor-name text-[14px]"}>
-                        <span className="rounded-md bg-cbs-orage text-white px-3 py-1 mr-3">
-                          02 lỗi
-                        </span>
-                        Đơn mang đi -
-                        <span className="text-cbs-primary">T39882</span>
-                      </p>
-                      <span className={"truncate text-xs  text-primary-gray py-2"}>100% đường, 100% đá, Topping Nha đam...</span>
-                    </div>
-                  </Link>
-                </td>
-                <td className={"w-[75px] py-2"}>
-                  <div className="text-cbs-primary">
-                    100003010
-                  </div>
-                </td>
-                <td className={"w-36	py-2"}>
-                  <div>
-                    Winggo Thái Thịnh
-                  </div>
-                </td>
-                <td className={"py-2"}>
-                  <div>
-                    Mang đi
-                  </div>
-                </td>
-                <td className={"px-1 py-2"}>
-                  <div
-                    className={
-                      "task-date whitespace-nowrap"
-                    }
-                  >
-                    23/11/2022 18:25
-                  </div>
-                </td>
-                <td className={"px-1 py-2"}>
-                  <div className="w-[70px] text-center rounded-md bg-cbs-schedule-after-7days text-white" style={{ fontSize: "10px" }}>
-                    Hoàn thành
-                  </div>
-                </td>
-                <td className={"w-[75px] py-2"}>
-                  <div>
-                    25.000đ
-                  </div>
-                </td>
-              </tr>
-              <tr
-                className={"border-b-0.5 border-primary-border bg-white hover:shadow-md hover:z-2 hover:relative"}
-              >
-                <td className={"w-[85px]"}>
-                  <div
-                    className={"flex gap-4  p-4"}
-                  >
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value=""
-                      id="check"
-                      style={{ width: "16px", height: "16px", marginTop: "5px" }}
-                    />
-                    <StarToggle />
-                  </div>
-                </td>
-                <td className={"w-[50px]"}>
-                  <Link to={""}>
-                    <div className={"py-2"}>
-                      <img
-                        src={userIcon}
-                        alt={"avatar"}
-                        className={
-                          "w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"
+                      >
+                        {moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
+                      </div>
+                    </td>
+                    <td className={"w-[50px]"}>
+                      <Link to={""}>
+                        <div className={"py-2"}>
+                          <img
+                            src={getIconApp(Number(item?.salesChannel))}
+                            alt={"avatar"}
+                            className={
+                              "w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"
+                            }
+                            aria-owns={open ? "mouse-over-popover" : undefined}
+                            aria-haspopup="true"
+                            onMouseEnter={handlePopoverOpen}
+                            onMouseLeave={handlePopoverClose}
+                          />
+                        </div>
+                      </Link>
+                    </td>
+                    <td className={"w-[90px] px-1 py-2"}>
+                      <button
+                        onClick={() =>
+                          openModal(
+                            <div className="t-add-new-task-dialog text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
+                              <ModalDetailItem />
+                            </div>
+                          )
                         }
-                        aria-owns={open ? "mouse-over-popover" : undefined}
-                        aria-haspopup="true"
-                        onMouseEnter={handlePopoverOpen}
-                        onMouseLeave={handlePopoverClose}
-                      />
-                    </div>
-                  </Link>
-                </td>
-                <td className={"w-[75px]"}>
-                  <Link to={""}>
-                    <div className={"user-infor py-2"}>
-                      <p className={"truncate user-infor-name text-[14px]"}>
-                        Shopee
-                      </p>
-                      <span className={"text-xs text-primary-gray py-2"}>16 mặt hàng</span>
-                    </div>
-                  </Link>
-                </td>
-                <td className={"w-1/4"}>
-                  <Link to={""}>
-                    <div className={"user-infor py-2"}>
-                      <p className={"truncate user-infor-name text-[14px]"}>
-                        <span className="rounded-md bg-cbs-orage text-white px-3 py-1 mr-3">
-                          02 lỗi
-                        </span>
-                        Đơn mang đi -
-                        <span className="text-cbs-primary">T39882</span>
-                      </p>
-                      <span className={"truncate text-xs  text-primary-gray py-2"}>100% đường, 100% đá, Topping Nha đam...</span>
-                    </div>
-                  </Link>
-                </td>
-                <td className={"w-[75px] py-2"}>
-                  <div className="text-cbs-primary">
-                    100003010
-                  </div>
-                </td>
-                <td className={"w-36	py-2"}>
-                  <div>
-                    Winggo Thái Thịnh
-                  </div>
-                </td>
-                <td className={"py-2"}>
-                  <div>
-                    Mang đi
-                  </div>
-                </td>
-                <td className={"px-1 py-2"}>
-                  <div
-                    className={
-                      "task-date whitespace-nowrap"
-                    }
-                  >
-                    23/11/2022 18:25
-                  </div>
-                </td>
-                <td className={"px-1 py-2"}>
-                  <div className="w-[70px] text-center rounded-md bg-cbs-schedule-expired text-white" style={{ fontSize: "10px" }}>
-                    Đã hủy
-                  </div>
-                </td>
-                <td className={"w-[75px] py-2"}>
-                  <div>
-                    25.000đ
-                  </div>
-                </td>
-              </tr>
+                      >
+                        <div className={"user-infor py-2"}>
+                          <p className={"truncate user-infor-name text-[14px]  text-left"}>
+                            {FNB_CHANNEL[Number(item?.salesChannel)-1]?.text}
+                          </p>
+                          {/* <span className={"text-xs text-primary-gray py-2  text-left"}>{item?.numberOfProducts} mặt hàng</span> */}
+                        </div>
+                      </button>
+                    </td>
+                    <td className={"px-1 py-2 w-1/4"}>
+                      <button
+                        onClick={() =>
+                          openModal(
+                            <div className="t-add-new-task-dialog text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
+                              <ModalDetailItem />
+                            </div>
+                          )
+                        }
+                      >
+                        <div className={"user-infor py-2"}>
+                          <p className={"truncate user-infor-name text-[14px]"}>
+                            {/* <span className="rounded-md bg-cbs-orage text-white px-3 py-1 mr-3">
+                              02 lỗi
+                            </span> */}
+                            {FNB_SERVICE[Number(item?.service)-1]?.text} - 
+                            <span className="text-cbs-primary">{item?.name}</span>
+                          </p>
+                          {/* <span className={"truncate text-xs text-primary-gray py-2"}>{item?.note}</span> */}
+                        </div>
+                      </button>
+                    </td>
+                    <td className={"px-1 py-2"}>
+                      <div className="text-cbs-primary">
+                        {item?.appOrderSign}
+                      </div>
+                    </td>
+                    <td className={"px-1 py-2"}>
+                      <div>
+                        {item?.funda?.name}
+                      </div>
+                    </td>
+                    <td className={"px-1 py-2"}>
+                      <div>
+                        {FNB_SERVICE[Number(item?.service)-1]?.text}
+                      </div>
+                    </td>
+                    <td className={"px-2 py-2"}>
+                      <div className="w-[70px] text-center rounded-md bg-cbs-schedule-after-7days text-white" style={{ fontSize: "12px" }}>
+                        {FNB_ORDER_STATUS[Number(item?.status)-1]?.text}
+                      </div>
+                    </td>
+                    <td className={"text-right px-2 py-2"}>
+                      <div>
+                        {formatNumberMoney(item?.total||0)} đ
+                      </div>
+                    </td>
+                  </tr>
+              ))}
+             
             </tbody>
 
           </table>
         </div>
-        <div className="w-1/4 mt-3">
+
+        {/* Báo cáo quản trị */}
+        {/* <div className="w-1/4 mt-3">
           <div className="bg-white border-0.5 border-second-color-border py-6 px-3">
             <button className="m-auto font-bold text-cbs-fnb-bg flex items-center">Winggo Thái thịnh <ExpandMoreIcon /></button>
             <button className="flex items-center m-auto"><img src={iconCalendar} alt="" />
@@ -1172,8 +1107,9 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               <ChartRevenueByHour />
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
+
       <UpdateStatusDialog
         showUpdateStatus={showUpdateStatus}
         setShowUpdateStatus={setShowUpdateStatus}
