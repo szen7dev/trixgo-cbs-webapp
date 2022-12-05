@@ -158,6 +158,14 @@ export const ModalAddNewOrder: FC<Props> = () => {
     )
   }
 
+  const [count, setCount] = useState(0);
+  const increaseCount = () => {
+    setCount(count + 1);
+  };
+  const decreaseCount = () => {
+    setCount(count + 1);
+  };
+
   const { list: contacts } = useContact({
     isFetchList: true,
   })
@@ -632,10 +640,13 @@ export const ModalAddNewOrder: FC<Props> = () => {
                               {/* <div className="flex gap-2 justify-end"> */}
                               <div className="flex justify-end">
                                 {/* <span>Số lượng: </span> */}
-                                <div className="flex gap-2 justify-end">
-                                  <button><img src={IconMinus} alt="" /></button>
-                                  <input type="number" min="1" className="ml-2 w-[40px]" defaultValue={1} onChange={e => handleChangeQuantity(e, product)} />
-                                  <button><img src={IconPlus} alt="" /></button>
+                                <div className="flex gap-2 justify-end items-center">
+                                  {/* <button onClick={decreaseCount}><img src={IconMinus} alt="" /></button>
+                                  <input type="number" min="1" className="ml-2 w-[40px]" defaultValue={count} onChange={e => handleChangeQuantity(e, product)} />
+                                  <button onClick={increaseCount}><img src={IconPlus} alt="" /></button> */}
+                                  <button onClick={decreaseCount}><img src={IconMinus}/></button>
+                                  <span  onChange={e => handleChangeQuantity(e, product)} >{count}</span>
+                                  <button onClick={increaseCount}><img src={IconPlus}/></button>
                                 </div>
                               </div>
                               <div className="flex flex-wrap w-4/5">
