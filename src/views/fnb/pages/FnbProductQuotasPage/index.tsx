@@ -34,7 +34,7 @@ export const FnbProductQuotasPage: FC = () => {
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
     const { info: infoProduct } = useFnbProduct({ params: { productID }, isFetchList: false, isFetchInfo: true  });
-	console.log({ infoProduct });
+	// console.log({ infoProduct });
     const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbQuota({ 
 		params: { 
 			keyword: keyword, 

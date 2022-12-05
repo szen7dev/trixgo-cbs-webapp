@@ -14,7 +14,7 @@ import PencilIcon from "assets/images/icons8-pencil-96.svg";
 /*=====4.PAGES/COMPONENTS=====*/
 import { SearchInput, ModalContainer } from "shareComponents/common";
 import PaginateV2 from "shareComponents/common/PaginateV2";
-// import { CreateFnbProductQoutas } from "./modal";
+import { CreateFnbShiftDetail } from "./modal";
 
 /*=====5.TYPINGS=====*/
 
@@ -78,11 +78,11 @@ export const FnbShiftDetailPage: FC = () => {
 		}
 	};
 
-	const [modalCreateProject, setModalCreateProject] = useState<boolean>(false);
-	const toggleModalCreateProject = () => setModalCreateProject(!modalCreateProject);
+	const [modalCreateShiftDetail, setModalCreateShiftDetail] = useState<boolean>(false);
+	const toggleModalCreateShiftDetail = () => setModalCreateShiftDetail(!modalCreateShiftDetail);
 
 	const [initialValues, setInitialValues] = useState(null);
-	const onConfirmCreateProject = () => refetch();
+	const onConfirmCreateShiftDetail = () => refetch();
 
 	useEffect(() => {
 		if (isSuccess && !(hasPermission && dataUserAccess?.level == 0)) {
@@ -128,7 +128,7 @@ export const FnbShiftDetailPage: FC = () => {
 											startTime: item.startTime ? moment(item.startTime).format('MM/DD/YYYY') : '',
 											expiredTime: item.expiredTime ? moment(item.expiredTime).format('MM/DD/YYYY') : '',
 										});
-										toggleModalCreateProject();
+										toggleModalCreateShiftDetail();
 									}}
 								>
 									<img src={PencilIcon} alt="Pencil" />
@@ -143,7 +143,7 @@ export const FnbShiftDetailPage: FC = () => {
 						className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold ml-6"
 						onClick={() => {
 							setInitialValues(null);
-							toggleModalCreateProject();
+							toggleModalCreateShiftDetail();
 						}}
 					>
 						Tạo mới
@@ -238,17 +238,17 @@ export const FnbShiftDetailPage: FC = () => {
 				))}
 			</table>
 
-			{/* <ModalContainer isModalOpen={modalCreateProject} toggle={toggleModalCreateProject}>
+			<ModalContainer isModalOpen={modalCreateShiftDetail} toggle={toggleModalCreateShiftDetail}>
 				<div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light">
-					<CreateFnbProductQoutas
+					<CreateFnbShiftDetail
 						modalType={initialValues ? "update" : "create"}
-						show={modalCreateProject}
-						toggle={toggleModalCreateProject}
+						show={modalCreateShiftDetail}
+						toggle={toggleModalCreateShiftDetail}
 						initialValues={initialValues ? initialValues : undefined}
-						onConfirm={onConfirmCreateProject}
+						onConfirm={onConfirmCreateShiftDetail}
 					/>
 				</div>
-			</ModalContainer> */}
+			</ModalContainer>
 
 		</main>
 	);
