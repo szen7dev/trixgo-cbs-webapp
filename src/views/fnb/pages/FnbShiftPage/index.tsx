@@ -38,29 +38,29 @@ export const FnbShiftPage: FC = () => {
 	useEffect(() => {
 		document.title = "Trixgo | FnB";
 	}, []);
-	
+
 	const history = useHistory();
 	const { productID } = useParams<{ productID: string }>();
 	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
-    const { info: infoProduct } = useFnbProduct({ params: { productID }, isFetchList: false, isFetchInfo: true  });
+	const { info: infoProduct } = useFnbProduct({ params: { productID }, isFetchList: false, isFetchInfo: true });
 	// console.log({ infoProduct });
 
 	/**
 	 * List mẩu tin
 	 */
-    const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFunda({ 
-		params: { 
-			keyword: keyword,  
-			limit: 30,  
+	const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFunda({
+		params: {
+			keyword: keyword,
+			limit: 30,
 			// productID, 
 			// populates: JSON.stringify({
 			// 	path: 'goods', select: "name unit"
 			// }) 
-		}, 
-		isFetchList: true, 
+		},
+		isFetchList: true,
 		isFetchInfo: false
 	});
 	// console.log({listWithPager});
@@ -100,16 +100,16 @@ export const FnbShiftPage: FC = () => {
 	}, [hasPermission, dataUserAccess]);
 
 	type PaginateHandle = React.ElementRef<typeof PaginateV2>;
-    const ref = React.useRef<PaginateHandle>(null);
-    const [pageIndex, setPageIndex] = useState(0);
+	const ref = React.useRef<PaginateHandle>(null);
+	const [pageIndex, setPageIndex] = useState(0);
 
 	return (
 		<main className="h-full overflow-auto">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
 				<div className="flex items-center">
 					<button onClick={history.goBack}>
-                        <img src="/images/common/button_back.png" alt="Button Back" />
-                    </button>
+						<img src="/images/common/button_back.png" alt="Button Back" />
+					</button>
 					<p className="text-lg">{infoProduct?.name}</p>
 					<SearchInput
 						classNameWrapper="ml-4"
@@ -127,8 +127,8 @@ export const FnbShiftPage: FC = () => {
 							</div> */}
 							{idsChecked.length == 1 ?
 								<>
-								<div
-									className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
+									<div
+										className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
 									// onClick={() => {
 									// 	const item = listWithPager[pageIndex].find((e: any) => e._id == idsChecked[0]);
 									// 	setInitialValues({
@@ -138,10 +138,10 @@ export const FnbShiftPage: FC = () => {
 									// 	});
 									// 	toggleModalCreateProject();
 									// }}
-								>
-									<img src={PencilIcon} alt="Pencil" />
-								</div>
-							</> : <></>
+									>
+										<img src={PencilIcon} alt="Pencil" />
+									</div>
+								</> : <></>
 							}
 						</div>
 					) : <></>}
@@ -161,95 +161,62 @@ export const FnbShiftPage: FC = () => {
 					</button> */}
 				</div>
 				<PaginateV2
-                        ref={ref}
-                        totalRecord={totalRecord}
-                        totalPages={totalPage}
-                        limit={20}
-                        hasNextPage={hasNextPage}
-                        isFetching={isLoading}
-                        nextPageAction={() => {
-                            fetchNextPage();
-                            setPageIndex(oldState => oldState+1)
-                        }}
-                        prevPageAction={() => {
-                            setPageIndex(oldState => oldState-1)
-                        }}
-                    />
+					ref={ref}
+					totalRecord={totalRecord}
+					totalPages={totalPage}
+					limit={20}
+					hasNextPage={hasNextPage}
+					isFetching={isLoading}
+					nextPageAction={() => {
+						fetchNextPage();
+						setPageIndex(oldState => oldState + 1)
+					}}
+					prevPageAction={() => {
+						setPageIndex(oldState => oldState - 1)
+					}}
+				/>
 			</header>
 
-			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
-				<thead className="bg-cbs-table-header h-10 border-b border-primary-border">
-					<tr className="text-left text-sm text-primary-gray">
-						<th className="pb-1 pt-1 text-center" style={{ width: "3.5%" }}>
-							<div className="border-r-2 border-gray-300 flex items-center justify-center">
-								<input
-									className="form-check-input"
-									type="checkbox"
-									checked={getStateCheckedAll()}
-									onChange={() => onClickCheckAll()}
-								/>
-							</div>
-						</th>
-						<th className="pb-1 pt-1 w-1/4">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Tên
-							</div>
-						</th>
-						<th className="pb-1 pt-1 font-normal w-[200px]">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Địa chỉ
-							</div>
-						</th>
-						<th className="pb-1 pt-1 font-normal w-[150px]">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Ngày bắt đầu
-							</div>
-						</th>
-						<th className="pb-1 pt-1 font-normal">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Phân loại
-							</div>
-						</th>
-						<th className="pb-1 pt-1 font-normal">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Ghi chú
-							</div>
-						</th>
-					</tr>
-				</thead>
-				
-				{
-					(listWithPager[pageIndex]??[]).map((item: any, i: any) => (
-						<tr key={item._id} className="text-[14px]">
-							<td className={"p-2 border-0.5 border-primary-border text-center"}>
-								<input
-									className="form-check-input"
-									type="checkbox"
-									checked={getStateChecked(item._id)}
-									onChange={() => onClickCheckButton(item._id)}
-								/>
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border text-cbs-highlight-color"}>
-								<Link to ={`/fnb/shift/${item._id}`}>
-									{item?.name}
-								</Link>
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								{item?.address}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								{moment(item?.createAt).format('DD/MM/YYYY')}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								{FNB_INTERNAL[Number(item?.internal)-1]?.text}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								{item?.description}
-							</td>
+			<div className={"w-full"}>
+				<table className="w-full table-Auto">
+					<thead>
+						<tr className="text-primary-gray border-b-0.5 border-cbs-border">
+							<th className="px-2 py-3">TT</th>
+							<th className="text-left px-2 py-3">Tên</th>
+							<th className="text-left px-2 py-3">Đia chỉ</th>
+							<th className="text-left px-2 py-3">Bắt đầu</th>
+							<th className="text-left px-2 py-3">Phân loại</th>
+							<th className="text-left px-2 py-3">CP nguyên liệu</th>
+							<th className="text-left px-2 py-3">CP thuê mặt bằng</th>
+							<th className="text-left px-2 py-3">CP điện nước</th>
+							<th className="text-left px-2 py-3">CP nhân sự</th>
+							<th className="text-left px-2 py-3">CP khác</th>
+							<th className="text-left px-2 py-3">Ghi chú</th>
 						</tr>
-					))
-				}
-			</table>
+					</thead>
+					<tbody>
+						{
+							(listWithPager[pageIndex] ?? []).map((item: any, i: any) => (
+								<tr key={item._id} className="border-b-0.5 border-cbs-border">
+									<td className="text-center px-2 py-3">1</td>
+									<td className="text-left px-2 py-3">
+										<Link to={`/fnb/shift/${item._id}`}>{item?.name}</Link>
+									</td>
+									<td className="text-left px-2 py-3">{item?.address}, {item?.area3?.name}, {item?.area2?.name}, {item?.area1?.name}</td>
+									<td className="text-left px-2 py-3">{item?.initialDay}</td>
+									<td className="text-left px-2 py-3">Hệ thống</td>
+									<td className="text-left px-2 py-3">{item?.materialExpenseRate}</td>
+									<td className="text-left px-2 py-3">{item?.planExpense}</td>
+									<td className="text-left px-2 py-3">{item?.utilityExpense}</td>
+									<td className="text-left px-2 py-3">{item?.humanExpense}</td>
+									<td className="text-left px-2 py-3">{item?.otherExpense}</td>
+									<td className="text-left px-2 py-3">{item?.description}</td>
+								</tr>
+							))
+						}
+					</tbody>
+				</table>
+			</div>
 
 			{/* <ModalContainer isModalOpen={modalCreateProject} toggle={toggleModalCreateProject}>
 				<div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light">
