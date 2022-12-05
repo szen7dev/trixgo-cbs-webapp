@@ -6,6 +6,7 @@ import { Dialog } from '@headlessui/react';
 import { Form, Formik, Field, ErrorMessage } from 'formik';
 import { toast } from 'react-toastify';
 import moment from 'moment';
+
 /**
  * Types, Services
  */
@@ -20,7 +21,9 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
     unitPrice: "",
     note: ""  
 } }) => {
+    
     const {  insertAsync, updateAsync, refetch } = useFnbProduct({ params: { keyword: "" }, isFetchList: false, isFetchInfo: false  });
+
     const handleSubmit = async (values: any) => {
         if (modalType == 'create') {
             const query = {
@@ -64,6 +67,7 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
             }
         };
     };
+
     return (
         <Formik
             initialValues={initialValues}
@@ -89,7 +93,7 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
                                 </button>
                             </div>
                             <div className="px-6 mt-2 pt-3.5 flex-1 flex flex-col">
-                            <div className="mb-4">
+                                <div className="mb-4">
                                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtType">
                                         Phân loại
                                     </label>

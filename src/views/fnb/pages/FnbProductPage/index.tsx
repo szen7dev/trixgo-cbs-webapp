@@ -33,7 +33,7 @@ export const FnBProductPage: FC = () => {
 	const [keyword, setKeyword] = useState("");
 
     const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbProduct({ params: { keyword: keyword }, isFetchList: true, isFetchInfo: false  });
-	console.log({listWithPager});
+	// console.log({listWithPager});
 
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
@@ -56,11 +56,11 @@ export const FnBProductPage: FC = () => {
 		}
 	};
 
-	const [modalCreateProject, setModalCreateProject] = useState<boolean>(false);
-	const toggleModalCreateProject = () => setModalCreateProject(!modalCreateProject);
+	const [modalCreateFnbProduct, setModalCreateFnbProduct] = useState<boolean>(false);
+	const toggleModalCreateFnbProduct = () => setModalCreateFnbProduct(!modalCreateFnbProduct);
 
 	const [initialValues, setInitialValues] = useState(null);
-	const onConfirmCreateProject = () => refetch();
+	const onConfirmCreateFnbProduct = () => refetch();
 
 	useEffect(() => {
 		if (isSuccess && !(hasPermission && dataUserAccess?.level == 0)) {
@@ -103,7 +103,7 @@ export const FnBProductPage: FC = () => {
 											startTime: item.startTime ? moment(item.startTime).format('MM/DD/YYYY') : '',
 											expiredTime: item.expiredTime ? moment(item.expiredTime).format('MM/DD/YYYY') : '',
 										});
-										toggleModalCreateProject();
+										toggleModalCreateFnbProduct();
 									}}
 								>
 									<img src={PencilIcon} alt="Pencil" />
@@ -118,7 +118,7 @@ export const FnBProductPage: FC = () => {
 						className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold mr-6"
 						onClick={() => {
 							setInitialValues(null);
-							toggleModalCreateProject();
+							toggleModalCreateFnbProduct();
 						}}
 					>
 						Tạo mới
@@ -250,14 +250,14 @@ export const FnBProductPage: FC = () => {
 
 			</table>
 
-			<ModalContainer isModalOpen={modalCreateProject} toggle={toggleModalCreateProject}>
+			<ModalContainer isModalOpen={modalCreateFnbProduct} toggle={toggleModalCreateFnbProduct}>
 				<div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light">
 					<CreateFnbProduct
 						modalType={initialValues ? "update" : "create"}
-						show={modalCreateProject}
-						toggle={toggleModalCreateProject}
+						show={modalCreateFnbProduct}
+						toggle={toggleModalCreateFnbProduct}
 						initialValues={initialValues ? initialValues : undefined}
-						onConfirm={onConfirmCreateProject}
+						onConfirm={onConfirmCreateFnbProduct}
 					/>
 				</div>
 			</ModalContainer>

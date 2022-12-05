@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useQuery } from "react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import React from 'react';
 
 import { ContactRepository } from 'apis/item';
@@ -16,6 +16,7 @@ interface UseContact {
     refetch: () => void;
     fetchNextPage: () => void;
     fetchPreviousPage: () => void;
+    insertAsync: any
 }
 
 type UseContactProps = {
@@ -32,6 +33,11 @@ export const useContact = ({
     isFetchList = false,
     isFetchInfo = false
 }: UseContactProps): UseContact => {
+
+    const { mutateAsync: insertAsync } =
+        useMutation((payload: any) => ContactRepository.insert(payload)
+    );
+
     const { data: detailData } =
         useQuery("contact__info", () => ContactRepository.fetchInfo(paramsInfo), {
             refetchOnWindowFocus: false,
@@ -86,6 +92,7 @@ export const useContact = ({
         refetch,
         fetchNextPage,
         fetchPreviousPage,
+        insertAsync
     }
 }
 

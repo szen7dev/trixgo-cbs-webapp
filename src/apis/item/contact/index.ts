@@ -5,7 +5,8 @@ import { Contact } from 'typings/items';
 
 export const contactRepository = {
     fetchList: (params: Contact.ContactListParams): Promise<Contact.ContactListResponse> => fetchListAndInfo(params),
-    fetchInfo: (params: Contact.ContactInfoParams) => fetchListAndInfo(params)
+    fetchInfo: (params: Contact.ContactInfoParams) => fetchListAndInfo(params),
+    insert: (payload: any) => insert(payload)
 }
 
 async function fetchListAndInfo(params: any) {
@@ -20,5 +21,14 @@ async function fetchListAndInfo(params: any) {
             ...params
         }
     })
+
+    return data;
+}
+
+async function insert(payload: any): Promise<any> {
+    const { data } = await API.post<any>(
+        `${URL}/contacts`, payload
+    );
+
     return data;
 }

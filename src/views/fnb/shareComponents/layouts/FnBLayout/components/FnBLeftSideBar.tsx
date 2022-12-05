@@ -45,11 +45,7 @@ export const FnbLeftSideBar: FC = () => {
     const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useContact({ 
 		params: { 
 			keyword: keyword,  
-			limit: 30,  
-			// productID, 
-			// populates: JSON.stringify({
-			// 	path: 'goods', select: "name unit"
-			// }) 
+			limit: 20
 		}, 
 		isFetchList: true, 
 		isFetchInfo: false
@@ -137,7 +133,6 @@ export const FnbLeftSideBar: FC = () => {
                                     (listWithPager[pageIndex]??[]).map((item: any, i: any) => (
                                         <div key={item._id} className="flex gap-3 mt-3">
                                             <div className="w-[28px] h-[28px] min-w-[28px] min-h-[28px] rounded-full flex items-center justify-center text-white text-lg min-w-[28px] min-h-[28px]" style={{ background: "#FCC4A2" }}>{item?.name.charAt(0)}</div>
-                                            {/* <img src={sampleAvaT} alt="" /> */}
                                             <div className="w-full">
                                                 <div className="flex justify-between">
                                                     <div>{item?.name}</div>

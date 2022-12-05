@@ -10,6 +10,7 @@ import type {
     Position,
     ContractType
 } from './commons';
+
 import { User } from 'typings/user';
 
 /**
