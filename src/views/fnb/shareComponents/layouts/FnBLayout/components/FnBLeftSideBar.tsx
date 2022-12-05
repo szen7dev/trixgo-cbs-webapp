@@ -32,7 +32,7 @@ import { useModal } from "services/hooks/useModal";
 import { ModalAddNewOrder } from "./ModalAddNewOrder";
 import { ModalAddNewContact } from "./ModalAddNewContact";
 
-export const FnbLeftSideBar: FC = () => {
+export const FnBLeftSideBar: FC = () => {
     const { user } = useAuth();
     const { openModal } = useModal();
     const [menuShowList, setMenuState] = useState(false);
@@ -45,7 +45,7 @@ export const FnbLeftSideBar: FC = () => {
     const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useContact({ 
 		params: { 
 			keyword: keyword,  
-			limit: 20
+			limit: 5
 		}, 
 		isFetchList: true, 
 		isFetchInfo: false
@@ -81,9 +81,17 @@ export const FnbLeftSideBar: FC = () => {
                         <img width={'20px'} src={iconFolder} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Ca làm việc</span>
                     </NavLink>
+                    <NavLink to={`/fnb/material`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                        <img width={'20px'} src={iconFolder} alt="Menu item" />
+                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Nhập xuất tồn kho</span>
+                    </NavLink>
+                    <NavLink to={`/fnb/expense`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                        <img width={'20px'} src={iconFolder} alt="Menu item" />
+                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản lý chi phí</span>
+                    </NavLink>
                     <NavLink to={`/fnb/product`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                         <img width={'20px'} src={iconFolder} alt="Menu item" />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Thực đơn</span>
+                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Định mức thực đơn</span>
                     </NavLink>
                     <NavLink to={`/fnb/report`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                         <img width={'20px'} src={iconFolder} alt="Menu item" />
@@ -128,7 +136,7 @@ export const FnbLeftSideBar: FC = () => {
                                     />
                                 </Paper>
                             </div>
-                            <div>
+                            <div className="ml- mr-0.5">
                                 {
                                     (listWithPager[pageIndex]??[]).map((item: any, i: any) => (
                                         <div key={item._id} className="flex gap-3 mt-3">

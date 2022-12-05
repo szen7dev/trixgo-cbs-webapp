@@ -107,9 +107,10 @@ export const FnbShiftPage: FC = () => {
 		<main className="h-full overflow-auto">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
 				<div className="flex items-center">
-					<button onClick={history.goBack}>
+					<p className="text-lg">Danh sách ca làm việc</p>
+					{/* <button onClick={history.goBack}>
                         <img src="/images/common/button_back.png" alt="Button Back" />
-                    </button>
+                    </button> */}
 					<p className="text-lg">{infoProduct?.name}</p>
 					<SearchInput
 						classNameWrapper="ml-4"
@@ -146,7 +147,7 @@ export const FnbShiftPage: FC = () => {
 						</div>
 					) : <></>}
 				</div>
-				<div className="flex items-center">
+				{/* <div className="flex items-center">
 					<button
 						className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold ml-6"
 						onClick={() => {
@@ -156,10 +157,10 @@ export const FnbShiftPage: FC = () => {
 					>
 						Tạo mới
 					</button>
-					{/* <button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
+					<button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
 						<img src={Vertical3Dots} alt="3Dots" />
-					</button> */}
-				</div>
+					</button>
+				</div> */}
 				<PaginateV2
                         ref={ref}
                         totalRecord={totalRecord}

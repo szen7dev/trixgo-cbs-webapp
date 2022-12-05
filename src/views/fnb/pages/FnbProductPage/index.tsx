@@ -115,7 +115,7 @@ export const FnBProductPage: FC = () => {
 				</div>
 				<div className="flex items-center">
 					<button
-						className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold mr-6"
+						className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold ml-6"
 						onClick={() => {
 							setInitialValues(null);
 							toggleModalCreateFnbProduct();
@@ -123,9 +123,9 @@ export const FnBProductPage: FC = () => {
 					>
 						Tạo mới
 					</button>
-					<button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
+					{/* <button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
 						<img src={Vertical3Dots} alt="3Dots" />
-					</button>
+					</button> */}
 				</div>
 				<PaginateV2
                         ref={ref}

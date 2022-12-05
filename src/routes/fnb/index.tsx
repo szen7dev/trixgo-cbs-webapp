@@ -19,8 +19,9 @@ import { FnBProductPage } from "views/fnb/pages/FnbProductPage/index";
 import { FnbProductQuotasPage } from "views/fnb/pages/FnbProductQuotasPage/index";
 import { FnbShiftPage } from "views/fnb/pages/FnbShiftPage/index";
 import { FnbShiftDetailPage } from "views/fnb/pages/FnbShiftDetailPage/index";
+import { FnbShiftMaterialPage } from "views/fnb/pages/FnbShiftMaterialPage/index";
 import { FnbReportPage } from "views/fnb/pages/FnbReportPage/index";
-import { FnbLayout } from "views/fnb/shareComponents/layouts/FnBLayout";
+import { FnbLayout } from "views/fnb/shareComponents/layouts/FnbLayout";
 
 const FnbRouter: FC = () => {
     return (
@@ -70,6 +71,16 @@ const FnbRouter: FC = () => {
                 component={() =>
                     <FnbLayout>
                         <FnbShiftDetailPage/>
+                    </FnbLayout>
+                }
+            />
+
+            <Route
+                exact
+                path="/fnb/shift/:fundaID/:shiftID/material"
+                component={() =>
+                    <FnbLayout>
+                        <FnbShiftMaterialPage/>
                     </FnbLayout>
                 }
             />

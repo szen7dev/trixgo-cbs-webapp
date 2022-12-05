@@ -189,6 +189,21 @@ export const FnbShiftDetailPage: FC = () => {
 						</th>
 						<th className="pb-1 pt-1 font-normal">
 							<div className="pl-2">
+								Doanh số
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="pl-2">
+								Số đơn hàng
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="pl-2">
+								Số hàng hóa
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="pl-2">
 								Bàn giao nguyên liệu
 							</div>
 						</th>
@@ -221,13 +236,22 @@ export const FnbShiftDetailPage: FC = () => {
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{item?.name}
 							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(item?.total||0)} đ
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(item?.numberOfOrders||0)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(item?.numberOfProducts||0)}
+							</td>
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
-								<Link to ={`/fnb/shift/${item._id}/material`}>
+								<Link to ={`/fnb/shift/${fundaID}/${item._id}/material`}>
 									Chi tiết
 								</Link>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
-								<Link to ={`/fnb/shift/${item._id}/cash`}>
+								<Link to ={`/fnb/shift/${fundaID}/${item._id}/cash`}>
 									Chi tiết
 								</Link>
 							</td>
