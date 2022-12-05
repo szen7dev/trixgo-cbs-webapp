@@ -27,7 +27,7 @@ async function fetchListAndInfo(params: any) {
 
 async function insert(payload: any): Promise<any> {
     const { data } = await API.post<any>(
-        `${URL}/contacts`, payload
+        `${ITEM_URL}/contacts`, payload
     );
 
     return data;

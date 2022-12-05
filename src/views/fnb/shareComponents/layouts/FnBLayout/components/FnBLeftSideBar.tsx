@@ -101,7 +101,7 @@ export const FnbLeftSideBar: FC = () => {
                                 openModal(
                                     <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block"
                                     style={{width:"600px"}}>
-                                        <ModalAddNewContact />
+                                        <ModalAddNewContact onClosed ={() => refetch()}/>
                                     </div>
                                 )
                             }

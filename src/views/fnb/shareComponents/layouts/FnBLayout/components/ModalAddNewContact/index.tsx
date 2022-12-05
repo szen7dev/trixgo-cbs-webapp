@@ -28,12 +28,14 @@
  
  type Props = {
      defaultValues?: any;
+     onClosed?: any
  }
 
 //  console.log('=============>>>>>>>>>>>>>>>>>>>>>>>')
  
  export const ModalAddNewContact: FC<Props> = ({ 
-    defaultValues = {}
+    defaultValues = {},
+    onClosed
   }) => {
 
     const { closeModal } = useModal();
@@ -41,23 +43,18 @@
     const {  insertAsync, refetch } = useContact({ params: { keyword: "" }, isFetchList: false, isFetchInfo: false  });
 
     const handleSubmit = async (values: any) => {
-        // console.log('2222222222=============>>>>>>>>>>>>>>>>>>>>>>>')
-        // console.log(values)
         const query = {
             ...values,
-            type: parseInt(values.type),
+            type: values.type.toString(),
             name: values.name,
             phone: values.phone,
             address: values.address,
             note: values.note,
         };
-        
         const result = await insertAsync(query);
-        console.log(result)
-
         if (!result.error) {
-            refetch();
-            // toggle();
+            onClosed();
+            closeModal();
             toast.success('Tạo mới dữ liệu thành công');
         } else {
             toast.error(result?.data?.message);
