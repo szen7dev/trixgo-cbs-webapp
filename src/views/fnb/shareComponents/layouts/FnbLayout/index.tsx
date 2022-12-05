@@ -14,7 +14,7 @@ import iconChat from "assets/images/icons8-chat-96.png";
 import { LeftNavigate, MainHeader, MainHeaderV2 } from "shareComponents/common";
 import { HomeRightSideBar } from "shareComponents/layouts";
 import { HomeHeaderContent } from "shareComponents/layouts/HomeLayout/components";
-import { FnbLeftSideBar } from "./components/FnBLeftSideBar";
+import { FnBLeftSideBar } from "./components/FnBLeftSideBar";
 
 /*=====5.TYPINGS=====*/
 
@@ -78,7 +78,7 @@ export const FnbLayout: FC<Props> = ({ children }) => {
 
           {/* Left navigation */}
 
-          <FnbLeftSideBar />
+          <FnBLeftSideBar />
 
           {/* Content area */}
           <main className="home-main-content home-main-content-v2 transition-all duration-500 ease-out overflow-auto relative">

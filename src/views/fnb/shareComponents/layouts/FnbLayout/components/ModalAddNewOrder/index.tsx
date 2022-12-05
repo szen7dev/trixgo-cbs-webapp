@@ -38,7 +38,7 @@ import { useModal } from "services/hooks/useModal";
 // import IconClock from "assets/images/icons8-snooze-48 1.svg";
 // import RadioEmpty from "assets/images/Ellipse 27.svg";
 // import RadioChecked from "assets/images/icons8-checked-40 (2) 2.svg";
-// import IconMinus from "assets/images/icons8-reduce-96 1.svg";
+import IconMinus from "assets/images/icons8-reduce-96 1.svg";
 import ItemSample from "assets/images/image 430.jpg";
 import IconPlus from "assets/images/icons8-add-new-100 1.svg";
 import CheckBoxEmpty from "assets/images/Frame 3548.svg";
@@ -284,7 +284,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                 <div className={"t-add-new-task-dialog-select px-6"}>
                   <div className={"flex py-2 border-b"}>
                     <div className={"w-1/4 flex items-start"}>
-                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full h-full"}>Cơ sở (*)</div>
+                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full h-full"}>Cơ sở</div>
                       <div className={"flex-1 max-w-4/5 w-4/5 h-full h-full"}>
                         <DropdownSearchable
                           onchangeValue={(value: any) => {
@@ -337,7 +337,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                       </div>
                     </div>
                     <div className={"w-1/4 flex items-start pl-3"}>
-                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full"}>Ca làm (*)</div>
+                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full"}>Ca làm</div>
                       <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                         <GroupSearchable
                           ref={groupSearchableRef}
@@ -369,7 +369,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                       </div>
                     </div>
                     <div className={"w-1/4 flex items-start pl-3"}>
-                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full"}>Mã khách (*)</div>
+                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full"}>Mã khách</div>
                       <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                         <DropdownSearchable
                           onchangeValue={(value: any) => setFieldValue("customerID", value.id)}
@@ -569,7 +569,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                       <div>
                         <div className="my-3">Sản phẩm</div>
                         <div>
-                          <input type="text" placeholder="Tìm kiếm gán lỗi"
+                          <input type="text" placeholder="Tìm kiếm sản phẩm"
                             onKeyUp={debounce(e => {
                               setKeywordSearchProduct(e.target.value);
                             }, 700)}
@@ -578,17 +578,19 @@ export const ModalAddNewOrder: FC<Props> = () => {
                         </div>
                         <div className="h-[300px] overflow-y-auto	my-2 ">
                           {!!products.length && products.map((product: any) => (
-                            <div key={product._id} className="flex gap-2 w-full border-b-0.5 pb-2">
+                            <div key={product._id} className="flex gap-2 w-full border-b-0.5 py-2">
                               <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
                               <div className="w-full">
                                 <div className="flex justify-between">
                                   <div>
                                     <p className="font-bold truncate"> {product.name} </p>
                                     <textarea
-                                      className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px]"
+                                      rows={3} cols={50}
+                                      className="border-0 flex-grow outline-none mt-1 w-full h-[30px] resize-none "
+                                      style={{ width: "300px" }}
                                       placeholder="Thêm ghi chú ...." onChange={e => handleChangeNote(e, product)} defaultValue={product.note}></textarea>
                                   </div>
-                                  <div> {convertCurrency(product.amount)} </div>
+                                  <div className="text-primary"> {convertCurrency(product.amount)} </div>
                                 </div>
                                 <div className="flex gap-2 justify-end">
                                   <button
@@ -613,7 +615,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                     <div className="boxright w-1/2">
                       <div className="h-[300px] overflow-y-auto	my-2 border-0.5 ">
                         {!!productsInCart.length && productsInCart.map((product: any) => (
-                          <div key={product._id} className="flex gap-2 w-full border-b-0.5 p-2">
+                          <div key={product._id} className="flex gap-2 w-full border-b-0.5 py-2 pl-3 pr-3">
                             <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
                             <div className="w-full">
                               <div className="flex justify-between">
@@ -629,48 +631,74 @@ export const ModalAddNewOrder: FC<Props> = () => {
                               </div>
                               {/* <div className="flex gap-2 justify-end"> */}
                               <div className="flex justify-end">
-                                <span>Số lượng: </span>
-                                <input type="number" min="1" className="ml-2 w-[40px]" defaultValue={1} onChange={e => handleChangeQuantity(e, product)} />
-                                {/* <button><img src={IconMinus} alt="" /></button>
-                                <span> 1 </span>
-                                <button><img src={IconPlus} alt="" /></button> */}
+                                {/* <span>Số lượng: </span> */}
+                                <div className="flex gap-2 justify-end">
+                                  <button><img src={IconMinus} alt="" /></button>
+                                  <input type="number" min="1" className="ml-2 w-[40px]" defaultValue={1} onChange={e => handleChangeQuantity(e, product)} />
+                                  <button><img src={IconPlus} alt="" /></button>
+                                </div>
                               </div>
-                              {/* <div className="flex flex-wrap w-4/5">
-                                <div className="w-1/4 pb-2 pr-2">
-                                  <CustomCheckboxToggle /> Pudding trứng
+                              <div className="flex flex-wrap w-4/5">
+                                <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                  <CustomCheckboxToggle /> <span>Pudding trứng</span>
                                 </div>
-                                <div className="w-1/4 pb-2 pr-2">
-                                  <CustomCheckboxToggle /> Pudding trứng
+                                <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                  <CustomCheckboxToggle /> <span>Pudding trứng</span>
                                 </div>
-                              </div> */}
+                                <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                  <CustomCheckboxToggle /> <span>Pudding trứng</span>
+                                </div>
+                                <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                  <CustomCheckboxToggle /> <span>Pudding trứng</span>
+                                </div>
+                                <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                  <CustomCheckboxToggle /> <span>Pudding trứng</span>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         ))}
                       </div>
-                      <div className="border-0.5 p-1">
-                        <div className="flex justify-between">
+                      <div className="border-0.5">
+                        <div className="flex justify-between my-2 p-2">
                           <div className="font-bold">Tổng tiền</div>
-                          <div>{convertCurrency(totalMoney)}</div>
+                          <div className="font-bold">{convertCurrency(totalMoney)}</div>
                         </div>
-                        {/* <div className="flex justify-between">
+                        <div className="flex justify-between items-center mb-1 pl-2 py-2">
                           <div className="">Triết khấu</div>
-                          <div className="flex">
-                            <div>25%</div>
-                            <div>10.000</div>
+                          <div className="flex gap-1">
+                            <div>
+                              <input type="text" placeholder="" value={"25%"}
+                                className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
+                              />
+                            </div>
+                            <div>
+                              <input type="text" placeholder="" value={"10.000"}
+                                className="w-[100px] h-[30px] border-0.5 border-r-0 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
+                              />
+                            </div>
                           </div>
                         </div>
-                        <div className="flex justify-between">
+                        <div className="flex justify-between items-center mb-1 pl-2 py-2">
                           <div className="">Giảm giá</div>
-                          <div className="flex">
-                            <div>25%</div>
-                            <div>10.000</div>
+                          <div className="flex gap-1">
+                            <div>
+                              <input type="text" placeholder="" value={"25%"}
+                                className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
+                              />
+                            </div>
+                            <div>
+                              <input type="text" placeholder="" value={"10.000"}
+                                className="w-[100px] h-[30px] border-0.5 border-r-0 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
+                              />
+                            </div>
                           </div>
-                        </div> */}
+                        </div>
                       </div>
                       <div className="border-0.5 p-1">
                         <div className="flex justify-between">
                           <div className="font-bold">Thanh toán</div>
-                          <div className="font-bold">{convertCurrency(totalPay)}</div>
+                          <div className="font-bold text-primary font-bold">{convertCurrency(totalPay)}</div>
                         </div>
                       </div>
                       <div className="text-right mb-5" style={{ marginTop: "100px" }}>

@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useQuery } from "react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import React from 'react';
 
 import { ContactRepository } from 'apis/item';
@@ -11,10 +11,12 @@ interface UseContact {
     hasNextPage: boolean | undefined;
     nextCursor: any,
     list: Array<Contact.Contact>;
+    listWithPager: Array<Contact.Contact>;
     info: Contact.Contact | undefined;
     refetch: () => void;
     fetchNextPage: () => void;
     fetchPreviousPage: () => void;
+    insertAsync: any
 }
 
 type UseContactProps = {
@@ -24,12 +26,18 @@ type UseContactProps = {
     isFetchInfo?: boolean,
 }
 
+// Khai báo hook
 export const useContact = ({
     params = {},
     paramsInfo = {},
     isFetchList = false,
     isFetchInfo = false
 }: UseContactProps): UseContact => {
+
+    const { mutateAsync: insertAsync } =
+        useMutation((payload: any) => ContactRepository.insert(payload)
+    );
+
     const { data: detailData } =
         useQuery("contact__info", () => ContactRepository.fetchInfo(paramsInfo), {
             refetchOnWindowFocus: false,
@@ -66,6 +74,8 @@ export const useContact = ({
         .map((d: any) => d.data?.listRecords))
         .filter(Boolean);
 
+    const listWithPager = (data?.pages || []).map((d: any) => d.data?.listRecords);
+
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPage = data?.pages[0]?.data?.totalPage || 0;
     const nextCursor = data?.pages && data?.pages[0]?.data?.nextCursor;
@@ -73,6 +83,7 @@ export const useContact = ({
     return {
         isLoading,
         list,
+        listWithPager,
         info,
         totalRecord,
         totalPage,
@@ -81,10 +92,14 @@ export const useContact = ({
         refetch,
         fetchNextPage,
         fetchPreviousPage,
+        insertAsync
     }
 }
 
-// Những Hook này cần refactor lại, không nên sử dụng
+/**
+ * Những Hook này cần refactor lại, không nên sử dụng
+ * Tuấn Nguyễn
+ */
 interface UseQueryContact {
     listContact: Array<Contact.Contact>;
     loading: boolean;
@@ -94,6 +109,7 @@ interface UseQueryContact {
     refetchListContact: () => void;
     fetchNextPageContact: () => void;
 }
+
 export const useQueryContact = (params?: Contact.ContactListParams): UseQueryContact => {
     const {
         isLoading,
@@ -143,6 +159,7 @@ interface UseQueryDetailContact {
     loading: boolean,
     onFetchDetailContactAsync: (contactId: string, params?: Contact.ContactListParams) => Promise<Contact.Contact>
 }
+
 export const useQueryDetailContact = (contactID?: string, params?: Contact.ContactListParams): UseQueryDetailContact => {
     const [detailContact, setDetailContact] = React.useState<any>({});
     const [loading, setLoading] = React.useState(false);

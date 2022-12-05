@@ -10,6 +10,7 @@ import type {
     Position,
     ContractType
 } from './commons';
+
 import { User } from 'typings/user';
 
 /**
@@ -46,6 +47,7 @@ export interface Contact {
     timeMobilize?: number;
     factor?: number;
     phone?: string;
+    map: any; // Chưa rõ cái này để làm gì
 }
 
 /**

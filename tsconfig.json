@@ -22,7 +22,8 @@
     "baseUrl": "src"
   },
   "include": [
-    "src"
+    "src/**/*",
+    "package.json"
   ],
   "files": [
     "src/typings/react-table-config.d.ts"
