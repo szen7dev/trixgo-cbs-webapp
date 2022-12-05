@@ -20,7 +20,7 @@ import { FnbProductQuotasPage } from "views/fnb/pages/FnbProductQuotasPage/index
 import { FnbShiftPage } from "views/fnb/pages/FnbShiftPage/index";
 import { FnbShiftDetailPage } from "views/fnb/pages/FnbShiftDetailPage/index";
 import { FnbReportPage } from "views/fnb/pages/FnbReportPage/index";
-import { FnbLayout } from "views/fnb/shareComponents/layouts/FnbLayout";
+import { FnbLayout } from "views/fnb/shareComponents/layouts/FnBLayout";
 
 const FnbRouter: FC = () => {
     return (
