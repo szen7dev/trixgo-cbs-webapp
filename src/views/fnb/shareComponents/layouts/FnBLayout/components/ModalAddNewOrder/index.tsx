@@ -284,7 +284,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                 <div className={"t-add-new-task-dialog-select px-6"}>
                   <div className={"flex py-2 border-b"}>
                     <div className={"w-1/4 flex items-start"}>
-                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full h-full"}>Cơ sở (*)</div>
+                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full h-full"}>Cơ sở</div>
                       <div className={"flex-1 max-w-4/5 w-4/5 h-full h-full"}>
                         <DropdownSearchable
                           onchangeValue={(value: any) => {
@@ -337,7 +337,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                       </div>
                     </div>
                     <div className={"w-1/4 flex items-start pl-3"}>
-                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full"}>Ca làm (*)</div>
+                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full"}>Ca làm</div>
                       <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                         <GroupSearchable
                           ref={groupSearchableRef}
@@ -369,7 +369,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                       </div>
                     </div>
                     <div className={"w-1/4 flex items-start pl-3"}>
-                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full"}>Mã khách (*)</div>
+                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full"}>Mã khách</div>
                       <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                         <DropdownSearchable
                           onchangeValue={(value: any) => setFieldValue("customerID", value.id)}
@@ -665,7 +665,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                           <div className="font-bold">Tổng tiền</div>
                           <div>{convertCurrency(totalMoney)}</div>
                         </div>
-                        {/* <div className="flex justify-between">
+                        <div className="flex justify-between">
                           <div className="">Triết khấu</div>
                           <div className="flex">
                             <div>25%</div>
@@ -678,7 +678,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                             <div>25%</div>
                             <div>10.000</div>
                           </div>
-                        </div> */}
+                        </div>
                       </div>
                       <div className="border-0.5 p-1">
                         <div className="flex justify-between">
