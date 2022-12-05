@@ -14,7 +14,7 @@ import iconChat from "assets/images/icons8-chat-96.png";
 import { LeftNavigate, MainHeader, MainHeaderV2 } from "shareComponents/common";
 import { HomeRightSideBar } from "shareComponents/layouts";
 import { HomeHeaderContent } from "shareComponents/layouts/HomeLayout/components";
-import { FnBLeftSideBar } from "./components/FnBLeftSideBar";
+import { FnbLeftSideBar } from "./components/FnbLeftSideBar";
 
 /*=====5.TYPINGS=====*/
 
