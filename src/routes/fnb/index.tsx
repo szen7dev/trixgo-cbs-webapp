@@ -85,6 +85,28 @@ const FnbRouter: FC = () => {
                 }
             />
 
+            {/* Nhập, xuất, tồn, thất thoát */}
+            <Route
+                exact
+                path="/fnb/material"
+                component={() =>
+                    <FnbLayout>
+                        <FnbShiftPage/>
+                    </FnbLayout>
+                }
+            />
+
+            {/* Doanh thu-1, Chi phí-2 */}
+            <Route
+                exact
+                path="/fnb/expense"
+                component={() =>
+                    <FnbLayout>
+                        <FnbShiftPage/>
+                    </FnbLayout>
+                }
+            />
+
             <Route
                 exact
                 path="/fnb/report"
