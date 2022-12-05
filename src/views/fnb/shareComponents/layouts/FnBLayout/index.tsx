@@ -78,7 +78,7 @@ export const FnbLayout: FC<Props> = ({ children }) => {
 
           {/* Left navigation */}
 
-          <FnBLeftSideBar />
+          <FnbLeftSideBar />
 
           {/* Content area */}
           <main className="home-main-content home-main-content-v2 transition-all duration-500 ease-out overflow-auto relative">
