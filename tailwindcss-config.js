@@ -161,7 +161,8 @@ module.exports = {
                 ...autoGeneratePx,
                 fill: "-webkit-fill-available",
                 fit: 'fit-content',
-                'td-dashboard': 'calc(100% - 371px)'
+                'td-dashboard': 'calc(100% - 371px)',
+                '1/8': '12.5%',
             },
             height: {
                 ...autoGeneratePx,

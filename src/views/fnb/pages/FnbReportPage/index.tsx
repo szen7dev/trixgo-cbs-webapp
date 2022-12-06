@@ -8,6 +8,7 @@ import FolderIcon from "assets/images/icons8-folder.svg";
 import PolygonIcon from "assets/images/icon-polygon.svg";
 import DownloadIcon from "assets/images/icons8-download-96.svg";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
+import GraySquare from "assets/images/Frame 4415.svg";
 
 import moment from "moment";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
@@ -18,6 +19,8 @@ import PaginateV2 from "shareComponents/common/PaginateV2";
 import { formatNumberMoney } from "utils/converter";
 import CameraIcon from "assets/images/camera-icon.svg";
 import { useFnbProduct } from 'services/hooks/fnb/useFnbProduct';
+import ChartRevenueByHour from "./components/chart";
+import { Button, FormControl, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 
 const TYPE_PRODUCT = [
 	{ value: 1, text: "Thông thường" },
@@ -27,23 +30,24 @@ export const FnbReportPage: FC = () => {
 	useEffect(() => {
 		document.title = "Trixgo | FnB";
 	}, []);
-	
+
 	const history = useHistory();
 	const { productID } = useParams<{ productID: string }>();
 	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
-    const { info: infoProduct } = useFnbProduct({ params: { productID }, isFetchList: false, isFetchInfo: true  });
+	const { info: infoProduct } = useFnbProduct({ params: { productID }, isFetchList: false, isFetchInfo: true });
 	console.log({ infoProduct });
-    const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbQuota({ 
-		params: { 
-			keyword: keyword, 
-			productID, 
+	const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbQuota({
+		params: {
+			keyword: keyword,
+			productID,
 			populates: JSON.stringify({
 				path: 'goods', select: "name unit"
-			}) 
-		}, isFetchList: true, isFetchInfo: false  });
-	console.log({listWithPager});
+			})
+		}, isFetchList: true, isFetchInfo: false
+	});
+	console.log({ listWithPager });
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
 	}, [idsChecked]);
@@ -65,6 +69,33 @@ export const FnbReportPage: FC = () => {
 		}
 	};
 
+	const CustomSelectBox = () => {
+		const [customItem, setCustomItem] = React.useState('');
+
+		const handleChange = (event: SelectChangeEvent) => {
+			setCustomItem(event.target.value);
+		};
+		return (
+			<div>
+				<FormControl sx={{ minWidth: 250, outline: "none" }} size="small" className="bg-white border-cbs-border border-0.5 p-1 text-[13px]">
+					<Select
+						value={customItem}
+						onChange={handleChange}
+						displayEmpty
+						className="outline-none"
+					>
+						<MenuItem value="" className="text-black">
+							Winggo Thái Thịnh
+						</MenuItem>
+						<MenuItem value={10}>Ten</MenuItem>
+						<MenuItem value={20}>Twenty</MenuItem>
+						<MenuItem value={30}>Thirty</MenuItem>
+					</Select>
+				</FormControl>
+			</div>
+		)
+	}
+
 	const [modalCreateProject, setModalCreateProject] = useState<boolean>(false);
 	const toggleModalCreateProject = () => setModalCreateProject(!modalCreateProject);
 
@@ -79,57 +110,139 @@ export const FnbReportPage: FC = () => {
 	}, [hasPermission, dataUserAccess]);
 
 	type PaginateHandle = React.ElementRef<typeof PaginateV2>;
-    const ref = React.useRef<PaginateHandle>(null);
-    const [pageIndex, setPageIndex] = useState(0);
+	const ref = React.useRef<PaginateHandle>(null);
+	const [pageIndex, setPageIndex] = useState(0);
 
 	return (
-		<main className="h-full overflow-auto">
-			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
+		<main className="h-full overflow-auto bg-cbs-table-highlight">
+			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6">
 				<div className="flex items-center">
-					<button onClick={history.goBack}>
-                        <img src="/images/common/button_back.png" alt="Button Back" />
-                    </button>
+					{/* <button onClick={history.goBack}>
+						<img src="/images/common/button_back.png" alt="Button Back" />
+					</button> */}
+					<span className="font-bold text-[18px]">Tất cả cơ sở</span>
 				</div>
-				<div className="flex items-center">
+				{/* <div className="flex items-center">
 					<button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
 						<img src={Vertical3Dots} alt="3Dots" />
 					</button>
-				</div>
+				</div> */}
 			</header>
+			<div className="my-3">
+				<div className="flex gap-3 mx-5 mb-3 items-end">
+					<div>
+						<div className="text-cbs-subtext mb-1">Cơ sở</div>
+						<CustomSelectBox />
+					</div>
+					<div>
+						<div className="text-cbs-subtext mb-1">Thời gian</div>
+						<CustomSelectBox />
+					</div>
+					<div>
+						<div className="text-cbs-subtext mb-1">So sánh</div>
+						<CustomSelectBox />
+					</div>
+					<Button variant="contained" disableElevation className="h-[40px] border-0.5 border-cbs-border" sx={{ textTransform: "none", padding: "0 1.25rem" }}>
+						Xem báo cáo
+					</Button>
+				</div>
 
-			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
-				<thead className="bg-cbs-table-header h-10 border-b border-primary-border">
-					<tr className="text-left text-sm text-primary-gray">
-						<th className="pb-1 pt-1 text-center" style={{ width: "3.5%" }}>
-							<div className="border-r-2 border-gray-300 flex items-center justify-center">
-								<input
-									className="form-check-input"
-									type="checkbox"
-									checked={getStateCheckedAll()}
-									onChange={() => onClickCheckAll()}
-								/>
-							</div>
-						</th>
-						<th className="pb-1 pt-1 w-[250px]">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								TT
-							</div>
-						</th>
-						<th className="pb-1 pt-1 font-normal w-[150px]">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Nội dung
-							</div>
-						</th>
-						<th className="pb-1 pt-1 font-normal w-[150px]">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Ghi chú
-							</div>
-						</th>
-					</tr>
-				</thead>
-				
-			</table>
+				<div className="flex gap-3 mx-5 mb-3 bg-white border-0.5 border-cbs-border p-3">
+					<div className="flex gap-2 w-1/5 items-start	">
+						<img src={GraySquare} alt="" />
+						<div>
+							<div className="text-primary text-[14px]">Tổng doanh số</div>
+							<div className="text-[20px]" style={{ fontSize: "20px" }}>504,000 đ</div>
+						</div>
+					</div>
+					<div className="flex gap-2 w-1/5 items-start	">
+						<img src={GraySquare} alt="" />
+						<div>
+							<div className="text-primary text-[14px]">Tổng doanh số</div>
+							<div className="text-[20px]" style={{ fontSize: "20px" }}>504,000 đ</div>
+						</div>
+					</div>
+					<div className="flex gap-2 w-1/5 items-start	">
+						<img src={GraySquare} alt="" />
+						<div>
+							<div className="text-primary text-[14px]">Tổng doanh số</div>
+							<div className="text-[20px]" style={{ fontSize: "20px" }}>504,000 đ</div>
+						</div>
+					</div>
+					<div className="flex gap-2 w-1/5 items-start	">
+						<img src={GraySquare} alt="" />
+						<div>
+							<div className="text-primary text-[14px]">Tổng doanh số</div>
+							<div className="text-[20px]" style={{ fontSize: "20px" }}>504,000 đ</div>
+						</div>
+					</div>
+					<div className="flex gap-2 w-1/5 items-start	">
+						<img src={GraySquare} alt="" />
+						<div>
+							<div className="text-primary text-[14px]">Tổng doanh số</div>
+							<div className="text-[20px]" style={{ fontSize: "20px" }}>504,000 đ</div>
+						</div>
+					</div>
+				</div>
 
+				<div className="flex gap-5 mx-5 my-5 ">
+					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(244, 148, 35, 1)" }}>
+						<div className="mx-4">
+							<div className="text-cbs-schedule-nextweek text-[14px]">Số khách hàng</div>
+							<div className="font-bold" style={{ fontSize: "20px" }}>11</div>
+						</div>
+					</div>
+					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(244, 148, 35, 1)" }}>
+						<div className="mx-4">
+							<div className="text-cbs-schedule-nextweek text-[14px]">Số khách hàng</div>
+							<div className="font-bold" style={{ fontSize: "20px" }}>11</div>
+						</div>
+					</div>
+					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(244, 148, 35, 1)" }}>
+						<div className="mx-4">
+							<div className="text-cbs-schedule-nextweek text-[14px]">Số khách hàng</div>
+							<div className="font-bold" style={{ fontSize: "20px" }}>11</div>
+						</div>
+					</div>
+					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(244, 148, 35, 1)" }}>
+						<div className="mx-4">
+							<div className="text-cbs-schedule-nextweek text-[14px]">Số khách hàng</div>
+							<div className="font-bold" style={{ fontSize: "20px" }}>11</div>
+						</div>
+					</div>
+					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(244, 148, 35, 1)" }}>
+						<div className="mx-4">
+							<div className="text-cbs-schedule-nextweek text-[14px]">Số khách hàng</div>
+							<div className="font-bold" style={{ fontSize: "20px" }}>11</div>
+						</div>
+					</div>
+					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(244, 148, 35, 1)" }}>
+						<div className="mx-4">
+							<div className="text-cbs-schedule-nextweek text-[14px]">Số khách hàng</div>
+							<div className="font-bold" style={{ fontSize: "20px" }}>11</div>
+						</div>
+					</div>
+					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(244, 148, 35, 1)" }}>
+						<div className="mx-4">
+							<div className="text-cbs-schedule-nextweek text-[14px]">Số khách hàng</div>
+							<div className="font-bold" style={{ fontSize: "20px" }}>11</div>
+						</div>
+					</div>
+					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(244, 148, 35, 1)" }}>
+						<div className="mx-4">
+							<div className="text-cbs-schedule-nextweek text-[14px]">Số khách hàng</div>
+							<div className="font-bold" style={{ fontSize: "20px" }}>11</div>
+						</div>
+					</div>
+				</div>
+
+				<div className="mx-5">
+					<div className="text-primary-gray mb-3">Doanh thu tổng hợp</div>
+					<div className="p-3 bg-white">
+						<ChartRevenueByHour />
+					</div>
+				</div>
+			</div>
 		</main>
 	);
 };
