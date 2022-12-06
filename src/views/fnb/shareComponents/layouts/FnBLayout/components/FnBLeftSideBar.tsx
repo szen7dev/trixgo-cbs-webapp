@@ -93,10 +93,16 @@ export const FnbLeftSideBar: FC = () => {
                         <img width={'20px'} src={iconFolder} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Thực đơn</span>
                     </NavLink>
-                    <NavLink to={`/fnb/report`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                        <img width={'20px'} src={iconFolder} alt="Menu item" />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Báo cáo</span>
-                    </NavLink>
+                    <div onClick={() => setMenuState(!menuShowList)} className="text-primary-gray px-4 py-1 cursor-pointer hover:bg-slate-200">
+                        {(menuShowList ? <ExpandLessIcon className="w-[20px]" fontSize="small"/> : <ExpandMoreIcon className="w-[20px]" fontSize="small"/>)}
+                        <span className="ml-2 text-[14px]">{(menuShowList ? 'Báo cáo' : 'Báo cáo')}</span>
+                    </div>
+                    <div className={"transition-1s h-0 overflow-hidden " + (menuShowList ? ' h-[45px]' : '')}>
+                        <NavLink to={`/fnb/revenue-report`} className={"left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray"}>
+                            <img width={'20px'} src={iconFolder} />
+                            <span className={"flex-1 ml-2 text-left text-[14px]"}>Báo cáo doanh thu</span>
+                        </NavLink>
+                    </div>
                 </div>
                 <div>
                     <div className="flex justify-between text-primary-gray px-4 py-1 cursor-pointer hover:bg-slate-200">
