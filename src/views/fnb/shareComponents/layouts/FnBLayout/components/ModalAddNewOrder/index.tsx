@@ -10,22 +10,10 @@ import debounce from "lodash/debounce";
 import { convertCurrency, formatNumberMoney } from 'utils/converter';
 import { useSocket } from "services/hooks/useSocket";
 import { useAuth } from 'services/hooks/auth/useAuth';
-// import { toArray } from 'lodash';
-// import DayPickerInput from "react-day-picker/DayPickerInput";
-// import moment from "moment";
-// import Axios from "axios";
 
 /**
  * Hooks, Typings
  */
-// import { useDoctype } from "services/hooks/items/useDoctype";
-// import { useQueryListGroup } from "services/hooks/usePlanGroup";
-// import { useQueryListDepartmentsIsMember } from 'services/hooks/items/useDepartment';
-// import { useUserSystem } from "services/hooks/users/useUserSystem";
-// import { useContract } from "services/hooks/items/useContract";
-// import { useUpload } from "services/hooks/useUpload";
-// import { APP_ID } from "apis/localdb";
-// import useUploadFile from 'services/hooks/useUploadFile';
 
 /**
  * Components, Assets
@@ -33,22 +21,13 @@ import { useAuth } from 'services/hooks/auth/useAuth';
 import { DropdownSearchable } from "shareComponents/common";
 import Close from "assets/icons/Close";
 import { useModal } from "services/hooks/useModal";
-// import fakeThumbnail from "assets/images/avatar.jpg";
-// import TagIcon from "assets/images/icons8-price-tag-96.svg";
-// import IconClock from "assets/images/icons8-snooze-48 1.svg";
-// import RadioEmpty from "assets/images/Ellipse 27.svg";
-// import RadioChecked from "assets/images/icons8-checked-40 (2) 2.svg";
 import IconMinus from "assets/images/icons8-reduce-96 1.svg";
-import ItemSample from "assets/images/image 430.jpg";
+import ItemSample from "assets/images/icons8-beverage-100.svg";
 import IconPlus from "assets/images/icons8-add-new-100 1.svg";
 import CheckBoxEmpty from "assets/images/Frame 3548.svg";
 import CheckedBox from "assets/images/Check-All.svg";
 
 import "react-day-picker/lib/style.css";
-// import iconAttach from "assets/images/icons8-attach-48.svg";
-// import { FileProp, FilePropsUpload } from "typings/common";
-// import { Button, FormControl, MenuItem, Popover, Select, SelectChangeEvent } from "@mui/material";
-// import { borderRadius } from "@mui/system";
 import { GroupSearchable } from "shareComponents/common/GroupSearchable";
 import API from "apis/repository";
 import { useContact } from "services/hooks/items/useContact";
