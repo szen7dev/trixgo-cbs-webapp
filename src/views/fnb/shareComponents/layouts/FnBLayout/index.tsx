@@ -15,6 +15,7 @@ import { LeftNavigate, MainHeader, MainHeaderV2 } from "shareComponents/common";
 import { HomeRightSideBar } from "shareComponents/layouts";
 import { HomeHeaderContent } from "shareComponents/layouts/HomeLayout/components";
 import { FnbLeftSideBar } from "./components/FnbLeftSideBar";
+import { FnbHeaderContent } from "./FnbHeaderContent";
 
 /*=====5.TYPINGS=====*/
 
@@ -73,7 +74,7 @@ export const FnbLayout: FC<Props> = ({ children }) => {
         <section className={"main-content-wrapper flex-1"}>
           {/*  Main header */}
           <MainHeaderV2 headerTitle={"FnB"}>
-            <HomeHeaderContent />
+            <FnbHeaderContent />
           </MainHeaderV2>
 
           {/* Left navigation */}
