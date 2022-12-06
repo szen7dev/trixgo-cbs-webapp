@@ -109,7 +109,7 @@ const FnbRouter: FC = () => {
 
             <Route
                 exact
-                path="/fnb/report"
+                path="/fnb/revenue-report"
                 component={() =>
                     <FnbLayout>
                         <FnbReportPage/>

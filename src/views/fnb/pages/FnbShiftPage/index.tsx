@@ -107,10 +107,9 @@ export const FnbShiftPage: FC = () => {
 		<main className="h-full overflow-auto">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
 				<div className="flex items-center">
-					<p className="text-lg">Danh sách ca làm việc</p>
-					{/* <button onClick={history.goBack}>
+					<button onClick={history.goBack}>
                         <img src="/images/common/button_back.png" alt="Button Back" />
-                    </button> */}
+                    </button>
 					<p className="text-lg">{infoProduct?.name}</p>
 					<SearchInput
 						classNameWrapper="ml-4"

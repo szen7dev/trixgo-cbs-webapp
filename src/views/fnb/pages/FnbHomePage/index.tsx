@@ -13,6 +13,9 @@ import "slick-carousel/slick/slick-theme.css";
 import "views/pcm/styles/pcm.module.css";
 
 /*=====3.ICONS=====*/
+import iconCalendar from "assets/images/icons8-calendar-96 2.svg";
+import arrowDownRed from "assets/images/icon-user-avatar.svg";
+import dotGreen from "assets/images/icon-user-avatar.svg";
 import userIcon from "assets/images/icon-user-avatar.svg";
 import projectIcon from "assets/images/icons8-project-50.svg";
 import TriangleDown from "assets/icons/TriangleDown";
