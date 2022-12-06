@@ -100,7 +100,7 @@ const options = {
             enabled: false,
         },
         datalabels: {
-            display: false,
+            display: true,
             color: "#798295",
             align: "top" as const,
             anchor: "end" as const,
