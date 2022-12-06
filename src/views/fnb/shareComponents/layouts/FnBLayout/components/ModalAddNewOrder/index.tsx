@@ -7,7 +7,7 @@ import { useHistory } from 'react-router-dom';
 import { number, object, string } from "yup";
 import { toast } from "react-toastify";
 import debounce from "lodash/debounce";
-import { convertCurrency } from 'utils/converter';
+import { convertCurrency, formatNumberMoney } from 'utils/converter';
 import { useSocket } from "services/hooks/useSocket";
 import { useAuth } from 'services/hooks/auth/useAuth';
 // import { toArray } from 'lodash';
@@ -52,6 +52,7 @@ import "react-day-picker/lib/style.css";
 import { GroupSearchable } from "shareComponents/common/GroupSearchable";
 import API from "apis/repository";
 import { useContact } from "services/hooks/items/useContact";
+import { convertObToUrl } from "utils";
 
 interface InitialValues {
   fundaID: string,
@@ -88,6 +89,14 @@ export const ModalAddNewOrder: FC<Props> = () => {
   const [keywordSearchProduct, setKeywordSearchProduct] = useState("");
   const [totalMoney, setTotalMoney] = useState(0);
   const [totalPay, setTotalPay] = useState(0);
+  const [discount, setDiscount] = useState(0);
+  const [sales, setSales] = useState(0);
+  const [discountAndSales, setDiscountAndSales] = useState({
+    discount: 0,
+    discountPercent: 0,
+    sales: 0,
+    salesPercent: 0,
+  });
 
   const [fundaID, setFundaID] = useState("");
   const [shiftID, setShiftID] = useState("");
@@ -133,7 +142,12 @@ export const ModalAddNewOrder: FC<Props> = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       const response = await API.get(
-        `/api/fnb/products?keyword=${keywordSearchProduct}`,
+        `/api/fnb/products?${convertObToUrl({
+            keyword: keywordSearchProduct,
+            populates: JSON.stringify({
+              path: 'images',
+            })
+        })}`,
       );
       const { data, status } = response?.data;
 
@@ -188,6 +202,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
         ...values,
         products,
         total: totalPay,
+        discount: discountAndSales.discount,
+        salesoff: discountAndSales.sales,
       }
 
       const { data, status } = await API.post(
@@ -214,6 +230,46 @@ export const ModalAddNewOrder: FC<Props> = () => {
       }
     }
   };
+
+  const handleChangeDiscount = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    const inputValue = Number(value);
+    let newDiscount = inputValue;
+    let newDiscountPercent = inputValue;
+
+    if(name === 'discount') {
+      newDiscountPercent = +((inputValue * 100) / totalMoney).toFixed(2);
+    } else if(name === 'discountPercent') {
+      newDiscount = (totalMoney * inputValue) / 100;
+    }
+
+    setDiscountAndSales(prev => ({
+      ...prev,
+      discount: newDiscount,
+      discountPercent: newDiscountPercent,
+    }));
+    setTotalPay(totalMoney - newDiscount - discountAndSales.sales);
+  }
+
+  const handleChangeSales = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    const inputValue = Number(value);
+    let newSales = inputValue;
+    let newSalesPercent = inputValue;
+
+    if(name === 'sales') {
+      newSalesPercent = +((inputValue * 100) / totalMoney).toFixed(2);
+    } else if(name === 'salesPercent') {
+      newSales = (totalMoney * inputValue) / 100;
+    }
+
+    setDiscountAndSales(prev => ({
+      ...prev,
+      sales: newSales,
+      salesPercent: newSalesPercent,
+    }));
+    setTotalPay(totalMoney - discountAndSales.discount - newSales);
+  }
 
   const handleChangeQuantity = (e: any, product: any) => {
     const value = Number(e.target.value);
@@ -242,7 +298,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
 
   const calTotalMoney = () => {
     const amount = productsInCart.reduce((prev: any, product: any) => {
-      return prev += (product.amount * product.quantity)
+      return prev += (product.unitPrice * product.quantity)
     }, 0)
     setTotalMoney(amount);
     setTotalPay(amount);
@@ -587,7 +643,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                         <div className="h-[300px] overflow-y-auto	my-2 ">
                           {!!products.length && products.map((product: any) => (
                             <div key={product._id} className="flex gap-2 w-full border-b-0.5 py-2">
-                              <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
+                              <img src={product?.images?.length ? `${process.env.REACT_APP_URL_S3}${product?.images[0]?.path}` : ItemSample } alt="item" className="w-[44px] h-[44px]" />
                               <div className="w-full">
                                 <div className="flex justify-between">
                                   <div>
@@ -598,7 +654,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                       style={{ width: "300px" }}
                                       placeholder="Thêm ghi chú ...." onChange={e => handleChangeNote(e, product)} defaultValue={product.note}></textarea>
                                   </div>
-                                  <div className="text-primary"> {convertCurrency(product.amount)} </div>
+                                  <div className="text-primary"> {convertCurrency(product.unitPrice)} </div>
                                 </div>
                                 <div className="flex gap-2 justify-end">
                                   <button
@@ -624,7 +680,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                       <div className="h-[300px] overflow-y-auto	my-2 border-0.5 ">
                         {!!productsInCart.length && productsInCart.map((product: any) => (
                           <div key={product._id} className="flex gap-2 w-full border-b-0.5 py-2 pl-3 pr-3">
-                            <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
+                            <img src={product?.images?.length ? `${process.env.REACT_APP_URL_S3}${product?.images[0]?.path}` : ItemSample} alt="item" className="w-[44px] h-[44px]" />
                             <div className="w-full">
                               <div className="flex justify-between">
                                 <div>
@@ -635,7 +691,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                     className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px] resize-none"
                                     placeholder="Thêm ghi chú ...." onChange={e => handleChangeNote(e, product)} defaultValue={product.note}></textarea>
                                 </div>
-                                <div className="text-blue-400">{convertCurrency(product.amount)}</div>
+                                <div className="text-blue-400">{convertCurrency(product.unitPrice)}</div>
                               </div>
                               {/* <div className="flex gap-2 justify-end"> */}
                               <div className="flex justify-end">
@@ -679,13 +735,19 @@ export const ModalAddNewOrder: FC<Props> = () => {
                           <div className="">Triết khấu</div>
                           <div className="flex gap-1">
                             <div>
-                              <input type="text" placeholder=""
+                              <input type="number" placeholder="25%"
                                 className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
+                                onChange={handleChangeDiscount}
+                                value={discountAndSales.discountPercent}
+                                name="discountPercent"
                               />
                             </div>
                             <div>
-                              <input type="text" placeholder="" 
+                              <input type="number" placeholder="10.000"
                                 className="w-[100px] h-[30px] border-0.5 border-r-0 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
+                                onChange={handleChangeDiscount}
+                                value={discountAndSales.discount}
+                                name="discount"
                               />
                             </div>
                           </div>
@@ -694,13 +756,19 @@ export const ModalAddNewOrder: FC<Props> = () => {
                           <div className="">Giảm giá</div>
                           <div className="flex gap-1">
                             <div>
-                              <input type="text" placeholder="" 
+                              <input type="number" placeholder="25%"
                                 className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
+                                onChange={handleChangeSales}
+                                value={discountAndSales.salesPercent}
+                                name="salesPercent"
                               />
                             </div>
                             <div>
-                              <input type="text" placeholder=""
+                              <input type="number" placeholder="10.000"
                                 className="w-[100px] h-[30px] border-0.5 border-r-0 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
+                                onChange={handleChangeSales}
+                                value={discountAndSales.sales}
+                                name="sales"
                               />
                             </div>
                           </div>
