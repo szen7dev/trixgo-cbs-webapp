@@ -1,12 +1,12 @@
-import React, { FC, useCallback, useState, useEffect } from "react";
+import React, { FC, useRef, useCallback, useState, useEffect, ChangeEvent } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { useModal } from "services/hooks/useModal";
+// import { useModal } from "services/hooks/useModal";
 import debounce from "lodash/debounce";
 import { SearchInput, ModalContainer } from "shareComponents/common";
-import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
-import FolderIcon from "assets/images/icons8-folder.svg";
-import PolygonIcon from "assets/images/icon-polygon.svg";
-import DownloadIcon from "assets/images/icons8-download-96.svg";
+// import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
+// import FolderIcon from "assets/images/icons8-folder.svg";
+// import PolygonIcon from "assets/images/icon-polygon.svg";
+// import DownloadIcon from "assets/images/icons8-download-96.svg";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import { CreateFnbProduct } from "./modal";
 import moment from "moment";
@@ -17,6 +17,10 @@ import { useFnbProduct } from 'services/hooks/fnb/useFnbProduct';
 import PaginateV2 from "shareComponents/common/PaginateV2";
 import { formatNumberMoney } from "utils/converter";
 import CameraIcon from "assets/images/camera-icon.svg";
+import { validateFiles } from 'validation/file';
+import { useUpload } from "services/hooks/useUpload";
+import { useAuth } from "services/hooks/auth/useAuth";
+import API from "apis/repository";
 
 const TYPE_PRODUCT = [
 	{ value: 1, text: "Thông thường" },
@@ -26,13 +30,29 @@ export const FnBProductPage: FC = () => {
 	useEffect(() => {
 		document.title = "Trixgo | FnB";
 	}, []);
-	
+
 	const history = useHistory();
+	const { user } = useAuth();
 	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
+	const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbProduct({ params: { keyword: keyword }, isFetchList: true, isFetchInfo: false  });
+	const { addFileToUpload } = useUpload({
+		appID: APP_ID.FNB.id,
+		companyID: user?.company?._id,
+	});
+
+    const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbProduct({
+		params: {
+			keyword,
+			populates: JSON.stringify({
+				path: 'images',
+			})
+		},
+		isFetchList: true,
+		isFetchInfo: false,
+	});
 	// console.log({listWithPager});
 
 	const getStateChecked = useCallback((id: string) => {
@@ -55,6 +75,42 @@ export const FnBProductPage: FC = () => {
 			setIdsChecked(idsAll);
 		}
 	};
+
+	const handleUploadAttach = async (filesSelected: FileList | null, productID: string) => {
+		if (!filesSelected || !filesSelected.length) return;
+
+		const validation = await validateFiles(filesSelected);
+		if (validation.error) return toast.warn(validation.message);
+
+		// Clear input file
+		if (fileInputRef.current) {
+		  fileInputRef.current.value = '';
+		}
+
+		const imagesID: any = [];
+
+		// Upload images
+		for (const [_, file] of Object.entries(filesSelected)) {
+			const { _id } = await addFileToUpload({
+				files: file as any,
+				fileType: 1,
+				progress: percentCompleted => {
+					console.info(`${percentCompleted}%`)
+				}
+			})
+			_id && imagesID.push(_id);
+		}
+
+		// Update image to products
+		await API.put(
+			`/api/fnb/products`,
+			{
+				productID,
+				imagesID,
+			}
+		);
+		refetch();
+	  }
 
 	const [modalCreateFnbProduct, setModalCreateFnbProduct] = useState<boolean>(false);
 	const toggleModalCreateFnbProduct = () => setModalCreateFnbProduct(!modalCreateFnbProduct);
@@ -228,11 +284,13 @@ export const FnBProductPage: FC = () => {
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								<div style={{display: "flex"}}>
-									<img
-										className="w-[75px] h-[75px] object-contain"
-										src={"https://thpt-phamhongthai.edu.vn/wp-content/uploads/2022/07/hinh-nen-girl-xinh-full-hd-cho-laptop-va-may.jpg"}
-										alt="Left side bar"
-									/>
+									{!!item?.images?.length && (
+										<img
+											className="w-[75px] h-[75px] object-contain"
+											src={`${process.env.REACT_APP_URL_S3}${item?.images[0]?.path}`}
+											alt="Left side bar"
+										/>
+									)}
 									<label className="ml-2">
 										<div className="w-[30px] h-[30px] bg-secondary-gray rounded-full flex items-center justify-center">
 											<img
@@ -240,7 +298,10 @@ export const FnBProductPage: FC = () => {
 											alt="Camera"
 											className="w-[15px] h-[13px]"
 											/>
-											<input type="file" name="signature" id="signature" className="hidden" accept="image/*" />
+											<input type="file" name="signature" id="signature" className="hidden" accept="image/*"
+											ref={fileInputRef}
+											onChange={(e: ChangeEvent<HTMLInputElement>) => handleUploadAttach(e.target.files, item._id)}
+											/>
 										</div>
 									</label>
 								</div>
