@@ -679,12 +679,12 @@ export const ModalAddNewOrder: FC<Props> = () => {
                           <div className="">Triết khấu</div>
                           <div className="flex gap-1">
                             <div>
-                              <input type="text" placeholder="" value={"25%"}
+                              <input type="text" placeholder=""
                                 className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
                               />
                             </div>
                             <div>
-                              <input type="text" placeholder="" value={"10.000"}
+                              <input type="text" placeholder="" 
                                 className="w-[100px] h-[30px] border-0.5 border-r-0 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
                               />
                             </div>
@@ -694,12 +694,12 @@ export const ModalAddNewOrder: FC<Props> = () => {
                           <div className="">Giảm giá</div>
                           <div className="flex gap-1">
                             <div>
-                              <input type="text" placeholder="" value={"25%"}
+                              <input type="text" placeholder="" 
                                 className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
                               />
                             </div>
                             <div>
-                              <input type="text" placeholder="" value={"10.000"}
+                              <input type="text" placeholder=""
                                 className="w-[100px] h-[30px] border-0.5 border-r-0 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
                               />
                             </div>
