@@ -152,35 +152,35 @@ export const FnbReportPage: FC = () => {
 						<img src={GraySquare} alt="" />
 						<div>
 							<div className="text-primary text-[14px]">Tổng doanh số</div>
-							<div className="text-[20px]" style={{ fontSize: "20px" }}>504,000 đ</div>
+							<div className="text-[20px]" style={{ fontSize: "20px" }}>10.000.000 đ</div>
 						</div>
 					</div>
 					<div className="flex gap-2 w-1/5 items-start	">
 						<img src={GraySquare} alt="" />
 						<div>
-							<div className="text-primary text-[14px]">Tổng doanh số</div>
-							<div className="text-[20px]" style={{ fontSize: "20px" }}>504,000 đ</div>
+							<div className="text-primary text-[14px]">Triết khấu</div>
+							<div className="text-[20px]" style={{ fontSize: "20px" }}>1.000.000 đ</div>
 						</div>
 					</div>
 					<div className="flex gap-2 w-1/5 items-start	">
 						<img src={GraySquare} alt="" />
 						<div>
-							<div className="text-primary text-[14px]">Tổng doanh số</div>
-							<div className="text-[20px]" style={{ fontSize: "20px" }}>504,000 đ</div>
+							<div className="text-primary text-[14px]">Giảm giá</div>
+							<div className="text-[20px]" style={{ fontSize: "20px" }}>2.000.000 đ</div>
 						</div>
 					</div>
 					<div className="flex gap-2 w-1/5 items-start	">
 						<img src={GraySquare} alt="" />
 						<div>
-							<div className="text-primary text-[14px]">Tổng doanh số</div>
-							<div className="text-[20px]" style={{ fontSize: "20px" }}>504,000 đ</div>
+							<div className="text-primary text-[14px]">Doanh thu thực</div>
+							<div className="text-[20px]" style={{ fontSize: "20px" }}>7.000.000 đ</div>
 						</div>
 					</div>
 					<div className="flex gap-2 w-1/5 items-start	">
 						<img src={GraySquare} alt="" />
 						<div>
-							<div className="text-primary text-[14px]">Tổng doanh số</div>
-							<div className="text-[20px]" style={{ fontSize: "20px" }}>504,000 đ</div>
+							<div className="text-primary text-[14px]">Tiền thuế</div>
+							<div className="text-[20px]" style={{ fontSize: "20px" }}>700.000 đ</div>
 						</div>
 					</div>
 				</div>
@@ -189,49 +189,49 @@ export const FnbReportPage: FC = () => {
 					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(244, 148, 35, 1)" }}>
 						<div className="mx-4">
 							<div className="text-cbs-schedule-nextweek text-[14px]">Số khách hàng</div>
-							<div className="font-bold" style={{ fontSize: "20px" }}>11</div>
+							<div className="font-bold" style={{ fontSize: "20px" }}>10</div>
 						</div>
 					</div>
 					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(244, 148, 35, 1)" }}>
 						<div className="mx-4">
-							<div className="text-cbs-schedule-nextweek text-[14px]">Số khách hàng</div>
-							<div className="font-bold" style={{ fontSize: "20px" }}>11</div>
+							<div className="text-cbs-schedule-nextweek text-[14px]">Số đơn hàng</div>
+							<div className="font-bold" style={{ fontSize: "20px" }}>20</div>
 						</div>
 					</div>
 					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(244, 148, 35, 1)" }}>
 						<div className="mx-4">
-							<div className="text-cbs-schedule-nextweek text-[14px]">Số khách hàng</div>
-							<div className="font-bold" style={{ fontSize: "20px" }}>11</div>
+							<div className="text-cbs-schedule-nextweek text-[14px]">Số sản phẩm</div>
+							<div className="font-bold" style={{ fontSize: "20px" }}>50</div>
 						</div>
 					</div>
 					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(244, 148, 35, 1)" }}>
 						<div className="mx-4">
-							<div className="text-cbs-schedule-nextweek text-[14px]">Số khách hàng</div>
-							<div className="font-bold" style={{ fontSize: "20px" }}>11</div>
+							<div className="text-cbs-schedule-nextweek text-[14px]">TB sản phẩm/khách</div>
+							<div className="font-bold" style={{ fontSize: "20px" }}>5</div>
 						</div>
 					</div>
 					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(244, 148, 35, 1)" }}>
 						<div className="mx-4">
-							<div className="text-cbs-schedule-nextweek text-[14px]">Số khách hàng</div>
-							<div className="font-bold" style={{ fontSize: "20px" }}>11</div>
+							<div className="text-cbs-schedule-nextweek text-[14px]">TB sản phẩm/đơn</div>
+							<div className="font-bold" style={{ fontSize: "20px" }}>2,50</div>
 						</div>
 					</div>
 					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(244, 148, 35, 1)" }}>
 						<div className="mx-4">
-							<div className="text-cbs-schedule-nextweek text-[14px]">Số khách hàng</div>
-							<div className="font-bold" style={{ fontSize: "20px" }}>11</div>
+							<div className="text-cbs-schedule-nextweek text-[14px]">TB doanh thu/đơn</div>
+							<div className="font-bold" style={{ fontSize: "20px" }}>200.000</div>
 						</div>
 					</div>
 					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(244, 148, 35, 1)" }}>
 						<div className="mx-4">
-							<div className="text-cbs-schedule-nextweek text-[14px]">Số khách hàng</div>
-							<div className="font-bold" style={{ fontSize: "20px" }}>11</div>
+							<div className="text-cbs-schedule-nextweek text-[14px]">Doanh số Off</div>
+							<div className="font-bold" style={{ fontSize: "20px" }}>1.500.000</div>
 						</div>
 					</div>
 					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(244, 148, 35, 1)" }}>
 						<div className="mx-4">
-							<div className="text-cbs-schedule-nextweek text-[14px]">Số khách hàng</div>
-							<div className="font-bold" style={{ fontSize: "20px" }}>11</div>
+							<div className="text-cbs-schedule-nextweek text-[14px]">Doanh số App</div>
+							<div className="font-bold" style={{ fontSize: "20px" }}>10.500.000</div>
 						</div>
 					</div>
 				</div>
