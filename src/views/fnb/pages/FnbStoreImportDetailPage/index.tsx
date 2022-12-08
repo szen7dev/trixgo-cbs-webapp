@@ -167,6 +167,11 @@ export const FnbStoreImportDetailPage: FC = () => {
 								Hàng hóa, nguyên vật liệu
 							</div>
 						</th>
+						<th className="pb-1 pt-1 font-normal  w-1/4">
+							<div className="border-r-2 border-gray-300 font-normal pl-2">
+								Đơn vị tính
+							</div>
+						</th>
 						<th className="pb-1 pt-1 font-normal">
 							<div className="border-r-2 border-gray-300 font-normal pl-2">
 								Khối lượng nhập kho
@@ -201,6 +206,9 @@ export const FnbStoreImportDetailPage: FC = () => {
 							<td className={"p-2 border-0.5 border-primary-border text-center"}>{Number(i+1)}</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
                                 Siro cam xả
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+                                kg
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
                                 {formatNumberMoney(100||0)}
