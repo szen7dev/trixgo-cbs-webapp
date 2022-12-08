@@ -64,7 +64,7 @@ export const useCashFlowPlan = ({
             refetchOnWindowFocus: false,
             enabled: isFetchInfo,
         });
-
+        
     const info = detailData?.data;
 
     const {
