@@ -190,13 +190,15 @@ export const FnbExpensePage: FC = () => {
 					(listWithPager[pageIndex]??[]).map((item: any, i: any) => (
 						<tr key={item._id} className="text-[14px]">
 							<td className={"p-2 border-0.5 border-primary-border text-center"}>{Number(i+1)}</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-                                {item?.name}
+							<td className={"p-2 border-0.5 border-primary-border text-cbs-highlight-color"}>
+								<Link to ={`/fnb/expense/${item._id}`}>
+									{item?.name}
+								</Link>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{moment(item?.createAt).format('DD/MM/YYYY')}
 							</td>
-							<td className={"p-2 border-0.5 border-primary-border text-cbs-highlight-color"}>
+							<td className={"p-2 border-0.5 border-primary-border"}>
                                 {formatNumberMoney(0||0)}
                               
 							</td>

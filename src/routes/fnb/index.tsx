@@ -28,8 +28,8 @@ import { FnbStoreImportDetailPage } from "views/fnb/pages/FnbStoreImportDetailPa
 import { FnbStoreExportPage } from "views/fnb/pages/FnbStoreExportPage/index";
 import { FnbStoreExportDetailPage } from "views/fnb/pages/FnbStoreExportDetailPage/index";
 import { FnbExpensePage } from "views/fnb/pages/FnbExpensePage/index";
-// import { FnbStoreImportPage } from "views/fnb/pages/FnbStoreImportPage/index";
-// import { FnbStoreImportDetailPage } from "views/fnb/pages/FnbStoreImportDetailPage/index";
+import { FnbExpenseFundaPage } from "views/fnb/pages/FnbExpenseFundaPage/index";
+import { FnbExpenseFundaDetailPage } from "views/fnb/pages/FnbExpenseFundaDetailPage/index";
 
 const FnbRouter: FC = () => {
     return (
@@ -151,6 +151,26 @@ const FnbRouter: FC = () => {
                 component={() =>
                     <FnbLayout>
                         <FnbExpensePage/>
+                    </FnbLayout>
+                }
+            />
+
+            <Route
+                exact
+                path="/fnb/expense/:fundaID"
+                component={() =>
+                    <FnbLayout>
+                        <FnbExpenseFundaPage/>
+                    </FnbLayout>
+                }
+            />
+
+            <Route
+                exact
+                path="/fnb/expense/:fundaID/:detailID"
+                component={() =>
+                    <FnbLayout>
+                        <FnbExpenseFundaDetailPage/>
                     </FnbLayout>
                 }
             />
