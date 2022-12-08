@@ -14,6 +14,7 @@ import ErrorPage from "views/authentication/Error";
 import {
     InspectionHomePage,
 } from "views/inspection/pages";
+import { FnbLayout } from "views/fnb/shareComponents/layouts/FnbLayout";
 import { FnBHomePage } from "views/fnb/pages/FnbHomePage/index";
 import { FnBProductPage } from "views/fnb/pages/FnbProductPage/index";
 import { FnbProductQuotasPage } from "views/fnb/pages/FnbProductQuotasPage/index";
@@ -21,7 +22,11 @@ import { FnbShiftPage } from "views/fnb/pages/FnbShiftPage/index";
 import { FnbShiftDetailPage } from "views/fnb/pages/FnbShiftDetailPage/index";
 import { FnbShiftMaterialPage } from "views/fnb/pages/FnbShiftMaterialPage/index";
 import { FnbReportPage } from "views/fnb/pages/FnbReportPage/index";
-import { FnbLayout } from "views/fnb/shareComponents/layouts/FnbLayout";
+import { FnbStorePage } from "views/fnb/pages/FnbStorePage/index";
+import { FnbStoreImportPage } from "views/fnb/pages/FnbStoreImportPage/index";
+import { FnbStoreImportDetailPage } from "views/fnb/pages/FnbStoreImportDetailPage/index";
+import { FnbStoreExportPage } from "views/fnb/pages/FnbStoreExportPage/index";
+import { FnbStoreExportDetailPage } from "views/fnb/pages/FnbStoreExportDetailPage/index";
 
 const FnbRouter: FC = () => {
     return (
@@ -85,13 +90,53 @@ const FnbRouter: FC = () => {
                 }
             />
 
-            {/* Nhập, xuất, tồn, thất thoát */}
+            {/* Quản lý kho: Nhập, xuất, tồn, thất thoát */}
             <Route
                 exact
-                path="/fnb/material"
+                path="/fnb/store"
                 component={() =>
                     <FnbLayout>
-                        <FnbShiftPage/>
+                        <FnbStorePage/>
+                    </FnbLayout>
+                }
+            />
+
+            <Route
+                exact
+                path="/fnb/store/:fundaID/import"
+                component={() =>
+                    <FnbLayout>
+                        <FnbStoreImportPage/>
+                    </FnbLayout>
+                }
+            />
+
+            <Route
+                exact
+                path="/fnb/store/:fundaID/import/:detailID"
+                component={() =>
+                    <FnbLayout>
+                        <FnbStoreImportDetailPage/>
+                    </FnbLayout>
+                }
+            />
+
+            <Route
+                exact
+                path="/fnb/store/:fundaID/export"
+                component={() =>
+                    <FnbLayout>
+                        <FnbStoreExportPage/>
+                    </FnbLayout>
+                }
+            />
+
+            <Route
+                exact
+                path="/fnb/store/:fundaID/export/:detailID"
+                component={() =>
+                    <FnbLayout>
+                        <FnbStoreExportDetailPage/>
                     </FnbLayout>
                 }
             />

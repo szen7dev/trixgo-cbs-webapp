@@ -7,17 +7,18 @@ import moment from "moment";
 
 /*=====3.ICONS=====*/
 import budgetLogo from "assets/logos/budget.png";
-// import fakeThumbnail from "assets/images/avatar.jpg";
 import iconFolder from "assets/images/icons8-application-window-100.png";
 import iconPlus from "assets/images/icons8-plus-math-96 3.svg";
 import iconPlusBlue from "assets/images/icons8-plus-math-96 1.svg";
 import sampleAvaT from "assets/images/Frame 3581.svg";
+import iconStore from 'assets/images/icons8-store.svg';
+import iconExpense from 'assets/images/icons8-expense.svg';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 import homeIcon from 'assets/images/icons-home.svg';
 import reportIcon from 'assets/images/icons-report.svg';
-import menuIcon from 'assets/images/icons8-squared.svg';
+import menuIcon from 'assets/images/icons8-order.svg';
 import shiftcon from 'assets/images/icons-shift.svg';
 
 /*=====4.PAGES/COMPONENTS=====*/
@@ -90,14 +91,14 @@ export const FnbLeftSideBar: FC = () => {
                         <img width={'20px'} src={shiftcon} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Ca làm việc</span>
                     </NavLink>
-                    {/* <NavLink to={`/fnb/material`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                        <img width={'20px'} src={iconFolder} alt="Menu item" />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Nhập xuất tồn kho</span>
+                    <NavLink to={`/fnb/store`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                        <img width={'20px'} src={iconStore} alt="Menu item" />
+                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản lý kho</span>
                     </NavLink>
                     <NavLink to={`/fnb/expense`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                        <img width={'20px'} src={iconFolder} alt="Menu item" />
+                        <img width={'20px'} src={iconExpense} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản lý chi phí</span>
-                    </NavLink> */}
+                    </NavLink>
                     <NavLink to={`/fnb/product`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                         <img width={'20px'} src={menuIcon} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Thực đơn</span>
