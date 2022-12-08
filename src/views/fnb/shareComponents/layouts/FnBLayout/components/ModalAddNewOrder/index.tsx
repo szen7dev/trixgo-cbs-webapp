@@ -119,7 +119,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = await API.get(
+      const response: any = await API.get(
         `/api/fnb/products?${convertObToUrl({
           type: 1,
           keyword: keywordSearchProduct,
@@ -131,8 +131,6 @@ export const ModalAddNewOrder: FC<Props> = () => {
       const { data, status } = response?.data;
 
       if (status !== 200) return;
-
-      const productsWithVariant: any = [];
 
       const productsAsync = data.listRecords?.map?.(async (product: any) => {
         const response = await API.get(
@@ -146,14 +144,14 @@ export const ModalAddNewOrder: FC<Props> = () => {
       })
 
       const products = await Promise.all(productsAsync);
-      console.log({ productsWithVariant, data: data.listRecords, products })
-      setProducts(productsWithVariant);
+      setProducts(products);
     }
 
     fetchProducts();
   }, [keywordSearchProduct])
 
   useEffect(() => {
+    console.log({ productsInCart })
     calTotalMoney();
   }, [JSON.stringify(productsInCart)])
 
@@ -180,6 +178,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
         productID: p._id,
         quantity: p.quantity,
         note: p.note,
+        variants: p.variantsSelected,
         upsize: 1,
         topping: 1,
       }))
@@ -279,6 +278,26 @@ export const ModalAddNewOrder: FC<Props> = () => {
       }
       return p;
     })
+    setProductsInCart(newProductsInCart);
+  }
+
+  const handleChooseVariant = (e: any, productId: string, variant: any) => {
+    const isChecked = e.target.checked;
+
+    const newProductsInCart = productsInCart.map((product: any) => {
+      if(!product.variantsSelected) product.variantsSelected = [];
+
+      if(product._id === productId) {
+        if(isChecked) {
+          product.variantsSelected.push(variant);
+        } else{
+          product.variantsSelected = product.variantsSelected.filter((v: any) => v._id !== variant._id)
+        }
+      }
+
+      return product;
+    })
+
     setProductsInCart(newProductsInCart);
   }
 
@@ -700,13 +719,11 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                 {!!product?.variants?.length && product.variants.map((variant: any) => (
                                   <div key={variant._id} className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
                                     <div className="form-check">
-                                      <input className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox" value="" id="flexCheckDefault" />
-                                      <label className="form-check-label inline-block text-gray-800" htmlFor="flexCheckDefault">
+                                      <input className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox" value={variant._id} id={variant._id} onChange={e => handleChooseVariant(e, product._id, variant)} />
+                                      <label className="form-check-label inline-block text-gray-800" htmlFor={variant._id}>
                                         {variant.name}
                                       </label>
                                     </div>
-                                    {/* <input />
-                                    <span>{variant.name}</span> */}
                                   </div>
                                 ))}
                               </div>
