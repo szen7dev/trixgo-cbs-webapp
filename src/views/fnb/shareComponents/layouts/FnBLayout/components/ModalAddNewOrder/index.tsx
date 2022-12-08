@@ -68,8 +68,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
   const [keywordSearchProduct, setKeywordSearchProduct] = useState("");
   const [totalMoney, setTotalMoney] = useState(0);
   const [totalPay, setTotalPay] = useState(0);
-  const [discount, setDiscount] = useState(0);
-  const [sales, setSales] = useState(0);
+  const [searchContact, setSearchContact] = useState('');
   const [discountAndSales, setDiscountAndSales] = useState({
     discount: 0,
     discountPercent: 0,
@@ -122,17 +121,33 @@ export const ModalAddNewOrder: FC<Props> = () => {
     const fetchProducts = async () => {
       const response = await API.get(
         `/api/fnb/products?${convertObToUrl({
-            keyword: keywordSearchProduct,
-            populates: JSON.stringify({
-              path: 'images',
-            })
+          type: 1,
+          keyword: keywordSearchProduct,
+          populates: JSON.stringify({
+            path: 'images',
+          })
         })}`,
       );
       const { data, status } = response?.data;
 
       if (status !== 200) return;
 
-      setProducts(data.listRecords);
+      const productsWithVariant: any = [];
+
+      const productsAsync = data.listRecords?.map?.(async (product: any) => {
+        const response = await API.get(
+          `/api/fnb/products?type=2`,
+        );
+
+        return {
+          ...product,
+          variants: response?.data?.data?.listRecords,
+        }
+      })
+
+      const products = await Promise.all(productsAsync);
+      console.log({ productsWithVariant, data: data.listRecords, products })
+      setProducts(productsWithVariant);
     }
 
     fetchProducts();
@@ -141,15 +156,6 @@ export const ModalAddNewOrder: FC<Props> = () => {
   useEffect(() => {
     calTotalMoney();
   }, [JSON.stringify(productsInCart)])
-
-  const CustomCheckboxToggle = () => {
-    const [selectCheckbox, setSelectCheckbox] = React.useState(false)
-    return (
-      <button onClick={() => setSelectCheckbox(!selectCheckbox)} className="h-[16px]">
-        {(selectCheckbox ? <img src={CheckedBox} alt="" /> : <img src={CheckBoxEmpty} alt="" />)}
-      </button>
-    )
-  }
 
   const [count, setCount] = useState(0);
   const increaseCount = () => {
@@ -160,6 +166,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
   };
 
   const { list: contacts } = useContact({
+    params: { keyword: searchContact },
     isFetchList: true,
   })
 
@@ -417,6 +424,11 @@ export const ModalAddNewOrder: FC<Props> = () => {
                         <DropdownSearchable
                           onchangeValue={(value: any) => setFieldValue("customerID", value.id)}
                           onClearData={() => setFieldValue("customerID", "")}
+                          onSearchInputChange={
+                            debounce(
+                              (value) => setSearchContact(value),
+                              100)
+                          }
                           placeholder={"Mã khách hàng"}
                           className={"max-w-full h-full flex-1"}
                           focusedClass={"border-b border-primary"}
@@ -685,21 +697,18 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                 </div>
                               </div>
                               <div className="flex flex-wrap w-4/5">
-                                <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
-                                  <CustomCheckboxToggle /> <span>Pudding trứng</span>
-                                </div>
-                                <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
-                                  <CustomCheckboxToggle /> <span>Pudding trứng</span>
-                                </div>
-                                <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
-                                  <CustomCheckboxToggle /> <span>Pudding trứng</span>
-                                </div>
-                                <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
-                                  <CustomCheckboxToggle /> <span>Pudding trứng</span>
-                                </div>
-                                <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
-                                  <CustomCheckboxToggle /> <span>Pudding trứng</span>
-                                </div>
+                                {!!product?.variants?.length && product.variants.map((variant: any) => (
+                                  <div key={variant._id} className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                    <div className="form-check">
+                                      <input className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox" value="" id="flexCheckDefault" />
+                                      <label className="form-check-label inline-block text-gray-800" htmlFor="flexCheckDefault">
+                                        {variant.name}
+                                      </label>
+                                    </div>
+                                    {/* <input />
+                                    <span>{variant.name}</span> */}
+                                  </div>
+                                ))}
                               </div>
                             </div>
                           </div>
