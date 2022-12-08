@@ -3,13 +3,14 @@ import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 
 /*=====2.TYPING/APIS=====*/
 import fnbRepository from 'apis/fnb/dashboard';
+
 export const useFnbDashboard = ({
     params = {},
     isFetchListOrderByProperty = false
 }: any): any => {
-
+    
     const { data: detailData, isLoading: listOrderByPropertyIsLoading, refetch: refetchListOrderByProperty } =
-        useQuery("fnb_dashboard_list_by_property", () => fnbRepository.getListByProperty(params), {
+        useQuery([`fnb_dashboard_list_by_property`,{...params, isFetchListOrderByProperty }],() => fnbRepository.getListByProperty(params), {
             refetchOnWindowFocus: false,
             enabled: isFetchListOrderByProperty,
         });
