@@ -27,6 +27,9 @@ import { FnbStoreImportPage } from "views/fnb/pages/FnbStoreImportPage/index";
 import { FnbStoreImportDetailPage } from "views/fnb/pages/FnbStoreImportDetailPage/index";
 import { FnbStoreExportPage } from "views/fnb/pages/FnbStoreExportPage/index";
 import { FnbStoreExportDetailPage } from "views/fnb/pages/FnbStoreExportDetailPage/index";
+import { FnbExpensePage } from "views/fnb/pages/FnbExpensePage/index";
+// import { FnbStoreImportPage } from "views/fnb/pages/FnbStoreImportPage/index";
+// import { FnbStoreImportDetailPage } from "views/fnb/pages/FnbStoreImportDetailPage/index";
 
 const FnbRouter: FC = () => {
     return (
@@ -147,7 +150,7 @@ const FnbRouter: FC = () => {
                 path="/fnb/expense"
                 component={() =>
                     <FnbLayout>
-                        <FnbShiftPage/>
+                        <FnbExpensePage/>
                     </FnbLayout>
                 }
             />

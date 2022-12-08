@@ -174,7 +174,7 @@ export const FnbStoreExportPage: FC = () => {
 						</th>
                         <th className="pb-1 pt-1 font-normal">
 							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Giá trị nhập kho
+								Giá trị xuất kho
 							</div>
 						</th>
                         <th className="pb-1 pt-1 font-normal">
@@ -195,7 +195,7 @@ export const FnbStoreExportPage: FC = () => {
 						<tr key={item._id} className="text-[14px]">
 							<td className={"p-2 border-0.5 border-primary-border text-center"}>{Number(i+1)}</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								Nhập kho Thái Thịnh ngày 15/1/2021
+								Xuất kho Thái Thịnh ngày 15/1/2021
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								15/2/2021
