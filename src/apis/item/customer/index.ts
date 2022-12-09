@@ -92,6 +92,6 @@ async function importCustomerFromExcel(data: any) {
 
 // Export excel
 async function exportCustomer(data: any) {
-    const { data: result } = await API.post(`${ITEM_URL}/contacts/export-customer`, data);
+    const { data: result } = await API.get(`${ITEM_URL}/contacts/export-customer`, data);
     return result;
 }
