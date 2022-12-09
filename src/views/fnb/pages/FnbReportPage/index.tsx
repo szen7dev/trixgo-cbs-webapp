@@ -379,15 +379,15 @@ export const FnbReportPage: FC = () => {
 							<div className="font-bold" style={{ fontSize: "20px" }}>{amountCustomer}</div>
 						</div>
 					</div>
-					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(244, 148, 35, 1)" }}>
+					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(41, 164, 182)" }}>
 						<div className="mx-4">
-							<div className="text-cbs-schedule-nextweek text-[14px]">Số đơn hàng</div>
+							<div className="text-[14px]" style={{ color: "rgba(41, 164, 182)" }}>Số đơn hàng</div>
 							<div className="font-bold" style={{ fontSize: "20px" }}>{totalQuantity}</div>
 						</div>
 					</div>
-					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(244, 148, 35, 1)" }}>
+					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(202, 94, 89)" }}>
 						<div className="mx-4">
-							<div className="text-cbs-schedule-nextweek text-[14px]">Số sản phẩm</div>
+							<div className="text-[14px]" style={{ color: "rgba(202, 94, 89)" }}>Số sản phẩm</div>
 							<div className="font-bold" style={{ fontSize: "20px" }}>{totalNumberOfProducts}</div>
 						</div>
 					</div>
@@ -409,15 +409,15 @@ export const FnbReportPage: FC = () => {
 							<div className="font-bold" style={{ fontSize: "20px" }}>{formatNumberMoney(revenue_orver_AVG)}</div>
 						</div>
 					</div>
-					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(244, 148, 35, 1)" }}>
+					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(0, 202, 153)" }}>
 						<div className="mx-4">
-							<div className="text-cbs-schedule-nextweek text-[14px]">Doanh số Off</div>
+							<div className="text-[14px]" style={{ color: "rgba(0, 202, 153)" }}>Doanh số Off</div>
 							<div className="font-bold" style={{ fontSize: "20px" }}>{formatNumberMoney(revenueOff)}</div>
 						</div>
 					</div>
-					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(244, 148, 35, 1)" }}>
+					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(0, 202, 153" }}>
 						<div className="mx-4">
-							<div className="text-cbs-schedule-nextweek text-[14px]">Doanh số App</div>
+							<div className="text-[14px]" style={{ color: "rgba(0, 202, 153)" }}>Doanh số App</div>
 							<div className="font-bold" style={{ fontSize: "20px" }}>{formatNumberMoney(revenueApp)}</div>
 						</div>
 					</div>
