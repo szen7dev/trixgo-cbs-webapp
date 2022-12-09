@@ -151,16 +151,26 @@ export const ModalAddNewOrder: FC<Props> = () => {
   }, [keywordSearchProduct])
 
   useEffect(() => {
-    console.log({ productsInCart })
     calTotalMoney();
   }, [JSON.stringify(productsInCart)])
 
-  const [count, setCount] = useState(0);
-  const increaseCount = () => {
-    setCount(count + 1);
+  const increaseCount = (product: any) => {
+    const newProducts = [...productsInCart];
+    for (let i = 0; i < newProducts.length; i++) {
+      if (newProducts[i]._id === product._id) {
+        newProducts[i].quantity = newProducts[i].quantity + 1;
+      }
+    }
+    setProductsInCart(newProducts);
   };
-  const decreaseCount = () => {
-    setCount(count + 1);
+  const decreaseCount = (product: any) => {
+    const newProducts = [...productsInCart];
+    for (let i = 0; i < newProducts.length; i++) {
+      if (newProducts[i]._id === product._id && newProducts[i].quantity > 1) {
+        newProducts[i].quantity = newProducts[i].quantity - 1;
+      }
+    }
+    setProductsInCart(newProducts);
   };
 
   const { list: contacts } = useContact({
@@ -283,7 +293,6 @@ export const ModalAddNewOrder: FC<Props> = () => {
 
   const handleChooseVariant = (e: any, productId: string, variant: any) => {
     const isChecked = e.target.checked;
-
     const newProductsInCart = productsInCart.map((product: any) => {
       if (!product.variantsSelected) product.variantsSelected = [];
 
@@ -294,15 +303,29 @@ export const ModalAddNewOrder: FC<Props> = () => {
           product.variantsSelected = product.variantsSelected.filter((v: any) => v._id !== variant._id)
         }
       }
-
       return product;
     })
 
     setProductsInCart(newProductsInCart);
   }
 
+  const calTotalPriceEachProduct = (product: any) => {
+    let amount = product.unitPrice * product.quantity;
+    if (product.variantsSelected && product.variantsSelected.length) {
+      product.variantsSelected.forEach((variant: any) => {
+        amount += variant.unitPrice;
+      });
+    }
+    return amount;
+  }
+
   const calTotalMoney = () => {
     const amount = productsInCart.reduce((prev: any, product: any) => {
+      if (product.variantsSelected && product.variantsSelected.length) {
+        product.variantsSelected.forEach((variant: any) => {
+          prev += variant.unitPrice;
+        });
+      }
       return prev += (product.unitPrice * product.quantity)
     }, 0)
     setTotalMoney(amount);
@@ -715,7 +738,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                     </label>
                                   </div>
                                 </div>
-                                <div className="text-blue-400">{convertCurrency(product.unitPrice)}</div>
+                                <div className="text-blue-400">{calTotalPriceEachProduct(product)}</div>
                               </div>
                               {/* <div className="flex gap-2 justify-end"> */}
                               <div className="flex justify-end">
@@ -724,9 +747,9 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   {/* <button onClick={decreaseCount}><img src={IconMinus} alt="" /></button>
                                   <input type="number" min="1" className="ml-2 w-[40px]" defaultValue={count} onChange={e => handleChangeQuantity(e, product)} />
                                   <button onClick={increaseCount}><img src={IconPlus} alt="" /></button> */}
-                                  <button onClick={decreaseCount}><img src={IconMinus} /></button>
-                                  <span onChange={e => handleChangeQuantity(e, product)} >{count}</span>
-                                  <button onClick={increaseCount}><img src={IconPlus} /></button>
+                                  <button onClick={() => decreaseCount(product)}><img src={IconMinus} /></button>
+                                  <span onChange={e => handleChangeQuantity(e, product)} >{product.quantity}</span>
+                                  <button onClick={() => increaseCount(product)}><img src={IconPlus} /></button>
                                 </div>
                               </div>
                               <div className="flex flex-wrap w-4/5">
@@ -734,7 +757,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   <div key={variant._id} className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
                                     <div className="form-check">
                                       <input className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox" value={variant._id} id={variant._id} onChange={e => handleChooseVariant(e, product._id, variant)} />
-                                      <label className="form-check-label inline-block text-gray-800" htmlFor={variant._id}>
+                                      <label className="form-check-label inline-block text-gray-800">
                                         {variant.name}
                                       </label>
                                     </div>
@@ -751,10 +774,10 @@ export const ModalAddNewOrder: FC<Props> = () => {
                           <div className="font-bold">{convertCurrency(totalMoney)}</div>
                         </div>
                         <div className="flex justify-between items-center mb-1 pl-2 py-2">
-                          <div className="">Triết khấu</div>
+                          <div className="">Chiết khấu</div>
                           <div className="flex gap-1">
                             <div>
-                              <input type="number" placeholder="25%"
+                              <input placeholder="25%"
                                 className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
                                 onChange={handleChangeDiscount}
                                 value={discountAndSales.discountPercent}
@@ -762,7 +785,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                               />
                             </div>
                             <div>
-                              <input type="number" placeholder="10.000"
+                              <input placeholder="10.000"
                                 className="w-[100px] h-[30px] border-0.5 border-r-0 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
                                 onChange={handleChangeDiscount}
                                 value={discountAndSales.discount}
@@ -775,7 +798,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                           <div className="">Giảm giá</div>
                           <div className="flex gap-1">
                             <div>
-                              <input type="number" placeholder="25%"
+                              <input placeholder="25%"
                                 className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
                                 onChange={handleChangeSales}
                                 value={discountAndSales.salesPercent}
@@ -783,7 +806,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                               />
                             </div>
                             <div>
-                              <input type="number" placeholder="10.000"
+                              <input placeholder="10.000"
                                 className="w-[100px] h-[30px] border-0.5 border-r-0 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
                                 onChange={handleChangeSales}
                                 value={discountAndSales.sales}
@@ -796,7 +819,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                       <div className="border-0.5 p-1">
                         <div className="flex justify-between">
                           <div className="font-bold">Thanh toán</div>
-                          <div className="font-bold text-primary font-bold">{convertCurrency(totalPay)}</div>
+                          <div className={`font-bold ${totalPay > 0 ? 'text-primary' : 'text-red-500'} font-bold`}>{convertCurrency(totalPay)}</div>
                         </div>
                       </div>
                       <div className="text-right mb-5" style={{ marginTop: "100px" }}>

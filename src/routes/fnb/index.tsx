@@ -14,7 +14,7 @@ import ErrorPage from "views/authentication/Error";
 import {
     InspectionHomePage,
 } from "views/inspection/pages";
-import { FnbLayout } from "views/fnb/shareComponents/layouts/FnbLayout";
+
 import { FnBHomePage } from "views/fnb/pages/FnbHomePage/index";
 import { FnBProductPage } from "views/fnb/pages/FnbProductPage/index";
 import { FnbProductQuotasPage } from "views/fnb/pages/FnbProductQuotasPage/index";
@@ -30,6 +30,7 @@ import { FnbStoreExportDetailPage } from "views/fnb/pages/FnbStoreExportDetailPa
 import { FnbExpensePage } from "views/fnb/pages/FnbExpensePage/index";
 import { FnbExpenseFundaPage } from "views/fnb/pages/FnbExpenseFundaPage/index";
 import { FnbExpenseFundaDetailPage } from "views/fnb/pages/FnbExpenseFundaDetailPage/index";
+import { FnbLayout } from "views/fnb/shareComponents/layouts/FnbLayout";
 
 const FnbRouter: FC = () => {
     return (
