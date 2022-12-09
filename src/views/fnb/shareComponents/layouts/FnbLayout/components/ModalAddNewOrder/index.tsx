@@ -32,6 +32,7 @@ import { GroupSearchable } from "shareComponents/common/GroupSearchable";
 import API from "apis/repository";
 import { useContact } from "services/hooks/items/useContact";
 import { convertObToUrl } from "utils";
+import { FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
 
 interface InitialValues {
   fundaID: string,
@@ -431,27 +432,44 @@ export const ModalAddNewOrder: FC<Props> = () => {
                     <div className={"w-1/4 flex items-start pl-3"}>
                       <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full"}>Ca làm</div>
                       <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
-                        <GroupSearchable
-                          ref={groupSearchableRef}
-                          disabled={values.fundaID.length <= 0}
-                          handleSetValue={(item: any) => {
-                            setShiftID(item.value);
-                            setFieldValue("shiftID", item.value);
+                        <DropdownSearchable
+                          onchangeValue={(value: any) => {
+                            setShiftID(value?.id)
+                            setFieldValue("shiftID", value?.id);
                           }}
                           onClearData={() => {
+                            setShiftID("")
                             setFieldValue("shiftID", "");
-                            setShiftID("");
-                            setGroupParentPicker({});
+                            // groupSearchableRef.current && groupSearchableRef.current.resetGroupSearchable();
                           }}
+                          // onSearchInputChange={
+                          //   debounce(
+                          //     (value) => setSearchDepartmentValue(value),
+                          //     500)
+                          // }
+                          // onScroll={(e) => handleScroll(e, 'project')}
+                          className={"max-w-full h-full flex-1"}
+                          placeholder="Chọn ca làm"
+                          isMultiple={false}
+                          allowClearValueSingleInput={true}
+                          showTriangle={false}
+                          maxWidthInput="max-w-full"
+                          renderSelectedItem={(item: any) => (
+                            <div
+                              className="max-w-full"
+                            >
+                              <p className={"truncate"}>{item.text}</p>
+                            </div>
+                          )}
                           data={shifts?.map((shift: any) => ({
                             label: shift.name,
                             value: shift._id,
                           }))}
-                          groupParentPicker={groupParentPicker}
-                          setGroupParentPicker={setGroupParentPicker}
-                          // onScroll={(e) => handleScroll(e, 'group')}
-                          className={"max-w-full h-full flex-1"}
-                          placeholder="Chọn ca làm"
+                          formatItem={{
+                            id: "value",
+                            text: "label",
+                          }}
+                          inlineSearch={true}
                         />
                         <ErrorMessage
                           name="shiftID"
@@ -538,32 +556,87 @@ export const ModalAddNewOrder: FC<Props> = () => {
                   <div className="flex justify-between my-6">
                     <div>
                       <span>Kênh bán hàng</span>
-                      <div className="flex flex-wrap mt-2 mb-2">
-                        <div className="flex items-center mr-4">
-                          <Field id="saleChannelOffline" type="radio" value="1" name="salesChannel" className="w-4 h-4" checked />
-                          <label htmlFor="saleChannelOffline" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Offline</label>
-                        </div>
-                        <div className="flex items-center mr-4">
-                          <Field id="saleChannelGrab" type="radio" value="2" name="salesChannel" className="w-4 h-4" />
-                          <label htmlFor="saleChannelGrab" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Grab</label>
-                        </div>
-                        <div className="flex items-center mr-4">
-                          <Field id="saleChannelShopee" type="radio" value="3" name="salesChannel" className="w-4 h-4" />
-                          <label htmlFor="saleChannelShopee" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Shopee</label>
-                        </div>
-                        <div className="flex items-center mr-4">
-                          <Field id="saleChannelGojek" type="radio" value="4" name="salesChannel" className="w-4 h-4" />
-                          <label htmlFor="saleChannelGojek" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Gojek</label>
-                        </div>
-                        <div className="flex items-center mr-4">
-                          <Field id="saleChannelBaemin" type="radio" value="5" name="salesChannel" className="w-4 h-4" />
-                          <label htmlFor="saleChannelBaemin" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Baemin</label>
-                        </div>
-                        <div className="flex items-center mr-4">
-                          <Field id="saleChannelLoship" type="radio" value="6" name="salesChannel" className="w-4 h-4" />
-                          <label htmlFor="saleChannelLoship" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Loship</label>
-                        </div>
-
+                      <div>
+                        <FormControl sx={{ marginTop: "-5px" }} >
+                          <RadioGroup
+                            row
+                            aria-labelledby="demo-row-radio-buttons-group-label"
+                            name="salesChannel"
+                          >
+                            <FormControlLabel
+                              sx={{ marginLeft: "0" }}
+                              value="1"
+                              control={
+                                <Radio
+                                  style={{ paddingRight: "5px" }}
+                                  icon={<img src={CheckBoxEmpty} alt="" />}
+                                  checkedIcon={<img src={CheckedBox} alt="" />}
+                                />
+                              }
+                              label={<span className="text-[13px]">Offline</span>}
+                            />
+                            <FormControlLabel
+                              sx={{ marginLeft: "0" }}
+                              value="2"
+                              control={
+                                <Radio
+                                  style={{ paddingRight: "5px" }}
+                                  icon={<img src={CheckBoxEmpty} alt="" />}
+                                  checkedIcon={<img src={CheckedBox} alt="" />}
+                                />
+                              }
+                              label={<span className="text-[13px]">Grab</span>}
+                            />
+                            <FormControlLabel
+                              sx={{ marginLeft: "0" }}
+                              value="3"
+                              control={
+                                <Radio
+                                  style={{ paddingRight: "5px" }}
+                                  icon={<img src={CheckBoxEmpty} alt="" />}
+                                  checkedIcon={<img src={CheckedBox} alt="" />}
+                                />
+                              }
+                              label={<span className="text-[13px]">Shopee</span>}
+                            />
+                            <FormControlLabel
+                              sx={{ marginLeft: "0" }}
+                              value="4"
+                              control={
+                                <Radio
+                                  style={{ paddingRight: "5px" }}
+                                  icon={<img src={CheckBoxEmpty} alt="" />}
+                                  checkedIcon={<img src={CheckedBox} alt="" />}
+                                />
+                              }
+                              label={<span className="text-[13px]">Gojek</span>}
+                            />
+                            <FormControlLabel
+                              sx={{ marginLeft: "0" }}
+                              value="5"
+                              control={
+                                <Radio
+                                  style={{ paddingRight: "5px" }}
+                                  icon={<img src={CheckBoxEmpty} alt="" />}
+                                  checkedIcon={<img src={CheckedBox} alt="" />}
+                                />
+                              }
+                              label={<span className="text-[13px]">Baemin</span>}
+                            />
+                            <FormControlLabel
+                              sx={{ marginLeft: "0" }}
+                              value="6"
+                              control={
+                                <Radio
+                                  style={{ paddingRight: "5px" }}
+                                  icon={<img src={CheckBoxEmpty} alt="" />}
+                                  checkedIcon={<img src={CheckedBox} alt="" />}
+                                />
+                              }
+                              label={<span className="text-[13px]">Loship</span>}
+                            />
+                          </RadioGroup>
+                        </FormControl>
                       </div>
                       <ErrorMessage
                         name="salesChannel"
@@ -573,7 +646,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                     </div>
                     <div>
                       <span>Phương thức thanh toán</span>
-                      <div className="flex flex-wrap mt-2 mb-2">
+                      {/* <div className="flex flex-wrap mt-2 mb-2">
                         <div className="flex items-center mr-4">
                           <Field id="paymentMethod1" type="radio" value="1" name="paymentMethod" className="w-4 h-4" checked />
                           <label htmlFor="paymentMethod1" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
@@ -586,6 +659,40 @@ export const ModalAddNewOrder: FC<Props> = () => {
                             Chuyển khoản
                           </label>
                         </div>
+                      </div> */}
+                      <div>
+                        <FormControl sx={{ marginTop: "-5px" }} >
+                          <RadioGroup
+                            row
+                            aria-labelledby="demo-row-radio-buttons-group-label"
+                            name="paymentMethod"
+                          >
+                            <FormControlLabel
+                              sx={{ marginLeft: "0", fontSize: "13px" }}
+                              value="1"
+                              control={
+                                <Radio
+                                  style={{ paddingRight: "5px" }}
+                                  icon={<img src={CheckBoxEmpty} alt="" />}
+                                  checkedIcon={<img src={CheckedBox} alt="" />}
+                                />
+                              }
+                              label={<span className="text-[13px]">Tiền mặt</span>}
+                            />
+                            <FormControlLabel
+                              sx={{ marginLeft: "0" }}
+                              value="2"
+                              control={
+                                <Radio
+                                  style={{ paddingRight: "5px" }}
+                                  icon={<img src={CheckBoxEmpty} alt="" />}
+                                  checkedIcon={<img src={CheckedBox} alt="" />}
+                                />
+                              }
+                              label={<span className="text-[13px]">Chuyển khoản</span>}
+                            />
+                          </RadioGroup>
+                        </FormControl>
                       </div>
                       <ErrorMessage
                         name="paymentMethod"
@@ -595,25 +702,51 @@ export const ModalAddNewOrder: FC<Props> = () => {
                     </div>
                     <div>
                       <span>Hình thức phục vụ</span>
-                      <div className="flex flex-wrap mt-2">
-                        <div className="flex items-center mr-4">
-                          <Field id="service1" type="radio" value="1" name="service" className="w-4 h-4" checked />
-                          <label htmlFor="service1" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                            Tại quán
-                          </label>
-                        </div>
-                        <div className="flex items-center mr-4">
-                          <Field id="service2" type="radio" value="2" name="service" className="w-4 h-4" />
-                          <label htmlFor="service2" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                            Mang đi
-                          </label>
-                        </div>
-                        <div className="flex items-center mr-4">
-                          <Field id="service3" type="radio" value="3" name="service" className="w-4 h-4" />
-                          <label htmlFor="service3" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                            Giao hàng (app)
-                          </label>
-                        </div>
+                      <div>
+                        <FormControl sx={{ marginTop: "-5px" }} >
+                          <RadioGroup
+                            row
+                            aria-labelledby="demo-row-radio-buttons-group-label"
+                            name="service"
+                          >
+                            <FormControlLabel
+                              sx={{ marginLeft: "0" }}
+                              value="1"
+                              control={
+                                <Radio
+                                  style={{ paddingRight: "5px" }}
+                                  icon={<img src={CheckBoxEmpty} alt="" />}
+                                  checkedIcon={<img src={CheckedBox} alt="" />}
+                                />
+                              }
+                              label={<span className="text-[13px]">Tại quán</span>}
+                            />
+                            <FormControlLabel
+                              sx={{ marginLeft: "0" }}
+                              value="2"
+                              control={
+                                <Radio
+                                  style={{ paddingRight: "5px" }}
+                                  icon={<img src={CheckBoxEmpty} alt="" />}
+                                  checkedIcon={<img src={CheckedBox} alt="" />}
+                                />
+                              }
+                              label={<span className="text-[13px]">Giao hàng (app)</span>}
+                            />
+                            <FormControlLabel
+                              sx={{ marginLeft: "0" }}
+                              value="3"
+                              control={
+                                <Radio
+                                  style={{ paddingRight: "5px" }}
+                                  icon={<img src={CheckBoxEmpty} alt="" />}
+                                  checkedIcon={<img src={CheckedBox} alt="" />}
+                                />
+                              }
+                              label={<span className="text-[13px]">Mang đi</span>}
+                            />
+                          </RadioGroup>
+                        </FormControl>
                       </div>
                     </div>
                   </div>
@@ -724,19 +857,39 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                     className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px] resize-none"
                                     placeholder="Thêm ghi chú ...." onChange={e => handleChangeNote(e, product)} defaultValue={product.note}></textarea>
                                 </div>
-                                <div className="flex gap-3">
-                                  <div className="flex gap-1">
-                                    <Field id="unitPrice1" type="radio" value="2" name="unitPrice" className="w-4 h-4" />
-                                    <label htmlFor="unitPrice1" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                                      Off
-                                    </label>
-                                  </div>
-                                  <div className="flex gap-1">
-                                    <Field id="unitPrice2" type="radio" value="2" name="unitPrice" className="w-4 h-4" />
-                                    <label htmlFor="unitPrice2" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                                      App
-                                    </label>
-                                  </div>
+                                <div>
+                                  <FormControl sx={{ marginTop: "-5px" }} >
+                                    <RadioGroup
+                                      row
+                                      aria-labelledby="demo-row-radio-buttons-group-label"
+                                      name="unitPrice"
+                                    >
+                                      <FormControlLabel
+                                        sx={{ marginLeft: "0" }}
+                                        value="Off"
+                                        control={
+                                          <Radio
+                                            style={{ paddingRight: "5px" }}
+                                            icon={<img src={CheckBoxEmpty} alt="" />}
+                                            checkedIcon={<img src={CheckedBox} alt="" />}
+                                          />
+                                        }
+                                        label={<span className="text-[13px]">Off</span>}
+                                      />
+                                      <FormControlLabel
+                                        sx={{ marginLeft: "0" }}
+                                        value="App"
+                                        control={
+                                          <Radio
+                                            style={{ paddingRight: "5px" }}
+                                            icon={<img src={CheckBoxEmpty} alt="" />}
+                                            checkedIcon={<img src={CheckedBox} alt="" />}
+                                          />
+                                        }
+                                        label={<span className="text-[13px]">App</span>}
+                                      />
+                                    </RadioGroup>
+                                  </FormControl>
                                 </div>
                                 <div className="text-blue-400">{calTotalPriceEachProduct(product)}</div>
                               </div>
