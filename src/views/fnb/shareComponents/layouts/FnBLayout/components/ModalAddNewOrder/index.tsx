@@ -222,9 +222,9 @@ export const ModalAddNewOrder: FC<Props> = () => {
     let newDiscount = inputValue;
     let newDiscountPercent = inputValue;
 
-    if(name === 'discount') {
+    if (name === 'discount') {
       newDiscountPercent = +((inputValue * 100) / totalMoney).toFixed(2);
-    } else if(name === 'discountPercent') {
+    } else if (name === 'discountPercent') {
       newDiscount = (totalMoney * inputValue) / 100;
     }
 
@@ -242,9 +242,9 @@ export const ModalAddNewOrder: FC<Props> = () => {
     let newSales = inputValue;
     let newSalesPercent = inputValue;
 
-    if(name === 'sales') {
+    if (name === 'sales') {
       newSalesPercent = +((inputValue * 100) / totalMoney).toFixed(2);
-    } else if(name === 'salesPercent') {
+    } else if (name === 'salesPercent') {
       newSales = (totalMoney * inputValue) / 100;
     }
 
@@ -285,12 +285,12 @@ export const ModalAddNewOrder: FC<Props> = () => {
     const isChecked = e.target.checked;
 
     const newProductsInCart = productsInCart.map((product: any) => {
-      if(!product.variantsSelected) product.variantsSelected = [];
+      if (!product.variantsSelected) product.variantsSelected = [];
 
-      if(product._id === productId) {
-        if(isChecked) {
+      if (product._id === productId) {
+        if (isChecked) {
           product.variantsSelected.push(variant);
-        } else{
+        } else {
           product.variantsSelected = product.variantsSelected.filter((v: any) => v._id !== variant._id)
         }
       }
@@ -653,7 +653,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                         <div className="h-[300px] overflow-y-auto	my-2 ">
                           {!!products.length && products.map((product: any) => (
                             <div key={product._id} className="flex gap-2 w-full border-b-0.5 py-2">
-                              <img src={product?.images?.length ? `${process.env.REACT_APP_URL_S3}${product?.images[0]?.path}` : ItemSample } alt="item" className="w-[44px] h-[44px]" />
+                              <img src={product?.images?.length ? `${process.env.REACT_APP_URL_S3}${product?.images[0]?.path}` : ItemSample} alt="item" className="w-[44px] h-[44px]" />
                               <div className="w-full">
                                 <div className="flex justify-between">
                                   <div>
@@ -701,6 +701,20 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                     className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px] resize-none"
                                     placeholder="Thêm ghi chú ...." onChange={e => handleChangeNote(e, product)} defaultValue={product.note}></textarea>
                                 </div>
+                                <div className="flex gap-3">
+                                  <div className="flex gap-1">
+                                    <Field id="unitPrice1" type="radio" value="2" name="unitPrice" className="w-4 h-4" />
+                                    <label htmlFor="unitPrice1" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                      Off
+                                    </label>
+                                  </div>
+                                  <div className="flex gap-1">
+                                    <Field id="unitPrice2" type="radio" value="2" name="unitPrice" className="w-4 h-4" />
+                                    <label htmlFor="unitPrice2" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                      App
+                                    </label>
+                                  </div>
+                                </div>
                                 <div className="text-blue-400">{convertCurrency(product.unitPrice)}</div>
                               </div>
                               {/* <div className="flex gap-2 justify-end"> */}
@@ -710,9 +724,9 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   {/* <button onClick={decreaseCount}><img src={IconMinus} alt="" /></button>
                                   <input type="number" min="1" className="ml-2 w-[40px]" defaultValue={count} onChange={e => handleChangeQuantity(e, product)} />
                                   <button onClick={increaseCount}><img src={IconPlus} alt="" /></button> */}
-                                  <button onClick={decreaseCount}><img src={IconMinus}/></button>
-                                  <span  onChange={e => handleChangeQuantity(e, product)} >{count}</span>
-                                  <button onClick={increaseCount}><img src={IconPlus}/></button>
+                                  <button onClick={decreaseCount}><img src={IconMinus} /></button>
+                                  <span onChange={e => handleChangeQuantity(e, product)} >{count}</span>
+                                  <button onClick={increaseCount}><img src={IconPlus} /></button>
                                 </div>
                               </div>
                               <div className="flex flex-wrap w-4/5">
