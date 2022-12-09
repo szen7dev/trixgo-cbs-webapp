@@ -6,6 +6,7 @@ import { Dialog } from '@headlessui/react';
 import { Form, Formik, Field, ErrorMessage } from 'formik';
 import { toast } from 'react-toastify';
 import moment from 'moment';
+
 /**
  * Types, Services
  */
@@ -18,9 +19,12 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
     sign: "",
     unit: "",
     unitPrice: "",
+    unitPrice2: "",
     note: ""  
 } }) => {
+    
     const {  insertAsync, updateAsync, refetch } = useFnbProduct({ params: { keyword: "" }, isFetchList: false, isFetchInfo: false  });
+
     const handleSubmit = async (values: any) => {
         if (modalType == 'create') {
             const query = {
@@ -30,6 +34,7 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
                 sign: values.sign,
                 unit: values.unit,
                 unitPrice: parseInt(values.unitPrice),
+                unitPrice2: parseInt(values.unitPrice2),
                 note: values.note,
             };
            
@@ -52,6 +57,7 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
                 sign: values.sign,
                 unit: values.unit,
                 unitPrice: parseInt(values.unitPrice),
+                unitPrice2: parseInt(values.unitPrice2),
                 note: values.note,
             };
             const result = await updateAsync(query);
@@ -64,6 +70,7 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
             }
         };
     };
+
     return (
         <Formik
             initialValues={initialValues}
@@ -89,7 +96,7 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
                                 </button>
                             </div>
                             <div className="px-6 mt-2 pt-3.5 flex-1 flex flex-col">
-                            <div className="mb-4">
+                                <div className="mb-4">
                                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtType">
                                         Phân loại
                                     </label>
@@ -137,14 +144,24 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
                                         className="font-normal leading-7 text-sm text-negative"
                                     />
                                 </div>
-
                                 <div className="mb-4">
                                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtUnitPrice">
-                                        Đơn giá
+                                        Đơn giá-Bán Off
                                     </label>
                                     <Field type="number" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtUnitPrice" placeholder="Đơn giá" {...getFieldProps('unitPrice')} />
                                     <ErrorMessage
                                         name="unitPrice"
+                                        component="span"
+                                        className="font-normal leading-7 text-sm text-negative"
+                                    />
+                                </div>
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtUnitPrice2">
+                                        Đơn giá 2-Bán App
+                                    </label>
+                                    <Field type="number" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtUnitPrice2" placeholder="Đơn giá 2" {...getFieldProps('unitPrice2')} />
+                                    <ErrorMessage
+                                        name="unitPrice2"
                                         component="span"
                                         className="font-normal leading-7 text-sm text-negative"
                                     />

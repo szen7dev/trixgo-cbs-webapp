@@ -7,25 +7,13 @@ import { useHistory } from 'react-router-dom';
 import { number, object, string } from "yup";
 import { toast } from "react-toastify";
 import debounce from "lodash/debounce";
-import { convertCurrency } from 'utils/converter';
+import { convertCurrency, formatNumberMoney } from 'utils/converter';
 import { useSocket } from "services/hooks/useSocket";
 import { useAuth } from 'services/hooks/auth/useAuth';
-// import { toArray } from 'lodash';
-// import DayPickerInput from "react-day-picker/DayPickerInput";
-// import moment from "moment";
-// import Axios from "axios";
 
 /**
  * Hooks, Typings
  */
-// import { useDoctype } from "services/hooks/items/useDoctype";
-// import { useQueryListGroup } from "services/hooks/usePlanGroup";
-// import { useQueryListDepartmentsIsMember } from 'services/hooks/items/useDepartment';
-// import { useUserSystem } from "services/hooks/users/useUserSystem";
-// import { useContract } from "services/hooks/items/useContract";
-// import { useUpload } from "services/hooks/useUpload";
-// import { APP_ID } from "apis/localdb";
-// import useUploadFile from 'services/hooks/useUploadFile';
 
 /**
  * Components, Assets
@@ -33,25 +21,17 @@ import { useAuth } from 'services/hooks/auth/useAuth';
 import { DropdownSearchable } from "shareComponents/common";
 import Close from "assets/icons/Close";
 import { useModal } from "services/hooks/useModal";
-// import fakeThumbnail from "assets/images/avatar.jpg";
-// import TagIcon from "assets/images/icons8-price-tag-96.svg";
-// import IconClock from "assets/images/icons8-snooze-48 1.svg";
-// import RadioEmpty from "assets/images/Ellipse 27.svg";
-// import RadioChecked from "assets/images/icons8-checked-40 (2) 2.svg";
-// import IconMinus from "assets/images/icons8-reduce-96 1.svg";
-import ItemSample from "assets/images/image 430.jpg";
+import IconMinus from "assets/images/icons8-reduce-96 1.svg";
+import ItemSample from "assets/images/icons8-beverage-100.svg";
 import IconPlus from "assets/images/icons8-add-new-100 1.svg";
 import CheckBoxEmpty from "assets/images/Frame 3548.svg";
 import CheckedBox from "assets/images/Check-All.svg";
 
 import "react-day-picker/lib/style.css";
-// import iconAttach from "assets/images/icons8-attach-48.svg";
-// import { FileProp, FilePropsUpload } from "typings/common";
-// import { Button, FormControl, MenuItem, Popover, Select, SelectChangeEvent } from "@mui/material";
-// import { borderRadius } from "@mui/system";
 import { GroupSearchable } from "shareComponents/common/GroupSearchable";
 import API from "apis/repository";
 import { useContact } from "services/hooks/items/useContact";
+import { convertObToUrl } from "utils";
 
 interface InitialValues {
   fundaID: string,
@@ -88,6 +68,13 @@ export const ModalAddNewOrder: FC<Props> = () => {
   const [keywordSearchProduct, setKeywordSearchProduct] = useState("");
   const [totalMoney, setTotalMoney] = useState(0);
   const [totalPay, setTotalPay] = useState(0);
+  const [searchContact, setSearchContact] = useState('');
+  const [discountAndSales, setDiscountAndSales] = useState({
+    discount: 0,
+    discountPercent: 0,
+    sales: 0,
+    salesPercent: 0,
+  });
 
   const [fundaID, setFundaID] = useState("");
   const [shiftID, setShiftID] = useState("");
@@ -132,33 +119,52 @@ export const ModalAddNewOrder: FC<Props> = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = await API.get(
-        `/api/fnb/products?keyword=${keywordSearchProduct}`,
+      const response: any = await API.get(
+        `/api/fnb/products?${convertObToUrl({
+          type: 1,
+          keyword: keywordSearchProduct,
+          populates: JSON.stringify({
+            path: 'images',
+          })
+        })}`,
       );
       const { data, status } = response?.data;
 
       if (status !== 200) return;
 
-      setProducts(data.listRecords);
+      const productsAsync = data.listRecords?.map?.(async (product: any) => {
+        const response = await API.get(
+          `/api/fnb/products?type=2`,
+        );
+
+        return {
+          ...product,
+          variants: response?.data?.data?.listRecords,
+        }
+      })
+
+      const products = await Promise.all(productsAsync);
+      setProducts(products);
     }
 
     fetchProducts();
   }, [keywordSearchProduct])
 
   useEffect(() => {
+    console.log({ productsInCart })
     calTotalMoney();
   }, [JSON.stringify(productsInCart)])
 
-  const CustomCheckboxToggle = () => {
-    const [selectCheckbox, setSelectCheckbox] = React.useState(false)
-    return (
-      <button onClick={() => setSelectCheckbox(!selectCheckbox)} className="h-[16px]">
-        {(selectCheckbox ? <img src={CheckedBox} alt="" /> : <img src={CheckBoxEmpty} alt="" />)}
-      </button>
-    )
-  }
+  const [count, setCount] = useState(0);
+  const increaseCount = () => {
+    setCount(count + 1);
+  };
+  const decreaseCount = () => {
+    setCount(count + 1);
+  };
 
   const { list: contacts } = useContact({
+    params: { keyword: searchContact },
     isFetchList: true,
   })
 
@@ -172,6 +178,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
         productID: p._id,
         quantity: p.quantity,
         note: p.note,
+        variants: p.variantsSelected,
         upsize: 1,
         topping: 1,
       }))
@@ -180,6 +187,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
         ...values,
         products,
         total: totalPay,
+        discount: discountAndSales.discount,
+        salesoff: discountAndSales.sales,
       }
 
       const { data, status } = await API.post(
@@ -207,6 +216,46 @@ export const ModalAddNewOrder: FC<Props> = () => {
     }
   };
 
+  const handleChangeDiscount = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    const inputValue = Number(value);
+    let newDiscount = inputValue;
+    let newDiscountPercent = inputValue;
+
+    if (name === 'discount') {
+      newDiscountPercent = +((inputValue * 100) / totalMoney).toFixed(2);
+    } else if (name === 'discountPercent') {
+      newDiscount = (totalMoney * inputValue) / 100;
+    }
+
+    setDiscountAndSales(prev => ({
+      ...prev,
+      discount: newDiscount,
+      discountPercent: newDiscountPercent,
+    }));
+    setTotalPay(totalMoney - newDiscount - discountAndSales.sales);
+  }
+
+  const handleChangeSales = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    const inputValue = Number(value);
+    let newSales = inputValue;
+    let newSalesPercent = inputValue;
+
+    if (name === 'sales') {
+      newSalesPercent = +((inputValue * 100) / totalMoney).toFixed(2);
+    } else if (name === 'salesPercent') {
+      newSales = (totalMoney * inputValue) / 100;
+    }
+
+    setDiscountAndSales(prev => ({
+      ...prev,
+      sales: newSales,
+      salesPercent: newSalesPercent,
+    }));
+    setTotalPay(totalMoney - discountAndSales.discount - newSales);
+  }
+
   const handleChangeQuantity = (e: any, product: any) => {
     const value = Number(e.target.value);
     if (value < 1) return;
@@ -232,9 +281,29 @@ export const ModalAddNewOrder: FC<Props> = () => {
     setProductsInCart(newProductsInCart);
   }
 
+  const handleChooseVariant = (e: any, productId: string, variant: any) => {
+    const isChecked = e.target.checked;
+
+    const newProductsInCart = productsInCart.map((product: any) => {
+      if (!product.variantsSelected) product.variantsSelected = [];
+
+      if (product._id === productId) {
+        if (isChecked) {
+          product.variantsSelected.push(variant);
+        } else {
+          product.variantsSelected = product.variantsSelected.filter((v: any) => v._id !== variant._id)
+        }
+      }
+
+      return product;
+    })
+
+    setProductsInCart(newProductsInCart);
+  }
+
   const calTotalMoney = () => {
     const amount = productsInCart.reduce((prev: any, product: any) => {
-      return prev += (product.amount * product.quantity)
+      return prev += (product.unitPrice * product.quantity)
     }, 0)
     setTotalMoney(amount);
     setTotalPay(amount);
@@ -284,7 +353,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                 <div className={"t-add-new-task-dialog-select px-6"}>
                   <div className={"flex py-2 border-b"}>
                     <div className={"w-1/4 flex items-start"}>
-                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full h-full"}>Cơ sở (*)</div>
+                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full h-full"}>Cơ sở</div>
                       <div className={"flex-1 max-w-4/5 w-4/5 h-full h-full"}>
                         <DropdownSearchable
                           onchangeValue={(value: any) => {
@@ -337,7 +406,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                       </div>
                     </div>
                     <div className={"w-1/4 flex items-start pl-3"}>
-                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full"}>Ca làm (*)</div>
+                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full"}>Ca làm</div>
                       <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                         <GroupSearchable
                           ref={groupSearchableRef}
@@ -369,11 +438,16 @@ export const ModalAddNewOrder: FC<Props> = () => {
                       </div>
                     </div>
                     <div className={"w-1/4 flex items-start pl-3"}>
-                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full"}>Mã khách (*)</div>
+                      <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full"}>Mã khách</div>
                       <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                         <DropdownSearchable
                           onchangeValue={(value: any) => setFieldValue("customerID", value.id)}
                           onClearData={() => setFieldValue("customerID", "")}
+                          onSearchInputChange={
+                            debounce(
+                              (value) => setSearchContact(value),
+                              100)
+                          }
                           placeholder={"Mã khách hàng"}
                           className={"max-w-full h-full flex-1"}
                           focusedClass={"border-b border-primary"}
@@ -569,7 +643,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                       <div>
                         <div className="my-3">Sản phẩm</div>
                         <div>
-                          <input type="text" placeholder="Tìm kiếm gán lỗi"
+                          <input type="text" placeholder="Tìm kiếm sản phẩm"
                             onKeyUp={debounce(e => {
                               setKeywordSearchProduct(e.target.value);
                             }, 700)}
@@ -578,17 +652,19 @@ export const ModalAddNewOrder: FC<Props> = () => {
                         </div>
                         <div className="h-[300px] overflow-y-auto	my-2 ">
                           {!!products.length && products.map((product: any) => (
-                            <div key={product._id} className="flex gap-2 w-full border-b-0.5 pb-2">
-                              <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
+                            <div key={product._id} className="flex gap-2 w-full border-b-0.5 py-2">
+                              <img src={product?.images?.length ? `${process.env.REACT_APP_URL_S3}${product?.images[0]?.path}` : ItemSample} alt="item" className="w-[44px] h-[44px]" />
                               <div className="w-full">
                                 <div className="flex justify-between">
                                   <div>
                                     <p className="font-bold truncate"> {product.name} </p>
                                     <textarea
-                                      className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px]"
+                                      rows={3} cols={50}
+                                      className="border-0 flex-grow outline-none mt-1 w-full h-[30px] resize-none "
+                                      style={{ width: "300px" }}
                                       placeholder="Thêm ghi chú ...." onChange={e => handleChangeNote(e, product)} defaultValue={product.note}></textarea>
                                   </div>
-                                  <div> {convertCurrency(product.amount)} </div>
+                                  <div className="text-primary"> {convertCurrency(product.unitPrice)} </div>
                                 </div>
                                 <div className="flex gap-2 justify-end">
                                   <button
@@ -613,8 +689,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
                     <div className="boxright w-1/2">
                       <div className="h-[300px] overflow-y-auto	my-2 border-0.5 ">
                         {!!productsInCart.length && productsInCart.map((product: any) => (
-                          <div key={product._id} className="flex gap-2 w-full border-b-0.5 p-2">
-                            <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
+                          <div key={product._id} className="flex gap-2 w-full border-b-0.5 py-2 pl-3 pr-3">
+                            <img src={product?.images?.length ? `${process.env.REACT_APP_URL_S3}${product?.images[0]?.path}` : ItemSample} alt="item" className="w-[44px] h-[44px]" />
                             <div className="w-full">
                               <div className="flex justify-between">
                                 <div>
@@ -625,52 +701,102 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                     className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px] resize-none"
                                     placeholder="Thêm ghi chú ...." onChange={e => handleChangeNote(e, product)} defaultValue={product.note}></textarea>
                                 </div>
-                                <div className="text-blue-400">{convertCurrency(product.amount)}</div>
+                                <div className="flex gap-3">
+                                  <div className="flex gap-1">
+                                    <Field id="unitPrice1" type="radio" value="2" name="unitPrice" className="w-4 h-4" />
+                                    <label htmlFor="unitPrice1" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                      Off
+                                    </label>
+                                  </div>
+                                  <div className="flex gap-1">
+                                    <Field id="unitPrice2" type="radio" value="2" name="unitPrice" className="w-4 h-4" />
+                                    <label htmlFor="unitPrice2" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                      App
+                                    </label>
+                                  </div>
+                                </div>
+                                <div className="text-blue-400">{convertCurrency(product.unitPrice)}</div>
                               </div>
                               {/* <div className="flex gap-2 justify-end"> */}
                               <div className="flex justify-end">
-                                <span>Số lượng: </span>
-                                <input type="number" min="1" className="ml-2 w-[40px]" defaultValue={1} onChange={e => handleChangeQuantity(e, product)} />
-                                {/* <button><img src={IconMinus} alt="" /></button>
-                                <span> 1 </span>
-                                <button><img src={IconPlus} alt="" /></button> */}
+                                {/* <span>Số lượng: </span> */}
+                                <div className="flex gap-2 justify-end items-center">
+                                  {/* <button onClick={decreaseCount}><img src={IconMinus} alt="" /></button>
+                                  <input type="number" min="1" className="ml-2 w-[40px]" defaultValue={count} onChange={e => handleChangeQuantity(e, product)} />
+                                  <button onClick={increaseCount}><img src={IconPlus} alt="" /></button> */}
+                                  <button onClick={decreaseCount}><img src={IconMinus} /></button>
+                                  <span onChange={e => handleChangeQuantity(e, product)} >{count}</span>
+                                  <button onClick={increaseCount}><img src={IconPlus} /></button>
+                                </div>
                               </div>
-                              {/* <div className="flex flex-wrap w-4/5">
-                                <div className="w-1/4 pb-2 pr-2">
-                                  <CustomCheckboxToggle /> Pudding trứng
-                                </div>
-                                <div className="w-1/4 pb-2 pr-2">
-                                  <CustomCheckboxToggle /> Pudding trứng
-                                </div>
-                              </div> */}
+                              <div className="flex flex-wrap w-4/5">
+                                {!!product?.variants?.length && product.variants.map((variant: any) => (
+                                  <div key={variant._id} className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                    <div className="form-check">
+                                      <input className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox" value={variant._id} id={variant._id} onChange={e => handleChooseVariant(e, product._id, variant)} />
+                                      <label className="form-check-label inline-block text-gray-800" htmlFor={variant._id}>
+                                        {variant.name}
+                                      </label>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
                             </div>
                           </div>
                         ))}
                       </div>
-                      <div className="border-0.5 p-1">
-                        <div className="flex justify-between">
+                      <div className="border-0.5">
+                        <div className="flex justify-between my-2 p-2">
                           <div className="font-bold">Tổng tiền</div>
-                          <div>{convertCurrency(totalMoney)}</div>
+                          <div className="font-bold">{convertCurrency(totalMoney)}</div>
                         </div>
-                        {/* <div className="flex justify-between">
+                        <div className="flex justify-between items-center mb-1 pl-2 py-2">
                           <div className="">Triết khấu</div>
-                          <div className="flex">
-                            <div>25%</div>
-                            <div>10.000</div>
+                          <div className="flex gap-1">
+                            <div>
+                              <input type="number" placeholder="25%"
+                                className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
+                                onChange={handleChangeDiscount}
+                                value={discountAndSales.discountPercent}
+                                name="discountPercent"
+                              />
+                            </div>
+                            <div>
+                              <input type="number" placeholder="10.000"
+                                className="w-[100px] h-[30px] border-0.5 border-r-0 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
+                                onChange={handleChangeDiscount}
+                                value={discountAndSales.discount}
+                                name="discount"
+                              />
+                            </div>
                           </div>
                         </div>
-                        <div className="flex justify-between">
+                        <div className="flex justify-between items-center mb-1 pl-2 py-2">
                           <div className="">Giảm giá</div>
-                          <div className="flex">
-                            <div>25%</div>
-                            <div>10.000</div>
+                          <div className="flex gap-1">
+                            <div>
+                              <input type="number" placeholder="25%"
+                                className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
+                                onChange={handleChangeSales}
+                                value={discountAndSales.salesPercent}
+                                name="salesPercent"
+                              />
+                            </div>
+                            <div>
+                              <input type="number" placeholder="10.000"
+                                className="w-[100px] h-[30px] border-0.5 border-r-0 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
+                                onChange={handleChangeSales}
+                                value={discountAndSales.sales}
+                                name="sales"
+                              />
+                            </div>
                           </div>
-                        </div> */}
+                        </div>
                       </div>
                       <div className="border-0.5 p-1">
                         <div className="flex justify-between">
                           <div className="font-bold">Thanh toán</div>
-                          <div className="font-bold">{convertCurrency(totalPay)}</div>
+                          <div className="font-bold text-primary font-bold">{convertCurrency(totalPay)}</div>
                         </div>
                       </div>
                       <div className="text-right mb-5" style={{ marginTop: "100px" }}>

@@ -22,7 +22,7 @@
     "baseUrl": "src"
   },
   "include": [
-    "src"
+    "src",
   ],
   "files": [
     "src/typings/react-table-config.d.ts"

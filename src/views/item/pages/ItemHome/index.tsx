@@ -98,16 +98,6 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
         }
     };
 
-    // useEffect(() => {
-    //     switch (type) {
-    //         case 21:
-    //             setItemState({ href: `/item/home/${type}` })
-    //             break;
-    //         default:
-    //             break;
-    //     }
-    // }, [type])
-
     const getStateChecked = useCallback((id: string) => {
         const user = doctypesChecked.find(item => item._id === id);
         return user ? true : false;

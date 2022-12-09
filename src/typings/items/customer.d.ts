@@ -50,3 +50,6 @@ interface ModalProps {
     }
     onConfirm?(): void
 }
+export interface CustomerExportResponse extends APIResponse {
+    data: String
+}

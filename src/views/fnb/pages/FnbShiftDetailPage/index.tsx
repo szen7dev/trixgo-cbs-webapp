@@ -14,7 +14,7 @@ import PencilIcon from "assets/images/icons8-pencil-96.svg";
 /*=====4.PAGES/COMPONENTS=====*/
 import { SearchInput, ModalContainer } from "shareComponents/common";
 import PaginateV2 from "shareComponents/common/PaginateV2";
-// import { CreateFnbProductQoutas } from "./modal";
+import { CreateFnbShiftDetail } from "./modal";
 
 /*=====5.TYPINGS=====*/
 
@@ -78,11 +78,11 @@ export const FnbShiftDetailPage: FC = () => {
 		}
 	};
 
-	const [modalCreateProject, setModalCreateProject] = useState<boolean>(false);
-	const toggleModalCreateProject = () => setModalCreateProject(!modalCreateProject);
+	const [modalCreateShiftDetail, setModalCreateShiftDetail] = useState<boolean>(false);
+	const toggleModalCreateShiftDetail = () => setModalCreateShiftDetail(!modalCreateShiftDetail);
 
 	const [initialValues, setInitialValues] = useState(null);
-	const onConfirmCreateProject = () => refetch();
+	const onConfirmCreateShiftDetail = () => refetch();
 
 	useEffect(() => {
 		if (isSuccess && !(hasPermission && dataUserAccess?.level == 0)) {
@@ -128,7 +128,7 @@ export const FnbShiftDetailPage: FC = () => {
 											startTime: item.startTime ? moment(item.startTime).format('MM/DD/YYYY') : '',
 											expiredTime: item.expiredTime ? moment(item.expiredTime).format('MM/DD/YYYY') : '',
 										});
-										toggleModalCreateProject();
+										toggleModalCreateShiftDetail();
 									}}
 								>
 									<img src={PencilIcon} alt="Pencil" />
@@ -143,7 +143,7 @@ export const FnbShiftDetailPage: FC = () => {
 						className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold ml-6"
 						onClick={() => {
 							setInitialValues(null);
-							toggleModalCreateProject();
+							toggleModalCreateShiftDetail();
 						}}
 					>
 						Tạo mới
@@ -179,11 +179,6 @@ export const FnbShiftDetailPage: FC = () => {
 						</th>
 						<th className="pb-1 pt-1 font-normal">
 							<div className="pl-2">
-								Thời gian khởi tạo
-							</div>
-						</th>
-						<th className="pb-1 pt-1 font-normal">
-							<div className="pl-2">
 								Nội dung
 							</div>
 						</th>
@@ -195,6 +190,26 @@ export const FnbShiftDetailPage: FC = () => {
 						<th className="pb-1 pt-1 font-normal">
 							<div className="pl-2">
 								Bàn giao tiền
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="pl-2">
+								Thời gian khởi tạo
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="pl-2">
+								Doanh số
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="pl-2">
+								Số đơn hàng
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="pl-2">
+								Số hàng hóa
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal">
@@ -216,20 +231,29 @@ export const FnbShiftDetailPage: FC = () => {
 								/>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
 								{item?.name}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
-								<Link to ={`/fnb/shift/${item._id}/material`}>
+								<Link to ={`/fnb/shift/${fundaID}/${item._id}/material`}>
 									Chi tiết
 								</Link>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
-								<Link to ={`/fnb/shift/${item._id}/cash`}>
+								<Link to ={`/fnb/shift/${fundaID}/${item._id}/cash`}>
 									Chi tiết
 								</Link>
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(item?.total||0)} đ
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(item?.numberOfOrders||0)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(item?.numberOfProducts||0)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{item?.note}
@@ -238,17 +262,17 @@ export const FnbShiftDetailPage: FC = () => {
 				))}
 			</table>
 
-			{/* <ModalContainer isModalOpen={modalCreateProject} toggle={toggleModalCreateProject}>
+			<ModalContainer isModalOpen={modalCreateShiftDetail} toggle={toggleModalCreateShiftDetail}>
 				<div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light">
-					<CreateFnbProductQoutas
+					<CreateFnbShiftDetail
 						modalType={initialValues ? "update" : "create"}
-						show={modalCreateProject}
-						toggle={toggleModalCreateProject}
+						show={modalCreateShiftDetail}
+						toggle={toggleModalCreateShiftDetail}
 						initialValues={initialValues ? initialValues : undefined}
-						onConfirm={onConfirmCreateProject}
+						onConfirm={onConfirmCreateShiftDetail}
 					/>
 				</div>
-			</ModalContainer> */}
+			</ModalContainer>
 
 		</main>
 	);
