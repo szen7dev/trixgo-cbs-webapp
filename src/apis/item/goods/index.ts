@@ -4,6 +4,9 @@ import { ITEM_URL } from '..';
 
 /*=====TYPING=====*/
 import { Goods } from 'typings/items';
+import type {
+    GoodsQueryDetailResponse
+} from 'typings/items/goods';
 
 /*=====INTERFACE DEFINE=====*/
 interface GoodsRepository {
@@ -12,6 +15,9 @@ interface GoodsRepository {
     deleteGoods: (ids: Array<string>) => Promise<any>;
     fetchListGoods: (params: Goods.GoodsQueryPayload) => Promise<Goods.GoodsQueryResponse>;
     fetchDetailGoods: (GoodsID: string, params?: Goods.GoodsQueryPayload) => Promise<Goods.GoodsQueryDetailResponse>;
+    downloadTemplateExcel: (data: any) => Promise<GoodsQueryDetailResponse>;
+    importExcel: (data: any) => Promise<GoodsQueryDetailResponse>;
+    exportExcel: (data: any) => Promise<GoodsQueryDetailResponse>;
 }
 
 export const GoodsRepository: GoodsRepository = {
@@ -20,6 +26,9 @@ export const GoodsRepository: GoodsRepository = {
     deleteGoods: (ids: Array<string>) => deleteGoods(ids),
     fetchListGoods: async (params) => fetchListGoods(params),
     fetchDetailGoods: async (GoodsID, params) => fetchListGoods(params),
+    downloadTemplateExcel: params => downloadTemplateExcel(params), 
+    importExcel: params => importExcel(params), 
+    exportExcel: params => exportExcel(params), 
 }
 
 /*=====APIS=====*/
@@ -66,4 +75,22 @@ async function deleteGoods(ids: Array<string>) {
         });
 
     return data;
+}
+
+// Tải mẫu excel
+async function downloadTemplateExcel(data: any) {
+    const { data: result } = await API.get(`${ITEM_URL}/goods/download-template-excel`, data);
+    return result;
+}
+    
+// Import excel
+async function importExcel(data: any) {
+    const { data: result } = await API.post(`${ITEM_URL}/goods/import-from-excel`, data);
+    return result;
+}
+
+// Export excel
+async function exportExcel(data: any) {
+    const { data: result } = await API.get(`${ITEM_URL}/goods/export-excel`, data);
+    return result;
 }
