@@ -152,16 +152,26 @@ export const ModalAddNewOrder: FC<Props> = () => {
   }, [keywordSearchProduct])
 
   useEffect(() => {
-    console.log({ productsInCart })
     calTotalMoney();
   }, [JSON.stringify(productsInCart)])
 
-  const [count, setCount] = useState(0);
-  const increaseCount = () => {
-    setCount(count + 1);
+  const increaseCount = (product: any) => {
+    const newProducts = [...productsInCart];
+    for (let i = 0; i < newProducts.length; i++) {
+      if (newProducts[i]._id === product._id) {
+        newProducts[i].quantity = newProducts[i].quantity + 1;
+      }
+    }
+    setProductsInCart(newProducts);
   };
-  const decreaseCount = () => {
-    setCount(count + 1);
+  const decreaseCount = (product: any) => {
+    const newProducts = [...productsInCart];
+    for (let i = 0; i < newProducts.length; i++) {
+      if (newProducts[i]._id === product._id && newProducts[i].quantity > 1) {
+        newProducts[i].quantity = newProducts[i].quantity - 1;
+      }
+    }
+    setProductsInCart(newProducts);
   };
 
   const { list: contacts } = useContact({
@@ -282,9 +292,18 @@ export const ModalAddNewOrder: FC<Props> = () => {
     setProductsInCart(newProductsInCart);
   }
 
+  const handleChangeType = (type: string, product: any) => {
+    const newProductsInCart = productsInCart.map((p: any) => {
+      if (p._id === product._id) {
+        return { ...p, statusApp: type };
+      }
+      return p;
+    })
+    setProductsInCart(newProductsInCart);
+  }
+
   const handleChooseVariant = (e: any, productId: string, variant: any) => {
     const isChecked = e.target.checked;
-
     const newProductsInCart = productsInCart.map((product: any) => {
       if (!product.variantsSelected) product.variantsSelected = [];
 
@@ -295,16 +314,30 @@ export const ModalAddNewOrder: FC<Props> = () => {
           product.variantsSelected = product.variantsSelected.filter((v: any) => v._id !== variant._id)
         }
       }
-
       return product;
     })
 
     setProductsInCart(newProductsInCart);
   }
 
+  const calTotalPriceEachProduct = (product: any) => {
+    let amount = (product.statusApp === 'app' ? product.unitPrice2 : product.unitPrice) * product.quantity;
+    if (product.variantsSelected && product.variantsSelected.length) {
+      product.variantsSelected.forEach((variant: any) => {
+        amount += variant.unitPrice;
+      });
+    }
+    return amount;
+  }
+
   const calTotalMoney = () => {
     const amount = productsInCart.reduce((prev: any, product: any) => {
-      return prev += (product.unitPrice * product.quantity)
+      if (product.variantsSelected && product.variantsSelected.length) {
+        product.variantsSelected.forEach((variant: any) => {
+          prev += variant.unitPrice;
+        });
+      }
+      return prev += ((product.statusApp === 'app' ? product.unitPrice2 : product.unitPrice) * product.quantity)
     }, 0)
     setTotalMoney(amount);
     setTotalPay(amount);
@@ -797,7 +830,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                       style={{ width: "300px" }}
                                       placeholder="Thêm ghi chú ...." onChange={e => handleChangeNote(e, product)} defaultValue={product.note}></textarea>
                                   </div>
-                                  <div className="text-primary"> {convertCurrency(product.unitPrice)} </div>
+                                  <div className="text-primary"> {convertCurrency(product.unitPrice)}</div>
                                 </div>
                                 <div className="flex gap-2 justify-end">
                                   <button
@@ -821,8 +854,10 @@ export const ModalAddNewOrder: FC<Props> = () => {
                     </div>
                     <div className="boxright w-1/2">
                       <div className="h-[300px] overflow-y-auto	my-2 border-0.5 ">
-                        {!!productsInCart.length && productsInCart.map((product: any) => (
-                          <div key={product._id} className="flex gap-2 w-full border-b-0.5 py-2 pl-3 pr-3">
+                        {!!productsInCart.length && productsInCart.map((product: any) => {
+                          console.log("product", product);
+                          return (
+                            <div key={product._id} className="flex gap-2 w-full border-b-0.5 py-2 pl-3 pr-3">
                             <img src={product?.images?.length ? `${process.env.REACT_APP_URL_S3}${product?.images[0]?.path}` : ItemSample} alt="item" className="w-[44px] h-[44px]" />
                             <div className="w-full">
                               <div className="flex justify-between">
@@ -834,41 +869,22 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                     className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px] resize-none"
                                     placeholder="Thêm ghi chú ...." onChange={e => handleChangeNote(e, product)} defaultValue={product.note}></textarea>
                                 </div>
-                                <div>
-                                  <FormControl sx={{ marginTop: "-5px" }} >
-                                    <RadioGroup
-                                      row
-                                      aria-labelledby="demo-row-radio-buttons-group-label"
-                                      name="unitPrice"
-                                    >
-                                      <FormControlLabel
-                                        sx={{ marginLeft: "0" }}
-                                        value="Off"
-                                        control={
-                                          <Radio
-                                            style={{ paddingRight: "5px" }}
-                                            icon={<img src={CheckBoxEmpty} alt="" />}
-                                            checkedIcon={<img src={CheckedBox} alt="" />}
-                                          />
-                                        }
-                                        label={<span className="text-[13px]">Off</span>}
-                                      />
-                                      <FormControlLabel
-                                        sx={{ marginLeft: "0" }}
-                                        value="App"
-                                        control={
-                                          <Radio
-                                            style={{ paddingRight: "5px" }}
-                                            icon={<img src={CheckBoxEmpty} alt="" />}
-                                            checkedIcon={<img src={CheckedBox} alt="" />}
-                                          />
-                                        }
-                                        label={<span className="text-[13px]">App</span>}
-                                      />
-                                    </RadioGroup>
-                                  </FormControl>
+                                <div className="flex gap-3">
+                                  <div className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                    <label>
+                                      <input onChange={() => handleChangeType('off', product)} type="radio" className="mr-2.5" checked={(product.statusApp == 'off' || !product.statusApp) ? true : false}/>
+                                      Off
+                                    </label>
+                                  </div>
+
+                                  <div className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                    <label>
+                                      <input onChange={() => handleChangeType('app', product)} type="radio" className="mr-2.5" checked={product.statusApp == 'app' ? true : false}/>
+                                      App
+                                    </label>
+                                  </div>
                                 </div>
-                                <div className="text-blue-400">{convertCurrency(product.unitPrice)}</div>
+                                <div className="text-blue-400">{calTotalPriceEachProduct(product)}</div>
                               </div>
                               {/* <div className="flex gap-2 justify-end"> */}
                               <div className="flex justify-end">
@@ -877,9 +893,9 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   {/* <button onClick={decreaseCount}><img src={IconMinus} alt="" /></button>
                                   <input type="number" min="1" className="ml-2 w-[40px]" defaultValue={count} onChange={e => handleChangeQuantity(e, product)} />
                                   <button onClick={increaseCount}><img src={IconPlus} alt="" /></button> */}
-                                  <button onClick={decreaseCount}><img src={IconMinus} /></button>
-                                  <span onChange={e => handleChangeQuantity(e, product)} >{count}</span>
-                                  <button onClick={increaseCount}><img src={IconPlus} /></button>
+                                  <button onClick={() => decreaseCount(product)}><img src={IconMinus} /></button>
+                                  <span onChange={e => handleChangeQuantity(e, product)} >{product.quantity}</span>
+                                  <button onClick={() => increaseCount(product)}><img src={IconPlus} /></button>
                                 </div>
                               </div>
                               <div className="flex flex-wrap w-4/5">
@@ -887,7 +903,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   <div key={variant._id} className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
                                     <div className="form-check">
                                       <input className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox" value={variant._id} id={variant._id} onChange={e => handleChooseVariant(e, product._id, variant)} />
-                                      <label className="form-check-label inline-block text-gray-800" htmlFor={variant._id}>
+                                      <label className="form-check-label inline-block text-gray-800">
                                         {variant.name}
                                       </label>
                                     </div>
@@ -896,7 +912,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
                               </div>
                             </div>
                           </div>
-                        ))}
+                          )
+                        })}
                       </div>
                       <div className="border-0.5">
                         <div className="flex justify-between my-2 p-2">
@@ -904,10 +921,10 @@ export const ModalAddNewOrder: FC<Props> = () => {
                           <div className="font-bold">{convertCurrency(totalMoney)}</div>
                         </div>
                         <div className="flex justify-between items-center mb-1 pl-2 py-2">
-                          <div className="">Triết khấu</div>
+                          <div className="">Chiết khấu</div>
                           <div className="flex gap-1">
                             <div>
-                              <input type="number" placeholder="25%"
+                              <input placeholder="25%"
                                 className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
                                 onChange={handleChangeDiscount}
                                 value={discountAndSales.discountPercent}
@@ -915,7 +932,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                               />
                             </div>
                             <div>
-                              <input type="number" placeholder="10.000"
+                              <input placeholder="10.000"
                                 className="w-[100px] h-[30px] border-0.5 border-r-0 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
                                 onChange={handleChangeDiscount}
                                 value={discountAndSales.discount}
@@ -928,7 +945,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                           <div className="">Giảm giá</div>
                           <div className="flex gap-1">
                             <div>
-                              <input type="number" placeholder="25%"
+                              <input placeholder="25%"
                                 className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
                                 onChange={handleChangeSales}
                                 value={discountAndSales.salesPercent}
@@ -936,7 +953,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                               />
                             </div>
                             <div>
-                              <input type="number" placeholder="10.000"
+                              <input placeholder="10.000"
                                 className="w-[100px] h-[30px] border-0.5 border-r-0 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
                                 onChange={handleChangeSales}
                                 value={discountAndSales.sales}
@@ -949,7 +966,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                       <div className="border-0.5 p-1">
                         <div className="flex justify-between">
                           <div className="font-bold">Thanh toán</div>
-                          <div className="font-bold text-primary font-bold">{convertCurrency(totalPay)}</div>
+                          <div className={`font-bold ${totalPay > 0 ? 'text-primary' : 'text-red-500'} font-bold`}>{convertCurrency(totalPay)}</div>
                         </div>
                       </div>
                       <div className="text-right mb-5" style={{ marginTop: "100px" }}>
