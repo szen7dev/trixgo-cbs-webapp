@@ -80,16 +80,16 @@ export const FnbReportPage: FC = () => {
 		isFetchInfo: false
 	});
 	const fundaIDActive = Object.entries(listFunda?.[0]|| [])?.[0]?.[1]?._id;
-	const [valueFunda, setValueFunda] = React.useState(fundaIDActive);
+	const [valueFunda, setValueFunda] = useState(fundaIDActive);
 	useEffect(() => {
 		if(fundaIDActive){
 			setValueFunda(fundaIDActive)
 		}
 	}, [fundaIDActive]);
 
-	const [from, setFrom] = React.useState(moment().format("YYYY-MM-DD"));
-	const [to, setTo] = React.useState(moment().format("YYYY-MM-DD"));
-	const [type, setType] = React.useState("1");
+	const [from, setFrom] = useState(moment().format("YYYY-MM-DD"));
+	const [to, setTo] = useState(moment().format("YYYY-MM-DD"));
+	const [type, setType] = useState("1");
 	
 	const CustomSelectBox1 = () => {
 		const handleChange = (event: SelectChangeEvent) => {
@@ -99,7 +99,7 @@ export const FnbReportPage: FC = () => {
 			<div>
 				<FormControl sx={{ minWidth: 250, outline: "none" }} size="small" className="bg-white border-cbs-border border-0.5 p-1 text-[13px]">
 					<Select
-						value={Object.entries(listFunda?.[0]|| [])?.[0]?.[1]?._id}
+						value={valueFunda}
 						onChange={handleChange}
 						displayEmpty
 						className="outline-none"
@@ -205,6 +205,65 @@ export const FnbReportPage: FC = () => {
 		isFetchListOrderByProperty: !!valueFunda, 
 	});
 
+	const { listOrderByProperty: listOrderByProperty4 } = useFnbDashboard({ 
+		params: { 
+			option: 4,
+			fundasID: [valueFunda],
+			fromDate: from,
+			toDate: to,
+		}, 
+		isFetchListOrderByProperty: !!valueFunda, 
+	});
+
+	let totalTotal = 0;
+	let totalDiscount = 0;
+	let totalSalesoff = 0;
+	let totalAmount = 0;
+	let totalVatAmount = 0;
+	const amountCustomer = listOrderByProperty4?.length || 0;
+	let totalQuantity = 0;
+	let totalNumberOfProducts = 0;
+	let revenueOff = 0;
+	let revenueApp = 0;
+	
+	listOrderByProperty?.map((item: any) => {
+		totalTotal 		+= item.total
+		totalDiscount 	+= item.discount;
+		totalSalesoff 	+= item.salesoff;
+		totalAmount 	+= item.amount;
+		totalVatAmount 	+= item.vatAmount
+	})
+
+	listOrderByProperty4?.map((item: any) => {
+		totalQuantity  +=item.quantity;
+		totalNumberOfProducts  +=item.numberOfProducts;
+		if(item.salesChannel == 1){
+			revenueOff += item.total;
+		}else{
+			revenueApp += item.total;
+		}
+	})
+	const product_customer_AVG = totalNumberOfProducts/amountCustomer || 0;
+	const product_order_AVG = totalNumberOfProducts/totalQuantity || 0;
+	const revenue_orver_AVG = totalTotal/totalNumberOfProducts || 0;
+
+	const { listOrderByProperty: listOrderByProperty2 } = useFnbDashboard({ 
+		params: { 
+			option: 2,
+			optionTime: 3,
+			fundasID: [valueFunda],
+			fromDate: from,
+			toDate: to,
+		}, 
+		isFetchListOrderByProperty: !!valueFunda, 
+	});
+	const array_hours: any = [];
+	const array_amount: any = [];
+	listOrderByProperty2?.map((item: any) => {
+		array_hours.push(item?._id?.hour)
+		array_amount.push(item?.total)
+	})
+	console.log({ listOrderByProperty2 });
 	return (
 		<main className="h-full overflow-auto bg-cbs-table-highlight">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6">
@@ -244,35 +303,35 @@ export const FnbReportPage: FC = () => {
 						<img src={GraySquare} alt="" />
 						<div>
 							<div className="text-primary text-[14px]">Tổng doanh số</div>
-							<div className="text-[20px]" style={{ fontSize: "20px" }}>10.000.000 đ</div>
+							<div className="text-[20px]" style={{ fontSize: "20px" }}>{formatNumberMoney(totalTotal)} đ</div>
 						</div>
 					</div>
 					<div className="flex gap-2 w-1/5 items-start	">
 						<img src={GraySquare} alt="" />
 						<div>
 							<div className="text-primary text-[14px]">Triết khấu</div>
-							<div className="text-[20px]" style={{ fontSize: "20px" }}>1.000.000 đ</div>
+							<div className="text-[20px]" style={{ fontSize: "20px" }}>{formatNumberMoney(totalDiscount)} đ</div>
 						</div>
 					</div>
 					<div className="flex gap-2 w-1/5 items-start	">
 						<img src={GraySquare} alt="" />
 						<div>
 							<div className="text-primary text-[14px]">Giảm giá</div>
-							<div className="text-[20px]" style={{ fontSize: "20px" }}>2.000.000 đ</div>
+							<div className="text-[20px]" style={{ fontSize: "20px" }}>{formatNumberMoney(totalSalesoff)} đ</div>
 						</div>
 					</div>
 					<div className="flex gap-2 w-1/5 items-start	">
 						<img src={GraySquare} alt="" />
 						<div>
 							<div className="text-primary text-[14px]">Doanh thu thực</div>
-							<div className="text-[20px]" style={{ fontSize: "20px" }}>7.000.000 đ</div>
+							<div className="text-[20px]" style={{ fontSize: "20px" }}>{formatNumberMoney(totalAmount)} đ</div>
 						</div>
 					</div>
 					<div className="flex gap-2 w-1/5 items-start	">
 						<img src={GraySquare} alt="" />
 						<div>
 							<div className="text-primary text-[14px]">Tiền thuế</div>
-							<div className="text-[20px]" style={{ fontSize: "20px" }}>700.000 đ</div>
+							<div className="text-[20px]" style={{ fontSize: "20px" }}>{formatNumberMoney(totalVatAmount)} đ</div>
 						</div>
 					</div>
 				</div>
@@ -281,49 +340,49 @@ export const FnbReportPage: FC = () => {
 					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(244, 148, 35, 1)" }}>
 						<div className="mx-4">
 							<div className="text-cbs-schedule-nextweek text-[14px]">Số khách hàng</div>
-							<div className="font-bold" style={{ fontSize: "20px" }}>10</div>
+							<div className="font-bold" style={{ fontSize: "20px" }}>{amountCustomer}</div>
 						</div>
 					</div>
 					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(244, 148, 35, 1)" }}>
 						<div className="mx-4">
 							<div className="text-cbs-schedule-nextweek text-[14px]">Số đơn hàng</div>
-							<div className="font-bold" style={{ fontSize: "20px" }}>20</div>
+							<div className="font-bold" style={{ fontSize: "20px" }}>{totalQuantity}</div>
 						</div>
 					</div>
 					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(244, 148, 35, 1)" }}>
 						<div className="mx-4">
 							<div className="text-cbs-schedule-nextweek text-[14px]">Số sản phẩm</div>
-							<div className="font-bold" style={{ fontSize: "20px" }}>50</div>
+							<div className="font-bold" style={{ fontSize: "20px" }}>{totalNumberOfProducts}</div>
 						</div>
 					</div>
 					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(244, 148, 35, 1)" }}>
 						<div className="mx-4">
 							<div className="text-cbs-schedule-nextweek text-[14px]">TB sản phẩm/khách</div>
-							<div className="font-bold" style={{ fontSize: "20px" }}>5</div>
+							<div className="font-bold" style={{ fontSize: "20px" }}>{product_customer_AVG}</div>
 						</div>
 					</div>
 					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(244, 148, 35, 1)" }}>
 						<div className="mx-4">
 							<div className="text-cbs-schedule-nextweek text-[14px]">TB sản phẩm/đơn</div>
-							<div className="font-bold" style={{ fontSize: "20px" }}>2,50</div>
+							<div className="font-bold" style={{ fontSize: "20px" }}>{product_order_AVG}</div>
 						</div>
 					</div>
 					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(244, 148, 35, 1)" }}>
 						<div className="mx-4">
 							<div className="text-cbs-schedule-nextweek text-[14px]">TB doanh thu/đơn</div>
-							<div className="font-bold" style={{ fontSize: "20px" }}>200.000</div>
+							<div className="font-bold" style={{ fontSize: "20px" }}>{formatNumberMoney(revenue_orver_AVG)}</div>
 						</div>
 					</div>
 					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(244, 148, 35, 1)" }}>
 						<div className="mx-4">
 							<div className="text-cbs-schedule-nextweek text-[14px]">Doanh số Off</div>
-							<div className="font-bold" style={{ fontSize: "20px" }}>1.500.000</div>
+							<div className="font-bold" style={{ fontSize: "20px" }}>{formatNumberMoney(revenueOff)}</div>
 						</div>
 					</div>
 					<div className="flex flex-col justify-center w-1/8 rounded-md h-[90px] bg-white " style={{ boxShadow: "-5px 0px 0px 0px rgba(244, 148, 35, 1)" }}>
 						<div className="mx-4">
 							<div className="text-cbs-schedule-nextweek text-[14px]">Doanh số App</div>
-							<div className="font-bold" style={{ fontSize: "20px" }}>10.500.000</div>
+							<div className="font-bold" style={{ fontSize: "20px" }}>{formatNumberMoney(revenueApp)}</div>
 						</div>
 					</div>
 				</div>
@@ -331,7 +390,7 @@ export const FnbReportPage: FC = () => {
 				<div className="mx-5">
 					<div className="text-primary-gray mb-3">Doanh thu tổng hợp</div>
 					<div className="p-3 bg-white">
-						<ChartRevenueByHour />
+						<ChartRevenueByHour array_hours={array_hours} array_amount={array_amount}/>
 					</div>
 				</div>
 			</div>
