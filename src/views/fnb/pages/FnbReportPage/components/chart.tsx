@@ -67,22 +67,22 @@ const options = {
                     switch (arr) {
                         case 0:
                             return "0";
-                        case 20000:
-                            return "20k";
-                        case 40000:
-                            return "40k";
-                        case 60000:
-                            return "60k";
-                        case 80000:
-                            return "80k";
                         case 100000:
                             return "100k";
-                        case 120000:
-                            return "120k";
-                        case 140000:
-                            return "140k";
-                        case 160000:
-                            return "160k";
+                        case 500000:
+                            return "500k";
+                        case 1000000:
+                            return "1000k";
+                        case 5000000:
+                            return "5000k";
+                        case 10000000:
+                            return "10.000k";
+                        case 20000000:
+                            return "20.000k";
+                        case 30000000:
+                            return "30.000k";
+                        case 40000000:
+                            return "40.000k";
                     }
                 },
             },

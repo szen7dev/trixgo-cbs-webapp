@@ -23,6 +23,7 @@ import { Button, FormControl, MenuItem, Select, SelectChangeEvent } from "@mui/m
 import { useFnbProduct } from 'services/hooks/fnb/useFnbProduct';
 import { useFnbDashboard } from 'services/hooks/fnb/useFnbDashboard';
 import { useFunda } from 'services/hooks/items/useFunda';
+import { string } from "yup";
 
 export const FnbReportPage: FC = () => {
 	type PaginateHandle = React.ElementRef<typeof PaginateV2>;
@@ -69,41 +70,54 @@ export const FnbReportPage: FC = () => {
 			history.push("/")
 		}
 	}, [hasPermission, dataUserAccess]);
-
-	const [keywordFunda, setKeywordFunda] = useState("");
 	const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager: listFunda, totalPage, refetch } = useFunda({ 
 		params: { 
-			keyword: keywordFunda,  
 			limit: 30,  
 		}, 
 		isFetchList: true, 
 		isFetchInfo: false
 	});
-	const fundaIDActive = Object.entries(listFunda?.[0]|| [])?.[0]?.[1]?._id;
-	const [valueFunda, setValueFunda] = useState(fundaIDActive);
-	useEffect(() => {
-		if(fundaIDActive){
-			setValueFunda(fundaIDActive)
-		}
-	}, [fundaIDActive]);
 
-	const [from, setFrom] = useState(moment().format("YYYY-MM-DD"));
-	const [to, setTo] = useState(moment().format("YYYY-MM-DD"));
-	const [type, setType] = useState("1");
-	
+	const [arrFundaID, setArrFundaID] = useState([]);
+	const [valueFunda, setValueFunda]: any = useState([]);
+	const [valueFundaActive, setValueFundaActive] = useState("");
+
+	const [from, setFrom] 	= useState(moment().startOf('day').format('YYYY-MM-DD HH:mm:ss'));
+	const [to, setTo] 		= useState(moment().endOf('day').format('YYYY-MM-DD HH:mm:ss'));
+	const [type, setType] 	= useState("1");
+
+	useEffect(() => {
+		// Set lần đầu load trang
+		if(listFunda && !arrFundaID?.length && !valueFundaActive?.length){
+			setArrFundaID(listFunda[0]?.map((item: any) => item._id));
+			setValueFunda(listFunda[0]?.map((item: any) => item._id));
+			setValueFundaActive(listFunda[0]?.map((item: any) => item._id))
+		}
+	}, [listFunda, arrFundaID, valueFundaActive]);
+
 	const CustomSelectBox1 = () => {
 		const handleChange = (event: SelectChangeEvent) => {
-			setValueFunda(event.target.value);
+			const value = event.target.value;
+			if(typeof(value) == "string"){
+				setValueFunda([event.target.value]);
+			}else{
+				setValueFunda(event.target.value);
+			}
+			setValueFundaActive(event.target.value);
 		};
 		return (
 			<div>
 				<FormControl sx={{ minWidth: 250, outline: "none" }} size="small" className="bg-white border-cbs-border border-0.5 p-1 text-[13px]">
 					<Select
-						value={valueFunda}
+						value={valueFundaActive}
 						onChange={handleChange}
 						displayEmpty
 						className="outline-none"
+						placeholder="Tất cả cơ sở"
 					>
+						<MenuItem value={arrFundaID} className="text-black" key={0}>
+							Tất cả cơ sở
+						</MenuItem>
 						{(listFunda[pageIndex]??[]).map((item: any)=> {
 							return (
 								<MenuItem value={item._id} className="text-black" key={item._id}>
@@ -122,43 +136,57 @@ export const FnbReportPage: FC = () => {
 			const type = event.target.value;
 			//Hôm nay
 			if(type == "1"){
-				setFrom(moment().format("YYYY-MM-DD"));
-				setTo(moment().format("YYYY-MM-DD"));
+				setFrom(moment().startOf('day').format('YYYY-MM-DD HH:mm:ss'));
+				setTo(moment().endOf('day').format('YYYY-MM-DD HH:mm:ss'));
 				setType("1");
 			}
 			//Hôm qua
 			if(type == "2"){
-				setFrom(moment().subtract(1, 'day').format("YYYY-MM-DD"));
-				setTo(moment().subtract(1, 'day').format("YYYY-MM-DD"));
+				setFrom(moment().subtract(1, 'day').startOf('day').format('YYYY-MM-DD HH:mm:ss'));
+				setTo(moment().subtract(1, 'day').endOf('day').format('YYYY-MM-DD HH:mm:ss'));
 				setType("2");
 			}
 
 			//Tuần này
 			if(type == "3"){
-				setFrom(moment().startOf('week').format("YYYY-MM-DD"));
-				setTo(moment().endOf("week").format("YYYY-MM-DD"));
+				setFrom(moment().startOf('week').startOf('day').format('YYYY-MM-DD HH:mm:ss'));
+				setTo(moment().endOf("week").endOf('day').format('YYYY-MM-DD HH:mm:ss'));
 				setType("3");
 			}
 
 			//Tuần trước
 			if(type == "4"){
-				setFrom(moment().subtract(1, 'weeks').startOf('week').format('YYYY-MM-DD'));
-				setTo(moment().subtract(1, 'weeks').endOf('week').format('YYYY-MM-DD'));
+				setFrom(moment().subtract(1, 'weeks').startOf('week').startOf('day').format('YYYY-MM-DD HH:mm:ss'));
+				setTo(moment().subtract(1, 'weeks').endOf('week').endOf('day').format('YYYY-MM-DD HH:mm:ss'));
 				setType("4");
 			}
 
 			//Tháng này
 			if(type == "5"){
-				setFrom(moment().startOf('month').format("YYYY-MM-DD"));
-				setTo(moment().endOf("month").format("YYYY-MM-DD"));
+				setFrom(moment().startOf('month').startOf('day').format('YYYY-MM-DD HH:mm:ss'));
+				setTo(moment().endOf("month").endOf('day').format('YYYY-MM-DD HH:mm:ss'));
 				setType("5");
 			}
 
 			//Tháng trước
 			if(type == "6"){
-				setFrom(moment().subtract(1,'months').startOf('month').format('YYYY-MM-DD'));
-				setTo(moment().subtract(1,'months').endOf('month').format('YYYY-MM-DD'));
+				setFrom(moment().subtract(1,'months').startOf('month').startOf('day').format('YYYY-MM-DD HH:mm:ss'));
+				setTo(moment().subtract(1,'months').endOf('month').endOf('day').format('YYYY-MM-DD HH:mm:ss'));
 				setType("6");
+			}
+
+			//Năm nay
+			if(type == "7"){
+				setFrom(moment().startOf('year').startOf('day').format('YYYY-MM-DD HH:mm:ss'));
+				setTo(moment().endOf('year').endOf('day').format('YYYY-MM-DD HH:mm:ss'));
+				setType("7");
+			}
+
+			//Năm trước
+			if(type == "8"){
+				setFrom(moment().subtract(1,'years').startOf('year').startOf('day').format('YYYY-MM-DD HH:mm:ss'));
+				setTo(moment().subtract(1,'years').endOf('year').endOf('day').format('YYYY-MM-DD HH:mm:ss'));
+				setType("8");
 			}
 		};
 
@@ -189,6 +217,12 @@ export const FnbReportPage: FC = () => {
 						<MenuItem value="6" className="text-black">
 							Tháng trước
 						</MenuItem>
+						<MenuItem value="7" className="text-black">
+							Năm Nay
+						</MenuItem>
+						<MenuItem value="8" className="text-black">
+							Năm trước
+						</MenuItem>
 					</Select>
 				</FormControl>
 			</div>
@@ -198,7 +232,7 @@ export const FnbReportPage: FC = () => {
 	const { listOrderByProperty } = useFnbDashboard({ 
 		params: { 
 			option: 1,
-			fundasID: [valueFunda],
+			fundasID: valueFunda,
 			fromDate: from,
 			toDate: to,
 		}, 
@@ -208,7 +242,7 @@ export const FnbReportPage: FC = () => {
 	const { listOrderByProperty: listOrderByProperty4 } = useFnbDashboard({ 
 		params: { 
 			option: 4,
-			fundasID: [valueFunda],
+			fundasID: valueFunda,
 			fromDate: from,
 			toDate: to,
 		}, 
@@ -251,19 +285,21 @@ export const FnbReportPage: FC = () => {
 		params: { 
 			option: 2,
 			optionTime: 3,
-			fundasID: [valueFunda],
+			fundasID: valueFunda,
 			fromDate: from,
 			toDate: to,
 		}, 
 		isFetchListOrderByProperty: !!valueFunda, 
 	});
-	const array_hours: any = [];
-	const array_amount: any = [];
+	const array_hours: any = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24];
+	const array_amount: any = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 	listOrderByProperty2?.map((item: any) => {
-		array_hours.push(item?._id?.hour)
-		array_amount.push(item?.total)
+		array_hours.map((item1: any) => {
+			if(item1 == item?._id?.hour){
+				array_amount[item1] = item?.total
+			}
+		})
 	})
-	console.log({ listOrderByProperty2 });
 	return (
 		<main className="h-full overflow-auto bg-cbs-table-highlight">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6">
