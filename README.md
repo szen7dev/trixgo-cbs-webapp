@@ -45,7 +45,7 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
-CÁC BƯỚC LÀM VIỆC VỚI MỘT ROUTE CĂN BẢN
+# CÁC BƯỚC LÀM VIỆC VỚI MỘT ROUTE CĂN BẢN
 1. Khai báo route (layout, view)
 
 2. Tạo file để định nghĩa kiểu giá trị (Typing)
@@ -70,3 +70,8 @@ https://gitlab.com/hiepyen/cbs_webapp/-/commit/14fe624f6da4e93a19966f6a04e341c6b
 - Viết hàm mới
 - Khai báo Type cho hàm src/typings/task.d.ts
 2-Vào file src/services/hooks/useTask.ts
+
+# LÀM VIỆC VỚI EXCEL
+1. Khai báo hàm trong API
+2. Khai báo phương thức trong HOOKS -> link tới API
+3. Gắn nút bấm vào file View và khai báo các hàm để kết nối tới HOOKS

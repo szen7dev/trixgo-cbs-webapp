@@ -177,7 +177,7 @@ export const FnbShiftMaterialPage: FC = () => {
 								TT
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal">
+						<th className="pb-1 pt-1 font-normal w-1/4">
 							<div className="pl-2">
 								Nguyên liệu
 							</div>
@@ -217,7 +217,7 @@ export const FnbShiftMaterialPage: FC = () => {
 								Tỷ lệ hao hụt (%)
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal">
+						<th className="pb-1 pt-1 font-normal w-1/6">
 							<div className="pl-2">
 								Ghi chú
 							</div>
@@ -236,33 +236,32 @@ export const FnbShiftMaterialPage: FC = () => {
 								/>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
+								Siro Táo xanh
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{item?.name}
-							</td>
-							{/* <td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(item?.total||0)} đ
+								gam
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(item?.numberOfOrders||0)}
+								{formatNumberMoney(100)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(item?.numberOfProducts||0)}
+								{formatNumberMoney(70)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(30)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
-								<Link to ={`/fnb/shift/${fundaID}/${item._id}/material`}>
-									Chi tiết
-								</Link>
+								{formatNumberMoney(25)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
-								<Link to ={`/fnb/shift/${fundaID}/${item._id}/cash`}>
-									Chi tiết
-								</Link>
+								{formatNumberMoney(5)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
+								5%
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{item?.note}
-							</td> */}
+								Kiểm tra lại nguyên nhân thất thoát và tìm được lý do
+							</td>
 						</tr>
 				))}
 			</table>

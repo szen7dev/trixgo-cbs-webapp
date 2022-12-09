@@ -179,12 +179,22 @@ export const FnbShiftDetailPage: FC = () => {
 						</th>
 						<th className="pb-1 pt-1 font-normal">
 							<div className="pl-2">
-								Thời gian khởi tạo
+								Nội dung
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal">
 							<div className="pl-2">
-								Nội dung
+								Bàn giao nguyên liệu
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="pl-2">
+								Bàn giao tiền
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="pl-2">
+								Thời gian khởi tạo
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal">
@@ -200,16 +210,6 @@ export const FnbShiftDetailPage: FC = () => {
 						<th className="pb-1 pt-1 font-normal">
 							<div className="pl-2">
 								Số hàng hóa
-							</div>
-						</th>
-						<th className="pb-1 pt-1 font-normal">
-							<div className="pl-2">
-								Bàn giao nguyên liệu
-							</div>
-						</th>
-						<th className="pb-1 pt-1 font-normal">
-							<div className="pl-2">
-								Bàn giao tiền
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal">
@@ -231,19 +231,7 @@ export const FnbShiftDetailPage: FC = () => {
 								/>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
 								{item?.name}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(item?.total||0)} đ
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(item?.numberOfOrders||0)}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(item?.numberOfProducts||0)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
 								<Link to ={`/fnb/shift/${fundaID}/${item._id}/material`}>
@@ -254,6 +242,18 @@ export const FnbShiftDetailPage: FC = () => {
 								<Link to ={`/fnb/shift/${fundaID}/${item._id}/cash`}>
 									Chi tiết
 								</Link>
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(item?.total||0)} đ
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(item?.numberOfOrders||0)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(item?.numberOfProducts||0)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{item?.note}

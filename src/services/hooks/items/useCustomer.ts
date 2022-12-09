@@ -17,6 +17,9 @@ interface useCustomer {
     insertAsync: (params: any) => Promise<any>;
     updateAsync: (params: any) => Promise<any>;
     deleteAsync: (ids: Array<string>) => Promise<any>;
+    downloadTemplateImportExcelCustomerAsync: (payload: any) => Promise<any>;
+    importCustomerFromExcelAsync: (payload: any) => Promise<any>;
+    exportCustomerAsync: (payload: any) => Promise<any>;
 }
 
 // Khai báo params cho hook
@@ -89,6 +92,24 @@ export const useCustomer = ({
 
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
 
+    // Tải mẫu import excel
+    const { mutateAsync: downloadTemplateImportExcelCustomerAsync } =
+        useMutation((payload: any ) =>
+        CustomerRepository.downloadTemplateImportExcelCustomer(payload)
+    );
+
+    // Import excel
+    const { mutateAsync: importCustomerFromExcelAsync } =
+        useMutation((payload: { projectID?: string, dataImport: string }) =>
+        CustomerRepository.importCustomerFromExcel(payload)
+    );
+
+    // Export excel
+    const { mutateAsync: exportCustomerAsync } =
+        useMutation((payload: any) =>
+        CustomerRepository.exportCustomer(payload)
+    );
+
     // Return data
     return {
         isLoading,
@@ -101,5 +122,8 @@ export const useCustomer = ({
         insertAsync,
         updateAsync,
         deleteAsync,
+        downloadTemplateImportExcelCustomerAsync,
+        importCustomerFromExcelAsync,
+        exportCustomerAsync
     }
 }
