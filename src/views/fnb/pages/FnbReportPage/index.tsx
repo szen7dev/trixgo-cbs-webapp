@@ -78,44 +78,31 @@ export const FnbReportPage: FC = () => {
 		isFetchInfo: false
 	});
 
-	const [arrFundaID, setArrFundaID] = useState([]);
 	const [valueFunda, setValueFunda]: any = useState([]);
-	const [valueFundaActive, setValueFundaActive] = useState("");
-
 	const [from, setFrom] 	= useState(moment().startOf('day').format('YYYY-MM-DD HH:mm:ss'));
 	const [to, setTo] 		= useState(moment().endOf('day').format('YYYY-MM-DD HH:mm:ss'));
 	const [type, setType] 	= useState("1");
-
-	useEffect(() => {
-		// Set lần đầu load trang
-		if(listFunda && !arrFundaID?.length && !valueFundaActive?.length){
-			setArrFundaID(listFunda[0]?.map((item: any) => item._id));
-			setValueFunda(listFunda[0]?.map((item: any) => item._id));
-			setValueFundaActive(listFunda[0]?.map((item: any) => item._id))
-		}
-	}, [listFunda, arrFundaID, valueFundaActive]);
-
+	
 	const CustomSelectBox1 = () => {
 		const handleChange = (event: SelectChangeEvent) => {
 			const value = event.target.value;
-			if(typeof(value) == "string"){
-				setValueFunda([event.target.value]);
+			if(value){
+				setValueFunda([value]);
 			}else{
-				setValueFunda(event.target.value);
+				setValueFunda([]);
 			}
-			setValueFundaActive(event.target.value);
 		};
 		return (
 			<div>
 				<FormControl sx={{ minWidth: 250, outline: "none" }} size="small" className="bg-white border-cbs-border border-0.5 p-1 text-[13px]">
 					<Select
-						value={valueFundaActive}
+						value={valueFunda}
 						onChange={handleChange}
 						displayEmpty
 						className="outline-none"
 						placeholder="Tất cả cơ sở"
 					>
-						<MenuItem value={arrFundaID} className="text-black" key={0}>
+						<MenuItem value="" className="text-black" key={0}>
 							Tất cả cơ sở
 						</MenuItem>
 						{(listFunda[pageIndex]??[]).map((item: any)=> {
