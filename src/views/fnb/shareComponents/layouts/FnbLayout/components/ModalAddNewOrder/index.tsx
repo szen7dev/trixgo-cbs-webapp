@@ -291,6 +291,16 @@ export const ModalAddNewOrder: FC<Props> = () => {
     setProductsInCart(newProductsInCart);
   }
 
+  const handleChangeType = (type: string, product: any) => {
+    const newProductsInCart = productsInCart.map((p: any) => {
+      if (p._id === product._id) {
+        return { ...p, statusApp: type };
+      }
+      return p;
+    })
+    setProductsInCart(newProductsInCart);
+  }
+
   const handleChooseVariant = (e: any, productId: string, variant: any) => {
     const isChecked = e.target.checked;
     const newProductsInCart = productsInCart.map((product: any) => {
@@ -310,7 +320,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
   }
 
   const calTotalPriceEachProduct = (product: any) => {
-    let amount = product.unitPrice * product.quantity;
+    let amount = (product.statusApp === 'app' ? product.unitPrice2 : product.unitPrice) * product.quantity;
     if (product.variantsSelected && product.variantsSelected.length) {
       product.variantsSelected.forEach((variant: any) => {
         amount += variant.unitPrice;
@@ -326,7 +336,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
           prev += variant.unitPrice;
         });
       }
-      return prev += (product.unitPrice * product.quantity)
+      return prev += (product.statusApp === 'app' ? product.unitPrice2 : product.unitPrice * product.quantity)
     }, 0)
     setTotalMoney(amount);
     setTotalPay(amount);
@@ -687,7 +697,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                       style={{ width: "300px" }}
                                       placeholder="Thêm ghi chú ...." onChange={e => handleChangeNote(e, product)} defaultValue={product.note}></textarea>
                                   </div>
-                                  <div className="text-primary"> {convertCurrency(product.unitPrice)} </div>
+                                  <div className="text-primary"> {convertCurrency(product.unitPrice)}</div>
                                 </div>
                                 <div className="flex gap-2 justify-end">
                                   <button
@@ -711,8 +721,10 @@ export const ModalAddNewOrder: FC<Props> = () => {
                     </div>
                     <div className="boxright w-1/2">
                       <div className="h-[300px] overflow-y-auto	my-2 border-0.5 ">
-                        {!!productsInCart.length && productsInCart.map((product: any) => (
-                          <div key={product._id} className="flex gap-2 w-full border-b-0.5 py-2 pl-3 pr-3">
+                        {!!productsInCart.length && productsInCart.map((product: any) => {
+                          console.log("product", product);
+                          return (
+                            <div key={product._id} className="flex gap-2 w-full border-b-0.5 py-2 pl-3 pr-3">
                             <img src={product?.images?.length ? `${process.env.REACT_APP_URL_S3}${product?.images[0]?.path}` : ItemSample} alt="item" className="w-[44px] h-[44px]" />
                             <div className="w-full">
                               <div className="flex justify-between">
@@ -725,15 +737,16 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                     placeholder="Thêm ghi chú ...." onChange={e => handleChangeNote(e, product)} defaultValue={product.note}></textarea>
                                 </div>
                                 <div className="flex gap-3">
-                                  <div className="flex gap-1">
-                                    <Field id="unitPrice1" type="radio" value="2" name="unitPrice" className="w-4 h-4" />
-                                    <label htmlFor="unitPrice1" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                  <div className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                    <label>
+                                      <input onChange={() => handleChangeType('off', product)} type="radio" className="mr-2.5" checked={(product.statusApp == 'off' || !product.statusApp) ? true : false}/>
                                       Off
                                     </label>
                                   </div>
-                                  <div className="flex gap-1">
-                                    <Field id="unitPrice2" type="radio" value="2" name="unitPrice" className="w-4 h-4" />
-                                    <label htmlFor="unitPrice2" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+
+                                  <div className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                    <label>
+                                      <input onChange={() => handleChangeType('app', product)} type="radio" className="mr-2.5" checked={product.statusApp == 'app' ? true : false}/>
                                       App
                                     </label>
                                   </div>
@@ -766,7 +779,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
                               </div>
                             </div>
                           </div>
-                        ))}
+                          )
+                        })}
                       </div>
                       <div className="border-0.5">
                         <div className="flex justify-between my-2 p-2">

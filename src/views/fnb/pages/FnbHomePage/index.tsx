@@ -866,53 +866,17 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
           <div className={"flex-1 flex items-center justify-end"}>
             <PaginateV2
               ref={ref}
-              totalRecord={
-                tabActive === 1
-                  ? totalRecordResponse
-                  : tabActive === 2
-                    ? totalRecordSubject
-                    : totalRecordFile
-              }
-              totalPages={
-                tabActive === 1
-                  ? totalPageResponse
-                  : tabActive === 2
-                    ? totalPageSubject
-                    : totalPageFile
-              }
-              limit={50}
-              hasNextPage={
-                tabActive === 1
-                  ? hasNextPageResponse
-                  : tabActive === 2
-                    ? hasNextPageSubject
-                    : hasNextPageFile
-              }
-              isFetching={
-                tabActive === 1
-                  ? isFetchingResponse
-                  : tabActive === 2
-                    ? isFetchingNextPageSubject
-                    : isFetchingFile
-              }
+              totalRecord={totalRecord}
+              totalPages={totalPage}
+              limit={20}
+              hasNextPage={hasNextPage}
+              isFetching={isLoading}
               nextPageAction={() => {
-                switch (tabActive) {
-                  case 1:
-                    nextPageResponse();
-                    break;
-                  case 2:
-                    nextPageListTask();
-                    break;
-                  case 3:
-                    nextPageFile();
-                    break;
-                  default:
-                    break;
-                }
-                setPageIndex((oldState) => oldState + 1);
+                fetchNextPage();
+                setPageIndex(oldState => oldState + 1)
               }}
               prevPageAction={() => {
-                setPageIndex((oldState) => oldState - 1);
+                setPageIndex(oldState => oldState - 1)
               }}
             />
           </div>
