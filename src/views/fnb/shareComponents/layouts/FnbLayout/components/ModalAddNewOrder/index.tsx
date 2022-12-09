@@ -337,7 +337,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
           prev += variant.unitPrice;
         });
       }
-      return prev += (product.statusApp === 'app' ? product.unitPrice2 : product.unitPrice * product.quantity)
+      return prev += ((product.statusApp === 'app' ? product.unitPrice2 : product.unitPrice) * product.quantity)
     }, 0)
     setTotalMoney(amount);
     setTotalPay(amount);
