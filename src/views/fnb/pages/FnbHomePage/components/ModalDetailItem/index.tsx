@@ -33,6 +33,8 @@ import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFi
 import Close from "assets/icons/Close";
 import ItemSample from "assets/images/image 430.jpg";
 import IconGreenDot from "assets/images/Frame 4330.svg";
+import CheckBoxEmpty from "assets/images/Frame 3548.svg";
+import CheckedBox from "assets/images/Check-All.svg";
 
 import "react-day-picker/lib/style.css";
 import { Editor } from "@tinymce/tinymce-react";
@@ -375,19 +377,25 @@ export const ModalDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                               </div>
                               <div className="text-primary">25.000</div>
                             </div>
-                          </div>
-                        </div>
-                        {/* end item */}
-                        {/* item */}
-                        <div className="flex gap-2 w-full border-b-0.5 p-2">
-                          <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
-                          <div className="w-full">
-                            <div className="flex justify-between	">
-                              <div>
-                                <p className="font-bold truncate">Trà sữa Matcha - Size M - 100% đường, 100% đá - Topping thạch dừa</p>
-                                <p className="text-primary-gray">Không bao gồm chân châu</p>
+                            <div className="flex flex-wrap w-4/5 mt-3">
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckedBox} alt="" /> <span>Pudding trứng</span>
                               </div>
-                              <div className="text-primary">25.000</div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckBoxEmpty} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckedBox} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckBoxEmpty} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckedBox} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckBoxEmpty} alt="" /> <span>Pudding trứng</span>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -403,19 +411,25 @@ export const ModalDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                               </div>
                               <div className="text-primary">25.000</div>
                             </div>
-                          </div>
-                        </div>
-                        {/* end item */}
-                        {/* item */}
-                        <div className="flex gap-2 w-full border-b-0.5 p-2">
-                          <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
-                          <div className="w-full">
-                            <div className="flex justify-between	">
-                              <div>
-                                <p className="font-bold truncate">Trà sữa Matcha - Size M - 100% đường, 100% đá - Topping thạch dừa</p>
-                                <p className="text-primary-gray">Không bao gồm chân châu</p>
+                            <div className="flex flex-wrap w-4/5 mt-3">
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckedBox} alt="" /> <span>Pudding trứng</span>
                               </div>
-                              <div className="text-primary">25.000</div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckBoxEmpty} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckedBox} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckBoxEmpty} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckedBox} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckBoxEmpty} alt="" /> <span>Pudding trứng</span>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -431,19 +445,25 @@ export const ModalDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                               </div>
                               <div className="text-primary">25.000</div>
                             </div>
-                          </div>
-                        </div>
-                        {/* end item */}
-                        {/* item */}
-                        <div className="flex gap-2 w-full border-b-0.5 p-2">
-                          <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
-                          <div className="w-full">
-                            <div className="flex justify-between	">
-                              <div>
-                                <p className="font-bold truncate">Trà sữa Matcha - Size M - 100% đường, 100% đá - Topping thạch dừa</p>
-                                <p className="text-primary-gray">Không bao gồm chân châu</p>
+                            <div className="flex flex-wrap w-4/5 mt-3">
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckedBox} alt="" /> <span>Pudding trứng</span>
                               </div>
-                              <div className="text-primary">25.000</div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckBoxEmpty} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckedBox} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckBoxEmpty} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckedBox} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckBoxEmpty} alt="" /> <span>Pudding trứng</span>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -459,6 +479,26 @@ export const ModalDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                               </div>
                               <div className="text-primary">25.000</div>
                             </div>
+                            <div className="flex flex-wrap w-4/5 mt-3">
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckedBox} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckBoxEmpty} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckedBox} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckBoxEmpty} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckedBox} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckBoxEmpty} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                            </div>
                           </div>
                         </div>
                         {/* end item */}
@@ -472,6 +512,128 @@ export const ModalDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                                 <p className="text-primary-gray">Không bao gồm chân châu</p>
                               </div>
                               <div className="text-primary">25.000</div>
+                            </div>
+                            <div className="flex flex-wrap w-4/5 mt-3">
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckedBox} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckBoxEmpty} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckedBox} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckBoxEmpty} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckedBox} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckBoxEmpty} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        {/* end item */}
+                        {/* item */}
+                        <div className="flex gap-2 w-full border-b-0.5 p-2">
+                          <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
+                          <div className="w-full">
+                            <div className="flex justify-between	">
+                              <div>
+                                <p className="font-bold truncate">Trà sữa Matcha - Size M - 100% đường, 100% đá - Topping thạch dừa</p>
+                                <p className="text-primary-gray">Không bao gồm chân châu</p>
+                              </div>
+                              <div className="text-primary">25.000</div>
+                            </div>
+                            <div className="flex flex-wrap w-4/5 mt-3">
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckedBox} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckBoxEmpty} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckedBox} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckBoxEmpty} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckedBox} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckBoxEmpty} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        {/* end item */}
+                        {/* item */}
+                        <div className="flex gap-2 w-full border-b-0.5 p-2">
+                          <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
+                          <div className="w-full">
+                            <div className="flex justify-between	">
+                              <div>
+                                <p className="font-bold truncate">Trà sữa Matcha - Size M - 100% đường, 100% đá - Topping thạch dừa</p>
+                                <p className="text-primary-gray">Không bao gồm chân châu</p>
+                              </div>
+                              <div className="text-primary">25.000</div>
+                            </div>
+                            <div className="flex flex-wrap w-4/5 mt-3">
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckedBox} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckBoxEmpty} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckedBox} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckBoxEmpty} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckedBox} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckBoxEmpty} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        {/* end item */}
+                        {/* item */}
+                        <div className="flex gap-2 w-full border-b-0.5 p-2">
+                          <img src={ItemSample} alt="item" className="w-[44px] h-[44px]" />
+                          <div className="w-full">
+                            <div className="flex justify-between	">
+                              <div>
+                                <p className="font-bold truncate">Trà sữa Matcha - Size M - 100% đường, 100% đá - Topping thạch dừa</p>
+                                <p className="text-primary-gray">Không bao gồm chân châu</p>
+                              </div>
+                              <div className="text-primary">25.000</div>
+                            </div>
+                            <div className="flex flex-wrap w-4/5 mt-3">
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckedBox} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckBoxEmpty} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckedBox} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckBoxEmpty} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckedBox} alt="" /> <span>Pudding trứng</span>
+                              </div>
+                              <div className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                <img src={CheckBoxEmpty} alt="" /> <span>Pudding trứng</span>
+                              </div>
                             </div>
                           </div>
                         </div>
