@@ -44,7 +44,7 @@ export const FnbShiftMaterialPage: FC = () => {
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
 	
-    const { info: infoFunda } = useFunda({ params: { FundaID: fundaID }, isFetchList: false, isFetchInfo: true  });
+    const { info: infoFunda } = useFunda({ params: { fundaID }, isFetchList: false, isFetchInfo: true  });
 	// console.log({ infoFunda });
 
     const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbShift({ 

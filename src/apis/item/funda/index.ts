@@ -11,7 +11,7 @@ interface FundaRepository {
     updateFunda: (params: any) => Promise<any>;
     deleteFunda: (ids: Array<string>) => Promise<any>;
     fetchListFunda: (params: Funda.FundaQueryPayload) => Promise<Funda.FundaQueryResponse>;
-    fetchDetailFunda: (FundaID: string, params?: Funda.FundaQueryPayload) => Promise<Funda.FundaQueryDetailResponse>;
+    fetchDetailFunda: (fundaID: string, params?: Funda.FundaQueryPayload) => Promise<Funda.FundaQueryDetailResponse>;
 }
 
 export const FundaRepository: FundaRepository = {
