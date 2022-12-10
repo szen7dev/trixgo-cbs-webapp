@@ -54,7 +54,7 @@ export const useFunda = ({
 
     // Get info
     const { data: infoFunda } =
-        useQuery("Funda__info", () => FundaRepository.fetchDetailFunda(params.FundaID || ''), {
+        useQuery("Funda__info", () => FundaRepository.fetchDetailFunda("",params), {
             refetchOnWindowFocus: false,
             enabled: isFetchInfo,
         });
