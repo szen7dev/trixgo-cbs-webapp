@@ -44,8 +44,8 @@ export const FnbShiftDetailPage: FC = () => {
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
 	
-    const { info: infoFunda } = useFunda({ params: { FundaID: fundaID }, isFetchList: false, isFetchInfo: true  });
-	// console.log({ infoFunda });
+    const { info: infoFunda } = useFunda({ params: { fundaID }, isFetchList: false, isFetchInfo: true  });
+	console.log({ infoFunda });
 
     const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbShift({ 
 		params: { 
@@ -55,7 +55,6 @@ export const FnbShiftDetailPage: FC = () => {
 			// 	path: 'goods', select: "name unit"
 			// }) 
 		}, isFetchList: true, isFetchInfo: false  });
-	// console.log({listWithPager});
 
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;

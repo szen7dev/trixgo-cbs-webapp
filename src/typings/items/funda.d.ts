@@ -12,7 +12,7 @@ export type FundaQueryPayload = QueryParam & {
     companyID?: string;
     parentID?: string;
     isListParentOfListChilds?: string;
-    FundaID?: string;
+    fundaID?: string;
 };
 
 export type FundaQueryResponse = APIResponse & {
