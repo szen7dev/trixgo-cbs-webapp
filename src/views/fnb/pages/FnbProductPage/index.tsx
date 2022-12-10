@@ -334,7 +334,12 @@ export const FnBProductPage: FC = () => {
 						</th>
 						<th className="pb-1 pt-1 font-normal">
 							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Đơn giá
+								Đơn giá bán Off
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="border-r-2 border-gray-300 font-normal pl-2">
+								Đơn giá bán App
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal">
@@ -379,6 +384,9 @@ export const FnBProductPage: FC = () => {
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{formatNumberMoney(item?.unitPrice||0)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(item?.unitPrice2||0)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{TYPE_PRODUCT[item.type-1]?.text}
