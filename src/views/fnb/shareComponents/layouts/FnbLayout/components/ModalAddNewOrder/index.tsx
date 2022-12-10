@@ -70,6 +70,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
   const [totalMoney, setTotalMoney] = useState(0);
   const [totalPay, setTotalPay] = useState(0);
   const [searchContact, setSearchContact] = useState('');
+  const [searchFunda, setSearchFunda] = useState('');
   const [discountAndSales, setDiscountAndSales] = useState({
     discount: 0,
     discountPercent: 0,
@@ -89,7 +90,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
   useEffect(() => {
     const fetchFundas = async () => {
       const response = await API.get(
-        `/api/item/fundas`,
+        `/api/item/fundas?keyword=${searchFunda}`,
       );
       const { data, status } = response?.data;
 
@@ -99,7 +100,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
     }
 
     fetchFundas();
-  }, [])
+  }, [searchFunda])
 
   useEffect(() => {
     if (!fundaID) return;
@@ -189,7 +190,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
         productID: p._id,
         quantity: p.quantity,
         note: p.note,
-        variants: p.variantsSelected,
+        variantsID: p.variantsSelected.map((v: any) => v._id),
         upsize: 1,
         topping: 1,
       }))
@@ -197,9 +198,9 @@ export const ModalAddNewOrder: FC<Props> = () => {
       const dataAddNewOrder: any = {
         ...values,
         products,
-        total: totalPay,
-        discount: discountAndSales.discount,
-        salesoff: discountAndSales.sales,
+        total: `${totalPay}`,
+        discount: `${discountAndSales.discount}`,
+        salesoff: `${discountAndSales.sales}`,
       }
 
       const { data, status } = await API.post(
@@ -401,14 +402,12 @@ export const ModalAddNewOrder: FC<Props> = () => {
                             setFieldValue("fundaID", "");
                             setShiftID("");
                             setFieldValue("shiftID", "");
-                            // groupSearchableRef.current && groupSearchableRef.current.resetGroupSearchable();
                           }}
-                          // onSearchInputChange={
-                          //   debounce(
-                          //     (value) => setSearchDepartmentValue(value),
-                          //     500)
-                          // }
-                          // onScroll={(e) => handleScroll(e, 'project')}
+                          onSearchInputChange={
+                            debounce(
+                              (value) => setSearchFunda(value),
+                              200)
+                          }
                           className={"max-w-full h-full flex-1"}
                           placeholder="Cơ sở"
                           isMultiple={false}
@@ -452,11 +451,6 @@ export const ModalAddNewOrder: FC<Props> = () => {
                             setFieldValue("shiftID", "");
                             // groupSearchableRef.current && groupSearchableRef.current.resetGroupSearchable();
                           }}
-                          // onSearchInputChange={
-                          //   debounce(
-                          //     (value) => setSearchDepartmentValue(value),
-                          //     500)
-                          // }
                           // onScroll={(e) => handleScroll(e, 'project')}
                           className={"max-w-full h-full flex-1"}
                           placeholder="Chọn ca làm"
@@ -497,7 +491,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                           onSearchInputChange={
                             debounce(
                               (value) => setSearchContact(value),
-                              100)
+                              200)
                           }
                           placeholder={"Mã khách hàng"}
                           className={"max-w-full h-full flex-1"}
@@ -855,7 +849,6 @@ export const ModalAddNewOrder: FC<Props> = () => {
                     <div className="boxright w-1/2">
                       <div className="h-[300px] overflow-y-auto	my-2 border-0.5 ">
                         {!!productsInCart.length && productsInCart.map((product: any) => {
-                          console.log("product", product);
                           return (
                             <div key={product._id} className="flex gap-2 w-full border-b-0.5 py-2 pl-3 pr-3">
                             <img src={product?.images?.length ? `${process.env.REACT_APP_URL_S3}${product?.images[0]?.path}` : ItemSample} alt="item" className="w-[44px] h-[44px]" />
@@ -893,9 +886,9 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   {/* <button onClick={decreaseCount}><img src={IconMinus} alt="" /></button>
                                   <input type="number" min="1" className="ml-2 w-[40px]" defaultValue={count} onChange={e => handleChangeQuantity(e, product)} />
                                   <button onClick={increaseCount}><img src={IconPlus} alt="" /></button> */}
-                                  <button onClick={() => decreaseCount(product)}><img src={IconMinus} /></button>
+                                  <button type="button" onClick={() => decreaseCount(product)}><img src={IconMinus} /></button>
                                   <span onChange={e => handleChangeQuantity(e, product)} >{product.quantity}</span>
-                                  <button onClick={() => increaseCount(product)}><img src={IconPlus} /></button>
+                                  <button type="button" onClick={() => increaseCount(product)}><img src={IconPlus} /></button>
                                 </div>
                               </div>
                               <div className="flex flex-wrap w-4/5">
