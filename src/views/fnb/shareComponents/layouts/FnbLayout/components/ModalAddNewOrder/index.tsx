@@ -190,7 +190,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
         productID: p._id,
         quantity: p.quantity,
         note: p.note,
-        variantsID: p.variantsSelected.map((v: any) => v._id),
+        variantsID: p.variantsSelected ? p.variantsSelected.map((v: any) => v._id) : [],
         upsize: 1,
         topping: 1,
       }))
@@ -203,6 +203,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
         salesoff: `${discountAndSales.sales}`,
       }
 
+      closeModal();
       const { data, status } = await API.post(
         `/api/fnb/orders`,
         dataAddNewOrder
@@ -217,7 +218,6 @@ export const ModalAddNewOrder: FC<Props> = () => {
         orderInfo: data?.data,
       })
 
-      closeModal();
       return toast.success('Tạo đơn thành công');
     } catch (error) {
       if (typeof error === "string") {

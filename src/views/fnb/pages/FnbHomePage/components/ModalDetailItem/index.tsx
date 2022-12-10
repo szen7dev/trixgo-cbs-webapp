@@ -275,7 +275,7 @@ export const ModalDetailItem: FC<Props> = ({ order }) => {
                                 <div className="text-primary">{convertCurrency(op.unitPrice)}</div>
                               </div>
                               <div className="flex flex-wrap w-4/5 mt-3">
-                                {op.subProducts.map((subProduct: any) => (
+                                {op.subProducts?.map?.((subProduct: any) => (
                                   <div key={subProduct._id} className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
                                     <li> {subProduct.name} </li>
                                   </div>
