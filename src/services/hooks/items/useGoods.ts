@@ -17,6 +17,9 @@ interface useGoods {
     insertAsync: (params: any) => Promise<any>;
     updateAsync: (params: any) => Promise<any>;
     deleteAsync: (ids: Array<string>) => Promise<any>;
+    downloadTemplateExcelAsync: (payload: any) => Promise<any>;
+    importExcelAsync: (payload: any) => Promise<any>;
+    exportExcelAsync: (payload: any) => Promise<any>;
 }
 
 // Khai báo params cho hook
@@ -89,6 +92,24 @@ export const useGoods = ({
 
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
 
+    // Tải mẫu import excel
+        const { mutateAsync: downloadTemplateExcelAsync } =
+        useMutation((payload: any ) =>
+        GoodsRepository.downloadTemplateExcel(payload)
+    );
+
+    // Import excel
+    const { mutateAsync: importExcelAsync } =
+        useMutation((payload: { projectID?: string, dataImport: string }) =>
+        GoodsRepository.importExcel(payload)
+    );
+
+    // Export excel
+    const { mutateAsync: exportExcelAsync } =
+        useMutation((payload: any) =>
+        GoodsRepository.exportExcel(payload)
+    );
+
     // Return data
     return {
         isLoading,
@@ -101,5 +122,8 @@ export const useGoods = ({
         insertAsync,
         updateAsync,
         deleteAsync,
+        downloadTemplateExcelAsync,
+        importExcelAsync,
+        exportExcelAsync
     }
 }

@@ -32,6 +32,7 @@ import { GroupSearchable } from "shareComponents/common/GroupSearchable";
 import API from "apis/repository";
 import { useContact } from "services/hooks/items/useContact";
 import { convertObToUrl } from "utils";
+import { FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
 
 interface InitialValues {
   fundaID: string,
@@ -151,16 +152,26 @@ export const ModalAddNewOrder: FC<Props> = () => {
   }, [keywordSearchProduct])
 
   useEffect(() => {
-    console.log({ productsInCart })
     calTotalMoney();
   }, [JSON.stringify(productsInCart)])
 
-  const [count, setCount] = useState(0);
-  const increaseCount = () => {
-    setCount(count + 1);
+  const increaseCount = (product: any) => {
+    const newProducts = [...productsInCart];
+    for (let i = 0; i < newProducts.length; i++) {
+      if (newProducts[i]._id === product._id) {
+        newProducts[i].quantity = newProducts[i].quantity + 1;
+      }
+    }
+    setProductsInCart(newProducts);
   };
-  const decreaseCount = () => {
-    setCount(count + 1);
+  const decreaseCount = (product: any) => {
+    const newProducts = [...productsInCart];
+    for (let i = 0; i < newProducts.length; i++) {
+      if (newProducts[i]._id === product._id && newProducts[i].quantity > 1) {
+        newProducts[i].quantity = newProducts[i].quantity - 1;
+      }
+    }
+    setProductsInCart(newProducts);
   };
 
   const { list: contacts } = useContact({
@@ -222,9 +233,9 @@ export const ModalAddNewOrder: FC<Props> = () => {
     let newDiscount = inputValue;
     let newDiscountPercent = inputValue;
 
-    if(name === 'discount') {
+    if (name === 'discount') {
       newDiscountPercent = +((inputValue * 100) / totalMoney).toFixed(2);
-    } else if(name === 'discountPercent') {
+    } else if (name === 'discountPercent') {
       newDiscount = (totalMoney * inputValue) / 100;
     }
 
@@ -242,9 +253,9 @@ export const ModalAddNewOrder: FC<Props> = () => {
     let newSales = inputValue;
     let newSalesPercent = inputValue;
 
-    if(name === 'sales') {
+    if (name === 'sales') {
       newSalesPercent = +((inputValue * 100) / totalMoney).toFixed(2);
-    } else if(name === 'salesPercent') {
+    } else if (name === 'salesPercent') {
       newSales = (totalMoney * inputValue) / 100;
     }
 
@@ -281,29 +292,52 @@ export const ModalAddNewOrder: FC<Props> = () => {
     setProductsInCart(newProductsInCart);
   }
 
+  const handleChangeType = (type: string, product: any) => {
+    const newProductsInCart = productsInCart.map((p: any) => {
+      if (p._id === product._id) {
+        return { ...p, statusApp: type };
+      }
+      return p;
+    })
+    setProductsInCart(newProductsInCart);
+  }
+
   const handleChooseVariant = (e: any, productId: string, variant: any) => {
     const isChecked = e.target.checked;
-
     const newProductsInCart = productsInCart.map((product: any) => {
-      if(!product.variantsSelected) product.variantsSelected = [];
+      if (!product.variantsSelected) product.variantsSelected = [];
 
-      if(product._id === productId) {
-        if(isChecked) {
+      if (product._id === productId) {
+        if (isChecked) {
           product.variantsSelected.push(variant);
-        } else{
+        } else {
           product.variantsSelected = product.variantsSelected.filter((v: any) => v._id !== variant._id)
         }
       }
-
       return product;
     })
 
     setProductsInCart(newProductsInCart);
   }
 
+  const calTotalPriceEachProduct = (product: any) => {
+    let amount = (product.statusApp === 'app' ? product.unitPrice2 : product.unitPrice) * product.quantity;
+    if (product.variantsSelected && product.variantsSelected.length) {
+      product.variantsSelected.forEach((variant: any) => {
+        amount += variant.unitPrice;
+      });
+    }
+    return amount;
+  }
+
   const calTotalMoney = () => {
     const amount = productsInCart.reduce((prev: any, product: any) => {
-      return prev += (product.unitPrice * product.quantity)
+      if (product.variantsSelected && product.variantsSelected.length) {
+        product.variantsSelected.forEach((variant: any) => {
+          prev += variant.unitPrice;
+        });
+      }
+      return prev += ((product.statusApp === 'app' ? product.unitPrice2 : product.unitPrice) * product.quantity)
     }, 0)
     setTotalMoney(amount);
     setTotalPay(amount);
@@ -408,27 +442,44 @@ export const ModalAddNewOrder: FC<Props> = () => {
                     <div className={"w-1/4 flex items-start pl-3"}>
                       <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full"}>Ca làm</div>
                       <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
-                        <GroupSearchable
-                          ref={groupSearchableRef}
-                          disabled={values.fundaID.length <= 0}
-                          handleSetValue={(item: any) => {
-                            setShiftID(item.value);
-                            setFieldValue("shiftID", item.value);
+                        <DropdownSearchable
+                          onchangeValue={(value: any) => {
+                            setShiftID(value?.id)
+                            setFieldValue("shiftID", value?.id);
                           }}
                           onClearData={() => {
+                            setShiftID("")
                             setFieldValue("shiftID", "");
-                            setShiftID("");
-                            setGroupParentPicker({});
+                            // groupSearchableRef.current && groupSearchableRef.current.resetGroupSearchable();
                           }}
+                          // onSearchInputChange={
+                          //   debounce(
+                          //     (value) => setSearchDepartmentValue(value),
+                          //     500)
+                          // }
+                          // onScroll={(e) => handleScroll(e, 'project')}
+                          className={"max-w-full h-full flex-1"}
+                          placeholder="Chọn ca làm"
+                          isMultiple={false}
+                          allowClearValueSingleInput={true}
+                          showTriangle={false}
+                          maxWidthInput="max-w-full"
+                          renderSelectedItem={(item: any) => (
+                            <div
+                              className="max-w-full"
+                            >
+                              <p className={"truncate"}>{item.text}</p>
+                            </div>
+                          )}
                           data={shifts?.map((shift: any) => ({
                             label: shift.name,
                             value: shift._id,
                           }))}
-                          groupParentPicker={groupParentPicker}
-                          setGroupParentPicker={setGroupParentPicker}
-                          // onScroll={(e) => handleScroll(e, 'group')}
-                          className={"max-w-full h-full flex-1"}
-                          placeholder="Chọn ca làm"
+                          formatItem={{
+                            id: "value",
+                            text: "label",
+                          }}
+                          inlineSearch={true}
                         />
                         <ErrorMessage
                           name="shiftID"
@@ -515,32 +566,87 @@ export const ModalAddNewOrder: FC<Props> = () => {
                   <div className="flex justify-between my-6">
                     <div>
                       <span>Kênh bán hàng</span>
-                      <div className="flex flex-wrap mt-2 mb-2">
-                        <div className="flex items-center mr-4">
-                          <Field id="saleChannelOffline" type="radio" value="1" name="salesChannel" className="w-4 h-4" checked />
-                          <label htmlFor="saleChannelOffline" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Offline</label>
-                        </div>
-                        <div className="flex items-center mr-4">
-                          <Field id="saleChannelGrab" type="radio" value="2" name="salesChannel" className="w-4 h-4" />
-                          <label htmlFor="saleChannelGrab" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Grab</label>
-                        </div>
-                        <div className="flex items-center mr-4">
-                          <Field id="saleChannelShopee" type="radio" value="3" name="salesChannel" className="w-4 h-4" />
-                          <label htmlFor="saleChannelShopee" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Shopee</label>
-                        </div>
-                        <div className="flex items-center mr-4">
-                          <Field id="saleChannelGojek" type="radio" value="4" name="salesChannel" className="w-4 h-4" />
-                          <label htmlFor="saleChannelGojek" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Gojek</label>
-                        </div>
-                        <div className="flex items-center mr-4">
-                          <Field id="saleChannelBaemin" type="radio" value="5" name="salesChannel" className="w-4 h-4" />
-                          <label htmlFor="saleChannelBaemin" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Baemin</label>
-                        </div>
-                        <div className="flex items-center mr-4">
-                          <Field id="saleChannelLoship" type="radio" value="6" name="salesChannel" className="w-4 h-4" />
-                          <label htmlFor="saleChannelLoship" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Loship</label>
-                        </div>
-
+                      <div>
+                        <FormControl sx={{ marginTop: "-5px" }} >
+                          <RadioGroup
+                            row
+                            aria-labelledby="demo-row-radio-buttons-group-label"
+                            name="salesChannel"
+                          >
+                            <FormControlLabel
+                              sx={{ marginLeft: "0" }}
+                              value="1"
+                              control={
+                                <Radio
+                                  style={{ paddingRight: "5px" }}
+                                  icon={<img src={CheckBoxEmpty} alt="" />}
+                                  checkedIcon={<img src={CheckedBox} alt="" />}
+                                />
+                              }
+                              label={<span className="text-[13px]">Offline</span>}
+                            />
+                            <FormControlLabel
+                              sx={{ marginLeft: "0" }}
+                              value="2"
+                              control={
+                                <Radio
+                                  style={{ paddingRight: "5px" }}
+                                  icon={<img src={CheckBoxEmpty} alt="" />}
+                                  checkedIcon={<img src={CheckedBox} alt="" />}
+                                />
+                              }
+                              label={<span className="text-[13px]">Grab</span>}
+                            />
+                            <FormControlLabel
+                              sx={{ marginLeft: "0" }}
+                              value="3"
+                              control={
+                                <Radio
+                                  style={{ paddingRight: "5px" }}
+                                  icon={<img src={CheckBoxEmpty} alt="" />}
+                                  checkedIcon={<img src={CheckedBox} alt="" />}
+                                />
+                              }
+                              label={<span className="text-[13px]">Shopee</span>}
+                            />
+                            <FormControlLabel
+                              sx={{ marginLeft: "0" }}
+                              value="4"
+                              control={
+                                <Radio
+                                  style={{ paddingRight: "5px" }}
+                                  icon={<img src={CheckBoxEmpty} alt="" />}
+                                  checkedIcon={<img src={CheckedBox} alt="" />}
+                                />
+                              }
+                              label={<span className="text-[13px]">Gojek</span>}
+                            />
+                            <FormControlLabel
+                              sx={{ marginLeft: "0" }}
+                              value="5"
+                              control={
+                                <Radio
+                                  style={{ paddingRight: "5px" }}
+                                  icon={<img src={CheckBoxEmpty} alt="" />}
+                                  checkedIcon={<img src={CheckedBox} alt="" />}
+                                />
+                              }
+                              label={<span className="text-[13px]">Baemin</span>}
+                            />
+                            <FormControlLabel
+                              sx={{ marginLeft: "0" }}
+                              value="6"
+                              control={
+                                <Radio
+                                  style={{ paddingRight: "5px" }}
+                                  icon={<img src={CheckBoxEmpty} alt="" />}
+                                  checkedIcon={<img src={CheckedBox} alt="" />}
+                                />
+                              }
+                              label={<span className="text-[13px]">Loship</span>}
+                            />
+                          </RadioGroup>
+                        </FormControl>
                       </div>
                       <ErrorMessage
                         name="salesChannel"
@@ -550,7 +656,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                     </div>
                     <div>
                       <span>Phương thức thanh toán</span>
-                      <div className="flex flex-wrap mt-2 mb-2">
+                      {/* <div className="flex flex-wrap mt-2 mb-2">
                         <div className="flex items-center mr-4">
                           <Field id="paymentMethod1" type="radio" value="1" name="paymentMethod" className="w-4 h-4" checked />
                           <label htmlFor="paymentMethod1" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
@@ -563,6 +669,40 @@ export const ModalAddNewOrder: FC<Props> = () => {
                             Chuyển khoản
                           </label>
                         </div>
+                      </div> */}
+                      <div>
+                        <FormControl sx={{ marginTop: "-5px" }} >
+                          <RadioGroup
+                            row
+                            aria-labelledby="demo-row-radio-buttons-group-label"
+                            name="paymentMethod"
+                          >
+                            <FormControlLabel
+                              sx={{ marginLeft: "0", fontSize: "13px" }}
+                              value="1"
+                              control={
+                                <Radio
+                                  style={{ paddingRight: "5px" }}
+                                  icon={<img src={CheckBoxEmpty} alt="" />}
+                                  checkedIcon={<img src={CheckedBox} alt="" />}
+                                />
+                              }
+                              label={<span className="text-[13px]">Tiền mặt</span>}
+                            />
+                            <FormControlLabel
+                              sx={{ marginLeft: "0" }}
+                              value="2"
+                              control={
+                                <Radio
+                                  style={{ paddingRight: "5px" }}
+                                  icon={<img src={CheckBoxEmpty} alt="" />}
+                                  checkedIcon={<img src={CheckedBox} alt="" />}
+                                />
+                              }
+                              label={<span className="text-[13px]">Chuyển khoản</span>}
+                            />
+                          </RadioGroup>
+                        </FormControl>
                       </div>
                       <ErrorMessage
                         name="paymentMethod"
@@ -572,25 +712,51 @@ export const ModalAddNewOrder: FC<Props> = () => {
                     </div>
                     <div>
                       <span>Hình thức phục vụ</span>
-                      <div className="flex flex-wrap mt-2">
-                        <div className="flex items-center mr-4">
-                          <Field id="service1" type="radio" value="1" name="service" className="w-4 h-4" checked />
-                          <label htmlFor="service1" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                            Tại quán
-                          </label>
-                        </div>
-                        <div className="flex items-center mr-4">
-                          <Field id="service2" type="radio" value="2" name="service" className="w-4 h-4" />
-                          <label htmlFor="service2" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                            Mang đi
-                          </label>
-                        </div>
-                        <div className="flex items-center mr-4">
-                          <Field id="service3" type="radio" value="3" name="service" className="w-4 h-4" />
-                          <label htmlFor="service3" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                            Giao hàng (app)
-                          </label>
-                        </div>
+                      <div>
+                        <FormControl sx={{ marginTop: "-5px" }} >
+                          <RadioGroup
+                            row
+                            aria-labelledby="demo-row-radio-buttons-group-label"
+                            name="service"
+                          >
+                            <FormControlLabel
+                              sx={{ marginLeft: "0" }}
+                              value="1"
+                              control={
+                                <Radio
+                                  style={{ paddingRight: "5px" }}
+                                  icon={<img src={CheckBoxEmpty} alt="" />}
+                                  checkedIcon={<img src={CheckedBox} alt="" />}
+                                />
+                              }
+                              label={<span className="text-[13px]">Tại quán</span>}
+                            />
+                            <FormControlLabel
+                              sx={{ marginLeft: "0" }}
+                              value="2"
+                              control={
+                                <Radio
+                                  style={{ paddingRight: "5px" }}
+                                  icon={<img src={CheckBoxEmpty} alt="" />}
+                                  checkedIcon={<img src={CheckedBox} alt="" />}
+                                />
+                              }
+                              label={<span className="text-[13px]">Giao hàng (app)</span>}
+                            />
+                            <FormControlLabel
+                              sx={{ marginLeft: "0" }}
+                              value="3"
+                              control={
+                                <Radio
+                                  style={{ paddingRight: "5px" }}
+                                  icon={<img src={CheckBoxEmpty} alt="" />}
+                                  checkedIcon={<img src={CheckedBox} alt="" />}
+                                />
+                              }
+                              label={<span className="text-[13px]">Mang đi</span>}
+                            />
+                          </RadioGroup>
+                        </FormControl>
                       </div>
                     </div>
                   </div>
@@ -653,7 +819,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                         <div className="h-[300px] overflow-y-auto	my-2 ">
                           {!!products.length && products.map((product: any) => (
                             <div key={product._id} className="flex gap-2 w-full border-b-0.5 py-2">
-                              <img src={product?.images?.length ? `${process.env.REACT_APP_URL_S3}${product?.images[0]?.path}` : ItemSample } alt="item" className="w-[44px] h-[44px]" />
+                              <img src={product?.images?.length ? `${process.env.REACT_APP_URL_S3}${product?.images[0]?.path}` : ItemSample} alt="item" className="w-[44px] h-[44px]" />
                               <div className="w-full">
                                 <div className="flex justify-between">
                                   <div>
@@ -664,7 +830,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                       style={{ width: "300px" }}
                                       placeholder="Thêm ghi chú ...." onChange={e => handleChangeNote(e, product)} defaultValue={product.note}></textarea>
                                   </div>
-                                  <div className="text-primary"> {convertCurrency(product.unitPrice)} </div>
+                                  <div className="text-primary"> {convertCurrency(product.unitPrice)}</div>
                                 </div>
                                 <div className="flex gap-2 justify-end">
                                   <button
@@ -688,8 +854,10 @@ export const ModalAddNewOrder: FC<Props> = () => {
                     </div>
                     <div className="boxright w-1/2">
                       <div className="h-[300px] overflow-y-auto	my-2 border-0.5 ">
-                        {!!productsInCart.length && productsInCart.map((product: any) => (
-                          <div key={product._id} className="flex gap-2 w-full border-b-0.5 py-2 pl-3 pr-3">
+                        {!!productsInCart.length && productsInCart.map((product: any) => {
+                          console.log("product", product);
+                          return (
+                            <div key={product._id} className="flex gap-2 w-full border-b-0.5 py-2 pl-3 pr-3">
                             <img src={product?.images?.length ? `${process.env.REACT_APP_URL_S3}${product?.images[0]?.path}` : ItemSample} alt="item" className="w-[44px] h-[44px]" />
                             <div className="w-full">
                               <div className="flex justify-between">
@@ -701,7 +869,22 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                     className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px] resize-none"
                                     placeholder="Thêm ghi chú ...." onChange={e => handleChangeNote(e, product)} defaultValue={product.note}></textarea>
                                 </div>
-                                <div className="text-blue-400">{convertCurrency(product.unitPrice)}</div>
+                                <div className="flex gap-3">
+                                  <div className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                    <label>
+                                      <input onChange={() => handleChangeType('off', product)} type="radio" className="mr-2.5" checked={(product.statusApp == 'off' || !product.statusApp) ? true : false}/>
+                                      Off
+                                    </label>
+                                  </div>
+
+                                  <div className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                    <label>
+                                      <input onChange={() => handleChangeType('app', product)} type="radio" className="mr-2.5" checked={product.statusApp == 'app' ? true : false}/>
+                                      App
+                                    </label>
+                                  </div>
+                                </div>
+                                <div className="text-blue-400">{calTotalPriceEachProduct(product)}</div>
                               </div>
                               {/* <div className="flex gap-2 justify-end"> */}
                               <div className="flex justify-end">
@@ -710,9 +893,9 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   {/* <button onClick={decreaseCount}><img src={IconMinus} alt="" /></button>
                                   <input type="number" min="1" className="ml-2 w-[40px]" defaultValue={count} onChange={e => handleChangeQuantity(e, product)} />
                                   <button onClick={increaseCount}><img src={IconPlus} alt="" /></button> */}
-                                  <button onClick={decreaseCount}><img src={IconMinus}/></button>
-                                  <span  onChange={e => handleChangeQuantity(e, product)} >{count}</span>
-                                  <button onClick={increaseCount}><img src={IconPlus}/></button>
+                                  <button onClick={() => decreaseCount(product)}><img src={IconMinus} /></button>
+                                  <span onChange={e => handleChangeQuantity(e, product)} >{product.quantity}</span>
+                                  <button onClick={() => increaseCount(product)}><img src={IconPlus} /></button>
                                 </div>
                               </div>
                               <div className="flex flex-wrap w-4/5">
@@ -720,7 +903,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   <div key={variant._id} className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
                                     <div className="form-check">
                                       <input className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox" value={variant._id} id={variant._id} onChange={e => handleChooseVariant(e, product._id, variant)} />
-                                      <label className="form-check-label inline-block text-gray-800" htmlFor={variant._id}>
+                                      <label className="form-check-label inline-block text-gray-800">
                                         {variant.name}
                                       </label>
                                     </div>
@@ -729,7 +912,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
                               </div>
                             </div>
                           </div>
-                        ))}
+                          )
+                        })}
                       </div>
                       <div className="border-0.5">
                         <div className="flex justify-between my-2 p-2">
@@ -737,10 +921,10 @@ export const ModalAddNewOrder: FC<Props> = () => {
                           <div className="font-bold">{convertCurrency(totalMoney)}</div>
                         </div>
                         <div className="flex justify-between items-center mb-1 pl-2 py-2">
-                          <div className="">Triết khấu</div>
+                          <div className="">Chiết khấu</div>
                           <div className="flex gap-1">
                             <div>
-                              <input type="number" placeholder="25%"
+                              <input placeholder="25%"
                                 className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
                                 onChange={handleChangeDiscount}
                                 value={discountAndSales.discountPercent}
@@ -748,7 +932,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                               />
                             </div>
                             <div>
-                              <input type="number" placeholder="10.000"
+                              <input placeholder="10.000"
                                 className="w-[100px] h-[30px] border-0.5 border-r-0 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
                                 onChange={handleChangeDiscount}
                                 value={discountAndSales.discount}
@@ -761,7 +945,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                           <div className="">Giảm giá</div>
                           <div className="flex gap-1">
                             <div>
-                              <input type="number" placeholder="25%"
+                              <input placeholder="25%"
                                 className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
                                 onChange={handleChangeSales}
                                 value={discountAndSales.salesPercent}
@@ -769,7 +953,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                               />
                             </div>
                             <div>
-                              <input type="number" placeholder="10.000"
+                              <input placeholder="10.000"
                                 className="w-[100px] h-[30px] border-0.5 border-r-0 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
                                 onChange={handleChangeSales}
                                 value={discountAndSales.sales}
@@ -782,7 +966,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                       <div className="border-0.5 p-1">
                         <div className="flex justify-between">
                           <div className="font-bold">Thanh toán</div>
-                          <div className="font-bold text-primary font-bold">{convertCurrency(totalPay)}</div>
+                          <div className={`font-bold ${totalPay > 0 ? 'text-primary' : 'text-red-500'} font-bold`}>{convertCurrency(totalPay)}</div>
                         </div>
                       </div>
                       <div className="text-right mb-5" style={{ marginTop: "100px" }}>
