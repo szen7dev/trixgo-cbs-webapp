@@ -278,12 +278,44 @@ export const FnbReportPage: FC = () => {
 		}, 
 		isFetchListOrderByProperty: !!valueFunda, 
 	});
-	const array_hours: any = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24];
+	const array_hours: any = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24];
 	const array_amount: any = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 	listOrderByProperty2?.map((item: any) => {
-		array_hours.map((item1: any) => {
-			if(item1 == item?._id?.hour){
-				array_amount[item1] = item?.total
+		array_hours.map((hours: any) => {
+			// Xử lý logic + thêm 7 giờ
+			let hoursPlus7 = item?._id?.hour + 7;
+			if(hoursPlus7 > 24){
+				if(hoursPlus7 == 25){
+					hoursPlus7 = 1;
+				}
+
+				if(hoursPlus7 == 26){
+					hoursPlus7 = 2;
+				}
+
+				if(hoursPlus7 == 27){
+					hoursPlus7 = 3;
+				}
+
+				if(hoursPlus7 == 28){
+					hoursPlus7 = 4;
+				}
+
+				if(hoursPlus7 == 29){
+					hoursPlus7 = 5;
+				}
+
+				if(hoursPlus7 == 30){
+					hoursPlus7 = 6;
+				}
+
+				if(hoursPlus7 == 31){
+					hoursPlus7 = 7;
+				}
+			}
+
+			if(hours == hoursPlus7){
+				array_amount[hours-1] = item?.total
 			}
 		})
 	})
