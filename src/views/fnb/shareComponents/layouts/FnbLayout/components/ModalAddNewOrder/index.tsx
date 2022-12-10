@@ -572,7 +572,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                               value="1"
                               control={
                                 <Radio
-                                  style={{ paddingRight: "5px" }}
+                                  style={{  }}
                                   icon={<img src={CheckBoxEmpty} alt="" />}
                                   checkedIcon={<img src={CheckedBox} alt="" />}
                                 />
@@ -584,7 +584,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                               value="2"
                               control={
                                 <Radio
-                                  style={{ paddingRight: "5px" }}
+                                  style={{  }}
                                   icon={<img src={CheckBoxEmpty} alt="" />}
                                   checkedIcon={<img src={CheckedBox} alt="" />}
                                 />
@@ -596,7 +596,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                               value="3"
                               control={
                                 <Radio
-                                  style={{ paddingRight: "5px" }}
+                                  style={{  }}
                                   icon={<img src={CheckBoxEmpty} alt="" />}
                                   checkedIcon={<img src={CheckedBox} alt="" />}
                                 />
@@ -608,7 +608,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                               value="4"
                               control={
                                 <Radio
-                                  style={{ paddingRight: "5px" }}
+                                  style={{  }}
                                   icon={<img src={CheckBoxEmpty} alt="" />}
                                   checkedIcon={<img src={CheckedBox} alt="" />}
                                 />
@@ -620,7 +620,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                               value="5"
                               control={
                                 <Radio
-                                  style={{ paddingRight: "5px" }}
+                                  style={{  }}
                                   icon={<img src={CheckBoxEmpty} alt="" />}
                                   checkedIcon={<img src={CheckedBox} alt="" />}
                                 />
@@ -632,7 +632,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                               value="6"
                               control={
                                 <Radio
-                                  style={{ paddingRight: "5px" }}
+                                  style={{  }}
                                   icon={<img src={CheckBoxEmpty} alt="" />}
                                   checkedIcon={<img src={CheckedBox} alt="" />}
                                 />
@@ -650,20 +650,6 @@ export const ModalAddNewOrder: FC<Props> = () => {
                     </div>
                     <div>
                       <span>Phương thức thanh toán</span>
-                      {/* <div className="flex flex-wrap mt-2 mb-2">
-                        <div className="flex items-center mr-4">
-                          <Field id="paymentMethod1" type="radio" value="1" name="paymentMethod" className="w-4 h-4" checked />
-                          <label htmlFor="paymentMethod1" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                            Tiền mặt
-                          </label>
-                        </div>
-                        <div className="flex items-center mr-4">
-                          <Field id="paymentMethod2" type="radio" value="2" name="paymentMethod" className="w-4 h-4" />
-                          <label htmlFor="paymentMethod2" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                            Chuyển khoản
-                          </label>
-                        </div>
-                      </div> */}
                       <div>
                         <FormControl sx={{ marginTop: "-5px" }} >
                           <RadioGroup
@@ -676,7 +662,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                               value="1"
                               control={
                                 <Radio
-                                  style={{ paddingRight: "5px" }}
+                                  style={{  }}
                                   icon={<img src={CheckBoxEmpty} alt="" />}
                                   checkedIcon={<img src={CheckedBox} alt="" />}
                                 />
@@ -688,7 +674,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                               value="2"
                               control={
                                 <Radio
-                                  style={{ paddingRight: "5px" }}
+                                  style={{  }}
                                   icon={<img src={CheckBoxEmpty} alt="" />}
                                   checkedIcon={<img src={CheckedBox} alt="" />}
                                 />
@@ -718,7 +704,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                               value="1"
                               control={
                                 <Radio
-                                  style={{ paddingRight: "5px" }}
+                                  style={{  }}
                                   icon={<img src={CheckBoxEmpty} alt="" />}
                                   checkedIcon={<img src={CheckedBox} alt="" />}
                                 />
@@ -730,7 +716,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                               value="2"
                               control={
                                 <Radio
-                                  style={{ paddingRight: "5px" }}
+                                  style={{  }}
                                   icon={<img src={CheckBoxEmpty} alt="" />}
                                   checkedIcon={<img src={CheckedBox} alt="" />}
                                 />
@@ -742,7 +728,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                               value="3"
                               control={
                                 <Radio
-                                  style={{ paddingRight: "5px" }}
+                                  style={{  }}
                                   icon={<img src={CheckBoxEmpty} alt="" />}
                                   checkedIcon={<img src={CheckedBox} alt="" />}
                                 />
@@ -847,64 +833,102 @@ export const ModalAddNewOrder: FC<Props> = () => {
                       </div>
                     </div>
                     <div className="boxright w-1/2">
-                      <div className="h-[300px] overflow-y-auto	my-2 border-0.5 ">
+                      <div className=" overflow-y-auto	my-2 border-0.5 ">
                         {!!productsInCart.length && productsInCart.map((product: any) => {
                           return (
                             <div key={product._id} className="flex gap-2 w-full border-b-0.5 py-2 pl-3 pr-3">
-                            <img src={product?.images?.length ? `${process.env.REACT_APP_URL_S3}${product?.images[0]?.path}` : ItemSample} alt="item" className="w-[44px] h-[44px]" />
-                            <div className="w-full">
-                              <div className="flex justify-between">
-                                <div>
-                                  <p className="font-bold truncate">
-                                    {product.name}
-                                  </p>
-                                  <textarea
-                                    className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px] resize-none"
-                                    placeholder="Thêm ghi chú ...." onChange={e => handleChangeNote(e, product)} defaultValue={product.note}></textarea>
-                                </div>
-                                <div className="flex gap-3">
-                                  <div className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                                    <label>
-                                      <input onChange={() => handleChangeType('off', product)} type="radio" className="mr-2.5" checked={(product.statusApp == 'off' || !product.statusApp) ? true : false}/>
-                                      Off
-                                    </label>
+                              <img src={product?.images?.length ? `${process.env.REACT_APP_URL_S3}${product?.images[0]?.path}` : ItemSample} alt="item" className="w-[44px] h-[44px]" />
+                              <div className="w-full">
+                                <div className="flex justify-between">
+                                  <div>
+                                    <p className="font-bold truncate">
+                                      {product.name}
+                                    </p>
+                                    <textarea
+                                      className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px] resize-none"
+                                      placeholder="Thêm ghi chú ...." onChange={e => handleChangeNote(e, product)} defaultValue={product.note}></textarea>
                                   </div>
-
-                                  <div className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                                    <label>
-                                      <input onChange={() => handleChangeType('app', product)} type="radio" className="mr-2.5" checked={product.statusApp == 'app' ? true : false}/>
-                                      App
-                                    </label>
-                                  </div>
-                                </div>
-                                <div className="text-blue-400">{calTotalPriceEachProduct(product)}</div>
-                              </div>
-                              {/* <div className="flex gap-2 justify-end"> */}
-                              <div className="flex justify-end">
-                                {/* <span>Số lượng: </span> */}
-                                <div className="flex gap-2 justify-end items-center">
-                                  {/* <button onClick={decreaseCount}><img src={IconMinus} alt="" /></button>
-                                  <input type="number" min="1" className="ml-2 w-[40px]" defaultValue={count} onChange={e => handleChangeQuantity(e, product)} />
-                                  <button onClick={increaseCount}><img src={IconPlus} alt="" /></button> */}
-                                  <button type="button" onClick={() => decreaseCount(product)}><img src={IconMinus} /></button>
-                                  <span onChange={e => handleChangeQuantity(e, product)} >{product.quantity}</span>
-                                  <button type="button" onClick={() => increaseCount(product)}><img src={IconPlus} /></button>
-                                </div>
-                              </div>
-                              <div className="flex flex-wrap w-4/5">
-                                {!!product?.variants?.length && product.variants.map((variant: any) => (
-                                  <div key={variant._id} className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
-                                    <div className="form-check">
-                                      <input className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox" value={variant._id} id={variant._id} onChange={e => handleChooseVariant(e, product._id, variant)} />
-                                      <label className="form-check-label inline-block text-gray-800">
-                                        {variant.name}
+                                  {/* <div className="flex gap-3">
+                                    <div className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                      <label>
+                                        <input onChange={() => handleChangeType('off', product)} type="radio" className="mr-2.5" checked={(product.statusApp == 'off' || !product.statusApp) ? true : false} />
+                                        Off
                                       </label>
                                     </div>
+
+                                    <div className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                      <label>
+                                        <input onChange={() => handleChangeType('app', product)} type="radio" className="mr-2.5" checked={product.statusApp == 'app' ? true : false} />
+                                        App
+                                      </label>
+                                    </div>
+                                  </div> */}
+                                  <div>
+                                    <FormControl sx={{ marginTop: "-5px" }} >
+                                      <RadioGroup
+                                        row
+                                        aria-labelledby="demo-row-radio-buttons-group-label"
+                                        name="paymentMethod"
+                                      >
+                                        <FormControlLabel
+                                          sx={{ marginLeft: "0", fontSize: "13px" }}
+                                          value="1"
+                                          onChange={() => handleChangeType('off', product)}
+                                          checked={(product.statusApp == 'off' || !product.statusApp) ? true : false}
+                                          control={
+                                            <Radio
+                                              style={{  }}
+                                              icon={<img src={CheckBoxEmpty} alt="" />}
+                                              checkedIcon={<img src={CheckedBox} alt="" />}
+                                            />
+                                          }
+                                          label={<span className="text-[13px]">Off</span>}
+                                        />
+                                        <FormControlLabel
+                                          sx={{ marginLeft: "0" }}
+                                          value="2"
+                                          onChange={() => handleChangeType('app', product)}
+                                          checked={product.statusApp == 'app' ? true : false} 
+                                          control={
+                                            <Radio
+                                              style={{  }}
+                                              icon={<img src={CheckBoxEmpty} alt="" />}
+                                              checkedIcon={<img src={CheckedBox} alt="" />}
+                                            />
+                                          }
+                                          label={<span className="text-[13px]">App</span>}
+                                        />
+                                      </RadioGroup>
+                                    </FormControl>
                                   </div>
-                                ))}
+                                  <div className="text-blue-400">{calTotalPriceEachProduct(product)}</div>
+                                </div>
+                                {/* <div className="flex gap-2 justify-end"> */}
+                                <div className="flex justify-end">
+                                  {/* <span>Số lượng: </span> */}
+                                  <div className="flex gap-2 justify-end items-center">
+                                    {/* <button onClick={decreaseCount}><img src={IconMinus} alt="" /></button>
+                                  <input type="number" min="1" className="ml-2 w-[40px]" defaultValue={count} onChange={e => handleChangeQuantity(e, product)} />
+                                  <button onClick={increaseCount}><img src={IconPlus} alt="" /></button> */}
+                                    <button type="button" onClick={() => decreaseCount(product)}><img src={IconMinus} /></button>
+                                    <span onChange={e => handleChangeQuantity(e, product)} >{product.quantity}</span>
+                                    <button type="button" onClick={() => increaseCount(product)}><img src={IconPlus} /></button>
+                                  </div>
+                                </div>
+                                <div className="flex flex-wrap w-4/5">
+                                  {!!product?.variants?.length && product.variants.map((variant: any) => (
+                                    <div key={variant._id} className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
+                                      <div className="form-check">
+                                        <input className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox" value={variant._id} id={variant._id} onChange={e => handleChooseVariant(e, product._id, variant)} />
+                                        <label className="form-check-label inline-block text-gray-800">
+                                          {variant.name}
+                                        </label>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
                               </div>
                             </div>
-                          </div>
                           )
                         })}
                       </div>
@@ -956,7 +980,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="border-0.5 p-1">
+                      <div className="border-0.5 px-1 py-2">
                         <div className="flex justify-between">
                           <div className="font-bold">Thanh toán</div>
                           <div className={`font-bold ${totalPay > 0 ? 'text-primary' : 'text-red-500'} font-bold`}>{convertCurrency(totalPay)}</div>
