@@ -178,7 +178,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
         productID: p._id,
         quantity: p.quantity,
         note: p.note,
-        variants: p.variantsSelected,
+        variantsID: p.variantsSelected.map((v: any) => v._id),
         upsize: 1,
         topping: 1,
       }))
