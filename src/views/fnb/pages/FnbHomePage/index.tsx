@@ -96,13 +96,12 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
   const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbOrder({ 
 		params: { 
       limit: 50,
-			keyword: keyword, 
-			// fundaID, 
+			keyword, 
 			populates: JSON.stringify({
-				path: 'funda', select: "name sign address"
+				path: 'funda shift customer userCreate',
+        select: "name sign address bizfullname fullname phone numberOfOrders",
 			}) 
 		}, isFetchList: true, isFetchInfo: false  });
-	// console.log({listWithPager});
 
   // Hàm trả về icon app
   const getIconApp = (salesChannel: any) => {
@@ -940,7 +939,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                         onClick={() =>
                           openModal(
                             <div className="t-add-new-task-dialog text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
-                              <ModalDetailItem />
+                              <ModalDetailItem order={item} />
                             </div>
                           )
                         }
@@ -958,7 +957,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                         onClick={() =>
                           openModal(
                             <div className="t-add-new-task-dialog text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
-                              <ModalDetailItem />
+                              <ModalDetailItem order={item} />
                             </div>
                           )
                         }

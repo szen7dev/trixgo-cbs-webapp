@@ -2,6 +2,7 @@
 import { FC, useState } from "react";
 import { NavLink } from 'react-router-dom';
 import moment from "moment";
+import debounce from "lodash/debounce";
 
 /*=====2.CSS=====*/
 
@@ -58,6 +59,10 @@ export const FnbLeftSideBar: FC = () => {
 	});
 
     const [pageIndex, setPageIndex] = useState(0);
+
+    const handleSearch = debounce(
+      (e: any) => setKeyword(e.target.value),
+    300)
 
     return (
         <div className="t-leftsidebar-navigation t-leftsidebar-navigation-v2 t-leftsidebar-navigation-type2 fixed left-64px top-14 bottom-0 transition-all duration-500 ease-out border-secondary-light z-10 bg-primary-light">
@@ -149,6 +154,7 @@ export const FnbLeftSideBar: FC = () => {
                                         sx={{ ml: 1, flex: 1 }}
                                         placeholder="Tìm kiếm ..."
                                         inputProps={{ 'aria-label': 'Tìm kiếm ...' }}
+                                        onChange={handleSearch}
                                     />
                                 </Paper>
                             </div>
