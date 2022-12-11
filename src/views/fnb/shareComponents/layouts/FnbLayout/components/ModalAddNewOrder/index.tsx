@@ -198,7 +198,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
       const dataAddNewOrder: any = {
         ...values,
         products,
-        total: `${totalPay}`,
+        total: `${totalMoney}`,
         discount: `${discountAndSales.discount}`,
         salesoff: `${discountAndSales.sales}`,
       }
