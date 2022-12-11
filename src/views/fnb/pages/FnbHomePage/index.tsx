@@ -786,7 +786,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 id="checkAll"
                 style={{ width: "14px", height: "14px" }}
               />
-              <div>
+              {/* <div>
                 <button onClick={() => setpopBox1(!popBox1)} className="relative w-[20px] h-[20px]">
                   <img src={arrowDown} className="m-auto" />
                 </button>
@@ -813,11 +813,11 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                     Chủ đề không quan tâm
                   </button>
                 </div>
-              </div>
+              </div> */}
             </div>
 
             <div className="flex gap-7 items-center">
-              <button><img src={updateIcon} alt="" /></button>
+              {/* <button><img src={updateIcon} alt="" /></button>
               <button><img src={mailIcon} alt="" /></button>
               <button onClick={() => setpopBox2(!popBox2)} className="relative w-[20px] h-[20px]">
                 <img src={moreIcon} className="m-auto" />
@@ -844,7 +844,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                     Chủ đề không quan tâm
                   </button>
                 </div>
-              </button>
+              </button> */}
               <button className="text-cbs-schedule-expired">Hủy đơn</button>
               <button
                 className="text-cbs-schedule-nextweek"
