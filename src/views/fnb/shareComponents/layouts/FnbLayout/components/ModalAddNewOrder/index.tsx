@@ -10,6 +10,7 @@ import debounce from "lodash/debounce";
 import { convertCurrency } from 'utils/converter';
 import { useSocket } from "services/hooks/useSocket";
 import { useAuth } from 'services/hooks/auth/useAuth';
+import { useQueryClient } from 'react-query';
 
 /**
  * Hooks, Typings
@@ -61,11 +62,11 @@ const SEASONS_TYPE = [
 ];
 
 export const ModalAddNewOrder: FC<Props> = () => {
+  const queryClient = useQueryClient();
   const { closeModal } = useModal();
   const { current: socket }: any = useSocket();
   const { user } = useAuth();
   const groupSearchableRef = React.useRef<GroupSearchableHandle>(null);
-
   const [keywordSearchProduct, setKeywordSearchProduct] = useState("");
   const [totalMoney, setTotalMoney] = useState(0);
   const [totalPay, setTotalPay] = useState(0);
@@ -190,9 +191,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
         productID: p._id,
         quantity: p.quantity,
         note: p.note,
-        variantsID: p.variantsSelected.map((v: any) => v._id),
-        upsize: 1,
-        topping: 1,
+        variantsID: p.variantsSelected ? p.variantsSelected.map((v: any) => v._id) : [],
+        unitPrice: p.statusApp === 'app' ? p.unitPrice2 : p.unitPrice
       }))
 
       const dataAddNewOrder: any = {
@@ -203,6 +203,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
         salesoff: `${discountAndSales.sales}`,
       }
 
+      closeModal();
       const { data, status } = await API.post(
         `/api/fnb/orders`,
         dataAddNewOrder
@@ -216,8 +217,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
         fundaID: dataAddNewOrder.fundaID,
         orderInfo: data?.data,
       })
-
-      closeModal();
+      queryClient.refetchQueries('fnb-order-list');
       return toast.success('Tạo đơn thành công');
     } catch (error) {
       if (typeof error === "string") {
@@ -325,7 +325,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
     let amount = (product.statusApp === 'app' ? product.unitPrice2 : product.unitPrice) * product.quantity;
     if (product.variantsSelected && product.variantsSelected.length) {
       product.variantsSelected.forEach((variant: any) => {
-        amount += variant.unitPrice;
+        amount += variant.unitPrice * product.quantity;
       });
     }
     return amount;
@@ -335,7 +335,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
     const amount = productsInCart.reduce((prev: any, product: any) => {
       if (product.variantsSelected && product.variantsSelected.length) {
         product.variantsSelected.forEach((variant: any) => {
-          prev += variant.unitPrice;
+          prev += variant.unitPrice * product.quantity;
         });
       }
       return prev += ((product.statusApp === 'app' ? product.unitPrice2 : product.unitPrice) * product.quantity)
@@ -486,7 +486,10 @@ export const ModalAddNewOrder: FC<Props> = () => {
                       <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full"}>Mã khách</div>
                       <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                         <DropdownSearchable
-                          onchangeValue={(value: any) => setFieldValue("customerID", value.id)}
+                          onchangeValue={(value: any) => {
+                            setFieldValue("customerID", value.id);
+                            setFieldValue("name", `Đơn hàng ${value.label}`);
+                          }}
                           onClearData={() => setFieldValue("customerID", "")}
                           onSearchInputChange={
                             debounce(
@@ -575,6 +578,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   style={{  }}
                                   icon={<img src={CheckBoxEmpty} alt="" />}
                                   checkedIcon={<img src={CheckedBox} alt="" />}
+                                  onChange={() => setFieldValue("salesChannel", 1)}
+                                  checked={(values.salesChannel === 1) ? true : false}
                                 />
                               }
                               label={<span className="text-[13px]">Offline</span>}
@@ -587,6 +592,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   style={{  }}
                                   icon={<img src={CheckBoxEmpty} alt="" />}
                                   checkedIcon={<img src={CheckedBox} alt="" />}
+                                  onChange={() => setFieldValue("salesChannel", 2)}
+                                  checked={(values.salesChannel === 2) ? true : false}
                                 />
                               }
                               label={<span className="text-[13px]">Grab</span>}
@@ -599,6 +606,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   style={{  }}
                                   icon={<img src={CheckBoxEmpty} alt="" />}
                                   checkedIcon={<img src={CheckedBox} alt="" />}
+                                  onChange={() => setFieldValue("salesChannel", 3)}
+                                  checked={(values.salesChannel === 3) ? true : false}
                                 />
                               }
                               label={<span className="text-[13px]">Shopee</span>}
@@ -611,6 +620,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   style={{  }}
                                   icon={<img src={CheckBoxEmpty} alt="" />}
                                   checkedIcon={<img src={CheckedBox} alt="" />}
+                                  onChange={() => setFieldValue("salesChannel", 4)}
+                                  checked={(values.salesChannel === 4) ? true : false}
                                 />
                               }
                               label={<span className="text-[13px]">Gojek</span>}
@@ -623,6 +634,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   style={{  }}
                                   icon={<img src={CheckBoxEmpty} alt="" />}
                                   checkedIcon={<img src={CheckedBox} alt="" />}
+                                  onChange={() => setFieldValue("salesChannel", 5)}
+                                  checked={(values.salesChannel === 5) ? true : false}
                                 />
                               }
                               label={<span className="text-[13px]">Baemin</span>}
@@ -635,6 +648,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   style={{  }}
                                   icon={<img src={CheckBoxEmpty} alt="" />}
                                   checkedIcon={<img src={CheckedBox} alt="" />}
+                                  onChange={() => setFieldValue("salesChannel", 6)}
+                                  checked={(values.salesChannel === 6) ? true : false}
                                 />
                               }
                               label={<span className="text-[13px]">Loship</span>}
@@ -665,6 +680,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   style={{  }}
                                   icon={<img src={CheckBoxEmpty} alt="" />}
                                   checkedIcon={<img src={CheckedBox} alt="" />}
+                                  onChange={() => setFieldValue("paymentMethod", 1)}
+                                  checked={(values.paymentMethod === 1) ? true : false}
                                 />
                               }
                               label={<span className="text-[13px]">Tiền mặt</span>}
@@ -677,6 +694,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   style={{  }}
                                   icon={<img src={CheckBoxEmpty} alt="" />}
                                   checkedIcon={<img src={CheckedBox} alt="" />}
+                                  onChange={() => setFieldValue("paymentMethod", 2)}
+                                  checked={(values.paymentMethod === 2) ? true : false}
                                 />
                               }
                               label={<span className="text-[13px]">Chuyển khoản</span>}
@@ -707,6 +726,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   style={{  }}
                                   icon={<img src={CheckBoxEmpty} alt="" />}
                                   checkedIcon={<img src={CheckedBox} alt="" />}
+                                  onChange={() => setFieldValue("service", 1)}
+                                  checked={(values.service === 1) ? true : false}
                                 />
                               }
                               label={<span className="text-[13px]">Tại quán</span>}
@@ -719,6 +740,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   style={{  }}
                                   icon={<img src={CheckBoxEmpty} alt="" />}
                                   checkedIcon={<img src={CheckedBox} alt="" />}
+                                  onChange={() => setFieldValue("service", 2)}
+                                  checked={(values.service === 2) ? true : false}
                                 />
                               }
                               label={<span className="text-[13px]">Giao hàng (app)</span>}
@@ -731,6 +754,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   style={{  }}
                                   icon={<img src={CheckBoxEmpty} alt="" />}
                                   checkedIcon={<img src={CheckedBox} alt="" />}
+                                  onChange={() => setFieldValue("service", 3)}
+                                  checked={(values.service === 3) ? true : false}
                                 />
                               }
                               label={<span className="text-[13px]">Mang đi</span>}
@@ -751,6 +776,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                               type="text"
                               className="border-0 flex-grow outline-none px-3 mt-0.5 w-3/4"
                               onChange={(event) => setFieldValue("name", event.target.value)}
+                              value={values.name}
                             />
                             <ErrorMessage
                               name="name"
@@ -819,7 +845,10 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                       setProductsInCart((prevProducts: any) => {
                                         const isExists = prevProducts.find((p: any) => p._id === product._id);
                                         if (isExists) return prevProducts;
-                                        else return [...prevProducts, product];
+                                        else return [...prevProducts, {
+                                          ...product,
+                                          quantity: 1
+                                        }];
                                       });
                                     }}
                                   >
@@ -842,7 +871,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                 <div className="flex justify-between">
                                   <div>
                                     <p className="font-bold truncate">
-                                      {product.name}
+                                      {`${product.name} (${product.statusApp === 'app' ? convertCurrency(product.unitPrice2) : convertCurrency(product.unitPrice)})`}
                                     </p>
                                     <textarea
                                       className="border-0 flex-grow outline-none mt-0.5 w-full h-[35px] resize-none"
@@ -921,7 +950,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                       <div className="form-check">
                                         <input className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox" value={variant._id} id={variant._id} onChange={e => handleChooseVariant(e, product._id, variant)} />
                                         <label className="form-check-label inline-block text-gray-800">
-                                          {variant.name}
+                                          {`${variant.name} (${convertCurrency(variant.unitPrice)})`}
                                         </label>
                                       </div>
                                     </div>
