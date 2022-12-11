@@ -263,13 +263,13 @@ export const FnbReportPage: FC = () => {
 
 	// Phân loại doanh số
 	listOrderByProperty?.map((item: any) => {
-		if(item._id.salesChannel == 1){
+		if(Number(item._id.salesChannel) == 1){
 			revenueOff += item.total;
 		}else{
 			revenueApp += item.total;
 		}
 
-		if(item._id.internal == 1){
+		if(Number(item._id.internal) == 1){
 			revenueInternal += item.total;
 		}else{
 			revenueFC += item.total;
