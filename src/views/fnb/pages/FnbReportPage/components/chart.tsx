@@ -117,7 +117,7 @@ const ChartRevenueByHour: FC<any> = ({array_hours, array_amount}) => {
         //     {
         //         data: [0, 0, 0, 0, 0, 0, 0, 0, 23000, 21000, 65000, 145000, 85000, 150000, 23000, 21000, 65000, 0, 0, 0, 0, 0, 0, 0],
         //         backgroundColor: "#0088FF",
-        //         barThickness: 46,
+        //         maxBarThickness: 46,
         //     },
         // ],
         labels: array_hours,
@@ -125,7 +125,7 @@ const ChartRevenueByHour: FC<any> = ({array_hours, array_amount}) => {
             {
                 data: array_amount,
                 backgroundColor: "#0088FF",
-                barThickness: 46,
+                maxBarThickness: 46,
             },
         ],
     };
