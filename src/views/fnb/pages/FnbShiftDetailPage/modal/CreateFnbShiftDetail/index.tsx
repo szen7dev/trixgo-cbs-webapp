@@ -8,6 +8,15 @@ import { toast } from 'react-toastify';
 import { DropdownSearchable } from "shareComponents/common";
 import debounce from "lodash/debounce";
 import { useParams } from "react-router-dom";
+import { FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
+
+/**
+ * asset img
+ */
+import CheckBoxEmpty from "assets/images/Frame 3548.svg";
+import CheckedBox from "assets/images/Check-All.svg";
+import DemoAvatar from "assets/images/image 437.png";
+import IconCancel from "assets/images/icons8-cancel-96 1.svg";
 
 /**
  * Types, Services
@@ -16,18 +25,24 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useFnbQuota } from 'services/hooks/fnb/useFnbQuota';
 import { useGoods } from "services/hooks/items/useGoods";
 import { useFnbShift } from 'services/hooks/fnb/useFnbShift';
+import { useGetUsersByCompany } from "services/hooks/auth/useAdmin";
 
-const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, initialValues = {
+const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID, initialValues = {
     name: "",
-    note: ""  
+    note: ""
 } }) => {
-    console.log({initialValues})
-
-	const { fundaID } = useParams<{ fundaID: string }>();
+    const [keywordUser, setKeywordUser] = useState("");
+    const { listMembers, nextPageGetUsersBySystem, hasnextPageGetUsersBySystem } = useGetUsersByCompany(companyID, keywordUser);
+    console.log({ listMembers })
+    const { fundaID } = useParams<{ fundaID: string }>();
     const [keyword, setKeyword] = useState('');
-    const {  insertAsync, updateAsync, refetch } = useFnbShift({ params: { keyword: "", fundaID, populates: JSON.stringify({
-        path: 'goods', select: "name unit"
-    })  }, isFetchList: false, isFetchInfo: false  });
+    const { insertAsync, updateAsync, refetch } = useFnbShift({
+        params: {
+            keyword: "", fundaID, populates: JSON.stringify({
+                path: 'goods', select: "name unit"
+            })
+        }, isFetchList: false, isFetchInfo: false
+    });
 
     const handleSubmit = async (values: any) => {
         if (modalType == 'create') {
@@ -38,8 +53,8 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, initialVa
                 note: values.note,
             };
 
-            console.log({fundaID, name: values.name, note: values.note})
-           
+            console.log({ fundaID, name: values.name, note: values.note })
+
             const result = await insertAsync(query);
             if (!result.error) {
                 refetch();
@@ -49,7 +64,7 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, initialVa
                 toast.error(result?.data?.message);
             }
         };
-        
+
         if (modalType == 'update') {
             const query = {
                 ...values,
@@ -103,29 +118,198 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, initialVa
                                     </svg>
                                 </button>
                             </div>
-                            <div className="px-6 mt-2 pt-3.5 flex-1 flex flex-col">                               
+                            <div className="px-6 mt-2 pt-3.5 flex-1 flex flex-col">
                                 <div className="mb-4">
-                                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtUnit">
-                                     Tên
+                                    <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtUnit">
+                                        Tên
                                     </label>
-                                    <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtName" placeholder="Tên" {...getFieldProps('name')} />
+                                    <Field className="appearance-none border-0.5 border-cbs-bg-input-search bg-cbs-table-header rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none " id="txtName" placeholder="Tên" {...getFieldProps('name')} />
                                     <ErrorMessage
                                         name="unit"
                                         component="span"
                                         className="font-normal leading-7 text-sm text-negative"
                                     />
                                 </div>
-
+                                <div className="ml-3">
+                                    <span className="text-[13px] text-primary-gray">Phân loại mùa trong năm</span>
+                                    <div  className="my-5">
+                                        <FormControl sx={{ marginTop: "-5px" }} >
+                                            <RadioGroup
+                                                row
+                                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                                name="season"
+                                            >
+                                                <FormControlLabel
+                                                    sx={{ width: "75px", marginLeft: "0", fontSize: "13px" }}
+                                                    value="1"
+                                                    onChange={() => setFieldValue('seasons', 1)}
+                                                    // checked={(values.seasons == 1) ? true : false}
+                                                    control={
+                                                        <Radio
+                                                            style={{}}
+                                                            icon={<img src={CheckBoxEmpty} alt="" />}
+                                                            checkedIcon={<img src={CheckedBox} alt="" />}
+                                                        />
+                                                    }
+                                                    label={<span className="text-[13px]">Xuân</span>}
+                                                />
+                                                <FormControlLabel
+                                                    sx={{ width: "75px", marginLeft: "0" }}
+                                                    value="2"
+                                                    onChange={() => setFieldValue('seasons', 2)}
+                                                    // checked={(values.seasons == 1) ? true : false}
+                                                    control={
+                                                        <Radio
+                                                            style={{}}
+                                                            icon={<img src={CheckBoxEmpty} alt="" />}
+                                                            checkedIcon={<img src={CheckedBox} alt="" />}
+                                                        />
+                                                    }
+                                                    label={<span className="text-[13px]">Hạ</span>}
+                                                />
+                                                <FormControlLabel
+                                                    sx={{ width: "75px", marginLeft: "0", fontSize: "13px" }}
+                                                    value="3"
+                                                    onChange={() => setFieldValue('seasons', 3)}
+                                                    // checked={(values.seasons == 1) ? true : false}
+                                                    control={
+                                                        <Radio
+                                                            style={{}}
+                                                            icon={<img src={CheckBoxEmpty} alt="" />}
+                                                            checkedIcon={<img src={CheckedBox} alt="" />}
+                                                        />
+                                                    }
+                                                    label={<span className="text-[13px]">Thu</span>}
+                                                />
+                                                <FormControlLabel
+                                                    sx={{ width: "75px", marginLeft: "0" }}
+                                                    value="4"
+                                                    onChange={() => setFieldValue('seasons', 4)}
+                                                    // checked={(values.seasons == 1) ? true : false}
+                                                    control={
+                                                        <Radio
+                                                            style={{}}
+                                                            icon={<img src={CheckBoxEmpty} alt="" />}
+                                                            checkedIcon={<img src={CheckedBox} alt="" />}
+                                                        />
+                                                    }
+                                                    label={<span className="text-[13px]">Đông</span>}
+                                                />
+                                            </RadioGroup>
+                                        </FormControl>
+                                    </div>
+                                </div>
+                                <div className="ml-3">
+                                    <span className="text-[13px] text-primary-gray">Phân loại ca trong ngày</span>
+                                    <div className="my-5">
+                                        <FormControl sx={{ marginTop: "-5px" }} >
+                                            <RadioGroup
+                                                row
+                                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                                name="shiftInDay"
+                                            >
+                                                <FormControlLabel
+                                                    sx={{ width: "75px", marginLeft: "0", fontSize: "13px" }}
+                                                    value="1"
+                                                    onChange={() => setFieldValue('shiftInDay', 1)}
+                                                    // checked={(values.seasons == 1) ? true : false}
+                                                    control={
+                                                        <Radio
+                                                            style={{}}
+                                                            icon={<img src={CheckBoxEmpty} alt="" />}
+                                                            checkedIcon={<img src={CheckedBox} alt="" />}
+                                                        />
+                                                    }
+                                                    label={<span className="text-[13px]">Sáng</span>}
+                                                />
+                                                <FormControlLabel
+                                                    sx={{ width: "75px", marginLeft: "0" }}
+                                                    value="2"
+                                                    onChange={() => setFieldValue('shiftInDay', 2)}
+                                                    // checked={(values.seasons == 1) ? true : false}
+                                                    control={
+                                                        <Radio
+                                                            style={{}}
+                                                            icon={<img src={CheckBoxEmpty} alt="" />}
+                                                            checkedIcon={<img src={CheckedBox} alt="" />}
+                                                        />
+                                                    }
+                                                    label={<span className="text-[13px]">Trưa</span>}
+                                                />
+                                                <FormControlLabel
+                                                    sx={{ width: "75px", marginLeft: "0", fontSize: "13px" }}
+                                                    value="3"
+                                                    onChange={() => setFieldValue('shiftInDay', 3)}
+                                                    // checked={(values.seasons == 1) ? true : false}
+                                                    control={
+                                                        <Radio
+                                                            style={{}}
+                                                            icon={<img src={CheckBoxEmpty} alt="" />}
+                                                            checkedIcon={<img src={CheckedBox} alt="" />}
+                                                        />
+                                                    }
+                                                    label={<span className="text-[13px]">Chiều</span>}
+                                                />
+                                                <FormControlLabel
+                                                    sx={{ width: "75px", marginLeft: "0" }}
+                                                    value="4"
+                                                    onChange={() => setFieldValue('shiftInDay', 4)}
+                                                    // checked={(values.seasons == 1) ? true : false}
+                                                    control={
+                                                        <Radio
+                                                            style={{}}
+                                                            icon={<img src={CheckBoxEmpty} alt="" />}
+                                                            checkedIcon={<img src={CheckedBox} alt="" />}
+                                                        />
+                                                    }
+                                                    label={<span className="text-[13px]">Tối</span>}
+                                                />
+                                            </RadioGroup>
+                                        </FormControl>
+                                    </div>
+                                </div>
                                 <div className="mb-4">
-                                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtNote">
-                                    Ghi chú
+                                    <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtNote">
+                                        Ghi chú
                                     </label>
-                                    <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtNote" placeholder="Ghi chú" {...getFieldProps('note')} />
+                                    <Field className="h-[60px] appearance-none border-0.5 border-cbs-bg-input-search bg-cbs-table-header rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none resize-none" as="textarea" id="txtNote" placeholder="Ghi chú" {...getFieldProps('note')} />
                                     <ErrorMessage
                                         name="note"
                                         component="span"
                                         className="font-normal leading-7 text-sm text-negative"
                                     />
+                                </div>
+                                <div>
+                                    <span className="text-[13px] text-primary-gray mb-3 ml-3">Nhân sự trong ca làm việc</span>
+                                    <div className="flex gap-2 my-3">
+                                        <div className="flex justify-between w-1/3 h-[40px] items-center border-0.5 border-cbs-border rounded-md px-3">
+                                            <div className="flex gap-2  items-center">
+                                                <img src={DemoAvatar} alt="" style={{ maxWidth: "24px", maxHeight: "24px" }} />
+                                                <span className="text-[14px]">Tùng Chi-Wgo</span>
+                                            </div>
+                                            <button>
+                                                <img src={IconCancel} alt="" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div className="my-3">
+                                        <input type="text" placeholder="Tìm kiếm nhân sự"
+                                            className="w-full h-[40px] rounded border-0.5 border-cbs-bg-input-search bg-cbs-bg-input-search px-3 py-1 outline-none "
+                                            onChange={debounce((e) => setKeywordUser(e.target.value), 500)}
+                                       />
+                                    </div>
+                                    <div>
+                                        {
+                                            listMembers.map((member: any) => {
+                                                return (
+                                                    <div className="w-full h-[40px] flex gap-2 items-center rounded border-0.5 border-cbs-border bg-cbs-light-blue px-3 mt-1" key={member._id}>
+                                                        <img src={`${process.env.REACT_APP_URL_S3_USER}/${member.image}`} alt="" style={{ maxWidth: "24px", maxHeight: "24px" }} />
+                                                        <span className="text-[14px]">{member.fullname}</span>
+                                                    </div>
+                                                )
+                                            })
+                                        }
+                                    </div>
                                 </div>
                                 <div className="flex justify-end pt-5 px-6 pb-6 mb-0.5">
                                     <div>
