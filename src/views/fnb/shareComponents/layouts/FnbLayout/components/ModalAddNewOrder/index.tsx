@@ -929,9 +929,9 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                     <button type="button" onClick={() => increaseCount(product)}><img src={IconPlus} /></button>
                                   </div>
                                 </div>
-                                <div className="flex flex-wrap w-full gap-3 mt-2">
+                                <div className="flex flex-wrap w-full gap-3">
                                   {!!product?.variants?.length && product.variants.map((variant: any) => (
-                                    <div key={variant._id} className="w-1/4 mb-2 flex gap-2 items-start">
+                                    <div key={variant._id} className="w-1/4 flex gap-2 items-start">
                                       {/* <div className="form-check">
                                         <input className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox" value={variant._id} id={variant._id} onChange={e => handleChooseVariant(e, product._id, variant)} />
                                         <label className="form-check-label inline-block text-gray-800">
