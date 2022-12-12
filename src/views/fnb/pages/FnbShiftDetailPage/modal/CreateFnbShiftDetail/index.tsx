@@ -49,11 +49,13 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
             const query = {
                 ...values,
                 fundaID,
-                name: values.name,
-                note: values.note,
+                // name: values.name,
+                // note: values.note,
+                // seasons: values.seasons,
+                // shiftType: values.shiftType,
             };
 
-            console.log({ fundaID, name: values.name, note: values.note })
+            // console.log(values)
 
             const result = await insertAsync(query);
             if (!result.error) {
@@ -71,6 +73,8 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                 shiftID: values._id,
                 name: values.name,
                 note: values.note,
+                seasons: values.seasons,
+                shiftType: values.shiftType,
             };
             const result = await updateAsync(query);
             if (!result.error) {
@@ -125,7 +129,7 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                     </label>
                                     <Field className="appearance-none border-0.5 border-cbs-bg-input-search bg-cbs-table-header rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none " id="txtName" placeholder="Tên" {...getFieldProps('name')} />
                                     <ErrorMessage
-                                        name="unit"
+                                        name="name"
                                         component="span"
                                         className="font-normal leading-7 text-sm text-negative"
                                     />
@@ -137,7 +141,7 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                             <RadioGroup
                                                 row
                                                 aria-labelledby="demo-row-radio-buttons-group-label"
-                                                name="season"
+                                                name="seasons"
                                             >
                                                 <FormControlLabel
                                                     sx={{ width: "75px", marginLeft: "0", fontSize: "13px" }}
@@ -202,12 +206,12 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                             <RadioGroup
                                                 row
                                                 aria-labelledby="demo-row-radio-buttons-group-label"
-                                                name="shiftInDay"
+                                                name="shiftType"
                                             >
                                                 <FormControlLabel
                                                     sx={{ width: "75px", marginLeft: "0", fontSize: "13px" }}
                                                     value="1"
-                                                    onChange={() => setFieldValue('shiftInDay', 1)}
+                                                    onChange={() => setFieldValue('shiftType', 1)}
                                                     control={
                                                         <Radio
                                                             style={{}}
@@ -220,7 +224,7 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                                 <FormControlLabel
                                                     sx={{ width: "75px", marginLeft: "0" }}
                                                     value="2"
-                                                    onChange={() => setFieldValue('shiftInDay', 2)}
+                                                    onChange={() => setFieldValue('shiftType', 2)}
                                                     control={
                                                         <Radio
                                                             style={{}}
@@ -233,7 +237,7 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                                 <FormControlLabel
                                                     sx={{ width: "75px", marginLeft: "0", fontSize: "13px" }}
                                                     value="3"
-                                                    onChange={() => setFieldValue('shiftInDay', 3)}
+                                                    onChange={() => setFieldValue('shiftType', 3)}
                                                     control={
                                                         <Radio
                                                             style={{}}
@@ -246,7 +250,7 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                                 <FormControlLabel
                                                     sx={{ width: "75px", marginLeft: "0" }}
                                                     value="4"
-                                                    onChange={() => setFieldValue('shiftInDay', 4)}
+                                                    onChange={() => setFieldValue('shiftType', 4)}
                                                     control={
                                                         <Radio
                                                             style={{}}
