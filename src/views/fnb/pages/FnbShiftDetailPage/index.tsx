@@ -25,6 +25,7 @@ import { useFnbProduct } from 'services/hooks/fnb/useFnbProduct';
 import { useFnbQuota } from 'services/hooks/fnb/useFnbQuota';
 import { useFunda } from 'services/hooks/items/useFunda';
 import { useFnbShift } from 'services/hooks/fnb/useFnbShift';
+import { useAuth } from 'services/hooks/auth/useAuth';
 
 /*=====7.OTHER=====*/
 import { APP_ID } from "apis/localdb";
@@ -34,10 +35,11 @@ const TYPE_PRODUCT = [
 	{ value: 2, text: "Topping" },
 ]
 export const FnbShiftDetailPage: FC = () => {
+	const { user } = useAuth();
+	const companyID = user?.company._id;
 	useEffect(() => {
 		document.title = "Trixgo | FnB";
 	}, []);
-	
 	const history = useHistory();
 	const { fundaID } = useParams<{ fundaID: string }>();
 	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
@@ -269,6 +271,7 @@ export const FnbShiftDetailPage: FC = () => {
 						toggle={toggleModalCreateShiftDetail}
 						initialValues={initialValues ? initialValues : undefined}
 						onConfirm={onConfirmCreateShiftDetail}
+						companyID = {companyID}
 					/>
 				</div>
 			</ModalContainer>

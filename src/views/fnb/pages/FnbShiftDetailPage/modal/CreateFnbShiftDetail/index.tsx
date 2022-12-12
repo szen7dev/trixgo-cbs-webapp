@@ -25,13 +25,15 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useFnbQuota } from 'services/hooks/fnb/useFnbQuota';
 import { useGoods } from "services/hooks/items/useGoods";
 import { useFnbShift } from 'services/hooks/fnb/useFnbShift';
+import { useGetUsersByCompany } from "services/hooks/auth/useAdmin";
 
-const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, initialValues = {
+const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID, initialValues = {
     name: "",
     note: ""
 } }) => {
-    console.log({ initialValues })
-
+    const [keywordUser, setKeywordUser] = useState("");
+    const { listMembers, nextPageGetUsersBySystem, hasnextPageGetUsersBySystem } = useGetUsersByCompany(companyID, keywordUser);
+    console.log({ listMembers })
     const { fundaID } = useParams<{ fundaID: string }>();
     const [keyword, setKeyword] = useState('');
     const { insertAsync, updateAsync, refetch } = useFnbShift({
@@ -140,8 +142,8 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, initialVa
                                                 <FormControlLabel
                                                     sx={{ width: "75px", marginLeft: "0", fontSize: "13px" }}
                                                     value="1"
-                                                    // onChange={() => handleChangeType('off', product)}
-                                                    // checked={(product.statusApp == 'off' || !product.statusApp) ? true : false}
+                                                    onChange={() => setFieldValue('seasons', 1)}
+                                                    // checked={(values.seasons == 1) ? true : false}
                                                     control={
                                                         <Radio
                                                             style={{}}
@@ -154,8 +156,8 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, initialVa
                                                 <FormControlLabel
                                                     sx={{ width: "75px", marginLeft: "0" }}
                                                     value="2"
-                                                    // onChange={() => handleChangeType('app', product)}
-                                                    // checked={product.statusApp == 'app' ? true : false}
+                                                    onChange={() => setFieldValue('seasons', 2)}
+                                                    // checked={(values.seasons == 1) ? true : false}
                                                     control={
                                                         <Radio
                                                             style={{}}
@@ -168,8 +170,8 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, initialVa
                                                 <FormControlLabel
                                                     sx={{ width: "75px", marginLeft: "0", fontSize: "13px" }}
                                                     value="3"
-                                                    // onChange={() => handleChangeType('off', product)}
-                                                    // checked={(product.statusApp == 'off' || !product.statusApp) ? true : false}
+                                                    onChange={() => setFieldValue('seasons', 3)}
+                                                    // checked={(values.seasons == 1) ? true : false}
                                                     control={
                                                         <Radio
                                                             style={{}}
@@ -182,8 +184,8 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, initialVa
                                                 <FormControlLabel
                                                     sx={{ width: "75px", marginLeft: "0" }}
                                                     value="4"
-                                                    // onChange={() => handleChangeType('app', product)}
-                                                    // checked={product.statusApp == 'app' ? true : false}
+                                                    onChange={() => setFieldValue('seasons', 4)}
+                                                    // checked={(values.seasons == 1) ? true : false}
                                                     control={
                                                         <Radio
                                                             style={{}}
@@ -209,8 +211,8 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, initialVa
                                                 <FormControlLabel
                                                     sx={{ width: "75px", marginLeft: "0", fontSize: "13px" }}
                                                     value="1"
-                                                    // onChange={() => handleChangeType('off', product)}
-                                                    // checked={(product.statusApp == 'off' || !product.statusApp) ? true : false}
+                                                    onChange={() => setFieldValue('shiftInDay', 1)}
+                                                    // checked={(values.seasons == 1) ? true : false}
                                                     control={
                                                         <Radio
                                                             style={{}}
@@ -223,8 +225,8 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, initialVa
                                                 <FormControlLabel
                                                     sx={{ width: "75px", marginLeft: "0" }}
                                                     value="2"
-                                                    // onChange={() => handleChangeType('app', product)}
-                                                    // checked={product.statusApp == 'app' ? true : false}
+                                                    onChange={() => setFieldValue('shiftInDay', 2)}
+                                                    // checked={(values.seasons == 1) ? true : false}
                                                     control={
                                                         <Radio
                                                             style={{}}
@@ -237,8 +239,8 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, initialVa
                                                 <FormControlLabel
                                                     sx={{ width: "75px", marginLeft: "0", fontSize: "13px" }}
                                                     value="3"
-                                                    // onChange={() => handleChangeType('off', product)}
-                                                    // checked={(product.statusApp == 'off' || !product.statusApp) ? true : false}
+                                                    onChange={() => setFieldValue('shiftInDay', 3)}
+                                                    // checked={(values.seasons == 1) ? true : false}
                                                     control={
                                                         <Radio
                                                             style={{}}
@@ -251,8 +253,8 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, initialVa
                                                 <FormControlLabel
                                                     sx={{ width: "75px", marginLeft: "0" }}
                                                     value="4"
-                                                    // onChange={() => handleChangeType('app', product)}
-                                                    // checked={product.statusApp == 'app' ? true : false}
+                                                    onChange={() => setFieldValue('shiftInDay', 4)}
+                                                    // checked={(values.seasons == 1) ? true : false}
                                                     control={
                                                         <Radio
                                                             style={{}}
@@ -289,30 +291,24 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, initialVa
                                                 <img src={IconCancel} alt="" />
                                             </button>
                                         </div>
-                                        <div className="flex justify-between w-1/3 h-[40px] items-center border-0.5 border-cbs-border rounded-md px-3">
-                                            <div className="flex gap-2  items-center">
-                                                <img src={DemoAvatar} alt="" style={{ maxWidth: "24px", maxHeight: "24px" }} />
-                                                <span className="text-[14px]">Tùng Chi-Wgo</span>
-                                            </div>
-                                            <button>
-                                                <img src={IconCancel} alt="" />
-                                            </button>
-                                        </div>
                                     </div>
                                     <div className="my-3">
                                         <input type="text" placeholder="Tìm kiếm nhân sự"
                                             className="w-full h-[40px] rounded border-0.5 border-cbs-bg-input-search bg-cbs-bg-input-search px-3 py-1 outline-none "
-                                        />
+                                            onChange={debounce((e) => setKeywordUser(e.target.value), 500)}
+                                       />
                                     </div>
                                     <div>
-                                        <div className="w-full h-[40px] flex gap-2 items-center rounded border-0.5 border-cbs-border bg-cbs-light-blue px-3 mt-1">
-                                            <img src={DemoAvatar} alt="" style={{ maxWidth: "24px", maxHeight: "24px" }} />
-                                            <span className="text-[14px]">Tùng Chi-Wgo</span>
-                                        </div>
-                                        <div className="w-full h-[40px] flex gap-2 items-center rounded border-0.5 border-cbs-border bg-cbs-light-blue px-3 mt-1">
-                                            <img src={DemoAvatar} alt="" style={{ maxWidth: "24px", maxHeight: "24px" }} />
-                                            <span className="text-[14px]">Tùng Chi-Wgo</span>
-                                        </div>
+                                        {
+                                            listMembers.map((member: any) => {
+                                                return (
+                                                    <div className="w-full h-[40px] flex gap-2 items-center rounded border-0.5 border-cbs-border bg-cbs-light-blue px-3 mt-1" key={member._id}>
+                                                        <img src={`${process.env.REACT_APP_URL_S3_USER}/${member.image}`} alt="" style={{ maxWidth: "24px", maxHeight: "24px" }} />
+                                                        <span className="text-[14px]">{member.fullname}</span>
+                                                    </div>
+                                                )
+                                            })
+                                        }
                                     </div>
                                 </div>
                                 <div className="flex justify-end pt-5 px-6 pb-6 mb-0.5">
