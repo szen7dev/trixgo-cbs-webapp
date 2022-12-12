@@ -226,7 +226,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
                   checked={formData.internal == 2?true: false}
                   onChange={onChange}
                 />
-                <label htmlFor="internal" className={"text-left ml-3"}>Nhượng quyên</label>
+                <label htmlFor="internal" className={"text-left ml-3"}>Nhượng quyền</label>
             </div>
           </div>
       </section>

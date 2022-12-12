@@ -33,7 +33,7 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
 } }) => {
     const [keywordUser, setKeywordUser] = useState("");
     const { listMembers, nextPageGetUsersBySystem, hasnextPageGetUsersBySystem } = useGetUsersByCompany(companyID, keywordUser);
-    console.log({ listMembers })
+    // console.log({ listMembers })
     const { fundaID } = useParams<{ fundaID: string }>();
     const [keyword, setKeyword] = useState('');
     const { insertAsync, updateAsync, refetch } = useFnbShift({
@@ -143,7 +143,6 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                                     sx={{ width: "75px", marginLeft: "0", fontSize: "13px" }}
                                                     value="1"
                                                     onChange={() => setFieldValue('seasons', 1)}
-                                                    // checked={(values.seasons == 1) ? true : false}
                                                     control={
                                                         <Radio
                                                             style={{}}
@@ -157,7 +156,6 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                                     sx={{ width: "75px", marginLeft: "0" }}
                                                     value="2"
                                                     onChange={() => setFieldValue('seasons', 2)}
-                                                    // checked={(values.seasons == 1) ? true : false}
                                                     control={
                                                         <Radio
                                                             style={{}}
@@ -171,7 +169,6 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                                     sx={{ width: "75px", marginLeft: "0", fontSize: "13px" }}
                                                     value="3"
                                                     onChange={() => setFieldValue('seasons', 3)}
-                                                    // checked={(values.seasons == 1) ? true : false}
                                                     control={
                                                         <Radio
                                                             style={{}}
@@ -185,7 +182,6 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                                     sx={{ width: "75px", marginLeft: "0" }}
                                                     value="4"
                                                     onChange={() => setFieldValue('seasons', 4)}
-                                                    // checked={(values.seasons == 1) ? true : false}
                                                     control={
                                                         <Radio
                                                             style={{}}
@@ -212,7 +208,6 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                                     sx={{ width: "75px", marginLeft: "0", fontSize: "13px" }}
                                                     value="1"
                                                     onChange={() => setFieldValue('shiftInDay', 1)}
-                                                    // checked={(values.seasons == 1) ? true : false}
                                                     control={
                                                         <Radio
                                                             style={{}}
@@ -226,7 +221,6 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                                     sx={{ width: "75px", marginLeft: "0" }}
                                                     value="2"
                                                     onChange={() => setFieldValue('shiftInDay', 2)}
-                                                    // checked={(values.seasons == 1) ? true : false}
                                                     control={
                                                         <Radio
                                                             style={{}}
@@ -240,7 +234,6 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                                     sx={{ width: "75px", marginLeft: "0", fontSize: "13px" }}
                                                     value="3"
                                                     onChange={() => setFieldValue('shiftInDay', 3)}
-                                                    // checked={(values.seasons == 1) ? true : false}
                                                     control={
                                                         <Radio
                                                             style={{}}
@@ -254,7 +247,6 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                                     sx={{ width: "75px", marginLeft: "0" }}
                                                     value="4"
                                                     onChange={() => setFieldValue('shiftInDay', 4)}
-                                                    // checked={(values.seasons == 1) ? true : false}
                                                     control={
                                                         <Radio
                                                             style={{}}
