@@ -396,7 +396,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
   return (
     <div className="t-home flex flex-col h-full overflow-hidden">
       <div className={"sticky top-0 bg-white z-10"}>
-        <div className={"filter-bar flex flex-wrap px-4 py-2"}>
+        {/* <div className={"filter-bar flex flex-wrap px-4 py-2"}>
           {(isLoadingResponse ||
             isLoadingListTask ||
             isFetchingNextPageSubject ||
@@ -773,7 +773,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             >
               Lưu
             </button>
-        </div>
+        </div> */}
 
         {/* Action bar */}
         <div className={"header-table flex px-4 w-full top-0 bg-white mb-1 pb-2"}>
@@ -990,9 +990,19 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                       </div>
                     </td>
                     <td className={"px-2 py-2"}>
-                      <div className="w-[70px] text-center rounded-md bg-cbs-schedule-after-7days text-white" style={{ fontSize: "12px" }}>
+                      {
+                        item?.status == 4 ? 
+                          <div className="w-[70px] text-center rounded-md bg-cbs-schedule-expired text-white" style={{ fontSize: "12px" }}>
+                            {FNB_ORDER_STATUS[Number(item?.status)-1]?.text}
+                          </div>
+                        : 
+                          <div className="w-[70px] text-center rounded-md bg-cbs-schedule-after-7days text-white" style={{ fontSize: "12px" }}>
+                          {FNB_ORDER_STATUS[Number(item?.status)-1]?.text}
+                        </div>
+                      }
+                      {/* <div className="w-[70px] text-center rounded-md bg-cbs-schedule-after-7days text-white" style={{ fontSize: "12px" }}>
                         {FNB_ORDER_STATUS[Number(item?.status)-1]?.text}
-                      </div>
+                      </div> */}
                     </td>
                     <td className={"text-right px-2 py-2"}>
                       <div>

@@ -15,7 +15,8 @@ import {
     ItemChildPage,
     ItemCustomerPage,
     ItemStoragePage,
-    ItemGoodsPage
+    ItemGoodsPage,
+    ItemFundasPage
 } from "views/item/pages";
 import { ItemLayoutV2 } from "views/item/shareComponents/layoutsV2";
 
@@ -31,6 +32,10 @@ const ItemRouterV2: FC = () => {
 
                 <ProtectedRoute exact path="/item/goods" component={ItemGoodsPage} />
                 <ProtectedRoute exact path="/item/goods/:parentID" component={ItemGoodsPage} />
+
+                <ProtectedRoute exact path="/item/fundas" component={ItemFundasPage} />
+                <ProtectedRoute exact path="/item/fundas/:parentID" component={ItemFundasPage} />
+
                 <ProtectedRoute
                     exact
                     path="/item/home"

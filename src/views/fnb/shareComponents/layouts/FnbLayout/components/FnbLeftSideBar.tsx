@@ -41,6 +41,7 @@ import { ModalAddNewContact } from "./ModalAddNewContact";
 
 export const FnbLeftSideBar: FC = () => {
     const { user } = useAuth();
+    // console.log(user)
     const { openModal } = useModal();
     const [menuShowList, setMenuState] = useState(false);
     const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
@@ -96,18 +97,31 @@ export const FnbLeftSideBar: FC = () => {
                         <img width={'20px'} src={shiftcon} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Ca làm việc</span>
                     </NavLink>
-                    <NavLink to={`/fnb/store`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                        <img width={'20px'} src={iconStore} alt="Menu item" />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản lý kho</span>
-                    </NavLink>
-                    <NavLink to={`/fnb/expense`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                        <img width={'20px'} src={iconExpense} alt="Menu item" />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản lý chi phí</span>
-                    </NavLink>
-                    <NavLink to={`/fnb/product`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                        <img width={'20px'} src={menuIcon} alt="Menu item" />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Thực đơn</span>
-                    </NavLink>
+                    {
+                        user?.email.toString() === 'assistant.c686.trx@gmail.com' ? 
+                        <NavLink to={`/fnb/store`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                            <img width={'20px'} src={iconStore} alt="Menu item" />
+                            <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản lý kho</span>
+                        </NavLink>
+                        : <></>
+                    }
+                    {
+                        user?.email.toString() === 'assistant.c686.trx@gmail.com' ? 
+                        <NavLink to={`/fnb/expense`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                            <img width={'20px'} src={iconExpense} alt="Menu item" />
+                            <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản lý chi phí</span>
+                        </NavLink>
+                        : <></>
+                    }
+                    {
+                        user?.email.toString() === 'assistant.c686.trx@gmail.com' ? 
+                        <NavLink to={`/fnb/product`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                            <img width={'20px'} src={menuIcon} alt="Menu item" />
+                            <span className={"flex-1 ml-2 text-left text-[14px]"}>Thực đơn</span>
+                        </NavLink>
+                        : <></>
+                    }
+
                     {/* <div onClick={() => setMenuState(!menuShowList)} className="text-primary-gray px-4 py-1 cursor-pointer hover:bg-slate-200">
                         {(menuShowList ? <ExpandLessIcon className="w-[20px]" fontSize="small"/> : <ExpandMoreIcon className="w-[20px]" fontSize="small"/>)}
                         <span className="ml-2 text-[14px]">{(menuShowList ? 'Báo cáo' : 'Báo cáo')}</span>

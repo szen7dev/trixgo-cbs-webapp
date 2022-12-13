@@ -39,7 +39,7 @@ export const FnbShiftMaterialPage: FC = () => {
 	}, []);
 	
 	const history = useHistory();
-	const { fundaID } = useParams<{ fundaID: string }>();
+	const { fundaID, shiftID } = useParams<{ fundaID: string, shiftID: string }>();
 	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
@@ -56,7 +56,10 @@ export const FnbShiftMaterialPage: FC = () => {
 			// }) 
 		}, isFetchList: true, isFetchInfo: false  });
 	// console.log({listWithPager});
-
+    const { info: infoShift } = useFnbShift({ 
+		params: { 
+			shiftID, 
+	}, isFetchList: false, isFetchInfo: true  });
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
 	}, [idsChecked]);
@@ -102,7 +105,7 @@ export const FnbShiftMaterialPage: FC = () => {
 					<button onClick={history.goBack}>
                         <img src="/images/common/button_back.png" alt="Button Back" />
                     </button>
-					<p className="text-lg">{infoFunda?.name}</p>
+					<p className="text-lg">{infoFunda?.name}/{infoShift?.name}</p>
 					<SearchInput
 						classNameWrapper="ml-4"
 						classNameInput="outline-none w-[296px]"

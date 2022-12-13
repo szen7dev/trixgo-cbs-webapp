@@ -235,14 +235,14 @@ export const FnbShiftDetailPage: FC = () => {
 								{item?.name}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
-								<Link to ={`/fnb/shift/${fundaID}/${item._id}/material`}>
+								{/* <Link to ={`/fnb/shift/${fundaID}/${item._id}/material`}>
 									Chi tiết
-								</Link>
+								</Link> */}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
-								<Link to ={`/fnb/shift/${fundaID}/${item._id}/cash`}>
+								{/* <Link to ={`/fnb/shift/${fundaID}/${item._id}/cash`}>
 									Chi tiết
-								</Link>
+								</Link> */}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
