@@ -47,7 +47,7 @@ export const TableSubtextProfile: FC<TableSubtextProfileProps> = ({
     storagesRef.current&&storagesRef.current.resetDropdown();
     contractsRef.current&&contractsRef.current.resetDropdown();
     fromToRef.current&&fromToRef.current.resetTimeRange();
-}
+  }
 
   const handleOnClickUpdate = React.useCallback((record) => async () => {
     const result = await onFetchDetailDocumentAsync(record._id);
@@ -67,6 +67,8 @@ export const TableSubtextProfile: FC<TableSubtextProfileProps> = ({
                 resetAllFilter();
                 dispatch(resetAllFilterAndKeyword({}));
                 // refetchListDocument();
+                // refetchListDocumentChild();
+                docChildPayload.refetchListDocumentChild();
                 // setPageIndex(0);
                 // ref.current&&ref.current.resetPaginate();
                 toggleModal();
@@ -112,14 +114,6 @@ export const TableSubtextProfile: FC<TableSubtextProfileProps> = ({
   );
   return (
     <>
-      {
-          recordSelected._id&&
-          <button
-              onClick={handleOnClickUpdate(recordSelected)}
-              className={"flex items-center justify-center mx-3 ml-6"}>
-              <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"}/>
-          </button>
-      }
       <table className="w-full text-black mt-3" {...props}>
         <thead>
           <tr className="text-left">
@@ -133,8 +127,16 @@ export const TableSubtextProfile: FC<TableSubtextProfileProps> = ({
                     />
                 </div>
             </th>
-            <th className="font-normal text-cbs-subtext px-3 py-2.5">
-              Nội dung
+            <th className="font-normal text-cbs-subtext px-3 py-2.5 flex">
+              <span>Nội dung</span>
+              {
+              recordSelected._id&&
+                <button
+                    onClick={handleOnClickUpdate(recordSelected)}
+                    className={"flex items-center justify-center mx-3 ml-6"}>
+                    <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"}/>
+                </button>
+              }
             </th>
             <th className="font-normal text-cbs-subtext px-3 py-2.5">
               Số hiệu
