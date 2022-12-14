@@ -17,7 +17,6 @@ import {
   DropdownSearchableV2,
   Loader,
 } from "shareComponents/common";
-
 interface TableSubtextProfileProps extends HTMLAttributes<HTMLTableElement> {
   docChildPayload: UseQueryListDocumentChild;
 }
