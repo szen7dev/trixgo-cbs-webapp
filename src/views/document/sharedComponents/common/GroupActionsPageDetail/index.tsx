@@ -12,7 +12,6 @@ type ButtonProps = {
     onClickTrash?: React.MouseEventHandler<HTMLButtonElement>;
     onClickPrint?: React.MouseEventHandler<HTMLButtonElement>;
     onGenerateQRCode?: React.MouseEventHandler<HTMLButtonElement>;
-
     types?: ("download" | "share" | "copy" | "email" | "edit" | "trash" | "print")[];
 }
 
@@ -24,7 +23,7 @@ export const GroupActionsPageDetail: FC<HTMLAttributes<HTMLDivElement> & ButtonP
                 <img className="w-[24px] h-[24px]" alt="icon" src={CopyIcon} />
             </button>}
 
-            {(!types || types?.includes('edit')) && <button className="flex items-center mr-0.5 min-w-max rounded-full hover:bg-cbs-gray p-2 disabled:bg-transparent disabled:opacity-60" onClick={onClickPencil} disabled={!onClickPencil}>
+            {(!types || types?.includes('edit')) && <button className="flex items-center mr-0.5 min-w-max rounded-full hover:bg-cbs-gray p-2 disabled:bg-transparent disabled:opacity-60" onClick={onClickPencil}>
                 <img className="w-[24px] h-[24px]" alt="icon" src={PencilIcon} />
             </button>}
 

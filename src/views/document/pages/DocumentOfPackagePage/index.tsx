@@ -165,7 +165,7 @@ export const DocumentOfPackagePage: FC = () => {
   const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
       isExporting: false,
   });
-
+  // console.log({ packageID })
   /**
    * 
    * Tải dữ liệu excel
@@ -176,6 +176,7 @@ export const DocumentOfPackagePage: FC = () => {
           const { error, data } = await exportDocumentAsync({
               filterParams: {  
                   departmentsID: [params.id],
+                  packageID
                   // ...fromToDate,
                   // datahubContactsID,
                   // types,
