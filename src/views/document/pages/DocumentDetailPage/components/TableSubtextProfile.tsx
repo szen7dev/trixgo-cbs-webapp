@@ -125,7 +125,7 @@ export const TableSubtextProfile: FC<TableSubtextProfileProps> = ({
         <thead>
           <tr className="text-left">
             <th className={cn("py-1 text-center", styles.theadInput)}>
-                <div className="border-r-2 border-gray-300 flex items-center justify-center">
+                <div className="border-gray-300 flex items-center justify-center">
                     <input
                         className="form-check-input"
                         type="checkbox"
@@ -157,7 +157,7 @@ export const TableSubtextProfile: FC<TableSubtextProfileProps> = ({
         <tbody>
           {(docChildPayload?.listDocumentChild?.length) ? docChildPayload.listDocumentChild?.map((doc, i) => (
             <tr key={doc._id}>
-              <td className="px-4 py-2.5 border-b border-cbs-border">
+              <td className="px-4 py-2.5 border-cbs-border">
                     <input
                         className="form-check-input"
                         type="checkbox"
