@@ -469,7 +469,10 @@ const PCMRouter: FC = () => {
                   <Route exact path="/pm/project/:id/group/:groupID" component={PcmTaskGroupPage} />
                   <Route exact path="/pm/project/:id/document/:docID">
                     <PmProjectLayout>
-                      <DocumentDetailPage />
+                      <ModalProvider>
+                        <DocumentDetailPage />
+                        <ModalCreateDocument />
+                      </ModalProvider>
                     </PmProjectLayout>
                   </Route>
                   <Route exact path="/pm/project/:id/photo">
