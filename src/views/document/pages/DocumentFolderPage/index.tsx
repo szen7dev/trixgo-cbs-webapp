@@ -85,30 +85,6 @@ export const DocumentFolderPage: FC = () => {
         </div>
         <div className="flex flex-wrap items-center w-full px-4 gap-x-2 text-black text-small py-1">
         <span className="text-x-large mr-7">Danh sách</span>
-          {/* <span className="">CHG.THT</span>
-          <IconArrowRight />
-          <button className="bg-cbs-active-comment text-cbs-primary h-10 w-10 text-center rounded-full">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 inline"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
-              />
-            </svg>
-          </button>
-          <IconArrowRight />
-          <span className="truncate max-w-[132px]">
-            Thi công san lấp mặt bằng
-          </span>
-          <IconArrowRight /> */}
-          {/* <span>Hợp đồng</span> */}
           <SearchInput
               classNameWrapper="rounded-sm flex bg-cbs-left-menu mr-2"
               onChange={debounce((e) => {

@@ -635,11 +635,11 @@ export const DocumentProjectPage: FC = () => {
                         >
                             Tải mẫu Import Excel
                     </button>
-                    <button className={"flex items-center justify-center mx-3 ml-3"}>
-                            <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
-                            accept=".xlsx, .xlsm, .xls, .csv"/>
-                            <label className="custom-file-label" htmlFor="inputGroupFile">Import excel tạo hồ sơ</label>
-                    </button>
+                    {/* <button className={"flex items-center justify-center mx-3 ml-3"}>
+                        <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
+                        accept=".xlsx, .xlsm, .xls, .csv"/>
+                        <label className="custom-file-label" htmlFor="inputGroupFile">Import excel tạo Hồ sơ</label>
+                    </button> */}
                     {
                         recordSelected._id&&
                         <button
