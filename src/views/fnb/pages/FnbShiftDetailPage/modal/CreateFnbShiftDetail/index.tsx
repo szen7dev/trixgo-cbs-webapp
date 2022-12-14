@@ -31,11 +31,12 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
     name: "",
     note: ""
 } }) => {
-    const [keywordUser, setKeywordUser] = useState("");
-    const { listMembers, nextPageGetUsersBySystem, hasnextPageGetUsersBySystem } = useGetUsersByCompany(companyID, keywordUser);
-    // console.log({ listMembers })
     const { fundaID } = useParams<{ fundaID: string }>();
+    const [keywordUser, setKeywordUser] = useState("");
     const [keyword, setKeyword] = useState('');
+    const [membersSelected, setMemberSelected] = useState<any>([]);
+
+    const { listMembers, nextPageGetUsersBySystem, hasnextPageGetUsersBySystem } = useGetUsersByCompany(companyID, keywordUser);
     const { insertAsync, updateAsync, refetch } = useFnbShift({
         params: {
             keyword: "", fundaID, populates: JSON.stringify({
@@ -87,6 +88,19 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
         };
     };
 
+    const handleAddMemberToShift = (member: any) => {
+        const isExists = membersSelected.find((m: any) => m._id === member._id);
+
+        if(isExists) return toast.warning('User đã được chọn');
+
+        setMemberSelected((prev: any) => ([...prev, member]));
+    }
+
+    const handleRemoveMemberToShift = (member: any) => {
+        const newMembers = membersSelected.filter((m: any) => m._id !== member._id);
+        setMemberSelected(newMembers);
+    }
+
     const {
         deleteAsync,
         list: listGoods,
@@ -98,6 +112,7 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
         params: { keyword }, // Khi keyword thay đổi giá trị => API thay đổi data => refretch kết quả
         isFetchList: true
     });
+
     return (
         <Formik
             initialValues={initialValues}
@@ -277,28 +292,30 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                 </div>
                                 <div>
                                     <span className="text-[13px] text-primary-gray mb-3 ml-3">Nhân sự trong ca làm việc</span>
-                                    <div className="flex gap-2 my-3">
-                                        <div className="flex justify-between w-1/3 h-[40px] items-center border-0.5 border-cbs-border rounded-md px-3">
-                                            <div className="flex gap-2  items-center">
-                                                <img src={DemoAvatar} alt="" style={{ maxWidth: "24px", maxHeight: "24px" }} />
-                                                <span className="text-[14px]">Tùng Chi-Wgo</span>
+                                    <div className="flex gap-2 my-3 flex-wrap">
+                                        {membersSelected.map((member: any) => (
+                                            <div key={member._id} className="flex justify-between w-1/3 h-[40px] items-center border-0.5 border-cbs-border rounded-md px-3">
+                                                <div className="flex gap-2 items-center">
+                                                    <img src={`${process.env.REACT_APP_URL_S3_USER}/${member.image}`} alt={member.bizfullname} style={{ maxWidth: "24px", maxHeight: "24px" }} />
+                                                    <span className="text-[14px]">{member.bizfullname}</span>
+                                                </div>
+                                                <button onClick={() => handleRemoveMemberToShift(member)}>
+                                                    <img src={IconCancel} alt="" />
+                                                </button>
                                             </div>
-                                            <button>
-                                                <img src={IconCancel} alt="" />
-                                            </button>
-                                        </div>
+                                        ))}
                                     </div>
                                     <div className="my-3">
                                         <input type="text" placeholder="Tìm kiếm nhân sự"
                                             className="w-full h-[40px] rounded border-0.5 border-cbs-bg-input-search bg-cbs-bg-input-search px-3 py-1 outline-none "
-                                            onChange={debounce((e) => setKeywordUser(e.target.value), 500)}
+                                            onChange={debounce((e) => setKeywordUser(e.target.value), 200)}
                                        />
                                     </div>
                                     <div>
                                         {
                                             listMembers.map((member: any) => {
                                                 return (
-                                                    <div className="w-full h-[40px] flex gap-2 items-center rounded border-0.5 border-cbs-border bg-cbs-light-blue px-3 mt-1" key={member._id}>
+                                                    <div onClick={() => handleAddMemberToShift(member)} className="cursor-pointer w-full h-[40px] flex gap-2 items-center rounded border-0.5 border-cbs-border bg-cbs-light-blue px-3 mt-1" key={member._id}>
                                                         <img src={`${process.env.REACT_APP_URL_S3_USER}/${member.image}`} alt="" style={{ maxWidth: "24px", maxHeight: "24px" }} />
                                                         <span className="text-[14px]">{member.fullname}</span>
                                                     </div>

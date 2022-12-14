@@ -63,7 +63,7 @@ export const FnbLeftSideBar: FC = () => {
 
     const handleSearch = debounce(
       (e: any) => setKeyword(e.target.value),
-    300)
+    200)
 
     return (
         <div className="t-leftsidebar-navigation t-leftsidebar-navigation-v2 t-leftsidebar-navigation-type2 fixed left-64px top-14 bottom-0 transition-all duration-500 ease-out border-secondary-light z-10 bg-primary-light">
