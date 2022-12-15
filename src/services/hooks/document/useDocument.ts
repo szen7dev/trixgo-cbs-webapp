@@ -28,7 +28,7 @@ export const useDocumentCustom = ({
 
     // Tải mẫu import excel
     const { mutateAsync: downloadTemplateImportExcelDocumentAsync } =
-        useMutation((payload: { projectID: string }) =>
+        useMutation((payload: { projectID?: string }) =>
         DocumentRepository.downloadTemplateImportExcelDocument(payload)
     );
 
