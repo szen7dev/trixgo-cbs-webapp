@@ -148,7 +148,7 @@ export const DocumentProjectPage: FC = () => {
         isFetchList: true
     });
 
-    const { importDocumentFromExcelAsync, exportDocumentAsync } = useDocumentCustom({});
+    const { downloadTemplateImportExcelDocumentAsync, importDocumentFromExcelAsync, exportDocumentAsync } = useDocumentCustom({});
     const { onFetchDetailDepartmentAsync } = useQueryDetailDepartment();
     const { insertDocumentChildAsync, updateDocumentChildAsync } = useMutationDocumentChild();
     const { toggleModal, updateModal } = useContext(ModalContext);
@@ -243,17 +243,8 @@ export const DocumentProjectPage: FC = () => {
     const handleDownloadTemplateImportExcel = async () => {
 		try {
             setStateExport({ isExporting: true });
-            const { error, data } = await exportDocumentAsync({
-                filterParams: {  
-                    departmentsID: [departmentID],
-                    ...fromToDate,
-                    datahubContactsID,
-                    types,
-                    directions,
-                    contractsID,
-                    storagesID,
-                    keyword: keywordInput 
-                }
+            const { error, data } = await downloadTemplateImportExcelDocumentAsync({
+                projectID
             });
 
             if(error) {
@@ -635,11 +626,11 @@ export const DocumentProjectPage: FC = () => {
                         >
                             Tải mẫu Import Excel
                     </button>
-                    {/* <button className={"flex items-center justify-center mx-3 ml-3"}>
+                    <button className={"flex items-center justify-center mx-3 ml-3"}>
                         <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
                         accept=".xlsx, .xlsm, .xls, .csv"/>
                         <label className="custom-file-label" htmlFor="inputGroupFile">Import excel tạo Hồ sơ</label>
-                    </button> */}
+                    </button>
                     {
                         recordSelected._id&&
                         <button
