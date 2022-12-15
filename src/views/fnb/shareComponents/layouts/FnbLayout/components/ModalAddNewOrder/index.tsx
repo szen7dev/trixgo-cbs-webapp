@@ -818,7 +818,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                           <input type="text" placeholder="Tìm kiếm sản phẩm"
                             onKeyUp={debounce(e => {
                               setKeywordSearchProduct(e.target.value);
-                            }, 700)}
+                            }, 100)}
                             className="w-full h-[40px] rounded border-0.5 border-cbs-bg-input-search bg-cbs-bg-input-search px-3 py-1 outline-none "
                           />
                         </div>

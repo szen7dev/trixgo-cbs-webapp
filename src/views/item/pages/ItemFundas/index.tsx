@@ -394,7 +394,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                         </th>
                         <th className="w-1/12 py-1 font-normal">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Cập nhật lần cuối
+                                Thành viên
                             </div>
                         </th>
                     </tr>
@@ -422,8 +422,10 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                             <td className="py-1 px-2">{moment(item.initialDay).format('L')}</td>
                             <td className="py-1 px-2">{CAMPAIGN_CONSTANT[item?.campaign-1]}</td>
                             <td className="py-1 px-2">{INTERNAL_CONSTANT[item?.internal-1]}</td>
-                            <td className="py-1 px-2">
-                               {item.modifyAt ? moment(item.modifyAt).format(' HH:mm - DD/MM/YYYY') : ''} - {item?.userUpdate?.bizfullname || "Anonymous"}
+                            <td className="py-1 px-2 text-primary-gray">
+                                 <Link to={`/item/fundas/${item._id}/members`}  className="underline text-sky-600">
+                                    Xem thành viên
+                                </Link>
                             </td>
                         </tr>
                     )) : <></>}

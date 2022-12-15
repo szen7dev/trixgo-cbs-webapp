@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useContext, useState } from "react";
+import React, { FC, Fragment, useContext, useState, useEffect } from "react";
 import { useHistory, Link, useParams, useLocation } from "react-router-dom";
 import { Transition } from "@headlessui/react";
 import moment from "moment";
@@ -26,23 +26,23 @@ import { useQueryDetailDepartment } from "services/hooks/items/useDepartment";
 import { useMutationDocumentChild } from "services/hooks/document/useDocumentChild";
 import { useDocumentPackage } from "services/hooks/document/useDocumentPackage";
 
-// import { IPackage } from "typings/document";
+import { useDocumentCustom, useListFilterDocument } from "services/hooks/document/useDocument";
 
-// const pkgs: Array<IPackage> = Array.from(Array(2).keys()).map((_, i) => ({
-//   id: i,
-//   title: "Thẻ lọc chính",
-// }));
+import { toast } from "react-toastify";
+import { read, utils } from 'xlsx';
+import { createLinkAndClick } from "utils";
 
 export const DocumentOfPackagePage: FC = () => {
   const history = useHistory();
 	const location = useLocation();
-  // const [pkg, setPkg] = useState<IPackage>(pkgs[0]);
   const { toggleModal, updateModal } = useContext(ModalContext);
   const { id: departmentID, packageID } = useParams<{ id: string, packageID: string }>();
   const [pageParam, setPageParam] = useState<any>({});
   const [cursorPage, setCursorPage] = useState<string[]>([]);
   const [isShow, setIsShow] = useState<boolean>(false);
   const [recordSelected, setSelectRecord] = useState<any>({});
+
+  const params = useParams<any>();
 
   const { data, totalRecord, totalPages, loading, nextCursor, refetch }   = useQueryListDocument(departmentID, pageParam, packageID);
   const { insertDocumentChildAsync, updateDocumentChildAsync }            = useMutationDocumentChild();
@@ -158,6 +158,48 @@ export const DocumentOfPackagePage: FC = () => {
   }, [cursorPage, nextCursor, pageParam?.lastestID]);
 
 	const { infoPackage } = useDocumentPackage({ packageID }, false, true)
+
+  //_____Import, export excel
+  const { importDocumentFromExcelAsync, exportDocumentAsync } = useDocumentCustom({});
+  const [dataImport, setDataImport] = useState([]);
+  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+      isExporting: false,
+  });
+  // console.log({ packageID })
+  /**
+   * 
+   * Tải dữ liệu excel
+   */
+  const handleExport = async () => {
+      try {
+          setStateExport({ isExporting: true });
+          const { error, data } = await exportDocumentAsync({
+              filterParams: {  
+                  departmentsID: [params.id],
+                  packageID,
+                  option: 1,
+                  // ...fromToDate,
+                  // datahubContactsID,
+                  // types,
+                  // directions,
+                  // contractsID,
+                  // storagesID,
+                  // keyword: keywordInput 
+              }
+          });
+
+          if(error) {
+              return toast.warn(data?.message);
+          }
+
+          data && createLinkAndClick(data, '_self');
+      } catch (error: any) {
+          toast.error(error.message)
+      } finally {
+          setStateExport({ isExporting: false });
+      }
+  }
+
   return (
     <>
       {/* Content */}
@@ -185,11 +227,6 @@ export const DocumentOfPackagePage: FC = () => {
               </svg>
             </button>
             <span style={{ width: "50%" }} className="text-x-large mr-7 truncate">{infoPackage?.data?.sign}.{infoPackage?.data?.name}</span>
-            {/* <DocumentDropdown
-              data={pkgs}
-              value={pkg.title}
-              onSelectValue={setPkg}
-            /> */}
             <SearchInput
               classNameWrapper="rounded-sm flex bg-cbs-left-menu mr-2"
               onChange={debounce((e) => {
@@ -198,17 +235,11 @@ export const DocumentOfPackagePage: FC = () => {
                 });
               }, 800)}
             />
-            <DropdownFilterButton
-              onSubmit={handleOnFilter}
-              onCancel={handleOnCancelFilter}
-              initialValues={pageParam}
-            />
-            {/* {Object.keys(recordSelected).length > 0 && (
-              <GroupActions
-                className="flex items-center flex-1"
-                onClickPencil={handleOnClickUpdate(recordSelected)}
-              />
-            )} */}
+             <button className={"flex items-center justify-center mx-3 ml-3"}
+                 onClick={handleExport.bind(null)}
+                 >
+                Tải Danh mục hồ sơ Gói thầu
+            </button>
           </div>
           <div className="flex flex-wrap items-center">
             {/* <ButtonCreate onClick={handleCreate} /> */}

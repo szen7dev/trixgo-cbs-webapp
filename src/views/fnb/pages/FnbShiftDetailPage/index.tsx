@@ -47,7 +47,6 @@ export const FnbShiftDetailPage: FC = () => {
 	const [keyword, setKeyword] = useState("");
 	
     const { info: infoFunda } = useFunda({ params: { fundaID }, isFetchList: false, isFetchInfo: true  });
-	console.log({ infoFunda });
 
     const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbShift({ 
 		params: { 

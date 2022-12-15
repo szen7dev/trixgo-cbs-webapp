@@ -6,6 +6,7 @@ export interface Funda {
     modifyAt: string,
     description: string | null;
     map: any; // Chưa rõ cái này để làm gì
+    members: any,
 }
 
 export type FundaQueryPayload = QueryParam & {

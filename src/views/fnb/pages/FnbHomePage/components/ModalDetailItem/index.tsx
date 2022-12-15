@@ -24,6 +24,7 @@ import ItemSample from "assets/images/image 430.jpg";
 import IconGreenDot from "assets/images/Frame 4330.svg";
 import CheckBoxEmpty from "assets/images/Frame 3548.svg";
 import CheckedBox from "assets/images/Check-All.svg";
+import IconCancel from "assets/images/icons8-cancel-96 1.svg";
 
 import "react-day-picker/lib/style.css";
 import { Button } from "@mui/material";
@@ -37,6 +38,7 @@ export const ModalDetailItem: FC<Props> = ({ order }) => {
   const { openModal, closeModal } = useModal();
   const [orderProducts, setOrderProducts] = useState([]);
   const [mistakes, setMistakes] = useState([]);
+  const [mistakesSelected, setMistakesSelected] = useState<any>([]);
   const [mistakeDoctypes, setMistakeDocTypes] = useState([]);
 
   const [keywordMistakeDoctypes, setKeywordMistakeDocTypes] = useState('');
@@ -101,6 +103,19 @@ export const ModalDetailItem: FC<Props> = ({ order }) => {
 
     fetchMistakeDoctypes();
   }, [keywordMistakeDoctypes])
+
+  const handleAddMistake = (item: any) => {
+    const isExists = mistakesSelected.find((m: any) => m._id === item._id);
+
+    if(isExists) return toast.warning('Lỗi đã được chọn');
+
+    setMistakesSelected((prev: any) => ([...prev, item]));
+  }
+
+  const handleRemoveMistake = (item: any) => {
+    const newItems = mistakesSelected.filter((m: any) => m._id !== item._id);
+    setMistakesSelected(newItems);
+  }
 
   if(!order) return <></>;
 
@@ -223,7 +238,7 @@ export const ModalDetailItem: FC<Props> = ({ order }) => {
                               <div className="text-gray-500 w-[75px]" style={{ minWidth: "75px" }}>Lỗi gặp phải: </div>
                               <div className="flex flex-wrap gap-2 px-2">
                                 {mistakes.map((m: any) => (
-                                  <button key={m._id} className="rounded-md bg-cbs-active-comment px-4 py-1"
+                                  <button key={m._id} className="cursor-pointer rounded-md bg-cbs-active-comment px-4 py-1"
                                     onClick={() =>
                                       openModal(
                                         <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{ width: "640px" }}>
@@ -242,6 +257,18 @@ export const ModalDetailItem: FC<Props> = ({ order }) => {
                       </div>
                       <div>
                         <div className="font-bold my-3">Lỗi gặp phải</div>
+                        <div className="flex gap-2 my-3 flex-wrap">
+                          {mistakesSelected.map((item: any) => (
+                            <div key={item._id} className="flex justify-between w-1/3 h-[40px] items-center border-0.5 border-cbs-border rounded-md px-3">
+                              <div className="flex gap-2 items-center">
+                                <span className="text-[14px]">{item.name}</span>
+                              </div>
+                              <button onClick={() => handleRemoveMistake(item)}>
+                                <img src={IconCancel} alt="" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
                         <div>
                           <input
                             type="text" 
@@ -254,7 +281,7 @@ export const ModalDetailItem: FC<Props> = ({ order }) => {
                         </div>
                         <div className="overflow-y-auto	my-2 ">
                           {mistakeDoctypes.map((md: any) => (
-                            <div key={md._id} className="w-full h-[40px] rounded border-0.5 border-cbs-border bg-cbs-bg-input-search px-3 py-3 mt-1">
+                            <div key={md._id} onClick={() => handleAddMistake(md)} className="cursor-pointer w-full h-[40px] rounded border-0.5 border-cbs-border bg-cbs-bg-input-search px-3 py-3 mt-1">
                               {md.name}
                             </div>
                           ))}

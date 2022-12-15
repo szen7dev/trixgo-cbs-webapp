@@ -2,6 +2,8 @@
 import { FC , lazy} from "react";
 import { Route, Switch, matchPath } from "react-router-dom";
 import { ProtectedRoute } from "routes/components";
+import { ModalCreateDocument } from 'views/document/sharedComponents/common';
+import { ModalProvider } from "views/document/contexts/modal";
 import DocumentLayoutV2 from "../../views/document/sharedComponents/layouts/DocumentLayoutV2";
 const DocumentHomePageV2       = lazy(() => import("views/document/pages/DocumentHomePageV2"))
 const DocumentDetailPage       = lazy(() => import("views/document/pages/DocumentDetailPage"))
@@ -21,7 +23,10 @@ const DocumentV2Router: FC = () => {
                 path="/document/home/:docID"
             >
                 <DocumentLayoutV2>
-                    <DocumentDetailPage/>
+                    <ModalProvider>
+                        <DocumentDetailPage/>
+                        <ModalCreateDocument />
+                    </ModalProvider>
                 </DocumentLayoutV2>
             </ProtectedRoute>
         </Switch>

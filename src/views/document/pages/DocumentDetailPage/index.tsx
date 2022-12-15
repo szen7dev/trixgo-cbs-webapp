@@ -192,7 +192,7 @@ export const DocumentDetailPage: FC = () => {
           </svg>
         </button>
         {/* <DropdownFilterButton /> */}
-        <GroupActionsPageDetail className="flex items-center flex-1" onGenerateQRCode={toggleModalQRCode} />
+        <GroupActionsPageDetail className="flex items-center flex-1" onGenerateQRCode={toggleModalQRCode}/>
         {/* <ButtonCreate onClick={toggleModal} /> */}
         {/* <ButtonMore /> */}
       </div>
@@ -307,7 +307,7 @@ export const DocumentDetailPage: FC = () => {
             <h3 className="text-cbs-subtext text-x-large font-bold flex-1">
               Hồ sơ văn bản con
             </h3>
-            <ButtonMore className="mr-6" />
+            {/* <ButtonMore className="mr-6" /> */}
             <ButtonIcon
               title="Thêm"
               onClick={toggleModalCreateDocumentChild}

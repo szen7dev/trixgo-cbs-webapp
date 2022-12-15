@@ -15,6 +15,7 @@ interface useFunda {
     listWithPager: Array<Funda.Funda>;
     info: Funda.Funda | undefined;
     refetch: () => void;
+    refetchInfo: () => void;
     fetchNextPage: () => void;
     insertAsync: (params: any) => Promise<any>;
     updateAsync: (params: any) => Promise<any>;
@@ -53,7 +54,7 @@ export const useFunda = ({
         );
 
     // Get info
-    const { data: infoFunda } =
+    const { data: infoFunda, refetch: refetchInfo } =
         useQuery("Funda__info", () => FundaRepository.fetchDetailFunda("",params), {
             refetchOnWindowFocus: false,
             enabled: isFetchInfo,
@@ -104,6 +105,7 @@ export const useFunda = ({
         totalPage,
         hasNextPage,
         refetch,
+        refetchInfo,
         fetchNextPage,
         insertAsync,
         updateAsync,
