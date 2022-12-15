@@ -38,6 +38,7 @@ import RadioChecked from "assets/images/icons8-checked-40 (2) 2.svg";
 import AvaSatffSample from "assets/images/image 437.png";
 import ImgDemoUpload from "assets/images/image 434.jpg";
 import DemoUploadBtn from "assets/images/Frame 4389.svg";
+import IconCancel from "assets/images/icons8-cancel-96 1.svg";
 
 import "react-day-picker/lib/style.css";
 import { Editor } from "@tinymce/tinymce-react";
@@ -47,6 +48,8 @@ import { FileProp, FilePropsUpload } from "typings/common";
 import { Button, FormControl, MenuItem, Popover, Select, SelectChangeEvent } from "@mui/material";
 import { borderRadius } from "@mui/system";
 import { GroupSearchable } from "shareComponents/common/GroupSearchable";
+import { useGetUsersByCompany } from "services/hooks/auth/useAdmin";
+import { useAuth } from "services/hooks/auth/useAuth";
 
 interface InitialValues {
     projectID: string,
@@ -71,6 +74,8 @@ type Props = {
 export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
     const history = useHistory();
     const { closeModal } = useModal();
+    const { user } = useAuth();
+
     const fileInputRef = useRef<HTMLInputElement>(null);
     type GroupSearchableHandle = React.ElementRef<typeof GroupSearchable>;
     const groupSearchableRef = React.useRef<GroupSearchableHandle>(null);
@@ -79,6 +84,22 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
     const [projectID, setProjectID] = useState(defaultValues?.project?._id || "");
     const [groupID, setGroupID] = useState(defaultValues?.group?._id || "");
     const [isNotiEmail, setIsNotiEmail] = useState(false);
+    const [keywordUser, setKeywordUser] = useState("");
+
+    const [membersSelected, setMemberSelected] = useState<any>([]);
+
+    const handleAddItemToBoard = (item: any) => {
+        const isExists = membersSelected.find((m: any) => m._id === item._id);
+
+        if(isExists) return toast.warning('Nhân sự đã được chọn');
+
+        setMemberSelected((prev: any) => ([...prev, item]));
+    }
+
+    const handleRemoveItemFromBoard = (item: any) => {
+        const newItems = membersSelected.filter((m: any) => m._id !== item._id);
+        setMemberSelected(newItems);
+    }
 
     const CustomRadioToggle = () => {
         const [selectRadio, setSelectRadio] = React.useState(false)
@@ -88,6 +109,8 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
             </button>
         )
     }
+
+    const { listMembers, nextPageGetUsersBySystem, hasnextPageGetUsersBySystem } = useGetUsersByCompany(user?.company?._id ?? '', keywordUser);
 
     const { addTaskAsync } = useTask({});
 
@@ -311,24 +334,35 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                                             </div>
                                             <div>
                                                 <div className="font-bold mb-3">Gán nhân sự mắc lỗi</div>
+                                                <div className="flex gap-2 my-3 flex-wrap">
+                                                    {membersSelected.map((member: any) => (
+                                                        <div key={member._id} className="flex justify-between w-1/3 h-[40px] items-center border-0.5 border-cbs-border rounded-md px-3">
+                                                            <div className="flex gap-2 items-center">
+                                                                <img src={`${process.env.REACT_APP_URL_S3_USER}/${member.image}`} alt="" style={{ maxWidth: "24px", maxHeight: "24px" }} />
+                                                                <span className="text-[14px]">{member.bizfullname}</span>
+                                                            </div>
+                                                            <button onClick={() => handleRemoveItemFromBoard(member)}>
+                                                                <img src={IconCancel} alt="" />
+                                                            </button>
+                                                        </div>
+                                                    ))}
+                                                </div>
                                                 <div>
                                                     <input type="text" placeholder="Tìm kiếm nhân sự"
-                                                        className="w-full h-[40px] rounded border-0.5 border-cbs-bg-input-search bg-cbs-bg-input-search px-3 py-1 outline-none "
+                                                        className="w-full h-[40px] rounded border-0.5 border-cbs-bg-input-search bg-cbs-bg-input-search px-3 py-1 outline-none"
+                                                        onChange={debounce((e) => setKeywordUser(e.target.value), 200)}
                                                     />
                                                 </div>
                                                 <div className="overflow-y-auto	my-2 ">
-                                                    <div className="flex gap-2 items-center w-full rounded border-0.5 border-cbs-border bg-cbs-active-comment px-3 py-2 mt-2">
-                                                        <img src={AvaSatffSample} alt="" className="w-[24px] h-[24px]" />
-                                                        <span className="text-[14px]">Phùng Đức Hiển-Wgo</span>
-                                                    </div>
-                                                    <div className="flex gap-2 items-center w-full rounded border-0.5 border-cbs-border bg-cbs-active-comment px-3 py-2 mt-2">
-                                                        <img src={AvaSatffSample} alt="" className="w-[24px] h-[24px]" />
-                                                        <span className="text-[14px]">Phùng Đức Hiển-Wgo</span>
-                                                    </div>
-                                                    <div className="flex gap-2 items-center w-full rounded border-0.5 border-cbs-border bg-cbs-active-comment px-3 py-2 mt-2">
-                                                        <img src={AvaSatffSample} alt="" className="w-[24px] h-[24px]" />
-                                                        <span className="text-[14px]">Phùng Đức Hiển-Wgo</span>
-                                                    </div>
+                                                    {listMembers.map((member: any) => {
+                                                            return (
+                                                                <div onClick={() => handleAddItemToBoard(member)} key={member._id} className="cursor-pointer w-full h-[40px] flex gap-2 items-center rounded border-0.5 border-cbs-border bg-cbs-light-blue px-3 mt-1">
+                                                                    <img src={`${process.env.REACT_APP_URL_S3_USER}/${member.image}`} alt="" style={{ maxWidth: "24px", maxHeight: "24px" }} />
+                                                                    <span className="text-[14px]">{member.fullname}</span>
+                                                                </div>
+                                                            )
+                                                        })
+                                                    }
                                                 </div>
                                             </div>
                                         </div>
