@@ -34,7 +34,7 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
     const { fundaID } = useParams<{ fundaID: string }>();
     const [keywordUser, setKeywordUser] = useState("");
     const [keyword, setKeyword] = useState('');
-    const [membersSelected, setMemberSelected] = useState<any>([]);
+    const [membersSelected, setMemberSelected] = useState<any>(initialValues?.staffs ?? []);
 
     const { listMembers, nextPageGetUsersBySystem, hasnextPageGetUsersBySystem } = useGetUsersByCompany(companyID, keywordUser);
     const { insertAsync, updateAsync, refetch } = useFnbShift({
@@ -46,22 +46,17 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
     });
 
     const handleSubmit = async (values: any) => {
+        const staffsID = membersSelected.map((m: any) => m._id); 
+
         if (modalType == 'create') {
             const query = {
                 ...values,
                 fundaID,
-                // name: values.name,
-                // note: values.note,
-                // seasons: values.seasons,
-                // shiftType: values.shiftType,
+                staffsID,
             };
-
-            // console.log(values)
 
             const result = await insertAsync(query);
             if (!result.error) {
-                refetch();
-                toggle();
                 toast.success('Tạo mới dữ liệu thành công');
             } else {
                 toast.error(result?.data?.message);
@@ -71,6 +66,7 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
         if (modalType == 'update') {
             const query = {
                 ...values,
+                staffsID,
                 shiftID: values._id,
                 name: values.name,
                 note: values.note,
@@ -79,13 +75,14 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
             };
             const result = await updateAsync(query);
             if (!result.error) {
-                refetch();
-                toggle();
                 toast.success('Cập nhật dữ liệu thành công');
             } else {
                 toast.error(result?.data?.message);
             }
         };
+
+        toggle();
+        onConfirm?.();
     };
 
     const handleAddMemberToShift = (member: any) => {
@@ -116,7 +113,6 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
     return (
         <Formik
             initialValues={initialValues}
-            // validationSchema={companySchema}
             onSubmit={handleSubmit}
         >
             {
@@ -157,6 +153,7 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                                 row
                                                 aria-labelledby="demo-row-radio-buttons-group-label"
                                                 name="seasons"
+                                                defaultValue={initialValues?.seasons ?? 1}
                                             >
                                                 <FormControlLabel
                                                     sx={{ width: "75px", marginLeft: "0", fontSize: "13px" }}
@@ -222,6 +219,7 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                                 row
                                                 aria-labelledby="demo-row-radio-buttons-group-label"
                                                 name="shiftType"
+                                                defaultValue={initialValues?.shiftType ?? 1}
                                             >
                                                 <FormControlLabel
                                                     sx={{ width: "75px", marginLeft: "0", fontSize: "13px" }}
