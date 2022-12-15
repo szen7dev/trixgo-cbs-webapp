@@ -176,7 +176,8 @@ export const DocumentOfPackagePage: FC = () => {
           const { error, data } = await exportDocumentAsync({
               filterParams: {  
                   departmentsID: [params.id],
-                  packageID
+                  packageID,
+                  option: 1,
                   // ...fromToDate,
                   // datahubContactsID,
                   // types,
