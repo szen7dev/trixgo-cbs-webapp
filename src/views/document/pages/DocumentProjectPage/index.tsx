@@ -746,7 +746,7 @@ export const DocumentProjectPage: FC = () => {
                                             <p className="mt-1.5 text-primary-gray text-xs">
                                                 {`${document?.author?.fullname || ""}-${
                                                     moment(document.createAt).isValid() &&
-                                                    moment(document.createAt).format("DD/MM/YYYY")
+                                                    moment(document.createAt).format("DD/MM/YYYY HH:mm")
                                                 }`}
                                             </p>
                                         </Link>
