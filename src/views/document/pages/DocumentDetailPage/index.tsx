@@ -1,15 +1,17 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { useUpload } from 'services/hooks/useUpload';
 import { validateFiles } from 'validation/file';
+import { read, utils } from 'xlsx';
 
 import { APP_KEY } from 'utils/constants';
 import { ModalCreateDocumentChild } from 'views/document/sharedComponents/common';
 import { ModalConfirm } from "shareComponents/common";
 import { ButtonIcon, ButtonMore } from 'shareComponents/common/Button'
+import { useDocumentCustom, useListFilterDocument } from "services/hooks/document/useDocument";
 
 import {
   // DropdownFilterButton,
@@ -168,6 +170,61 @@ export const DocumentDetailPage: FC = () => {
     }
   }
 
+  //_____Import, export excel
+  const [dataImport, setDataImport] = useState([]);
+  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+      isExporting: false,
+  });
+
+  const { downloadTemplateImportExcelDocumentAsync, importDocumentFromExcelAsync, exportDocumentAsync } = useDocumentCustom({});
+
+  /**
+ * Xử lý import excel (đọc file)
+ */
+  const handleImport = ($event: any) => {
+    const files = $event.target.files;
+    if (files.length) {
+        const file = files[0];
+        const reader = new FileReader();
+        reader.onload = (event: any) => {
+            const wb = read(event.target.result);
+            const sheets = wb.SheetNames;
+
+            if (sheets.length) {
+                const rows: any = utils.sheet_to_json(wb.Sheets[sheets[1]]); // Index=1 (tức Sheet số 2 từ trái sang)
+                
+                // Set data để Import
+                setDataImport(rows)
+            }
+        }
+        
+        reader.readAsArrayBuffer(file);
+    }
+
+    // Đọc xong thì xóa value trong Input đi
+    $event.target.value = null;
+  }
+
+  // Gọi tới API để đẩy data lên
+  useEffect(() => {
+      if(dataImport.length){
+          const fetchData = async () => {
+              const data = await importDocumentFromExcelAsync({ documentID: params.docID, dataImport: JSON.stringify(dataImport) });
+              setDataImport([]);
+              // refetchTaskInfo?.()
+
+              if(!data.error){
+                  return toast.success("Import thành công");
+              }
+              return toast.error(data.message);
+          }
+
+          fetchData();
+      }
+      
+      console.log('=========DATA THAY ĐỔI RỒI==============')
+  }, [dataImport])
+
   return (
     <div className="flex flex-col overflow-hidden bg-cbs-gray h-full">
       <div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1">
@@ -308,6 +365,11 @@ export const DocumentDetailPage: FC = () => {
               Hồ sơ văn bản con
             </h3>
             {/* <ButtonMore className="mr-6" /> */}
+            <button className={"flex items-center justify-center mx-3 ml-3"}>
+                  <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
+                  accept=".xlsx, .xlsm, .xls, .csv"/>
+                  <label className="custom-file-label" htmlFor="inputGroupFile">Import excel tạo Hồ sơ</label>
+              </button>
             <ButtonIcon
               title="Thêm"
               onClick={toggleModalCreateDocumentChild}

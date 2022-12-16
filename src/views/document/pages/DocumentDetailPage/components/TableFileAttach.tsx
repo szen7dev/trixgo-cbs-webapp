@@ -50,11 +50,11 @@ export const TableFileAttach: FC<TableFileAttachProps> = ({
               <td className="py-2 align-middle">
                 {fileAttach?.file?.size / 1000 || 0} KB
               </td>
-              <td>
+              {/* <td>
                 <button className="flex items-center mr-0.5 min-w-max rounded-full hover:bg-cbs-gray p-2 disabled:bg-transparent disabled:opacity-60" onClick={handleDeleteFileAttach.bind(null, fileAttach._id)}>
                   <img className="w-[24px] h-[24px]" alt="icon" src={TrashIcon} />
                 </button>
-              </td>
+              </td> */}
             </tr>
           ))}
         </tbody>
