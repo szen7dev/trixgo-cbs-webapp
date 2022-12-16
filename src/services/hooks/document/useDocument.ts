@@ -12,7 +12,7 @@ import type {
 
 // Khai báo kiểu
 type UseDocumentCustom = {
-    downloadTemplateImportExcelDocumentAsync: (payload: { projectID: string }) => Promise<any>,
+    downloadTemplateImportExcelDocumentAsync: (payload: any) => Promise<any>,
     importDocumentFromExcelAsync: (payload: any) => Promise<any>,
     exportDocumentAsync: (payload: any) => Promise<any>,
 };
@@ -28,7 +28,7 @@ export const useDocumentCustom = ({
 
     // Tải mẫu import excel
     const { mutateAsync: downloadTemplateImportExcelDocumentAsync } =
-        useMutation((payload: { projectID?: string }) =>
+        useMutation((payload: any ) =>
         DocumentRepository.downloadTemplateImportExcelDocument(payload)
     );
 

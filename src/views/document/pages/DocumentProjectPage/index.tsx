@@ -105,6 +105,7 @@ export const DocumentProjectPage: FC = () => {
     //_____End history traffict
     const location = useLocation()
     const { id: departmentID } = useParams<{ id: string }>();
+    // console.log({departmentID})
     const [isShow, setIsShow] = useState<boolean>(false);
 
     //_____Import, export excel
@@ -244,7 +245,7 @@ export const DocumentProjectPage: FC = () => {
 		try {
             setStateExport({ isExporting: true });
             const { error, data } = await downloadTemplateImportExcelDocumentAsync({
-                projectID
+                projectID: departmentID
             });
 
             if(error) {

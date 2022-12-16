@@ -70,7 +70,7 @@ async function updateDocument(data: any) {
 }
 
 async function downloadTemplateImportExcelDocument(data: any) {
-    const { data: result } = await API.get(`${DOCUMENT_URL}/download-template-excel`, data);
+    const { data: result } = await API.post(`${DOCUMENT_URL}/download-template-excel`, data);
     return result;
 }
     
