@@ -52,9 +52,9 @@ export const FnbShiftDetailPage: FC = () => {
 		params: { 
 			keyword: keyword, 
 			fundaID, 
-			// populates: JSON.stringify({
-			// 	path: 'goods', select: "name unit"
-			// }) 
+			populates: JSON.stringify({
+				path: 'staffs'
+			}) 
 		}, isFetchList: true, isFetchInfo: false  });
 
 	const getStateChecked = useCallback((id: string) => {
@@ -82,7 +82,10 @@ export const FnbShiftDetailPage: FC = () => {
 	const toggleModalCreateShiftDetail = () => setModalCreateShiftDetail(!modalCreateShiftDetail);
 
 	const [initialValues, setInitialValues] = useState(null);
-	const onConfirmCreateShiftDetail = () => refetch();
+	const onConfirmCreateShiftDetail = () => {
+		refetch();
+		setIdsChecked([]);
+	}
 
 	useEffect(() => {
 		if (isSuccess && !(hasPermission && dataUserAccess?.level == 0)) {
