@@ -149,7 +149,7 @@ export const SubtaskItem: FC<Props> = ({ task, userId, index }) => {
                     </div>
                 </Popover>
 
-                <div ref={wrapperClass} className={"relative inline-block"}>
+                {/* <div ref={wrapperClass} className={"relative inline-block"}>
                     <button onClick={() => setShowOption(!showOption)} className={"rounded w-[24px] h-[24px] min-w-[24px] min-h-[24px] max-w-[24px] max-h-[24px] bg-cbs-form-input-bg flex items-center justify-center"}>
                         <img src={iconHorizontalDots} alt={"----"} className={"w-[10px]"} />
                     </button>
@@ -163,7 +163,7 @@ export const SubtaskItem: FC<Props> = ({ task, userId, index }) => {
                                 </button>
                             </div>
 
-                            {/* <div className={"mb-4"}>
+                            <div className={"mb-4"}>
                                 <button
                                     className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
                                 >
@@ -174,10 +174,10 @@ export const SubtaskItem: FC<Props> = ({ task, userId, index }) => {
                                 >
                                     Cập nhật trạng thái
                                 </button>
-                            </div> */}
+                            </div>
                         </div>
                     }
-                </div>
+                </div> */}
             </div>
         </div>
     )
