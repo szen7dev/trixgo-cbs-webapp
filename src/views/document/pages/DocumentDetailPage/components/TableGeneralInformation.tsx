@@ -24,7 +24,13 @@ export const TableGeneralInformation: FC<TableGeneralInformationProps> = ({
   const table = React.useMemo(
     () => [
       { title: "Mã hiệu", value: docInfo.sign },
-      { title: "Hồ sơ hoàn thành", value: finishs[Number(docInfo?.finish)-1]?.name },
+      { 
+        title: "Thời hạn hoàn thành",
+        value:
+        (moment(docInfo.deadline).isValid() &&
+          moment(docInfo.deadline).format(DATE_FORMAT)) ||
+        "",
+      },
       { title: "Mã hiệu hồ sơ lưu", value: docInfo.storeSign },
       { title: "Gói thầu, hạng mục", value: docInfo.package?.name },
       {

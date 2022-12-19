@@ -56,7 +56,16 @@ const fieldInputByRow = [
 	{ title: "Giá trị", name: "value", type: "text" },
 	{ title: "Nhận dạng", name: "style", type: "text" },
 	{ title: "Tình trạng", name: "status", type: "text" },
-	{ title: "Ngày văn bản (*)", name: "date", type: "datepicker" },
+	{ 
+		title: "Ngày văn bản (*)", 
+		name: "date", 
+		type: "datepicker" 
+	},
+	{ 
+		title: "Thời hạn hoàn thành", 
+		name: "deadline", 
+		type: "datepicker" 
+	},
 	{
 		title: "Ngày nhận",
 		name: "receivedDate",
@@ -72,9 +81,7 @@ const useInitialValues = (
 	const { listPackage } = useQueryListPackage({ keyword: keywordPackage, departmentID });
 	const { listContact: listContactSender } = useQueryContact({ companyID, keyword: keywordSender });
 	const { listContact: listContactReceiver } = useQueryContact({ companyID, keyword: keywordReceiver });
-	// const { listDoctypes: fields } = useQueryListDoctype({ type: 1, companyID, keyword: keywordFields }); // lĩnh vực
-	// const { data: listDatahubContact } = useDatahubContact({ keyword: keywordDatahubContact }, true, false); // Danh bạ hệ thống
-	const { data: listDatahubContact } = useQueryListCompany({ keyword: keywordDatahubContact }); // Danh bạ hệ thống mới
+	const { data: listDatahubContact } = useQueryListCompany({ keyword: keywordDatahubContact });
 	const { listDoctypes: properties } = useQueryListDoctype({
 		keyword: keywordProperty,
 		type: 2,
@@ -138,13 +145,7 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 	);
 
 	const initialValues = {
-		// field: document.field?._id,
-		// packageID: document?.package?._id,
 		departmentID: document?.project?._id,
-		// receiver: document?.receiver?._id,
-		// sender: document?.sender?._id,
-		// storage: document?.storage?._id,
-		// property: document?.property?._id,
 		parentID: document?._id
 	}
 
@@ -163,7 +164,6 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 				})),
 				name: "direction",
 			},
-			{ title: "Hồ sơ hoàn thành", data: [{_id: 1, name: "Đang triển khai" }, {  _id: 2, name: "Hoàn thành" }], name: "finish" },
 			{ title: "Nhận", data: listContactReceiver, name: "receiver" },
 			{ title: "Phân loại", data: properties, name: "property" },
 			{
@@ -188,11 +188,12 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 		if (moment(values.date).isValid()) {
 			formatValues.date = moment(values.date).toJSON();
 		}
-
 		if (moment(values.expiredResponse).isValid()) {
 			formatValues.expiredResponse = moment(values.expiredResponse).toJSON();
 		}
-
+		if (moment(values.deadline).isValid()) {
+			formatValues.deadline = moment(values.deadline).toJSON();
+		}
 		if (moment(values.receivedDate).isValid()) {
 			formatValues.receivedDate = moment(values.receivedDate).toJSON();
 		}
@@ -231,10 +232,6 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 			formatValues.packageID = values.package;
 		}
 
-		if(values.finish){
-			formatValues.finish = values.finish;
-		}
-
 		if(values.receiver){
 			formatValues.receiverID = values.receiver;
 		}
@@ -251,9 +248,6 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 
 		if(!formatValues.direction)
 			return toast.warning("Vui lòng chọn hướng hồ sơ")
-
-		// if(!formatValues.sender)
-		// 	return toast.warning("Vui lòng chọn ban hành")
 
 		if(!formatValues.property)
 			return toast.warning("Vui lòng chọn tính chất")
@@ -337,10 +331,6 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 												if(item.name == "package"){
 													return setKeywordPackage(value);
 												}
-
-												// if(item.name == "sender"){
-												// 	return setKeywordSender(value);
-												// }
 
 												if(item.name == "receiver"){
 													return setKeywordReceiver(value);
@@ -439,14 +429,6 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 																		handleBlur(e);
 																	}}
 																/>
-																{/* {item.type === "text" ? (
-																) : (
-																	<input
-																	type={item.type}
-																	value={item.value}
-																	checked={item.checked}
-																	/>
-																)} */}
 															</div>
 														</div>
 													</Fragment>
@@ -634,12 +616,6 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 													</div>
 												)}
 											</Field>
-											{/* <textarea
-											rows={10}
-											placeholder="Biên soạn nội dung"
-											className="w-full focus:outline-none resize-none lex-grow py-2"
-											// {...formik.getFieldProps('content')}
-											></textarea> */}
 										</div>
 										{/* File uploaded */}
 										{Array.from({ length: 0 }).map((_, index) => (

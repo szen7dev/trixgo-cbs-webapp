@@ -31,6 +31,7 @@ export interface Document {
     };
     date?: string;
     receivedDate?: string;
+    deadline?: string;
     style?: string;
     direction?: number;
     storeSign?: {
