@@ -313,7 +313,7 @@ export const DocumentDetailPage: FC = () => {
           </div>
         </div>
         {/* File attached */}
-        <div className="bg-white mt-2.5 pb-3 pt-5 px-3.5">
+        <div className="bg-white pb-3 pt-5 px-3.5">
           <div className="flex flex-wrap">
             <h3 className="text-cbs-subtext text-x-large font-bold flex-1">
               Tài liệu đính kèm
@@ -359,7 +359,7 @@ export const DocumentDetailPage: FC = () => {
           <TableJobs />
         </div> */}
         {/* Subtext Profile */}
-        <div className="bg-white mt-2.5 pb-3 pt-5 px-3.5">
+        <div className="bg-white pb-3 pt-5 px-3.5">
           <div className="flex flex-wrap">
             <h3 className="text-cbs-subtext text-x-large font-bold flex-1">
               Hồ sơ văn bản con
