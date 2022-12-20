@@ -24,6 +24,7 @@ const RowTableInsertInline: FC<Props> = ({ onInsert }) => {
             const value = e.target.value;
             if(!value) return;
             onInsert({ name: value })
+            e.target.value = ""
           }, 700)}
         />
       </td>

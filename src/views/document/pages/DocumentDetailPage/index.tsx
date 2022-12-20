@@ -249,7 +249,7 @@ export const DocumentDetailPage: FC = () => {
           </svg>
         </button>
         {/* <DropdownFilterButton /> */}
-        <GroupActionsPageDetail className="flex items-center flex-1" onGenerateQRCode={toggleModalQRCode}/>
+        <GroupActionsPageDetail className="flex items-center flex-1" onGenerateQRCode={toggleModalQRCode} detailDocument={detailDocument} refeshInfoDocument={onFetchDetailDocumentAsync}/>
         {/* <ButtonCreate onClick={toggleModal} /> */}
         {/* <ButtonMore /> */}
       </div>
