@@ -45,11 +45,12 @@ import { Editor } from "@tinymce/tinymce-react";
 import { Editor as EditorType } from "tinymce";
 import iconAttach from "assets/images/icons8-attach-48.svg";
 import { FileProp, FilePropsUpload } from "typings/common";
-import { Button, FormControl, MenuItem, Popover, Select, SelectChangeEvent } from "@mui/material";
+import { Button, FormControl, FormControlLabel, MenuItem, Popover, Radio, RadioGroup, Select, SelectChangeEvent } from "@mui/material";
 import { borderRadius } from "@mui/system";
 import { GroupSearchable } from "shareComponents/common/GroupSearchable";
 import { useGetUsersByCompany } from "services/hooks/auth/useAdmin";
 import { useAuth } from "services/hooks/auth/useAuth";
+import { DropdownSearchable } from "shareComponents/common";
 
 interface InitialValues {
     projectID: string,
@@ -91,7 +92,7 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
     const handleAddItemToBoard = (item: any) => {
         const isExists = membersSelected.find((m: any) => m._id === item._id);
 
-        if(isExists) return toast.warning('Nhân sự đã được chọn');
+        if (isExists) return toast.warning('Nhân sự đã được chọn');
 
         setMemberSelected((prev: any) => ([...prev, item]));
     }
@@ -210,99 +211,406 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                                 <div className={"t-add-new-task-dialog-select px-6 pb-4"}>
                                     <div className="flex gap-4 w-full">
                                         <div className="w-full ">
+                                            <div className="my-3">
+                                                <div className={"w-full flex items-start"}>
+                                                    <div className={"max-w-1/2 w-1/2 h-full text-left  text-primary-gray font-bold texxt-[13px] flex items-center mr-2  h-full h-full"}>Lỗi mắc phải</div>
+                                                    <div className={" flex-1 max-w-1/2 w-1/2 h-full h-full"}>
+                                                        <DropdownSearchable
+                                                            // onchangeValue={(value: any) => {
+                                                            //     setFundaID(value?.id)
+                                                            //     setFieldValue("fundaID", value?.id);
+                                                            //     setShiftID("");
+                                                            //     setFieldValue("shiftID", "");
+                                                            // }}
+                                                            // onClearData={() => {
+                                                            //     setFundaID("")
+                                                            //     setFieldValue("fundaID", "");
+                                                            //     setShiftID("");
+                                                            //     setFieldValue("shiftID", "");
+                                                            // }}
+                                                            // onSearchInputChange={
+                                                            //     debounce(
+                                                            //         (value) => setSearchFunda(value),
+                                                            //         200)
+                                                            // }
+                                                            className={"max-w-full h-full flex-1 border-0.5 border-cbs-bg-input-search bg-cbs-bg-input-search placeholder-primary-gray"}
+                                                            placeholder="Tìm kiếm lỗi"
+                                                            isMultiple={false}
+                                                            allowClearValueSingleInput={true}
+                                                            showTriangle={false}
+                                                            maxWidthInput="max-w-full"
+                                                            renderSelectedItem={(item: any) => (
+                                                                <div
+                                                                    className="max-w-full"
+                                                                >
+                                                                    {/* <p className={"truncate"}>{item.text}</p> */}
+                                                                </div>
+                                                            )}
+                                                            // data={fundas.map((funda: any) => ({
+                                                            //     label: `${funda.sign}.${funda.name}`,
+                                                            //     value: funda._id,
+                                                            // }))}
+                                                            // formatItem={{
+                                                            //     id: "value",
+                                                            //     text: "label",
+                                                            // }}
+                                                            inlineSearch={true}
+                                                        />
+                                                        <ErrorMessage
+                                                            name="errorName"
+                                                            component="div"
+                                                            className="font-normal text-xs text-negative pl-3"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="flex gap-2 mt-2">
+                                                    <div className="flex justify-between w-1/3 h-[40px] items-center border-0.5 border-cbs-border rounded-md px-2">
+                                                        <div className="flex gap-2 items-center">
+                                                            <span className="text-[13px]">Trân châu nấu sống</span>
+                                                        </div>
+                                                        <button
+                                                        // onClick={() => handleRemoveItemFromBoard(member)}
+                                                        >
+                                                            <img src={IconCancel} alt="" />
+                                                        </button>
+                                                    </div>
+                                                    <div className="flex justify-between w-1/3 h-[40px] items-center border-0.5 border-cbs-border rounded-md px-2">
+                                                        <div className="flex gap-2 items-center">
+                                                            <span className="text-[13px]">Trân châu nấu sống</span>
+                                                        </div>
+                                                        <button
+                                                        // onClick={() => handleRemoveItemFromBoard(member)}
+                                                        >
+                                                            <img src={IconCancel} alt="" />
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="my-3">
+                                                <div className={"w-full flex items-start"}>
+                                                    <div className={"max-w-1/2 w-1/2 h-full text-left  text-primary-gray font-bold texxt-[13px] flex items-center mr-2  h-full h-full"}>Nhân sự mắc lỗi</div>
+                                                    <div className={" flex-1 max-w-1/2 w-1/2 h-full h-full"}>
+                                                        <DropdownSearchable
+                                                            // onchangeValue={(value: any) => {
+                                                            //     setFundaID(value?.id)
+                                                            //     setFieldValue("fundaID", value?.id);
+                                                            //     setShiftID("");
+                                                            //     setFieldValue("shiftID", "");
+                                                            // }}
+                                                            // onClearData={() => {
+                                                            //     setFundaID("")
+                                                            //     setFieldValue("fundaID", "");
+                                                            //     setShiftID("");
+                                                            //     setFieldValue("shiftID", "");
+                                                            // }}
+                                                            // onSearchInputChange={
+                                                            //     debounce(
+                                                            //         (value) => setSearchFunda(value),
+                                                            //         200)
+                                                            // }
+                                                            className={"max-w-full h-full flex-1 border-0.5 border-cbs-bg-input-search bg-cbs-bg-input-search placeholder-primary-gray"}
+                                                            placeholder="Tìm kiếm nhân sự"
+                                                            isMultiple={false}
+                                                            allowClearValueSingleInput={true}
+                                                            showTriangle={false}
+                                                            maxWidthInput="max-w-full"
+                                                            renderSelectedItem={(item: any) => (
+                                                                <div
+                                                                    className="max-w-full"
+                                                                >
+                                                                    {/* <p className={"truncate"}>{item.text}</p> */}
+                                                                </div>
+                                                            )}
+                                                            // data={fundas.map((funda: any) => ({
+                                                            //     label: `${funda.sign}.${funda.name}`,
+                                                            //     value: funda._id,
+                                                            // }))}
+                                                            // formatItem={{
+                                                            //     id: "value",
+                                                            //     text: "label",
+                                                            // }}
+                                                            inlineSearch={true}
+                                                        />
+                                                        <ErrorMessage
+                                                            name="errorName"
+                                                            component="div"
+                                                            className="font-normal text-xs text-negative pl-3"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="flex gap-2 mt-2">
+                                                    <div className="flex justify-between w-1/3 h-[40px] items-center border-0.5 border-cbs-border rounded-md px-2">
+                                                        <div className="flex gap-2 items-center">
+                                                            <img src={AvaSatffSample} alt="" style={{ maxWidth: "24px", maxHeight: "24px" }} />
+                                                            <span className="text-[13px]">Phùng Thị Thu-Wgo</span>
+                                                        </div>
+                                                        <button
+                                                        // onClick={() => handleRemoveItemFromBoard(member)}
+                                                        >
+                                                            <img src={IconCancel} alt="" />
+                                                        </button>
+                                                    </div>
+                                                    <div className="flex justify-between w-1/3 h-[40px] items-center border-0.5 border-cbs-border rounded-md px-2">
+                                                        <div className="flex gap-2 items-center">
+                                                            <img src={AvaSatffSample} alt="" style={{ maxWidth: "24px", maxHeight: "24px" }} />
+                                                            <span className="text-[13px]">Phùng Thị Thu-Wgo</span>
+                                                        </div>
+                                                        <button
+                                                        // onClick={() => handleRemoveItemFromBoard(member)}
+                                                        >
+                                                            <img src={IconCancel} alt="" />
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="my-3">
+                                                <div className={"w-full flex items-start"}>
+                                                    <div className={"max-w-1/2 w-1/2 h-full text-left  text-primary-gray font-bold texxt-[13px] flex items-center mr-2  h-full h-full"}>Cơ sở</div>
+                                                    <div className={" flex-1 max-w-1/2 w-1/2 h-full h-full"}>
+                                                        <DropdownSearchable
+                                                            // onchangeValue={(value: any) => {
+                                                            //     setFundaID(value?.id)
+                                                            //     setFieldValue("fundaID", value?.id);
+                                                            //     setShiftID("");
+                                                            //     setFieldValue("shiftID", "");
+                                                            // }}
+                                                            // onClearData={() => {
+                                                            //     setFundaID("")
+                                                            //     setFieldValue("fundaID", "");
+                                                            //     setShiftID("");
+                                                            //     setFieldValue("shiftID", "");
+                                                            // }}
+                                                            // onSearchInputChange={
+                                                            //     debounce(
+                                                            //         (value) => setSearchFunda(value),
+                                                            //         200)
+                                                            // }
+                                                            className={"max-w-full h-full flex-1 border-0.5 border-cbs-bg-input-search bg-cbs-bg-input-search placeholder-primary-gray"}
+                                                            placeholder="Tìm kiếm cơ sở"
+                                                            isMultiple={false}
+                                                            allowClearValueSingleInput={true}
+                                                            showTriangle={false}
+                                                            maxWidthInput="max-w-full"
+                                                            renderSelectedItem={(item: any) => (
+                                                                <div
+                                                                    className="max-w-full"
+                                                                >
+                                                                    {/* <p className={"truncate"}>{item.text}</p> */}
+                                                                </div>
+                                                            )}
+                                                            // data={fundas.map((funda: any) => ({
+                                                            //     label: `${funda.sign}.${funda.name}`,
+                                                            //     value: funda._id,
+                                                            // }))}
+                                                            // formatItem={{
+                                                            //     id: "value",
+                                                            //     text: "label",
+                                                            // }}
+                                                            inlineSearch={true}
+                                                        />
+                                                        <ErrorMessage
+                                                            name="errorName"
+                                                            component="div"
+                                                            className="font-normal text-xs text-negative pl-3"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="flex gap-2 mt-2">
+                                                    <div className="flex justify-between w-1/3 h-[40px] items-center border-0.5 border-cbs-border rounded-md px-2">
+                                                        <div className="flex gap-2 items-center">
+                                                            <span className="text-[13px]">Winggo Thái Thịnh</span>
+                                                        </div>
+                                                        <button
+                                                        // onClick={() => handleRemoveItemFromBoard(member)}
+                                                        >
+                                                            <img src={IconCancel} alt="" />
+                                                        </button>
+                                                    </div>
+                                                    <div className="flex justify-between w-1/3 h-[40px] items-center border-0.5 border-cbs-border rounded-md px-2">
+                                                        <div className="flex gap-2 items-center">
+                                                            <span className="text-[13px]">Winggo Thái Thịnh</span>
+                                                        </div>
+                                                        <button
+                                                        // onClick={() => handleRemoveItemFromBoard(member)}
+                                                        >
+                                                            <img src={IconCancel} alt="" />
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="my-3">
+                                                <div className={"w-full flex items-start"}>
+                                                    <div className={"max-w-1/2 w-1/2 h-full text-left  text-primary-gray font-bold texxt-[13px] flex items-center mr-2  h-full h-full"}>Đơn hàng</div>
+                                                    <div className={" flex-1 max-w-1/2 w-1/2 h-full h-full"}>
+                                                        <DropdownSearchable
+                                                            // onchangeValue={(value: any) => {
+                                                            //     setFundaID(value?.id)
+                                                            //     setFieldValue("fundaID", value?.id);
+                                                            //     setShiftID("");
+                                                            //     setFieldValue("shiftID", "");
+                                                            // }}
+                                                            // onClearData={() => {
+                                                            //     setFundaID("")
+                                                            //     setFieldValue("fundaID", "");
+                                                            //     setShiftID("");
+                                                            //     setFieldValue("shiftID", "");
+                                                            // }}
+                                                            // onSearchInputChange={
+                                                            //     debounce(
+                                                            //         (value) => setSearchFunda(value),
+                                                            //         200)
+                                                            // }
+                                                            className={"max-w-full h-full flex-1 border-0.5 border-cbs-bg-input-search bg-cbs-bg-input-search placeholder-primary-gray"}
+                                                            placeholder="Tìm kiếm đơn hàng"
+                                                            isMultiple={false}
+                                                            allowClearValueSingleInput={true}
+                                                            showTriangle={false}
+                                                            maxWidthInput="max-w-full"
+                                                            renderSelectedItem={(item: any) => (
+                                                                <div
+                                                                    className="max-w-full"
+                                                                >
+                                                                    {/* <p className={"truncate"}>{item.text}</p> */}
+                                                                </div>
+                                                            )}
+                                                            // data={fundas.map((funda: any) => ({
+                                                            //     label: `${funda.sign}.${funda.name}`,
+                                                            //     value: funda._id,
+                                                            // }))}
+                                                            // formatItem={{
+                                                            //     id: "value",
+                                                            //     text: "label",
+                                                            // }}
+                                                            inlineSearch={true}
+                                                        />
+                                                        <ErrorMessage
+                                                            name="errorName"
+                                                            component="div"
+                                                            className="font-normal text-xs text-negative pl-3"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="flex gap-2 mt-2">
+                                                    <div className="flex justify-between w-1/3 h-[40px] items-center border-0.5 border-cbs-border rounded-md px-2">
+                                                        <div className="flex gap-2 items-center">
+                                                            <span className="text-[13px]">Trân châu nấu sống</span>
+                                                        </div>
+                                                        <button
+                                                        // onClick={() => handleRemoveItemFromBoard(member)}
+                                                        >
+                                                            <img src={IconCancel} alt="" />
+                                                        </button>
+                                                    </div>
+                                                    <div className="flex justify-between w-1/3 h-[40px] items-center border-0.5 border-cbs-border rounded-md px-2">
+                                                        <div className="flex gap-2 items-center">
+                                                            <span className="text-[13px]">Trân châu nấu sống</span>
+                                                        </div>
+                                                        <button
+                                                        // onClick={() => handleRemoveItemFromBoard(member)}
+                                                        >
+                                                            <img src={IconCancel} alt="" />
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div className={" p-2 my-2"}>
                                                 <div className={"flex py-2"}>
-                                                    <div className={"w-full flex items-center"}>
-                                                        <img src={IconGreenDot} alt="" />
-                                                        <div className={"h-full text-left flex items-center px-1 "}>
-                                                            <span className="text-gray-500 pr-1">Mã lỗi: </span>
-                                                            <span> <span style={{ color: "#F45F5F" }}>502</span>-Quên ống hút do dùng ống hút để tự ý uống đồ uống trong giờ làm</span>
-                                                        </div>
-                                                    </div>
-                                                    {/* Mã lỗi: 502-Quên ống hút do dùng ống hút để tự ý uống đồ uống trong giờ làm */}
-                                                </div>
-                                                <div className={"flex py-2"}>
-                                                    <div className={"w-full flex items-center"}>
-                                                        <img src={IconGreenDot} alt="" />
-                                                        <div className={"h-full text-left flex items-center px-1 "}>
-                                                            <span className="text-gray-500 pr-1">Đơn hàng:  </span>
-                                                            <span>Trà sữa xanh xoài anh Tiến</span>
-                                                        </div>
-                                                        {/* Đơn hàng: Trà sữa xanh xoài anh Tiến */}
-                                                    </div>
-                                                </div>
-                                                <div className={"flex py-2"}>
-                                                    <div className={"w-full flex items-center"}>
-                                                        <img src={IconGreenDot} alt="" />
-                                                        <div>
-                                                            <div className={"h-full text-left flex items-center px-1"}>
-                                                                <span className="text-gray-500 pr-1">Ca làm: </span>
-                                                                <span>Ca sáng 24/11/2022</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className={"flex py-2"}>
-                                                    <div className={"w-full flex items-center"}>
-                                                        <img src={IconGreenDot} alt="" />
-                                                        <div>
-                                                            <div className={"h-full text-left flex items-center px-1"}>
-                                                                <span className="text-gray-500 pr-1">Cơ sở: </span>
-                                                                <span>Winggo 30 Vĩnh Phúc </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className={"flex py-2"}>
-                                                    <div className={"w-full flex items-center"}>
+                                                    <div className={"w-full items-center"}>
                                                         <div className="my-2">
                                                             <div className="font-bold mb-2 text-primary-gray">Phân loại</div>
-                                                            <div className="flex">
-                                                                <div className="flex gap-2 items-center" style={{ marginRight: "80px" }}>
-                                                                    <CustomRadioToggle /> <span>Hệ thống phát hiện</span>
-                                                                </div>
-                                                                <div className="flex gap-2 items-center">
-                                                                    <CustomRadioToggle /> <span>Hệ thống phát hiện</span>
-                                                                </div>
+                                                            <div>
+                                                                <FormControl sx={{ marginTop: "-5px", marginLeft: "-9px" }} >
+                                                                    <RadioGroup
+                                                                        row
+                                                                        aria-labelledby="demo-row-radio-buttons-group-label"
+                                                                        name="paymentMethod"
+                                                                        className="flex justify-between	"
+                                                                        sx={{ flexWrap: "nowrap" }}
+                                                                    >
+                                                                        <FormControlLabel
+                                                                            sx={{ marginLeft: "0", width: "300px" }}
+                                                                            value="1"
+                                                                            control={
+                                                                                <Radio
+                                                                                    style={{}}
+                                                                                    icon={<img src={RadioEmpty} alt="" />}
+                                                                                    checkedIcon={<img src={RadioChecked} alt="" />}
+                                                                                // onChange={() => setFieldValue("paymentMethod", 1)}
+                                                                                // checked={(values.paymentMethod === 1) ? true : false}
+                                                                                />
+                                                                            }
+                                                                            label={<span className="text-[13px]">Hệ thống phát hiện</span>}
+                                                                        />
+                                                                        <FormControlLabel
+                                                                            sx={{ marginLeft: "0", width: "300px" }}
+                                                                            value="2"
+                                                                            control={
+                                                                                <Radio
+                                                                                    style={{}}
+                                                                                    icon={<img src={RadioEmpty} alt="" />}
+                                                                                    checkedIcon={<img src={RadioChecked} alt="" />}
+                                                                                // onChange={() => setFieldValue("paymentMethod", 2)}
+                                                                                // checked={(values.paymentMethod === 2) ? true : false}
+                                                                                />
+                                                                            }
+                                                                            label={<span className="text-[13px]">Khách hàng phát hiện</span>}
+                                                                        />
+                                                                    </RadioGroup>
+                                                                </FormControl>
+                                                            </div>
+                                                        </div>
+                                                        <div className="my-2">
+                                                            <div className="font-bold mb-2 text-primary-gray">Tình trạng</div>
+                                                            <div>
+                                                                <FormControl sx={{ marginTop: "-5px", marginLeft: "-9px" }} >
+                                                                    <RadioGroup
+                                                                        row
+                                                                        aria-labelledby="demo-row-radio-buttons-group-label"
+                                                                        name="paymentMethod"
+                                                                        className="flex justify-between	"
+                                                                        sx={{ flexWrap: "nowrap" }}
+                                                                    >
+                                                                        <FormControlLabel
+                                                                            sx={{ marginLeft: "0", width: "300px" }}
+                                                                            value="1"
+                                                                            control={
+                                                                                <Radio
+                                                                                    style={{}}
+                                                                                    icon={<img src={RadioEmpty} alt="" />}
+                                                                                    checkedIcon={<img src={RadioChecked} alt="" />}
+                                                                                // onChange={() => setFieldValue("paymentMethod", 1)}
+                                                                                // checked={(values.paymentMethod === 1) ? true : false}
+                                                                                />
+                                                                            }
+                                                                            label={<span className="text-[13px]">Đã xử lý</span>}
+                                                                        />
+                                                                        <FormControlLabel
+                                                                            sx={{ marginLeft: "0", width: "300px" }}
+                                                                            value="2"
+                                                                            control={
+                                                                                <Radio
+                                                                                    style={{}}
+                                                                                    icon={<img src={RadioEmpty} alt="" />}
+                                                                                    checkedIcon={<img src={RadioChecked} alt="" />}
+                                                                                // onChange={() => setFieldValue("paymentMethod", 2)}
+                                                                                // checked={(values.paymentMethod === 2) ? true : false}
+                                                                                />
+                                                                            }
+                                                                            label={<span className="text-[13px]">Chưa xử lý</span>}
+                                                                        />
+                                                                    </RadioGroup>
+                                                                </FormControl>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div className={"flex py-2"}>
                                                     <div className={"w-full flex items-center"}>
-                                                        <img src={IconGreenDot} alt="" />
                                                         <div className={"h-full text-left flex items-center px-1 "}>
-                                                            <span className="text-gray-500 pr-1">Trạng thái: </span>
-                                                            <span>
-                                                                <span style={{ color: "#F45F5F" }}>Chưa được xử lý</span>
-                                                                <span style={{ color: "#01CA99" }}>Đã được xử lý</span>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className={"flex py-2"}>
-                                                    <div className={"w-full flex items-center"}>
-                                                        <img src={IconGreenDot} alt="" />
-                                                        <div className={"h-full text-left flex items-center px-1 "}>
-                                                            <span className="text-gray-500 pr-3">Giá trị phạt (nếu có):</span>
+                                                            <span className="text-primary-gray font-bold pr-3">Giá trị phạt (nếu có):</span>
                                                             <input type="text" placeholder=""
                                                                 className="w-[100px] h-[30px] border-0.5 border-cbs-bg-input-search bg-cbs-bg-input-search px-3 py-1 outline-none text-right"
                                                             />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className={"flex py-2"}>
-                                                    <div className={"w-full flex items-center"}>
-                                                        <img src={IconGreenDot} alt="" />
-                                                        <div className={"h-full text-left flex gap-3 items-center px-1 "}>
-                                                            <span className="text-gray-500 pr-1">Nhân sự mắc lỗi: </span>
-                                                            <div className="flex gap-3">
-                                                                <img src={AvaSatffSample} alt="" className="w-[36px] h-[36px]" />
-                                                                <div className="flex flex-col	">
-                                                                    <span>Phùng Thị Thu-Wgo</span>
-                                                                    <span className="text-primary-gray">Tổng lỗi đã mắc (13) - xếp thứ 6 về hay mắc lỗi</span>
-                                                                </div>
-                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -324,7 +632,7 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                                                                     <img src={ImgDemoUpload} alt="" />
                                                                 </div>
                                                                 <button>
-                                                                <img src={DemoUploadBtn} alt="" />
+                                                                    <img src={DemoUploadBtn} alt="" />
                                                                 </button>
                                                                 {/* img upload */}
                                                             </div>
@@ -332,44 +640,11 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div>
-                                                <div className="font-bold mb-3">Gán nhân sự mắc lỗi</div>
-                                                <div className="flex gap-2 my-3 flex-wrap">
-                                                    {membersSelected.map((member: any) => (
-                                                        <div key={member._id} className="flex justify-between w-1/3 h-[40px] items-center border-0.5 border-cbs-border rounded-md px-3">
-                                                            <div className="flex gap-2 items-center">
-                                                                <img src={`${process.env.REACT_APP_URL_S3_USER}/${member.image}`} alt="" style={{ maxWidth: "24px", maxHeight: "24px" }} />
-                                                                <span className="text-[14px]">{member.bizfullname}</span>
-                                                            </div>
-                                                            <button onClick={() => handleRemoveItemFromBoard(member)}>
-                                                                <img src={IconCancel} alt="" />
-                                                            </button>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                                <div>
-                                                    <input type="text" placeholder="Tìm kiếm nhân sự"
-                                                        className="w-full h-[40px] rounded border-0.5 border-cbs-bg-input-search bg-cbs-bg-input-search px-3 py-1 outline-none"
-                                                        onChange={debounce((e) => setKeywordUser(e.target.value), 200)}
-                                                    />
-                                                </div>
-                                                <div className="overflow-y-auto	my-2 ">
-                                                    {listMembers.map((member: any) => {
-                                                            return (
-                                                                <div onClick={() => handleAddItemToBoard(member)} key={member._id} className="cursor-pointer w-full h-[40px] flex gap-2 items-center rounded border-0.5 border-cbs-border bg-cbs-light-blue px-3 mt-1">
-                                                                    <img src={`${process.env.REACT_APP_URL_S3_USER}/${member.image}`} alt="" style={{ maxWidth: "24px", maxHeight: "24px" }} />
-                                                                    <span className="text-[14px]">{member.fullname}</span>
-                                                                </div>
-                                                            )
-                                                        })
-                                                    }
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
-                                    <div className="text-right" style={{ marginTop: "100px" }}>
-                                        <button type="submit" className="btn btn-primary ml-auto">Xác nhận</button>
-                                    </div>
+                                </div>
+                                <div className="text-right p-3 border-t-0.5 border-cbs-border" style={{ marginTop: "50px" }}>
+                                    <button type="submit" className="btn btn-primary ml-auto">Xác nhận</button>
                                 </div>
                             </Form>
                         );
