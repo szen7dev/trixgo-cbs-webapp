@@ -1,10 +1,10 @@
 /*=====1.LIBRARY=====*/
 import React, { FC, useCallback, useState, useEffect } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
 import debounce from "lodash/debounce";
 import moment from "moment";
 import { formatNumberMoney } from "utils/converter";
+import { toast } from "react-toastify";
 
 /*=====2.CSS=====*/
 
@@ -14,56 +14,45 @@ import PencilIcon from "assets/images/icons8-pencil-96.svg";
 /*=====4.PAGES/COMPONENTS=====*/
 import { SearchInput, ModalContainer } from "shareComponents/common";
 import PaginateV2 from "shareComponents/common/PaginateV2";
-// import { CreateFnbProductQoutas } from "./modal";
+import { CreateFnbExpenseFundaDetail } from "./modal";
 
 /*=====5.TYPINGS=====*/
 
 /*=====6.HOOKS/APIS=====*/
-import { APP_ID } from "apis/localdb";
 import { useModal } from "services/hooks/useModal";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { useFnbProduct } from 'services/hooks/fnb/useFnbProduct';
 import { useFnbQuota } from 'services/hooks/fnb/useFnbQuota';
 import { useFunda } from 'services/hooks/items/useFunda';
+import { useFnbShift } from 'services/hooks/fnb/useFnbShift';
+import { useFnbGeneralBook } from 'services/hooks/fnb/useFnbGeneralBook';
+import { useAuth } from 'services/hooks/auth/useAuth';
 
 /*=====7.OTHER=====*/
-import { FNB_INTERNAL } from "apis/localdb";
-
-const TYPE_PRODUCT = [
-	{ value: 1, text: "Thông thường" },
-	{ value: 2, text: "Topping" },
-]
+import { APP_ID } from "apis/localdb";
 
 export const FnbExpenseFundaPage: FC = () => {
+	const { user } = useAuth();
+	const companyID = user?.company._id;
 	useEffect(() => {
 		document.title = "Trixgo | FnB";
 	}, []);
-	
 	const history = useHistory();
-	const { productID } = useParams<{ productID: string }>();
+	const { fundaID } = useParams<{ fundaID: string }>();
 	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
-
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
-    const { info: infoProduct } = useFnbProduct({ params: { productID }, isFetchList: false, isFetchInfo: true  });
-	// console.log({ infoProduct });
-
-	/**
-	 * List mẩu tin
-	 */
-    const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFunda({ 
+	
+    const { info: infoFunda } = useFunda({ params: { fundaID }, isFetchList: false, isFetchInfo: true  });
+    const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbGeneralBook({ 
 		params: { 
-			keyword: keyword,  
-			limit: 30,  
-			// productID, 
-			// populates: JSON.stringify({
-			// 	path: 'goods', select: "name unit"
-			// }) 
-		}, 
-		isFetchList: true, 
-		isFetchInfo: false
-	});
-	// console.log({listWithPager});
+			keyword: keyword, 
+			fundasID: [fundaID], 
+			populates: JSON.stringify({
+				path: 'userCreate',
+				select: 'fullname',
+			}) 
+		}, isFetchList: true, isFetchInfo: false  });
 
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
@@ -86,11 +75,14 @@ export const FnbExpenseFundaPage: FC = () => {
 		}
 	};
 
-	const [modalCreateProject, setModalCreateProject] = useState<boolean>(false);
-	const toggleModalCreateProject = () => setModalCreateProject(!modalCreateProject);
+	const [modalCreateShiftDetail, setModalCreateShiftDetail] = useState<boolean>(false);
+	const toggleModalCreateShiftDetail = () => setModalCreateShiftDetail(!modalCreateShiftDetail);
 
 	const [initialValues, setInitialValues] = useState(null);
-	const onConfirmCreateProject = () => refetch();
+	const onConfirmCreateShiftDetail = () => {
+		refetch();
+		setIdsChecked([]);
+	}
 
 	useEffect(() => {
 		if (isSuccess && !(hasPermission && dataUserAccess?.level == 0)) {
@@ -110,7 +102,7 @@ export const FnbExpenseFundaPage: FC = () => {
 					<button onClick={history.goBack}>
                         <img src="/images/common/button_back.png" alt="Button Back" />
                     </button>
-					<p className="text-lg">{infoProduct?.name}</p>
+					<p className="text-lg">{infoFunda?.name}</p>
 					<SearchInput
 						classNameWrapper="ml-4"
 						classNameInput="outline-none w-[296px]"
@@ -129,6 +121,15 @@ export const FnbExpenseFundaPage: FC = () => {
 								<>
 								<div
 									className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
+									onClick={() => {
+										const item = listWithPager[pageIndex].find((e: any) => e._id == idsChecked[0]);
+										setInitialValues({
+											...item,
+											startTime: item.startTime ? moment(item.startTime).format('MM/DD/YYYY') : '',
+											expiredTime: item.expiredTime ? moment(item.expiredTime).format('MM/DD/YYYY') : '',
+										});
+										toggleModalCreateShiftDetail();
+									}}
 								>
 									<img src={PencilIcon} alt="Pencil" />
 								</div>
@@ -136,6 +137,20 @@ export const FnbExpenseFundaPage: FC = () => {
 							}
 						</div>
 					) : <></>}
+				</div>
+				<div className="flex items-center">
+					<button
+						className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold ml-6"
+						onClick={() => {
+							setInitialValues(null);
+							toggleModalCreateShiftDetail();
+						}}
+					>
+						Tạo mới
+					</button>
+					{/* <button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
+						<img src={Vertical3Dots} alt="3Dots" />
+					</button> */}
 				</div>
 				<PaginateV2
                         ref={ref}
@@ -155,64 +170,90 @@ export const FnbExpenseFundaPage: FC = () => {
 			</header>
 
 			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
-				<thead className="bg-cbs-table-header h-10 border-b border-primary-border">
-					<tr className="text-left text-sm text-primary-gray">
-						<th className="pb-1 pt-1" style={{ width: "3.5%" }}>
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
+			<thead className="bg-cbs-table-header h-10 border-b border-primary-border">
+					<tr className="text-left text-sm text-primary-gray text-[14px]">
+						<th className="pb-1 pt-1 w-[50px] font-normal">
+							<div className="pl-2">
+								<input
+									className="form-check-input"
+									type="checkbox"
+									// checked={getStateChecked(item._id)}
+									// onChange={() => onClickCheckButton(item._id)}
+								/>
+							</div>
+						</th>
+						<th className="pb-1 pt-1 w-[50px] font-normal">
+							<div className="pl-2">
 								TT
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal w-1/4">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
+						<th className="pb-1 pt-1 font-normal">
+							<div className="pl-2">
 								Nội dung
 							</div>
 						</th>
-                        <th className="pb-1 pt-1 font-normal">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Ngày tháng
-							</div>
-						</th>
-                        <th className="pb-1 pt-1 font-normal">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
+						<th className="pb-1 pt-1 font-normal">
+							<div className="pl-2">
 								Chi phí
 							</div>
 						</th>
-                        <th className="pb-1 pt-1 font-normal">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
+						<th className="pb-1 pt-1 font-normal">
+							<div className="pl-2">
 								Người tạo
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
+							<div className="pl-2">
 								Ghi chú
 							</div>
 						</th>
 					</tr>
 				</thead>
-				
 				{
 					(listWithPager[pageIndex]??[]).map((item: any, i: any) => (
 						<tr key={item._id} className="text-[14px]">
-							<td className={"p-2 border-0.5 border-primary-border text-center"}>{Number(i+1)}</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								Chi phí thực hiện T12/2021
+							<td className={"p-2 border-0.5 border-primary-border text-cente"}>
+								<input
+									className="form-check-input"
+									type="checkbox"
+									checked={getStateChecked(item._id)}
+									onChange={() => onClickCheckButton(item._id)}
+								/>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								15/2/2021
+								{i+1}
 							</td>
-							<td className={"p-2 border-0.5 border-primary-border text-cbs-highlight-color"}>
-								150.000.000
+							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
+								<Link to={`/fnb/expense/${fundaID}/${item?._id}`}>
+									{item?.name}
+								</Link>
 							</td>
-                            <td className={"p-2 border-0.5 border-primary-border"}>
-                                Phùng Thị Hà-TRX 15/2/2021 15:30
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(item?.amount)}
 							</td>
-                            <td className={"p-2 border-0.5 border-primary-border"}>
-                                Đã nhận đủ
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{item?.userCreate?.fullname} {moment(item?.createAt).format("L")} {moment(item?.createAt).format("LT") }
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{item?.note}
 							</td>
 						</tr>
-					))
-				}
+				))}
 			</table>
+
+			<ModalContainer isModalOpen={modalCreateShiftDetail} toggle={toggleModalCreateShiftDetail}>
+				<div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light">
+					<CreateFnbExpenseFundaDetail
+						modalType={initialValues ? "update" : "create"}
+						show={modalCreateShiftDetail}
+						toggle={toggleModalCreateShiftDetail}
+						initialValues={initialValues ? initialValues : undefined}
+						onConfirm={onConfirmCreateShiftDetail}
+						companyID = {companyID}
+					/>
+				</div>
+			</ModalContainer>
+
 		</main>
 	);
 };

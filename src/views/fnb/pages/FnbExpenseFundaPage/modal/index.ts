@@ -1,0 +1,1 @@
+export { default as CreateFnbExpenseFundaDetail } from "./CreateFnbExpenseFundaDetail";
