@@ -31,6 +31,8 @@ import { FnbExpensePage } from "views/fnb/pages/FnbExpensePage/index";
 import { FnbExpenseFundaPage } from "views/fnb/pages/FnbExpenseFundaPage";
 import { FnbExpenseFundaDetailPage } from "views/fnb/pages/FnbExpenseFundaDetailPage";
 import { FnbLayout } from "views/fnb/shareComponents/layouts/FnbLayout";
+import { FnbBillOrder } from "views/fnb/pages/FnbBill/FnbBillOrder";
+import { FnbBillList } from "views/fnb/pages/FnbBill/FnbBillList";
 
 const FnbRouter: FC = () => {
     return (
@@ -185,6 +187,37 @@ const FnbRouter: FC = () => {
                     </FnbLayout>
                 }
             />
+
+            <Route
+                exact
+                path="/fnb/home/:orderID/print/1"
+                component={() =>
+                    <FnbBillOrder/>
+                }
+            />
+            <Route
+                exact
+                path="/fnb/home/order1"
+                component={() =>
+                    <FnbBillOrder/>
+                }
+            />
+            <Route
+                exact
+                path="/fnb/home/:orderID/print/2"
+                component={() =>
+                    <FnbBillList/>
+                }
+            />
+            <Route
+                exact
+                path="/fnb/home/order2"
+                component={() =>
+                    <FnbBillList/>
+                }
+            />
+            {/* F7 (https://app.trixgo.com/fnb/home/:orderID/print/2) */}
+            {/* F6 (https://app.trixgo.com/fnb/home/:orderID/print/1) */}
             <Route path="/fnb/*" component={ErrorPage} />
         </Switch>
     )
