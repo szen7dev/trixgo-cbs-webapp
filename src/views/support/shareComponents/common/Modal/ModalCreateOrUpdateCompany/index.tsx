@@ -222,6 +222,7 @@ export const ModalCreateOrUpdateCompany: FC<ModalProps> = ({ toggle, modalType, 
                     className="font-normal leading-7 text-sm text-negative"
                   />
                 </div>
+                
                 <div className="mb-4">
                   <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtPhone">
                     Số điện thoại
