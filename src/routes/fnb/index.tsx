@@ -28,8 +28,8 @@ import { FnbStoreImportDetailPage } from "views/fnb/pages/FnbStoreImportDetailPa
 import { FnbStoreExportPage } from "views/fnb/pages/FnbStoreExportPage/index";
 import { FnbStoreExportDetailPage } from "views/fnb/pages/FnbStoreExportDetailPage/index";
 import { FnbExpensePage } from "views/fnb/pages/FnbExpensePage/index";
-import { FnbExpenseFundaPage } from "views/fnb/pages/FnbExpenseFundaPage/index";
-import { FnbExpenseFundaDetailPage } from "views/fnb/pages/FnbExpenseFundaDetailPage/index";
+import { FnbExpenseFundaPage } from "views/fnb/pages/FnbExpenseFundaPage";
+import { FnbExpenseFundaDetailPage } from "views/fnb/pages/FnbExpenseFundaDetailPage";
 import { FnbLayout } from "views/fnb/shareComponents/layouts/FnbLayout";
 
 const FnbRouter: FC = () => {

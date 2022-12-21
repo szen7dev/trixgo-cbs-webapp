@@ -13,28 +13,9 @@ import "slick-carousel/slick/slick-theme.css";
 import "views/pcm/styles/pcm.module.css";
 
 /*=====3.ICONS=====*/
-import iconCalendar from "assets/images/icons8-calendar-96 2.svg";
-import arrowDownRed from "assets/images/icon-user-avatar.svg";
-import dotGreen from "assets/images/icon-user-avatar.svg";
-import userIcon from "assets/images/icon-user-avatar.svg";
-import projectIcon from "assets/images/icons8-project-50.svg";
-import TriangleDown from "assets/icons/TriangleDown";
-import businessBuiding from "assets/images/icons8-business-building-48.svg";
-import updateIcon from "assets/images/icons8-pencil-96.svg";
-import mailIcon from "assets/images/icons8-email-96 1.svg";
-import moreIcon from "assets/images/moreIcon.svg";
-import arrowDown from "assets/images/icon-arrowdown.svg";
-import iconShift from "assets/images/icons8-shift-100 1.svg";
-import iconSandtime from "assets/images/icons8-sand-timer-96 1.svg";
-import iconOk from "assets/images/icons8-ok-96 1.svg";
-import iconWarning from "assets/images/icons8-high-risk-96 1.svg";
-import iconSupport from "assets/images/icons8-online-support-96 1.svg";
 import iconDown from "assets/images/icons8-download-64 1.svg";
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Popover } from "@mui/material";
-import ChartRevenueByHour from "./components/chart";
 
 import offlineChannelIcon from "assets/images/fnb/offline.svg";
 import grabChannelIcon from "assets/images/fnb/grab.svg";

@@ -6,7 +6,6 @@ import type {
 } from 'typings/document/document-file';
 
 const DOCUMENT_URL = "/api/document";
-
 interface DocumentFileRepository {
     fetchList: (params: DocumentFileQueryPayload) => Promise<DocumentFileQueryResponse>
     insertDocumentFile: (params: any) => Promise<any>
