@@ -65,7 +65,8 @@ export const blobToFile = (theBlob: Blob, fileName: string): File => {
 
 export const formatNumberMoney = (number: number | string): string => {
   // 'de-DE'
-  return (Number(number || 0).toLocaleString('en-US')) || ""
+  // return (Number(number || 0).toLocaleString('en-US')) || "" // EN
+  return (Number(number || 0).toLocaleString('it-IT')) || "" // VN
 }
 
 export const formatNaNToZero = (number: number): number => {

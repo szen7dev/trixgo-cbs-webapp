@@ -1,21 +1,14 @@
 import { FC, HTMLAttributes } from "react";
 import moment from "moment";
 
-import pdfIcon from "assets/images/icons8-pdf-48 1.png";
-import TrashIcon from "assets/images/icons8-remove-96.svg";
+import pdfIcon from "assets/images/icons8-attach.svg";
+import { formatNumberMoney } from "utils/converter";
 
 import type { DocumentFileProps } from "typings/document/document-file";
-
-const DATE_FORMAT = "DD/MM/YYYY";
 interface TableFileAttachProps extends HTMLAttributes<HTMLTableElement> {
   fileAttachs: DocumentFileProps[];
   handleDeleteFileAttach: (fileId: string) => void;
 }
-
-// const showOpenFile = (file: any) => {
-//   const path = `${process.env.REACT_APP_URL_S3}${file.file.path}` 
-//   window.open(path);
-// }
 
 export const TableFileAttach: FC<TableFileAttachProps> = ({
   fileAttachs,
@@ -44,17 +37,12 @@ export const TableFileAttach: FC<TableFileAttachProps> = ({
               </td>
               <td className="py-2 align-middle">
                 {(moment(fileAttach.createAt).isValid() &&
-                  moment(fileAttach.createAt).format(DATE_FORMAT)) ||
+                  moment(fileAttach.createAt).format('DD/MM/YYYY HH:mm')) ||
                   "-"}
               </td>
               <td className="py-2 align-middle">
-                {fileAttach?.file?.size / 1000 || 0} KB
+                {formatNumberMoney(Number(fileAttach?.file?.size / 1024 || 0).toFixed(0))} KB
               </td>
-              {/* <td>
-                <button className="flex items-center mr-0.5 min-w-max rounded-full hover:bg-cbs-gray p-2 disabled:bg-transparent disabled:opacity-60" onClick={handleDeleteFileAttach.bind(null, fileAttach._id)}>
-                  <img className="w-[24px] h-[24px]" alt="icon" src={TrashIcon} />
-                </button>
-              </td> */}
             </tr>
           ))}
         </tbody>

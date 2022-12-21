@@ -1,7 +1,7 @@
 import * as React from 'react';
 import defaultAva from "assets/images/image 166.jpg";
 import iconReply from "assets/images/icons8-reply-arrow-48 1.svg";
-import iconAttach from "assets/images/icons8-attach-48 1.svg";
+import iconAttach from "assets/images/icons8-attach.svg";
 import iconLink from "assets/images/icons8-link-96 1.svg";
 import iconEmoji from "assets/images/icons8-grinning-face-with-sweat-48 7.svg";
 
