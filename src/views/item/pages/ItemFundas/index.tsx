@@ -45,6 +45,9 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
         name: "",
         sign: "",
         address: '',
+        area1: '', 
+        area2: '',
+        area3: '',
         initialDay: new Date(),
         campaign: 1,
         internal: 1
@@ -58,10 +61,17 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
         fetchNextPage,
         totalRecord
     } = useFunda({
-        params: { keyword, isListParentOfListChilds: "1", parentID }, // Khi keyword thay đổi giá trị => API thay đổi data => refretch kết quả
+        params: { 
+            keyword, 
+            isListParentOfListChilds: "1", 
+            populates: { 
+                "path": "area1 area2 area3",
+                "select": "name"
+            }, 
+            parentID 
+        },
         isFetchList: true
     });
-
     // console.log({ listFunda });
     // Reset form
     const clearData = () => {
@@ -95,7 +105,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, name, sign, description, address, initialDay, campaign, internal} = newListIDChecked[0];
+            const { _id, name, sign, description, address, initialDay, campaign, internal, area1, area2, area3} = newListIDChecked[0];
             setInitialValues({
                 fundaID: _id,
                 name,
@@ -104,7 +114,10 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                 address,
                 initialDay,
                 campaign: +campaign,
-                internal
+                internal,
+                area1, 
+                area2,
+                area3
             });
         } else {
             clearData();
@@ -178,7 +191,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
             <div
                 className={"inline-block w-[521px] h-[300px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "700px",
+                    height: "760px",
                 }}
             >
                 <ModalCreateOrUpdateFunda

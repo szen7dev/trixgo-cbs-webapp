@@ -175,6 +175,9 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
         openModal(
             <div
                 className={"inline-block w-[521px] h-[620px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
+                style={{
+                    height: "700px",
+                }}
             >
                 <ModalCreateOrUpdateCustomer
                     modalType={modalType}
