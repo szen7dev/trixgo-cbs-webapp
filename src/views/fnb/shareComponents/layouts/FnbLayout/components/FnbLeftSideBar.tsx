@@ -75,7 +75,10 @@ export const FnbLeftSideBar: FC = () => {
                         className="flex gap-2 items-center justify-center text-primary-gray bg-cbs-blue-button  rounded-md font-bold px-6 py-2 mb-3"
                         onClick={() =>
                             openModal(
-                                <div className="t-add-new-task-dialog text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
+                                <div 
+                                className="w-full text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block"
+                                style={{maxWidth:" calc(100vw - 50px)"}}
+                                >
                                     <ModalAddNewOrder />
                                 </div>
                             )
