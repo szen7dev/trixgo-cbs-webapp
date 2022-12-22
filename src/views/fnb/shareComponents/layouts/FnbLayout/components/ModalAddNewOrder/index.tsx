@@ -19,7 +19,6 @@ import { useQueryClient } from 'react-query';
 /**
  * Components, Assets
  */
-import { DropdownSearchable } from "shareComponents/common";
 import Close from "assets/icons/Close";
 import { useModal } from "services/hooks/useModal";
 import IconMinus from "assets/images/icons8-reduce-96 1.svg";
@@ -34,12 +33,14 @@ import DemoTraSua from "assets/images/image 430.png";
 import IconCancel from "assets/images/icons8-cancel-96 1.svg";
 
 import "react-day-picker/lib/style.css";
+import { DropdownSearchable } from "shareComponents/common";
 import { GroupSearchable } from "shareComponents/common/GroupSearchable";
 import API from "apis/repository";
 import { useContact } from "services/hooks/items/useContact";
 import { convertObToUrl } from "utils";
 import { Checkbox, FormControl, FormControlLabel, IconButton, InputBase, Paper, Radio, RadioGroup } from "@mui/material";
 import SearchIcon from "assets/icons/Search";
+import { ItemInCartMenu } from "./itemInCartDetail";
 
 interface InitialValues {
   fundaID: string,
@@ -778,7 +779,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                         </div>
                       </div>
                       <div className="flex gap-4 bg-cbs-form-input-bg p-3">
-                        <div className="w-1/5 bg-white py-3 px-2 rounded" style={{maxWidth:"175px"}}>
+                        <div className="w-1/5 bg-white py-3 px-2 rounded" style={{ maxWidth: "175px" }}>
                           <div>
                             <button className="left-menu-nav flex items-center p-1.5 my-1  rounded w-full hover:bg-gray-400 hover:text-white  bg-gray-400 text-white">
                               <span className={"flex-1  text-left text-[14px]"}>TẤT CẢ</span>
@@ -893,7 +894,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                         name="paymentMethod"
                                       >
                                         <FormControlLabel
-                                          sx={{ marginLeft: "0", fontSize: "13px", marginRight:"27px" }}
+                                          sx={{ marginLeft: "0", fontSize: "13px", marginRight: "27px" }}
                                           value="1"
                                           // onChange={() => handleChangeType('off', product)}
                                           // checked={(product.statusApp == 'off' || !product.statusApp) ? true : false}
@@ -925,7 +926,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   </div>
                                   <div className="flex items-center gap-4">
                                     {/* Đường */}
-                                    <div  className="w-[100px]">Đường:</div>
+                                    <div className="w-[100px]">Đường:</div>
                                     <FormControl sx={{ marginTop: "-5px" }} >
                                       <RadioGroup
                                         row
@@ -993,7 +994,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   </div>
                                   <div className="flex items-center gap-4">
                                     {/* Đá */}
-                                    <div  className="w-[100px]">Đá:</div>
+                                    <div className="w-[100px]">Đá:</div>
                                     <FormControl sx={{ marginTop: "-5px" }} >
                                       <RadioGroup
                                         row
@@ -1091,6 +1092,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                             </div>
                           )
                         })}
+                        <ItemInCartMenu />
                       </div>
                       <div className="">
                         <div className="flex justify-between my-2 p-2">
@@ -1146,7 +1148,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                           <div className={`font-bold ${totalPay > 0 ? 'text-primary' : 'text-red-500'} font-bold`}>{convertCurrency(totalPay)}</div>
                         </div>
                       </div>
-                      <div className="text-right mb-5" style={{ marginTop: "100px" }}>
+                      <div className="text-right mb-5 mx-2" style={{ marginTop: "100px" }}>
                         <button type="submit" className="btn btn-primary ml-auto">Xác nhận</button>
                       </div>
                     </div>
