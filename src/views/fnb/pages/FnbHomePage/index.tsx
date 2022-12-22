@@ -872,7 +872,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             <thead className="bg-cbs-table-header h-10 border-b border-primary-border">
               <tr>
                 <th className="pb-1 pt-1 font-normal w-[50px]"></th>
-                <th className="pb-1 pt-1 font-normal text-left">Thời gian</th>
+                <th className="pb-1 pt-1 font-normal text-left w-[150px]">Thời gian</th>
                 <th className="pb-1 pt-1 font-normal text-left w-[50px]">Kênh</th>
                 <th className="pb-1 pt-1 font-normal text-left w-[100px]"></th>
                 <th className="pb-1 pt-1 font-normal text-left">Đơn hàng</th>
@@ -881,6 +881,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 <th className="pb-1 pt-1 font-normal text-left">Hình thức</th>
                 <th className="pb-1 pt-1 font-normal text-left">Trạng thái</th>
                 <th className="pb-1 pt-1 font-normal text-left">Giá trị</th>
+                <th className="pb-1 pt-1 font-normal text-left">In ấn</th>
               </tr>
             </thead>
             <tbody>
@@ -913,7 +914,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                       </div>
                     </td>
                     <td className={"w-[50px]"}>
-                      <Link to={`/fnb/home/${item._id}/print/1`}>
                         <div className={"py-2"}>
                           <img
                             src={getIconApp(Number(item?.salesChannel))}
@@ -927,16 +927,13 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                             onMouseLeave={handlePopoverClose}
                           />
                         </div>
-                      </Link>
                     </td>
                     <td className={"w-[90px] px-1 py-2"}>
-                        <Link to={`/fnb/home/${item._id}/print/2`}>
-                          <div className={"user-infor py-2"}>
-                              <p className={"truncate user-infor-name text-[14px]  text-left"}>
-                                {FNB_CHANNEL[Number(item?.salesChannel)-1]?.text}
-                              </p>
-                            </div>
-                        </Link>
+                        <div className={"user-infor py-2"}>
+                          <p className={"truncate user-infor-name text-[14px]  text-left"}>
+                            {FNB_CHANNEL[Number(item?.salesChannel)-1]?.text}
+                          </p>
+                        </div>
                     </td>
                     <td className={"px-1 py-2 w-1/4"}>
                       <button
@@ -986,14 +983,19 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                           {FNB_ORDER_STATUS[Number(item?.status)-1]?.text}
                         </div>
                       }
-                      {/* <div className="w-[70px] text-center rounded-md bg-cbs-schedule-after-7days text-white" style={{ fontSize: "12px" }}>
-                        {FNB_ORDER_STATUS[Number(item?.status)-1]?.text}
-                      </div> */}
                     </td>
                     <td className={"text-right px-2 py-2"}>
                       <div>
                         {formatNumberMoney(item?.total||0)} đ
                       </div>
+                    </td>
+                    <td className={"text-right px-2 py-2"}>
+                      <Link to={`/fnb/home/${item._id}/print/1`}>
+                        <p>In bill</p>
+                      </Link>
+                      <Link to={`/fnb/home/${item._id}/print/2`}>
+                        <p>In tem</p>
+                      </Link>
                     </td>
                   </tr>
               ))}
