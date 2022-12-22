@@ -157,29 +157,29 @@ export const FnbExpensePage: FC = () => {
 			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
 				<thead className="bg-cbs-table-header h-10 border-b border-primary-border">
 					<tr className="text-left text-sm text-primary-gray">
-						<th className="pb-1 pt-1 text-center" style={{ width: "3.5%" }}>TT</th>
+						<th className="pb-1 pt-1 text-center font-normal" style={{ width: "3.5%" }}>TT</th>
 						<th className="pb-1 pt-1 w-1/4">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
+							<div className="border-gray-300 font-normal pl-2">
 								Tên
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal w-[150px]">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
+							<div className="border-gray-300 font-normal pl-2">
 								Ngày bắt đầu
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
+							<div className="border-gray-300 font-normal pl-2">
 								Chi phí
 							</div>
 						</th>
                         <th className="pb-1 pt-1 font-normal w-[200px]">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
+							<div className="border-gray-300 font-normal pl-2">
 								Địa chỉ
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
+							<div className="border-gray-300 font-normal pl-2">
 								Ghi chú
 							</div>
 						</th>
@@ -200,7 +200,6 @@ export const FnbExpensePage: FC = () => {
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
                                 {formatNumberMoney(0||0)}
-                              
 							</td>
                             <td className={"p-2 border-0.5 border-primary-border"}>
 								{item?.address}
