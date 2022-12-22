@@ -33,7 +33,8 @@ export const FnbBillList: FC = () => {
 
     return (
         <main className="min-h-screen overflow-auto bg-cbs-border">
-            <div className="h-full mx-auto bg-cbs-gray my-3 pb-1" style={{ width: "188px" }}>
+            {/* <div className="h-full mx-auto bg-cbs-gray my-3 pb-1" style={{ width: "188px" }}> */}
+            <div className="h-full mx-auto bg-cbs-gray my-3 pb-1">
                 {/* item */}
                 <div className="bg-white p-2 mb-5 rounded-md border-0.5 border-cbs-border ">
                     <div className="border-b-0.5 border-cbs-border pb-1">
