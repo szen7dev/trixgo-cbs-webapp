@@ -92,7 +92,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
     onConfirm && onConfirm();
     closeModal();
   };
-
+  
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData((previous: any) => ({
