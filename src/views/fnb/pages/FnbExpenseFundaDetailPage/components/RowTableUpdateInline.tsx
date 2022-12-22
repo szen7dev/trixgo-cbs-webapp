@@ -101,7 +101,7 @@ const RowTableUpdateInline: FC<Props> = ({ index, contracts, cashFlow, itemsChec
         <input
           type="number"
           className={
-            "w-full h-full focus-visible:outline-blue-600 px-[16px] py-[9px]"
+            "w-full h-full focus-visible:outline-blue-600 px-[16px] py-[9px] text-right"
           }
           defaultValue={cashFlow.unitPrice}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
@@ -118,7 +118,7 @@ const RowTableUpdateInline: FC<Props> = ({ index, contracts, cashFlow, itemsChec
         />
       </td>
       
-      <td className="px-2 table-cell box-border border border-gray-300 align-middle">
+      <td className="px-2 table-cell box-border border border-gray-300 align-middle text-right">
         {convertCurrency(cashFlow?.amount)}
       </td>
       <td className="px-2 table-cell box-border border border-gray-300 align-middle">
