@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { UIEvent, FC, useState } from "react";
 
 import { useModal } from "services/hooks/useModal";
 import { useStorage } from "services/hooks/items/useStorage";
@@ -7,6 +7,10 @@ import { toast } from "react-toastify";
 import { ModalProps } from 'typings/items/doctype';
 import { Form, Formik, Field, ErrorMessage } from 'formik';
 import moment from "moment";
+import { DropdownSearchable } from "shareComponents/common";
+import { useArea } from "services/hooks/items/useArea";
+import debounce from 'lodash/debounce';
+
 export const ModalCreateOrUpdateFunda: FC<any> = ({
   modalType,
   onConfirm,
@@ -21,11 +25,24 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
     internal: 1
   }
 }) => {
-  console.log({ initialValues });
   const { closeModal } = useModal();
   const [formData, setFormData] = useState(initialValues);
   const { insertAsync, updateAsync } = useFunda({});
-
+  const [keywordArea, setKeywordArea] = useState('');
+  const { listAreas, nextPageList: nextPageListArea } = useArea({
+    params: {
+      keyword: keywordArea,
+      populates: JSON.stringify({
+        path: "parent",
+        select: "name",
+        populate: {
+          path: "parent",
+          select: "name",
+        }
+      })
+    },
+    isFetchAreas: true
+  });
   const handleSubmit = async () => {
     if(!formData.name) {
       return toast.warn('Vui lòng nhập nội dung');
@@ -83,7 +100,12 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
       [name]: value
     }))
   }
-
+  const handleSearchArea = debounce((value) => setKeywordArea(value), 500);
+  const handleScroll = (e: UIEvent<HTMLDivElement>) => {
+    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
+    const bottom = scrollHeight - scrollTop === clientHeight;
+    bottom && nextPageListArea();
+  }
   return (
     <main className="relative h-full">
       <header className="px-10 py-5 flex items-center justify-between">
@@ -106,7 +128,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
           type="text"
           placeholder="Nhập nội dung"
           name="name"
-          className="h-12 w-full border border-primary-border outline-none px-8"
+          className={"w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
           defaultValue={formData.name}
           onChange={onChange}
         />
@@ -120,7 +142,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
           type="text"
           placeholder="Nhập mã hiệu"
           name="sign"
-          className="h-12 w-full border border-primary-border outline-none px-8"
+          className={"w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
           defaultValue={formData?.sign}
           onChange={onChange}
         />
@@ -134,7 +156,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
           type="text"
           placeholder="Mô tả"
           name="description"
-          className="h-12 w-full border border-primary-border outline-none px-8"
+          className={"w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
           defaultValue={formData?.description}
           onChange={onChange}
         />
@@ -145,13 +167,58 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
           Địa chỉ
         </label>
         <input
-          type="text"
-          placeholder="Địa chỉ"
-          name="address"
-          className="h-12 w-full border border-primary-border outline-none px-8"
-          defaultValue={formData?.address}
-          onChange={onChange}
-        />
+            placeholder={"Địa chỉ"}
+            className={"w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
+            defaultValue={formData?.address}
+            onChange={onChange}
+            name = "address"
+        ></input>
+      </section>
+
+      <section className="px-10 mt-2">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtInitialDay">
+            khu vực
+          </label>
+          <DropdownSearchable
+            onchangeValue={(value: any) => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    area: value?.id
+                }))
+            }}
+            onClearData={() => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    area: ""
+                }))
+            }}
+            onSearchInputChange={debounce((value: any) => setKeywordArea(value), 600)}
+            onScroll={handleScroll}
+            className="w-full mt-2 rounded-md border border-primary-border px-1 py-1 placeholder-primary-gray bg-cbs-table-header"
+            placeholder="Tìm kiếm khu vực"
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            showTriangle={false}
+            maxWidthInput="max-w-full"
+            renderSelectedItem={(item: any) => (
+                <div className="max-w-full">
+                    <p className={"truncate"}>{item.text}</p>
+                </div>
+            )}
+            data={listAreas.map((area:any) => ({
+                label: `${area?.name}, ${area?.parent?.name}, ${area?.parent?.parent?.name}`,
+                value: area._id,
+            }))}
+            initialValue={{
+              value: formData?.area3?._id, 
+              label: formData?.area3 && `${formData?.area3?.name}, ${formData?.area2?.name}, ${formData?.area1?.name}` || "Chọn khu vực"
+            }}
+            formatItem={{
+                id: "value",
+                text: "label",
+            }}
+            inlineSearch={true}
+          />
       </section>
 
       <section className="px-10 mt-2">
@@ -162,11 +229,12 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
           type="date"
           placeholder="Ngày bắt đầu"
           name="initialDay"
-          className="h-12 w-full border border-primary-border outline-none px-8"
+          className="w-full mt-2 rounded-md border border-primary-border px-1 py-1 placeholder-primary-gray bg-cbs-table-header"
           defaultValue={moment(formData.initialDay).format('YYYY-MM-DD')}
           onChange={onChange}
         />
       </section>
+
       <section className="px-10 mt-2">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtCampaign">
             Chiến dịch quảng cáo
@@ -230,7 +298,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
             </div>
           </div>
       </section>
-    
+      
       <footer className="absolute right-0 bottom-0 px-10 py-5">
         <button className="bg-primary text-primary-light text-base w-24 h-8 rounded"
           onClick={handleSubmit}>

@@ -294,37 +294,37 @@ export const FnbExpenseFundaDetailPage: FC = () => {
                 <thead className="bg-cbs-table-header h-[38px] border-b border-primary-border">
                     <tr className="text-left text-sm">
                         <th className={cn("py-1", styles.theadInput)}>
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                            <div className="border-gray-300 font-normal pl-2">
                                 TT
                             </div>
                         </th>
                         <th className="py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                            <div className="border-gray-300 font-normal pl-2">
                                 Nội dung
                             </div>
                         </th>
                         <th className="py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                khối lượng
+                            <div className="border-gray-300 font-normal pl-2">
+                                Khối lượng
                             </div>
                         </th>
                         <th className="py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                            <div className="border-gray-300 font-normal pl-2">
                                 Đơn giá
                             </div>
                         </th>
                         <th className="py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                            <div className="border-gray-300 font-normal pl-2">
                                 Thành tiền
                             </div>
                         </th>
                         <th className="py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                            <div className="border-gray-300 font-normal pl-2">
                                 Người tạo
                             </div>
                         </th>
                         <th className="py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                            <div className="border-gray-300 font-normal pl-2">
                                 Ghi chú
                             </div>
                         </th>

@@ -228,7 +228,7 @@ export const FnbExpenseFundaPage: FC = () => {
 									{item?.name}
 								</Link>
 							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
+							<td className={"p-2 border-0.5 border-primary-border text-right"}>
 								{formatNumberMoney(item?.amount)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
@@ -238,7 +238,8 @@ export const FnbExpenseFundaPage: FC = () => {
 								{item?.note}
 							</td>
 						</tr>
-				))}
+					))
+				}
 			</table>
 
 			<ModalContainer isModalOpen={modalCreateShiftDetail} toggle={toggleModalCreateShiftDetail}>
