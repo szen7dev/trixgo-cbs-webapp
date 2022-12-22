@@ -19,7 +19,6 @@ import { useQueryClient } from 'react-query';
 /**
  * Components, Assets
  */
-import { DropdownSearchable } from "shareComponents/common";
 import Close from "assets/icons/Close";
 import { useModal } from "services/hooks/useModal";
 import IconMinus from "assets/images/icons8-reduce-96 1.svg";
@@ -34,12 +33,14 @@ import DemoTraSua from "assets/images/image 430.png";
 import IconCancel from "assets/images/icons8-cancel-96 1.svg";
 
 import "react-day-picker/lib/style.css";
+import { DropdownSearchable } from "shareComponents/common";
 import { GroupSearchable } from "shareComponents/common/GroupSearchable";
 import API from "apis/repository";
 import { useContact } from "services/hooks/items/useContact";
 import { convertObToUrl } from "utils";
 import { Checkbox, FormControl, FormControlLabel, IconButton, InputBase, Paper, Radio, RadioGroup } from "@mui/material";
 import SearchIcon from "assets/icons/Search";
+import { ItemInCartMenu } from "./itemInCartDetail";
 
 interface InitialValues {
   fundaID: string,
@@ -778,20 +779,20 @@ export const ModalAddNewOrder: FC<Props> = () => {
                         </div>
                       </div>
                       <div className="flex gap-4 bg-cbs-form-input-bg p-3">
-                        <div className="w-1/5 bg-white p-3 rounded">
+                        <div className="w-1/5 bg-white py-3 px-2 rounded" style={{ maxWidth: "175px" }}>
                           <div>
-                            <button className="left-menu-nav flex items-center p-1.5  rounded w-full hover:bg-gray-400 hover:text-white ">
+                            <button className="left-menu-nav flex items-center p-1.5 my-1  rounded w-full hover:bg-gray-400 hover:text-white  bg-gray-400 text-white">
                               <span className={"flex-1  text-left text-[14px]"}>TẤT CẢ</span>
                             </button>
-                            <button className="left-menu-nav flex items-center p-1.5  rounded w-full hover:bg-gray-400 hover:text-white ">
+                            <button className="left-menu-nav flex items-center p-1.5 my-1 rounded w-full hover:bg-gray-400 hover:text-white ">
                               <span className={"flex-1  text-left text-[14px]"}>TRÀ SỮA</span>
                             </button>
-                            <button className="left-menu-nav flex items-center p-1.5  rounded w-full hover:bg-gray-400 hover:text-white ">
+                            <button className="left-menu-nav flex items-center p-1.5 my-1 rounded w-full hover:bg-gray-400 hover:text-white ">
                               <span className={"flex-1  text-left text-[14px]"}>TRÀ HOA QUẢ</span>
                             </button>
                           </div>
                         </div>
-                        <div className="w-4/5  bg-white p-3 rounded">
+                        <div className="w-full  bg-white p-3 rounded">
                           <div>
                             <Paper
                               component="form"
@@ -831,7 +832,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   {/* <img src={DemoTraSua} className="w-full h-full" /> */}
                                   <img src={product?.images?.length ? `${process.env.REACT_APP_URL_S3}${product?.images[0]?.path}` : DemoTraSua} className="w-full h-full" />
                                   <div className="w-full absolute bottom-0	 bg-black opacity-75	text-white text-14px px-3 py-1" style={{ maxWidth: "250px" }}>
-                                    <div className="truncate">{product.name}</div>
+                                    <div className="overflow-ellipsis line-clamp-2">{product.name}</div>
                                     <div className="text-right">{convertCurrency(product.unitPrice)}</div>
                                   </div>
                                 </button>
@@ -844,260 +845,15 @@ export const ModalAddNewOrder: FC<Props> = () => {
                     {/* right */}
                     <div className="boxright w-1/3 border-l-0.5">
                       <div className=" overflow-y-auto	mb-2 border-b-0.5 bg-cbs-form-input-bg ">
-                        {!!productsInCart.length && productsInCart.map((product: any) => {
-                          return (
-                            <div key={product._id} className="border-b-0.5 mb-2 bg-white">
-                              <div className="flex gap-2 w-full border-b-0.5 py-2 pl-3 pr-3">
-                                <img src={product?.images?.length ? `${process.env.REACT_APP_URL_S3}${product?.images[0]?.path}` : DemoTraSua} alt="item" className="w-[44px] h-[44px]" />
-                                <div className="w-full">
-                                  <div className="flex justify-between">
-                                    <div>
-                                      <p className="font-bold truncate">
-                                        {`${product.name} (${product.statusApp === 'app' ? convertCurrency(product.unitPrice2) : convertCurrency(product.unitPrice)})`}
-                                      </p>
-                                    </div>
-                                    <div className="text-blue-400">{calTotalPriceEachProduct(product)}</div>
-                                  </div>
-                                  <div>
-                                    <textarea
-                                      className="border-0 flex-grow outline-none my-1.5 px-1 w-full h-[35px] resize-none"
-                                      placeholder="Thêm ghi chú ...." onChange={e => handleChangeNote(e, product)} defaultValue={product.note}></textarea>
-                                  </div>
-                                  {/* <div className="flex gap-2 justify-end"> */}
-                                  <div className="flex justify-end">
-                                    {/* <span>Số lượng: </span> */}
-                                    <div className="flex gap-2 justify-end items-center">
-                                      <button
-                                        // onClick={() => handleRemoveItemFromBoard(member)}
-                                        className="mr-3"
-                                      >
-                                        <img src={IconCancel} alt="" />
-                                      </button>
-                                      <button type="button" onClick={() => decreaseCount(product)}><img src={IconMinus} /></button>
-                                      <span onChange={e => handleChangeQuantity(e, product)} >{product.quantity}</span>
-                                      <button type="button" onClick={() => increaseCount(product)}><img src={IconPlus} /></button>
-                                    </div>
-                                  </div>
-
-                                </div>
-                              </div>
-                              <div className="px-3 py-2">
-                                <div className="">
-                                  <div className="flex items-center gap-4">
-                                    {/* Size */}
-                                    <div className="w-[100px]">Size:</div>
-                                    <FormControl sx={{ marginTop: "-5px" }} >
-                                      <RadioGroup
-                                        row
-                                        aria-labelledby="demo-row-radio-buttons-group-label"
-                                        name="paymentMethod"
-                                      >
-                                        <FormControlLabel
-                                          sx={{ marginLeft: "0", fontSize: "13px", marginRight:"27px" }}
-                                          value="1"
-                                          // onChange={() => handleChangeType('off', product)}
-                                          // checked={(product.statusApp == 'off' || !product.statusApp) ? true : false}
-                                          control={
-                                            <Radio
-                                              style={{}}
-                                              icon={<img src={CheckBoxEmpty} alt="" />}
-                                              checkedIcon={<img src={CheckedBox} alt="" />}
-                                            />
-                                          }
-                                          label={<span className="text-[13px]">M</span>}
-                                        />
-                                        <FormControlLabel
-                                          sx={{ marginLeft: "0" }}
-                                          value="2"
-                                          // onChange={() => handleChangeType('app', product)}
-                                          // checked={product.statusApp == 'app' ? true : false}
-                                          control={
-                                            <Radio
-                                              style={{}}
-                                              icon={<img src={CheckBoxEmpty} alt="" />}
-                                              checkedIcon={<img src={CheckedBox} alt="" />}
-                                            />
-                                          }
-                                          label={<span className="text-[13px]">L</span>}
-                                        />
-                                      </RadioGroup>
-                                    </FormControl>
-                                  </div>
-                                  <div className="flex items-center gap-4">
-                                    {/* Đường */}
-                                    <div  className="w-[100px]">Đường:</div>
-                                    <FormControl sx={{ marginTop: "-5px" }} >
-                                      <RadioGroup
-                                        row
-                                        aria-labelledby="demo-row-radio-buttons-group-label"
-                                        name="paymentMethod"
-                                      >
-                                        <FormControlLabel
-                                          sx={{ marginLeft: "0", fontSize: "13px" }}
-                                          value="1"
-                                          // onChange={() => handleChangeType('off', product)}
-                                          // checked={(product.statusApp == 'off' || !product.statusApp) ? true : false}
-                                          control={
-                                            <Radio
-                                              style={{}}
-                                              icon={<img src={CheckBoxEmpty} alt="" />}
-                                              checkedIcon={<img src={CheckedBox} alt="" />}
-                                            />
-                                          }
-                                          label={<span className="text-[13px]">100</span>}
-                                        />
-                                        <FormControlLabel
-                                          sx={{ marginLeft: "0" }}
-                                          value="2"
-                                          // onChange={() => handleChangeType('app', product)}
-                                          // checked={product.statusApp == 'app' ? true : false}
-                                          control={
-                                            <Radio
-                                              style={{}}
-                                              icon={<img src={CheckBoxEmpty} alt="" />}
-                                              checkedIcon={<img src={CheckedBox} alt="" />}
-                                            />
-                                          }
-                                          label={<span className="text-[13px]">70</span>}
-                                        />
-                                        <FormControlLabel
-                                          sx={{ marginLeft: "0", fontSize: "13px" }}
-                                          value="3"
-                                          // onChange={() => handleChangeType('off', product)}
-                                          // checked={(product.statusApp == 'off' || !product.statusApp) ? true : false}
-                                          control={
-                                            <Radio
-                                              style={{}}
-                                              icon={<img src={CheckBoxEmpty} alt="" />}
-                                              checkedIcon={<img src={CheckedBox} alt="" />}
-                                            />
-                                          }
-                                          label={<span className="text-[13px]">50</span>}
-                                        />
-                                        <FormControlLabel
-                                          sx={{ marginLeft: "0" }}
-                                          value="4"
-                                          // onChange={() => handleChangeType('app', product)}
-                                          // checked={product.statusApp == 'app' ? true : false}
-                                          control={
-                                            <Radio
-                                              style={{}}
-                                              icon={<img src={CheckBoxEmpty} alt="" />}
-                                              checkedIcon={<img src={CheckedBox} alt="" />}
-                                            />
-                                          }
-                                          label={<span className="text-[13px]">30</span>}
-                                        />
-                                      </RadioGroup>
-                                    </FormControl>
-                                  </div>
-                                  <div className="flex items-center gap-4">
-                                    {/* Đá */}
-                                    <div  className="w-[100px]">Đá:</div>
-                                    <FormControl sx={{ marginTop: "-5px" }} >
-                                      <RadioGroup
-                                        row
-                                        aria-labelledby="demo-row-radio-buttons-group-label"
-                                        name="paymentMethod"
-                                      >
-                                        <FormControlLabel
-                                          sx={{ marginLeft: "0", fontSize: "13px" }}
-                                          value="1"
-                                          // onChange={() => handleChangeType('off', product)}
-                                          // checked={(product.statusApp == 'off' || !product.statusApp) ? true : false}
-                                          control={
-                                            <Radio
-                                              style={{}}
-                                              icon={<img src={CheckBoxEmpty} alt="" />}
-                                              checkedIcon={<img src={CheckedBox} alt="" />}
-                                            />
-                                          }
-                                          label={<span className="text-[13px]">100</span>}
-                                        />
-                                        <FormControlLabel
-                                          sx={{ marginLeft: "0" }}
-                                          value="2"
-                                          // onChange={() => handleChangeType('app', product)}
-                                          // checked={product.statusApp == 'app' ? true : false}
-                                          control={
-                                            <Radio
-                                              style={{}}
-                                              icon={<img src={CheckBoxEmpty} alt="" />}
-                                              checkedIcon={<img src={CheckedBox} alt="" />}
-                                            />
-                                          }
-                                          label={<span className="text-[13px]">70</span>}
-                                        />
-                                        <FormControlLabel
-                                          sx={{ marginLeft: "0", fontSize: "13px" }}
-                                          value="3"
-                                          // onChange={() => handleChangeType('off', product)}
-                                          // checked={(product.statusApp == 'off' || !product.statusApp) ? true : false}
-                                          control={
-                                            <Radio
-                                              style={{}}
-                                              icon={<img src={CheckBoxEmpty} alt="" />}
-                                              checkedIcon={<img src={CheckedBox} alt="" />}
-                                            />
-                                          }
-                                          label={<span className="text-[13px]">50</span>}
-                                        />
-                                        <FormControlLabel
-                                          sx={{ marginLeft: "0" }}
-                                          value="4"
-                                          // onChange={() => handleChangeType('app', product)}
-                                          // checked={product.statusApp == 'app' ? true : false}
-                                          control={
-                                            <Radio
-                                              style={{}}
-                                              icon={<img src={CheckBoxEmpty} alt="" />}
-                                              checkedIcon={<img src={CheckedBox} alt="" />}
-                                            />
-                                          }
-                                          label={<span className="text-[13px]">30</span>}
-                                        />
-                                      </RadioGroup>
-                                    </FormControl>
-                                  </div>
-                                </div>
-                                <div>
-                                  {/* topping */}
-                                  <div>Topping:</div>
-                                  <div className="flex flex-wrap w-full">
-                                    {!!product?.variants?.length && product.variants.map((variant: any) => (
-                                      <div key={variant._id} className="w-1/3 flex gap-2 items-start px-1">
-                                        <FormControl sx={{ marginTop: "-5px" }} >
-                                          <FormControlLabel
-                                            sx={{ marginLeft: "0", marginRight: "0", fontSize: "13px", alignItems: "flex-start", }}
-                                            value={variant._id}
-                                            id={variant._id}
-                                            onChange={e => handleChooseVariant(e, product._id, variant)}
-                                            control={
-                                              <Checkbox
-                                                sx={{ minWidth: "34px", }}
-                                                icon={<img src={CheckBoxEmpty} alt="" />}
-                                                checkedIcon={<img src={CheckedBox} alt="" />}
-                                              />
-                                            }
-                                            label={<div className="text-[13px]" style={{ paddingTop: "7px" }}>{`${variant.name} (${convertCurrency(variant.unitPrice)})`}</div>}
-                                          />
-                                        </FormControl  >
-                                      </div>
-                                    ))}
-                                  </div>
-                                </div>
-                              </div>
-
-                            </div>
-                          )
-                        })}
+                        {/* loop */}
+                        <ItemInCartMenu />
                       </div>
                       <div className="">
                         <div className="flex justify-between my-2 p-2">
                           <div className="font-bold">Tổng tiền</div>
                           <div className="font-bold">{convertCurrency(totalMoney)}</div>
                         </div>
-                        <div className="flex justify-between items-center mb-1 pl-2 py-2">
+                        <div className="flex justify-between items-center mb-1 px-2 py-2">
                           <div className="">Chiết khấu</div>
                           <div className="flex gap-1">
                             <div>
@@ -1110,7 +866,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                             </div>
                             <div>
                               <input placeholder="10.000"
-                                className="w-[100px] h-[30px] border-0.5 border-r-0 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
+                                className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
                                 onChange={handleChangeDiscount}
                                 value={discountAndSales.discount}
                                 name="discount"
@@ -1118,7 +874,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="flex justify-between items-center mb-1 pl-2 py-2">
+                        <div className="flex justify-between items-center mb-1 px-2 py-2">
                           <div className="">Giảm giá</div>
                           <div className="flex gap-1">
                             <div>
@@ -1131,7 +887,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                             </div>
                             <div>
                               <input placeholder="10.000"
-                                className="w-[100px] h-[30px] border-0.5 border-r-0 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
+                                className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
                                 onChange={handleChangeSales}
                                 value={discountAndSales.sales}
                                 name="sales"
@@ -1146,7 +902,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                           <div className={`font-bold ${totalPay > 0 ? 'text-primary' : 'text-red-500'} font-bold`}>{convertCurrency(totalPay)}</div>
                         </div>
                       </div>
-                      <div className="text-right mb-5" style={{ marginTop: "100px" }}>
+                      <div className="text-right mb-5 mx-2" style={{ marginTop: "100px" }}>
                         <button type="submit" className="btn btn-primary ml-auto">Xác nhận</button>
                       </div>
                     </div>
