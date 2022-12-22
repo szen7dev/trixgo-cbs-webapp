@@ -778,20 +778,20 @@ export const ModalAddNewOrder: FC<Props> = () => {
                         </div>
                       </div>
                       <div className="flex gap-4 bg-cbs-form-input-bg p-3">
-                        <div className="w-1/5 bg-white p-3 rounded">
+                        <div className="w-1/5 bg-white py-3 px-2 rounded" style={{maxWidth:"175px"}}>
                           <div>
-                            <button className="left-menu-nav flex items-center p-1.5  rounded w-full hover:bg-gray-400 hover:text-white ">
+                            <button className="left-menu-nav flex items-center p-1.5 my-1  rounded w-full hover:bg-gray-400 hover:text-white  bg-gray-400 text-white">
                               <span className={"flex-1  text-left text-[14px]"}>TẤT CẢ</span>
                             </button>
-                            <button className="left-menu-nav flex items-center p-1.5  rounded w-full hover:bg-gray-400 hover:text-white ">
+                            <button className="left-menu-nav flex items-center p-1.5 my-1 rounded w-full hover:bg-gray-400 hover:text-white ">
                               <span className={"flex-1  text-left text-[14px]"}>TRÀ SỮA</span>
                             </button>
-                            <button className="left-menu-nav flex items-center p-1.5  rounded w-full hover:bg-gray-400 hover:text-white ">
+                            <button className="left-menu-nav flex items-center p-1.5 my-1 rounded w-full hover:bg-gray-400 hover:text-white ">
                               <span className={"flex-1  text-left text-[14px]"}>TRÀ HOA QUẢ</span>
                             </button>
                           </div>
                         </div>
-                        <div className="w-4/5  bg-white p-3 rounded">
+                        <div className="w-full  bg-white p-3 rounded">
                           <div>
                             <Paper
                               component="form"
@@ -1097,7 +1097,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                           <div className="font-bold">Tổng tiền</div>
                           <div className="font-bold">{convertCurrency(totalMoney)}</div>
                         </div>
-                        <div className="flex justify-between items-center mb-1 pl-2 py-2">
+                        <div className="flex justify-between items-center mb-1 px-2 py-2">
                           <div className="">Chiết khấu</div>
                           <div className="flex gap-1">
                             <div>
@@ -1110,7 +1110,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                             </div>
                             <div>
                               <input placeholder="10.000"
-                                className="w-[100px] h-[30px] border-0.5 border-r-0 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
+                                className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
                                 onChange={handleChangeDiscount}
                                 value={discountAndSales.discount}
                                 name="discount"
@@ -1118,7 +1118,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="flex justify-between items-center mb-1 pl-2 py-2">
+                        <div className="flex justify-between items-center mb-1 px-2 py-2">
                           <div className="">Giảm giá</div>
                           <div className="flex gap-1">
                             <div>
@@ -1131,7 +1131,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                             </div>
                             <div>
                               <input placeholder="10.000"
-                                className="w-[100px] h-[30px] border-0.5 border-r-0 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
+                                className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
                                 onChange={handleChangeSales}
                                 value={discountAndSales.sales}
                                 name="sales"

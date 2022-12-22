@@ -1147,6 +1147,13 @@ button {
   -ms-transition: 1s;
   -o-transition: 1s;
 }
+.transition-500ms{
+  transition: 0.5s;
+  -webkit-transition: 0.5s;
+  -moz-transition: 0.5s;
+  -ms-transition: 0.5s;
+  -o-transition: 0.5s;
+}
 .top-165{
   top: 165px;
 }
