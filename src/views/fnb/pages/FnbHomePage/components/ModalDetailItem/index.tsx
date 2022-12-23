@@ -288,13 +288,13 @@ export const ModalDetailItem: FC<Props> = ({ order }) => {
                               <div className="flex flex-wrap gap-2 px-2">
                                 {mistakes.map((m: any) => (
                                   <button key={m._id} className="cursor-pointer rounded-md bg-cbs-active-comment px-4 py-1"
-                                    // onClick={() =>
-                                    //   openModal(
-                                    //     <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{ width: "640px" }}>
-                                    //       <ModalErrorDetailItem />
-                                    //     </div>
-                                    //   )
-                                    // }
+                                  // onClick={() =>
+                                  //   openModal(
+                                  //     <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{ width: "640px" }}>
+                                  //       <ModalErrorDetailItem />
+                                  //     </div>
+                                  //   )
+                                  // }
                                   >
                                     <p className="text-left text-[14px] my-1">{m.mistake?.name}</p>
                                     <p className="text-gray-500 text-left"><i>Mắc lỗi: Phùng Thị Thu-Wgo</i></p>
@@ -306,11 +306,22 @@ export const ModalDetailItem: FC<Props> = ({ order }) => {
                             </div>
                           </div>
                         </div>
-                        <div>
-                            <p className="text-cbs-primary my-2"><i>Bấm vào đây để cập nhật gán lỗi</i></p>
-                          </div>
+                        <div className="text-cbs-primary my-2">
+                          <button
+                            className="text-cbs-primary"
+                            onClick={() =>
+                              openModal(
+                                <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{ width: "640px" }}>
+                                  <ModalErrorDetailItem />
+                                </div>
+                              )
+                            }
+                          >
+                            <i>Bấm vào đây để cập nhật gán lỗi</i>
+                          </button>
+                        </div>
                       </div>
-                     
+
                       {/* <div>
                         <div className="font-bold my-3">Lỗi gặp phải</div>
                         <div className="flex gap-2 my-3 flex-wrap">

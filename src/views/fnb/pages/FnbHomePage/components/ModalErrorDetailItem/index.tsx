@@ -2,7 +2,7 @@
  * Libraries
  */
 import React, { ChangeEvent, FC, UIEvent, useEffect, useRef, useState } from "react";
-import { Formik, Form, ErrorMessage } from "formik";
+import { Formik, Form, ErrorMessage, Field } from "formik";
 import { useHistory } from 'react-router-dom';
 import { object, string } from "yup";
 import { toArray } from 'lodash';
@@ -205,7 +205,7 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                     onSubmit={onSubmitFilterData}
                 >
                     {(formik) => {
-                        const { setFieldValue, values } = formik;
+                        const { setFieldValue,getFieldProps, values } = formik;
                         return (
                             <Form>
                                 <div className={"t-add-new-task-dialog-select px-6 pb-4"}>
@@ -564,6 +564,17 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                                                         </div>
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <div className="my-3">
+                                                <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtNote">
+                                                    Ghi chú
+                                                </label>
+                                                <Field className="h-[60px] appearance-none border-0.5 border-cbs-bg-input-search bg-cbs-table-header rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none resize-none" as="textarea" id="txtNote" placeholder="Ghi chú" {...getFieldProps('note')} />
+                                                <ErrorMessage
+                                                    name="note"
+                                                    component="span"
+                                                    className="font-normal leading-7 text-sm text-negative"
+                                                />
                                             </div>
                                         </div>
                                     </div>
