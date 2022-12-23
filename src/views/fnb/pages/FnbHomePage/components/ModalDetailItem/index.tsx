@@ -29,6 +29,7 @@ import IconCancel from "assets/images/icons8-cancel-96 1.svg";
 import "react-day-picker/lib/style.css";
 import { Button } from "@mui/material";
 import { ModalErrorDetailItem } from "../ModalErrorDetailItem";
+import { DropdownSearchable } from "shareComponents/common";
 
 type Props = {
   order: any;
@@ -107,7 +108,7 @@ export const ModalDetailItem: FC<Props> = ({ order }) => {
   const handleAddMistake = (item: any) => {
     const isExists = mistakesSelected.find((m: any) => m._id === item._id);
 
-    if(isExists) return toast.warning('Lỗi đã được chọn');
+    if (isExists) return toast.warning('Lỗi đã được chọn');
 
     setMistakesSelected((prev: any) => ([...prev, item]));
   }
@@ -117,7 +118,7 @@ export const ModalDetailItem: FC<Props> = ({ order }) => {
     setMistakesSelected(newItems);
   }
 
-  if(!order) return <></>;
+  if (!order) return <></>;
 
   return (
     <>
@@ -211,7 +212,7 @@ export const ModalDetailItem: FC<Props> = ({ order }) => {
                             {/* Thanh toán: Tiền mặt | Phục vụ: Tại quán */}
                           </div>
                         </div>
-                        <div className={"flex py-2"}>
+                        <div className={"flex gap-4 py-2"}>
                           <div className={"w-full flex items-center"}>
                             <img src={IconGreenDot} alt="" />
                             <div className={"h-full text-left flex items-center px-1 "}>
@@ -220,6 +221,54 @@ export const ModalDetailItem: FC<Props> = ({ order }) => {
                             </div>
                           </div>
                           {/* Khách: 0988115998 - Nguyễn Văn A (đã mua 68 lần) */}
+                          <div className={" w-full h-full"} style={{ maxWidth: "30%" }}>
+                            <DropdownSearchable
+                              // onchangeValue={(value: any) => {
+                              //     setFundaID(value?.id)
+                              //     setFieldValue("fundaID", value?.id);
+                              //     setShiftID("");
+                              //     setFieldValue("shiftID", "");
+                              // }}
+                              // onClearData={() => {
+                              //     setFundaID("")
+                              //     setFieldValue("fundaID", "");
+                              //     setShiftID("");
+                              //     setFieldValue("shiftID", "");
+                              // }}
+                              // onSearchInputChange={
+                              //     debounce(
+                              //         (value) => setSearchFunda(value),
+                              //         200)
+                              // }
+                              className={"max-w-full h-full flex-1 border-0.5 border-cbs-bg-input-search bg-cbs-bg-input-search placeholder-primary-gray rounded-md"}
+                              placeholder="Tìm kiếm nhân sự"
+                              isMultiple={false}
+                              allowClearValueSingleInput={true}
+                              showTriangle={false}
+                              maxWidthInput="max-w-full"
+                              renderSelectedItem={(item: any) => (
+                                <div
+                                  className="max-w-full"
+                                >
+                                  {/* <p className={"truncate"}>{item.text}</p> */}
+                                </div>
+                              )}
+                              // data={fundas.map((funda: any) => ({
+                              //     label: `${funda.sign}.${funda.name}`,
+                              //     value: funda._id,
+                              // }))}
+                              // formatItem={{
+                              //     id: "value",
+                              //     text: "label",
+                              // }}
+                              inlineSearch={true}
+                            />
+                            <ErrorMessage
+                              name="errorName"
+                              component="div"
+                              className="font-normal text-xs text-negative pl-3"
+                            />
+                          </div>
                         </div>
                         <div className={"flex py-2"}>
                           <div className={"w-full flex items-center"}>
@@ -235,7 +284,7 @@ export const ModalDetailItem: FC<Props> = ({ order }) => {
                           <div className={"w-full flex items-baseline	"}>
                             <img src={IconGreenDot} alt="" />
                             <div className={"h-full text-left flex px-1 "}>
-                              <div className="text-gray-500 w-[75px]" style={{ minWidth: "75px" }}>Lỗi gặp phải: </div>
+                              <div className="text-gray-500" style={{ minWidth: "75px" }}>Lỗi gặp phải: </div>
                               <div className="flex flex-wrap gap-2 px-2">
                                 {mistakes.map((m: any) => (
                                   <button key={m._id} className="cursor-pointer rounded-md bg-cbs-active-comment px-4 py-1"
@@ -259,7 +308,7 @@ export const ModalDetailItem: FC<Props> = ({ order }) => {
                         <div className="font-bold my-3">Lỗi gặp phải</div>
                         <div className="flex gap-2 my-3 flex-wrap">
                           {mistakesSelected.map((item: any) => (
-                            <div key={item._id} className="flex justify-between w-1/3 h-[40px] items-center border-0.5 border-cbs-border rounded-md px-3">
+                            <div key={item._id} className="flex gap-2 justify-between h-[40px] items-center border-0.5 border-cbs-border rounded-md px-3" style={{ minWidth: "33%" }}>
                               <div className="flex gap-2 items-center">
                                 <span className="text-[14px]">{item.name}</span>
                               </div>
@@ -271,7 +320,7 @@ export const ModalDetailItem: FC<Props> = ({ order }) => {
                         </div>
                         <div>
                           <input
-                            type="text" 
+                            type="text"
                             placeholder="Tìm kiếm gán lỗi"
                             className="w-full h-[40px] rounded border-0.5 border-cbs-bg-input-search bg-cbs-bg-input-search px-3 py-1 outline-none "
                             onChange={debounce(
