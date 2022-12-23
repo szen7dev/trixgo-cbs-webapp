@@ -241,7 +241,7 @@ export const ModalDetailItem: FC<Props> = ({ order }) => {
                               //         200)
                               // }
                               className={"max-w-full h-full flex-1 border-0.5 border-cbs-bg-input-search bg-cbs-bg-input-search placeholder-primary-gray rounded-md"}
-                              placeholder="Tìm kiếm nhân sự"
+                              placeholder="Tìm kiếm khách hàng"
                               isMultiple={false}
                               allowClearValueSingleInput={true}
                               showTriangle={false}
@@ -288,23 +288,30 @@ export const ModalDetailItem: FC<Props> = ({ order }) => {
                               <div className="flex flex-wrap gap-2 px-2">
                                 {mistakes.map((m: any) => (
                                   <button key={m._id} className="cursor-pointer rounded-md bg-cbs-active-comment px-4 py-1"
-                                    onClick={() =>
-                                      openModal(
-                                        <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{ width: "640px" }}>
-                                          <ModalErrorDetailItem />
-                                        </div>
-                                      )
-                                    }
+                                    // onClick={() =>
+                                    //   openModal(
+                                    //     <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{ width: "640px" }}>
+                                    //       <ModalErrorDetailItem />
+                                    //     </div>
+                                    //   )
+                                    // }
                                   >
-                                    {m.mistake?.name}
+                                    <p className="text-left text-[14px] my-1">{m.mistake?.name}</p>
+                                    <p className="text-gray-500 text-left"><i>Mắc lỗi: Phùng Thị Thu-Wgo</i></p>
+                                    <p className="text-gray-500 text-left"><i>Phạt: Phùng Thị Thu-Wgo</i></p>
+                                    <p className="text-gray-500 text-left"><i>Ghi chú: Phùng Thị Thu-Wgo</i></p>
                                   </button>
                                 ))}
                               </div>
                             </div>
                           </div>
                         </div>
+                        <div>
+                            <p className="text-cbs-primary my-2"><i>Bấm vào đây để cập nhật gán lỗi</i></p>
+                          </div>
                       </div>
-                      <div>
+                     
+                      {/* <div>
                         <div className="font-bold my-3">Lỗi gặp phải</div>
                         <div className="flex gap-2 my-3 flex-wrap">
                           {mistakesSelected.map((item: any) => (
@@ -335,7 +342,7 @@ export const ModalDetailItem: FC<Props> = ({ order }) => {
                             </div>
                           ))}
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                     <div className="boxright w-1/2">
                       <div className=" overflow-y-auto	mt-2 border-0.5 ">
