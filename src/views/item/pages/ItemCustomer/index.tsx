@@ -40,9 +40,13 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
         type: '',
         name: '',
         address: '',
+        note: '',
         taxid: '',
         phone: '',
         description: '',
+        funda: '',
+        gender: 1,
+        birthday: ''
     });
 
     const {
@@ -53,7 +57,13 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
         fetchNextPage,
         totalRecord
     } = useCustomer({
-        params: { keyword, isListParentOrListChilds: "1", parentID }, // Khi keyword thay đổi giá trị => API tự động cập nhật lại Data => cập nhật lại view
+        params: { 
+            populates: {
+                path: 'parent userUpdate funda',
+                select: 'name bizfullname'
+            },
+            keyword, isListParentOrListChilds: "1", parentID 
+        }, // Khi keyword thay đổi giá trị => API tự động cập nhật lại Data => cập nhật lại view
         isFetchList: true,
     });
 
@@ -93,7 +103,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, type, name, address, taxid, phone, description } = newListIDChecked[0];
+            const { _id, type, name, address, taxid, phone, description, funda, note, gender, birthday } = newListIDChecked[0];
             setInitialValues({
                 parent: parentID,
                 contactID: _id,
@@ -103,6 +113,10 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                 taxid: taxid || '',
                 phone: phone || '',
                 description: description || '',
+                funda: funda,
+                note,
+                gender,
+                birthday
             });
         } else {
             clearData();
@@ -176,7 +190,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
             <div
                 className={"inline-block w-[521px] h-[620px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "700px",
+                    height: "750px",
                 }}
             >
                 <ModalCreateOrUpdateCustomer

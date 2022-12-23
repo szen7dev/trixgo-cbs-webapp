@@ -12,11 +12,14 @@ import iconMember from "assets/images/icons8-member-48-white.svg";
 import { OtherActions } from "./OtherActions";
 import CollapseShow from "assets/images/CBS-Collapse-Show.svg";
 import CollapseHide from "assets/images/CBS-Collapse-Hide.svg";
+import IconDownload from "assets/images/icons8-download-48_2.png";
 import { Task } from "typings/task";
 import { AddUserRelated } from "./AddUserRelated";
 import { User } from "typings/user";
 import { useModal } from "services/hooks/useModal";
 import { ModalCloneTask } from "./ModalCloneTask";
+import API from "apis/repository";
+import { toast } from "react-toastify";
 
 type Props = {
     handleCollapse?: () => void;
@@ -28,10 +31,6 @@ type Props = {
 }
 
 export const ActionTaskDetailBar: FC<Props> = ({ checkAssigneeBid, task, user, refetchTaskInfo, handleCollapse, collapse }) => {
-    // console.log(task)
-    // console.log(user)
-    // console.log(checkAssigneeBid)
-
     const [activeCopyTextTooltip, setActiveCopyTextTooltip] = useState(false);
     const history = useHistory();
 
@@ -45,6 +44,28 @@ export const ActionTaskDetailBar: FC<Props> = ({ checkAssigneeBid, task, user, r
 
     const mouseLeaveCopyTextButton = () => {
         setActiveCopyTextTooltip(false);
+    }
+
+    const handleDownloadFiles = async () => {
+        try {
+            toast.info('Quá trình download đang thực hiện, vui lòng không reload trang');
+
+            const response = await API.get(
+                `/api/subject_pcm/pcm_files/downloads?taskID=${task._id}`,
+            );
+            const { data, status } = response?.data;
+
+            if (status !== 200) return;
+
+            const a = document.createElement('a');
+            a.href = data.Location;
+            a.download = 'download';
+            a.click();
+            a.remove();
+        } catch(error: any) {
+            console.error(error);
+            toast.error(error.message);
+        }
     }
 
     if(!user) return null;
@@ -96,6 +117,12 @@ export const ActionTaskDetailBar: FC<Props> = ({ checkAssigneeBid, task, user, r
                 {
                     (task.subtype == 4 && task.assignee._id.toString() == user?._id.toString()) ? <></> : <AddUserRelated task={task} onConfirmAddUserRelated={refetchTaskInfo} />
                 }
+                <button
+                    onClick={handleDownloadFiles}
+                    className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mx-3 relative"}
+                >
+                    <img src={IconDownload} alt={"----"} className={"w-[18px]"} />
+                </button>
             </div>
 
             <button onClick={() => {
