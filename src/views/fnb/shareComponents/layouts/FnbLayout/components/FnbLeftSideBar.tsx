@@ -186,10 +186,10 @@ export const FnbLeftSideBar: FC = () => {
                                             <div className="w-[28px] h-[28px] min-w-[28px] min-h-[28px] rounded-full flex items-center justify-center text-white text-lg min-w-[28px] min-h-[28px]" style={{ background: "#FCC4A2" }}>{item?.name.charAt(0)}</div>
                                             <div className="w-full">
                                                 <div className="flex justify-between">
-                                                    <div>{item?.name}</div>
+                                                    <div>{item?.name} ({item?.numberOfOrders | 0})</div>
                                                     <div className="text-cbs-subtext">{moment(item?.createAt).format('DD/MM/YY')}</div>
                                                 </div>
-                                                <div className="text-cbs-subtext">{item?.phone} - {item?.address}</div>
+                                                <div className="text-cbs-subtext">{item?.phone}-{item?.note}</div>
                                             </div>
                                         </div>
                                     ))
