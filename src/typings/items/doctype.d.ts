@@ -8,6 +8,7 @@ export type Doctype = {
     company?: Company
     modifyAt?: string;
     createAt?: string;
+    salesChannel: number;
 }
 
 export type DoctypeListParams = QueryParam & {
@@ -63,6 +64,7 @@ interface ModalProps {
         name: string;
         description: string;
         type: number;
+        salesChannel: number;
     }
     onConfirm?(): void
 }
