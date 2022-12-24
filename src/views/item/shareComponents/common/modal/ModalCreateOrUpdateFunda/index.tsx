@@ -10,6 +10,10 @@ import moment from "moment";
 import { DropdownSearchable } from "shareComponents/common";
 import { useArea } from "services/hooks/items/useArea";
 import debounce from 'lodash/debounce';
+import { Checkbox, FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
+import CheckBoxEmpty from "assets/images/Frame 3548.svg";
+import CheckedBox from "assets/images/Check-All.svg";
+import { useDoctype } from "services/hooks/items/useDoctype";
 
 export const ModalCreateOrUpdateFunda: FC<any> = ({
   modalType,
@@ -22,7 +26,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
     address: '',
     initialDay: new Date(),
     campaign: 1,
-    internal: 1
+    internal: 1,
   }
 }) => {
   const { closeModal } = useModal();
@@ -100,12 +104,41 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
       [name]: value
     }))
   }
+
+  const onChangeCampain = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    const campainIDs = formData.activeCampaign || [];
+    const findIdx = campainIDs.indexOf(value);
+    
+    if (findIdx > -1) {
+      campainIDs.splice(findIdx, 1);
+    } else {
+      campainIDs.push(value);
+    }
+
+    setFormData((previous: any) => ({
+      ...previous,
+      [name]: campainIDs
+    }))
+  }
+
   const handleSearchArea = debounce((value) => setKeywordArea(value), 500);
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
     const bottom = scrollHeight - scrollTop === clientHeight;
     bottom && nextPageListArea();
   }
+
+  const {
+      list: listDoctypes,
+  } = useDoctype({
+      params: {
+          type: 22,// Chiến dịch
+          limit: 30
+      },
+      isFetchList: true
+  });
+
   return (
     <main className="relative h-full">
       <header className="px-10 py-5 flex items-center justify-between">
@@ -296,6 +329,71 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
                 />
                 <label htmlFor="internal" className={"text-left ml-3"}>Nhượng quyền</label>
             </div>
+          </div>
+      </section>
+
+      <section className="px-10 mt-2">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtCampaign">
+            Chiến dịch đang hoạt động
+          </label>
+          <div className="flex flex-wrap w-full">
+            {
+              listDoctypes.map((doctype: any) => (
+                <div className={"flex items-center ml-3"} key={doctype._id}>
+                    <input
+                      type="checkbox"
+                      value={doctype._id}
+                      name="activeCampaign"
+                      className="form-check-input mt-0"
+                      defaultValue={doctype._id}
+                      onChange={onChangeCampain}
+                      checked={formData?.activeCampaign?.includes(doctype._id)}
+                    />
+                    <label htmlFor="activeCampaign" className={"text-left ml-3"}>{doctype.name}</label>
+              </div>
+              ))
+            }
+              {/* <div className="w-1/3 flex gap-2 items-start px-1">
+                  <FormControl sx={{ marginTop: "-5px" }} >
+                      <FormControlLabel
+                          sx={{ marginLeft: "0", marginRight: "0", fontSize: "13px", alignItems: "flex-start", }}
+                          // value={variant._id}
+                          // id={variant._id}
+                          // onChange={e => handleChooseVariant(e, itemInCart._id, variant)}
+                          control={
+                              <Checkbox
+                                  sx={{ minWidth: "34px", }}
+                                  icon={<img src={CheckBoxEmpty} alt="" />}
+                                  checkedIcon={<img src={CheckedBox} alt="" />}
+                              />
+                          }
+                          label={<div className="text-[13px]" style={{ paddingTop: "7px" }}>
+                              Pudding trứng (6k)
+                          </div>}
+                      />
+                  </FormControl  >
+              </div>
+              <div className="w-1/3 flex gap-2 items-start px-1">
+                  <FormControl sx={{ marginTop: "-5px" }} >
+                      <FormControlLabel
+                          sx={{ marginLeft: "0", marginRight: "0", fontSize: "13px", alignItems: "flex-start", }}
+                          // value={variant._id}
+                          // id={variant._id}
+                          // onChange={e => handleChooseVariant(e, itemInCart._id, variant)}
+                          control={
+                              <Checkbox
+                                  sx={{ minWidth: "34px", }}
+                                  icon={<img src={CheckBoxEmpty} alt="" />}
+                                  checkedIcon={<img src={CheckedBox} alt="" />}
+                                  checked={true}
+                              />
+                          }
+                          label={<div className="text-[13px]" style={{ paddingTop: "7px" }}>
+                              Pudding trứng (6k)
+                          </div>}
+                      />
+                  </FormControl  >
+              </div> */}
           </div>
       </section>
       

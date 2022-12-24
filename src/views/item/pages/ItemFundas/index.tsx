@@ -50,7 +50,8 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
         area3: '',
         initialDay: new Date(),
         campaign: 1,
-        internal: 1
+        internal: 1,
+        activeCampaign: []
     });
 
     const {
@@ -105,7 +106,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, name, sign, description, address, initialDay, campaign, internal, area1, area2, area3} = newListIDChecked[0];
+            const { _id, name, sign, description, address, initialDay, campaign, internal, area1, area2, area3, activeCampaign} = newListIDChecked[0];
             setInitialValues({
                 fundaID: _id,
                 name,
@@ -117,7 +118,8 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                 internal,
                 area1, 
                 area2,
-                area3
+                area3,
+                activeCampaign
             });
         } else {
             clearData();
@@ -183,7 +185,8 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                 address: '',
                 initialDay: new Date(),
                 campaign: 1,
-                internal: 1
+                internal: 1,
+                activeCampaign: []
             };
         }
 
@@ -191,7 +194,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
             <div
                 className={"inline-block w-[521px] h-[300px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "760px",
+                    height: "800px",
                 }}
             >
                 <ModalCreateOrUpdateFunda

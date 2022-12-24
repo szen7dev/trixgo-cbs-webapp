@@ -39,7 +39,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
 }) => {
   const { closeModal } = useModal();
   const [formData, setFormData] = useState(initialValues);
-  const { insertAsync, updateAsync } = useCustomer({});
+  const { refetch: refetchCustomer, insertAsync, updateAsync } = useCustomer({});
   console.log({ formData })
   const handleSubmit = async () => {
     if(!formData.name) {
@@ -56,7 +56,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
           if (error) {
             return toast.warning(message);
           }
-
+          refetchCustomer();
           toast.success('Tạo thành công', { autoClose: 1500 });
           break;
         }
@@ -77,7 +77,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
             }
             return toast.warning(message);
           }
-
+          refetchCustomer();
           toast.success('Cập nhật thành công', { autoClose: 1500 });
           break;
         }
