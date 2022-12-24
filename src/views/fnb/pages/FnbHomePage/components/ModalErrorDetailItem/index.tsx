@@ -2,7 +2,7 @@
  * Libraries
  */
 import React, { ChangeEvent, FC, UIEvent, useEffect, useRef, useState } from "react";
-import { Formik, Form, ErrorMessage } from "formik";
+import { Formik, Form, ErrorMessage, Field } from "formik";
 import { useHistory } from 'react-router-dom';
 import { object, string } from "yup";
 import { toArray } from 'lodash';
@@ -205,7 +205,7 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                     onSubmit={onSubmitFilterData}
                 >
                     {(formik) => {
-                        const { setFieldValue, values } = formik;
+                        const { setFieldValue,getFieldProps, values } = formik;
                         return (
                             <Form>
                                 <div className={"t-add-new-task-dialog-select px-6 pb-4"}>
@@ -438,82 +438,7 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="my-3">
-                                                <div className={"w-full flex items-start"}>
-                                                    <div className={"max-w-1/2 w-1/2 h-full text-left  text-primary-gray font-bold texxt-[13px] flex items-center mr-2  h-full h-full"}>Đơn hàng</div>
-                                                    <div className={" flex-1 max-w-1/2 w-1/2 h-full h-full"}>
-                                                        <DropdownSearchable
-                                                            // onchangeValue={(value: any) => {
-                                                            //     setFundaID(value?.id)
-                                                            //     setFieldValue("fundaID", value?.id);
-                                                            //     setShiftID("");
-                                                            //     setFieldValue("shiftID", "");
-                                                            // }}
-                                                            // onClearData={() => {
-                                                            //     setFundaID("")
-                                                            //     setFieldValue("fundaID", "");
-                                                            //     setShiftID("");
-                                                            //     setFieldValue("shiftID", "");
-                                                            // }}
-                                                            // onSearchInputChange={
-                                                            //     debounce(
-                                                            //         (value) => setSearchFunda(value),
-                                                            //         200)
-                                                            // }
-                                                            className={"max-w-full h-full flex-1 border-0.5 border-cbs-bg-input-search bg-cbs-bg-input-search placeholder-primary-gray"}
-                                                            placeholder="Tìm kiếm đơn hàng"
-                                                            isMultiple={false}
-                                                            allowClearValueSingleInput={true}
-                                                            showTriangle={false}
-                                                            maxWidthInput="max-w-full"
-                                                            renderSelectedItem={(item: any) => (
-                                                                <div
-                                                                    className="max-w-full"
-                                                                >
-                                                                    {/* <p className={"truncate"}>{item.text}</p> */}
-                                                                </div>
-                                                            )}
-                                                            // data={fundas.map((funda: any) => ({
-                                                            //     label: `${funda.sign}.${funda.name}`,
-                                                            //     value: funda._id,
-                                                            // }))}
-                                                            // formatItem={{
-                                                            //     id: "value",
-                                                            //     text: "label",
-                                                            // }}
-                                                            inlineSearch={true}
-                                                        />
-                                                        <ErrorMessage
-                                                            name="errorName"
-                                                            component="div"
-                                                            className="font-normal text-xs text-negative pl-3"
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className="flex gap-2 mt-2">
-                                                    <div className="flex justify-between w-1/3 h-[40px] items-center border-0.5 border-cbs-border rounded-md px-2">
-                                                        <div className="flex gap-2 items-center">
-                                                            <span className="text-[13px]">Trân châu nấu sống</span>
-                                                        </div>
-                                                        <button
-                                                        // onClick={() => handleRemoveItemFromBoard(member)}
-                                                        >
-                                                            <img src={IconCancel} alt="" />
-                                                        </button>
-                                                    </div>
-                                                    <div className="flex justify-between w-1/3 h-[40px] items-center border-0.5 border-cbs-border rounded-md px-2">
-                                                        <div className="flex gap-2 items-center">
-                                                            <span className="text-[13px]">Trân châu nấu sống</span>
-                                                        </div>
-                                                        <button
-                                                        // onClick={() => handleRemoveItemFromBoard(member)}
-                                                        >
-                                                            <img src={IconCancel} alt="" />
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className={" p-2 my-2"}>
+                                            <div className={"my-3"}>
                                                 <div className={"flex py-2"}>
                                                     <div className={"w-full items-center"}>
                                                         <div className="my-2">
@@ -639,6 +564,17 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                                                         </div>
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <div className="my-3">
+                                                <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtNote">
+                                                    Ghi chú
+                                                </label>
+                                                <Field className="h-[60px] appearance-none border-0.5 border-cbs-bg-input-search bg-cbs-table-header rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none resize-none" as="textarea" id="txtNote" placeholder="Ghi chú" {...getFieldProps('note')} />
+                                                <ErrorMessage
+                                                    name="note"
+                                                    component="span"
+                                                    className="font-normal leading-7 text-sm text-negative"
+                                                />
                                             </div>
                                         </div>
                                     </div>

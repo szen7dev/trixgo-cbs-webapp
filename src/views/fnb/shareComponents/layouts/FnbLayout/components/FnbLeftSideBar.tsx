@@ -96,6 +96,10 @@ export const FnbLeftSideBar: FC = () => {
                         <img width={'20px'} src={reportIcon} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Báo cáo doanh thu</span>
                     </NavLink>
+                    <NavLink to={`/fnb/risk-report`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                        <img width={'20px'} src={reportIcon} alt="Menu item" />
+                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Báo cáo rủi ro</span>
+                    </NavLink>
                     <NavLink to={`/fnb/shift`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                         <img width={'20px'} src={shiftcon} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Ca làm việc</span>
@@ -182,10 +186,10 @@ export const FnbLeftSideBar: FC = () => {
                                             <div className="w-[28px] h-[28px] min-w-[28px] min-h-[28px] rounded-full flex items-center justify-center text-white text-lg min-w-[28px] min-h-[28px]" style={{ background: "#FCC4A2" }}>{item?.name.charAt(0)}</div>
                                             <div className="w-full">
                                                 <div className="flex justify-between">
-                                                    <div>{item?.name}</div>
+                                                    <div>{item?.name} ({item?.numberOfOrders | 0})</div>
                                                     <div className="text-cbs-subtext">{moment(item?.createAt).format('DD/MM/YY')}</div>
                                                 </div>
-                                                <div className="text-cbs-subtext">{item?.phone} - {item?.address}</div>
+                                                <div className="text-cbs-subtext">{item?.phone}-{item?.note}</div>
                                             </div>
                                         </div>
                                     ))

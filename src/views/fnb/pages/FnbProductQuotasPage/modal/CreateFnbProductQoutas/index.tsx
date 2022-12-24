@@ -15,18 +15,27 @@ import { useParams } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import { useFnbQuota } from 'services/hooks/fnb/useFnbQuota';
 import { useGoods } from "services/hooks/items/useGoods";
+import { FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
+import CheckBoxEmpty from "assets/images/Frame 3548.svg";
+import CheckedBox from "assets/images/Check-All.svg";
+import RadioEmpty from "assets/images/Ellipse 27.svg";
+import RadioChecked from "assets/images/icons8-checked-40 (2) 2.svg";
 
 const CreateFnbProductQoutas: FC<any> = ({ toggle, modalType, onConfirm, initialValues = {
     goodsID: "",
     quantity: "",
-    note: ""  
+    note: ""
 } }) => {
-    console.log({initialValues})
-	const { productID } = useParams<{ productID: string }>();
+    console.log({ initialValues })
+    const { productID } = useParams<{ productID: string }>();
     const [keyword, setKeyword] = useState('');
-    const {  insertAsync, updateAsync, refetch } = useFnbQuota({ params: { keyword: "", productID, populates: JSON.stringify({
-        path: 'goods', select: "name unit"
-    })  }, isFetchList: false, isFetchInfo: false  });
+    const { insertAsync, updateAsync, refetch } = useFnbQuota({
+        params: {
+            keyword: "", productID, populates: JSON.stringify({
+                path: 'goods', select: "name unit"
+            })
+        }, isFetchList: false, isFetchInfo: false
+    });
     const handleSubmit = async (values: any) => {
         if (modalType == 'create') {
             const query = {
@@ -36,7 +45,7 @@ const CreateFnbProductQoutas: FC<any> = ({ toggle, modalType, onConfirm, initial
                 quantity: parseInt(values.quantity),
                 note: values.note,
             };
-           
+
             const result = await insertAsync(query);
             if (!result.error) {
                 refetch();
@@ -46,7 +55,7 @@ const CreateFnbProductQoutas: FC<any> = ({ toggle, modalType, onConfirm, initial
                 toast.error(result?.data?.message);
             }
         };
-        
+
         if (modalType == 'update') {
             const query = {
                 ...values,
@@ -102,8 +111,8 @@ const CreateFnbProductQoutas: FC<any> = ({ toggle, modalType, onConfirm, initial
                                 </button>
                             </div>
                             <div className="px-6 mt-2 pt-3.5 flex-1 flex flex-col">
-                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtQuantity">
-                                     Chọn nguyên liệu
+                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtQuantity">
+                                    Chọn nguyên liệu
                                 </label>
                                 <DropdownSearchable
                                     onchangeValue={(value: any) => {
@@ -120,7 +129,7 @@ const CreateFnbProductQoutas: FC<any> = ({ toggle, modalType, onConfirm, initial
                                     allowClearValueSingleInput={true}
                                     showTriangle={false}
                                     maxWidthInput="max-w-full"
-                                    disabled={modalType == 'create' ? false: true}
+                                    disabled={modalType == 'create' ? false : true}
                                     renderSelectedItem={(item: any) => (
                                         <div className="max-w-full">
                                             <p className={"truncate"}>{item.text}</p>
@@ -140,10 +149,10 @@ const CreateFnbProductQoutas: FC<any> = ({ toggle, modalType, onConfirm, initial
                                     }}
                                     inlineSearch={true}
                                 />
-                               
+
                                 <div className="mb-4">
                                     <label className="block text-gray-700 text-sm font-bold mt-2 mb-2" htmlFor="txtUnit">
-                                     Khối lượng
+                                        Khối lượng
                                     </label>
                                     <Field type="number" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtQuantity" placeholder="Khối lượng" {...getFieldProps('quantity')} />
                                     <ErrorMessage
@@ -155,7 +164,7 @@ const CreateFnbProductQoutas: FC<any> = ({ toggle, modalType, onConfirm, initial
 
                                 <div className="mb-4">
                                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtNote">
-                                    Ghi chú
+                                        Ghi chú
                                     </label>
                                     <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtNote" placeholder="Ghi chú" {...getFieldProps('note')} />
                                     <ErrorMessage
@@ -163,6 +172,184 @@ const CreateFnbProductQoutas: FC<any> = ({ toggle, modalType, onConfirm, initial
                                         component="span"
                                         className="font-normal leading-7 text-sm text-negative"
                                     />
+                                </div>
+                                <div className="">
+                                    <div className=" items-center gap-4 mb-4 text-sm">
+                                        {/* Size */}
+                                        <div className="w-[100px] text-gray-700 text-sm font-bold my-2">Size:</div>
+                                        <FormControl sx={{ marginTop: "-5px" }} >
+                                            <RadioGroup
+                                                row
+                                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                                name="paymentMethod"
+                                            >
+                                                <FormControlLabel
+                                                    sx={{ marginLeft: "0", fontSize: "13px", marginRight: "27px" }}
+                                                    value="1"
+                                                    // onChange={() => handleChangeType('off', product)}
+                                                    // checked={(product.statusApp == 'off' || !product.statusApp) ? true : false}
+                                                    control={
+                                                        <Radio
+                                                            style={{}}
+                                                            icon={<img src={CheckBoxEmpty} alt="" />}
+                                                            checkedIcon={<img src={CheckedBox} alt="" />}
+                                                        />
+                                                    }
+                                                    label={<span className="text-[13px]">M</span>}
+                                                />
+                                                <FormControlLabel
+                                                    sx={{ marginLeft: "0" }}
+                                                    value="2"
+                                                    // onChange={() => handleChangeType('app', product)}
+                                                    // checked={product.statusApp == 'app' ? true : false}
+                                                    control={
+                                                        <Radio
+                                                            style={{}}
+                                                            icon={<img src={CheckBoxEmpty} alt="" />}
+                                                            checkedIcon={<img src={CheckedBox} alt="" />}
+                                                        />
+                                                    }
+                                                    label={<span className="text-[13px]">L</span>}
+                                                />
+                                            </RadioGroup>
+                                        </FormControl>
+                                    </div>
+                                    <div className=" items-center gap-4 mb-4 text-sm">
+                                        {/* Đường */}
+                                        <div className="w-[100px] text-gray-700 text-sm font-bold my-2">Đường:</div>
+                                        <FormControl sx={{ marginTop: "-5px" }} >
+                                            <RadioGroup
+                                                row
+                                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                                name="paymentMethod"
+                                            >
+                                                <FormControlLabel
+                                                    sx={{ marginLeft: "0", fontSize: "13px" }}
+                                                    value="1"
+                                                    // onChange={() => handleChangeType('off', product)}
+                                                    // checked={(product.statusApp == 'off' || !product.statusApp) ? true : false}
+                                                    control={
+                                                        <Radio
+                                                            style={{}}
+                                                            icon={<img src={CheckBoxEmpty} alt="" />}
+                                                            checkedIcon={<img src={CheckedBox} alt="" />}
+                                                        />
+                                                    }
+                                                    label={<span className="text-[13px]">100</span>}
+                                                />
+                                                <FormControlLabel
+                                                    sx={{ marginLeft: "0" }}
+                                                    value="2"
+                                                    // onChange={() => handleChangeType('app', product)}
+                                                    // checked={product.statusApp == 'app' ? true : false}
+                                                    control={
+                                                        <Radio
+                                                            style={{}}
+                                                            icon={<img src={CheckBoxEmpty} alt="" />}
+                                                            checkedIcon={<img src={CheckedBox} alt="" />}
+                                                        />
+                                                    }
+                                                    label={<span className="text-[13px]">70</span>}
+                                                />
+                                                <FormControlLabel
+                                                    sx={{ marginLeft: "0", fontSize: "13px" }}
+                                                    value="3"
+                                                    // onChange={() => handleChangeType('off', product)}
+                                                    // checked={(product.statusApp == 'off' || !product.statusApp) ? true : false}
+                                                    control={
+                                                        <Radio
+                                                            style={{}}
+                                                            icon={<img src={CheckBoxEmpty} alt="" />}
+                                                            checkedIcon={<img src={CheckedBox} alt="" />}
+                                                        />
+                                                    }
+                                                    label={<span className="text-[13px]">50</span>}
+                                                />
+                                                <FormControlLabel
+                                                    sx={{ marginLeft: "0" }}
+                                                    value="4"
+                                                    // onChange={() => handleChangeType('app', product)}
+                                                    // checked={product.statusApp == 'app' ? true : false}
+                                                    control={
+                                                        <Radio
+                                                            style={{}}
+                                                            icon={<img src={CheckBoxEmpty} alt="" />}
+                                                            checkedIcon={<img src={CheckedBox} alt="" />}
+                                                        />
+                                                    }
+                                                    label={<span className="text-[13px]">30</span>}
+                                                />
+                                            </RadioGroup>
+                                        </FormControl>
+                                    </div>
+                                    <div className=" items-center gap-4 mb-4 text-sm">
+                                        {/* Đá */}
+                                        <div className="w-[100px] text-gray-700 text-sm font-bold my-2">Đá:</div>
+                                        <FormControl sx={{ marginTop: "-5px" }} >
+                                            <RadioGroup
+                                                row
+                                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                                name="paymentMethod"
+                                            >
+                                                <FormControlLabel
+                                                    sx={{ marginLeft: "0", fontSize: "13px" }}
+                                                    value="1"
+                                                    // onChange={() => handleChangeType('off', product)}
+                                                    // checked={(product.statusApp == 'off' || !product.statusApp) ? true : false}
+                                                    control={
+                                                        <Radio
+                                                            style={{}}
+                                                            icon={<img src={CheckBoxEmpty} alt="" />}
+                                                            checkedIcon={<img src={CheckedBox} alt="" />}
+                                                        />
+                                                    }
+                                                    label={<span className="text-[13px]">100</span>}
+                                                />
+                                                <FormControlLabel
+                                                    sx={{ marginLeft: "0" }}
+                                                    value="2"
+                                                    // onChange={() => handleChangeType('app', product)}
+                                                    // checked={product.statusApp == 'app' ? true : false}
+                                                    control={
+                                                        <Radio
+                                                            style={{}}
+                                                            icon={<img src={CheckBoxEmpty} alt="" />}
+                                                            checkedIcon={<img src={CheckedBox} alt="" />}
+                                                        />
+                                                    }
+                                                    label={<span className="text-[13px]">70</span>}
+                                                />
+                                                <FormControlLabel
+                                                    sx={{ marginLeft: "0", fontSize: "13px" }}
+                                                    value="3"
+                                                    // onChange={() => handleChangeType('off', product)}
+                                                    // checked={(product.statusApp == 'off' || !product.statusApp) ? true : false}
+                                                    control={
+                                                        <Radio
+                                                            style={{}}
+                                                            icon={<img src={CheckBoxEmpty} alt="" />}
+                                                            checkedIcon={<img src={CheckedBox} alt="" />}
+                                                        />
+                                                    }
+                                                    label={<span className="text-[13px]">50</span>}
+                                                />
+                                                <FormControlLabel
+                                                    sx={{ marginLeft: "0" }}
+                                                    value="4"
+                                                    // onChange={() => handleChangeType('app', product)}
+                                                    // checked={product.statusApp == 'app' ? true : false}
+                                                    control={
+                                                        <Radio
+                                                            style={{}}
+                                                            icon={<img src={CheckBoxEmpty} alt="" />}
+                                                            checkedIcon={<img src={CheckedBox} alt="" />}
+                                                        />
+                                                    }
+                                                    label={<span className="text-[13px]">30</span>}
+                                                />
+                                            </RadioGroup>
+                                        </FormControl>
+                                    </div>
                                 </div>
                                 <div className="flex justify-end pt-5 px-6 pb-6 mb-0.5">
                                     <div>
