@@ -243,6 +243,11 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 		if(values.field){
 			formatValues.publishID = values.field;
 		}
+
+		if(values.contract){
+			formatValues.contractID = values.contract;
+		}
+		
 		if(!formatValues.package)
 			return toast.warning("Vui lòng chọn gói thầu")
 

@@ -21,6 +21,7 @@ import homeIcon from 'assets/images/icons-home.svg';
 import reportIcon from 'assets/images/icons-report.svg';
 import menuIcon from 'assets/images/icons8-order.svg';
 import shiftcon from 'assets/images/icons-shift.svg';
+import { ModalCreateOrUpdateCustomer, ModalConfirm } from 'views/item/shareComponents/common';
 
 /*=====4.PAGES/COMPONENTS=====*/
 
@@ -45,7 +46,20 @@ export const FnbLeftSideBar: FC = () => {
     const { openModal } = useModal();
     const [menuShowList, setMenuState] = useState(false);
     const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
-
+    const [initialValues, setInitialValues] = useState({
+        // parent: parentID,
+        contactID: '',
+        type: '',
+        name: '',
+        address: '',
+        note: '',
+        taxid: '',
+        phone: '',
+        description: '',
+        funda: '',
+        gender: 1,
+        birthday: ''
+    });
     /**
 	 * List mẩu tin
 	 */
@@ -58,12 +72,49 @@ export const FnbLeftSideBar: FC = () => {
 		isFetchList: true, 
 		isFetchInfo: false
 	});
-
     const [pageIndex, setPageIndex] = useState(0);
 
     const handleSearch = debounce(
       (e: any) => setKeyword(e.target.value),
     200)
+    const handleConfirmCreateOrUpdate = () => refetch();
+
+    const handleOpenModalCreateOrUpdate = (modalType: 'create' | 'update') => {
+
+        let initValues: any = {...initialValues};
+
+        // setItemsChecked([]);
+
+        // Mở modal tạo mới
+        if(modalType === 'create') {
+            // clearData();
+            initValues = {
+                // parent: parentID,
+                contactID: '',
+                type: '',
+                name: '',
+                address: '',
+                taxid: '',
+                phone: '',
+                description: '',
+            };
+        }
+
+        openModal(
+            <div
+                className={"inline-block w-[521px] h-[620px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
+                style={{
+                    height: "750px",
+                }}
+            >
+                <ModalCreateOrUpdateCustomer
+                    modalType={modalType}
+                    initialValues={initValues}
+                    onConfirm={handleConfirmCreateOrUpdate}
+                />
+            </div>
+        )
+    }
 
     return (
         <div className="t-leftsidebar-navigation t-leftsidebar-navigation-v2 t-leftsidebar-navigation-type2 fixed left-64px top-14 bottom-0 transition-all duration-500 ease-out border-secondary-light z-10 bg-primary-light">
@@ -147,14 +198,15 @@ export const FnbLeftSideBar: FC = () => {
                             <span className="ml-2 text-[14px] align-middle"> Khách hàng</span>
                         </div>
                         <button
-                            onClick={() =>
-                                openModal(
-                                    <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block"
-                                    style={{width:"600px"}}>
-                                        <ModalAddNewContact onClosed ={() => refetch()}/>
-                                    </div>
-                                )
-                            }
+                            onClick={() => handleOpenModalCreateOrUpdate('create')}
+                            // onClick={() =>
+                            //     openModal(
+                            //         <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block"
+                            //         style={{width:"600px"}}>
+                            //             <ModalAddNewContact onClosed ={() => refetch()}/>
+                            //         </div>
+                            //     )
+                            // }
                         >
                             <img src={iconPlus} alt="" />
                         </button>

@@ -37,7 +37,8 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
         doctypeID: '',
         name: '',
         description: '',
-        type
+        type,
+        salesChannel: 1
     });
 
     const {
@@ -86,12 +87,13 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, name, description, type } = newListIDChecked[0];
+            const { _id, name, description, type, salesChannel } = newListIDChecked[0];
             setInitialValues({
                 doctypeID: _id,
                 name,
                 description,
-                type
+                type,
+                salesChannel
             });
         } else {
             clearData();
@@ -149,14 +151,15 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
                 doctypeID: '',
                 name: '',
                 description: '',
-                type
+                type,
+                salesChannel: 1
             };
         }
 
         openModal(
             <div
                 className={"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
-            >
+                style={ type== 22 && {height: "420px"}|| {height: "320px"}}>
                 <ModalCreateOrUpdateDoctype
                     modalType={modalType}
                     initialValues={initValues}

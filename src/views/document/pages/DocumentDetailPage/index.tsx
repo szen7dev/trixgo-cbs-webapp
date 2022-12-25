@@ -329,7 +329,7 @@ export const DocumentDetailPage: FC = () => {
               <input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={handleSetFiles} />
             </label>
           </div>
-          <TableFileAttach fileAttachs={documentFiles} handleDeleteFileAttach={handleOpenModalConfirmDelete}>
+          <TableFileAttach fileAttachs={documentFiles} handleDeleteFileAttach={handleOpenModalConfirmDelete} documentID={params.docID}>
             {Number(totalDocumentFile) - documentFiles.length > 0 && (
               <button
                 className="text-primary text-[13px]"
