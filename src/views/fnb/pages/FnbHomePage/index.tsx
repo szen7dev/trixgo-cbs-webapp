@@ -112,11 +112,14 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
 
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   const dispatch = useDispatch();
-  const [popBox1, setpopBox1] = React.useState(false)
-  const [popBox2, setpopBox2] = React.useState(false)
+  const [popBox1, setpopBox1] = useState(false)
+  const [popBox2, setpopBox2] = useState(false)
   const [filter, setFilter] = useState("all");
   const { user } = useAuth();
   const [pageIndex, setPageIndex] = useState(0);
+
+  const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
+
   const ref = React.useRef<PaginateHandle>(null);
   const tabIndex = useAppSelector((state) => state.dashboardV2.data.tabIndex);
   const tabActive = useAppSelector((state) => state.dashboardV2.data.tabActive);
@@ -124,7 +127,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
   const { openModal } = useModal();
 
   const StarToggle = () => {
-    const [selectStar, setSelectStar] = React.useState(false)
+    const [selectStar, setSelectStar] = useState(false)
     return (
       <button onClick={() => setSelectStar(!selectStar)} className="h-[16px]">
         {(selectStar ? <StarIcon sx={{ color: '#FFCA28', width: 16, height: 16 }} /> : <StarBorderIcon sx={{ color: '#FFCA28', width: 16, height: 16 }} />)}
@@ -304,7 +307,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
     ...queryFile,
     enabled: tabActive === 3 ? true : false,
   });
-  //////
 
   const onReset = () => {
     setReset(false);
@@ -364,6 +366,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
       </div>
     )
   }
+
   // popover
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
   const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -373,6 +376,33 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
     setAnchorEl(null);
   };
   const open = Boolean(anchorEl);
+
+  const getStateChecked = React.useCallback((id: string) => {
+    return idsChecked.includes(id) ? true : false;
+  }, [idsChecked]);
+
+  const onClickCheckButton = (id: string) => {
+    const check = idsChecked.includes(id);
+    if (check) {
+      const newList = [...idsChecked];
+      newList.splice(newList.findIndex((e: any) => e == id), 1);
+      setIdsChecked(newList);
+    } else {
+      const newList = [...idsChecked, id];
+      setIdsChecked(newList);
+    };
+  };
+
+  const getStateCheckedAll = React.useCallback(() => idsChecked.length == listWithPager?.[pageIndex]?.length, [idsChecked]);
+
+  const onClickCheckAll = () => {
+    if (idsChecked.length == listWithPager?.[pageIndex]?.length) {
+      setIdsChecked([]);
+    } else {
+      const idsAll = listWithPager?.[pageIndex]?.map((e: any) => e._id);
+      setIdsChecked(idsAll);
+    }
+  };
 
   return (
     <div className="t-home flex flex-col h-full overflow-hidden">
@@ -761,10 +791,11 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
           <div className={"flex gap-7 items-center justify-center mr-2"}>
             <div className="flex gap-2 items-center">
               <input
-                className="form-check-input"
+                className="form-check-input line"
                 type="checkbox"
-                value=""
                 id="checkAll"
+                checked={getStateCheckedAll()}
+                onChange={onClickCheckAll}
                 style={{ width: "14px", height: "14px" }}
               />
               {/* <div>
@@ -832,7 +863,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 onClick={() =>
                   openModal(
                     <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{width:"640px"}}>
-                      <ModalErrorDetailItem />
+                      <ModalErrorDetailItem defaultValues={{ orderID: idsChecked.length ? idsChecked[0] : '' }} />
                     </div>
                   )
                 }
@@ -887,7 +918,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             <tbody>
             {
                 (listWithPager[pageIndex]??[]).map((item: any, i: any) => (
-                   <tr key={item._id}
+                  <tr key={item._id}
                     className={"border-b-0.5 border-primary-border bg-white hover:shadow-md hover:z-2 hover:relative text-[14px]"}
                   >
                     <td className={"w-[50px]"}>
@@ -897,19 +928,15 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                         <input
                           className="form-check-input"
                           type="checkbox"
-                          value=""
-                          id="check"
+                          checked={getStateChecked(item._id)}
+                          onChange={() => onClickCheckButton(item._id)}
                           style={{ width: "16px", height: "16px", marginTop: "5px" }}
                         />
                         {/* <StarToggle /> */}
                       </div>
                     </td>
                     <td className={"px-1 py-2"}>
-                      <div
-                        className={
-                          ""
-                        }
-                      >
+                      <div>
                         {moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
                       </div>
                     </td>
