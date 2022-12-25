@@ -50,7 +50,7 @@ export const ItemInCartMenu : FC<any> = ({item, service, handleChooseVariant, ha
         <div className="">
             <div className="border-b-0.5 mb-2 bg-white">
                 <div className="flex gap-2 w-full border-b-0.5 py-2 pl-3 pr-3">
-                    <img src={DemoTraSua} alt="item" className="w-[44px] h-[44px]" />
+                    <img src={item?.images?.length ? `${process.env.REACT_APP_URL_S3}${item?.images[0]?.path}` : DemoTraSua} alt="item" className="w-[44px] h-[44px]" />
                     <div className="w-full">
                         <div className="flex justify-between">
                             <div>
@@ -75,6 +75,7 @@ export const ItemInCartMenu : FC<any> = ({item, service, handleChooseVariant, ha
                                 <button
                                     onClick={() => handleRemoveItem(item)}
                                     className="mr-3"
+                                    type="button"
                                 >
                                     <img src={IconCancel} alt="" />
                                 </button>

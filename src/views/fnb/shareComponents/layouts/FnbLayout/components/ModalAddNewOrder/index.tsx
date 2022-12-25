@@ -198,7 +198,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
 
   useEffect(() => {
     calTotalMoney();
-  }, [JSON.stringify(productsInCart)])
+  }, [JSON.stringify(productsInCart), service])
 
   const increaseCount = (product: any) => {
     const newProducts = [...productsInCart];
