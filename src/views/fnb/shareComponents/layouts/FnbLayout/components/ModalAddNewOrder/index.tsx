@@ -189,7 +189,6 @@ export const ModalAddNewOrder: FC<Props> = () => {
       }
     })
     const products = await Promise.all(productsAsync);
-    console.log("productsAsync", products);
     setProducts(products);
   };
 
