@@ -24,6 +24,7 @@ type UseContactProps = {
     paramsInfo?: Contact.ContactInfoParams,
     isFetchList?: boolean,
     isFetchInfo?: boolean,
+    populates?: any,
 }
 
 // Khai báo hook
