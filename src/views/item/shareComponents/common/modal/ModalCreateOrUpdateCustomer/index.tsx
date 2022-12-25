@@ -1,5 +1,5 @@
 /*=====1.LIBRARY=====*/
-import React, { UIEvent, FC, useState } from "react";
+import React, { UIEvent, FC, useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import debounce from 'lodash/debounce';
 import moment from 'moment';
@@ -40,7 +40,6 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
   const { closeModal } = useModal();
   const [formData, setFormData] = useState(initialValues);
   const { refetch: refetchCustomer, insertAsync, updateAsync } = useCustomer({});
-  console.log({ formData })
   const handleSubmit = async () => {
     if(!formData.name) {
       return toast.warn('Vui lòng nhập nội dung');
@@ -111,7 +110,6 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
     // bottom && nextPageListArea();
   }
   const [keywordFunda, setKeywordFunda] = useState('');
-
   const {
     deleteAsync,
     list: listFunda,
@@ -130,6 +128,13 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
     },
     isFetchList: true
   });
+  // const [listFunda1, setListFunda1]: any = useState([]);
+
+  // useEffect(() => {
+  //   if(listFunda.length){
+  //     setListFunda1(listFunda)
+  //   }
+  // }, [listFunda.length, listFunda1.length ]);
 
   return (
     <main className="relative h-full">
@@ -180,7 +185,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
                 value: funda._id,
             }))}
             initialValue={{
-              value: formData?.funda?._id, 
+              value: formData?.funda?._id || "", 
               label: formData?.funda?.name || "Chọn cơ sở"
             }}
             formatItem={{
