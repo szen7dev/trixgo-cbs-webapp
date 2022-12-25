@@ -2,12 +2,12 @@
  * Libraries
  */
 import React, { FC, useEffect, useRef, useState } from "react";
-import { Formik, Form, ErrorMessage, Field } from "formik";
+import { Formik, Form, ErrorMessage, useFormik, FormikProvider } from "formik";
 import { useHistory } from 'react-router-dom';
 import { number, object, string } from "yup";
 import { toast } from "react-toastify";
 import debounce from "lodash/debounce";
-import { convertCurrency } from 'utils/converter';
+import { formatNumberMoney, convertCurrency } from 'utils/converter';
 import { useSocket } from "services/hooks/useSocket";
 import { useAuth } from 'services/hooks/auth/useAuth';
 import { useQueryClient } from 'react-query';
@@ -29,11 +29,11 @@ import CheckedBox from "assets/images/Check-All.svg";
 import RadioEmpty from "assets/images/Ellipse 27.svg";
 import RadioChecked from "assets/images/icons8-checked-40 (2) 2.svg";
 import IconSearch from "assets/images/icons8-search-96 1.svg";
-import DemoTraSua from "assets/images/image 430.png";
+import beverageIcon from "assets/images/icons8-beverage.png";
 import IconCancel from "assets/images/icons8-cancel-96 1.svg";
 
 import "react-day-picker/lib/style.css";
-import { DropdownSearchable } from "shareComponents/common";
+import { DropdownSearchable, Loader } from "shareComponents/common";
 import { GroupSearchable } from "shareComponents/common/GroupSearchable";
 import API from "apis/repository";
 import { useContact } from "services/hooks/items/useContact";
@@ -47,7 +47,7 @@ interface InitialValues {
   shiftID: string,
   customerID: string,
   seasons: number,
-  service: number,
+  service: string,
   paymentMethod: number,
   salesChannel: number,
   name: string,
@@ -60,15 +60,11 @@ type Props = {
 }
 
 type GroupSearchableHandle = React.ElementRef<typeof GroupSearchable>;
-
-const SEASONS_TYPE = [
-  { text: 'Mùa xuân', value: 1 },
-  { text: 'Mùa hạ', value: 2 },
-  { text: 'Mùa thu', value: 3 },
-  { text: 'Mùa đông', value: 4 },
-];
+type DropdownSearchableHandle = React.ElementRef<typeof DropdownSearchable>;
 
 export const ModalAddNewOrder: FC<Props> = () => {
+  const dropdownFundaRef = useRef<DropdownSearchableHandle>(null);
+  const dropdownShiftsRef = useRef<DropdownSearchableHandle>(null);
   const queryClient = useQueryClient();
   const { closeModal } = useModal();
   const { current: socket }: any = useSocket();
@@ -95,6 +91,28 @@ export const ModalAddNewOrder: FC<Props> = () => {
   const [products, setProducts] = useState<any>([]);
   const [productsInCart, setProductsInCart] = useState<any>([]);
 
+  const [productIsParent, setProductIsParent] = useState<any>([]);
+  const [indexParentID, setIndexParentID] = useState('');
+
+  //
+  const [service, setService] = useState("1");
+  const [loading, setLoading] = useState(false);
+  //
+
+  useEffect(() => {
+    const fetchFundas = async () => {
+      const response = await API.get(
+        `/api/fnb/products?isParent=1&limit=50`,
+      );
+      const { data, status } = response?.data;
+
+      if (status !== 200) return;
+      setProductIsParent(data?.listRecords || []);
+    }
+
+    fetchFundas();
+  }, []);
+
   useEffect(() => {
     const fetchFundas = async () => {
       const response = await API.get(
@@ -103,12 +121,20 @@ export const ModalAddNewOrder: FC<Props> = () => {
       const { data, status } = response?.data;
 
       if (status !== 200) return;
-
-      setFundas(data.listRecords);
+      const fundaList = data.listRecords || [];
+      if (fundaList && fundaList.length) {
+        dropdownFundaRef?.current?.setValueRef({
+          label: `${fundaList[0].sign}.${fundaList[0].name}`,
+          value: fundaList[0]._id,
+        });
+        setFundaID(fundaList[0]._id)
+        setShiftID("");
+      }
+      setFundas(fundaList);
     }
 
     fetchFundas();
-  }, [searchFunda])
+  }, [searchFunda]);
 
   useEffect(() => {
     if (!fundaID) return;
@@ -120,54 +146,64 @@ export const ModalAddNewOrder: FC<Props> = () => {
       const { data, status } = response?.data;
 
       if (status !== 200) return;
-
-      setShifts(data.listRecords);
+      const shiftsList = data.listRecords || [];
+      if (shiftsList && shiftsList.length) {
+        dropdownShiftsRef?.current?.setValueRef({
+          label: shiftsList[0].name,
+          value: shiftsList[0]._id,
+        });
+        setShiftID(shiftsList[0]._id);
+      } else {
+        dropdownShiftsRef?.current?.setValueRef(null);
+        setShiftID("");
+      }
+      setShifts(shiftsList);
     }
 
     fetchShifts();
   }, [fundaID])
 
+  const fetchProducts = async () => {
+    const response: any = await API.get(
+      `/api/fnb/products?${convertObToUrl({
+        type: 1,
+        limit: 50,
+        keyword: keywordSearchProduct,
+        populates: JSON.stringify({
+          path: 'images',
+        }),
+        parentID: indexParentID
+      })}`,
+    );
+    const { data, status } = response?.data;
+    if (status !== 200) return;
+
+    const response2 = await API.get(
+      `/api/fnb/products?type=2&limit=50`,
+    );
+
+    const productsAsync = data.listRecords?.map?.(async (product: any) => {
+      return {
+        ...product,
+        variants: response2?.data?.data?.listRecords,
+      }
+    })
+    const products = await Promise.all(productsAsync);
+    setProducts(products);
+  };
+
   useEffect(() => {
-    const fetchProducts = async () => {
-      const response: any = await API.get(
-        `/api/fnb/products?${convertObToUrl({
-          type: 1,
-          keyword: keywordSearchProduct,
-          populates: JSON.stringify({
-            path: 'images',
-          })
-        })}`,
-      );
-      const { data, status } = response?.data;
-
-      if (status !== 200) return;
-
-      const productsAsync = data.listRecords?.map?.(async (product: any) => {
-        const response = await API.get(
-          `/api/fnb/products?type=2`,
-        );
-
-        return {
-          ...product,
-          variants: response?.data?.data?.listRecords,
-        }
-      })
-
-      const products = await Promise.all(productsAsync);
-      setProducts(products);
-    }
-
     fetchProducts();
-  }, [keywordSearchProduct])
+  }, [keywordSearchProduct, indexParentID]);
 
   useEffect(() => {
     calTotalMoney();
-  }, [JSON.stringify(productsInCart)])
+  }, [JSON.stringify(productsInCart), service])
 
   const increaseCount = (product: any) => {
     const newProducts = [...productsInCart];
     for (let i = 0; i < newProducts.length; i++) {
-      if (newProducts[i]._id === product._id) {
+      if (newProducts[i]._id === product._id && newProducts[i].createdAt === product.createdAt) {
         newProducts[i].quantity = newProducts[i].quantity + 1;
       }
     }
@@ -176,7 +212,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
   const decreaseCount = (product: any) => {
     const newProducts = [...productsInCart];
     for (let i = 0; i < newProducts.length; i++) {
-      if (newProducts[i]._id === product._id && newProducts[i].quantity > 1) {
+      if (newProducts[i]._id === product._id && newProducts[i].createdAt === product.createdAt && newProducts[i].quantity > 1) {
         newProducts[i].quantity = newProducts[i].quantity - 1;
       }
     }
@@ -190,20 +226,47 @@ export const ModalAddNewOrder: FC<Props> = () => {
 
   const onSubmitFilterData = async (values: any) => {
     try {
+      if (!productsInCart || productsInCart.length === 0) {
+        toast.warning('Vui lòng chọn sản phẩm');
+        return;
+      };
+      setLoading(true);
       for (const value in values) {
         values[value] = values[value].toString();
       }
 
-      const products = productsInCart.map((p: any) => ({
-        productID: p._id,
-        quantity: p.quantity,
-        note: p.note,
-        variantsID: p.variantsSelected ? p.variantsSelected.map((v: any) => v._id) : [],
-        unitPrice: p.statusApp === 'app' ? p.unitPrice2 : p.unitPrice
-      }))
+      const products = productsInCart.map((p: any) => {
+        let price = 0;
+        switch (true) {
+          case service === "1" && p.size === "1":
+            price = p.unitPrice || 0;
+            break;
+          case service === "2" && p.size === "1":
+            price = p.unitPrice2|| 0;
+            break;
+          case service === "1" && p.size === "2":
+            price = p.unitPrice3|| 0;
+            break;
+          case service === "2" && p.size === "2":
+            price = p.unitPrice4|| 0;
+            break;
+          default:
+            break;
+        }
+        return {
+          ...p,
+          productID: p._id,
+          quantity: p.quantity,
+          note: p.note,
+          variantsID: p.variantsSelected ? p.variantsSelected.map((v: any) => v._id) : [],
+          unitPrice: price
+        }
+      })
 
       const dataAddNewOrder: any = {
         ...values,
+        fundaID: fundaID,
+        shiftID: shiftID,
         products,
         total: `${totalMoney}`,
         discount: `${discountAndSales.discount}`,
@@ -216,6 +279,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
         dataAddNewOrder
       );
 
+      setLoading(false);
+
       if (status !== 200) return toast.warning('Yêu cầu tạo đơn thất bại');
       if (data.error) return toast.warning('Tạo đơn thất bại');
 
@@ -227,6 +292,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
       queryClient.refetchQueries('fnb-order-list');
       return toast.success('Tạo đơn thành công');
     } catch (error) {
+      setLoading(false);
       if (typeof error === "string") {
         toast.error(error);
       } else if (error instanceof Error) {
@@ -280,7 +346,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
     if (value < 1) return;
 
     const newProductsInCart = productsInCart.map((p: any) => {
-      if (p._id === product._id) {
+      if (p._id === product._id && p.createdAt === product.createdAt) {
         return { ...p, quantity: value };
       }
       return p;
@@ -288,11 +354,21 @@ export const ModalAddNewOrder: FC<Props> = () => {
     setProductsInCart(newProductsInCart);
   }
 
+  const handleRemoveItem = (product: any) => {
+    const newProductsInCart: any = [];
+    productsInCart.forEach((item: any) => {
+      if (item.createdAt !== product.createdAt) {
+        newProductsInCart.push(item);
+      }
+    });
+    setProductsInCart(newProductsInCart);
+  }
+
   const handleChangeNote = (e: any, product: any) => {
     const value = e.target.value;
 
     const newProductsInCart = productsInCart.map((p: any) => {
-      if (p._id === product._id) {
+      if (p._id === product._id && p.createdAt === product.createdAt) {
         return { ...p, note: value };
       }
       return p;
@@ -300,22 +376,22 @@ export const ModalAddNewOrder: FC<Props> = () => {
     setProductsInCart(newProductsInCart);
   }
 
-  const handleChangeType = (type: string, product: any) => {
+  const handleChangeValue = (product: any, key: any, value: any) => {
     const newProductsInCart = productsInCart.map((p: any) => {
-      if (p._id === product._id) {
-        return { ...p, statusApp: type };
+      if (p._id === product._id && p.createdAt === product.createdAt) {
+        return { ...p, [key]: value };
       }
       return p;
     })
     setProductsInCart(newProductsInCart);
   }
 
-  const handleChooseVariant = (e: any, productId: string, variant: any) => {
+  const handleChooseVariant = (e: any, productId: string, variant: any, createdAt: any) => {
     const isChecked = e.target.checked;
     const newProductsInCart = productsInCart.map((product: any) => {
       if (!product.variantsSelected) product.variantsSelected = [];
 
-      if (product._id === productId) {
+      if (product._id === productId && createdAt === product.createdAt) {
         if (isChecked) {
           product.variantsSelected.push(variant);
         } else {
@@ -328,16 +404,6 @@ export const ModalAddNewOrder: FC<Props> = () => {
     setProductsInCart(newProductsInCart);
   }
 
-  const calTotalPriceEachProduct = (product: any) => {
-    let amount = (product.statusApp === 'app' ? product.unitPrice2 : product.unitPrice) * product.quantity;
-    if (product.variantsSelected && product.variantsSelected.length) {
-      product.variantsSelected.forEach((variant: any) => {
-        amount += variant.unitPrice * product.quantity;
-      });
-    }
-    return amount;
-  }
-
   const calTotalMoney = () => {
     const amount = productsInCart.reduce((prev: any, product: any) => {
       if (product.variantsSelected && product.variantsSelected.length) {
@@ -345,15 +411,34 @@ export const ModalAddNewOrder: FC<Props> = () => {
           prev += variant.unitPrice * product.quantity;
         });
       }
-      return prev += ((product.statusApp === 'app' ? product.unitPrice2 : product.unitPrice) * product.quantity)
+
+      let price = 0;
+      switch (true) {
+        case service === "1" && product.size === "1":
+          price = product.unitPrice || 0;
+          break;
+        case service === "2" && product.size === "1":
+          price = product.unitPrice2|| 0;
+          break;
+        case service === "1" && product.size === "2":
+          price = product.unitPrice3|| 0;
+          break;
+        case service === "2" && product.size === "2":
+          price = product.unitPrice4|| 0;
+          break;
+        default:
+          break;
+      }
+
+      return prev += (price * product.quantity)
     }, 0)
     setTotalMoney(amount);
     setTotalPay(amount);
   }
 
   const addOrderSchema = object().shape({
-    fundaID: string().required("Vui lòng chọn cơ sở"),
-    shiftID: string().required("Vui lòng chọn ca"),
+    // fundaID: string().required("Vui lòng chọn cơ sở"),
+    // shiftID: string().required("Vui lòng chọn ca"),
     customerID: string().required("Vui lòng chọn mã khách hàng"),
     salesChannel: number().required("Vui lòng chọn kênh bán hàng"),
     paymentMethod: number().required("Vui lòng chọn phương thức thanh toán"),
@@ -365,7 +450,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
     shiftID,
     customerID: "",
     seasons: 1,
-    service: 1,
+    service: "1",
     paymentMethod: 1,
     salesChannel: 1,
     name: "",
@@ -375,6 +460,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
 
   return (
     <>
+      {(loading) && <Loader className="border-primary" />}
       <div className={"flex flex-col"}>
         <div className={"flex w-full py-3 px-3 border-b"}>
           <h4 className={"flex-1 text-lg font-bold text-left"}>Đơn hàng mới</h4>
@@ -401,17 +487,18 @@ export const ModalAddNewOrder: FC<Props> = () => {
                             <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full h-full"}>Cơ sở</div>
                             <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                               <DropdownSearchable
+                                ref={dropdownFundaRef} 
                                 onchangeValue={(value: any) => {
                                   setFundaID(value?.id)
                                   setFieldValue("fundaID", value?.id);
-                                  setShiftID("");
-                                  setFieldValue("shiftID", "");
+                                  // setShiftID("");
+                                  // setFieldValue("shiftID", "");
                                 }}
                                 onClearData={() => {
                                   setFundaID("")
                                   setFieldValue("fundaID", "");
-                                  setShiftID("");
-                                  setFieldValue("shiftID", "");
+                                  // setShiftID("");
+                                  // setFieldValue("shiftID", "");
                                 }}
                                 onSearchInputChange={
                                   debounce(
@@ -452,6 +539,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                             <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full"}>Ca làm</div>
                             <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                               <DropdownSearchable
+                                ref={dropdownShiftsRef}
                                 onchangeValue={(value: any) => {
                                   setShiftID(value?.id)
                                   setFieldValue("shiftID", value?.id);
@@ -553,8 +641,12 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                         style={{}}
                                         icon={<img src={RadioEmpty} alt="" />}
                                         checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => setFieldValue("service", 1)}
-                                        checked={(values.service === 1) ? true : false}
+                                        onChange={() => {
+                                          setFieldValue("service", "1");
+                                          setService("1");
+                                          setFieldValue("salesChannel", 1);
+                                        }}
+                                        checked={(values.service === "1") ? true : false}
                                       />
                                     }
                                     label={<span className="text-[13px]">Off</span>}
@@ -567,8 +659,12 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                         style={{}}
                                         icon={<img src={RadioEmpty} alt="" />}
                                         checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => setFieldValue("service", 2)}
-                                        checked={(values.service === 2) ? true : false}
+                                        onChange={() => {
+                                          setFieldValue("service", "2");
+                                          setService("2");
+                                          setFieldValue("salesChannel", 2);
+                                        }}
+                                        checked={(values.service === "2") ? true : false}
                                       />
                                     }
                                     label={<span className="text-[13px]">App</span>}
@@ -781,15 +877,27 @@ export const ModalAddNewOrder: FC<Props> = () => {
                       <div className="flex gap-4 bg-cbs-form-input-bg p-3">
                         <div className="w-1/5 bg-white py-3 px-2 rounded" style={{ maxWidth: "175px" }}>
                           <div>
-                            <button className="left-menu-nav flex items-center p-1.5 my-1  rounded w-full hover:bg-gray-400 hover:text-white  bg-gray-400 text-white">
+                            <button 
+                             type="button"
+                            onClick={() => setIndexParentID('')}
+                            className={`
+                            left-menu-nav flex items-center p-1.5 my-1 rounded w-full hover:bg-gray-400 hover:text-white
+                            ${!indexParentID ? "bg-gray-400 text-white" : ""}
+                            `}>
                               <span className={"flex-1  text-left text-[14px]"}>TẤT CẢ</span>
                             </button>
-                            <button className="left-menu-nav flex items-center p-1.5 my-1 rounded w-full hover:bg-gray-400 hover:text-white ">
-                              <span className={"flex-1  text-left text-[14px]"}>TRÀ SỮA</span>
-                            </button>
-                            <button className="left-menu-nav flex items-center p-1.5 my-1 rounded w-full hover:bg-gray-400 hover:text-white ">
-                              <span className={"flex-1  text-left text-[14px]"}>TRÀ HOA QUẢ</span>
-                            </button>
+                            {productIsParent.map((item: any, index: number) => (
+                              <button key={index}
+                              type="button"
+                              onClick={() => setIndexParentID(item._id)}
+                              className={`
+                            left-menu-nav flex items-center p-1.5 my-1 rounded w-full hover:bg-gray-400 hover:text-white
+                            ${indexParentID === item._id ? "bg-gray-400 text-white" : ""}
+                            `}>
+                                <span className={"flex-1  text-left text-[14px]"}>{item?.name}</span>
+                              </button>
+                            ))
+                            }
                           </div>
                         </div>
                         <div className="w-full  bg-white p-3 rounded">
@@ -814,26 +922,29 @@ export const ModalAddNewOrder: FC<Props> = () => {
                           <div className="overflow-y-auto	my-2 " style={{ height: "600px" }}>
                             <div className="flex flex-wrap gap-2">
                               {!!products.length && products.map((product: any) => (
-                                <button
+                                <button 
                                   key={product._id}
+                                  type="button"
                                   className="w-full h-full relative"
-                                  style={{ maxWidth: "250px", maxHeight: "250px" }}
+                                  // style={{ maxWidth: "250px", maxHeight: "250px" }}
+                                  style={{ width: "19%" }}
                                   onClick={() => {
                                     setProductsInCart((prevProducts: any) => {
-                                      const isExists = prevProducts.find((p: any) => p._id === product._id);
-                                      if (isExists) return prevProducts;
-                                      else return [...prevProducts, {
+                                      return [...prevProducts, {
                                         ...product,
-                                        quantity: 1
+                                        quantity: 1,
+                                        size: "1",
+                                        sugar: "1",
+                                        ice: "1",
+                                        createdAt: new Date()
                                       }];
                                     });
                                   }}
                                 >
-                                  {/* <img src={DemoTraSua} className="w-full h-full" /> */}
-                                  <img src={product?.images?.length ? `${process.env.REACT_APP_URL_S3}${product?.images[0]?.path}` : DemoTraSua} className="w-full h-full" />
-                                  <div className="w-full absolute bottom-0	 bg-black opacity-75	text-white text-14px px-3 py-1" style={{ maxWidth: "250px" }}>
-                                    <div className="overflow-ellipsis line-clamp-2">{product.name}</div>
-                                    <div className="text-right">{convertCurrency(product.unitPrice)}</div>
+                                  <img src={product?.images?.length ? `${process.env.REACT_APP_URL_S3}${product?.images[0]?.path}` : beverageIcon} className="w-full h-full" />
+                                  <div className="w-full absolute bottom-0 bg-black opacity-75 text-white text-[14px] px-3 py-1" style={{ maxWidth: "250px" }}>
+                                    <div className="overflow-ellipsis line-clamp-2 text-left">{product.name}</div>
+                                    <div className="text-right font-bold">{formatNumberMoney(product.unitPrice)}</div>
                                   </div>
                                 </button>
                               ))}
@@ -846,12 +957,25 @@ export const ModalAddNewOrder: FC<Props> = () => {
                     <div className="boxright w-1/3 border-l-0.5">
                       <div className=" overflow-y-auto	mb-2 border-b-0.5 bg-cbs-form-input-bg ">
                         {/* loop */}
-                        <ItemInCartMenu />
+                        {(productsInCart || []).map((item: any, index: number) =>
+                          <ItemInCartMenu
+                            key={index}
+                            item={item}
+                            service={values.service}
+                            handleChooseVariant={handleChooseVariant}
+                            handleChangeQuantity={handleChangeQuantity}
+                            increaseCount={increaseCount}
+                            decreaseCount={decreaseCount}
+                            handleChangeNote={handleChangeNote}
+                            handleChangeValue={handleChangeValue}
+                            handleRemoveItem={handleRemoveItem}
+                          />)
+                        }
                       </div>
                       <div className="">
                         <div className="flex justify-between my-2 p-2">
                           <div className="font-bold">Tổng tiền</div>
-                          <div className="font-bold">{convertCurrency(totalMoney)}</div>
+                          <div className="font-bold">{formatNumberMoney(totalMoney)}</div>
                         </div>
                         <div className="flex justify-between items-center mb-1 px-2 py-2">
                           <div className="">Chiết khấu</div>
@@ -899,7 +1023,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                       <div className="border-t-0.5 border-b-0.5 px-2 py-2">
                         <div className="flex justify-between">
                           <div className="font-bold">Thanh toán</div>
-                          <div className={`font-bold ${totalPay > 0 ? 'text-primary' : 'text-red-500'} font-bold`}>{convertCurrency(totalPay)}</div>
+                          <div className={`font-bold ${totalPay > 0 ? 'text-primary' : 'text-red-500'} font-bold`}>{formatNumberMoney(totalPay)}</div>
                         </div>
                       </div>
                       <div className="text-right mb-5 mx-2" style={{ marginTop: "100px" }}>
