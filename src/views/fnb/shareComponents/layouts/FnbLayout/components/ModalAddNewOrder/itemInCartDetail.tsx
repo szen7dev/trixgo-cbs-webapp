@@ -13,9 +13,39 @@ import IconSearch from "assets/images/icons8-search-96 1.svg";
 import DemoTraSua from "assets/images/image 430.png";
 import IconCancel from "assets/images/icons8-cancel-96 1.svg";
 import { Checkbox, FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
+import { convertCurrency } from "utils/converter";
 
-export const ItemInCartMenu : FC = () =>  {
+export const ItemInCartMenu : FC<any> = ({item, service, handleChooseVariant, handleChangeQuantity, increaseCount, decreaseCount, handleChangeNote, handleChangeValue, handleRemoveItem}) =>  {
     const [menuShowList, setMenuState] = useState(false);
+
+    const calTotalPriceEachProduct = (product: any) => {
+        let price = 0;
+        switch (true) {
+            case service === "1" && product.size === "1":
+                price = product.unitPrice || 0;
+                break;
+            case service === "2" && product.size === "1":
+                price = product.unitPrice2 || 0;
+                break;
+            case service === "1" && product.size === "2":
+                price = product.unitPrice3 || 0;
+                break;
+            case service === "2" && product.size === "2":
+                price = product.unitPrice4 || 0;
+                break;
+            default:
+                break;
+        }
+
+        let amount = price * product.quantity;
+        if (product.variantsSelected && product.variantsSelected.length) {
+            product.variantsSelected.forEach((variant: any) => {
+                amount += variant.unitPrice * product.quantity;
+            });
+        }
+        return convertCurrency(amount);
+    }
+
     return (
         <div className="">
             <div className="border-b-0.5 mb-2 bg-white">
@@ -25,17 +55,17 @@ export const ItemInCartMenu : FC = () =>  {
                         <div className="flex justify-between">
                             <div>
                                 <p className="font-bold truncate" onClick={() => setMenuState(!menuShowList)}>
-                                    Trà Sữa Trân Châu Đường Đen Kem Trứng
+                                    {item.name}
                                 </p>
                             </div>
-                            <div className="text-blue-400 font-bold">25.000</div>
+                            <div className="text-blue-400 font-bold">{calTotalPriceEachProduct(item)}</div>
                         </div>
                         <div>
                             <textarea
                                 className="border-0 flex-grow outline-none my-1.5 px-1 w-full h-[35px] resize-none"
                                 placeholder="Thêm ghi chú ...."
-                            //   onChange={e => handleChangeNote(e, itemInCart)} 
-                            //   defaultValue={itemInCart.note}
+                                onChange={e => handleChangeNote(e, item)} 
+                                defaultValue={item.note}
                             ></textarea>
                         </div>
                         {/* <div className="flex gap-2 justify-end"> */}
@@ -43,19 +73,19 @@ export const ItemInCartMenu : FC = () =>  {
                             {/* <span>Số lượng: </span> */}
                             <div className="flex gap-2 justify-end items-center">
                                 <button
-                                    // onClick={() => handleRemoveItemFromBoard(member)}
+                                    onClick={() => handleRemoveItem(item)}
                                     className="mr-3"
                                 >
                                     <img src={IconCancel} alt="" />
                                 </button>
                                 <button type="button"
-                                // onClick={() => decreaseCount(itemInCart)}
+                                onClick={() => decreaseCount(item)}
                                 ><img src={IconMinus} /></button>
                                 <span
-                                // onChange={e => handleChangeQuantity(e, itemInCart)} 
-                                >1</span>
+                                onChange={e => handleChangeQuantity(e, item)} 
+                                >{item.quantity}</span>
                                 <button type="button"
-                                // onClick={() => increaseCount(itemInCart)}
+                                onClick={() => increaseCount(item)}
                                 ><img src={IconPlus} /></button>
                             </div>
                         </div>
@@ -79,8 +109,8 @@ export const ItemInCartMenu : FC = () =>  {
                                     <FormControlLabel
                                         sx={{ marginLeft: "0", fontSize: "13px", marginRight: "27px" }}
                                         value="1"
-                                        // onChange={() => handleChangeType('off', product)}
-                                        // checked={(product.statusApp == 'off' || !product.statusApp) ? true : false}
+                                        onChange={() => handleChangeValue(item, 'size', '1')}
+                                        checked={item.size == '1' ? true : false}
                                         control={
                                             <Radio
                                                 style={{}}
@@ -93,8 +123,8 @@ export const ItemInCartMenu : FC = () =>  {
                                     <FormControlLabel
                                         sx={{ marginLeft: "0" }}
                                         value="2"
-                                        // onChange={() => handleChangeType('app', product)}
-                                        // checked={product.statusApp == 'app' ? true : false}
+                                        onChange={() => handleChangeValue(item, 'size', "2")}
+                                        checked={item.size == "2" ? true : false}
                                         control={
                                             <Radio
                                                 style={{}}
@@ -119,8 +149,8 @@ export const ItemInCartMenu : FC = () =>  {
                                     <FormControlLabel
                                         sx={{ marginLeft: "0", fontSize: "13px" }}
                                         value="1"
-                                        // onChange={() => handleChangeType('off', product)}
-                                        // checked={(product.statusApp == 'off' || !product.statusApp) ? true : false}
+                                        onChange={() => handleChangeValue(item, 'sugar', "1")}
+                                        checked={item.sugar == "1" ? true : false}
                                         control={
                                             <Radio
                                                 style={{}}
@@ -133,8 +163,8 @@ export const ItemInCartMenu : FC = () =>  {
                                     <FormControlLabel
                                         sx={{ marginLeft: "0" }}
                                         value="2"
-                                        // onChange={() => handleChangeType('app', product)}
-                                        // checked={product.statusApp == 'app' ? true : false}
+                                        onChange={() => handleChangeValue(item, 'sugar', "2")}
+                                        checked={item.sugar == "2" ? true : false}
                                         control={
                                             <Radio
                                                 style={{}}
@@ -147,8 +177,8 @@ export const ItemInCartMenu : FC = () =>  {
                                     <FormControlLabel
                                         sx={{ marginLeft: "0", fontSize: "13px" }}
                                         value="3"
-                                        // onChange={() => handleChangeType('off', product)}
-                                        // checked={(product.statusApp == 'off' || !product.statusApp) ? true : false}
+                                        onChange={() => handleChangeValue(item, 'sugar', "3")}
+                                        checked={item.sugar == "3" ? true : false}
                                         control={
                                             <Radio
                                                 style={{}}
@@ -161,8 +191,8 @@ export const ItemInCartMenu : FC = () =>  {
                                     <FormControlLabel
                                         sx={{ marginLeft: "0" }}
                                         value="4"
-                                        // onChange={() => handleChangeType('app', product)}
-                                        // checked={product.statusApp == 'app' ? true : false}
+                                        onChange={() => handleChangeValue(item, 'sugar', "4")}
+                                        checked={item.sugar == "4" ? true : false}
                                         control={
                                             <Radio
                                                 style={{}}
@@ -171,6 +201,20 @@ export const ItemInCartMenu : FC = () =>  {
                                             />
                                         }
                                         label={<span className="text-[13px]">30</span>}
+                                    />
+                                    <FormControlLabel
+                                        sx={{ marginLeft: "0" }}
+                                        value="5"
+                                        onChange={() => handleChangeValue(item, 'sugar', "5")}
+                                        checked={item.sugar == "5" ? true : false}
+                                        control={
+                                            <Radio
+                                                style={{}}
+                                                icon={<img src={CheckBoxEmpty} alt="" />}
+                                                checkedIcon={<img src={CheckedBox} alt="" />}
+                                            />
+                                        }
+                                        label={<span className="text-[13px]">0</span>}
                                     />
                                 </RadioGroup>
                             </FormControl>
@@ -187,8 +231,8 @@ export const ItemInCartMenu : FC = () =>  {
                                     <FormControlLabel
                                         sx={{ marginLeft: "0", fontSize: "13px" }}
                                         value="1"
-                                        // onChange={() => handleChangeType('off', product)}
-                                        // checked={(product.statusApp == 'off' || !product.statusApp) ? true : false}
+                                        onChange={() => handleChangeValue(item, 'ice', "1")}
+                                        checked={item.ice == "1" ? true : false}
                                         control={
                                             <Radio
                                                 style={{}}
@@ -201,8 +245,8 @@ export const ItemInCartMenu : FC = () =>  {
                                     <FormControlLabel
                                         sx={{ marginLeft: "0" }}
                                         value="2"
-                                        // onChange={() => handleChangeType('app', product)}
-                                        // checked={product.statusApp == 'app' ? true : false}
+                                        onChange={() => handleChangeValue(item, 'ice', "2")}
+                                        checked={item.ice == "2" ? true : false}
                                         control={
                                             <Radio
                                                 style={{}}
@@ -215,8 +259,8 @@ export const ItemInCartMenu : FC = () =>  {
                                     <FormControlLabel
                                         sx={{ marginLeft: "0", fontSize: "13px" }}
                                         value="3"
-                                        // onChange={() => handleChangeType('off', product)}
-                                        // checked={(product.statusApp == 'off' || !product.statusApp) ? true : false}
+                                        onChange={() => handleChangeValue(item, 'ice', "3")}
+                                        checked={item.ice == "3" ? true : false}
                                         control={
                                             <Radio
                                                 style={{}}
@@ -229,8 +273,8 @@ export const ItemInCartMenu : FC = () =>  {
                                     <FormControlLabel
                                         sx={{ marginLeft: "0" }}
                                         value="4"
-                                        // onChange={() => handleChangeType('app', product)}
-                                        // checked={product.statusApp == 'app' ? true : false}
+                                        onChange={() => handleChangeValue(item, 'ice', "4")}
+                                        checked={item.ice == "4" ? true : false}
                                         control={
                                             <Radio
                                                 style={{}}
@@ -240,6 +284,20 @@ export const ItemInCartMenu : FC = () =>  {
                                         }
                                         label={<span className="text-[13px]">30</span>}
                                     />
+                                    <FormControlLabel
+                                        sx={{ marginLeft: "0" }}
+                                        value="5"
+                                        onChange={() => handleChangeValue(item, 'ice', "5")}
+                                        checked={item.ice == "5" ? true : false}
+                                        control={
+                                            <Radio
+                                                style={{}}
+                                                icon={<img src={CheckBoxEmpty} alt="" />}
+                                                checkedIcon={<img src={CheckedBox} alt="" />}
+                                            />
+                                        }
+                                        label={<span className="text-[13px]">0</span>}
+                                    />
                                 </RadioGroup>
                             </FormControl>
                         </div>
@@ -247,47 +305,27 @@ export const ItemInCartMenu : FC = () =>  {
                     <div>
                         {/* topping */}
                         <div>Topping:</div>
-                        <div className="flex flex-wrap w-full">
-                            <div className="w-1/3 flex gap-2 items-start px-1">
-                                <FormControl sx={{ marginTop: "-5px" }} >
-                                    <FormControlLabel
-                                        sx={{ marginLeft: "0", marginRight: "0", fontSize: "13px", alignItems: "flex-start", }}
-                                        // value={variant._id}
-                                        // id={variant._id}
-                                        // onChange={e => handleChooseVariant(e, itemInCart._id, variant)}
-                                        control={
-                                            <Checkbox
-                                                sx={{ minWidth: "34px", }}
-                                                icon={<img src={CheckBoxEmpty} alt="" />}
-                                                checkedIcon={<img src={CheckedBox} alt="" />}
-                                            />
-                                        }
-                                        label={<div className="text-[13px]" style={{ paddingTop: "7px" }}>
-                                            Pudding trứng (6k)
-                                        </div>}
-                                    />
-                                </FormControl  >
-                            </div>
-                            <div className="w-1/3 flex gap-2 items-start px-1">
-                                <FormControl sx={{ marginTop: "-5px" }} >
-                                    <FormControlLabel
-                                        sx={{ marginLeft: "0", marginRight: "0", fontSize: "13px", alignItems: "flex-start", }}
-                                        // value={variant._id}
-                                        // id={variant._id}
-                                        // onChange={e => handleChooseVariant(e, itemInCart._id, variant)}
-                                        control={
-                                            <Checkbox
-                                                sx={{ minWidth: "34px", }}
-                                                icon={<img src={CheckBoxEmpty} alt="" />}
-                                                checkedIcon={<img src={CheckedBox} alt="" />}
-                                            />
-                                        }
-                                        label={<div className="text-[13px]" style={{ paddingTop: "7px" }}>
-                                            Pudding trứng (6k)
-                                        </div>}
-                                    />
-                                </FormControl  >
-                            </div>
+                        <div className="flex flex-wrap w-full gap-3">
+                            {!!item?.variants?.length && item.variants.map((variant: any) => (
+                                <div key={variant._id} className="w-1/4 flex gap-2 items-start">
+                                    <FormControl sx={{ marginTop: "-5px" }}>
+                                        <FormControlLabel
+                                            sx={{ marginLeft: "0", marginRight: "0", fontSize: "13px", alignItems: "flex-start", }}
+                                            value={variant._id}
+                                            id={variant._id}
+                                            onChange={e => handleChooseVariant(e, item._id, variant, item.createdAt)}
+                                            control={
+                                                <Checkbox
+                                                    sx={{ minWidth: "34px", }}
+                                                    icon={<img src={CheckBoxEmpty} alt="" />}
+                                                    checkedIcon={<img src={CheckedBox} alt="" />}
+                                                />
+                                            }
+                                            label={<div className="text-[13px]" style={{ paddingTop: "7px" }}>{`${variant.name} (${convertCurrency(variant.unitPrice)})`}</div>}
+                                        />
+                                    </FormControl  >
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
