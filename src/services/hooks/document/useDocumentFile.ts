@@ -5,6 +5,7 @@ import type { DocumentFileProps, DocumentFileQueryPayload } from 'typings/docume
 
 interface UseQueryListDocumentFile {
     createDocumentFileMutateAsync: any,
+    updateDocumentFileMutateAsync: any,
     deleteDocumentFileMutateAsync: any,
     loading: boolean;
     totalRecord: number;
@@ -22,6 +23,11 @@ export const useQueryListDocumentFile = (params: DocumentFileQueryPayload): UseQ
     const { mutateAsync: createDocumentFileMutateAsync, isLoading: isLoadingCreateDocumentFile } =
       useMutation((params: any) => DocumentFileRepository.insertDocumentFile(params)
     );
+
+    // update document file
+    const { mutateAsync: updateDocumentFileMutateAsync, isLoading: isLoadingUpdateDocumentFile } =
+     useMutation((params: any) => DocumentFileRepository.update(params)
+   );
 
     const { mutateAsync: deleteDocumentFileMutateAsync } =
       useMutation((params: any) => DocumentFileRepository.deleteDocumentFile(params)
@@ -66,6 +72,7 @@ export const useQueryListDocumentFile = (params: DocumentFileQueryPayload): UseQ
 
     return {
         createDocumentFileMutateAsync,
+        updateDocumentFileMutateAsync,
         deleteDocumentFileMutateAsync,
         loading: isLoading,
         nextCursor,
