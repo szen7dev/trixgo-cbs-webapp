@@ -1628,7 +1628,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                                 <a key={file._id} href={`${process.env.REACT_APP_URL_S3}${file.path}`}>
                                   <div className="border-0.5 border-cbs-border rounded-full px-3 py-1 flex">
                                     <img src={iconFile} className="mr-[5px] w-5 h-5" />
-                                    <span>{file?.nameOrg}</span>
+                                    <span>{file?.nameOrg.substring(0, 20)}...</span>
                                   </div>
                                 </a>
                             ))
@@ -1644,7 +1644,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                                 <a key={file._id} href={`${process.env.REACT_APP_URL_S3}${file.path}`}>
                                   <div className="border-0.5 border-cbs-border rounded-full px-3 py-1 flex">
                                     <img src={iconPhoto} className="mr-[5px] w-6 h-6"/>
-                                    <span>image_{file?.nameOrg}</span>
+                                    <span>image_{file?.nameOrg.substring(0, 10)}...</span>
                                   </div>
                                 </a>
                             ))
