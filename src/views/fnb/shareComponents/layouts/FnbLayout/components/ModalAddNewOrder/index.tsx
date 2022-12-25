@@ -167,6 +167,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
     const response: any = await API.get(
       `/api/fnb/products?${convertObToUrl({
         type: 1,
+        limit: 50,
         keyword: keywordSearchProduct,
         populates: JSON.stringify({
           path: 'images',
@@ -177,18 +178,18 @@ export const ModalAddNewOrder: FC<Props> = () => {
     const { data, status } = response?.data;
     if (status !== 200) return;
 
-    const productsAsync = data.listRecords?.map?.(async (product: any) => {
-      const response = await API.get(
-        `/api/fnb/products?type=2`,
-      );
+    const response2 = await API.get(
+      `/api/fnb/products?type=2&limit=50`,
+    );
 
+    const productsAsync = data.listRecords?.map?.(async (product: any) => {
       return {
         ...product,
-        variants: response?.data?.data?.listRecords,
+        variants: response2?.data?.data?.listRecords,
       }
     })
-
     const products = await Promise.all(productsAsync);
+    console.log("productsAsync", products);
     setProducts(products);
   };
 
