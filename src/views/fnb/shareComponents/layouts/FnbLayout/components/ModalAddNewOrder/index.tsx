@@ -7,7 +7,7 @@ import { useHistory } from 'react-router-dom';
 import { number, object, string } from "yup";
 import { toast } from "react-toastify";
 import debounce from "lodash/debounce";
-import { convertCurrency } from 'utils/converter';
+import { formatNumberMoney, convertCurrency } from 'utils/converter';
 import { useSocket } from "services/hooks/useSocket";
 import { useAuth } from 'services/hooks/auth/useAuth';
 import { useQueryClient } from 'react-query';
@@ -926,7 +926,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   key={product._id}
                                   type="button"
                                   className="w-full h-full relative"
-                                  style={{ maxWidth: "250px", maxHeight: "250px" }}
+                                  // style={{ maxWidth: "250px", maxHeight: "250px" }}
+                                  style={{ width: "24%" }}
                                   onClick={() => {
                                     setProductsInCart((prevProducts: any) => {
                                       return [...prevProducts, {
@@ -940,11 +941,10 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                     });
                                   }}
                                 >
-                                  {/* <img src={DemoTraSua} className="w-full h-full" /> */}
                                   <img src={product?.images?.length ? `${process.env.REACT_APP_URL_S3}${product?.images[0]?.path}` : DemoTraSua} className="w-full h-full" />
-                                  <div className="w-full absolute bottom-0	 bg-black opacity-75	text-white text-14px px-3 py-1" style={{ maxWidth: "250px" }}>
-                                    <div className="overflow-ellipsis line-clamp-2">{product.name}</div>
-                                    <div className="text-right">{convertCurrency(product.unitPrice)}</div>
+                                  <div className="w-full absolute bottom-0 bg-black opacity-75 text-white text-[14px] px-3 py-1" style={{ maxWidth: "250px" }}>
+                                    <div className="overflow-ellipsis line-clamp-2 text-left">{product.name}</div>
+                                    <div className="text-right font-bold">{formatNumberMoney(product.unitPrice)}</div>
                                   </div>
                                 </button>
                               ))}
@@ -975,7 +975,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                       <div className="">
                         <div className="flex justify-between my-2 p-2">
                           <div className="font-bold">Tổng tiền</div>
-                          <div className="font-bold">{convertCurrency(totalMoney)}</div>
+                          <div className="font-bold">{formatNumberMoney(totalMoney)}</div>
                         </div>
                         <div className="flex justify-between items-center mb-1 px-2 py-2">
                           <div className="">Chiết khấu</div>
@@ -1023,7 +1023,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                       <div className="border-t-0.5 border-b-0.5 px-2 py-2">
                         <div className="flex justify-between">
                           <div className="font-bold">Thanh toán</div>
-                          <div className={`font-bold ${totalPay > 0 ? 'text-primary' : 'text-red-500'} font-bold`}>{convertCurrency(totalPay)}</div>
+                          <div className={`font-bold ${totalPay > 0 ? 'text-primary' : 'text-red-500'} font-bold`}>{formatNumberMoney(totalPay)}</div>
                         </div>
                       </div>
                       <div className="text-right mb-5 mx-2" style={{ marginTop: "100px" }}>

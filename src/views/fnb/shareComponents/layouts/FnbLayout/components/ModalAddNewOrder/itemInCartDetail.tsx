@@ -13,7 +13,7 @@ import IconSearch from "assets/images/icons8-search-96 1.svg";
 import DemoTraSua from "assets/images/image 430.png";
 import IconCancel from "assets/images/icons8-cancel-96 1.svg";
 import { Checkbox, FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
-import { convertCurrency } from "utils/converter";
+import { formatNumberMoney, convertCurrency } from "utils/converter";
 
 export const ItemInCartMenu : FC<any> = ({item, service, handleChooseVariant, handleChangeQuantity, increaseCount, decreaseCount, handleChangeNote, handleChangeValue, handleRemoveItem}) =>  {
     const [menuShowList, setMenuState] = useState(false);
@@ -43,7 +43,7 @@ export const ItemInCartMenu : FC<any> = ({item, service, handleChooseVariant, ha
                 amount += variant.unitPrice * product.quantity;
             });
         }
-        return convertCurrency(amount);
+        return formatNumberMoney(amount);
     }
 
     return (
@@ -322,7 +322,7 @@ export const ItemInCartMenu : FC<any> = ({item, service, handleChooseVariant, ha
                                                     checkedIcon={<img src={CheckedBox} alt="" />}
                                                 />
                                             }
-                                            label={<div className="text-[13px]" style={{ paddingTop: "7px" }}>{`${variant.name} (${convertCurrency(variant.unitPrice)})`}</div>}
+                                            label={<div className="text-[13px]" style={{ paddingTop: "7px" }}>{`${variant.name} (${formatNumberMoney(variant.unitPrice)})`}</div>}
                                         />
                                     </FormControl  >
                                 </div>
