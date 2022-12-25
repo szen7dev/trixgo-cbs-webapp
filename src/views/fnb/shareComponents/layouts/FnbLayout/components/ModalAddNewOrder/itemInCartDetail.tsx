@@ -10,7 +10,7 @@ import CheckedBox from "assets/images/Check-All.svg";
 import RadioEmpty from "assets/images/Ellipse 27.svg";
 import RadioChecked from "assets/images/icons8-checked-40 (2) 2.svg";
 import IconSearch from "assets/images/icons8-search-96 1.svg";
-import DemoTraSua from "assets/images/image 430.png";
+import beverageIcon from "assets/images/icons8-beverage.png";
 import IconCancel from "assets/images/icons8-cancel-96 1.svg";
 import { Checkbox, FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { formatNumberMoney, convertCurrency } from "utils/converter";
@@ -50,7 +50,7 @@ export const ItemInCartMenu : FC<any> = ({item, service, handleChooseVariant, ha
         <div className="">
             <div className="border-b-0.5 mb-2 bg-white">
                 <div className="flex gap-2 w-full border-b-0.5 py-2 pl-3 pr-3">
-                    <img src={item?.images?.length ? `${process.env.REACT_APP_URL_S3}${item?.images[0]?.path}` : DemoTraSua} alt="item" className="w-[44px] h-[44px]" />
+                    <img src={item?.images?.length ? `${process.env.REACT_APP_URL_S3}${item?.images[0]?.path}` : beverageIcon} alt="item" className="w-[44px] h-[44px]" />
                     <div className="w-full">
                         <div className="flex justify-between">
                             <div>

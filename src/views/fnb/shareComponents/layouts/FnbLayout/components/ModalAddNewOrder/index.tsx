@@ -29,7 +29,7 @@ import CheckedBox from "assets/images/Check-All.svg";
 import RadioEmpty from "assets/images/Ellipse 27.svg";
 import RadioChecked from "assets/images/icons8-checked-40 (2) 2.svg";
 import IconSearch from "assets/images/icons8-search-96 1.svg";
-import DemoTraSua from "assets/images/image 430.png";
+import beverageIcon from "assets/images/icons8-beverage.png";
 import IconCancel from "assets/images/icons8-cancel-96 1.svg";
 
 import "react-day-picker/lib/style.css";
@@ -941,7 +941,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                     });
                                   }}
                                 >
-                                  <img src={product?.images?.length ? `${process.env.REACT_APP_URL_S3}${product?.images[0]?.path}` : DemoTraSua} className="w-full h-full" />
+                                  <img src={product?.images?.length ? `${process.env.REACT_APP_URL_S3}${product?.images[0]?.path}` : beverageIcon} className="w-full h-full" />
                                   <div className="w-full absolute bottom-0 bg-black opacity-75 text-white text-[14px] px-3 py-1" style={{ maxWidth: "250px" }}>
                                     <div className="overflow-ellipsis line-clamp-2 text-left">{product.name}</div>
                                     <div className="text-right font-bold">{formatNumberMoney(product.unitPrice)}</div>
