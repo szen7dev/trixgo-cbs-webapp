@@ -329,6 +329,8 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
   };
   const open = Boolean(anchorEl);
 
+  // console.log(listDataForSubject)
+
   return (
     <div className="t-home flex flex-col h-full overflow-hidden">
       <div className={"sticky top-0 bg-white z-10"}>
@@ -1251,7 +1253,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                 id="checkAll"
                 style={{ width: "14px", height: "14px" }}
               />
-              <div>
+              {/* <div>
                 <button onClick={() => setpopBox1(!popBox1)} className="relative w-[20px] h-[20px]">
                   <img src={arrowDown} className="m-auto" />
                 </button>
@@ -1278,9 +1280,9 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                     Chủ đề không quan tâm
                   </button>
                 </div>
-              </div>
+              </div> */}
             </div>
-            <div className="flex gap-7 items-center">
+            {/* <div className="flex gap-7 items-center">
               <button><img src={trashIcon} alt="" /></button>
               <button><img src={mailIcon} alt="" /></button>
               <button onClick={() => setpopBox2(!popBox2)} className="relative w-[20px] h-[20px]">
@@ -1309,7 +1311,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                   </button>
                 </div>
               </button>
-            </div>
+            </div> */}
           </div>
           {/* <button
             onClick={() => setFilter("all")}
@@ -1544,6 +1546,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
             <tbody>
               {(listDataForSubject[pageIndex] ?? []).map(
                 (item: any, index: number) => {
+                  console.log(item.lastComment?.files)
                   return (
                     <tr
                       key={index}
@@ -1616,6 +1619,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                             {subContentHtml(item.lastComment?.content)}
                           </p>
                         </Link>
+                        {/* Attach files */}
                         {/* <div className="flex gap-2 text-primary-gray pb-2">
                           <div className="border-0.5 border-cbs-border rounded-full px-3 py-1 flex">
                           <img src={icons8pdf} className="mr-[5px]" />
@@ -1623,6 +1627,19 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                           </div>
                           <div className="border-0.5 border-cbs-border rounded-full py-1 px-2">+2</div>
                         </div> */}
+
+                        {
+                            // (item?.lastComment?.files.length && item?.lastComment?.files).map((file: any, subindex: any) => (
+                            //   <div key={file._id} className="flex gap-2 text-primary-gray pb-2">
+                            //     <div className="border-0.5 border-cbs-border rounded-full px-3 py-1 flex">
+                            //     <img src={icons8pdf} className="mr-[5px]" />
+                            //     <span>2022.09.26.FCT</span>
+                            //     </div>
+                            //     <div className="border-0.5 border-cbs-border rounded-full py-1 px-2">+2</div>
+                            //   </div>
+                            // ))
+                        }
+
                       </td>
                       <td className={"w-[100px] align-middle"}>
 
