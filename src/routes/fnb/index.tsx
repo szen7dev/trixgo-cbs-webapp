@@ -19,7 +19,11 @@ import { FnBHomePage } from "views/fnb/pages/FnbHomePage/index";
 import { FnBProductPage } from "views/fnb/pages/FnbProductPage/index";
 import { FnbProductQuotasPage } from "views/fnb/pages/FnbProductQuotasPage/index";
 import { FnbShiftPage } from "views/fnb/pages/FnbShiftPage/index";
+import { FnbContactPage } from "views/fnb/pages/FnbContactPage/index";
+import { FnbContactDetailPage } from "views/fnb/pages/FnbContactDetailPage/index";
+import { FnbRiskReportPage } from "views/fnb/pages/FnbRiskReportPage/index";
 import { FnbShiftDetailPage } from "views/fnb/pages/FnbShiftDetailPage/index";
+import { FnbRiskReportDetailPage } from "views/fnb/pages/FnbRiskReportDetailPage/index";
 import { FnbShiftMaterialPage } from "views/fnb/pages/FnbShiftMaterialPage/index";
 import { FnbReportPage } from "views/fnb/pages/FnbReportPage/index";
 import { FnbStorePage } from "views/fnb/pages/FnbStorePage/index";
@@ -92,6 +96,46 @@ const FnbRouter: FC = () => {
                 component={() =>
                     <FnbLayout>
                         <FnbShiftMaterialPage/>
+                    </FnbLayout>
+                }
+            />
+
+            <Route
+                exact
+                path="/fnb/risk-report"
+                component={() =>
+                    <FnbLayout>
+                        <FnbRiskReportPage/>
+                    </FnbLayout>
+                }
+            />
+
+            <Route
+                exact
+                path="/fnb/risk-report/:fundaID"
+                component={() =>
+                    <FnbLayout>
+                        <FnbRiskReportDetailPage/>
+                    </FnbLayout>
+                }
+            />
+
+            <Route
+                exact
+                path="/fnb/contacts"
+                component={() =>
+                    <FnbLayout>
+                        <FnbContactPage/>
+                    </FnbLayout>
+                }
+            />
+
+            <Route
+                exact
+                path="/fnb/contacts/:fundaID"
+                component={() =>
+                    <FnbLayout>
+                        <FnbContactDetailPage/>
                     </FnbLayout>
                 }
             />

@@ -151,6 +151,10 @@ export const FnbLeftSideBar: FC = () => {
                         <img width={'20px'} src={reportIcon} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Báo cáo rủi ro</span>
                     </NavLink>
+                    <NavLink to={`/fnb/contacts`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                        <img width={'20px'} src={reportIcon} alt="Menu item" />
+                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Danh bạ khách hàng</span>
+                    </NavLink>
                     <NavLink to={`/fnb/shift`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                         <img width={'20px'} src={shiftcon} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Ca làm việc</span>
