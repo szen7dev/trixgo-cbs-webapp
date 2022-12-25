@@ -1546,7 +1546,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
             <tbody>
               {(listDataForSubject[pageIndex] ?? []).map(
                 (item: any, index: number) => {
-                  console.log(item.lastComment?.files)
+                  // console.log(item.lastComment?.files)
                   return (
                     <tr
                       key={index}
