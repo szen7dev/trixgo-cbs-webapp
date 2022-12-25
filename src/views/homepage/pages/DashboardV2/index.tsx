@@ -1627,17 +1627,16 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                           </div>
                           <div className="border-0.5 border-cbs-border rounded-full py-1 px-2">+2</div>
                         </div> */}
-
                         {
-                            // (item?.lastComment?.files.length && item?.lastComment?.files).map((file: any, subindex: any) => (
-                            //   <div key={file._id} className="flex gap-2 text-primary-gray pb-2">
-                            //     <div className="border-0.5 border-cbs-border rounded-full px-3 py-1 flex">
-                            //     <img src={icons8pdf} className="mr-[5px]" />
-                            //     <span>2022.09.26.FCT</span>
-                            //     </div>
-                            //     <div className="border-0.5 border-cbs-border rounded-full py-1 px-2">+2</div>
-                            //   </div>
-                            // ))
+                          (item?.lastComment?.files)?.map((file: any, subindex: any) => (
+                            <div key={file._id} className="flex gap-2 text-primary-gray pb-2">
+                              <div className="border-0.5 border-cbs-border rounded-full px-3 py-1 flex">
+                              <img src={icons8pdf} className="mr-[5px]" />
+                              <span>{file?.nameOrg}</span>
+                              </div>
+                              <div className="border-0.5 border-cbs-border rounded-full py-1 px-2">+2</div>
+                            </div>
+                          ))
                         }
 
                       </td>
