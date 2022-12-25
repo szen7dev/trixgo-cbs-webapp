@@ -25,7 +25,9 @@ import mailIcon from "assets/images/icons8-email-96 1.svg";
 import moreIcon from "assets/images/moreIcon.svg";
 import arrowDown from "assets/images/icon-arrowdown.svg";
 import defaultAva from "assets/images/image 166.jpg";
-import icons8pdf from "assets/images/icons8-pdf-100 1.svg";
+import iconPhoto from "assets/images/icons8-photo.svg";
+import iconPdf from "assets/images/icons8-attach.svg";
+import iconFile from "assets/images/icons8-attach.svg";
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 
@@ -1605,12 +1607,12 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                       <td className={"w-td-dashboard"}>
                         <Link to={"/pcm/detail/" + item._id}>
                           <div className={"task-title truncate text-[14px] mt-2"} style={{ lineHeight: "20px" }}>
-                            {/* <span className="bg-cbs-orage text-white mr-1 py-1 px-3 rounded-md">Cao</span> */}
+                            {item?.priority == 3 ? 
+                              <span className="bg-cbs-orage text-white mr-1 py-1 px-3 rounded-md">Cao</span>
+                              : <></>
+                            }
                             {item.project.sign}.{subContentHtml(item.name)}
                           </div>
-                          {/* <p className={"task-title truncate text-[14px] mt-2"}>
-                            {item.project.sign}.{subContentHtml(item.name)}
-                          </p> */}
                           <p
                             className={
                               "crop-text truncate text-xs text-primary-gray py-2"
@@ -1620,26 +1622,37 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                           </p>
                         </Link>
                         {/* Attach files */}
-                        {/* <div className="flex gap-2 text-primary-gray pb-2">
-                          <div className="border-0.5 border-cbs-border rounded-full px-3 py-1 flex">
-                          <img src={icons8pdf} className="mr-[5px]" />
-                          <span>2022.09.26.FCT</span>
-                          </div>
-                          <div className="border-0.5 border-cbs-border rounded-full py-1 px-2">+2</div>
-                        </div> */}
-
-                        {
-                            // (item?.lastComment?.files.length && item?.lastComment?.files).map((file: any, subindex: any) => (
-                            //   <div key={file._id} className="flex gap-2 text-primary-gray pb-2">
-                            //     <div className="border-0.5 border-cbs-border rounded-full px-3 py-1 flex">
-                            //     <img src={icons8pdf} className="mr-[5px]" />
-                            //     <span>2022.09.26.FCT</span>
-                            //     </div>
-                            //     <div className="border-0.5 border-cbs-border rounded-full py-1 px-2">+2</div>
-                            //   </div>
-                            // ))
-                        }
-
+                        <div className="flex mr-2 gap-2 text-primary-gray pb-2">
+                          {
+                            (item?.lastComment?.files)?.slice(0, 3).map((file: any, subindex: any) => (
+                                <a key={file._id} href={`${process.env.REACT_APP_URL_S3}${file.path}`}>
+                                  <div className="border-0.5 border-cbs-border rounded-full px-3 py-1 flex">
+                                    <img src={iconFile} className="mr-[5px] w-5 h-5" />
+                                    <span>{file?.nameOrg.substring(0, 20)}...</span>
+                                  </div>
+                                </a>
+                            ))
+                          }
+                           {item?.lastComment?.files.length > 3 && (
+                              <div className="border-0.5 border-cbs-border rounded-full py-1 px-2">+{item?.lastComment?.files.length-1}</div>
+                            )}
+                        </div>
+                        {/* Attach Images */}
+                        <div className="flex mr-2 gap-2 text-primary-gray pb-2">
+                          {
+                            (item?.lastComment?.images)?.slice(0, 3).map((file: any, subindex: any) => (
+                                <a key={file._id} href={`${process.env.REACT_APP_URL_S3}${file.path}`}>
+                                  <div className="border-0.5 border-cbs-border rounded-full px-3 py-1 flex">
+                                    <img src={iconPhoto} className="mr-[5px] w-6 h-6"/>
+                                    <span>image_{file?.nameOrg.substring(0, 10)}...</span>
+                                  </div>
+                                </a>
+                            ))
+                          }
+                           {item?.lastComment?.images.length > 3 && (
+                              <div className="border-0.5 border-cbs-border rounded-full py-1 px-2">+{item?.lastComment?.images.length-1}</div>
+                            )}
+                        </div>
                       </td>
                       <td className={"w-[100px] align-middle"}>
 
