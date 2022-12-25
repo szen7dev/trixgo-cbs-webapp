@@ -927,7 +927,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   type="button"
                                   className="w-full h-full relative"
                                   // style={{ maxWidth: "250px", maxHeight: "250px" }}
-                                  style={{ width: "24%" }}
+                                  style={{ width: "19%" }}
                                   onClick={() => {
                                     setProductsInCart((prevProducts: any) => {
                                       return [...prevProducts, {
