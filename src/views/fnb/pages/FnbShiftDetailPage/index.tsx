@@ -260,7 +260,7 @@ export const FnbShiftDetailPage: FC = () => {
 				{
 					(listWithPager[pageIndex]??[]).map((item: any, i: any) => (
 						<tr key={item._id} className="text-[14px]">
-							<td className={"p-2 border-0.5 border-primary-border text-cente"}>
+							<td className={"p-2 border-0.5 border-primary-border text-center"}>
 								<input
 									className="form-check-input"
 									type="checkbox"
@@ -276,7 +276,7 @@ export const FnbShiftDetailPage: FC = () => {
 							{/* <td className={"p-2 border-0.5 border-primary-border"}>
 								{moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
 							</td> */}
-							<td className={"p-2 border-0.5 border-primary-border"}>
+							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
 								{formatNumberMoney(500000)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
@@ -285,10 +285,10 @@ export const FnbShiftDetailPage: FC = () => {
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{formatNumberMoney(1500000)}
 							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
+							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
 								{formatNumberMoney(200000)}
 							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
+							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
 								{formatNumberMoney(1200000)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
@@ -315,7 +315,7 @@ export const FnbShiftDetailPage: FC = () => {
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{formatNumberMoney(300000)}
 							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
+							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
 								{item?.note}
 							</td>
 						</tr>
