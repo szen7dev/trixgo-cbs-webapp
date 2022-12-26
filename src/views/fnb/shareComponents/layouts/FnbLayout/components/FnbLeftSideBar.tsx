@@ -149,7 +149,7 @@ export const FnbLeftSideBar: FC = () => {
                     </NavLink>
                     <NavLink to={`/fnb/risk-report`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                         <img width={'20px'} src={reportIcon} alt="Menu item" />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Báo cáo rủi ro</span>
+                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Báo cáo lỗi</span>
                     </NavLink>
                     <NavLink to={`/fnb/contacts`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                         <img width={'20px'} src={reportIcon} alt="Menu item" />

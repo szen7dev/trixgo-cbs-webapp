@@ -284,32 +284,27 @@ export const FnbStorePage: FC = () => {
 						</th>
 					</tr>
 				</thead>
-
 				{
 					(listWithPager[pageIndex] ?? []).map((item: any, i: any) => (
 						<tr key={item._id} className="text-[14px]">
 							<td className={"p-2 border-t-0.5 border-b-0.5 border-primary-border text-center"}>{Number(i + 1)}</td>
-							<td className={"p-2 border-t-0.5 border-b-0.5 border-primary-border"}>
-								{item?.name}
-							</td>
 							<td className={"p-2 border-t-0.5 border-b-0.5 border-primary-border text-cbs-highlight-color"}>
-								{formatNumberMoney(0 || 0)}
 								<Link to={`/fnb/store/${item._id}/import`}>
-									<p><i>Xem chi tiết</i></p>
-								</Link>
-							</td>
-							<td className={"p-2 border-t-0.5 border-b-0.5 border-primary-border"}>
-								{formatNumberMoney(0 || 0)}
-								<Link to={`/fnb/store/${item._id}/export`}>
-									<p><i>Xem chi tiết</i></p>
+									{item?.name}
 								</Link>
 							</td>
 							<td className={"p-2 border-t-0.5 border-b-0.5 border-primary-border"}>
 								{formatNumberMoney(0 || 0)}
 							</td>
 							<td className={"p-2 border-t-0.5 border-b-0.5 border-primary-border"}>
-								<span className="text-cbs-down-text">Rủi ro, vượt kiểm soát</span>
-								<span className="text-cbs-completed">Rủi ro, vượt kiểm soát</span>
+								{formatNumberMoney(0 || 0)}
+							</td>
+							<td className={"p-2 border-t-0.5 border-b-0.5 border-primary-border"}>
+								{formatNumberMoney(0 || 0)}
+							</td>
+							<td className={"p-2 border-t-0.5 border-b-0.5 border-primary-border"}>
+								<p className="text-cbs-down-text">Rủi ro, vượt kiểm soát</p>
+								<p className="text-cbs-completed">An toàn</p>
 							</td>
 							<td className={"p-2 border-t-0.5 border-b-0.5 border-primary-border"}>
 								{item?.description}
@@ -319,5 +314,5 @@ export const FnbStorePage: FC = () => {
 				}
 			</table>
 		</main>
-	);
-};
+	)
+}
