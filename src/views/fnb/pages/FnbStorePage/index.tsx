@@ -95,7 +95,7 @@ export const FnbStorePage: FC = () => {
 	const SelectYear = () => {
 		return (
 			<div className="selectInput flex border-0.5 rounded-md" style={{ maxHeight: "30px" }}>
-				<img src={iconSelectTime} alt="" className="absolute w-[30px] h-[30px]" style={{padding:"1px"}} />
+				<img src={iconSelectTime} alt="" className="absolute w-[30px] h-[30px]" style={{ padding: "1px" }} />
 				<FormControl
 					sx={{ minWidth: 120, maxHeight: "30px", padding: "0", border: "0", outline: "none" }}
 					className="relative"
@@ -107,10 +107,10 @@ export const FnbStorePage: FC = () => {
 							name: 'time',
 							id: 'selectInput',
 						}}
-						sx={{ maxHeight: "30px", fontSize:"14px", color:"#666666" }}
+						sx={{ maxHeight: "30px", fontSize: "14px", color: "#666666" }}
 						className="text-[14px] text-primary-gray"
 					>
-						<option value={0} className="my-2 py-2 text-[14px] text-primary-gray" style={{lineHeight:"30px"}}>Tất cả</option>
+						<option value={0} className="my-2 py-2 text-[14px] text-primary-gray" style={{ lineHeight: "30px" }}>Tất cả</option>
 						<option value={10} className="my-2 py-2 text-[14px] text-primary-gray">Năm 2022</option>
 						<option value={20} className="my-2 py-2 text-[14px] text-primary-gray">Năm 2022</option>
 						<option value={30} className="my-2 py-2 text-[14px] text-primary-gray">Năm 2022</option>
@@ -146,7 +146,7 @@ export const FnbStorePage: FC = () => {
 					aria-label="text alignment"
 					sx={{
 						display: "flex",
-						gap: "0.25rem",
+						gap: "0.5rem",
 						border: "0",
 						borderRadius: "0",
 						marginLeft: "10px",
@@ -212,20 +212,22 @@ export const FnbStorePage: FC = () => {
 
 	return (
 		<main className="h-full overflow-auto">
-			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
-				<div className="flex items-center">
-					<button onClick={history.goBack}>
-						<img src="/images/common/button_back.png" alt="Button Back" />
-					</button>
-					<p className="text-lg">{infoProduct?.name}</p>
-					<SearchInput
-						classNameWrapper="ml-4"
-						classNameInput="outline-none w-[296px]"
-						onChange={debounce(
-							(event: any) => setKeyword(event.target.value),
-							500
-						)}
-					/>
+			<header className="mt-1 sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] pl-3 pr-6 border-0.5 border-primary-border rounded-t-2xl" style={{borderRadius:"15px 15px 0px 0px",}}>
+				<div className="flex items-center gap-2">
+					<div className="flex items-center">
+						{/* <button onClick={history.goBack}>
+							<img src="/images/common/button_back.png" alt="Button Back" />
+						</button> */}
+						<p className="text-lg">{infoProduct?.name}</p>
+						<SearchInput
+							classNameWrapper="ml-4"
+							classNameInput="outline-none w-[296px]"
+							onChange={debounce(
+								(event: any) => setKeyword(event.target.value),
+								500
+							)}
+						/>
+					</div>
 					<SelectYear />
 					<SelectMonth />
 				</div>
@@ -246,7 +248,7 @@ export const FnbStorePage: FC = () => {
 				/>
 			</header>
 
-			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
+			<table className="table-fixed border-collapse w-full overflow-auto  border-primary-border">
 				<thead className="h-10 border-b border-primary-border">
 					<tr className="text-left text-sm text-primary-gray font-bold">
 						<th className="pb-1 pt-1 text-center font-bold" style={{ width: "3.5%" }}>TT</th>
