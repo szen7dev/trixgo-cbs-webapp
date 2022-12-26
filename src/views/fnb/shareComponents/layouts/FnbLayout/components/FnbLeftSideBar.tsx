@@ -127,7 +127,7 @@ export const FnbLeftSideBar: FC = () => {
                         onClick={() =>
                             openModal(
                                 <div 
-                                className="w-full text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block"
+                                className="w-full text-left transition-all transform bg-primary-light shadow-xl rounded my-6 align-top inline-block"
                                 style={{maxWidth:" calc(100vw - 50px)"}}
                                 >
                                     <ModalAddNewOrder />
