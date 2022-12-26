@@ -187,27 +187,32 @@ export const FnbShiftDetailPage: FC = () => {
 						</th>
 						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
-								Tổng tiền mặt
+								Tiền đầu ca (1)
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
-								Tiền đầu ca
+								Tiền khách trả (2)
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
-								Tiền tồn cuối ca
+								Tổng tiền mặt (3=1+2)
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
-								Chi phí phát sinh
+								Chi phí trong ca (4)
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
-								Dư/Thiếu
+								Tồn cuối ca (5)
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
+							<div className="pl-2">
+								Dư/Thiếu (4+5-3)
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
@@ -245,7 +250,6 @@ export const FnbShiftDetailPage: FC = () => {
 								Tiền Bee
 							</div>
 						</th>
-
 						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
 								Ghi chú
@@ -273,19 +277,22 @@ export const FnbShiftDetailPage: FC = () => {
 								{moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
 							</td> */}
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(1000000)}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
 								{formatNumberMoney(500000)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(300000)}
+								{formatNumberMoney(1000000)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(300000)}
+								{formatNumberMoney(1500000)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(300000)}
+								{formatNumberMoney(200000)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(1200000)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(-100000)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{formatNumberMoney(300000)}
