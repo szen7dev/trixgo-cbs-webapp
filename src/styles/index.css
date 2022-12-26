@@ -1140,6 +1140,14 @@ button {
 .select-search:focus {
   outline: none;
 }
+.selectInput .MuiInputBase-formControl .MuiSelect-select{
+  padding: 0;
+} 
+.selectInput .MuiInputBase-formControl .MuiNativeSelect-select{
+  padding-left: 40px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
 .transition-1s{
   transition: 1s;
   -webkit-transition: 1s;
