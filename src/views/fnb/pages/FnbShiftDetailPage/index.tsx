@@ -173,49 +173,80 @@ export const FnbShiftDetailPage: FC = () => {
 			</header>
 
 			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
-			<thead className="bg-cbs-table-header h-10 border-b border-primary-border">
+			<thead className="bg-cbs-table-header h-10 border-b">
 					<tr className="text-left text-sm text-primary-gray text-[14px]">
-						<th className="pb-1 pt-1 w-[50px] font-normal">
+						<th className="pb-1 pt-1 w-[50px] font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
-								TT
+								#
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal">
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border w-[150px]">
 							<div className="pl-2">
-								Nội dung
+								Ca làm việc
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal">
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
-								Bàn giao nguyên liệu
+								Tổng tiền mặt
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal">
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
-								Bàn giao tiền
+								Tiền đầu ca
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal">
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
-								Thời gian khởi tạo
+								Tiền tồn cuối ca
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal">
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
-								Doanh số
+								Chi phí phát sinh
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal">
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
-								Số đơn hàng
+								Dư/Thiếu
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal">
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
-								Số hàng hóa
+								Tiền chuyển khoản
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal">
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
+							<div className="pl-2">
+								Tiền Grab
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
+							<div className="pl-2">
+								Tiền Shopee
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
+							<div className="pl-2">
+								Tiền Gojek
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
+							<div className="pl-2">
+								Tiền Baemin
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
+							<div className="pl-2">
+								Tiền Loship
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
+							<div className="pl-2">
+								Tiền Bee
+							</div>
+						</th>
+
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
 								Ghi chú
 							</div>
@@ -233,30 +264,49 @@ export const FnbShiftDetailPage: FC = () => {
 									onChange={() => onClickCheckButton(item._id)}
 								/>
 							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								{item?.name}
+							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"} title="Bàn giao nguyên liệu">
+								<Link to ={`/fnb/shift/${fundaID}/${item._id}/material`}>
+									{item?.name}
+								</Link>
 							</td>
-							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
-								{/* <Link to ={`/fnb/shift/${fundaID}/${item._id}/material`}>
-									Chi tiết
-								</Link> */}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
-								{/* <Link to ={`/fnb/shift/${fundaID}/${item._id}/cash`}>
-									Chi tiết
-								</Link> */}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
+							{/* <td className={"p-2 border-0.5 border-primary-border"}>
 								{moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
+							</td> */}
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(1000000)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(item?.total||0)} đ
+								{formatNumberMoney(500000)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(item?.numberOfOrders||0)}
+								{formatNumberMoney(300000)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(item?.numberOfProducts||0)}
+								{formatNumberMoney(300000)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(300000)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(300000)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(300000)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(300000)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(300000)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(300000)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(300000)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(300000)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{item?.note}

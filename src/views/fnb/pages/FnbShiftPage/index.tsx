@@ -129,15 +129,6 @@ export const FnbShiftPage: FC = () => {
 								<>
 								<div
 									className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
-									// onClick={() => {
-									// 	const item = listWithPager[pageIndex].find((e: any) => e._id == idsChecked[0]);
-									// 	setInitialValues({
-									// 		...item,
-									// 		startTime: item.startTime ? moment(item.startTime).format('MM/DD/YYYY') : '',
-									// 		expiredTime: item.expiredTime ? moment(item.expiredTime).format('MM/DD/YYYY') : '',
-									// 	});
-									// 	toggleModalCreateProject();
-									// }}
 								>
 									<img src={PencilIcon} alt="Pencil" />
 								</div>
@@ -146,20 +137,6 @@ export const FnbShiftPage: FC = () => {
 						</div>
 					) : <></>}
 				</div>
-				{/* <div className="flex items-center">
-					<button
-						className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold ml-6"
-						onClick={() => {
-							setInitialValues(null);
-							toggleModalCreateProject();
-						}}
-					>
-						Tạo mới
-					</button>
-					<button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
-						<img src={Vertical3Dots} alt="3Dots" />
-					</button>
-				</div> */}
 				<PaginateV2
                         ref={ref}
                         totalRecord={totalRecord}
@@ -186,14 +163,24 @@ export const FnbShiftPage: FC = () => {
 								Điểm bán
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal">
+						{/* <th className="pb-1 pt-1 font-normal">
 							<div className="border-gray-300 font-normal pl-2">
-								Phân loại
+								Bàn giao ca
 							</div>
 						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="border-gray-300 font-normal pl-2">
+								Bàn giao nguyên liệu
+							</div>
+						</th> */}
 						<th className="pb-1 pt-1 font-normal w-[150px]">
 							<div className="border-gray-300 font-normal pl-2">
 								Cán bộ quản lý
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="border-gray-300 font-normal pl-2">
+								Phân loại
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal w-[200px]">
@@ -222,11 +209,21 @@ export const FnbShiftPage: FC = () => {
 									{item?.name}
 								</Link>
 							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								{FNB_INTERNAL[Number(item?.internal)-1]?.text}
+							{/* <td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
+								<Link to ={`/fnb/shift/${item._id}`}>
+									Bàn giao ca
+								</Link>
 							</td>
+							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
+								<Link to ={`/fnb/shift/${item._id}/material`}>
+									Bàn giao nguyên liệu
+								</Link>
+							</td> */}
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								------
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{FNB_INTERNAL[Number(item?.internal)-1]?.text}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{item?.address}

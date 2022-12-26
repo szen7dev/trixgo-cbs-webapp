@@ -19,6 +19,8 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 import homeIcon from 'assets/images/icons-home.svg';
 import reportIcon from 'assets/images/icons-report.svg';
+import contactIcon from 'assets/images/icons8-contacts-96.svg';
+import riskIcon from 'assets/images/icons8-high-risk-100.svg';
 import menuIcon from 'assets/images/icons8-order.svg';
 import shiftcon from 'assets/images/icons-shift.svg';
 import { ModalCreateOrUpdateCustomer, ModalConfirm } from 'views/item/shareComponents/common';
@@ -148,11 +150,11 @@ export const FnbLeftSideBar: FC = () => {
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Báo cáo doanh thu</span>
                     </NavLink>
                     <NavLink to={`/fnb/risk-report`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                        <img width={'20px'} src={reportIcon} alt="Menu item" />
+                        <img width={'20px'} src={riskIcon} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Báo cáo lỗi</span>
                     </NavLink>
                     <NavLink to={`/fnb/contacts`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                        <img width={'20px'} src={reportIcon} alt="Menu item" />
+                        <img width={'20px'} src={contactIcon} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Danh bạ khách hàng</span>
                     </NavLink>
                     <NavLink to={`/fnb/shift`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
