@@ -268,7 +268,7 @@ export const FnbShiftDetailPage: FC = () => {
 									onChange={() => onClickCheckButton(item._id)}
 								/>
 							</td>
-							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"} title="Bàn giao nguyên liệu">
+							<td className={"p-2 border-0.5 border-primary-border text-cbs-highlight-color"} title="Bàn giao nguyên liệu">
 								<Link to ={`/fnb/shift/${fundaID}/${item._id}/material`}>
 									{item?.name}
 								</Link>
