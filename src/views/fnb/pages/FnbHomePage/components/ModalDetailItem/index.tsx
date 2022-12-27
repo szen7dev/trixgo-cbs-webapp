@@ -312,7 +312,7 @@ export const ModalDetailItem: FC<Props> = ({ order }) => {
                             onClick={() =>
                               openModal(
                                 <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{ width: "640px" }}>
-                                  <ModalErrorDetailItem />
+                                  <ModalErrorDetailItem defaultValues={{ orderID: order._id }} />
                                 </div>
                               )
                             }
@@ -356,31 +356,101 @@ export const ModalDetailItem: FC<Props> = ({ order }) => {
                       </div> */}
                     </div>
                     <div className="boxright w-1/2">
-                      <div className=" overflow-y-auto	mt-2 border-0.5 ">
-                        {orderProducts.map((op: any) => (
+                      <div className=" overflow-y-auto mt-2 border-0.5">
+
+                        {/* Version 1
                           <div key={op._id} className="flex gap-2 w-full border-b-0.5 p-2">
                             <img src={op.images?.length ? `${process.env.REACT_APP_URL_S3}${op.product?.images[0]?.path}` : ItemSample} alt="item" className="w-[44px] h-[44px]" />
                             <div className="w-full">
-                              <div className="flex justify-between  ">
+                              <div className="flex justify-between">
                                 <div>
                                   <p className="font-bold truncate">{op.product?.name}</p>
                                   <p className="text-primary-gray">{op.note}</p>
                                 </div>
-                                <div className="text-primary">{convertCurrency(op.unitPrice)}</div>
+                                <div className="text-primary">{convertCurrency(op.unitPrice)}{` x `}{op.quantity}</div>
                               </div>
-                              <div className="flex flex-wrap w-4/5 mt-3">
+                              <div className="flex">
+                                <div className="w-4/5 mt-3">
                                 {op.subProducts?.map?.((subProduct: any) => (
-                                  <div key={subProduct._id} className="w-1/4 mb-2 pr-2 flex gap-2 items-center">
-                                    <li> {subProduct.name} </li>
+                                  <div key={subProduct._id} className="mb-2 pr-2 flex items-center">
+                                    <li> {`${subProduct.name.trim()}`}: {convertCurrency(subProduct.unitPrice)} </li>
                                   </div>
                                 ))}
+                              </div>
+                              <div className="w-1/5 flex justify-end items-start">
+                                {convertCurrency(op.unitPrice * op.quantity)}
+                              </div>
+                              </div>
+                            </div>
+                          </div> 
+                        */}
+
+                        { /* Version 2
+                          <div key={op._id} className="flex gap-2 w-full border-b-0.5 p-2">
+                            <img src={op.images?.length ? `${process.env.REACT_APP_URL_S3}${op.product?.images[0]?.path}` : ItemSample} alt="item" className="w-[44px] h-[44px]" />
+                            <div className="w-full flex">
+                              <div className="flex-grow">
+                                <div>
+                                  <p className="font-bold truncate">{op.product?.name}</p>
+                                  <p className="text-primary-gray">{op.note}</p>
+                                </div>
+                                <div className="w-4/5 mt-3">
+                                  {op.subProducts?.map?.((subProduct: any) => (
+                                    <div key={subProduct._id} className="mb-2 pr-2 flex items-center">
+                                      <li> {`${subProduct.name.trim()}`}: {convertCurrency(subProduct.unitPrice)} </li>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                              <div className="flex-shrink">
+                                <div>
+                                  <strong>Giá: </strong>
+                                  <span>{convertCurrency(op.unitPrice)}</span>
+                                </div>
+
+                                <div>
+                                  <strong>Số lượng: </strong>
+                                  <span>{convertCurrency(op.quantity)}</span>
+                                </div>
+
+                                <div>
+                                  <strong>Thành tiền: </strong>
+                                  <span>{convertCurrency(op.unitPrice * op.quantity)}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div> 
+                         */ }
+
+                        {orderProducts.map((op: any) => (
+                          <div key={op._id} className="flex gap-2 w-full border-b-0.5 p-2">
+                            <img src={op.images?.length ? `${process.env.REACT_APP_URL_S3}${op.product?.images[0]?.path}` : ItemSample} alt="item" className="w-[44px] h-[44px]" />
+                            <div className="w-full">
+                              <div className="flex justify-between">
+                                <div>
+                                  <p className="font-bold truncate">{op.product?.name}</p>
+                                  <p className="text-primary-gray">{op.note}</p>
+                                </div>
+                                <div className="text-primary">{convertCurrency(op.unitPrice)}{` x `}{op.quantity}</div>
+                              </div>
+                              <div className="flex">
+                                <div className="w-4/5 mt-3">
+                                  {op.subProducts?.map?.((subProduct: any) => (
+                                    <div key={subProduct._id} className="mb-2 pr-2 flex items-center">
+                                      <li> {`${subProduct.name.trim()}`}: {convertCurrency(subProduct.unitPrice)} </li>
+                                    </div>
+                                  ))}
+                                </div>
+                                <div className="w-2/5 flex justify-end items-end">
+                                  {convertCurrency(op.unitPrice * op.quantity)}
+                                </div>
                               </div>
                             </div>
                           </div>
                         ))}
                       </div>
                       <div className="border-l-0.5 border-r-0.5 px-2">
-                        <div className="flex justify-between mt-2 mb-3">
+                        <div className="flex justify-between mt-2 mb-3 text-xl">
                           <div className="font-bold">Tổng tiền</div>
                           <div className="font-bold">{convertCurrency(order.total)}</div>
                         </div>
@@ -398,7 +468,7 @@ export const ModalDetailItem: FC<Props> = ({ order }) => {
                         </div>
                       </div>
                       <div className="border-0.5 p-1">
-                        <div className="flex justify-between bg-cbs-form-input-bg">
+                        <div className="flex justify-between bg-cbs-form-input-bg text-xl">
                           <div className="font-bold">Thanh toán</div>
                           <div className="font-bold text-primary">{convertCurrency(order.amount)}</div>
                         </div>
