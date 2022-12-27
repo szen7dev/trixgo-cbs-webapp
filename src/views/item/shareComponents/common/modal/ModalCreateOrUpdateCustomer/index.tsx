@@ -128,17 +128,10 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
     },
     isFetchList: true
   });
-  // const [listFunda1, setListFunda1]: any = useState([]);
-
-  // useEffect(() => {
-  //   if(listFunda.length){
-  //     setListFunda1(listFunda)
-  //   }
-  // }, [listFunda.length, listFunda1.length ]);
 
   return (
-    <main className="relative h-full">
-      <header className="px-10 py-5 flex items-center justify-between">
+    <main className="relative h-[800px]">
+      <header className="px-5 py-2 flex items-center justify-between">
         <p className="font-bold text-xl">
           {modalType === 'create' ? 'Tạo danh bạ' : 'Cập nhật danh bạ'}
         </p>
@@ -152,7 +145,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
 
       <section className="px-10 mt-2">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtInitialDay">
-            khu vực
+            Khu vực
           </label>
           <DropdownSearchable
             onchangeValue={(value: any) => {
@@ -292,6 +285,20 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
           name="address"
           className="w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"
           defaultValue={formData.address}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-10 py-2">
+        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtTaxid">
+          Mã số thuế
+        </label>
+        <input
+          type="text"
+          placeholder="Nhập mã số thuế"
+          name="taxid"
+          className="w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.taxid}
           onChange={onChange}
         />
       </section>
