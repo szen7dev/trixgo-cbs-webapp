@@ -24,6 +24,7 @@ import { FnbContactDetailPage } from "views/fnb/pages/FnbContactDetailPage/index
 import { FnbRiskReportPage } from "views/fnb/pages/FnbRiskReportPage/index";
 import { FnbShiftDetailPage } from "views/fnb/pages/FnbShiftDetailPage/index";
 import { FnbRiskReportDetailPage } from "views/fnb/pages/FnbRiskReportDetailPage/index";
+import { FnbShiftCashPage } from "views/fnb/pages/FnbShiftCashPage/index";
 import { FnbShiftMaterialPage } from "views/fnb/pages/FnbShiftMaterialPage/index";
 import { FnbReportPage } from "views/fnb/pages/FnbReportPage/index";
 import { FnbStorePage } from "views/fnb/pages/FnbStorePage/index";
@@ -91,6 +92,16 @@ const FnbRouter: FC = () => {
             />
 
             <Route
+                exact
+                path="/fnb/shift/:fundaID/:shiftID/cash"
+                component={() =>
+                    <FnbLayout>
+                        <FnbShiftCashPage/>
+                    </FnbLayout>
+                }
+            />
+
+             <Route
                 exact
                 path="/fnb/shift/:fundaID/:shiftID/material"
                 component={() =>

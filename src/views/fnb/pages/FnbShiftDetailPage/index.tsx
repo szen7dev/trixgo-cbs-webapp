@@ -173,49 +173,84 @@ export const FnbShiftDetailPage: FC = () => {
 			</header>
 
 			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
-			<thead className="bg-cbs-table-header h-10 border-b border-primary-border">
+			<thead className="bg-cbs-table-header h-10 border-b">
 					<tr className="text-left text-sm text-primary-gray text-[14px]">
-						<th className="pb-1 pt-1 w-[50px] font-normal">
+						<th className="pb-1 pt-1 w-[50px] font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
-								TT
+								#
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal">
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border w-[150px]">
 							<div className="pl-2">
-								Nội dung
+								Ca làm việc
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal">
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
-								Bàn giao nguyên liệu
+								Tiền đầu ca (1)
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal">
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
-								Bàn giao tiền
+								Tiền khách trả (2)
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal">
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
-								Thời gian khởi tạo
+								Tổng tiền mặt (3=1+2)
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal">
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
-								Doanh số
+								Chi phí trong ca (4)
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal">
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
-								Số đơn hàng
+								Tồn cuối ca (5)
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal">
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
-								Số hàng hóa
+								Dư/Thiếu (4+5-3)
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal">
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
+							<div className="pl-2">
+								Tiền chuyển khoản
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
+							<div className="pl-2">
+								Tiền Grab
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
+							<div className="pl-2">
+								Tiền Shopee
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
+							<div className="pl-2">
+								Tiền Gojek
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
+							<div className="pl-2">
+								Tiền Baemin
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
+							<div className="pl-2">
+								Tiền Loship
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
+							<div className="pl-2">
+								Tiền Bee
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
 								Ghi chú
 							</div>
@@ -225,7 +260,7 @@ export const FnbShiftDetailPage: FC = () => {
 				{
 					(listWithPager[pageIndex]??[]).map((item: any, i: any) => (
 						<tr key={item._id} className="text-[14px]">
-							<td className={"p-2 border-0.5 border-primary-border text-cente"}>
+							<td className={"p-2 border-0.5 border-primary-border text-center"}>
 								<input
 									className="form-check-input"
 									type="checkbox"
@@ -233,32 +268,54 @@ export const FnbShiftDetailPage: FC = () => {
 									onChange={() => onClickCheckButton(item._id)}
 								/>
 							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								{item?.name}
+							<td className={"p-2 border-0.5 border-primary-border text-cbs-highlight-color"} title="Bàn giao nguyên liệu">
+								<Link to ={`/fnb/shift/${fundaID}/${item._id}/material`}>
+									{item?.name}
+								</Link>
 							</td>
-							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
-								{/* <Link to ={`/fnb/shift/${fundaID}/${item._id}/material`}>
-									Chi tiết
-								</Link> */}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
-								{/* <Link to ={`/fnb/shift/${fundaID}/${item._id}/cash`}>
-									Chi tiết
-								</Link> */}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
+							{/* <td className={"p-2 border-0.5 border-primary-border"}>
 								{moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
+							</td> */}
+							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
+								{formatNumberMoney(500000)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(item?.total||0)} đ
+								{formatNumberMoney(1000000)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(item?.numberOfOrders||0)}
+								{formatNumberMoney(1500000)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
+								{formatNumberMoney(200000)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
+								{formatNumberMoney(1200000)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(item?.numberOfProducts||0)}
+								{formatNumberMoney(-100000)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(300000)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(300000)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(300000)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(300000)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(300000)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(300000)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(300000)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
 								{item?.note}
 							</td>
 						</tr>

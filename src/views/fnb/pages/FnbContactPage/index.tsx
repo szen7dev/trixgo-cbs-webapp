@@ -146,72 +146,54 @@ export const FnbContactPage: FC = () => {
 						</div>
 					) : <></>}
 				</div>
-				{/* <div className="flex items-center">
-					<button
-						className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold ml-6"
-						onClick={() => {
-							setInitialValues(null);
-							toggleModalCreateProject();
-						}}
-					>
-						Tạo mới
-					</button>
-					<button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
-						<img src={Vertical3Dots} alt="3Dots" />
-					</button>
-				</div> */}
 				<PaginateV2
-                        ref={ref}
-                        totalRecord={totalRecord}
-                        totalPages={totalPage}
-                        limit={20}
-                        hasNextPage={hasNextPage}
-                        isFetching={isLoading}
-                        nextPageAction={() => {
-                            fetchNextPage();
-                            setPageIndex(oldState => oldState+1)
-                        }}
-                        prevPageAction={() => {
-                            setPageIndex(oldState => oldState-1)
-                        }}
-                    />
+					ref={ref}
+					totalRecord={totalRecord}
+					totalPages={totalPage}
+					limit={20}
+					hasNextPage={hasNextPage}
+					isFetching={isLoading}
+					nextPageAction={() => {
+						fetchNextPage();
+						setPageIndex(oldState => oldState+1)
+					}}
+					prevPageAction={() => {
+						setPageIndex(oldState => oldState-1)
+					}}
+				/>
 			</header>
 
 			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
 				<thead className="bg-cbs-table-header h-10 border-b border-primary-border">
 					<tr className="text-left text-sm text-primary-gray">
-						<th className="pb-1 pt-1 text-center" style={{ width: "3.5%" }}>
-							<div className="border-r-2 border-gray-300 flex items-center justify-center">
-								<input
-									className="form-check-input"
-									type="checkbox"
-									checked={getStateCheckedAll()}
-									onChange={() => onClickCheckAll()}
-								/>
-							</div>
-						</th>
+						<th className="pb-1 pt-1 text-center font-normal" style={{ width: "3.5%" }}>TT</th>
 						<th className="pb-1 pt-1 w-1/4">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Tên
+							<div className="border-gray-300 font-normal pl-2">
+								Điểm bán
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal w-[200px]">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Địa chỉ
+						<th className="pb-1 pt-1 font-normal">
+							<div className="border-gray-300 font-normal pl-2">
+								Tổng danh bạ
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal w-[150px]">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
+							<div className="border-gray-300 font-normal pl-2">
 								Ngày bắt đầu
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Phân loại
+						<th className="pb-1 pt-1 font-normal w-[150px]">
+							<div className="border-gray-300 font-normal pl-2">
+								Cán bộ quản lý
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal w-[200px]">
+							<div className="border-gray-300 font-normal pl-2">
+								Địa chỉ
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
+							<div className="border-gray-300 font-normal pl-2">
 								Ghi chú
 							</div>
 						</th>
@@ -221,27 +203,23 @@ export const FnbContactPage: FC = () => {
 				{
 					(listWithPager[pageIndex]??[]).map((item: any, i: any) => (
 						<tr key={item._id} className="text-[14px]">
-							<td className={"p-2 border-0.5 border-primary-border text-center"}>
-								<input
-									className="form-check-input"
-									type="checkbox"
-									checked={getStateChecked(item._id)}
-									onChange={() => onClickCheckButton(item._id)}
-								/>
-							</td>
+							<td className={"p-2 border-t-0.5 border-b-0.5 border-primary-border text-center"}>{Number(i + 1)}</td>
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-highlight-color"}>
 								<Link to ={`/fnb/contacts/${item._id}`}>
 									{item?.name}
 								</Link>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{item?.address}
+								0
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{moment(item?.createAt).format('DD/MM/YYYY')}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{FNB_INTERNAL[Number(item?.internal)-1]?.text}
+								------
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{item?.address}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{item?.description}
@@ -250,19 +228,6 @@ export const FnbContactPage: FC = () => {
 					))
 				}
 			</table>
-
-			{/* <ModalContainer isModalOpen={modalCreateProject} toggle={toggleModalCreateProject}>
-				<div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light">
-					<CreateFnbProductQoutas
-						modalType={initialValues ? "update" : "create"}
-						show={modalCreateProject}
-						toggle={toggleModalCreateProject}
-						initialValues={initialValues ? initialValues : undefined}
-						onConfirm={onConfirmCreateProject}
-					/>
-				</div>
-			</ModalContainer> */}
-
 		</main>
 	);
 };

@@ -5,21 +5,14 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 /*=====2.PROVIDERS=====*/
 import AuthProvider from "services/providers/Auth";
 import ModalProvider from "services/providers/Modal";
-// import ChatProvider from "services/providers/Chat";
-// import DeleteConfirmProvider from "services/providers/DeleteConfirm";
 import RightClickMenuProvider from "services/providers/RightClickMenu";
 
 /*=====3.LAYOUTS=====*/
 import { FullPageLayout } from "shareComponents/layouts";
 import { MediaLayout } from "shareComponents/layouts/MediaLayout";
 import Policy from "views/authentication/Policy";
-import { HomePage } from "views/financial/pages/HomePage";
-import { FinancialLayoutV2 } from "views/financial/sharedComponents/layoutsV2";
-import { HumanHomePage } from "views/human/pages";
 import HumanRouterV2 from "./human/indexV2";
-// import FinancialRouterV2 from "./financial/indexV2";
 
-// import { Loader } from "shareComponents/common";
 /*=====4.CONFIG ROUTE=====*/
 const AccountingRouter = lazy(() => import("./accounting"));
 const AuthenticationRouter = lazy(() => import("./authentication"));
