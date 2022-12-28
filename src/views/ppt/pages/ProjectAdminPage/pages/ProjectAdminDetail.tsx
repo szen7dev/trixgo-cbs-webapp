@@ -65,7 +65,7 @@ const ProjectAdminDetail: FC = () => {
 	}, [hasPermission, dataUserAccess]);
 	
 	return (
-		<main className="h-full">
+		<main className="h-full overflow-auto">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
 				<div className="flex items-center">
 					<p className="text-lg">{nameAppRoleDetail}</p>
