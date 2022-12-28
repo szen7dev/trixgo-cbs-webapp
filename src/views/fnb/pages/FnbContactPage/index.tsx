@@ -55,6 +55,7 @@ export const FnbContactPage: FC = () => {
 		params: { 
 			keyword: keyword,  
 			limit: 30,  
+			isMember: 1,
 			// productID, 
 			// populates: JSON.stringify({
 			// 	path: 'goods', select: "name unit"
@@ -210,13 +211,13 @@ export const FnbContactPage: FC = () => {
 								</Link>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								0
+								{formatNumberMoney(item?.numberOfCustomers)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{moment(item?.createAt).format('DD/MM/YYYY')}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								------
+								
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{item?.address}

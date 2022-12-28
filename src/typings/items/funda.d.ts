@@ -15,6 +15,7 @@ export type FundaQueryPayload = QueryParam & {
     populates?: any;
     isListParentOfListChilds?: string;
     fundaID?: string;
+    isMember?: any;
 };
 
 export type FundaQueryResponse = APIResponse & {

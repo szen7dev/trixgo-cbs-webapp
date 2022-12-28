@@ -334,27 +334,27 @@ export const FnbReportPage: FC = () => {
 	})
 	return (
 		<main className="h-full overflow-auto bg-cbs-table-highlight">
-			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6">
+			{/* <header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6">
 				<div className="flex items-center">
-					{/* <button onClick={history.goBack}>
+					<button onClick={history.goBack}>
 						<img src="/images/common/button_back.png" alt="Button Back" />
-					</button> */}
+					</button>
 					<span className="font-bold text-[18px]">Tất cả cơ sở</span>
 				</div>
-				{/* <div className="flex items-center">
+				<div className="flex items-center">
 					<button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
 						<img src={Vertical3Dots} alt="3Dots" />
 					</button>
-				</div> */}
-			</header>
+				</div>
+			</header> */}
 			<div className="my-3">
 				<div className="flex gap-3 mx-5 mb-3 items-end">
 					<div>
-						<div className="text-cbs-subtext mb-1">Cơ sở</div>
+						{/* <div className="text-cbs-subtext mb-1">Cơ sở</div> */}
 						<CustomSelectBox1 />
 					</div>
 					<div>
-						<div className="text-cbs-subtext mb-1">Thời gian</div>
+						{/* <div className="text-cbs-subtext mb-1">Thời gian</div> */}
 						<CustomSelectBox2 />
 					</div>
 					{/* <div>

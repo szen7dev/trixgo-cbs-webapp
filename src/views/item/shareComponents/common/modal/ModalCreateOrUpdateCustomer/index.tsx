@@ -144,7 +144,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
       </header>
 
       <section className="px-10 mt-2">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtInitialDay">
+          <label className="block text-gray-700 text-sm font-bold" htmlFor="txtInitialDay">
             Khu vực
           </label>
           <DropdownSearchable
@@ -190,7 +190,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
       </section>
 
       <section className="px-10 py-2">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtDescription">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription">
           Họ và tên(*)
         </label>
         <input
@@ -204,7 +204,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
       </section>
 
       <section className="px-10 py-2">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtDescription">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription">
           Điện thoại(*)
         </label>
         <input
@@ -218,7 +218,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
       </section>
 
       <section className="px-10 py-2">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtDescription">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription">
           Giới tính(*)
         </label>
         <div className={"flex items-center"}>
@@ -262,7 +262,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
       </section>
 
       <section className="px-10 py-2">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtDescription">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription">
           Ngày sinh(*)
         </label>
         <input
@@ -276,7 +276,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
       </section>
 
       <section className="px-10 py-2">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtDescription">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription">
           Địa chỉ
         </label>
         <input
@@ -290,7 +290,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
       </section>
 
       <section className="px-10 py-2">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtTaxid">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtTaxid">
           Mã số thuế
         </label>
         <input
@@ -304,7 +304,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
       </section>
 
       <section className="px-10 mt-2">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtDescription">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription">
           Ghi chú
         </label>
         <input

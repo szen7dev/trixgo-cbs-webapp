@@ -55,6 +55,7 @@ export const FnbShiftPage: FC = () => {
 		params: { 
 			keyword: keyword,  
 			limit: 30,  
+			isMember: 1,
 			// productID, 
 			// populates: JSON.stringify({
 			// 	path: 'goods', select: "name unit"
@@ -220,7 +221,7 @@ export const FnbShiftPage: FC = () => {
 								</Link>
 							</td> */}
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								------
+								
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{FNB_INTERNAL[Number(item?.internal)-1]?.text}

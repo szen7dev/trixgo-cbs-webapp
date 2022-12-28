@@ -55,6 +55,7 @@ export const FnbExpensePage: FC = () => {
 		params: { 
 			keyword: keyword,  
 			limit: 30,  
+			isMember: 1,
 			// productID, 
 			// populates: JSON.stringify({
 			// 	path: 'goods', select: "name unit"
