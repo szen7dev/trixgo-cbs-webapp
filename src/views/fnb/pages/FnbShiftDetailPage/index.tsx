@@ -276,7 +276,7 @@ export const FnbShiftDetailPage: FC = () => {
 								{item?.name}
 								<p className="text-cbs-subtext"><i>Nhân viên: {item?.staffs.length}</i></p>
 								<p className="text-cbs-subtext">
-									<i title="Tổng doanh số">{formatNumberMoney(item?.total)}</i> | 
+									<i title="Tổng doanh số"><b>{formatNumberMoney(item?.total)}</b></i> | 
 									<i title="Doanh số Off">{formatNumberMoney(item?.total1)}</i>
 								</p>
 							</td>
