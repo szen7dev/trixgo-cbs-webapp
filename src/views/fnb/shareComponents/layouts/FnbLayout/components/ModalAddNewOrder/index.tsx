@@ -953,66 +953,6 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   </div>
                                 </button>
                               ))}
-                              <button
-                                type="button"
-                                // className="w-full h-full relative"
-                                className="flex-1 w-1/5 pb-1/2 bg-purple-300 relative"
-                                style={{ maxWidth: "200px", maxHeight: "200px", flexBasis:"19%"}}
-                              // style={{ width: "19%" }}
-                              >
-                                <img src={DemoImg} className="w-full h-full object-contain	" />
-                                <div className="w-full absolute bottom-0 bg-black opacity-75 text-white text-[14px] px-3 py-1"
-                                // style={{ maxWidth: "250px" }}
-                                >
-                                  <div className="overflow-ellipsis line-clamp-2 text-left">san pham</div>
-                                  <div className="text-right font-bold">100.000</div>
-                                </div>
-                              </button>
-                              <button
-                                type="button"
-                                // className="w-full h-full relative"
-                                className="flex-1 w-1/5 pb-1/2 bg-purple-300 relative"
-                                style={{ maxWidth: "200px", maxHeight: "200px", flexBasis:"19%"}}
-                              // style={{ width: "19%" }}
-                              >
-                                <img src={DemoImg2} className="w-full h-full object-contain	" />
-                                <div className="w-full absolute bottom-0 bg-black opacity-75 text-white text-[14px] px-3 py-1"
-                                // style={{ maxWidth: "250px" }}
-                                >
-                                  <div className="overflow-ellipsis line-clamp-2 text-left">san pham</div>
-                                  <div className="text-right font-bold">100.000</div>
-                                </div>
-                              </button>
-                              <button
-                                type="button"
-                                // className="w-full h-full relative"
-                                className="flex-1 w-1/5 pb-1/2 bg-purple-300 relative"
-                                style={{ maxWidth: "200px", maxHeight: "200px", flexBasis:"19%"}}
-                              // style={{ width: "19%" }}
-                              >
-                                <img src={DemoImg2} className="w-full h-full object-contain	" />
-                                <div className="w-full absolute bottom-0 bg-black opacity-75 text-white text-[14px] px-3 py-1"
-                                // style={{ maxWidth: "250px" }}
-                                >
-                                  <div className="overflow-ellipsis line-clamp-2 text-left">san pham</div>
-                                  <div className="text-right font-bold">100.000</div>
-                                </div>
-                              </button>
-                              <button
-                                type="button"
-                                // className="w-full h-full relative"
-                                className="flex-1 w-1/5 pb-1/2 bg-purple-300 relative"
-                                style={{ maxWidth: "200px", maxHeight: "200px", flexBasis:"19%"}}
-                              // style={{ width: "19%" }}
-                              >
-                                <img src={DemoImg2} className="w-full h-full object-contain	" />
-                                <div className="w-full absolute bottom-0 bg-black opacity-75 text-white text-[14px] px-3 py-1"
-                                // style={{ maxWidth: "250px" }}
-                                >
-                                  <div className="overflow-ellipsis line-clamp-2 text-left">san pham</div>
-                                  <div className="text-right font-bold">100.000</div>
-                                </div>
-                              </button>
                             </div>
                           </div>
                         </div>
