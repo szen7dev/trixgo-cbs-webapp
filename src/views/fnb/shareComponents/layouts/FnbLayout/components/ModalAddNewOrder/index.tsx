@@ -118,7 +118,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
   useEffect(() => {
     const fetchFundas = async () => {
       const response = await API.get(
-        `/api/item/fundas?keyword=${searchFunda}`,
+        `/api/item/fundas?keyword=${searchFunda}&isMember=1`,
       );
       const { data, status } = response?.data;
 
@@ -767,6 +767,20 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                       />
                                     }
                                     label={<span className="text-[13px]">Loship</span>}
+                                  />
+                                  <FormControlLabel
+                                    sx={{ marginLeft: "0" }}
+                                    value="7"
+                                    control={
+                                      <Radio
+                                        style={{}}
+                                        icon={<img src={RadioEmpty} alt="" />}
+                                        checkedIcon={<img src={RadioChecked} alt="" />}
+                                        onChange={() => setFieldValue("salesChannel", 7)}
+                                        checked={(values.salesChannel === 7) ? true : false}
+                                      />
+                                    }
+                                    label={<span className="text-[13px]">Bee</span>}
                                   />
                                 </RadioGroup>
                               </FormControl>

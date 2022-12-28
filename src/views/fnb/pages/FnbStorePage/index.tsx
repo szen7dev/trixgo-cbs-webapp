@@ -112,9 +112,9 @@ export const FnbStorePage: FC = () => {
 						className="text-[14px] text-primary-gray"
 					>
 						<option value={0} className="my-2 py-2 text-[14px] text-primary-gray" style={{ lineHeight: "30px" }}>Tất cả</option>
-						<option value={10} className="my-2 py-2 text-[14px] text-primary-gray">Năm 2022</option>
+						<option value={10} className="my-2 py-2 text-[14px] text-primary-gray">Năm 2021</option>
 						<option value={20} className="my-2 py-2 text-[14px] text-primary-gray">Năm 2022</option>
-						<option value={30} className="my-2 py-2 text-[14px] text-primary-gray">Năm 2022</option>
+						<option value={30} className="my-2 py-2 text-[14px] text-primary-gray">Năm 2023</option>
 					</NativeSelect>
 				</FormControl>
 			</div>
@@ -150,7 +150,7 @@ export const FnbStorePage: FC = () => {
 						gap: "0.5rem",
 						border: "0",
 						borderRadius: "0",
-						marginLeft: "10px",
+						marginLeft: "5px",
 					}}
 				>
 					<CustomToggleButton value="T1">
@@ -222,7 +222,7 @@ export const FnbStorePage: FC = () => {
 						<p className="text-lg">{infoProduct?.name}</p>
 						<SearchInput
 							classNameWrapper="ml-4"
-							classNameInput="outline-none w-[296px]"
+							classNameInput="outline-none w-[175px]"
 							onChange={debounce(
 								(event: any) => setKeyword(event.target.value),
 								500

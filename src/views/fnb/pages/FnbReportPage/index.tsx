@@ -72,6 +72,7 @@ export const FnbReportPage: FC = () => {
 	}, [hasPermission, dataUserAccess]);
 	const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager: listFunda, totalPage, refetch } = useFunda({ 
 		params: { 
+			isMember: 1,
 			limit: 30,  
 		}, 
 		isFetchList: true, 

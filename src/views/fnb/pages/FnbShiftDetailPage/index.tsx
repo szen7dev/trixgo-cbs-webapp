@@ -187,7 +187,7 @@ export const FnbShiftDetailPage: FC = () => {
 						</th>
 						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
-								Tiền đầu ca (1)
+								Tiền mặt đầu ca (1)
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
@@ -198,6 +198,11 @@ export const FnbShiftDetailPage: FC = () => {
 						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
 								Tổng tiền mặt (3=1+2)
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
+							<div className="pl-2">
+								Tiền chuyển khoản
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
@@ -217,37 +222,32 @@ export const FnbShiftDetailPage: FC = () => {
 						</th>
 						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
-								Tiền chuyển khoản
+								Doanh số Grab
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
-								Tiền Grab
+								Doanh số Shopee
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
-								Tiền Shopee
+								Doanh số Gojek
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
-								Tiền Gojek
+								Doanh số Baemin
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
-								Tiền Baemin
+								Doanh số Loship
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
-								Tiền Loship
-							</div>
-						</th>
-						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
-							<div className="pl-2">
-								Tiền Bee
+								Doanh số Bee
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
@@ -268,13 +268,17 @@ export const FnbShiftDetailPage: FC = () => {
 									onChange={() => onClickCheckButton(item._id)}
 								/>
 							</td>
-							<td className={"p-2 border-0.5 border-primary-border text-cbs-highlight-color"} title="Bàn giao nguyên liệu">
+							<td className={"p-2 border-0.5 border-primary-border text-cbs-highlight-color"}>
 								{/* <Link to ={`/fnb/shift/${fundaID}/${item._id}/material`}>
 									{item?.name}
 									<p className="text-cbs-subtext"><i>Nhân viên: {item?.staffs.length}</i></p>
 								</Link> */}
 								{item?.name}
 								<p className="text-cbs-subtext"><i>Nhân viên: {item?.staffs.length}</i></p>
+								<p className="text-cbs-subtext">
+									<i title="Tổng doanh số"><b>{formatNumberMoney(item?.total)}</b></i> | 
+									<i title="Doanh số Off">{formatNumberMoney(item?.total1)}</i>
+								</p>
 							</td>
 							{/* <td className={"p-2 border-0.5 border-primary-border"}>
 								{moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
@@ -283,10 +287,13 @@ export const FnbShiftDetailPage: FC = () => {
 								{formatNumberMoney(item?.openingCash)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(item?.cash)}
+								{formatNumberMoney(item?.cashAmount)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(Number(item?.openingCash | 0) + Number(item?.cash | 0))}
+								{formatNumberMoney(Number(item?.openingCash | 0) + Number(item?.cashAmount | 0))}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(item?.transferAmount)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
 								{formatNumberMoney(item?.incurredCash)}
@@ -295,10 +302,7 @@ export const FnbShiftDetailPage: FC = () => {
 								{formatNumberMoney(item?.closingCash)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(Number(item?.incurredCash | 0) + Number(item?.closingCash | 0)- Number(item?.openingCash | 0)- Number(item?.cash | 0))}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(0)}
+								{formatNumberMoney(Number(item?.incurredCash | 0) + Number(item?.closingCash | 0)- Number(item?.openingCash | 0)- Number(item?.cashAmount | 0))}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{formatNumberMoney(item?.total2)}
