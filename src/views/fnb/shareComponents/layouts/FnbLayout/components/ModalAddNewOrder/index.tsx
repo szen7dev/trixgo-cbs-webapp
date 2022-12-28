@@ -31,6 +31,8 @@ import RadioChecked from "assets/images/icons8-checked-40 (2) 2.svg";
 import IconSearch from "assets/images/icons8-search-96 1.svg";
 import beverageIcon from "assets/images/icons8-beverage.png";
 import IconCancel from "assets/images/icons8-cancel-96 1.svg";
+import DemoImg from "assets/images/task-detail-image.png";
+import DemoImg2 from "assets/images/authentication-img.png";
 
 import "react-day-picker/lib/style.css";
 import { DropdownSearchable, Loader } from "shareComponents/common";
@@ -242,13 +244,13 @@ export const ModalAddNewOrder: FC<Props> = () => {
             price = p.unitPrice || 0;
             break;
           case service === "2" && p.size === "1":
-            price = p.unitPrice2|| 0;
+            price = p.unitPrice2 || 0;
             break;
           case service === "1" && p.size === "2":
-            price = p.unitPrice3|| 0;
+            price = p.unitPrice3 || 0;
             break;
           case service === "2" && p.size === "2":
-            price = p.unitPrice4|| 0;
+            price = p.unitPrice4 || 0;
             break;
           default:
             break;
@@ -418,13 +420,13 @@ export const ModalAddNewOrder: FC<Props> = () => {
           price = product.unitPrice || 0;
           break;
         case service === "2" && product.size === "1":
-          price = product.unitPrice2|| 0;
+          price = product.unitPrice2 || 0;
           break;
         case service === "1" && product.size === "2":
-          price = product.unitPrice3|| 0;
+          price = product.unitPrice3 || 0;
           break;
         case service === "2" && product.size === "2":
-          price = product.unitPrice4|| 0;
+          price = product.unitPrice4 || 0;
           break;
         default:
           break;
@@ -487,7 +489,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                             <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full h-full"}>Cơ sở</div>
                             <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                               <DropdownSearchable
-                                ref={dropdownFundaRef} 
+                                ref={dropdownFundaRef}
                                 onchangeValue={(value: any) => {
                                   setFundaID(value?.id)
                                   setFieldValue("fundaID", value?.id);
@@ -877,10 +879,10 @@ export const ModalAddNewOrder: FC<Props> = () => {
                       <div className="flex gap-4 bg-cbs-form-input-bg p-3">
                         <div className="w-1/5 bg-white py-3 px-2 rounded" style={{ maxWidth: "175px" }}>
                           <div>
-                            <button 
-                             type="button"
-                            onClick={() => setIndexParentID('')}
-                            className={`
+                            <button
+                              type="button"
+                              onClick={() => setIndexParentID('')}
+                              className={`
                             left-menu-nav flex items-center p-1.5 my-1 rounded w-full hover:bg-gray-400 hover:text-white
                             ${!indexParentID ? "bg-gray-400 text-white" : ""}
                             `}>
@@ -888,9 +890,9 @@ export const ModalAddNewOrder: FC<Props> = () => {
                             </button>
                             {productIsParent.map((item: any, index: number) => (
                               <button key={index}
-                              type="button"
-                              onClick={() => setIndexParentID(item._id)}
-                              className={`
+                                type="button"
+                                onClick={() => setIndexParentID(item._id)}
+                                className={`
                             left-menu-nav flex items-center p-1.5 my-1 rounded w-full hover:bg-gray-400 hover:text-white
                             ${indexParentID === item._id ? "bg-gray-400 text-white" : ""}
                             `}>
@@ -922,12 +924,13 @@ export const ModalAddNewOrder: FC<Props> = () => {
                           <div className="overflow-y-auto	my-2 " style={{ height: "600px" }}>
                             <div className="flex flex-wrap gap-2">
                               {!!products.length && products.map((product: any) => (
-                                <button 
+                                <button
                                   key={product._id}
                                   type="button"
-                                  className="w-full h-full relative"
-                                  // style={{ maxWidth: "250px", maxHeight: "250px" }}
-                                  style={{ width: "19%" }}
+                                  // className="w-full h-full relative"
+                                  className="flex-1 w-1/5 pb-1/2 bg-purple-300 relative"
+                                  style={{ maxWidth: "19%", maxHeight: "200px", flexBasis:"19%"}}
+                                  // style={{ width: "19%" }}
                                   onClick={() => {
                                     setProductsInCart((prevProducts: any) => {
                                       return [...prevProducts, {
@@ -941,13 +944,75 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                     });
                                   }}
                                 >
-                                  <img src={product?.images?.length ? `${process.env.REACT_APP_URL_S3}${product?.images[0]?.path}` : beverageIcon} className="w-full h-full" />
-                                  <div className="w-full absolute bottom-0 bg-black opacity-75 text-white text-[14px] px-3 py-1" style={{ maxWidth: "250px" }}>
+                                  <img src={product?.images?.length ? `${process.env.REACT_APP_URL_S3}${product?.images[0]?.path}` : beverageIcon} className="w-full h-full object-contain" />
+                                  <div className="w-full absolute bottom-0 bg-black opacity-75 text-white text-[14px] px-3 py-1"
+                                  // style={{ maxWidth: "250px" }}
+                                  >
                                     <div className="overflow-ellipsis line-clamp-2 text-left">{product.name}</div>
                                     <div className="text-right font-bold">{formatNumberMoney(product.unitPrice)}</div>
                                   </div>
                                 </button>
                               ))}
+                              <button
+                                type="button"
+                                // className="w-full h-full relative"
+                                className="flex-1 w-1/5 pb-1/2 bg-purple-300 relative"
+                                style={{ maxWidth: "200px", maxHeight: "200px", flexBasis:"19%"}}
+                              // style={{ width: "19%" }}
+                              >
+                                <img src={DemoImg} className="w-full h-full object-contain	" />
+                                <div className="w-full absolute bottom-0 bg-black opacity-75 text-white text-[14px] px-3 py-1"
+                                // style={{ maxWidth: "250px" }}
+                                >
+                                  <div className="overflow-ellipsis line-clamp-2 text-left">san pham</div>
+                                  <div className="text-right font-bold">100.000</div>
+                                </div>
+                              </button>
+                              <button
+                                type="button"
+                                // className="w-full h-full relative"
+                                className="flex-1 w-1/5 pb-1/2 bg-purple-300 relative"
+                                style={{ maxWidth: "200px", maxHeight: "200px", flexBasis:"19%"}}
+                              // style={{ width: "19%" }}
+                              >
+                                <img src={DemoImg2} className="w-full h-full object-contain	" />
+                                <div className="w-full absolute bottom-0 bg-black opacity-75 text-white text-[14px] px-3 py-1"
+                                // style={{ maxWidth: "250px" }}
+                                >
+                                  <div className="overflow-ellipsis line-clamp-2 text-left">san pham</div>
+                                  <div className="text-right font-bold">100.000</div>
+                                </div>
+                              </button>
+                              <button
+                                type="button"
+                                // className="w-full h-full relative"
+                                className="flex-1 w-1/5 pb-1/2 bg-purple-300 relative"
+                                style={{ maxWidth: "200px", maxHeight: "200px", flexBasis:"19%"}}
+                              // style={{ width: "19%" }}
+                              >
+                                <img src={DemoImg2} className="w-full h-full object-contain	" />
+                                <div className="w-full absolute bottom-0 bg-black opacity-75 text-white text-[14px] px-3 py-1"
+                                // style={{ maxWidth: "250px" }}
+                                >
+                                  <div className="overflow-ellipsis line-clamp-2 text-left">san pham</div>
+                                  <div className="text-right font-bold">100.000</div>
+                                </div>
+                              </button>
+                              <button
+                                type="button"
+                                // className="w-full h-full relative"
+                                className="flex-1 w-1/5 pb-1/2 bg-purple-300 relative"
+                                style={{ maxWidth: "200px", maxHeight: "200px", flexBasis:"19%"}}
+                              // style={{ width: "19%" }}
+                              >
+                                <img src={DemoImg2} className="w-full h-full object-contain	" />
+                                <div className="w-full absolute bottom-0 bg-black opacity-75 text-white text-[14px] px-3 py-1"
+                                // style={{ maxWidth: "250px" }}
+                                >
+                                  <div className="overflow-ellipsis line-clamp-2 text-left">san pham</div>
+                                  <div className="text-right font-bold">100.000</div>
+                                </div>
+                              </button>
                             </div>
                           </div>
                         </div>
