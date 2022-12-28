@@ -191,6 +191,11 @@ export const FnbRiskReportPage: FC = () => {
 								Tổng số lỗi
 							</div>
 						</th>
+						<th className="pb-1 pt-1 font-normal w-[200px]">
+							<div className="border-gray-300 font-normal pl-2">
+								Tổng giá trị bị phạt
+							</div>
+						</th>
 						<th className="pb-1 pt-1 font-normal w-[150px]">
 							<div className="border-gray-300 font-normal pl-2">
 								Ngày bắt đầu
@@ -224,13 +229,16 @@ export const FnbRiskReportPage: FC = () => {
 								</Link>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								0
+								{formatNumberMoney(item?.numberOfMistakes)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(item?.amountOfMistakes)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{moment(item?.createAt).format('DD/MM/YYYY')}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								---
+								
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{item?.address}

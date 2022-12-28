@@ -220,7 +220,7 @@ export const FnbShiftPage: FC = () => {
 								</Link>
 							</td> */}
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								------
+								
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{FNB_INTERNAL[Number(item?.internal)-1]?.text}

@@ -271,6 +271,7 @@ export const FnbShiftDetailPage: FC = () => {
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-highlight-color"} title="Bàn giao nguyên liệu">
 								<Link to ={`/fnb/shift/${fundaID}/${item._id}/material`}>
 									{item?.name}
+									<p className="text-cbs-subtext"><i>Nhân viên: {item?.staffs.length}</i></p>
 								</Link>
 							</td>
 							{/* <td className={"p-2 border-0.5 border-primary-border"}>
