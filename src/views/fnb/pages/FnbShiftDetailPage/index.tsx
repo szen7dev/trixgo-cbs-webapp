@@ -175,7 +175,7 @@ export const FnbShiftDetailPage: FC = () => {
 			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
 			<thead className="bg-cbs-table-header h-10 border-b">
 					<tr className="text-left text-sm text-primary-gray text-[14px]">
-						<th className="pb-1 pt-1 w-[50px] font-normal border-0.5 border-primary-border">
+						<th className="pb-1 pt-1 w-[35px] font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
 								#
 							</div>
@@ -192,7 +192,7 @@ export const FnbShiftDetailPage: FC = () => {
 						</th>
 						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
-								Tiền khách trả (2)
+								Tiền mặt khách trả (2)
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
@@ -269,52 +269,54 @@ export const FnbShiftDetailPage: FC = () => {
 								/>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-highlight-color"} title="Bàn giao nguyên liệu">
-								<Link to ={`/fnb/shift/${fundaID}/${item._id}/material`}>
+								{/* <Link to ={`/fnb/shift/${fundaID}/${item._id}/material`}>
 									{item?.name}
 									<p className="text-cbs-subtext"><i>Nhân viên: {item?.staffs.length}</i></p>
-								</Link>
+								</Link> */}
+								{item?.name}
+								<p className="text-cbs-subtext"><i>Nhân viên: {item?.staffs.length}</i></p>
 							</td>
 							{/* <td className={"p-2 border-0.5 border-primary-border"}>
 								{moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
 							</td> */}
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
-								{formatNumberMoney(500000)}
+								{formatNumberMoney(item?.openingCash)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(1000000)}
+								{formatNumberMoney(item?.cash)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(1500000)}
+								{formatNumberMoney(Number(item?.openingCash | 0) + Number(item?.cash | 0))}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
-								{formatNumberMoney(200000)}
+								{formatNumberMoney(item?.incurredCash)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
-								{formatNumberMoney(1200000)}
+								{formatNumberMoney(item?.closingCash)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(-100000)}
+								{formatNumberMoney(Number(item?.incurredCash | 0) + Number(item?.closingCash | 0)- Number(item?.openingCash | 0)- Number(item?.cash | 0))}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(300000)}
+								{formatNumberMoney(0)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(300000)}
+								{formatNumberMoney(item?.total2)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(300000)}
+								{formatNumberMoney(item?.total3)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(300000)}
+								{formatNumberMoney(item?.total4)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(300000)}
+								{formatNumberMoney(item?.total5)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(300000)}
+								{formatNumberMoney(item?.total6)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(300000)}
+								{formatNumberMoney(item?.total7)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
 								{item?.note}

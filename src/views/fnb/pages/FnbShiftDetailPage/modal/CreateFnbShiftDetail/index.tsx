@@ -72,6 +72,9 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                 note: values.note,
                 seasons: values.seasons,
                 shiftType: values.shiftType,
+                openingCash: Number(values.openingCash),
+                incurredCash: Number(values.incurredCash),
+                closingCash: Number(values.closingCash),
             };
             const result = await updateAsync(query);
             if (!result.error) {
@@ -135,7 +138,7 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                             </div>
                             <div className="px-6 mt-2 pt-3.5 flex-1 flex flex-col">
                                 <div className="mb-4">
-                                    <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtUnit">
+                                    <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtName">
                                         Tên
                                     </label>
                                     <Field className="appearance-none border-0.5 border-cbs-bg-input-search bg-cbs-table-header rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none " id="txtName" placeholder="Tên" {...getFieldProps('name')} />
@@ -276,6 +279,39 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                             </RadioGroup>
                                         </FormControl>
                                     </div>
+                                </div>
+                                <div className="mb-4">
+                                    <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtOpeningCash">
+                                        Tiền đầu ca
+                                    </label>
+                                    <Field className="appearance-none border-0.5 border-cbs-bg-input-search bg-cbs-table-header rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none " id="txtOpeningCash" placeholder="Tiền đầu ca" {...getFieldProps('openingCash')} />
+                                    <ErrorMessage
+                                        name="openingCash"
+                                        component="span"
+                                        className="font-normal leading-7 text-sm text-negative"
+                                    />
+                                </div>
+                                <div className="mb-4">
+                                    <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtIncurredCash">
+                                        Chi phí trong ca
+                                    </label>
+                                    <Field className="appearance-none border-0.5 border-cbs-bg-input-search bg-cbs-table-header rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none " id="txtIncurredCash" placeholder="Chi phí trong ca" {...getFieldProps('incurredCash')} />
+                                    <ErrorMessage
+                                        name="incurredCash"
+                                        component="span"
+                                        className="font-normal leading-7 text-sm text-negative"
+                                    />
+                                </div>
+                                <div className="mb-4">
+                                    <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtClosingCash">
+                                        Tiền kiểm kê cuối ca
+                                    </label>
+                                    <Field className="appearance-none border-0.5 border-cbs-bg-input-search bg-cbs-table-header rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none " id="txtClosingCash" placeholder="Tiền kiểm kê cuối ca" {...getFieldProps('closingCash')} />
+                                    <ErrorMessage
+                                        name="closingCash"
+                                        component="span"
+                                        className="font-normal leading-7 text-sm text-negative"
+                                    />
                                 </div>
                                 <div className="mb-4">
                                     <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtNote">
