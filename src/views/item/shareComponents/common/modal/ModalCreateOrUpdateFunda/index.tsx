@@ -24,6 +24,8 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
     sign: '',
     description: '',
     address: '',
+    phone: '',
+    bankAccount: '',
     initialDay: new Date(),
     campaign: 1,
     internal: 1,
@@ -154,7 +156,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
       </header>
 
       <section className="px-10 py-2">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtName">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtName">
           Nội dung
         </label>
         <input
@@ -168,7 +170,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
       </section>
 
       <section className="px-10 mt-2">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtSign">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtSign">
           Mã hiệu
         </label>
         <input
@@ -182,7 +184,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
       </section>
 
       <section className="px-10 mt-2">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtDescription">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription">
           Mô tả
         </label>
         <input
@@ -196,7 +198,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
       </section>
 
       <section className="px-10 mt-2">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtAddress">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtAddress">
           Địa chỉ
         </label>
         <input
@@ -209,7 +211,33 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
       </section>
 
       <section className="px-10 mt-2">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtInitialDay">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtPhone">
+          Điện thoại
+        </label>
+        <input
+            placeholder={"Điện thoại"}
+            className={"w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
+            defaultValue={formData?.phone}
+            onChange={onChange}
+            name = "phone"
+        ></input>
+      </section>
+
+      <section className="px-10 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtBankAccount">
+          Tài khoản ngân hàng
+        </label>
+        <input
+            placeholder={"Tài khoản ngân hàng"}
+            className={"w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
+            defaultValue={formData?.bankAccount}
+            onChange={onChange}
+            name = "bankAccount"
+        ></input>
+      </section>
+
+      <section className="px-10 mt-2">
+          <label className="block text-gray-700 text-sm font-bold" htmlFor="txtInitialDay">
             khu vực
           </label>
           <DropdownSearchable
@@ -255,7 +283,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
       </section>
 
       <section className="px-10 mt-2">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtInitialDay">
+          <label className="block text-gray-700 text-sm font-bold" htmlFor="txtInitialDay">
             Ngày bắt đầu
           </label>
         <input
@@ -269,7 +297,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
       </section>
 
       <section className="px-10 mt-2">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtCampaign">
+          <label className="block text-gray-700 text-sm font-bold" htmlFor="txtCampaign">
             Chiến dịch quảng cáo
           </label>
           <div className={"flex items-center"}>
@@ -301,7 +329,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
       </section>
 
       <section className="px-10 mt-2">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtInternal">
+          <label className="block text-gray-700 text-sm font-bold" htmlFor="txtInternal">
             Phân loại
           </label>
           <div className={"flex items-center"}>
@@ -339,7 +367,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
           <div className="flex flex-wrap w-full">
             {
               listDoctypes.map((doctype: any) => (
-                <div className={"flex items-center ml-3"} key={doctype._id}>
+                <div className={"flex items-center ml-3 mb-2"} key={doctype._id}>
                     <input
                       type="checkbox"
                       value={doctype._id}
