@@ -399,7 +399,7 @@ export const FnBProductPage: FC = () => {
 									{!!item?.images?.length && (
 										<img
 											className="w-[75px] h-[75px] object-contain"
-											src={`${process.env.REACT_APP_URL_S3}${item?.images[0]?.path}`}
+											src={`${process.env.REACT_APP_URL_S3}${item?.images[item?.images?.length - 1]?.path}`}
 											alt="Left side bar"
 										/>
 									)}

@@ -85,7 +85,7 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
         `/api/fnb/mistakes?${convertObToUrl({
           orderID: order._id,
           populates: JSON.stringify({
-            path: 'mistake',
+            path: 'mistake executor',
           })
         })}`,
       );
@@ -291,7 +291,7 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                                 </div>
                               )}
                               data={listCustomers.map((item: any) => ({
-                                  label: item.name,
+                                  label: item.phone ? `${item.name} - ${item.phone}` : item.name,
                                   value: `${item._id}__${item.phone}__${item.numberOfOrders}`,
                               }))}
                               formatItem={{
@@ -299,11 +299,6 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                                   text: "label",
                               }}
                               inlineSearch={true}
-                            />
-                            <ErrorMessage
-                              name="errorName"
-                              component="div"
-                              className="font-normal text-xs text-negative pl-3"
                             />
                           </div>
                         </div>
@@ -334,9 +329,9 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                                   // }
                                   >
                                     <p className="text-left text-[14px] my-1">{m.mistake?.name}</p>
-                                    <p className="text-gray-500 text-left"><i>Mắc lỗi: Phùng Thị Thu-Wgo</i></p>
-                                    <p className="text-gray-500 text-left"><i>Phạt: Phùng Thị Thu-Wgo</i></p>
-                                    <p className="text-gray-500 text-left"><i>Ghi chú: Phùng Thị Thu-Wgo</i></p>
+                                    <p className="text-gray-500 text-left"><i>Mắc lỗi: {m.executor?.fullname}</i></p>
+                                    <p className="text-gray-500 text-left"><i>Phạt: {convertCurrency(m.amount)}</i></p>
+                                    <p className="text-gray-500 text-left"><i>Ghi chú: {m.note}</i></p>
                                   </button>
                                 ))}
                               </div>
@@ -461,7 +456,7 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
 
                         {orderProducts.map((op: any) => (
                           <div key={op._id} className="flex gap-2 w-full border-b-0.5 p-2">
-                            <img src={op.images?.length ? `${process.env.REACT_APP_URL_S3}${op.product?.images[0]?.path}` : ItemSample} alt="item" className="w-[44px] h-[44px]" />
+                            <img src={op.product.images?.length ? `${process.env.REACT_APP_URL_S3}${op.product?.images[op.product?.images?.length - 1]?.path}` : ItemSample} alt="item" className="w-[44px] h-[44px]" />
                             <div className="w-full">
                               <div className="flex justify-between">
                                 <div>
