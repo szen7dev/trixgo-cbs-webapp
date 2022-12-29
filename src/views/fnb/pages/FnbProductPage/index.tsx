@@ -220,16 +220,16 @@ export const FnBProductPage: FC = () => {
             fetchData();
         }
         
-        console.log('=========DATA THAY ĐỔI RỒI==============')
+        // console.log('=========DATA THAY ĐỔI RỒI==============')
     }, [dataImport])
 
 	return (
 		<main className="h-full overflow-auto">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
 				<div className="flex items-center">
-					<p className="text-lg">Danh sách thực đơn</p>
+					{/* <p className="text-lg">Danh sách thực đơn</p> */}
 					<SearchInput
-						classNameWrapper="ml-4"
+						classNameWrapper=""
 						classNameInput="outline-none w-[296px]"
 						onChange={debounce(
 							(event: any) => setKeyword(event.target.value),
@@ -263,12 +263,12 @@ export const FnBProductPage: FC = () => {
 						</div>
 					) : <></>}
 				</div>
-				<button className={"flex items-center justify-center mx-3 ml-3"}
+				<button className={"flex items-center justify-center mx-3 ml-1"}
 						onClick={handleDownloadTemplateImportExcel}
 					>
 						Tải mẫu Import Excel thực đơn
-				</button>
-				<button className={"flex items-center justify-center mx-3 ml-3"}>
+				</button> 
+				<button className={"flex items-center justify-center mx-3 ml-1"}>
 						<input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
 						accept=".xlsx, .xlsm, .xls, .csv"/>
 						<label className="custom-file-label" htmlFor="inputGroupFile">Import excel tạo thực đơn</label>

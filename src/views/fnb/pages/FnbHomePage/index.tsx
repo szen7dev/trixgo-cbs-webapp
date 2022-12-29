@@ -6,6 +6,7 @@ import parse from "html-react-parser";
 import { debounce } from "lodash";
 import { useDispatch } from "react-redux";
 import { formatNumberMoney } from "utils/converter";
+import { toast } from "react-toastify";
 
 /*=====2.CSS=====*/
 import "slick-carousel/slick/slick.css";
@@ -14,8 +15,8 @@ import "views/pcm/styles/pcm.module.css";
 
 /*=====3.ICONS=====*/
 import iconDown from "assets/images/icons8-download-64 1.svg";
-import StarIcon from '@mui/icons-material/Star';
-import StarBorderIcon from '@mui/icons-material/StarBorder';
+// import StarIcon from '@mui/icons-material/Star';
+// import StarBorderIcon from '@mui/icons-material/StarBorder';
 
 import offlineChannelIcon from "assets/images/fnb/offline.svg";
 import grabChannelIcon from "assets/images/fnb/grab.svg";
@@ -25,13 +26,14 @@ import baemineChannelIcon from "assets/images/fnb/baemin.svg";
 import loshipChannelIcon from "assets/images/fnb/loship.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
-import { DropdownSearchableV2, Loader } from "shareComponents/common";
-import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
+// import { DropdownSearchableV2, Loader } from "shareComponents/common";
+// import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
 import PaginateV2 from "shareComponents/common/PaginateV2";
 import { UpdateStatusDialog } from "./UpdateStatusDialog";
-import { ModalCreateResultSearch } from "./ModalCreateResultSearch";
+// import { ModalCreateResultSearch } from "./ModalCreateResultSearch";
 import { ModalDetailItem } from "./components/ModalDetailItem/index";
 import { ModalErrorDetailItem } from "./components/ModalErrorDetailItem";
+import { ModalConfirm } from "shareComponents/common";
 
 /*=====5.TYPINGS=====*/
 
@@ -57,6 +59,7 @@ import {
   setTabActive,
   setTabIndex,
 } from "redux/reducer/DashboardV2Slice";
+import API from "apis/repository";
 
 import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
 
@@ -112,9 +115,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
 
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   const dispatch = useDispatch();
-  const [popBox1, setpopBox1] = useState(false)
-  const [popBox2, setpopBox2] = useState(false)
-  const [filter, setFilter] = useState("all");
   const { user } = useAuth();
   const [pageIndex, setPageIndex] = useState(0);
 
@@ -124,211 +124,10 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
   const tabIndex = useAppSelector((state) => state.dashboardV2.data.tabIndex);
   const tabActive = useAppSelector((state) => state.dashboardV2.data.tabActive);
   const [showUpdateStatus, setShowUpdateStatus] = useState(false);
-  const { openModal } = useModal();
-
-  const StarToggle = () => {
-    const [selectStar, setSelectStar] = useState(false)
-    return (
-      <button onClick={() => setSelectStar(!selectStar)} className="h-[16px]">
-        {(selectStar ? <StarIcon sx={{ color: '#FFCA28', width: 16, height: 16 }} /> : <StarBorderIcon sx={{ color: '#FFCA28', width: 16, height: 16 }} />)}
-      </button>
-    )
-  }
-  const keywordForResponse = useAppSelector(
-    (state) => state.dashboardV2.data.keywordForResponse
-  );
-
-  const queryResponse = useAppSelector(
-    (state) => state.dashboardV2.data.queryResponse
-  );
-
-  const keywordForSubject = useAppSelector(
-    (state) => state.dashboardV2.data.keywordForSubject
-  );
-
-  const keywordForFile = useAppSelector(
-    (state) => state.dashboardV2.data.keywordForFile
-  );
-
-  const querySubject = useAppSelector(
-    (state) => state.dashboardV2.data.querySubject
-  );
-
-  const queryFile = useAppSelector((state) => state.dashboardV2.data.queryFile);
-
-  const [reset, setReset] = useState(false);
-  ///// Danh sách công ty
-  const [searchCompanyName, setSearchCompanyName] = useState("");
-  const {
-    data: listCompany,
-    hasNextPage: hasNextPageCompany,
-    fetchNextPage: fetchNextPageCompany,
-  } = useQueryListCompany({ keyword: searchCompanyName });
-
-  const handleScrollCompany = (e: UIEvent<HTMLDivElement>) => {
-    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
-    const bottom = scrollHeight - scrollTop === clientHeight;
-
-    if (bottom && hasNextPageCompany) {
-      fetchNextPageCompany();
-    }
-  };
-
-  // Người tạo
-  const [authors, setAuthors] = useState<string[]>([]);
-
-  // Danh sách user
-  const [searchUserSystem, setSearchUserSystem] = useState("");
-  const {
-    data: listUsersSystem,
-    hasNextPage: hasNextPageUserSystem,
-    fetchNextPage: fetchNextPageUserSystem,
-  } = useUserSystem({ keyword: searchUserSystem }, true);
-
-  const handleScrollUserSystem = (e: UIEvent<HTMLDivElement>) => {
-    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
-    const bottom = scrollHeight - scrollTop === clientHeight;
-
-    if (bottom && hasNextPageUserSystem) {
-      fetchNextPageUserSystem();
-    }
-  };
-
-  const [fromCreateDate, setFromCreateDate] = useState("1990/01/01");
-  const [toCreateDate, settoCreateDate] = useState("2999/12/31");
-  // Dự án
-  const [project, setProject] = useState<string[]>([]);
-  const [searchProject, setSearchProject] = useState("");
-
-  const {
-    data: listProject,
-    fetchNextPage: fetchNextPagePrject,
-    hasNextPage: hasNextPageProject,
-  } = useQueryListDepartmentsIsMember({
-    keyword: searchProject,
-    isFetch: true,
-  });
-
-  const handleScrollProject = (e: UIEvent<HTMLDivElement>) => {
-    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
-    const bottom = scrollHeight - scrollTop === clientHeight;
-
-    if (bottom && hasNextPageProject) {
-      fetchNextPagePrject();
-    }
-  };
-
-  // Danh sách các response
-  const query: any = {
-    ...queryResponse,
-    keyword: keywordForResponse,
-    projectsID: project,
-    fromDate: fromCreateDate,
-    toDate: toCreateDate,
-    isGroup: (queryResponse.companyOfAuthorsID.length ||
-      queryResponse.authorsID.length ||
-      queryResponse.projectsID.length ||
-      queryResponse.official != 0 || keywordForResponse) ? "1" : "0",
-    enabled: tabActive === 1 ? true : false,
-  };
-
-  if (filter !== "all") {
-    query.read = filter === "read" ? 2 : 1;
-  }
-
-  const {
-    listDataForResponseWithPager: listDataForResponse,
-    isLoadingResponse,
-    totalRecord: totalRecordResponse,
-    totalPage: totalPageResponse,
-    hasNextPageSubject: hasNextPageResponse,
-    nextPageSubject: nextPageResponse,
-    isFetching: isFetchingResponse,
-  } = useListResponseFromSearch(query);
-
-  const [fromExpiredDate, setFromExpiredDate] = useState("1990/01/01");
-  const [toExpiredDate, setToExpiredDate] = useState("2999/12/31");
-  const [isExpired, setIsExpired] = useState<any>(0);
-  const [isParent, setIsParent] = useState<any>(-1);
-  const [subtypes, setSubtypes] = useState<string[]>([]);
-  const [status, setStatus] = useState<string[]>([]);
-
-  // Danh sách các subject theo keyword
-  const querySearchTask: any = {
-    keyword: keywordForSubject,
-    fromDate: fromExpiredDate,
-    toDate: toExpiredDate,
-    authorsID: authors,
-    projectsID: project,
-    isExpired: isExpired,
-    isParent: isParent,
-    subtypes: subtypes,
-    status: status,
-    isGroup: (querySubject.companiesOfAssignee.length ||
-      querySubject.assigneesID.length ||
-      keywordForSubject) ? "1" : "0",
-    ...querySubject,
-  };
-  if (filter !== "all") {
-    querySearchTask.read = filter === "read" ? 2 : 1;
-  }
-
-  const {
-    listTasksWithPager: listDataForSubject,
-    nextPageListTask,
-    totalRecord: totalRecordSubject,
-    totalPage: totalPageSubject,
-    hasNextPage: hasNextPageSubject,
-    isLoadingListTask,
-    isFetching: isFetchingNextPageSubject,
-    refetchListTask
-  } = useSearchTask({
-    params: querySearchTask,
-    isFetch: tabActive === 2 ? true : false,
-  });
-
-  // Danh sách File
-  const {
-    isLoadingFile,
-    nextPageFile,
-    totalRecord: totalRecordFile,
-    totalPage: totalPageFile,
-    listDataForFileWithPager: listDataForFile,
-    isFetching: isFetchingFile,
-    hasNextPageFile,
-  } = useListFileFromSearch({
-    keyword: keywordForFile,
-    fromDate: fromCreateDate,
-    toDate: toCreateDate,
-    projectsID: project,
-    isGroup: (queryFile.companyOfAuthorsID.length ||
-      queryFile.authorsID.length ||
-      keywordForFile) ? "1" : "0",
-    ...queryFile,
-    enabled: tabActive === 3 ? true : false,
-  });
-
-  const onReset = () => {
-    setReset(false);
-    dispatch(resetFilterDashboard({}));
-    setFromCreateDate("1990/01/01");
-    settoCreateDate("2999/12/31");
-    setProject([]);
-    setAuthors([]);
-    setIsParent(-1);
-    setFromExpiredDate("1990/01/01");
-    setToExpiredDate("2999/12/31");
-    setIsExpired(0);
-    setSubtypes([]);
-    setStatus([]);
-    setTimeout(() => {
-      setReset(true);
-    }, 0);
-  };
+  const { openModal, closeModal } = useModal();
 
   useEffect(() => {
     return () => {
-      onReset();
       dispatch(setTabActive(2));
       dispatch(setTabIndex(1));
     }
@@ -344,28 +143,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
   const onPressUpdateStatus = async () => {
     await updateStatusMultipleAsync({ option: 2 });
     refetchPcmPlanTaskNotification();
-    refetchListTask();
   };
-
-  const checkActive = (relateds: string[], user: string) => {
-    let result = "read border-b-0.5 border-primary-border hover:shadow-md hover:z-2 hover:relative";
-    if (relateds.includes(user)) {
-      result = "unread border-b-0.5 border-primary-border hover:shadow-md hover:z-2 hover:relative";
-    }
-    return result;
-  };
-
-  const onSaveResultSearch = () => {
-    openModal(
-      <div
-        className={
-          "inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
-        }
-      >
-        <ModalCreateResultSearch condition={querySearchTask} />
-      </div>
-    )
-  }
 
   // popover
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
@@ -403,6 +181,29 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
       setIdsChecked(idsAll);
     }
   };
+
+  const handleCancelOrder = async () => {
+    try {
+      closeModal();
+
+      const response = await API.put(
+        `/api/fnb/orders`,
+        {
+          orderID: idsChecked[0],
+          status: 4
+        }
+      );
+
+      if (response.status !== 200 || response.data?.error) {
+        return toast.warn('Hủy đơn hàng thất bại');
+      }
+
+      refetch();
+      toast.info('Hủy đơn hàng thành công');
+    } catch(err: any) {
+      toast.error(err.message);
+    }
+  }
 
   return (
     <div className="t-home flex flex-col h-full overflow-hidden">
@@ -857,7 +658,30 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                   </button>
                 </div>
               </button> */}
-              <button className="text-cbs-schedule-expired">Hủy đơn</button>
+              {idsChecked.length === 1 && (
+                <button
+                  className="text-cbs-schedule-expired"
+                  onClick={() =>
+                    openModal(
+                      <div
+                        className={
+                          "inline-block w-[521px] h-[240px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+                        }
+                      >
+                        <ModalConfirm
+                          title="Bạn có muốn xác nhận hủy đơn không?"
+                          description="Đơn hàng của bạn sẽ không thể hoàn tác"
+                          onConfirm={handleCancelOrder}
+                          defaultText={false}
+                          onCancel={closeModal}
+                        />
+                      </div>
+                    )
+                  }
+                >
+                  Hủy đơn
+                </button>
+              )}
               <button
                 className="text-cbs-schedule-nextweek"
                 onClick={() =>

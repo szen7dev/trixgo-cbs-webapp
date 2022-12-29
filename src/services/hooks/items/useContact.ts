@@ -124,7 +124,6 @@ export const useQueryContact = (params?: Contact.ContactListParams): UseQueryCon
             ContactRepository.fetchList({
                 limit: params?.limit || 10,
                 lastestID: pageParam || "",
-                type: params?.type,
                 ...params,
             }),
         {

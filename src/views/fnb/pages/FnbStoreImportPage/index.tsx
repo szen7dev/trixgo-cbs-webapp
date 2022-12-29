@@ -40,13 +40,12 @@ export const FnbStoreImportPage: FC = () => {
 	}, []);
 	
 	const history = useHistory();
-	const { productID } = useParams<{ productID: string }>();
+	const { fundaID } = useParams<{ fundaID: string }>();
 	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
-    const { info: infoProduct } = useFnbProduct({ params: { productID }, isFetchList: false, isFetchInfo: true  });
-	// console.log({ infoProduct });
+	const { info: infoFunda } = useFunda({ params: { fundaID }, isFetchList: false, isFetchInfo: true  });
 
 	/**
 	 * List mẩu tin
@@ -110,7 +109,7 @@ export const FnbStoreImportPage: FC = () => {
 					<button onClick={history.goBack}>
                         <img src="/images/common/button_back.png" alt="Button Back" />
                     </button>
-					<p className="text-lg">{infoProduct?.name}</p>
+					<p className="text-lg">{infoFunda?.name}</p>
 					<SearchInput
 						classNameWrapper="ml-4"
 						classNameInput="outline-none w-[296px]"
@@ -137,21 +136,35 @@ export const FnbStoreImportPage: FC = () => {
 						</div>
 					) : <></>}
 				</div>
+				<div className="flex items-center">
+					<button
+						className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold ml-6"
+						// onClick={() => {
+						// 	setInitialValues(null);
+						// 	toggleModalCreateShiftDetail();
+						// }}
+					>
+						Tạo mới
+					</button>
+					{/* <button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
+						<img src={Vertical3Dots} alt="3Dots" />
+					</button> */}
+				</div>
 				<PaginateV2
-                        ref={ref}
-                        totalRecord={totalRecord}
-                        totalPages={totalPage}
-                        limit={20}
-                        hasNextPage={hasNextPage}
-                        isFetching={isLoading}
-                        nextPageAction={() => {
-                            fetchNextPage();
-                            setPageIndex(oldState => oldState+1)
-                        }}
-                        prevPageAction={() => {
-                            setPageIndex(oldState => oldState-1)
-                        }}
-                    />
+					ref={ref}
+					totalRecord={totalRecord}
+					totalPages={totalPage}
+					limit={20}
+					hasNextPage={hasNextPage}
+					isFetching={isLoading}
+					nextPageAction={() => {
+						fetchNextPage();
+						setPageIndex(oldState => oldState+1)
+					}}
+					prevPageAction={() => {
+						setPageIndex(oldState => oldState-1)
+					}}
+				/>
 			</header>
 
 			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">

@@ -139,20 +139,20 @@ export const FnbExpensePage: FC = () => {
 					) : <></>}
 				</div>
 				<PaginateV2
-                        ref={ref}
-                        totalRecord={totalRecord}
-                        totalPages={totalPage}
-                        limit={20}
-                        hasNextPage={hasNextPage}
-                        isFetching={isLoading}
-                        nextPageAction={() => {
-                            fetchNextPage();
-                            setPageIndex(oldState => oldState+1)
-                        }}
-                        prevPageAction={() => {
-                            setPageIndex(oldState => oldState-1)
-                        }}
-                    />
+					ref={ref}
+					totalRecord={totalRecord}
+					totalPages={totalPage}
+					limit={20}
+					hasNextPage={hasNextPage}
+					isFetching={isLoading}
+					nextPageAction={() => {
+						fetchNextPage();
+						setPageIndex(oldState => oldState+1)
+					}}
+					prevPageAction={() => {
+						setPageIndex(oldState => oldState-1)
+					}}
+				/>
 			</header>
 
 			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">

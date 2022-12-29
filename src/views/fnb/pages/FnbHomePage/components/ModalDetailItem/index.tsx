@@ -1,7 +1,7 @@
 /**
  * Libraries
  */
-import React, { ChangeEvent, FC, useEffect, useState } from "react";
+import React, { ChangeEvent, FC, UIEvent, useEffect, useState } from "react";
 import { Formik, Form, ErrorMessage } from "formik";
 import { toast } from "react-toastify";
 import moment from "moment";
@@ -11,10 +11,10 @@ import debounce from "lodash/debounce";
  * Hooks, Typings
  */
 import { useModal } from "services/hooks/useModal";
-import { APP_ID, FNB_ORDER_STATUS, FNB_PAYMENT, FNB_SERVICE } from "apis/localdb";
+import { FNB_PAYMENT, FNB_SERVICE } from "apis/localdb";
 import API from "apis/repository";
 import { convertObToUrl } from "utils";
-import { convertCurrency, formatNumberMoney } from 'utils/converter';
+import { convertCurrency } from 'utils/converter';
 
 /**
  * Components, Assets
@@ -22,20 +22,21 @@ import { convertCurrency, formatNumberMoney } from 'utils/converter';
 import Close from "assets/icons/Close";
 import ItemSample from "assets/images/image 430.jpg";
 import IconGreenDot from "assets/images/Frame 4330.svg";
-import CheckBoxEmpty from "assets/images/Frame 3548.svg";
-import CheckedBox from "assets/images/Check-All.svg";
-import IconCancel from "assets/images/icons8-cancel-96 1.svg";
+// import CheckBoxEmpty from "assets/images/Frame 3548.svg";
+// import CheckedBox from "assets/images/Check-All.svg";
+// import IconCancel from "assets/images/icons8-cancel-96 1.svg";
 
 import "react-day-picker/lib/style.css";
-import { Button } from "@mui/material";
 import { ModalErrorDetailItem } from "../ModalErrorDetailItem";
 import { DropdownSearchable } from "shareComponents/common";
+import { useQueryContact } from 'services/hooks/items/useContact';
 
 type Props = {
   order: any;
+  onUpdate?: () => void;
 }
 
-export const ModalDetailItem: FC<Props> = ({ order }) => {
+export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
   const { openModal, closeModal } = useModal();
   const [orderProducts, setOrderProducts] = useState([]);
   const [mistakes, setMistakes] = useState([]);
@@ -43,6 +44,17 @@ export const ModalDetailItem: FC<Props> = ({ order }) => {
   const [mistakeDoctypes, setMistakeDocTypes] = useState([]);
 
   const [keywordMistakeDoctypes, setKeywordMistakeDocTypes] = useState('');
+  const [keywordCustomerSearch, setKeywordCustomerSearch] = useState('');
+  const [customerInfo, setCustomerInfo] = useState({
+    name: order.customer?.name,
+    phone: order.customer?.phone,
+    numberOfOrders: order.customer?.numberOfOrders,
+  });
+
+  const { fetchNextPageContact, hasNextPage, listContact: listCustomers } = useQueryContact({
+    keyword: keywordCustomerSearch,
+    type: 1,
+  });
 
   useEffect(() => {
     const fetchOrderProducts = async () => {
@@ -104,6 +116,43 @@ export const ModalDetailItem: FC<Props> = ({ order }) => {
 
     fetchMistakeDoctypes();
   }, [keywordMistakeDoctypes])
+
+  const handleScrollCustomer = (e: UIEvent<HTMLDivElement>) => {
+    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
+    const bottom = scrollHeight - scrollTop === clientHeight;
+
+    if (bottom && hasNextPage) {
+      fetchNextPageContact();
+    }
+  };
+
+  const handleUpdateCustomer = async (value: any) => {
+    const [customerID, phone, numberOfOrders] = value.value?.split?.('__');
+
+    if(!customerID) return;
+
+    try {
+      const { data, status } = await API.put(
+        `/api/fnb/orders`,
+        {
+          orderID: order._id,
+          customerID,
+        }
+      );
+
+      if (status !== 200 || data?.error) return toast.warning('Cập nhật khách hàng thất bại');
+
+      onUpdate?.();
+      setCustomerInfo({
+        name: value.text,
+        phone,
+        numberOfOrders: numberOfOrders === 'undefined' ? 0 : numberOfOrders,
+      });
+      toast.success('Cập nhật khách hàng thành công');
+    } catch(error: any) {
+      toast.error(error.message);
+    }
+  }
 
   const handleAddMistake = (item: any) => {
     const isExists = mistakesSelected.find((m: any) => m._id === item._id);
@@ -217,29 +266,19 @@ export const ModalDetailItem: FC<Props> = ({ order }) => {
                             <img src={IconGreenDot} alt="" />
                             <div className={"h-full text-left flex items-center px-1 "}>
                               <span className="text-gray-500 pr-1">Khách: </span>
-                              <span>{order.customer?.phone} - {order.customer?.name} <span className="text-cbs-fnb-bg">(đã mua {order.customer?.numberOfOrders ?? 0} lần)</span></span>
+                              <span>{customerInfo?.phone} - {customerInfo?.name} <span className="text-cbs-fnb-bg">(đã mua {customerInfo?.numberOfOrders ?? 0} lần)</span></span>
                             </div>
                           </div>
                           {/* Khách: 0988115998 - Nguyễn Văn A (đã mua 68 lần) */}
                           <div className={" w-full h-full"} style={{ maxWidth: "30%" }}>
                             <DropdownSearchable
-                              // onchangeValue={(value: any) => {
-                              //     setFundaID(value?.id)
-                              //     setFieldValue("fundaID", value?.id);
-                              //     setShiftID("");
-                              //     setFieldValue("shiftID", "");
-                              // }}
-                              // onClearData={() => {
-                              //     setFundaID("")
-                              //     setFieldValue("fundaID", "");
-                              //     setShiftID("");
-                              //     setFieldValue("shiftID", "");
-                              // }}
-                              // onSearchInputChange={
-                              //     debounce(
-                              //         (value) => setSearchFunda(value),
-                              //         200)
-                              // }
+                              onchangeValue={handleUpdateCustomer}
+                              onSearchInputChange={
+                                  debounce(
+                                      (value) => setKeywordCustomerSearch(value),
+                                      200)
+                              }
+                              onScroll={handleScrollCustomer}
                               className={"max-w-full h-full flex-1 border-0.5 border-cbs-bg-input-search bg-cbs-bg-input-search placeholder-primary-gray rounded-md"}
                               placeholder="Tìm kiếm khách hàng"
                               isMultiple={false}
@@ -247,20 +286,18 @@ export const ModalDetailItem: FC<Props> = ({ order }) => {
                               showTriangle={false}
                               maxWidthInput="max-w-full"
                               renderSelectedItem={(item: any) => (
-                                <div
-                                  className="max-w-full"
-                                >
-                                  {/* <p className={"truncate"}>{item.text}</p> */}
+                                <div className="max-w-full">
+                                  <p className={"truncate"}>{item.text}</p>
                                 </div>
                               )}
-                              // data={fundas.map((funda: any) => ({
-                              //     label: `${funda.sign}.${funda.name}`,
-                              //     value: funda._id,
-                              // }))}
-                              // formatItem={{
-                              //     id: "value",
-                              //     text: "label",
-                              // }}
+                              data={listCustomers.map((item: any) => ({
+                                  label: item.name,
+                                  value: `${item._id}__${item.phone}__${item.numberOfOrders}`,
+                              }))}
+                              formatItem={{
+                                  id: "value",
+                                  text: "label",
+                              }}
                               inlineSearch={true}
                             />
                             <ErrorMessage
@@ -382,7 +419,7 @@ export const ModalDetailItem: FC<Props> = ({ order }) => {
                               </div>
                               </div>
                             </div>
-                          </div> 
+                          </div>
                         */}
 
                         { /* Version 2
@@ -419,7 +456,7 @@ export const ModalDetailItem: FC<Props> = ({ order }) => {
                                 </div>
                               </div>
                             </div>
-                          </div> 
+                          </div>
                          */ }
 
                         {orderProducts.map((op: any) => (

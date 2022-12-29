@@ -768,7 +768,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                     }
                                     label={<span className="text-[13px]">Loship</span>}
                                   />
-                                  <FormControlLabel
+                                  {/* <FormControlLabel
                                     sx={{ marginLeft: "0" }}
                                     value="7"
                                     control={
@@ -781,7 +781,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                       />
                                     }
                                     label={<span className="text-[13px]">Bee</span>}
-                                  />
+                                  /> */}
                                 </RadioGroup>
                               </FormControl>
                             </div>
