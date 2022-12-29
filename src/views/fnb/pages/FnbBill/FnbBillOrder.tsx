@@ -3,39 +3,32 @@ import React, { FC, useCallback, useState, useEffect } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import debounce from "lodash/debounce";
 import moment from "moment";
-import { formatNumberMoney } from "utils/converter";
+import { formatNumberMoney, convertCurrency } from "utils/converter";
 import { toast } from "react-toastify";
 
 /*=====2.CSS=====*/
 
 /*=====3.ICONS=====*/
-import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import QrCodeIcon from "assets/images/icons8-qr-code-100 1.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
-import { SearchInput, ModalContainer } from "shareComponents/common";
-import PaginateV2 from "shareComponents/common/PaginateV2";
 
 /*=====5.TYPINGS=====*/
 
 /*=====6.HOOKS/APIS=====*/
-import { useModal } from "services/hooks/useModal";
-import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
-import { useFnbProduct } from 'services/hooks/fnb/useFnbProduct';
-import { useFnbQuota } from 'services/hooks/fnb/useFnbQuota';
-import { useFunda } from 'services/hooks/items/useFunda';
-import { useFnbShift } from 'services/hooks/fnb/useFnbShift';
-import { useAuth } from 'services/hooks/auth/useAuth';
+
+import API from "apis/repository";
+import { convertObToUrl } from "utils";
 
 import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
 
 /*=====7.OTHER=====*/
 import { APP_ID } from "apis/localdb";
-import { FNB_CHANNEL, FNB_SERVICE, FNB_PAYMENT, FNB_ORDER_STATUS } from "apis/localdb";
+import { FNB_CHANNEL, FNB_SERVICE, FNB_PAYMENT, FNB_ORDER_STATUS, FNB_SIZE } from "apis/localdb";
 
 export const FnbBillOrder: FC = () => {
     const { orderID } = useParams<{ orderID: string }>()
-    // console.log({orderID})
+    const [orderProducts, setOrderProducts] = useState([]);
 
     const { info, refetch } = useFnbOrder(
         { 
@@ -50,15 +43,42 @@ export const FnbBillOrder: FC = () => {
             isFetchInfo:  true  
         }
     )
+    
+    useEffect(() => {
+        const fetchOrderProducts = async () => {
+            const response = await API.get(
+                `/api/fnb/order_products?${convertObToUrl({
+                orderID,
+                populates: JSON.stringify({
+                    path: 'subProducts product',
+                    populate: {
+                    path: 'images',
+                    }
+                })
+                })}`,
+            );
+            const { data, status } = response?.data;
 
-    console.log(info)
+            if (status !== 200) return;
+
+            setOrderProducts(data.listRecords)
+        }
+
+        fetchOrderProducts();
+    }, [])
+
+    // console.log(orderProducts)
+    // console.log(info)
 
     return (
         <main className="min-h-screen overflow-auto bg-cbs-border">
-            <div className="mx-auto bg-white h-full p-2 flex flex-col justify-between	" style={{ width: "301px", minHeight:"calc(100vh - 20px)", marginTop:"10px" }}>
+            <div className="mx-auto bg-white h-full p-2 flex flex-col justify-between" style={{ width: "301px", minHeight:"calc(100vh - 20px)", marginTop:"10px" }}>
+            {/* <div className="mx-auto bg-white h-full p-2 flex flex-col justify-between"> */}
                 <div>
                     <div className="flex">
-                        <img src={QrCodeIcon} alt="" style={{ width: "90px", height: "90px" }} />
+                        <Link to ={`/fnb/home`}>
+                            <img src={QrCodeIcon} alt="" style={{ width: "90px", height: "90px" }} />
+						</Link>
                         <div className="text-center mt-3">
                             <div className="font-bold text-[14px]">{info?.funda?.name}</div>
                             <div className="text-[13px]">Địa chỉ: {info?.funda?.address}</div>
@@ -72,7 +92,7 @@ export const FnbBillOrder: FC = () => {
                     <div className="border-t-0.5 border-b-0.5 border-cbs-border mx-2 py-1 text-[13px]">
                         <div className="flex justify-between">
                             <div className="font-bold">{info?.name}</div>
-                            <div> {moment(info?.createAt).format('HH:mm DD/MM/YYYY')}</div>
+                            <div>{moment(info?.createAt).format('HH:mm DD/MM/YYYY')}</div>
                         </div>
                         <div>
                             <span>Thu ngân: <span>{info?.userCreate?.fullname}</span></span>
@@ -88,15 +108,32 @@ export const FnbBillOrder: FC = () => {
                                 </tr>
                             </thead>
                             <tbody>
+                            {
+                                orderProducts.map((item: any) => (
+                                    <tr key={item._id}>
+                                        <td className="text-left">{item.product?.name} - Size {item?.size >=1 && FNB_SIZE[Number(item.size)-1].text}</td>
+                                        <td className="text-center px-1">{item.quantity}</td>
+                                        <td className="text-right">{formatNumberMoney(Number(item.quantity*item.unitPrice))}</td>
+                                    </tr>
+
+                                    // {item.subProducts?.map?.((subProduct: any) => (
+                                    //     <tr key={subProduct._id}>
+                                    //         <td className="text-left">{subProduct.name.trim()}</td>
+                                    //         <td className="text-center px-1"></td>
+                                    //         <td className="text-right">{formatNumberMoney(subProduct.unitPrice)}</td>
+                                    //     </tr>
+                                    // ))}
+                                ))
+                            }
                                 <tr>
-                                    <td className="text-left">Trà Sữa Socola kem trứng nướng - Size M</td>
-                                    <td className="text-center px-1">2</td>
-                                    <td className="text-right">56.000</td>
+                                    <td className="text-left">Chiết khấu</td>
+                                    <td className="text-center px-1"></td>
+                                    <td className="text-right">{formatNumberMoney(info?.discount)}</td>
                                 </tr>
                                 <tr>
-                                    <td className="text-left">Trà Sữa Socola kem trứng nướng - Size M</td>
-                                    <td className="text-center px-1">2</td>
-                                    <td className="text-right">56.000</td>
+                                    <td className="text-left">Giảm giá</td>
+                                    <td className="text-center px-1"></td>
+                                    <td className="text-right">{formatNumberMoney(info?.salesoff)}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -106,8 +143,8 @@ export const FnbBillOrder: FC = () => {
                             <thead>
                                 <tr className="font-bold">
                                     <th className="w-1/2 text-left">Tiền hàng</th>
-                                    <th className="w-[35px] text-center px-1">4</th>
-                                    <th className="w-[75px] text-right">112.000</th>
+                                    <th className="w-[35px] text-center px-1"></th>
+                                    <th className="w-[75px] text-right">{formatNumberMoney(info?.amount)}đ</th>
                                 </tr>
                             </thead>
                         </table>
@@ -121,5 +158,5 @@ export const FnbBillOrder: FC = () => {
                 <div className="w-full h-[30px]"></div>
             </div>
         </main>
-    );
-};
+    )
+}

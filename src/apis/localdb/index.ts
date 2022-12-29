@@ -635,8 +635,12 @@ export const FNB_SERVICE = [
 
 export const FNB_PAYMENT = [
     { value: 1, text: 'Tiền mặt' },
-    { value: 2, text: 'Chuyển khoản' },
-    { value: 3, text: 'Qua app' },
+    { value: 2, text: 'Chuyển khoản' }
+]
+
+export const FNB_SIZE = [
+    { value: 1, text: 'M' },
+    { value: 2, text: 'L' },
 ]
 
 export const FNB_ORDER_STATUS = [

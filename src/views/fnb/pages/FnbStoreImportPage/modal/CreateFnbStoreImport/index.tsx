@@ -99,7 +99,7 @@ const CreateFnbStoreImport: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                     as="h3"
                                     className="text-lg leading-6 font-bold"
                                 >
-                                    {modalType == 'create' ? 'Tạo quản lý chi phí' : 'Cập nhật quản lý chi phí'}
+                                    {modalType == 'create' ? 'Tạo' : 'Cập nhật'}
                                 </Dialog.Title>
                                 <button className="bg-primary-gray bg-opacity-20 p-2 rounded-3xl" type="button" onClick={() => toggle()}>
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

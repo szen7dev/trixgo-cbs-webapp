@@ -14,17 +14,14 @@ import { useModal } from "services/hooks/useModal";
 import { FNB_PAYMENT, FNB_SERVICE } from "apis/localdb";
 import API from "apis/repository";
 import { convertObToUrl } from "utils";
-import { convertCurrency } from 'utils/converter';
+import { formatNumberMoney } from 'utils/converter';
 
 /**
  * Components, Assets
  */
 import Close from "assets/icons/Close";
-import ItemSample from "assets/images/image 430.jpg";
+import beverageIcon from "assets/images/icons8-beverage.png";
 import IconGreenDot from "assets/images/Frame 4330.svg";
-// import CheckBoxEmpty from "assets/images/Frame 3548.svg";
-// import CheckedBox from "assets/images/Check-All.svg";
-// import IconCancel from "assets/images/icons8-cancel-96 1.svg";
 
 import "react-day-picker/lib/style.css";
 import { ModalErrorDetailItem } from "../ModalErrorDetailItem";
@@ -330,7 +327,7 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                                   >
                                     <p className="text-left text-[14px] my-1">{m.mistake?.name}</p>
                                     <p className="text-gray-500 text-left"><i>Mắc lỗi: {m.executor?.fullname}</i></p>
-                                    <p className="text-gray-500 text-left"><i>Phạt: {convertCurrency(m.amount)}</i></p>
+                                    <p className="text-gray-500 text-left"><i>Phạt: {formatNumberMoney(m.amount)}</i></p>
                                     <p className="text-gray-500 text-left"><i>Ghi chú: {m.note}</i></p>
                                   </button>
                                 ))}
@@ -399,18 +396,18 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                                   <p className="font-bold truncate">{op.product?.name}</p>
                                   <p className="text-primary-gray">{op.note}</p>
                                 </div>
-                                <div className="text-primary">{convertCurrency(op.unitPrice)}{` x `}{op.quantity}</div>
+                                <div className="text-primary">{formatNumberMoney(op.unitPrice)}{` x `}{op.quantity}</div>
                               </div>
                               <div className="flex">
                                 <div className="w-4/5 mt-3">
                                 {op.subProducts?.map?.((subProduct: any) => (
                                   <div key={subProduct._id} className="mb-2 pr-2 flex items-center">
-                                    <li> {`${subProduct.name.trim()}`}: {convertCurrency(subProduct.unitPrice)} </li>
+                                    <li> {`${subProduct.name.trim()}`}: {formatNumberMoney(subProduct.unitPrice)} </li>
                                   </div>
                                 ))}
                               </div>
                               <div className="w-1/5 flex justify-end items-start">
-                                {convertCurrency(op.unitPrice * op.quantity)}
+                                {formatNumberMoney(op.unitPrice * op.quantity)}
                               </div>
                               </div>
                             </div>
@@ -429,7 +426,7 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                                 <div className="w-4/5 mt-3">
                                   {op.subProducts?.map?.((subProduct: any) => (
                                     <div key={subProduct._id} className="mb-2 pr-2 flex items-center">
-                                      <li> {`${subProduct.name.trim()}`}: {convertCurrency(subProduct.unitPrice)} </li>
+                                      <li> {`${subProduct.name.trim()}`}: {formatNumberMoney(subProduct.unitPrice)} </li>
                                     </div>
                                   ))}
                                 </div>
@@ -437,17 +434,17 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                               <div className="flex-shrink">
                                 <div>
                                   <strong>Giá: </strong>
-                                  <span>{convertCurrency(op.unitPrice)}</span>
+                                  <span>{formatNumberMoney(op.unitPrice)}</span>
                                 </div>
 
                                 <div>
                                   <strong>Số lượng: </strong>
-                                  <span>{convertCurrency(op.quantity)}</span>
+                                  <span>{formatNumberMoney(op.quantity)}</span>
                                 </div>
 
                                 <div>
                                   <strong>Thành tiền: </strong>
-                                  <span>{convertCurrency(op.unitPrice * op.quantity)}</span>
+                                  <span>{formatNumberMoney(op.unitPrice * op.quantity)}</span>
                                 </div>
                               </div>
                             </div>
@@ -456,25 +453,25 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
 
                         {orderProducts.map((op: any) => (
                           <div key={op._id} className="flex gap-2 w-full border-b-0.5 p-2">
-                            <img src={op.product.images?.length ? `${process.env.REACT_APP_URL_S3}${op.product?.images[op.product?.images?.length - 1]?.path}` : ItemSample} alt="item" className="w-[44px] h-[44px]" />
+                            <img src={op.product.images?.length ? `${process.env.REACT_APP_URL_S3}${op.product?.images[op.product?.images?.length - 1]?.path}` : beverageIcon} alt="item" className="w-[44px] h-[44px]" />
                             <div className="w-full">
                               <div className="flex justify-between">
                                 <div>
                                   <p className="font-bold truncate">{op.product?.name}</p>
                                   <p className="text-primary-gray">{op.note}</p>
                                 </div>
-                                <div className="text-primary">{convertCurrency(op.unitPrice)}{` x `}{op.quantity}</div>
+                                <div className="text-primary">{formatNumberMoney(op.unitPrice)}{` x `}{op.quantity}</div>
                               </div>
                               <div className="flex">
                                 <div className="w-4/5 mt-3">
                                   {op.subProducts?.map?.((subProduct: any) => (
                                     <div key={subProduct._id} className="mb-2 pr-2 flex items-center">
-                                      <li> {`${subProduct.name.trim()}`}: {convertCurrency(subProduct.unitPrice)} </li>
+                                      <li> {`${subProduct.name.trim()}`}: {formatNumberMoney(subProduct.unitPrice)} </li>
                                     </div>
                                   ))}
                                 </div>
                                 <div className="w-2/5 flex justify-end items-end">
-                                  {convertCurrency(op.unitPrice * op.quantity)}
+                                  {formatNumberMoney(op.unitPrice * op.quantity)}
                                 </div>
                               </div>
                             </div>
@@ -484,25 +481,25 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                       <div className="border-l-0.5 border-r-0.5 px-2">
                         <div className="flex justify-between mt-2 mb-3 text-xl">
                           <div className="font-bold">Tổng tiền</div>
-                          <div className="font-bold">{convertCurrency(order.total)}</div>
+                          <div className="font-bold">{formatNumberMoney(order.total)}</div>
                         </div>
                         <div className="flex justify-between	mt-2 mb-3">
                           <div className="">Triết khấu</div>
                           <div className="flex">
-                            <div>{convertCurrency(order.discount)}</div>
+                            <div>{formatNumberMoney(order.discount)}</div>
                           </div>
                         </div>
                         <div className="flex justify-between mt-2 mb-3">
                           <div className="">Giảm giá</div>
                           <div className="flex">
-                            <div>{convertCurrency(order.salesoff)}</div>
+                            <div>{formatNumberMoney(order.salesoff)}</div>
                           </div>
                         </div>
                       </div>
                       <div className="border-0.5 p-1">
                         <div className="flex justify-between bg-cbs-form-input-bg text-xl">
                           <div className="font-bold">Thanh toán</div>
-                          <div className="font-bold text-primary">{convertCurrency(order.amount)}</div>
+                          <div className="font-bold text-primary">{formatNumberMoney(order.amount)}</div>
                         </div>
                       </div>
                       {/* <div className="text-right" style={{ marginTop: "100px" }}>
