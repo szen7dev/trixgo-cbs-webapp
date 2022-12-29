@@ -14,17 +14,16 @@ import PencilIcon from "assets/images/icons8-pencil-96.svg";
 /*=====4.PAGES/COMPONENTS=====*/
 import { SearchInput, ModalContainer } from "shareComponents/common";
 import PaginateV2 from "shareComponents/common/PaginateV2";
-// import { CreateFnbProductQoutas } from "./modal";
+import { CreateFnbStoreImport } from "./modal";
 
 /*=====5.TYPINGS=====*/
 
 /*=====6.HOOKS/APIS=====*/
 import { APP_ID } from "apis/localdb";
-import { useModal } from "services/hooks/useModal";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
-import { useFnbProduct } from 'services/hooks/fnb/useFnbProduct';
-import { useFnbQuota } from 'services/hooks/fnb/useFnbQuota';
 import { useFunda } from 'services/hooks/items/useFunda';
+import { useFnbGeneralBook } from 'services/hooks/fnb/useFnbGeneralBook';
+import { useAuth } from 'services/hooks/auth/useAuth';
 
 /*=====7.OTHER=====*/
 import { FNB_INTERNAL } from "apis/localdb";
@@ -35,6 +34,8 @@ const TYPE_PRODUCT = [
 ]
 
 export const FnbStoreImportPage: FC = () => {
+	const { user } = useAuth();
+	const companyID = user?.company._id;
 	useEffect(() => {
 		document.title = "Trixgo | FnB";
 	}, []);
@@ -46,23 +47,15 @@ export const FnbStoreImportPage: FC = () => {
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
 	const { info: infoFunda } = useFunda({ params: { fundaID }, isFetchList: false, isFetchInfo: true  });
-
-	/**
-	 * List mẩu tin
-	 */
-    const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFunda({ 
+    const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbGeneralBook({ 
 		params: { 
-			keyword: keyword,  
-			limit: 30,  
-			// productID, 
-			// populates: JSON.stringify({
-			// 	path: 'goods', select: "name unit"
-			// }) 
-		}, 
-		isFetchList: true, 
-		isFetchInfo: false
-	});
-	// console.log({listWithPager});
+			keyword: keyword, 
+			fundasID: [fundaID], 
+			populates: JSON.stringify({
+				path: 'userCreate',
+				select: 'fullname',
+			}) 
+		}, isFetchList: true, isFetchInfo: false  });
 
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
@@ -89,7 +82,13 @@ export const FnbStoreImportPage: FC = () => {
 	const toggleModalCreateProject = () => setModalCreateProject(!modalCreateProject);
 
 	const [initialValues, setInitialValues] = useState(null);
-	const onConfirmCreateProject = () => refetch();
+	const onConfirmCreateShiftDetail = () => {
+		refetch();
+		setIdsChecked([]);
+	}
+
+	const [modalCreateShiftDetail, setModalCreateShiftDetail] = useState<boolean>(false);
+	const toggleModalCreateShiftDetail = () => setModalCreateShiftDetail(!modalCreateShiftDetail);
 
 	useEffect(() => {
 		if (isSuccess && !(hasPermission && dataUserAccess?.level == 0)) {
@@ -139,10 +138,10 @@ export const FnbStoreImportPage: FC = () => {
 				<div className="flex items-center">
 					<button
 						className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold ml-6"
-						// onClick={() => {
-						// 	setInitialValues(null);
-						// 	toggleModalCreateShiftDetail();
-						// }}
+						onClick={() => {
+							setInitialValues(null);
+							toggleModalCreateShiftDetail();
+						}}
 					>
 						Tạo mới
 					</button>
@@ -169,63 +168,90 @@ export const FnbStoreImportPage: FC = () => {
 
 			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
 				<thead className="bg-cbs-table-header h-10 border-b border-primary-border">
-					<tr className="text-left text-sm text-primary-gray">
-						<th className="pb-1 pt-1" style={{ width: "3.5%" }}>
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
+					<tr className="text-left text-sm text-primary-gray text-[14px]">
+						<th className="pb-1 pt-1 w-[50px] font-normal">
+							<div className="pl-2">
+								<input
+									className="form-check-input"
+									type="checkbox"
+									// checked={getStateChecked(item._id)}
+									// onChange={() => onClickCheckButton(item._id)}
+								/>
+							</div>
+						</th>
+						<th className="pb-1 pt-1 w-[50px] font-normal">
+							<div className="pl-2">
 								TT
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal w-1/4">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Nội dung đơn hàng
+						<th className="pb-1 pt-1 font-normal">
+							<div className="pl-2">
+								Nội dung
 							</div>
 						</th>
-                        <th className="pb-1 pt-1 font-normal">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Ngày tháng
+						<th className="pb-1 pt-1 font-normal">
+							<div className="pl-2">
+								Chi phí
 							</div>
 						</th>
-                        <th className="pb-1 pt-1 font-normal">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Giá trị nhập kho
-							</div>
-						</th>
-                        <th className="pb-1 pt-1 font-normal">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
+						<th className="pb-1 pt-1 font-normal">
+							<div className="pl-2">
 								Người tạo
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
+							<div className="pl-2">
 								Ghi chú
 							</div>
 						</th>
 					</tr>
 				</thead>
-				
 				{
 					(listWithPager[pageIndex]??[]).map((item: any, i: any) => (
 						<tr key={item._id} className="text-[14px]">
-							<td className={"p-2 border-0.5 border-primary-border text-center"}>{Number(i+1)}</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								Nhập kho Thái Thịnh ngày 15/1/2021
+							<td className={"p-2 border-0.5 border-primary-border text-cente"}>
+								<input
+									className="form-check-input"
+									type="checkbox"
+									checked={getStateChecked(item._id)}
+									onChange={() => onClickCheckButton(item._id)}
+								/>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								15/2/2021
+								{i+1}
 							</td>
-							<td className={"p-2 border-0.5 border-primary-border text-cbs-highlight-color"}>
-								150.000.000
+							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
+								<Link to={`/fnb/store/${fundaID}/import/${item?._id}`}>
+									{item?.name}
+								</Link>
 							</td>
-                            <td className={"p-2 border-0.5 border-primary-border"}>
-                                Phùng Thị Hà-TRX 15/2/2021 15:30
+							<td className={"p-2 border-0.5 border-primary-border text-right"}>
+								{formatNumberMoney(item?.amount)}
 							</td>
-                            <td className={"p-2 border-0.5 border-primary-border"}>
-                                Đã nhận đủ
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{item?.userCreate?.fullname} {moment(item?.createAt).format("L")} {moment(item?.createAt).format("LT") }
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{item?.note}
 							</td>
 						</tr>
 					))
 				}
 			</table>
+
+			<ModalContainer isModalOpen={modalCreateShiftDetail} toggle={toggleModalCreateShiftDetail}>
+				<div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light">
+					<CreateFnbStoreImport
+						modalType={initialValues ? "update" : "create"}
+						show={modalCreateShiftDetail}
+						toggle={toggleModalCreateShiftDetail}
+						initialValues={initialValues ? initialValues : undefined}
+						onConfirm={onConfirmCreateShiftDetail}
+						companyID = {companyID}
+					/>
+				</div>
+			</ModalContainer>
+
 		</main>
-	);
-};
+	)
+}
