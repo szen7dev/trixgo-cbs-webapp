@@ -8,6 +8,8 @@ import { toast } from 'react-toastify';
 import { DropdownSearchable } from "shareComponents/common";
 import debounce from "lodash/debounce";
 import { useParams } from "react-router-dom";
+import { useDoctype } from "services/hooks/items/useDoctype";
+import { Doctype } from "typings/items";
 
 /**
  * Types, Services
@@ -17,10 +19,16 @@ import { useFnbGeneralBook } from 'services/hooks/fnb/useFnbGeneralBook';
 
 const CreateFnbExpenseFundaDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID, initialValues = {
     name: "",
-    note: ""
+    note: "",
+    outin: 1,
+    revenueType: 1,
+    expenseType:1,
+    appExpenseType: 1,
 } }) => {
+    console.log({ initialValues })
     const { fundaID } = useParams<{ fundaID: string }>();
     const [keyword, setKeyword] = useState('');
+    const [keywordDoctype, setKeywordDoctype] = useState('');
     const { insertAsync, updateAsync, refetch } = useFnbGeneralBook({
         params: {
             keyword: "", fundaID, 
@@ -28,13 +36,13 @@ const CreateFnbExpenseFundaDetail: FC<any> = ({ toggle, modalType, onConfirm, co
     });
 
     const handleSubmit = async (values: any) => {
-
+        console.log({values});
         if (modalType == 'create') {
             const query = {
                 ...values,
+                campaignName: values.campaignName._id,
                 fundaID,
             };
-
             const result = await insertAsync(query);
             if (!result.error) {
                 toast.success('Tạo mới dữ liệu thành công');
@@ -47,6 +55,7 @@ const CreateFnbExpenseFundaDetail: FC<any> = ({ toggle, modalType, onConfirm, co
             const query = {
                 ...values,
                 bookID: values._id,
+                campaignName: values.campaignName._id,
                 name: values.name,
                 note: values.note,
             };
@@ -62,6 +71,20 @@ const CreateFnbExpenseFundaDetail: FC<any> = ({ toggle, modalType, onConfirm, co
         onConfirm?.();
     };
 
+    const {
+        deleteManyAsync,
+        list: listDoctypes,
+        hasNextPage: hasNextPageDoctype,
+        refetch: refetchListDoctype,
+        fetchNextPage: fetchNextPageDoctype,
+        totalRecord
+    } = useDoctype({
+        params: {
+            type: 22,
+            keyword: keywordDoctype
+        },
+        isFetchList: true
+    });
     return (
         <Formik
             initialValues={initialValues}
@@ -77,7 +100,7 @@ const CreateFnbExpenseFundaDetail: FC<any> = ({ toggle, modalType, onConfirm, co
                                     as="h3"
                                     className="text-lg leading-6 font-bold"
                                 >
-                                    {modalType == 'create' ? 'Tạo quản lý chi phí' : 'Cập nhật quản lý chi phí'}
+                                    {modalType == 'create' ? 'Tạo' : 'Cập nhật'}
                                 </Dialog.Title>
                                 <button className="bg-primary-gray bg-opacity-20 p-2 rounded-3xl" type="button" onClick={() => toggle()}>
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -87,12 +110,24 @@ const CreateFnbExpenseFundaDetail: FC<any> = ({ toggle, modalType, onConfirm, co
                             </div>
                             <div className="px-6 mt-2 pt-3.5 flex-1 flex flex-col">
                                 <div className="mb-4">
-                                    <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtUnit">
+                                    <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtName">
                                         Tên
                                     </label>
-                                    <Field className="appearance-none border-0.5 border-cbs-bg-input-search bg-cbs-table-header rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none " id="txtName" placeholder="Tên" {...getFieldProps('name')} />
+                                    <Field className="w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header" id="txtName" placeholder="Tên" {...getFieldProps('name')} />
                                     <ErrorMessage
                                         name="name"
+                                        component="span"
+                                        className="font-normal leading-7 text-sm text-negative"
+                                    />
+                                </div>
+
+                                <div className="mb-4">
+                                    <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtSign">
+                                        Mã hiệu
+                                    </label>
+                                    <Field className="w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header" id="txtNote" placeholder="Mã hiệu" {...getFieldProps('sign')} />
+                                    <ErrorMessage
+                                        name="sign"
                                         component="span"
                                         className="font-normal leading-7 text-sm text-negative"
                                     />
@@ -102,14 +137,184 @@ const CreateFnbExpenseFundaDetail: FC<any> = ({ toggle, modalType, onConfirm, co
                                     <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtNote">
                                         Ghi chú
                                     </label>
-                                    <Field className="h-[60px] appearance-none border-0.5 border-cbs-bg-input-search bg-cbs-table-header rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none resize-none" as="textarea" id="txtNote" placeholder="Ghi chú" {...getFieldProps('note')} />
+                                    <Field className="w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header" as="textarea" id="txtNote" placeholder="Ghi chú" {...getFieldProps('note')} />
                                     <ErrorMessage
                                         name="note"
                                         component="span"
                                         className="font-normal leading-7 text-sm text-negative"
                                     />
                                 </div>
-                               
+
+                                <div className="mb-4">
+                                    <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtCampaignName">
+                                        Chiến dich
+                                    </label>
+                                    <DropdownSearchable
+                                            onchangeValue={(value: any) => {
+                                                setFieldValue("campaignName", {value, _id: value.id });
+                                            }}
+                                            onClearData={() => {
+                                                setFieldValue("campaignName", "");
+                                            }}
+                                            onSearchInputChange={debounce((value: any) => setKeywordDoctype(value), 600)}
+                                            // onScroll={handleScroll}
+                                            className="w-full mt-2 rounded-md border border-primary-border px-1 py-1 placeholder-primary-gray bg-cbs-table-header"
+                                            placeholder="Tìm kiếm cơ sở"
+                                            isMultiple={false}
+                                            allowClearValueSingleInput={true}
+                                            showTriangle={false}
+                                            maxWidthInput="max-w-full"
+                                            renderSelectedItem={(item: any) => (
+                                                <div className="max-w-full">
+                                                    <p className={"truncate"}>{item.text}</p>
+                                                </div>
+                                            )}
+                                            data={ 
+                                                listDoctypes?.map((doctype: any) =>  ({
+                                                    label: doctype.name,
+                                                    value: doctype._id,
+                                                }))
+                                            }
+                                            initialValue={{
+                                                value: initialValues?.campaignName?._id || "", 
+                                                label: initialValues?.campaignName?.name || "Chọn chiến dịch"
+                                            }}
+                                            formatItem={{
+                                                id: "value",
+                                                text: "label",
+                                            }}
+                                            inlineSearch={true}
+                                        />
+                                </div>
+
+                                <div className="mb-4">
+                                    <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtOutin">
+                                        Doanh thu, chi phí
+                                    </label>
+                                    <div className={" flex items-center"}>
+                                        <div className={"flex items-center"}>
+                                            <Field type="radio" name="outin" value={1} className={"form-check-input mt-0"} onChange={() => setFieldValue('outin', 1)} />
+                                            <label htmlFor="outin" className={"text-left ml-3"}>Doanh thu</label>
+                                        </div>
+                                        <div className={"flex items-center ml-3"}>
+                                            <Field type="radio" name="outin" value={2} className={"form-check-input mt-0"} onChange={() => setFieldValue('outin', 2)}/>
+                                            <label htmlFor="outin" className={"text-left ml-3"}>Chi phí</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="mb-4">
+                                    <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtRevenueType">
+                                        Phân loại, doanh thu
+                                    </label>
+                                    <div className={" flex items-center"}>
+                                        <div className={"flex items-center"}>
+                                            <Field type="radio" name="revenueType" value={1} className={"form-check-input mt-0"} onChange={() => setFieldValue('revenueType', 1)} />
+                                            <label htmlFor="revenueType" className={"text-left ml-3"}>Offline</label>
+                                        </div>
+                                        <div className={"flex items-center ml-3"}>
+                                            <Field type="radio" name="revenueType" value={2} className={"form-check-input mt-0"} onChange={() => setFieldValue('revenueType', 2)} />
+                                            <label htmlFor="revenueType" className={"text-left ml-3"}>Grab</label>
+                                        </div>
+
+                                        <div className={"flex items-center ml-3"}>
+                                            <Field type="radio" name="revenueType" value={3} className={"form-check-input mt-0"} onChange={() => setFieldValue('revenueType', 3)} />
+                                            <label htmlFor="revenueType" className={"text-left ml-3"}>Shopee</label>
+                                        </div>
+
+                                        <div className={"flex items-center ml-3"}>
+                                            <Field type="radio" name="revenueType" value={4} className={"form-check-input mt-0"} onChange={() => setFieldValue('revenueType', 4)} />
+                                            <label htmlFor="revenueType" className={"text-left ml-3"}>Gojek</label>
+                                        </div>
+                                        <div className={"flex items-center ml-3"}>
+                                            <Field type="radio" name="revenueType" value={5} className={"form-check-input mt-0"} onChange={() => setFieldValue('revenueType', 5)} />
+                                            <label htmlFor="revenueType" className={"text-left ml-3"}>Baemin</label>
+                                        </div>
+                                        <div className={"flex items-center ml-3"}>
+                                            <Field type="radio" name="revenueType" value={6} className={"form-check-input mt-0"} onChange={() => setFieldValue('revenueType', 6)} />
+                                            <label htmlFor="revenueType" className={"text-left ml-3"}>Loship</label>
+                                        </div>
+                                        <div className={"flex items-center ml-3"}>
+                                            <Field type="radio" name="revenueType" value={7} className={"form-check-input mt-0"} onChange={() => setFieldValue('revenueType', 7)} />
+                                            <label htmlFor="revenueType" className={"text-left ml-3"}>Bee</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="mb-4">
+                                    <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtExpenseType">
+                                        Phân loại, chi phí
+                                    </label>
+                                    <div className={" flex items-center"}>
+                                        <div className={"flex items-center"}>
+                                            <Field type="radio" name="expenseType" value={1} className={"form-check-input mt-0"} onChange={() => setFieldValue('expenseType', 1)} />
+                                            <label htmlFor="expenseType" className={"text-left ml-3"}>Truyền thông và marketing</label>
+                                        </div>
+                                        <div className={"flex items-center ml-3"}>
+                                            <Field type="radio" name="expenseType" value={2} className={"form-check-input mt-0"} onChange={() => setFieldValue('expenseType', 2)} />
+                                            <label htmlFor="expenseType" className={"text-left ml-3"}>Food App</label>
+                                        </div>
+                                        <div className={"flex items-center ml-3"}>
+                                            <Field type="radio" name="expenseType" value={3} className={"form-check-input mt-0"} onChange={() => setFieldValue('expenseType', 3)} />
+                                            <label htmlFor="expenseType" className={"text-left ml-3"}>Nguyên liệu</label>
+                                        </div>
+                                        <div className={"flex items-center ml-3"}>
+                                            <Field type="radio" name="expenseType" value={4} className={"form-check-input mt-0"} onChange={() => setFieldValue('expenseType', 4)} />
+                                            <label htmlFor="expenseType" className={"text-left ml-4"}>Thuê mặt bằng</label>
+                                        </div>
+                                        <div className={"flex items-center ml-3"}>
+                                            <Field type="radio" name="expenseType" value={5} className={"form-check-input mt-0"} onChange={() => setFieldValue('expenseType', 5)} />
+                                            <label htmlFor="expenseType" className={"text-left ml-5"}>Điện nước</label>
+                                        </div>
+                                        <div className={"flex items-center ml-3"}>
+                                            <Field type="radio" name="expenseType" value={6} className={"form-check-input mt-0"} onChange={() => setFieldValue('expenseType', 6)} />
+                                            <label htmlFor="expenseType" className={"text-left ml-3"}>Lương nhân viên</label>
+                                        </div>
+                                        <div className={"flex items-center ml-3"}>
+                                            <Field type="radio" name="expenseType" value={7} className={"form-check-input mt-0"} onChange={() => setFieldValue('expenseType', 7)} />
+                                            <label htmlFor="expenseType" className={"text-left ml-3"}>Khác</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="mb-4">
+                                <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtAppExpenseType">
+                                        Phân loại app
+                                    </label>
+                                    <div className={" flex items-center"}>
+                                        <div className={"flex items-center"}>
+                                            <Field type="radio" name="appExpenseType" value={1} className={"form-check-input mt-0"} onChange={() => setFieldValue('appExpenseType', 1)} />
+                                            <label htmlFor="appExpenseType" className={"text-left ml-3"}>Offline</label>
+                                        </div>
+                                        <div className={"flex items-center ml-3"}>
+                                            <Field type="radio" name="appExpenseType" value={2} className={"form-check-input mt-0"} onChange={() => setFieldValue('appExpenseType', 2)} />
+                                            <label htmlFor="appExpenseType" className={"text-left ml-3"}>Grab</label>
+                                        </div>
+
+                                        <div className={"flex items-center ml-3"}>
+                                            <Field type="radio" name="appExpenseType" value={3} className={"form-check-input mt-0"} onChange={() => setFieldValue('appExpenseType', 3)} />
+                                            <label htmlFor="appExpenseType" className={"text-left ml-3"}>Shopee</label>
+                                        </div>
+
+                                        <div className={"flex items-center ml-3"}>
+                                            <Field type="radio" name="appExpenseType" value={4} className={"form-check-input mt-0"} onChange={() => setFieldValue('appExpenseType', 4)} />
+                                            <label htmlFor="appExpenseType" className={"text-left ml-3"}>Gojek</label>
+                                        </div>
+                                        <div className={"flex items-center ml-3"}>
+                                            <Field type="radio" name="appExpenseType" value={5} className={"form-check-input mt-0"} onChange={() => setFieldValue('appExpenseType', 5)} />
+                                            <label htmlFor="appExpenseType" className={"text-left ml-3"}>Baemin</label>
+                                        </div>
+                                        <div className={"flex items-center ml-3"}>
+                                            <Field type="radio" name="appExpenseType" value={6} className={"form-check-input mt-0"} onChange={() => setFieldValue('appExpenseType', 6)} />
+                                            <label htmlFor="appExpenseType" className={"text-left ml-3"}>Loship</label>
+                                        </div>
+                                        <div className={"flex items-center ml-3"}>
+                                            <Field type="radio" name="appExpenseType" value={7} className={"form-check-input mt-0"} onChange={() => setFieldValue('appExpenseType', 7)} />
+                                            <label htmlFor="appExpenseType" className={"text-left ml-3"}>Bee</label>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div className="flex justify-end pt-5 px-6 pb-6 mb-0.5">
                                     <div>
                                         <button type="submit" className="px-7 py-3.5 rounded-md bg-primary text-white font-bold text-sm leading-4">Xác nhận</button>

@@ -731,7 +731,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 <th className="pb-1 pt-1 font-normal text-left w-[50px]">Kênh</th>
                 <th className="pb-1 pt-1 font-normal text-left w-[100px]"></th>
                 <th className="pb-1 pt-1 font-normal text-left">Đơn hàng</th>
-                <th className="pb-1 pt-1 font-normal text-left">Mã đơn app</th>
+                <th className="pb-1 pt-1 font-normal text-left">Mã đơn/Mã đơn app</th>
                 <th className="pb-1 pt-1 font-normal text-left">Cơ sở</th>
                 <th className="pb-1 pt-1 font-normal text-left">Hình thức</th>
                 <th className="pb-1 pt-1 font-normal text-left">Trạng thái</th>
@@ -801,7 +801,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                             {/* <span className="rounded-md bg-cbs-orage text-white px-3 py-1 mr-3">
                               02 lỗi
                             </span> */}
-                            {FNB_SERVICE[Number(item?.service)-1]?.text} - 
+                            {/* {FNB_SERVICE[Number(item?.service)-1]?.text} -  */}
                             <span className="text-cbs-primary">{item?.name}</span>
                           </p>
                           {/* <span className={"truncate text-xs text-primary-gray py-2"}>{item?.note}</span> */}
@@ -809,8 +809,8 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                       </button>
                     </td>
                     <td className={"px-1 py-2"}>
-                      <div className="text-cbs-primary">
-                        {item?.appOrderSign}
+                      <div className="">
+                        {item?.sign} | {item?.appOrderSign}
                       </div>
                     </td>
                     <td className={"px-1 py-2"}>
@@ -842,10 +842,10 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                     </td>
                     <td className={"text-right px-2 py-2"}>
                       <Link to={`/fnb/home/${item._id}/print/1`}>
-                        <p>In bill</p>
+                        <span className="mr-5 text-cbs-primary underline">In bill</span>
                       </Link>
                       <Link to={`/fnb/home/${item._id}/print/2`}>
-                        <p>In tem</p>
+                        <span className="text-cbs-primary underline">In tem</span>
                       </Link>
                     </td>
                   </tr>

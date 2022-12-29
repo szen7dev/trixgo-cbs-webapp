@@ -44,6 +44,8 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
         description: '',
         name: "",
         sign: "",
+        phone: "",
+        bankAccount: '',
         address: '',
         area1: '', 
         area2: '',
@@ -106,11 +108,13 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, name, sign, description, address, initialDay, campaign, internal, area1, area2, area3, activeCampaign} = newListIDChecked[0];
+            const { _id, name, sign, phone, bankAccount, description, address, initialDay, campaign, internal, area1, area2, area3, activeCampaign} = newListIDChecked[0];
             setInitialValues({
                 fundaID: _id,
                 name,
                 sign,
+                phone,
+                bankAccount,
                 description,
                 address,
                 initialDay,
@@ -181,6 +185,8 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                 fundaID: '',
                 name: '',
                 sign: '',
+                phone: '',
+                bankAccount: '',
                 description: '',
                 address: '',
                 initialDay: new Date(),
