@@ -19,12 +19,8 @@ import { CreateFnbExpenseFundaDetail } from "./modal";
 /*=====5.TYPINGS=====*/
 
 /*=====6.HOOKS/APIS=====*/
-import { useModal } from "services/hooks/useModal";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
-import { useFnbProduct } from 'services/hooks/fnb/useFnbProduct';
-import { useFnbQuota } from 'services/hooks/fnb/useFnbQuota';
 import { useFunda } from 'services/hooks/items/useFunda';
-import { useFnbShift } from 'services/hooks/fnb/useFnbShift';
 import { useFnbGeneralBook } from 'services/hooks/fnb/useFnbGeneralBook';
 import { useAuth } from 'services/hooks/auth/useAuth';
 
@@ -170,7 +166,7 @@ export const FnbExpenseFundaPage: FC = () => {
 			</header>
 
 			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
-			<thead className="bg-cbs-table-header h-10 border-b border-primary-border">
+				<thead className="bg-cbs-table-header h-10 border-b border-primary-border">
 					<tr className="text-left text-sm text-primary-gray text-[14px]">
 						<th className="pb-1 pt-1 w-[50px] font-normal">
 							<div className="pl-2">
@@ -256,5 +252,5 @@ export const FnbExpenseFundaPage: FC = () => {
 			</ModalContainer>
 
 		</main>
-	);
-};
+	)
+}

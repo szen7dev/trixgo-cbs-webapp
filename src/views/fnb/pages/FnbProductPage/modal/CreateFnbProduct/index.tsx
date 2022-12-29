@@ -20,6 +20,8 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
     unit: "",
     unitPrice: "",
     unitPrice2: "",
+    unitPrice3: "",
+    unitPrice4: "",
     note: ""  
 } }) => {
     
@@ -35,6 +37,8 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
                 unit: values.unit,
                 unitPrice: parseInt(values.unitPrice),
                 unitPrice2: parseInt(values.unitPrice2),
+                unitPrice3: parseInt(values.unitPrice3),
+                unitPrice4: parseInt(values.unitPrice4),
                 note: values.note,
             };
            
@@ -58,6 +62,8 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
                 unit: values.unit,
                 unitPrice: parseInt(values.unitPrice),
                 unitPrice2: parseInt(values.unitPrice2),
+                unitPrice3: parseInt(values.unitPrice3),
+                unitPrice4: parseInt(values.unitPrice4),
                 note: values.note,
             };
             const result = await updateAsync(query);
@@ -146,7 +152,7 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
                                 </div>
                                 <div className="mb-4">
                                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtUnitPrice">
-                                        Đơn giá-Bán Off
+                                        Đơn giá Size M, bán Off
                                     </label>
                                     <Field type="number" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtUnitPrice" placeholder="Đơn giá" {...getFieldProps('unitPrice')} />
                                     <ErrorMessage
@@ -157,11 +163,33 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
                                 </div>
                                 <div className="mb-4">
                                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtUnitPrice2">
-                                        Đơn giá 2-Bán App
+                                        Đơn giá Size M, bán App
                                     </label>
                                     <Field type="number" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtUnitPrice2" placeholder="Đơn giá 2" {...getFieldProps('unitPrice2')} />
                                     <ErrorMessage
                                         name="unitPrice2"
+                                        component="span"
+                                        className="font-normal leading-7 text-sm text-negative"
+                                    />
+                                </div>
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtUnitPrice3">
+                                        Đơn giá Size L, bán Off
+                                    </label>
+                                    <Field type="number" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtUnitPrice3" placeholder="Đơn giá" {...getFieldProps('unitPrice3')} />
+                                    <ErrorMessage
+                                        name="unitPrice3"
+                                        component="span"
+                                        className="font-normal leading-7 text-sm text-negative"
+                                    />
+                                </div>
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtUnitPrice4">
+                                        Đơn giá Size L, bán App
+                                    </label>
+                                    <Field type="number" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtUnitPrice4" placeholder="Đơn giá 2" {...getFieldProps('unitPrice4')} />
+                                    <ErrorMessage
+                                        name="unitPrice4"
                                         component="span"
                                         className="font-normal leading-7 text-sm text-negative"
                                     />

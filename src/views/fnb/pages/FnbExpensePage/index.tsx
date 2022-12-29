@@ -45,8 +45,6 @@ export const FnbExpensePage: FC = () => {
 
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
-    const { info: infoProduct } = useFnbProduct({ params: { productID }, isFetchList: false, isFetchInfo: true  });
-	// console.log({ infoProduct });
 
 	/**
 	 * List mẩu tin
@@ -111,7 +109,6 @@ export const FnbExpensePage: FC = () => {
 					<button onClick={history.goBack}>
                         <img src="/images/common/button_back.png" alt="Button Back" />
                     </button>
-					<p className="text-lg">{infoProduct?.name}</p>
 					<SearchInput
 						classNameWrapper="ml-4"
 						classNameInput="outline-none w-[296px]"
@@ -171,7 +168,7 @@ export const FnbExpensePage: FC = () => {
 						</th>
 						<th className="pb-1 pt-1 font-normal">
 							<div className="border-gray-300 font-normal pl-2">
-								Chi phí
+								Tổng chi phí
 							</div>
 						</th>
                         <th className="pb-1 pt-1 font-normal w-[200px]">
@@ -200,7 +197,7 @@ export const FnbExpensePage: FC = () => {
 								{moment(item?.createAt).format('DD/MM/YYYY')}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-                                {formatNumberMoney(0||0)}
+                                {formatNumberMoney(item?.totalAccExpense||0)}
 							</td>
                             <td className={"p-2 border-0.5 border-primary-border"}>
 								{item?.address}
