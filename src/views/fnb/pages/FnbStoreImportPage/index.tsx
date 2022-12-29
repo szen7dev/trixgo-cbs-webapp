@@ -1,10 +1,10 @@
 /*=====1.LIBRARY=====*/
 import React, { FC, useCallback, useState, useEffect } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
 import debounce from "lodash/debounce";
 import moment from "moment";
 import { formatNumberMoney } from "utils/converter";
+import { toast } from "react-toastify";
 
 /*=====2.CSS=====*/
 
@@ -19,19 +19,13 @@ import { CreateFnbStoreImport } from "./modal";
 /*=====5.TYPINGS=====*/
 
 /*=====6.HOOKS/APIS=====*/
-import { APP_ID } from "apis/localdb";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { useFunda } from 'services/hooks/items/useFunda';
 import { useFnbGeneralBook } from 'services/hooks/fnb/useFnbGeneralBook';
 import { useAuth } from 'services/hooks/auth/useAuth';
 
 /*=====7.OTHER=====*/
-import { FNB_INTERNAL } from "apis/localdb";
-
-const TYPE_PRODUCT = [
-	{ value: 1, text: "Thông thường" },
-	{ value: 2, text: "Topping" },
-]
+import { APP_ID } from "apis/localdb";
 
 export const FnbStoreImportPage: FC = () => {
 	const { user } = useAuth();
@@ -39,24 +33,22 @@ export const FnbStoreImportPage: FC = () => {
 	useEffect(() => {
 		document.title = "Trixgo | FnB";
 	}, []);
-	
 	const history = useHistory();
 	const { fundaID } = useParams<{ fundaID: string }>();
 	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
-
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
-	const { info: infoFunda } = useFunda({ params: { fundaID }, isFetchList: false, isFetchInfo: true  });
+	
+    const { info: infoFunda } = useFunda({ params: { fundaID }, isFetchList: false, isFetchInfo: true  });
     const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbGeneralBook({ 
 		params: { 
 			keyword: keyword, 
 			fundasID: [fundaID], 
 			populates: JSON.stringify({
-				path: 'userCreate',
-				select: 'fullname',
+				path: 'campaignName userCreate',
+				// select: 'fullname name',
 			}) 
 		}, isFetchList: true, isFetchInfo: false  });
-
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
 	}, [idsChecked]);
@@ -78,17 +70,14 @@ export const FnbStoreImportPage: FC = () => {
 		}
 	};
 
-	const [modalCreateProject, setModalCreateProject] = useState<boolean>(false);
-	const toggleModalCreateProject = () => setModalCreateProject(!modalCreateProject);
+	const [modalCreateShiftDetail, setModalCreateShiftDetail] = useState<boolean>(false);
+	const toggleModalCreateShiftDetail = () => setModalCreateShiftDetail(!modalCreateShiftDetail);
 
 	const [initialValues, setInitialValues] = useState(null);
 	const onConfirmCreateShiftDetail = () => {
 		refetch();
 		setIdsChecked([]);
 	}
-
-	const [modalCreateShiftDetail, setModalCreateShiftDetail] = useState<boolean>(false);
-	const toggleModalCreateShiftDetail = () => setModalCreateShiftDetail(!modalCreateShiftDetail);
 
 	useEffect(() => {
 		if (isSuccess && !(hasPermission && dataUserAccess?.level == 0)) {
@@ -127,6 +116,15 @@ export const FnbStoreImportPage: FC = () => {
 								<>
 								<div
 									className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
+									onClick={() => {
+										const item = listWithPager[pageIndex].find((e: any) => e._id == idsChecked[0]);
+										setInitialValues({
+											...item,
+											startTime: item.startTime ? moment(item.startTime).format('MM/DD/YYYY') : '',
+											expiredTime: item.expiredTime ? moment(item.expiredTime).format('MM/DD/YYYY') : '',
+										});
+										toggleModalCreateShiftDetail();
+									}}
 								>
 									<img src={PencilIcon} alt="Pencil" />
 								</div>
@@ -150,20 +148,20 @@ export const FnbStoreImportPage: FC = () => {
 					</button> */}
 				</div>
 				<PaginateV2
-					ref={ref}
-					totalRecord={totalRecord}
-					totalPages={totalPage}
-					limit={20}
-					hasNextPage={hasNextPage}
-					isFetching={isLoading}
-					nextPageAction={() => {
-						fetchNextPage();
-						setPageIndex(oldState => oldState+1)
-					}}
-					prevPageAction={() => {
-						setPageIndex(oldState => oldState-1)
-					}}
-				/>
+                        ref={ref}
+                        totalRecord={totalRecord}
+                        totalPages={totalPage}
+                        limit={20}
+                        hasNextPage={hasNextPage}
+                        isFetching={isLoading}
+                        nextPageAction={() => {
+                            fetchNextPage();
+                            setPageIndex(oldState => oldState+1)
+                        }}
+                        prevPageAction={() => {
+                            setPageIndex(oldState => oldState-1)
+                        }}
+                    />
 			</header>
 
 			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">

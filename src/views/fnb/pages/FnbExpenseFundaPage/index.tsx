@@ -45,11 +45,10 @@ export const FnbExpenseFundaPage: FC = () => {
 			keyword: keyword, 
 			fundasID: [fundaID], 
 			populates: JSON.stringify({
-				path: 'userCreate',
-				select: 'fullname',
+				path: 'campaignName userCreate',
+				// select: 'fullname name',
 			}) 
 		}, isFetchList: true, isFetchInfo: false  });
-
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
 	}, [idsChecked]);
