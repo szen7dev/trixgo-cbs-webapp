@@ -71,7 +71,7 @@ export const FnbBillList: FC = () => {
     // console.log(info)
 
     return (
-        <main className="min-h-screen overflow-auto bg-cbs-border">
+        <main className="h-screen overflow-auto bg-cbs-border">
             {/* <div className="h-full mx-auto bg-cbs-gray my-3 pb-1" style={{ width: "188px" }}> */}
             <div className="h-full mx-auto bg-cbs-gray my-3 pb-1">
                 {/* item */}
