@@ -165,7 +165,7 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
                                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtUnitPrice2">
                                         Đơn giá Size M, bán App
                                     </label>
-                                    <Field type="number" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtUnitPrice2" placeholder="Đơn giá 2" {...getFieldProps('unitPrice2')} />
+                                    <Field type="number" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtUnitPrice2" placeholder="Đơn giá" {...getFieldProps('unitPrice2')} />
                                     <ErrorMessage
                                         name="unitPrice2"
                                         component="span"
@@ -187,7 +187,7 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
                                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtUnitPrice4">
                                         Đơn giá Size L, bán App
                                     </label>
-                                    <Field type="number" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtUnitPrice4" placeholder="Đơn giá 2" {...getFieldProps('unitPrice4')} />
+                                    <Field type="number" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtUnitPrice4" placeholder="Đơn giá" {...getFieldProps('unitPrice4')} />
                                     <ErrorMessage
                                         name="unitPrice4"
                                         component="span"
