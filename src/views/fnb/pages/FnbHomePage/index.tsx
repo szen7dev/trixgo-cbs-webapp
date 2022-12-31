@@ -24,6 +24,7 @@ import shopeeChannelIcon from "assets/images/fnb/shopee.svg";
 import gojekChannelIcon from "assets/images/fnb/gojek.svg";
 import baemineChannelIcon from "assets/images/fnb/baemin.svg";
 import loshipChannelIcon from "assets/images/fnb/loship.svg";
+import businessBuiding from "assets/images/icons8-business-building-48.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
 // import { DropdownSearchableV2, Loader } from "shareComponents/common";
@@ -33,7 +34,8 @@ import { UpdateStatusDialog } from "./UpdateStatusDialog";
 // import { ModalCreateResultSearch } from "./ModalCreateResultSearch";
 import { ModalDetailItem } from "./components/ModalDetailItem/index";
 import { ModalErrorDetailItem } from "./components/ModalErrorDetailItem";
-import { ModalConfirm } from "shareComponents/common";
+import { DropdownSearchableV2, Loader, ModalConfirm } from "shareComponents/common";
+import TriangleDown from "assets/icons/TriangleDown";
 
 /*=====5.TYPINGS=====*/
 
@@ -46,104 +48,82 @@ import { useQueryListDepartmentsIsMember } from "services/hooks/items/useDepartm
 import { useSearchTask } from "services/hooks/useMainSearch";
 import { useTask } from "services/hooks/useTask";
 import { useModal } from "services/hooks/useModal";
-import {
-  useListFileFromSearch,
-  useListResponseFromSearch,
-  usePcmPlanTaskNotification,
-} from "services/hooks/pcm/usePcmDashboardV2";
-import {
-  resetFilterDashboard,
-  setQueryFile,
-  setQueryResponse,
-  setQuerySubject,
-  setTabActive,
-  setTabIndex,
-} from "redux/reducer/DashboardV2Slice";
+
 import API from "apis/repository";
 
 import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
 
 /*=====7.OTHER=====*/
-import { FNB_CHANNEL, FNB_SERVICE, FNB_PAYMENT, FNB_ORDER_STATUS } from "apis/localdb";
+import { FNB_CHANNEL, FNB_SERVICE, FNB_PAYMENT, FNB_ORDER_STATUS, FNB_SHIFT } from "apis/localdb";
+import { useInfiniteQuery } from "react-query";
+import { setQueryFnb } from "redux/reducer/FnbSlice";
+import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
 
 type Props = {
   type?: number;
 };
 
+// Hàm trả về icon app
+export const getIconApp = (salesChannel: any) => {
+  switch (salesChannel) {
+    case 1:
+      return offlineChannelIcon
+
+    case 2:
+      return grabChannelIcon
+
+    case 3:
+      return shopeeChannelIcon
+
+    case 4:
+      return gojekChannelIcon
+
+    case 5:
+      return baemineChannelIcon
+
+    case 6:
+      return loshipChannelIcon
+
+    default:
+      return offlineChannelIcon
+  }
+}
+
 export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
 
   useEffect(() => {
-		document.title = "Trixgo | FnB";
-	}, []);
-
-  const [keyword, setKeyword] = useState("");
-  const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbOrder({ 
-		params: { 
-      limit: 50,
-			keyword, 
-			populates: JSON.stringify({
-				path: 'funda shift customer userCreate',
-        select: "name sign address bizfullname fullname phone numberOfOrders",
-			}) 
-		}, isFetchList: true, isFetchInfo: false  });
-
-  // Hàm trả về icon app
-  const getIconApp = (salesChannel: any) => {
-    switch (salesChannel) {
-      case 1:
-        return offlineChannelIcon
-
-      case 2:
-        return grabChannelIcon
-
-      case 3:
-        return shopeeChannelIcon
-
-      case 4:
-        return gojekChannelIcon
-
-      case 5:
-        return baemineChannelIcon
-
-      case 6:
-        return loshipChannelIcon
-
-      default:
-        return offlineChannelIcon
-    }
-  }
+    document.title = "Trixgo | FnB";
+  }, []);
 
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   const dispatch = useDispatch();
   const { user } = useAuth();
   const [pageIndex, setPageIndex] = useState(0);
+  const [reset, setReset] = useState(false);
 
   const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
-
   const ref = React.useRef<PaginateHandle>(null);
-  const tabIndex = useAppSelector((state) => state.dashboardV2.data.tabIndex);
-  const tabActive = useAppSelector((state) => state.dashboardV2.data.tabActive);
-  const [showUpdateStatus, setShowUpdateStatus] = useState(false);
   const { openModal, closeModal } = useModal();
 
-  useEffect(() => {
-    return () => {
-      dispatch(setTabActive(2));
-      dispatch(setTabIndex(1));
-    }
-  }, []);
+  const keyword = useAppSelector(
+    (state) => state.fnbSlice.data.keywordHomeFnb
+  );
 
-  const { refetch: refetchPcmPlanTaskNotification } = usePcmPlanTaskNotification({ enabled: false });
+  const queryFnb = useAppSelector(
+    (state) => state.fnbSlice.data.queryFnb
+  );
 
-  const { updateStatusMultipleAsync } = useTask({
-    params: {},
-    isFetchInfo: false,
+  const { isLoading, isFetching, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbOrder({
+    params: {
+      limit: 50,
+      keyword,
+      ...queryFnb,
+      populates: JSON.stringify({
+        path: 'funda shift customer userCreate',
+        select: "name sign address bizfullname fullname phone numberOfOrders",
+      })
+    }, isFetchList: true, isFetchInfo: false
   });
-
-  const onPressUpdateStatus = async () => {
-    await updateStatusMultipleAsync({ option: 2 });
-    refetchPcmPlanTaskNotification();
-  };
 
   // popover
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
@@ -200,280 +180,269 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
 
       refetch();
       toast.info('Hủy đơn hàng thành công');
-    } catch(err: any) {
+    } catch (err: any) {
       toast.error(err.message);
     }
   }
 
+  ///
+  const [searchFunda, setSearchFunda] = useState('');
+
+  const {
+    data: dataFunda,
+    hasNextPage: hasNextPageFunda,
+    fetchNextPage: fetchNextPageFunda
+  } = useInfiniteQuery(
+    ['Fnb_Funda_list', searchFunda],
+    async ({ pageParam }: any) =>
+      API.get(
+        `api/item/fundas?&isMember=1&limit=50&keyword=${searchFunda}&lastestID=${pageParam || ""}`,
+      ),
+    {
+      getNextPageParam: ({ data }: any) => {
+        return data?.nextCursor ?? undefined;
+      },
+      refetchOnWindowFocus: false,
+      enabled: true
+    }
+  );
+
+  const listFunda = []
+    .concat(...(dataFunda?.pages || [])
+      .map((d: any) => d.data?.data?.listRecords));
+
+  const handleScrollFunda = (e: UIEvent<HTMLDivElement>) => {
+    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
+    const bottom = scrollHeight - scrollTop === clientHeight;
+
+    if (bottom && hasNextPageFunda) {
+      fetchNextPageFunda();
+    }
+  };
+
+  //
+
   return (
     <div className="t-home flex flex-col h-full overflow-hidden">
       <div className={"sticky top-0 bg-white z-10"}>
-        {/* <div className={"filter-bar flex flex-wrap px-4 py-2"}>
-          {(isLoadingResponse ||
-            isLoadingListTask ||
-            isFetchingNextPageSubject ||
-            isFetchingResponse ||
-            isLoadingFile ||
-            isFetchingFile) && <Loader className="border-primary" />}
-          
+        <div className={"filter-bar flex flex-wrap px-4 py-2"}>
+          {(isLoading ||
+            isFetching) && <Loader className="border-primary" />}
+
           <DropdownSearchableV2
-              reset={reset}
-              selectOneByOne={true}
-              countBadge={queryResponse.companyOfAuthorsID.length}
-              className={"mr-2 border border-primary-border rounded-lg mb-2"}
-              placeholder={"Cơ sở"}
-              onchangeValue={(value) => {
-                if (
-                  !queryResponse.companyOfAuthorsID?.includes?.(
-                    value.id as string
-                  )
-                ) {
-                  const newData: any = [
-                    ...queryResponse.companyOfAuthorsID,
-                    value.id,
-                  ];
-                  dispatch(
-                    setQueryResponse({
-                      ...queryResponse,
-                      companyOfAuthorsID: newData,
-                    })
-                  );
-                }
-                setSearchCompanyName("");
-                dispatch(setTabActive(tabIndex));
-                setPageIndex(0);
-                ref.current && ref.current.resetPaginate();
-              }}
-              onMultipleRemoveValue={(id: any) => {
-                const newList = queryResponse.companyOfAuthorsID.filter(
-                  (item: any) => item !== id
-                );
-                dispatch(
-                  setQueryResponse({
-                    ...queryResponse,
-                    companyOfAuthorsID: newList,
-                  })
-                );
-              }}
-              onClearData={() =>
-                dispatch(
-                  setQueryResponse({
-                    ...queryResponse,
-                    companyOfAuthorsID: [],
-                  })
+            reset={reset}
+            selectOneByOne={true}
+            className={"mr-2 border border-primary-border rounded-lg mb-2"}
+            placeholder={"Cơ sở"}
+            showTriangle={true}
+            isMultiple={true}
+            formatItem={{
+              id: "value",
+              text: "label",
+            }}
+            renderItem={(item) => (
+              <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            prefixIcon={
+              <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
+            }
+            countBadge={queryFnb.fundasID.length}
+            data={listFunda.map((item: any) => ({
+              label: `${item.sign}.${item.name}`,
+              value: item._id,
+            }))}
+            onchangeValue={(value) => {
+              if (
+                !queryFnb.fundasID?.includes?.(
+                  value.id as string
                 )
+              ) {
+                const newData: any = [
+                  ...queryFnb.fundasID,
+                  value.id,
+                ];
+                dispatch(
+                  setQueryFnb({
+                    ...queryFnb,
+                    fundasID: newData,
+                  })
+                );
               }
-              onScroll={handleScrollCompany}
-              onSearchInputChange={debounce(
-                (value) => setSearchCompanyName(value),
-                500
-              )}
-              showTriangle={true}
-              isMultiple={true}
-              data={listCompany.map((company) => ({
-                label: company.name,
-                value: company._id,
-              }))}
-              formatItem={{
-                id: "value",
-                text: "label",
-              }}
-              renderItem={(item) => (
-                <p className={"min-w-[300px]"}>{item.text}</p>
-              )}
-              prefixIcon={
-                <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
-              }
-            />
+              setSearchFunda("");
+              setPageIndex(0);
+              ref.current && ref.current.resetPaginate();
+            }}
+            onMultipleRemoveValue={(id: any) => {
+              const newList = queryFnb.fundasID.filter(
+                (item: any) => item !== id
+              );
+              dispatch(
+                setQueryFnb({
+                  ...queryFnb,
+                  fundasID: newList,
+                })
+              );
+            }}
+            onClearData={() =>
+              dispatch(
+                setQueryFnb({
+                  ...queryFnb,
+                  fundasID: [],
+                })
+              )
+            }
+            onScroll={handleScrollFunda}
+            onSearchInputChange={debounce(
+              (value) => setSearchFunda(value),
+              500
+            )}
+          />
 
-            <DropdownSearchableV2
-              selectOneByOne={true}
-              reset={reset}
-              countBadge={queryResponse.authorsID.length}
-              className={"mr-2 border border-primary-border rounded-lg mb-2"}
-              placeholder={"Ca làm"}
-              showTriangle={true}
-              isMultiple={true}
-              onchangeValue={(value) => {
-                if (!queryResponse.authorsID?.includes?.(value.id as string)) {
-                  const newData: any = [...queryResponse.authorsID, value.id];
-                  dispatch(
-                    setQueryResponse({
-                      ...queryResponse,
-                      authorsID: newData,
-                    })
-                  );
-                }
-                setSearchUserSystem("");
-                dispatch(setTabActive(tabIndex));
-                setPageIndex(0);
-                ref.current && ref.current.resetPaginate();
-              }}
-              onMultipleRemoveValue={(id: any) => {
-                const newList = queryResponse.authorsID.filter(
-                  (item: any) => item !== id
-                );
-                dispatch(
-                  setQueryResponse({
-                    ...queryResponse,
-                    authorsID: newList,
-                  })
-                );
-              }}
-              onClearData={() =>
-                dispatch(
-                  setQueryResponse({
-                    ...queryResponse,
-                    authorsID: [],
-                  })
+          <DropdownSearchableV2
+            reset={reset}
+            selectOneByOne={true}
+            className={"mr-2 border border-primary-border rounded-lg mb-2"}
+            placeholder={"Ca làm"}
+            showTriangle={true}
+            isMultiple={true}
+            disableSearch={true}
+            formatItem={{
+              id: "value",
+              text: "label",
+            }}
+            renderItem={(item) => (
+              <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            prefixIcon={
+              <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
+            }
+            countBadge={queryFnb.shiftTypes.length}
+            data={FNB_SHIFT.map((item: any) => ({
+              label: `${item.text}`,
+              value: item.value,
+            }))}
+            onchangeValue={(value) => {
+              if (
+                !queryFnb.shiftTypes?.includes?.(
+                  value.id as string
                 )
-              }
-              onSearchInputChange={debounce(
-                (value) => setSearchUserSystem(value),
-                500
-              )}
-              onScroll={handleScrollUserSystem}
-              renderSelectedItem={(item: any) => (
-                <div className="flex items-center">
-                  <img
-                    alt="Thumbnail"
-                    src={item.imageUrl || userIcon}
-                    className="mr-1 w-6 h-6 rounded-full"
-                  />
-                  <p
-                    style={{
-                      textOverflow: "ellipsis",
-                      maxWidth: "100%",
-                      minWidth: 0,
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      flex: "1 1 auto",
-                    }}
-                  >
-                    {item.text}
-                  </p>
-                </div>
-              )}
-              data={listUsersSystem.map((item) => ({
-                label: item.bizfullname || item.fullname,
-                value: item._id,
-                imgUrl: item.imgUrl,
-                email: item.email,
-              }))}
-              formatItem={{
-                id: "value",
-                text: "label",
-                imageUrl: "imgUrl",
-              }}
-              renderItem={(item) => (
-                <div className={"flex"}>
-                  <div
-                    className={
-                      "w-[44px] h-[44px] flex items-center justify-center rounded-full bg-accent text-white text-2xl font-bold"
-                    }
-                  >
-                    {item.label.charAt(0)}
-                  </div>
-                  <div className={"flex-1 ml-2"}>
-                    <p className={"truncate"}>{item.label}</p>
-                    <p className={"text-primary-gray truncate"}>{item.email}</p>
-                  </div>
-                </div>
-              )}
-              prefixIcon={
-                <img className={"mr-2"} src={iconShift} alt={"icon"} />
-              }
-            />
-
-            <DropdownSearchableV2
-              selectOneByOne={true}
-              reset={reset}
-              className={"mr-2 border border-primary-border rounded-lg mb-2"}
-              placeholder={"Kênh khách hàng"}
-              prefixIcon={
-                <img className={"mr-2"} src={projectIcon} alt={"icon"} />
-              }
-              isMultiple={true}
-              onchangeValue={(value) => {
-                if (!project?.includes?.(value.id as string)) {
-                  const newData: any = [...project, value.id];
-                  setProject(newData);
-                }
-                setSearchProject("");
-                dispatch(setTabActive(tabIndex));
-                setPageIndex(0);
-                ref.current && ref.current.resetPaginate();
-              }}
-              onMultipleRemoveValue={(id: any) => {
-                const newList = project.filter((item: any) => item !== id);
-                setProject(newList);
-              }}
-              onClearData={() => setProject([])}
-              onSearchInputChange={debounce(
-                (value) => setSearchProject(value),
-                500
-              )}
-              onScroll={handleScrollProject}
-              data={listProject.map((item) => ({
-                label: `${item.sign}.${item.name}`,
-                value: item._id,
-              }))}
-              formatItem={{
-                id: "value",
-                text: "label",
-              }}
-              renderItem={(item) => (
-                <p className={"min-w-[300px]"}>{item.text}</p>
-              )}
-            />      
-
-            <DropdownSearchableV2
-              selectOneByOne={true}
-              reset={reset}
-              className={"mr-2 border border-primary-border rounded-lg mb-2"}
-              placeholder={"Hình thức phục vụ"}
-              prefixIcon={
-                <img className={"mr-2"} src={iconSupport} alt={"icon"} />
-              }
-              isMultiple={false}
-              disableSearch={true}
-              data={[
-                {
-                  id: 0,
-                  text: "Tất cả",
-                },
-                {
-                  id: 1,
-                  text: "Chính thức",
-                },
-                {
-                  id: 2,
-                  text: "Không chính thức",
-                },
-              ]}
-              onchangeValue={(value) => {
+              ) {
+                const newData: any = [
+                  ...queryFnb.shiftTypes,
+                  value.id,
+                ];
                 dispatch(
-                  setQueryResponse({
-                    ...queryResponse,
-                    official: value.id,
+                  setQueryFnb({
+                    ...queryFnb,
+                    shiftTypes: newData,
                   })
                 );
-                dispatch(setTabActive(tabIndex));
-                setPageIndex(0);
-                ref.current && ref.current.resetPaginate();
-              }}
-            />
+              }
+              setSearchFunda("");
+              setPageIndex(0);
+              ref.current && ref.current.resetPaginate();
+            }}
+            onMultipleRemoveValue={(id: any) => {
+              const newList = queryFnb.shiftTypes.filter(
+                (item: any) => item !== id
+              );
+              dispatch(
+                setQueryFnb({
+                  ...queryFnb,
+                  shiftTypes: newList,
+                })
+              );
+            }}
+            onClearData={() =>
+              dispatch(
+                setQueryFnb({
+                  ...queryFnb,
+                  shiftTypes: [],
+                })
+              )
+            }
+          />
+
+<DropdownSearchableV2
+            reset={reset}
+            selectOneByOne={true}
+            className={"mr-2 border border-primary-border rounded-lg mb-2"}
+            placeholder={"Kênh bán hàng"}
+            showTriangle={true}
+            isMultiple={true}
+            disableSearch={true}
+            formatItem={{
+              id: "value",
+              text: "label",
+            }}
+            renderItem={(item) => (
+              <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            prefixIcon={
+              <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
+            }
+            countBadge={queryFnb.salesChannels.length}
+            data={FNB_CHANNEL.map((item: any) => ({
+              label: `${item.text}`,
+              value: item.value,
+            }))}
+            onchangeValue={(value) => {
+              if (
+                !queryFnb.salesChannels?.includes?.(
+                  value.id as string
+                )
+              ) {
+                const newData: any = [
+                  ...queryFnb.salesChannels,
+                  value.id,
+                ];
+                dispatch(
+                  setQueryFnb({
+                    ...queryFnb,
+                    salesChannels: newData,
+                  })
+                );
+              }
+              setSearchFunda("");
+              setPageIndex(0);
+              ref.current && ref.current.resetPaginate();
+            }}
+            onMultipleRemoveValue={(id: any) => {
+              const newList = queryFnb.salesChannels.filter(
+                (item: any) => item !== id
+              );
+              dispatch(
+                setQueryFnb({
+                  ...queryFnb,
+                  salesChannels: newList,
+                })
+              );
+            }}
+            onClearData={() =>
+              dispatch(
+                setQueryFnb({
+                  ...queryFnb,
+                  salesChannels: [],
+                })
+              )
+            }
+          />
+
           <TimeRangeDropdown
               className={
                 "mr-2 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
               }
               placeholder={"Thời khoảng"}
               iconBack={<TriangleDown />}
-              iconFront={<img src={iconSandtime} alt={"----"} />}
+              iconFront={<img src={businessBuiding} alt={"----"} />}
               onValueChange={(val) => {
-                setFromCreateDate(val.fromDate);
-                settoCreateDate(val.toDate);
-                dispatch(setTabActive(tabIndex));
+                dispatch(
+                  setQueryFnb({
+                    ...queryFnb,
+                    fromDate: val.fromDate,
+                    toDate: val.toDate,
+                  })
+                );
               }}
               options={[
                 {
@@ -499,93 +468,125 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               ]}
             />
 
-            <DropdownSearchableV2
-              selectOneByOne={true}
-              reset={reset}
-              className={"mr-2 border border-primary-border rounded-lg mb-2"}
-              placeholder={"Trạng thái"}
-              prefixIcon={
-                <img className={"mr-2"} src={iconOk} alt={"icon"} />
-              }
-              isMultiple={false}
-              disableSearch={true}
-              data={[
-                {
-                  id: 0,
-                  text: "Tất cả",
-                },
-                {
-                  id: 1,
-                  text: "Chính thức",
-                },
-                {
-                  id: 2,
-                  text: "Không chính thức",
-                },
-              ]}
-              onchangeValue={(value) => {
+          <DropdownSearchableV2
+            reset={reset}
+            selectOneByOne={true}
+            className={"mr-2 border border-primary-border rounded-lg mb-2"}
+            placeholder={"Trạng thái"}
+            showTriangle={true}
+            isMultiple={true}
+            disableSearch={true}
+            formatItem={{
+              id: "value",
+              text: "label",
+            }}
+            renderItem={(item) => (
+              <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            prefixIcon={
+              <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
+            }
+            countBadge={queryFnb.status.length}
+            data={FNB_ORDER_STATUS.map((item: any) => ({
+              label: `${item.text}`,
+              value: item.value,
+            }))}
+            onchangeValue={(value) => {
+              if (
+                !queryFnb.status?.includes?.(
+                  value.id as string
+                )
+              ) {
+                const newData: any = [
+                  ...queryFnb.status,
+                  value.id,
+                ];
                 dispatch(
-                  setQueryResponse({
-                    ...queryResponse,
-                    official: value.id,
+                  setQueryFnb({
+                    ...queryFnb,
+                    status: newData,
                   })
                 );
-                dispatch(setTabActive(tabIndex));
-                setPageIndex(0);
-                ref.current && ref.current.resetPaginate();
-              }}
-            />
-
-            <DropdownSearchableV2
-              selectOneByOne={true}
-              reset={reset}
-              className={"mr-2 border border-primary-border rounded-lg mb-2"}
-              placeholder={"Lỗi gặp phải"}
-              prefixIcon={
-                <img className={"mr-2"} src={iconWarning} alt={"icon"} />
               }
-              isMultiple={false}
-              disableSearch={true}
-              data={[
-                {
-                  id: 0,
-                  text: "Tất cả",
-                },
-                {
-                  id: 1,
-                  text: "Chính thức",
-                },
-                {
-                  id: 2,
-                  text: "Không chính thức",
-                },
-              ]}
-              onchangeValue={(value) => {
-                dispatch(
-                  setQueryResponse({
-                    ...queryResponse,
-                    official: value.id,
-                  })
-                );
-                dispatch(setTabActive(tabIndex));
-                setPageIndex(0);
-                ref.current && ref.current.resetPaginate();
-              }}
-            />
+              setSearchFunda("");
+              setPageIndex(0);
+              ref.current && ref.current.resetPaginate();
+            }}
+            onMultipleRemoveValue={(id: any) => {
+              const newList = queryFnb.status.filter(
+                (item: any) => item !== id
+              );
+              dispatch(
+                setQueryFnb({
+                  ...queryFnb,
+                  status: newList,
+                })
+              );
+            }}
+            onClearData={() =>
+              dispatch(
+                setQueryFnb({
+                  ...queryFnb,
+                  status: [],
+                })
+              )
+            }
+          />
 
-          <button
+          <DropdownSearchableV2
+            reset={reset}
+            selectOneByOne={true}
+            className={"mr-2 border border-primary-border rounded-lg mb-2"}
+            placeholder={"Lỗi gặp phải"}
+            showTriangle={true}
+            isMultiple={false}
+            disableSearch={true}
+            formatItem={{
+              id: "value",
+              text: "label",
+            }}
+            renderItem={(item) => (
+              <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            prefixIcon={
+              <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
+            }
+            countBadge={queryFnb.status.length}
+            data={[{
+              value: 0, text: 'Không lỗi',
+            },
+            {
+              value: 1, text: 'Có lỗi'
+            }].map((item: any) => ({
+              label: `${item.text}`,
+              value: item.value,
+            }))}
+            onchangeValue={(value) => {
+              dispatch(
+                setQueryFnb({
+                  ...queryFnb,
+                  isMistake: value.id,
+                })
+              );
+              setPageIndex(0);
+              ref.current && ref.current.resetPaginate();
+            }}
+            onClearData={() =>
+              dispatch(
+                setQueryFnb({
+                  ...queryFnb,
+                  isMistake: 0,
+                })
+              )
+            }
+          />
+
+          {/* <button
             className={"border-primary border-0.5 bg-cbs-secondary rounded text-white px-4 h-[32px] mb-2"}
           >
             Lọc
-          </button>
-
-          <button
-              className={"bg-grey rounded px-2 h-[32px] ml-2"}
-              onClick={onSaveResultSearch}
-            >
-              Lưu
-            </button>
-        </div> */}
+          </button> */}
+        </div>
 
         {/* Action bar */}
         <div className={"header-table flex px-4 w-full top-0 bg-white mb-1 pb-2"}>
@@ -599,65 +600,10 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 onChange={onClickCheckAll}
                 style={{ width: "14px", height: "14px" }}
               />
-              {/* <div>
-                <button onClick={() => setpopBox1(!popBox1)} className="relative w-[20px] h-[20px]">
-                  <img src={arrowDown} className="m-auto" />
-                </button>
-                <div
-                  className={"w-auto rounded flex flex-col bg-white absolute " + (popBox1 ? "block" : "hidden")}
-                  style={{ boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)" }}
-                >
-                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
-                    Tất cả
-                  </button>
-                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
-                    Bỏ chọn tất cả
-                  </button>
-                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
-                    Chủ đề đã đọc
-                  </button>
-                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
-                    Chủ đề chưa đọc
-                  </button>
-                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
-                    Chủ đề quan tâm
-                  </button>
-                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
-                    Chủ đề không quan tâm
-                  </button>
-                </div>
-              </div> */}
             </div>
 
             <div className="flex gap-7 items-center">
-              {/* <button><img src={updateIcon} alt="" /></button>
-              <button><img src={mailIcon} alt="" /></button>
-              <button onClick={() => setpopBox2(!popBox2)} className="relative w-[20px] h-[20px]">
-                <img src={moreIcon} className="m-auto" />
-                <div
-                  className={"w-[250px] rounded flex flex-col bg-white absolute " + (popBox2 ? "block" : "hidden")}
-                  style={{ boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)" }}
-                >
-                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
-                    Đánh dấu là đã đọc
-                  </button>
-                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
-                    Đánh dấu là quan trọng
-                  </button>
-                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
-                    Đánh dấu quan tâm
-                  </button>
-                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
-                    Chủ đề chưa đọc
-                  </button>
-                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
-                    Chủ đề quan tâm
-                  </button>
-                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
-                    Chủ đề không quan tâm
-                  </button>
-                </div>
-              </button> */}
+
               {idsChecked.length === 1 && (
                 <button
                   className="text-cbs-schedule-expired"
@@ -686,7 +632,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 className="text-cbs-schedule-nextweek"
                 onClick={() =>
                   openModal(
-                    <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{width:"640px"}}>
+                    <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{ width: "640px" }}>
                       <ModalErrorDetailItem defaultValues={{ orderID: idsChecked.length ? idsChecked[0] : '' }} />
                     </div>
                   )
@@ -740,8 +686,8 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               </tr>
             </thead>
             <tbody>
-            {
-                (listWithPager[pageIndex]??[]).map((item: any, i: any) => (
+              {
+                (listWithPager[pageIndex] ?? []).map((item: any, i: any) => (
                   <tr key={item._id}
                     className={"border-b-0.5 border-primary-border bg-white hover:shadow-md hover:z-2 hover:relative text-[14px]"}
                   >
@@ -765,26 +711,26 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                       </div>
                     </td>
                     <td className={"w-[50px]"}>
-                        <div className={"py-2"}>
-                          <img
-                            src={getIconApp(Number(item?.salesChannel))}
-                            alt={"avatar"}
-                            className={
-                              "w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"
-                            }
-                            aria-owns={open ? "mouse-over-popover" : undefined}
-                            aria-haspopup="true"
-                            onMouseEnter={handlePopoverOpen}
-                            onMouseLeave={handlePopoverClose}
-                          />
-                        </div>
+                      <div className={"py-2"}>
+                        <img
+                          src={getIconApp(Number(item?.salesChannel))}
+                          alt={"avatar"}
+                          className={
+                            "w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"
+                          }
+                          aria-owns={open ? "mouse-over-popover" : undefined}
+                          aria-haspopup="true"
+                          onMouseEnter={handlePopoverOpen}
+                          onMouseLeave={handlePopoverClose}
+                        />
+                      </div>
                     </td>
                     <td className={"w-[90px] px-1 py-2"}>
-                        <div className={"user-infor py-2"}>
-                          <p className={"truncate user-infor-name text-[14px]  text-left"}>
-                            {FNB_CHANNEL[Number(item?.salesChannel)-1]?.text}
-                          </p>
-                        </div>
+                      <div className={"user-infor py-2"}>
+                        <p className={"truncate user-infor-name text-[14px]  text-left"}>
+                          {FNB_CHANNEL[Number(item?.salesChannel) - 1]?.text}
+                        </p>
+                      </div>
                     </td>
                     <td className={"px-1 py-2 w-1/4"}>
                       <button
@@ -820,24 +766,24 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                     </td>
                     <td className={"px-1 py-2"}>
                       <div>
-                        {FNB_SERVICE[Number(item?.service)-1]?.text}
+                        {FNB_SERVICE[Number(item?.service) - 1]?.text}
                       </div>
                     </td>
                     <td className={"px-2 py-2"}>
                       {
-                        item?.status == 4 ? 
+                        item?.status == 4 ?
                           <div className="w-[70px] text-center rounded-md bg-cbs-schedule-expired text-white" style={{ fontSize: "12px" }}>
-                            {FNB_ORDER_STATUS[Number(item?.status)-1]?.text}
+                            {FNB_ORDER_STATUS[Number(item?.status) - 1]?.text}
                           </div>
-                        : 
+                          :
                           <div className="w-[70px] text-center rounded-md bg-cbs-schedule-after-7days text-white" style={{ fontSize: "12px" }}>
-                          {FNB_ORDER_STATUS[Number(item?.status)-1]?.text}
-                        </div>
+                            {FNB_ORDER_STATUS[Number(item?.status) - 1]?.text}
+                          </div>
                       }
                     </td>
                     <td className={"text-right px-2 py-2"}>
                       <div>
-                        {formatNumberMoney(item?.total||0)} đ
+                        {formatNumberMoney(item?.total || 0)} đ
                       </div>
                     </td>
                     <td className={"text-right px-2 py-2"}>
@@ -849,8 +795,8 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                       </Link>
                     </td>
                   </tr>
-              ))}
-             
+                ))}
+
             </tbody>
 
           </table>
@@ -925,11 +871,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
         </div> */}
       </div>
 
-      <UpdateStatusDialog
-        showUpdateStatus={showUpdateStatus}
-        setShowUpdateStatus={setShowUpdateStatus}
-        onPress={onPressUpdateStatus}
-      />
     </div>
   );
 };

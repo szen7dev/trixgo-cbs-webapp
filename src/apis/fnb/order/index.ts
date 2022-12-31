@@ -7,8 +7,10 @@ const URL = "/api/fnb";
 const fnbOrderRepository = {
     async getInfoAndGetList(payload: any): Promise<any> {
         const { data } = await API.get<any>(
-            `${URL}/orders?${convertObToUrl(payload)}`
-        );
+            `${URL}/orders`, {
+                params: payload
+            }
+        ); 
         return data;
     },
 

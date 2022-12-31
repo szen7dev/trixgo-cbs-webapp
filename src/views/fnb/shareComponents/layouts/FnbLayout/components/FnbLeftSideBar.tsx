@@ -41,11 +41,14 @@ import SearchIcon from '@mui/icons-material/Search';
 import { useModal } from "services/hooks/useModal";
 import { ModalAddNewOrder } from "./ModalAddNewOrder";
 import { ModalAddNewContact } from "./ModalAddNewContact";
+import { useDispatch } from "react-redux";
+import { resetQueryFnb } from "redux/reducer/FnbSlice";
 
 export const FnbLeftSideBar: FC = () => {
     const { user } = useAuth();
     // console.log(user)
     const { openModal } = useModal();
+    const dispath = useDispatch();
     const [menuShowList, setMenuState] = useState(false);
     const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
     const [initialValues, setInitialValues] = useState({
@@ -141,29 +144,29 @@ export const FnbLeftSideBar: FC = () => {
                     </button>
                 </div>
                 <div className="t-link-menu-container">
-                    <NavLink to={`/fnb/home`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                    <NavLink to={`/fnb/home`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                         <img width={'20px'} src={homeIcon} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Trang chủ</span>
                     </NavLink>
-                    <NavLink to={`/fnb/revenue-report`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                    <NavLink to={`/fnb/revenue-report`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                         <img width={'20px'} src={reportIcon} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Báo cáo doanh thu</span>
                     </NavLink>
-                    <NavLink to={`/fnb/risk-report`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                    <NavLink to={`/fnb/risk-report`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                         <img width={'20px'} src={riskIcon} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Báo cáo lỗi</span>
                     </NavLink>
-                    <NavLink to={`/fnb/contacts`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                    <NavLink to={`/fnb/contacts`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                         <img width={'20px'} src={contactIcon} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Danh bạ khách hàng</span>
                     </NavLink>
-                    <NavLink to={`/fnb/shift`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                    <NavLink to={`/fnb/shift`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                         <img width={'20px'} src={shiftcon} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Ca làm việc</span>
                     </NavLink>
                     {
                         user?.email.toString() === 'assistant.c686.trx@gmail.com' ? 
-                        <NavLink to={`/fnb/store`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                        <NavLink to={`/fnb/store`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                             <img width={'20px'} src={iconStore} alt="Menu item" />
                             <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản lý kho</span>
                         </NavLink>
@@ -171,7 +174,7 @@ export const FnbLeftSideBar: FC = () => {
                     }
                     {
                         user?.email.toString() === 'assistant.c686.trx@gmail.com' ? 
-                        <NavLink to={`/fnb/expense`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                        <NavLink to={`/fnb/expense`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                             <img width={'20px'} src={iconExpense} alt="Menu item" />
                             <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản lý chi phí</span>
                         </NavLink>
@@ -179,7 +182,7 @@ export const FnbLeftSideBar: FC = () => {
                     }
                     {
                         user?.email.toString() === 'assistant.c686.trx@gmail.com' ? 
-                        <NavLink to={`/fnb/product`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                        <NavLink to={`/fnb/product`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                             <img width={'20px'} src={menuIcon} alt="Menu item" />
                             <span className={"flex-1 ml-2 text-left text-[14px]"}>Thực đơn</span>
                         </NavLink>
