@@ -248,7 +248,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             }
             countBadge={queryFnb.fundasID.length}
             data={listFunda.map((item: any) => ({
-              label: `${item.sign}.${item.name}`,
+              label: `${item?.sign}.${item?.name}`,
               value: item._id,
             }))}
             onchangeValue={(value) => {
