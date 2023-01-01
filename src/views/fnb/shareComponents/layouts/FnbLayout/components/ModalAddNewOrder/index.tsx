@@ -960,7 +960,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   >
                                     <img src={product?.images?.length ? `${process.env.REACT_APP_URL_S3}${product?.images[0]?.path}` : beverageIcon} className="w-full h-full object-contain" />
                                     <div className="w-full absolute bottom-0 bg-black opacity-75 text-white text-[14px] px-3 py-1">
-                                      <div className="overflow-ellipsis line-clamp-2 text-left">{product.name}-{product?.parent}</div>
+                                      <div className="overflow-ellipsis line-clamp-2 text-left">{product.name}</div>
                                       <div className="text-right font-bold">{formatNumberMoney(product.unitPrice)}</div>
                                     </div>
                                   </button>
