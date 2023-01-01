@@ -67,7 +67,7 @@ export const FnbBillOrder: FC = () => {
         fetchOrderProducts();
     }, [])
 
-    // console.log(orderProducts)
+    console.log(orderProducts)
     // console.log(info)
 
     return (
@@ -116,13 +116,13 @@ export const FnbBillOrder: FC = () => {
                                         <td className="text-right">{formatNumberMoney(Number(item.quantity*item.unitPrice))}</td>
                                     </tr>
 
-                                    // {item.subProducts?.map?.((subProduct: any) => (
-                                    //     <tr key={subProduct._id}>
+                                    // item?.subProducts?.map((subProduct: any) => (
+                                    //     <tr>
                                     //         <td className="text-left">{subProduct.name.trim()}</td>
                                     //         <td className="text-center px-1"></td>
                                     //         <td className="text-right">{formatNumberMoney(subProduct.unitPrice)}</td>
                                     //     </tr>
-                                    // ))}
+                                    // ))
                                 ))
                             }
                                 <tr>
