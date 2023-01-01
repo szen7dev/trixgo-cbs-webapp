@@ -956,5 +956,44 @@ export const APP_ID = {
     },
     FNB: {
         id: "61e04971fdebf77b072d1b0f",
+        menuFnbApp: {
+            id: "63af81debe33df0012ecaeca",
+            payment: {
+                id: "623f21bce998e94feda0cd89",
+                name: "Payment"
+            },
+            dashboard: {
+                id: "623f21cde998e94feda0cd8a",
+                name: "Báo cáo quản trị"
+            },
+            revenueReport: {
+                id: "63af822f87a6c20011972adf",
+                name: "Báo cáo doanh thu"
+            },
+            riskReport: {
+                id: "63af82484faba6001259551f",
+                name: "Báo cáo lỗi hay gặp"
+            },
+            contacts: {
+                id: "63af825ebe33df0012ecaed8",
+                name: "Danh bạ khách hàng"
+            },
+            shift: {
+                id: "63af826987a6c20011972ae0",
+                name: "Ca làm việc"
+            },
+            store: {
+                id: "63af82764faba60012595520",
+                name: "Quản lý kho"
+            },
+            expense: {
+                id: "63af8280be33df0012ecaed9",
+                name: "Quản lý chi phí"
+            },
+            product: {
+                id: "63af828e87a6c20011972ae1",
+                name: "Thực đơn"
+            },
+        }
     },
 };

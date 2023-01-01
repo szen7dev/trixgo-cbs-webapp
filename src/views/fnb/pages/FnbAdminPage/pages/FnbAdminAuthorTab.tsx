@@ -14,8 +14,9 @@ const FnbAdminAuthorTab: FC = () => {
 	const [funcID, setFuncID] = useState<string>(location.state || "");
 	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
 	const { nameAppRoleDetail, companyAppRoleDetail, typeAppRoleDetail } = useAdminDetail({ appID: funcID, keyword: "" }); 
-	const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.FNB.id});
+	const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.FNB.id, parentID: APP_ID.FNB.menuFnbApp.id});
 	const { listAppRoles } = useAdmin({ appID: APP_ID.FNB.id, keyword: "" });
+	
 	const { refetchGetListAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.FNB.id, type: "1" });
 	const { listAppRoleMenuFromAdmin, updatePermissionsAppRoleMenusMutateAsync, refetchGetListAppRoleMenuFromAdmin } = useGetListAppRoleMenuFromAdmin({ appID: APP_ID.FNB.id, companyID: companyAppRoleDetail, roleID: funcID });
 
