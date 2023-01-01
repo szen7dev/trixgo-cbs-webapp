@@ -67,11 +67,11 @@ export const FnbBillOrder: FC = () => {
         fetchOrderProducts();
     }, [])
 
-    useEffect(() => {
-        if (orderProducts && orderProducts.length) {
-            window.print();
-        }
-    }, [orderProducts]);
+    // useEffect(() => {
+    //     if (orderProducts && orderProducts.length) {
+    //         window.print();
+    //     }
+    // }, [orderProducts]);
 
     // console.log(orderProducts)
     // console.log(info)
@@ -136,12 +136,12 @@ export const FnbBillOrder: FC = () => {
                                 <tr>
                                     <td className="text-left">Chiết khấu</td>
                                     <td className="text-center px-1"></td>
-                                    <td className="text-right">{formatNumberMoney(info?.discount)}</td>
+                                    <td className="text-right font-bold">{formatNumberMoney(info?.discount)}</td>
                                 </tr>
                                 <tr>
                                     <td className="text-left">Giảm giá</td>
                                     <td className="text-center px-1"></td>
-                                    <td className="text-right">{formatNumberMoney(info?.salesoff)}</td>
+                                    <td className="text-right font-bold">{formatNumberMoney(info?.salesoff)}</td>
                                 </tr>
                             </tbody>
                         </table>

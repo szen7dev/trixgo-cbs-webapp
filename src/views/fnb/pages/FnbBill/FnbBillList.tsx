@@ -67,11 +67,11 @@ export const FnbBillList: FC = () => {
         fetchOrderProducts();
     }, [])
 
-    useEffect(() => {
-        if (orderProducts && orderProducts.length) {
-            window.print();
-        }
-    }, [orderProducts]);
+    // useEffect(() => {
+    //     if (orderProducts && orderProducts.length) {
+    //         window.print();
+    //     }
+    // }, [orderProducts]);
 
     console.log(orderProducts)
     // console.log(info)
@@ -83,7 +83,9 @@ export const FnbBillList: FC = () => {
                 {/* <div className="mx-auto my-2 bg-white h-full p-2 flex flex-col justify-between"> */}
                 {
                     orderProducts.map((item: any, index: number) => {
-                        let amount = Number(item.quantity * item.unitPrice)
+                        // let amount = Number(item.quantity * item.unitPrice)
+                        let amount = Number(item.unitPrice)
+
                         if (item?.subProducts) {
                             for (const subProduct of item?.subProducts) {
                                 amount = Number(amount) + Number(subProduct.unitPrice)
