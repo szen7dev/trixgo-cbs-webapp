@@ -35,7 +35,7 @@ export const FnbReportPage: FC = () => {
 	}, []);
 
 	const history = useHistory();
-	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
+	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
 
 	const CustomSelectBox = () => {
 		const [customItem, setCustomItem] = React.useState('');

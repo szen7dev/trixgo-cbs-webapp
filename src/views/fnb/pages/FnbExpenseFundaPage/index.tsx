@@ -35,7 +35,7 @@ export const FnbExpenseFundaPage: FC = () => {
 	}, []);
 	const history = useHistory();
 	const { fundaID } = useParams<{ fundaID: string }>();
-	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
+	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
 	

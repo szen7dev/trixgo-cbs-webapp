@@ -459,7 +459,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
     }, 0)
     setTotalMoney(amount);
    
-    if (serviceApp) {
+    if (serviceApp !== "0") {
       if (serviceApp === "1") {
         handleAutoChangeDiscount(amount, 'discountPercent', 0);
       } else {

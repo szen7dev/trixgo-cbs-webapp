@@ -40,7 +40,7 @@ export const FnbShiftCashPage: FC = () => {
 	
 	const history = useHistory();
 	const { fundaID, shiftID } = useParams<{ fundaID: string, shiftID: string }>();
-	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
+	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
 	
