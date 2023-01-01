@@ -46,7 +46,8 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
         description: '',
         funda: '',
         gender: 1,
-        birthday: ''
+        birthday: '',
+        nonResident: '1'
     });
 
     const {
@@ -103,7 +104,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, type, name, address, taxid, phone, description, funda, note, gender, birthday } = newListIDChecked[0];
+            const { _id, type, name, address, taxid, phone, description, funda, note, gender, birthday, nonResident } = newListIDChecked[0];
             setInitialValues({
                 parent: parentID,
                 contactID: _id,
@@ -116,7 +117,8 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                 funda: funda,
                 note,
                 gender,
-                birthday
+                birthday,
+                nonResident
             });
         } else {
             clearData();
@@ -401,6 +403,11 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                                 Mô tả
                             </div>
                         </th>
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Thông tin khách
+                            </div>
+                        </th>
                         <th className="py-1 font-normal">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Cập nhật lần cuối
@@ -430,6 +437,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                             <td className="py-1 px-2">{item.taxid}</td>
                             <td className="py-1 px-2">{item.phone}</td>
                             <td className="py-1 px-2">{item.description}</td>
+                            <td className="py-1 px-2">{item.nonResident}</td>
                             <td className="py-1 px-2">
                                 {item.modifyAt ? moment(item.modifyAt).format('HH:mm - DD/MM/YYYY') : ''} <br /> {item?.userUpdate?.bizfullname || ''}
                             </td>

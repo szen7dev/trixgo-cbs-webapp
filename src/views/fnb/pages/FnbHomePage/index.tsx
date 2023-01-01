@@ -54,7 +54,7 @@ import API from "apis/repository";
 import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
 
 /*=====7.OTHER=====*/
-import { FNB_CHANNEL, FNB_SERVICE, FNB_PAYMENT, FNB_ORDER_STATUS, FNB_SHIFT } from "apis/localdb";
+import { FNB_CHANNEL, FNB_SERVICE, FNB_PAYMENT, FNB_ORDER_STATUS, FNB_SHIFT, FNB_NORESIDENT_TYPES } from "apis/localdb";
 import { useInfiniteQuery } from "react-query";
 import { setQueryFnb } from "redux/reducer/FnbSlice";
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
@@ -702,13 +702,22 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                           onChange={() => onClickCheckButton(item._id)}
                           style={{ width: "16px", height: "16px", marginTop: "5px" }}
                         />
-                        {/* <StarToggle /> */}
                       </div>
                     </td>
                     <td className={"px-1 py-2"}>
                       <div>
                         {moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
                       </div>
+                      {
+                        item?.nonResident == 2 ?
+                          <div className="w-[70px] text-center rounded-md bg-cbs-schedule-expired text-white" style={{ fontSize: "12px" }}>
+                            {FNB_NORESIDENT_TYPES[Number(item?.nonResident) - 1]?.text}
+                          </div>
+                          :
+                          <div className="w-[70px] text-center rounded-md bg-cbs-schedule-after-7days text-white" style={{ fontSize: "12px" }}>
+                            {FNB_NORESIDENT_TYPES[Number(item?.nonResident) - 1]?.text}
+                          </div>
+                      }
                     </td>
                     <td className={"w-[50px]"}>
                       <div className={"py-2"}>

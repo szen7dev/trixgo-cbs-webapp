@@ -651,6 +651,11 @@ export const FNB_ORDER_STATUS = [
     { value: 5, text: 'Hoàn thành', backgroud: '5fba7d' },
 ]
 
+export const FNB_NORESIDENT_TYPES = [
+    { value: 1, text: 'Khách đã biết tên', backgroud: '4d4dff' },
+    { value: 2, text: 'No Name', backgroud: 'FFB83A' },
+]
+
 /**
  * TÀI CHÍNH DOANH NGHIỆP
  */

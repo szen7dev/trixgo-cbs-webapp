@@ -17,6 +17,7 @@ export interface Customer {
     funda: any,
     gender: number;
     birthday: string;
+    nonResident: string;
 }
 
 export type CustomerQueryPayload = QueryParam & {
@@ -54,6 +55,7 @@ interface ModalProps {
         description: string,
         birthday: string,
         note: string,
+        nonResident: string,
         funda: any,
     }
     onConfirm?(): void
