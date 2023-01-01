@@ -110,19 +110,26 @@ export const FnbBillOrder: FC = () => {
                             <tbody>
                             {
                                 orderProducts.map((item: any) => (
-                                    <tr key={item._id}>
-                                        <td className="text-left">{item.product?.name} - Size {item?.size >=1 && FNB_SIZE[Number(item.size)-1].text}</td>
-                                        <td className="text-center px-1">{item.quantity}</td>
-                                        <td className="text-right">{formatNumberMoney(Number(item.quantity*item.unitPrice))}</td>
-                                    </tr>
-
-                                    // item?.subProducts?.map((subProduct: any) => (
-                                    //     <tr>
-                                    //         <td className="text-left">{subProduct.name.trim()}</td>
-                                    //         <td className="text-center px-1"></td>
-                                    //         <td className="text-right">{formatNumberMoney(subProduct.unitPrice)}</td>
-                                    //     </tr>
-                                    // ))
+                                    // {
+                                    //     let total = 0
+                                    //     ...
+                                    // }
+                                    <>
+                                        <tr key={item._id}>
+                                            <td className="text-left">{item.product?.name} - Size {item?.size >=1 && FNB_SIZE[Number(item.size)-1].text}</td>
+                                            <td className="text-center px-1">{item.quantity}</td>
+                                            <td className="text-right">{formatNumberMoney(Number(item.quantity*item.unitPrice))}</td>
+                                        </tr>
+                                        {
+                                            item?.subProducts?.map((subProduct: any) => (
+                                                <tr key={subProduct._id}>
+                                                    <td className="text-left">{subProduct.name.trim()}</td>
+                                                    <td className="text-center px-1"></td>
+                                                    <td className="text-right">{formatNumberMoney(subProduct.unitPrice)}</td>
+                                                </tr>
+                                            ))
+                                        }
+                                    </>
                                 ))
                             }
                                 <tr>
