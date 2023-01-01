@@ -156,13 +156,15 @@ export const FnbLeftSideBar: FC = () => {
                     </button>
                 </div>
                 <div className="t-link-menu-container">
-                    <NavLink
-                        to={'/fnb/admin'}
-                        className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
-                    >
-                        <img width={'20px'} src={adminIcon} alt="Menu item" />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản trị viên</span>
-                    </NavLink>
+                    {hasPermission && dataUserAccess?.level == 0 ?
+                        <NavLink
+                            to={'/fnb/admin'}
+                            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
+                        >
+                            <img width={'20px'} src={adminIcon} alt="Menu item" />
+                            <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản trị viên</span>
+                        </NavLink> : <></>
+                    }
 
                     <NavLink to={`/fnb/home`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                         <img width={'20px'} src={homeIcon} alt="Menu item" />

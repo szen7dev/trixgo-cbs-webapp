@@ -44,7 +44,7 @@ export const FnBProductPage: FC = () => {
 
 	const history = useHistory();
 	const { user } = useAuth();
-	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
+	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
 	const fileInputRef = useRef<HTMLInputElement>(null);
