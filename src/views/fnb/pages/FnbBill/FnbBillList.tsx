@@ -83,11 +83,11 @@ export const FnbBillList: FC = () => {
             {/* <div className="mx-auto my-2 bg-white h-full p-2 flex flex-col justify-between"> */}
                 {
                     orderProducts.map((item: any) => {
-                        let amount = Number(item.quantity*item.unitPrice)
+                        let prodcuctPrice = Number(item.unitPrice)
 
                         if(item?.subProducts){
                             for(const subProduct of item?.subProducts){
-                                amount = Number(amount) + Number(subProduct.unitPrice)
+                                prodcuctPrice = Number(prodcuctPrice) + Number(subProduct.unitPrice)
                             }
                         }
 
@@ -111,7 +111,7 @@ export const FnbBillList: FC = () => {
                                         <div>{item?.note}</div>
                                         <div className="flex justify-between">
                                             <div>{moment(info?.createAt).format('HH:mm DD/MM/YYYY')}</div>
-                                            <div className="font-bold">{formatNumberMoney(amount)}đ</div>
+                                            <div className="font-bold">{formatNumberMoney(prodcuctPrice)}đ</div>
                                         </div>
                                     </div>
                                 </div>
