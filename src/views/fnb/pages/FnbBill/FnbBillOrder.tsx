@@ -67,7 +67,13 @@ export const FnbBillOrder: FC = () => {
         fetchOrderProducts();
     }, [])
 
-    console.log(orderProducts)
+    useEffect(() => {
+        if (orderProducts && orderProducts.length) {
+            window.print();
+        }
+    }, [orderProducts]);
+
+    // console.log(orderProducts)
     // console.log(info)
 
     return (
@@ -109,28 +115,23 @@ export const FnbBillOrder: FC = () => {
                             </thead>
                             <tbody>
                             {
-                                orderProducts.map((item: any) => (
-                                    // {
-                                    //     let total = 0
-                                    //     ...
-                                    // }
-                                    <>
+                                orderProducts.map((item: any) => {
+                                    let amount = Number(item.quantity*item.unitPrice)
+
+                                    if(item?.subProducts){
+                                        for(const subProduct of item?.subProducts){
+                                            amount = Number(amount) + Number(item.quantity)*Number(subProduct.unitPrice)
+                                        }
+                                    }
+
+                                    return (
                                         <tr key={item._id}>
                                             <td className="text-left">{item.product?.name} - Size {item?.size >=1 && FNB_SIZE[Number(item.size)-1].text}</td>
                                             <td className="text-center px-1">{item.quantity}</td>
-                                            <td className="text-right">{formatNumberMoney(Number(item.quantity*item.unitPrice))}</td>
+                                            <td className="text-right">{formatNumberMoney(amount)}</td>
                                         </tr>
-                                        {
-                                            item?.subProducts?.map((subProduct: any) => (
-                                                <tr key={subProduct._id}>
-                                                    <td className="text-left">{subProduct.name.trim()}</td>
-                                                    <td className="text-center px-1"></td>
-                                                    <td className="text-right">{formatNumberMoney(subProduct.unitPrice)}</td>
-                                                </tr>
-                                            ))
-                                        }
-                                    </>
-                                ))
+                                    )
+                                })
                             }
                                 <tr>
                                     <td className="text-left">Chiết khấu</td>

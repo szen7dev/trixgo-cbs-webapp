@@ -67,6 +67,12 @@ export const FnbBillList: FC = () => {
         fetchOrderProducts();
     }, [])
 
+    useEffect(() => {
+        if (orderProducts && orderProducts.length) {
+            window.print();
+        }
+    }, [orderProducts]);
+
     console.log(orderProducts)
     // console.log(info)
 
@@ -75,34 +81,44 @@ export const FnbBillList: FC = () => {
             {/* <div className="h-full mx-auto bg-cbs-gray my-3 pb-1" style={{ width: "188px" }}> */}
             <div className="h-full mx-auto bg-cbs-gray my-3 pb-1">
             {/* <div className="mx-auto my-2 bg-white h-full p-2 flex flex-col justify-between"> */}
-                {/* item */}
-                    {
-                        orderProducts.map((item: any) => (
-                            <div key={item._id} className="bg-white p-2 mb-5 rounded-md border-0.5 border-cbs-border ">
-                                <div className="border-b-0.5 border-cbs-border pb-1">
-                                    <div className="font-bold">
-                                        <Link to ={`/fnb/home`}>
-                                            {info?.funda?.name}
-                                        </Link>
-                                    </div>
-                                    <div className="flex justify-between ">
-                                        {/* <div>{FNB_SERVICE[Number(info?.service)-1]?.text} | {info?.name} | {info?.sign}</div> */}
-                                        <div>1/2</div>
-                                    </div>
-                                </div>
+                {
+                    orderProducts.map((item: any) => {
+                        let amount = Number(item.quantity*item.unitPrice)
 
-                                <div className="pt-2">
-                                    <div>{item.product?.name} - Size {item.product?.size >=1 && FNB_SIZE[Number(item.product.size)-1].text}</div>
-                                    <div>{item?.note}</div>
-                                    <div className="flex justify-between">
-                                        <div>{moment(info?.createAt).format('HH:mm DD/MM/YYYY')}</div>
-                                        <div className="font-bold">{formatNumberMoney(Number(item.quantity*item.unitPrice))}đ</div>
+                        if(item?.subProducts){
+                            for(const subProduct of item?.subProducts){
+                                amount = Number(amount) + Number(subProduct.unitPrice)
+                            }
+                        }
+
+                        for (let i = 1; i <= Number(item.quantity); i++) {
+                            return (
+                                <div key={item._id} className="bg-white p-2 mb-5 rounded-md border-0.5 border-cbs-border ">
+                                    <div className="border-b-0.5 border-cbs-border pb-1">
+                                        <div className="font-bold">
+                                            <Link to ={`/fnb/home`}>
+                                                {info?.funda?.name}
+                                            </Link>
+                                        </div>
+                                        <div className="flex justify-between ">
+                                            {/* <div>{FNB_SERVICE[Number(info?.service)-1]?.text} | {info?.name} | {info?.sign}</div> */}
+                                            <div>{i}/{Number(item.quantity)}</div>
+                                        </div>
+                                    </div>
+        
+                                    <div className="pt-2">
+                                        <div>{item.product?.name} - Size {item.product?.size >=1 && FNB_SIZE[Number(item.product.size)-1].text}</div>
+                                        <div>{item?.note}</div>
+                                        <div className="flex justify-between">
+                                            <div>{moment(info?.createAt).format('HH:mm DD/MM/YYYY')}</div>
+                                            <div className="font-bold">{formatNumberMoney(amount)}đ</div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))
-                    }
-                {/* end item */}
+                            )
+                        }                        
+                    })
+                }
             </div>
         </main>
     )
