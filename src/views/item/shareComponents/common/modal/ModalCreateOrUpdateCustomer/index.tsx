@@ -324,7 +324,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
         </label>
         <input
           type="text"
-          placeholder="1-Khách biết tên, 2-Khách vãng lai"
+          placeholder="1-Khách biết thông tin, 2-Khách vãng lai/chưa biết thông tin"
           name="nonResident"
           className="w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"
           defaultValue={formData.nonResident}
