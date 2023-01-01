@@ -53,9 +53,12 @@ export const FnbShiftDetailPage: FC = () => {
 			keyword: keyword, 
 			fundaID, 
 			populates: JSON.stringify({
-				path: 'staffs'
+				path: 'staffs',
+				select: 'fullname',
 			}) 
 		}, isFetchList: true, isFetchInfo: false  });
+
+	console.log(listWithPager)
 
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
@@ -271,18 +274,25 @@ export const FnbShiftDetailPage: FC = () => {
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-highlight-color"}>
 								{/* <Link to ={`/fnb/shift/${fundaID}/${item._id}/material`}>
 									{item?.name}
-									<p className="text-cbs-subtext"><i>Nhân viên: {item?.staffs.length}</i></p>
 								</Link> */}
-								{item?.name}
-								<p className="text-cbs-subtext"><i>Nhân viên: {item?.staffs.length}</i></p>
+								{item?.name} ({item?.staffs.length})
+								<p className="text-cbs-subtext text-[12px]"><i>{moment(item?.createAt).format('HH:mm DD/MM/YYYY')}</i></p>
+								{/* <p className="text-cbs-subtext text-[12px]"><i>SL: {item?.staffs.length}</i></p> */}
+								{
+                                	item?.staffs.length && item?.staffs.map((staff: any) => {
+										return (
+											<p key={staff._id} className="text-cbs-subtext text-[12px]"><i>{staff?.fullname}</i></p>
+										)
+									})
+								}
+								<p className="text-cbs-subtext text-[12px]"><i>Size M: <b>{item?.numberOfOpeningSizeM}</b></i></p>
+								<p className="text-cbs-subtext text-[12px]"><i>Size L: <b>{item?.numberOfOpeningSizeL}</b></i></p>
+								<p className="text-cbs-subtext text-[12px]"><i>Lỗi: <b>{item?.numberOfMistakes}</b></i></p>
 								<p className="text-cbs-subtext">
 									<i title="Tổng doanh số"><b>{formatNumberMoney(item?.total)}</b></i> | 
 									<i title="Doanh số Off">{formatNumberMoney(item?.total1)}</i>
 								</p>
 							</td>
-							{/* <td className={"p-2 border-0.5 border-primary-border"}>
-								{moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
-							</td> */}
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
 								{formatNumberMoney(item?.openingCash)}
 							</td>
