@@ -31,30 +31,30 @@ export const FnbBillList: FC = () => {
     const [orderProducts, setOrderProducts] = useState([]);
 
     const { info, refetch } = useFnbOrder(
-        { 
-            params: { 
+        {
+            params: {
                 orderID,
                 populates: JSON.stringify({
                     path: 'funda shift customer userCreate',
                     select: "name sign address fullname phone bankAccount",
-                }) 
-            }, 
-            isFetchList:false, 
-            isFetchInfo:  true  
+                })
+            },
+            isFetchList: false,
+            isFetchInfo: true
         }
     )
-    
+
     useEffect(() => {
         const fetchOrderProducts = async () => {
             const response = await API.get(
                 `/api/fnb/order_products?${convertObToUrl({
-                orderID,
-                populates: JSON.stringify({
-                    path: 'subProducts product',
-                    populate: {
-                    path: 'images',
-                    }
-                })
+                    orderID,
+                    populates: JSON.stringify({
+                        path: 'subProducts product',
+                        populate: {
+                            path: 'images',
+                        }
+                    })
                 })}`,
             );
             const { data, status } = response?.data;
@@ -67,40 +67,64 @@ export const FnbBillList: FC = () => {
         fetchOrderProducts();
     }, [])
 
-    // console.log(orderProducts)
+    // useEffect(() => {
+    //     if (orderProducts && orderProducts.length) {
+    //         window.print();
+    //     }
+    // }, [orderProducts]);
+
+    console.log(orderProducts)
     // console.log(info)
 
     return (
         <main className="h-screen overflow-auto bg-cbs-border">
             {/* <div className="h-full mx-auto bg-cbs-gray my-3 pb-1" style={{ width: "188px" }}> */}
-            <div className="mx-auto my-2 bg-white h-full p-2 flex flex-col justify-between">
-                {/* item */}
-                    {
-                        orderProducts.map((item: any) => (
-                            <div key={item._id} className="bg-white p-2 mb-5 rounded-md border-0.5 border-cbs-border ">
-                                <div className="border-b-0.5 border-cbs-border pb-1">
-                                    <div className="font-bold">
-                                        <Link to ={`/fnb/home`}>
-                                            {info?.funda?.name}
-                                        </Link>
-                                    </div>
-                                    <div className="flex justify-between ">
-                                        <div>{FNB_SERVICE[Number(info?.service)-1]?.text} | {info?.name} | {info?.sign}</div>
-                                        {/* <div>1/2</div> */}
-                                    </div>
-                                </div>
+            <div className="h-full mx-auto bg-cbs-gray my-3 pb-1">
+                {/* <div className="mx-auto my-2 bg-white h-full p-2 flex flex-col justify-between"> */}
+                {
+                    orderProducts.map((item: any, index: number) => {
+                        // let amount = Number(item.quantity * item.unitPrice)
+                        let amount = Number(item.unitPrice)
 
-                                <div className="pt-2">
-                                    <div>{item.product?.name} - Size {item.product?.size >=1 && FNB_SIZE[Number(item.product.size)-1].text}</div>
-                                    <div className="flex justify-between">
-                                        <div>{moment(info?.createAt).format('HH:mm DD/MM/YYYY')}</div>
-                                        <div className="font-bold">{formatNumberMoney(Number(item.quantity*item.unitPrice))}đ</div>
-                                    </div>
-                                </div>
+                        if (item?.subProducts) {
+                            for (const subProduct of item?.subProducts) {
+                                amount = Number(amount) + Number(subProduct.unitPrice)
+                            }
+                        }
+                        const quantity = [];
+                        for (let i = 1; i <= Number(item.quantity); i++) {
+                            quantity.push(i);
+                        }
+
+                        return (
+                            <div key={index}>
+                                {quantity.map((e) => {
+                                    return (
+                                        <div key={`${e}.${item._id}`} className="bg-white p-2 mb-5 rounded-md border-0.5 border-cbs-border ">
+                                            <div className="border-b-0.5 border-cbs-border pb-1">
+                                                <div className="font-bold">
+                                                    <Link to={`/fnb/home`}>
+                                                        {info?.funda?.name} ({e}/{Number(item.quantity)})
+                                                    </Link>
+                                                </div>
+                                            </div>
+
+                                            <div className="pt-2">
+                                                <div>{item.product?.name} - Size {item.product?.size >= 1 && FNB_SIZE[Number(item.product.size) - 1].text}</div>
+                                                <div>{item?.note}</div>
+                                                <div className="flex justify-between">
+                                                    <div>{moment(info?.createAt).format('HH:mm DD/MM/YYYY')}</div>
+                                                    <div className="font-bold">{formatNumberMoney(amount)}đ</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )
+                                })
+                                }
                             </div>
-                        ))
-                    }
-                {/* end item */}
+                        )
+                    })
+                }
             </div>
         </main>
     )

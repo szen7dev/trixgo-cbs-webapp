@@ -67,6 +67,12 @@ export const FnbBillOrder: FC = () => {
         fetchOrderProducts();
     }, [])
 
+    // useEffect(() => {
+    //     if (orderProducts && orderProducts.length) {
+    //         window.print();
+    //     }
+    // }, [orderProducts]);
+
     // console.log(orderProducts)
     // console.log(info)
 
@@ -109,31 +115,33 @@ export const FnbBillOrder: FC = () => {
                             </thead>
                             <tbody>
                             {
-                                orderProducts.map((item: any) => (
-                                    <tr key={item._id}>
-                                        <td className="text-left">{item.product?.name} - Size {item?.size >=1 && FNB_SIZE[Number(item.size)-1].text}</td>
-                                        <td className="text-center px-1">{item.quantity}</td>
-                                        <td className="text-right">{formatNumberMoney(Number(item.quantity*item.unitPrice))}</td>
-                                    </tr>
+                                orderProducts.map((item: any) => {
+                                    let amount = Number(item.quantity*item.unitPrice)
 
-                                    // {item.subProducts?.map?.((subProduct: any) => (
-                                    //     <tr key={subProduct._id}>
-                                    //         <td className="text-left">{subProduct.name.trim()}</td>
-                                    //         <td className="text-center px-1"></td>
-                                    //         <td className="text-right">{formatNumberMoney(subProduct.unitPrice)}</td>
-                                    //     </tr>
-                                    // ))}
-                                ))
+                                    if(item?.subProducts){
+                                        for(const subProduct of item?.subProducts){
+                                            amount = Number(amount) + Number(item.quantity)*Number(subProduct.unitPrice)
+                                        }
+                                    }
+
+                                    return (
+                                        <tr key={item._id}>
+                                            <td className="text-left">{item.product?.name} - Size {item?.size >=1 && FNB_SIZE[Number(item.size)-1].text}</td>
+                                            <td className="text-center px-1">{item.quantity}</td>
+                                            <td className="text-right">{formatNumberMoney(amount)}</td>
+                                        </tr>
+                                    )
+                                })
                             }
                                 <tr>
                                     <td className="text-left">Chiết khấu</td>
                                     <td className="text-center px-1"></td>
-                                    <td className="text-right">{formatNumberMoney(info?.discount)}</td>
+                                    <td className="text-right font-bold">{formatNumberMoney(info?.discount)}</td>
                                 </tr>
                                 <tr>
                                     <td className="text-left">Giảm giá</td>
                                     <td className="text-center px-1"></td>
-                                    <td className="text-right">{formatNumberMoney(info?.salesoff)}</td>
+                                    <td className="text-right font-bold">{formatNumberMoney(info?.salesoff)}</td>
                                 </tr>
                             </tbody>
                         </table>

@@ -1,5 +1,5 @@
 /*=====1.LIBRARY=====*/
-import { FC, useState } from "react";
+import { FC, useCallback, useState } from "react";
 import { NavLink } from 'react-router-dom';
 import moment from "moment";
 import debounce from "lodash/debounce";
@@ -15,8 +15,7 @@ import sampleAvaT from "assets/images/Frame 3581.svg";
 import iconStore from 'assets/images/icons8-store.svg';
 import iconExpense from 'assets/images/icons8-expense.svg';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-
+import adminIcon from "assets/images/icons8-user-shield-48.svg"
 import homeIcon from 'assets/images/icons-home.svg';
 import reportIcon from 'assets/images/icons-report.svg';
 import contactIcon from 'assets/images/icons8-contacts-96.svg';
@@ -34,6 +33,7 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
 import { useContact } from 'services/hooks/items/useContact';
+import { useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/auth/usePermissions";
 
 /*=====7.OTHER=====*/
 import { IconButton, InputBase, Paper } from "@mui/material";
@@ -51,7 +51,8 @@ export const FnbLeftSideBar: FC = () => {
     const dispath = useDispatch();
     const [menuShowList, setMenuState] = useState(false);
     const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
-    const [initialValues, setInitialValues] = useState({
+
+    const initialValues = {
         // parent: parentID,
         contactID: '',
         type: '',
@@ -64,34 +65,37 @@ export const FnbLeftSideBar: FC = () => {
         funda: '',
         gender: 1,
         birthday: ''
-    });
+    }
+
+    const { listAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.FNB.id, type: "1" });
+
     /**
-	 * List mẩu tin
-	 */
+     * List mẩu tin
+     */
     const [keyword, setKeyword] = useState("");
-    const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useContact({ 
-		params: { 
-			keyword: keyword,  
-			limit: 5
-		}, 
-		isFetchList: true, 
-		isFetchInfo: false
-	});
+    const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useContact({
+        params: {
+            keyword: keyword,
+            limit: 5
+        },
+        isFetchList: true,
+        isFetchInfo: false
+    });
     const [pageIndex, setPageIndex] = useState(0);
 
     const handleSearch = debounce(
-      (e: any) => setKeyword(e.target.value),
-    200)
+        (e: any) => setKeyword(e.target.value),
+        200)
     const handleConfirmCreateOrUpdate = () => refetch();
 
     const handleOpenModalCreateOrUpdate = (modalType: 'create' | 'update') => {
 
-        let initValues: any = {...initialValues};
+        let initValues: any = { ...initialValues };
 
         // setItemsChecked([]);
 
         // Mở modal tạo mới
-        if(modalType === 'create') {
+        if (modalType === 'create') {
             // clearData();
             initValues = {
                 // parent: parentID,
@@ -121,6 +125,14 @@ export const FnbLeftSideBar: FC = () => {
         )
     }
 
+    const onCheckPerAccessApp = useCallback((appID: string) => {
+        const roleApp = listAppRoleMenu.find((e: any) => e?._id?.menu == appID);
+        if (roleApp && roleApp.read >= 1) {
+            return true;
+        }
+        return false;
+    }, [listAppRoleMenu]);
+
     return (
         <div className="t-leftsidebar-navigation t-leftsidebar-navigation-v2 t-leftsidebar-navigation-type2 fixed left-64px top-14 bottom-0 transition-all duration-500 ease-out border-secondary-light z-10 bg-primary-light">
             <div className="t-leftsidebar-navigation-container-v2  overflow-auto transition-all duration-500 ease-out p-3">
@@ -131,9 +143,9 @@ export const FnbLeftSideBar: FC = () => {
                         className="flex gap-2 items-center justify-center text-primary-gray bg-cbs-blue-button  rounded-md font-bold px-6 py-2 mb-3"
                         onClick={() =>
                             openModal(
-                                <div 
-                                className="w-full text-left transition-all transform bg-primary-light shadow-xl rounded my-6 align-top inline-block"
-                                style={{maxWidth:" calc(100vw - 50px)"}}
+                                <div
+                                    className="w-full text-left transition-all transform bg-primary-light shadow-xl rounded my-6 align-top inline-block"
+                                    style={{ maxWidth: " calc(100vw - 50px)" }}
                                 >
                                     <ModalAddNewOrder />
                                 </div>
@@ -144,49 +156,83 @@ export const FnbLeftSideBar: FC = () => {
                     </button>
                 </div>
                 <div className="t-link-menu-container">
+                    <NavLink
+                        to={'/fnb/admin'}
+                        className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
+                    >
+                        <img width={'20px'} src={adminIcon} alt="Menu item" />
+                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản trị viên</span>
+                    </NavLink>
+
                     <NavLink to={`/fnb/home`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                         <img width={'20px'} src={homeIcon} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Trang chủ</span>
                     </NavLink>
-                    <NavLink to={`/fnb/revenue-report`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                        <img width={'20px'} src={reportIcon} alt="Menu item" />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Báo cáo doanh thu</span>
-                    </NavLink>
-                    <NavLink to={`/fnb/risk-report`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                        <img width={'20px'} src={riskIcon} alt="Menu item" />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Báo cáo lỗi</span>
-                    </NavLink>
-                    <NavLink to={`/fnb/contacts`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                        <img width={'20px'} src={contactIcon} alt="Menu item" />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Danh bạ khách hàng</span>
-                    </NavLink>
-                    <NavLink to={`/fnb/shift`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                        <img width={'20px'} src={shiftcon} alt="Menu item" />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Ca làm việc</span>
-                    </NavLink>
-                    {
-                        user?.email.toString() === 'assistant.c686.trx@gmail.com' ? 
-                        <NavLink to={`/fnb/store`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                            <img width={'20px'} src={iconStore} alt="Menu item" />
-                            <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản lý kho</span>
-                        </NavLink>
-                        : <></>
+                    {onCheckPerAccessApp(APP_ID.FNB.menuFnbApp.revenueReport.id) ?
+                        <NavLink to={`/fnb/revenue-report`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                            <img width={'20px'} src={reportIcon} alt="Menu item" />
+                            <span className={"flex-1 ml-2 text-left text-[14px]"}>Báo cáo doanh thu</span>
+                        </NavLink> : <></>
                     }
-                    {
-                        user?.email.toString() === 'assistant.c686.trx@gmail.com' ? 
-                        <NavLink to={`/fnb/expense`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                            <img width={'20px'} src={iconExpense} alt="Menu item" />
-                            <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản lý chi phí</span>
-                        </NavLink>
-                        : <></>
+
+                    {onCheckPerAccessApp(APP_ID.FNB.menuFnbApp.riskReport.id) ?
+                        <NavLink to={`/fnb/risk-report`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                            <img width={'20px'} src={riskIcon} alt="Menu item" />
+                            <span className={"flex-1 ml-2 text-left text-[14px]"}>Báo cáo lỗi</span>
+                        </NavLink> : <></>
                     }
-                    {
-                        user?.email.toString() === 'assistant.c686.trx@gmail.com' ? 
-                        <NavLink to={`/fnb/product`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                            <img width={'20px'} src={menuIcon} alt="Menu item" />
-                            <span className={"flex-1 ml-2 text-left text-[14px]"}>Thực đơn</span>
-                        </NavLink>
-                        : <></>
+
+                    {onCheckPerAccessApp(APP_ID.FNB.menuFnbApp.contacts.id) ?
+                        <NavLink to={`/fnb/contacts`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                            <img width={'20px'} src={contactIcon} alt="Menu item" />
+                            <span className={"flex-1 ml-2 text-left text-[14px]"}>Danh bạ khách hàng</span>
+                        </NavLink> : <></>
+                    }
+
+                    {onCheckPerAccessApp(APP_ID.FNB.menuFnbApp.shift.id) ?
+                        <NavLink to={`/fnb/shift`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                            <img width={'20px'} src={shiftcon} alt="Menu item" />
+                            <span className={"flex-1 ml-2 text-left text-[14px]"}>Ca làm việc</span>
+                        </NavLink> : <></>
+                    }
+
+                    {onCheckPerAccessApp(APP_ID.FNB.menuFnbApp.store.id) ?
+                        <>
+                            {
+                                user?.email.toString() === 'assistant.c686.trx@gmail.com' ?
+                                    <NavLink to={`/fnb/store`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                                        <img width={'20px'} src={iconStore} alt="Menu item" />
+                                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản lý kho</span>
+                                    </NavLink>
+                                    : <></>
+                            }
+                        </> : <></>
+                    }
+
+                    {onCheckPerAccessApp(APP_ID.FNB.menuFnbApp.expense.id) ?
+                        <>
+                            {
+                                user?.email.toString() === 'assistant.c686.trx@gmail.com' ?
+                                    <NavLink to={`/fnb/expense`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                                        <img width={'20px'} src={iconExpense} alt="Menu item" />
+                                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản lý chi phí</span>
+                                    </NavLink>
+                                    : <></>
+                            }
+                        </> : <></>
+                    }
+
+                    {onCheckPerAccessApp(APP_ID.FNB.menuFnbApp.product.id) ?
+                        <>
+                            {
+                                user?.email.toString() === 'assistant.c686.trx@gmail.com' ?
+                                    <NavLink to={`/fnb/product`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                                        <img width={'20px'} src={menuIcon} alt="Menu item" />
+                                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Thực đơn</span>
+                                    </NavLink>
+                                    : <></>
+                            }
+                        </> : <></>
                     }
 
                     {/* <div onClick={() => setMenuState(!menuShowList)} className="text-primary-gray px-4 py-1 cursor-pointer hover:bg-slate-200">
@@ -208,14 +254,14 @@ export const FnbLeftSideBar: FC = () => {
                         </div>
                         <button
                             onClick={() => handleOpenModalCreateOrUpdate('create')}
-                            // onClick={() =>
-                            //     openModal(
-                            //         <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block"
-                            //         style={{width:"600px"}}>
-                            //             <ModalAddNewContact onClosed ={() => refetch()}/>
-                            //         </div>
-                            //     )
-                            // }
+                        // onClick={() =>
+                        //     openModal(
+                        //         <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block"
+                        //         style={{width:"600px"}}>
+                        //             <ModalAddNewContact onClosed ={() => refetch()}/>
+                        //         </div>
+                        //     )
+                        // }
                         >
                             <img src={iconPlus} alt="" />
                         </button>
@@ -242,7 +288,7 @@ export const FnbLeftSideBar: FC = () => {
                             </div>
                             <div className="ml- mr-0.5">
                                 {
-                                    (listWithPager[pageIndex]??[]).map((item: any, i: any) => (
+                                    (listWithPager[pageIndex] ?? []).map((item: any, i: any) => (
                                         <div key={item._id} className="flex gap-3 mt-3">
                                             <div className="w-[28px] h-[28px] min-w-[28px] min-h-[28px] rounded-full flex items-center justify-center text-white text-lg min-w-[28px] min-h-[28px]" style={{ background: "#FCC4A2" }}>{item?.name.charAt(0)}</div>
                                             <div className="w-full">

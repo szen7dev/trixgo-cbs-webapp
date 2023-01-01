@@ -1,20 +1,7 @@
 /*=====1.LIBRARY=====*/
-import { FC } from "react";
-import { Route, Switch } from "react-router-dom";
-
-/*=====2.PROVIDERS=====*/
-
-/*=====3.LAYOUTS=====*/
-import { InspectionLayout } from "views/inspection/shareComponents/layouts";
-
-/*=====4.CONFIG ROUTE=====*/
-
-/*=====5.PAGES/COMPONENTS=====*/
+import { FC, lazy } from "react";
+import { Route, Switch, matchPath } from "react-router-dom";
 import ErrorPage from "views/authentication/Error";
-import {
-    InspectionHomePage,
-} from "views/inspection/pages";
-
 import { FnBHomePage } from "views/fnb/pages/FnbHomePage/index";
 import { FnBProductPage } from "views/fnb/pages/FnbProductPage/index";
 import { FnbProductQuotasPage } from "views/fnb/pages/FnbProductQuotasPage/index";
@@ -38,16 +25,40 @@ import { FnbExpenseFundaDetailPage } from "views/fnb/pages/FnbExpenseFundaDetail
 import { FnbLayout } from "views/fnb/shareComponents/layouts/FnbLayout";
 import { FnbBillOrder } from "views/fnb/pages/FnbBill/FnbBillOrder";
 import { FnbBillList } from "views/fnb/pages/FnbBill/FnbBillList";
+import LayoutSecondary from "views/fnb/shareComponents/layouts/LayoutSecondary";
+
+const FnbAdminFunctionalTab = lazy(() => import("views/fnb/pages/FnbAdminPage/pages/FnbAdminFunctionalTab"))
+const FnbAdminDetail = lazy(() => import("views/fnb/pages/FnbAdminPage/pages/FnbAdminDetail"))
+const FnbAdminAuthorTab = lazy(() => import("views/fnb/pages/FnbAdminPage/pages/FnbAdminAuthorTab"))
 
 const FnbRouter: FC = () => {
     return (
         <Switch>
+            <Route path="/fnb/admin">
+                <FnbLayout>
+                    <LayoutSecondary pages={[
+                        { id: '1', title: 'Nhóm chức năng', path: '/fnb/admin', navExact: true },
+                        {
+                            id: '2', title: 'Phân quyền chức năng', path: '/fnb/admin/2', location: (location) => {
+                                // Get match params
+                                const match = matchPath<{ id: string }>(location.pathname, { path: '/cmcs/admin/:id/detail' })
+                                // Push to state
+                                return ({ pathname: '/fnb/admin/2', state: match ? match.params.id : null })
+                            }
+                        },
+                    ]}>
+                        <Route exact path="/fnb/admin" component={FnbAdminFunctionalTab} />
+                        <Route exact path="/fnb/admin/:id/detail" component={FnbAdminDetail} />
+                        <Route exact path="/fnb/admin/2" component={FnbAdminAuthorTab} />
+                    </LayoutSecondary>
+                </FnbLayout>
+            </Route>
             <Route
                 exact
                 path="/fnb/home"
                 component={() =>
                     <FnbLayout>
-                        <FnBHomePage/>
+                        <FnBHomePage />
                     </FnbLayout>
                 }
             />
@@ -56,7 +67,7 @@ const FnbRouter: FC = () => {
                 path="/fnb/product"
                 component={() =>
                     <FnbLayout>
-                        <FnBProductPage/>
+                        <FnBProductPage />
                     </FnbLayout>
                 }
             />
@@ -66,17 +77,17 @@ const FnbRouter: FC = () => {
                 path="/fnb/product/:productID"
                 component={() =>
                     <FnbLayout>
-                        <FnbProductQuotasPage/>
+                        <FnbProductQuotasPage />
                     </FnbLayout>
                 }
             />
-            
+
             <Route
                 exact
                 path="/fnb/shift"
                 component={() =>
                     <FnbLayout>
-                        <FnbShiftPage/>
+                        <FnbShiftPage />
                     </FnbLayout>
                 }
             />
@@ -86,7 +97,7 @@ const FnbRouter: FC = () => {
                 path="/fnb/shift/:fundaID"
                 component={() =>
                     <FnbLayout>
-                        <FnbShiftDetailPage/>
+                        <FnbShiftDetailPage />
                     </FnbLayout>
                 }
             />
@@ -96,17 +107,17 @@ const FnbRouter: FC = () => {
                 path="/fnb/shift/:fundaID/:shiftID/cash"
                 component={() =>
                     <FnbLayout>
-                        <FnbShiftCashPage/>
+                        <FnbShiftCashPage />
                     </FnbLayout>
                 }
             />
 
-             <Route
+            <Route
                 exact
                 path="/fnb/shift/:fundaID/:shiftID/material"
                 component={() =>
                     <FnbLayout>
-                        <FnbShiftMaterialPage/>
+                        <FnbShiftMaterialPage />
                     </FnbLayout>
                 }
             />
@@ -116,7 +127,7 @@ const FnbRouter: FC = () => {
                 path="/fnb/risk-report"
                 component={() =>
                     <FnbLayout>
-                        <FnbRiskReportPage/>
+                        <FnbRiskReportPage />
                     </FnbLayout>
                 }
             />
@@ -126,7 +137,7 @@ const FnbRouter: FC = () => {
                 path="/fnb/risk-report/:fundaID"
                 component={() =>
                     <FnbLayout>
-                        <FnbRiskReportDetailPage/>
+                        <FnbRiskReportDetailPage />
                     </FnbLayout>
                 }
             />
@@ -136,7 +147,7 @@ const FnbRouter: FC = () => {
                 path="/fnb/contacts"
                 component={() =>
                     <FnbLayout>
-                        <FnbContactPage/>
+                        <FnbContactPage />
                     </FnbLayout>
                 }
             />
@@ -146,7 +157,7 @@ const FnbRouter: FC = () => {
                 path="/fnb/contacts/:fundaID"
                 component={() =>
                     <FnbLayout>
-                        <FnbContactDetailPage/>
+                        <FnbContactDetailPage />
                     </FnbLayout>
                 }
             />
@@ -157,7 +168,7 @@ const FnbRouter: FC = () => {
                 path="/fnb/store"
                 component={() =>
                     <FnbLayout>
-                        <FnbStorePage/>
+                        <FnbStorePage />
                     </FnbLayout>
                 }
             />
@@ -167,7 +178,7 @@ const FnbRouter: FC = () => {
                 path="/fnb/store/:fundaID/import"
                 component={() =>
                     <FnbLayout>
-                        <FnbStoreImportPage/>
+                        <FnbStoreImportPage />
                     </FnbLayout>
                 }
             />
@@ -177,7 +188,7 @@ const FnbRouter: FC = () => {
                 path="/fnb/store/:fundaID/import/:detailID"
                 component={() =>
                     <FnbLayout>
-                        <FnbStoreImportDetailPage/>
+                        <FnbStoreImportDetailPage />
                     </FnbLayout>
                 }
             />
@@ -187,7 +198,7 @@ const FnbRouter: FC = () => {
                 path="/fnb/store/:fundaID/export"
                 component={() =>
                     <FnbLayout>
-                        <FnbStoreExportPage/>
+                        <FnbStoreExportPage />
                     </FnbLayout>
                 }
             />
@@ -197,7 +208,7 @@ const FnbRouter: FC = () => {
                 path="/fnb/store/:fundaID/export/:detailID"
                 component={() =>
                     <FnbLayout>
-                        <FnbStoreExportDetailPage/>
+                        <FnbStoreExportDetailPage />
                     </FnbLayout>
                 }
             />
@@ -208,7 +219,7 @@ const FnbRouter: FC = () => {
                 path="/fnb/expense"
                 component={() =>
                     <FnbLayout>
-                        <FnbExpensePage/>
+                        <FnbExpensePage />
                     </FnbLayout>
                 }
             />
@@ -218,7 +229,7 @@ const FnbRouter: FC = () => {
                 path="/fnb/expense/:fundaID"
                 component={() =>
                     <FnbLayout>
-                        <FnbExpenseFundaPage/>
+                        <FnbExpenseFundaPage />
                     </FnbLayout>
                 }
             />
@@ -228,7 +239,7 @@ const FnbRouter: FC = () => {
                 path="/fnb/expense/:fundaID/:detailID"
                 component={() =>
                     <FnbLayout>
-                        <FnbExpenseFundaDetailPage/>
+                        <FnbExpenseFundaDetailPage />
                     </FnbLayout>
                 }
             />
@@ -238,7 +249,7 @@ const FnbRouter: FC = () => {
                 path="/fnb/revenue-report"
                 component={() =>
                     <FnbLayout>
-                        <FnbReportPage/>
+                        <FnbReportPage />
                     </FnbLayout>
                 }
             />
@@ -247,28 +258,28 @@ const FnbRouter: FC = () => {
                 exact
                 path="/fnb/home/:orderID/print/1"
                 component={() =>
-                    <FnbBillOrder/>
+                    <FnbBillOrder />
                 }
             />
             <Route
                 exact
                 path="/fnb/home/order1"
                 component={() =>
-                    <FnbBillOrder/>
+                    <FnbBillOrder />
                 }
             />
             <Route
                 exact
                 path="/fnb/home/:orderID/print/2"
                 component={() =>
-                    <FnbBillList/>
+                    <FnbBillList />
                 }
             />
             <Route
                 exact
                 path="/fnb/home/order2"
                 component={() =>
-                    <FnbBillList/>
+                    <FnbBillList />
                 }
             />
             {/* F7 (https://app.trixgo.com/fnb/home/:orderID/print/2) */}
