@@ -275,9 +275,9 @@ export const FnbShiftDetailPage: FC = () => {
 								{/* <Link to ={`/fnb/shift/${fundaID}/${item._id}/material`}>
 									{item?.name}
 								</Link> */}
-								{item?.name}
+								{item?.name} ({item?.staffs.length})
 								<p className="text-cbs-subtext text-[12px]"><i>{moment(item?.createAt).format('HH:mm DD/MM/YYYY')}</i></p>
-								<p className="text-cbs-subtext text-[12px]"><i>SL: {item?.staffs.length}</i></p>
+								{/* <p className="text-cbs-subtext text-[12px]"><i>SL: {item?.staffs.length}</i></p> */}
 								{
                                 	item?.staffs.length && item?.staffs.map((staff: any) => {
 										return (
@@ -287,6 +287,7 @@ export const FnbShiftDetailPage: FC = () => {
 								}
 								<p className="text-cbs-subtext text-[12px]"><i>Size M: <b>{item?.numberOfOpeningSizeM}</b></i></p>
 								<p className="text-cbs-subtext text-[12px]"><i>Size L: <b>{item?.numberOfOpeningSizeL}</b></i></p>
+								<p className="text-cbs-subtext text-[12px]"><i>Lỗi: <b>{item?.numberOfMistakes}</b></i></p>
 								<p className="text-cbs-subtext">
 									<i title="Tổng doanh số"><b>{formatNumberMoney(item?.total)}</b></i> | 
 									<i title="Doanh số Off">{formatNumberMoney(item?.total1)}</i>
