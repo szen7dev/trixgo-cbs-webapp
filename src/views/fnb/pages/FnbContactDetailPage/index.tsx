@@ -56,9 +56,12 @@ export const FnbContactDetailPage: FC = () => {
 			keyword: keyword, 
 			fundaID,
 			// populates: JSON.stringify({
-			// 	path: 'funda'
+			// 	path: 'userCreate', select: "fullname"
 			// }) 
-		}, isFetchList: true, isFetchInfo: false  });
+		}, 
+		isFetchList: true, 
+		isFetchInfo: false  
+	});
 
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
@@ -230,6 +233,7 @@ export const FnbContactDetailPage: FC = () => {
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{item?.name}
+								<p><i>{moment(item?.createAt).format("HH:mm DD/MM/YYYY")}</i></p>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border "}>
 								{item?.phone}
