@@ -88,11 +88,11 @@ export const FnbShiftDetailPage: FC = () => {
 	}
 
 	useEffect(() => {
-		if (isSuccess && !(hasPermission && dataUserAccess?.level == 0)) {
-			toast.error("Không có quyền truy cập. Bạn không phải là quản trị viên!");
+		if (isSuccess && !(hasPermission)) {
+			toast.error("Bạn không có quyền truy cập chức năng này. Vui lòng liên hệ ban quản trị.");
 			history.push("/")
 		}
-	}, [hasPermission, dataUserAccess]);
+	}, [hasPermission]);
 
 	type PaginateHandle = React.ElementRef<typeof PaginateV2>;
     const ref = React.useRef<PaginateHandle>(null);
