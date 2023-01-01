@@ -938,34 +938,33 @@ export const ModalAddNewOrder: FC<Props> = () => {
                           <div className="overflow-y-auto	my-2 " style={{ height: "600px" }}>
                             <div className="flex flex-wrap gap-2">
                               {!!products.length && products.map((product: any) => (
-                                <button
-                                  key={product._id}
-                                  type="button"
-                                  // className="w-full h-full relative"
-                                  className="flex-1 w-1/5 pb-1/2 bg-purple-300 relative"
-                                  style={{ maxWidth: "19%", maxHeight: "200px", flexBasis:"19%"}}
-                                  // style={{ width: "19%" }}
-                                  onClick={() => {
-                                    setProductsInCart((prevProducts: any) => {
-                                      return [...prevProducts, {
-                                        ...product,
-                                        quantity: 1,
-                                        size: "1",
-                                        sugar: "1",
-                                        ice: "1",
-                                        createdAt: new Date()
-                                      }];
-                                    });
-                                  }}
-                                >
-                                  <img src={product?.images?.length ? `${process.env.REACT_APP_URL_S3}${product?.images[0]?.path}` : beverageIcon} className="w-full h-full object-contain" />
-                                  <div className="w-full absolute bottom-0 bg-black opacity-75 text-white text-[14px] px-3 py-1"
-                                  // style={{ maxWidth: "250px" }}
+                                  product?.parent ? (
+                                    <button
+                                      title={product.name}
+                                      key={product._id}
+                                      type="button"
+                                      className="flex-1 w-1/5 pb-1/2 bg-purple-300 relative"
+                                      style={{ maxWidth: "24%", maxHeight: "200px", flexBasis:"24%"}}
+                                      onClick={() => {
+                                        setProductsInCart((prevProducts: any) => {
+                                          return [...prevProducts, {
+                                            ...product,
+                                            quantity: 1,
+                                            size: "1",
+                                            sugar: "1",
+                                            ice: "1",
+                                            createdAt: new Date()
+                                          }];
+                                        });
+                                      }}
                                   >
-                                    <div className="overflow-ellipsis line-clamp-2 text-left">{product.name}</div>
-                                    <div className="text-right font-bold">{formatNumberMoney(product.unitPrice)}</div>
-                                  </div>
-                                </button>
+                                    <img src={product?.images?.length ? `${process.env.REACT_APP_URL_S3}${product?.images[0]?.path}` : beverageIcon} className="w-full h-full object-contain" />
+                                    <div className="w-full absolute bottom-0 bg-black opacity-75 text-white text-[14px] px-3 py-1">
+                                      <div className="overflow-ellipsis line-clamp-2 text-left">{product.name}</div>
+                                      <div className="text-right font-bold">{formatNumberMoney(product.unitPrice)}</div>
+                                    </div>
+                                  </button>
+                                  ):(<></>)
                               ))}
                             </div>
                           </div>
@@ -1057,5 +1056,5 @@ export const ModalAddNewOrder: FC<Props> = () => {
         </Formik>
       </div>
     </>
-  );
-};
+  )
+}

@@ -67,13 +67,14 @@ export const FnbBillList: FC = () => {
         fetchOrderProducts();
     }, [])
 
-    // console.log(orderProducts)
+    console.log(orderProducts)
     // console.log(info)
 
     return (
         <main className="h-screen overflow-auto bg-cbs-border">
             {/* <div className="h-full mx-auto bg-cbs-gray my-3 pb-1" style={{ width: "188px" }}> */}
             <div className="h-full mx-auto bg-cbs-gray my-3 pb-1">
+            {/* <div className="mx-auto my-2 bg-white h-full p-2 flex flex-col justify-between"> */}
                 {/* item */}
                     {
                         orderProducts.map((item: any) => (
@@ -85,13 +86,14 @@ export const FnbBillList: FC = () => {
                                         </Link>
                                     </div>
                                     <div className="flex justify-between ">
-                                        <div>{FNB_SERVICE[Number(info?.service)-1]?.text} | {info?.name} | {info?.sign}</div>
-                                        {/* <div>1/2</div> */}
+                                        {/* <div>{FNB_SERVICE[Number(info?.service)-1]?.text} | {info?.name} | {info?.sign}</div> */}
+                                        <div>1/2</div>
                                     </div>
                                 </div>
 
                                 <div className="pt-2">
                                     <div>{item.product?.name} - Size {item.product?.size >=1 && FNB_SIZE[Number(item.product.size)-1].text}</div>
+                                    <div>{item?.note}</div>
                                     <div className="flex justify-between">
                                         <div>{moment(info?.createAt).format('HH:mm DD/MM/YYYY')}</div>
                                         <div className="font-bold">{formatNumberMoney(Number(item.quantity*item.unitPrice))}đ</div>

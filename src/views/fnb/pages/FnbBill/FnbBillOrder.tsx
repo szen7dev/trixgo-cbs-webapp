@@ -67,12 +67,12 @@ export const FnbBillOrder: FC = () => {
         fetchOrderProducts();
     }, [])
 
-    // console.log(orderProducts)
+    console.log(orderProducts)
     // console.log(info)
 
     return (
         <main className="h-screen overflow-auto bg-cbs-border">
-            <div className="mx-auto my-2 bg-white h-full p-2 flex flex-col justify-between" style={{ width: "301px" }}>
+            <div className="mx-auto my-2 bg-white h-full p-2 flex flex-col justify-between">
             {/* <div className="mx-auto bg-white h-full p-2 flex flex-col justify-between"> */}
                 <div>
                     <div className="flex">
@@ -116,13 +116,13 @@ export const FnbBillOrder: FC = () => {
                                         <td className="text-right">{formatNumberMoney(Number(item.quantity*item.unitPrice))}</td>
                                     </tr>
 
-                                    // {item.subProducts?.map?.((subProduct: any) => (
-                                    //     <tr key={subProduct._id}>
+                                    // item?.subProducts?.map((subProduct: any) => (
+                                    //     <tr>
                                     //         <td className="text-left">{subProduct.name.trim()}</td>
                                     //         <td className="text-center px-1"></td>
                                     //         <td className="text-right">{formatNumberMoney(subProduct.unitPrice)}</td>
                                     //     </tr>
-                                    // ))}
+                                    // ))
                                 ))
                             }
                                 <tr>
