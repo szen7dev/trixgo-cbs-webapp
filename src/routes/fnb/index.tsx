@@ -268,13 +268,13 @@ const FnbRouter: FC = () => {
                     <FnbBillOrder />
                 }
             />
-            <Route
+            {/* <Route
                 exact
                 path="/fnb/home/:orderID/print/2"
                 component={() =>
                     <FnbBillList />
                 }
-            />
+            /> */}
             <Route
                 exact
                 path="/fnb/home/order2"
