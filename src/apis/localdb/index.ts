@@ -652,8 +652,8 @@ export const FNB_ORDER_STATUS = [
 ]
 
 export const FNB_NORESIDENT_TYPES = [
-    { value: 1, text: 'Khách đã biết tên', backgroud: '4d4dff' },
-    { value: 2, text: 'No Name', backgroud: 'FFB83A' },
+    { value: 1, text: 'Đã biết', backgroud: '4d4dff' },
+    { value: 2, text: 'Chưa biết', backgroud: 'FFB83A' },
 ]
 
 /**
