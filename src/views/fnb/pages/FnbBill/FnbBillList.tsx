@@ -24,7 +24,7 @@ import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
 
 /*=====7.OTHER=====*/
 import { APP_ID } from "apis/localdb";
-import { FNB_CHANNEL, FNB_SERVICE, FNB_PAYMENT, FNB_ORDER_STATUS, FNB_SIZE } from "apis/localdb";
+import { FNB_CHANNEL, FNB_SERVICE, FNB_PAYMENT, FNB_ORDER_STATUS, FNB_SIZE, FNB_SUGAR, FNB_ICE } from "apis/localdb";
 
 export const FnbBillList: FC = () => {
     const { orderID } = useParams<{ orderID: string }>()
@@ -73,7 +73,7 @@ export const FnbBillList: FC = () => {
     //     }
     // }, [orderProducts]);
 
-    console.log(orderProducts)
+    // console.log(orderProducts)
     // console.log(info)
 
     return (
@@ -86,11 +86,15 @@ export const FnbBillList: FC = () => {
                         // let amount = Number(item.quantity * item.unitPrice)
                         let amount = Number(item.unitPrice)
 
+                        let str = ""
+
                         if (item?.subProducts) {
                             for (const subProduct of item?.subProducts) {
                                 amount = Number(amount) + Number(subProduct.unitPrice)
+                                str = str + subProduct.name
                             }
                         }
+
                         const quantity = [];
                         for (let i = 1; i <= Number(item.quantity); i++) {
                             quantity.push(i);
@@ -111,7 +115,9 @@ export const FnbBillList: FC = () => {
 
                                             <div className="pt-2">
                                                 <div>{item.product?.name} - Size {item.product?.size >= 1 && FNB_SIZE[Number(item.product.size) - 1].text}</div>
-                                                <div>{item?.note}</div>
+                                                <div>
+                                                    Đường {FNB_SUGAR[Number(item.sugar)-1].text}, Đá {FNB_ICE[Number(item.ice)-1].text}, {item?.note}, {str}
+                                                </div>
                                                 <div className="flex justify-between">
                                                     <div>{moment(info?.createAt).format('HH:mm DD/MM/YYYY')}</div>
                                                     <div className="font-bold">{formatNumberMoney(amount)}đ</div>
