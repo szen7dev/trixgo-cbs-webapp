@@ -33,6 +33,7 @@ import DashboardV2Slice from './DashboardV2Slice';
 import DocumentHomeSlice from "./DocumentHomeSlice";
 import DocumentProjectSlice from "./DocumentProjectSlice";
 import CmcsHomeSlice from "./CmcsHomeSlice";
+import fnbSlice from './FnbSlice';
 import { useSelector, TypedUseSelectorHook } from 'react-redux';
 
 const combinedReducer = combineReducers({
@@ -68,6 +69,7 @@ const combinedReducer = combineReducers({
     documentHome: DocumentHomeSlice,
     documentProject: DocumentProjectSlice,
     cmcsHome: CmcsHomeSlice,
+    fnbSlice: fnbSlice
 });
 const rootReducer = (state: any, action: any) => {
     if (action.type === 'user/logout') {

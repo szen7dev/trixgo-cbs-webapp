@@ -34,6 +34,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
     birthday: '',
     description: '',
     note: '',
+    nonResident: '',
     funda: {},
   }
 }) => {
@@ -313,6 +314,20 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
           name="note"
           className="w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"
           defaultValue={formData.note}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-10 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtNonResident">
+          Phân loại khách
+        </label>
+        <input
+          type="text"
+          placeholder="1-Khách biết tên, 2-Khách vãng lai"
+          name="nonResident"
+          className="w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.nonResident}
           onChange={onChange}
         />
       </section>

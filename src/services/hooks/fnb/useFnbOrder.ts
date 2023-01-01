@@ -37,7 +37,8 @@ export const useFnbOrder = ({
         data,
         refetch,
         fetchNextPage,
-        hasNextPage
+        hasNextPage,
+        isFetching
     } = useInfiniteQuery(
         ['fnb-order-list', params],
         async ({ pageParam }: any) =>
@@ -78,5 +79,6 @@ export const useFnbOrder = ({
         insertAsync,
         updateAsync,
         deleteManyAsync,
+        isFetching
     }
 }

@@ -71,8 +71,8 @@ export const FnbBillOrder: FC = () => {
     // console.log(info)
 
     return (
-        <main className="min-h-screen overflow-auto bg-cbs-border">
-            <div className="mx-auto bg-white h-full p-2 flex flex-col justify-between" style={{ width: "301px", minHeight:"calc(100vh - 20px)", marginTop:"10px" }}>
+        <main className="h-screen overflow-auto bg-cbs-border">
+            <div className="mx-auto my-2 bg-white h-full p-2 flex flex-col justify-between">
             {/* <div className="mx-auto bg-white h-full p-2 flex flex-col justify-between"> */}
                 <div>
                     <div className="flex">
