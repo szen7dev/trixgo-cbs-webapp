@@ -24,6 +24,7 @@ import shopeeChannelIcon from "assets/images/fnb/shopee.svg";
 import gojekChannelIcon from "assets/images/fnb/gojek.svg";
 import baemineChannelIcon from "assets/images/fnb/baemin.svg";
 import loshipChannelIcon from "assets/images/fnb/loship.svg";
+import beeChannelIcon from "assets/images/fnb/bee.svg";
 import businessBuiding from "assets/images/icons8-business-building-48.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
@@ -83,6 +84,9 @@ export const getIconApp = (salesChannel: any) => {
 
     case 6:
       return loshipChannelIcon
+
+    case 7:
+      return beeChannelIcon
 
     default:
       return offlineChannelIcon
@@ -710,13 +714,13 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                       </div>
                       {
                         item?.nonResident == 2 ?
-                          <div className="w-[70px] text-center rounded-md bg-cbs-schedule-expired text-white" style={{ fontSize: "12px" }}>
+                          <div className="w-[100px] text-center bg-cbs-schedule-expired text-white" style={{ fontSize: "12px" }}>
                             {FNB_NORESIDENT_TYPES[Number(item?.nonResident) - 1]?.text}
                           </div>
-                          :
-                          <div className="w-[70px] text-center rounded-md bg-cbs-schedule-after-7days text-white" style={{ fontSize: "12px" }}>
-                            {FNB_NORESIDENT_TYPES[Number(item?.nonResident) - 1]?.text}
-                          </div>
+                          : <></>
+                          // <div className="w-[90px] text-center bg-cbs-schedule-after-7days text-white" style={{ fontSize: "12px" }}>
+                          //   {FNB_NORESIDENT_TYPES[Number(item?.nonResident) - 1]?.text}
+                          // </div>
                       }
                     </td>
                     <td className={"w-[50px]"}>
@@ -753,19 +757,18 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                       >
                         <div className={"user-infor py-2"}>
                           <p className={"user-infor-name text-[14px] text-left"}>
-                            {/* <span className="rounded-md bg-cbs-orage text-white px-3 py-1 mr-3">
-                              02 lỗi
-                            </span> */}
-                            {/* {FNB_SERVICE[Number(item?.service)-1]?.text} -  */}
+                            {
+                              item?.numberOfMistakes ? <span className="rounded-md bg-cbs-orage text-white px-3 py-1 mr-3">{item?.numberOfMistakes} lỗi</span>: <></>
+                            }
                             <span className="text-cbs-primary">{item?.name}</span>
                           </p>
-                          {/* <span className={"truncate text-xs text-primary-gray py-2"}>{item?.note}</span> */}
+                          <span className={"truncate text-xs text-primary-gray py-2"}>{item?.note}</span>
                         </div>
                       </button>
                     </td>
                     <td className={"px-1 py-2"}>
                       <div className="">
-                        {item?.sign} | {item?.appOrderSign}
+                        {item?.sign} {item?.appOrderSign}
                       </div>
                     </td>
                     <td className={"px-1 py-2"}>

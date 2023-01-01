@@ -625,6 +625,7 @@ export const FNB_CHANNEL = [
     { value: 4, text: 'Gojek' },
     { value: 5, text: 'Baemin' },
     { value: 6, text: 'Loship' },
+    { value: 7, text: 'Bee' },
 ]
 
 export const FNB_SERVICE = [
@@ -668,8 +669,8 @@ export const FNB_ORDER_STATUS = [
 ]
 
 export const FNB_NORESIDENT_TYPES = [
-    { value: 1, text: 'Đã biết', backgroud: '4d4dff' },
-    { value: 2, text: 'Chưa biết', backgroud: 'FFB83A' },
+    { value: 1, text: 'Đã biết khách', backgroud: '4d4dff' },
+    { value: 2, text: 'Chưa biết khách', backgroud: 'FFB83A' },
 ]
 
 /**
