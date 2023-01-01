@@ -104,12 +104,8 @@ export const FnbBillList: FC = () => {
                                             <div className="border-b-0.5 border-cbs-border pb-1">
                                                 <div className="font-bold">
                                                     <Link to={`/fnb/home`}>
-                                                        {info?.funda?.name}
+                                                        {info?.funda?.name} ({e}/{Number(item.quantity)})
                                                     </Link>
-                                                </div>
-                                                <div className="flex justify-between ">
-                                                    {/* <div>{FNB_SERVICE[Number(info?.service)-1]?.text} | {info?.name} | {info?.sign}</div> */}
-                                                    <div>{e}/{Number(item.quantity)}</div>
                                                 </div>
                                             </div>
 
