@@ -643,6 +643,22 @@ export const FNB_SIZE = [
     { value: 2, text: 'L' },
 ]
 
+export const FNB_SUGAR = [
+    { value: 1, text: '100' },
+    { value: 2, text: '70' },
+    { value: 3, text: '50' },
+    { value: 4, text: '30' },
+    { value: 5, text: '0' },
+]
+
+export const FNB_ICE = [
+    { value: 1, text: '100' },
+    { value: 2, text: '70' },
+    { value: 3, text: '50' },
+    { value: 4, text: '30' },
+    { value: 5, text: '0' },
+]
+
 export const FNB_ORDER_STATUS = [
     { value: 1, text: 'Đang giao hàng/Phục vụ', backgroud: '4d4dff' },
     { value: 2, text: 'Hoàn tiền một phần', backgroud: '4d4dff' },

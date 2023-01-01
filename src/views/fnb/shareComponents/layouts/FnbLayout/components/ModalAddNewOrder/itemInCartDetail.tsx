@@ -54,7 +54,7 @@ export const ItemInCartMenu : FC<any> = ({item, service, handleChooseVariant, ha
                     <div className="w-full">
                         <div className="flex justify-between">
                             <div>
-                                <p className="font-bold truncate" onClick={() => setMenuState(!menuShowList)}>
+                                <p className="font-bold truncate cursor-pointer" title="Ẩn/hiện thông tin chi tiết" onClick={() => setMenuState(!menuShowList)}>
                                     {item.name}
                                 </p>
                             </div>

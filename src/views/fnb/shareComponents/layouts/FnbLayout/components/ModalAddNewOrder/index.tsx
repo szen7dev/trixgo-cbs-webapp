@@ -50,7 +50,7 @@ interface InitialValues {
   customerID: string,
   seasons: number,
   service: string,
-  paymentMethod: number,
+  paymentMethod: string,
   salesChannel: number,
   name: string,
   note: string,
@@ -200,7 +200,11 @@ export const ModalAddNewOrder: FC<Props> = () => {
 
   useEffect(() => {
     calTotalMoney();
-  }, [JSON.stringify(productsInCart), service])
+  }, [JSON.stringify(productsInCart)]);
+
+  useEffect(() => {
+    calTotalMoney(service);
+  }, [service]);
 
   const increaseCount = (product: any) => {
     const newProducts = [...productsInCart];
@@ -323,6 +327,25 @@ export const ModalAddNewOrder: FC<Props> = () => {
     setTotalPay(totalMoney - newDiscount - discountAndSales.sales);
   }
 
+  const handleAutoChangeDiscount = (totalMoney: number, name: string, value: number) => {
+    const inputValue = Number(value);
+    let newDiscount = inputValue;
+    let newDiscountPercent = inputValue;
+
+    if (name === 'discount') {
+      newDiscountPercent = +((inputValue * 100) / totalMoney).toFixed(2);
+    } else if (name === 'discountPercent') {
+      newDiscount = (totalMoney * inputValue) / 100;
+    }
+
+    setDiscountAndSales(prev => ({
+      ...prev,
+      discount: newDiscount,
+      discountPercent: newDiscountPercent,
+    }));
+    setTotalPay(totalMoney - newDiscount - discountAndSales.sales);
+  }
+
   const handleChangeSales = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const inputValue = Number(value);
@@ -406,7 +429,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
     setProductsInCart(newProductsInCart);
   }
 
-  const calTotalMoney = () => {
+  const calTotalMoney = (serviceApp = "0") => {
     const amount = productsInCart.reduce((prev: any, product: any) => {
       if (product.variantsSelected && product.variantsSelected.length) {
         product.variantsSelected.forEach((variant: any) => {
@@ -435,7 +458,16 @@ export const ModalAddNewOrder: FC<Props> = () => {
       return prev += (price * product.quantity)
     }, 0)
     setTotalMoney(amount);
-    setTotalPay(amount);
+   
+    if (serviceApp) {
+      if (serviceApp === "1") {
+        handleAutoChangeDiscount(amount, 'discountPercent', 0);
+      } else {
+        handleAutoChangeDiscount(amount, 'discountPercent', 25);
+      }
+    } else {
+      setTotalPay(amount);
+    }
   }
 
   const addOrderSchema = object().shape({
@@ -453,7 +485,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
     customerID: "",
     seasons: 1,
     service: "1",
-    paymentMethod: 1,
+    paymentMethod: "1",
     salesChannel: 1,
     name: "",
     note: "",
@@ -625,7 +657,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="flex justify-between pt-3 my-3">
+                        <div className="flex justify-between pt-1 my-1">
                           <div>
                             <span>Đơn off hoặc app</span>
                             <div>
@@ -647,6 +679,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                           setFieldValue("service", "1");
                                           setService("1");
                                           setFieldValue("salesChannel", 1);
+                                          setFieldValue("paymentMethod", "1");
                                         }}
                                         checked={(values.service === "1") ? true : false}
                                       />
@@ -665,6 +698,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                           setFieldValue("service", "2");
                                           setService("2");
                                           setFieldValue("salesChannel", 2);
+                                          setFieldValue("paymentMethod", "2");
                                         }}
                                         checked={(values.service === "2") ? true : false}
                                       />
@@ -768,7 +802,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                     }
                                     label={<span className="text-[13px]">Loship</span>}
                                   />
-                                  {/* <FormControlLabel
+                                  <FormControlLabel
                                     sx={{ marginLeft: "0" }}
                                     value="7"
                                     control={
@@ -781,7 +815,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                       />
                                     }
                                     label={<span className="text-[13px]">Bee</span>}
-                                  /> */}
+                                  />
                                 </RadioGroup>
                               </FormControl>
                             </div>
@@ -808,8 +842,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                         style={{}}
                                         icon={<img src={RadioEmpty} alt="" />}
                                         checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => setFieldValue("paymentMethod", 1)}
-                                        checked={(values.paymentMethod === 1) ? true : false}
+                                        onChange={() => setFieldValue("paymentMethod", "1")}
+                                        checked={(values.paymentMethod === "1") ? true : false}
                                       />
                                     }
                                     label={<span className="text-[13px]">Tiền mặt</span>}
@@ -822,8 +856,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                         style={{}}
                                         icon={<img src={RadioEmpty} alt="" />}
                                         checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => setFieldValue("paymentMethod", 2)}
-                                        checked={(values.paymentMethod === 2) ? true : false}
+                                        onChange={() => setFieldValue("paymentMethod", "2")}
+                                        checked={(values.paymentMethod === "2") ? true : false}
                                       />
                                     }
                                     label={<span className="text-[13px]">Chuyển khoản</span>}
