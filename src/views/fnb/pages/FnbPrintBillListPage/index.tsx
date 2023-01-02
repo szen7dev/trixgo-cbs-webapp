@@ -73,6 +73,8 @@ useEffect(() => {
 const componentRef = useRef(null);
 usePrintComponent({ ref: componentRef });
 
+console.log(orderProducts)
+
 if (isLoadingInfo) return <Loader className="border-primary" />;
 
   return (
@@ -118,36 +120,6 @@ if (isLoadingInfo) return <Loader className="border-primary" />;
                           }
 
                           return (
-                              // <table
-                              //   key={index}
-                              //   className =""
-                              //   style={{ height: "30mm", width: "100%" }}
-                              // >
-                              //     <tbody>
-                              //         {
-                              //           quantity.map((e) => {
-                              //               return (
-                              //                 <tr key={`${e}.${item._id}`}>
-                              //                   <td className="text-xs px-2">
-                              //                       <div className="font-bold">
-                              //                       {info?.funda?.name} ({e}/{Number(item.quantity)})
-                              //                     </div>
-                              //                     <div className="mb-2">
-                              //                       <p className="font-bold">{item.product?.name} - Size {item.product?.size >= 1 && FNB_SIZE[Number(item.product.size) - 1].text}</p>
-                              //                       <p><i>Đường {FNB_SUGAR[Number(item.sugar)-1].text}, Đá {FNB_ICE[Number(item.ice)-1].text}, {item?.note}, {str}</i></p>
-                              //                     </div>
-                              //                     <div className="flex justify-between">
-                              //                         <div>{moment(info?.createAt).format('HH:mm DD/MM/YYYY')}</div>
-                              //                         <div className="font-bold">{formatNumberMoney(amount)}đ</div>
-                              //                     </div>
-                              //                   </td>
-                              //                 </tr>
-                              //               )
-                              //           })
-                              //         }
-                              //     </tbody>
-                              // </table>
-
                               <div
                                 key={index}
                                 className =""
@@ -164,7 +136,7 @@ if (isLoadingInfo) return <Loader className="border-primary" />;
                                                         {info?.funda?.name} ({e}/{Number(item.quantity)})
                                                       </div>
                                                       <div className="mb-2">
-                                                        <p className="font-bold">{item.product?.name} - Size {item.product?.size >= 1 && FNB_SIZE[Number(item.product.size) - 1].text}</p>
+                                                        <p className="font-bold">{item.product?.name} - Size {item.size >= 1 && FNB_SIZE[Number(item.size) - 1].text}</p>
                                                         <p><i>Đường {FNB_SUGAR[Number(item.sugar)-1].text}, Đá {FNB_ICE[Number(item.ice)-1].text}, {item?.note}, {str}</i></p>
                                                       </div>
                                                       <div className="flex justify-between">
