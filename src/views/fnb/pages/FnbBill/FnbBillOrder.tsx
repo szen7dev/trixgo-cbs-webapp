@@ -87,13 +87,13 @@ export const FnbBillOrder: FC = () => {
 						</Link>
                         <div className="text-center mt-3">
                             <div className="font-bold text-[12px]">{info?.funda?.name}</div>
-                            <div className="text-[11px]">{info?.funda?.address}</div>
-                            <div className="text-[11px]">{info?.funda?.phone}</div>
+                            <div className="text-[12px]">{info?.funda?.address}</div>
+                            <div className="text-[12px]">{info?.funda?.phone}</div>
                         </div>
                     </div>
                     <div className="text-center py-1">
                         <div className="font-bold text-[12px]">HÓA ĐƠN THANH TOÁN</div>
-                        <div className="text-[11px]">Số: {info?.sign}</div>
+                        <div className="text-[12px]">Số: {info?.sign}</div>
                     </div>
                     <div className="border-t-0.5 border-b-0.5 border-cbs-border mx-2 py-1 text-[13px]">
                         <div className="flex justify-between">
@@ -146,7 +146,7 @@ export const FnbBillOrder: FC = () => {
                             </tbody>
                         </table>
                     </div>
-                    <div className="border-t-0.5 border-b-0.5 border-cbs-border  mx-2 py-1 text-[11px]">
+                    <div className="border-t-0.5 border-b-0.5 border-cbs-border  mx-2 py-1 text-[12px]">
                         <table className="table-fixed w-full">
                             <thead>
                                 <tr className="font-bold">
@@ -157,11 +157,11 @@ export const FnbBillOrder: FC = () => {
                             </thead>
                         </table>
                     </div>
-                    <div className="flex justify-between border-b-0.5 border-cbs-border  mx-2 py-1 text-[11px]">
+                    <div className="flex justify-between border-b-0.5 border-cbs-border  mx-2 py-1 text-[12px]">
                         <div>Hình thức thanh toán</div>
                         <div>{info?.paymentMethod >=1 && FNB_PAYMENT[Number(info?.paymentMethod)-1].text}</div>
                     </div>
-                    <div className="text-center italic text-[11px]  mx-4 py-1 ">{info?.funda?.bankAccount}</div>
+                    <div className="text-center italic text-[12px]  mx-4 py-1 ">{info?.funda?.bankAccount}</div>
                 </div>
                 <div className="w-full h-[30px]"></div>
             </div>

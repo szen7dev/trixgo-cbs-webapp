@@ -78,8 +78,8 @@ export const FnbBillList: FC = () => {
 
     return (
         <main className="h-screen overflow-auto bg-cbs-border">
-            {/* <div className="h-full mx-auto bg-cbs-gray my-3 pb-1" style={{ width: "188px" }}> */}
-            <div className="h-full mx-auto bg-cbs-gray my-3 pb-1">
+            <div className="h-full mx-auto bg-cbs-gray my-3 pb-1" style={{ width: "50mm"}}>
+            {/* <div className="h-full mx-auto bg-cbs-gray my-3 pb-1"> */}
                 {/* <div className="mx-auto my-2 bg-white h-full p-2 flex flex-col justify-between"> */}
                 {
                     orderProducts.map((item: any, index: number) => {
@@ -104,7 +104,7 @@ export const FnbBillList: FC = () => {
                             <div key={index}>
                                 {quantity.map((e) => {
                                     return (
-                                        <div key={`${e}.${item._id}`} className="bg-white p-2 mb-5 rounded-md border-0.5 border-cbs-border ">
+                                        <div key={`${e}.${item._id}`} className=" text-[12px] bg-white p-2 mb-2 rounded-md border-0.5 border-cbs-border" style={{ height: "30mm" }}>
                                             <div className="border-b-0.5 border-cbs-border pb-1">
                                                 <div className="font-bold">
                                                     <Link to={`/fnb/home`}>
