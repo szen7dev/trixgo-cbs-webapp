@@ -199,42 +199,27 @@ export const FnbLeftSideBar: FC = () => {
                     }
 
                     {onCheckPerAccessApp(APP_ID.FNB.menuFnbApp.store.id) ?
-                        <>
-                            {
-                                user?.email.toString() === 'assistant.c686.trx@gmail.com' ?
-                                    <NavLink to={`/fnb/store`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                                        <img width={'20px'} src={iconStore} alt="Menu item" />
-                                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản lý kho</span>
-                                    </NavLink>
-                                    : <></>
-                            }
-                        </> : <></>
+                        <NavLink to={`/fnb/store`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                            <img width={'20px'} src={iconStore} alt="Menu item" />
+                            <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản lý kho</span>
+                        </NavLink>
+                        : <></>
                     }
 
                     {onCheckPerAccessApp(APP_ID.FNB.menuFnbApp.expense.id) ?
-                        <>
-                            {
-                                user?.email.toString() === 'assistant.c686.trx@gmail.com' ?
-                                    <NavLink to={`/fnb/expense`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                                        <img width={'20px'} src={iconExpense} alt="Menu item" />
-                                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản lý chi phí</span>
-                                    </NavLink>
-                                    : <></>
-                            }
-                        </> : <></>
+                         <NavLink to={`/fnb/expense`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                            <img width={'20px'} src={iconExpense} alt="Menu item" />
+                            <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản lý chi phí</span>
+                        </NavLink>
+                        : <></>
                     }
 
                     {onCheckPerAccessApp(APP_ID.FNB.menuFnbApp.product.id) ?
-                        <>
-                            {
-                                user?.email.toString() === 'assistant.c686.trx@gmail.com' ?
-                                    <NavLink to={`/fnb/product`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                                        <img width={'20px'} src={menuIcon} alt="Menu item" />
-                                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Thực đơn</span>
-                                    </NavLink>
-                                    : <></>
-                            }
-                        </> : <></>
+                        <NavLink to={`/fnb/product`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                            <img width={'20px'} src={menuIcon} alt="Menu item" />
+                            <span className={"flex-1 ml-2 text-left text-[14px]"}>Thực đơn</span>
+                        </NavLink>
+                        : <></>
                     }
 
                     {/* <div onClick={() => setMenuState(!menuShowList)} className="text-primary-gray px-4 py-1 cursor-pointer hover:bg-slate-200">
