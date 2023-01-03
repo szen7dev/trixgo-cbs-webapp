@@ -72,9 +72,12 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                 note: values.note,
                 seasons: values.seasons,
                 shiftType: values.shiftType,
+                paidStatus: values.paidStatus,
                 openingCash: Number(values.openingCash),
                 incurredCash: Number(values.incurredCash),
                 closingCash: Number(values.closingCash),
+                workingHours: Number(values.workingHours),
+                subWorkingHours: Number(values.subWorkingHours),
             };
             const result = await updateAsync(query);
             if (!result.error) {
@@ -263,19 +266,6 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                                     }
                                                     label={<span className="text-[13px]">Tối</span>}
                                                 />
-                                                {/* <FormControlLabel
-                                                    sx={{ width: "75px", marginLeft: "0" }}
-                                                    value="4"
-                                                    onChange={() => setFieldValue('shiftType', 4)}
-                                                    control={
-                                                        <Radio
-                                                            style={{}}
-                                                            icon={<img src={CheckBoxEmpty} alt="" />}
-                                                            checkedIcon={<img src={CheckedBox} alt="" />}
-                                                        />
-                                                    }
-                                                    label={<span className="text-[13px]">Đêm</span>}
-                                                /> */}
                                             </RadioGroup>
                                         </FormControl>
                                     </div>
@@ -313,6 +303,46 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                         className="font-normal leading-7 text-sm text-negative"
                                     />
                                 </div>
+                                <div className="ml-3">
+                                    <span className="text-[13px] text-primary-gray">Tình trạng nộp tiền</span>
+                                    <div className="my-5">
+                                        <FormControl sx={{ marginTop: "-5px" }} >
+                                            <RadioGroup
+                                                row
+                                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                                name="paidStatus"
+                                                defaultValue={initialValues?.paidStatus ?? 1}
+                                            >
+                                                <FormControlLabel
+                                                    sx={{ width: "150px", marginLeft: "0", fontSize: "13px" }}
+                                                    value="1"
+                                                    onChange={() => setFieldValue('paidStatus', 1)}
+                                                    control={
+                                                        <Radio
+                                                            style={{}}
+                                                            icon={<img src={CheckBoxEmpty} alt="" />}
+                                                            checkedIcon={<img src={CheckedBox} alt="" />}
+                                                        />
+                                                    }
+                                                    label={<span className="text-[13px]">Chưa nộp</span>}
+                                                />
+                                                <FormControlLabel
+                                                    sx={{ width: "150px", marginLeft: "0" }}
+                                                    value="2"
+                                                    onChange={() => setFieldValue('paidStatus', 2)}
+                                                    control={
+                                                        <Radio
+                                                            style={{}}
+                                                            icon={<img src={CheckBoxEmpty} alt="" />}
+                                                            checkedIcon={<img src={CheckedBox} alt="" />}
+                                                        />
+                                                    }
+                                                    label={<span className="text-[13px]">Đã nộp</span>}
+                                                />
+                                            </RadioGroup>
+                                        </FormControl>
+                                    </div>
+                                </div>
                                 <div className="mb-4">
                                     <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtNote">
                                         Ghi chú
@@ -324,8 +354,30 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                         className="font-normal leading-7 text-sm text-negative"
                                     />
                                 </div>
+                                <div className="mb-4">
+                                    <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtWorkingHours">
+                                        Số giờ làm việc ca chính
+                                    </label>
+                                    <Field className="appearance-none border-0.5 border-cbs-bg-input-search bg-cbs-table-header rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none " id="txtClosingCash" placeholder=" Số giờ làm việc ca chính" {...getFieldProps('workingHours')} />
+                                    <ErrorMessage
+                                        name="workingHours"
+                                        component="span"
+                                        className="font-normal leading-7 text-sm text-negative"
+                                    />
+                                </div>
+                                <div className="mb-4">
+                                    <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtSubWorkingHours">
+                                        Số giờ làm việc ca phụ
+                                    </label>
+                                    <Field className="appearance-none border-0.5 border-cbs-bg-input-search bg-cbs-table-header rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none " id="txtClosingCash" placeholder=" Số giờ làm việc ca phụ" {...getFieldProps('subWorkingHours')} />
+                                    <ErrorMessage
+                                        name="subWorkingHours"
+                                        component="span"
+                                        className="font-normal leading-7 text-sm text-negative"
+                                    />
+                                </div>
                                 <div>
-                                    <span className="text-[13px] text-primary-gray mb-3 ml-3">Nhân sự trong ca làm việc</span>
+                                    <span className="text-[13px] text-primary-gray mb-2 ml-3">Nhân sự ca chính</span>
                                     <div className="flex gap-2 my-3 flex-wrap">
                                         {membersSelected.map((member: any) => (
                                             <div key={member._id} className="flex justify-between w-1/3 h-[40px] items-center border-0.5 border-cbs-border rounded-md px-3">
@@ -339,7 +391,7 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                             </div>
                                         ))}
                                     </div>
-                                    <div className="my-3">
+                                    <div className="my-1">
                                         <input type="text" placeholder="Tìm kiếm nhân sự"
                                             className="w-full h-[40px] rounded border-0.5 border-cbs-bg-input-search bg-cbs-bg-input-search px-3 py-1 outline-none "
                                             onChange={debounce((e) => setKeywordUser(e.target.value), 200)}

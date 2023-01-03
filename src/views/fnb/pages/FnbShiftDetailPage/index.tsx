@@ -50,6 +50,7 @@ export const FnbShiftDetailPage: FC = () => {
 
     const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbShift({ 
 		params: { 
+			limit: 50, 
 			keyword: keyword, 
 			fundaID, 
 			populates: JSON.stringify({
@@ -58,7 +59,7 @@ export const FnbShiftDetailPage: FC = () => {
 			}) 
 		}, isFetchList: true, isFetchInfo: false  });
 
-	console.log(listWithPager)
+	// console.log(listWithPager)
 
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
@@ -159,20 +160,20 @@ export const FnbShiftDetailPage: FC = () => {
 					</button> */}
 				</div>
 				<PaginateV2
-                        ref={ref}
-                        totalRecord={totalRecord}
-                        totalPages={totalPage}
-                        limit={20}
-                        hasNextPage={hasNextPage}
-                        isFetching={isLoading}
-                        nextPageAction={() => {
-                            fetchNextPage();
-                            setPageIndex(oldState => oldState+1)
-                        }}
-                        prevPageAction={() => {
-                            setPageIndex(oldState => oldState-1)
-                        }}
-                    />
+					ref={ref}
+					totalRecord={totalRecord}
+					totalPages={totalPage}
+					limit={50}
+					hasNextPage={hasNextPage}
+					isFetching={isLoading}
+					nextPageAction={() => {
+						fetchNextPage();
+						setPageIndex(oldState => oldState+1)
+					}}
+					prevPageAction={() => {
+						setPageIndex(oldState => oldState-1)
+					}}
+				/>
 			</header>
 
 			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
