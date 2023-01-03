@@ -46,6 +46,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
         sign: "",
         phone: "",
         bankAccount: '',
+        loyaltyPointsRate: '',
         address: '',
         area1: '', 
         area2: '',
@@ -108,13 +109,14 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, name, sign, phone, bankAccount, description, address, initialDay, campaign, internal, area1, area2, area3, activeCampaign} = newListIDChecked[0];
+            const { _id, name, sign, phone, bankAccount, loyaltyPointsRate, description, address, initialDay, campaign, internal, area1, area2, area3, activeCampaign} = newListIDChecked[0];
             setInitialValues({
                 fundaID: _id,
                 name,
                 sign,
                 phone,
                 bankAccount,
+                loyaltyPointsRate,
                 description,
                 address,
                 initialDay,
@@ -187,6 +189,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                 sign: '',
                 phone: '',
                 bankAccount: '',
+                loyaltyPointsRate: '',
                 description: '',
                 address: '',
                 initialDay: new Date(),
@@ -310,19 +313,19 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                             classNameInput="outline-none w-[296px]"
                             onChange={onChangeSearch}
                         />
-
+{/* 
                         <button className={"flex items-center justify-center mx-3 ml-3"}
-                                // onClick={handleDownloadTemplateImportExcel}
+                                onClick={handleDownloadTemplateImportExcel}
                             >
                                 Tải mẫu Import Excel
                         </button>
 
                         <button className={"flex items-center justify-center mx-3 ml-3"}>
                             <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden
-                            //  onChange={handleImport}
+                             onChange={handleImport}
                             accept=".xlsx, .xlsm, .xls, .csv"/>
                             <label className="custom-file-label" htmlFor="inputGroupFile">Import Excel</label>
-                        </button>
+                        </button> */}
 
                         {/* Nếu chọn 1 phẩn tử => chỉ cho update */}
                         {itemsChecked.length === 1 ? (

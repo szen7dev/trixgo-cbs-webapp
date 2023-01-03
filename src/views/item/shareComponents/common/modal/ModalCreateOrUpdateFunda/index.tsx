@@ -26,6 +26,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
     address: '',
     phone: '',
     bankAccount: '',
+    loyaltyPointsRate: '',
     initialDay: new Date(),
     campaign: 1,
     internal: 1,
@@ -237,8 +238,21 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
       </section>
 
       <section className="px-10 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtBankAccount">
+          Tỷ lệ tích điểm (%)
+        </label>
+        <input
+            placeholder={"Tỷ lệ tích điểm % (mặc định 10%)"}
+            className={"w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"}
+            defaultValue={formData?.loyaltyPointsRate}
+            onChange={onChange}
+            name = "loyaltyPointsRate"
+        ></input>
+      </section>
+
+      <section className="px-10 mt-2">
           <label className="block text-gray-700 text-sm font-bold" htmlFor="txtInitialDay">
-            khu vực
+            Khu vực
           </label>
           <DropdownSearchable
             onchangeValue={(value: any) => {
