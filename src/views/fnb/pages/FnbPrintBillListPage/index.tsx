@@ -72,8 +72,15 @@ useEffect(() => {
 }, [info]);
 const componentRef = useRef(null);
 usePrintComponent({ ref: componentRef });
+// console.log(orderProducts)
 
-console.log(orderProducts)
+useEffect(() => {
+  if (orderProducts && orderProducts.length) {
+      setTimeout(function(){
+          window.print();
+      },1000);
+  }
+}, [orderProducts]);
 
 if (isLoadingInfo) return <Loader className="border-primary" />;
 
