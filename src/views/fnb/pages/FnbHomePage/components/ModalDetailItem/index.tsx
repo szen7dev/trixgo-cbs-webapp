@@ -26,7 +26,7 @@ import IconGreenDot from "assets/images/Frame 4330.svg";
 import "react-day-picker/lib/style.css";
 import { ModalErrorDetailItem } from "../ModalErrorDetailItem";
 import { DropdownSearchable } from "shareComponents/common";
-import { useQueryContact } from 'services/hooks/items/useContact';
+import { useQueryContact, useContact } from 'services/hooks/items/useContact';
 
 type Props = {
   order: any;
@@ -52,6 +52,11 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
     keyword: keywordCustomerSearch,
     type: 1,
   });
+
+  const { list: contacts } = useContact({
+    params: { keyword: keywordCustomerSearch },
+    isFetchList: true,
+  })
 
   useEffect(() => {
     const fetchOrderProducts = async () => {
@@ -287,9 +292,9 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                                   <p className={"truncate"}>{item.text}</p>
                                 </div>
                               )}
-                              data={listCustomers.map((item: any) => ({
-                                  label: item.phone ? `${item.name} - ${item.phone}` : item.name,
-                                  value: `${item._id}__${item.phone}__${item.numberOfOrders}`,
+                              data={contacts.map(contact => ({
+                                label: `${contact.name}-${contact.phone}`,
+                                value: contact._id,
                               }))}
                               formatItem={{
                                   id: "value",
