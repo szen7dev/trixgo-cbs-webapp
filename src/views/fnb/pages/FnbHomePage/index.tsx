@@ -36,6 +36,7 @@ import { UpdateStatusDialog } from "./UpdateStatusDialog";
 import { ModalDetailItem } from "./components/ModalDetailItem/index";
 import { ModalErrorDetailItem } from "./components/ModalErrorDetailItem";
 import { ModalUpdatePayment } from "./components/ModalUpdatePayment";
+import { ModalUpdateSalesChannel } from "./components/ModalUpdateSalesChannel";
 import { DropdownSearchableV2, Loader, ModalConfirm } from "shareComponents/common";
 import TriangleDown from "assets/icons/TriangleDown";
 
@@ -645,6 +646,18 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 >
                   Cập nhật phương thức thanh toán
                 </button>
+                <button
+                  className="text-cbs-schedule-today"
+                  onClick={() =>
+                    openModal(
+                      <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{ width: "640px" }}>
+                        <ModalUpdateSalesChannel defaultValues={{ orderID: idsChecked.length ? idsChecked[0] : '' }} />
+                      </div>
+                    )
+                  }
+                >
+                  Cập nhật kênh bán hàng
+                </button>
                </>
               )}
               <button
@@ -668,7 +681,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               ref={ref}
               totalRecord={totalRecord}
               totalPages={totalPage}
-              limit={20}
+              limit={50}
               hasNextPage={hasNextPage}
               isFetching={isLoading}
               nextPageAction={() => {
