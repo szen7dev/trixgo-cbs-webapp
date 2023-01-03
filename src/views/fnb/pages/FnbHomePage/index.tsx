@@ -35,6 +35,7 @@ import { UpdateStatusDialog } from "./UpdateStatusDialog";
 // import { ModalCreateResultSearch } from "./ModalCreateResultSearch";
 import { ModalDetailItem } from "./components/ModalDetailItem/index";
 import { ModalErrorDetailItem } from "./components/ModalErrorDetailItem";
+import { ModalUpdatePayment } from "./components/ModalUpdatePayment";
 import { DropdownSearchableV2, Loader, ModalConfirm } from "shareComponents/common";
 import TriangleDown from "assets/icons/TriangleDown";
 
@@ -609,6 +610,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             <div className="flex gap-7 items-center">
 
               {idsChecked.length === 1 && (
+                <>
                 <button
                   className="text-cbs-schedule-expired"
                   onClick={() =>
@@ -631,6 +633,19 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 >
                   Hủy đơn
                 </button>
+                 <button
+                  className="text-cbs-schedule-today"
+                  onClick={() =>
+                    openModal(
+                      <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{ width: "640px" }}>
+                        <ModalUpdatePayment defaultValues={{ orderID: idsChecked.length ? idsChecked[0] : '' }} />
+                      </div>
+                    )
+                  }
+                >
+                  Cập nhật phương thức thanh toán
+                </button>
+               </>
               )}
               <button
                 className="text-cbs-schedule-nextweek"
