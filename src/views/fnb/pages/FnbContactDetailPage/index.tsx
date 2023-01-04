@@ -15,7 +15,6 @@ import PencilIcon from "assets/images/icons8-pencil-96.svg";
 /*=====4.PAGES/COMPONENTS=====*/
 import { SearchInput, ModalContainer } from "shareComponents/common";
 import PaginateV2 from "shareComponents/common/PaginateV2";
-import { CreateFnbShiftDetail } from "./modal";
 
 /*=====5.TYPINGS=====*/
 
@@ -254,19 +253,6 @@ export const FnbContactDetailPage: FC = () => {
 						</tr>
 				))}
 			</table>
-
-			<ModalContainer isModalOpen={modalCreateShiftDetail} toggle={toggleModalCreateShiftDetail}>
-				<div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light">
-					<CreateFnbShiftDetail
-						modalType={initialValues ? "update" : "create"}
-						show={modalCreateShiftDetail}
-						toggle={toggleModalCreateShiftDetail}
-						initialValues={initialValues ? initialValues : undefined}
-						onConfirm={onConfirmCreateShiftDetail}
-						companyID = {companyID}
-					/>
-				</div>
-			</ModalContainer>
 
 		</main>
 	);

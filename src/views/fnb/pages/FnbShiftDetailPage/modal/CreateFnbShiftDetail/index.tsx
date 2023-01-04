@@ -78,6 +78,10 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                 closingCash: Number(values.closingCash),
                 workingHours: Number(values.workingHours),
                 subWorkingHours: Number(values.subWorkingHours),
+                numberOfOpeningSizeM: Number(values.numberOfOpeningSizeM),
+                numberOfOpeningSizeL: Number(values.numberOfOpeningSizeL),
+                numberOfEotSizeM: Number(values.numberOfEotSizeM),
+                numberOfEotSizeL: Number(values.numberOfEotSizeL),
             };
             const result = await updateAsync(query);
             if (!result.error) {
@@ -272,9 +276,9 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                 </div>
                                 <div className="mb-4">
                                     <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtOpeningCash">
-                                        Tiền đầu ca
+                                        Tiền đầu ca để lại đổi cho khách
                                     </label>
-                                    <Field className="appearance-none border-0.5 border-cbs-bg-input-search bg-cbs-table-header rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none " id="txtOpeningCash" placeholder="Tiền đầu ca" {...getFieldProps('openingCash')} />
+                                    <Field className="appearance-none border-0.5 border-cbs-bg-input-search bg-cbs-table-header rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none " id="txtOpeningCash" placeholder="Tiền đầu ca-tiền lẻ để lại đổi cho khách" {...getFieldProps('openingCash')} />
                                     <ErrorMessage
                                         name="openingCash"
                                         component="span"
@@ -350,6 +354,50 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                     <Field className="h-[60px] appearance-none border-0.5 border-cbs-bg-input-search bg-cbs-table-header rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none resize-none" as="textarea" id="txtNote" placeholder="Ghi chú" {...getFieldProps('note')} />
                                     <ErrorMessage
                                         name="note"
+                                        component="span"
+                                        className="font-normal leading-7 text-sm text-negative"
+                                    />
+                                </div>
+                                <div className="mb-4">
+                                    <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtNumberOfOpeningSizeM">
+                                        Số cốc size M đầu ca
+                                    </label>
+                                    <Field className="appearance-none border-0.5 border-cbs-bg-input-search bg-cbs-table-header rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none " id="txtNumberOfOpeningSizeM" placeholder="Số cốc size M đầu ca" {...getFieldProps('numberOfOpeningSizeM')} />
+                                    <ErrorMessage
+                                        name="numberOfOpeningSizeM"
+                                        component="span"
+                                        className="font-normal leading-7 text-sm text-negative"
+                                    />
+                                </div>
+                                <div className="mb-4">
+                                    <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtNumberOfEotSizeM">
+                                        Số cốc size M cuối ca
+                                    </label>
+                                    <Field className="appearance-none border-0.5 border-cbs-bg-input-search bg-cbs-table-header rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none " id="txtNumberOfEotSizeM" placeholder="Số cốc size M cuối ca" {...getFieldProps('numberOfEotSizeM')} />
+                                    <ErrorMessage
+                                        name="numberOfEotSizeM"
+                                        component="span"
+                                        className="font-normal leading-7 text-sm text-negative"
+                                    />
+                                </div>
+                                <div className="mb-4">
+                                    <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtNumberOfOpeningSizeL">
+                                        Số cốc size L đầu ca
+                                    </label>
+                                    <Field className="appearance-none border-0.5 border-cbs-bg-input-search bg-cbs-table-header rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none " id="txtNumberOfOpeningSizeL" placeholder="Số cốc size L đầu ca" {...getFieldProps('numberOfOpeningSizeL')} />
+                                    <ErrorMessage
+                                        name="numberOfOpeningSizeL"
+                                        component="span"
+                                        className="font-normal leading-7 text-sm text-negative"
+                                    />
+                                </div>
+                                <div className="mb-4">
+                                    <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtNumberOfEotSizeL">
+                                        Số cốc size L cuối ca
+                                    </label>
+                                    <Field className="appearance-none border-0.5 border-cbs-bg-input-search bg-cbs-table-header rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none " id="txtNumberOfEotSizeL" placeholder="Số cốc size L cuối ca" {...getFieldProps('numberOfEotSizeL')} />
+                                    <ErrorMessage
+                                        name="numberOfEotSizeL"
                                         component="span"
                                         className="font-normal leading-7 text-sm text-negative"
                                     />
