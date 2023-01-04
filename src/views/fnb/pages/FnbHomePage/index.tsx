@@ -634,7 +634,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 >
                   Hủy đơn
                 </button>
-                 <button
+                 {/* <button
                   className="text-cbs-schedule-today"
                   onClick={() =>
                     openModal(
@@ -645,7 +645,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                   }
                 >
                   Cập nhật phương thức thanh toán
-                </button>
+                </button> */}
                 <button
                   className="text-cbs-schedule-today"
                   onClick={() =>

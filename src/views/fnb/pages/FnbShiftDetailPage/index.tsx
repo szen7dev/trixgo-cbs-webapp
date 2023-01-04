@@ -184,7 +184,7 @@ export const FnbShiftDetailPage: FC = () => {
 								#
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border w-[150px]">
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border w-[200px]">
 							<div className="pl-2">
 								Ca làm việc
 							</div>
@@ -278,21 +278,25 @@ export const FnbShiftDetailPage: FC = () => {
 								</Link> */}
 								{item?.name} ({item?.staffs.length})
 								<p className="text-cbs-subtext text-[12px]"><i>{moment(item?.createAt).format('HH:mm DD/MM/YYYY')}</i></p>
-								{/* <p className="text-cbs-subtext text-[12px]"><i>SL: {item?.staffs.length}</i></p> */}
+								<p className="text-cbs-subtext text-[12px]"><i>Nhân viên: <b>{item?.staffs.length}</b></i></p>
 								{
                                 	item?.staffs.length && item?.staffs.map((staff: any) => {
 										return (
-											<p key={staff._id} className="text-cbs-subtext text-[12px]"><i>{staff?.fullname}</i></p>
+											<p key={staff._id} className="text-cbs-subtext text-[12px]"><i>- {staff?.fullname}</i></p>
 										)
 									})
 								}
-								<p className="text-cbs-subtext text-[12px]"><i>Size M: <b>{item?.numberOfOpeningSizeM}</b></i></p>
-								<p className="text-cbs-subtext text-[12px]"><i>Size L: <b>{item?.numberOfOpeningSizeL}</b></i></p>
-								<p className="text-cbs-subtext text-[12px]"><i>Lỗi: <b>{item?.numberOfMistakes}</b></i></p>
-								<p className="text-cbs-subtext">
-									<i title="Tổng doanh số"><b>{formatNumberMoney(item?.total)}</b></i> | 
-									<i title="Doanh số Off">{formatNumberMoney(item?.total1)}</i>
-								</p>
+								<p className="text-cbs-subtext text-[12px]"><i>Size M: <b>{item?.numberOfSizeM}</b>
+								- Thất thoát: <b style={{color:"red"}}>{Number(item?.numberOfOpeningSizeM || 0) - Number(item?.numberOfEotSizeM || 0) - Number(item?.numberOfSizeM || 0)}</b>
+								</i></p>
+								<p className="text-cbs-subtext text-[12px]"><i>Size L: <b>{item?.numberOfSizeL}</b> 
+								- Thất thoát: <b style={{color:"red"}}>{Number(item?.numberOfOpeningSizeL || 0) - Number(item?.numberOfEotSizeL || 0) - Number(item?.numberOfSizeL || 0)}</b>
+								</i></p>
+								<p className="text-cbs-subtext text-[12px]"><i>Số lỗi mắc phải: <b>{item?.numberOfMistakes}</b></i></p>
+								<p className="text-cbs-subtext text-[12px]"><i>Tổng doanh số: <b>{formatNumberMoney(item?.total)}</b></i></p>
+								<p className="text-cbs-subtext text-[12px]"><i>- Offline: {formatNumberMoney(item?.total1)}</i></p>
+								<p className="text-cbs-subtext text-[12px]"><i>- App: {formatNumberMoney(Number(item?.total2 + item?.total3 + item?.total4 + item?.total5 + item?.total6 + item?.total7))}</i></p>
+								<p className="text-cbs-subtext text-[12px]"><i>Đơn hủy: <b style={{color:"red"}}>{formatNumberMoney(item?.totalOfCancelOrders)}</b></i></p>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
 								{formatNumberMoney(item?.openingCash)}
@@ -301,7 +305,7 @@ export const FnbShiftDetailPage: FC = () => {
 								{formatNumberMoney(item?.cashAmount)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(Number(item?.openingCash | 0) + Number(item?.cashAmount | 0))}
+								{formatNumberMoney(Number(item?.openingCash || 0) + Number(item?.cashAmount || 0))}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{formatNumberMoney(item?.transferAmount)}
@@ -313,7 +317,7 @@ export const FnbShiftDetailPage: FC = () => {
 								{formatNumberMoney(item?.closingCash)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(Number(item?.incurredCash | 0) + Number(item?.closingCash | 0)- Number(item?.openingCash | 0)- Number(item?.cashAmount | 0))}
+								{formatNumberMoney(Number(item?.incurredCash || 0) + Number(item?.closingCash || 0)- Number(item?.openingCash || 0)- Number(item?.cashAmount || 0))}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{formatNumberMoney(item?.total2)}
