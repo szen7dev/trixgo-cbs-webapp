@@ -634,7 +634,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 >
                   Hủy đơn
                 </button>
-                 {/* <button
+                 <button
                   className="text-cbs-schedule-today"
                   onClick={() =>
                     openModal(
@@ -644,8 +644,8 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                     )
                   }
                 >
-                  Cập nhật phương thức thanh toán
-                </button> */}
+                  Cập nhật Phương thức thanh toán
+                </button>
                 <button
                   className="text-cbs-schedule-today"
                   onClick={() =>
@@ -656,7 +656,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                     )
                   }
                 >
-                  Cập nhật kênh bán hàng
+                  Cập nhật Kênh bán hàng
                 </button>
                </>
               )}
@@ -746,9 +746,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                             {FNB_NORESIDENT_TYPES[Number(item?.nonResident) - 1]?.text}
                           </div>
                           : <></>
-                          // <div className="w-[90px] text-center bg-cbs-schedule-after-7days text-white" style={{ fontSize: "12px" }}>
-                          //   {FNB_NORESIDENT_TYPES[Number(item?.nonResident) - 1]?.text}
-                          // </div>
                       }
                     </td>
                     <td className={"w-[50px]"}>
@@ -790,7 +787,8 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                             }
                             <span className="text-cbs-primary">{item?.name}</span>
                           </p>
-                          <span className={"truncate text-xs text-primary-gray py-2"}>{item?.note}</span>
+                          <p><span className={"text-xs text-primary-gray text-left"}>{item?.shift.name}</span></p>
+                          <span className={"text-xs text-primary-gray text-left"}>{item?.note}</span>
                         </div>
                       </button>
                     </td>
