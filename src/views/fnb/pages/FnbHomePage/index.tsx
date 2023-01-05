@@ -746,9 +746,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                             {FNB_NORESIDENT_TYPES[Number(item?.nonResident) - 1]?.text}
                           </div>
                           : <></>
-                          // <div className="w-[90px] text-center bg-cbs-schedule-after-7days text-white" style={{ fontSize: "12px" }}>
-                          //   {FNB_NORESIDENT_TYPES[Number(item?.nonResident) - 1]?.text}
-                          // </div>
                       }
                     </td>
                     <td className={"w-[50px]"}>

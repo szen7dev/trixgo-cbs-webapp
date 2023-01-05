@@ -320,7 +320,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
 
       <section className="px-10 mt-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtNonResident">
-          Phân loại khách
+          Khách biết thông tin/vãng lai
         </label>
         <input
           type="text"

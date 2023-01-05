@@ -37,7 +37,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
     const [initialValues, setInitialValues] = useState({
         parent: parentID,
         contactID: '',
-        type: '',
+        type: '2',
         name: '',
         address: '',
         note: '',
@@ -79,6 +79,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
             taxid: '',
             phone: '',
             description: '',
+            nonResident: '',
         }))
     }
 
@@ -179,12 +180,13 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
             initValues = {
                 parent: parentID,
                 contactID: '',
-                type: '',
+                type: '2',
                 name: '',
                 address: '',
                 taxid: '',
                 phone: '',
                 description: '',
+                nonResident: '1',
             };
         }
 
