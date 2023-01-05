@@ -11,7 +11,7 @@ import debounce from "lodash/debounce";
  * Hooks, Typings
  */
 import { useModal } from "services/hooks/useModal";
-import { FNB_PAYMENT, FNB_SERVICE } from "apis/localdb";
+import { FNB_PAYMENT, FNB_SERVICE, FNB_SIZE } from "apis/localdb";
 import API from "apis/repository";
 import { convertObToUrl } from "utils";
 import { formatNumberMoney } from 'utils/converter';
@@ -355,114 +355,16 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                           </button>
                         </div>
                       </div>
-
-                      {/* <div>
-                        <div className="font-bold my-3">Lỗi gặp phải</div>
-                        <div className="flex gap-2 my-3 flex-wrap">
-                          {mistakesSelected.map((item: any) => (
-                            <div key={item._id} className="flex gap-2 justify-between h-[40px] items-center border-0.5 border-cbs-border rounded-md px-3" style={{ minWidth: "33%" }}>
-                              <div className="flex gap-2 items-center">
-                                <span className="text-[14px]">{item.name}</span>
-                              </div>
-                              <button onClick={() => handleRemoveMistake(item)}>
-                                <img src={IconCancel} alt="" />
-                              </button>
-                            </div>
-                          ))}
-                        </div>
-                        <div>
-                          <input
-                            type="text"
-                            placeholder="Tìm kiếm gán lỗi"
-                            className="w-full h-[40px] rounded border-0.5 border-cbs-bg-input-search bg-cbs-bg-input-search px-3 py-1 outline-none "
-                            onChange={debounce(
-                              (e) => setKeywordMistakeDocTypes(e.target.value),
-                              200)}
-                          />
-                        </div>
-                        <div className="overflow-y-auto	my-2 ">
-                          {mistakeDoctypes.map((md: any) => (
-                            <div key={md._id} onClick={() => handleAddMistake(md)} className="cursor-pointer w-full h-[40px] rounded border-0.5 border-cbs-border bg-cbs-bg-input-search px-3 py-3 mt-1">
-                              {md.name}
-                            </div>
-                          ))}
-                        </div>
-                      </div> */}
                     </div>
                     <div className="boxright w-1/2">
                       <div className=" overflow-y-auto mt-2 border-0.5">
-
-                        {/* Version 1
-                          <div key={op._id} className="flex gap-2 w-full border-b-0.5 p-2">
-                            <img src={op.images?.length ? `${process.env.REACT_APP_URL_S3}${op.product?.images[0]?.path}` : ItemSample} alt="item" className="w-[44px] h-[44px]" />
-                            <div className="w-full">
-                              <div className="flex justify-between">
-                                <div>
-                                  <p className="font-bold truncate">{op.product?.name}</p>
-                                  <p className="text-primary-gray">{op.note}</p>
-                                </div>
-                                <div className="text-primary">{formatNumberMoney(op.unitPrice)}{` x `}{op.quantity}</div>
-                              </div>
-                              <div className="flex">
-                                <div className="w-4/5 mt-3">
-                                {op.subProducts?.map?.((subProduct: any) => (
-                                  <div key={subProduct._id} className="mb-2 pr-2 flex items-center">
-                                    <li> {`${subProduct.name.trim()}`}: {formatNumberMoney(subProduct.unitPrice)} </li>
-                                  </div>
-                                ))}
-                              </div>
-                              <div className="w-1/5 flex justify-end items-start">
-                                {formatNumberMoney(op.unitPrice * op.quantity)}
-                              </div>
-                              </div>
-                            </div>
-                          </div>
-                        */}
-
-                        { /* Version 2
-                          <div key={op._id} className="flex gap-2 w-full border-b-0.5 p-2">
-                            <img src={op.images?.length ? `${process.env.REACT_APP_URL_S3}${op.product?.images[0]?.path}` : ItemSample} alt="item" className="w-[44px] h-[44px]" />
-                            <div className="w-full flex">
-                              <div className="flex-grow">
-                                <div>
-                                  <p className="font-bold truncate">{op.product?.name}</p>
-                                  <p className="text-primary-gray">{op.note}</p>
-                                </div>
-                                <div className="w-4/5 mt-3">
-                                  {op.subProducts?.map?.((subProduct: any) => (
-                                    <div key={subProduct._id} className="mb-2 pr-2 flex items-center">
-                                      <li> {`${subProduct.name.trim()}`}: {formatNumberMoney(subProduct.unitPrice)} </li>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                              <div className="flex-shrink">
-                                <div>
-                                  <strong>Giá: </strong>
-                                  <span>{formatNumberMoney(op.unitPrice)}</span>
-                                </div>
-
-                                <div>
-                                  <strong>Số lượng: </strong>
-                                  <span>{formatNumberMoney(op.quantity)}</span>
-                                </div>
-
-                                <div>
-                                  <strong>Thành tiền: </strong>
-                                  <span>{formatNumberMoney(op.unitPrice * op.quantity)}</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                         */ }
-
                         {orderProducts.map((op: any) => (
                           <div key={op._id} className="flex gap-2 w-full border-b-0.5 p-2">
                             <img src={op.product.images?.length ? `${process.env.REACT_APP_URL_S3}${op.product?.images[op.product?.images?.length - 1]?.path}` : beverageIcon} alt="item" className="w-[44px] h-[44px]" />
                             <div className="w-full">
                               <div className="flex justify-between">
                                 <div>
-                                  <p className="font-bold truncate">{op.product?.name}</p>
+                                  <p className="font-bold truncate">{op.product?.name}- Size {FNB_SIZE[Number(op.size)-1].text}</p>
                                   <p className="text-primary-gray">{op.note}</p>
                                 </div>
                                 <div className="text-primary">{formatNumberMoney(op.unitPrice)}{` x `}{op.quantity}</div>
