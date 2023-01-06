@@ -254,7 +254,7 @@ export const FnbShiftDetailPage: FC = () => {
 								Doanh số Bee
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border">
+						<th className="pb-1 pt-1 font-normal border-0.5 border-primary-border w-[200px]">
 							<div className="pl-2">
 								Ghi chú
 							</div>
@@ -287,9 +287,11 @@ export const FnbShiftDetailPage: FC = () => {
 									})
 								}
 								<p className="text-cbs-subtext text-[12px]"><i>Size M: <b>{item?.numberOfSizeM}</b>
+								<p>- Tồn đầu-Tồn cuối: {item?.numberOfOpeningSizeM}-{item?.numberOfEotSizeM}={Number(item?.numberOfOpeningSizeM-item?.numberOfEotSizeM)}</p>
 								- Thất thoát: <b style={{color:"red"}}>{Number(item?.numberOfOpeningSizeM || 0) - Number(item?.numberOfEotSizeM || 0) - Number(item?.numberOfSizeM || 0)}</b>
 								</i></p>
 								<p className="text-cbs-subtext text-[12px]"><i>Size L: <b>{item?.numberOfSizeL}</b> 
+								<p>- Tồn đầu-Tồn cuối: {item?.numberOfOpeningSizeL}-{item?.numberOfEotSizeL}={Number(item?.numberOfOpeningSizeL-item?.numberOfEotSizeL)}</p>
 								- Thất thoát: <b style={{color:"red"}}>{Number(item?.numberOfOpeningSizeL || 0) - Number(item?.numberOfEotSizeL || 0) - Number(item?.numberOfSizeL || 0)}</b>
 								</i></p>
 								<p className="text-cbs-subtext text-[12px]"><i>Số lỗi mắc phải: <b>{item?.numberOfMistakes}</b></i></p>
