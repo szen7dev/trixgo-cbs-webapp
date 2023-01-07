@@ -49,7 +49,7 @@ export const FnbRiskReportDetailPage: FC = () => {
 	const [keyword, setKeyword] = useState("");
 	
     const { info: infoFunda } = useFunda({ params: { fundaID }, isFetchList: false, isFetchInfo: true  });
-	console.log({infoFunda})
+	// console.log({infoFunda})
     const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbMistake({ 
 		params: { 
 			keyword: keyword, 
@@ -59,26 +59,7 @@ export const FnbRiskReportDetailPage: FC = () => {
 			}) 
 		}, isFetchList: true, isFetchInfo: false  });
 
-	const getStateChecked = useCallback((id: string) => {
-		return idsChecked.includes(id) ? true : false;
-	}, [idsChecked]);
-
-	const onClickCheckButton = (id: string) => {
-		setIdsChecked([id]);
-	};
-
-	const getStateCheckedAll = useCallback(() => {
-		return idsChecked.length == listWithPager.length;
-	}, [idsChecked]);
-
-	const onClickCheckAll = () => {
-		if (idsChecked.length == listWithPager.length) {
-			setIdsChecked([]);
-		} else {
-			const idsAll = listWithPager.map((e: any) => e._id);
-			setIdsChecked(idsAll);
-		}
-	};
+	// console.log(listWithPager)
 
 	const [modalCreateShiftDetail, setModalCreateShiftDetail] = useState<boolean>(false);
 	const toggleModalCreateShiftDetail = () => setModalCreateShiftDetail(!modalCreateShiftDetail);

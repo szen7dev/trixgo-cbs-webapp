@@ -238,7 +238,7 @@ export const FnbReportPage: FC = () => {
 		isFetchListOrderByProperty: !!valueFunda, 
 	});
 
-	console.log(listOrderByProperty)
+	// console.log(listOrderByProperty)
 
 	let totalTotal = 0;
 	let totalDiscount = 0;
