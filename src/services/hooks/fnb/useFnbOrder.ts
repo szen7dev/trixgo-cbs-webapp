@@ -64,6 +64,12 @@ export const useFnbOrder = ({
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPage = data?.pages[0]?.data?.totalPage || 0;
 
+    // Export excel
+    const { mutateAsync: exportOrderAsync } =
+        useMutation((payload: any) =>
+        fnbRepository.exportOrder(payload)
+    );
+
     return {
         isLoading,
         isLoadingInfo,
@@ -79,6 +85,7 @@ export const useFnbOrder = ({
         insertAsync,
         updateAsync,
         deleteManyAsync,
+        exportOrderAsync,
         isFetching
     }
 }

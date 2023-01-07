@@ -34,6 +34,15 @@ const fnbOrderRepository = {
         );
         return data;
     },
+
+    async exportOrder(payload: any): Promise<any> {
+        const { data } = await API.get<any>(
+            `${URL}/orders/export-excel`, {
+                params: payload
+            }
+        ); 
+        return data;
+    },
 };
 
 export default fnbOrderRepository;

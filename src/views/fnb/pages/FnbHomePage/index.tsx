@@ -15,8 +15,6 @@ import "views/pcm/styles/pcm.module.css";
 
 /*=====3.ICONS=====*/
 import iconDown from "assets/images/icons8-download-64 1.svg";
-// import StarIcon from '@mui/icons-material/Star';
-// import StarBorderIcon from '@mui/icons-material/StarBorder';
 
 import offlineChannelIcon from "assets/images/fnb/offline.svg";
 import grabChannelIcon from "assets/images/fnb/grab.svg";
@@ -28,11 +26,7 @@ import beeChannelIcon from "assets/images/fnb/bee.svg";
 import businessBuiding from "assets/images/icons8-business-building-48.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
-// import { DropdownSearchableV2, Loader } from "shareComponents/common";
-// import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
 import PaginateV2 from "shareComponents/common/PaginateV2";
-import { UpdateStatusDialog } from "./UpdateStatusDialog";
-// import { ModalCreateResultSearch } from "./ModalCreateResultSearch";
 import { ModalDetailItem } from "./components/ModalDetailItem/index";
 import { ModalErrorDetailItem } from "./components/ModalErrorDetailItem";
 import { ModalUpdatePayment } from "./components/ModalUpdatePayment";
@@ -43,12 +37,8 @@ import TriangleDown from "assets/icons/TriangleDown";
 /*=====5.TYPINGS=====*/
 
 /*=====6.HOOKS/APIS=====*/
-import { useQueryListCompany } from "services/hooks/useCompanies";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { useAppSelector } from "redux/reducer";
-import { useUserSystem } from "services/hooks/users/useUserSystem";
-import { useQueryListDepartmentsIsMember } from "services/hooks/items/useDepartment";
-import { useSearchTask } from "services/hooks/useMainSearch";
 import { useTask } from "services/hooks/useTask";
 import { useModal } from "services/hooks/useModal";
 
@@ -57,6 +47,7 @@ import API from "apis/repository";
 import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
 
 /*=====7.OTHER=====*/
+import { createLinkAndClick } from "utils";
 import { FNB_CHANNEL, FNB_SERVICE, FNB_PAYMENT, FNB_ORDER_STATUS, FNB_SHIFT, FNB_NORESIDENT_TYPES } from "apis/localdb";
 import { useInfiniteQuery } from "react-query";
 import { setQueryFnb } from "redux/reducer/FnbSlice";
@@ -226,7 +217,44 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
     }
   };
 
-  //
+  /**
+   * 
+   * Xử lý download template excel
+   */
+  //_____Import, export excel
+  const [dataImport, setDataImport] = useState([]);
+  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+      isExporting: false,
+  });
+  const { exportOrderAsync } = useFnbOrder({});
+
+  const handleExportExcel = async () => {
+  try {
+          setStateExport({ isExporting: true });
+          const { error, data } = await exportOrderAsync({
+              filterParams: {  
+                  // departmentsID: [departmentID],
+                  // ...fromToDate,
+                  // datahubContactsID,
+                  // types,
+                  // directions,
+                  // contractsID,
+                  // storagesID,
+                  // keyword: keywordInput 
+              }
+          });
+
+          if(error) {
+              return toast.warn(data?.message);
+          }
+
+          data && createLinkAndClick(data, '_self');
+      } catch (error: any) {
+          toast.error(error.message)
+      } finally {
+          setStateExport({ isExporting: false });
+      }
+	}
 
   return (
     <div className="t-home flex flex-col h-full overflow-hidden">
@@ -369,7 +397,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             }
           />
 
-<DropdownSearchableV2
+          <DropdownSearchableV2
             reset={reset}
             selectOneByOne={true}
             className={"mr-2 border border-primary-border rounded-lg mb-2"}
@@ -672,7 +700,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               >
                 Gán lỗi gặp phải
               </button>
-              <button><img src={iconDown} alt="" /></button>
+              <button onClick={handleExportExcel}><img src={iconDown} title="Tải dữ liệu Excel"/></button>
             </div>
           </div>
           {/* Chưa rõ chỗ này, hình như để phân trang */}
