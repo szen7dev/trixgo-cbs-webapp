@@ -321,15 +321,7 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                               <div className="text-gray-500" style={{ minWidth: "75px" }}>Lỗi gặp phải: </div>
                               <div className="flex flex-wrap gap-2 px-2">
                                 {mistakes.map((m: any) => (
-                                  <button key={m._id} className="cursor-pointer rounded-md bg-cbs-active-comment px-4 py-1"
-                                  // onClick={() =>
-                                  //   openModal(
-                                  //     <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{ width: "640px" }}>
-                                  //       <ModalErrorDetailItem />
-                                  //     </div>
-                                  //   )
-                                  // }
-                                  >
+                                  <button key={m._id} className="cursor-pointer rounded-md bg-cbs-active-comment px-4 py-1">
                                     <p className="text-left text-[14px] my-1">{m.mistake?.name}</p>
                                     <p className="text-gray-500 text-left"><i>Mắc lỗi: {m.executor?.fullname}</i></p>
                                     <p className="text-gray-500 text-left"><i>Phạt: {formatNumberMoney(m.amount)}</i></p>
@@ -364,7 +356,7 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                             <div className="w-full">
                               <div className="flex justify-between">
                                 <div>
-                                  <p className="font-bold truncate">{op.product?.name}- Size {FNB_SIZE[Number(op.size)-1].text}</p>
+                                  <p className="font-bold truncate">{op.product?.name} - Size {FNB_SIZE[Number(op.size)-1].text} - {formatNumberMoney(op.product?.unitPrice)}</p>
                                   <p className="text-primary-gray">{op.note}</p>
                                 </div>
                                 <div className="text-primary">{formatNumberMoney(op.unitPrice)}{` x `}{op.quantity}</div>
