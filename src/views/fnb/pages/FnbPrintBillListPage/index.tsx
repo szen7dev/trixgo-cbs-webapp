@@ -140,9 +140,10 @@ if (isLoadingInfo) return <Loader className="border-primary" />;
                                                   <tr>
                                                     <td className="text-xs px-2">
                                                         <div className="font-bold">
-                                                        {info?.funda?.name} ({e}/{Number(item.quantity)})
-                                                      </div>
-                                                      <div className="mb-2">
+                                                          {info?.funda?.name}
+                                                        </div>
+                                                        <p className="">{info?.sign} - {e}/{Number(item.quantity)}</p>
+                                                      <div className="">
                                                         <p className="font-bold">{item.product?.name} - Size {item.size >= 1 && FNB_SIZE[Number(item.size) - 1].text}</p>
                                                         <p><i>Đường {FNB_SUGAR[Number(item.sugar)-1].text}, Đá {FNB_ICE[Number(item.ice)-1].text}, {item?.note}, {str}</i></p>
                                                       </div>
