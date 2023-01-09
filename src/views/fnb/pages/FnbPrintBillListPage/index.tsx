@@ -86,7 +86,7 @@ if (isLoadingInfo) return <Loader className="border-primary" />;
 
   return (
     <div className="bg-cbs-gray">
-      <div className="h-full">
+      <div className="">
         <div className="bg-white mx-auto shadow-cbs-md" style={{ width: "50mm"}}>
             <div
                 ref={componentRef}

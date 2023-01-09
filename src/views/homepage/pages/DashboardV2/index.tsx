@@ -30,6 +30,7 @@ import iconPdf from "assets/images/icons8-attach.svg";
 import iconFile from "assets/images/icons8-attach.svg";
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
+import { ModalZoomView } from "shareComponents/common";
 
 import { useUserSystem } from "services/hooks/users/useUserSystem";
 import { useAuth } from "services/hooks/auth/useAuth";
@@ -58,6 +59,7 @@ import { useModal } from "services/hooks/useModal";
 import { UpdateStatusDialog } from "./UpdateStatusDialog";
 import { ModalCreateResultSearch } from "./ModalCreateResultSearch";
 import { Popover } from "@mui/material";
+import { ImageProps } from "typings/common";
 
 type Props = {
   type?: number;
@@ -75,7 +77,15 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
   const tabIndex = useAppSelector((state) => state.dashboardV2.data.tabIndex);
   const tabActive = useAppSelector((state) => state.dashboardV2.data.tabActive);
   const [showUpdateStatus, setShowUpdateStatus] = useState(false);
+  const [isShowImageFullScreen, setIsShowImageFullScreen] = useState(false);
   const { openModal } = useModal();
+
+  const [defaultState, setDefaultState] = useState({
+    mediaID: '',
+    images: [] as ImageProps[],
+    index: 0,
+    createAt: ""
+  });
 
   const StarToggle = () => {
     const [selectStar, setSelectStar] = React.useState(false)
@@ -1637,16 +1647,27 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                               <div className="border-0.5 border-cbs-border rounded-full py-1 px-2">+{item?.lastComment?.files.length-1}</div>
                             )}
                         </div>
-                        {/* Attach Images */}
+                        {/* Attach Images href={`${process.env.REACT_APP_URL_S3}${file.path}`} */}
                         <div className="flex mr-2 gap-2 text-primary-gray pb-2">
                           {
                             (item?.lastComment?.images)?.slice(0, 3).map((file: any, subindex: any) => (
-                                <a key={file._id} href={`${process.env.REACT_APP_URL_S3}${file.path}`}>
+                                <button
+                                  key={file._id}
+                                  onClick={() => {
+                                    setDefaultState({
+                                      mediaID: file._id,
+                                      images: item?.lastComment?.images,
+                                      index: subindex,
+                                      createAt: file.createAt
+                                    });
+                                    setIsShowImageFullScreen(true);
+                                  }}
+                                >
                                   <div className="border-0.5 border-cbs-border rounded-full px-3 py-1 flex">
-                                    <img src={iconPhoto} className="mr-[5px] w-6 h-6"/>
+                                    <img src={iconPhoto} className="mr-[5px] w-6 h-6" />
                                     <span>image_{file?.nameOrg.substring(0, 10)}...</span>
                                   </div>
-                                </a>
+                                </button>
                             ))
                           }
                            {item?.lastComment?.images.length > 3 && (
@@ -1816,6 +1837,11 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
         showUpdateStatus={showUpdateStatus}
         setShowUpdateStatus={setShowUpdateStatus}
         onPress={onPressUpdateStatus}
+      />
+      <ModalZoomView
+        isShow={isShowImageFullScreen}
+        toggle={() => setIsShowImageFullScreen(!isShowImageFullScreen)}
+        initialData={defaultState}
       />
     </div>
   );
