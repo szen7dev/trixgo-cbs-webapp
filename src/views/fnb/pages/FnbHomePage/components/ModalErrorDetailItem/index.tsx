@@ -232,7 +232,7 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
     useEffect(() => {
         const fetchFundas = async () => {
           const response = await API.get(
-            `/api/item/fundas?isMember=1&keyword=${searchFunda}`,
+            `/api/item/fundas?&isMember=1keyword=${searchFunda}`,
           );
           const { data, status } = response?.data;
 
@@ -278,7 +278,7 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
         <>
             <div className={"flex flex-col"}>
                 <div className={"flex w-full py-3 px-6 border-b"}>
-                    <h4 className={"flex-1 text-lg font-bold text-left"}>Chi tiết</h4>
+                    <h4 className={"flex-1 text-lg font-bold text-left"}>Chi tiết1</h4>
                     <div className={"flex items-center justify-center cursor-pointer"}>
                         <Close onClick={closeModal} />
                     </div>

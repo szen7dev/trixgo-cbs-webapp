@@ -97,6 +97,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
   const { user } = useAuth();
   const [pageIndex, setPageIndex] = useState(0);
   const [reset, setReset] = useState(false);
+  const [cancelNote, setCancelNote] = useState('');
 
   const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
   const ref = React.useRef<PaginateHandle>(null);
@@ -159,30 +160,41 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
     }
   };
 
-  const handleCancelOrder = async () => {
+  const handleCancelOrder = React.useCallback(async () => {
     try {
+      console.log({
+        orderID: idsChecked[0],
+          cancelNote,
+      })
+
+      // setCancelNote('')
+
       closeModal();
 
-      const response = await API.put(
-        `/api/fnb/orders`,
-        {
-          orderID: idsChecked[0],
-          status: 4
-        }
-      );
+      // const response = await API.put(
+      //   `/api/fnb/orders`,
+      //   {
+      //     orderID: idsChecked[0],
+      //     cancelNote,
+      //     status: 4
+      //   }
+      // );
 
-      if (response.status !== 200 || response.data?.error) {
-        return toast.warn('Hủy đơn hàng thất bại');
-      }
+      // if (response.status !== 200 || response.data?.error) {
+      //   return toast.warn('Hủy đơn hàng thất bại');
+      // }
 
-      refetch();
-      toast.info('Hủy đơn hàng thành công');
+      // refetch();
+      // toast.info('Hủy đơn hàng thành công');
     } catch (err: any) {
       toast.error(err.message);
     }
-  }
+  }, [cancelNote])
 
-  ///
+  useEffect(() => {
+    console.log('Rendering...', cancelNote);
+  }, [cancelNote])
+
   const [searchFunda, setSearchFunda] = useState('');
 
   const {
@@ -655,6 +667,11 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                           onConfirm={handleCancelOrder}
                           defaultText={false}
                           onCancel={closeModal}
+                          isAddTextarea={true}
+                          onKeyUpTextarea={(e: any) => {
+                            console.log({ value: e.target.value })
+                            setCancelNote(e.target.value);
+                          }}
                         />
                       </div>
                     )
@@ -815,7 +832,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                             }
                             <span className="text-cbs-primary">{item?.name}</span>
                           </p>
-                          <p><span className={"text-xs text-primary-gray text-left"}>{item?.shift.name}</span></p>
+                          <p><span className={"text-xs text-primary-gray text-left"}>{item?.shift?.name}</span></p>
                           <span className={"text-xs text-primary-gray text-left"}>{item?.note}</span>
                         </div>
                       </button>

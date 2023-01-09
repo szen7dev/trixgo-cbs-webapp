@@ -15,8 +15,10 @@ import PencilIcon from "assets/images/icons8-pencil-96.svg";
 /*=====4.PAGES/COMPONENTS=====*/
 import { SearchInput, ModalContainer } from "shareComponents/common";
 import PaginateV2 from "shareComponents/common/PaginateV2";
+import { ModalZoomView } from "shareComponents/common";
 
 /*=====5.TYPINGS=====*/
+import { ImageProps } from "typings/common";
 
 /*=====6.HOOKS/APIS=====*/
 import { useModal } from "services/hooks/useModal";
@@ -39,17 +41,24 @@ const STATUS_MISTAKE = [
 export const FnbRiskReportDetailPage: FC = () => {
 	const { user } = useAuth();
 	const companyID = user?.company._id;
-	useEffect(() => {
-		document.title = "Trixgo | FnB";
-	}, []);
+	
 	const history = useHistory();
 	const { fundaID } = useParams<{ fundaID: string }>();
 	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
+
+	const [isShowImageFullScreen, setIsShowImageFullScreen] = useState(false);
+
+	const [defaultState, setDefaultState] = useState({
+	    mediaID: '',
+	    images: [] as ImageProps[],
+	    index: 0,
+	    createAt: ""
+  	});
 	
     const { info: infoFunda } = useFunda({ params: { fundaID }, isFetchList: false, isFetchInfo: true  });
-	// console.log({infoFunda})
+
     const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbMistake({ 
 		params: { 
 			keyword: keyword, 
@@ -58,8 +67,6 @@ export const FnbRiskReportDetailPage: FC = () => {
 				path: 'mistake executor funda files'
 			}) 
 		}, isFetchList: true, isFetchInfo: false  });
-
-	// console.log(listWithPager)
 
 	const [modalCreateShiftDetail, setModalCreateShiftDetail] = useState<boolean>(false);
 	const toggleModalCreateShiftDetail = () => setModalCreateShiftDetail(!modalCreateShiftDetail);
@@ -76,6 +83,10 @@ export const FnbRiskReportDetailPage: FC = () => {
 			history.push("/")
 		}
 	}, [hasPermission]);
+
+	useEffect(() => {
+		document.title = "Trixgo | FnB";
+	}, []);
 
 	type PaginateHandle = React.ElementRef<typeof PaginateV2>;
     const ref = React.useRef<PaginateHandle>(null);
@@ -238,7 +249,19 @@ export const FnbRiskReportDetailPage: FC = () => {
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{item?.files?.map((image: any, i: number) => {
 									return (
-										<div key={i} className="mt-2 cursor-pointer relative">
+										<div
+											key={image._id}
+											className="mt-2 cursor-pointer relative"
+											onClick={() => {
+			                                    setDefaultState({
+				                                    mediaID: image._id,
+				                                    images: item?.files,
+				                                    index: i,
+				                                    createAt: image.createAt
+			                                    });
+			                                    setIsShowImageFullScreen(true);
+			                                }}
+										>
 											<img src={`${process.env.REACT_APP_URL_S3}${image?.path}`} />
 										</div>
 									)
@@ -250,6 +273,11 @@ export const FnbRiskReportDetailPage: FC = () => {
 						</tr>
 				))}
 			</table>
+			<ModalZoomView
+		        isShow={isShowImageFullScreen}
+		        toggle={() => setIsShowImageFullScreen(!isShowImageFullScreen)}
+		        initialData={defaultState}
+		    />
 		</main>
 	);
 };

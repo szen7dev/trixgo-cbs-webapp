@@ -364,7 +364,7 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                             <div className="w-full">
                               <div className="flex justify-between">
                                 <div>
-                                  <p className="font-bold truncate">{op.product?.name}- Size {FNB_SIZE[Number(op.size)-1].text}</p>
+                                  <p className="font-bold truncate">{op.product?.name}- Size {FNB_SIZE[Number(op.size || 1)-1]?.text}</p>
                                   <p className="text-primary-gray">{op.note}</p>
                                 </div>
                                 <div className="text-primary">{formatNumberMoney(op.unitPrice)}{` x `}{op.quantity}</div>
