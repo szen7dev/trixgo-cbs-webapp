@@ -110,13 +110,13 @@ if (isLoadingInfo) return <Loader className="border-primary" />;
                   {
                       orderProducts.map((item: any, index: number) => {
                           // let amount = Number(item.quantity * item.unitPrice)
-                          let amount = Number(item.unitPrice)
+                          const amount = Number(item.unitPrice)
 
                           let str = ""
 
                           if (item?.subProducts) {
                               for (const subProduct of item?.subProducts) {
-                                  amount = Number(amount) + Number(subProduct.unitPrice)
+                                  // amount = Number(amount) + Number(subProduct.unitPrice)
                                   str = str + subProduct.name
                               }
                           }
