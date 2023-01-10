@@ -212,6 +212,48 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
         }
     };
 
+    const handlePasteFile = (event: any) => {
+        // event.preventDefault();
+
+        if(event.clipboardData?.files?.length) {
+          return handleSetFiles(event.clipboardData.files)
+        }
+
+        const text = event.clipboardData.getData('text/plain');
+        text && window.document.execCommand('insertText', false, text);
+    }
+
+    useEffect(() => {
+        const dropZone = document.getElementById("txtNote");
+
+        const handleDragOver = (e: any) => {
+            e.stopPropagation();
+            e.preventDefault();
+        }
+
+        const handleDrop = (e: any) => {
+            e.stopPropagation();
+            e.preventDefault();
+            if (e.dataTransfer) {
+                handleSetFiles(e.dataTransfer.files);
+            }
+        }
+
+        if (dropZone) {
+            dropZone.addEventListener('dragover', handleDragOver);
+
+            // Get file data on drop
+            dropZone.addEventListener('drop', handleDrop);
+        }
+
+        return () => {
+            if(dropZone) {
+                dropZone.removeEventListener('dragover', handleDragOver);
+                dropZone.removeEventListener('drop', handleDrop);
+            }
+        }
+    }, [])
+
     const addTaskSchema = object().shape({
         fundaID: string().required("Vui lòng chọn cơ sở!"),
         executorID: string().required("Vui lòng chọn nhân sự!"),
@@ -642,7 +684,7 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                                                 <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtNote">
                                                     Ghi chú
                                                 </label>
-                                                <Field className="h-[60px] appearance-none border-0.5 border-cbs-bg-input-search bg-cbs-table-header rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none resize-none" as="textarea" id="txtNote" placeholder="Ghi chú" {...getFieldProps('note')} />
+                                                <Field className="h-[60px] appearance-none border-0.5 border-cbs-bg-input-search bg-cbs-table-header rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none resize-none" as="textarea" id="txtNote" placeholder="Ghi chú" onPaste={handlePasteFile} {...getFieldProps('note')} />
                                             </div>
                                         </div>
                                     </div>

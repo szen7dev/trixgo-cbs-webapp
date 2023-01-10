@@ -870,8 +870,8 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                           </div>
                           : <></>
                       }
-                      <Link to={`/fnb/shift/${item?.funda._id}`}>
-                        <p><span className={"text-xs text-primary-gray text-left"}>{item?.shift.name}</span></p>
+                      <Link to={`/fnb/shift/${item?.funda?._id}`}>
+                        <p><span className={"text-xs text-primary-gray text-left"}>{item?.shift?.name}</span></p>
                       </Link>
                     </td>
                     <td className={"w-[50px]"}>
