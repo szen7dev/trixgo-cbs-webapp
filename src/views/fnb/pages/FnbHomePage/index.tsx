@@ -3,10 +3,11 @@ import React, { FC, useState, UIEvent, useEffect } from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import parse from "html-react-parser";
-import { debounce } from "lodash";
+import { debounce, toArray } from "lodash";
 import { useDispatch } from "react-redux";
 import { formatNumberMoney } from "utils/converter";
 import { toast } from "react-toastify";
+import Axios from "axios";
 
 /*=====2.CSS=====*/
 import "slick-carousel/slick/slick.css";
@@ -24,6 +25,8 @@ import baemineChannelIcon from "assets/images/fnb/baemin.svg";
 import loshipChannelIcon from "assets/images/fnb/loship.svg";
 import beeChannelIcon from "assets/images/fnb/bee.svg";
 import businessBuiding from "assets/images/icons8-business-building-48.svg";
+import { IconImage } from 'views/media/shareComponents/common';
+import iconPhoto from "assets/images/icons8-photo.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import PaginateV2 from "shareComponents/common/PaginateV2";
@@ -33,8 +36,11 @@ import { ModalUpdatePayment } from "./components/ModalUpdatePayment";
 import { ModalUpdateSalesChannel } from "./components/ModalUpdateSalesChannel";
 import { DropdownSearchableV2, Loader, ModalConfirm } from "shareComponents/common";
 import TriangleDown from "assets/icons/TriangleDown";
-
-/*=====5.TYPINGS=====*/
+import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
+import { APP_ID } from "apis/localdb";
+import { validateFiles } from 'validation/file';
+import { FileProp, FileProps, FilePropsUpload, ImageProps } from "typings/common";
+import { ModalZoomView } from "shareComponents/common";
 
 /*=====6.HOOKS/APIS=====*/
 import { useAuth } from "services/hooks/auth/useAuth";
@@ -45,6 +51,7 @@ import { useModal } from "services/hooks/useModal";
 import API from "apis/repository";
 
 import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
+import { useUpload } from 'services/hooks/useUpload';
 
 /*=====7.OTHER=====*/
 import { createLinkAndClick } from "utils";
@@ -98,10 +105,24 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
   const [pageIndex, setPageIndex] = useState(0);
   const [reset, setReset] = useState(false);
   const [cancelNote, setCancelNote] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
+  const [isShowImageFullScreen, setIsShowImageFullScreen] = useState(false);
+
+  const [defaultState, setDefaultState] = useState({
+    mediaID: '',
+    images: [] as ImageProps[],
+    index: 0,
+    createAt: ""
+  });
 
   const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
   const ref = React.useRef<PaginateHandle>(null);
   const { openModal, closeModal } = useModal();
+
+  const { addFileToUpload } = useUpload({
+    appID: APP_ID.FNB.id,
+    companyID: user?.company?._id,
+  });
 
   const keyword = useAppSelector(
     (state) => state.fnbSlice.data.keywordHomeFnb
@@ -117,8 +138,12 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
       keyword,
       ...queryFnb,
       populates: JSON.stringify({
-        path: 'funda shift customer userCreate',
-        select: "name sign address bizfullname fullname phone numberOfOrders",
+        path: 'funda shift customer userCreate files',
+        select: "name path nameOrg author sign address bizfullname fullname phone numberOfOrders",
+        populate: {
+          path: 'author',
+          select: 'fullname bizfullname image',
+        }
       })
     }, isFetchList: true, isFetchInfo: false
   });
@@ -160,40 +185,75 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
     }
   };
 
-  const handleCancelOrder = React.useCallback(async () => {
+  const handleCancelOrder = async () => {
     try {
-      console.log({
-        orderID: idsChecked[0],
-          cancelNote,
-      })
-
-      // setCancelNote('')
-
       closeModal();
 
-      // const response = await API.put(
-      //   `/api/fnb/orders`,
-      //   {
-      //     orderID: idsChecked[0],
-      //     cancelNote,
-      //     status: 4
-      //   }
-      // );
+      const response = await API.put(
+        `/api/fnb/orders`,
+        {
+          orderID: idsChecked[0],
+          cancelNote,
+          status: 4
+        }
+      );
 
-      // if (response.status !== 200 || response.data?.error) {
-      //   return toast.warn('Hủy đơn hàng thất bại');
-      // }
+      if (response.status !== 200 || response.data?.error) {
+        return toast.warn('Hủy đơn hàng thất bại');
+      }
 
-      // refetch();
-      // toast.info('Hủy đơn hàng thành công');
+      refetch();
+      toast.info('Hủy đơn hàng thành công');
     } catch (err: any) {
       toast.error(err.message);
     }
-  }, [cancelNote])
+  }
 
-  useEffect(() => {
-    console.log('Rendering...', cancelNote);
-  }, [cancelNote])
+  const handleSetFiles = async (filesSelected: FileList | null) => {
+    if (!filesSelected) return;
+
+    try {
+      const { error, message } = await validateFiles(filesSelected);
+      if (error) return toast.warn(message);
+
+      setIsUploading(true);
+
+      const filesID: string[] = [];
+
+      for (const [key, file] of Object.entries(filesSelected)) {
+        const { _id } = await addFileToUpload({
+          files: file as any,
+          fileType: 1,
+          progress: percentCompleted => {
+            console.log(`${percentCompleted}%`, key);
+          }
+        })
+        _id && filesID.push(_id);
+      }
+
+      setIsUploading(false);
+      setIdsChecked([]);
+
+      if(!filesID.length) return toast.warn('Upload ảnh thất bại');
+
+      const response = await API.put(
+        `/api/fnb/orders`,
+        {
+          orderID: idsChecked[0],
+          filesID,
+        }
+      );
+
+      if (response.status !== 200 || response.data?.error) {
+        return toast.warn('Upload ảnh thất bại');
+      }
+
+      refetch();
+      toast.info('Upload ảnh thành công');
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+  }
 
   const [searchFunda, setSearchFunda] = useState('');
 
@@ -233,7 +293,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
    * 
    * Xử lý download template excel
    */
-  //_____Import, export excel
   const [dataImport, setDataImport] = useState([]);
   const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
       isExporting: false,
@@ -241,32 +300,36 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
   const { exportOrderAsync } = useFnbOrder({});
 
   const handleExportExcel = async () => {
-  try {
-          setStateExport({ isExporting: true });
-          const { error, data } = await exportOrderAsync({
-              filterParams: {  
-                  // departmentsID: [departmentID],
-                  // ...fromToDate,
-                  // datahubContactsID,
-                  // types,
-                  // directions,
-                  // contractsID,
-                  // storagesID,
-                  // keyword: keywordInput 
-              }
-          });
+    try {
+      setStateExport({ isExporting: true });
+      const { error, data } = await exportOrderAsync({
+        filterParams: {  
+          // departmentsID: [departmentID],
+          // ...fromToDate,
+          // datahubContactsID,
+          // types,
+          // directions,
+          // contractsID,
+          // storagesID,
+          // keyword: keywordInput 
+        }
+      });
 
-          if(error) {
-              return toast.warn(data?.message);
-          }
-
-          data && createLinkAndClick(data, '_self');
-      } catch (error: any) {
-          toast.error(error.message)
-      } finally {
-          setStateExport({ isExporting: false });
+      if(error) {
+        return toast.warn(data?.message);
       }
+
+      data && createLinkAndClick(data, '_self');
+    } catch (error: any) {
+      toast.error(error.message)
+    } finally {
+      setStateExport({ isExporting: false });
+    }
 	}
+
+  if(isUploading) {
+    return <Loader className="border-primary" />
+  }
 
   return (
     <div className="t-home flex flex-col h-full overflow-hidden">
@@ -667,7 +730,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                           onConfirm={handleCancelOrder}
                           defaultText={false}
                           onCancel={closeModal}
-                          isAddTextarea={true}
+                          isAddTextarea={false}
                           onKeyUpTextarea={(e: any) => {
                             console.log({ value: e.target.value })
                             setCancelNote(e.target.value);
@@ -718,6 +781,21 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 Gán lỗi gặp phải
               </button>
               <button onClick={handleExportExcel}><img src={iconDown} title="Tải dữ liệu Excel"/></button>
+
+              {idsChecked.length === 1 && (
+                <label className="w-8 h-8 rounded-md flex justify-center items-center cursor-pointer">
+                  <IconImage />
+                  <input
+                    type="file"
+                    name="images"
+                    className="hidden"
+                    accept="image/*"
+                    multiple
+                    onChange={e => handleSetFiles(e.target.files)}
+                  />
+                </label>
+              )}
+                {/*<button onClick={}><img src={iconDown} title="Tải dữ liệu Excel"/></button>*/}
             </div>
           </div>
           {/* Chưa rõ chỗ này, hình như để phân trang */}
@@ -836,6 +914,32 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                           <span className={"text-xs text-primary-gray text-left"}>{item?.note}</span>
                         </div>
                       </button>
+                      <div className="flex mr-2 gap-2 text-primary-gray pb-2">
+                        {
+                          (item?.files)?.slice(0, 3).map((file: any, subindex: any) => (
+                            <button
+                              key={file._id}
+                              onClick={() => {
+                                setDefaultState({
+                                  mediaID: file._id,
+                                  images: item?.files,
+                                  index: subindex,
+                                  createAt: file.createAt
+                                });
+                                setIsShowImageFullScreen(true);
+                              }}
+                            >
+                              <div className="border-0.5 border-cbs-border rounded-full px-3 py-1 flex overflow-hidden">
+                                <img src={iconPhoto} className="mr-[5px] w-6 h-6" />
+                                <span>image_{file?.nameOrg.substring(0, 10)}...</span>
+                              </div>
+                            </button>
+                          ))
+                        }
+                        {item?.files?.length > 3 && (
+                          <div className="border-0.5 border-cbs-border rounded-full py-1 px-2">+{item?.files?.length-1}</div>
+                        )}
+                      </div>
                     </td>
                     <td className={"px-1 py-2"}>
                       <div className="">
@@ -953,7 +1057,11 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
           </div>
         </div> */}
       </div>
-
+      <ModalZoomView
+        isShow={isShowImageFullScreen}
+        toggle={() => setIsShowImageFullScreen(!isShowImageFullScreen)}
+        initialData={defaultState}
+      />
     </div>
   );
 };

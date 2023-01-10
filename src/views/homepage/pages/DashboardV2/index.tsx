@@ -1648,7 +1648,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                             )}
                         </div>
                         {/* Attach Images href={`${process.env.REACT_APP_URL_S3}${file.path}`} */}
-                        <div className="flex mr-2 gap-2 text-primary-gray pb-2">
+                        <div className="flex wrap flex-wrap mr-2 text-primary-gray pb-2">
                           {
                             (item?.lastComment?.images)?.slice(0, 3).map((file: any, subindex: any) => (
                                 <button
