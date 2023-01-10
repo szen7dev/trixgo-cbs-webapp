@@ -33,6 +33,7 @@ export const FnbBillOrder: FC = () => {
     const { info, refetch } = useFnbOrder(
         { 
             params: { 
+                limit: 200,
                 orderID,
                 populates: JSON.stringify({
                     path: 'funda shift customer userCreate',
@@ -119,13 +120,13 @@ export const FnbBillOrder: FC = () => {
                             <tbody>
                             {
                                 orderProducts.map((item: any) => {
-                                    let amount = Number(item.quantity*item.unitPrice)
+                                    const amount = Number(item.quantity*item.unitPrice)
 
-                                    if(item?.subProducts){
-                                        for(const subProduct of item?.subProducts){
-                                            amount = Number(amount) + Number(item.quantity)*Number(subProduct.unitPrice)
-                                        }
-                                    }
+                                    // if(item?.subProducts){
+                                    //     for(const subProduct of item?.subProducts){
+                                    //         amount = Number(amount) + Number(item.quantity)*Number(subProduct.unitPrice)
+                                    //     }
+                                    // }
 
                                     return (
                                         <tr key={item._id}>

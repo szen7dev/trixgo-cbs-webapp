@@ -64,7 +64,7 @@ export const FnbRiskReportDetailPage: FC = () => {
 			keyword: keyword, 
 			fundasID: [fundaID],
 			populates: JSON.stringify({
-				path: 'mistake executor funda files'
+				path: 'userCreate mistake executor funda files'
 			}) 
 		}, isFetchList: true, isFetchInfo: false  });
 
@@ -219,17 +219,11 @@ export const FnbRiskReportDetailPage: FC = () => {
 				{
 					(listWithPager[pageIndex]??[]).map((item: any, i: any) => (
 						<tr key={item._id} className="text-[14px]">
-							<td className={"p-2 border-0.5 border-primary-border text-cente"}>
-								{/* <input
-									className="form-check-input"
-									type="checkbox"
-									checked={getStateChecked(item._id)}
-									onChange={() => onClickCheckButton(item._id)}
-								/> */}
-								{i+1}
-							</td>
+							<td className={"p-2 border-0.5 border-primary-border text-cente"}>{i+1}</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{item?.mistake?.name}
+								<p className=" text-[13px] text-gray-500"><i>Người ghi nhận: {item?.userCreate?.fullname}</i></p>
+								<p className=" text-[13px] text-gray-500"><i>Thời gian: {moment(item.createAt).format('DD/MM/YYYY HH:mm')}</i></p>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border "}>
 								{item?.executor?.fullname}

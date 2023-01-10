@@ -870,6 +870,9 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                           </div>
                           : <></>
                       }
+                      <Link to={`/fnb/shift/${item?.funda._id}`}>
+                        <p><span className={"text-xs text-primary-gray text-left"}>{item?.shift.name}</span></p>
+                      </Link>
                     </td>
                     <td className={"w-[50px]"}>
                       <div className={"py-2"}>
@@ -988,74 +991,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
 
           </table>
         </div>
-
-        {/* Báo cáo quản trị */}
-        {/* <div className="w-1/4 mt-3">
-          <div className="bg-white border-0.5 border-second-color-border py-6 px-3">
-            <button className="m-auto font-bold text-cbs-fnb-bg flex items-center">Winggo Thái thịnh <ExpandMoreIcon /></button>
-            <button className="flex items-center m-auto"><img src={iconCalendar} alt="" />
-              Hôm nay <ExpandMoreIcon />
-            </button>
-            <div className="font-bold text-center">Tổng doanh số</div>
-            <div className="flex items-center gap-4 justify-center	">
-              <span className="text-cbs-down-text flex gap-3"><img src={arrowDownRed} /> 93.49 %</span>
-              <span className="text-primary text-[22px] font-bold ">20.000.000đ</span>
-            </div>
-            <div className="flex border-t-0.5 border-b-0.5 border-primary-border justify-between mx-1 py-2">
-              <div>
-                <div className="flex text-cbs-subtext gap-1"><img src={dotGreen} alt="" /> Hệ thống</div>
-                <div className="font-bold ">15.000.000</div>
-              </div>
-              <div className="border-r-0.5 border-primary-border pr-2">
-                <div className="flex text-cbs-subtext gap-1"><img src={dotGreen} alt="" />Nhượng quyền</div>
-                <div className="font-bold ">15.000.000</div>
-              </div>
-              <div>
-                <div className="flex text-cbs-subtext gap-1"><img src={dotGreen} alt="" />Tiền mặt</div>
-                <div className="text-cbs-fnb-bg ">15.000.000</div>
-              </div>
-              <div>
-                <div className="flex text-cbs-subtext gap-1"><img src={dotGreen} alt="" />Chuyển khoản</div>
-                <div className="text-cbs-fnb-bg">15.000.000</div>
-              </div>
-            </div>
-            <div className="flex  justify-between my-3">
-              <div>
-                <div className=" text-cbs-subtext pb-3">Tỷ lệ Off</div>
-                <div className="font-bold text-cbs-fnb-bg">5%</div>
-              </div>
-              <div>
-                <div className=" text-cbs-subtext pb-3">Tỷ lệ App</div>
-                <div className="font-bold text-cbs-fnb-bg">5%</div>
-              </div>
-              <div>
-                <div className=" text-cbs-subtext pb-3">Hóa đơn</div>
-                <div className="font-bold ">50</div>
-              </div>
-              <div>
-                <div className=" text-cbs-subtext pb-3">Mặt hàng</div>
-                <div className="font-bold ">200</div>
-              </div>
-              <div>
-                <div className=" text-cbs-subtext pb-3">Khách hàng</div>
-                <div className="font-bold ">50</div>
-              </div>
-            </div>
-            <div>
-              <div className="flex justify-between	">
-                <div className="text-cbs-schedule-nextweek font-bold">Các lỗi hay gặp (168) </div>
-                <div><a href="#" className="text-cbs-fnb-bg">Xem tất cả</a></div>
-              </div>
-              <div className="flex justify-between	">
-                <div>Đường quá ngọt</div>
-                <div className="text-cbs-down-text">2</div>
-              </div>
-            </div>
-            <div className="flex">
-              <ChartRevenueByHour />
-            </div>
-          </div>
-        </div> */}
       </div>
       <ModalZoomView
         isShow={isShowImageFullScreen}
