@@ -33,6 +33,7 @@ export const FnbBillOrder: FC = () => {
     const { info, refetch } = useFnbOrder(
         { 
             params: { 
+                limit: 200,
                 orderID,
                 populates: JSON.stringify({
                     path: 'funda shift customer userCreate',
