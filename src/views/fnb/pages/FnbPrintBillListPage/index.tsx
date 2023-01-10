@@ -32,6 +32,7 @@ const FnbPrintBillListPage: FC = () => {
   const { info, refetch, isLoadingInfo } = useFnbOrder(
     {
         params: {
+            limit: 200,
             orderID,
             populates: JSON.stringify({
                 path: 'funda shift customer userCreate',
@@ -74,6 +75,14 @@ const componentRef = useRef(null);
 usePrintComponent({ ref: componentRef });
 // console.log(orderProducts)
 
+let totalProd = 0
+orderProducts.map((item: any, index: number) => {
+  for (let i = 1; i <= Number(item.quantity); i++) {
+    totalProd = Number(totalProd) + 1
+  }
+})
+// console.log({totalProd})
+
 useEffect(() => {
   if (orderProducts && orderProducts.length) {
       setTimeout(function(){
@@ -107,22 +116,28 @@ if (isLoadingInfo) return <Loader className="border-primary" />;
                   `}
                 </style>
                 <Link to={`/fnb/home`}>
-                  {
+                  { 
+                      
                       orderProducts.map((item: any, index: number) => {
-                          // let amount = Number(item.quantity * item.unitPrice)
+                          let currentIndex = 0 
+                          currentIndex = Number(currentIndex) + Number(index + 1)
+                          console.log({currentIndex})
+
                           const amount = Number(item.unitPrice)
 
                           let str = ""
 
                           if (item?.subProducts) {
                               for (const subProduct of item?.subProducts) {
-                                  // amount = Number(amount) + Number(subProduct.unitPrice)
                                   str = str + subProduct.name
                               }
                           }
 
                           const quantity = [];
                           for (let i = 1; i <= Number(item.quantity); i++) {
+                              // currentIndex = Number(currentIndex) + Number(i)
+                              // console.log({currentIndex})
+                              // console.log('==================')
                               quantity.push(i);
                           }
 
@@ -133,7 +148,11 @@ if (isLoadingInfo) return <Loader className="border-primary" />;
                                 // style={{ height: "30mm", width: "100%" }}
                               >
                                   {
-                                        quantity.map((e) => {
+                                        quantity.map((e, subindex) => {
+                                          currentIndex = Number(currentIndex) + Number(subindex)
+                                          console.log({currentIndex})
+                                          console.log('==================')
+                                          
                                             return (
                                              <table key={`${e}.${item._id}`} style={{ height: "30mm", width: "100%" }}>
                                                 <tbody>
@@ -142,7 +161,8 @@ if (isLoadingInfo) return <Loader className="border-primary" />;
                                                         <div className="font-bold">
                                                           {info?.funda?.name}
                                                         </div>
-                                                        <p className="">{info?.sign} / {info?.appOrderSign} - {e}/{Number(item.quantity)}</p>
+                                                        {/* <p className="">{info?.sign} / {info?.appOrderSign} - {e}/{Number(item.quantity)}</p> */}
+                                                        <p className="">{info?.sign} / {info?.appOrderSign} - {currentIndex}/{Number(totalProd)}</p>
                                                       <div className="">
                                                         <p className="font-bold">{item.product?.name} - Size {item.size >= 1 && FNB_SIZE[Number(item.size) - 1].text}</p>
                                                         <p><i>Đường {FNB_SUGAR[Number(item.sugar)-1].text}, Đá {FNB_ICE[Number(item.ice)-1].text}, {item?.note}, {str}</i></p>
