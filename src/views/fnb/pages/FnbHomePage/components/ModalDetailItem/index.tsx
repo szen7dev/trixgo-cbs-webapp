@@ -156,6 +156,24 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
     }
   }
 
+  const handleUpdateNote = debounce(async (e: any) => {
+    const value = e.target.value;
+
+    try {
+      const { data, status } = await API.put(
+        `/api/fnb/orders`,
+        {
+          orderID: order._id,
+          cancelNote: value,
+        }
+      );
+
+      if (status !== 200 || data?.error) return toast.warning('Cập nhật ghi chú thất bại');
+    } catch(error: any) {
+      toast.error(error.message);
+    }
+  }, 300)
+
   const handleAddMistake = (item: any) => {
     const isExists = mistakesSelected.find((m: any) => m._id === item._id);
 
@@ -307,9 +325,9 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                         <div className={"flex py-2"}>
                           <div className={"w-full flex items-center"}>
                             <img src={IconGreenDot} alt="" />
-                            <div className={"h-full text-left flex items-center px-1 "}>
+                            <div className={"h-full text-left flex items-center px-1"}>
                               <span className="text-gray-500 pr-1">Ghi chú: </span>
-                              <span>{order.note}</span>
+                              <textarea rows={2} onKeyUp={handleUpdateNote} className="resize block text-sm text-gray-900 bg-gray-50 rounded-lg p-2" placeholder="Write your note here...">{order.note}</textarea>
                             </div>
                           </div>
                           {/* Ghi chú: Đặt hộ khách qua Zalo */}
