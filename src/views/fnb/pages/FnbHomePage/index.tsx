@@ -913,7 +913,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                             }
                             <span className="text-cbs-primary">{item?.name}</span>
                           </p>
-                          {/* <p><span className={"text-xs text-primary-gray text-left"}>{item?.shift?.name}</span></p> */}
                           <span className={"text-xs text-primary-gray text-left"}>{item?.note}</span>
                         </div>
                       </button>
