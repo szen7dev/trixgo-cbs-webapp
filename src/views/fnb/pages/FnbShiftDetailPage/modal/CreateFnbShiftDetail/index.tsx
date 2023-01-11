@@ -62,7 +62,7 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                 toast.error(result?.data?.message);
             }
         };
-
+        
         if (modalType == 'update') {
             const query = {
                 ...values,
@@ -430,8 +430,8 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                         {membersSelected.map((member: any) => (
                                             <div key={member._id} className="flex justify-between w-1/3 h-[40px] items-center border-0.5 border-cbs-border rounded-md px-3">
                                                 <div className="flex gap-2 items-center">
-                                                    <img src={`${process.env.REACT_APP_URL_S3_USER}/${member.image}`} alt={member.bizfullname} style={{ maxWidth: "24px", maxHeight: "24px" }} />
-                                                    <span className="text-[14px]">{member.bizfullname}</span>
+                                                    <img src={`${process.env.REACT_APP_URL_S3_USER}/${member.image}`} alt={member.fullname} style={{ maxWidth: "24px", maxHeight: "24px" }} />
+                                                    <span className="text-[14px]">{member.fullname}</span>
                                                 </div>
                                                 <button onClick={() => handleRemoveMemberToShift(member)}>
                                                     <img src={IconCancel} alt="" />

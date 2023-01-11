@@ -55,7 +55,7 @@ export const FnbShiftDetailPage: FC = () => {
 			fundaID, 
 			populates: JSON.stringify({
 				path: 'staffs',
-				select: 'fullname',
+				select: 'fullname image',
 			}) 
 		}, isFetchList: true, isFetchInfo: false  });
 
