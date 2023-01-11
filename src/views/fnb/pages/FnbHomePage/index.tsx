@@ -871,7 +871,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                           : <></>
                       }
                       <Link to={`/fnb/shift/${item?.funda?._id}`}>
-                        <p><span className={"text-xs text-primary-gray text-left"}>{item?.shift?.name}</span></p>
+                        <p><span className={"text-xs text-primary-gray text-left"}>{item?.funda?.sign}.{item?.shift?.name}</span></p>
                       </Link>
                     </td>
                     <td className={"w-[50px]"}>
@@ -913,7 +913,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                             }
                             <span className="text-cbs-primary">{item?.name}</span>
                           </p>
-                          {/* <p><span className={"text-xs text-primary-gray text-left"}>{item?.shift?.name}</span></p> */}
                           <span className={"text-xs text-primary-gray text-left"}>{item?.note}</span>
                         </div>
                       </button>
@@ -951,7 +950,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                     </td>
                     <td className={"px-1 py-2"}>
                       <div>
-                        {item?.funda?.name}
+                      {item?.funda?.sign}.{item?.funda?.name}
                       </div>
                     </td>
                     <td className={"px-1 py-2"}>

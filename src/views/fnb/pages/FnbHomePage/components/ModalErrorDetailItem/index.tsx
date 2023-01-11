@@ -274,7 +274,7 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
     useEffect(() => {
         const fetchFundas = async () => {
           const response = await API.get(
-            `/api/item/fundas?&isMember=1keyword=${searchFunda}`,
+            `/api/item/fundas?&isMember=1&keyword=${searchFunda}`,
           );
           const { data, status } = response?.data;
 
