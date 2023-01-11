@@ -207,7 +207,7 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                             <div>
                               <div className={"h-full text-left flex items-center px-1 border-r-0.5 border-black"}>
                                 <span className="text-gray-500 pr-1">Cơ sở: </span>
-                                <span>{order.funda?.name}</span>
+                                <span>{order?.funda?.sign}.{order.funda?.name}</span>
                               </div>
                             </div>
                             <div>

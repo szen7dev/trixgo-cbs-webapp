@@ -144,6 +144,14 @@ export const ModalAddNewOrder: FC<Props> = () => {
     const fetchShifts = async () => {
       const response = await API.get(
         `/api/fnb/shifts?fundaID=${fundaID}`,
+        {
+          params: {
+              populates: {
+                  "path": "funda",
+                  "select": "sign",
+              }
+          },
+      }
       );
       const { data, status } = response?.data;
 
@@ -600,7 +608,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   </div>
                                 )}
                                 data={shifts?.map((shift: any) => ({
-                                  label: shift.name,
+                                  label: `${shift.funda.sign}.${shift.name}`,
                                   value: shift._id,
                                 }))}
                                 formatItem={{

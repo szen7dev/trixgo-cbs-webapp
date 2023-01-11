@@ -101,7 +101,7 @@
                                             <div className="w-full ">
                                                 <div className={" p-2 my-2"}>
                                                     <div className="mb-3">
-                                                        <div className="ml-3 mb-3 text-primary-gray">Tên222</div>
+                                                        <div className="ml-3 mb-3 text-primary-gray">Tên</div>
                                                         <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtName" placeholder="Nhập nội dung" {...getFieldProps('name')} />
                                                         <ErrorMessage
                                                             name="name"

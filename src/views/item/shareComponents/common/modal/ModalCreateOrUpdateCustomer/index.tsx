@@ -175,7 +175,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
                 </div>
             )}
             data={listFunda.map((funda:any) => ({
-                label: funda.name,
+                label: `${funda.sign}.${funda.name}`,
                 value: funda._id,
             }))}
             initialValue={{

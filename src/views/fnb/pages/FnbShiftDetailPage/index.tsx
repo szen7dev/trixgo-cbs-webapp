@@ -54,8 +54,8 @@ export const FnbShiftDetailPage: FC = () => {
 			keyword: keyword, 
 			fundaID, 
 			populates: JSON.stringify({
-				path: 'staffs',
-				select: 'fullname image',
+				path: 'staffs funda',
+				select: 'name sign fullname image',
 			}) 
 		}, isFetchList: true, isFetchInfo: false  });
 
@@ -276,7 +276,7 @@ export const FnbShiftDetailPage: FC = () => {
 								{/* <Link to ={`/fnb/shift/${fundaID}/${item._id}/material`}>
 									{item?.name}
 								</Link> */}
-								{item?.name} ({item?.staffs.length})
+								{item?.funda?.sign}.{item?.name}
 								<p className="text-cbs-subtext text-[12px]"><i>{moment(item?.createAt).format('HH:mm DD/MM/YYYY')}</i></p>
 								<p className="text-cbs-subtext text-[12px]"><i>Nhân viên: <b>{item?.staffs.length}</b></i></p>
 								{
