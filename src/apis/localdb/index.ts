@@ -639,6 +639,11 @@ export const FNB_PAYMENT = [
     { value: 2, text: 'Chuyển khoản' }
 ]
 
+export const FNB_TOPPING = [
+    { value: 1, text: 'Trân châu đen' },
+    { value: 2, text: 'Trân châu trắng' },
+]
+
 export const FNB_SIZE = [
     { value: 1, text: 'M' },
     { value: 2, text: 'L' },

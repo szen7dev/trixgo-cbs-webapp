@@ -23,7 +23,7 @@ import API from "apis/repository";
 import { convertObToUrl } from "utils";
 import usePrintComponent from "services/hooks/ppt/usePrintComponent";
 
-import { FNB_CHANNEL, FNB_SERVICE, FNB_PAYMENT, FNB_ORDER_STATUS, FNB_SIZE, FNB_SUGAR, FNB_ICE } from "apis/localdb";
+import { FNB_TOPPING, FNB_SIZE, FNB_SUGAR, FNB_ICE } from "apis/localdb";
 
 const FnbPrintBillListPage: FC = () => {
   const { orderID } = useParams<{ orderID: string }>()
@@ -73,7 +73,7 @@ useEffect(() => {
 }, [info]);
 const componentRef = useRef(null);
 usePrintComponent({ ref: componentRef });
-// console.log(orderProducts)
+console.log(orderProducts)
 
 let totalProd = 0
 orderProducts.map((item: any, index: number) => {
@@ -117,11 +117,10 @@ if (isLoadingInfo) return <Loader className="border-primary" />;
                 </style>
                 <Link to={`/fnb/home`}>
                   { 
-                      
                       orderProducts.map((item: any, index: number) => {
+                        // console.log(item)
                           let currentIndex = 0 
-                          currentIndex = Number(currentIndex) + Number(index + 1)
-                          console.log({currentIndex})
+                          currentIndex = Number(currentIndex) + Number(index)
 
                           const amount = Number(item.unitPrice)
 
@@ -129,7 +128,7 @@ if (isLoadingInfo) return <Loader className="border-primary" />;
 
                           if (item?.subProducts) {
                               for (const subProduct of item?.subProducts) {
-                                  str = str + subProduct.name
+                                  str = str + subProduct.name + ", "
                               }
                           }
 
@@ -140,6 +139,7 @@ if (isLoadingInfo) return <Loader className="border-primary" />;
                               // console.log('==================')
                               quantity.push(i);
                           }
+                          // console.log(quantity)
 
                           return (
                               <div
@@ -149,9 +149,10 @@ if (isLoadingInfo) return <Loader className="border-primary" />;
                               >
                                   {
                                         quantity.map((e, subindex) => {
-                                          currentIndex = Number(currentIndex) + Number(subindex)
-                                          console.log({currentIndex})
-                                          console.log('==================')
+                                          currentIndex = Number(currentIndex) + Number(1)
+                                          // console.log({subindex})
+                                          // console.log({currentIndex})
+                                          // console.log('==================')
                                           
                                             return (
                                              <table key={`${e}.${item._id}`} style={{ height: "30mm", width: "100%" }}>
@@ -161,14 +162,14 @@ if (isLoadingInfo) return <Loader className="border-primary" />;
                                                         <div className="font-bold">
                                                           {info?.funda?.name}
                                                         </div>
-                                                        {/* <p className="">{info?.sign} / {info?.appOrderSign} - {e}/{Number(item.quantity)}</p> */}
-                                                        <p className="">{info?.sign} / {info?.appOrderSign} - {currentIndex}/{Number(totalProd)}</p>
+                                                        <p className="">{info?.sign} / {info?.appOrderSign} - {item.black >= 1 && FNB_TOPPING[Number(item.black) - 1].text}</p>
                                                       <div className="">
-                                                        <p className="font-bold">{item.product?.name} - Size {item.size >= 1 && FNB_SIZE[Number(item.size) - 1].text}</p>
-                                                        <p><i>Đường {FNB_SUGAR[Number(item.sugar)-1].text}, Đá {FNB_ICE[Number(item.ice)-1].text}, {item?.note}, {str}</i></p>
+                                                        <p className="font-bold">{item.product?.name}</p>
+                                                        <p><b>Size {item.size >= 1 && FNB_SIZE[Number(item.size) - 1].text}</b>, Đường {FNB_SUGAR[Number(item.sugar)-1].text}, Đá {FNB_ICE[Number(item.ice)-1].text}, {item?.note}</p>
+                                                        <p>+ Topping: {str}</p>
                                                       </div>
                                                       <div className="flex justify-between">
-                                                          <div>{moment(info?.createAt).format('HH:mm DD/MM/YYYY')}</div>
+                                                          <div>{currentIndex}/{Number(totalProd)} | {moment(info?.createAt).format('HH:mm DD/MM/YY')}</div>
                                                           <div className="font-bold">{formatNumberMoney(amount)}đ</div>
                                                       </div>
                                                     </td>
@@ -176,6 +177,7 @@ if (isLoadingInfo) return <Loader className="border-primary" />;
                                                 </tbody>
                                              </table>
                                             )
+                                            
                                         })
                                       }
                               </div>
