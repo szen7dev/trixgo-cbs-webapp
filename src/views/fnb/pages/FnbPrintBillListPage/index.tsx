@@ -162,14 +162,14 @@ if (isLoadingInfo) return <Loader className="border-primary" />;
                                                         <div className="font-bold">
                                                           {info?.funda?.name}
                                                         </div>
-                                                        <p className="">{info?.sign} / {info?.appOrderSign} - {item.black >= 1 && FNB_TOPPING[Number(item.black) - 1].text}</p>
+                                                        <p className="">{info?.sign} / {info?.appOrderSign} - {currentIndex}/{Number(totalProd)}</p>
                                                       <div className="">
                                                         <p className="font-bold">{item.product?.name}</p>
                                                         <p><b>Size {item.size >= 1 && FNB_SIZE[Number(item.size) - 1].text}</b>, Đường {FNB_SUGAR[Number(item.sugar)-1].text}, Đá {FNB_ICE[Number(item.ice)-1].text}, {item?.note}</p>
                                                         <p>+ Topping: {str}</p>
                                                       </div>
                                                       <div className="flex justify-between">
-                                                          <div>{currentIndex}/{Number(totalProd)} | {moment(info?.createAt).format('HH:mm DD/MM/YY')}</div>
+                                                          <div>{moment(info?.createAt).format('HH:mm DD/MM/YY')}</div>
                                                           <div className="font-bold">{formatNumberMoney(amount)}đ</div>
                                                       </div>
                                                     </td>
