@@ -155,18 +155,17 @@ if (isLoadingInfo) return <Loader className="border-primary" />;
                                           // console.log('==================')
                                           
                                             return (
-                                             <table key={`${e}.${item._id}`} style={{ height: "30mm", width: "100%" }}>
+                                             <table key={`${e}.${item._id}`} style={{ height: "30mm", width: "50mm" }}>
                                                 <tbody>
                                                   <tr>
-                                                    <td className="text-xs px-2">
+                                                    <td className="px-0.5 text-[10px]">
                                                         <div className="font-bold">
-                                                          {info?.funda?.name}
+                                                          {info?.funda?.name}-{info?.sign} / {info?.appOrderSign} - {currentIndex}/{Number(totalProd)}
                                                         </div>
-                                                        <p className="">{info?.sign} / {info?.appOrderSign} - {currentIndex}/{Number(totalProd)}</p>
+                                                        {/* <p className="">{info?.sign} / {info?.appOrderSign} - {currentIndex}/{Number(totalProd)}</p> */}
                                                       <div className="">
-                                                        <p className="font-bold">{item.product?.name}</p>
-                                                        <p><b>Size {item.size >= 1 && FNB_SIZE[Number(item.size) - 1].text}</b>, Đường {FNB_SUGAR[Number(item.sugar)-1].text}, Đá {FNB_ICE[Number(item.ice)-1].text}, {item?.note}</p>
-                                                        <p>+ Topping: {str}</p>
+                                                        <p><b>{item.product?.name}</b> (Size {item.size >= 1 && FNB_SIZE[Number(item.size) - 1].text} - Đường {FNB_SUGAR[Number(item.sugar)-1].text}, Đá {FNB_ICE[Number(item.ice)-1].text}, {item?.note})</p>
+                                                        { str != "" ? <p>+ {str}</p> : <></>}
                                                       </div>
                                                       <div className="flex justify-between">
                                                           <div>{moment(info?.createAt).format('HH:mm DD/MM/YY')}</div>
