@@ -145,8 +145,8 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
       </header>
 
       <section className="px-10 mt-2">
-          <label className="block text-gray-700 text-sm font-bold" htmlFor="txtInitialDay">
-            Khu vực
+          <label className="block text-gray-700 text-sm font-bold" htmlFor="txtInitialDay" title="Bắt buộc nhập thông tin">
+            Khu vực  (*)
           </label>
           <DropdownSearchable
             onchangeValue={(value: any) => {
@@ -205,8 +205,8 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
       </section>
 
       <section className="px-10 py-2">
-        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription">
-          Họ và tên(*)
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription" title="Bắt buộc nhập thông tin">
+          Họ và tên (*)
         </label>
         <input
           type="text"
@@ -219,8 +219,8 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
       </section>
 
       <section className="px-10 py-2">
-        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription">
-          Điện thoại(*)
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription" title="Bắt buộc nhập thông tin">
+          Điện thoại (*)
         </label>
         <input
           type="text"
@@ -233,8 +233,8 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
       </section>
 
       <section className="px-10 py-2">
-        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription">
-          Giới tính(*)
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription" title="Bắt buộc nhập thông tin">
+          Giới tính (*)
         </label>
         <div className={"flex items-center"}>
             <div className={"flex items-center ml-3"}>
@@ -278,7 +278,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
 
       <section className="px-10 py-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription">
-          Ngày sinh(*)
+          Ngày sinh
         </label>
         <input
           type="date"
