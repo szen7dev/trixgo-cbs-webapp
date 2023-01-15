@@ -101,7 +101,9 @@ export const FnbBillOrder: FC = () => {
                         </div>
                     </div>
                     <div className="text-center py-1">
-                        <div className="font-bold text-[12px]">HÓA ĐƠN THANH TOÁN</div>
+                        <Link to={`/fnb/home/${info?._id}/print/2`}>
+                            <div className="font-bold text-[12px]" title="Bấm vào đây để in Tem">HÓA ĐƠN THANH TOÁN <i className="text-cbs-primary">(in Tem)</i></div>
+                        </Link>
                         <div className="text-[12px]">Số: {info?.sign}</div>
                     </div>
                     <div className="border-t-0.5 border-b-0.5 border-cbs-border mx-2 py-1 text-[13px]">
