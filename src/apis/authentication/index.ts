@@ -150,8 +150,8 @@ const AuthenticationRepository = {
     const { data } = await API.get<any>(
       `/api/auth/users`, {
       params: {
-        select: "bizfullname email image",
-        limit: 20,
+        select: "bizfullname fullname email image",
+        limit: 10,
         ...payload,
       }
     }
