@@ -75,3 +75,50 @@ https://gitlab.com/hiepyen/cbs_webapp/-/commit/14fe624f6da4e93a19966f6a04e341c6b
 1. Khai báo hàm trong API
 2. Khai báo phương thức trong HOOKS -> link tới API
 3. Gắn nút bấm vào file View và khai báo các hàm để kết nối tới HOOKS
+
+=================
+# LÀM VIỆC VỚI FILE, ẢNH
+1. Triệu gọi các hàm
+import { useUpload } from "services/hooks/useUpload";
+const fileInputRef = useRef<HTMLInputElement>(null);
+2. Khai báo phương thức
+    const { addFileToUpload } = useUpload({
+        appID: APP_ID.FNB.id,
+        companyID: user?.company?._id,
+    });
+
+    const handleUploadAttach = async (filesSelected: FileList | null, productID: string) => {
+		if (!filesSelected || !filesSelected.length) return;
+
+		const validation = await validateFiles(filesSelected);
+		if (validation.error) return toast.warn(validation.message);
+
+		// Clear input file
+		if (fileInputRef.current) {
+		  fileInputRef.current.value = '';
+		}
+
+		const imagesID: any = [];
+
+		// Upload images
+		for (const [_, file] of Object.entries(filesSelected)) {
+			const { _id } = await addFileToUpload({
+				files: file as any,
+				fileType: 1,
+				progress: percentCompleted => {
+					console.info(`${percentCompleted}%`)
+				}
+			})
+			_id && imagesID.push(_id);
+		}
+
+		// Update image to products
+		await API.put(
+			`/api/fnb/products`,
+			{
+				productID,
+				imagesID,
+			}
+		);
+		refetch();
+	  }
