@@ -115,76 +115,75 @@ if (isLoadingInfo) return <Loader className="border-primary" />;
                       }
                   `}
                 </style>
-                <Link to={`/fnb/home`}>
                   { 
-                      orderProducts.map((item: any, index: number) => {
-                        // console.log(item)
-                          let currentIndex = 0 
-                          currentIndex = Number(currentIndex) + Number(index)
+                    orderProducts.map((item: any, index: number) => {
+                      // console.log(item)
+                        let currentIndex = 0 
+                        currentIndex = Number(currentIndex) + Number(index)
 
-                          const amount = Number(item.unitPrice)
+                        const amount = Number(item.unitPrice)
 
-                          let str = ""
+                        let str = ""
 
-                          if (item?.subProducts) {
-                              for (const subProduct of item?.subProducts) {
-                                  str = str + subProduct.name + ", "
-                              }
-                          }
+                        if (item?.subProducts) {
+                            for (const subProduct of item?.subProducts) {
+                                str = str + subProduct.name + ", "
+                            }
+                        }
 
-                          const quantity = [];
-                          for (let i = 1; i <= Number(item.quantity); i++) {
-                              // currentIndex = Number(currentIndex) + Number(i)
-                              // console.log({currentIndex})
-                              // console.log('==================')
-                              quantity.push(i);
-                          }
-                          // console.log(quantity)
+                        const quantity = [];
+                        for (let i = 1; i <= Number(item.quantity); i++) {
+                            // currentIndex = Number(currentIndex) + Number(i)
+                            // console.log({currentIndex})
+                            // console.log('==================')
+                            quantity.push(i);
+                        }
+                        // console.log(quantity)
 
-                          return (
-                              <div
-                                key={index}
-                                className =""
-                                // style={{ height: "30mm", width: "100%" }}
-                              >
-                                  {
-                                        quantity.map((e, subindex) => {
-                                          currentIndex = Number(currentIndex) + Number(1)
-                                          // console.log({subindex})
-                                          // console.log({currentIndex})
-                                          // console.log('==================')
-                                          
-                                            return (
-                                             <table key={`${e}.${item._id}`} style={{ height: "30mm", width: "50mm" }}>
-                                                <tbody>
-                                                  <tr>
-                                                    <td className="px-0.5 text-[10px]">
-                                                        <div className="font-bold">
+                        return (
+                            <div
+                              key={index}
+                              className =""
+                              // style={{ height: "30mm", width: "100%" }}
+                            >
+                                {
+                                      quantity.map((e, subindex) => {
+                                        currentIndex = Number(currentIndex) + Number(1)
+                                        // console.log({subindex})
+                                        // console.log({currentIndex})
+                                        // console.log('==================')
+                                        
+                                          return (
+                                            <table key={`${e}.${item._id}`} style={{ height: "30mm", width: "50mm" }}>
+                                              <tbody>
+                                                <tr>
+                                                  <td className="px-0.5 text-[10px]">
+                                                      <Link to={`/fnb/home`}>
+                                                        <div className="font-bold" title="Bấm vào đây để trở về Trang chủ">
                                                           {info?.funda?.name}-{info?.sign} / {info?.appOrderSign} - {currentIndex}/{Number(totalProd)}
                                                         </div>
-                                                        {/* <p className="">{info?.sign} / {info?.appOrderSign} - {currentIndex}/{Number(totalProd)}</p> */}
-                                                      <div className="">
-                                                        <p><b>{item.product?.name}</b> (Size {item.size >= 1 && FNB_SIZE[Number(item.size) - 1].text} - Đường {FNB_SUGAR[Number(item.sugar)-1].text}, Đá {FNB_ICE[Number(item.ice)-1].text}, {item?.note})</p>
-                                                        { str != "" ? <p>+ {str}</p> : <></>}
-                                                      </div>
-                                                      <div className="flex justify-between">
-                                                          <div>{moment(info?.createAt).format('HH:mm DD/MM/YY')}</div>
-                                                          <div className="font-bold">{formatNumberMoney(amount)}đ</div>
-                                                      </div>
-                                                    </td>
-                                                  </tr>
-                                                </tbody>
-                                             </table>
-                                            )
-                                            
-                                        })
-                                      }
-                              </div>
-
-                          )
-                      })
-                    }                            
-                </Link>
+                                                      </Link>
+                                                      <Link to={`/fnb/home/${info?._id}/print/1`}>
+                                                        <div title="Bấm vào đây để in Bill">
+                                                          <p className="text-cbs-primary"><b>{item.product?.name}</b> (Size {item.size >= 1 && FNB_SIZE[Number(item.size) - 1].text} - Đường {FNB_SUGAR[Number(item.sugar)-1].text}, Đá {FNB_ICE[Number(item.ice)-1].text}, {item?.note})</p>
+                                                          { str != "" ? <p>+ {str}</p> : <></>}
+                                                        </div>
+                                                      </Link>
+                                                    <div className="flex justify-between">
+                                                        <div>{moment(info?.createAt).format('HH:mm DD/MM/YY')}</div>
+                                                        <div className="font-bold">{formatNumberMoney(amount)}đ</div>
+                                                    </div>
+                                                  </td>
+                                                </tr>
+                                              </tbody>
+                                            </table>
+                                          )
+                                      })
+                                    }
+                            </div>
+                        )
+                    })
+                  }                            
               </div>
         </div>
       </div>

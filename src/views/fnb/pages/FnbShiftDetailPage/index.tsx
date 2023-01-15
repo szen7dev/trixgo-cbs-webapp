@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 
 /*=====3.ICONS=====*/
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
+import iconDown from "assets/images/icons8-download-64 1.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import { SearchInput, ModalContainer } from "shareComponents/common";
@@ -26,8 +27,10 @@ import { useFnbQuota } from 'services/hooks/fnb/useFnbQuota';
 import { useFunda } from 'services/hooks/items/useFunda';
 import { useFnbShift } from 'services/hooks/fnb/useFnbShift';
 import { useAuth } from 'services/hooks/auth/useAuth';
+// import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
 
 /*=====7.OTHER=====*/
+import { createLinkAndClick } from "utils";
 import { APP_ID } from "apis/localdb";
 
 const TYPE_PRODUCT = [
@@ -101,6 +104,43 @@ export const FnbShiftDetailPage: FC = () => {
 	type PaginateHandle = React.ElementRef<typeof PaginateV2>;
     const ref = React.useRef<PaginateHandle>(null);
     const [pageIndex, setPageIndex] = useState(0);
+	
+  /**
+   * 
+   * Xử lý download template excel
+   */
+  const [dataImport, setDataImport] = useState([]);
+  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+      isExporting: false,
+  });
+  const { exportExcelAsync } = useFnbShift({});
+	const handleExportExcel = async () => {
+		try {
+		  setStateExport({ isExporting: true });
+		  const { error, data } = await exportExcelAsync({
+			filterParams: {  
+			  // departmentsID: [departmentID],
+			  // ...fromToDate,
+			  // datahubContactsID,
+			  // types,
+			  // directions,
+			  // contractsID,
+			  // storagesID,
+			  // keyword: keywordInput 
+			}
+		  });
+	
+		  if(error) {
+			return toast.warn(data?.message);
+		  }
+	
+		  data && createLinkAndClick(data, '_self');
+		} catch (error: any) {
+		  toast.error(error.message)
+		} finally {
+		  setStateExport({ isExporting: false });
+		}
+	}
 
 	return (
 		<main className="h-full overflow-auto">
@@ -155,6 +195,8 @@ export const FnbShiftDetailPage: FC = () => {
 					>
 						Tạo mới
 					</button>
+					<button className="ml-10" onClick={handleExportExcel}><img src={iconDown} title="Tải dữ liệu Excel"/></button>
+
 					{/* <button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
 						<img src={Vertical3Dots} alt="3Dots" />
 					</button> */}
