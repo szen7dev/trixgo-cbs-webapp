@@ -291,7 +291,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
 
   /**
    * 
-   * Xử lý download template excel
+   * Xử lý download excel
    */
   const [dataImport, setDataImport] = useState([]);
   const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
