@@ -385,6 +385,7 @@ export const FnBProductPage: FC = () => {
 								<Link to ={`/fnb/product/${item._id}`}>
 									{item?.name}
 								</Link>
+								<p className="border-gray-300 text-[13px]"><i>{item?.namecv}</i></p>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{item?.sign}

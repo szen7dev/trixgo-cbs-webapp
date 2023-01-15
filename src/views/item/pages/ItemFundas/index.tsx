@@ -1,5 +1,5 @@
 /*=====1.LIBRARY=====*/
-import { FC, useState, useCallback, useEffect } from "react";
+import { FC, useRef, useState, useCallback, useEffect, ChangeEvent } from "react";
 import cn from "classnames";
 import debounce from "lodash/debounce";
 import moment from "moment";
@@ -7,6 +7,8 @@ import { toast } from "react-toastify";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { validateFiles } from 'validation/file';
 import { read, utils } from 'xlsx';
+import { APP_ID } from "apis/localdb";
+import { formatNumberMoney } from "utils/converter";
 
 /*=====2.CSS=====*/
 import styles from "views/support/styles/support.module.css";
@@ -14,6 +16,7 @@ import styles from "views/support/styles/support.module.css";
 /*=====3.ICONS=====*/
 import DeleteIcon from "assets/images/icons8-remove.svg";
 import iconPencil from 'assets/images/icons8-pencil-96 1.png';
+import CameraIcon from "assets/images/camera-icon.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import { SearchInput } from "shareComponents/common";
@@ -26,6 +29,9 @@ import { Storage } from "typings/items";
 import { useModal } from "services/hooks/useModal";
 import { useStorage } from "services/hooks/items/useStorage";
 import { useFunda } from "services/hooks/items/useFunda";
+import { useUpload } from "services/hooks/useUpload";
+import { useAuth } from "services/hooks/auth/useAuth";
+import API from "apis/repository";
 
 /*=====7.OTHER=====*/
 import { createLinkAndClick } from "utils";
@@ -33,6 +39,7 @@ const CAMPAIGN_CONSTANT = ["Tắt", "Bật"];
 const INTERNAL_CONSTANT = ["Hệ thống", "Nhượng quyền"];
 
 export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
+    const { user } = useAuth();
 	const history = useHistory();
     const { closeModal, openModal } = useModal();
     const [keyword, setKeyword] = useState('');
@@ -69,8 +76,8 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
             keyword, 
             isListParentOfListChilds: "1", 
             populates: { 
-                "path": "area1 area2 area3",
-                "select": "name"
+                "path": "area1 area2 area3 images",
+                // "select": "name"
             }, 
             parentID 
         },
@@ -298,6 +305,55 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
     //     console.log('=========DATA THAY ĐỔI RỒI==============')
     // }, [dataImport])
 
+    /**
+     * UPLOAD HÌNH ẢNH
+     */
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const { addFileToUpload } = useUpload({
+		appID: APP_ID.FNB.id,
+		companyID: user?.company?._id,
+	});
+
+    const handleUploadAttach = async (filesSelected: FileList | null, fundaID: string) => {
+		if (!filesSelected || !filesSelected.length) return;
+
+		const validation = await validateFiles(filesSelected);
+		if (validation.error) return toast.warn(validation.message);
+
+		// Clear input file
+		if (fileInputRef.current) {
+		  fileInputRef.current.value = '';
+		}
+
+		const imagesID: any = [];
+		const bankQrcode: any = [];
+
+		// Upload images
+		for (const [_, file] of Object.entries(filesSelected)) {
+			const { _id } = await addFileToUpload({
+				files: file as any,
+				fileType: 1,
+				progress: percentCompleted => {
+					console.info(`${percentCompleted}%`)
+				}
+			})
+			_id && imagesID.push(_id);
+			_id && bankQrcode.push(_id);
+		}
+
+		// Update image to products
+		await API.put(
+			`/api/item/fundas`,
+			{
+				fundaID,
+				imagesID,
+                bankQrcode
+			}
+		);
+		refetch();
+	  }
+
     return (
         <main className="relative h-full">
             <header className="sticky top-0 bg-primary-light z-10">
@@ -422,6 +478,11 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                                 Thành viên
                             </div>
                         </th>
+                        <th className="w-1/12 py-1 font-normal">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Hình ảnh
+                            </div>
+                        </th>
                     </tr>
                 </thead>
 
@@ -440,10 +501,11 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                                 <Link to={`/item/fundas/${item._id}`}>
                                     {item.amountChilds>0? <b>{item?.name}({item.amountChilds})</b>: item.name }
                                 </Link>
+                                <p>TKNH: <b>{item?.bankAccount}</b></p>
                             </td>
                             <td className="py-1 px-2">{item?.sign}</td>
                             <td className="py-1 px-2">{item?.description}</td>
-                            <td className="py-1 px-2">{item?.address}</td>
+                            <td className="py-1 px-2">{item?.address}, {item?.area3.name}, {item?.area2.name}, {item?.area1.name}</td>
                             <td className="py-1 px-2">{moment(item.initialDay).format('L')}</td>
                             <td className="py-1 px-2">{CAMPAIGN_CONSTANT[item?.campaign-1]}</td>
                             <td className="py-1 px-2">{INTERNAL_CONSTANT[item?.internal-1]}</td>
@@ -452,6 +514,32 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                                     Xem thành viên
                                 </Link>
                             </td>
+                            <td className={"p-2 border-0.5 border-primary-border"}>
+								<div style={{display: "flex"}}>
+									{!!item?.images?.length && (
+										<img
+											className="w-[75px] h-[75px] object-contain"
+											src={`${process.env.REACT_APP_URL_S3}${item?.images[item?.images?.length - 1]?.path}`}
+											alt="Left side bar"
+										/>
+									)}
+								</div>
+                                <div>
+                                    <label className="ml-2">
+                                        <div className="w-[30px] h-[30px] bg-secondary-gray rounded-full flex items-center justify-center">
+                                            <img
+                                            src={CameraIcon}
+                                            alt="Camera"
+                                            className="w-[15px] h-[13px]"
+                                            />
+                                            <input type="file" name="signature" id="signature" className="hidden" accept="image/*"
+                                            ref={fileInputRef}
+                                            onChange={(e: ChangeEvent<HTMLInputElement>) => handleUploadAttach(e.target.files, item._id)}
+                                            />
+                                        </div>
+                                    </label>
+                                </div>
+							</td>
                         </tr>
                     )) : <></>}
                 </tbody>

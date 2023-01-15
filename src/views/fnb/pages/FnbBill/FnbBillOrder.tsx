@@ -37,13 +37,18 @@ export const FnbBillOrder: FC = () => {
                 orderID,
                 populates: JSON.stringify({
                     path: 'funda shift customer userCreate',
-                    select: "name sign address fullname phone bankAccount",
+                    select: "name sign address fullname phone bankAccount bankQrcode",
+                    populate: {
+                        path: 'bankQrcode',
+                        select: "_id path"
+                    }
                 }) 
             }, 
             isFetchList:false, 
             isFetchInfo:  true  
         }
     )
+    // console.log(info?.funda)
     
     useEffect(() => {
         const fetchOrderProducts = async () => {
@@ -87,7 +92,7 @@ export const FnbBillOrder: FC = () => {
                 <div>
                     <div className="flex">
                         <Link to ={`/fnb/home`}>
-                            <img src={QrCodeIcon} alt="" style={{ width: "90px", height: "90px" }} />
+                            <img src={`${process.env.REACT_APP_URL_S3}${info?.funda?.bankQrcode?.path}`} alt="" style={{ width: "90px", height: "90px" }} />
 						</Link>
                         <div className="text-center mt-3">
                             <div className="font-bold text-[12px]">{info?.funda?.name}</div>
