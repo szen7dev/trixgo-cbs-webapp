@@ -35,6 +35,7 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
     const [keywordUser, setKeywordUser] = useState("");
     const [keyword, setKeyword] = useState('');
     const [membersSelected, setMemberSelected] = useState<any>(initialValues?.staffs ?? []);
+    const [submembersSelected, setSubmemberSelected] = useState<any>(initialValues?.subStaffs ?? []);
 
     const { listMembers, nextPageGetUsersBySystem, hasnextPageGetUsersBySystem } = useGetUsersByCompany(companyID, keywordUser);
     const { insertAsync, updateAsync, refetch } = useFnbShift({
@@ -47,12 +48,14 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
 
     const handleSubmit = async (values: any) => {
         const staffsID = membersSelected.map((m: any) => m._id); 
+        const subStaffsID = submembersSelected.map((m: any) => m._id); 
 
         if (modalType == 'create') {
             const query = {
                 ...values,
                 fundaID,
                 staffsID,
+                subStaffsID,
             };
 
             const result = await insertAsync(query);
@@ -67,6 +70,7 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
             const query = {
                 ...values,
                 staffsID,
+                subStaffsID,
                 shiftID: values._id,
                 name: values.name,
                 note: values.note,
@@ -95,6 +99,7 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
         onConfirm?.();
     };
 
+    // Add nhân sự ca chính
     const handleAddMemberToShift = (member: any) => {
         const isExists = membersSelected.find((m: any) => m._id === member._id);
 
@@ -102,10 +107,24 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
 
         setMemberSelected((prev: any) => ([...prev, member]));
     }
+    
+    // Add nhân sự ca gãy
+    const handleAddSubmemberToShift = (member: any) => {
+        const isExists = submembersSelected.find((m: any) => m._id === member._id);
+
+        if(isExists) return toast.warning('User đã được chọn');
+
+        setSubmemberSelected((prev: any) => ([...prev, member]));
+    }
 
     const handleRemoveMemberToShift = (member: any) => {
         const newMembers = membersSelected.filter((m: any) => m._id !== member._id);
         setMemberSelected(newMembers);
+    }
+
+    const handleRemoveSubmemberToShift = (member: any) => {
+        const newSubmembers = submembersSelected.filter((m: any) => m._id !== member._id);
+        setSubmemberSelected(newSubmembers);
     }
 
     const {
@@ -458,16 +477,16 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                         }
                                     </div>
                                 </div>
-                                <div>
-                                    <span className="text-[13px] text-primary-gray mb-2 ml-3">Nhân sự ca gãy</span>
+                                <div className="mb-2 mt-3">
+                                    <span className="text-[13px] text-primary-gray ml-3">Nhân sự ca gãy</span>
                                     <div className="flex gap-2 my-3 flex-wrap">
-                                        {membersSelected.map((member: any) => (
+                                        {submembersSelected.map((member: any) => (
                                             <div key={member._id} className="flex justify-between w-1/3 h-[40px] items-center border-0.5 border-cbs-border rounded-md px-3">
                                                 <div className="flex gap-2 items-center">
                                                     <img src={`${process.env.REACT_APP_URL_S3_USER}/${member.image}`} alt={member.fullname} style={{ maxWidth: "24px", maxHeight: "24px" }} />
                                                     <span className="text-[14px]">{member.fullname}</span>
                                                 </div>
-                                                <button onClick={() => handleRemoveMemberToShift(member)}>
+                                                <button onClick={() => handleRemoveSubmemberToShift(member)}>
                                                     <img src={IconCancel} alt="" />
                                                 </button>
                                             </div>
@@ -483,7 +502,7 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                         {
                                             listMembers.map((member: any) => {
                                                 return (
-                                                    <div onClick={() => handleAddMemberToShift(member)} className="cursor-pointer w-full h-[40px] flex gap-2 items-center rounded border-0.5 border-cbs-border bg-cbs-light-blue px-3 mt-1" key={member._id}>
+                                                    <div onClick={() => handleAddSubmemberToShift(member)} className="cursor-pointer w-full h-[40px] flex gap-2 items-center rounded border-0.5 border-cbs-border bg-cbs-light-blue px-3 mt-1" key={member._id}>
                                                         <img src={`${process.env.REACT_APP_URL_S3_USER}/${member.image}`} alt="" style={{ maxWidth: "24px", maxHeight: "24px" }} />
                                                         <span className="text-[14px]">{member.fullname}</span>
                                                     </div>
