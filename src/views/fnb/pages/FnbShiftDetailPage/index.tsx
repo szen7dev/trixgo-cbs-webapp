@@ -118,16 +118,17 @@ export const FnbShiftDetailPage: FC = () => {
 		try {
 		  setStateExport({ isExporting: true });
 		  const { error, data } = await exportExcelAsync({
-			filterParams: {  
-			  // departmentsID: [departmentID],
-			  // ...fromToDate,
-			  // datahubContactsID,
-			  // types,
-			  // directions,
-			  // contractsID,
-			  // storagesID,
-			  // keyword: keywordInput 
-			}
+			fundaID,
+			// filterParams: {  
+			// 	fundaID: fundaID,
+			// //   ...fromToDate,
+			// //   datahubContactsID,
+			// //   types,
+			// //   directions,
+			// //   contractsID,
+			// //   storagesID,
+			// //   keyword: keywordInput 
+			// }
 		  });
 	
 		  if(error) {
