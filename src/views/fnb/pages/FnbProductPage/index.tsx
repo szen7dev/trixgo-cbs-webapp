@@ -427,9 +427,11 @@ export const FnBProductPage: FC = () => {
 											alt="Camera"
 											className="w-[15px] h-[13px]"
 											/>
-											<input type="file" name="signature" id="signature" className="hidden" accept="image/*"
-											ref={fileInputRef}
-											onChange={(e: ChangeEvent<HTMLInputElement>) => handleUploadAttach(e.target.files, item._id)}
+											<input 
+												type="file" 
+												className="hidden" 
+												accept="image/*"
+												onChange={(e: ChangeEvent<HTMLInputElement>) => handleUploadAttach(e.target.files, item._id)}
 											/>
 										</div>
 									</label>
