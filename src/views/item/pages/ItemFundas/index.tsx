@@ -73,6 +73,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
         totalRecord
     } = useFunda({
         params: { 
+            limit: 50,
             keyword, 
             isListParentOfListChilds: "1", 
             populates: { 
@@ -309,6 +310,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
      * UPLOAD HÌNH ẢNH
      */
     const fileInputRef = useRef<HTMLInputElement>(null);
+    // console.log({fileInputRef})
 
     const { addFileToUpload } = useUpload({
 		appID: APP_ID.FNB.id,
@@ -316,6 +318,8 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
 	});
 
     const handleUploadAttach = async (filesSelected: FileList | null, fundaID: string) => {
+        // console.log({fundaID})
+        // console.log(filesSelected)
 		if (!filesSelected || !filesSelected.length) return;
 
 		const validation = await validateFiles(filesSelected);
