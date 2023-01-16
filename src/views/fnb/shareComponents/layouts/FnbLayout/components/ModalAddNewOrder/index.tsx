@@ -65,6 +65,7 @@ type GroupSearchableHandle = React.ElementRef<typeof GroupSearchable>;
 type DropdownSearchableHandle = React.ElementRef<typeof DropdownSearchable>;
 
 export const ModalAddNewOrder: FC<Props> = () => {
+  const history = useHistory();
   const dropdownFundaRef = useRef<DropdownSearchableHandle>(null);
   const dropdownShiftsRef = useRef<DropdownSearchableHandle>(null);
   const queryClient = useQueryClient();
@@ -304,6 +305,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
         orderInfo: data?.data,
       })
       queryClient.refetchQueries('fnb-order-list');
+      
+      history.push(`/fnb/home/${data?.data?._id}/print/1`);
       return toast.success('Tạo đơn thành công');
     } catch (error) {
       setLoading(false);
@@ -443,7 +446,24 @@ export const ModalAddNewOrder: FC<Props> = () => {
     const amount = productsInCart.reduce((prev: any, product: any) => {
       if (product.variantsSelected && product.variantsSelected.length) {
         product.variantsSelected.forEach((variant: any) => {
-          prev += variant.unitPrice * product.quantity;
+          let variantPrice = 0;
+          switch (true) {
+            case service === "1" && product.size === "1":
+              variantPrice = variant.unitPrice || 0;
+              break;
+            case service === "2" && product.size === "1":
+              variantPrice = variant.unitPrice2 || 0;
+              break;
+            case service === "1" && product.size === "2":
+              variantPrice = variant.unitPrice3 || 0;
+              break;
+            case service === "2" && product.size === "2":
+              variantPrice = variant.unitPrice4 || 0;
+              break;
+            default:
+              break;
+          }
+          prev += variantPrice * product.quantity;
         });
       }
 
@@ -501,6 +521,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
     note: "",
     appOrderSign: "",
   };
+
+  console.log("products", products);
 
   return (
     <>
