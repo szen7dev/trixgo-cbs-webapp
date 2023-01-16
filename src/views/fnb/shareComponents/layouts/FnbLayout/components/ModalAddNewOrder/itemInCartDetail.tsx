@@ -40,10 +40,48 @@ export const ItemInCartMenu : FC<any> = ({item, service, handleChooseVariant, ha
         let amount = price * product.quantity;
         if (product.variantsSelected && product.variantsSelected.length) {
             product.variantsSelected.forEach((variant: any) => {
-                amount += variant.unitPrice * product.quantity;
+                let variantPrice = 0;
+                switch (true) {
+                    case service === "1" && item.size === "1":
+                        variantPrice = variant.unitPrice || 0;
+                        break;
+                    case service === "2" && item.size === "1":
+                        variantPrice = variant.unitPrice2 || 0;
+                        break;
+                    case service === "1" && item.size === "2":
+                        variantPrice = variant.unitPrice3 || 0;
+                        break;
+                    case service === "2" && item.size === "2":
+                        variantPrice = variant.unitPrice4 || 0;
+                        break;
+                    default:
+                        break;
+                }
+                amount += variantPrice * product.quantity;
             });
         }
         return formatNumberMoney(amount);
+    }
+
+    const returnVariantPrice = (variant: any) => {
+        let price = 0;
+        switch (true) {
+            case service === "1" && item.size === "1":
+                price = variant.unitPrice || 0;
+                break;
+            case service === "2" && item.size === "1":
+                price = variant.unitPrice2 || 0;
+                break;
+            case service === "1" && item.size === "2":
+                price = variant.unitPrice3 || 0;
+                break;
+            case service === "2" && item.size === "2":
+                price = variant.unitPrice4 || 0;
+                break;
+            default:
+                break;
+        }
+        return formatNumberMoney(price)
     }
 
     return (
@@ -322,7 +360,7 @@ export const ItemInCartMenu : FC<any> = ({item, service, handleChooseVariant, ha
                                                     checkedIcon={<img src={CheckedBox} alt="" />}
                                                 />
                                             }
-                                            label={<div className="text-[13px]" style={{ paddingTop: "7px" }}>{`${variant.name} (${formatNumberMoney(variant.unitPrice)})`}</div>}
+                                            label={<div className="text-[13px]" style={{ paddingTop: "7px" }}>{`${variant.name} (${returnVariantPrice(variant)})`}</div>}
                                         />
                                     </FormControl  >
                                 </div>

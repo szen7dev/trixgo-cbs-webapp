@@ -33,6 +33,32 @@ type Props = {
   onUpdate?: () => void;
 }
 
+// Hàm tính giá sản phẩm, topping
+export const getProdPrice = (size: any, salesChannel: any, prod: any) => {
+  // console.log({size, salesChannel, prod })
+    // M-Off
+    if(Number(size) == 1 && Number(salesChannel) == 1){
+      return prod.unitPrice
+    }
+
+    // M-App
+    if(Number(size) == 1 && Number(salesChannel) != 1){
+      return prod.unitPrice2
+    }
+
+    // L-Off
+    if(Number(size) == 2 && Number(salesChannel) == 1){
+      return prod.unitPrice3
+    }
+
+    // L-App
+    if(Number(size) == 2 && Number(salesChannel) != 1){
+      // console.log(prod.unitPrice4)
+      return prod.unitPrice4
+    }
+}
+// console.log(getProdPrice)
+
 export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
   const { openModal, closeModal } = useModal();
   const [orderProducts, setOrderProducts] = useState([]);
@@ -375,7 +401,7 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                               <div className="flex justify-between">
                                 <div>
                                   {/* <p className="font-bold truncate">{op.product?.name} - Size {FNB_SIZE[Number(op.size)-1].text} - {formatNumberMoney(op.product?.unitPrice)}</p> */}
-                                  <p className="font-bold truncate">{op.product?.name} - Size {FNB_SIZE[Number(op.size)-1].text}</p>
+                                  <p className="font-bold truncate">{op.product?.name} - Size {FNB_SIZE[Number(op.size)-1].text}-{formatNumberMoney(getProdPrice(op.size, order.salesChannel, op.product))}</p>
                                   <p className="text-primary-gray">{op.note}</p>
                                 </div>
                                 <div className="text-primary">{formatNumberMoney(op.unitPrice)}{` x `}{op.quantity}</div>
@@ -384,7 +410,8 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                                 <div className="w-4/5 mt-3">
                                   {op.subProducts?.map?.((subProduct: any) => (
                                     <div key={subProduct._id} className="mb-2 pr-2 flex items-center">
-                                      <li> {`${subProduct.name.trim()}`}: {formatNumberMoney(subProduct.unitPrice)} </li>
+                                      {/* <li> {`${subProduct.name.trim()}`}: {formatNumberMoney(subProduct.unitPrice)} </li> */}
+                                      <li> {`${subProduct.name.trim()}`}: {formatNumberMoney(getProdPrice(op.size, order.salesChannel, subProduct))} </li>
                                     </div>
                                   ))}
                                 </div>

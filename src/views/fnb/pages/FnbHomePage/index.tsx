@@ -778,7 +778,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                   )
                 }
               >
-                Gán lỗi gặp phải
+                Gán tình huống gặp phải
               </button>
               <button onClick={handleExportExcel}><img src={iconDown} title="Tải dữ liệu Excel"/></button>
 
