@@ -63,6 +63,7 @@ interface InitialValues {
     executorID: string,
     mistakeID: string,
     amount: number,
+    bonus: number,
     note: string,
     files: Array<string>,
     status: number,
@@ -188,6 +189,7 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                 status: `${values.status}`,
                 type: `${values.type}`,
                 amount: `${values.amount}`,
+                bonus: `${values.bonus}`,
                 orderID: defaultValues.orderID,
             }
 
@@ -265,6 +267,7 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
         executorID: "",
         mistakeID: "",
         amount: 0,
+        bonus: 0,
         note: "",
         files: [],
         status: 1,
@@ -340,11 +343,10 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                                         <div className="w-full ">
                                             <div className="my-3">
                                                 <div className={"w-full flex items-start"}>
-                                                    <div className={"max-w-1/2 w-1/2 h-full text-left  text-primary-gray font-bold text-[13px] flex items-center mr-2  h-full h-full"}>Lỗi mắc phải</div>
+                                                    <div className={"max-w-1/2 w-1/2 h-full text-left  text-primary-gray font-bold text-[13px] flex items-center mr-2  h-full h-full"}>Phân loại tình huống</div>
                                                     <div className={" flex-1 max-w-1/2 w-1/2 h-full h-full"}>
                                                         <DropdownSearchable
                                                             onchangeValue={(value: any) => {
-                                                                // setMistakeSelected(value?.id);
                                                                 setFieldValue("mistakeID", value?.id);
                                                             }}
                                                             onClearData={() => {
@@ -356,7 +358,7 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                                                                     200)
                                                             }
                                                             className={"max-w-full h-full flex-1 border-0.5 border-cbs-bg-input-search bg-cbs-bg-input-search placeholder-primary-gray"}
-                                                            placeholder="Tìm kiếm lỗi"
+                                                            placeholder="Tìm kiếm phân loại"
                                                             isMultiple={false}
                                                             allowClearValueSingleInput={true}
                                                             showTriangle={false}
@@ -383,28 +385,10 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                                                         />
                                                     </div>
                                                 </div>
-                                                {/* <div className="flex gap-2 mt-2">
-                                                    {mistakeSelected?.map?.((item: any) => (
-                                                        <div key={item._id} className="flex justify-between w-1/3 h-[40px] items-center border-0.5 border-cbs-border rounded-md px-2">
-                                                            <div className="flex gap-2 items-center">
-                                                                <span className="text-[13px]">{item.name}</span>
-                                                            </div>
-                                                            <button
-                                                                onClick={() => {
-                                                                    setMistakeSelected((prev: any) => {
-                                                                        return prev.filter((p: any) => p._id !== item._id);
-                                                                    })
-                                                                }}
-                                                            >
-                                                                <img src={IconCancel} alt="" />
-                                                            </button>
-                                                        </div>
-                                                    ))}
-                                                </div> */}
                                             </div>
                                             <div className="my-3">
                                                 <div className={"w-full flex items-start"}>
-                                                    <div className={"max-w-1/2 w-1/2 h-full text-left  text-primary-gray font-bold texxt-[13px] flex items-center mr-2  h-full h-full"}>Nhân sự mắc lỗi</div>
+                                                    <div className={"max-w-1/2 w-1/2 h-full text-left  text-primary-gray font-bold texxt-[13px] flex items-center mr-2  h-full h-full"}>Nhân sự gặp phải</div>
                                                     <div className={" flex-1 max-w-1/2 w-1/2 h-full h-full"}>
                                                         <DropdownSearchable
                                                             onchangeValue={(value: any) => {
@@ -622,8 +606,18 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                                                 <div className={"flex py-2"}>
                                                     <div className={"w-full flex items-center"}>
                                                         <div className={"h-full text-left flex items-center px-1 "}>
-                                                            <span className="text-primary-gray font-bold pr-3">Giá trị phạt (nếu có):</span>
+                                                            <span className="text-primary-gray font-bold pr-3">Giá trị phạt</span>
                                                             <Field type="text" name="amount" placeholder=""
+                                                                className="w-[100px] h-[30px] border-0.5 border-cbs-bg-input-search bg-cbs-bg-input-search px-3 py-1 outline-none text-right"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className={"flex py-2"}>
+                                                    <div className={"w-full flex items-center"}>
+                                                        <div className={"h-full text-left flex items-center px-1 "}>
+                                                            <span className="text-primary-gray font-bold pr-3">Giá trị thưởng</span>
+                                                            <Field type="text" name="bonus" placeholder=""
                                                                 className="w-[100px] h-[30px] border-0.5 border-cbs-bg-input-search bg-cbs-bg-input-search px-3 py-1 outline-none text-right"
                                                             />
                                                         </div>
