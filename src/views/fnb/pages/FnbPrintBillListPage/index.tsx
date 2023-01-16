@@ -165,7 +165,7 @@ if (isLoadingInfo) return <Loader className="border-primary" />;
                                                       </Link>
                                                       <Link to={`/fnb/home/${info?._id}/print/1`}>
                                                         <div title="Bấm vào đây để in Bill">
-                                                          <p className="text-cbs-primary"><b>{item.product?.name}</b> (Size {item.size >= 1 && FNB_SIZE[Number(item.size) - 1].text} - Đường {FNB_SUGAR[Number(item.sugar)-1].text}, Đá {FNB_ICE[Number(item.ice)-1].text}, {item?.note})</p>
+                                                          <p className=""><b>{item.product?.name}</b> (Size {item.size >= 1 && FNB_SIZE[Number(item.size) - 1].text} - Đường {FNB_SUGAR[Number(item.sugar)-1].text}, Đá {FNB_ICE[Number(item.ice)-1].text}, {item?.note})</p>
                                                           { str != "" ? <p>+ {str}</p> : <></>}
                                                         </div>
                                                       </Link>
