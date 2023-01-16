@@ -318,8 +318,6 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
 	});
 
     const handleUploadAttach = async (filesSelected: FileList | null, fundaID: string) => {
-        // console.log({fundaID})
-        // console.log(filesSelected)
 		if (!filesSelected || !filesSelected.length) return;
 
 		const validation = await validateFiles(filesSelected);
@@ -509,7 +507,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                             </td>
                             <td className="py-1 px-2">{item?.sign}</td>
                             <td className="py-1 px-2">{item?.description}</td>
-                            <td className="py-1 px-2">{item?.address}, {item?.area3.name}, {item?.area2.name}, {item?.area1.name}</td>
+                            <td className="py-1 px-2">{item?.address}, {item?.area3?.name}, {item?.area2?.name}, {item?.area1?.name}</td>
                             <td className="py-1 px-2">{moment(item.initialDay).format('L')}</td>
                             <td className="py-1 px-2">{CAMPAIGN_CONSTANT[item?.campaign-1]}</td>
                             <td className="py-1 px-2">{INTERNAL_CONSTANT[item?.internal-1]}</td>
@@ -532,13 +530,15 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                                     <label className="ml-2">
                                         <div className="w-[30px] h-[30px] bg-secondary-gray rounded-full flex items-center justify-center">
                                             <img
-                                            src={CameraIcon}
-                                            alt="Camera"
-                                            className="w-[15px] h-[13px]"
+                                                src={CameraIcon}
+                                                alt="Camera"
+                                                className="w-[15px] h-[13px]"
                                             />
-                                            <input type="file" name="signature" id="signature" className="hidden" accept="image/*"
-                                            ref={fileInputRef}
-                                            onChange={(e: ChangeEvent<HTMLInputElement>) => handleUploadAttach(e.target.files, item._id)}
+                                            <input
+                                                type="file"
+                                                className="hidden"
+                                                accept="image/*"
+                                                onChange={(e: ChangeEvent<HTMLInputElement>) => handleUploadAttach(e.target.files, item._id)}
                                             />
                                         </div>
                                     </label>
