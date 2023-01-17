@@ -11,7 +11,7 @@ const initialState: any = {
             salesChannels: [],
             fromDate: "",
             toDate: "",
-            status: [],
+            statuss: [],
             isMistake: 0
         },
     },

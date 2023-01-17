@@ -49,7 +49,6 @@ interface InitialValues {
   shiftID: string,
   customerID: string,
   seasons: number,
-  service: string,
   paymentMethod: string,
   salesChannel: number,
   name: string,
@@ -102,6 +101,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
   const [loading, setLoading] = useState(false);
   //
 
+  const [credit, setCredit] = useState(0);
+
   useEffect(() => {
     const fetchFundas = async () => {
       const response = await API.get(
@@ -147,12 +148,12 @@ export const ModalAddNewOrder: FC<Props> = () => {
         `/api/fnb/shifts?fundaID=${fundaID}`,
         {
           params: {
-              populates: {
-                  "path": "funda",
-                  "select": "sign",
-              }
+            populates: {
+              "path": "funda",
+              "select": "sign",
+            }
           },
-      }
+        }
       );
       const { data, status } = response?.data;
 
@@ -274,7 +275,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
           quantity: p.quantity,
           note: p.note,
           variantsID: p.variantsSelected ? p.variantsSelected.map((v: any) => v._id) : [],
-          unitPrice: price
+          unitPrice: price,
         }
       })
 
@@ -286,6 +287,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
         total: `${totalMoney}`,
         discount: `${discountAndSales.discount}`,
         salesoff: `${discountAndSales.sales}`,
+        credit: credit
       }
 
       closeModal();
@@ -305,7 +307,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
         orderInfo: data?.data,
       })
       queryClient.refetchQueries('fnb-order-list');
-      
+
       history.push(`/fnb/home/${data?.data?._id}/print/1`);
       return toast.success('Tạo đơn thành công');
     } catch (error) {
@@ -317,6 +319,12 @@ export const ModalAddNewOrder: FC<Props> = () => {
       }
     }
   };
+
+  const fetchCredit = async (contactID: any) => {
+    const { data, status } = await API.get(`/api/item/contacts?select=name phone remainLoyaltyPoints&contactID=${contactID}`);
+    if (status !== 200) return;
+    setCredit(data?.data?.remainLoyaltyPoints || 0);
+  }
 
   const handleChangeDiscount = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -335,7 +343,9 @@ export const ModalAddNewOrder: FC<Props> = () => {
       discount: newDiscount,
       discountPercent: newDiscountPercent,
     }));
-    setTotalPay(totalMoney - newDiscount - discountAndSales.sales);
+    const totalPay = totalMoney - newDiscount - discountAndSales.sales - credit;
+
+    setTotalPay(totalPay < 0 ? 0 : totalPay);
   }
 
   const handleAutoChangeDiscount = (totalMoney: number, name: string, value: number) => {
@@ -343,7 +353,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
     let newDiscount = inputValue;
     let newDiscountPercent = inputValue;
     let newSales = discountAndSales.sales;
-    newSales = (totalMoney * discountAndSales.salesPercent)/100;
+    newSales = (totalMoney * discountAndSales.salesPercent) / 100;
     if (name === 'discount') {
       newDiscountPercent = +((inputValue * 100) / totalMoney).toFixed(2);
     } else if (name === 'discountPercent') {
@@ -382,7 +392,6 @@ export const ModalAddNewOrder: FC<Props> = () => {
   const handleChangeQuantity = (e: any, product: any) => {
     const value = Number(e.target.value);
     if (value < 1) return;
-
     const newProductsInCart = productsInCart.map((p: any) => {
       if (p._id === product._id && p.createdAt === product.createdAt) {
         return { ...p, quantity: value };
@@ -488,7 +497,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
       return prev += (price * product.quantity)
     }, 0)
     setTotalMoney(amount);
-   
+
     if (serviceApp !== "0") {
       if (serviceApp === "1") {
         handleAutoChangeDiscount(amount, 'discountPercent', 0);
@@ -514,15 +523,12 @@ export const ModalAddNewOrder: FC<Props> = () => {
     shiftID,
     customerID: "",
     seasons: 1,
-    service: "1",
     paymentMethod: "1",
     salesChannel: 1,
     name: "",
     note: "",
     appOrderSign: "",
   };
-
-  console.log("products", products);
 
   return (
     <>
@@ -653,6 +659,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                 onchangeValue={(value: any) => {
                                   setFieldValue("customerID", value.id);
                                   setFieldValue("name", `Đơn hàng ${value.label}`);
+                                  fetchCredit(value.id);
                                 }}
                                 onClearData={() => setFieldValue("customerID", "")}
                                 onSearchInputChange={
@@ -691,57 +698,6 @@ export const ModalAddNewOrder: FC<Props> = () => {
                         </div>
                         <div className="flex justify-between pt-1 my-1">
                           <div>
-                            <span>Đơn off hoặc app</span>
-                            <div>
-                              <FormControl sx={{ marginTop: "-5px" }} >
-                                <RadioGroup
-                                  row
-                                  aria-labelledby="demo-row-radio-buttons-group-label"
-                                  name="service"
-                                >
-                                  <FormControlLabel
-                                    sx={{ marginLeft: "0" }}
-                                    value="1"
-                                    control={
-                                      <Radio
-                                        style={{}}
-                                        icon={<img src={RadioEmpty} alt="" />}
-                                        checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => {
-                                          setFieldValue("service", "1");
-                                          setService("1");
-                                          setFieldValue("salesChannel", 1);
-                                          setFieldValue("paymentMethod", "1");
-                                        }}
-                                        checked={(values.service === "1") ? true : false}
-                                      />
-                                    }
-                                    label={<span className="text-[13px]">Off</span>}
-                                  />
-                                  <FormControlLabel
-                                    sx={{ marginLeft: "0" }}
-                                    value="2"
-                                    control={
-                                      <Radio
-                                        style={{}}
-                                        icon={<img src={RadioEmpty} alt="" />}
-                                        checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => {
-                                          setFieldValue("service", "2");
-                                          setService("2");
-                                          setFieldValue("salesChannel", 2);
-                                          setFieldValue("paymentMethod", "2");
-                                        }}
-                                        checked={(values.service === "2") ? true : false}
-                                      />
-                                    }
-                                    label={<span className="text-[13px]">App</span>}
-                                  />
-                                </RadioGroup>
-                              </FormControl>
-                            </div>
-                          </div>
-                          <div>
                             <span>Phân loại kênh bán hàng</span>
                             <div>
                               <FormControl sx={{ marginTop: "-5px" }} >
@@ -758,7 +714,11 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                         style={{}}
                                         icon={<img src={RadioEmpty} alt="" />}
                                         checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => setFieldValue("salesChannel", 1)}
+                                        onChange={() => {
+                                          setFieldValue("salesChannel", 1);
+                                          setFieldValue("paymentMethod", "1");
+                                          setService("1");
+                                        }}
                                         checked={(values.salesChannel === 1) ? true : false}
                                       />
                                     }
@@ -772,7 +732,11 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                         style={{}}
                                         icon={<img src={RadioEmpty} alt="" />}
                                         checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => setFieldValue("salesChannel", 2)}
+                                        onChange={() => {
+                                          setFieldValue("salesChannel", 2);
+                                          setFieldValue("paymentMethod", "2");
+                                          setService("2");
+                                        }}
                                         checked={(values.salesChannel === 2) ? true : false}
                                       />
                                     }
@@ -786,7 +750,11 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                         style={{}}
                                         icon={<img src={RadioEmpty} alt="" />}
                                         checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => setFieldValue("salesChannel", 3)}
+                                        onChange={() => {
+                                          setFieldValue("salesChannel", 3);
+                                          setFieldValue("paymentMethod", "2");
+                                          setService("2");
+                                        }}
                                         checked={(values.salesChannel === 3) ? true : false}
                                       />
                                     }
@@ -800,7 +768,11 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                         style={{}}
                                         icon={<img src={RadioEmpty} alt="" />}
                                         checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => setFieldValue("salesChannel", 4)}
+                                        onChange={() => {
+                                          setFieldValue("salesChannel", 4);
+                                          setFieldValue("paymentMethod", "2");
+                                          setService("2");
+                                        }}
                                         checked={(values.salesChannel === 4) ? true : false}
                                       />
                                     }
@@ -814,7 +786,11 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                         style={{}}
                                         icon={<img src={RadioEmpty} alt="" />}
                                         checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => setFieldValue("salesChannel", 5)}
+                                        onChange={() => {
+                                          setFieldValue("salesChannel", 5);
+                                          setFieldValue("paymentMethod", "2");
+                                          setService("2");
+                                        }}
                                         checked={(values.salesChannel === 5) ? true : false}
                                       />
                                     }
@@ -828,7 +804,11 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                         style={{}}
                                         icon={<img src={RadioEmpty} alt="" />}
                                         checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => setFieldValue("salesChannel", 6)}
+                                        onChange={() => {
+                                          setFieldValue("salesChannel", 6);
+                                          setFieldValue("paymentMethod", "2");
+                                          setService("2");
+                                        }}
                                         checked={(values.salesChannel === 6) ? true : false}
                                       />
                                     }
@@ -842,7 +822,11 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                         style={{}}
                                         icon={<img src={RadioEmpty} alt="" />}
                                         checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => setFieldValue("salesChannel", 7)}
+                                        onChange={() => {
+                                          setFieldValue("salesChannel", 7);
+                                          setFieldValue("paymentMethod", "2");
+                                          setService("2");
+                                        }}
                                         checked={(values.salesChannel === 7) ? true : false}
                                       />
                                     }
@@ -1004,25 +988,25 @@ export const ModalAddNewOrder: FC<Props> = () => {
                           <div className="overflow-y-auto	my-2 " style={{ height: "600px" }}>
                             <div className="flex flex-wrap gap-2">
                               {!!products.length && products.map((product: any) => (
-                                  product?.parent ? (
-                                    <button
-                                      title={product.name}
-                                      key={product._id}
-                                      type="button"
-                                      className="flex-1 w-1/5 pb-1/2 bg-purple-300 relative"
-                                      style={{ maxWidth: "24%", maxHeight: "200px", flexBasis:"24%"}}
-                                      onClick={() => {
-                                        setProductsInCart((prevProducts: any) => {
-                                          return [...prevProducts, {
-                                            ...product,
-                                            quantity: 1,
-                                            size: "1",
-                                            sugar: "1",
-                                            ice: "1",
-                                            createdAt: new Date()
-                                          }];
-                                        });
-                                      }}
+                                product?.parent ? (
+                                  <button
+                                    title={product.name}
+                                    key={product._id}
+                                    type="button"
+                                    className="flex-1 w-1/5 pb-1/2 bg-purple-300 relative"
+                                    style={{ maxWidth: "24%", maxHeight: "200px", flexBasis: "24%" }}
+                                    onClick={() => {
+                                      setProductsInCart((prevProducts: any) => {
+                                        return [...prevProducts, {
+                                          ...product,
+                                          quantity: 1,
+                                          size: "1",
+                                          sugar: "1",
+                                          ice: "1",
+                                          createdAt: new Date()
+                                        }];
+                                      });
+                                    }}
                                   >
                                     <img src={product?.images?.length ? `${process.env.REACT_APP_URL_S3}${product?.images[0]?.path}` : beverageIcon} className="w-full h-full object-contain" />
                                     <div className="w-full absolute bottom-0 bg-black opacity-75 text-white text-[14px] px-3 py-1">
@@ -1030,7 +1014,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                       <div className="text-right font-bold">{formatNumberMoney(product.unitPrice)}</div>
                                     </div>
                                   </button>
-                                  ):(<></>)
+                                ) : (<></>)
                               ))}
                             </div>
                           </div>
@@ -1045,7 +1029,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                           <ItemInCartMenu
                             key={index}
                             item={item}
-                            service={values.service}
+                            service={service}
                             handleChooseVariant={handleChooseVariant}
                             handleChangeQuantity={handleChangeQuantity}
                             increaseCount={increaseCount}
@@ -1103,6 +1087,23 @@ export const ModalAddNewOrder: FC<Props> = () => {
                             </div>
                           </div>
                         </div>
+
+                        {values.customerID ?
+                          <div className="flex justify-between items-center mb-1 px-2 py-2">
+                            <div className="">Credit {`(${formatNumberMoney(credit)})`}</div>
+                            <div className="flex gap-1">
+                              <div>
+                                <input placeholder="25%"
+                                  className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
+                                  onChange={handleChangeSales}
+                                  value={discountAndSales.salesPercent}
+                                  name="salesPercent"
+                                  disabled
+                                />
+                              </div>
+                            </div>
+                          </div> : <></>
+                        }
                       </div>
                       <div className="border-t-0.5 border-b-0.5 px-2 py-2">
                         <div className="flex justify-between">
