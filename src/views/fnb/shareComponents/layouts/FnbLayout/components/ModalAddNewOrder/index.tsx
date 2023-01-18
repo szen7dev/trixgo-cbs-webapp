@@ -287,7 +287,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
         total: `${totalMoney}`,
         discount: `${discountAndSales.discount}`,
         salesoff: `${discountAndSales.sales}`,
-        credit: credit
+        credit: credit.toString()
       }
 
       closeModal();
@@ -343,7 +343,10 @@ export const ModalAddNewOrder: FC<Props> = () => {
       discount: newDiscount,
       discountPercent: newDiscountPercent,
     }));
-    const totalPay = totalMoney - newDiscount - discountAndSales.sales - credit;
+    let totalPay = totalMoney - newDiscount - discountAndSales.sales;
+    if (service === "2") {
+      totalPay = totalPay - credit;
+    }
 
     setTotalPay(totalPay < 0 ? 0 : totalPay);
   }
@@ -366,7 +369,12 @@ export const ModalAddNewOrder: FC<Props> = () => {
       discountPercent: newDiscountPercent,
       sales: newSales
     }));
-    setTotalPay(totalMoney - newDiscount - newSales);
+    let totalPay = totalMoney - newDiscount - newSales;
+    if (service === "2") {
+      totalPay = totalPay - credit;
+    }
+
+    setTotalPay(totalPay < 0 ? 0 : totalPay);
   }
 
   const handleChangeSales = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -386,7 +394,13 @@ export const ModalAddNewOrder: FC<Props> = () => {
       sales: newSales,
       salesPercent: newSalesPercent,
     }));
-    setTotalPay(totalMoney - discountAndSales.discount - newSales);
+    
+    let totalPay = totalMoney - discountAndSales.discount - newSales;
+    if (service === "2") {
+      totalPay = totalPay - credit;
+    }
+
+    setTotalPay(totalPay < 0 ? 0 : totalPay);
   }
 
   const handleChangeQuantity = (e: any, product: any) => {
@@ -1088,16 +1102,14 @@ export const ModalAddNewOrder: FC<Props> = () => {
                           </div>
                         </div>
 
-                        {values.customerID ?
+                        {values.customerID && service === "2" ?
                           <div className="flex justify-between items-center mb-1 px-2 py-2">
                             <div className="">Credit {`(${formatNumberMoney(credit)})`}</div>
                             <div className="flex gap-1">
                               <div>
                                 <input placeholder="25%"
                                   className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
-                                  onChange={handleChangeSales}
-                                  value={discountAndSales.salesPercent}
-                                  name="salesPercent"
+                                  value={(totalMoney - discountAndSales.discount - discountAndSales.sales) > credit ? credit : totalMoney - discountAndSales.discount - discountAndSales.sales}
                                   disabled
                                 />
                               </div>
