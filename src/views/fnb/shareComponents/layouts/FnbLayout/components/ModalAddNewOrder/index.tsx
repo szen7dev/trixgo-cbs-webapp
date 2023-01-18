@@ -344,7 +344,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
       discountPercent: newDiscountPercent,
     }));
     let totalPay = totalMoney - newDiscount - discountAndSales.sales;
-    if (service === "2") {
+    if (service === "1") {
       totalPay = totalPay - credit;
     }
 
@@ -370,7 +370,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
       sales: newSales
     }));
     let totalPay = totalMoney - newDiscount - newSales;
-    if (service === "2") {
+    if (service === "1") {
       totalPay = totalPay - credit;
     }
 
@@ -396,7 +396,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
     }));
     
     let totalPay = totalMoney - discountAndSales.discount - newSales;
-    if (service === "2") {
+    if (service === "1") {
       totalPay = totalPay - credit;
     }
 
@@ -1102,7 +1102,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                           </div>
                         </div>
 
-                        {values.customerID && service === "2" ?
+                        {values.customerID && service === "1" ?
                           <div className="flex justify-between items-center mb-1 px-2 py-2">
                             <div className="">Credit {`(${formatNumberMoney(credit)})`}</div>
                             <div className="flex gap-1">
