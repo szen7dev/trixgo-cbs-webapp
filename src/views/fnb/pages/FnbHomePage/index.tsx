@@ -548,8 +548,8 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 dispatch(
                   setQueryFnb({
                     ...queryFnb,
-                    fromDate: val.fromDate,
-                    toDate: val.toDate,
+                    fromDate: moment(val.fromDate).format("YYYY-MM-DD 00:00"),
+                    toDate: moment(val.toDate).format("YYYY-MM-DD 23:59"),
                   })
                 );
               }}
@@ -595,25 +595,25 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             prefixIcon={
               <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
             }
-            countBadge={queryFnb.status.length}
+            countBadge={queryFnb.statuss.length}
             data={FNB_ORDER_STATUS.map((item: any) => ({
               label: `${item.text}`,
               value: item.value,
             }))}
             onchangeValue={(value) => {
               if (
-                !queryFnb.status?.includes?.(
+                !queryFnb.statuss?.includes?.(
                   value.id as string
                 )
               ) {
                 const newData: any = [
-                  ...queryFnb.status,
+                  ...queryFnb.statuss,
                   value.id,
                 ];
                 dispatch(
                   setQueryFnb({
                     ...queryFnb,
-                    status: newData,
+                    statuss: newData,
                   })
                 );
               }
@@ -622,13 +622,13 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               ref.current && ref.current.resetPaginate();
             }}
             onMultipleRemoveValue={(id: any) => {
-              const newList = queryFnb.status.filter(
+              const newList = queryFnb.statuss.filter(
                 (item: any) => item !== id
               );
               dispatch(
                 setQueryFnb({
                   ...queryFnb,
-                  status: newList,
+                  statuss: newList,
                 })
               );
             }}
@@ -636,7 +636,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               dispatch(
                 setQueryFnb({
                   ...queryFnb,
-                  status: [],
+                  statuss: [],
                 })
               )
             }
@@ -660,7 +660,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             prefixIcon={
               <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
             }
-            countBadge={queryFnb.status.length}
             data={[{
               value: 0, text: 'Không lỗi',
             },
