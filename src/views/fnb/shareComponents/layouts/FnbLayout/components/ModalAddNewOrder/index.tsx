@@ -309,7 +309,9 @@ export const ModalAddNewOrder: FC<Props> = () => {
       queryClient.refetchQueries('fnb-order-list');
 
       history.push(`/fnb/home/${data?.data?._id}/print/1`);
-      return toast.success('Tạo đơn thành công');
+      // return toast.success('Tạo đơn thành công',{
+      //   position: toast.POSITION.BOTTOM_RIGHT,
+      // });
     } catch (error) {
       setLoading(false);
       if (typeof error === "string") {
