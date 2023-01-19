@@ -219,8 +219,8 @@ export const FnbShiftDetailPage: FC = () => {
 				/>
 			</header>
 
-			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
-			<thead className="bg-cbs-table-header h-10 border-b">
+			<table className="table-fixed border-collapse relative w-full overflow-auto border-l border-r border-primary-border">
+			<thead className="bg-cbs-table-header h-10  sticky z-10		" style={{top:"48px", outline:"0.5px solid #cccccc"}}>
 					<tr className="text-left text-sm text-primary-gray text-[14px]">
 						<th className="pb-1 pt-1 w-[35px] font-normal border-0.5 border-primary-border">
 							<div className="pl-2">
