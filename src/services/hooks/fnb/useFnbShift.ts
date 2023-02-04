@@ -82,6 +82,11 @@ export const useFnbShift = ({
         fnbRepository.exportExcel(payload)
     );
 
+    const { mutateAsync: exportExcelAsync2 } =
+    useMutation((payload: any) =>
+    fnbRepository.exportExcel2(payload)
+);
+
     return {
         isLoading,
         isLoadingInfo,
@@ -100,5 +105,6 @@ export const useFnbShift = ({
         downloadTemplateExcelAsync,
         importExcelAsync,
         exportExcelAsync,
+        exportExcelAsync2,
     }
 }

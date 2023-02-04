@@ -73,14 +73,14 @@ export const FnbBillOrder: FC = () => {
         fetchOrderProducts();
     }, [])
 
-    useEffect(() => {
-        if (orderProducts && orderProducts.length) {
-            setTimeout(function(){
-                window.print();
-            },1500);
-            // window.print();
-        }
-    }, [orderProducts]);
+    // useEffect(() => {
+    //     if (orderProducts && orderProducts.length) {
+    //         setTimeout(function(){
+    //             window.print();
+    //         },1500);
+    //         // window.print();
+    //     }
+    // }, [orderProducts]);
 
     // console.log(orderProducts)
     // console.log(info)
@@ -134,10 +134,44 @@ export const FnbBillOrder: FC = () => {
                                     //         amount = Number(amount) + Number(item.quantity)*Number(subProduct.unitPrice)
                                     //     }
                                     // }
+                                    
+                                    let toppingPrice = 0
+                                    let str = ""
+
+                                    if (item?.subProducts) {
+                                        for (const subProduct of item?.subProducts) {
+                                            // str = str + subProduct.name + ", ";
+
+                                            if(item.size == 1 && info.salesChannel == 1){
+                                                toppingPrice = Number(toppingPrice) + Number(subProduct.unitPrice)
+                                                str = str + subProduct.name + "-" + formatNumberMoney(subProduct.unitPrice) + ", "
+                                            }
+
+                                            if(item.size == 1 && info.salesChannel != 1){
+                                                toppingPrice = Number(toppingPrice) + Number(subProduct.unitPrice2)
+                                                str = str + subProduct.name + "-" + formatNumberMoney(subProduct.unitPrice2) + ", "
+                                            }
+
+                                            if(item.size == 2 && info.salesChannel == 1){
+                                                toppingPrice = Number(toppingPrice) + Number(subProduct.unitPrice3)
+                                                str = str + subProduct.name + "-" + formatNumberMoney(subProduct.unitPrice3) + ", "
+                                            }
+
+                                            if(item.size == 2 && info.salesChannel != 1){
+                                                toppingPrice = Number(toppingPrice) + Number(subProduct.unitPrice4)
+                                                str = str + subProduct.name + "-" + formatNumberMoney(subProduct.unitPrice4) + ", "
+                                            }
+                                        }
+                                    }
 
                                     return (
                                         <tr key={item._id}>
-                                            <td className="text-left">{item.product?.name} - Size {item?.size >=1 && FNB_SIZE[Number(item.size)-1].text}</td>
+                                            <td className="text-left">
+                                                <p><b>{item.product?.name} - {formatNumberMoney(Number(amount) - Number(toppingPrice))} - Size {item?.size >=1 && FNB_SIZE[Number(item.size)-1].text}</b></p>
+                                                {
+                                                    str != "" ? <p><i>{str}</i></p> : <></>
+                                                }
+                                            </td>
                                             <td className="text-center px-1">{item.quantity}</td>
                                             <td className="text-right">{formatNumberMoney(amount)}</td>
                                         </tr>
@@ -145,14 +179,19 @@ export const FnbBillOrder: FC = () => {
                                 })
                             }
                                 <tr>
+                                    <td className="text-left">Tổng</td>
+                                    <td className="text-center px-1"></td>
+                                    <td className="text-right font-bold">{formatNumberMoney(info?.total)}</td>
+                                </tr>
+                                <tr>
                                     <td className="text-left">Chiết khấu</td>
                                     <td className="text-center px-1"></td>
-                                    <td className="text-right font-bold">{formatNumberMoney(info?.discount)}</td>
+                                    <td className="text-right">{formatNumberMoney(info?.discount)}</td>
                                 </tr>
                                 <tr>
                                     <td className="text-left">Giảm giá</td>
                                     <td className="text-center px-1"></td>
-                                    <td className="text-right font-bold">{formatNumberMoney(info?.salesoff)}</td>
+                                    <td className="text-right">{formatNumberMoney(info?.salesoff)}</td>
                                 </tr>
                             </tbody>
                         </table>

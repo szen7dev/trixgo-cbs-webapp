@@ -113,22 +113,31 @@ export const FnbShiftDetailPage: FC = () => {
   const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
       isExporting: false,
   });
-  const { exportExcelAsync } = useFnbShift({});
+  const { exportExcelAsync, exportExcelAsync2 } = useFnbShift({});
 	const handleExportExcel = async () => {
 		try {
 		  setStateExport({ isExporting: true });
 		  const { error, data } = await exportExcelAsync({
 			fundaID,
-			// filterParams: {  
-			// 	fundaID: fundaID,
-			// //   ...fromToDate,
-			// //   datahubContactsID,
-			// //   types,
-			// //   directions,
-			// //   contractsID,
-			// //   storagesID,
-			// //   keyword: keywordInput 
-			// }
+		  });
+	
+		  if(error) {
+			return toast.warn(data?.message);
+		  }
+	
+		  data && createLinkAndClick(data, '_self');
+		} catch (error: any) {
+		  toast.error(error.message)
+		} finally {
+		  setStateExport({ isExporting: false });
+		}
+	}
+
+	const handleExportExcel2 = async () => {
+		try {
+		  setStateExport({ isExporting: true });
+		  const { error, data } = await exportExcelAsync2({
+			fundaID,
 		  });
 	
 		  if(error) {
@@ -196,7 +205,13 @@ export const FnbShiftDetailPage: FC = () => {
 					>
 						Tạo mới
 					</button>
-					<button className="ml-10" onClick={handleExportExcel}><img src={iconDown} title="Tải dữ liệu Excel"/></button>
+					<button title="Tải dữ liệu Excel" className="ml-5" onClick={handleExportExcel}>
+						{/* <img src={iconDown} title="Tải dữ liệu Excel"/> */}
+						Tải chấm công
+					</button>
+					<button title="Tải dữ liệu Excel" className="ml-5" onClick={handleExportExcel2}>
+						Tải doanh số
+					</button>
 
 					{/* <button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
 						<img src={Vertical3Dots} alt="3Dots" />
