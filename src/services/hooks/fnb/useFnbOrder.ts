@@ -71,6 +71,11 @@ export const useFnbOrder = ({
         fnbRepository.exportOrder(payload)
     );
 
+    const { mutateAsync: exportOrderAsync2 } =
+    useMutation((payload: any) =>
+    fnbRepository.exportOrder2(payload)
+);
+
     return {
         isLoading,
         isLoadingInfo,
@@ -87,6 +92,7 @@ export const useFnbOrder = ({
         updateAsync,
         deleteManyAsync,
         exportOrderAsync,
+        exportOrderAsync2,
         isFetching
     }
 }

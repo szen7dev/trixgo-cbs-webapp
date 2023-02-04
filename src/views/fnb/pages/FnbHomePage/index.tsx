@@ -297,21 +297,33 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
   const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
       isExporting: false,
   });
-  const { exportOrderAsync } = useFnbOrder({});
+  const { exportOrderAsync, exportOrderAsync2 } = useFnbOrder({});
 
   const handleExportExcel = async () => {
     try {
       setStateExport({ isExporting: true });
       const { error, data } = await exportOrderAsync({
         filterParams: {  
-          // departmentsID: [departmentID],
-          // ...fromToDate,
-          // datahubContactsID,
-          // types,
-          // directions,
-          // contractsID,
-          // storagesID,
-          // keyword: keywordInput 
+        }
+      });
+
+      if(error) {
+        return toast.warn(data?.message);
+      }
+
+      data && createLinkAndClick(data, '_self');
+    } catch (error: any) {
+      toast.error(error.message)
+    } finally {
+      setStateExport({ isExporting: false });
+    }
+	}
+
+  const handleExportExcel2 = async () => {
+    try {
+      setStateExport({ isExporting: true });
+      const { error, data } = await exportOrderAsync2({
+        filterParams: {  
         }
       });
 
@@ -779,7 +791,14 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               >
                 Gán tình huống gặp phải
               </button>
-              <button onClick={handleExportExcel}><img src={iconDown} title="Tải dữ liệu Excel"/></button>
+              <button onClick={handleExportExcel} title="Tải dữ liệu Excel">
+                Tải KPI
+                {/* <img src={iconDown} title="Tải dữ liệu Excel"/> */}
+              </button>
+              <button onClick={handleExportExcel2} title="Tải dữ liệu Excel">
+                Tải đơn hàng
+                {/* <img src={iconDown} title="Tải dữ liệu Excel"/> */}
+              </button>
 
               {idsChecked.length === 1 && (
                 <label className="w-8 h-8 rounded-md flex justify-center items-center cursor-pointer">
