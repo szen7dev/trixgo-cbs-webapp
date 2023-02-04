@@ -73,14 +73,14 @@ export const FnbBillOrder: FC = () => {
         fetchOrderProducts();
     }, [])
 
-    // useEffect(() => {
-    //     if (orderProducts && orderProducts.length) {
-    //         setTimeout(function(){
-    //             window.print();
-    //         },1500);
-    //         // window.print();
-    //     }
-    // }, [orderProducts]);
+    useEffect(() => {
+        if (orderProducts && orderProducts.length) {
+            setTimeout(function(){
+                window.print();
+            },1500);
+            // window.print();
+        }
+    }, [orderProducts]);
 
     // console.log(orderProducts)
     // console.log(info)
