@@ -53,6 +53,13 @@ const fnbShiftRepository = {
         );
         return data;
     },
+
+    async exportExcel2(payload: any): Promise<any> {
+        const { data } = await API.get<any>(
+            `${URL}/shifts/export-excel2`, { params: payload }
+        );
+        return data;
+    },
 };
 
 export default fnbShiftRepository;
