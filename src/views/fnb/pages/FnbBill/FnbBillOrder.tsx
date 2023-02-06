@@ -104,7 +104,7 @@ export const FnbBillOrder: FC = () => {
                         <Link to={`/fnb/home/${info?._id}/print/2`}>
                             <div className="font-bold text-[12px]" title="Bấm vào đây để in Tem">HÓA ĐƠN THANH TOÁN <i className="text-cbs-primary">(in Tem)</i></div>
                         </Link>
-                        <div className="text-[12px]">Số: {info?.sign} | Mã đơn app: <b>{FNB_CHANNEL[Number(info.salesChannel)-1].sign}{info.appOrderSign}</b></div>
+                        <div className="text-[12px]">Số: {info?.sign} | Mã đơn app: <b>{FNB_CHANNEL[Number(info?.salesChannel)-1].sign}{info?.appOrderSign}</b></div>
                     </div>
                     <div className="border-t-0.5 border-b-0.5 border-cbs-border mx-2 py-1 text-[13px]">
                         <div className="flex justify-between">
