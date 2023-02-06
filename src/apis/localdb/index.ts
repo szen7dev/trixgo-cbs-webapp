@@ -619,13 +619,13 @@ export const FNB_SHIFT = [
 ]
 
 export const FNB_CHANNEL = [
-    { value: 1, text: 'Offline' },
-    { value: 2, text: 'Grab' },
-    { value: 3, text: 'Shopee' },
-    { value: 4, text: 'Gojek' },
-    { value: 5, text: 'Baemin' },
-    { value: 6, text: 'Loship' },
-    { value: 7, text: 'Bee' },
+    { value: 1, text: 'Offline', sign: "of" },
+    { value: 2, text: 'Grab', sign: "gf"  },
+    { value: 3, text: 'Shopee', sign: "sp"  },
+    { value: 4, text: 'Gojek', sign: "go"  },
+    { value: 5, text: 'Baemin', sign: "ba"  },
+    { value: 6, text: 'Loship', sign: "ls"  },
+    { value: 7, text: 'Bee', sign: "be"  },
 ]
 
 export const FNB_SERVICE = [

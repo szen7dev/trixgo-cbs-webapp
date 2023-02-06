@@ -963,7 +963,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                     </td>
                     <td className={"px-1 py-2"}>
                       <div className="">
-                        {item?.sign} {item?.appOrderSign}
+                        {item?.sign} {FNB_CHANNEL[Number(item.salesChannel)-1].sign}{item?.appOrderSign}
                       </div>
                     </td>
                     <td className={"px-1 py-2"}>

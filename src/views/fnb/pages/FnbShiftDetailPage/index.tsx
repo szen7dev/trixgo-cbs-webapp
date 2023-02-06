@@ -336,11 +336,19 @@ export const FnbShiftDetailPage: FC = () => {
 								</Link> */}
 								{item?.funda?.sign}.{item?.name}
 								<p className="text-cbs-subtext text-[12px]"><i>{moment(item?.createAt).format('HH:mm DD/MM/YYYY')}</i></p>
-								<p className="text-cbs-subtext text-[12px]"><i>Nhân viên: <b>{item?.staffs.length}</b></i></p>
+								<p className="text-cbs-subtext text-[12px]"><i>Ca chính-{item.workingHours}h: <b>{item?.staffs.length}</b></i></p>
 								{
                                 	item?.staffs.length && item?.staffs.map((staff: any) => {
 										return (
 											<p key={staff._id} className="text-cbs-subtext text-[12px]"><i>- {staff?.fullname}</i></p>
+										)
+									})
+								}
+								<p className="text-cbs-subtext text-[12px]"><i>Ca phụ-{item.subWorkingHours}h: <b>{item?.subStaffs.length}</b></i></p>
+								{
+                                	item?.subStaffs.length && item?.subStaffs.map((subStaff: any) => {
+										return (
+											<p key={subStaff._id} className="text-cbs-subtext text-[12px]"><i>- {subStaff?.fullname}</i></p>
 										)
 									})
 								}

@@ -23,7 +23,7 @@ import API from "apis/repository";
 import { convertObToUrl } from "utils";
 import usePrintComponent from "services/hooks/ppt/usePrintComponent";
 
-import { FNB_TOPPING, FNB_SIZE, FNB_SUGAR, FNB_ICE } from "apis/localdb";
+import { FNB_CHANNEL, FNB_TOPPING, FNB_SIZE, FNB_SUGAR, FNB_ICE } from "apis/localdb";
 
 const FnbPrintBillListPage: FC = () => {
   const { orderID } = useParams<{ orderID: string }>()
@@ -160,7 +160,7 @@ if (isLoadingInfo) return <Loader className="border-primary" />;
                                                   <td className="px-0.5 text-[10px]">
                                                       <Link to={`/fnb/home`}>
                                                         <div className="font-bold" title="Bấm vào đây để trở về Trang chủ">
-                                                          {info?.funda?.name}-{info?.sign} / {info?.appOrderSign} - {currentIndex}/{Number(totalProd)}
+                                                          {info?.funda?.name}-{info?.sign}/{FNB_CHANNEL[Number(info.salesChannel)-1].sign}{info?.appOrderSign} - {currentIndex}/{Number(totalProd)}
                                                         </div>
                                                       </Link>
                                                       <Link to={`/fnb/home/${info?._id}/print/1`}>
