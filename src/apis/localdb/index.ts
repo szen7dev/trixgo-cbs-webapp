@@ -619,7 +619,7 @@ export const FNB_SHIFT = [
 ]
 
 export const FNB_CHANNEL = [
-    { value: 1, text: 'Offline', sign: "Off" },
+    { value: 1, text: 'Offline', sign: "of" },
     { value: 2, text: 'Grab', sign: "gf"  },
     { value: 3, text: 'Shopee', sign: "sp"  },
     { value: 4, text: 'Gojek', sign: "go"  },
