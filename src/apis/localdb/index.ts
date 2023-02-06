@@ -623,7 +623,7 @@ export const FNB_CHANNEL = [
     { value: 2, text: 'Grab', sign: "gf"  },
     { value: 3, text: 'Shopee', sign: "sp"  },
     { value: 4, text: 'Gojek', sign: "go"  },
-    { value: 5, text: 'Baemin', sign: "ba"  },
+    { value: 5, text: 'Baemin', sign: "bm"  },
     { value: 6, text: 'Loship', sign: "ls"  },
     { value: 7, text: 'Bee', sign: "be"  },
 ]
