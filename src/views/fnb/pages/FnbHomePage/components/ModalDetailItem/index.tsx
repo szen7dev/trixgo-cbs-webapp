@@ -11,7 +11,7 @@ import debounce from "lodash/debounce";
  * Hooks, Typings
  */
 import { useModal } from "services/hooks/useModal";
-import { FNB_PAYMENT, FNB_SERVICE, FNB_SIZE } from "apis/localdb";
+import { FNB_CHANNEL, FNB_PAYMENT, FNB_SERVICE, FNB_SIZE } from "apis/localdb";
 import API from "apis/repository";
 import { convertObToUrl } from "utils";
 import { formatNumberMoney } from 'utils/converter';
@@ -284,7 +284,7 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                             <img src={IconGreenDot} alt="" />
                             <div className={"h-full text-left flex items-center px-1 "}>
                               <span className="text-gray-500 pr-1">Mã đơn trên App: </span>
-                              <span>{order.appOrderSign}</span>
+                              <span>{FNB_CHANNEL[Number(order.salesChannel)-1].sign}{order.appOrderSign}</span>
                             </div>
                           </div>
                           {/* Mã đơn trên App: Grab25688 */}
