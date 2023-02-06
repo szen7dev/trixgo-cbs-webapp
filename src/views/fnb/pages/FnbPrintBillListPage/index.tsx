@@ -160,7 +160,7 @@ if (isLoadingInfo) return <Loader className="border-primary" />;
                                                   <td className="px-0.5 text-[10px]">
                                                       <Link to={`/fnb/home`}>
                                                         <div className="font-bold" title="Bấm vào đây để trở về Trang chủ">
-                                                          {info?.funda?.name}-{info?.sign}/{FNB_CHANNEL[Number(info.salesChannel)-1].sign}{info?.appOrderSign} - {currentIndex}/{Number(totalProd)}
+                                                          {info?.funda?.name}-{info?.sign}/{FNB_CHANNEL[Number(info?.salesChannel)-1]?.sign}{info?.appOrderSign} - {currentIndex}/{Number(totalProd)}
                                                         </div>
                                                       </Link>
                                                       <Link to={`/fnb/home/${info?._id}/print/1`}>
