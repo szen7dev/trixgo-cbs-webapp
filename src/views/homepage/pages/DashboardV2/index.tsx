@@ -27,6 +27,8 @@ import arrowDown from "assets/images/icon-arrowdown.svg";
 import defaultAva from "assets/images/image 166.jpg";
 import iconPhoto from "assets/images/icons8-photo.svg";
 import iconPdf from "assets/images/icons8-attach.svg";
+import downloadIcon from "assets/images/icons8-attach.svg";
+import sendMailIcon from "assets/images/icons8-attach.svg";
 import iconFile from "assets/images/icons8-attach.svg";
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
@@ -1325,7 +1327,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
               </button>
             </div> */}
           </div>
-          {/* <button
+          <button
             onClick={() => setFilter("all")}
             className={
               "py-1 px-6 mx-2 rounded-full border border-primary-border " +
@@ -1363,7 +1365,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
             onClick={() => setShowUpdateStatus(true)}
           >
             Đánh dấu tất cả đã đọc
-          </button> */}
+          </button>
           {/* <button className={"flex items-center justify-center mx-3"}>
             <img src={downloadIcon} alt={"-----"} />
           </button>
