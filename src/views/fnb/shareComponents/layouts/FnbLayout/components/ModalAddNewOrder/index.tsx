@@ -103,19 +103,23 @@ export const ModalAddNewOrder: FC<Props> = () => {
 
   const [credit, setCredit] = useState(0);
 
-  useEffect(() => {
-    const fetchFundas = async () => {
-      const response = await API.get(
-        `/api/fnb/products?isParent=1&limit=50`,
-      );
-      const { data, status } = response?.data;
+  /**
+   * Code cũ: Tuấn Dev
+   */
+  // useEffect(() => {
+  //   const fetchFundas = async () => {
+  //     const response = await API.get(
+  //       `/api/fnb/products?isParent=1&limit=50`, ////
+  //     );
+  //     const { data, status } = response?.data;
 
-      if (status !== 200) return;
-      setProductIsParent(data?.listRecords || []);
-    }
+  //     if (status !== 200) return;
+  //     setProductIsParent(data?.listRecords || []);
+  //   }
 
-    fetchFundas();
-  }, []);
+  //   fetchFundas();
+  // }, []);
+  // console.log({fundaID})
 
   useEffect(() => {
     const fetchFundas = async () => {
@@ -143,6 +147,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
   useEffect(() => {
     if (!fundaID) return;
 
+    // Tìm kiếm ca làm việc của Cơ sở/Điểm bán
     const fetchShifts = async () => {
       const response = await API.get(
         `/api/fnb/shifts?fundaID=${fundaID}`,
@@ -171,10 +176,29 @@ export const ModalAddNewOrder: FC<Props> = () => {
       }
       setShifts(shiftsList);
     }
-
     fetchShifts();
+
+    /**
+     * Tìm kiếm DANH MỤC sản phẩm
+     * Code mới-Hiệp Dev
+     */
+    const fetchCateProduct = async () => {
+      const response = await API.get(
+        `/api/fnb/products?isParent=1&limit=50&fundaID=${fundaID}`, ////
+        // `/api/fnb/products?isParent=1&limit=50`, ////
+      );
+      const { data, status } = response?.data;
+
+      if (status !== 200) return;
+      setProductIsParent(data?.listRecords || []);
+    }
+    fetchCateProduct();
+
   }, [fundaID])
 
+  /**
+   * Tìm kiếm sản phẩm của Cơ sở/Điểm bán
+   */
   const fetchProducts = async () => {
     const response: any = await API.get(
       `/api/fnb/products?${convertObToUrl({
@@ -184,14 +208,15 @@ export const ModalAddNewOrder: FC<Props> = () => {
         populates: JSON.stringify({
           path: 'images',
         }),
-        parentID: indexParentID
+        parentID: indexParentID,
+        fundaID: fundaID //Hiepnh: Bổ sung thêm trường này
       })}`,
     );
     const { data, status } = response?.data;
     if (status !== 200) return;
 
     const response2 = await API.get(
-      `/api/fnb/products?type=2&limit=50`,
+      `/api/fnb/products?type=2&limit=50&fundaID=${fundaID}`,
     );
 
     const productsAsync = data.listRecords?.map?.(async (product: any) => {
@@ -201,12 +226,13 @@ export const ModalAddNewOrder: FC<Props> = () => {
       }
     })
     const products = await Promise.all(productsAsync);
+
     setProducts(products);
   };
 
   useEffect(() => {
     fetchProducts();
-  }, [keywordSearchProduct, indexParentID]);
+  }, [keywordSearchProduct, indexParentID, fundaID]); // Hiepnh: Bổ sung thêm trường này fundaID
 
   useEffect(() => {
     calTotalMoney();
@@ -545,6 +571,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
     note: "",
     appOrderSign: "",
   };
+
+  // console.log({fundaID})
 
   return (
     <>
