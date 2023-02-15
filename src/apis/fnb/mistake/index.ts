@@ -35,7 +35,7 @@ const fnbShiftRepository = {
 
     async exportMistake(payload: any): Promise<any> {
         const { data } = await API.get<any>(
-            `${URL}/orders/export-excel`, {
+            `${URL}/mistakes/export-excel`, {
                 params: payload
             }
         ); 
