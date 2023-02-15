@@ -159,7 +159,7 @@ export const FnbShiftCashPage: FC = () => {
 			</header>
 
 			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
-			<thead className="bg-cbs-table-header h-10 border-b border-primary-border">
+				<thead className="bg-cbs-table-header h-10 border-b border-primary-border">
 					<tr className="text-left text-sm text-primary-gray text-[14px]">
 						<th className="pb-1 pt-1 w-[50px] font-normal">
 							<div className="pl-2">
