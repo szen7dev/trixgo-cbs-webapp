@@ -75,7 +75,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
     salesPercent: 0,
   });
 
-  const [fundaID, setFundaID] = useState("637f15aab9d1cb6898003dd0");
+  const [fundaID, setFundaID] = useState("");
   const [shiftID, setShiftID] = useState("");
 
   const [groupParentPicker, setGroupParentPicker] = useState<any>({});
