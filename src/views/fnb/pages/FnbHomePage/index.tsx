@@ -138,11 +138,11 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
       keyword,
       ...queryFnb,
       populates: JSON.stringify({
-        path: 'funda shift customer userCreate files',
-        select: "name path nameOrg author sign address bizfullname fullname phone numberOfOrders",
+        path: 'funda shift customer userCreate files assignee',
+        select: "name path nameOrg author sign address fullname phone numberOfOrders",
         populate: {
           path: 'author',
-          select: 'fullname bizfullname image',
+          select: 'fullname image',
         }
       })
     }, isFetchList: true, isFetchInfo: false
@@ -700,6 +700,53 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               )
             }
           />
+
+          {/* <DropdownSearchableV2
+            reset={reset}
+            selectOneByOne={true}
+            className={"mr-2 border border-primary-border rounded-lg mb-2"}
+            placeholder={"Đơn vãng lai"}
+            showTriangle={true}
+            isMultiple={false}
+            disableSearch={true}
+            formatItem={{
+              id: "value",
+              text: "label",
+            }}
+            renderItem={(item) => (
+              <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            prefixIcon={
+              <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
+            }
+            data={[{
+              value: 0, text: 'Không lỗi',
+            },
+            {
+              value: 1, text: 'Có lỗi'
+            }].map((item: any) => ({
+              label: `${item.text}`,
+              value: item.value,
+            }))}
+            onchangeValue={(value) => {
+              dispatch(
+                setQueryFnb({
+                  ...queryFnb,
+                  isMistake: value.id,
+                })
+              );
+              setPageIndex(0);
+              ref.current && ref.current.resetPaginate();
+            }}
+            onClearData={() =>
+              dispatch(
+                setQueryFnb({
+                  ...queryFnb,
+                  isMistake: 0,
+                })
+              )
+            }
+          />     */}
 
           {/* <button
             className={"border-primary border-0.5 bg-cbs-secondary rounded text-white px-4 h-[32px] mb-2"}
