@@ -241,7 +241,9 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                             <img src={IconGreenDot} alt="" />
                             <div className={"h-full text-left flex items-center px-1 "}>
                               <span className="text-gray-500 pr-1">Tên: </span>
-                              <span>{order.name}</span>
+                              <span>{order.name} - </span>
+                              <span className="text-gray-500 pr-1"> Mã hiệu: </span>
+                              <span><span className="text-cbs-primary">{order.sign}</span></span>
                             </div>
                           </div>
                         </div>
@@ -260,23 +262,33 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                                 <span>{order.shift?.name}</span>
                               </div>
                             </div>
+                          </div>
+                        </div>
+                        <div className={"flex py-2"}>
+                          <div className={"w-full flex items-center"}>
+                            <img src={IconGreenDot} alt="" />
                             <div>
                               <div className={"h-full text-left flex items-center px-1"}>
                                 <span className="text-gray-500 pr-1">Người tạo: </span>
-                                <span>{order.userCreate?.fullname}</span>
+                                <span>{order.userCreate?.fullname} | <span className="text-cbs-primary">{moment(order.createAt).format('HH:mm DD/MM/YYYY')} ({moment(order.createAt).fromNow()})</span></span>
                               </div>
                             </div>
-                            {/* Cơ sở: Winggo 30 Vĩnh Phúc | Ca làm: Ca sáng 24/11/2022 | Người tạo:  Phùng Thị Thu-Wgo */}
                           </div>
                         </div>
                         <div className={"flex py-2"}>
                           <div className={"w-full flex items-center"}>
                             <img src={IconGreenDot} alt="" />
                             <div className={"h-full text-left flex items-center px-1 "}>
-                              <span className="text-gray-500 pr-1">Mã hiệu: </span>
-                              <span><span className="text-cbs-primary">{order.sign}</span> - <span className="text-cbs-schedule-nextweek">{moment(order.createAt).format('DD/MM/YYYY HH:mm')}</span></span>
+                              <span className="text-gray-500 pr-1">Nhân sự ca làm: </span>
+                              <span>
+                                  {order.assignee?.map?.((staff: any) => (
+                                     <span key={staff._id} className="text-cbs-primary">
+                                      {staff?.fullname}, 
+                                    </span>
+                                  ))}
+                                <span className="text-cbs-primary"></span>
+                              </span>
                             </div>
-                            {/* Mã hiệu: 100003010 - 24/11/2022 15:30 */}
                           </div>
                         </div>
                         <div className={"flex py-2"}>
@@ -349,11 +361,11 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                           </div>
                         </div>
                         <div className={"flex py-2"}>
-                          <div className={"w-full flex items-center"}>
+                          <div className={"w-full items-center"}>
                             <img src={IconGreenDot} alt="" />
                             <div className={"h-full text-left flex items-center px-1"}>
                               <span className="text-gray-500 pr-1">Ghi chú: </span>
-                              <textarea rows={2} onKeyUp={handleUpdateNote} className="resize block text-sm text-gray-900 bg-gray-50 rounded-lg p-2" placeholder="Write your note here...">{order.note}</textarea>
+                              <textarea rows={2} onKeyUp={handleUpdateNote} className="resize block text-sm text-gray-900 bg-gray-50 rounded-lg p-2 w-full" placeholder="Viết ghi chú tại đây...">{order.note}</textarea>
                             </div>
                           </div>
                           {/* Ghi chú: Đặt hộ khách qua Zalo */}
