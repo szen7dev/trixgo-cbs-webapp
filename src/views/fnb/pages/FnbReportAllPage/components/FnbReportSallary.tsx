@@ -27,17 +27,6 @@ import { useFnbMistake } from 'services/hooks/fnb/useFnbMistake';
 import { FNB_INTERNAL } from "apis/localdb";
 import { createLinkAndClick } from "utils";
 
-const TYPE_PRODUCT = [
-	{ value: 1, text: "Thông thường" },
-	{ value: 2, text: "Topping" },
-]
-const TYPE_MISTAKE = [
-	"Hệ thống phát hiện", "Khách hàng phát hiện"
-]
-const STATUS_MISTAKE = [
-	"Đã xử lý", "Chưa xử lý"
-]
-
 export const FnbReportSallary: FC = () => {
 	useEffect(() => {
 		document.title = "Trixgo | FnB";
@@ -86,7 +75,7 @@ export const FnbReportSallary: FC = () => {
 	/**
 	 * LÀM VIỆC VỚI EXCEL
 	 */
-	  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+	const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
 		isExporting: false,
 	});
 	const { exportMistakeAsync } = useFnbMistake({});
@@ -118,7 +107,7 @@ export const FnbReportSallary: FC = () => {
 					<button onClick={history.goBack} className="mr-5">
                         <img src="/images/common/button_back.png" alt="Button Back" />
                     </button>
-					<p className="text-lg mr-10">Danh sách lỗi nhân viên</p>
+					<p className="text-lg mr-10">Bảng tính lương nhân viên đểm bán</p>
 				</div>
 				<button onClick={handleExportExcel} title="Tải dữ liệu Excel">
 					Tải dữ liệu Excel
@@ -150,32 +139,17 @@ export const FnbReportSallary: FC = () => {
 						</th>
 						<th className="pb-1 pt-1 font-normal w-1/4">
 							<div className="pl-2">
-								Lỗi mắc phải
+								Điểm bán
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal">
 							<div className="pl-2">
-								Nhân sự mắc lỗi
+								Doanh số
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal">
 							<div className="pl-2">
-								Cơ sở
-							</div>
-						</th>
-						<th className="pb-1 pt-1 font-normal">
-							<div className="pl-2">
-								Phân loại
-							</div>
-						</th>
-						<th className="pb-1 pt-1 font-normal">
-							<div className="pl-2">
-								Người phát hiện/gán lỗi
-							</div>
-						</th>
-						<th className="pb-1 pt-1 font-normal">
-							<div className="pl-2">
-								Giá trị phạt
+								Số giờ làm việc
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal">
@@ -200,35 +174,9 @@ export const FnbReportSallary: FC = () => {
 							<td className={"p-2 border-0.5 border-primary-border "}>
 								{item?.funda?.name}
 							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								{TYPE_MISTAKE[item?.type-1]}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								{STATUS_MISTAKE[item?.status-1]}
-							</td>
+
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{formatNumberMoney(item?.amount||0)}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								{item?.files?.map((image: any, i: number) => {
-									return (
-										<div
-											key={image._id}
-											className="mt-2 cursor-pointer relative"
-											onClick={() => {
-			                                    setDefaultState({
-				                                    mediaID: image._id,
-				                                    images: item?.files,
-				                                    index: i,
-				                                    createAt: image.createAt
-			                                    });
-			                                    setIsShowImageFullScreen(true);
-			                                }}
-										>
-											<img src={`${process.env.REACT_APP_URL_S3}${image?.path}`} />
-										</div>
-									)
-								})}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{item?.note}
@@ -237,11 +185,6 @@ export const FnbReportSallary: FC = () => {
 					))
 				}
 			</table>
-			<ModalZoomView
-		        isShow={isShowImageFullScreen}
-		        toggle={() => setIsShowImageFullScreen(!isShowImageFullScreen)}
-		        initialData={defaultState}
-		    />
 		</main>
 	);
 };

@@ -14,7 +14,7 @@ import { FnbRiskReportDetailPage } from "views/fnb/pages/FnbRiskReportDetailPage
 import { FnbShiftCashPage } from "views/fnb/pages/FnbShiftCashPage/index";
 import { FnbShiftMaterialPage } from "views/fnb/pages/FnbShiftMaterialPage/index";
 import { FnbReportPage } from "views/fnb/pages/FnbReportPage/index";
-import { FnbReportAllPage, FnbReportMistake, FnbReportCustomer, FnbReportNonameOrder, FnbReportSallary } from "views/fnb/pages/FnbReportAllPage/index";
+import { FnbReportAllPage, FnbReportMistake, FnbReportCustomer, FnbReportNonameOrder, FnbReportSallary, FnbReportRevenue } from "views/fnb/pages/FnbReportAllPage/index";
 import { FnbStorePage } from "views/fnb/pages/FnbStorePage/index";
 import { FnbStoreImportPage } from "views/fnb/pages/FnbStoreImportPage/index";
 import { FnbStoreImportDetailPage } from "views/fnb/pages/FnbStoreImportDetailPage/index";
@@ -297,6 +297,15 @@ const FnbRouter: FC = () => {
                 component={() =>
                     <FnbLayout>
                         <FnbReportSallary />
+                    </FnbLayout>
+                }
+            />
+            <Route
+                exact
+                path="/fnb/reports/type/5"
+                component={() =>
+                    <FnbLayout>
+                        <FnbReportRevenue />
                     </FnbLayout>
                 }
             />
