@@ -32,6 +32,15 @@ const fnbShiftRepository = {
         );
         return data;
     },
+
+    async exportMistake(payload: any): Promise<any> {
+        const { data } = await API.get<any>(
+            `${URL}/mistakes/export-excel`, {
+                params: payload
+            }
+        ); 
+        return data;
+    },
 };
 
 export default fnbShiftRepository;
