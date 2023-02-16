@@ -21,19 +21,10 @@ import { useQueryClient } from 'react-query';
  */
 import Close from "assets/icons/Close";
 import { useModal } from "services/hooks/useModal";
-import IconMinus from "assets/images/icons8-reduce-96 1.svg";
-import ItemSample from "assets/images/icons8-beverage-100.svg";
-import IconPlus from "assets/images/icons8-add-new-100 1.svg";
-import CheckBoxEmpty from "assets/images/Frame 3548.svg";
-import CheckedBox from "assets/images/Check-All.svg";
 import RadioEmpty from "assets/images/Ellipse 27.svg";
 import RadioChecked from "assets/images/icons8-checked-40 (2) 2.svg";
 import IconSearch from "assets/images/icons8-search-96 1.svg";
 import beverageIcon from "assets/images/icons8-beverage.png";
-import IconCancel from "assets/images/icons8-cancel-96 1.svg";
-import DemoImg from "assets/images/task-detail-image.png";
-import DemoImg2 from "assets/images/authentication-img.png";
-
 import "react-day-picker/lib/style.css";
 import { DropdownSearchable, Loader } from "shareComponents/common";
 import { GroupSearchable } from "shareComponents/common/GroupSearchable";
