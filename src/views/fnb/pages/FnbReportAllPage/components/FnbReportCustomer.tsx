@@ -42,16 +42,17 @@ export const FnbReportCustomer: FC = () => {
             const response = await API.get(
                 `/api/fnb/orders/get-list-by-property?option=8`,
             );
-            const { data, status } = response?.data;
+            const { data } = response?.data;
 			// console.log(data)
 
-            if (status !== 200) return;
+            if (response.status !== 200) return;
 
             setOrders(data)
         }
 
         fetchOrders();
     }, [])
+	console.log(getOrders)
 
 	const [orderProducts, setOrderProducts] = useState([]);
 	useEffect(() => {
