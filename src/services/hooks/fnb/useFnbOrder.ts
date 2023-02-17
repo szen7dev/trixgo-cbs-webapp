@@ -72,9 +72,14 @@ export const useFnbOrder = ({
     );
 
     const { mutateAsync: exportOrderAsync2 } =
-    useMutation((payload: any) =>
-    fnbRepository.exportOrder2(payload)
-);
+        useMutation((payload: any) =>
+        fnbRepository.exportOrder2(payload)
+    );
+
+    const { mutateAsync: exportOrderAsync3 } =
+        useMutation((payload: any) =>
+        fnbRepository.exportOrder3(payload)
+    );
 
     return {
         isLoading,
@@ -85,6 +90,7 @@ export const useFnbOrder = ({
         totalRecord,
         totalPage,
         hasNextPage,
+        isFetching,
         refetch,
         refetchInfo,
         fetchNextPage,
@@ -93,6 +99,6 @@ export const useFnbOrder = ({
         deleteManyAsync,
         exportOrderAsync,
         exportOrderAsync2,
-        isFetching
+        exportOrderAsync3,
     }
 }
