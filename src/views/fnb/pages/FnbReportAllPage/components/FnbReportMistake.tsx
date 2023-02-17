@@ -86,11 +86,11 @@ export const FnbReportMistake: FC = () => {
 	/**
 	 * LÀM VIỆC VỚI EXCEL
 	 */
-	  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+	const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
 		isExporting: false,
 	});
 	const { exportMistakeAsync } = useFnbMistake({});
-  
+	
 	const handleExportExcel = async () => {
 	  try {
 		setStateExport({ isExporting: true });
@@ -160,6 +160,11 @@ export const FnbReportMistake: FC = () => {
 						</th>
 						<th className="pb-1 pt-1 font-normal">
 							<div className="pl-2">
+								Số lần tái phạm
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="pl-2">
 								Cơ sở
 							</div>
 						</th>
@@ -196,6 +201,9 @@ export const FnbReportMistake: FC = () => {
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border "}>
 								{item?.executor?.fullname}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border "}>
+								{item?.number}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border "}>
 								{item?.funda?.name}

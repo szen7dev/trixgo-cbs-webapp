@@ -32,9 +32,9 @@ import { createLinkAndClick } from "utils";
 
 export const FnbReportCustomer: FC = () => {
 	const [getOrders, setOrders] = useState([])
-	// useEffect(() => {
-	// 	document.title = "Trixgo | FnB";
-	// }, []);
+	useEffect(() => {
+		document.title = "Trixgo | FnB";
+	}, []);
 	const history = useHistory();
 
 	useEffect(() => {
@@ -53,8 +53,6 @@ export const FnbReportCustomer: FC = () => {
         fetchOrders();
     }, [])
 
-	console.log(getOrders)
-
 	const [orderProducts, setOrderProducts] = useState([]);
 	useEffect(() => {
         const fetchOrderProducts = async () => {
@@ -69,7 +67,8 @@ export const FnbReportCustomer: FC = () => {
                 })
                 })}`,
             );
-            const { data, status } = response?.data;
+
+            const { data, status } = response?.data
             // console.log(data)
 
             if (status !== 200) return;
@@ -77,9 +76,37 @@ export const FnbReportCustomer: FC = () => {
             setOrderProducts(data.listRecords)
         }
 
-        fetchOrderProducts();
+        fetchOrderProducts()
     }, [])
-	console.log(orderProducts)
+	// console.log(orderProducts)
+
+	/**
+	 * LÀM VIỆC VỚI EXCEL
+	 */
+	const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+		isExporting: false,
+	});
+	const { exportOrderAsync3 } = useFnbOrder({});
+  
+	const handleExportExcel = async () => {
+	  try {
+		setStateExport({ isExporting: true });
+		const { error, data } = await exportOrderAsync3({
+		  filterParams: {  
+		  }
+		});
+  
+		if(error) {
+		  return toast.warn(data?.message);
+		}
+  
+		data && createLinkAndClick(data, '_self');
+	  } catch (error: any) {
+		toast.error(error.message)
+	  } finally {
+		setStateExport({ isExporting: false });
+	  }
+	}
 
 	return (
 		<main className="h-full overflow-auto">
@@ -90,7 +117,7 @@ export const FnbReportCustomer: FC = () => {
                     </button>
 					<p className="text-lg mr-10">Danh sách khách hàng tiềm năng</p>
 				</div>
-				<button title="Tải dữ liệu Excel">
+				<button onClick={handleExportExcel} title="Tải dữ liệu Excel">
 					Tải dữ liệu Excel
 				</button>
 			</header>
