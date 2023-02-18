@@ -165,15 +165,15 @@ export const FnbReportAllPage: FC = () => {
 						Vào xem chi tiết để tải báo cáo
 					</td>
 				</tr>
-				{/* <tr className="text-[14px]">
+				<tr className="text-[14px]">
 					<td className={"p-2 border-t-0.5 border-b-0.5 border-primary-border text-center w-10"}>4</td>
 					<td className={"p-2 border-0.5 border-primary-border text-cbs-highlight-color w-1/4"}>
 						<Link to ={`/fnb/reports/type/4`}>
-							Bảng tính lương nhân viên đểm bán
+							Bảng tính lương nhân viên
 						</Link>
 					</td>
 					<td className={"p-2 border-0.5 border-primary-border w-2/4"}>
-						Bảng tính lương nhân viên theo từng điểm bán
+						Bảng tổng hợp lương nhân viên
 					</td>
 					<td className={"p-2 border-0.5 border-primary-border"}>
 						Vào xem chi tiết để tải báo cáo
@@ -192,7 +192,7 @@ export const FnbReportAllPage: FC = () => {
 					<td className={"p-2 border-0.5 border-primary-border"}>
 						Vào xem chi tiết để tải báo cáo
 					</td>
-				</tr> */}
+				</tr>
 			</table>
 		</main>
 	);

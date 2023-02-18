@@ -105,15 +105,15 @@ export const FnbShiftDetailPage: FC = () => {
     const ref = React.useRef<PaginateHandle>(null);
     const [pageIndex, setPageIndex] = useState(0);
 	
-  /**
-   * 
-   * Xử lý download template excel
-   */
-  const [dataImport, setDataImport] = useState([]);
-  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
-      isExporting: false,
-  });
-  const { exportExcelAsync, exportExcelAsync2 } = useFnbShift({});
+	/**
+	 * 
+	 * Xử lý download template excel
+	 */
+	const [dataImport, setDataImport] = useState([]);
+	const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+		isExporting: false,
+	});
+  	const { exportExcelAsync, exportExcelAsync2 } = useFnbShift({});
 	const handleExportExcel = async () => {
 		try {
 		  setStateExport({ isExporting: true });

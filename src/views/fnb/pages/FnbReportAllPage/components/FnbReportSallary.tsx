@@ -21,7 +21,7 @@ import { ImageProps } from "typings/common";
 /*=====6.HOOKS/APIS=====*/
 import { APP_ID } from "apis/localdb";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
-import { useFnbMistake } from 'services/hooks/fnb/useFnbMistake';
+import { useFnbShift } from 'services/hooks/fnb/useFnbShift';
 
 /*=====7.OTHER=====*/
 import { FNB_INTERNAL } from "apis/localdb";
@@ -47,20 +47,6 @@ export const FnbReportSallary: FC = () => {
 	    createAt: ""
   	});
 
-	/**
-	 * List mẩu tin
-	 */
-	const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbMistake({ 
-		params: { 
-			keyword: keyword, 
-			// fundasID: [fundaID],
-			populates: JSON.stringify({
-				path: 'userCreate mistake executor funda files'
-			}) 
-		}, isFetchList: true, isFetchInfo: false  });
-
-	// console.log(listWithPager)
-
 	useEffect(() => {
 		if (isSuccess && !(hasPermission)) {
 			toast.error("Bạn không có quyền truy cập chức năng này. Vui lòng liên hệ ban quản trị.");
@@ -77,27 +63,25 @@ export const FnbReportSallary: FC = () => {
 	 */
 	const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
 		isExporting: false,
-	});
-	const { exportMistakeAsync } = useFnbMistake({});
-  
+	})
+	const { exportExcelAsync, exportExcelAsync2 } = useFnbShift({})
 	const handleExportExcel = async () => {
-	  try {
-		setStateExport({ isExporting: true });
-		const { error, data } = await exportMistakeAsync({
-		  filterParams: {  
+		try {
+		  setStateExport({ isExporting: true });
+		  const { error, data } = await exportExcelAsync({
+			// fundaID: "63a7919a62105c26b0d350d5",
+		  });
+	
+		  if(error) {
+			return toast.warn(data?.message);
 		  }
-		});
-  
-		if(error) {
-		  return toast.warn(data?.message);
+	
+		  data && createLinkAndClick(data, '_self');
+		} catch (error: any) {
+		  toast.error(error.message)
+		} finally {
+		  setStateExport({ isExporting: false });
 		}
-  
-		data && createLinkAndClick(data, '_self');
-	  } catch (error: any) {
-		toast.error(error.message)
-	  } finally {
-		setStateExport({ isExporting: false });
-	  }
 	}
 
 	return (
@@ -112,25 +96,10 @@ export const FnbReportSallary: FC = () => {
 				<button onClick={handleExportExcel} title="Tải dữ liệu Excel">
 					Tải dữ liệu Excel
 				</button>
-				<PaginateV2
-					ref={ref}
-					totalRecord={totalRecord}
-					totalPages={totalPage}
-					limit={20}
-					hasNextPage={hasNextPage}
-					isFetching={isLoading}
-					nextPageAction={() => {
-						fetchNextPage();
-						setPageIndex(oldState => oldState+1)
-					}}
-					prevPageAction={() => {
-						setPageIndex(oldState => oldState-1)
-					}}
-				/>
 			</header>
 
 			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
-				<thead className="bg-cbs-table-header h-10 border-b border-primary-border">
+				{/* <thead className="bg-cbs-table-header h-10 border-b border-primary-border">
 					<tr className="text-left text-sm text-primary-gray text-[14px]">
 						<th className="pb-1 pt-1 w-[50px] font-normal">
 							<div className="pl-2">
@@ -158,8 +127,8 @@ export const FnbReportSallary: FC = () => {
 							</div>
 						</th>
 					</tr>
-				</thead>
-				{
+				</thead> */}
+				{/* {
 					(listWithPager[pageIndex]??[]).map((item: any, i: any) => (
 						<tr key={item._id} className="text-[14px]">
 							<td className={"p-2 border-0.5 border-primary-border text-cente"}>{i+1}</td>
@@ -183,7 +152,7 @@ export const FnbReportSallary: FC = () => {
 							</td>
 						</tr>
 					))
-				}
+				} */}
 			</table>
 		</main>
 	);
