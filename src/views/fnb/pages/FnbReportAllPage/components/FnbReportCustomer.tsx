@@ -37,22 +37,22 @@ export const FnbReportCustomer: FC = () => {
 	}, []);
 	const history = useHistory();
 
-	useEffect(() => {
-        const fetchOrders = async () => {
-            const response = await API.get(
-                `/api/fnb/orders/get-list-by-property?option=8`,
-            );
-            const { data } = response?.data;
-			// console.log(data)
+	// useEffect(() => {
+    //     const fetchOrders = async () => {
+    //         const response = await API.get(
+    //             `/api/fnb/orders/get-list-by-property?option=8`,
+    //         );
+    //         const { data } = response?.data;
+	// 		// console.log(data)
 
-            if (response.status !== 200) return;
+    //         if (response.status !== 200) return;
 
-            setOrders(data)
-        }
+    //         setOrders(data)
+    //     }
 
-        fetchOrders();
-    }, [])
-	console.log(getOrders)
+    //     fetchOrders();
+    // }, [])
+	// console.log(getOrders)
 
 	/**
 	 * LÀM VIỆC VỚI EXCEL
@@ -161,7 +161,7 @@ export const FnbReportCustomer: FC = () => {
 						</th>
 					</tr>
 				</thead>
-				{
+				{/* {
 					getOrders.map((item: any, i: any) => (
 						<tr key={item._id} className="text-[14px]">
 							<td className={"p-2 border-0.5 border-primary-border text-cente"}>{i+1}</td>
@@ -200,7 +200,7 @@ export const FnbReportCustomer: FC = () => {
 							</td>
 						</tr>
 					))
-				}
+				} */}
 			</table>
 		</main>
 	)
