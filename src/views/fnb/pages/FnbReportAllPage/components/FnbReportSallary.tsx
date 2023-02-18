@@ -69,7 +69,7 @@ export const FnbReportSallary: FC = () => {
 		try {
 		  setStateExport({ isExporting: true });
 		  const { error, data } = await exportExcelAsync({
-			// fundaID: "63a7919a62105c26b0d350d5",
+			
 		  });
 	
 		  if(error) {
