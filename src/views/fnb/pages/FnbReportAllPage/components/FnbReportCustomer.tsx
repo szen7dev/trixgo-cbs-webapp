@@ -42,43 +42,17 @@ export const FnbReportCustomer: FC = () => {
             const response = await API.get(
                 `/api/fnb/orders/get-list-by-property?option=8`,
             );
-            const { data, status } = response?.data;
+            const { data } = response?.data;
 			// console.log(data)
 
-            if (status !== 200) return;
+            if (response.status !== 200) return;
 
             setOrders(data)
         }
 
         fetchOrders();
     }, [])
-
-	const [orderProducts, setOrderProducts] = useState([]);
-	useEffect(() => {
-        const fetchOrderProducts = async () => {
-            const response = await API.get(
-                `/api/fnb/order_products?${convertObToUrl({
-                orderID: "63edc0d436b5d454746ae3e5",
-                populates: JSON.stringify({
-                    path: 'subProducts product',
-                    populate: {
-                    path: 'images',
-                    }
-                })
-                })}`,
-            );
-
-            const { data, status } = response?.data
-            // console.log(data)
-
-            if (status !== 200) return;
-
-            setOrderProducts(data.listRecords)
-        }
-
-        fetchOrderProducts()
-    }, [])
-	// console.log(orderProducts)
+	console.log(getOrders)
 
 	/**
 	 * LÀM VIỆC VỚI EXCEL
@@ -130,9 +104,14 @@ export const FnbReportCustomer: FC = () => {
 								TT
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal w-1/4">
+						<th className="pb-1 pt-1 font-normal w-1/6">
 							<div className="pl-2">
-								Tên khách hàng
+								Khách hàng
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal w-1/6">
+							<div className="pl-2">
+								Địa chỉ
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal">
@@ -142,7 +121,27 @@ export const FnbReportCustomer: FC = () => {
 						</th>
 						<th className="pb-1 pt-1 font-normal">
 							<div className="pl-2">
-								Tổng giá trị thanh toán
+								Giá trị đơn hàng
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="pl-2">
+								Chiết khấu
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="pl-2">
+								Giảm giá
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="pl-2">
+								Giảm trừ tích điểm
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="pl-2">
+								Thanh toán
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal">
@@ -152,36 +151,57 @@ export const FnbReportCustomer: FC = () => {
 						</th>
 						<th className="pb-1 pt-1 font-normal">
 							<div className="pl-2">
+								Tổng số sản phẩm
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="pl-2">
 								Ghi chú
 							</div>
 						</th>
 					</tr>
 				</thead>
-				{/* {
-					(listWithPager[pageIndex]??[]).map((item: any, i: any) => (
+				{
+					getOrders.map((item: any, i: any) => (
 						<tr key={item._id} className="text-[14px]">
 							<td className={"p-2 border-0.5 border-primary-border text-cente"}>{i+1}</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								{item?.mistake?.name}
-								<p className=" text-[13px] text-gray-500"><i>Người ghi nhận: {item?.userCreate?.fullname}</i></p>
-								<p className=" text-[13px] text-gray-500"><i>Thời gian: {moment(item.createAt).format('DD/MM/YYYY HH:mm')}</i></p>
+							<td className={"p-2 border-0.5 border-primary-border "}>
+								{item?._id?.customer?.name}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border "}>
-								{item?.executor?.fullname}
+								{item?._id?.customer?.funda?.name}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border "}>
-								{item?.funda?.name}
+								{item?._id?.customer?.phone}
 							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
+							<td className={"p-2 border-0.5 border-primary-border text-right"}>
+								{formatNumberMoney(item?.total||0)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border text-right"}>
+								{formatNumberMoney(item?.discount||0)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border text-right"}>
+								{formatNumberMoney(item?.salesoff||0)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border text-right"}>
+								{formatNumberMoney(item?.credit||0)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border text-right"}>
 								{formatNumberMoney(item?.amount||0)}
 							</td>
+							<td className={"p-2 border-0.5 border-primary-border text-right"}>
+								{formatNumberMoney(item?.numberOfOrders||0)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border text-right"}>
+								{formatNumberMoney(item?.numberOfProducts||0)}
+							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{item?.note}
+								{item?._id?.customer?.note}
 							</td>
 						</tr>
 					))
-				} */}
+				}
 			</table>
 		</main>
-	);
-};
+	)
+}
