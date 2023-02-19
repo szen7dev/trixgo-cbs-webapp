@@ -187,11 +187,11 @@ export const FnbBillOrder: FC = () => {
                                     <td className="text-center px-1"></td>
                                     <td className="text-right">{formatNumberMoney(info?.salesoff)}</td>
                                 </tr>
-                                {/* <tr>
+                                <tr>
                                     <td className="text-left">Trừ tích điểm (nếu có)</td>
                                     <td className="text-center px-1"></td>
                                     <td className="text-right">{formatNumberMoney(info?.credit)}</td>
-                                </tr> */}
+                                </tr>
                             </tbody>
                         </table>
                     </div>
