@@ -2,7 +2,7 @@
  * Libraries
  */
 import React, { FC, useEffect, useRef, useState } from "react";
-import { Formik, Form, ErrorMessage, useFormik, FormikProvider } from "formik";
+import { Formik, Form, ErrorMessage } from "formik";
 import { useHistory } from 'react-router-dom';
 import { number, object, string } from "yup";
 import { toast } from "react-toastify";
@@ -31,8 +31,8 @@ import { GroupSearchable } from "shareComponents/common/GroupSearchable";
 import API from "apis/repository";
 import { useContact } from "services/hooks/items/useContact";
 import { convertObToUrl } from "utils";
-import { Checkbox, FormControl, FormControlLabel, IconButton, InputBase, Paper, Radio, RadioGroup } from "@mui/material";
-import SearchIcon from "assets/icons/Search";
+import { FormControl, FormControlLabel, IconButton, InputBase, Paper, Radio, RadioGroup } from "@mui/material";
+// import SearchIcon from "assets/icons/Search";
 import { ItemInCartMenu } from "./itemInCartDetail";
 
 interface InitialValues {
@@ -78,7 +78,6 @@ export const ModalAddNewOrder: FC<Props> = () => {
   const [fundaID, setFundaID] = useState("");
   const [shiftID, setShiftID] = useState("");
 
-  const [groupParentPicker, setGroupParentPicker] = useState<any>({});
   const [fundas, setFundas] = useState<any>([]);
   const [shifts, setShifts] = useState<any>([]);
   const [products, setProducts] = useState<any>([]);
@@ -87,12 +86,12 @@ export const ModalAddNewOrder: FC<Props> = () => {
   const [productIsParent, setProductIsParent] = useState<any>([]);
   const [indexParentID, setIndexParentID] = useState('');
 
-  //
   const [service, setService] = useState("1");
   const [loading, setLoading] = useState(false);
-  //
+  const [isUseCredit, setIsUseCredit] = useState(false);
 
   const [credit, setCredit] = useState(0);
+  const [creditTemp, setCreditTemp] = useState(0);
 
   /**
    * Code cũ: Tuấn Dev
@@ -200,7 +199,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
           path: 'images',
         }),
         parentID: indexParentID,
-        fundaID: fundaID //Hiepnh: Bổ sung thêm trường này
+        fundaID,
       })}`,
     );
     const { data, status } = response?.data;
@@ -296,18 +295,19 @@ export const ModalAddNewOrder: FC<Props> = () => {
         }
       })
 
+      const realCredit = (totalMoney - discountAndSales.discount - discountAndSales.sales) > credit ? credit : totalMoney - discountAndSales.discount - discountAndSales.sales;
       const dataAddNewOrder: any = {
         ...values,
-        fundaID: fundaID,
-        shiftID: shiftID,
+        fundaID,
+        shiftID,
         products,
         total: `${totalMoney}`,
         discount: `${discountAndSales.discount}`,
         salesoff: `${discountAndSales.sales}`,
-        credit: credit.toString()
+        credit: realCredit.toString(),
       }
-
       closeModal();
+
       const { data, status } = await API.post(
         `/api/fnb/orders`,
         dataAddNewOrder
@@ -339,10 +339,13 @@ export const ModalAddNewOrder: FC<Props> = () => {
     }
   };
 
-  const fetchCredit = async (contactID: any) => {
+  const fetchCredit = async (contactID: any, isUseCredit: boolean) => {
     const { data, status } = await API.get(`/api/item/contacts?select=name phone remainLoyaltyPoints&contactID=${contactID}`);
     if (status !== 200) return;
-    setCredit(data?.data?.remainLoyaltyPoints || 0);
+    const value = data?.data?.remainLoyaltyPoints || 0;
+    setCreditTemp(value);
+
+    isUseCredit && setCredit(value);
   }
 
   const handleChangeDiscount = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -413,7 +416,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
       sales: newSales,
       salesPercent: newSalesPercent,
     }));
-    
+
     let totalPay = totalMoney - discountAndSales.discount - newSales;
     if (service === "1") {
       totalPay = totalPay - credit;
@@ -542,6 +545,15 @@ export const ModalAddNewOrder: FC<Props> = () => {
     }
   }
 
+  const resetCredit = (newCredit: any = creditTemp) => {
+    if(isUseCredit) {
+      setTotalPay((totalMoney - discountAndSales.discount - discountAndSales.sales) > newCredit ? newCredit : totalMoney - discountAndSales.discount - discountAndSales.sales);
+    }
+    setCredit(0);
+    setCreditTemp(0);
+    setIsUseCredit(false);
+  }
+
   const addOrderSchema = object().shape({
     // fundaID: string().required("Vui lòng chọn cơ sở"),
     // shiftID: string().required("Vui lòng chọn ca"),
@@ -562,8 +574,6 @@ export const ModalAddNewOrder: FC<Props> = () => {
     note: "",
     appOrderSign: "",
   };
-
-  // console.log({fundaID})
 
   return (
     <>
@@ -688,15 +698,19 @@ export const ModalAddNewOrder: FC<Props> = () => {
                             </div>
                           </div>
                           <div className={"w-1/3 flex items-start pl-3"}>
-                            <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full"}>Mã khách</div>
+                            <div className={"h-full text-left  text-gray-500 flex items-center mr-2 w-1/5 h-full"}>Mã khách</div>
                             <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                               <DropdownSearchable
                                 onchangeValue={(value: any) => {
                                   setFieldValue("customerID", value.id);
                                   setFieldValue("name", `Đơn hàng ${value.label}`);
-                                  fetchCredit(value.id);
+                                  resetCredit(value);
+                                  fetchCredit(value.id, false);
                                 }}
-                                onClearData={() => setFieldValue("customerID", "")}
+                                onClearData={() => {
+                                  resetCredit();
+                                  setFieldValue("customerID", "")
+                                }}
                                 onSearchInputChange={
                                   debounce(
                                     (value) => setSearchContact(value),
@@ -1125,7 +1139,67 @@ export const ModalAddNewOrder: FC<Props> = () => {
 
                         {values.customerID && service === "1" ?
                           <div className="flex justify-between items-center mb-1 px-2 py-2">
-                            <div className="">Credit {`(${formatNumberMoney(credit)})`}</div>
+                            <div>
+                              <div>Credit {`(${formatNumberMoney(credit || creditTemp)})`}</div>
+                              <div>
+                                <FormControl sx={{ marginTop: "-5px" }} >
+                                  <RadioGroup
+                                    row
+                                    aria-labelledby="demo-row-radio-buttons-group-label"
+                                    name="isUseCredit"
+                                  >
+                                    <FormControlLabel
+                                      sx={{ marginLeft: "0", fontSize: "13px" }}
+                                      value="1"
+                                      control={
+                                        <Radio
+                                          style={{}}
+                                          icon={<img src={RadioEmpty} alt="" />}
+                                          checkedIcon={<img src={RadioChecked} alt="" />}
+                                          onChange={() => {
+                                            setCredit(0);
+                                            setIsUseCredit(false);
+
+                                            const amountPay = (totalMoney - discountAndSales.discount - discountAndSales.sales) > credit ? credit : totalMoney - discountAndSales.discount - discountAndSales.sales;
+
+                                            if(totalPay) {
+                                              setTotalPay(totalPay + credit);
+                                            } else if(totalPay === 0 && amountPay < credit) {
+                                              setTotalPay(amountPay);
+                                            }
+                                          }}
+                                          checked={!isUseCredit ? true : false}
+                                        />
+                                      }
+                                      label={<span className="text-[13px]">Không sử dụng</span>}
+                                    />
+                                    <FormControlLabel
+                                      sx={{ marginLeft: "0" }}
+                                      value="2"
+                                      control={
+                                        <Radio
+                                          style={{}}
+                                          icon={<img src={RadioEmpty} alt="" />}
+                                          checkedIcon={<img src={RadioChecked} alt="" />}
+                                          onChange={() => {
+                                            setCredit(creditTemp);
+                                            setIsUseCredit(true);
+
+                                            if(totalPay) {
+                                              setTotalPay(creditTemp > totalPay ? 0 : totalPay - creditTemp);
+                                            }
+
+                                            fetchCredit(values.customerID, true);
+                                          }}
+                                          checked={isUseCredit ? true : false}
+                                        />
+                                      }
+                                      label={<span className="text-[13px]">Sử dụng</span>}
+                                    />
+                                  </RadioGroup>
+                                </FormControl>
+                              </div>
+                            </div>
                             <div className="flex gap-1">
                               <div>
                                 <input placeholder="25%"
