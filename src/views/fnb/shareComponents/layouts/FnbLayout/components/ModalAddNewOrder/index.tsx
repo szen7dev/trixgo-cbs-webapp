@@ -2,7 +2,7 @@
  * Libraries
  */
 import React, { FC, useEffect, useRef, useState } from "react";
-import { Formik, Form, ErrorMessage, useFormik, FormikProvider } from "formik";
+import { Formik, Form, ErrorMessage } from "formik";
 import { useHistory } from 'react-router-dom';
 import { number, object, string } from "yup";
 import { toast } from "react-toastify";
@@ -21,27 +21,18 @@ import { useQueryClient } from 'react-query';
  */
 import Close from "assets/icons/Close";
 import { useModal } from "services/hooks/useModal";
-import IconMinus from "assets/images/icons8-reduce-96 1.svg";
-import ItemSample from "assets/images/icons8-beverage-100.svg";
-import IconPlus from "assets/images/icons8-add-new-100 1.svg";
-import CheckBoxEmpty from "assets/images/Frame 3548.svg";
-import CheckedBox from "assets/images/Check-All.svg";
 import RadioEmpty from "assets/images/Ellipse 27.svg";
 import RadioChecked from "assets/images/icons8-checked-40 (2) 2.svg";
 import IconSearch from "assets/images/icons8-search-96 1.svg";
 import beverageIcon from "assets/images/icons8-beverage.png";
-import IconCancel from "assets/images/icons8-cancel-96 1.svg";
-import DemoImg from "assets/images/task-detail-image.png";
-import DemoImg2 from "assets/images/authentication-img.png";
-
 import "react-day-picker/lib/style.css";
 import { DropdownSearchable, Loader } from "shareComponents/common";
 import { GroupSearchable } from "shareComponents/common/GroupSearchable";
 import API from "apis/repository";
 import { useContact } from "services/hooks/items/useContact";
 import { convertObToUrl } from "utils";
-import { Checkbox, FormControl, FormControlLabel, IconButton, InputBase, Paper, Radio, RadioGroup } from "@mui/material";
-import SearchIcon from "assets/icons/Search";
+import { FormControl, FormControlLabel, IconButton, InputBase, Paper, Radio, RadioGroup } from "@mui/material";
+// import SearchIcon from "assets/icons/Search";
 import { ItemInCartMenu } from "./itemInCartDetail";
 
 interface InitialValues {
@@ -87,7 +78,6 @@ export const ModalAddNewOrder: FC<Props> = () => {
   const [fundaID, setFundaID] = useState("");
   const [shiftID, setShiftID] = useState("");
 
-  const [groupParentPicker, setGroupParentPicker] = useState<any>({});
   const [fundas, setFundas] = useState<any>([]);
   const [shifts, setShifts] = useState<any>([]);
   const [products, setProducts] = useState<any>([]);
@@ -96,11 +86,9 @@ export const ModalAddNewOrder: FC<Props> = () => {
   const [productIsParent, setProductIsParent] = useState<any>([]);
   const [indexParentID, setIndexParentID] = useState('');
 
-  //
   const [service, setService] = useState("1");
   const [loading, setLoading] = useState(false);
   const [isUseCredit, setIsUseCredit] = useState(false);
-  //
 
   const [credit, setCredit] = useState(0);
   const [creditTemp, setCreditTemp] = useState(0);
@@ -307,6 +295,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
         }
       })
 
+      const realCredit = (totalMoney - discountAndSales.discount - discountAndSales.sales) > credit ? credit : totalMoney - discountAndSales.discount - discountAndSales.sales;
       const dataAddNewOrder: any = {
         ...values,
         fundaID,
@@ -315,10 +304,10 @@ export const ModalAddNewOrder: FC<Props> = () => {
         total: `${totalMoney}`,
         discount: `${discountAndSales.discount}`,
         salesoff: `${discountAndSales.sales}`,
-        credit: credit.toString()
+        credit: realCredit.toString(),
       }
-
       closeModal();
+
       const { data, status } = await API.post(
         `/api/fnb/orders`,
         dataAddNewOrder
@@ -427,7 +416,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
       sales: newSales,
       salesPercent: newSalesPercent,
     }));
-    
+
     let totalPay = totalMoney - discountAndSales.discount - newSales;
     if (service === "1") {
       totalPay = totalPay - credit;
@@ -556,9 +545,9 @@ export const ModalAddNewOrder: FC<Props> = () => {
     }
   }
 
-  const resetCredit = () => {
+  const resetCredit = (newCredit: any = creditTemp) => {
     if(isUseCredit) {
-      setTotalPay(totalPay + credit);
+      setTotalPay((totalMoney - discountAndSales.discount - discountAndSales.sales) > newCredit ? newCredit : totalMoney - discountAndSales.discount - discountAndSales.sales);
     }
     setCredit(0);
     setCreditTemp(0);
@@ -585,8 +574,6 @@ export const ModalAddNewOrder: FC<Props> = () => {
     note: "",
     appOrderSign: "",
   };
-
-  // console.log({fundaID})
 
   return (
     <>
@@ -717,7 +704,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                 onchangeValue={(value: any) => {
                                   setFieldValue("customerID", value.id);
                                   setFieldValue("name", `Đơn hàng ${value.label}`);
-                                  resetCredit();
+                                  resetCredit(value);
                                   fetchCredit(value.id, false);
                                 }}
                                 onClearData={() => {
@@ -1153,7 +1140,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                         {values.customerID && service === "1" ?
                           <div className="flex justify-between items-center mb-1 px-2 py-2">
                             <div>
-                              <div>Credit {`(${formatNumberMoney(credit)})`}</div>
+                              <div>Credit {`(${formatNumberMoney(credit || creditTemp)})`}</div>
                               <div>
                                 <FormControl sx={{ marginTop: "-5px" }} >
                                   <RadioGroup
@@ -1172,8 +1159,13 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                           onChange={() => {
                                             setCredit(0);
                                             setIsUseCredit(false);
-                                            if(totalPay && isUseCredit) {
+
+                                            const amountPay = (totalMoney - discountAndSales.discount - discountAndSales.sales) > credit ? credit : totalMoney - discountAndSales.discount - discountAndSales.sales;
+
+                                            if(totalPay) {
                                               setTotalPay(totalPay + credit);
+                                            } else if(totalPay === 0 && amountPay < credit) {
+                                              setTotalPay(amountPay);
                                             }
                                           }}
                                           checked={!isUseCredit ? true : false}
@@ -1192,9 +1184,12 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                           onChange={() => {
                                             setCredit(creditTemp);
                                             setIsUseCredit(true);
-                                            totalPay && setTotalPay(totalPay - creditTemp);
 
-                                            !creditTemp && fetchCredit(values.customerID, true);
+                                            if(totalPay) {
+                                              setTotalPay(creditTemp > totalPay ? 0 : totalPay - creditTemp);
+                                            }
+
+                                            fetchCredit(values.customerID, true);
                                           }}
                                           checked={isUseCredit ? true : false}
                                         />

@@ -64,6 +64,7 @@ export const FnbBillOrder: FC = () => {
                 })}`,
             );
             const { data, status } = response?.data;
+            // console.log(data)
 
             if (status !== 200) return;
 
@@ -128,13 +129,6 @@ export const FnbBillOrder: FC = () => {
                             {
                                 orderProducts.map((item: any) => {
                                     const amount = Number(item.quantity*item.unitPrice)
-
-                                    // if(item?.subProducts){
-                                    //     for(const subProduct of item?.subProducts){
-                                    //         amount = Number(amount) + Number(item.quantity)*Number(subProduct.unitPrice)
-                                    //     }
-                                    // }
-                                    
                                     let toppingPrice = 0
                                     let str = ""
 

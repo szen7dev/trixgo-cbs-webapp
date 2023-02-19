@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 import debounce from "lodash/debounce";
 import moment from "moment";
 import { formatNumberMoney } from "utils/converter";
+import API from "apis/repository";
+import { convertObToUrl } from "utils";
 
 /*=====2.CSS=====*/
 
@@ -22,94 +24,62 @@ import { ImageProps } from "typings/common";
 import { APP_ID } from "apis/localdb";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { useFnbMistake } from 'services/hooks/fnb/useFnbMistake';
+import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
 
 /*=====7.OTHER=====*/
 import { FNB_INTERNAL } from "apis/localdb";
 import { createLinkAndClick } from "utils";
 
-const TYPE_PRODUCT = [
-	{ value: 1, text: "Thông thường" },
-	{ value: 2, text: "Topping" },
-]
-const TYPE_MISTAKE = [
-	"Hệ thống phát hiện", "Khách hàng phát hiện"
-]
-const STATUS_MISTAKE = [
-	"Đã xử lý", "Chưa xử lý"
-]
-
 export const FnbReportCustomer: FC = () => {
-	useEffect(() => {
-		document.title = "Trixgo | FnB";
-	}, []);
-	
+	const [getOrders, setOrders] = useState([])
+	// useEffect(() => {
+	// 	document.title = "Trixgo | FnB";
+	// }, []);
 	const history = useHistory();
-	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
-
-	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
-	const [keyword, setKeyword] = useState("");
-
-	const [isShowImageFullScreen, setIsShowImageFullScreen] = useState(false);
-
-	const [defaultState, setDefaultState] = useState({
-	    mediaID: '',
-	    images: [] as ImageProps[],
-	    index: 0,
-	    createAt: ""
-  	});
-
-	/**
-	 * List mẩu tin
-	 */
-	const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbMistake({ 
-		params: { 
-			keyword: keyword, 
-			// fundasID: [fundaID],
-			populates: JSON.stringify({
-				path: 'userCreate mistake executor funda files'
-			}) 
-		}, isFetchList: true, isFetchInfo: false  });
-
-	// console.log(listWithPager)
 
 	useEffect(() => {
-		if (isSuccess && !(hasPermission)) {
-			toast.error("Bạn không có quyền truy cập chức năng này. Vui lòng liên hệ ban quản trị.");
-			history.push("/")
-		}
-	}, [hasPermission]);
+        const fetchOrders = async () => {
+            const response = await API.get(
+                `/api/fnb/orders/get-list-by-property?option=8`,
+            );
+            const { data, status } = response?.data;
+			// console.log(data)
 
-	type PaginateHandle = React.ElementRef<typeof PaginateV2>;
-    const ref = React.useRef<PaginateHandle>(null);
-    const [pageIndex, setPageIndex] = useState(0);
+            if (status !== 200) return;
 
-	/**
-	 * LÀM VIỆC VỚI EXCEL
-	 */
-	  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
-		isExporting: false,
-	});
-	const { exportMistakeAsync } = useFnbMistake({});
-  
-	const handleExportExcel = async () => {
-	  try {
-		setStateExport({ isExporting: true });
-		const { error, data } = await exportMistakeAsync({
-		  filterParams: {  
-		  }
-		});
-  
-		if(error) {
-		  return toast.warn(data?.message);
-		}
-  
-		data && createLinkAndClick(data, '_self');
-	  } catch (error: any) {
-		toast.error(error.message)
-	  } finally {
-		setStateExport({ isExporting: false });
-	  }
-	}
+            setOrders(data)
+        }
+
+        fetchOrders();
+    }, [])
+
+	console.log(getOrders)
+
+	const [orderProducts, setOrderProducts] = useState([]);
+	useEffect(() => {
+        const fetchOrderProducts = async () => {
+            const response = await API.get(
+                `/api/fnb/order_products?${convertObToUrl({
+                orderID: "63edc0d436b5d454746ae3e5",
+                populates: JSON.stringify({
+                    path: 'subProducts product',
+                    populate: {
+                    path: 'images',
+                    }
+                })
+                })}`,
+            );
+            const { data, status } = response?.data;
+            // console.log(data)
+
+            if (status !== 200) return;
+
+            setOrderProducts(data.listRecords)
+        }
+
+        fetchOrderProducts();
+    }, [])
+	console.log(orderProducts)
 
 	return (
 		<main className="h-full overflow-auto">
@@ -118,26 +88,11 @@ export const FnbReportCustomer: FC = () => {
 					<button onClick={history.goBack} className="mr-5">
                         <img src="/images/common/button_back.png" alt="Button Back" />
                     </button>
-					<p className="text-lg mr-10">Danh sách lỗi nhân viên</p>
+					<p className="text-lg mr-10">Danh sách khách hàng tiềm năng</p>
 				</div>
-				<button onClick={handleExportExcel} title="Tải dữ liệu Excel">
+				<button title="Tải dữ liệu Excel">
 					Tải dữ liệu Excel
 				</button>
-				<PaginateV2
-					ref={ref}
-					totalRecord={totalRecord}
-					totalPages={totalPage}
-					limit={20}
-					hasNextPage={hasNextPage}
-					isFetching={isLoading}
-					nextPageAction={() => {
-						fetchNextPage();
-						setPageIndex(oldState => oldState+1)
-					}}
-					prevPageAction={() => {
-						setPageIndex(oldState => oldState-1)
-					}}
-				/>
 			</header>
 
 			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
@@ -150,32 +105,22 @@ export const FnbReportCustomer: FC = () => {
 						</th>
 						<th className="pb-1 pt-1 font-normal w-1/4">
 							<div className="pl-2">
-								Lỗi mắc phải
+								Tên khách hàng
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal">
 							<div className="pl-2">
-								Nhân sự mắc lỗi
+								Điện thoại
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal">
 							<div className="pl-2">
-								Cơ sở
+								Tổng giá trị thanh toán
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal">
 							<div className="pl-2">
-								Phân loại
-							</div>
-						</th>
-						<th className="pb-1 pt-1 font-normal">
-							<div className="pl-2">
-								Người phát hiện/gán lỗi
-							</div>
-						</th>
-						<th className="pb-1 pt-1 font-normal">
-							<div className="pl-2">
-								Giá trị phạt
+								Tổng số đơn hàng
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal">
@@ -185,7 +130,7 @@ export const FnbReportCustomer: FC = () => {
 						</th>
 					</tr>
 				</thead>
-				{
+				{/* {
 					(listWithPager[pageIndex]??[]).map((item: any, i: any) => (
 						<tr key={item._id} className="text-[14px]">
 							<td className={"p-2 border-0.5 border-primary-border text-cente"}>{i+1}</td>
@@ -201,47 +146,15 @@ export const FnbReportCustomer: FC = () => {
 								{item?.funda?.name}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{TYPE_MISTAKE[item?.type-1]}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								{STATUS_MISTAKE[item?.status-1]}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
 								{formatNumberMoney(item?.amount||0)}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								{item?.files?.map((image: any, i: number) => {
-									return (
-										<div
-											key={image._id}
-											className="mt-2 cursor-pointer relative"
-											onClick={() => {
-			                                    setDefaultState({
-				                                    mediaID: image._id,
-				                                    images: item?.files,
-				                                    index: i,
-				                                    createAt: image.createAt
-			                                    });
-			                                    setIsShowImageFullScreen(true);
-			                                }}
-										>
-											<img src={`${process.env.REACT_APP_URL_S3}${image?.path}`} />
-										</div>
-									)
-								})}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{item?.note}
 							</td>
 						</tr>
 					))
-				}
+				} */}
 			</table>
-			<ModalZoomView
-		        isShow={isShowImageFullScreen}
-		        toggle={() => setIsShowImageFullScreen(!isShowImageFullScreen)}
-		        initialData={defaultState}
-		    />
 		</main>
 	);
 };
