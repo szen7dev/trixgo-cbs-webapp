@@ -131,7 +131,7 @@ export const ModalUpdateSalesChannel: FC<Props> = ({ defaultValues = {} }) => {
                                                 <div className={"flex py-2"}>
                                                     <div className={"w-full items-center"}>
                                                         <div className="my-2">
-                                                            <div className="font-bold mb-2 text-primary-gray">Kênh bán hàng</div>
+                                                            <div className="font-bold mb-2 text-primary-gray">Lưu ý: Chỉ áp dụng chuyển đổi giữa các kênh Food App - không chuyển đổi được giữa Food App và Offline</div>
                                                             <div>
                                                                 <FormControl sx={{ marginTop: "-5px", marginLeft: "-9px" }} >
                                                                     <RadioGroup
@@ -141,7 +141,7 @@ export const ModalUpdateSalesChannel: FC<Props> = ({ defaultValues = {} }) => {
                                                                         className="flex justify-between	"
                                                                         sx={{ flexWrap: "nowrap" }}
                                                                     >
-                                                                        <FormControlLabel
+                                                                        {/* <FormControlLabel
                                                                             sx={{ marginLeft: "0", width: "75px" }}
                                                                             value="1"
                                                                             control={
@@ -154,7 +154,7 @@ export const ModalUpdateSalesChannel: FC<Props> = ({ defaultValues = {} }) => {
                                                                                 />
                                                                             }
                                                                             label={<span className="text-[13px]">Offline</span>}
-                                                                        />
+                                                                        /> */}
                                                                         <FormControlLabel
                                                                             sx={{ marginLeft: "0", width: "75px" }}
                                                                             value="2"
