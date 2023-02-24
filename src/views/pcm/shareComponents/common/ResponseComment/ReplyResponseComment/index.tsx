@@ -1,4 +1,4 @@
-import React, { ClipboardEvent, FC, useEffect, useRef, useState, useContext, useMemo } from "react";
+import { FC, useRef, useState, useContext, useMemo } from "react";
 import Axios from 'axios';
 import { captureException } from "@sentry/react";
 import { Editor } from "@tinymce/tinymce-react";
