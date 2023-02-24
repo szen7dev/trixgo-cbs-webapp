@@ -190,20 +190,6 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
           />
       </section>
 
-      <section className="px-10 mt-2">
-        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtType">
-          Phân loại nhân viên, khách hàng
-        </label>
-        <input
-          type="text"
-          placeholder="1-Nhân viên, 2-Khách hàng"
-          name="type"
-          className="w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"
-          defaultValue={formData.type}
-          onChange={onChange}
-        />
-      </section>
-
       <section className="px-10 py-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription" title="Bắt buộc nhập thông tin">
           Họ và tên (*)
@@ -290,6 +276,20 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
         />
       </section>
 
+      <section className="px-10 mt-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtType">
+          Phân loại nhân viên, khách hàng
+        </label>
+        <input
+          type="text"
+          placeholder="1-Nhân viên, 2-Khách hàng"
+          name="type"
+          className="w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.type}
+          onChange={onChange}
+        />
+      </section>
+
       <section className="px-10 py-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription">
           Địa chỉ
@@ -332,7 +332,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
         />
       </section>
 
-      <section className="px-10 mt-2">
+      {/* <section className="px-10 mt-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtNonResident">
           Khách biết thông tin/vãng lai
         </label>
@@ -344,7 +344,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
           defaultValue={formData.nonResident}
           onChange={onChange}
         />
-      </section>
+      </section> */}
 
       <footer className="absolute right-0 bottom-0 px-10 py-5">
         <button className="bg-primary text-primary-light text-base w-24 h-8 rounded"
