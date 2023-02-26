@@ -1699,7 +1699,7 @@ export const DashboardV2: FC<Props> = () => {
                                 >
                                   <div className="border-0.5 border-cbs-border rounded-full px-3 py-1 flex">
                                     <img src={iconPhoto} className="mr-[5px] w-6 h-6" />
-                                    <span>image_{file?.nameOrg.substring(0, 10)}...</span>
+                                    <span>{file?.nameOrg.substring(0, 10)}...</span>
                                   </div>
                                 </button>
                             ))
@@ -1714,9 +1714,9 @@ export const DashboardV2: FC<Props> = () => {
                           <button className="w-[40px] h-[40px] rounded-full hover:bg-cbs-form-input-bg" onClick={toggleModalConfirmDeleteTask.bind(null, item)}>
                             <img src={trashIcon} className="m-auto" />
                           </button>
-                          <button className="w-[40px] h-[40px] rounded-full hover:bg-cbs-form-input-bg">
+                          {/* <button className="w-[40px] h-[40px] rounded-full hover:bg-cbs-form-input-bg">
                             <img src={mailIcon} className="m-auto" />
-                          </button>
+                          </button> */}
                         </div>
                         <div className={
                           "task-date whitespace-nowrap py-2 text-right pr-4"
