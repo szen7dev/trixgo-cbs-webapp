@@ -1,9 +1,9 @@
 import React, { FC, useEffect, useMemo, useState } from "react";
 import FilterProjectNew from "./FilterProjectNew";
 import arrowDownIcon from "assets/images/Polygon 3.svg";
-import arrowRightIcon from "assets/images/arrowRight.svg";
-import defaultAva from "assets/images/image 166.jpg";
-import { usePcmPlanTaskNotification, usePcmDynamicReport } from "services/hooks/pcm/usePcmDashboardV2";
+// import arrowRightIcon from "assets/images/arrowRight.svg";
+// import defaultAva from "assets/images/image 166.jpg";
+import { usePcmDynamicReport } from "services/hooks/pcm/usePcmDashboardV2";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { PCM_PROPOSAL_TASK, PCM_STATUS_TASK } from 'apis/localdb';
 import { useAppSelector } from "redux/reducer";
@@ -14,7 +14,6 @@ import moment from "moment";
 const ProjectNew: FC = () => {
     const dispatch = useDispatch();
     const { user } = useAuth();
-    const [clickSelect, setClickSelect] = React.useState(false);
 
     const companiesOfAuthor = useAppSelector(state => state.dashboardV2.data.pcmMine.companiesOfAuthor);
     const authorsID = useAppSelector(state => state.dashboardV2.data.pcmMine.authorsID);
@@ -197,7 +196,7 @@ const ProjectNew: FC = () => {
                                     }}>
                                         <div className="flex gap-2">
                                             <img src={`${process.env.REACT_APP_URL_S3_USER}/${item?._id?.author?.image}`}
-                                                className={"w-[20px] h-[20px] rounded-full border-2 " + (selected ? "border-cbs-primary" : "border-white")}
+                                                className={"w-[20px] h-[20px] rounded-full border-2 " + (selected ? "border-cbs-primary" : "border-white")} alt={item?._id?.author?.fullname}
                                             />
                                             <span className="text-cbs-subtext"> {item?._id?.author?.fullname}</span>
                                         </div>
@@ -247,7 +246,7 @@ const ProjectNew: FC = () => {
                             )
                         })
                         }
-                        {/*                       
+                        {/*
                         <div className="flex gap-2 justify-between pt-2">
                             <a href="" className="text-cbs-subtext">Xem thêm <span>(12)</span></a>
                         </div> */}
@@ -332,6 +331,7 @@ const ProjectNew: FC = () => {
                     listDataProject={listDataProject}
                     listDataSubtype={listDataSubtype}
                     listDataStatus={listDataStatus}
+                    user={user}
                 />
             </div>
         </div>

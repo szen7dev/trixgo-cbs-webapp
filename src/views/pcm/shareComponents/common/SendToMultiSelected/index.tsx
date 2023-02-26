@@ -25,9 +25,7 @@ export const SendToMultiSelected:FC<Props> = ({ projectId, selectedUser, setSele
         isBottom && fetchNextPage();
     }
 
-    const handleSearchAssignee = (keyword: string) => {
-        setKeywordAssignee(keyword);
-    };
+    const handleSearchAssignee = (keyword: string) => setKeywordAssignee(keyword);
 
     return (
         <>

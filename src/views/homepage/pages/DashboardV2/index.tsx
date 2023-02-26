@@ -9,6 +9,16 @@ import "views/pcm/styles/pcm.module.css";
 
 import { DropdownSearchableV2, Loader } from "shareComponents/common";
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
+// import iconChat from "assets/images/icons8-chat-96 1.svg";
+// import iconTrash from "assets/images/icons8-delete-96 1.svg";
+// import taskUserAvt from "assets/images/task-user.svg";
+
+// import moreIcon from "assets/images/moreIcon.svg";
+// import arrowDown from "assets/images/icon-arrowdown.svg";
+// import defaultAva from "assets/images/image 166.jpg";
+// import iconPdf from "assets/images/icons8-attach.svg";
+// import downloadIcon from "assets/images/icons8-attach.svg";
+// import sendMailIcon from "assets/images/icons8-attach.svg";
 import userIcon from "assets/images/icon-user-avatar.svg";
 import maleUserIcon from "assets/images/icons8-male-user-64.svg";
 import categoryIcon from "assets/images/icons8-category-48.svg";
@@ -17,22 +27,15 @@ import projectIcon from "assets/images/icons8-project-50.svg";
 import TriangleDown from "assets/icons/TriangleDown";
 import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
 import businessBuiding from "assets/images/icons8-business-building-48.svg";
-import iconChat from "assets/images/icons8-chat-96 1.svg";
-import iconTrash from "assets/images/icons8-delete-96 1.svg";
-import taskUserAvt from "assets/images/task-user.svg";
 import trashIcon from "assets/images/icons8-trash-96 1.svg";
 import mailIcon from "assets/images/icons8-email-96 1.svg";
-import moreIcon from "assets/images/moreIcon.svg";
-import arrowDown from "assets/images/icon-arrowdown.svg";
-import defaultAva from "assets/images/image 166.jpg";
+
 import iconPhoto from "assets/images/icons8-photo.svg";
-import iconPdf from "assets/images/icons8-attach.svg";
-import downloadIcon from "assets/images/icons8-attach.svg";
-import sendMailIcon from "assets/images/icons8-attach.svg";
 import iconFile from "assets/images/icons8-attach.svg";
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { ModalZoomView } from "shareComponents/common";
+import { ModalConfirm } from "shareComponents/common";
 
 import { useUserSystem } from "services/hooks/users/useUserSystem";
 import { useAuth } from "services/hooks/auth/useAuth";
@@ -60,18 +63,18 @@ import { useTask } from "services/hooks/useTask";
 import { useModal } from "services/hooks/useModal";
 import { UpdateStatusDialog } from "./UpdateStatusDialog";
 import { ModalCreateResultSearch } from "./ModalCreateResultSearch";
-import { Popover } from "@mui/material";
 import { ImageProps } from "typings/common";
+import { toast } from "react-toastify";
 
 type Props = {
   type?: number;
 };
 
-export const DashboardV2: FC<Props> = ({ type = 0 }) => {
+export const DashboardV2: FC<Props> = () => {
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   const dispatch = useDispatch();
-  const [popBox1, setpopBox1] = React.useState(false)
-  const [popBox2, setpopBox2] = React.useState(false)
+  // const [popBox1, setpopBox1] = React.useState(false)
+  // const [popBox2, setpopBox2] = React.useState(false)
   const [filter, setFilter] = useState("all");
   const { user } = useAuth();
   const [pageIndex, setPageIndex] = useState(0);
@@ -80,7 +83,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
   const tabActive = useAppSelector((state) => state.dashboardV2.data.tabActive);
   const [showUpdateStatus, setShowUpdateStatus] = useState(false);
   const [isShowImageFullScreen, setIsShowImageFullScreen] = useState(false);
-  const { openModal } = useModal();
+  const { openModal, closeModal } = useModal();
 
   const [defaultState, setDefaultState] = useState({
     mediaID: '',
@@ -180,7 +183,6 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
       fetchNextPagePrject();
     }
   };
-  //
 
   // Danh sách các response
 
@@ -218,8 +220,6 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
   const [subtypes, setSubtypes] = useState<string[]>([]);
   const [status, setStatus] = useState<string[]>([]);
 
-  // Danh sách các subject theo keyword
-
   const querySearchTask: any = {
     keyword: keywordForSubject,
     fromDate: fromExpiredDate,
@@ -253,7 +253,6 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     isFetch: tabActive === 2 ? true : false,
   });
 
-  // Danh sách File
   const {
     isLoadingFile,
     nextPageFile,
@@ -273,7 +272,6 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
     ...queryFile,
     enabled: tabActive === 3 ? true : false,
   });
-  //////
 
   const onReset = () => {
     setReset(false);
@@ -303,7 +301,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
 
   const { refetch: refetchPcmPlanTaskNotification } = usePcmPlanTaskNotification({ enabled: false });
 
-  const { updateStatusMultipleAsync } = useTask({
+  const { updateStatusMultipleAsync, updateTaskAsync } = useTask({
     params: {},
     isFetchInfo: false,
   });
@@ -343,7 +341,41 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
   };
   const open = Boolean(anchorEl);
 
-  // console.log(listDataForSubject)
+  const toggleModalConfirmDeleteTask = (task: any) => {
+    openModal(
+      <div
+        className={
+          "inline-block w-[521px] h-[240px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+        }
+      >
+        <ModalConfirm
+          title="Bạn có chắc chắn muốn xóa công việc không?"
+          description="Bạn sẽ không thể hoàn tác lại công việc vừa xóa"
+          onConfirm={handleDeleteTask.bind(null, task)}
+          defaultText={false}
+          onCancel={closeModal}
+        />
+      </div>
+    );
+  }
+
+  const handleDeleteTask = async (task: any) => {
+    try {
+      closeModal();
+      if(!user) return;
+
+      const { error, data } = await updateTaskAsync({
+        taskID: task._id,
+        usersDeleteID: [user._id]
+      })
+
+      if(error) return toast.warn(data?.message);
+
+      refetchListTask();
+    } catch (error: any) {
+      return toast.error(error.message);
+    }
+  }
 
   return (
     <div className="t-home flex flex-col h-full overflow-hidden">
@@ -1667,7 +1699,7 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                                 >
                                   <div className="border-0.5 border-cbs-border rounded-full px-3 py-1 flex">
                                     <img src={iconPhoto} className="mr-[5px] w-6 h-6" />
-                                    <span>image_{file?.nameOrg.substring(0, 10)}...</span>
+                                    <span>{file?.nameOrg.substring(0, 10)}...</span>
                                   </div>
                                 </button>
                             ))
@@ -1678,14 +1710,13 @@ export const DashboardV2: FC<Props> = ({ type = 0 }) => {
                         </div>
                       </td>
                       <td className={"w-[100px] align-middle"}>
-
-                        <div className=" justify-items-end absolute ml-[10px] hidden group-hover:block homeboxbutton">
-                          <button className="w-[40px] h-[40px] rounded-full hover:bg-cbs-form-input-bg">
+                        <div className="justify-items-end absolute ml-[10px] hidden group-hover:block homeboxbutton">
+                          <button className="w-[40px] h-[40px] rounded-full hover:bg-cbs-form-input-bg" onClick={toggleModalConfirmDeleteTask.bind(null, item)}>
                             <img src={trashIcon} className="m-auto" />
                           </button>
-                          <button className="w-[40px] h-[40px] rounded-full hover:bg-cbs-form-input-bg">
+                          {/* <button className="w-[40px] h-[40px] rounded-full hover:bg-cbs-form-input-bg">
                             <img src={mailIcon} className="m-auto" />
-                          </button>
+                          </button> */}
                         </div>
                         <div className={
                           "task-date whitespace-nowrap py-2 text-right pr-4"

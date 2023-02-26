@@ -186,6 +186,17 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
         setIsUploading(false);
     }
 
+    const handlePasteFile = (event: any) => {
+		// event.preventDefault();
+
+		if(event.clipboardData?.files?.length) {
+		  return handleSetFiles(event.clipboardData.files)
+		}
+
+		const text = event.clipboardData.getData('text/plain');
+		text && window.document.execCommand('insertText', false, text);
+	}
+
     const handleAddChildTask = async (values: any) => {
         try {
             const usersRelated = selectedUser.map(user => user.value);
@@ -366,6 +377,7 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
                                 <textarea name="" rows={8}
                                     className="border-0.5 p-4 rounded-md w-full bg-white outline:none outlineNone"
                                     placeholder="Nhập mô tả"
+                                    onPaste={handlePasteFile}
                                     onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
                                         setFieldValue("description", e.target.value);
                                     }}
