@@ -1,6 +1,7 @@
 import * as React from 'react';
 import JobDialog from '../DialogProjectDetail';
 import { Link } from 'react-router-dom';
+import { toast } from "react-toastify";
 
 import icons8pdf from "assets/images/icons8-pdf-100 1.svg";
 import StarIcon from '@mui/icons-material/Star';
@@ -8,21 +9,36 @@ import StarBorderIcon from '@mui/icons-material/StarBorder';
 import moment from 'moment';
 import { PCM_STATUS_TASK } from 'apis/localdb';
 import { subContentHtml } from 'views/homepage/pages';
+import { useTask } from 'services/hooks/useTask';
 
-const FilterItem = ({ item }: any) => {
-    const [selectStar, setSelectStar] = React.useState(false)
-    // dialog
+const FilterItem = ({ item, userId }: any) => {
+    const [selectStar, setSelectStar] = React.useState(item?.flags?.includes(userId) ?? false);
     const [open, setOpen] = React.useState(false);
 
-    const handleClickOpen = () => {
-        setOpen(true);
+    const { updateTaskAsync } = useTask({});
+
+    const handleClose = () => setOpen(false);
+
+    const handleMarkTask = async () => {
+        setSelectStar(!selectStar);
+        try {
+            const { error, data } = await updateTaskAsync({
+                taskID: item._id,
+                ...selectStar ? { flagsRemoves: [userId] } : { flags: [userId] }
+            })
+
+            if(error) return toast.warn(data?.message);
+        } catch (error) {
+            if(error instanceof Error)
+                toast.error(error.message);
+            if(typeof error === 'string')
+                toast.error(error);
+        }
     };
 
-    const handleClose = (value: string) => {
-        setOpen(false);
-    };
     const files = item?.lastComment?.files && item?.lastComment?.files.length ? item?.lastComment?.files : [];
     const images = item?.lastComment?.images && item?.lastComment?.images.length ? item?.lastComment?.images : [];
+
     return (
         <div>
             <div className="flex justify-between gap-6 py-3">
@@ -50,12 +66,11 @@ const FilterItem = ({ item }: any) => {
                                     <span className="font-bold text-sm	truncate max-w-4xl  mr-[5px]">{subContentHtml(item?.name)}</span>
                                 </div>
                             </a> */}
-                            <button onClick={() => setSelectStar(!selectStar)}>
+                            <button onClick={handleMarkTask}>
                                 {(selectStar ? <StarIcon sx={{ color: '#FFCA28', width: 14, height: 14 }} /> : <StarBorderIcon sx={{ color: '#FFCA28', width: 14, height: 14 }} />)}
                             </button>
                         </div>
                         <div className="my-1 text-primary-gray text-xs truncate max-w-4xl">
-                            {/* {item?.sign} -  */}
                             {item?.project?.sign} - Người tạo: {item?.author?.fullname} - Ngày tạo: {moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
                         </div>
                         {item?.lastComment?.author?.fullname ?

@@ -158,6 +158,7 @@ export interface updateTaskPayload {
   assigneeAttachs?: Array<string>;
   tasksLink?: Array<string>;
   linksDocs?: Array<string>;
+  usersDeleteID?: Array<string>;
   isUpdateNews?: boolean;
 }
 

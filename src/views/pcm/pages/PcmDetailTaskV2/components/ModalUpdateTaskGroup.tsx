@@ -5,7 +5,7 @@ import debounce from 'lodash/debounce';
 import { toast } from "react-toastify";
 import { useTask } from "services/hooks/useTask";
 import { DropdownSearchable } from "shareComponents/common";
-import { Group, Task } from 'typings/task';
+import { Group } from 'typings/task';
 import { TOAST_DEFAULT_OPTIONS } from 'utils/constants';
 import { useQueryListGroup } from "services/hooks/usePlanGroup";
 

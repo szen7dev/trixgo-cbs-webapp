@@ -1,7 +1,7 @@
 /**
  * Libraries
  */
-import React, { ChangeEvent, FC, UIEvent, useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, FC, UIEvent, useRef, useState } from "react";
 import { Formik, Form, ErrorMessage } from "formik";
 import { useHistory } from 'react-router-dom';
 import { object, string } from "yup";
@@ -35,17 +35,17 @@ import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFi
 import { DropdownSearchable } from "shareComponents/common";
 import Close from "assets/icons/Close";
 import fakeThumbnail from "assets/images/avatar.jpg";
-// import TagIcon from "assets/images/icons8-price-tag-96.svg";
 import IconClock from "assets/images/icons8-snooze-48 1.svg";
+// import TagIcon from "assets/images/icons8-price-tag-96.svg";
 
 import "react-day-picker/lib/style.css";
 import { Editor } from "@tinymce/tinymce-react";
 import { Editor as EditorType } from "tinymce";
 import iconAttach from "assets/images/icons8-attach-48.svg";
 import { FileProp, FilePropsUpload } from "typings/common";
-import { Button, FormControl, MenuItem, Popover, Select, SelectChangeEvent } from "@mui/material";
-import { borderRadius } from "@mui/system";
+import { Popover } from "@mui/material";
 import { GroupSearchable } from "../GroupSearchable";
+// import { borderRadius } from "@mui/system";
 
 interface InitialValues {
   projectID: string,
@@ -284,6 +284,17 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
 
     setIsUploading(false);
   }
+
+  const handlePasteFile = (event: any) => {
+		// event.preventDefault();
+
+		if(event.clipboardData?.files?.length) {
+		  return handleUploadAttach(event.clipboardData.files)
+		}
+
+		const text = event.clipboardData.getData('text/plain');
+		text && window.document.execCommand('insertText', false, text);
+	}
 
   const handleRemoveUpload = (file: FileProp | FilePropsUpload, type: 'FILE' | 'IMAGE') => {
     if ('id' in file) {
@@ -760,13 +771,9 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                 <div className={"px-6 my-3"}>
                   <Editor
                     onEditorChange={(value) => setFieldValue("description", value)}
-                    // onActivate={}
-                    onInit={(evt, editor) => {
-                      editorRef.current = editor;
-                    }}
-                    // disabled={user?.email !== 'contact@trixgo.com'}
+                    onInit={(evt, editor) => editorRef.current = editor}
+                    onPaste={handlePasteFile}
                     apiKey={process.env.REACT_APP_TINYMCE_API_KEY}
-                    // onSaveContent={handleSave}
                     init={{
                       height: "350px",
                       menu: {
@@ -866,7 +873,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
 
                 </div>
                 <div className={"flex items-center border-t py-3 px-6"}>
-                  <label>
+                  <label title="Chọn file đính kèm hoặc dán ảnh trực tiếp vào ô soạn thảo">
                     <img
                       src={iconAttach}
                       alt="Icon attach"
@@ -891,18 +898,18 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                     />
                     <label htmlFor="email-notice" className={"text-left ml-2 whitespace-nowrap"}>Thông báo email</label>
                   </div>
-                  <div className="flex items-center ml-3">
+                  {/* <div className="flex items-center ml-3">
                     <img
                       src={IconClock}
                       alt="Icon attach"
                       className="h-6 w-6"
                     />
-                    {/* <Button aria-describedby={idPopover} variant="text" 
+                    <Button aria-describedby={idPopover} variant="text" 
                     onClick={handleClickOpenPop}
                     style={{textTransform: 'none', fontSize: '14px'}}
                     >
                       <span className="text-primary-gray">Nhắc trước thời hạn</span>
-                    </Button> */}
+                    </Button>
                     <Popover
                       id={idPopover}
                       open={open}
@@ -930,7 +937,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                         </div>
                       </div>
                     </Popover>
-                  </div>
+                  </div> */}
                   <button type="submit" className="btn btn-primary ml-auto" disabled={isUploading}>Xác nhận</button>
                 </div>
               </Form>

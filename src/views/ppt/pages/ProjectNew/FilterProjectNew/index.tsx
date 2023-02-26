@@ -14,7 +14,7 @@ import FilterItem from "./FilterItem";
 import { useSearchTask } from "services/hooks/useMainSearch";
 import { setQueryPcmMine } from "redux/reducer/DashboardV2Slice";
 
-const FilterProjectNew: FC<any> = ({ listDataCompany, listDataUser, listDataProject, listDataSubtype, listDataStatus}) => {
+const FilterProjectNew: FC<any> = ({ user, listDataCompany, listDataUser, listDataProject, listDataSubtype, listDataStatus }) => {
     const dispatch = useDispatch();
     type PaginateHandle = React.ElementRef<typeof PaginateV2>;
     type DropdownSearchableV2Handle = React.ElementRef<typeof DropdownSearchableV2>;
@@ -36,10 +36,6 @@ const FilterProjectNew: FC<any> = ({ listDataCompany, listDataUser, listDataProj
     const subtypesRef = useRef<DropdownSearchableV2Handle>(null);
     const statusRef = useRef<DropdownSearchableV2Handle>(null);
 
-    const keywordForSubject = useAppSelector(
-        (state) => state.dashboardV2.data.keywordForSubject
-    );
-    
     useEffect(() => {
         companyOfAuthorRef.current && companyOfAuthorRef.current.setValuesDropdown(companiesOfAuthor);
     }, [companiesOfAuthor]);
@@ -208,7 +204,7 @@ const FilterProjectNew: FC<any> = ({ listDataCompany, listDataUser, listDataProj
                             }}
                             selectOneByOne={true}
                         />
-                        
+
                         <TimeRangeDropdown
                             className={
                                 "mr-4 border border-primary-border rounded-lg my-2 text-cbs-subtext p-1 pl-2 "
@@ -307,7 +303,7 @@ const FilterProjectNew: FC<any> = ({ listDataCompany, listDataUser, listDataProj
                                 ]
                             }
                         />
-                        <DropdownSearchableV2  
+                        <DropdownSearchableV2
                             ref={subtypesRef}
                             selectOneByOne={true}
                             className={"mr-2 border border-primary-border rounded-lg my-2 text-cbs-subtext"}
@@ -364,11 +360,9 @@ const FilterProjectNew: FC<any> = ({ listDataCompany, listDataUser, listDataProj
 
             <div className="flex-1 overflow-y-auto bg-white px-4 py-2">
                 {(listDataForSubject[pageIndex] ?? []).map(
-                    (item: any, index: number) => {
-                        return (
-                            <FilterItem item={item} key={index}/>
-                        )
-                    })}
+                    (item: any, index: number) =>
+                        <FilterItem item={item} key={index} userId={user._id} />
+                    )}
             </div>
         </div>
     )

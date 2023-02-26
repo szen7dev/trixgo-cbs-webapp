@@ -120,7 +120,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
 	const handleDownloadExcel = async () => {
 		try {
 			setStateExport({ isExporting: true });
-			const { error, data } = await downloadExcelTaskAsync({ 
+			const { error, data } = await downloadExcelTaskAsync({
                 conditionDownload: JSON.stringify({
                     type, draft, subtype, typeStatus, statusNe: "3",
                 })
@@ -138,7 +138,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
 			setStateExport({ isExporting: false });
 		}
 	}
-    
+
     if(stateExport.isExporting) {
         return <Loader className="border-primary" />
     }
@@ -214,7 +214,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
                     />
                 </div>
             </div>
-            
+
             <div className={"table-task-sheet"}>
                 <table className={"w-full table-fixed tasks border-collapse"}>
 
