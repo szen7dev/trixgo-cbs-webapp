@@ -38,6 +38,7 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
 
     const initUsersSelected = useMemo(() => {
         let arr = [];
+
         if(parent) {
             const { _id, bizfullname, image } = parent.author;
             arr = [{
@@ -45,6 +46,10 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
                 value: _id,
                 image: image ? `${process.env.REACT_APP_URL_S3_USER}/${image}` : taskUserAvt
             }];
+
+            if(_id === userId) {
+                return arr;
+            }
         } else{
             if(task.accessUsers && task.accessUsers.length) {
                 arr = task.accessUsers.map(({ bizfullname, _id, image }) => ({
