@@ -21,7 +21,7 @@ import { ImageProps } from "typings/common";
 /*=====6.HOOKS/APIS=====*/
 import { APP_ID } from "apis/localdb";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
-import { useFnbShift } from 'services/hooks/fnb/useFnbShift';
+import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
 
 /*=====7.OTHER=====*/
 import { FNB_INTERNAL } from "apis/localdb";
@@ -64,12 +64,12 @@ export const FnbReportRevenue: FC = () => {
 	const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
 		isExporting: false,
 	})
-	const { exportExcelAsync, exportExcelAsync2 } = useFnbShift({})
+	const { exportOrderAsync2 } = useFnbOrder({})
 	const handleExportExcel = async () => {
 		try {
 		  setStateExport({ isExporting: true });
-		  const { error, data } = await exportExcelAsync2({
-			
+		  const { error, data } = await exportOrderAsync2({
+			option: 1
 		  });
 	
 		  if(error) {
