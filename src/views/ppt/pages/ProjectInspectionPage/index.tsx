@@ -11,7 +11,7 @@ const ProjectInspectionPage: FC = () => {
 	const match = useRouteMatch<{ id: string }>();
 
 	useEffect(() => {
-		document.title = "Nghiệm thu | Trixgo"
+		document.title = "Nghiệm thu"
 	}, []);
 
 	return (

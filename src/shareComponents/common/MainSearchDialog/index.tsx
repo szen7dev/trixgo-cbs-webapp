@@ -99,7 +99,7 @@ export const MainSearchDialog: FC = () => {
   return (
     <div className="t-main-search-wrapper rounded pb-4">
       <header className="flex pt-3 pl-6 pr-8 items-center">
-        <span className="mr-5 font-bold text-3x-large" title="Trợ lý ảo của Trixgo">
+        <span className="mr-5 font-bold text-3x-large" title="Trợ lý ảo">
           <span className="text-cbs-primary">V</span>
           <span className="text-cbs-schedule-expired">i</span>
           <span className="text-cbs-schedule-nextweek">a</span>

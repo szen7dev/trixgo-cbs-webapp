@@ -36,7 +36,7 @@ const TYPE_PRODUCT = [
 
 export const FnbStoreExportPage: FC = () => {
 	useEffect(() => {
-		document.title = "Trixgo | FnB";
+		document.title = "FnB";
 	}, []);
 	
 	const history = useHistory();

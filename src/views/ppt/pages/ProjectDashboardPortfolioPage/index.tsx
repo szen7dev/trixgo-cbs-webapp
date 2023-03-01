@@ -29,7 +29,7 @@ const ProjectDashboardPortfolioPage: FC = () => {
 	// ---------
 
 	useEffect(() => {
-		document.title = "Trixgo | Báo cáo đầu tư";
+		document.title = "Báo cáo đầu tư";
 	}, []);
 
 	return (

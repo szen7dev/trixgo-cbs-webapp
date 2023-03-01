@@ -81,7 +81,7 @@ const PcmPrintTaskTypeOne: FC = () => {
       return history.push("/");
     }
 
-    document.title = `Trixgo-${taskInfo.name}`;
+    document.title = `${taskInfo.name}`;
 
     const relatedsID = taskInfo.related?.map((user: any) => user._id) ?? [];
     const groupMembersID = taskInfo.group?.members?.map((user: any) => user._id) ?? [];

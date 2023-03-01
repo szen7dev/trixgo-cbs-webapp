@@ -65,7 +65,7 @@ const PcmPrintTaskTypeFive: FC = () => {
       return history.push("/");
     }
 
-    document.title = `Trixgo-${taskInfo.name}`;
+    document.title = `${taskInfo.name}`;
 
   }, [taskInfo, isSuccessApp]);
   const componentRef = useRef(null);

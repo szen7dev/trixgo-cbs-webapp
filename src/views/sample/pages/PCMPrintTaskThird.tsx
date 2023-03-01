@@ -54,7 +54,7 @@ const PCMPrintTaskSecond: FC<Props> = (props) => {
             <header className="mt-3">
               <p className="font-bold">PHỤ LỤC ẢNH</p>
               <p>
-                <i>(Đính kèm Đóng góp về hệ thống TRIXGO-PCM, số hiệu: )</i>
+                <i>(Đính kèm Đóng góp về hệ thống, số hiệu: )</i>
               </p>
             </header>
             <main className="space-y-5">

@@ -53,7 +53,7 @@ export const BiddingHomePage: FC = () => {
 	const history = useHistory();
 
 	useEffect(() => {
-		document.title = "Trixgo | Note"
+		document.title = "Note"
 		setData(Array.from({ length: 30 }).map((_, index) => ({
 			id: index,
 			project: index % 2 ? "Thi công rà phá bom mìn, vật nổ" : 'Thi công ép cọc thí nghiệm, thí nghiệm cọc thí nghiệm và thi công ép cọc đại trà',

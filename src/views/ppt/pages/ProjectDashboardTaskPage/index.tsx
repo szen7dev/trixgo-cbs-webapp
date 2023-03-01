@@ -76,7 +76,7 @@ const ProjectDashboardTaskPage: FC = () => {
 	// ---------
 
 	useEffect(() => {
-		document.title = "Trixgo | Báo cáo công việc";
+		document.title = "Báo cáo công việc";
 	}, []);
 
 	const [type, setType] = useState<string>('all');

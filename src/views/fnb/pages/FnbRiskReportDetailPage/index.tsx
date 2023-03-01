@@ -85,7 +85,7 @@ export const FnbRiskReportDetailPage: FC = () => {
 	}, [hasPermission]);
 
 	useEffect(() => {
-		document.title = "Trixgo | FnB";
+		document.title = "FnB";
 	}, []);
 
 	type PaginateHandle = React.ElementRef<typeof PaginateV2>;

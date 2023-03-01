@@ -29,7 +29,7 @@ const pages = [
 export const BiddingOtherPage: FC = () => {
 	const [pageActive, setPageActive] = useState('info')
 	useEffect(() => {
-		document.title = "Trixgo | Note"
+		document.title = "Note"
 	}, []);
 	let pageRender
 	switch(pageActive) {

@@ -337,8 +337,6 @@ const FnbRouter: FC = () => {
                     <FnbBillList />
                 }
             />
-            {/* F7 (https://app.trixgo.com/fnb/home/:orderID/print/2) */}
-            {/* F6 (https://app.trixgo.com/fnb/home/:orderID/print/1) */}
             <Route path="/fnb/*" component={ErrorPage} />
         </Switch>
     )
