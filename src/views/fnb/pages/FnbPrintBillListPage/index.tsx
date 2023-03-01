@@ -69,7 +69,7 @@ useEffect(() => {
 
 useEffect(() => {
   if (isLoadingInfo) return;
-  document.title = `Trixgo | FnB`;
+  document.title = `FnB`;
 }, [info]);
 const componentRef = useRef(null);
 usePrintComponent({ ref: componentRef });

@@ -40,7 +40,7 @@ const STATUS_MISTAKE = [
 
 export const FnbReportMistake: FC = () => {
 	useEffect(() => {
-		document.title = "Trixgo | FnB";
+		document.title = "FnB";
 	}, []);
 	
 	const history = useHistory();

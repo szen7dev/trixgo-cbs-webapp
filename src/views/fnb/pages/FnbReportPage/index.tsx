@@ -31,7 +31,7 @@ export const FnbReportPage: FC = () => {
     const [pageIndex, setPageIndex] = useState(0);
 
 	useEffect(() => {
-		document.title = "Trixgo | FnB";
+		document.title = "FnB";
 	}, []);
 
 	const history = useHistory();

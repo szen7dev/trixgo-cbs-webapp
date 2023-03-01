@@ -323,35 +323,12 @@ export const Dashboard: FC = () => {
 					<img src={imgBusiness2} alt="Business"/>
 				</div>
 
-        {/* <div className="t-home-right-block">
-          <div className="t-home-right-block-common">
-            <img src={imgProcess} alt="Process" />
-            <div className="t-home-right-block-common-text">
-              <div className="t-home-right-block-common-title">Quản lý vận hành</div>
-            </div>
-          </div>
-          <div className="flex items-center mt-2 t-home-operation">
-            <img src={imgProcess2} alt="Process management" />
-            <div className="t-home-operation-text pl-4 text-dark">
-              <div className="mb-5">
-                Trixgo sắp sửa ra mắt ứng dụng Quản lý vận hành công trình. Với ứng dụng này, việc bàn giao dữ liệu của Chủ đầu tư cho đơn vị vận hành trở nên cực kỳ nhanh gọn. Thông tin về căn hộ được cung cấp tới tận tay cư dân
-              </div>
-              <a className="flex items-center text-primary-gray" href="/">
-                Xem ngay
-                <span className="ml-2 rounded-full p-1 inline-block">
-                  <img src={iconArrowRight} alt="Arrow" />
-                </span>
-              </a>
-            </div>
-          </div>
-        </div> */}
-
         <div className="t-home-right-block">
           <div className="t-home-right-block-common">
             <img src={iconNew} alt="New" />
             <div className="t-home-right-block-common-text">
               <div className="t-home-right-block-common-description">
-                <span>Trixgo ra mắt phiên bản mới v3.0.0</span>
+                <span>Ra mắt phiên bản mới v3.0.0</span>
                 <ul>
                   <li>Giao diện đổi mới</li>
                   <li>Đồng bộ hóa Mobile, Tablet và Web</li>
@@ -381,7 +358,7 @@ export const Dashboard: FC = () => {
                 <div className="t-home-training-progress-bar w-1/4">
                   <div style={{ width: "40%" }}></div>
                 </div>
-                <div className="w-3/4 whitespace-nowrap pl-3">Thực hành triển khai trên nền tảng Trixgo</div>
+                <div className="w-3/4 whitespace-nowrap pl-3">Thực hành triển khai trên nền tảng</div>
               </div>
               <div className="mb-2 flex items-center">
                 <div className="t-home-training-progress-bar w-1/4">

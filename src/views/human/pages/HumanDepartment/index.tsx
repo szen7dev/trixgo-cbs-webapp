@@ -39,7 +39,7 @@ const HumanDepartment: FC = () => {
 	});
 
 	useEffect(() => {
-		document.title = "Trixgo | Danh sách dự án";
+		document.title = "Danh sách dự án";
 	}, []);
 
 	const onChangeSearch = debounce((e: React.ChangeEvent<HTMLInputElement>) => {

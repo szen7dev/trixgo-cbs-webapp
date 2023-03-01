@@ -5,7 +5,6 @@ import {AppsMenu} from "../AppsMenu";
 import {UserMenu} from "../UserMenu";
 import {useAuth} from "../../../services/hooks/auth/useAuth";
 import iconHelp from "../../../assets/images/icons8-help-48.svg";
-import iconTrixgo from "../../../assets/images/iconTrixgo.svg";
 
 type HeaderProps = {
     headerTitle: string;

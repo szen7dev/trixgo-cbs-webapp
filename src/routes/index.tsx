@@ -54,7 +54,7 @@ const FnbPrintBillListPage = lazy(() => import('views/fnb/pages/FnbPrintBillList
 
 const Routes: FC = () => {
     useEffect(() => {
-        document.title = "Trixgo | Quản trị doanh nghiệp";
+        document.title = "Quản trị doanh nghiệp";
     }, []);
 
     return (

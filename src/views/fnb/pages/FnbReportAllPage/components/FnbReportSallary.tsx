@@ -29,7 +29,7 @@ import { createLinkAndClick } from "utils";
 
 export const FnbReportSallary: FC = () => {
 	useEffect(() => {
-		document.title = "Trixgo | FnB";
+		document.title = "FnB";
 	}, []);
 	
 	const history = useHistory();

@@ -96,7 +96,7 @@ export const getIconApp = (salesChannel: any) => {
 export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
 
   useEffect(() => {
-    document.title = "Trixgo | FnB";
+    document.title = "FnB";
   }, []);
 
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;

@@ -92,13 +92,12 @@ const DatahubHome: FC<RouteComponentProps> = () => {
 						<div className='pt-1'>
 							<div className='flex items-cebter'>
 								<span className='text-cbs-primary text-2x-large mr-2'>
-									+84 868 898 086
+									+84
 								</span>
 								<span className='bg-cbs-primary text-white text-xs py-[7px] px-1 align-middle'>
 									24/7
 								</span>
 							</div>
-							<p className='mt-3.5 text-cbs-subtext'>© 2022 Công ty Cổ phần Trixgo</p>
 						</div>
 					</div>
 					<div className='w-3/12'>

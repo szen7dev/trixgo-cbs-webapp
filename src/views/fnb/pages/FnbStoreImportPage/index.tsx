@@ -31,7 +31,7 @@ export const FnbStoreImportPage: FC = () => {
 	const { user } = useAuth();
 	const companyID = user?.company._id;
 	useEffect(() => {
-		document.title = "Trixgo | FnB";
+		document.title = "FnB";
 	}, []);
 	const history = useHistory();
 	const { fundaID } = useParams<{ fundaID: string }>();

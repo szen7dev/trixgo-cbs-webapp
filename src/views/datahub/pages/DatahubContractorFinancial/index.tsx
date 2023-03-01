@@ -54,7 +54,7 @@ const DatahubContractorFinancial: FC = () => {
     });
 
 	useEffect(() => {
-		document.title = "Thầu và mua sắm | Trixgo";
+		document.title = "Thầu và mua sắm";
 	}, []);
 
 	const handleUploadFiles = async (filesSelected: FileList | null, datahubFinreportID: string) => {

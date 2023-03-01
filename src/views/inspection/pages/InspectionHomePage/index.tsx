@@ -48,7 +48,7 @@ export const InspectionHomePage: FC = () => {
 	console.log("listDataForWithPager", listDataForWithPager);
 	const [pageIndex, setPageIndex] = useState(0);
 	useEffect(() => {
-		document.title = "Trixgo | Note"
+		document.title = "Note"
 	}, []);
 	// const match = useRouteMatch<{ id: string }>();
 

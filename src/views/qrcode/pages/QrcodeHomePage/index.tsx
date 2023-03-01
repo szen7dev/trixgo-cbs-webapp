@@ -22,7 +22,7 @@ SwiperCore.use([Pagination]);
 
 export const QrcodeHomePage: FC = () => {
 	useEffect(() => {
-		document.title = "Trixgo | Note"
+		document.title = "Note"
 	}, []);
 
 	return (

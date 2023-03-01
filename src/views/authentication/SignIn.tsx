@@ -13,7 +13,7 @@ import { SignInPayload } from "typings/auth";
 import { Loader } from "shareComponents/common";
 import RegisterPage from "./Register";
 
-import SignInLogo from "assets/images/signin-logo.svg";
+// import SignInLogo from "assets/images/signin-logo.svg";
 import SignInImage from "assets/images/signin-image.svg";
 import MailIcon from "assets/images/icons-email.svg";
 import LockIcon from "assets/images/icons-lock.svg";
@@ -84,9 +84,9 @@ const LoginPage: FC = () => {
 
                 return (
                   <Form>
-                    <div className="flex justify-center">
+                    {/* <div className="flex justify-center">
                       <img src={SignInLogo} alt="SignIn" />
-                    </div>
+                    </div> */}
                     <div className="mt-12">
                       <h1 className="font-bold text-4xl">
                         {/* Cú pháp signIn:<tên biến>*/}
@@ -226,4 +226,4 @@ const LoginPage: FC = () => {
   );
 };
 
-export default LoginPage;
+export default LoginPage

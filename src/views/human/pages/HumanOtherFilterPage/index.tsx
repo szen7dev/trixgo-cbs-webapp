@@ -21,7 +21,7 @@ SwiperCore.use([Pagination]);
 
 export const HumanOtherFilterPage: FC = () => {
 	useEffect(() => {
-		document.title = "Trixgo | Note"
+		document.title = "Note"
 	}, []);
 
 	return (

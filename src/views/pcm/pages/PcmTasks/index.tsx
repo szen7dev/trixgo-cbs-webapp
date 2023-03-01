@@ -181,14 +181,14 @@ export const PcmTasks: FC = () => {
                             </div>
                             <div className="text-sm mb-2 italic text-primary-gray">Created: Nguyễn Hữu Hiệp-PGI - 28/04/2021 15:30</div>
                             <div className="tpf-attach flex flex-wrap">
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.png">
-                                    <img className="h-6 w-6 object-contain" src={attachImg} alt="Attachment" /> TrixgoHomepage.png
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.png">
+                                    <img className="h-6 w-6 object-contain" src={attachImg} alt="Attachment" /> Homepage.png
                                 </button>
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.docx">
-                                    <img className="h-6 w-6 object-contain" src={attachWord} alt="Attachment" /> TrixgoHomepage.docx
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.docx">
+                                    <img className="h-6 w-6 object-contain" src={attachWord} alt="Attachment" /> Homepage.docx
                                 </button>
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.xlsx">
-                                    <img className="h-6 w-6 object-contain" src={attachExcel} alt="Attachment" /> TrixgoHomepage.xlsx
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.xlsx">
+                                    <img className="h-6 w-6 object-contain" src={attachExcel} alt="Attachment" /> Homepage.xlsx
                                 </button>
                                 <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl tpf-attach-item-plus" title="+3">+3</button>
                             </div>
@@ -224,14 +224,14 @@ export const PcmTasks: FC = () => {
                             </div>
                             <div className="text-sm mb-2 italic text-primary-gray">Created: Nguyễn Hữu Hiệp-PGI - 28/04/2021 15:30</div>
                             <div className="tpf-attach flex flex-wrap">
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.png">
-                                    <img className="h-6 w-6 object-contain" src={attachImg} alt="Attachment" /> TrixgoHomepage.png
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.png">
+                                    <img className="h-6 w-6 object-contain" src={attachImg} alt="Attachment" /> Homepage.png
                                 </button>
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.docx">
-                                    <img className="h-6 w-6 object-contain" src={attachWord} alt="Attachment" /> TrixgoHomepage.docx
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.docx">
+                                    <img className="h-6 w-6 object-contain" src={attachWord} alt="Attachment" /> Homepage.docx
                                 </button>
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.xlsx">
-                                    <img className="h-6 w-6 object-contain" src={attachExcel} alt="Attachment" /> TrixgoHomepage.xlsx
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.xlsx">
+                                    <img className="h-6 w-6 object-contain" src={attachExcel} alt="Attachment" /> Homepage.xlsx
                                 </button>
                                 <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl tpf-attach-item-plus" title="+3">+3</button>
                             </div>
@@ -265,14 +265,14 @@ export const PcmTasks: FC = () => {
                             </div>
                             <div className="text-sm mb-2 italic text-primary-gray">Created: Nguyễn Hữu Hiệp-PGI - 28/04/2021 15:30</div>
                             <div className="tpf-attach flex flex-wrap">
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.png">
-                                    <img className="h-6 w-6 object-contain" src={attachImg} alt="Attachment" /> TrixgoHomepage.png
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.png">
+                                    <img className="h-6 w-6 object-contain" src={attachImg} alt="Attachment" /> Homepage.png
                                 </button>
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.docx">
-                                    <img className="h-6 w-6 object-contain" src={attachWord} alt="Attachment" /> TrixgoHomepage.docx
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.docx">
+                                    <img className="h-6 w-6 object-contain" src={attachWord} alt="Attachment" /> Homepage.docx
                                 </button>
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.xlsx">
-                                    <img className="h-6 w-6 object-contain" src={attachExcel} alt="Attachment" /> TrixgoHomepage.xlsx
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.xlsx">
+                                    <img className="h-6 w-6 object-contain" src={attachExcel} alt="Attachment" /> Homepage.xlsx
                                 </button>
                                 <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl tpf-attach-item-plus" title="+3">+3</button>
                             </div>
@@ -306,14 +306,14 @@ export const PcmTasks: FC = () => {
                             </div>
                             <div className="text-sm mb-2 italic text-primary-gray">Created: Nguyễn Hữu Hiệp-PGI - 28/04/2021 15:30</div>
                             <div className="tpf-attach flex flex-wrap">
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.png">
-                                    <img className="h-6 w-6 object-contain" src={attachImg} alt="Attachment" /> TrixgoHomepage.png
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.png">
+                                    <img className="h-6 w-6 object-contain" src={attachImg} alt="Attachment" /> Homepage.png
                                 </button>
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.docx">
-                                    <img className="h-6 w-6 object-contain" src={attachWord} alt="Attachment" /> TrixgoHomepage.docx
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.docx">
+                                    <img className="h-6 w-6 object-contain" src={attachWord} alt="Attachment" /> Homepage.docx
                                 </button>
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.xlsx">
-                                    <img className="h-6 w-6 object-contain" src={attachExcel} alt="Attachment" /> TrixgoHomepage.xlsx
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.xlsx">
+                                    <img className="h-6 w-6 object-contain" src={attachExcel} alt="Attachment" /> Homepage.xlsx
                                 </button>
                                 <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl tpf-attach-item-plus" title="+3">+3</button>
                             </div>
@@ -347,14 +347,14 @@ export const PcmTasks: FC = () => {
                             </div>
                             <div className="text-sm mb-2 italic text-primary-gray">Created: Nguyễn Hữu Hiệp-PGI - 28/04/2021 15:30</div>
                             <div className="tpf-attach flex flex-wrap">
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.png">
-                                    <img className="h-6 w-6 object-contain" src={attachImg} alt="Attachment" /> TrixgoHomepage.png
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.png">
+                                    <img className="h-6 w-6 object-contain" src={attachImg} alt="Attachment" /> Homepage.png
                                 </button>
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.docx">
-                                    <img className="h-6 w-6 object-contain" src={attachWord} alt="Attachment" /> TrixgoHomepage.docx
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.docx">
+                                    <img className="h-6 w-6 object-contain" src={attachWord} alt="Attachment" /> Homepage.docx
                                 </button>
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.xlsx">
-                                    <img className="h-6 w-6 object-contain" src={attachExcel} alt="Attachment" /> TrixgoHomepage.xlsx
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.xlsx">
+                                    <img className="h-6 w-6 object-contain" src={attachExcel} alt="Attachment" /> Homepage.xlsx
                                 </button>
                                 <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl tpf-attach-item-plus" title="+3">+3</button>
                             </div>
@@ -388,14 +388,14 @@ export const PcmTasks: FC = () => {
                             </div>
                             <div className="text-sm mb-2 italic text-primary-gray">Created: Nguyễn Hữu Hiệp-PGI - 28/04/2021 15:30</div>
                             <div className="tpf-attach flex flex-wrap">
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.png">
-                                    <img className="h-6 w-6 object-contain" src={attachImg} alt="Attachment" /> TrixgoHomepage.png
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.png">
+                                    <img className="h-6 w-6 object-contain" src={attachImg} alt="Attachment" /> Homepage.png
                                 </button>
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.docx">
-                                    <img className="h-6 w-6 object-contain" src={attachWord} alt="Attachment" /> TrixgoHomepage.docx
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.docx">
+                                    <img className="h-6 w-6 object-contain" src={attachWord} alt="Attachment" /> Homepage.docx
                                 </button>
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.xlsx">
-                                    <img className="h-6 w-6 object-contain" src={attachExcel} alt="Attachment" /> TrixgoHomepage.xlsx
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.xlsx">
+                                    <img className="h-6 w-6 object-contain" src={attachExcel} alt="Attachment" /> Homepage.xlsx
                                 </button>
                                 <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl tpf-attach-item-plus" title="+3">+3</button>
                             </div>
@@ -429,14 +429,14 @@ export const PcmTasks: FC = () => {
                             </div>
                             <div className="text-sm mb-2 italic text-primary-gray">Created: Nguyễn Hữu Hiệp-PGI - 28/04/2021 15:30</div>
                             <div className="tpf-attach flex flex-wrap">
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.png">
-                                    <img className="h-6 w-6 object-contain" src={attachImg} alt="Attachment" /> TrixgoHomepage.png
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.png">
+                                    <img className="h-6 w-6 object-contain" src={attachImg} alt="Attachment" /> Homepage.png
                                 </button>
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.docx">
-                                    <img className="h-6 w-6 object-contain" src={attachWord} alt="Attachment" /> TrixgoHomepage.docx
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.docx">
+                                    <img className="h-6 w-6 object-contain" src={attachWord} alt="Attachment" /> Homepage.docx
                                 </button>
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.xlsx">
-                                    <img className="h-6 w-6 object-contain" src={attachExcel} alt="Attachment" /> TrixgoHomepage.xlsx
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.xlsx">
+                                    <img className="h-6 w-6 object-contain" src={attachExcel} alt="Attachment" /> Homepage.xlsx
                                 </button>
                                 <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl tpf-attach-item-plus" title="+3">+3</button>
                             </div>
@@ -470,14 +470,14 @@ export const PcmTasks: FC = () => {
                             </div>
                             <div className="text-sm mb-2 italic text-primary-gray">Created: Nguyễn Hữu Hiệp-PGI - 28/04/2021 15:30</div>
                             <div className="tpf-attach flex flex-wrap">
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.png">
-                                    <img className="h-6 w-6 object-contain" src={attachImg} alt="Attachment" /> TrixgoHomepage.png
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.png">
+                                    <img className="h-6 w-6 object-contain" src={attachImg} alt="Attachment" /> Homepage.png
                                 </button>
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.docx">
-                                    <img className="h-6 w-6 object-contain" src={attachWord} alt="Attachment" /> TrixgoHomepage.docx
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.docx">
+                                    <img className="h-6 w-6 object-contain" src={attachWord} alt="Attachment" /> Homepage.docx
                                 </button>
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.xlsx">
-                                    <img className="h-6 w-6 object-contain" src={attachExcel} alt="Attachment" /> TrixgoHomepage.xlsx
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.xlsx">
+                                    <img className="h-6 w-6 object-contain" src={attachExcel} alt="Attachment" /> Homepage.xlsx
                                 </button>
                                 <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl tpf-attach-item-plus" title="+3">+3</button>
                             </div>
@@ -511,14 +511,14 @@ export const PcmTasks: FC = () => {
                             </div>
                             <div className="text-sm mb-2 italic text-primary-gray">Created: Nguyễn Hữu Hiệp-PGI - 28/04/2021 15:30</div>
                             <div className="tpf-attach flex flex-wrap">
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.png">
-                                    <img className="h-6 w-6 object-contain" src={attachImg} alt="Attachment" /> TrixgoHomepage.png
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.png">
+                                    <img className="h-6 w-6 object-contain" src={attachImg} alt="Attachment" /> Homepage.png
                                 </button>
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.docx">
-                                    <img className="h-6 w-6 object-contain" src={attachWord} alt="Attachment" /> TrixgoHomepage.docx
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.docx">
+                                    <img className="h-6 w-6 object-contain" src={attachWord} alt="Attachment" /> Homepage.docx
                                 </button>
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.xlsx">
-                                    <img className="h-6 w-6 object-contain" src={attachExcel} alt="Attachment" /> TrixgoHomepage.xlsx
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.xlsx">
+                                    <img className="h-6 w-6 object-contain" src={attachExcel} alt="Attachment" /> Homepage.xlsx
                                 </button>
                                 <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl tpf-attach-item-plus" title="+3">+3</button>
                             </div>
@@ -552,14 +552,14 @@ export const PcmTasks: FC = () => {
                             </div>
                             <div className="text-sm mb-2 italic text-primary-gray">Created: Nguyễn Hữu Hiệp-PGI - 28/04/2021 15:30</div>
                             <div className="tpf-attach flex flex-wrap">
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.png">
-                                    <img className="h-6 w-6 object-contain" src={attachImg} alt="Attachment" /> TrixgoHomepage.png
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.png">
+                                    <img className="h-6 w-6 object-contain" src={attachImg} alt="Attachment" /> Homepage.png
                                 </button>
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.docx">
-                                    <img className="h-6 w-6 object-contain" src={attachWord} alt="Attachment" /> TrixgoHomepage.docx
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.docx">
+                                    <img className="h-6 w-6 object-contain" src={attachWord} alt="Attachment" /> Homepage.docx
                                 </button>
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.xlsx">
-                                    <img className="h-6 w-6 object-contain" src={attachExcel} alt="Attachment" /> TrixgoHomepage.xlsx
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.xlsx">
+                                    <img className="h-6 w-6 object-contain" src={attachExcel} alt="Attachment" /> Homepage.xlsx
                                 </button>
                                 <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl tpf-attach-item-plus" title="+3">+3</button>
                             </div>
@@ -593,14 +593,14 @@ export const PcmTasks: FC = () => {
                             </div>
                             <div className="text-sm mb-2 italic text-primary-gray">Created: Nguyễn Hữu Hiệp-PGI - 28/04/2021 15:30</div>
                             <div className="tpf-attach flex flex-wrap">
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.png">
-                                    <img className="h-6 w-6 object-contain" src={attachImg} alt="Attachment" /> TrixgoHomepage.png
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.png">
+                                    <img className="h-6 w-6 object-contain" src={attachImg} alt="Attachment" /> Homepage.png
                                 </button>
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.docx">
-                                    <img className="h-6 w-6 object-contain" src={attachWord} alt="Attachment" /> TrixgoHomepage.docx
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.docx">
+                                    <img className="h-6 w-6 object-contain" src={attachWord} alt="Attachment" /> Homepage.docx
                                 </button>
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.xlsx">
-                                    <img className="h-6 w-6 object-contain" src={attachExcel} alt="Attachment" /> TrixgoHomepage.xlsx
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.xlsx">
+                                    <img className="h-6 w-6 object-contain" src={attachExcel} alt="Attachment" /> Homepage.xlsx
                                 </button>
                                 <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl tpf-attach-item-plus" title="+3">+3</button>
                             </div>
@@ -634,14 +634,14 @@ export const PcmTasks: FC = () => {
                             </div>
                             <div className="text-sm mb-2 italic text-primary-gray">Created: Nguyễn Hữu Hiệp-PGI - 28/04/2021 15:30</div>
                             <div className="tpf-attach flex flex-wrap">
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.png">
-                                    <img className="h-6 w-6 object-contain" src={attachImg} alt="Attachment" /> TrixgoHomepage.png
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.png">
+                                    <img className="h-6 w-6 object-contain" src={attachImg} alt="Attachment" /> Homepage.png
                                 </button>
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.docx">
-                                    <img className="h-6 w-6 object-contain" src={attachWord} alt="Attachment" /> TrixgoHomepage.docx
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.docx">
+                                    <img className="h-6 w-6 object-contain" src={attachWord} alt="Attachment" /> Homepage.docx
                                 </button>
-                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="TrixgoHomepage.xlsx">
-                                    <img className="h-6 w-6 object-contain" src={attachExcel} alt="Attachment" /> TrixgoHomepage.xlsx
+                                <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl" title="Homepage.xlsx">
+                                    <img className="h-6 w-6 object-contain" src={attachExcel} alt="Attachment" /> Homepage.xlsx
                                 </button>
                                 <button className="tpf-attach-item bg-primary-light border border-secondary-gray flex items-center pt-1 pr-3 pb-1 pl-3 whitespace-nowrap overflow-hidden overflow-ellipsis mr-2 max-w-3xl tpf-attach-item-plus" title="+3">+3</button>
                             </div>

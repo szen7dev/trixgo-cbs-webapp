@@ -97,7 +97,7 @@ const DatahubContractorContract: FC = () => {
 	const instance = useTable({ columns, data: _data, getRowId: (row) => row._id }, useRowSelect);
 
 	useEffect(() => {
-		document.title = "Thầu và mua sắm | Trixgo";
+		document.title = "Thầu và mua sắm";
 	}, []);
 
 	return (

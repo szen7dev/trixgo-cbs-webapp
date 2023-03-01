@@ -13,7 +13,7 @@ export const UserMenu: FC = () => {
       <div className="flex items-center justify-center ml-6">
         <Menu.Button className="flex justify-center items-center group focus:outline-none border rounded-lg border-primary-border p-1.5">
           <span className={"text-2xl text-primary-gray mr-2"}>
-              Trixgo
+              Tài khoản
           </span>
           <img
             src={`${process.env.REACT_APP_URL_S3_USER}/${user?.image}`}
