@@ -1095,7 +1095,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                           <div className="font-bold">{formatNumberMoney(totalMoney)}</div>
                         </div>
                         <div className="flex justify-between items-center mb-1 px-2 py-2">
-                          <div className="">Chiết khấu</div>
+                          <div className="">Chiết khấu*** (chỉ áp dụng đơn App)</div>
                           <div className="flex gap-1">
                             <div>
                               <input placeholder="25%"
@@ -1116,7 +1116,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                           </div>
                         </div>
                         <div className="flex justify-between items-center mb-1 px-2 py-2">
-                          <div className="">Giảm giá</div>
+                          <div className="">Giảm giá*** (chỉ áp dụng đơn Off)</div>
                           <div className="flex gap-1">
                             <div>
                               <input placeholder="25%"
@@ -1140,7 +1140,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                         {values.customerID && service === "1" ?
                           <div className="flex justify-between items-center mb-1 px-2 py-2">
                             <div>
-                              <div>Credit {`(${formatNumberMoney(credit || creditTemp)})`}</div>
+                              <div>Credit-Trừ từ tích điểm-Chỉ áp dụng đơn Off {`(${formatNumberMoney(credit || creditTemp)})`}</div>
                               <div>
                                 <FormControl sx={{ marginTop: "-5px" }} >
                                   <RadioGroup

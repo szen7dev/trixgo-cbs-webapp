@@ -43,6 +43,7 @@ import { ModalAddNewOrder } from "./ModalAddNewOrder";
 import { ModalAddNewContact } from "./ModalAddNewContact";
 import { useDispatch } from "react-redux";
 import { resetQueryFnb } from "redux/reducer/FnbSlice";
+import { formatNumberMoney } from "utils/converter";
 
 export const FnbLeftSideBar: FC = () => {
     const { user } = useAuth();
@@ -288,7 +289,8 @@ export const FnbLeftSideBar: FC = () => {
                                             <div className="w-full">
                                                 <div className="flex justify-between">
                                                     <div>{item?.name} ({item?.numberOfOrders | 0})</div>
-                                                    <div className="text-cbs-subtext">{moment(item?.createAt).format('DD/MM/YY')}</div>
+                                                    {/* <div className="text-cbs-subtext">{moment(item?.createAt).format('DD/MM/YY')}</div> */}
+                                                    <div className="text-cbs-subtext">{formatNumberMoney(item?.remainLoyaltyPoints)}đ</div>
                                                 </div>
                                                 <div className="text-cbs-subtext">{item?.phone}-{item?.note}</div>
                                             </div>
