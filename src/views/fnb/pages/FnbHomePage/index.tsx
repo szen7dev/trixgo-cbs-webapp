@@ -15,8 +15,6 @@ import "slick-carousel/slick/slick-theme.css";
 import "views/pcm/styles/pcm.module.css";
 
 /*=====3.ICONS=====*/
-import iconDown from "assets/images/icons8-download-64 1.svg";
-
 import offlineChannelIcon from "assets/images/fnb/offline.svg";
 import grabChannelIcon from "assets/images/fnb/grab.svg";
 import shopeeChannelIcon from "assets/images/fnb/shopee.svg";
@@ -36,21 +34,20 @@ import { ModalUpdatePayment } from "./components/ModalUpdatePayment";
 import { ModalUpdateSalesChannel } from "./components/ModalUpdateSalesChannel";
 import { DropdownSearchableV2, Loader, ModalConfirm } from "shareComponents/common";
 import TriangleDown from "assets/icons/TriangleDown";
-import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
 import { APP_ID } from "apis/localdb";
 import { validateFiles } from 'validation/file';
-import { FileProp, FileProps, FilePropsUpload, ImageProps } from "typings/common";
+import { ImageProps } from "typings/common";
 import { ModalZoomView } from "shareComponents/common";
 
 /*=====6.HOOKS/APIS=====*/
 import { useAuth } from "services/hooks/auth/useAuth";
 import { useAppSelector } from "redux/reducer";
-import { useTask } from "services/hooks/useTask";
 import { useModal } from "services/hooks/useModal";
 
 import API from "apis/repository";
 
 import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
+import { useFnbOrderProduct } from 'services/hooks/fnb/useFnbOrderProduct';
 import { useUpload } from 'services/hooks/useUpload';
 
 /*=====7.OTHER=====*/
@@ -298,6 +295,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
       isExporting: false,
   });
   const { exportOrderAsync, exportOrderAsync2 } = useFnbOrder({});
+  const { exportExcelAsync } = useFnbOrderProduct({});
 
   const handleExportExcel = async () => {
     try {
@@ -323,6 +321,26 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
     try {
       setStateExport({ isExporting: true });
       const { error, data } = await exportOrderAsync2({
+        filterParams: {  
+        }
+      });
+
+      if(error) {
+        return toast.warn(data?.message);
+      }
+
+      data && createLinkAndClick(data, '_self');
+    } catch (error: any) {
+      toast.error(error.message)
+    } finally {
+      setStateExport({ isExporting: false });
+    }
+	}
+
+  const handleExportExcel3 = async () => {
+    try {
+      setStateExport({ isExporting: true });
+      const { error, data } = await exportExcelAsync({
         filterParams: {  
         }
       });
@@ -844,6 +862,10 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               </button>
               <button onClick={handleExportExcel2} title="Tải dữ liệu Excel">
                 Tải đơn hàng
+                {/* <img src={iconDown} title="Tải dữ liệu Excel"/> */}
+              </button>
+              <button onClick={handleExportExcel3} title="Tải dữ liệu Excel">
+                Tải sản phẩm
                 {/* <img src={iconDown} title="Tải dữ liệu Excel"/> */}
               </button>
 
