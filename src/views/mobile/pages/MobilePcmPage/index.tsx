@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { useParams } from 'react-router-dom';
 
 /**
@@ -15,9 +15,12 @@ import { useParams } from 'react-router-dom';
  */
 
 export const MobilePcmPage: FC = () => {
-
   const { id: taskId } = useParams<{ id: string }>()
-  console.log({taskId})
+  console.log({taskId}) 
+
+  useEffect(() => {
+    window.open(`trixgo://https://app.trixgo.com/pcm/detail/${taskId}`, '_blank');
+  }, [taskId]);
   
   return (
     <main className="relative h-full">
