@@ -35,6 +35,7 @@ const QrcodeRouterV2 = lazy(() => import("./qrcode/indexV2"));
 const ReeRouterV2 = lazy(() => import("./ree/indexV2"));
 const InspectionRouter = lazy(() => import("./inspection/index"));
 const FnbRouter = lazy(() => import("./fnb/index"));
+const MobileRouter = lazy(() => import("./mobile/index"));
 const SupportRouter = lazy(() => import("./support"));
 const TimesheetRouterV2 = lazy(() => import("./timesheet/indexV2"));
 const ItemRouterV2 = lazy(() => import("./item/indexV2"));
@@ -219,6 +220,11 @@ const Routes: FC = () => {
                                 {/* =====FNB===== */}
                                 <Route path="/fnb">
                                     <FnbRouter />
+                                </Route>
+
+                                {/* =====MOBILE===== */}
+                                <Route path="/mobile">
+                                    <MobileRouter />
                                 </Route>
 
                                 {/* =====POLICY===== */}
