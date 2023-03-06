@@ -7,30 +7,10 @@ import debounce from "lodash/debounce";
 import { Paginate } from "shareComponents/common";
 import {
   NavigateTab,
-  // DocumentDropdown,
   SearchInput,
 } from "views/document/sharedComponents/common";
 
 import { useQueryListPackage } from "services/hooks/document/usePackage";
-
-const IconArrowRight = () => (
-  <div className="">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="h-5 w-5"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M9 5l7 7-7 7"
-      />
-    </svg>
-  </div>
-);
 
 export const DocumentFolderPage: FC = () => {
   const params = useParams<any>();
@@ -45,7 +25,12 @@ export const DocumentFolderPage: FC = () => {
     totalPages,
     totalRecord,
 	  nextCursor
-  } = useQueryListPackage({ keyword, departmentID: params.id, ...pageParam });
+  } = useQueryListPackage({ 
+    keyword, 
+    departmentID: params.id, 
+    populates: JSON.stringify({ "path": "contract", "select": "name sign" }),
+    ...pageParam 
+  });
 
   const nextPageAction = React.useCallback(() => {
     setPageParam({ lastestID: nextCursor || "" });
@@ -73,6 +58,7 @@ export const DocumentFolderPage: FC = () => {
       setPrevCursor([...prevCursor, nextCursor])
     }
   }, [nextCursor, prevCursor]);
+  // console.log(listPackage)
 
   return (
     <>
@@ -132,7 +118,7 @@ export const DocumentFolderPage: FC = () => {
                   style={{ minWidth: "150px" }}
                 >
                   <span className="pl-2 border-l border-cbs-border">
-                    Người được truy cập
+                    Thành viên
                   </span>
                 </th>
               </tr>
@@ -169,8 +155,9 @@ export const DocumentFolderPage: FC = () => {
                           >
                             <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
                           </svg>
-                          {elm.name}({ elm.numberOfDocs})
+                          {elm.name} ({ elm.numberOfDocs})
                         </p>
+                       {elm?.contract ?  <p><i>Hợp đồng: {elm?.contract?.name} - {elm?.contract?.sign}</i></p> : <></>}
                       </Link>
                     </td>
                     <td className="py-2 px-2">{elm?.author?.fullname}</td>
@@ -225,6 +212,7 @@ export const DocumentFolderPage: FC = () => {
           </table>
         </div>
         <Paginate
+          limit={20}
           totalPages={totalPages}
           totalRecord={totalRecord}
           hasNextPage

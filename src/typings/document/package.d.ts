@@ -13,7 +13,7 @@ export interface Package {
     project?: Project | string;
     company?: Company | string;
     userUpdate?: Author;
-    contract?: Contract | string;
+    contract?: any;
 }
 
 export type PackageQueryPayload = QueryParam & {
