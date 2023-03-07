@@ -306,17 +306,16 @@ export const ModalAddNewOrder: FC<Props> = () => {
         salesoff: `${discountAndSales.sales}`,
         credit: realCredit.toString(),
       }
-      closeModal();
 
       const { data, status } = await API.post(
         `/api/fnb/orders`,
         dataAddNewOrder
       );
 
-      setLoading(false);
-
       if (status !== 200) return toast.warning('Yêu cầu tạo đơn thất bại');
       if (data.error) return toast.warning('Tạo đơn thất bại');
+
+      console.log({ isConnect: socket.connected });
 
       socket?.emit('FNB_CSS_ADD_NEW_ORDER', {
         companyID: user?.company?._id,
@@ -330,12 +329,14 @@ export const ModalAddNewOrder: FC<Props> = () => {
       //   position: toast.POSITION.BOTTOM_RIGHT,
       // });
     } catch (error) {
-      setLoading(false);
       if (typeof error === "string") {
         toast.error(error);
       } else if (error instanceof Error) {
         toast.error(error.message);
       }
+    } finally {
+      setLoading(false);
+      closeModal();
     }
   };
 
@@ -585,7 +586,6 @@ export const ModalAddNewOrder: FC<Props> = () => {
             <Close onClick={closeModal} />
           </div>
         </div>
-        {/* input select */}
         <Formik
           validationSchema={addOrderSchema}
           initialValues={initialValues}
@@ -674,9 +674,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                 showTriangle={false}
                                 maxWidthInput="max-w-full"
                                 renderSelectedItem={(item: any) => (
-                                  <div
-                                    className="max-w-full"
-                                  >
+                                  <div className="max-w-full">
                                     <p className={"truncate"}>{item.text}</p>
                                   </div>
                                 )}
