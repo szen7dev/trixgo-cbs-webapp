@@ -315,7 +315,12 @@ export const ModalAddNewOrder: FC<Props> = () => {
       if (status !== 200) return toast.warning('Yêu cầu tạo đơn thất bại');
       if (data.error) return toast.warning('Tạo đơn thất bại');
 
-      console.log({ isConnect: socket.connected });
+      console.log({
+        isConnect: socket.connected,
+        companyID: user?.company?._id,
+        fundaID: dataAddNewOrder.fundaID,
+        orderInfo: data?.data,
+      });
 
       socket?.emit('FNB_CSS_ADD_NEW_ORDER', {
         companyID: user?.company?._id,
