@@ -60,7 +60,26 @@ export const FnbReportCustomer: FC = () => {
 	const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
 		isExporting: false,
 	});
-	const { exportOrderAsync3 } = useFnbOrder({});
+	const { exportOrderAsync2, exportOrderAsync3 } = useFnbOrder({});
+
+	const handleExportExcel2 = async () => {
+		try {
+		  setStateExport({ isExporting: true });
+		  const { error, data } = await exportOrderAsync2({
+			option: 2
+		  });
+	
+		  if(error) {
+			return toast.warn(data?.message);
+		  }
+	
+		  data && createLinkAndClick(data, '_self');
+		} catch (error: any) {
+		  toast.error(error.message)
+		} finally {
+		  setStateExport({ isExporting: false });
+		}
+		}
   
 	const handleExportExcel = async () => {
 	  try {
@@ -91,6 +110,9 @@ export const FnbReportCustomer: FC = () => {
                     </button>
 					<p className="text-lg mr-10">Danh sách khách hàng tiềm năng</p>
 				</div>
+				<button onClick={handleExportExcel2} title="Tải dữ liệu Excel">
+					Tải số liệu khách hàng
+				</button>
 				<button onClick={handleExportExcel} title="Tải dữ liệu Excel">
 					Tải dữ liệu Excel
 				</button>
