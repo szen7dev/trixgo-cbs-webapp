@@ -7,7 +7,7 @@ import { useHistory } from 'react-router-dom';
 import { number, object, string } from "yup";
 import { toast } from "react-toastify";
 import debounce from "lodash/debounce";
-import { formatNumberMoney, convertCurrency } from 'utils/converter';
+import { formatNumberMoney } from 'utils/converter';
 import { useSocket } from "services/hooks/useSocket";
 import { useAuth } from 'services/hooks/auth/useAuth';
 import { useQueryClient } from 'react-query';
@@ -32,8 +32,8 @@ import API from "apis/repository";
 import { useContact } from "services/hooks/items/useContact";
 import { convertObToUrl } from "utils";
 import { FormControl, FormControlLabel, IconButton, InputBase, Paper, Radio, RadioGroup } from "@mui/material";
-// import SearchIcon from "assets/icons/Search";
 import { ItemInCartMenu } from "./itemInCartDetail";
+// import SearchIcon from "assets/icons/Search";
 
 interface InitialValues {
   fundaID: string,
@@ -62,10 +62,9 @@ export const ModalAddNewOrder: FC<Props> = () => {
   const { closeModal } = useModal();
   const { current: socket }: any = useSocket();
   const { user } = useAuth();
-  const groupSearchableRef = React.useRef<GroupSearchableHandle>(null);
+  // const groupSearchableRef = React.useRef<GroupSearchableHandle>(null);
+
   const [keywordSearchProduct, setKeywordSearchProduct] = useState("");
-  const [totalMoney, setTotalMoney] = useState(0);
-  const [totalPay, setTotalPay] = useState(0);
   const [searchContact, setSearchContact] = useState('');
   const [searchFunda, setSearchFunda] = useState('');
   const [discountAndSales, setDiscountAndSales] = useState({
@@ -89,9 +88,15 @@ export const ModalAddNewOrder: FC<Props> = () => {
   const [service, setService] = useState("1");
   const [loading, setLoading] = useState(false);
   const [isUseCredit, setIsUseCredit] = useState(false);
+  const [isEditCredit, setIsEditCredit] = useState(false);
+
+  const [totalMoney, setTotalMoney] = useState(0);
+  const [totalPay, setTotalPay] = useState(0);
+  const [totalPayTemp, setTotalPayTemp] = useState(0);
 
   const [credit, setCredit] = useState(0);
   const [creditTemp, setCreditTemp] = useState(0);
+  const [creditInput, setCreditInput] = useState(0);
 
   /**
    * Code cũ: Tuấn Dev
@@ -174,8 +179,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
      */
     const fetchCateProduct = async () => {
       const response = await API.get(
-        `/api/fnb/products?isParent=1&limit=50&fundaID=${fundaID}`, ////
-        // `/api/fnb/products?isParent=1&limit=50`, ////
+        `/api/fnb/products?isParent=1&limit=50&fundaID=${fundaID}`,
       );
       const { data, status } = response?.data;
 
@@ -295,7 +299,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
         }
       })
 
-      const realCredit = (totalMoney - discountAndSales.discount - discountAndSales.sales) > credit ? credit : totalMoney - discountAndSales.discount - discountAndSales.sales;
+      const realCredit = isEditCredit ? creditInput : (totalMoney - discountAndSales.discount - discountAndSales.sales) > credit ? credit : totalMoney - discountAndSales.discount - discountAndSales.sales;
+
       const dataAddNewOrder: any = {
         ...values,
         fundaID,
@@ -306,11 +311,13 @@ export const ModalAddNewOrder: FC<Props> = () => {
         salesoff: `${discountAndSales.sales}`,
         credit: realCredit.toString(),
       }
+      console.log({ dataAddNewOrder })
 
       const { data, status } = await API.post(
         `/api/fnb/orders`,
         dataAddNewOrder
       );
+      console.log({ data, status })
 
       if (status !== 200) return toast.warning('Yêu cầu tạo đơn thất bại');
       if (data.error) return toast.warning('Tạo đơn thất bại');
@@ -557,7 +564,10 @@ export const ModalAddNewOrder: FC<Props> = () => {
     }
     setCredit(0);
     setCreditTemp(0);
+    setCreditInput(0);
+    setTotalPayTemp(0);
     setIsUseCredit(false);
+    setIsEditCredit(false);
   }
 
   const addOrderSchema = object().shape({
@@ -671,7 +681,6 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   setFieldValue("shiftID", "");
                                   // groupSearchableRef.current && groupSearchableRef.current.resetGroupSearchable();
                                 }}
-                                // onScroll={(e) => handleScroll(e, 'project')}
                                 className={"max-w-full h-full flex-1"}
                                 placeholder="Chọn ca làm"
                                 isMultiple={false}
@@ -1157,15 +1166,18 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                       control={
                                         <Radio
                                           style={{}}
-                                          icon={<img src={RadioEmpty} alt="" />}
+                                          icon={<img src={RadioEmpty} alt="Radio Empty" />}
                                           checkedIcon={<img src={RadioChecked} alt="" />}
                                           onChange={() => {
                                             setCredit(0);
                                             setIsUseCredit(false);
+                                            setIsEditCredit(false);
+                                            setCreditInput(0);
+                                            setTotalPayTemp(0);
 
                                             const amountPay = (totalMoney - discountAndSales.discount - discountAndSales.sales) > credit ? credit : totalMoney - discountAndSales.discount - discountAndSales.sales;
 
-                                            if(totalPay) {
+                                            if(totalPay && !isEditCredit) {
                                               setTotalPay(totalPay + credit);
                                             } else if(totalPay === 0 && amountPay < credit) {
                                               setTotalPay(amountPay);
@@ -1205,11 +1217,53 @@ export const ModalAddNewOrder: FC<Props> = () => {
                             </div>
                             <div className="flex gap-1">
                               <div>
-                                <input placeholder="25%"
-                                  className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
-                                  value={(totalMoney - discountAndSales.discount - discountAndSales.sales) > credit ? credit : totalMoney - discountAndSales.discount - discountAndSales.sales}
-                                  disabled
-                                />
+                                {!isEditCredit ? (
+                                  <input placeholder="25%"
+                                    className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
+                                    value={(totalMoney - discountAndSales.discount - discountAndSales.sales) > credit ? credit : totalMoney - discountAndSales.discount - discountAndSales.sales}
+                                    onPointerUp={() => {
+                                      setIsEditCredit(!isEditCredit);
+
+                                      const amountPay = (totalMoney - discountAndSales.discount - discountAndSales.sales) > credit ? credit : totalMoney - discountAndSales.discount - discountAndSales.sales;
+
+                                      if(totalPay) {
+                                        setTotalPay(totalPay + credit);
+                                        setTotalPayTemp(totalPay + credit);
+                                      } else if(totalPay === 0 && amountPay < credit) {
+                                        setTotalPay(amountPay);
+                                        setTotalPayTemp(amountPay);
+                                      }
+                                    }}
+                                    disabled
+                                  />
+                                ) : (
+                                  <input placeholder="25%"
+                                    className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
+                                    value={creditInput}
+                                    type="number"
+                                    onChange={(e: any) => {
+                                      const value = +e.target.value;
+                                      if(value <= credit) {
+                                        setCreditInput(value);
+                                      }
+                                    }}
+                                    onFocus={() => {
+                                      setCreditInput(0);
+
+                                      const amountPay = (totalMoney - discountAndSales.discount - discountAndSales.sales) > credit ? credit : totalMoney - discountAndSales.discount - discountAndSales.sales;
+
+                                      if(totalPay) {
+                                        setTotalPayTemp(totalPay);
+                                      } else if(totalPay === 0 && amountPay < credit) {
+                                        setTotalPayTemp(amountPay);
+                                      }
+                                    }}
+                                    onBlur={(e: any) => {
+                                      const value = +e.target.value;
+                                      setTotalPayTemp(totalPayTemp - value);
+                                    }}
+                                  />
+                                )}
                               </div>
                             </div>
                           </div> : <></>
@@ -1218,7 +1272,11 @@ export const ModalAddNewOrder: FC<Props> = () => {
                       <div className="border-t-0.5 border-b-0.5 px-2 py-2">
                         <div className="flex justify-between">
                           <div className="font-bold">Thanh toán</div>
-                          <div className={`font-bold ${totalPay > 0 ? 'text-primary' : 'text-red-500'} font-bold`}>{formatNumberMoney(totalPay)}</div>
+                          {!isEditCredit ? (
+                            <div className={`font-bold ${totalPay > 0 ? 'text-primary' : 'text-red-500'} font-bold`}>{formatNumberMoney(totalPay)}</div>
+                          ) : (
+                            <div className={`font-bold ${totalPayTemp > 0 ? 'text-primary' : 'text-red-500'} font-bold`}>{formatNumberMoney(totalPayTemp)}</div>
+                          )}
                         </div>
                       </div>
                       <div className="text-right mb-5 mx-2" style={{ marginTop: "100px" }}>

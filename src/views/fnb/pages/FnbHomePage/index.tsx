@@ -287,10 +287,10 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
   };
 
   /**
-   * 
+   *
    * Xử lý download excel
    */
-  const [dataImport, setDataImport] = useState([]);
+  // const [dataImport, setDataImport] = useState([]);
   const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
       isExporting: false,
   });
@@ -301,7 +301,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
     try {
       setStateExport({ isExporting: true });
       const { error, data } = await exportOrderAsync({
-        filterParams: {  
+        filterParams: {
         }
       });
 
@@ -321,7 +321,9 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
     try {
       setStateExport({ isExporting: true });
       const { error, data } = await exportOrderAsync2({
-        filterParams: {  
+        filterParams: {
+          ...queryFnb,
+          keyword,
         }
       });
 
@@ -341,7 +343,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
     try {
       setStateExport({ isExporting: true });
       const { error, data } = await exportExcelAsync({
-        filterParams: {  
+        filterParams: {
         }
       });
 

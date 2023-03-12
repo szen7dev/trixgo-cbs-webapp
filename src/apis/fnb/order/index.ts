@@ -10,7 +10,7 @@ const fnbOrderRepository = {
             `${URL}/orders`, {
                 params: payload
             }
-        ); 
+        );
         return data;
     },
 
@@ -20,14 +20,14 @@ const fnbOrderRepository = {
         );
         return data;
     },
-    
+
     async update(payload: any): Promise<any> {
         const { data } = await API.put<any>(
             `${URL}/orders`, payload
         );
         return data;
     },
-    
+
     async remove(payload: any): Promise<any> {
         const { data } = await API.delete<any>(
             `${URL}/orders`, { params: payload }
@@ -40,7 +40,7 @@ const fnbOrderRepository = {
             `${URL}/orders/export-excel`, {
                 params: payload
             }
-        ); 
+        );
         return data;
     },
 
@@ -49,7 +49,7 @@ const fnbOrderRepository = {
             `${URL}/orders/export-excel2`, {
                 params: payload
             }
-        ); 
+        );
         return data;
     },
 
@@ -58,7 +58,7 @@ const fnbOrderRepository = {
             `${URL}/orders/export-excel3`, {
                 params: payload
             }
-        ); 
+        );
         return data;
     },
 };
