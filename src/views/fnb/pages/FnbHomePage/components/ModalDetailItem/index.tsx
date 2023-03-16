@@ -441,7 +441,7 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                           <div className="font-bold">{formatNumberMoney(order.total)}</div>
                         </div>
                         <div className="flex justify-between	mt-2 mb-3">
-                          <div className="">Triết khấu</div>
+                          <div className="">Chiết khấu</div>
                           <div className="flex">
                             <div>{formatNumberMoney(order.discount)}</div>
                           </div>
