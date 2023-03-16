@@ -858,10 +858,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               >
                 Gán tình huống gặp phải
               </button>
-              <button onClick={handleExportExcel} title="Tải dữ liệu Excel">
-                Tải KPI
-                {/* <img src={iconDown} title="Tải dữ liệu Excel"/> */}
-              </button>
               <button onClick={handleExportExcel2} title="Tải dữ liệu Excel">
                 Tải đơn hàng
                 {/* <img src={iconDown} title="Tải dữ liệu Excel"/> */}
@@ -870,7 +866,10 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 Tải sản phẩm
                 {/* <img src={iconDown} title="Tải dữ liệu Excel"/> */}
               </button>
-
+              <button onClick={handleExportExcel} title="Tải dữ liệu Excel">
+                Tải KPI
+                {/* <img src={iconDown} title="Tải dữ liệu Excel"/> */}
+              </button>
               {idsChecked.length === 1 && (
                 <label className="w-8 h-8 rounded-md flex justify-center items-center cursor-pointer">
                   <IconImage />
