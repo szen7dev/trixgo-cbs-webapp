@@ -891,7 +891,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               ref={ref}
               totalRecord={totalRecord}
               totalPages={totalPage}
-              limit={50}
+              limit={20}
               hasNextPage={hasNextPage}
               isFetching={isLoading}
               nextPageAction={() => {
