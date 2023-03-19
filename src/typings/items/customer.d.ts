@@ -18,6 +18,17 @@ export interface Customer {
     gender: number;
     birthday: string;
     nonResident: string;
+    // purchasedValue: number | null | undefined;
+    // purchasedOffValue: number | null | undefined;
+    // totalLoyaltyPoints: number | null | undefined;
+    // usedLoyaltyPoints: number | null | undefined;
+    // remainLoyaltyPoints: number | null | undefined;
+
+    purchasedValue: string | null;
+    purchasedOffValue: string | null;
+    totalLoyaltyPoints: string | null;
+    usedLoyaltyPoints: string | null;
+    remainLoyaltyPoints: string | null;
 }
 
 export type CustomerQueryPayload = QueryParam & {

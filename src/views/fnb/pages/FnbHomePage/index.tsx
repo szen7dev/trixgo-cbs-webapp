@@ -181,6 +181,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
       setIdsChecked(idsAll);
     }
   };
+  // console.log({pageIndex})
 
   const handleCancelOrder = async () => {
     try {
