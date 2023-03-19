@@ -22,10 +22,12 @@ import { formatNumberMoney, convertCurrency } from "utils/converter";
 import API from "apis/repository";
 import { convertObToUrl } from "utils";
 import usePrintComponent from "services/hooks/ppt/usePrintComponent";
+import { useAuth } from "services/hooks/auth/useAuth";
 
 import { FNB_CHANNEL, FNB_TOPPING, FNB_SIZE, FNB_SUGAR, FNB_ICE } from "apis/localdb";
 
 const FnbPrintBillListPage: FC = () => {
+  const { user } = useAuth();
   const { orderID } = useParams<{ orderID: string }>()
   const [orderProducts, setOrderProducts] = useState([]);
 
