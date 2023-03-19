@@ -60,7 +60,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
   const dropdownShiftsRef = useRef<DropdownSearchableHandle>(null);
   const queryClient = useQueryClient();
   const { closeModal } = useModal();
-  const { current: socket }: any = useSocket();
+  const { current: socket }: any = useSocket(); // Cấu trúc khai báo Socket
   const { user } = useAuth();
   // const groupSearchableRef = React.useRef<GroupSearchableHandle>(null);
 
@@ -311,32 +311,34 @@ export const ModalAddNewOrder: FC<Props> = () => {
         salesoff: `${discountAndSales.sales}`,
         credit: realCredit.toString(),
       }
-      console.log({ dataAddNewOrder })
+      // console.log({ dataAddNewOrder })
 
       const { data, status } = await API.post(
         `/api/fnb/orders`,
         dataAddNewOrder
       );
-      console.log({ data, status })
+      // console.log({ data, status })
 
       if (status !== 200) return toast.warning('Yêu cầu tạo đơn thất bại');
       if (data.error) return toast.warning('Tạo đơn thất bại');
 
-      console.log({
-        isConnect: socket.connected,
-        companyID: user?.company?._id,
-        fundaID: dataAddNewOrder.fundaID,
-        orderInfo: data?.data,
-      });
-
+      // console.log({
+      //   isConnect: socket.connected,
+      //   companyID: user?.company?._id,
+      //   fundaID: dataAddNewOrder.fundaID,
+      //   orderInfo: data?.data,
+      // });
+      
+      // Bắn Socket lên Server
       socket?.emit('FNB_CSS_ADD_NEW_ORDER', {
         companyID: user?.company?._id,
         fundaID: dataAddNewOrder.fundaID,
         orderInfo: data?.data,
       })
-      queryClient.refetchQueries('fnb-order-list');
 
+      queryClient.refetchQueries('fnb-order-list');
       history.push(`/fnb/home/${data?.data?._id}/print/1`);
+
       // return toast.success('Tạo đơn thành công',{
       //   position: toast.POSITION.BOTTOM_RIGHT,
       // });
