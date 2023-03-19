@@ -18,6 +18,12 @@ import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
 import { useAuth } from "services/hooks/auth/useAuth";
 import { useCustomer } from "services/hooks/items/useCustomer";
 
+/**
+ * 
+ * @returns TOKEN
+ * eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbmZvVXNlciI6eyJlbWFpbCI6ImhpZXBuaC53aW5nZ29AZ21haWwuY29tIiwicGhvbmUiOiJ1bmRlZmluZWQiLCJmdWxsbmFtZSI6Ik5ndXnhu4VuIEjhu691IEhp4buHcC1XR08gKEJPRCkiLCJiaXpmdWxsbmFtZSI6Ik5ndXnhu4VuIEjhu691IEhp4buHcC1XR08gKEJPRCkiLCJjb21wYW55Ijp7Il9pZCI6IjYwNDZiZWRlYjU1NTI1MzY4YjExYzVjMyIsIm5hbWUiOiJDw7RuZyB0eSBD4buVIHBo4bqnbiBXaW5nZ28iLCJzaWduIjoiV0dPIiwiaW1hZ2UiOiIzOGIwYWEwZC04NGU3LTQyZDEtODQyYy01NWU5NjM4MjY2OWEuanBnIn0sImRlcGFydG1lbnQiOnsiX2lkIjoiNjNhZmMyZTQ0ZmFiYTYwMDEyNTk1NTVkIiwibmFtZSI6IkJBTiBMw4NOSCDEkOG6oE8iLCJzaWduIjoiV0dPLkJPRCJ9LCJpbWFnZSI6IjBkYWU5YmRlLWJlMTMtNDU3NC05ZmQxLTQ5MzI2NDM5MzI1NC53ZWJwIiwic2lnbmF0dXJlIjoic2lnbmF0dXJlX2RlZmF1bHQucG5nIiwic3RhdHVzIjoxLCJsZXZlbCI6MCwiX2lkIjoiNjNiMzZhODk3MDM3YjQwMDEyZjZlNmYzIn0sImlhdCI6MTY3OTIzMzUzMn0.QZEBx9lK9rQ78YR-Qi2wW43LY2ZhOWnS_MIceCnUIBc
+ */
+
 const FnbPage: FC = () => {
     const { user } = useAuth();
     const { id: contactID } = useParams<{ id: string }>();
