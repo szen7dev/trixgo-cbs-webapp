@@ -104,7 +104,8 @@ const FnbPage: FC = () => {
                         </div>
                         <hr className="border-zinc-200 border mt-2 mb-2"/>
                     </div>
-                ))}
+                ))
+            }
         </div>
     )
 }

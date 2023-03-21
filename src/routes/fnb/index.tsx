@@ -4,6 +4,7 @@ import { Route, Switch, matchPath } from "react-router-dom";
 import ErrorPage from "views/authentication/Error";
 import { FnBHomePage } from "views/fnb/pages/FnbHomePage/index";
 import { FnBProductPage } from "views/fnb/pages/FnbProductPage/index";
+import { FnbVoucherPage } from "views/fnb/pages/FnbVoucherPage/index";
 import { FnbProductQuotasPage } from "views/fnb/pages/FnbProductQuotasPage/index";
 import { FnbShiftPage } from "views/fnb/pages/FnbShiftPage/index";
 import { FnbContactPage } from "views/fnb/pages/FnbContactPage/index";
@@ -72,7 +73,15 @@ const FnbRouter: FC = () => {
                     </FnbLayout>
                 }
             />
-
+            <Route
+                exact
+                path="/fnb/voucher"
+                component={() =>
+                    <FnbLayout>
+                        <FnbVoucherPage />
+                    </FnbLayout>
+                }
+            />
             <Route
                 exact
                 path="/fnb/product/:productID"
