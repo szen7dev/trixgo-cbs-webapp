@@ -17,9 +17,10 @@ import qrcode from "assets/images/qrcode-default.png";
 /**
  * Hooks
  */
-import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
 import { useAuth } from "services/hooks/auth/useAuth";
 import { useCustomer } from "services/hooks/items/useCustomer";
+import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
+import { useFnbVoucher } from 'services/hooks/fnb/useFnbVoucher';
 
 /**
  * 
@@ -41,16 +42,28 @@ const FnbPage: FC = () => {
     // console.log(info)
 
     const { isLoading, isFetching, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbOrder({
-    params: {
-        limit: 50,
-        statuss: [5],
-        customerID: contactID
-    }, 
-        isFetchList: true, 
-        isFetchInfo: false
-    });
+        params: {
+            limit: 50,
+            statuss: [5],
+            customerID: contactID
+        }, 
+            isFetchList: true, 
+            isFetchInfo: false
+        }
+    )
     // console.log(listWithPager[0])
     // console.log(listWithPager[0].length)
+
+    const { listWithPager: listVouchers } = useFnbVoucher({
+        params: {
+            limit: 20,
+            customerID: contactID
+        }, 
+            isFetchList: true, 
+            isFetchInfo: false
+        }
+    )
+    // console.log(listVouchers)
 
     return (
         <div className="p-2 relative transition-all duration-500 ease-out overflow-auto" style={{height:"100vh"}}>
@@ -74,17 +87,36 @@ const FnbPage: FC = () => {
                 <p className="absolute top-0 right-0 text-cbs-primary"><b>{formatNumberMoney(Number(info?.remainLoyaltyPoints))}</b></p>
             </div>
             <hr className="border-zinc-200 border mt-2 mb-2"/>
-            <p>Lịch sử mua hàng tại Trà sữa Winggo</p>
+            <p><b>Danh sách voucher Winggo dành cho bạn</b></p>
             <hr className="border-zinc-200 border mt-2 mb-2"/>
+            {
+                (listVouchers[0] ?? []).map((item: any, i: any) => (
+                    <div key={item?._id} className="border p-2 mb-2">
+                        <p>{item.name}</p>
+                        <p>Mã: <b className="text-cbs-primary text-base">{item?.suid}</b></p>
+                        <p><b>Ưu đãi {formatNumberMoney(item?.salesoffAmount)} | Giảm giá {formatNumberMoney(item?.salesoffRate)} % - Đơn hàng từ {formatNumberMoney(item?.minOrderAmount)}</b></p>
+                        <p>
+                            Thời hạn: {moment(item.expired).format('DD/MM/YYYY HH:mm')} 
+                            <span className="text-cbs-schedule-expired"> ({moment(item.expired).fromNow()})</span>
+                        </p>
+                        <p className="text-primary-gray"><i>{item.note}</i></p>
+                    </div>
+                ))
+            }
 
+            <p><b>Lịch sử mua hàng tại Trà sữa Winggo</b></p>
+            <hr className="border-zinc-200 border mt-2 mb-2"/>
             {
                 (listWithPager[0] ?? []).map((item: any, i: any) => (
                     <div key={item?._id}>
-                        <p><b>Đơn hàng ngày {moment(item.createAt).format('HH:mm DD/MM/YYYY')} <span className="text-cbs-primary"> ({moment(item.createAt).fromNow()})</span></b></p>
-                        <p>Mã hiệu {item?.sign} | {FNB_CHANNEL[Number(item?.salesChannel)-1]?.sign}{item?.appOrderSign}</p>
+                        <p>
+                            Đơn hàng ngày {moment(item.createAt).format('HH:mm DD/MM/YYYY')} 
+                            <span className="text-primary-gray"> ({moment(item.createAt).fromNow()})</span>
+                        </p>
+                        <p>Mã hiệu: {item?.sign} | {FNB_CHANNEL[Number(item?.salesChannel)-1]?.sign}{item?.appOrderSign}</p>
                         <div className="relative">
-                            <p> <b>Tổng giá trị</b> </p>
-                            <p className="absolute top-0 right-0"><b>{formatNumberMoney(item?.total)}</b></p>
+                            <p>Tổng giá trị</p>
+                            <p className="absolute top-0 right-0">{formatNumberMoney(item?.total)}</p>
                         </div>
                         <div className="relative">
                             <p>Giảm giá</p>
@@ -95,12 +127,12 @@ const FnbPage: FC = () => {
                             <p className="absolute top-0 right-0">{formatNumberMoney(item?.credit)}</p>
                         </div>
                         <div className="relative">
-                            <p><b>Còn lại thanh toán</b> </p>
-                            <p className="absolute top-0 right-0"><b>{formatNumberMoney(item?.amount)}</b></p>
+                            <p>Còn lại thanh toán</p>
+                            <p className="absolute top-0 right-0">{formatNumberMoney(item?.amount)}</p>
                         </div>
                         <div className="relative">
                             <p>Điểm tích lũy</p>
-                            <p className="absolute top-0 right-0">{formatNumberMoney(item?.loyaltyPoints)}</p>
+                            <p className="absolute top-0 right-0 text-cbs-primary">{formatNumberMoney(item?.loyaltyPoints)}</p>
                         </div>
                         <hr className="border-zinc-200 border mt-2 mb-2"/>
                     </div>
