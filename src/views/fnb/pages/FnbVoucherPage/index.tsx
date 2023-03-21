@@ -59,29 +59,16 @@ export const FnbVoucherPage: FC = () => {
 	});
 
     const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbVoucher({
-		// params: {
-		// 	keyword,
-		// 	populates: JSON.stringify({
-		// 		path: 'referrer customer userCreate',
-		// 	})
-            
-		// },
-        // params: {
-        //     populates: JSON.stringify({
-        //         path: "referrer customer userCreate",
-        //         select: "_id name fullname email image sign"
-        //     }),
-        // },
-        // params: {
-        //     populates: {
-        //         path: "referrer customer userCreate",
-        //         select: "_id name fullname email image sign"
-        //     },
-        // },
+		params: {
+			populates: JSON.stringify({
+				path: "referrer customer userCreate",
+                select: "_id name fullname phone"
+			})
+		},
 		isFetchList: true,
 		isFetchInfo: false,
 	});
-	console.log({listWithPager});
+	// console.log({listWithPager});
 
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
@@ -103,42 +90,6 @@ export const FnbVoucherPage: FC = () => {
 			setIdsChecked(idsAll);
 		}
 	};
-
-	const handleUploadAttach = async (filesSelected: FileList | null, productID: string) => {
-		if (!filesSelected || !filesSelected.length) return;
-
-		const validation = await validateFiles(filesSelected);
-		if (validation.error) return toast.warn(validation.message);
-
-		// Clear input file
-		if (fileInputRef.current) {
-		  fileInputRef.current.value = '';
-		}
-
-		const imagesID: any = [];
-
-		// Upload images
-		for (const [_, file] of Object.entries(filesSelected)) {
-			const { _id } = await addFileToUpload({
-				files: file as any,
-				fileType: 1,
-				progress: percentCompleted => {
-					console.info(`${percentCompleted}%`)
-				}
-			})
-			_id && imagesID.push(_id);
-		}
-
-		// Update image to products
-		await API.put(
-			`/api/fnb/products`,
-			{
-				productID,
-				imagesID,
-			}
-		);
-		refetch();
-	  }
 
 	const [modalCreateFnbProduct, setModalCreateFnbProduct] = useState<boolean>(false);
 	const toggleModalCreateFnbProduct = () => setModalCreateFnbProduct(!modalCreateFnbProduct);
@@ -220,7 +171,7 @@ export const FnbVoucherPage: FC = () => {
                 const data = await importExcelAsync({ dataImport: JSON.stringify(dataImport) });
                 setDataImport([]);
                 // refetchTaskInfo?.()
-                console.log(data)
+                // console.log(data)
 
                 if(!data.error){
                     return toast.success("Import thành công");
@@ -235,7 +186,6 @@ export const FnbVoucherPage: FC = () => {
 		<main className="h-full overflow-auto">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
 				<div className="flex items-center">
-					{/* <p className="text-lg">Danh sách thực đơn</p> */}
 					<SearchInput
 						classNameWrapper=""
 						classNameInput="outline-none w-[296px]"
@@ -244,12 +194,8 @@ export const FnbVoucherPage: FC = () => {
 							500
 						)}
 					/>
-					{/* <FinancialCashFlowFilterButton /> */}
 					{(idsChecked && idsChecked.length) ? (
 						<div className="flex items-center gap-2 border-l-2 border-primary-border px-4 ml-4">
-							{/* <div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
-								<img src={DownloadIcon} alt="Download" />
-							</div> */}
 							{idsChecked.length == 1 ?
 								<>
 								<div
@@ -291,9 +237,6 @@ export const FnbVoucherPage: FC = () => {
 					>
 						Tạo mới
 					</button>
-					{/* <button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
-						<img src={Vertical3Dots} alt="3Dots" />
-					</button> */}
 				</div>
 				<PaginateV2
 					ref={ref}
@@ -378,7 +321,8 @@ export const FnbVoucherPage: FC = () => {
 					</tr>
 				</thead>
 				{
-					(listWithPager[pageIndex]??[]).map((item: any, i: any) => (
+					(
+                        listWithPager[pageIndex]??[]).map((item: any, i: any) => (
 						<tr key={item._id} className="text-[14px]">
 							<td className={"p-2 border-0.5 border-primary-border text-center"}>
 								<input
@@ -398,10 +342,10 @@ export const FnbVoucherPage: FC = () => {
 								{item?.suid}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{/* {item?.referrer} */}
+								{item?.referrer?.name}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-                                {moment(item?.createAt).format("DD/MM/YYYY HH:mm")} ({moment(item?.createAt).fromNow()})
+                                {moment(item?.expired).format("DD/MM/YYYY HH:mm")} ({moment(item?.expired).fromNow()})
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{formatNumberMoney(item?.minOrderAmount||0)}
@@ -413,14 +357,14 @@ export const FnbVoucherPage: FC = () => {
 								{formatNumberMoney(item?.salesoffRate||0)}
 							</td>
                             <td className={"p-2 border-0.5 border-primary-border"}>
-								{/* {item?.customer} */}
+								{item?.customer?.name}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{item?.note}
 							</td>
 						</tr>
-				))}
-
+				    ))
+                }
 			</table>
 
 			<ModalContainer isModalOpen={modalCreateFnbProduct} toggle={toggleModalCreateFnbProduct}>
