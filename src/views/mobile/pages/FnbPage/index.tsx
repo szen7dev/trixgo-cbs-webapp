@@ -54,9 +54,10 @@ const FnbPage: FC = () => {
     // console.log(listWithPager[0])
     // console.log(listWithPager[0].length)
 
-    const { listWithPager: listVouchers } = useFnbVoucher({
+    const { totalRecord: totalVoucher, listWithPager: listVouchers } = useFnbVoucher({
         params: {
             limit: 20,
+            status: 1,
             customerID: contactID
         }, 
             isFetchList: true, 
@@ -87,7 +88,7 @@ const FnbPage: FC = () => {
                 <p className="absolute top-0 right-0 text-cbs-primary"><b>{formatNumberMoney(Number(info?.remainLoyaltyPoints))}</b></p>
             </div>
             <hr className="border-zinc-200 border mt-2 mb-2"/>
-            <p><b>Danh sách voucher Winggo dành cho bạn</b></p>
+            <p><b>Danh sách voucher Winggo dành cho bạn ({totalVoucher})</b></p>
             <hr className="border-zinc-200 border mt-2 mb-2"/>
             {
                 (listVouchers[0] ?? []).map((item: any, i: any) => (
@@ -104,7 +105,7 @@ const FnbPage: FC = () => {
                 ))
             }
 
-            <p><b>Lịch sử mua hàng tại Trà sữa Winggo</b></p>
+            <p><b>Lịch sử mua hàng tại Trà sữa Winggo ({totalRecord})</b></p>
             <hr className="border-zinc-200 border mt-2 mb-2"/>
             {
                 (listWithPager[0] ?? []).map((item: any, i: any) => (
