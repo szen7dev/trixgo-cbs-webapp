@@ -14,7 +14,7 @@ import { APP_KEY } from 'utils/constants';
  */
 import logo from "assets/images/LogoFnB.jpg";
 import QRCodeIcon from "assets/images/document/qr-code.png";
-import { ModalQRCode } from "shareComponents/common/ModalQRCode";
+import { ModalFnbQRCode } from "shareComponents/common/ModalFnbQRCode";
 
 /**
  * Hooks
@@ -79,6 +79,10 @@ const FnbPage: FC = () => {
                 }
             })
     }, []);
+
+    // Code
+    const d = new Date();
+    const time = d.getTime();
 
     return (
         <div className="p-2 relative transition-all duration-500 ease-out overflow-auto" style={{ height: "100vh" }}>
@@ -179,10 +183,10 @@ const FnbPage: FC = () => {
                 ))
             }
 
-            <ModalQRCode
+            <ModalFnbQRCode
                 value={{
-                    appID: APP_KEY.FNB,
-                    id: contactID
+                    ref1: contactID,
+                    ref2: `${time}`
                 }}
                 isToggle={isToggleModalQRCode}
                 toggle={toggleModalQRCode}
