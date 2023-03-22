@@ -18,6 +18,7 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
     template: 1,
     type: 1,
     name: "",
+    sign: "",
     note: "",
     minOrderAmount: "",
     salesoffAmount: "",
@@ -34,6 +35,7 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
                 template: parseInt(values.template),
                 type: parseInt(values.type),
                 name: values.name,
+                sign: values.sign,
                 note: values.note,
                 expired: values.expired,
                 minOrderAmount: parseInt(values.minOrderAmount),
@@ -58,6 +60,7 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
                 template: parseInt(values.template),
                 type: parseInt(values.type),
                 name: values.name,
+                sign: values.sign,
                 note: values.note,
                 expired: values.expired,
                 minOrderAmount: parseInt(values.minOrderAmount),
@@ -75,10 +78,6 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
         };
 
         queryClient.refetchQueries('fnb-voucher-list')
-
-        // return toast.success('Xử lý thành công',{
-        //     position: toast.POSITION.BOTTOM_RIGHT,
-        // })
     };
 
     return (
@@ -96,7 +95,7 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
                                     as="h3"
                                     className="text-lg leading-6 font-bold"
                                 >
-                                    {modalType == 'create' ? 'Tạo thực đơn' : 'Cập nhật thực đơn'}
+                                    {modalType == 'create' ? 'Tạo' : 'Cập nhật'}
                                 </Dialog.Title>
                                 <button className="bg-primary-gray bg-opacity-20 p-2 rounded-3xl" type="button" onClick={() => toggle()}>
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -152,12 +151,23 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
                                     </div>
                                 </div>
                                 <div className="mb-4">
-                                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtName">
+                                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
                                         Tên
                                     </label>
-                                    <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtName" placeholder="Nhập tên" {...getFieldProps('name')} />
+                                    <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" placeholder="Nhập tên" {...getFieldProps('name')} />
                                     <ErrorMessage
                                         name="name"
+                                        component="span"
+                                        className="font-normal leading-7 text-sm text-negative"
+                                    />
+                                </div>
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="sign">
+                                        Mã hiệu
+                                    </label>
+                                    <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="sign" placeholder="Nhập tên" {...getFieldProps('sign')} />
+                                    <ErrorMessage
+                                        name="sign"
                                         component="span"
                                         className="font-normal leading-7 text-sm text-negative"
                                     />
@@ -208,7 +218,7 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
                                 </div>
                                 <div className="mb-4">
                                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="note">
-                                    Ghi chú
+                                        Ghi chú
                                     </label>
                                     <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="note" placeholder="Ghi chú" {...getFieldProps('note')} />
                                     <ErrorMessage

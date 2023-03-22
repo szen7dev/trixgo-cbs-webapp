@@ -225,7 +225,7 @@ export const FnbVoucherPage: FC = () => {
 				<button className={"flex items-center justify-center mx-3 ml-1"}>
 						<input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
 						accept=".xlsx, .xlsm, .xls, .csv"/>
-						<label className="custom-file-label" htmlFor="inputGroupFile">Import excel tạo thực đơn</label>
+						<label className="custom-file-label" htmlFor="inputGroupFile">Import excel</label>
 				</button>
 				<div className="flex items-center">
 					<button
@@ -339,12 +339,13 @@ export const FnbVoucherPage: FC = () => {
 							</td>
                             <td className={"p-2 border-0.5 border-primary-border"}>
 								{TYPE_VOUCHER[item.type-1]?.text}
+								<p className="text-xs text-primary-gray"><i>{item._id}</i></p>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-highlight-color"}>
                                 {item?.name}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{item?.suid}
+								{item?.sign}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
                                 {moment(item?.expired).format("DD/MM/YYYY HH:mm")} ({moment(item?.expired).fromNow()})
