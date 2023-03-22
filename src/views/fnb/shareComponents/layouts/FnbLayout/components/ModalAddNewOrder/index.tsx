@@ -97,7 +97,6 @@ export const ModalAddNewOrder: FC<Props> = () => {
   const [credit, setCredit] = useState(0);
   const [creditTemp, setCreditTemp] = useState(0);
   const [creditInput, setCreditInput] = useState(0);
-  const [voucherInput, setVoucherInput] = useState("");
 
   useEffect(() => {
     const fetchFundas = async () => {
@@ -303,7 +302,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
       // console.log({ data, status })
 
       if (status !== 200) return toast.warning('Yêu cầu tạo đơn thất bại');
-      if (data.error) return toast.warning('Tạo đơn thất bại');
+      if (data.error) return toast.warning(data.data.message);
 
       // console.log({
       //   isConnect: socket.connected,
@@ -1253,64 +1252,6 @@ export const ModalAddNewOrder: FC<Props> = () => {
                             </div>
                           </div> : <></>
                         }
-
-                        {values.customerID && service === "1" ?
-                          <>
-                          <div className="flex justify-between items-center mb-1 px-2 py-2">
-                            <div>
-                              <div>Voucher</div>
-                              <div>
-                                <input 
-                                  className="w-[150px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none"
-                                  value={voucherInput}
-                                  placeholder={"Nhập mã voucher"}
-                                  onChange={(e: any) => {
-                                    setVoucherInput(e.target.value);
-                                  }}
-                                  // onFocus={() => {
-                                  // }}
-                                  // onBlur={(e: any) => {
-                                  //   const value = +e.target.value;
-                                  //   setTotalPayTemp(totalPayTemp - value);
-                                  // }}
-                                />
-                              </div>
-                            </div>
-                            <div className="flex gap-1">
-                              <div>
-                              <input placeholder="25%"
-                                    className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right mt-5"
-                                    value={creditInput}
-                                    type="number"
-                                    onChange={(e: any) => {
-                                      const value = +e.target.value;
-                                      if (value <= credit) {
-                                        setCreditInput(value);
-                                      }
-                                    }}
-                                    onFocus={() => {
-                                      setCreditInput(0);
-
-                                      const amountPay = (totalMoney - discountAndSales.discount - discountAndSales.sales) > credit ? credit : totalMoney - discountAndSales.discount - discountAndSales.sales;
-
-                                      if (totalPay) {
-                                        setTotalPayTemp(totalPay);
-                                      } else if (totalPay === 0 && amountPay < credit) {
-                                        setTotalPayTemp(amountPay);
-                                      }
-                                    }}
-                                    onBlur={(e: any) => {
-                                      const value = +e.target.value;
-                                      setTotalPayTemp(totalPayTemp - value);
-                                    }}
-                                  />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="ml-2 mb-5 text-red-500">Voucher đã hết hiệu lực</div>
-                          </> : <></>
-                        }
-
                       </div>
                       <div className="border-t-0.5 border-b-0.5 px-2 py-2">
                         <div className="flex justify-between">
