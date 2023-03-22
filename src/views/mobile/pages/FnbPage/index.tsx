@@ -7,32 +7,29 @@ import { formatNumberMoney, convertCurrency } from "utils/converter";
  * Components
  */
 import { FNB_CHANNEL } from "apis/localdb";
+import { APP_KEY } from 'utils/constants';
 
 /**
  * Assets
  */
 import logo from "assets/images/LogoFnB.jpg";
-import qrcode from "assets/images/qrcode-default.png";
+import QRCodeIcon from "assets/images/document/qr-code.png";
+import { ModalQRCode } from "shareComponents/common/ModalQRCode";
 
 /**
  * Hooks
  */
-import { useAuth } from "services/hooks/auth/useAuth";
-import { useCustomer } from "services/hooks/items/useCustomer";
-import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
-import { useFnbVoucher } from 'services/hooks/fnb/useFnbVoucher';
-
-/**
- * 
- * TOKEN CỨNG
- * eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbmZvVXNlciI6eyJlbWFpbCI6ImhpZXBuaC53aW5nZ29AZ21haWwuY29tIiwicGhvbmUiOiJ1bmRlZmluZWQiLCJmdWxsbmFtZSI6Ik5ndXnhu4VuIEjhu691IEhp4buHcC1XR08gKEJPRCkiLCJiaXpmdWxsbmFtZSI6Ik5ndXnhu4VuIEjhu691IEhp4buHcC1XR08gKEJPRCkiLCJjb21wYW55Ijp7Il9pZCI6IjYwNDZiZWRlYjU1NTI1MzY4YjExYzVjMyIsIm5hbWUiOiJDw7RuZyB0eSBD4buVIHBo4bqnbiBXaW5nZ28iLCJzaWduIjoiV0dPIiwiaW1hZ2UiOiIzOGIwYWEwZC04NGU3LTQyZDEtODQyYy01NWU5NjM4MjY2OWEuanBnIn0sImRlcGFydG1lbnQiOnsiX2lkIjoiNjNhZmMyZTQ0ZmFiYTYwMDEyNTk1NTVkIiwibmFtZSI6IkJBTiBMw4NOSCDEkOG6oE8iLCJzaWduIjoiV0dPLkJPRCJ9LCJpbWFnZSI6IjBkYWU5YmRlLWJlMTMtNDU3NC05ZmQxLTQ5MzI2NDM5MzI1NC53ZWJwIiwic2lnbmF0dXJlIjoic2lnbmF0dXJlX2RlZmF1bHQucG5nIiwic3RhdHVzIjoxLCJsZXZlbCI6MCwiX2lkIjoiNjNiMzZhODk3MDM3YjQwMDEyZjZlNmYzIn0sImlhdCI6MTY3OTIzMzUzMn0.QZEBx9lK9rQ78YR-Qi2wW43LY2ZhOWnS_MIceCnUIBc
- */
+// import { useAuth } from "services/hooks/auth/useAuth";
+// import { useCustomer } from "services/hooks/items/useCustomer";
+// import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
+// import { useFnbVoucher } from 'services/hooks/fnb/useFnbVoucher';
 
 const fixedHeaders = {
     "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbmZvVXNlciI6eyJlbWFpbCI6ImhpZXBuaC5rdHJAZ21haWwuY29tIiwiZnVsbG5hbWUiOiJLaeG7g20gdGjhu60gdmnDqm4tSVRFU1QiLCJiaXpmdWxsbmFtZSI6Iktp4buDbSB0aOG7rSB2acOqbi1JVEVTVCIsImNvbXBhbnkiOnsiX2lkIjoiNWUwNDdkYzA1ZTMwZGNlNzI4NDlhNGE0IiwibmFtZSI6IkPDtG5nIHR5IGPhu5UgcGjhuqduIGThu4tjaCB24bulIGtp4buDbSB0aOG7rSIsImltYWdlIjoiZjQ4MDQ3YWVmZmUzNzM0NjhkOWQxN2IyMWYxNjE3NTYucG5nIiwic2lnbiI6IklURVNUIn0sImRlcGFydG1lbnQiOnsiX2lkIjoiNWU3Y2NkNTIwZTNhZmQzZWE0ZTcwYzE2IiwibmFtZSI6IklURVNULVBow7JuZyBr4bq_IHRvw6FuIiwic2lnbiI6bnVsbH0sImltYWdlIjoidXNlcl9kZWZhdWx0LnBuZyIsInNpZ25hdHVyZSI6InNpZ25hdHVyZV9kZWZhdWx0LnBuZyIsInN0YXR1cyI6MSwibGV2ZWwiOjEsIl9pZCI6IjVmNzM2M2UyYzIyOTc5NGQ4YzBiYzY5MSJ9LCJpYXQiOjE2NzkzODQ3NzZ9.oRgR9yIFWYM_3TVLo_X6l-FBGuuxtFRNJUn4lZ7rFjo"
 };
 
 const FnbPage: FC = () => {
+    const params = useParams<any>();
     const { id: contactID } = useParams<{ id: string }>();
     const [info, setInfoCustomer] = useState<any>({});
     const [totalVoucher, setTotalVoucher] = useState(0);
@@ -40,6 +37,10 @@ const FnbPage: FC = () => {
 
     const [totalFnbOrder, setTotalFnbOrder] = useState(0);
     const [listFnbOrder, setListFnbOrder] = useState([]);
+
+    // QR code
+    const [isToggleModalQRCode, setIsToggleModalQRCode] = useState(false);
+    const toggleModalQRCode = () => setIsToggleModalQRCode(!isToggleModalQRCode);
 
     useEffect(() => {
         fetch(`https://service.app.trixgo.com/api/item/contacts?populates=%7B%22path%22:%22parent+userUpdate%22,%22select%22:%22name+bizfullname%22%7D&limit=20&contactID=${contactID}&select=name+sign+phone+purchasedValue+totalLoyaltyPoints+usedLoyaltyPoints+remainLoyaltyPoints`, {
@@ -82,7 +83,11 @@ const FnbPage: FC = () => {
     return (
         <div className="p-2 relative transition-all duration-500 ease-out overflow-auto" style={{ height: "100vh" }}>
             <img alt="Next" src={logo} className="w-16 mb-2" />
-            <img alt="Next" src={qrcode} className="w-24 absolute top-2 right-2" />
+            {/* <img alt="Next" src={qrcode} className="w-24 absolute top-2 right-2" /> */}
+            <button className="flex items-center mr-0.5 min-w-max rounded-full hover:bg-cbs-gray p-2 absolute top-2 right-2" onClick={toggleModalQRCode}>
+                <img className="w-[36px] h-[36px]" alt="icon" src={QRCodeIcon} />
+            </button>
+
             <p><b className="text-base">Xin chào {info?.name}</b></p>
             <div className="relative">
                 <p>Tổng thanh toán</p>
@@ -159,8 +164,16 @@ const FnbPage: FC = () => {
                     </div>
                 ))
             }
-        </div>
-    )
-}
+
+            <ModalQRCode
+                value={{
+                    appID: APP_KEY.FNB,
+                    id: contactID
+                }}
+                isToggle={isToggleModalQRCode}
+                toggle={toggleModalQRCode}
+            />
+         </div>
+     )}
 
 export default FnbPage

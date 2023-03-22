@@ -1136,7 +1136,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                         {values.customerID && service === "1" ?
                           <div className="flex justify-between items-center mb-1 px-2 py-2">
                             <div>
-                              <div>Credit-Trừ từ tích điểm-Chỉ áp dụng đơn Off {`(${formatNumberMoney(credit || creditTemp)})`}</div>
+                              <div>Trừ từ tích điểm-chỉ áp dụng đơn Off {`(${formatNumberMoney(credit || creditTemp)})`}</div>
                               <div>
                                 <FormControl sx={{ marginTop: "-5px" }} >
                                   <RadioGroup
