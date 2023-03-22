@@ -57,7 +57,7 @@ export const ModalQRCode: FC<Props> = ({ isToggle, toggle, value }) => {
               onClick={toggle}
             />
           </header>
-          <QRCode id="qrcode" value={JSON.stringify(value)} size={300} />
+          <QRCode id="qrcode" value={JSON.stringify(value)} size={275} />
 
           <div className="flex justify-end mt-5">
             <div>
