@@ -283,11 +283,6 @@ export const FnbVoucherPage: FC = () => {
 								Mã hiệu
 							</div>
 						</th>
-                        <th className="pb-1 pt-1 font-normal w-[150px]">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Dành cho khách hàng
-							</div>
-						</th>
 						<th className="pb-1 pt-1 font-normal">
 							<div className="border-r-2 border-gray-300 font-normal pl-2">
 								Thời hạn sử dụng
@@ -295,7 +290,7 @@ export const FnbVoucherPage: FC = () => {
 						</th>
 						<th className="pb-1 pt-1 font-normal">
 							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Giá trị đơn hàng tối thiểu để được áp dụng
+								Đơn hàng tối thiểu áp dụng
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal">
@@ -310,12 +305,22 @@ export const FnbVoucherPage: FC = () => {
 						</th>
 						<th className="pb-1 pt-1 font-normal">
 							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Người giới thiệu
+								Ghi chú
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal w-[150px]">
+							<div className="border-r-2 border-gray-300 font-normal pl-2">
+								Số khách hàng được nhận
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal">
 							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Ghi chú
+								Số khách hàng đã sử dụng
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="border-r-2 border-gray-300 font-normal pl-2">
+								Tỷ lệ
 							</div>
 						</th>
 					</tr>
@@ -342,9 +347,6 @@ export const FnbVoucherPage: FC = () => {
 								{item?.suid}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{item?.referrer?.name}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
                                 {moment(item?.expired).format("DD/MM/YYYY HH:mm")} ({moment(item?.expired).fromNow()})
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
@@ -356,11 +358,17 @@ export const FnbVoucherPage: FC = () => {
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{formatNumberMoney(item?.salesoffRate||0)}
 							</td>
-                            <td className={"p-2 border-0.5 border-primary-border"}>
-								{item?.customer?.name}
-							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{item?.note}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(item?.receivers?.length || 0)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney( item?.buyers?.length || 0 )}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border text-primary-light bg-cbs-green"}>
+								{ item?.receivers?.length != 0 ? Number(item?.buyers?.length/item?.receivers?.length)*100 : 0}%
 							</td>
 						</tr>
 				    ))
@@ -380,5 +388,5 @@ export const FnbVoucherPage: FC = () => {
 			</ModalContainer>
 
 		</main>
-	);
-};
+	)
+}

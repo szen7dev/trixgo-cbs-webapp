@@ -98,24 +98,6 @@ export const ModalAddNewOrder: FC<Props> = () => {
   const [creditTemp, setCreditTemp] = useState(0);
   const [creditInput, setCreditInput] = useState(0);
 
-  /**
-   * Code cũ: Tuấn Dev
-   */
-  // useEffect(() => {
-  //   const fetchFundas = async () => {
-  //     const response = await API.get(
-  //       `/api/fnb/products?isParent=1&limit=50`, ////
-  //     );
-  //     const { data, status } = response?.data;
-
-  //     if (status !== 200) return;
-  //     setProductIsParent(data?.listRecords || []);
-  //   }
-
-  //   fetchFundas();
-  // }, []);
-  // console.log({fundaID})
-
   useEffect(() => {
     const fetchFundas = async () => {
       const response = await API.get(
