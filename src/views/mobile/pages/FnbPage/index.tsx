@@ -106,8 +106,7 @@ const FnbPage: FC = () => {
             {
                 listVouchers.map((item: any, i: any) => (
                     <div key={item?._id} className="border p-2 mb-2">
-                        <p>{item.name}</p>
-                        <p>Mã: <b className="text-cbs-primary text-base">{item?.sign}</b></p>
+                        <p>{item.name} - <b className="text-cbs-primary text-base">{item?.sign}</b></p>
                         <p><b>Ưu đãi {formatNumberMoney(item?.salesoffAmount)} | Giảm giá {formatNumberMoney(item?.salesoffRate)} % - Đơn hàng từ {formatNumberMoney(item?.minOrderAmount)}</b></p>
                         <p>
                             Thời hạn: {moment(item.expired).format('DD/MM/YYYY HH:mm')}
@@ -127,7 +126,11 @@ const FnbPage: FC = () => {
                             Đơn hàng ngày {moment(item.createAt).format('HH:mm DD/MM/YYYY')}
                             <span className="text-primary-gray"> ({moment(item.createAt).fromNow()})</span>
                         </p>
-                        <p>Mã hiệu: {item?.sign} | {FNB_CHANNEL[Number(item?.salesChannel) - 1]?.sign}{item?.appOrderSign}</p>
+                        <p>Voucher: 
+                             <b className="text-cbs-primary pr-1 pl-1">{item?.voucher?.sign}</b>
+                             <span className="text-primary-gray">- Ưu đãi {formatNumberMoney(item?.voucher?.salesoffAmount)} | Giảm giá {formatNumberMoney(item?.voucher?.salesoffRate)} % - Đơn hàng từ {formatNumberMoney(item?.voucher?.minOrderAmount)}</span>
+                        </p>
+                        <p>Mã hiệu: {item?.sign} | {FNB_CHANNEL[Number(item?.salesChannel)-1]?.sign}{item?.appOrderSign}</p>
                         <div className="relative">
                             <p>Tổng giá trị</p>
                             <p className="absolute top-0 right-0">{formatNumberMoney(item?.total)}</p>
@@ -139,6 +142,10 @@ const FnbPage: FC = () => {
                         <div className="relative">
                             <p>Trừ tích điểm</p>
                             <p className="absolute top-0 right-0">{formatNumberMoney(item?.credit)}</p>
+                        </div>
+                        <div className="relative">
+                            <p>Voucher</p>
+                            <p className="absolute top-0 right-0">{formatNumberMoney(item?.offer)}</p>
                         </div>
                         <div className="relative">
                             <p>Còn lại thanh toán</p>
