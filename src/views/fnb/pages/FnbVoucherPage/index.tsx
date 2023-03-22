@@ -328,51 +328,52 @@ export const FnbVoucherPage: FC = () => {
 				{
 					(
                         listWithPager[pageIndex]??[]).map((item: any, i: any) => (
-						<tr key={item._id} className="text-[14px]">
-							<td className={"p-2 border-0.5 border-primary-border text-center"}>
-								<input
-									className="form-check-input"
-									type="checkbox"
-									checked={getStateChecked(item._id)}
-									onChange={() => onClickCheckButton(item._id)}
-								/>
-							</td>
-                            <td className={"p-2 border-0.5 border-primary-border"}>
-								{TYPE_VOUCHER[item.type-1]?.text}
-								<p className="text-xs text-primary-gray"><i>{item._id}</i></p>
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border text-cbs-highlight-color"}>
-                                {item?.name}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								{item?.sign}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-                                {moment(item?.expired).format("DD/MM/YYYY HH:mm")} ({moment(item?.expired).fromNow()})
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(item?.minOrderAmount||0)}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(item?.salesoffAmount||0)}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(item?.salesoffRate||0)}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								{item?.note}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(item?.receivers?.length || 0)}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney( item?.buyers?.length || 0 )}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border text-primary-light bg-cbs-green"}>
-								{ item?.receivers?.length != 0 ? Number(item?.buyers?.length/item?.receivers?.length)*100 : 0}%
-							</td>
-						</tr>
-				    ))
+							<tr key={item._id} className="text-[14px]">
+								<td className={"p-2 border-0.5 border-primary-border text-center"}>
+									<input
+										className="form-check-input"
+										type="checkbox"
+										checked={getStateChecked(item._id)}
+										onChange={() => onClickCheckButton(item._id)}
+									/>
+								</td>
+								<td className={"p-2 border-0.5 border-primary-border"}>
+									{TYPE_VOUCHER[item.type-1]?.text}
+									<p className="text-xs text-primary-gray"><i>{item._id}</i></p>
+								</td>
+								<td className={"p-2 border-0.5 border-primary-border text-cbs-highlight-color"}>
+									{item?.name}
+								</td>
+								<td className={"p-2 border-0.5 border-primary-border"}>
+									{item?.sign}
+								</td>
+								<td className={"p-2 border-0.5 border-primary-border"}>
+									{moment(item?.expired).format("DD/MM/YYYY HH:mm")} ({moment(item?.expired).fromNow()})
+								</td>
+								<td className={"p-2 border-0.5 border-primary-border"}>
+									{formatNumberMoney(item?.minOrderAmount||0)}
+								</td>
+								<td className={"p-2 border-0.5 border-primary-border"}>
+									{formatNumberMoney(item?.salesoffAmount||0)}
+								</td>
+								<td className={"p-2 border-0.5 border-primary-border"}>
+									{formatNumberMoney(item?.salesoffRate||0)}
+								</td>
+								<td className={"p-2 border-0.5 border-primary-border"}>
+									{item?.note}
+								</td>
+								<td className={"p-2 border-0.5 border-primary-border"}>
+									{formatNumberMoney(item?.receivers?.length || 0)}
+								</td>
+								<td className={"p-2 border-0.5 border-primary-border"}>
+									{formatNumberMoney( item?.buyers?.length || 0 )}
+								</td>
+								<td className={"p-2 border-0.5 border-primary-border text-primary-light bg-cbs-green"}>
+									{ item?.receivers?.length != 0 ? Number(item?.buyers?.length/item?.receivers?.length)*100 : 0}%
+								</td>
+							</tr>
+				    	)
+					)
                 }
 			</table>
 
