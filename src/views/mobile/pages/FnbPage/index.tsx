@@ -94,7 +94,7 @@ const FnbPage: FC = () => {
                 (listVouchers[0] ?? []).map((item: any, i: any) => (
                     <div key={item?._id} className="border p-2 mb-2">
                         <p>{item.name}</p>
-                        <p>Mã: <b className="text-cbs-primary text-base">{item?.suid}</b></p>
+                        <p>Mã: <b className="text-cbs-primary text-base">{item?.sign}</b></p>
                         <p><b>Ưu đãi {formatNumberMoney(item?.salesoffAmount)} | Giảm giá {formatNumberMoney(item?.salesoffRate)} % - Đơn hàng từ {formatNumberMoney(item?.minOrderAmount)}</b></p>
                         <p>
                             Thời hạn: {moment(item.expired).format('DD/MM/YYYY HH:mm')} 
