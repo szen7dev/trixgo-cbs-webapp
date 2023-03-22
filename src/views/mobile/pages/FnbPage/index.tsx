@@ -140,21 +140,35 @@ const FnbPage: FC = () => {
                             <p>Tổng giá trị</p>
                             <p className="absolute top-0 right-0">{formatNumberMoney(item?.total)}</p>
                         </div>
-                        <div className="relative">
-                            <p>Giảm giá</p>
-                            <p className="absolute top-0 right-0">{formatNumberMoney(item?.salesoff)}</p>
+                        <div className="relative text-primary-gray">
+                            <i>
+                                <p>Trừ triết khấu</p>
+                                <p className="absolute top-0 right-0">{formatNumberMoney(item?.discount)}</p>
+                            </i>
                         </div>
-                        <div className="relative">
-                            <p>Trừ tích điểm</p>
-                            <p className="absolute top-0 right-0">{formatNumberMoney(item?.credit)}</p>
+                        <div className="relative text-primary-gray">
+                           <i>
+                            <p>Trừ giảm giá</p>
+                                <p className="absolute top-0 right-0">{formatNumberMoney(item?.salesoff)}</p>
+                           </i>
                         </div>
-                        <div className="relative">
-                            <p>Voucher</p>
-                            <p className="absolute top-0 right-0">{formatNumberMoney(item?.offer)}</p>
+                        <div className="relative text-primary-gray">
+                            <i>
+                                <p>Trừ tích điểm</p>
+                                <p className="absolute top-0 right-0">{formatNumberMoney(item?.credit)}</p>
+                            </i>
                         </div>
-                        <div className="relative">
+                        <div className="relative text-primary-gray">
+                            <i>
+                                <p>Trừ voucher</p>
+                                <p className="absolute top-0 right-0">{formatNumberMoney(item?.offer)}</p>
+                            </i>
+                        </div>
+                        <div className="relative text-primary-gray">
+                           <i>
                             <p>Còn lại thanh toán</p>
-                            <p className="absolute top-0 right-0">{formatNumberMoney(item?.amount)}</p>
+                                <p className="absolute top-0 right-0">{formatNumberMoney(item?.amount)}</p>
+                           </i>
                         </div>
                         <div className="relative">
                             <p>Điểm tích lũy</p>
