@@ -9,6 +9,7 @@ export interface Customer {
     };
     type: string;
     name: string;
+    fullname: string;
     address: string;
     note: string;
     taxid: string | null;
