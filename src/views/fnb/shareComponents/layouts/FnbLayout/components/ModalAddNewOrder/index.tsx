@@ -302,7 +302,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
       // console.log({ data, status })
 
       if (status !== 200) return toast.warning('Yêu cầu tạo đơn thất bại');
-      if (data.error) return toast.warning('Tạo đơn thất bại');
+      if (data.error) return toast.warning(data.data.message);
 
       // console.log({
       //   isConnect: socket.connected,
