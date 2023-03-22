@@ -48,7 +48,7 @@ const FnbPage: FC = () => {
             customerID: contactID,
             populates: JSON.stringify({
 				path: "voucher",
-                select: "_id name sign"
+                select: "_id name sign salesoffAmount salesoffRate minOrderAmount"
 			})
         }, 
             isFetchList: true, 
@@ -116,7 +116,10 @@ const FnbPage: FC = () => {
                             Đơn hàng ngày {moment(item.createAt).format('HH:mm DD/MM/YYYY')} 
                             <span className="text-primary-gray"> ({moment(item.createAt).fromNow()})</span>
                         </p>
-                        <p>Voucher: <b className="text-cbs-primary">{item?.voucher?.sign}</b></p>
+                        <p>Voucher: 
+                             <b className="text-cbs-primary">{item?.voucher?.sign}</b>
+                             - Ưu đãi {formatNumberMoney(item?.voucher?.salesoffAmount)} | Giảm giá {formatNumberMoney(item?.voucher?.salesoffRate)} % - Đơn hàng từ {formatNumberMoney(item?.voucher?.minOrderAmount)}
+                        </p>
                         <p>Mã hiệu: {item?.sign} | {FNB_CHANNEL[Number(item?.salesChannel)-1]?.sign}{item?.appOrderSign}</p>
                         <div className="relative">
                             <p>Tổng giá trị</p>
