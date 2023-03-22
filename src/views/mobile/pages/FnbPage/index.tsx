@@ -45,7 +45,11 @@ const FnbPage: FC = () => {
         params: {
             limit: 50,
             statuss: [5],
-            customerID: contactID
+            customerID: contactID,
+            populates: JSON.stringify({
+				path: "voucher",
+                select: "_id name sign"
+			})
         }, 
             isFetchList: true, 
             isFetchInfo: false
@@ -57,7 +61,6 @@ const FnbPage: FC = () => {
     const { totalRecord: totalVoucher, listWithPager: listVouchers } = useFnbVoucher({
         params: {
             limit: 20,
-            status: 1,
             customerID: contactID
         }, 
             isFetchList: true, 
@@ -93,8 +96,7 @@ const FnbPage: FC = () => {
             {
                 (listVouchers[0] ?? []).map((item: any, i: any) => (
                     <div key={item?._id} className="border p-2 mb-2">
-                        <p>{item.name}</p>
-                        <p>Mã: <b className="text-cbs-primary text-base">{item?.sign}</b></p>
+                        <p>{item.name} - <b className="text-cbs-primary text-base">{item?.sign}</b></p>
                         <p><b>Ưu đãi {formatNumberMoney(item?.salesoffAmount)} | Giảm giá {formatNumberMoney(item?.salesoffRate)} % - Đơn hàng từ {formatNumberMoney(item?.minOrderAmount)}</b></p>
                         <p>
                             Thời hạn: {moment(item.expired).format('DD/MM/YYYY HH:mm')} 
@@ -114,6 +116,7 @@ const FnbPage: FC = () => {
                             Đơn hàng ngày {moment(item.createAt).format('HH:mm DD/MM/YYYY')} 
                             <span className="text-primary-gray"> ({moment(item.createAt).fromNow()})</span>
                         </p>
+                        <p>Voucher: <b className="text-cbs-primary">{item?.voucher?.sign}</b></p>
                         <p>Mã hiệu: {item?.sign} | {FNB_CHANNEL[Number(item?.salesChannel)-1]?.sign}{item?.appOrderSign}</p>
                         <div className="relative">
                             <p>Tổng giá trị</p>
@@ -126,6 +129,10 @@ const FnbPage: FC = () => {
                         <div className="relative">
                             <p>Trừ tích điểm</p>
                             <p className="absolute top-0 right-0">{formatNumberMoney(item?.credit)}</p>
+                        </div>
+                        <div className="relative">
+                            <p>Voucher</p>
+                            <p className="absolute top-0 right-0">{formatNumberMoney(item?.offer)}</p>
                         </div>
                         <div className="relative">
                             <p>Còn lại thanh toán</p>
