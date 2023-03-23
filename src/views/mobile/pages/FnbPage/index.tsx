@@ -24,6 +24,9 @@ import { ModalFnbQRCode } from "shareComponents/common/ModalFnbQRCode";
 // import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
 // import { useFnbVoucher } from 'services/hooks/fnb/useFnbVoucher';
 
+const domain = 'http://localhost:3003';
+// const domain = 'https://service.app.trixgo.com';
+
 const fixedHeaders = {
     "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbmZvVXNlciI6eyJlbWFpbCI6ImhpZXBuaC5rdHJAZ21haWwuY29tIiwiZnVsbG5hbWUiOiJLaeG7g20gdGjhu60gdmnDqm4tSVRFU1QiLCJiaXpmdWxsbmFtZSI6Iktp4buDbSB0aOG7rSB2acOqbi1JVEVTVCIsImNvbXBhbnkiOnsiX2lkIjoiNWUwNDdkYzA1ZTMwZGNlNzI4NDlhNGE0IiwibmFtZSI6IkPDtG5nIHR5IGPhu5UgcGjhuqduIGThu4tjaCB24bulIGtp4buDbSB0aOG7rSIsImltYWdlIjoiZjQ4MDQ3YWVmZmUzNzM0NjhkOWQxN2IyMWYxNjE3NTYucG5nIiwic2lnbiI6IklURVNUIn0sImRlcGFydG1lbnQiOnsiX2lkIjoiNWU3Y2NkNTIwZTNhZmQzZWE0ZTcwYzE2IiwibmFtZSI6IklURVNULVBow7JuZyBr4bq_IHRvw6FuIiwic2lnbiI6bnVsbH0sImltYWdlIjoidXNlcl9kZWZhdWx0LnBuZyIsInNpZ25hdHVyZSI6InNpZ25hdHVyZV9kZWZhdWx0LnBuZyIsInN0YXR1cyI6MSwibGV2ZWwiOjEsIl9pZCI6IjVmNzM2M2UyYzIyOTc5NGQ4YzBiYzY5MSJ9LCJpYXQiOjE2NzkzODQ3NzZ9.oRgR9yIFWYM_3TVLo_X6l-FBGuuxtFRNJUn4lZ7rFjo"
 };
@@ -43,7 +46,7 @@ const FnbPage: FC = () => {
     const toggleModalQRCode = () => setIsToggleModalQRCode(!isToggleModalQRCode);
 
     useEffect(() => {
-        fetch(`https://service.app.trixgo.com/api/item/contacts?populates=%7B%22path%22:%22parent+userUpdate%22,%22select%22:%22name+bizfullname%22%7D&limit=20&contactID=${contactID}&select=name+sign+phone+purchasedValue+totalLoyaltyPoints+usedLoyaltyPoints+remainLoyaltyPoints`, {
+        fetch(`${domain}/api/item/contacts?populates=%7B%22path%22:%22parent+userUpdate%22,%22select%22:%22name+bizfullname%22%7D&limit=20&contactID=${contactID}&select=name+sign+phone+purchasedValue+totalLoyaltyPoints+usedLoyaltyPoints+remainLoyaltyPoints`, {
             headers: fixedHeaders,
         })
             .then(async (response) => {
@@ -53,7 +56,7 @@ const FnbPage: FC = () => {
                 }
             });
 
-        fetch(`https://service.app.trixgo.com/api/fnb/vouchers?customerID=${contactID}&limit=20&status=1`, {
+        fetch(`${domain}/api/fnb/vouchers?customerID=${contactID}&limit=20&status=1`, {
             headers: fixedHeaders,
         })
             .then(async (response) => {
@@ -66,7 +69,7 @@ const FnbPage: FC = () => {
                 }
             });
 
-        fetch(`https://service.app.trixgo.com/api/fnb/orders?lastestID=&limit=50&statuss[]=5&customerID=${contactID}`, {
+        fetch(`${domain}/api/fnb/orders?lastestID=&limit=50&statuss[]=5&customerID=${contactID}`, {
             headers: fixedHeaders,
         })
             .then(async (response) => {
@@ -83,6 +86,8 @@ const FnbPage: FC = () => {
     // Code
     const d = new Date();
     const time = d.getTime();
+
+    console.log({info})
 
     return (
         <div className="p-2 relative transition-all duration-500 ease-out overflow-auto" style={{ height: "100vh" }}>
