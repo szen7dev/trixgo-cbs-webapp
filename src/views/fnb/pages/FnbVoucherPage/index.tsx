@@ -33,12 +33,13 @@ import API from "apis/repository";
 import { createLinkAndClick } from "utils";
 
 const TYPE_VOUCHER = [
-	{ value: 1, text: "Thông thường/các dịp lễ tết" },
+	{ value: 1, text: "Thông thường" },
 	{ value: 2, text: "Tặng người giới thiệu" },
-	{ value: 3, text: "Tặng người nhận giới thiệu" },
-	{ value: 4, text: "Tổ chức các sự kiện" },
-	{ value: 5, text: "Tặng cho nhân viên, cán bộ" },
-	{ value: 6, text: "Tri ân đối tác" },
+	{ value: 3, text: "Tặng khách mới" },
+	{ value: 4, text: "Tặng sự kiện" },
+	{ value: 5, text: "Tặng nhân viên" },
+	{ value: 6, text: "Tặng đối tác" },
+	{ value: 7, text: "Tặng khác" },
 ]
 
 export const FnbVoucherPage: FC = () => {

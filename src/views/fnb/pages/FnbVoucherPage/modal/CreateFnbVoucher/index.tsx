@@ -134,19 +134,23 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
                                         </div>
                                         <div className={"flex items-center ml-3"}>
                                             <Field type="radio" name="type" value={3} className={"form-check-input mt-0"} onChange={() => setFieldValue('type', 3)} />
-                                            <label htmlFor="type" className={"text-left ml-3"}>Tặng người nhận giới thiệu</label>
+                                            <label htmlFor="type" className={"text-left ml-3"}>Tặng khách mới</label>
                                         </div>
                                         <div className={"flex items-center ml-3"}>
                                             <Field type="radio" name="type" value={4} className={"form-check-input mt-0"} onChange={() => setFieldValue('type', 4)} />
-                                            <label htmlFor="type" className={"text-left ml-3"}>Tổ chức các sự kiện</label>
+                                            <label htmlFor="type" className={"text-left ml-3"}>Tặng sự kiện</label>
                                         </div>
                                         <div className={"flex items-center ml-3"}>
                                             <Field type="radio" name="type" value={5} className={"form-check-input mt-0"} onChange={() => setFieldValue('type', 5)} />
-                                            <label htmlFor="type" className={"text-left ml-3"}>Tặng cho nhân viên, cán bộ</label>
+                                            <label htmlFor="type" className={"text-left ml-3"}>Tặng viên</label>
                                         </div>
                                         <div className={"flex items-center ml-3"}>
                                             <Field type="radio" name="type" value={6} className={"form-check-input mt-0"} onChange={() => setFieldValue('type', 6)} />
-                                            <label htmlFor="type" className={"text-left ml-3"}>Tri ân đối tác</label>
+                                            <label htmlFor="type" className={"text-left ml-3"}>Tặng đối tác</label>
+                                        </div>
+                                        <div className={"flex items-center ml-3"}>
+                                            <Field type="radio" name="type" value={7} className={"form-check-input mt-0"} onChange={() => setFieldValue('type', 7)} />
+                                            <label htmlFor="type" className={"text-left ml-3"}>Tặng khác</label>
                                         </div>
                                     </div>
                                 </div>

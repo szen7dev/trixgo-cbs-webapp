@@ -21,7 +21,7 @@ import { ModalFnbQRCode } from "shareComponents/common/ModalFnbQRCode";
  */
 // import { useAuth } from "services/hooks/auth/useAuth";
 // import { useCustomer } from "services/hooks/items/useCustomer";
-// import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
+import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
 // import { useFnbVoucher } from 'services/hooks/fnb/useFnbVoucher';
 
 const domain = 'http://localhost:3003';
@@ -32,6 +32,7 @@ const fixedHeaders = {
 };
 
 const FnbPage: FC = () => {
+    
     const params = useParams<any>();
     const { id: contactID } = useParams<{ id: string }>();
     const [info, setInfoCustomer] = useState<any>({});
@@ -44,6 +45,22 @@ const FnbPage: FC = () => {
     // QR code
     const [isToggleModalQRCode, setIsToggleModalQRCode] = useState(false);
     const toggleModalQRCode = () => setIsToggleModalQRCode(!isToggleModalQRCode);
+
+    // const populates = `JSON.stringify({path: "voucher",select: "_id name sign salesoffAmount salesoffRate minOrderAmount"})`
+    // const { isLoading, isFetching, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbOrder({
+    //     params: {
+    //         limit: 50,
+    //         statuss: [5],
+    //         customerID: contactID,
+    //         populates: JSON.stringify({
+	// 			path: "voucher",
+    //             select: "_id name sign salesoffAmount salesoffRate minOrderAmount"
+	// 		})
+    //     }, 
+    //         isFetchList: true, 
+    //         isFetchInfo: false
+    //     }
+    // )
 
     useEffect(() => {
         fetch(`${domain}/api/item/contacts?populates=%7B%22path%22:%22parent+userUpdate%22,%22select%22:%22name+bizfullname%22%7D&limit=20&contactID=${contactID}&select=name+sign+phone+purchasedValue+totalLoyaltyPoints+usedLoyaltyPoints+remainLoyaltyPoints`, {
@@ -69,7 +86,7 @@ const FnbPage: FC = () => {
                 }
             });
 
-        fetch(`${domain}/api/fnb/orders?lastestID=&limit=50&statuss[]=5&customerID=${contactID}`, {
+        fetch(`${domain}/api/fnb/orders?lastestID=&limit=50&statuss[]=5&customerID=${contactID}&populates=%7B%22path%22:%22voucher%22,%22select%22:%22_id+name+sign+salesoffAmount+salesoffRate+minOrderAmount%22%7D`, {
             headers: fixedHeaders,
         })
             .then(async (response) => {
@@ -87,7 +104,8 @@ const FnbPage: FC = () => {
     const d = new Date();
     const time = d.getTime();
 
-    console.log({info})
+    // console.log({info})
+    // console.log({listFnbOrder})
 
     return (
         <div className="p-2 relative transition-all duration-500 ease-out overflow-auto" style={{ height: "100vh" }}>
