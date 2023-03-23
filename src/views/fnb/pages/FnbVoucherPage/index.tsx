@@ -369,8 +369,8 @@ export const FnbVoucherPage: FC = () => {
 								<td className={"p-2 border-0.5 border-primary-border"}>
 									{formatNumberMoney( item?.buyers?.length || 0 )}
 								</td>
-								<td className={"p-2 border-0.5 border-primary-border text-primary-light bg-cbs-green"}>
-									{ item?.receivers?.length != 0 ? Number(item?.buyers?.length/item?.receivers?.length)*100 : 0}%
+								<td className={"p-2 border-0.5 border-primary-border"}>
+									{ item?.receivers?.length != 0 ? Number(Number(item?.buyers?.length/item?.receivers?.length)*100 ).toFixed(2): 0}%
 								</td>
 							</tr>
 				    	)
