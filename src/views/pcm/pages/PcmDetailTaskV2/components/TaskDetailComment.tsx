@@ -148,13 +148,14 @@ export const TaskDetailComment: FC<Props> = ({ task, refetchInfo }) => {
 
             <div className={"list-comment mt-4"}>
                 {/* !totalRecord && !_comments?.length */}
-                {_comments.map((comment: CommentProps) => (
+                {_comments.map((comment: CommentProps, index: number) => (
                     <ParentResponseComment
                         key={comment._id}
                         task={task}
                         comment={comment}
                         socket={socket}
                         tab={filter}
+                        isLastComment={(_comments.length - 1) === index}
                         userId={user?._id}
                         onConfirmUpdate={refetchInfo}
                         onClickImage={(comment: CommentProps, index: number) => {
