@@ -42,6 +42,19 @@ const TYPE_VOUCHER = [
 	{ value: 7, text: "Tặng khác" },
 ]
 
+// export const compareTwoTime = (time1: any, time2: any) => {
+//     const a = (new Date(time1)).getTime();
+//     const b = (new Date(time2)).getTime();
+//     if (a > b) {
+//         return 1;
+//     } else if (b > a) {
+//         return 2;
+//     } else {
+//         return 0;
+//     }
+// }
+// const currentTime = new Date()
+
 export const FnbVoucherPage: FC = () => {
 	useEffect(() => {
 		document.title = "FnB";

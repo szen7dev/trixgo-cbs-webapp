@@ -272,7 +272,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
             break;
         }
         return {
-          // ...p,
+          // ...p, // Lấy tất cả các field
           productID: p._id,
           quantity: p.quantity,
           black: p.black,
