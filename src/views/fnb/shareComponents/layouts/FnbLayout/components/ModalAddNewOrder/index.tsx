@@ -272,10 +272,15 @@ export const ModalAddNewOrder: FC<Props> = () => {
             break;
         }
         return {
-          ...p,
+          // ...p,
           productID: p._id,
           quantity: p.quantity,
+          black: p.black,
+          size: p.size,
+          sugar: p.sugar,
+          ice: p.ice,
           note: p.note,
+          variantsSelected: p.variantsSelected,
           variantsID: p.variantsSelected ? p.variantsSelected.map((v: any) => v._id) : [],
           unitPrice: price,
         }

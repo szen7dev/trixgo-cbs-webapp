@@ -24,8 +24,8 @@ import { ModalFnbQRCode } from "shareComponents/common/ModalFnbQRCode";
 import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
 // import { useFnbVoucher } from 'services/hooks/fnb/useFnbVoucher';
 
-// const domain = 'http://localhost:3003';
-const domain = 'https://service.app.trixgo.com';
+const domain = 'http://localhost:3003';
+// const domain = 'https://service.app.trixgo.com';
 
 const fixedHeaders = {
     "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbmZvVXNlciI6eyJlbWFpbCI6ImhpZXBuaC5rdHJAZ21haWwuY29tIiwiZnVsbG5hbWUiOiJLaeG7g20gdGjhu60gdmnDqm4tSVRFU1QiLCJiaXpmdWxsbmFtZSI6Iktp4buDbSB0aOG7rSB2acOqbi1JVEVTVCIsImNvbXBhbnkiOnsiX2lkIjoiNWUwNDdkYzA1ZTMwZGNlNzI4NDlhNGE0IiwibmFtZSI6IkPDtG5nIHR5IGPhu5UgcGjhuqduIGThu4tjaCB24bulIGtp4buDbSB0aOG7rSIsImltYWdlIjoiZjQ4MDQ3YWVmZmUzNzM0NjhkOWQxN2IyMWYxNjE3NTYucG5nIiwic2lnbiI6IklURVNUIn0sImRlcGFydG1lbnQiOnsiX2lkIjoiNWU3Y2NkNTIwZTNhZmQzZWE0ZTcwYzE2IiwibmFtZSI6IklURVNULVBow7JuZyBr4bq_IHRvw6FuIiwic2lnbiI6bnVsbH0sImltYWdlIjoidXNlcl9kZWZhdWx0LnBuZyIsInNpZ25hdHVyZSI6InNpZ25hdHVyZV9kZWZhdWx0LnBuZyIsInN0YXR1cyI6MSwibGV2ZWwiOjEsIl9pZCI6IjVmNzM2M2UyYzIyOTc5NGQ4YzBiYzY5MSJ9LCJpYXQiOjE2NzkzODQ3NzZ9.oRgR9yIFWYM_3TVLo_X6l-FBGuuxtFRNJUn4lZ7rFjo"
