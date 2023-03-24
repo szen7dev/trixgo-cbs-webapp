@@ -12,7 +12,12 @@ const initialState: any = {
             fromDate: "",
             toDate: "",
             statuss: [],
-            isMistake: 0
+            isMistake: 0,
+            isNonResident: 0,
+            isDiscount: 0,
+            isSalesoff: 0,
+            isCredit: 0,
+            isOffer: 0,
         },
     },
 };

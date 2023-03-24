@@ -452,6 +452,18 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                             <div>{formatNumberMoney(order.salesoff)}</div>
                           </div>
                         </div>
+                        <div className="flex justify-between mt-2 mb-3">
+                          <div className="">Trừ tích điểm</div>
+                          <div className="flex">
+                            <div>{formatNumberMoney(order.credit)}</div>
+                          </div>
+                        </div>
+                        <div className="flex justify-between mt-2 mb-3">
+                          <div className="">Trừ voucher</div>
+                          <div className="flex">
+                            <div>{formatNumberMoney(order.offer)}</div>
+                          </div>
+                        </div>
                       </div>
                       <div className="border-0.5 p-1">
                         <div className="flex justify-between bg-cbs-form-input-bg text-xl">
