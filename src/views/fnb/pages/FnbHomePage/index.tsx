@@ -26,6 +26,7 @@ import businessBuiding from "assets/images/icons8-business-building-48.svg";
 import { IconImage } from 'views/media/shareComponents/common';
 import iconPhoto from "assets/images/icons8-photo.svg";
 import iconRefresh from "assets/images/icons8-refresh.png";
+import iconTicket from "assets/images/icons8-ticket.png";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import PaginateV2 from "shareComponents/common/PaginateV2";
@@ -1223,6 +1224,19 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                     <td className={"px-1 py-2"}>
                       <div className="">
                         {item?.sign} {FNB_CHANNEL[Number(item?.salesChannel)-1]?.sign}{item?.appOrderSign}
+                        <div>
+                          {
+                            item?.offer > 0 ?
+                              <img
+                                src={iconTicket}
+                                  alt={"ticket"}
+                                  className={
+                                    "w-[36px] h-[36px] rounded-full overflow-hidden"
+                                  }
+                              />
+                              : <></>
+                          }
+                        </div>
                       </div>
                     </td>
                     <td className={"px-1 py-2"}>
