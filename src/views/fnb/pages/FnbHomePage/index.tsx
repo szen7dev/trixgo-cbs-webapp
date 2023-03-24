@@ -448,7 +448,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             reset={reset}
             selectOneByOne={true}
             className={"mr-2 border border-primary-border rounded-lg mb-2"}
-            placeholder={"Ca làm"}
+            placeholder={"Ca"}
             showTriangle={true}
             isMultiple={true}
             disableSearch={true}
@@ -578,7 +578,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               className={
                 "mr-2 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
               }
-              placeholder={"Thời khoảng"}
+              placeholder={"Khoảng"}
               iconBack={<TriangleDown />}
               iconFront={<img src={businessBuiding} alt={"----"} />}
               onValueChange={(val) => {
@@ -866,6 +866,53 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               )
             }
           />
+
+          <DropdownSearchableV2
+            reset={reset}
+            selectOneByOne={true}
+            className={"mr-2 border border-primary-border rounded-lg mb-2"}
+            placeholder={"Đơn"}
+            showTriangle={true}
+            isMultiple={false}
+            disableSearch={true}
+            formatItem={{
+              id: "value",
+              text: "label",
+            }}
+            renderItem={(item) => (
+              <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            prefixIcon={
+              <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
+            }
+            data={[{
+              value: 1, text: 'Nhân viên',
+            },
+            {
+              value: 2, text: 'Khách hàng'
+            }].map((item: any) => ({
+              label: `${item.text}`,
+              value: item.value,
+            }))}
+            onchangeValue={(value) => {
+              dispatch(
+                setQueryFnb({
+                  ...queryFnb,
+                  isCustomerType: value.id,
+                })
+              );
+              setPageIndex(0);
+              ref.current && ref.current.resetPaginate();
+            }}
+            onClearData={() =>
+              dispatch(
+                setQueryFnb({
+                  ...queryFnb,
+                  isCustomerType: 0,
+                })
+              )
+            }
+          />            
 
           <DropdownSearchableV2
             reset={reset}

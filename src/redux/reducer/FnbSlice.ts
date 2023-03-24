@@ -18,6 +18,7 @@ const initialState: any = {
             isSalesoff: 0,
             isCredit: 0,
             isOffer: 0,
+            isCustomerType: 0,
         },
     },
 };
