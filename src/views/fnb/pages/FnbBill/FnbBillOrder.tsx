@@ -184,7 +184,7 @@ export const FnbBillOrder: FC = () => {
                                     <td className="text-right">{formatNumberMoney(info?.discount)}</td>
                                 </tr>
                                 <tr>
-                                    <td className="text-left">Giảm giá</td>
+                                    <td className="text-left">Giảm giá (chỉ áp dụng đơn tại quán)</td>
                                     <td className="text-center px-1"></td>
                                     <td className="text-right">{formatNumberMoney(info?.salesoff)}</td>
                                 </tr>
@@ -192,6 +192,11 @@ export const FnbBillOrder: FC = () => {
                                     <td className="text-left">Trừ tích điểm (chỉ áp dụng đơn tại quán)</td>
                                     <td className="text-center px-1"></td>
                                     <td className="text-right">{formatNumberMoney(info?.credit)}</td>
+                                </tr>
+                                <tr>
+                                    <td className="text-left">Trừ voucher (chỉ áp dụng đơn tại quán)</td>
+                                    <td className="text-center px-1"></td>
+                                    <td className="text-right">{formatNumberMoney(info?.offer)}</td>
                                 </tr>
                             </tbody>
                         </table>

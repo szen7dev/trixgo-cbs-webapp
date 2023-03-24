@@ -33,13 +33,27 @@ import API from "apis/repository";
 import { createLinkAndClick } from "utils";
 
 const TYPE_VOUCHER = [
-	{ value: 1, text: "Thông thường/các dịp lễ tết" },
+	{ value: 1, text: "Thông thường" },
 	{ value: 2, text: "Tặng người giới thiệu" },
-	{ value: 3, text: "Tặng người nhận giới thiệu" },
-	{ value: 4, text: "Tổ chức các sự kiện" },
-	{ value: 5, text: "Tặng cho nhân viên, cán bộ" },
-	{ value: 6, text: "Tri ân đối tác" },
+	{ value: 3, text: "Tặng khách mới" },
+	{ value: 4, text: "Tặng sự kiện" },
+	{ value: 5, text: "Tặng nhân viên" },
+	{ value: 6, text: "Tặng đối tác" },
+	{ value: 7, text: "Tặng khác" },
 ]
+
+// export const compareTwoTime = (time1: any, time2: any) => {
+//     const a = (new Date(time1)).getTime();
+//     const b = (new Date(time2)).getTime();
+//     if (a > b) {
+//         return 1;
+//     } else if (b > a) {
+//         return 2;
+//     } else {
+//         return 0;
+//     }
+// }
+// const currentTime = new Date()
 
 export const FnbVoucherPage: FC = () => {
 	useEffect(() => {
@@ -368,8 +382,8 @@ export const FnbVoucherPage: FC = () => {
 								<td className={"p-2 border-0.5 border-primary-border"}>
 									{formatNumberMoney( item?.buyers?.length || 0 )}
 								</td>
-								<td className={"p-2 border-0.5 border-primary-border text-primary-light bg-cbs-green"}>
-									{ item?.receivers?.length != 0 ? Number(item?.buyers?.length/item?.receivers?.length)*100 : 0}%
+								<td className={"p-2 border-0.5 border-primary-border"}>
+									{ item?.receivers?.length != 0 ? Number(Number(item?.buyers?.length/item?.receivers?.length)*100 ).toFixed(2): 0}%
 								</td>
 							</tr>
 				    	)
