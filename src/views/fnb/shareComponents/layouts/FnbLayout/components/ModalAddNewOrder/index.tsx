@@ -292,7 +292,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
         discount: `${discountAndSales.discount}`,
         salesoff: `${discountAndSales.sales}`,
         credit: realCredit.toString(),
-        offer: voucherTotalPrice.toString()
+        offer: voucherTotalPrice.toString(),
+        voucherID: voucherId || ""
       }
       // console.log({ dataAddNewOrder })
 
@@ -556,12 +557,14 @@ export const ModalAddNewOrder: FC<Props> = () => {
 
     setVoucherErrorStatus(false);
     setVoucherInput("");
+    setVoucherId("");
     setVoucherTotalPrice(0);
     setVoucherName("");
     setVoucherStatus("");
   }
 
   ////
+  const [voucherId, setVoucherId] = useState("");
   const [voucherInput, setVoucherInput] = useState("");
   const [voucherName, setVoucherName] = useState("");
   const [voucherStatus, setVoucherStatus] = useState("");
@@ -577,12 +580,14 @@ export const ModalAddNewOrder: FC<Props> = () => {
     console.log("fetchVoucher", data);
     if (data?.error) {
       setVoucherTotalPrice(0);
+      setVoucherId("");
       setVoucherName("");
       setVoucherStatus("Mã Voucher không chính xác");
       setVoucherErrorStatus(true);
       handleAutoChangeDiscount(totalMoney, 'discountPercent', 0, 0);
     } else {
       setVoucherErrorStatus(false);
+      setVoucherId(data?.data?._id);
       if (data?.data?.name) {
         setVoucherName(data?.data?.name);
       }
@@ -591,6 +596,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
       // 1. Đã sử dụng: nếu infoVocher.buyers[] chứa customerID
       if (data?.data?.buyers && data.data.buyers.includes(customerID)) {
         setVoucherTotalPrice(0);
+        setVoucherId("");
         setVoucherStatus("Khách hàng này đã sử dụng mã Voucher rồi");
         setVoucherErrorStatus(true);
         handleAutoChangeDiscount(totalMoney, 'discountPercent', 0, 0);
@@ -602,6 +608,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
       const expiredTime = new Date(data?.data?.expired).getTime();
       if (currentTime > expiredTime) {
         setVoucherTotalPrice(0);
+        setVoucherId("");
         setVoucherStatus("Mã Voucher này đã hết hạn");
         setVoucherErrorStatus(true);
         handleAutoChangeDiscount(totalMoney, 'discountPercent', 0, 0);
@@ -611,6 +618,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
       // 3-Giá trị đơn hàng không đủ điều kiện áp dụng: total < infoVoucher.minOrderAmount 
       if (totalMoney < data?.data?.minOrderAmount) {
         setVoucherTotalPrice(0);
+        setVoucherId("");
         setVoucherStatus(`Đơn hàng phải từ ${formatNumberMoney(data?.data?.minOrderAmount)} trở lên`);
         setVoucherErrorStatus(true);
         handleAutoChangeDiscount(totalMoney, 'discountPercent', 0, 0);
@@ -620,6 +628,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
       // 4-Kiểm tra nếu Mã khách (customerID) mà không nằm trong infoVoucher.receivers[] -> Báo mã khách không hợp lệ
       if (data?.data?.receivers && !data.data.receivers.includes(customerID)) {
         setVoucherTotalPrice(0);
+        setVoucherId("");
         setVoucherStatus(`Khách hàng này không nằm trong danh sách khách hàng được hưởng Voucher`);
         setVoucherErrorStatus(true);
         handleAutoChangeDiscount(totalMoney, 'discountPercent', 0, 0);
@@ -1280,6 +1289,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                             setVoucherErrorStatus(false);
                                             setVoucherInput("");
                                             setVoucherTotalPrice(0);
+                                            setVoucherId("");
                                             setVoucherName("");
                                             setVoucherStatus("");
                                           }}
