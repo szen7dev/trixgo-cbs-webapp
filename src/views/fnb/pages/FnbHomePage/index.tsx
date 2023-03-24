@@ -26,6 +26,7 @@ import businessBuiding from "assets/images/icons8-business-building-48.svg";
 import { IconImage } from 'views/media/shareComponents/common';
 import iconPhoto from "assets/images/icons8-photo.svg";
 import iconRefresh from "assets/images/icons8-refresh.png";
+import iconTicket from "assets/images/icons8-ticket.png";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import PaginateV2 from "shareComponents/common/PaginateV2";
@@ -512,7 +513,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
             reset={reset}
             selectOneByOne={true}
             className={"mr-2 border border-primary-border rounded-lg mb-2"}
-            placeholder={"Kênh bán hàng"}
+            placeholder={"Kênh"}
             showTriangle={true}
             isMultiple={true}
             disableSearch={true}
@@ -677,12 +678,12 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               )
             }
           />
-{/* 
+
           <DropdownSearchableV2
             reset={reset}
             selectOneByOne={true}
             className={"mr-2 border border-primary-border rounded-lg mb-2"}
-            placeholder={"Khách vãng lai"}
+            placeholder={"Chiết khấu"}
             showTriangle={true}
             isMultiple={false}
             disableSearch={true}
@@ -697,10 +698,10 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
             }
             data={[{
-              value: 0, text: 'Không lỗi',
+              value: 0, text: 'Không',
             },
             {
-              value: 1, text: 'Có lỗi'
+              value: 1, text: 'Có'
             }].map((item: any) => ({
               label: `${item.text}`,
               value: item.value,
@@ -709,7 +710,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               dispatch(
                 setQueryFnb({
                   ...queryFnb,
-                  isMistake: value.id,
+                  isDiscount: value.id,
                 })
               );
               setPageIndex(0);
@@ -719,17 +720,205 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               dispatch(
                 setQueryFnb({
                   ...queryFnb,
-                  isMistake: 0,
+                  isDiscount: 0,
                 })
               )
             }
-          /> */}
+          />
 
           <DropdownSearchableV2
             reset={reset}
             selectOneByOne={true}
             className={"mr-2 border border-primary-border rounded-lg mb-2"}
-            placeholder={"Lỗi gặp phải"}
+            placeholder={"Giảm giá"}
+            showTriangle={true}
+            isMultiple={false}
+            disableSearch={true}
+            formatItem={{
+              id: "value",
+              text: "label",
+            }}
+            renderItem={(item) => (
+              <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            prefixIcon={
+              <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
+            }
+            data={[{
+              value: 0, text: 'Không',
+            },
+            {
+              value: 1, text: 'Có'
+            }].map((item: any) => ({
+              label: `${item.text}`,
+              value: item.value,
+            }))}
+            onchangeValue={(value) => {
+              dispatch(
+                setQueryFnb({
+                  ...queryFnb,
+                  isSalesoff: value.id,
+                })
+              );
+              setPageIndex(0);
+              ref.current && ref.current.resetPaginate();
+            }}
+            onClearData={() =>
+              dispatch(
+                setQueryFnb({
+                  ...queryFnb,
+                  isSalesoff: 0,
+                })
+              )
+            }
+          />
+
+          <DropdownSearchableV2
+            reset={reset}
+            selectOneByOne={true}
+            className={"mr-2 border border-primary-border rounded-lg mb-2"}
+            placeholder={"Tích điểm"}
+            showTriangle={true}
+            isMultiple={false}
+            disableSearch={true}
+            formatItem={{
+              id: "value",
+              text: "label",
+            }}
+            renderItem={(item) => (
+              <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            prefixIcon={
+              <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
+            }
+            data={[{
+              value: 0, text: 'Không',
+            },
+            {
+              value: 1, text: 'Có'
+            }].map((item: any) => ({
+              label: `${item.text}`,
+              value: item.value,
+            }))}
+            onchangeValue={(value) => {
+              dispatch(
+                setQueryFnb({
+                  ...queryFnb,
+                  isCredit: value.id,
+                })
+              );
+              setPageIndex(0);
+              ref.current && ref.current.resetPaginate();
+            }}
+            onClearData={() =>
+              dispatch(
+                setQueryFnb({
+                  ...queryFnb,
+                  isCredit: 0,
+                })
+              )
+            }
+          />
+
+          <DropdownSearchableV2
+            reset={reset}
+            selectOneByOne={true}
+            className={"mr-2 border border-primary-border rounded-lg mb-2"}
+            placeholder={"Voucher"}
+            showTriangle={true}
+            isMultiple={false}
+            disableSearch={true}
+            formatItem={{
+              id: "value",
+              text: "label",
+            }}
+            renderItem={(item) => (
+              <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            prefixIcon={
+              <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
+            }
+            data={[{
+              value: 0, text: 'Không',
+            },
+            {
+              value: 1, text: 'Có'
+            }].map((item: any) => ({
+              label: `${item.text}`,
+              value: item.value,
+            }))}
+            onchangeValue={(value) => {
+              dispatch(
+                setQueryFnb({
+                  ...queryFnb,
+                  isOffer: value.id,
+                })
+              );
+              setPageIndex(0);
+              ref.current && ref.current.resetPaginate();
+            }}
+            onClearData={() =>
+              dispatch(
+                setQueryFnb({
+                  ...queryFnb,
+                  isOffer: 0,
+                })
+              )
+            }
+          />
+
+          <DropdownSearchableV2
+            reset={reset}
+            selectOneByOne={true}
+            className={"mr-2 border border-primary-border rounded-lg mb-2"}
+            placeholder={"Khách"}
+            showTriangle={true}
+            isMultiple={false}
+            disableSearch={true}
+            formatItem={{
+              id: "value",
+              text: "label",
+            }}
+            renderItem={(item) => (
+              <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            prefixIcon={
+              <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
+            }
+            data={[{
+              value: 0, text: 'Biết thông tin',
+            },
+            {
+              value: 1, text: 'Vãng lai'
+            }].map((item: any) => ({
+              label: `${item.text}`,
+              value: item.value,
+            }))}
+            onchangeValue={(value) => {
+              dispatch(
+                setQueryFnb({
+                  ...queryFnb,
+                  isNonResident: value.id,
+                })
+              );
+              setPageIndex(0);
+              ref.current && ref.current.resetPaginate();
+            }}
+            onClearData={() =>
+              dispatch(
+                setQueryFnb({
+                  ...queryFnb,
+                  isNonResident: 0,
+                })
+              )
+            }
+          />
+
+          <DropdownSearchableV2
+            reset={reset}
+            selectOneByOne={true}
+            className={"mr-2 border border-primary-border rounded-lg mb-2"}
+            placeholder={"Lỗi"}
             showTriangle={true}
             isMultiple={false}
             disableSearch={true}
@@ -1035,6 +1224,19 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                     <td className={"px-1 py-2"}>
                       <div className="">
                         {item?.sign} {FNB_CHANNEL[Number(item?.salesChannel)-1]?.sign}{item?.appOrderSign}
+                        <div>
+                          {
+                            item?.offer > 0 ?
+                              <img
+                                src={iconTicket}
+                                  alt={"ticket"}
+                                  className={
+                                    "w-[36px] h-[36px] rounded-full overflow-hidden"
+                                  }
+                              />
+                              : <></>
+                          }
+                        </div>
                       </div>
                     </td>
                     <td className={"px-1 py-2"}>
