@@ -142,7 +142,7 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
                                         </div>
                                         <div className={"flex items-center ml-3"}>
                                             <Field type="radio" name="type" value={5} className={"form-check-input mt-0"} onChange={() => setFieldValue('type', 5)} />
-                                            <label htmlFor="type" className={"text-left ml-3"}>Tặng viên</label>
+                                            <label htmlFor="type" className={"text-left ml-3"}>Tặng nhân viên</label>
                                         </div>
                                         <div className={"flex items-center ml-3"}>
                                             <Field type="radio" name="type" value={6} className={"form-check-input mt-0"} onChange={() => setFieldValue('type', 6)} />
