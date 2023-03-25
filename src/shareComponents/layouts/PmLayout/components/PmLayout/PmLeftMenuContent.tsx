@@ -3,15 +3,15 @@ import {useModal} from "services/hooks/useModal";
 import {ModalAddNewTask} from "../../../../common";
 import { NavLink } from 'react-router-dom';
 
-import projectIcon from "assets/images/icons-project.svg";
-import shieldIcon from "assets/images/icons8-user-shield-48.svg";
-import paperPenIcon from "assets/images/icons-paper-pen.svg";
-import fileIcon from "assets/images/icon-file.svg";
+// import projectIcon from "assets/images/icons-project.svg";
+// import shieldIcon from "assets/images/icons8-user-shield-48.svg";
+// import paperPenIcon from "assets/images/icons-paper-pen.svg";
+// import fileIcon from "assets/images/icon-file.svg";
+// import documentIcon from "assets/images/icons8-document.svg";
 
 import rocketIcon from "assets/images/icons8-rocket.svg"
 import reportIcon from "assets/images/icons8-report.svg";
 import taskIcon from "assets/images/icons8-task.svg";
-import documentIcon from "assets/images/icons8-document.svg";
 
 export const PmLeftMenuContent:FC = () => {
     const { openModal } = useModal();
