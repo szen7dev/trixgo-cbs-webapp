@@ -145,10 +145,9 @@ export const ChildResponseComment: FC<Props> = ({ userId, comment, onClickImage,
                         <div
                             className={"comment-text mt-2 break-all"}
                             dangerouslySetInnerHTML={{
-                                __html: nl2p(collapseComment ? sliceText(removeHTMLTags(comment.content), 0, 100) : comment.content)
+                                __html: nl2p((comment.content && collapseComment) ? sliceText(removeHTMLTags(comment.content), 0, 100) : comment.content)
                             }}
                         />
-
                         <div className={"comment-extra-content transition-all " + (collapseComment ? "h-0 overflow-hidden" : "")}>
                             {!!comment.files?.length && (
                                 <div className={"comment-attach mt-4"}>
