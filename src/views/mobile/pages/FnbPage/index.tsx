@@ -14,6 +14,8 @@ import { APP_KEY } from 'utils/constants';
  */
 import logo from "assets/images/LogoFnB.jpg";
 import QRCodeIcon from "assets/images/document/qr-code.png";
+import voucherIcon from "assets/images/icons8-ticket-100.png";
+import orderIcon from "assets/images/icons8-order-history-100.png";
 import { ModalFnbQRCode } from "shareComponents/common/ModalFnbQRCode";
 
 /**
@@ -115,7 +117,8 @@ const FnbPage: FC = () => {
                 <img className="w-[36px] h-[36px]" alt="icon" src={QRCodeIcon} />
             </button>
 
-            <p><b className="text-base">Xin chào {info?.name}</b></p>
+            <p><b className="text-base">Trà sữa Winggo xin chào {info?.name}</b></p>
+            {/* <div className="zalo-follow-only-button" data-oaid="1073382123081143638"></div> */}
             <div className="relative">
                 <p>Tổng thanh toán</p>
                 <p className="absolute top-0 right-0"><b>{formatNumberMoney(Number(info?.purchasedValue))}</b></p>
@@ -133,7 +136,10 @@ const FnbPage: FC = () => {
                 <p className="absolute top-0 right-0 text-cbs-primary"><b>{formatNumberMoney(Number(info?.remainLoyaltyPoints))}</b></p>
             </div>
             <hr className="border-zinc-200 border mt-2 mb-2" />
-            <p><b>Danh sách voucher Winggo dành cho bạn ({totalVoucher})</b></p>
+            <div className="flex items-center">
+                <img src={voucherIcon} alt="icon" className="w-6 h-6 rounded-full" />
+                <p className="px-1"><b>Danh sách voucher c bạn ({totalVoucher})</b></p>
+            </div>
             <hr className="border-zinc-200 border mt-2 mb-2" />
             {
                 listVouchers.map((item: any, i: any) => (
@@ -148,8 +154,10 @@ const FnbPage: FC = () => {
                     </div>
                 ))
             }
-
-            <p><b>Lịch sử mua hàng tại Trà sữa Winggo ({totalFnbOrder})</b></p>
+            <div className="flex items-center">
+                <img src={orderIcon} alt="icon" className="w-6 h-6 rounded-full" />
+                <p className="px-1"><b>Lịch sử mua hàng({totalFnbOrder})</b></p>
+            </div>
             <hr className="border-zinc-200 border mt-2 mb-2" />
             {
                 (listFnbOrder).map((item: any, i: any) => (

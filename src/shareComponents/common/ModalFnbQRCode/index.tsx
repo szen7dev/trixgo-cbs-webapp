@@ -48,7 +48,7 @@ export const ModalFnbQRCode: FC<Props> = ({ isToggle, toggle, value }) => {
         <main className="mb-5 ml-6 mr-6">
           <header className="py-5 flex items-center w-full justify-between">
             <p className="font-bold text-xl">
-              QR Code
+              QR Code giới thiệu bạn
             </p>
             <img
               src={CloseIcon}
