@@ -138,7 +138,7 @@ const FnbPage: FC = () => {
             <hr className="border-zinc-200 border mt-2 mb-2" />
             <div className="flex items-center">
                 <img src={voucherIcon} alt="icon" className="w-6 h-6 rounded-full" />
-                <p className="px-1"><b>Danh sách voucher c bạn ({totalVoucher})</b></p>
+                <p className="px-1"><b>Danh sách voucher của bạn ({totalVoucher})</b></p>
             </div>
             <hr className="border-zinc-200 border mt-2 mb-2" />
             {
