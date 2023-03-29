@@ -60,7 +60,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
   const dropdownShiftsRef = useRef<DropdownSearchableHandle>(null);
   const queryClient = useQueryClient();
   const { closeModal } = useModal();
-  const { current: socket }: any = useSocket(); // Cấu trúc khai báo Socket
+  const { current: socket }: any = useSocket();
   const { user } = useAuth();
   // const groupSearchableRef = React.useRef<GroupSearchableHandle>(null);
 
@@ -97,6 +97,24 @@ export const ModalAddNewOrder: FC<Props> = () => {
   const [credit, setCredit] = useState(0);
   const [creditTemp, setCreditTemp] = useState(0);
   const [creditInput, setCreditInput] = useState(0);
+
+  /**
+   * Code cũ: Tuấn Dev
+   */
+  // useEffect(() => {
+  //   const fetchFundas = async () => {
+  //     const response = await API.get(
+  //       `/api/fnb/products?isParent=1&limit=50`, ////
+  //     );
+  //     const { data, status } = response?.data;
+
+  //     if (status !== 200) return;
+  //     setProductIsParent(data?.listRecords || []);
+  //   }
+
+  //   fetchFundas();
+  // }, []);
+  // console.log({fundaID})
 
   useEffect(() => {
     const fetchFundas = async () => {
@@ -272,15 +290,10 @@ export const ModalAddNewOrder: FC<Props> = () => {
             break;
         }
         return {
-          // ...p, // Lấy tất cả các field
+          ...p,
           productID: p._id,
           quantity: p.quantity,
-          black: p.black,
-          size: p.size,
-          sugar: p.sugar,
-          ice: p.ice,
           note: p.note,
-          variantsSelected: p.variantsSelected,
           variantsID: p.variantsSelected ? p.variantsSelected.map((v: any) => v._id) : [],
           unitPrice: price,
         }
@@ -297,37 +310,33 @@ export const ModalAddNewOrder: FC<Props> = () => {
         discount: `${discountAndSales.discount}`,
         salesoff: `${discountAndSales.sales}`,
         credit: realCredit.toString(),
-        offer: voucherTotalPrice.toString(),
-        voucherID: voucherId || ""
       }
-      // console.log({ dataAddNewOrder })
+      console.log({ dataAddNewOrder })
 
       const { data, status } = await API.post(
         `/api/fnb/orders`,
         dataAddNewOrder
       );
-      // console.log({ data, status })
+      console.log({ data, status })
 
       if (status !== 200) return toast.warning('Yêu cầu tạo đơn thất bại');
-      if (data.error) return toast.warning(data.data.message);
+      if (data.error) return toast.warning('Tạo đơn thất bại');
 
-      // console.log({
-      //   isConnect: socket.connected,
-      //   companyID: user?.company?._id,
-      //   fundaID: dataAddNewOrder.fundaID,
-      //   orderInfo: data?.data,
-      // });
+      console.log({
+        isConnect: socket.connected,
+        companyID: user?.company?._id,
+        fundaID: dataAddNewOrder.fundaID,
+        orderInfo: data?.data,
+      });
 
-      // Bắn Socket lên Server
       socket?.emit('FNB_CSS_ADD_NEW_ORDER', {
         companyID: user?.company?._id,
         fundaID: dataAddNewOrder.fundaID,
         orderInfo: data?.data,
       })
-
       queryClient.refetchQueries('fnb-order-list');
-      history.push(`/fnb/home/${data?.data?._id}/print/1`);
 
+      history.push(`/fnb/home/${data?.data?._id}/print/1`);
       // return toast.success('Tạo đơn thành công',{
       //   position: toast.POSITION.BOTTOM_RIGHT,
       // });
@@ -377,7 +386,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
     setTotalPay(totalPay < 0 ? 0 : totalPay);
   }
 
-  const handleAutoChangeDiscount = (totalMoney: number, name: string, value: number, voucherTotalPrice?: number) => {
+  const handleAutoChangeDiscount = (totalMoney: number, name: string, value: number) => {
     const inputValue = Number(value);
     let newDiscount = inputValue;
     let newDiscountPercent = inputValue;
@@ -397,7 +406,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
     }));
     let totalPay = totalMoney - newDiscount - newSales;
     if (service === "1") {
-      totalPay = totalPay - credit - (voucherTotalPrice || 0);
+      totalPay = totalPay - credit;
     }
 
     setTotalPay(totalPay < 0 ? 0 : totalPay);
@@ -550,7 +559,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
   }
 
   const resetCredit = (newCredit: any = creditTemp) => {
-    if (isUseCredit) {
+    if(isUseCredit) {
       setTotalPay((totalMoney - discountAndSales.discount - discountAndSales.sales) > newCredit ? newCredit : totalMoney - discountAndSales.discount - discountAndSales.sales);
     }
     setCredit(0);
@@ -559,97 +568,6 @@ export const ModalAddNewOrder: FC<Props> = () => {
     setTotalPayTemp(0);
     setIsUseCredit(false);
     setIsEditCredit(false);
-
-    setVoucherErrorStatus(false);
-    setVoucherInput("");
-    setVoucherId("");
-    setVoucherTotalPrice(0);
-    setVoucherName("");
-    setVoucherStatus("");
-  }
-
-  ////
-  const [voucherId, setVoucherId] = useState("");
-  const [voucherInput, setVoucherInput] = useState("");
-  const [voucherName, setVoucherName] = useState("");
-  const [voucherStatus, setVoucherStatus] = useState("");
-  const [voucherTotalPrice, setVoucherTotalPrice] = useState(0);
-  const [voucherErrorStatus, setVoucherErrorStatus] = useState(false);
-
-  ///
-
-  const fetchVoucher = async (sign: string, customerID: string) => {
-    if (!sign) return;
-    const { data, status } = await API.get(`/api/fnb/vouchers?sign=${sign}`);
-    if (status !== 200) return;
-    console.log("fetchVoucher", data);
-    if (data?.error) {
-      setVoucherTotalPrice(0);
-      setVoucherId("");
-      setVoucherName("");
-      setVoucherStatus("Mã Voucher không chính xác");
-      setVoucherErrorStatus(true);
-      handleAutoChangeDiscount(totalMoney, 'discountPercent', 0, 0);
-    } else {
-      setVoucherErrorStatus(false);
-      setVoucherId(data?.data?._id);
-      if (data?.data?.name) {
-        setVoucherName(data?.data?.name);
-      }
-  
-      // Check dieu kien
-      // 1. Đã sử dụng: nếu infoVocher.buyers[] chứa customerID
-      if (data?.data?.buyers && data.data.buyers.includes(customerID)) {
-        setVoucherTotalPrice(0);
-        setVoucherId("");
-        setVoucherStatus("Khách hàng này đã sử dụng mã Voucher rồi");
-        setVoucherErrorStatus(true);
-        handleAutoChangeDiscount(totalMoney, 'discountPercent', 0, 0);
-        return;
-      }
-
-      // 2-Hết hiệu lực: nếu now() > expired
-      const currentTime = new Date().getTime();
-      const expiredTime = new Date(data?.data?.expired).getTime();
-      if (currentTime > expiredTime) {
-        setVoucherTotalPrice(0);
-        setVoucherId("");
-        setVoucherStatus("Mã Voucher này đã hết hạn");
-        setVoucherErrorStatus(true);
-        handleAutoChangeDiscount(totalMoney, 'discountPercent', 0, 0);
-        return;
-      }
-
-      // 3-Giá trị đơn hàng không đủ điều kiện áp dụng: total < infoVoucher.minOrderAmount 
-      if (totalMoney < data?.data?.minOrderAmount) {
-        setVoucherTotalPrice(0);
-        setVoucherId("");
-        setVoucherStatus(`Đơn hàng phải từ ${formatNumberMoney(data?.data?.minOrderAmount)} trở lên`);
-        setVoucherErrorStatus(true);
-        handleAutoChangeDiscount(totalMoney, 'discountPercent', 0, 0);
-        return;
-      }
-
-      // 4-Kiểm tra nếu Mã khách (customerID) mà không nằm trong infoVoucher.receivers[] -> Báo mã khách không hợp lệ
-      if (data?.data?.receivers && !data.data.receivers.includes(customerID)) {
-        setVoucherTotalPrice(0);
-        setVoucherId("");
-        setVoucherStatus(`Khách hàng này không nằm trong danh sách khách hàng được hưởng Voucher`);
-        setVoucherErrorStatus(true);
-        handleAutoChangeDiscount(totalMoney, 'discountPercent', 0, 0);
-        return;
-      }
-
-      if (data?.data?.salesoffAmount) {
-        setVoucherTotalPrice(data?.data?.salesoffAmount);
-        setVoucherStatus(`Voucher hợp lệ. Bạn được giảm: ${formatNumberMoney(data?.data?.salesoffAmount)}`);
-        handleAutoChangeDiscount(totalMoney, 'discountPercent', 0, data?.data?.salesoffAmount);
-      } else {
-        setVoucherTotalPrice(Math.round(data?.data?.salesoffRate * totalMoney / 100));
-        setVoucherStatus(`Voucher hợp lệ. Bạn được giảm: ${data?.data?.salesoffRate}% trên tổng hoá đơn`);
-        handleAutoChangeDiscount(totalMoney, 'discountPercent', 0, data?.data?.salesoffRate);
-      }
-    }
   }
 
   const addOrderSchema = object().shape({
@@ -1188,56 +1106,53 @@ export const ModalAddNewOrder: FC<Props> = () => {
                           <div className="font-bold">Tổng tiền</div>
                           <div className="font-bold">{formatNumberMoney(totalMoney)}</div>
                         </div>
-                        {
-                          service === '2' ?
-                            <div className="flex justify-between items-center mb-1 px-2 py-2">
-                              <div className="">Chiết khấu*** (chỉ áp dụng đơn App)</div>
-                              <div className="flex gap-1">
-                                <div>
-                                  <input placeholder="25%"
-                                    className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
-                                    onChange={handleChangeDiscount}
-                                    value={discountAndSales.discountPercent}
-                                    name="discountPercent"
-                                  />
-                                </div>
-                                <div>
-                                  <input placeholder="10.000"
-                                    className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
-                                    onChange={handleChangeDiscount}
-                                    value={discountAndSales.discount}
-                                    name="discount"
-                                  />
-                                </div>
-                              </div>
-                            </div> :
-                            <div className="flex justify-between items-center mb-1 px-2 py-2">
-                              <div className="">Giảm giá*** (chỉ áp dụng đơn Off)</div>
-                              <div className="flex gap-1">
-                                <div>
-                                  <input placeholder="25%"
-                                    className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
-                                    onChange={handleChangeSales}
-                                    value={discountAndSales.salesPercent}
-                                    name="salesPercent"
-                                  />
-                                </div>
-                                <div>
-                                  <input placeholder="10.000"
-                                    className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
-                                    onChange={handleChangeSales}
-                                    value={discountAndSales.sales}
-                                    name="sales"
-                                  />
-                                </div>
-                              </div>
+                        <div className="flex justify-between items-center mb-1 px-2 py-2">
+                          <div className="">Chiết khấu*** (chỉ áp dụng đơn App)</div>
+                          <div className="flex gap-1">
+                            <div>
+                              <input placeholder="25%"
+                                className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
+                                onChange={handleChangeDiscount}
+                                value={discountAndSales.discountPercent}
+                                name="discountPercent"
+                              />
                             </div>
-                        }
+                            <div>
+                              <input placeholder="10.000"
+                                className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
+                                onChange={handleChangeDiscount}
+                                value={discountAndSales.discount}
+                                name="discount"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex justify-between items-center mb-1 px-2 py-2">
+                          <div className="">Giảm giá*** (chỉ áp dụng đơn Off)</div>
+                          <div className="flex gap-1">
+                            <div>
+                              <input placeholder="25%"
+                                className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
+                                onChange={handleChangeSales}
+                                value={discountAndSales.salesPercent}
+                                name="salesPercent"
+                              />
+                            </div>
+                            <div>
+                              <input placeholder="10.000"
+                                className="w-[100px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none text-right"
+                                onChange={handleChangeSales}
+                                value={discountAndSales.sales}
+                                name="sales"
+                              />
+                            </div>
+                          </div>
+                        </div>
 
                         {values.customerID && service === "1" ?
                           <div className="flex justify-between items-center mb-1 px-2 py-2">
                             <div>
-                              <div>Trừ từ tích điểm-chỉ áp dụng đơn Off {`(${formatNumberMoney(credit || creditTemp)})`}</div>
+                              <div>Credit-Trừ từ tích điểm-Chỉ áp dụng đơn Off {`(${formatNumberMoney(credit || creditTemp)})`}</div>
                               <div>
                                 <FormControl sx={{ marginTop: "-5px" }} >
                                   <RadioGroup
@@ -1262,9 +1177,9 @@ export const ModalAddNewOrder: FC<Props> = () => {
 
                                             const amountPay = (totalMoney - discountAndSales.discount - discountAndSales.sales) > credit ? credit : totalMoney - discountAndSales.discount - discountAndSales.sales;
 
-                                            if (totalPay && !isEditCredit) {
+                                            if(totalPay && !isEditCredit) {
                                               setTotalPay(totalPay + credit);
-                                            } else if (totalPay === 0 && amountPay < credit) {
+                                            } else if(totalPay === 0 && amountPay < credit) {
                                               setTotalPay(amountPay);
                                             }
                                           }}
@@ -1285,18 +1200,11 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                             setCredit(creditTemp);
                                             setIsUseCredit(true);
 
-                                            if (totalPay) {
-                                              setTotalPay(creditTemp > (totalPay + voucherTotalPrice) ? 0 : (totalPay + voucherTotalPrice) - creditTemp);
+                                            if(totalPay) {
+                                              setTotalPay(creditTemp > totalPay ? 0 : totalPay - creditTemp);
                                             }
 
                                             fetchCredit(values.customerID, true);
-
-                                            setVoucherErrorStatus(false);
-                                            setVoucherInput("");
-                                            setVoucherTotalPrice(0);
-                                            setVoucherId("");
-                                            setVoucherName("");
-                                            setVoucherStatus("");
                                           }}
                                           checked={isUseCredit ? true : false}
                                         />
@@ -1318,10 +1226,10 @@ export const ModalAddNewOrder: FC<Props> = () => {
 
                                       const amountPay = (totalMoney - discountAndSales.discount - discountAndSales.sales) > credit ? credit : totalMoney - discountAndSales.discount - discountAndSales.sales;
 
-                                      if (totalPay) {
+                                      if(totalPay) {
                                         setTotalPay(totalPay + credit);
                                         setTotalPayTemp(totalPay + credit);
-                                      } else if (totalPay === 0 && amountPay < credit) {
+                                      } else if(totalPay === 0 && amountPay < credit) {
                                         setTotalPay(amountPay);
                                         setTotalPayTemp(amountPay);
                                       }
@@ -1335,7 +1243,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                     type="number"
                                     onChange={(e: any) => {
                                       const value = +e.target.value;
-                                      if (value <= credit) {
+                                      if(value <= credit) {
                                         setCreditInput(value);
                                       }
                                     }}
@@ -1344,9 +1252,9 @@ export const ModalAddNewOrder: FC<Props> = () => {
 
                                       const amountPay = (totalMoney - discountAndSales.discount - discountAndSales.sales) > credit ? credit : totalMoney - discountAndSales.discount - discountAndSales.sales;
 
-                                      if (totalPay) {
+                                      if(totalPay) {
                                         setTotalPayTemp(totalPay);
-                                      } else if (totalPay === 0 && amountPay < credit) {
+                                      } else if(totalPay === 0 && amountPay < credit) {
                                         setTotalPayTemp(amountPay);
                                       }
                                     }}
@@ -1359,41 +1267,6 @@ export const ModalAddNewOrder: FC<Props> = () => {
                               </div>
                             </div>
                           </div> : <></>
-                        }
-
-                        {values.customerID && service === "1" && !isUseCredit ?
-                          <>
-                          <div className="flex justify-between items-center mb-1 px-2 py-2">
-                            <div>
-                              <div>Voucher</div>
-                              <div>
-                                <input
-                                  placeholder="Nhập mã voucher"
-                                  className="w-[125px] h-[30px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none"
-                                  value={voucherInput}
-                                  onChange={(e: any) => {
-                                    setVoucherInput(e.target.value);
-                                  }}
-
-                                  onBlur={(e: any) => {
-                                   fetchVoucher(e.target.value, values.customerID);
-                                  }}
-                                />
-                              </div>
-                            </div>
-                            <div className="flex gap-1">
-                            <div className="font-bold">{formatNumberMoney(voucherTotalPrice)}</div>
-                            </div>
-                            </div>
-                            {voucherName ?
-                              <div className="text-primary ml-2 mb-2">Tên Voucher: {voucherName}</div> : <></>
-                            }
-
-                            {voucherStatus ?
-                              <div className={`${voucherErrorStatus ? "text-red-500" : "text-primary"} ml-2 mb-5`}>Tình trạng: {voucherStatus}</div> : <></>
-                            }
-
-                          </> : <></>
                         }
                       </div>
                       <div className="border-t-0.5 border-b-0.5 px-2 py-2">

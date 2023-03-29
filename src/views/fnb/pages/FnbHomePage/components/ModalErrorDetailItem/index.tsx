@@ -7,16 +7,23 @@ import { useHistory } from 'react-router-dom';
 import { object, string } from "yup";
 import { toArray } from 'lodash';
 import { toast } from "react-toastify";
+import DayPickerInput from "react-day-picker/DayPickerInput";
 import moment from "moment";
 import debounce from "lodash/debounce";
 import Axios from "axios";
-import { useSocket } from "services/hooks/useSocket";
 
 /**
  * Hooks, Typings
  */
+import { useDoctype } from "services/hooks/items/useDoctype";
+import { useQueryListGroup } from "services/hooks/usePlanGroup";
+import { useTask } from 'services/hooks/useTask';
+import { useQueryListDepartmentsIsMember } from 'services/hooks/items/useDepartment';
+import { useUserSystem } from "services/hooks/users/useUserSystem";
+import { useContract } from "services/hooks/items/useContract";
 import { useModal } from "services/hooks/useModal";
 import { validateFiles } from 'validation/file';
+import { PCM_PROPOSAL_TASK } from "apis/localdb";
 import { APP_ID } from "apis/localdb";
 import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
 import classNames from 'classnames';
@@ -25,12 +32,24 @@ import classNames from 'classnames';
  * Components, Assets
  */
 import Close from "assets/icons/Close";
+import ItemSample from "assets/images/image 430.jpg";
+import IconGreenDot from "assets/images/Frame 4330.svg";
 import RadioEmpty from "assets/images/Ellipse 27.svg";
 import RadioChecked from "assets/images/icons8-checked-40 (2) 2.svg";
+import AvaSatffSample from "assets/images/image 437.png";
+import ImgDemoUpload from "assets/images/image 434.jpg";
+import DemoUploadBtn from "assets/images/Frame 4389.svg";
+import IconCancel from "assets/images/icons8-cancel-96 1.svg";
 
 import "react-day-picker/lib/style.css";
+import { Editor } from "@tinymce/tinymce-react";
+import { Editor as EditorType } from "tinymce";
+import iconAttach from "assets/images/icons8-attach-48.svg";
 import { FileProp, FileProps, FilePropsUpload } from "typings/common";
 import { Button, FormControl, FormControlLabel, MenuItem, Popover, Radio, RadioGroup, Select, SelectChangeEvent } from "@mui/material";
+import { borderRadius } from "@mui/system";
+import { GroupSearchable } from "shareComponents/common/GroupSearchable";
+import { useGetUsersByCompany } from "services/hooks/auth/useAdmin";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { DropdownSearchable } from "shareComponents/common";
 import API from "apis/repository";
@@ -67,11 +86,13 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
     const [employees, setEmployees] = useState<any>([]);
     const [fundas, setFundas] = useState<any>([]);
 
+    const [mistakeSelected, setMistakeSelected] = useState<any>([]);
+    const [employeeSelected, setEmployeeSelected] = useState<any>([]);
+    const [fundaSelected, setFundaSelected] = useState<any>([]);
+
     const [searchMistake, setSearchMistake] = useState('');
     const [searchFunda, setSearchFunda] = useState('');
     const [searchEmployee, setSearchEmployee] = useState('');
-
-    const { current: socket }: any = useSocket(); // Cấu trúc khai báo Socket
 
     const [uploads, {
         setUploadImageProgress,
@@ -154,6 +175,8 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
 
     const onSubmitFilterData = async (values: any) => {
         try {
+            closeModal();
+
             let files: string[] = [];
 
             for (const [, { _id }] of Object.entries(uploads.images)) {
@@ -161,7 +184,7 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
             }
 
             const dataInsert = {
-                ...values, // giải nén toàn bộ các biến ở Form
+                ...values,
                 files,
                 status: `${values.status}`,
                 type: `${values.type}`,
@@ -179,15 +202,6 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                 return toast.warning('Gán lỗi thất bại');
             }
 
-            // console.log({ socket, isConnected: socket.isConnected })
-
-            // Bắn Socket lên Server
-            socket?.emit('FNB_CSS_ADD_NEW_MISTAKE', {
-                companyID: user?.company?._id,
-                fundaID: dataInsert.fundaID,
-                mistakeInfo: data?.data,
-            })
-
             toast.success('Gán lỗi thành công');
         } catch (error) {
             if (typeof error === "string") {
@@ -196,7 +210,6 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                 toast.error(error.message);
             }
         } finally {
-            closeModal(); // Khi chạy hàm này -> Rerender lại trang -> mất kết nối socket
             removeAllFiles();
         }
     };
@@ -509,7 +522,7 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                                                                     <RadioGroup
                                                                         row
                                                                         aria-labelledby="demo-row-radio-buttons-group-label"
-                                                                        name="type"
+                                                                        name="paymentMethod"
                                                                         className="flex justify-between	"
                                                                         sx={{ flexWrap: "nowrap" }}
                                                                     >
@@ -521,8 +534,8 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                                                                                     style={{}}
                                                                                     icon={<img src={RadioEmpty} alt="" />}
                                                                                     checkedIcon={<img src={RadioChecked} alt="" />}
-                                                                                    onChange={() => setFieldValue("type", 1)}
-                                                                                    checked={(values.type === 1) ? true : false}
+                                                                                // onChange={() => setFieldValue("paymentMethod", 1)}
+                                                                                // checked={(values.paymentMethod === 1) ? true : false}
                                                                                 />
                                                                             }
                                                                             label={<span className="text-[13px]">Hệ thống phát hiện</span>}
@@ -535,8 +548,8 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                                                                                     style={{}}
                                                                                     icon={<img src={RadioEmpty} alt="" />}
                                                                                     checkedIcon={<img src={RadioChecked} alt="" />}
-                                                                                    onChange={() => setFieldValue("type", 2)}
-                                                                                    checked={(values.type === 2) ? true : false}
+                                                                                // onChange={() => setFieldValue("paymentMethod", 2)}
+                                                                                // checked={(values.paymentMethod === 2) ? true : false}
                                                                                 />
                                                                             }
                                                                             label={<span className="text-[13px]">Khách hàng phát hiện</span>}
@@ -565,7 +578,7 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                                                                                     icon={<img src={RadioEmpty} alt="" />}
                                                                                     checkedIcon={<img src={RadioChecked} alt="" />}
                                                                                     onChange={() => setFieldValue("status", 1)}
-                                                                                    checked={(values.status === 1) ? true : false}
+                                                                                    // checked={(values.status === 1) ? true : false}
                                                                                 />
                                                                             }
                                                                             label={<span className="text-[13px]">Đã xử lý</span>}
@@ -579,7 +592,7 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                                                                                     icon={<img src={RadioEmpty} alt="" />}
                                                                                     checkedIcon={<img src={RadioChecked} alt="" />}
                                                                                     onChange={() => setFieldValue("status", 2)}
-                                                                                    checked={(values.status === 2) ? true : false}
+                                                                                    // checked={(values.status === 2) ? true : false}
                                                                                 />
                                                                             }
                                                                             label={<span className="text-[13px]">Chưa xử lý</span>}

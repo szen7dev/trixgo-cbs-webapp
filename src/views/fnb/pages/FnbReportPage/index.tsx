@@ -379,7 +379,7 @@ export const FnbReportPage: FC = () => {
 					<div className="flex gap-2 w-1/5 items-start	">
 						<img src={GraySquare} alt="" />
 						<div>
-							<div className="text-primary text-[14px]">Chiết khấu</div>
+							<div className="text-primary text-[14px]">Triết khấu</div>
 							<div className="text-[20px] font-bold" style={{ fontSize: "20px" }}>{formatNumberMoney(totalDiscount)} đ</div>
 						</div>
 					</div>

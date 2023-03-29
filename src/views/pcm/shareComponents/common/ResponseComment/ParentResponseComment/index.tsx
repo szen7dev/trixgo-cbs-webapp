@@ -13,7 +13,7 @@ import { ChildResponseComment } from "../ChildResponseComment";
 import { Comment as CommentType, CommentPayload, CommentProps, Task } from "typings/task";
 import moment from 'moment';
 import { debounce } from 'lodash';
-import { nl2p, removeHTMLTags, sliceText } from 'utils';
+import { nl2p } from 'utils';
 import { APP_KEY } from 'utils/constants';
 import { APP_ID } from "apis/localdb";
 import { humanFileSize } from 'utils/converter';
@@ -38,28 +38,31 @@ type Props = {
     task: Task;
     comment: CommentProps;
     tab: number;
-    isLastComment: boolean;
     socket?: any;
     onClickImage?: (comment: CommentType, index: number) => void,
     onConfirmUpdate?: () => void;
 }
-// const useStyles = makeStyles({
-//     popover: {
-//         pointerEvents: "none"
-//     },
-//     popoverContent: {
-//         pointerEvents: "auto"
-//     }
-// });
+const useStyles = makeStyles({
+    popover: {
+        pointerEvents: "none"
+    },
+    popoverContent: {
+        pointerEvents: "auto"
+    }
+});
 
-export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, socket, isLastComment, onClickImage, onConfirmUpdate }) => {
+export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, socket, onClickImage, onConfirmUpdate }) => {
 
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
-    const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
-    const handlePopoverClose = () => setAnchorEl(null);
+    const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handlePopoverClose = () => {
+        setAnchorEl(null);
+    };
     const open = Boolean(anchorEl);
 
-    const [collapseComment, setCollapseComment] = useState(!isLastComment);
+    const [collapseComment, setCollapseComment] = useState(false);
     const [openReply, setOpenReply] = useState(false);
     const [isOfficial, setIsOfficial] = useState(comment.official);
     const [amountReply, setAmountReply] = useState(
@@ -67,18 +70,6 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
     );
     const [showDetail, setShowDetail] = useState(false);
     const detailRef = useRef<HTMLDivElement>(null);
-
-    const bottomPageRef = useRef<any>(null);
-
-    const scrollToBottom = () => {
-        if(bottomPageRef.current) {
-            bottomPageRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-    };
-
-    useEffect(() => {
-        scrollToBottom();
-    }, [])
 
     useOnClickOutside(detailRef, () => setShowDetail(false));
 
@@ -363,7 +354,7 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
                             <div className="text-cbs-primary bg-cbs-sub-primary rounded p-3">{comment?.author?.position?.name}</div>
                             <div className="flex gap-2 items-center	">
                                 {/* <a href=""><img src={iconChat} alt="" /></a>
-                                <a href=""><img src={iconTrash} alt="" /></a> */}
+                                            <a href=""><img src={iconTrash} alt="" /></a> */}
                             </div>
                         </div>
                     </div>
@@ -371,12 +362,10 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
             </Popover>
 
             <div className={"comment-content ml-4 flex-1"}>
-                <div className={"comment-content-wrapper"} ref={isLastComment ? bottomPageRef : null}>
+                <div className={"comment-content-wrapper"}>
                     <div className={"flex items-center justify-between"}>
                         <div className={"user-name"}>
-                            <div className={"font-bold cursor-pointer"} onClick={() => setCollapseComment(!collapseComment)}>
-                                {comment.author?.bizfullname}
-                            </div>
+                            <div className={"font-bold"}>{comment.author?.bizfullname}</div>
                             {
                                 !collapseComment &&
                                 <div className={"text-primary-gray flex items-center"}>
@@ -458,7 +447,7 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
                     <div
                         className={"comment-text mt-2 break-all"}
                         dangerouslySetInnerHTML={{
-                            __html: nl2p(collapseComment ? sliceText(removeHTMLTags(comment.content), 0, 100) : comment.content)
+                            __html: nl2p(comment.content)
                         }}
                     />
 

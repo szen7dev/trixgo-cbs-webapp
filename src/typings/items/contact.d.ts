@@ -48,11 +48,6 @@ export interface Contact {
     factor?: number;
     phone?: string;
     map: any; // Chưa rõ cái này để làm gì
-    purchasedValue: string | null;
-    purchasedOffValue: string | null;
-    totalLoyaltyPoints: string | null;
-    usedLoyaltyPoints: string | null;
-    remainLoyaltyPoints: string | null;
 }
 
 /**

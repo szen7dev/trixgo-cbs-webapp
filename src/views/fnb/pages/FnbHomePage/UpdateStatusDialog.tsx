@@ -84,5 +84,5 @@ export const UpdateStatusDialog: FC<Props> = ({
         </div>
       </Dialog>
     </Transition>
-  )
-}
+  );
+};
