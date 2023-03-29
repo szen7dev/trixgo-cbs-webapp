@@ -69,7 +69,7 @@ type Props = {
 
 export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
   const history = useHistory();
-  const { closeModal } = useModal();
+  const { closeModal } = useModal(true);
   const editorRef = useRef<EditorType>();
   const fileInputRef = useRef<HTMLInputElement>(null);
   type GroupSearchableHandle = React.ElementRef<typeof GroupSearchable>;
