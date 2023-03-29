@@ -1,5 +1,5 @@
 /*=====1.LIBRARY=====*/
-import { FC, lazy } from "react";
+import { FC } from "react";
 import { Route, Switch } from "react-router-dom";
 
 /*=====3.LAYOUTS=====*/
@@ -11,10 +11,8 @@ import { ProtectedRoute } from "routes/components";
 /*=====5.PAGES/COMPONENTS=====*/
 import ErrorPage from "views/authentication/Error";
 import {
-    MobilePcmPage
+    MobilePcmPage,
 } from "views/mobile/pages";
-
-const FnbPage = lazy(() => import('views/mobile/pages/FnbPage'));
 
 const MobileRouter: FC = () => {
     return (
@@ -27,8 +25,6 @@ const MobileRouter: FC = () => {
                         <MobilePcmPage />
                     }
                 />
-
-                <Route exact path="/mobile/activity/:id" component={FnbPage} />
                
                 <ProtectedRoute path="/item/*" component={ErrorPage} />
             </Switch>

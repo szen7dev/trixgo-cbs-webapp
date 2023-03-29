@@ -7,7 +7,7 @@ import { NavLink } from 'react-router-dom';
 
 /*=====6.HOOKS/APIS=====*/
 import { ModalCreateArticle } from "views/media/shareComponents/common";
-import { ModalContainer } from "../../../common";
+import { ModalAddNewTask, ModalContainer } from "../../../common";
 
 export const MediaLeftMenuContent: FC = () => {
 

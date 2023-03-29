@@ -113,8 +113,6 @@ export const useTask = ({
       useQuery(["task--info", params], () => TaskRepository.taskInfo(params), {
           refetchOnWindowFocus: false,
           enabled: isFetchInfo,
-          // staleTime: 10000, // Time in milliseconds before the data is considered stale
-          // cacheTime: 60000, // Time in milliseconds before the data is removed from the cache
       });
 
   const info = detailData?.data;

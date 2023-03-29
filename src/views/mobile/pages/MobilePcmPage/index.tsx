@@ -16,7 +16,7 @@ import { useParams } from 'react-router-dom';
 
 export const MobilePcmPage: FC = () => {
   const { id: taskId } = useParams<{ id: string }>()
-  // console.log({taskId}) 
+  console.log({taskId}) 
 
   useEffect(() => {
     window.open(`trixgo://https://app.trixgo.com/pcm/detail/${taskId}`, '_blank');
