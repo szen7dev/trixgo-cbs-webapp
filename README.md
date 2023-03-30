@@ -1,4 +1,4 @@
-# This Is A Web Application For Core Build Solutions Platform
+# This Is A Web Application For CBS
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
