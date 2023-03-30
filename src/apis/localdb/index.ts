@@ -1021,6 +1021,10 @@ export const APP_ID = {
                 id: "63af828e87a6c20011972ae1",
                 name: "Thực đơn"
             },
+            voucher: {
+                id: "641b14185dbd2900125544fc",
+                name: "Voucher"
+            },
             reports: {
                 id: "63ecc4e03e1aa800127fb48b",
                 name: "Báo cáo khác"

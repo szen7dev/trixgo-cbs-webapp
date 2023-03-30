@@ -441,7 +441,7 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                           <div className="font-bold">{formatNumberMoney(order.total)}</div>
                         </div>
                         <div className="flex justify-between	mt-2 mb-3">
-                          <div className="">Triết khấu</div>
+                          <div className="">Chiết khấu</div>
                           <div className="flex">
                             <div>{formatNumberMoney(order.discount)}</div>
                           </div>
@@ -450,6 +450,18 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                           <div className="">Giảm giá</div>
                           <div className="flex">
                             <div>{formatNumberMoney(order.salesoff)}</div>
+                          </div>
+                        </div>
+                        <div className="flex justify-between mt-2 mb-3">
+                          <div className="">Trừ tích điểm</div>
+                          <div className="flex">
+                            <div>{formatNumberMoney(order.credit)}</div>
+                          </div>
+                        </div>
+                        <div className="flex justify-between mt-2 mb-3">
+                          <div className="">Trừ voucher</div>
+                          <div className="flex">
+                            <div>{formatNumberMoney(order.offer)}</div>
                           </div>
                         </div>
                       </div>

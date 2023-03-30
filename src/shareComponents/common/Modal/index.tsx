@@ -5,14 +5,17 @@ import { Dialog, Transition } from "@headlessui/react";
 import { useModal } from "services/hooks/useModal";
 
 export const Modal: FC = () => {
-  const { isModalOpen, closeModal, modalContent } = useModal();
+  const { isModalOpen, closeModal, isManualClose, modalContent } = useModal();
+
+  const handleCloseModal = () => isManualClose ? null : closeModal();
 
   return (
-    <Transition appear show={isModalOpen} as={Fragment}>
+    <Transition show={isModalOpen} as={Fragment}>
       <Dialog
+        static={true}
         as="div"
         className="fixed inset-0 z-50 overflow-y-auto"
-        onClose={closeModal}
+        onClose={handleCloseModal}
       >
         <div className="min-h-screen text-center">
           <Transition.Child

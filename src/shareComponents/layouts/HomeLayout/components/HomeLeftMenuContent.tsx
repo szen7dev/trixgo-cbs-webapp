@@ -213,7 +213,6 @@ export const HomeLeftMenuContent: FC = () => {
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản trị viên</span>
                     </NavLink> : <></>
                 }
-
                 {
                     listTab.map(nav => renderNav(nav))
                 }

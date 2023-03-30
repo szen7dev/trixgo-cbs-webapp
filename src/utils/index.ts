@@ -65,6 +65,14 @@ export const nl2p = function (text: string){
     return paragraphs;
 }
 
+export const removeHTMLTags = (text: string) => {
+    return text.replace(/<[^>]+>/gi, '');
+}
+
+export const sliceText = (text: string, from: number, to: number, isHaveDot = true) => {
+    return !isHaveDot ? text.slice(from, to) : (text.length > to ? `${text.slice(from, to)}...` : text.slice(from, to))
+}
+
 export async function handleException (callback: any, callbackError?: any){
     try {
         await callback();

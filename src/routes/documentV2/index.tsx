@@ -7,7 +7,7 @@ import { ModalProvider } from "views/document/contexts/modal";
 import DocumentLayoutV2 from "../../views/document/sharedComponents/layouts/DocumentLayoutV2";
 const DocumentHomePageV2       = lazy(() => import("views/document/pages/DocumentHomePageV2"))
 const DocumentDetailPage       = lazy(() => import("views/document/pages/DocumentDetailPage"))
-const DocumentRouter: FC = () => {
+const DocumentV2Router: FC = () => {
     return (
         <Switch>
             <ProtectedRoute
@@ -33,4 +33,4 @@ const DocumentRouter: FC = () => {
         )
     };
 
-export default DocumentRouter;
+export default DocumentV2Router;

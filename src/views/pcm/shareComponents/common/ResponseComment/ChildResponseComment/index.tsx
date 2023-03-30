@@ -8,7 +8,7 @@ import iconAttach from "assets/images/icons8-attach-48.svg";
 // import {listEmoji} from "../../../../../messages/pages/MessageHome/sections/ChattingSection";
 import type { Comment as CommentType, CommentProps, Task } from "typings/task";
 import moment from "moment";
-import { nl2p } from 'utils';
+import { nl2p, removeHTMLTags, sliceText } from 'utils';
 import { humanFileSize } from 'utils/converter';
 import { toast } from "react-toastify";
 import {useOnClickOutside} from "../../../../../../services/hooks/useOnclickOutside";
@@ -22,7 +22,7 @@ type Props = {
 }
 
 export const ChildResponseComment: FC<Props> = ({ userId, comment, onClickImage, handleUploadAttachments, handleUpdateDescriptionFile }) => {
-    const [collapseComment, setCollapseComment] = useState(false);
+    const [collapseComment, setCollapseComment] = useState(true);
     const [showDetail, setShowDetail] = useState(false);
     const detailRef = useRef<HTMLDivElement>(null);
 
@@ -65,7 +65,9 @@ export const ChildResponseComment: FC<Props> = ({ userId, comment, onClickImage,
                     <div className={"comment-content-wrapper"}>
                         <div className={"flex items-center justify-between"}>
                             <div className={"user-name"}>
-                                <div className={"font-bold"}>{comment.author?.bizfullname}</div>
+                                <div className={"font-bold cursor-pointer"} onClick={() => setCollapseComment(!collapseComment)}>
+                                    {comment.author?.bizfullname}
+                                </div>
                                 {
                                     !collapseComment &&
                                     <div className={"text-primary-gray flex items-center"}>
@@ -143,10 +145,9 @@ export const ChildResponseComment: FC<Props> = ({ userId, comment, onClickImage,
                         <div
                             className={"comment-text mt-2 break-all"}
                             dangerouslySetInnerHTML={{
-                                __html: nl2p(comment.content)
+                                __html: nl2p((comment.content && collapseComment) ? sliceText(removeHTMLTags(comment.content), 0, 100) : comment.content)
                             }}
                         />
-
                         <div className={"comment-extra-content transition-all " + (collapseComment ? "h-0 overflow-hidden" : "")}>
                             {!!comment.files?.length && (
                                 <div className={"comment-attach mt-4"}>
