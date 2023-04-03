@@ -16,30 +16,30 @@ import HumanRouterV2 from "./human/indexV2";
 /*=====4.CONFIG ROUTE=====*/
 const AccountingRouter = lazy(() => import("./accounting"));
 const AuthenticationRouter = lazy(() => import("./authentication"));
-// const SampleRouter = lazy(() => import("./sample"));
-// const BiddingRouter = lazy(() => import("./bidding/indexV2"));
+const SampleRouter = lazy(() => import("./sample"));
+const BiddingRouter = lazy(() => import("./bidding/indexV2"));
 const CmcsRouterV2 = lazy(() => import("./cmcs/indexV2"));
 const DatahubRouterV2 = lazy(() => import("./datahub/indexV2"));
 const DocumentV2Router = lazy(() => import("./documentV2"));
 const FinancialRouterV2 = lazy(() => import("./financial/indexV2"));
-// const MarketRouterV2 = lazy(() => import("./market/indexV2"));
+const MarketRouterV2 = lazy(() => import("./market/indexV2"));
 const MediaRouter = lazy(() => import("./media"));
 const MessagesRouter = lazy(() => import("./messages"));
-// const OperationRouterV2 = lazy(() => import("./operation/indexV2"));
+const OperationRouterV2 = lazy(() => import("./operation/indexV2"));
 const OwnerRouterV2 = lazy(() => import('./owner/indexV2'));
 const PcmRouter = lazy(() => import('./pcm'));
 const PmRouter = lazy(() => import('./pm'));
-// const WorkshopRouterV2 = lazy(() => import('./workshop/indexV2'));
+const WorkshopRouterV2 = lazy(() => import('./workshop/indexV2'));
 const PersonalRouterV2 = lazy(() => import("./personal/indexV2"));
 const QrcodeRouterV2 = lazy(() => import("./qrcode/indexV2"));
-// const ReeRouterV2 = lazy(() => import("./ree/indexV2"));
+const ReeRouterV2 = lazy(() => import("./ree/indexV2"));
 const InspectionRouter = lazy(() => import("./inspection/index"));
 const FnbRouter = lazy(() => import("./fnb/index"));
 const MobileRouter = lazy(() => import("./mobile/index"));
 const SupportRouter = lazy(() => import("./support"));
-// const TimesheetRouterV2 = lazy(() => import("./timesheet/indexV2"));
+const TimesheetRouterV2 = lazy(() => import("./timesheet/indexV2"));
 const ItemRouterV2 = lazy(() => import("./item/indexV2"));
-// const BudgetRouterV2 = lazy(() => import("./budget/indexV2"));
+const BudgetRouterV2 = lazy(() => import("./budget/indexV2"));
 
 /*=====5.PAGES=====*/
 const ErrorPage = lazy(() => import("views/authentication/Error"));
@@ -68,9 +68,9 @@ const Routes: FC = () => {
             <Router>
                 <AuthProvider>
                     <RightClickMenuProvider>
-                        {/* <Route path="/sample">
+                        <Route path="/sample">
                             <SampleRouter />
-                        </Route> */}
+                        </Route>
 
                         <ModalProvider>
                             <Switch>
@@ -88,9 +88,9 @@ const Routes: FC = () => {
                                 </Route>
 
                                 {/* =====SAMPLE UI===== */}
-                                {/* <Route path="/sample">
+                                <Route path="/sample">
                                     <SampleRouter />
-                                </Route> */}
+                                </Route>
 
                                 {/* =====HOME===== */}
                                 <Route exact path="/">
@@ -105,9 +105,9 @@ const Routes: FC = () => {
                                 </Route>
 
                                 {/* =====BIDDING===== */}
-                                {/* <Route path="/bidding">
+                                <Route path="/bidding">
                                     <BiddingRouter />
-                                </Route> */}
+                                </Route>
 
                                 {/* =====CMCS===== */}
                                 <Route path="/cmcs">
@@ -156,24 +156,24 @@ const Routes: FC = () => {
                                     <OwnerRouterV2 />
                                 </Route>
 
-                                {/* <Route path="/budget">
+                                <Route path="/budget">
                                     <BudgetRouterV2 />
-                                </Route> */}
+                                </Route>
 
                                 {/* =====TIMESHEET===== */}
-                                {/* <Route path="/timesheet">
+                                <Route path="/timesheet">
                                     <TimesheetRouterV2 />
-                                </Route> */}
+                                </Route>
 
                                 {/* =====WORKSHOP===== */}
-                                {/* <Route path="/workshop">
+                                <Route path="/workshop">
                                     <WorkshopRouterV2 />
-                                </Route> */}
+                                </Route>
 
                                 {/* =====MARKET===== */}
-                                {/* <Route path="/market">
+                                <Route path="/market">
                                     <MarketRouterV2 />
-                                </Route> */}
+                                </Route>
 
                                 {/* =====QRCODE===== */}
                                 <Route path="/qrcode">
@@ -181,14 +181,14 @@ const Routes: FC = () => {
                                 </Route>
 
                                 {/* =====OPERATION===== */}
-                                {/* <Route path="/operation">
+                                <Route path="/operation">
                                     <OperationRouterV2 />
-                                </Route> */}
+                                </Route>
 
                                 {/* =====REE===== */}
-                                {/* <Route path="/ree">
+                                <Route path="/ree">
                                     <ReeRouterV2 />
-                                </Route> */}
+                                </Route>
 
                                 {/* =====MEDIA===== */}
                                 <Route path="/media">

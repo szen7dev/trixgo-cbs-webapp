@@ -10,8 +10,8 @@ import debounce from "lodash/debounce";
 import { SearchInput, GroupActions, ModalContainer, ModalConfirm, DropdownSearchableV2 } from "shareComponents/common";
 // import ModalCreateBiddingPlan from "./components/ModalCreateBiddingPlan";
 // import ModalUpdateBiddingPlan from "./components/ModalUpdateBiddingPlan";
-// import ModalCreateBiddingPlan from "../../../bidding/pages/BiddingPlanPage/components/ModalCreateBiddingPlan";
-// import ModalUpdateBiddingPlan from "../../../bidding/pages/BiddingPlanPage/components/ModalUpdateBiddingPlan";
+import ModalCreateBiddingPlan from "../../../bidding/pages/BiddingPlanPage/components/ModalCreateBiddingPlan";
+import ModalUpdateBiddingPlan from "../../../bidding/pages/BiddingPlanPage/components/ModalUpdateBiddingPlan";
 import PaginateV2 from "shareComponents/common/PaginateV2";
 import VerifyIcon from "../../../../assets/images/icons8-verified-check-circle-for-approved-valid-content-96.svg";
 // import TriangleDown from "assets/icons/TriangleDown";
@@ -203,11 +203,11 @@ const ProjectBiddingPage: FC = () => {
               data={[]}
             />
           </div>
-          {/* <button
+          <button
             onClick={toggleModalCreateOrUpdate.bind(null, "create")}
             className={"h-[32px] rounded bg-cbs-green text-white font-bold px-4"}>
             Tạo mới
-          </button> */}
+          </button>
         </div>
         <div className={"flex items-center pb-2"}>
           <div className={"border-0.5 border-primary-border flex items-center"}>
@@ -356,7 +356,7 @@ const ProjectBiddingPage: FC = () => {
                       className="pt-2.5 pb-3 px-1 border-b-0.5 border-r-0.5 border-cbs-border"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      {/* <NavLink to={`/bidding/plan/${projectID}/${item._id}`}>
+                      <NavLink to={`/bidding/plan/${projectID}/${item._id}`}>
                         <div style={{lineHeight: "20px"}}>
                           <span className="bg-cbs-orage text-white mr-1 py-1 px-3 rounded">Cao</span>
                           {item.name}
@@ -367,7 +367,7 @@ const ProjectBiddingPage: FC = () => {
                         <p>
                           {item?.bidder?.name ? "Đơn vị trúng thầu:" + item?.bidder?.name : ""}
                         </p>
-                      </NavLink> */}
+                      </NavLink>
                       {/* {item.name} */}
                       {/* <p className={"mt-1 text-gray-500"}>
                         {item.userCreate?.bizfullname}
@@ -379,17 +379,6 @@ const ProjectBiddingPage: FC = () => {
                       <p>
                         {item?.bidder?.name ? "Đơn vị trúng thầu:" + item?.bidder?.name : ""}
                       </p> */}
-
-                        <div style={{lineHeight: "20px"}}>
-                          <span className="bg-cbs-orage text-white mr-1 py-1 px-3 rounded">Cao</span>
-                          {item.name}
-                        </div>
-                        <p className={"mt-1 text-gray-500"}>
-                          {item?.contractors?.length ? "Số đơn vị tham gia:" + item?.contractors?.length : ""}
-                        </p>
-                        <p>
-                          {item?.bidder?.name ? "Đơn vị trúng thầu:" + item?.bidder?.name : ""}
-                        </p>
                     </td>
                     <td className="pt-2.5 pb-3 px-1 border-b-0.5 border-r-0.5 border-cbs-border">
                       {moment(item.startTime).format("L")}
@@ -454,7 +443,7 @@ const ProjectBiddingPage: FC = () => {
       )} */}
 
       {/* Modal Create bidding plan */}
-      {/* <ModalContainer
+      <ModalContainer
         isModalOpen={modalShow.create}
         toggle={toggleModalCreateOrUpdate.bind(null, "create")}
       >
@@ -465,10 +454,10 @@ const ProjectBiddingPage: FC = () => {
             projectID={projectID}
           />
         </div>
-      </ModalContainer> */}
+      </ModalContainer>
 
       {/* Modal Update CashFlow */}
-      {/* <ModalContainer
+      <ModalContainer
         isModalOpen={modalShow.update}
         toggle={toggleModalCreateOrUpdate.bind(null, "update")}
       >
@@ -479,7 +468,7 @@ const ProjectBiddingPage: FC = () => {
             onConfirm={refetch}
           />
         </div>
-      </ModalContainer> */}
+      </ModalContainer>
     </div>
   );
 };

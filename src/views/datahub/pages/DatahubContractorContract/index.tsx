@@ -126,6 +126,7 @@ const DatahubContractorContract: FC = () => {
 						<ButtonCreate onClick={() => { setShow(!show); setSelected({}) }} />
 						: <></>
 					}
+					{/* <ButtonMore /> */}
 				</div>
 				<div className="overflow-auto relative">
 					<TableWithoutContext

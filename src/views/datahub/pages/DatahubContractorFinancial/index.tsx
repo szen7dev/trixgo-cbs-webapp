@@ -124,6 +124,7 @@ const DatahubContractorFinancial: FC = () => {
 						<ButtonCreate onClick={() => { setShow(!show); setSelected({}) }} />
 						: <></>
 					}
+					{/* <ButtonMore /> */}
 				</div>
 				<div className="overflow-auto relative">
 					<table className="text-black text-medium border-separate space-x-0 space-y-0 w-full" style={{ borderSpacing: 0 }}>
