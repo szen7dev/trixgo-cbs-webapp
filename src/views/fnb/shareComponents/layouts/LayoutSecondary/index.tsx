@@ -24,7 +24,7 @@ const LayoutSecondary: FC<HTMLAttributes<HTMLDivElement> & Props> = ({ pages, ch
   const match = useRouteMatch<{ id: string }>();
 
   return (
-    <div className="flex flex-col text-sm text-black overflow-hidden h-full" {...props}>
+    <div className="flex flex-col text-sm text-black h-full overflow-auto" {...props}>
       {/* Header */}
       <div className="px-4 flex justify-between w-full text-primary-gray bg-white border-b border-cbs-border">
         <div className="flex flex-1 text-medium">

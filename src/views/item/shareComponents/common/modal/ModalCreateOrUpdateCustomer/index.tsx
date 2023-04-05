@@ -332,7 +332,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
         />
       </section>
 
-      {/* <section className="px-10 mt-2">
+      <section className="px-10 mt-2 hidden">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtNonResident">
           Khách biết thông tin/vãng lai
         </label>
@@ -344,7 +344,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
           defaultValue={formData.nonResident}
           onChange={onChange}
         />
-      </section> */}
+      </section>
 
       <footer className="absolute right-0 bottom-0 px-10 py-5">
         <button className="bg-primary text-primary-light text-base w-24 h-8 rounded"

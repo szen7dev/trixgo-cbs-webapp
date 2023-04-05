@@ -219,6 +219,7 @@ export const DashboardV2: FC<Props> = () => {
   const [isParent, setIsParent] = useState<any>(-1);
   const [subtypes, setSubtypes] = useState<string[]>([]);
   const [status, setStatus] = useState<string[]>([]);
+  const [selectStar, setSelectStar] = React.useState(false);
 
   const querySearchTask: any = {
     keyword: keywordForSubject,
@@ -376,6 +377,28 @@ export const DashboardV2: FC<Props> = () => {
       return toast.error(error.message);
     }
   }
+
+  const handleMarkTask = async (task: any) => {
+    try {
+      if(!user) return;
+
+      const isMarked = (task?.flags?.includes(user?._id) ?? false);
+      const dataUpdate = {
+        taskID: task._id,
+        ...isMarked ? { flagsRemoves: [user._id] } : { flags: [user._id] }
+      }
+      const { error, data } = await updateTaskAsync(dataUpdate);
+
+      if(error) return toast.warn(data?.message);
+
+      refetchListTask();
+    } catch (error) {
+      if(error instanceof Error)
+        toast.error(error.message);
+      if(typeof error === 'string')
+        toast.error(error);
+    }
+  };
 
   return (
     <div className="t-home flex flex-col h-full overflow-hidden">
@@ -1292,13 +1315,13 @@ export const DashboardV2: FC<Props> = () => {
         <div className={"header-table flex px-4 w-full top-0 bg-white mb-1 pb-2"}>
           <div className={"flex gap-7 items-center justify-center mr-2"}>
             <div className="flex gap-2 items-center">
-              <input
+              {/* <input
                 className="form-check-input"
                 type="checkbox"
                 value=""
                 id="checkAll"
                 style={{ width: "14px", height: "14px" }}
-              />
+              /> */}
               {/* <div>
                 <button onClick={() => setpopBox1(!popBox1)} className="relative w-[20px] h-[20px]">
                   <img src={arrowDown} className="m-auto" />
@@ -1592,7 +1615,6 @@ export const DashboardV2: FC<Props> = () => {
             <tbody>
               {(listDataForSubject[pageIndex] ?? []).map(
                 (item: any, index: number) => {
-                  // console.log(item.lastComment?.files)
                   return (
                     <tr
                       key={index}
@@ -1602,14 +1624,15 @@ export const DashboardV2: FC<Props> = () => {
                         <div
                           className={"flex gap-4 items-center justify-center py-4 px-1"}
                         >
-                          <input
+                          {/* <input
                             className="form-check-input mt-[5px]"
                             type="checkbox"
                             value=""
-                            id="check"
                             style={{ width: "13px", height: "13px", marginTop: "5px" }}
-                          />
-                          <StarToggle />
+                          /> */}
+                          <button onClick={handleMarkTask.bind(null, item)}>
+                            {((item?.flags?.includes(user?._id) ?? false) ? <StarIcon sx={{ color: '#FFCA28', width: 20, height: 20 }} /> : <StarBorderIcon sx={{ color: '#FFCA28', width: 20, height: 20 }} />)}
+                          </button>
                         </div>
                       </td>
                       <td className={"w-[55px]"}>

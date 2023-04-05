@@ -14,7 +14,8 @@ export const APP_KEY = {
     DOCUMENT: "5e47867080019357cce04746",
     HUMAN: "61e049c9fdebf77b072d1b13",
     CMCS: "6131d6f83f4b736dc93253b2",
-    DATAHUB: "60390cb12b367a1cdd9f3fb2"
+    DATAHUB: "60390cb12b367a1cdd9f3fb2",
+    FNB: "61e04971fdebf77b072d1b0f",
 }
 
 export const EMOJI_TYPE = [

@@ -165,7 +165,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 						</Link>
 					</> : <></>}
 
-					{infoGroup?.data?.parent?.parent?.name ? 
+					{infoGroup?.data?.parent?.parent?.name ?
 					<>
 					<img src={nextIcon} alt={"-----"} className={"mx-4 h-[12px] w-[12px]"} />
 					<Link to={`/pm/project/${projectID}/folder/${infoGroup?.data?.parent?.parent?._id}`}>
@@ -175,7 +175,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 						</div>
 					</Link>
 					</> : <></>}
-					{groupID ? 
+					{groupID ?
 						<button
 						className={"ml-6"}
 						onClick={() =>
@@ -195,7 +195,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 						<img src={iconAddNew} alt={"-----"} className={"h-[24px] w-[24px]"}/>
 					</button> : <></>
 					}
-					
+
 					{/* <button className={"ml-6"}>
 						<img src={downloadIcon} alt={"-----"} className={"h-[24px] w-[24px]"}/>
 					</button> */}

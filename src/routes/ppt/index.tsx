@@ -21,6 +21,7 @@ import {
 	DocumentReportPage,
 } from 'views/document/pages';
 import {
+	ProjectBiddingPage,
 	ProjectBudgetPage,
 	ProjectCategoryPage,
 	ProjectDashboardPortfolioPage,
@@ -85,6 +86,17 @@ const PPTRoutes: FC = () => {
 								]}>
 									<Route exact path='/ppt/project/:id/budget' component={ProjectBudgetPage} />
 									<Route exact path='/ppt/project/:id/cash-flow' component={() => <>hello</>} />
+								</LayoutSecondary>
+							</Route>
+							<Route exact path={['/ppt/project/:id/bidding', '/ppt/project/:id/bidding/(2|3)']}>
+								<LayoutSecondary pages={[
+									{ id: '1', title: 'Hồ sơ dự thầu', path: '/ppt/project/:id/bidding', navExact: true },
+									{ id: '2', title: 'Hồ sơ mời thầu', path: '/ppt/project/:id/bidding/2' },
+									{ id: '3', title: 'Tư vấn thầu', path: '/ppt/project/:id/bidding/3' },
+								]}>
+									<Route exact path='/ppt/project/:id/bidding' component={ProjectBiddingPage} />
+									<Route exact path='/ppt/project/:id/bidding/2' component={() => <>hello</>} />
+									<Route exact path='/ppt/project/:id/bidding/3' component={() => <>hello</>} />
 								</LayoutSecondary>
 							</Route>
 							<Route exact path='/ppt/project/:id/payment' component={ProjectPaymentPage} />

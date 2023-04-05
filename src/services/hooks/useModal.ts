@@ -4,12 +4,13 @@ import ModalContext from "services/contexts/Modal";
 
 type UseModal = {
   isModalOpen: boolean;
+  isManualClose: boolean;
   openModal: (payload: ReactNode) => void;
   closeModal: () => void;
   modalContent: ReactNode;
 };
 
-export const useModal = (): UseModal => {
+export const useModal = (isManualClose = false): UseModal => {
   const { dispatch, state } = useContext(ModalContext);
 
   const openModal = (payload: ReactNode) => {
@@ -29,6 +30,7 @@ export const useModal = (): UseModal => {
     isModalOpen: state.isModalOpen,
     openModal,
     closeModal,
+    isManualClose,
     modalContent: state.modalContent,
   };
 };
