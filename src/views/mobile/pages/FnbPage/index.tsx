@@ -56,7 +56,7 @@ const FnbPage: FC = () => {
     //         customerID: contactID,
     //         populates: JSON.stringify({
 	// 			path: "voucher",
-    //             select: "_id name sign salesoffAmount salesoffRate minOrderAmount"
+    //             select: "_id name sign salesoffAmount salesoffRate minOrderAmount" //
 	// 		})
     //     }, 
     //         isFetchList: true, 
