@@ -58,29 +58,33 @@ const ButtonMore: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({
           className="z-10 absolute right-0 mt-2 text-right origin-top-right border border-gray-300 bg-white divide-y divide-gray-100 rounded-md whitespace-nowrap"
           style={{ width: "264px" }}
         >
-           {/* onClick={() => onClickPrint?.apply(null)} */}
-          <Menu.Item>
+          <Menu.Item onClick={() => {
+            onClickPrint && onClickPrint()
+          }}>
             <button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
               <img src={iconPrint} alt="Icon Edit" className="inline-block mr-6" />
               In ấn
             </button>
           </Menu.Item>
-          {/* onClick={() => onClickCopy?.apply(null)} */}
-          <Menu.Item>
+          <Menu.Item onClick={() => {
+            onClickCopy && onClickCopy()
+          }}>
             <button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
               <img src={iconCopy} alt="Icon Edit" className="inline-block mr-6" />
               Copy link
             </button>
           </Menu.Item>
-          {/* onClick={() => onClickUpdate?.apply(null)} */}
-          <Menu.Item>
+          <Menu.Item onClick={() => {
+            onClickUpdate && onClickUpdate()
+          }}>
             <button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
               <img src={iconPencil} alt="Icon Edit" className="inline-block mr-6" />
               Cập nhật
             </button>
           </Menu.Item>
-          {/* onClick={() => onClickRemove?.apply(null)} */}
-          <Menu.Item>
+          <Menu.Item onClick={() => {
+            onClickRemove && onClickRemove()
+          }}>
             <button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
               <img src={iconTrash} alt="Icon trash" className="inline-block mr-6" />
               Xóa
