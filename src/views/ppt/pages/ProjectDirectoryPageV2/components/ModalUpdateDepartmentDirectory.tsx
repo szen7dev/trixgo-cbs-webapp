@@ -1,4 +1,4 @@
-import { FC, useEffect, useLayoutEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { toast } from "react-toastify";
 
 /**
@@ -8,23 +8,17 @@ import { Dialog } from '@headlessui/react';
 import { Form, Formik, ErrorMessage } from 'formik';
 import { string, object } from 'yup';
 import debounce from "lodash/debounce";
-import moment from 'moment';
 
 /**
  * Components, Utils
  */
 import { DropdownSearchable } from "shareComponents/common";
 import { TOAST_DEFAULT_OPTIONS } from 'utils/constants';
-import { BIDDING_PLAN_CONTRACT_TYPE, BIDDING_PLAN_FORM, BIDDING_PLAN_STATUS, FINANCIAL_PLANNING_TYPES } from 'apis/localdb';
 
 /**
  * Hooks
  */
-import { useBiddingPlan } from 'services/hooks/bidding/useBiddingPlan';
-
-import { BiddingPlanRepository } from 'apis/bidding';
 import { departmentDirectoryRepository } from 'apis/item/department_directory';
-import { useQueryListCompany } from "services/hooks/useCompanies";
 import { useDepartmentDirectory } from 'services/hooks/items/useDepartmentDirectory';
 import { useUserSystem } from "services/hooks/users/useUserSystem";
 import { useAuth } from 'services/hooks/auth/useAuth';
@@ -55,10 +49,8 @@ const DEPARTMENT_DIRECTORY_LOCK = [
 const ModalUpdateBiddingPlan: FC<ModalProps> = ({ departmentDirectoryID, toggle, onConfirm, projectID }) => {
 	const [initValues, setInitValues] = useState<{ [key: string]: any }>({});
 	const { updateAsync } = useDepartmentDirectory({});
-	const [bidder, setBidder] = useState("");
 	const [searchUserSystem, setSearchUserSystem] = useState("");
 	const { user } = useAuth();
-	const companyID = user?.company?._id;
 
 	useEffect(() => {
 		if(!departmentDirectoryID) return;
@@ -75,8 +67,6 @@ const ModalUpdateBiddingPlan: FC<ModalProps> = ({ departmentDirectoryID, toggle,
 
 	const {
 		data: listUsersSystem,
-		hasNextPage: hasNextPageUserSystem,
-		fetchNextPage: fetchNextPageUserSystem,
 	} = useUserSystem({ keyword: searchUserSystem, projectID }, true);
 
 	// useEffect(() => {

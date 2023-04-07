@@ -8,10 +8,9 @@ import { ModalProvider } from "views/document/contexts/modal";
 import LayoutSecondary from 'views/ppt/sharedComponents/layouts/LayoutSecondary'
 
 /*=====MODALS COMPONENT=====*/
-import { ModalCreateDocument, ModalCreateDocumentChild } from 'views/document/sharedComponents/common';
+import { ModalCreateDocument } from 'views/document/sharedComponents/common';
 
 /*=====PAGES=====*/
-// import ErrorPage from 'views/authentication/Error'
 import {
 	DocumentDetailPage,
 	DocumentFolderPage,
@@ -27,22 +26,14 @@ import {
 	ProjectDashboardPortfolioPage,
 	ProjectDashboardTaskPage,
 	ProjectMarketPage,
-	ProjectDocumentPage,
 	ProjectDrawing2Page,
 	ProjectDrawingPage,
 	ProjectFolderPage,
 	ProjectHomePage,
-	ProjectMomPage,
-	ProjectOtherPage,
 	ProjectPaymentPage,
 	ProjectPhotoContractPage,
 	ProjectPhotoPage,
-	ProjectProductionPage,
-	ProjectPunchPage,
-	ProjectReportPage,
 	ProjectResourcePage,
-	ProjectRfaPage,
-	ProjectRfiPage,
 	ProjectSchedulePage,
 	ProjectDashboardPage
 } from 'views/ppt/pages'

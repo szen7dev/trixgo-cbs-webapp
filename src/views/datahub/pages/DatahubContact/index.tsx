@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 
-import { Link } from "react-router-dom";
 import { useQueryClient } from 'react-query'
 import { debounce } from 'lodash'
 
@@ -30,9 +29,7 @@ const DatahubContact: FC = () => {
 	const [show, setShow] = useState(false);
 	const [selected, setSelected] = useState<DatahubTypes<keyof DatahubTypesBase> | null>(null);
 	const [keyword, setKeyword] = useState("");
-	// const { data, fetchNextPage, fetchPrevPage, resetPage } = useDatahubTypes({ level: 1, select: '_id name description popular', keyword: query, limit: 10, type: 1 });
 	const {
-		isLoading,
         refetchList,
         data: listDatahubContact,
         fetchNextPage,
@@ -106,7 +103,6 @@ const DatahubContact: FC = () => {
 									Mã số thuế
 								</span>
 							</th>
-							
 							<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
 								<span className="pl-2 border-l border-cbs-border">
 									Ghi chú
@@ -115,7 +111,7 @@ const DatahubContact: FC = () => {
 						</tr>
 					</thead>
 					<ContextMenuWrapper tag="tbody" className="text-small">
-						{	
+						{
 							listDatahubContact?.map((props: any, index: number) => {
 								const { _id, name, sign, address, taxid, note } = props
 								return (
