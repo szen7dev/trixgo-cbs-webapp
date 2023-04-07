@@ -645,9 +645,10 @@ export const ModalAddNewOrder: FC<Props> = () => {
         setVoucherStatus(`Voucher hợp lệ. Bạn được giảm: ${formatNumberMoney(data?.data?.salesoffAmount)}`);
         handleAutoChangeDiscount(totalMoney, 'discountPercent', 0, data?.data?.salesoffAmount);
       } else {
-        setVoucherTotalPrice(Math.round(data?.data?.salesoffRate * totalMoney / 100));
+        const moneyOfSales = Math.round(data?.data?.salesoffRate * totalMoney / 100);
+        setVoucherTotalPrice(moneyOfSales);
         setVoucherStatus(`Voucher hợp lệ. Bạn được giảm: ${data?.data?.salesoffRate}% trên tổng hoá đơn`);
-        handleAutoChangeDiscount(totalMoney, 'discountPercent', 0, data?.data?.salesoffRate);
+        handleAutoChangeDiscount(totalMoney, 'discountPercent', 0, moneyOfSales);
       }
     }
   }
