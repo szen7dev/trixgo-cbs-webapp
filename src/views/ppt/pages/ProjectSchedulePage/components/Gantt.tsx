@@ -82,15 +82,15 @@ const Gantt: FC<{ tasks: any }> = ({ tasks }) => {
 				text: "Today",
 				title: "Today: " + dateToStr(today)
 			});
-	
+
 			gantt.config.row_height = 25; // Chiều cao hàng
 			gantt.ext.zoom.init(zoomConfig);
 			gantt.ext.zoom.setLevel("quarter"); // Set mặc định hiển thị theo Quý
-			
+
 			// // Date display config
 			gantt.config.date_grid = "%d/%m/%Y";
 			gantt.config.xml_date = "%Y-%m-%d %H:%i:%s";
-	
+
 			gantt.config.order_branch = true;/*!*/
 			gantt.config.order_branch_free = true;/*!*/
 
@@ -110,7 +110,7 @@ const Gantt: FC<{ tasks: any }> = ({ tasks }) => {
 				ignore:".gantt_task_line, .gantt_task_link",
 				useKey: false
 		  	};
-			
+
 		}
 	}, [JSON.stringify(tasks)])
 

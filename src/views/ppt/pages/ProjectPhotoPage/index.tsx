@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import debounce from 'lodash/debounce';
 
-import { SearchInput } from "shareComponents/common";
+// import { SearchInput } from "shareComponents/common";
 // import DropdownFilterButton from "views/pages/document/components/DocumentFilterButton";
 import ModalExample from "views/ppt/sharedComponents/common/ModalExample";
 
@@ -58,11 +58,11 @@ const ProjectPhotoPage: FC = () => {
 
 	useEffect(() => {
 		document.title = `${projectInfo.sign} | Hình ảnh`
-	}, []);
+	}, [projectInfo.sign]);
 
-	const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
+	// const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
         // setKeyworkd(event.target.value);
-    }, 500);
+    // }, 500);
 
 	return (
 		<>

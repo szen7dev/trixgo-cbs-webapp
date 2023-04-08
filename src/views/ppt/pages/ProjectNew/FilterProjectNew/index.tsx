@@ -78,7 +78,6 @@ const FilterProjectNew: FC<any> = ({ user, listDataCompany, listDataUser, listDa
         hasNextPage: hasNextPageSubject,
         isLoadingListTask,
         isFetching,
-        refetchListTask
       } = useSearchTask({
         params: querySearchTask,
         isFetch: true,
@@ -94,7 +93,9 @@ const FilterProjectNew: FC<any> = ({ user, listDataCompany, listDataUser, listDa
                     <div className={"filter-bar flex flex-wrap px-4 py-2"}>
                         <div className="flex gap-1 items-center  my-2 mr-4">
                             <input type="checkbox" />
-                            <button><img src={iconSmallBlackDown} style={{ width: "9px", height: "5px" }} /></button>
+                            <button>
+                                <img src={iconSmallBlackDown} alt="Small blackdown" style={{ width: "9px", height: "5px" }} />
+                            </button>
                         </div>
                         <DropdownSearchableV2
                             ref={companyOfAuthorRef}

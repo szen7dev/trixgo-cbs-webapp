@@ -1,4 +1,4 @@
-import { FC, useMemo } from "react";
+import { FC } from "react";
 
 // import cn from "classnames";
 import {
@@ -17,7 +17,7 @@ import styles from 'views/cmcs/styles/styles.module.css';
 
 // import ListIcon from "assets/images/icon-bulleted-list.svg";
 // import PolygonIcon from "assets/images/icon-polygon.svg";
-import CircleIcon from "assets/images/icon-circle.svg";
+// import CircleIcon from "assets/images/icon-circle.svg";
 
 ChartJS.register(
   CategoryScale,
@@ -92,77 +92,77 @@ const options = {
   },
 };
 
-const arrMonths = Array.from({ length: 12 }, () => 0);
+// const arrMonths = Array.from({ length: 12 }, () => 0);
 
-const Chartkpis: FC<any> = ({ data }) => {
-  const dataContract = useMemo(() => {
-    if (!data?.contractAmountByMonth) {
-      return {
-        data: arrMonths,
-        totalAmount: 0
-      }
-    }
+const Chartkpis: FC<any> = () => {
+  // const dataContract = useMemo(() => {
+  //   if (!data?.contractAmountByMonth) {
+  //     return {
+  //       data: arrMonths,
+  //       totalAmount: 0
+  //     }
+  //   }
 
-    const dataAmountContract = arrMonths.map((_, index) => {
-      const haveMoney = data.contractAmountByMonth?.find((item: any) => item._id?.month === (index + 1));
-      return haveMoney ? haveMoney.amount : 0;
-    })
+  //   const dataAmountContract = arrMonths.map((_, index) => {
+  //     const haveMoney = data.contractAmountByMonth?.find((item: any) => item._id?.month === (index + 1));
+  //     return haveMoney ? haveMoney.amount : 0;
+  //   })
 
-    const totalAmount = data.contractAmountByMonth?.reduce((total: number, item: any) =>
-      total += item.amount
-      , 0)
+  //   const totalAmount = data.contractAmountByMonth?.reduce((total: number, item: any) =>
+  //     total += item.amount
+  //     , 0)
 
-    return {
-      data: dataAmountContract,
-      totalAmount: (totalAmount / 1_000_000_000).toFixed(1)
-    };
-  }, [data?.contractAmountByMonth])
+  //   return {
+  //     data: dataAmountContract,
+  //     totalAmount: (totalAmount / 1_000_000_000).toFixed(1)
+  //   };
+  // }, [data?.contractAmountByMonth])
 
-  const dataContractIPC = useMemo(() => {
-    if (!data?.cmcsContractIPCAmountByMonth) {
-      return {
-        data: arrMonths,
-        totalAmount: 0
-      }
-    }
+  // const dataContractIPC = useMemo(() => {
+  //   if (!data?.cmcsContractIPCAmountByMonth) {
+  //     return {
+  //       data: arrMonths,
+  //       totalAmount: 0
+  //     }
+  //   }
 
-    const dataAmountContract = arrMonths.map((_, index) => {
-      const haveMoney = data.cmcsContractIPCAmountByMonth?.find((item: any) => item._id?.month === (index + 1));
-      return haveMoney ? haveMoney.amount : 0;
-    })
+  //   const dataAmountContract = arrMonths.map((_, index) => {
+  //     const haveMoney = data.cmcsContractIPCAmountByMonth?.find((item: any) => item._id?.month === (index + 1));
+  //     return haveMoney ? haveMoney.amount : 0;
+  //   })
 
-    const totalAmount = data.cmcsContractIPCAmountByMonth?.reduce((total: number, item: any) =>
-      total += item.amount
-      , 0)
+  //   const totalAmount = data.cmcsContractIPCAmountByMonth?.reduce((total: number, item: any) =>
+  //     total += item.amount
+  //     , 0)
 
-    return {
-      data: dataAmountContract,
-      totalAmount: (totalAmount / 1_000_000_000).toFixed(1)
-    };
-  }, [data?.cmcsContractIPCAmountByMonth])
+  //   return {
+  //     data: dataAmountContract,
+  //     totalAmount: (totalAmount / 1_000_000_000).toFixed(1)
+  //   };
+  // }, [data?.cmcsContractIPCAmountByMonth])
 
-  const dataContractPayment = useMemo(() => {
-    if (!data?.cmcsContractPaymentAmountByMonth) {
-      return {
-        data: arrMonths,
-        totalAmount: 0
-      }
-    }
+  // const dataContractPayment = useMemo(() => {
+  //   if (!data?.cmcsContractPaymentAmountByMonth) {
+  //     return {
+  //       data: arrMonths,
+  //       totalAmount: 0
+  //     }
+  //   }
 
-    const dataAmountContract = arrMonths.map((_, index) => {
-      const haveMoney = data.cmcsContractPaymentAmountByMonth?.find((item: any) => item._id?.month === (index + 1));
-      return haveMoney ? haveMoney.amount : 0;
-    })
+  //   const dataAmountContract = arrMonths.map((_, index) => {
+  //     const haveMoney = data.cmcsContractPaymentAmountByMonth?.find((item: any) => item._id?.month === (index + 1));
+  //     return haveMoney ? haveMoney.amount : 0;
+  //   })
 
-    const totalAmount = data.cmcsContractPaymentAmountByMonth?.reduce((total: number, item: any) =>
-      total += item.amount
-      , 0)
+  //   const totalAmount = data.cmcsContractPaymentAmountByMonth?.reduce((total: number, item: any) =>
+  //     total += item.amount
+  //     , 0)
 
-    return {
-      data: dataAmountContract,
-      totalAmount: (totalAmount / 1_000_000_000).toFixed(1)
-    };
-  }, [data?.cmcsContractPaymentAmountByMonth])
+  //   return {
+  //     data: dataAmountContract,
+  //     totalAmount: (totalAmount / 1_000_000_000).toFixed(1)
+  //   };
+  // }, [data?.cmcsContractPaymentAmountByMonth])
 
   const dataChart = {
     labels: [

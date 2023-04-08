@@ -22,31 +22,31 @@ ChartJS.register(
   Legend
 );
 
-const data = {
-  labels: [
-    "Quản lý công việc",
-    "Quản lý hồ sơ văn bản",
-    "Quản lý hợp đồng",
-    "Quản lý nhân sự",
-    "Quản lý ...",
-    "Quản lý ...",
-    "Quản lý ...",
-    "Quản lý ...",
-    "Quản lý ...",
-    "Quản lý ...",
-    "Quản lý ...",
-    "Quản lý ...",
-  ],
-  datasets: [
-    {
-      data: [
-        2780, 3780, 2780, 2780, 2780, 2780, 2780, 2780, 2780, 2780, 2780, 2780,
-      ],
-      backgroundColor: "#f59f0b",
-      barThickness: 12,
-    },
-  ],
-};
+// const data = {
+//   labels: [
+//     "Quản lý công việc",
+//     "Quản lý hồ sơ văn bản",
+//     "Quản lý hợp đồng",
+//     "Quản lý nhân sự",
+//     "Quản lý ...",
+//     "Quản lý ...",
+//     "Quản lý ...",
+//     "Quản lý ...",
+//     "Quản lý ...",
+//     "Quản lý ...",
+//     "Quản lý ...",
+//     "Quản lý ...",
+//   ],
+//   datasets: [
+//     {
+//       data: [
+//         2780, 3780, 2780, 2780, 2780, 2780, 2780, 2780, 2780, 2780, 2780, 2780,
+//       ],
+//       backgroundColor: "#f59f0b",
+//       barThickness: 12,
+//     },
+//   ],
+// };
 
 const dataNew = {
   labels: [
@@ -145,7 +145,7 @@ const StatisticsByApp: FC<Props> = (props) => {
   const { listAppAccess } = useListAppAccess(listParam);
   const arrApp = [];
   const arrAmountAccesses = [];
-  
+
   for (const element of listAppAccess) {
     arrApp.push(element._id.app.name);
     arrAmountAccesses.push(element.amountAccesses);

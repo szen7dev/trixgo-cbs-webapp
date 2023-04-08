@@ -1,15 +1,15 @@
-import React, { FC, useCallback, useState, useEffect } from "react";
+import React, { FC, useState, useEffect } from "react";
 import { RouteComponentProps, useHistory, useLocation, useParams, Link } from "react-router-dom";
-import { APP_ID, PCM_STATUS_TASK } from 'apis/localdb';
+import { PCM_STATUS_TASK } from 'apis/localdb';
 import { useModal } from "services/hooks/useModal";
 
-import iconFile from 'assets/images/icons8-audit-96.png';
+// import iconFile from 'assets/images/icons8-audit-96.png';
 import GroupDefaultIcon from "assets/images/icons8-star-96.png";
 import '../../style.css';
-import { SetGroupDefault } from "./modal";
+// import { SetGroupDefault } from "./modal";
 
 // HOOK
-import useCheckedList from "services/hooks/ppt/useCheckedList";
+// import useCheckedList from "services/hooks/ppt/useCheckedList";
 import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
 import { usePcmProject } from "services/hooks/pcm/usePcmProject";
 import { useTask } from "services/hooks/useTask";
@@ -19,32 +19,32 @@ import { useAuth } from "services/hooks/auth/useAuth";
 // import { Paginate, SearchInput } from "shareComponents/common";
 // import debounce from "lodash/debounce";
 import nextIcon from "assets/images/icons-arrow-next.svg";
-import downloadIcon from "assets/images/icons8-download-64.svg";
+// import downloadIcon from "assets/images/icons8-download-64.svg";
 import iconBack from "assets/images/icon-back-gray.svg";
 // import userAvt from "assets/images/task-user.svg";
-import iconFolder from "assets/images/icons8-folder-96 4.svg";
+// import iconFolder from "assets/images/icons8-folder-96 4.svg";
 import iconAddNew from "assets/images/Frame 4048.svg";
 import { ModalAddNewTask } from "shareComponents/common";
 
-interface IData {
-	id: number,
-	type: string,
-	content: string,
-	created_by: string,
-	created_at: string,
-	code: string,
-	count: number,
-	status: number,
-	path: string,
-}
+// interface IData {
+// 	id: number,
+// 	type: string,
+// 	content: string,
+// 	created_by: string,
+// 	created_at: string,
+// 	code: string,
+// 	count: number,
+// 	status: number,
+// 	path: string,
+// }
 
-const IconArrowRight = () => (
-	<div className="">
-		<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-			<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-		</svg>
-	</div>
-)
+// const IconArrowRight = () => (
+// 	<div className="">
+// 		<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+// 			<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+// 		</svg>
+// 	</div>
+// )
 
 const FolderIcon: FC<{ type: string }> = ({ type }) => {
 	switch (type) {
@@ -74,25 +74,21 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 	// }, []);
 	//_____End history traffict
 	const history = useHistory();
-	const location = useLocation();
+	// const location = useLocation();
 	// const [data, setData] = useState<IData[]>([]);
-	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
+	// const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const { openModal } = useModal();
 	const { id: projectID, groupID } = useParams<{ id: string, groupID: string }>();
 	const { infoDepartment } = usePcmProject({ departmentID: projectID });
 	// const { assigned, checkboxRef, handleCheckAll, handleChangeCheckbox } = useCheckedList(data);
-	const { dataUserInfo, refetchDataUserInfo, user } = useAuth();
-	const [keyword, setKeyword] = useState("");
-	const [isFetchTask, setIsFetchTask] = useState(false);
+	const { dataUserInfo, refetchDataUserInfo } = useAuth();
+	const [keyword] = useState("");
+	// const [isFetchTask, setIsFetchTask] = useState(false);
 	const {
-		// isLoading,
-		// refetch,
 		data: listPcmPlanGroup,
 		fetchNextPage,
 		hasNextPage,
 		totalRecord,
-		// totalPage,
-		// refetchInfoGroup
 	} = usePcmPlanGroup({
 		projectID,
 		parentID: groupID,

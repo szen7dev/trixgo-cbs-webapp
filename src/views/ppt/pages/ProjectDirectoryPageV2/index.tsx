@@ -2,15 +2,15 @@ import React, {FC, useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
 import businessBuilding from "assets/images/icons8-business-building-48.svg";
 import debounce from 'lodash/debounce';
-import downloadIcon from "assets/images/icons8-download-64.svg";
-import pencilIcon from "assets/images/icons8-pencil-96.svg";
+// import downloadIcon from "assets/images/icons8-download-64.svg";
+// import pencilIcon from "assets/images/icons8-pencil-96.svg";
 import {DropdownSearchableV2, ModalContainer, GroupActions, SearchInput, Loader} from "shareComponents/common";
 
-import nextIcon from "assets/images/icons-arrow-next.svg";
-import userAvatar from "assets/images/task-user.svg";
+// import nextIcon from "assets/images/icons-arrow-next.svg";
+// import userAvatar from "assets/images/task-user.svg";
 import { useQueryListCompany } from 'services/hooks/useCompanies';
 import { useDepartmentDirectory } from 'services/hooks/items/useDepartmentDirectory';
-import iconChevronRight from "assets/images/icon-chevron-right.png";
+// import iconChevronRight from "assets/images/icon-chevron-right.png";
 import ModalCreateDepartmentDirectory from "../../../ppt/pages/ProjectDirectoryPageV2/components/ModalCreateDepartmentDirectory";
 import ModalUpdateDepartmentDirectory from "../../../ppt/pages/ProjectDirectoryPageV2/components/ModalUpdateDepartmentDirectory";
 import useCheckedList from "services/hooks/ppt/useCheckedList";
@@ -18,8 +18,8 @@ import { useProject } from 'services/hooks/items/useProject';
 
 // Phân trang
 import PaginateV2 from "shareComponents/common/PaginateV2";
-import { AnyARecord } from "dns";
-import {useAppSelector} from "redux/reducer";
+// import { AnyARecord } from "dns";
+// import {useAppSelector} from "redux/reducer";
 
 const DEPARTMENT_DIRECTORY_TYPE = [
     { id: 1, text: "Trợ lý viên" },
@@ -42,18 +42,17 @@ const ProjectDirectoryPageV2:FC = () => {
 	const { id: projectID } = useParams<{ id: string }>();
     const [keyword, setKeyword] = useState("");
 
-    const { data: listCompanies, fetchNextPage } = useQueryListCompany({ keyword: keywordCompany, limit: 20 });
+    const { data: listCompanies } = useQueryListCompany({ keyword: keywordCompany, limit: 20 });
     const {
         isLoading,
         hasNextPage,
-        list: listDepartmentDirectory, 
+        list: listDepartmentDirectory,
         listDepartmentDirectoryWithPager,
         totalRecord,
         totalPage,
         isFetching,
         fetchNextPage: fetchNextPageDepartmentDirectory,
         refetch,
-        nextCursor
     } = useDepartmentDirectory({ params: { keyword, companyID: companySelected, projectID, limit: 20 }, isFetchList: true });
 
     const { info: projectInfo } = useProject({
@@ -67,17 +66,17 @@ const ProjectDirectoryPageV2:FC = () => {
 
 	useEffect(() => {
 		document.title = `${projectInfo.sign} | Danh bạ dự án`
-	}, []);
-    
+	}, [projectInfo.sign]);
+
     const [departmentDirectoryIdSelected, setDepartmentDirectoryIdSelected] = useState("");
 
-    const { assigned, checked, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(listDepartmentDirectory);
+    const { assigned, handleChangeCheckbox } = useCheckedList(listDepartmentDirectory);
     useEffect(() => {
         const assignedEntries = Object.entries(assigned);
         if (!assignedEntries.length) return;
-    
+
         const cashBookSelected = assignedEntries.filter(([_, value]) => value);
-    
+
         if (cashBookSelected.length === 1) {
           setDepartmentDirectoryIdSelected(cashBookSelected[0][0]);
         }
@@ -118,7 +117,7 @@ const ProjectDirectoryPageV2:FC = () => {
                     onSearchInputChange={handleSearch}
                     onchangeValue={handleChangeCompany}
                 />
-                <button className={"bg-cbs-green rounded h-[32px] px-4 text-white font-bold"} 
+                <button className={"bg-cbs-green rounded h-[32px] px-4 text-white font-bold"}
                     onClick={toggleModalCreateOrUpdate.bind(null, "create")}
                 >
                     Tạo mới
@@ -149,7 +148,7 @@ const ProjectDirectoryPageV2:FC = () => {
                         trash: !Object.values(assigned).some((value) => value),
                     }}
                 />
-        
+
                 {/* XỬ LÝ PHẤN TRANG */}
                 <PaginateV2
                     ref={ref}
@@ -166,7 +165,7 @@ const ProjectDirectoryPageV2:FC = () => {
                         setPageIndex(oldState => oldState-1)
                     }}
                 />
-              
+
             </div>
 
             <div className={"table-project-directory mt-2"}>
