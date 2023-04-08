@@ -15,6 +15,7 @@ import logo from "assets/images/LogoFnB.jpg";
 import QRCodeIcon from "assets/images/document/qr-code.png";
 import voucherIcon from "assets/images/icons8-ticket-100.png";
 import orderIcon from "assets/images/icons8-order-history-100.png";
+import orderGift from "assets/images/icons8-gift-100.png";
 import { ModalFnbQRCode } from "shareComponents/common/ModalFnbQRCode";
 
 /**
@@ -85,13 +86,9 @@ const FnbPage: FC = () => {
     const d = new Date();
     const time = d.getTime();
 
-    // console.log({info})
-    // console.log({listFnbOrder})
-
     return (
         <div className="p-2 relative transition-all duration-500 ease-out overflow-auto" style={{ height: "100vh" }}>
             <img alt="Next" src={logo} className="w-16 mb-2" />
-            {/* <img alt="Next" src={qrcode} className="w-24 absolute top-2 right-2" /> */}
             <button className="flex items-center mr-0.5 min-w-max rounded-full hover:bg-cbs-gray p-2 absolute top-2 right-2" onClick={toggleModalQRCode}>
                 <p className="mr-2">QR giới thiệu bạn</p>
                 <img className="w-[36px] h-[36px]" alt="icon" src={QRCodeIcon} />
@@ -119,12 +116,16 @@ const FnbPage: FC = () => {
                 <img src={voucherIcon} alt="icon" className="w-6 h-6 rounded-full" />
                 <p className="px-1"><b>Danh sách voucher của bạn ({totalVoucher})</b></p>
             </div>
-            <p className="text-primary-gray"><i>Voucher và Tích điểm chỉ áp dụng với đơn hàng mua tại quán hoặc đặt qua Hotline. Vui lòng đọc mã Voucher và số điện thoại cho nhân viên để hưởng ưu đãi. Cảm ơn đã lựa chọn Winggo</i></p>
+            <p className="text-primary-gray"><i>Voucher và Tích điểm chỉ áp dụng với đơn hàng Mua tại quán hoặc đặt qua Hotline. Vui lòng đọc mã Voucher và số điện thoại cho nhân viên để hưởng ưu đãi. Cảm ơn đã lựa chọn Winggo</i></p>
             <hr className="border-zinc-200 border mt-2 mb-2" />
             {
                 listVouchers.map((item: any, i: any) => (
                     <div key={item?._id} className="border p-2 mb-2">
-                        <p>{item.name} - <b className="text-cbs-primary text-base">{item?.sign}</b></p>
+                        <div>
+                            <img src={orderGift} className="w-[24px] h-[24px] float-left inline-block mr-2"/>
+                            <div className="inline-block float-left mr-3">{item.name} - <b className="text-cbs-primary text-base">{item?.sign}</b></div>
+                            {/* <input type="text" placeholder={"Điện thoại nhận"} className="w-[100px] h-[24px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none"/> */}
+                        </div>
                         <p><b>Ưu đãi {formatNumberMoney(item?.salesoffAmount)} | Giảm giá {formatNumberMoney(item?.salesoffRate)} % - Đơn hàng từ {formatNumberMoney(item?.minOrderAmount)}</b></p>
                         <p>
                             Thời hạn: {moment(item.expired).format('DD/MM/YYYY HH:mm')}
