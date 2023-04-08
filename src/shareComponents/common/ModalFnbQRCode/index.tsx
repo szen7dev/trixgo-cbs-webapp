@@ -45,10 +45,10 @@ export const ModalFnbQRCode: FC<Props> = ({ isToggle, toggle, value }) => {
   return (
     <ModalContainer isModalOpen={isToggle} toggle={toggle}>
       <div className="inline-flex flex-col text-black max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-md">
-        <main className="mb-5 ml-6 mr-6">
+        <main className="mb-1 ml-2 mr-2">
           <header className="py-5 flex items-center w-full justify-between">
             <p className="font-bold text-xl">
-              QR Code giới thiệu bạn
+              Gửi hình ảnh cho bạn bè
             </p>
             <img
               src={CloseIcon}
@@ -73,5 +73,5 @@ export const ModalFnbQRCode: FC<Props> = ({ isToggle, toggle, value }) => {
         </main>
       </div>
     </ModalContainer>
-  );
-};
+  )
+}

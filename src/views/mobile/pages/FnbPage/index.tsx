@@ -1,13 +1,12 @@
 import { FC, useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
 import moment from "moment";
-import { formatNumberMoney, convertCurrency } from "utils/converter";
+import { formatNumberMoney } from "utils/converter";
 
 /**
  * Components
  */
 import { FNB_CHANNEL } from "apis/localdb";
-import { APP_KEY } from 'utils/constants';
 
 /**
  * Assets
@@ -21,10 +20,6 @@ import { ModalFnbQRCode } from "shareComponents/common/ModalFnbQRCode";
 /**
  * Hooks
  */
-// import { useAuth } from "services/hooks/auth/useAuth";
-// import { useCustomer } from "services/hooks/items/useCustomer";
-import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
-// import { useFnbVoucher } from 'services/hooks/fnb/useFnbVoucher';
 
 // const domain = 'http://localhost:3003';
 const domain = 'https://service.app.trixgo.com';
@@ -47,22 +42,6 @@ const FnbPage: FC = () => {
     // QR code
     const [isToggleModalQRCode, setIsToggleModalQRCode] = useState(false);
     const toggleModalQRCode = () => setIsToggleModalQRCode(!isToggleModalQRCode);
-
-    // const populates = `JSON.stringify({path: "voucher",select: "_id name sign salesoffAmount salesoffRate minOrderAmount"})`
-    // const { isLoading, isFetching, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbOrder({
-    //     params: {
-    //         limit: 50,
-    //         statuss: [5],
-    //         customerID: contactID,
-    //         populates: JSON.stringify({
-	// 			path: "voucher",
-    //             select: "_id name sign salesoffAmount salesoffRate minOrderAmount" //
-	// 		})
-    //     }, 
-    //         isFetchList: true, 
-    //         isFetchInfo: false
-    //     }
-    // )
 
     useEffect(() => {
         fetch(`${domain}/api/item/contacts?populates=%7B%22path%22:%22parent+userUpdate%22,%22select%22:%22name+bizfullname%22%7D&limit=20&contactID=${contactID}&select=name+sign+phone+purchasedValue+totalLoyaltyPoints+usedLoyaltyPoints+remainLoyaltyPoints`, {
@@ -114,11 +93,11 @@ const FnbPage: FC = () => {
             <img alt="Next" src={logo} className="w-16 mb-2" />
             {/* <img alt="Next" src={qrcode} className="w-24 absolute top-2 right-2" /> */}
             <button className="flex items-center mr-0.5 min-w-max rounded-full hover:bg-cbs-gray p-2 absolute top-2 right-2" onClick={toggleModalQRCode}>
+                <p className="mr-2">QR giới thiệu bạn</p>
                 <img className="w-[36px] h-[36px]" alt="icon" src={QRCodeIcon} />
             </button>
 
             <p><b className="text-base">Trà sữa Winggo xin chào {info?.name}</b></p>
-            {/* <div className="zalo-follow-only-button" data-oaid="1073382123081143638"></div> */}
             <div className="relative">
                 <p>Tổng thanh toán</p>
                 <p className="absolute top-0 right-0"><b>{formatNumberMoney(Number(info?.purchasedValue))}</b></p>
@@ -140,6 +119,7 @@ const FnbPage: FC = () => {
                 <img src={voucherIcon} alt="icon" className="w-6 h-6 rounded-full" />
                 <p className="px-1"><b>Danh sách voucher của bạn ({totalVoucher})</b></p>
             </div>
+            <p className="text-primary-gray"><i>Voucher và tích điểm chỉ áp dụng với đơn hàng mua tại quán hoặc đặt qua Hotline. Đọc mã Voucher và số điện thoại cho nhân viên để hưởng ưu đãi</i></p>
             <hr className="border-zinc-200 border mt-2 mb-2" />
             {
                 listVouchers.map((item: any, i: any) => (
