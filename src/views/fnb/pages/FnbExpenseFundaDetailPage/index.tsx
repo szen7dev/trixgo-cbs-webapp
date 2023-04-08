@@ -18,8 +18,6 @@ import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLa
 
 import RowTableInsertInline from "./components/RowTableInsertInline";
 import RowTableUpdateInline from "./components/RowTableUpdateInline";
-import RowTableView from "./components/RowTableView";
-import ModalShare from "./components/ModalShare";
 import PaginateV2 from "shareComponents/common/PaginateV2";
 import { useFunda } from 'services/hooks/items/useFunda';
 
@@ -280,6 +278,16 @@ export const FnbExpenseFundaDetailPage: FC = () => {
                             </div>
                         </th>
                         <th className="py-1">
+                            <div className="border-gray-300 font-normal pl-2">
+                                Ngày tháng
+                            </div>
+                        </th>
+                        <th className="py-1 w-1/16">
+                            <div className="border-gray-300 font-normal pl-2">
+                                Phân loại
+                            </div>
+                        </th>
+                        <th className="py-1 w-1/5">
                             <div className="border-gray-300 font-normal pl-2">
                                 Nội dung
                             </div>

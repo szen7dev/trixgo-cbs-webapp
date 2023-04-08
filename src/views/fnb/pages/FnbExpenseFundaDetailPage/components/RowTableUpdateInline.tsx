@@ -2,14 +2,11 @@ import { UIEvent, FocusEvent, ChangeEvent, FC, useState, useCallback } from "rea
 import debounce from "lodash/debounce";
 import moment from "moment";
 import { convertCurrency, convertCurrencyToNumber } from "utils/converter";
-
-import { DropdownSearchable } from "shareComponents/common";
 import { Contract } from "typings/cmcs";
-import CashFlowPlan from "typings/financial/cashFlowPlan";
+import { FNB_CHANNEL, FNB_BOOK_OUTIN, FNB_BOOK_TYPE, APP_ID } from "apis/localdb";
 
 type Props = {
   index: number,
-  // cashFlow: CashFlowPlan.CashFlowPlan,
   cashFlow: any,
   contracts: Contract[],
   onUpdate: (values: any, callback: (response: any) => void) => Promise<any>;
@@ -19,7 +16,7 @@ type Props = {
   itemsChecked: string[]
 };
 
-const RowTableUpdateInline: FC<Props> = ({ index, contracts, cashFlow, itemsChecked, onUpdate, onScrollContract, onSearchContract, onChangeCheckbox }) => {
+const RowTableUpdateInline: FC<Props> = ({ index, cashFlow, onUpdate}) => {
   const [sellerName, setSellerName] = useState(cashFlow.contract?.sellerInfo?.name);
   const [values, setValues] = useState({
     value: `${cashFlow.value}`,
@@ -35,28 +32,28 @@ const RowTableUpdateInline: FC<Props> = ({ index, contracts, cashFlow, itemsChec
     }
   }
 
-  const getStateCheckbox = useCallback((id: string) => {
-		return itemsChecked.includes(id);
-	}, [itemsChecked]);
-
-  const handleChangeCheckbox = () => {
-    const cashFlowID = cashFlow._id;
-		const isChecked = itemsChecked.includes(cashFlowID);
-    let idsListNew: string[] = [];
-
-		if(isChecked) {
-      idsListNew = itemsChecked.filter(item => item !== cashFlowID);
-    } else {
-			idsListNew = [...itemsChecked, cashFlowID];
-		};
-
-    onChangeCheckbox(idsListNew)
-	};
-
   return (
     <tr className="border-b border-primary-border h-10">
       <td className="px-2 table-cell box-border border border-gray-300 align-middle">
         {index+1}
+      </td>
+      <td className="px-2 table-cell box-border border border-gray-300 align-middle">
+        {/* Ngày tháng */}
+        <input type="date" autoComplete="off" 
+          className={
+            "w-full h-full focus-visible:outline-blue-600 px-[16px] py-[9px]"
+          }
+          defaultValue={moment(cashFlow.date).format('YYYY-MM-DD')}
+          onBlur={debounce((e: React.FocusEvent<HTMLInputElement>) => {
+            const value = e.target.value;
+            if(!value) return;
+
+            onUpdate({ bookID: cashFlow._id, date: value }, callbackUpdate)
+          }, 700)}
+        />
+      </td>
+      <td className="px-2 table-cell box-border border border-gray-300 align-middle">
+        {FNB_BOOK_OUTIN[Number(cashFlow?.outin)-1].text}/{FNB_CHANNEL[Number(cashFlow?.revenueType)-1].text}/{FNB_BOOK_TYPE[Number(cashFlow?.expenseType)-1].text}
       </td>
       <td className="px-2 table-cell box-border border border-gray-300 align-middle">
         {/* Nội dung */}
@@ -122,9 +119,9 @@ const RowTableUpdateInline: FC<Props> = ({ index, contracts, cashFlow, itemsChec
         {convertCurrency(cashFlow?.amount)}
       </td>
       <td className="px-2 table-cell box-border border border-gray-300 align-middle">
-        {cashFlow?.userCreate?.fullname} {moment(cashFlow?.createAt).format("L")} {moment(cashFlow?.createAt).format("LT") }
+        {cashFlow?.userCreate?.fullname}
+        <p><i>{moment(cashFlow?.createAt).format("DD/MM/YYYY HH:mm")}</i></p>
       </td>
-      
       <td className="px-2 table-cell box-border border border-gray-300 align-middle">
         {/* Giá trị kế hoạch */}
         <input

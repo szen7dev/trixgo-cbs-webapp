@@ -25,7 +25,7 @@ import { useFnbGeneralBook } from 'services/hooks/fnb/useFnbGeneralBook';
 import { useAuth } from 'services/hooks/auth/useAuth';
 
 /*=====7.OTHER=====*/
-import { APP_ID } from "apis/localdb";
+import { FNB_CHANNEL, FNB_BOOK_OUTIN, FNB_BOOK_TYPE, APP_ID } from "apis/localdb";
 
 export const FnbExpenseFundaPage: FC = () => {
 	const { user } = useAuth();
@@ -55,19 +55,6 @@ export const FnbExpenseFundaPage: FC = () => {
 
 	const onClickCheckButton = (id: string) => {
 		setIdsChecked([id]);
-	};
-
-	const getStateCheckedAll = useCallback(() => {
-		return idsChecked.length == listWithPager.length;
-	}, [idsChecked]);
-
-	const onClickCheckAll = () => {
-		if (idsChecked.length == listWithPager.length) {
-			setIdsChecked([]);
-		} else {
-			const idsAll = listWithPager.map((e: any) => e._id);
-			setIdsChecked(idsAll);
-		}
 	};
 
 	const [modalCreateShiftDetail, setModalCreateShiftDetail] = useState<boolean>(false);
@@ -109,9 +96,6 @@ export const FnbExpenseFundaPage: FC = () => {
 					{/* <FinancialCashFlowFilterButton /> */}
 					{(idsChecked && idsChecked.length) ? (
 						<div className="flex items-center gap-2 border-l-2 border-primary-border px-4 ml-4">
-							{/* <div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
-								<img src={DownloadIcon} alt="Download" />
-							</div> */}
 							{idsChecked.length == 1 ?
 								<>
 								<div
@@ -179,10 +163,15 @@ export const FnbExpenseFundaPage: FC = () => {
 						</th>
 						<th className="pb-1 pt-1 font-normal">
 							<div className="pl-2">
-								Ngày tháng hạch toán
+								Ngày tháng
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal">
+						<th className="pb-1 pt-1 w-1/6 font-normal">
+							<div className="pl-2">
+								Phân loại
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal w-2/5">
 							<div className="pl-2">
 								Nội dung
 							</div>
@@ -221,6 +210,9 @@ export const FnbExpenseFundaPage: FC = () => {
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{moment(item?.date).format("DD/MM/YYYY")}
 							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{FNB_BOOK_OUTIN[Number(item?.outin)-1].text}/{FNB_CHANNEL[Number(item?.revenueType)-1].text}/{FNB_BOOK_TYPE[Number(item?.expenseType)-1].text}
+							</td>
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
 								<Link to={`/fnb/expense/${fundaID}/${item?._id}`}>
 									{item?.name}
@@ -230,7 +222,8 @@ export const FnbExpenseFundaPage: FC = () => {
 								{formatNumberMoney(item?.amount)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{item?.userCreate?.fullname} {moment(item?.createAt).format("L")} {moment(item?.createAt).format("LT") }
+								{item?.userCreate?.fullname}
+								<p><i>{moment(item?.createAt).format("DD/MM/YYYY HH:mm")}</i></p>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{item?.note}

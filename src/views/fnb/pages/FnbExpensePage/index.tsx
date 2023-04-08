@@ -41,7 +41,7 @@ export const FnbExpensePage: FC = () => {
     const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFunda({ 
 		params: { 
 			keyword: keyword,  
-			limit: 50,  
+			// limit: 50,  
 			isMember: 1
 		}, 
 		isFetchList: true, 

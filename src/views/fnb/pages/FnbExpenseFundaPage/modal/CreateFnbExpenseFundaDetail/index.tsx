@@ -18,6 +18,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useFnbGeneralBook } from 'services/hooks/fnb/useFnbGeneralBook';
 
 const CreateFnbExpenseFundaDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID, initialValues = {
+    date: "",
     name: "",
     note: "",
     outin: 1,
@@ -25,7 +26,6 @@ const CreateFnbExpenseFundaDetail: FC<any> = ({ toggle, modalType, onConfirm, co
     expenseType:1,
     appExpenseType: 1,
 } }) => {
-    console.log({ initialValues })
     const { fundaID } = useParams<{ fundaID: string }>();
     const [keyword, setKeyword] = useState('');
     const [keywordDoctype, setKeywordDoctype] = useState('');
@@ -36,7 +36,6 @@ const CreateFnbExpenseFundaDetail: FC<any> = ({ toggle, modalType, onConfirm, co
     });
 
     const handleSubmit = async (values: any) => {
-        console.log({values});
         if (modalType == 'create') {
             const query = {
                 ...values,
@@ -85,6 +84,7 @@ const CreateFnbExpenseFundaDetail: FC<any> = ({ toggle, modalType, onConfirm, co
         },
         isFetchList: true
     });
+
     return (
         <Formik
             initialValues={initialValues}
@@ -110,10 +110,22 @@ const CreateFnbExpenseFundaDetail: FC<any> = ({ toggle, modalType, onConfirm, co
                             </div>
                             <div className="px-6 mt-2 pt-3.5 flex-1 flex flex-col">
                                 <div className="mb-4">
-                                    <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtName">
-                                        Tên
+                                    <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtDate">
+                                        Ngày tháng
                                     </label>
-                                    <Field className="w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header" id="txtName" placeholder="Tên" {...getFieldProps('name')} />
+                                    <Field className="w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header" id="txtDate" placeholder="Ngày tháng" {...getFieldProps('date')} />
+                                    <ErrorMessage
+                                        name="name"
+                                        component="span"
+                                        className="font-normal leading-7 text-sm text-negative"
+                                    />
+                                </div>
+
+                                <div className="mb-4">
+                                    <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtName">
+                                        Nội dung
+                                    </label>
+                                    <Field className="w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header" id="txtName" placeholder="Nội dung" {...getFieldProps('name')} />
                                     <ErrorMessage
                                         name="name"
                                         component="span"
@@ -147,44 +159,44 @@ const CreateFnbExpenseFundaDetail: FC<any> = ({ toggle, modalType, onConfirm, co
 
                                 <div className="mb-4">
                                     <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtCampaignName">
-                                        Chiến dich
+                                        Chiến dịch
                                     </label>
                                     <DropdownSearchable
-                                            onchangeValue={(value: any) => {
-                                                setFieldValue("campaignName", {value, _id: value.id });
-                                            }}
-                                            onClearData={() => {
-                                                setFieldValue("campaignName", "");
-                                            }}
-                                            onSearchInputChange={debounce((value: any) => setKeywordDoctype(value), 600)}
-                                            // onScroll={handleScroll}
-                                            className="w-full mt-2 rounded-md border border-primary-border px-1 py-1 placeholder-primary-gray bg-cbs-table-header"
-                                            placeholder="Tìm kiếm cơ sở"
-                                            isMultiple={false}
-                                            allowClearValueSingleInput={true}
-                                            showTriangle={false}
-                                            maxWidthInput="max-w-full"
-                                            renderSelectedItem={(item: any) => (
-                                                <div className="max-w-full">
-                                                    <p className={"truncate"}>{item.text}</p>
-                                                </div>
-                                            )}
-                                            data={ 
-                                                listDoctypes?.map((doctype: any) =>  ({
-                                                    label: doctype.name,
-                                                    value: doctype._id,
-                                                }))
-                                            }
-                                            initialValue={{
-                                                value: initialValues?.campaignName?._id || "", 
-                                                label: initialValues?.campaignName?.name || "Chọn chiến dịch"
-                                            }}
-                                            formatItem={{
-                                                id: "value",
-                                                text: "label",
-                                            }}
-                                            inlineSearch={true}
-                                        />
+                                        onchangeValue={(value: any) => {
+                                            setFieldValue("campaignName", {value, _id: value.id });
+                                        }}
+                                        onClearData={() => {
+                                            setFieldValue("campaignName", "");
+                                        }}
+                                        onSearchInputChange={debounce((value: any) => setKeywordDoctype(value), 600)}
+                                        // onScroll={handleScroll}
+                                        className="w-full mt-2 rounded-md border border-primary-border px-1 py-1 placeholder-primary-gray bg-cbs-table-header"
+                                        placeholder="Tìm kiếm cơ sở"
+                                        isMultiple={false}
+                                        allowClearValueSingleInput={true}
+                                        showTriangle={false}
+                                        maxWidthInput="max-w-full"
+                                        renderSelectedItem={(item: any) => (
+                                            <div className="max-w-full">
+                                                <p className={"truncate"}>{item.text}</p>
+                                            </div>
+                                        )}
+                                        data={ 
+                                            listDoctypes?.map((doctype: any) =>  ({
+                                                label: doctype.name,
+                                                value: doctype._id,
+                                            }))
+                                        }
+                                        initialValue={{
+                                            value: initialValues?.campaignName?._id || "", 
+                                            label: initialValues?.campaignName?.name || "Chọn chiến dịch"
+                                        }}
+                                        formatItem={{
+                                            id: "value",
+                                            text: "label",
+                                        }}
+                                        inlineSearch={true}
+                                    />
                                 </div>
 
                                 <div className="mb-4">
@@ -248,27 +260,27 @@ const CreateFnbExpenseFundaDetail: FC<any> = ({ toggle, modalType, onConfirm, co
                                     <div className={" flex items-center"}>
                                         <div className={"flex items-center"}>
                                             <Field type="radio" name="expenseType" value={1} className={"form-check-input mt-0"} onChange={() => setFieldValue('expenseType', 1)} />
-                                            <label htmlFor="expenseType" className={"text-left ml-3"}>Truyền thông và marketing</label>
-                                        </div>
-                                        <div className={"flex items-center ml-3"}>
-                                            <Field type="radio" name="expenseType" value={2} className={"form-check-input mt-0"} onChange={() => setFieldValue('expenseType', 2)} />
                                             <label htmlFor="expenseType" className={"text-left ml-3"}>Food App</label>
                                         </div>
                                         <div className={"flex items-center ml-3"}>
-                                            <Field type="radio" name="expenseType" value={3} className={"form-check-input mt-0"} onChange={() => setFieldValue('expenseType', 3)} />
+                                            <Field type="radio" name="expenseType" value={2} className={"form-check-input mt-0"} onChange={() => setFieldValue('expenseType', 2)} />
                                             <label htmlFor="expenseType" className={"text-left ml-3"}>Nguyên liệu</label>
                                         </div>
                                         <div className={"flex items-center ml-3"}>
+                                            <Field type="radio" name="expenseType" value={3} className={"form-check-input mt-0"} onChange={() => setFieldValue('expenseType', 3)} />
+                                            <label htmlFor="expenseType" className={"text-left ml-3"}>Thuê mặt bằng</label>
+                                        </div>
+                                        <div className={"flex items-center ml-3"}>
                                             <Field type="radio" name="expenseType" value={4} className={"form-check-input mt-0"} onChange={() => setFieldValue('expenseType', 4)} />
-                                            <label htmlFor="expenseType" className={"text-left ml-4"}>Thuê mặt bằng</label>
+                                            <label htmlFor="expenseType" className={"text-left ml-4"}>Nhân viên</label>
                                         </div>
                                         <div className={"flex items-center ml-3"}>
                                             <Field type="radio" name="expenseType" value={5} className={"form-check-input mt-0"} onChange={() => setFieldValue('expenseType', 5)} />
-                                            <label htmlFor="expenseType" className={"text-left ml-5"}>Điện nước</label>
+                                            <label htmlFor="expenseType" className={"text-left ml-5"}>Quản lý</label>
                                         </div>
                                         <div className={"flex items-center ml-3"}>
                                             <Field type="radio" name="expenseType" value={6} className={"form-check-input mt-0"} onChange={() => setFieldValue('expenseType', 6)} />
-                                            <label htmlFor="expenseType" className={"text-left ml-3"}>Lương nhân viên</label>
+                                            <label htmlFor="expenseType" className={"text-left ml-3"}>Bảo trì</label>
                                         </div>
                                         <div className={"flex items-center ml-3"}>
                                             <Field type="radio" name="expenseType" value={7} className={"form-check-input mt-0"} onChange={() => setFieldValue('expenseType', 7)} />

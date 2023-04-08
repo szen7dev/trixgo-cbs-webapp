@@ -628,6 +628,21 @@ export const FNB_CHANNEL = [
     { value: 7, text: 'Bee', sign: "be"  },
 ]
 
+export const FNB_BOOK_OUTIN = [
+    { value: 1, text: 'Doanh thu' },
+    { value: 2, text: 'Chi phí' },
+]
+
+export const FNB_BOOK_TYPE = [
+    { value: 1, text: 'Food App' },
+    { value: 2, text: 'Nguyên liệu' },
+    { value: 3, text: 'Thuê mặt bằng' },
+    { value: 4, text: 'Nhân viên' },
+    { value: 5, text: 'Quản lý' },
+    { value: 6, text: 'Bảo trì' },
+    { value: 7, text: 'Khác' },
+]
+
 export const FNB_SERVICE = [
     { value: 1, text: 'Tại quán' },
     { value: 2, text: 'Mang đi' },
