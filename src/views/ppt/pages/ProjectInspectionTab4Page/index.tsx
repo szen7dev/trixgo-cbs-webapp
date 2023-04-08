@@ -1,28 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { FC, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import useScrollSticky from "services/hooks/datahub/useScrollSticky";
-import useCheckedList from "services/hooks/ppt/useCheckedList";
-import ChartReportByTime from "./components/ChartReportByTime";
+import { FC } from "react";
+// import useScrollSticky from "services/hooks/datahub/useScrollSticky";
+// import useCheckedList from "services/hooks/ppt/useCheckedList";
+// import ChartReportByTime from "./components/ChartReportByTime";
 import LeftMenuSelection from "./components/LeftMenuSelection";
 
 const ProjectInspectionTab4Page: FC = () => {
-	const [data, setData] = useState<{ id: number, [key: string]: any }[]>([]);
-	const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data);
-	const { innerRef, sticky } = useScrollSticky('#scroller')
+	// const [data, setData] = useState<{ id: number, [key: string]: any }[]>([]);
+	// const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data);
+	// const { innerRef, sticky } = useScrollSticky('#scroller')
 
-	useEffect(() => {
-		document.title = "CHG.THT-Nghiệm thu chất lượng"
-		setData(() => Array.from({ length: 30 }).map((_, index) => ({
-			id: index,
-			project: index % 2 ? "Thi công rà phá bom mìn, vật nổ" : 'Thi công ép cọc thí nghiệm, thí nghiệm cọc thí nghiệm và thi công ép cọc đại trà',
-			joined: 8,
-			worked: 15,
-			created_at: "15:30 22/12/2021",
-			updated_at: "15:30 22/12/2021",
-			status: index,
-		})));
-	}, []);
+	// useEffect(() => {
+	// 	document.title = "CHG.THT-Nghiệm thu chất lượng"
+	// 	setData(() => Array.from({ length: 30 }).map((_, index) => ({
+	// 		id: index,
+	// 		project: index % 2 ? "Thi công rà phá bom mìn, vật nổ" : 'Thi công ép cọc thí nghiệm, thí nghiệm cọc thí nghiệm và thi công ép cọc đại trà',
+	// 		joined: 8,
+	// 		worked: 15,
+	// 		created_at: "15:30 22/12/2021",
+	// 		updated_at: "15:30 22/12/2021",
+	// 		status: index,
+	// 	})));
+	// }, []);
 
 	return (
 		<div className="h-full overflow-hidden relative bg-cbs-bg-input-search p-4">

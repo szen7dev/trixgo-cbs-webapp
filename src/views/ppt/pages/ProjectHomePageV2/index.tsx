@@ -7,9 +7,6 @@ import {ModalZoomView} from "../../../../shareComponents/common";
 import moment from "moment";
 
 const ProjectHomePageV2: FC = () => {
-	useEffect(() => {
-		document.title = `${projectInfo.sign} | Trang chủ dự án`;
-	}, []);
 	const {openPost, state, toggleModal } = useContext(ContextModalPost);
 
 	const { id: projectID } = useParams<{ id: string }>();
@@ -20,7 +17,9 @@ const ProjectHomePageV2: FC = () => {
 		isFetchInfo: true
 	})
 
-	console.log(projectInfo.photos)
+	useEffect(() => {
+		document.title = `${projectInfo.sign} | Trang chủ dự án`;
+	}, [projectInfo.sign]);
 
 	const renderPrevNextButton = (type: string, onClick: () => void) => {
 		return (

@@ -1,16 +1,16 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
-import Avatar from '@mui/material/Avatar';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemText from '@mui/material/ListItemText';
-import DialogTitle from '@mui/material/DialogTitle';
+// import Button from '@mui/material/Button';
+// import Avatar from '@mui/material/Avatar';
+// import List from '@mui/material/List';
+// import ListItem from '@mui/material/ListItem';
+// import ListItemAvatar from '@mui/material/ListItemAvatar';
+// import ListItemText from '@mui/material/ListItemText';
+// import DialogTitle from '@mui/material/DialogTitle';
+// import PersonIcon from '@mui/icons-material/Person';
+// import AddIcon from '@mui/icons-material/Add';
+// import Typography from '@mui/material/Typography';
+// import { blue } from '@mui/material/colors';
 import Dialog from '@mui/material/Dialog';
-import PersonIcon from '@mui/icons-material/Person';
-import AddIcon from '@mui/icons-material/Add';
-import Typography from '@mui/material/Typography';
-import { blue } from '@mui/material/colors';
 
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
@@ -21,10 +21,10 @@ import iconsClose from "assets/images/iconCloseDialog.svg";
 import iconsTask from "assets/images/icons8-task-completed-48 1.svg";
 import defaultAva from "assets/images/image 166.jpg";
 import iconClock from "assets/images/icons8-snooze-48 1.svg";
-import CommentProvider from 'views/pcm/contexts/comment/comment.provider';
-import { TaskDetailComment } from 'views/pcm/pages/PcmDetailTaskV2/components/TaskDetailComment';
-import { useTask } from 'services/hooks/useTask';
-import { useParams } from 'react-router-dom';
+// import CommentProvider from 'views/pcm/contexts/comment/comment.provider';
+// import { TaskDetailComment } from 'views/pcm/pages/PcmDetailTaskV2/components/TaskDetailComment';
+// import { useTask } from 'services/hooks/useTask';
+// import { useParams } from 'react-router-dom';
 import DialogComment from './Comment';
 
 export interface DialogProps {
@@ -33,7 +33,7 @@ export interface DialogProps {
     onClose: (value: string) => void;
 }
 
-export default function JobDialog(props: DialogProps) {
+const JobDialog: React.FC<DialogProps> = (props: DialogProps) => {
     const [selectStar, setSelectStar] = React.useState(false)
     const { onClose, selectedValue, open } = props;
 
@@ -41,9 +41,9 @@ export default function JobDialog(props: DialogProps) {
         onClose(selectedValue);
     };
 
-    const handleListItemClick = (value: string) => {
-        onClose(value);
-    };
+    // const handleListItemClick = (value: string) => {
+    //     onClose(value);
+    // };
     return (
         <Dialog onClose={handleClose} open={open} fullWidth maxWidth={"lg"}>
             <div className='pb-3 h-full overflow-y-auto	'>
@@ -174,3 +174,5 @@ export default function JobDialog(props: DialogProps) {
         </Dialog>
     );
 }
+
+export default JobDialog;

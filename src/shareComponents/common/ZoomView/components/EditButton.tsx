@@ -32,14 +32,14 @@ const EditButton: FC<Props> = ({ ...props }) => {
 				leaveTo="transform opacity-0 scale-95"
 			>
 				<Menu.Items className="z-10 absolute right-1/2 mt-2 text-right origin-top-right border border-gray-300 bg-white divide-y divide-gray-100 rounded-md whitespace-nowrap" style={{ width: "264px" }}>
-					<Menu.Item onClick={onUpdate}>
-						<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
+					<Menu.Item>
+						<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left" onClick={onUpdate}>
 							<img src={iconPencil} alt="Icon Edit" className="inline-block mr-6" />
 							Cập nhật
 						</button>
 					</Menu.Item>
-					<Menu.Item onClick={onDelete}>
-						<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
+					<Menu.Item>
+						<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left" onClick={onDelete}>
 							<img src={iconTrash} alt="Icon trash" className="inline-block mr-6" />
 							Xóa
 						</button>

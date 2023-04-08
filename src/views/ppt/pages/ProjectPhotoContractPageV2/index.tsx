@@ -64,7 +64,7 @@ const ProjectPhotoContractPage: FC = () => {
 		},
 		isFetchComment: !!contractID
 	});
-	
+
 	const { info: projectInfo } = useProject({
 		params: {
 			departmentID: projectID,
@@ -76,7 +76,7 @@ const ProjectPhotoContractPage: FC = () => {
 
 	useEffect(() => {
 		document.title = `${projectInfo.sign} | Hình ảnh`
-	}, []);
+	}, [projectInfo.sign]);
 
 	const toggle = () => setIsShow(!isShow)
 

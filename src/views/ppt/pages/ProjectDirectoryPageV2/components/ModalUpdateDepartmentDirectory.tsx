@@ -50,7 +50,9 @@ const ModalUpdateBiddingPlan: FC<ModalProps> = ({ departmentDirectoryID, toggle,
 	const [initValues, setInitValues] = useState<{ [key: string]: any }>({});
 	const { updateAsync } = useDepartmentDirectory({});
 	const [searchUserSystem, setSearchUserSystem] = useState("");
-	const { user } = useAuth();
+	useAuth();
+	// const [bidder, setBidder] = useState("");
+	// const companyID = user?.company?._id;
 
 	useEffect(() => {
 		if(!departmentDirectoryID) return;

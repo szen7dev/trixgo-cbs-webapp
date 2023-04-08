@@ -1,8 +1,5 @@
-import React, { ChangeEvent, FC } from "react";
+import React, { FC } from "react";
 import debounce from "lodash/debounce";
-
-import { DropdownSearchable } from "shareComponents/common";
-import { Contract } from "typings/cmcs";
 
 type Props = {
   onInsert: (values: any) => void;

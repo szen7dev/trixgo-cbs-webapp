@@ -10,7 +10,7 @@ import CaretDownIcon from "assets/images/icon-caret-down.png";
 import DownloadIcon from "assets/images/icons8-download-48_2.png";
 import SendEmailIcon from "assets/images/icons8-send-email-96.svg";
 import PrintIcon from "assets/images/icons8-print-32.png";
-import HumanAvatar from "assets/images/human-avatar.svg";
+// import HumanAvatar from "assets/images/human-avatar.svg";
 import { Link } from 'react-router-dom';
 
 interface Props {
@@ -20,8 +20,8 @@ interface Props {
 }
 const ModalInformation: FC<Props> = ({ open, onClose, dataPopup }) => {
 	const [data, setData] = useState<Array<number>>([])
-	const { assigned, checked, checkboxRef, handleChangeCheckbox, handleCheckAll } = useCheckedList(data);
-	const { companyPopup, typeStatusPopup, projectID } =dataPopup;
+	const { assigned, checkboxRef, handleChangeCheckbox, handleCheckAll } = useCheckedList(data);
+	const { companyPopup, typeStatusPopup, projectID } = dataPopup;
 	useEffect(() => {
 		const _data = Array.from({ length: 10 }).map((_, i) => i);
 		setData(_data);
@@ -32,7 +32,6 @@ const ModalInformation: FC<Props> = ({ open, onClose, dataPopup }) => {
 		listTasks,
 		totalRecord,
 		nextPageListTask: fetchNextPage,
-		refetchListTask,
         hasNextPage,
 	} = useTask({
 		params: {
@@ -133,12 +132,12 @@ const ModalInformation: FC<Props> = ({ open, onClose, dataPopup }) => {
 										{listTasks?.map((task: any, index) => {
 											let colorActualFinishTime  = `red`;
 											let textActualFinishTime  = `Quá hạn`;
-											if(typeStatusPopup == 2){
+											if(+typeStatusPopup === 2){
 												colorActualFinishTime  = `yellow`;
 												textActualFinishTime  = `Tuần tới`;
 											}
 
-											if(typeStatusPopup == 3){
+											if(+typeStatusPopup === 3){
 												colorActualFinishTime  = `green`;
 												textActualFinishTime  = `>7 ngày`;
 											}

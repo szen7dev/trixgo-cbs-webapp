@@ -1,28 +1,28 @@
-import React, { FC, useEffect, useMemo, useState } from "react";
+import { FC } from "react";
 
-import { SearchInput, ButtonCreate, ButtonMore } from "shareComponents/common";
+// import { SearchInput, ButtonCreate, ButtonMore } from "shareComponents/common";
 
-import { TableOptions, useExpanded, useTable } from "react-table";
-import { TableWithoutContext } from "shareComponents/common/Table";
-import classNames from "classnames";
+// import { TableOptions, useExpanded, useTable } from "react-table";
+// import { TableWithoutContext } from "shareComponents/common/Table";
+// import classNames from "classnames";
 import FilterProjectKpis from "./FilterProject";
 import arrowDownIcon from "assets/images/Polygon 3.svg";
-import arrowRightIcon from "assets/images/arrowRight.svg";
-import defaultAva from "assets/images/image 166.jpg";
-import { height } from "@mui/system";
+// import arrowRightIcon from "assets/images/arrowRight.svg";
+// import defaultAva from "assets/images/image 166.jpg";
+// import { height } from "@mui/system";
 import Chartkpis from "./Chartkpis";
 
 const ProjectKpis: FC = () => {
-    const [clickSelect, setClickSelect] = React.useState(false)
+    // const [clickSelect, setClickSelect] = React.useState(false)
     return (
         <>
             <div className="py-4 px-3 bg-cbs-bg-gray border border-red">
                 <div className="flex text-lg mb-5">
-                    <a href="" className="mr-[60px]">
+                    <div className="mr-[60px]">
                         <div className="flex gap-2 font-bold text-primary-gray">
                             <span>Tổng quan</span> <img src={arrowDownIcon} alt="" />
                         </div>
-                    </a>
+                    </div>
                 </div>
                 <div className="flex gap-2 mb-3.5">
                     <div className="max-w-[200px] w-full bg-white py-3.5 px-4  border-0.5 border-cbs-border rounded-md" style={{maxWidth:"200px"}}>
@@ -45,7 +45,7 @@ const ProjectKpis: FC = () => {
                                 <div className="bg-cbs-gray rounded-lg px-2">100.000.000</div>
                             </div>
                             <div className="flex gap-2 justify-between pt-2">
-                                <a href="" className="text-cbs-subtext">Xem thêm <span>(12)</span></a>
+                                <a href="https://app.trixgo.com" className="text-cbs-subtext">Xem thêm <span>(12)</span></a>
                             </div>
                         </div>
                     </div>
@@ -80,7 +80,7 @@ const ProjectKpis: FC = () => {
                                 <div className="bg-cbs-gray rounded-lg px-2">100.000.000</div>
                             </div>
                             <div className="flex gap-2 justify-between px-3 pt-2">
-                                <a href="" className="text-cbs-subtext">Xem thêm <span>(12)</span></a>
+                                <a href="https://app.trixgo.com" className="text-cbs-subtext">Xem thêm <span>(12)</span></a>
                             </div>
                         </div>
                     </div>
@@ -104,7 +104,7 @@ const ProjectKpis: FC = () => {
                                 <div className="bg-cbs-gray rounded-lg px-2">100.000.000</div>
                             </div>
                             <div className="flex gap-2 justify-between px-3 pt-2">
-                                <a href="" className="text-cbs-subtext">Xem thêm <span>(12)</span></a>
+                                <a href="https://app.trixgo.com" className="text-cbs-subtext">Xem thêm <span>(12)</span></a>
                             </div>
                         </div>
                     </div>

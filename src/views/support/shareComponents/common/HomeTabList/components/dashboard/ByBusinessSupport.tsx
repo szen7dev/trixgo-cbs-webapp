@@ -11,6 +11,8 @@ const ByBusinessSupport: FC<Props> = ({ timeType }) => {
   const listParam = checkTimeType(timeType);
   const { listCompany } = useListCompanyAccess(listParam);
   let totalAccept = 0;
+
+  /* eslint-disable */
   listCompany.map(item => {
     totalAccept += item.amountAccesses
   })

@@ -2,42 +2,41 @@ import { FC, useEffect, useState } from "react";
 import { useParams, Link } from 'react-router-dom';
 
 // Hook
-import useCheckedList from 'services/hooks/ppt/useCheckedList';
+// import useCheckedList from 'services/hooks/ppt/useCheckedList';
 import { useQueryListCompanyOfAuthorAndAmountTask } from "services/hooks/pcm/useStatistical";
 
-import { SearchInput, GroupActions, ButtonMore } from "shareComponents/common";
+// import { SearchInput, GroupActions, ButtonMore } from "shareComponents/common";
 
 // import DropdownFilterButton from "views/pages/document/components/DocumentFilterButton";
-import ModalInformation from "./components/ModalInformation";
-import CaretDownIcon from "assets/images/icon-caret-down.png";
-import debounce from "lodash/debounce";
+// import ModalInformation from "./components/ModalInformation";
+// import CaretDownIcon from "assets/images/icon-caret-down.png";
+// import debounce from "lodash/debounce";
 import { useProject } from 'services/hooks/items/useProject';
 
 const ProjectSubjectPage: FC = () => {
 	const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
-	const [data, setData] = useState<{ id: number, [key: string]: any }[]>([])
 	const [dataCompany, setDataCompany] = useState([]);
-	const [companyPopup, setCompanyPopup] = useState();
-	const [typeStatusPopup, setTypeStatusPopup] = useState();
-	const [totalTaskOverdueWork, setTotalTaskOverdueWork] = useState();
-	const [totalTaskNextWeekWork, setTotalTaskNextWeekWork] = useState();
-	const [totalTaskMoreThan7Days, setTotalTaskMoreThan7Days] = useState();
-	const [totalTaskFinish, setRotalTaskFinish] = useState();
-	const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data)
+	// const [data, setData] = useState<{ id: number, [key: string]: any }[]>([])
+	const [, setCompanyPopup] = useState();
+	const [, setTypeStatusPopup] = useState();
+	const [, setTotalTaskOverdueWork] = useState();
+	const [, setTotalTaskNextWeekWork] = useState();
+	const [, setTotalTaskMoreThan7Days] = useState();
+	const [, setRotalTaskFinish] = useState();
+	// const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data)
 	const { id: projectID } = useParams<{ id: string }>();
-	const [keyword, setKeyword] = useState("");
-	
-	const { 
+	const [keyword] = useState("");
+
+	const {
 		listCompany,
         listCompanyAndTaskOverdueWork,
         listCompanyAndTaskNextWeekWork,
         listCompanyAndTaskMoreThan7Days,
 		listCompanyAndTaskFinish,
-        isLoading,
 	} = useQueryListCompanyOfAuthorAndAmountTask({
 		projectID, keyword, subtype: "3"
 	});
-	
+
 	useEffect(() => {
 		// if(listCompany?.length && listCompanyAndTaskOverdueWork?.length && listCompanyAndTaskNextWeekWork?.length && listCompanyAndTaskMoreThan7Days?.length){
 		if(listCompany?.length){
@@ -45,16 +44,17 @@ const ProjectSubjectPage: FC = () => {
 			let totalNextWeekWorkAll: any = 0
 			let totalMoreThan7DaysAll: any = 0
 			let totalFinishAll: any = 0
+
 			const data: any = listCompany.map((item: any)=> {
-				const totalOverdueWork: any = listCompanyAndTaskOverdueWork?.find((item1: any) => item1._id == item._id)
-				const totalNextWeekWork: any = listCompanyAndTaskNextWeekWork?.find((item1: any) => item1._id == item._id)
-				const totalMoreThan7Days: any = listCompanyAndTaskMoreThan7Days?.find((item1: any) => item1._id == item._id)
-				const totalFinish: any = listCompanyAndTaskFinish?.find((item1: any) => item1._id == item._id)
+				const totalOverdueWork: any = listCompanyAndTaskOverdueWork?.find((item1: any) => item1._id === item._id)
+				const totalNextWeekWork: any = listCompanyAndTaskNextWeekWork?.find((item1: any) => item1._id === item._id)
+				const totalMoreThan7Days: any = listCompanyAndTaskMoreThan7Days?.find((item1: any) => item1._id === item._id)
+				const totalFinish: any = listCompanyAndTaskFinish?.find((item1: any) => item1._id === item._id)
 				// Tính tổng số lượng task
-				totalOverdueWorkAll +=totalOverdueWork?.count || 0;
-				totalNextWeekWorkAll+=totalNextWeekWork?.count || 0;
-				totalMoreThan7DaysAll+=totalMoreThan7Days?.count || 0;
-				totalFinishAll+=totalFinish?.count || 0;
+				totalOverdueWorkAll += totalOverdueWork?.count || 0;
+				totalNextWeekWorkAll += totalNextWeekWork?.count || 0;
+				totalMoreThan7DaysAll += totalMoreThan7Days?.count || 0;
+				totalFinishAll += totalFinish?.count || 0;
 
 				// Tính số phần trăm các việc của công ty
 				const percent = totalOverdueWork?.count || 0 + totalNextWeekWork?.count || 0 + totalMoreThan7Days?.count || 0;
@@ -200,8 +200,8 @@ const ProjectSubjectPage: FC = () => {
 											</div>
 										</td>
 										<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border text-right text-white cursor-auto" style={{ fontSize: '10px' }} onClick={e => e.stopPropagation()}>
-											{company?.totalFinish ? 
-												<div className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2" >{company?.totalFinish}</div> : 
+											{company?.totalFinish ?
+												<div className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2" >{company?.totalFinish}</div> :
 												<></>
 											}
 										</td>

@@ -112,16 +112,14 @@ export const MainChatOptions:FC = () => {
                 <DotsVerticalIcon/>
             </Menu.Button>
             <Menu.Items className={"absolute top-55px right-3 rounded-md shadow-lg bg-white min-w-[272px] text-gray-500 cursor-pointer"}>
-                <Menu.Item
-                    onClick={() => dispatch(openConfigConversation({conversationId: currentChat}))}
-                >
-                    <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2 " + ((isAuthor(chatData, profileId)&&!chatData.isPrivate)?"":"hidden")}>
+                <Menu.Item>
+                    <div onClick={() => dispatch(openConfigConversation({conversationId: currentChat}))} className={"w-full hover:bg-gray-100 flex items-center px-4 py-2 " + ((isAuthor(chatData, profileId)&&!chatData.isPrivate)?"":"hidden")}>
                         <img className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px]"} src={"/images/messages/icons8-settings-48.png"} alt={"exit"}/>
                         <div className={"flex-1 text-left ml-4"}>Cài đặt hội thoại</div>
                     </div>
                 </Menu.Item>
-                <Menu.Item
-                    onClick={() => {
+                <Menu.Item>
+                    <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"} onClick={() => {
                         if (checkedValue()) {
                             dispatch(openNotificationMute({
                                 conversation: currentChat
@@ -129,35 +127,27 @@ export const MainChatOptions:FC = () => {
                         } else {
                             handleTurnOffMute();
                         }
-                    }}
-                >
-                    <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+                    }}>
                         <img className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px]"} src={NotificationIcon} alt={"bookmark"}/>
                         <div className={"flex-1 text-left ml-4"}>{checkedValue()?"Tắt thông báo":"Bật thông báo"}</div>
                     </div>
                 </Menu.Item>
-                <Menu.Item
-                    onClick={() => {
+                <Menu.Item>
+                    <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"} onClick={() => {
                         dispatch(setSelectedStateOn({conversationId: currentChat}));
-                    }}
-                >
-                    <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+                    }}>
                         <img className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px]"} src={IconSelected} alt={"add folder"}/>
                         <div className={"flex-1 text-left ml-4"}>Lựa chọn tin nhắn</div>
                     </div>
                 </Menu.Item>
-                <Menu.Item
-                    onClick={() => userLeaveConversation()}
-                >
-                    <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+                <Menu.Item>
+                    <div onClick={() => userLeaveConversation()} className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
                         <img className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px]"} src={ExitRedIcon} alt={"exit"}/>
                         <div className={"flex-1 text-left ml-4 text-negative"}>Rời cuộc hội thoại</div>
                     </div>
                 </Menu.Item>
-                <Menu.Item
-                    onClick={() => userDeleteConversation()}
-                >
-                    <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2 " + (isAuthor(chatData, profileId)?"":"hidden")}>
+                <Menu.Item>
+                    <div onClick={() => userDeleteConversation()} className={"w-full hover:bg-gray-100 flex items-center px-4 py-2 " + (isAuthor(chatData, profileId)?"":"hidden")}>
                         <img className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px]"} src={RemoveRedIcon} alt={"exit"}/>
                         <div className={"flex-1 text-left ml-4 text-negative"}>Xoá cuộc hội thoại</div>
                     </div>

@@ -1,31 +1,31 @@
-import React, {FC, useEffect, useState} from "react";
-import { RouteComponentProps, useHistory, useLocation, useParams, Link } from "react-router-dom";
+import { FC, useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom";
 import moment from "moment";
 
-import nextIcon from "assets/images/icons-arrow-next.svg";
-import downloadIcon from "assets/images/icons8-download-64.svg";
-import userAvatar from "assets/images/task-user.svg";
-import PDFIcon from "assets/images/CBS-PDF-Icon-48.svg";
+// import nextIcon from "assets/images/icons-arrow-next.svg";
+// import downloadIcon from "assets/images/icons8-download-64.svg";
+// import userAvatar from "assets/images/task-user.svg";
+// import PDFIcon from "assets/images/CBS-PDF-Icon-48.svg";
 import drawingIcon from "assets/images/icons8-google-drawing-100.svg";
-import drawingIconPdf from "assets/images/icons8-google-pdf-100.svg";
+// import drawingIconPdf from "assets/images/icons8-google-pdf-100.svg";
 import taskUserAvt from "assets/images/task-user.svg";
 
 //HOOK
-import { usePcmProject } from "services/hooks/pcm/usePcmProject";
+// import { usePcmProject } from "services/hooks/pcm/usePcmProject";
 import {
 	useQueryListDocument,
   } from "services/hooks/ppt/useDocument";
-import { APP_ID } from 'apis/localdb';
-import { useHistoryTraffics } from "services/hooks/auth/useAuth";
-import { useQueryListDocumentFile } from "services/hooks/document/useDocumentFile";
+// import { APP_ID } from 'apis/localdb';
+// import { useHistoryTraffics } from "services/hooks/auth/useAuth";
+// import { useQueryListDocumentFile } from "services/hooks/document/useDocumentFile";
 import { useProject } from 'services/hooks/items/useProject';
 
 const ProjectDrawingPageV2:FC = () => {
-	const [keyword, setKeyword] = useState("");
+	const [keyword] = useState("");
 	// ID của dự án
-	const { id: projectID, documentID } = useParams<{ id: string, documentID: string }>();
+	const { id: projectID } = useParams<{ id: string, documentID: string }>();
 	// Call hook lấy thông tin project
-	const { infoDepartment } = usePcmProject({ departmentID: projectID });
+	// const { infoDepartment } = usePcmProject({ departmentID: projectID });
 
     const { info: projectInfo } = useProject({
 		params: {
@@ -38,37 +38,23 @@ const ProjectDrawingPageV2:FC = () => {
 
 	useEffect(() => {
 		document.title = `${projectInfo.sign} | Bản vẽ`
-	}, []);
+	}, [projectInfo.sign]);
 
 	const {
-		createDocumentFileMutateAsync,
-		documentFiles,
-		refetch: refetchDocumentFiles,
-		fetchNextPage: fetchNextPageDocumentFile,
-		totalRecord: totalDocumentFile,
-	  } = useQueryListDocumentFile({
-		documentID
-	});
-
-	const { 
-        data: listDocumentParent, 
-        totalRecord, 
-        totalPages, 
-        loading, 
-        nextCursor, 
-        refetch 
+        data: listDocumentParent,
+        refetch
     }   = useQueryListDocument(projectID, { type:"9", limit: 30 }, "");
 
-	const { data: listDocumentChild, 
-			totalRecord: totalRecordChild, 
-			totalPages: totalPagesChild, 
-			loading: loadingChild, 
-			nextCursor: nextCursorChild, 
-			fetchNextPage: fetchNextPageDocumentChild,
-			refetch: refetchChild } = useQueryListDocument(projectID, { type:"9", parentID: documentID, keyword }, "");
-		
+	// const { data: listDocumentChild,
+	// 		totalRecord: totalRecordChild,
+	// 		totalPages: totalPagesChild,
+	// 		loading: loadingChild,
+	// 		nextCursor: nextCursorChild,
+	// 		fetchNextPage: fetchNextPageDocumentChild,
+	// 		refetch: refetchChild } = useQueryListDocument(projectID, { type:"9", parentID: documentID, keyword }, "");
+
 	useEffect(() => {
-		refetchChild();
+		// refetchChild();
 		refetch()
 	}, [keyword]);
 
@@ -107,7 +93,7 @@ const ProjectDrawingPageV2:FC = () => {
                         {/* Hồ sơ con của hồ sơ */}
                         {
                             listDocumentParent.map((document, index) => (
-                                
+
                                 <tr key={index}>
                                     <td className={"px-4 py-2 text-left border-b-0.5 border-primary-border align-middle"}>
                                         <div className={"flex items-center"}>
@@ -122,7 +108,7 @@ const ProjectDrawingPageV2:FC = () => {
                                     </td>
                                     <td className={"px-4 py-2 text-left border-b-0.5 border-primary-border align-middle"}>
                                         <div className={"flex items-center"}>
-                                            <img src={document.author?.image ? `${process.env.REACT_APP_URL_S3_USER}/${document.author?.image}` : taskUserAvt}
+                                            <img src={document.author?.image ? `${process.env.REACT_APP_URL_S3_USER}/${document.author?.image}` : taskUserAvt} alt="Ava usr"
                                             className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px] max-w-[24px] max-h-[24px] rounded-full overflow-hidden"}/>
                                             <p className={"ml-4"}>{document.author?.fullname}</p>
                                         </div>
@@ -136,7 +122,7 @@ const ProjectDrawingPageV2:FC = () => {
                                 </tr>
                             ))
                         }
-                        
+
                         {/* File đính kèm của hồ sơ */}
                         {/* <tr>
                             <td className={"px-4 py-2 text-left border-b-0.5 border-primary-border align-middle"}>

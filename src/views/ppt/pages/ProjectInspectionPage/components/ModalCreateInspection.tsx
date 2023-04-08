@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import { FC } from 'react'
 import { Form, Formik } from 'formik'
 import { Dialog } from '@headlessui/react'
 
@@ -9,7 +9,6 @@ type Props = {
 	show: boolean
 	buttonOnly?: boolean
 	type: 'create' | 'edit'
-
 	toggle: () => void
 }
 

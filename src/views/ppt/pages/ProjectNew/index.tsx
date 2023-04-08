@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, useState } from "react";
+import React, { FC } from "react";
 import FilterProjectNew from "./FilterProjectNew";
 import arrowDownIcon from "assets/images/Polygon 3.svg";
 // import arrowRightIcon from "assets/images/arrowRight.svg";
@@ -37,11 +37,11 @@ const ProjectNew: FC = () => {
     return (
         <div className="py-4 px-3 bg-cbs-bg-gray	">
             <div className="flex text-lg mb-5">
-                <a href="" className="mr-[60px]">
+                <div className="mr-[60px]">
                     <div className="flex gap-2 font-bold text-primary-gray">
                         <span>Tổng quan</span> <img src={arrowDownIcon} alt="" />
                     </div>
-                </a>
+                </div>
                 {/* <a href="" className="mr-[60px]">
                     <div className="flex gap-2 font-bold text-primary-gray">
                         <span>Tổng quan</span> <img src={arrowRightIcon} alt="" />
