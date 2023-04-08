@@ -97,6 +97,9 @@ export const ModalAddNewOrder: FC<Props> = () => {
   const [credit, setCredit] = useState(0);
   const [creditTemp, setCreditTemp] = useState(0);
   const [creditInput, setCreditInput] = useState(0);
+  const [customerID, setCustomerID] = useState("");
+
+  const setTypingTimeoutVoucherRef: any = useRef(null);
 
   useEffect(() => {
     const fetchFundas = async () => {
@@ -491,7 +494,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
     setProductsInCart(newProductsInCart);
   }
 
-  const calTotalMoney = (serviceApp = "0") => {
+  const calTotalMoney = async (serviceApp = "0") => {
     const amount = productsInCart.reduce((prev: any, product: any) => {
       if (product.variantsSelected && product.variantsSelected.length) {
         product.variantsSelected.forEach((variant: any) => {
@@ -538,14 +541,16 @@ export const ModalAddNewOrder: FC<Props> = () => {
     }, 0)
     setTotalMoney(amount);
 
+    const totalVoucher = await fetchVoucher(voucherInput, customerID, true, amount);
+
     if (serviceApp !== "0") {
       if (serviceApp === "1") {
-        handleAutoChangeDiscount(amount, 'discountPercent', 0);
+        handleAutoChangeDiscount(amount, 'discountPercent', 0, totalVoucher);
       } else {
-        handleAutoChangeDiscount(amount, 'discountPercent', 25);
+        handleAutoChangeDiscount(amount, 'discountPercent', 25, totalVoucher);
       }
     } else {
-      handleAutoChangeDiscount(amount, 'discountPercent', discountAndSales.discountPercent);
+      handleAutoChangeDiscount(amount, 'discountPercent', discountAndSales.discountPercent, totalVoucher);
     }
   }
 
@@ -578,10 +583,20 @@ export const ModalAddNewOrder: FC<Props> = () => {
 
   ///
 
-  const fetchVoucher = async (sign: string, customerID: string) => {
-    if (!sign) return;
+  const fetchVoucher = async (sign: string, customerID: string, noUpdateTotal = false, totalMoneyTmp?: number) => {
+    if (!sign) {
+      setVoucherTotalPrice(0);
+      setVoucherId("");
+      setVoucherName("");
+      setVoucherStatus("");
+      setVoucherErrorStatus(false);
+      if (!noUpdateTotal) {
+        handleAutoChangeDiscount(totalMoney, 'discountPercent', 0, 0);
+      }
+      return 0;
+    };
     const { data, status } = await API.get(`/api/fnb/vouchers?sign=${sign}`);
-    if (status !== 200) return;
+    if (status !== 200) return 0;
     console.log("fetchVoucher", data);
     if (data?.error) {
       setVoucherTotalPrice(0);
@@ -589,7 +604,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
       setVoucherName("");
       setVoucherStatus("Mã Voucher không chính xác");
       setVoucherErrorStatus(true);
-      handleAutoChangeDiscount(totalMoney, 'discountPercent', 0, 0);
+      if (!noUpdateTotal) handleAutoChangeDiscount(totalMoney, 'discountPercent', 0, 0);
     } else {
       setVoucherErrorStatus(false);
       setVoucherId(data?.data?._id);
@@ -604,8 +619,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
         setVoucherId("");
         setVoucherStatus("Khách hàng này đã sử dụng mã Voucher rồi");
         setVoucherErrorStatus(true);
-        handleAutoChangeDiscount(totalMoney, 'discountPercent', 0, 0);
-        return;
+        if (!noUpdateTotal) handleAutoChangeDiscount(totalMoney, 'discountPercent', 0, 0);
+        return 0;
       }
 
       // 2-Hết hiệu lực: nếu now() > expired
@@ -616,18 +631,18 @@ export const ModalAddNewOrder: FC<Props> = () => {
         setVoucherId("");
         setVoucherStatus("Mã Voucher này đã hết hạn");
         setVoucherErrorStatus(true);
-        handleAutoChangeDiscount(totalMoney, 'discountPercent', 0, 0);
-        return;
+        if (!noUpdateTotal) handleAutoChangeDiscount(totalMoney, 'discountPercent', 0, 0);
+        return 0;
       }
 
       // 3-Giá trị đơn hàng không đủ điều kiện áp dụng: total < infoVoucher.minOrderAmount 
-      if (totalMoney < data?.data?.minOrderAmount) {
+      if ((totalMoneyTmp || totalMoney) < data?.data?.minOrderAmount) {
         setVoucherTotalPrice(0);
         setVoucherId("");
         setVoucherStatus(`Đơn hàng phải từ ${formatNumberMoney(data?.data?.minOrderAmount)} trở lên`);
         setVoucherErrorStatus(true);
-        handleAutoChangeDiscount(totalMoney, 'discountPercent', 0, 0);
-        return;
+        if (!noUpdateTotal) handleAutoChangeDiscount(totalMoney, 'discountPercent', 0, 0);
+        return 0;
       }
 
       // 4-Kiểm tra nếu Mã khách (customerID) mà không nằm trong infoVoucher.receivers[] -> Báo mã khách không hợp lệ
@@ -636,19 +651,21 @@ export const ModalAddNewOrder: FC<Props> = () => {
         setVoucherId("");
         setVoucherStatus(`Khách hàng này không nằm trong danh sách khách hàng được hưởng Voucher`);
         setVoucherErrorStatus(true);
-        handleAutoChangeDiscount(totalMoney, 'discountPercent', 0, 0);
-        return;
+        if (!noUpdateTotal) handleAutoChangeDiscount(totalMoney, 'discountPercent', 0, 0);
+        return 0;
       }
 
       if (data?.data?.salesoffAmount) {
         setVoucherTotalPrice(data?.data?.salesoffAmount);
         setVoucherStatus(`Voucher hợp lệ. Bạn được giảm: ${formatNumberMoney(data?.data?.salesoffAmount)}`);
-        handleAutoChangeDiscount(totalMoney, 'discountPercent', 0, data?.data?.salesoffAmount);
+        if (!noUpdateTotal) handleAutoChangeDiscount(totalMoney, 'discountPercent', 0, data?.data?.salesoffAmount);
+        return data?.data?.salesoffAmount;
       } else {
         const moneyOfSales = Math.round(data?.data?.salesoffRate * totalMoney / 100);
         setVoucherTotalPrice(moneyOfSales);
         setVoucherStatus(`Voucher hợp lệ. Bạn được giảm: ${data?.data?.salesoffRate}% trên tổng hoá đơn`);
-        handleAutoChangeDiscount(totalMoney, 'discountPercent', 0, moneyOfSales);
+        if (!noUpdateTotal) handleAutoChangeDiscount(totalMoney, 'discountPercent', 0, moneyOfSales);
+        return moneyOfSales;
       }
     }
   }
@@ -797,6 +814,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                             <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                               <DropdownSearchable
                                 onchangeValue={(value: any) => {
+                                  setCustomerID(value.id);
                                   setFieldValue("customerID", value.id);
                                   setFieldValue("name", `Đơn hàng ${value.label}`);
                                   resetCredit(value);
@@ -1374,10 +1392,14 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   value={voucherInput}
                                   onChange={(e: any) => {
                                     setVoucherInput(e.target.value);
-                                  }}
 
-                                  onBlur={(e: any) => {
-                                   fetchVoucher(e.target.value, values.customerID);
+                                    if (setTypingTimeoutVoucherRef.current) {
+                                      clearTimeout(setTypingTimeoutVoucherRef.current);
+                                    }
+
+                                    setTypingTimeoutVoucherRef.current = setTimeout(() => {
+                                      fetchVoucher(e.target.value, values.customerID);
+                                    }, 500);
                                   }}
                                 />
                               </div>
