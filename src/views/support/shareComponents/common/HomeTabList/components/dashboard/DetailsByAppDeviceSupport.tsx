@@ -6,83 +6,85 @@ import styles from 'views/support/styles/support.module.css'
 import { useListAppDeviceAccess } from 'services/hooks/useSupport';
 import { checkTimeType } from "utils/app";
 
-const data = [
-  {
-    id: 1,
-    name: "Quản lý công việc",
-    "%": 12,
-    mob: 1522,
-    tab: 3566,
-    web: 4800,
-  },
-  {
-    id: 2,
-    name: "Quản lý hồ sơ văn bản",
-    "%": 12,
-    mob: 1522,
-    tab: 3566,
-    web: 4800,
-  },
-  {
-    id: 3,
-    name: "Quản lý hợp đồng",
-    "%": 12,
-    mob: 1522,
-    tab: 3566,
-    web: 4800,
-  },
-  {
-    id: 4,
-    name: "Quản trị tài chính",
-    "%": 12,
-    mob: 1522,
-    tab: 3566,
-    web: 4800,
-  },
-  {
-    id: 5,
-    name: "Quản lý nhân sự",
-    "%": 12,
-    mob: 1522,
-    tab: 3566,
-    web: 4800,
-  },
-  {
-    id: 6,
-    name: "Quản lý dự án",
-    "%": 12,
-    mob: 1522,
-    tab: 3566,
-    web: 4800,
-  },
-  {
-    id: 7,
-    name: "Truyền thông",
-    "%": 12,
-    mob: 1522,
-    tab: 3566,
-    web: 4800,
-  },
-  {
-    id: 8,
-    name: "Kế toán",
-    "%": 12,
-    mob: 1522,
-    tab: 3566,
-    web: 4800,
-  },
-  {
-    id: 9,
-    name: "...",
-    "%": 12,
-    mob: 1522,
-    tab: 3566,
-    web: 4800,
-  },
-];
+// const data = [
+//   {
+//     id: 1,
+//     name: "Quản lý công việc",
+//     "%": 12,
+//     mob: 1522,
+//     tab: 3566,
+//     web: 4800,
+//   },
+//   {
+//     id: 2,
+//     name: "Quản lý hồ sơ văn bản",
+//     "%": 12,
+//     mob: 1522,
+//     tab: 3566,
+//     web: 4800,
+//   },
+//   {
+//     id: 3,
+//     name: "Quản lý hợp đồng",
+//     "%": 12,
+//     mob: 1522,
+//     tab: 3566,
+//     web: 4800,
+//   },
+//   {
+//     id: 4,
+//     name: "Quản trị tài chính",
+//     "%": 12,
+//     mob: 1522,
+//     tab: 3566,
+//     web: 4800,
+//   },
+//   {
+//     id: 5,
+//     name: "Quản lý nhân sự",
+//     "%": 12,
+//     mob: 1522,
+//     tab: 3566,
+//     web: 4800,
+//   },
+//   {
+//     id: 6,
+//     name: "Quản lý dự án",
+//     "%": 12,
+//     mob: 1522,
+//     tab: 3566,
+//     web: 4800,
+//   },
+//   {
+//     id: 7,
+//     name: "Truyền thông",
+//     "%": 12,
+//     mob: 1522,
+//     tab: 3566,
+//     web: 4800,
+//   },
+//   {
+//     id: 8,
+//     name: "Kế toán",
+//     "%": 12,
+//     mob: 1522,
+//     tab: 3566,
+//     web: 4800,
+//   },
+//   {
+//     id: 9,
+//     name: "...",
+//     "%": 12,
+//     mob: 1522,
+//     tab: 3566,
+//     web: 4800,
+//   },
+// ];
+
 type Props = {
   timeType: string;
 };
+
 const DetailsByAppDeviceSupport:FC<Props> = (props) => {
   const { timeType } = props;
   const listParam = checkTimeType(timeType);
@@ -90,6 +92,7 @@ const DetailsByAppDeviceSupport:FC<Props> = (props) => {
   let totalMobile = 0;
   let totalTablet = 0;
   let totalWebsite = 0;
+
   for (const key in listAppDeviceAccess) {
       listAppDeviceAccess[key].data?.forEach(element => {
         if(element.type == 1){
@@ -114,6 +117,7 @@ const DetailsByAppDeviceSupport:FC<Props> = (props) => {
   }
 
   const totalAccess = totalMobile + totalTablet + totalWebsite;
+
   return (
     <section className="bg-primary-light px-6 py-4 mt-3 h-[620px]">
       <p className="text-primary-gray font-bold text-lg">

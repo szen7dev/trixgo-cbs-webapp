@@ -7,7 +7,6 @@ import {
 	Title,
 	Tooltip,
 	BarController,
-	Legend,
 	ChartData,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';

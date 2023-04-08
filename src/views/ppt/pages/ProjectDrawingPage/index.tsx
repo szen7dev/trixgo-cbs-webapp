@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 
 import { SearchInput } from "shareComponents/common";
-import { RouteComponentProps, useHistory, useLocation, useParams, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import debounce from "lodash/debounce";
 
 import iconDownload from 'assets/images/icons8-download-48_2.png';
@@ -36,31 +36,26 @@ const ProjectDrawingPage: FC = () => {
 	const { infoDepartment } = usePcmProject({ departmentID: projectID });
 	useEffect(() => {
 		document.title = `${infoDepartment?.data?.sign}.${infoDepartment?.data?.name}`
-	}, []);
+	}, [infoDepartment?.data?.sign, infoDepartment?.data?.name]);
 
 	const {
-		createDocumentFileMutateAsync,
 		documentFiles,
-		refetch: refetchDocumentFiles,
 		fetchNextPage: fetchNextPageDocumentFile,
 		totalRecord: totalDocumentFile,
 	  } = useQueryListDocumentFile({
 		documentID
 	});
-	const { data: listDocumentParent, totalRecord, totalPages, loading, nextCursor, refetch }   = useQueryListDocument(projectID, { type:"9" }, "");
-	const { data: listDocumentChild, 
-			totalRecord: totalRecordChild, 
-			totalPages: totalPagesChild, 
-			loading: loadingChild, 
-			nextCursor: nextCursorChild, 
+	const { data: listDocumentParent, refetch }   = useQueryListDocument(projectID, { type:"9" }, "");
+	const { data: listDocumentChild,
+			totalRecord: totalRecordChild,
 			fetchNextPage: fetchNextPageDocumentChild,
 			refetch: refetchChild } = useQueryListDocument(projectID, { type:"9", parentID: documentID, keyword }, "");
-		
+
 	useEffect(() => {
 		refetchChild();
 		refetch()
 	}, [keyword]);
-	
+
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
 			{/* Content */}
@@ -69,7 +64,7 @@ const ProjectDrawingPage: FC = () => {
 					{
 						listDocumentParent?.map((document, index) => (
 							<Link key={index} to={`/pcm/project/${projectID}/drawing/${document._id}`} className="align-top">
-								<div className={`flex gap-x-2.5 px-4 pt-3 pb-2 hover:bg-cbs-active-comment ${document._id == documentID && "bg-cbs-active-comment" } `}>
+								<div className={`flex gap-x-2.5 px-4 pt-3 pb-2 hover:bg-cbs-active-comment ${document._id === documentID && "bg-cbs-active-comment" } `}>
 									<div>
 										<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 											<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
@@ -84,7 +79,7 @@ const ProjectDrawingPage: FC = () => {
 						))
 					}
 				</div>
-				
+
 				<div className="flex-1 pt-1.5 pb-8 px-4 h-full overflow-auto">
 					<SearchInput placeholder="Tìm kiếm bản vẽ" classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={debounce(
 							(event: any) => setKeyword(event.target.value),
@@ -92,7 +87,7 @@ const ProjectDrawingPage: FC = () => {
 						)} />
 					<div className={`flex gap-x-2.5 pt-3 pb-2 font-bold`}>Hồ sơ con({totalRecordChild})</div>
 					<div className="grid grid-cols-6 gap-4 mt-2">
-						{ documentID &&listDocumentChild?.map((document, index) => 
+						{ documentID &&listDocumentChild?.map((document, index) =>
 							<Link  key={index} to={`/ppt/project/${projectID}/document/${document._id}`} className="align-top">
 								<div className="border-0.5 border-cbs-border">
 									<div className="flex p-2 min-h-[90px]">
@@ -128,8 +123,8 @@ const ProjectDrawingPage: FC = () => {
 					)}
 					<div className={`flex gap-x-2.5 pt-3 pb-2 font-bold`}>File đính kèm({totalDocumentFile})</div>
 					<div className="grid grid-cols-6 gap-4 mt-2">
-						{ documentID &&documentFiles?.map((documentFile, index) => 
-                  			<a href={`${process.env.REACT_APP_URL_S3}${documentFile?.file?.path}`} key={index} target="_blank" rel="noreferrer"> 
+						{ documentID &&documentFiles?.map((documentFile, index) =>
+                  			<a href={`${process.env.REACT_APP_URL_S3}${documentFile?.file?.path}`} key={index} target="_blank" rel="noreferrer">
 								<div className="border-0.5 border-cbs-border">
 									<div className="flex p-2 min-h-[90px]">
 										<img src={iconPdf} alt="" className="self-start w-6 mr-2" />

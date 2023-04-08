@@ -22,8 +22,8 @@ export const SupportDocsManagementPage: FC = () => {
   const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
   const { openModal, closeModal } = useModal();
 
-  const { 
-    data: listUsersApp, 
+  const {
+    data: listUsersApp,
     fetchNextPage,
     totalRecord,
     hasNextPage,
@@ -31,9 +31,9 @@ export const SupportDocsManagementPage: FC = () => {
     updateMemberAppUserAsync,
     deleteMemberAppUserAsync
   } = useAppUser({
-    appID, 
-    companyID, 
-    limit: LIMIT_PER_PAGE_USER_APP, 
+    appID,
+    companyID,
+    limit: LIMIT_PER_PAGE_USER_APP,
     keyword: ''
   });
 
@@ -41,7 +41,7 @@ export const SupportDocsManagementPage: FC = () => {
 		const check = idsChecked.includes(id);
 		if (check) {
 			const newList = [...idsChecked];
-			newList.splice(newList.findIndex((e: any) => e == id), 1);
+			newList.splice(newList.findIndex((e: any) => e.toString() === id.toString()), 1);
 			setIdsChecked(newList);
 		} else {
 			const newList = [...idsChecked];
@@ -55,11 +55,11 @@ export const SupportDocsManagementPage: FC = () => {
 	}, [idsChecked]);
 
   const getStateCheckedAll = useCallback(() => {
-		return idsChecked.length == listUsersApp.length;
-	}, [idsChecked]);
+		return idsChecked.length === listUsersApp.length;
+	}, [idsChecked, listUsersApp]);
 
 	const onClickCheckAll = () => {
-		if (idsChecked.length == listUsersApp.length) {
+		if (idsChecked.length === listUsersApp.length) {
 			setIdsChecked([]);
 		} else {
 			const idsAll = listUsersApp.map((e: any) => e._id);
@@ -212,18 +212,18 @@ export const SupportDocsManagementPage: FC = () => {
               </td>
               <td className="p-2">{appUser.user?.email}</td>
               <td className="p-2">
-                <input 
-                  type="radio" 
-                  name={`userAppLevel_${appUser._id}`} 
+                <input
+                  type="radio"
+                  name={`userAppLevel_${appUser._id}`}
                   value={`${appUser.user?._id}__0`}
                   defaultChecked={appUser.level === 0}
                   onChange={onChangeLevel}
                 />
               </td>
               <td className="p-2">
-                <input 
-                  type="radio" 
-                  name={`userAppLevel_${appUser._id}`} 
+                <input
+                  type="radio"
+                  name={`userAppLevel_${appUser._id}`}
                   value={`${appUser.user?._id}__1`}
                   defaultChecked={appUser.level === 1}
                   onChange={onChangeLevel}

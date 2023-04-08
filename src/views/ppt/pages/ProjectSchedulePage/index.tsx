@@ -3,9 +3,9 @@ import { useHistory, useParams } from "react-router-dom"
 
 // import image from 'assets/images/icons8-stacked-organizational-chart-highlighted-first-node-96 1.png';
 // import avatar from 'assets/images/avatar.jpg';
+// import { PCM_MILESTONE } from "apis/localdb/index";
 import Gantt from "./components/Gantt";
 import { usePcmProject } from "services/hooks/pcm/usePcmProject";
-// import { PCM_MILESTONE } from "apis/localdb/index";
 import { useTask } from "services/hooks/useTask";
 import { Link } from "react-router-dom";
 
@@ -19,11 +19,11 @@ let dataGranttInint:any = [
 	{ id: 7, text: "<b>Quyết toán</b>", start_date: null, duration: null, parent:null, progress: 0, open: true},
 ]
 
-const getTimeBetween = function (time1: any, time2: any) {
-    const a = (new Date(time1)).getTime();
-    const b = (new Date(time2)).getTime();
-    return (a - b) / (1000);
-};
+// const getTimeBetween = function (time1: any, time2: any) {
+//     const a = (new Date(time1)).getTime();
+//     const b = (new Date(time2)).getTime();
+//     return (a - b) / (1000);
+// };
 
 const ProjectSchedulePage: FC = () => {
 	const history = useHistory();
@@ -35,16 +35,10 @@ const ProjectSchedulePage: FC = () => {
 			{ id: 1, source: 1, target: 2, type: '0' }
 		]
 	});
-	
-	function handleClick() {
-		history.goBack();
-	}
+
 	const { infoDepartment } = usePcmProject({ departmentID });
 	const {
 		listTasks,
-		totalRecord,
-		nextPageListTask,
-		refetchListTask
 	  } = useTask({
 		params: {
 			projectID: departmentID, isPassPermision: "1", unlimit: "1"
@@ -54,23 +48,23 @@ const ProjectSchedulePage: FC = () => {
 
 	useEffect(() => {
 		document.title = `${infoDepartment?.data?.sign}-Mốc tiến độ`;
-	});
-	
+	}, [infoDepartment?.data?.sign]);
+
 	useEffect(() => {
 		listTasks?.forEach((task:any) => {
-			const taskUrl = <Link to={`/pcm/detail/${task._id}`}>{task.name}</Link>
+			// const taskUrl = <Link to={`/pcm/detail/${task._id}`}>{task.name}</Link>
 
 			if(task.milestone){
 				const actualStartTime  = new Date(task.actualStartTime);
 				const actualFinishTime =  new Date(task.actualFinishTime);
-				dataGranttInint = [ 
+				dataGranttInint = [
 					...dataGranttInint, {
-						id: task._id, 
-						text: `<a href="/pcm/detail/${task._id}">${task.name} (${(task.percentage)} %)</a>`, 
-						// text: taskUrl, 
-						start_date: actualStartTime, 
+						id: task._id,
+						text: `<a href="/pcm/detail/${task._id}">${task.name} (${(task.percentage)} %)</a>`,
+						// text: taskUrl,
+						start_date: actualStartTime,
 						end_date: actualFinishTime,
-						parent: task.milestone, 
+						parent: task.milestone,
 						percentage: task.percentage,
 						progress: Number(task.percentage/100).toFixed(3),
 						open: true
@@ -85,7 +79,7 @@ const ProjectSchedulePage: FC = () => {
 			]
 		});
 	}, [JSON.stringify(listTasks)]);
-	
+
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
 			{/* Header */}

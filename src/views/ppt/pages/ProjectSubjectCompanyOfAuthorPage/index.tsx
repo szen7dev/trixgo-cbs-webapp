@@ -1,6 +1,6 @@
 import { FC, useState, useEffect } from "react";
 
-import { Header, ClassifyTable } from "views/pcm/shareComponents/common";
+import { ClassifyTable } from "views/pcm/shareComponents/common";
 import { ListTable } from "views/pcm/shareComponents/common/ListTable/index2";
 import { useTask } from "services/hooks/useTask";
 import { Loader } from "shareComponents/common/Loader";
@@ -11,7 +11,6 @@ import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
 import { useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
 
 type Props = {
   type?: number
@@ -19,7 +18,7 @@ type Props = {
 
 export const ProjectSubjectCompanyOfAuthorPage: FC<Props> = ({ type = 1 }) => {
 	const { id: projectID, companyID, subtype } = useParams<{ id: string, companyID: string, subtype: string }>();
-  const [viewMode, setViewMode] = useState("LIST");
+  const [viewMode] = useState("LIST");
   const history = useHistory();
   const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 	const [keyword, setKeyword] = useState("");
@@ -36,7 +35,7 @@ export const ProjectSubjectCompanyOfAuthorPage: FC<Props> = ({ type = 1 }) => {
     },
     isFetch: true
   });
-  
+
   // Việc tuần tới
   const {
     listTasks: tasksNextWeek,
@@ -112,7 +111,7 @@ export const ProjectSubjectCompanyOfAuthorPage: FC<Props> = ({ type = 1 }) => {
 			history.push("/");
     };
     document.title = "Quản lý công việc";
-  }, [isSuccessApp]);  
+  }, [isSuccessApp, hasPermission, history]);
 
   if (isLoadingListTask) {
     return <Loader className="border-primary" />;
@@ -122,7 +121,6 @@ export const ProjectSubjectCompanyOfAuthorPage: FC<Props> = ({ type = 1 }) => {
     <>
       <div>
         <header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
-           
           <div className="flex items-center">
           <button onClick={() => history.goBack()}>
               <svg

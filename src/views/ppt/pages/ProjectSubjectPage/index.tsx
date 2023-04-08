@@ -2,10 +2,8 @@ import React, { FC, useEffect, useState } from "react";
 import { useParams, Link } from 'react-router-dom';
 
 // Hook
-import useCheckedList from 'services/hooks/ppt/useCheckedList';
 import { useQueryListCompanyOfAssigneeAndAmountTask } from "services/hooks/pcm/useStatistical";
 
-import {SearchInput, GroupActions, ButtonMore, DropdownSearchableV2} from "shareComponents/common";
 import ModalInformation from "./components/ModalInformation";
 import { useProject } from 'services/hooks/items/useProject';
 
@@ -16,24 +14,22 @@ let totalFinishMain = 0;
 
 const ProjectSubjectPage: FC = () => {
 	const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
-	const [data, setData] = useState<{ id: number, [key: string]: any }[]>([])
 	const [dataCompany, setDataCompany] = useState([]);
 	const [companyPopup, setCompanyPopup] = useState();
 	const [typeStatusPopup, setTypeStatusPopup] = useState();
 	const { id: projectID } = useParams<{ id: string }>();
-	const [keyword, setKeyword] = useState("");
+	const [keyword] = useState("");
 
-	const { 
+	const {
 		listCompany,
         listCompanyAndTaskOverdueWork,
         listCompanyAndTaskNextWeekWork,
         listCompanyAndTaskMoreThan7Days,
 		listCompanyAndTaskFinish,
-        isLoading,
 	} = useQueryListCompanyOfAssigneeAndAmountTask({
 		projectID, keyword
 	});
-	
+
 	useEffect(() => {
 		totalOverdueWorkMain = 0;
 		totalNextWeekWorkMain = 0;
@@ -144,7 +140,7 @@ const ProjectSubjectPage: FC = () => {
 							<th className="py-2.5 px-3 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
 								Hoàn thành({totalFinishMain})
 							</th>
-						</tr>	
+						</tr>
 					</thead>
 					<tbody className="">
 						{
@@ -190,9 +186,9 @@ const ProjectSubjectPage: FC = () => {
 											</div>
 										</td>
 										<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border text-right text-white cursor-auto" style={{ fontSize: '10px' }} onClick={e => e.stopPropagation()}>
-											{company?.totalFinish ? 
-												<button className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2" 
-												onClick={() => toggleVisible({ company: company._id, typeStatus: "4"}) }>{company?.totalFinish}</button> : 
+											{company?.totalFinish ?
+												<button className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2"
+												onClick={() => toggleVisible({ company: company._id, typeStatus: "4"}) }>{company?.totalFinish}</button> :
 												<></>
 											}
 										</td>

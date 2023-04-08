@@ -14,12 +14,12 @@ import debounce from "lodash/debounce";
  */
 import { DropdownSearchable } from "shareComponents/common";
 import { TOAST_DEFAULT_OPTIONS } from 'utils/constants';
-import { BIDDING_PLAN_CONTRACT_TYPE, BIDDING_PLAN_FORM, BIDDING_PLAN_STATUS, FINANCIAL_PLANNING_TYPES } from 'apis/localdb';
+// import { BIDDING_PLAN_CONTRACT_TYPE, BIDDING_PLAN_FORM, BIDDING_PLAN_STATUS, FINANCIAL_PLANNING_TYPES } from 'apis/localdb';
 
 /**
  * Hooks
  */
-import { useBiddingPlan } from 'services/hooks/bidding/useBiddingPlan';
+// import { useBiddingPlan } from 'services/hooks/bidding/useBiddingPlan';
 import { useDepartmentDirectory } from 'services/hooks/items/useDepartmentDirectory';
 
 // import { useQueryListCompany } from "services/hooks/useCompanies";
@@ -54,7 +54,7 @@ const ModalCreateDepartmentDirectory: FC<ModalProps> = ({ toggle, onConfirm, pro
 	const financialSchema = object().shape({
 		member: string().required("Bạn cần chọn thành viên"),
 	});
-	
+
 	const handleSubmit = async (values: any) => {
 		try {
 			const { error, data } = await insertAsync(values);
@@ -85,10 +85,8 @@ const ModalCreateDepartmentDirectory: FC<ModalProps> = ({ toggle, onConfirm, pro
 
 	const {
 		data: listUsersSystem,
-		hasNextPage: hasNextPageUserSystem,
-		fetchNextPage: fetchNextPageUserSystem,
 	} = useUserSystem({ keyword: searchUserSystem, projectID }, true);
-	
+
 	return (
 		<Formik
 			initialValues={{ name: '', companyID, projectID  }}
@@ -114,7 +112,7 @@ const ModalCreateDepartmentDirectory: FC<ModalProps> = ({ toggle, onConfirm, pro
 							</div>
 							{/* md:h-[500px] */}
 							<div className="relative px-6 mt-2 pt-3.5 flex-1 text-x-small">
-								
+
 								<label className='mt-4 block'>
 									<div className='mb-1.5'>
 										Thành viên (*)
@@ -260,7 +258,7 @@ const ModalCreateDepartmentDirectory: FC<ModalProps> = ({ toggle, onConfirm, pro
 										className="font-normal text-negative italic"
 									/>
 								</label>
-								
+
 							</div>
 							<div className="flex justify-end pt-5 px-6 pb-6 mt-6">
 								<div>

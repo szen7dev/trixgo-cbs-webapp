@@ -1,5 +1,4 @@
 import { FC } from "react";
-import _ from "lodash";
 import { checkTimeType } from "utils/app";
 
 import { ChartDoughnutSmall } from "views/support/shareComponents/common";

@@ -1,28 +1,28 @@
 import React, { FC, useEffect, useState } from "react";
-import projectIcon from "assets/images/icons8-project-50.svg";
-import timetableIcon from "assets/images/icons8-timetable-48.svg";
+// import projectIcon from "assets/images/icons8-project-50.svg";
+// import timetableIcon from "assets/images/icons8-timetable-48.svg";
 import { debounce } from "lodash";
-import { createLinkAndClick } from 'utils';
-import { toast } from "react-toastify";
-import { DropdownSearchableV2, Loader } from "shareComponents/common";
+// import { createLinkAndClick } from 'utils';
+// import { toast } from "react-toastify";
+import { DropdownSearchableV2 } from "shareComponents/common";
 import { setFilterDropdown } from "redux/reducer/CmcsHomeSlice";
 import { useProjectCustom } from "services/hooks/items/useProject";
 import { useDispatch } from "react-redux";
 import PaginateV2 from "shareComponents/common/PaginateV2";
 import { useAppSelector } from "redux/reducer";
-import { useListAccessByContract, useListFilterContract } from "services/hooks/cmcs/useContract";
+import { useListAccessByContract } from "services/hooks/cmcs/useContract";
 // Hook dùng để export excel
-import { useContractCustom } from "services/hooks/cmcs/useContractIncome";
+// import { useContractCustom } from "services/hooks/cmcs/useContractIncome";
 import TriangleDown from "assets/icons/TriangleDown";
 import moment from "moment";
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
-import iconMaleUser from "assets/images/icons8-male-user-64.svg";
-import { formatNumberMoney } from "utils";
-import { CONTRACT_COME_IN_STATUS } from "apis/localdb";
-import iconSmallBlackDown from "assets/images/iconSmallBlackDown.svg";
-import icons8pdf from "assets/images/icons8-pdf-100 1.svg";
-import StarIcon from '@mui/icons-material/Star';
-import StarBorderIcon from '@mui/icons-material/StarBorder';
+// import iconMaleUser from "assets/images/icons8-male-user-64.svg";
+// import { formatNumberMoney } from "utils";
+// import { CONTRACT_COME_IN_STATUS } from "apis/localdb";
+// import iconSmallBlackDown from "assets/images/iconSmallBlackDown.svg";
+// import icons8pdf from "assets/images/icons8-pdf-100 1.svg";
+// import StarIcon from '@mui/icons-material/Star';
+// import StarBorderIcon from '@mui/icons-material/StarBorder';
 import FilterItem from "./FilterItem";
 
 const FilterProjectKpis: FC = () => {
@@ -38,10 +38,10 @@ const FilterProjectKpis: FC = () => {
 
     type PaginateHandle = React.ElementRef<typeof PaginateV2>;
     const ref = React.useRef<PaginateHandle>(null);
-    const [pageIndex, setPageIndex] = useState(0);
-    const [recordSelected, setSelectRecord] = useState<any>({});
+    const [, setPageIndex] = useState(0);
+    // const [recordSelected, setSelectRecord] = useState<any>({});
 
-    const [fromToDate, setFromToDate] = useState({ fromDate: "", toDate: "" })
+    const [, setFromToDate] = useState({ fromDate: "", toDate: "" })
 
     const [projectKeyword, setProjectKeyword] = useState("");
     const [projectsID, setProjectsID] = useState<string[]>([]);
@@ -57,61 +57,61 @@ const FilterProjectKpis: FC = () => {
     const { listAccessByContract: listAccessByContractSell } = useListAccessByContract({ params: { keyword: listAccessByContractSellKeyword, option: 1 }, isFetchList: true });
     const { listAccessByContract: listAccessByContractBuy } = useListAccessByContract({ params: { keyword: listAccessByContractBuyKeyword, option: 2 }, isFetchList: true });
 
-    const [statuss, setStatuss] = useState<string[]>([]);
-    const [ontimes, setOntimes] = useState<string[]>([]);
-    const [onbudgets, setOnbudgets] = useState<string[]>([]);
+    // const [statuss] = useState<string[]>([]);
+    // const [ontimes] = useState<string[]>([]);
+    // const [onbudgets] = useState<string[]>([]);
 
-    const { isLoading, totalRecord, totalPage, hasNextPage, listCmcsByFilterWithPager, fetchNextPageListCmcsByFilter } = useListFilterContract({
-        params: {
-            ...fromToDate,
-            projectsID,
-            buyerInfosID,
-            sellerInfosID,
-            statuss,
-            ontimes,
-            onbudgets,
-            keyword: keywordInput
-        },
-        isFetchList: true
-    })
+    // const { isLoading, totalRecord, totalPage, hasNextPage, listCmcsByFilterWithPager, fetchNextPageListCmcsByFilter } = useListFilterContract({
+    //     params: {
+    //         ...fromToDate,
+    //         projectsID,
+    //         buyerInfosID,
+    //         sellerInfosID,
+    //         statuss,
+    //         ontimes,
+    //         onbudgets,
+    //         keyword: keywordInput
+    //     },
+    //     isFetchList: true
+    // })
 
     //Down load excel
-    const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
-        isExporting: false,
-    });
+    // const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+    //     isExporting: false,
+    // });
 
-    const { exportContractAsync } = useContractCustom({});
-    const handleExportReport = async () => {
-        try {
-            setStateExport({ isExporting: true });
-            const { error, data } = await exportContractAsync({
-                filterParams: {
-                    ...fromToDate,
-                    projectsID,
-                    buyerInfosID,
-                    sellerInfosID,
-                    statuss,
-                    ontimes,
-                    onbudgets,
-                    keyword: keywordInput
-                },
-                type: 'all'
-            });
-            if (error) {
-                return toast.warn(data?.message);
-            }
+    // const { exportContractAsync } = useContractCustom({});
+    // const handleExportReport = async () => {
+    //     try {
+    //         setStateExport({ isExporting: true });
+    //         const { error, data } = await exportContractAsync({
+    //             filterParams: {
+    //                 ...fromToDate,
+    //                 projectsID,
+    //                 buyerInfosID,
+    //                 sellerInfosID,
+    //                 statuss,
+    //                 ontimes,
+    //                 onbudgets,
+    //                 keyword: keywordInput
+    //             },
+    //             type: 'all'
+    //         });
+    //         if (error) {
+    //             return toast.warn(data?.message);
+    //         }
 
-            data && createLinkAndClick(data, '_self');
-        } catch (error: any) {
-            toast.error(error.message)
-        } finally {
-            setStateExport({ isExporting: false });
-        }
-    }
+    //         data && createLinkAndClick(data, '_self');
+    //     } catch (error: any) {
+    //         toast.error(error.message)
+    //     } finally {
+    //         setStateExport({ isExporting: false });
+    //     }
+    // }
 
-    if (stateExport.isExporting) {
-        return <Loader className="border-primary" />
-    }
+    // if (stateExport.isExporting) {
+    //     return <Loader className="border-primary" />
+    // }
 
     return (
         <div className="cmcs-home h-screen w-full bg-white relative overflow-hidden px-4">

@@ -1,9 +1,8 @@
 import { FC, useState, useEffect } from "react";
 
-import { Header, ClassifyTable } from "views/pcm/shareComponents/common";
+import { ClassifyTable } from "views/pcm/shareComponents/common";
 import { ListTable } from "views/pcm/shareComponents/common/ListTable/index2";
 import { useTask } from "services/hooks/useTask";
-import { Loader } from "shareComponents/common/Loader";
 import { SearchInput } from "shareComponents/common";
 import debounce from "lodash/debounce";
 
@@ -11,7 +10,6 @@ import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
 import { useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
 import { PCM_MILESTONE } from "apis/localdb/index";
 
 type Props = {
@@ -21,7 +19,7 @@ type Props = {
 export const ProjectMilestonePage: FC<Props> = ({ type = 1 }) => {
 	const { id: projectID, milestoneID } = useParams<{ id: string, milestoneID: string }>();
   const milestoneIDState = milestoneID ? milestoneID : "1";
-  const [viewMode, setViewMode] = useState("LIST");
+  const [viewMode] = useState("LIST");
   const history = useHistory();
   const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 	const [keyword, setKeyword] = useState("");
@@ -43,7 +41,6 @@ export const ProjectMilestonePage: FC<Props> = ({ type = 1 }) => {
   // Việc tuần tới
   const {
     listTasks: tasksNextWeek,
-    isLoadingListTask,
     totalRecord: nextWeekRecords,
     nextPageListTask: nextPageTaskNextWeek,
     refetchListTask: refetchListTaskNextWeek
@@ -117,8 +114,11 @@ export const ProjectMilestonePage: FC<Props> = ({ type = 1 }) => {
 			toast.error("Bạn không có quyền truy cập tính năng này!");
 			history.push("/");
     };
+  }, [isSuccessApp, hasPermission, history]);
+
+  useEffect(() => {
     document.title = "Quản lý công việc";
-  }, [isSuccessApp]);
+  }, [])
 
   return (
     <>
@@ -126,7 +126,7 @@ export const ProjectMilestonePage: FC<Props> = ({ type = 1 }) => {
         <header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
 
           <div className="flex items-center">
-            {milestoneID ? 
+            {milestoneID ?
             <>
               <button onClick={() => history.goBack()}>
                 <svg

@@ -150,11 +150,11 @@ export const SupportMemberPage: FC = () => {
   }, [usersChecked]);
 
   const getStateCheckedAll = useCallback(() => {
-    return usersChecked.length == listUsersSystem.length;
-  }, [usersChecked]);
+    return usersChecked.length === listUsersSystem.length;
+  }, [usersChecked, listUsersSystem]);
 
   const onClickCheckAll = () => {
-    if (usersChecked.length == listUsersSystem.length) {
+    if (usersChecked.length === listUsersSystem.length) {
       setUsersChecked([]);
     } else {
       setUsersChecked(listUsersSystem);

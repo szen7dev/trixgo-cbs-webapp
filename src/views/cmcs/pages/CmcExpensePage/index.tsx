@@ -187,8 +187,8 @@ const CmcExpensePage: FC = () => {
           </button>
           }
           <DropdownOption>
-            <Menu.Item onClick={handleExportReport}>
-              <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-3"}>
+            <Menu.Item>
+              <div onClick={handleExportReport} className={"w-full hover:bg-gray-100 flex items-center px-4 py-3"}>
                 <img src="/images/common/icons8-download-48.png" alt="Download Excel" />
                 <div className={"flex-1 text-left ml-4"}>
                   Download Excel
