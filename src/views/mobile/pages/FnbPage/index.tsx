@@ -119,7 +119,7 @@ const FnbPage: FC = () => {
                 <img src={voucherIcon} alt="icon" className="w-6 h-6 rounded-full" />
                 <p className="px-1"><b>Danh sách voucher của bạn ({totalVoucher})</b></p>
             </div>
-            <p className="text-primary-gray"><i>Voucher và tích điểm chỉ áp dụng với đơn hàng mua tại quán hoặc đặt qua Hotline. Đọc mã Voucher và số điện thoại cho nhân viên để hưởng ưu đãi</i></p>
+            <p className="text-primary-gray"><i>Voucher và Tích điểm chỉ áp dụng với đơn hàng mua tại quán hoặc đặt qua Hotline. Vui lòng đọc mã Voucher và số điện thoại cho nhân viên để hưởng ưu đãi. Cảm ơn đã lựa chọn Winggo</i></p>
             <hr className="border-zinc-200 border mt-2 mb-2" />
             {
                 listVouchers.map((item: any, i: any) => (

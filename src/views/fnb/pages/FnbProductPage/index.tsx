@@ -57,6 +57,7 @@ export const FnBProductPage: FC = () => {
     const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbProduct({
 		params: {
 			keyword,
+			limit: 20,
 			populates: JSON.stringify({
 				path: 'images',
 			})
@@ -219,8 +220,6 @@ export const FnBProductPage: FC = () => {
             }
             fetchData();
         }
-        
-        // console.log('=========DATA THAY ĐỔI RỒI==============')
     }, [dataImport])
 
 	return (
@@ -283,7 +282,7 @@ export const FnBProductPage: FC = () => {
 					ref={ref}
 					totalRecord={totalRecord}
 					totalPages={totalPage}
-					limit={10}
+					limit={20}
 					hasNextPage={hasNextPage}
 					isFetching={isLoading}
 					nextPageAction={() => {

@@ -63,6 +63,24 @@ export const useFnbGeneralBook = ({
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPage = data?.pages[0]?.data?.totalPage || 0;
 
+    // Tải mẫu import excel
+    const { mutateAsync: downloadTemplateExcelAsync } =
+        useMutation((payload: any ) =>
+        fnbRepository.downloadTemplateExcel(payload)
+    );
+
+    // Import excel
+    const { mutateAsync: importExcelAsync } =
+        useMutation((payload: { dataImport: string }) =>
+        fnbRepository.importExcel(payload)
+    );
+
+    // Export excel
+    const { mutateAsync: exportExcelAsync } =
+        useMutation((payload: any) =>
+        fnbRepository.exportExcel(payload)
+    );
+
     return {
         isLoading,
         isLoadingInfo,
@@ -78,5 +96,8 @@ export const useFnbGeneralBook = ({
         insertAsync,
         updateAsync,
         deleteManyAsync,
+        downloadTemplateExcelAsync,
+        importExcelAsync,
+        exportExcelAsync,
     }
 }

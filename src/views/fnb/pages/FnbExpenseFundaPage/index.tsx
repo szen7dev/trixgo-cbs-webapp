@@ -3,8 +3,10 @@ import React, { FC, useCallback, useState, useEffect } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import debounce from "lodash/debounce";
 import moment from "moment";
-import { formatNumberMoney } from "utils/converter";
 import { toast } from "react-toastify";
+import { formatNumberMoney } from "utils/converter";
+import { validateFiles } from 'validation/file';
+import { read, utils } from 'xlsx';
 
 /*=====2.CSS=====*/
 
@@ -26,6 +28,7 @@ import { useAuth } from 'services/hooks/auth/useAuth';
 
 /*=====7.OTHER=====*/
 import { FNB_CHANNEL, FNB_BOOK_OUTIN, FNB_BOOK_TYPE, APP_ID } from "apis/localdb";
+import { createLinkAndClick } from "utils";
 
 export const FnbExpenseFundaPage: FC = () => {
 	const { user } = useAuth();
@@ -77,6 +80,80 @@ export const FnbExpenseFundaPage: FC = () => {
     const ref = React.useRef<PaginateHandle>(null);
     const [pageIndex, setPageIndex] = useState(0);
 
+	/**
+     * LÀM VIỆC VỚI EXCEL
+     */
+    //_____Import, export excel
+    const [dataImport, setDataImport] = useState([]);
+    const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+        isExporting: false,
+    });
+    const { downloadTemplateExcelAsync, importExcelAsync, exportExcelAsync } = useFnbGeneralBook({});
+
+    const handleDownloadTemplateImportExcel = async () => {
+		try {
+            setStateExport({ isExporting: true });
+            const { error, data } = await downloadTemplateExcelAsync({
+                filterParams: {  
+
+                }
+            });
+
+            if(error) {
+                return toast.warn(data?.message);
+            }
+
+            data && createLinkAndClick(data, '_self');
+        } catch (error: any) {
+            toast.error(error.message)
+        } finally {
+            setStateExport({ isExporting: false });
+        }
+	}
+
+	//_____Xử lý import excel (đọc file)
+    const handleImport = ($event: any) => {
+        const files = $event.target.files;
+        if (files.length) {
+            const file = files[0];
+            const reader = new FileReader();
+            reader.onload = (event: any) => {
+                const wb = read(event.target.result);
+                const sheets = wb.SheetNames;
+
+                if (sheets.length) {
+                    const rows: any = utils.sheet_to_json(wb.Sheets[sheets[0]]); // Index=1 (tức Sheet số 2 từ trái sang)
+                    
+                    // Set data để Import
+                    setDataImport(rows)
+                }
+            }
+            
+            reader.readAsArrayBuffer(file);
+        }
+
+        // Đọc xong thì xóa value trong Input đi
+        $event.target.value = null;
+    }
+
+	//_____Gọi tới API để đẩy data lên
+    useEffect(() => {
+        if(dataImport.length){
+            const fetchData = async () => {
+                const data = await importExcelAsync({ dataImport: JSON.stringify(dataImport) });
+                setDataImport([]);
+                // refetchTaskInfo?.()
+                console.log(data)
+
+                if(!data.error){
+                    return toast.success("Import thành công");
+                }
+                return toast.error(data.message);
+            }
+            fetchData();
+        }
+    }, [dataImport])
+
 	return (
 		<main className="h-full overflow-auto">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
@@ -118,6 +195,16 @@ export const FnbExpenseFundaPage: FC = () => {
 					) : <></>}
 				</div>
 				<div className="flex items-center">
+					<button className={"flex items-center justify-center mx-3 ml-1"}
+							onClick={handleDownloadTemplateImportExcel}
+						>
+							Tải mẫu Excel
+					</button> 
+					<button className={"flex items-center justify-center mx-3 ml-1"}>
+							<input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
+							accept=".xlsx, .xlsm, .xls, .csv"/>
+							<label className="custom-file-label" htmlFor="inputGroupFile">Import excel</label>
+					</button>
 					<button
 						className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold ml-6"
 						onClick={() => {
