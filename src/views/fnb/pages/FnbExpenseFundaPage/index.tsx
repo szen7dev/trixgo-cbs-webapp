@@ -143,25 +143,22 @@ export const FnbExpenseFundaPage: FC = () => {
 					>
 						Tạo mới
 					</button>
-					{/* <button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
-						<img src={Vertical3Dots} alt="3Dots" />
-					</button> */}
 				</div>
 				<PaginateV2
-                        ref={ref}
-                        totalRecord={totalRecord}
-                        totalPages={totalPage}
-                        limit={20}
-                        hasNextPage={hasNextPage}
-                        isFetching={isLoading}
-                        nextPageAction={() => {
-                            fetchNextPage();
-                            setPageIndex(oldState => oldState+1)
-                        }}
-                        prevPageAction={() => {
-                            setPageIndex(oldState => oldState-1)
-                        }}
-                    />
+					ref={ref}
+					totalRecord={totalRecord}
+					totalPages={totalPage}
+					limit={50}
+					hasNextPage={hasNextPage}
+					isFetching={isLoading}
+					nextPageAction={() => {
+						fetchNextPage();
+						setPageIndex(oldState => oldState+1)
+					}}
+					prevPageAction={() => {
+						setPageIndex(oldState => oldState-1)
+					}}
+				/>
 			</header>
 
 			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
@@ -172,8 +169,6 @@ export const FnbExpenseFundaPage: FC = () => {
 								<input
 									className="form-check-input"
 									type="checkbox"
-									// checked={getStateChecked(item._id)}
-									// onChange={() => onClickCheckButton(item._id)}
 								/>
 							</div>
 						</th>
@@ -184,12 +179,17 @@ export const FnbExpenseFundaPage: FC = () => {
 						</th>
 						<th className="pb-1 pt-1 font-normal">
 							<div className="pl-2">
+								Ngày tháng hạch toán
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="pl-2">
 								Nội dung
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal">
 							<div className="pl-2">
-								Chi phí
+								Giá trị
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal">
@@ -217,6 +217,9 @@ export const FnbExpenseFundaPage: FC = () => {
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{i+1}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{moment(item?.date).format("DD/MM/YYYY")}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
 								<Link to={`/fnb/expense/${fundaID}/${item?._id}`}>

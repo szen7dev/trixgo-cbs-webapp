@@ -14,26 +14,15 @@ import PencilIcon from "assets/images/icons8-pencil-96.svg";
 /*=====4.PAGES/COMPONENTS=====*/
 import { SearchInput, ModalContainer } from "shareComponents/common";
 import PaginateV2 from "shareComponents/common/PaginateV2";
-// import { CreateFnbProductQoutas } from "./modal";
 
 /*=====5.TYPINGS=====*/
 
 /*=====6.HOOKS/APIS=====*/
 import { APP_ID } from "apis/localdb";
-import { useModal } from "services/hooks/useModal";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
-import { useFnbProduct } from 'services/hooks/fnb/useFnbProduct';
-import { useFnbQuota } from 'services/hooks/fnb/useFnbQuota';
 import { useFunda } from 'services/hooks/items/useFunda';
 
 /*=====7.OTHER=====*/
-import { FNB_INTERNAL } from "apis/localdb";
-
-const TYPE_PRODUCT = [
-	{ value: 1, text: "Thông thường" },
-	{ value: 2, text: "Topping" },
-]
-
 export const FnbExpensePage: FC = () => {
 	useEffect(() => {
 		document.title = "FnB";
@@ -52,44 +41,13 @@ export const FnbExpensePage: FC = () => {
     const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFunda({ 
 		params: { 
 			keyword: keyword,  
-			limit: 30,  
-			isMember: 1,
-			// productID, 
-			// populates: JSON.stringify({
-			// 	path: 'goods', select: "name unit"
-			// }) 
+			limit: 50,  
+			isMember: 1
 		}, 
 		isFetchList: true, 
 		isFetchInfo: false
 	});
 	// console.log({listWithPager});
-
-	const getStateChecked = useCallback((id: string) => {
-		return idsChecked.includes(id) ? true : false;
-	}, [idsChecked]);
-
-	const onClickCheckButton = (id: string) => {
-		setIdsChecked([id]);
-	};
-
-	const getStateCheckedAll = useCallback(() => {
-		return idsChecked.length == listWithPager.length;
-	}, [idsChecked]);
-
-	const onClickCheckAll = () => {
-		if (idsChecked.length == listWithPager.length) {
-			setIdsChecked([]);
-		} else {
-			const idsAll = listWithPager.map((e: any) => e._id);
-			setIdsChecked(idsAll);
-		}
-	};
-
-	const [modalCreateProject, setModalCreateProject] = useState<boolean>(false);
-	const toggleModalCreateProject = () => setModalCreateProject(!modalCreateProject);
-
-	const [initialValues, setInitialValues] = useState(null);
-	const onConfirmCreateProject = () => refetch();
 
 	useEffect(() => {
 		if (isSuccess && !(hasPermission)) {
@@ -120,9 +78,6 @@ export const FnbExpensePage: FC = () => {
 					{/* <FinancialCashFlowFilterButton /> */}
 					{(idsChecked && idsChecked.length) ? (
 						<div className="flex items-center gap-2 border-l-2 border-primary-border px-4 ml-4">
-							{/* <div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
-								<img src={DownloadIcon} alt="Download" />
-							</div> */}
 							{idsChecked.length == 1 ?
 								<>
 								<div
@@ -139,7 +94,7 @@ export const FnbExpensePage: FC = () => {
 					ref={ref}
 					totalRecord={totalRecord}
 					totalPages={totalPage}
-					limit={20}
+					limit={50}
 					hasNextPage={hasNextPage}
 					isFetching={isLoading}
 					nextPageAction={() => {
@@ -168,7 +123,7 @@ export const FnbExpensePage: FC = () => {
 						</th>
 						<th className="pb-1 pt-1 font-normal">
 							<div className="border-gray-300 font-normal pl-2">
-								Tổng chi phí
+								Giá trị
 							</div>
 						</th>
                         <th className="pb-1 pt-1 font-normal w-[200px]">
