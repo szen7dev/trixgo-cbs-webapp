@@ -287,7 +287,7 @@ export const FnbStorePage: FC = () => {
 						<tr key={item._id} className="text-[14px]">
 							<td className={"p-2 border-0.5 border-primary-border text-center"}>{Number(i+1)}</td>
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-highlight-color"}>
-								<Link to ={`/fnb/expense/${item._id}`}>
+								<Link to ={`/fnb/store/${item._id}/import`}>
 									{item?.name}
 								</Link>
 							</td>

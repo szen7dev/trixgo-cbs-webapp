@@ -301,6 +301,16 @@ export const FnbStoreImportDetailPage: FC = () => {
                         </th>
                         <th className="py-1">
                             <div className="border-gray-300 font-normal pl-2">
+                                Ngày tháng
+                            </div>
+                        </th>
+                        <th className="py-1 w-1/16">
+                            <div className="border-gray-300 font-normal pl-2">
+                                Phân loại
+                            </div>
+                        </th>
+                        <th className="py-1 w-1/5">
+                            <div className="border-gray-300 font-normal pl-2">
                                 Hàng hoá nguyên vật liệu
                             </div>
                         </th>
@@ -311,7 +321,7 @@ export const FnbStoreImportDetailPage: FC = () => {
                         </th>
                         <th className="py-1">
                             <div className="border-gray-300 font-normal pl-2">
-                                Khối lượng nhập kho
+                                Khối lượng
                             </div>
                         </th>
                         <th className="py-1">
@@ -340,24 +350,19 @@ export const FnbStoreImportDetailPage: FC = () => {
                 <tbody>
                 {
 					(listWithPager[pageIndex]??[]).map((item: any, i: number) => (
-                        // if(permissions.onlyView) {
-                        //     return <RowTableView key={item._id} cashFlow={item} />
-                        // }
-						// return (
-                            <RowTableUpdateInline
-                                index={i}
-                                key={item._id}
-                                contracts={listContracts}
-                                cashFlow={item}
-                                itemsChecked={itemsChecked}
-                                onUpdate={handleUpdate}
-                                onScrollContract={handleScroll}
-                                onChangeCheckbox={handleChangeCheckbox}
-                                onSearchContract={onChangeSearchContract}
-                            />
-                        // )
+                        <RowTableUpdateInline
+                            index={i}
+                            key={item._id}
+                            contracts={listContracts}
+                            cashFlow={item}
+                            itemsChecked={itemsChecked}
+                            onUpdate={handleUpdate}
+                            onScrollContract={handleScroll}
+                            onChangeCheckbox={handleChangeCheckbox}
+                            onSearchContract={onChangeSearchContract}
+                        />
 				    ))}
-                    {/* {(showRowInsert && permissions.hasPermissionCreateUpdate) && <RowTableInsertInline onInsert={handleInsert} />} */}
+                    
                     { <RowTableInsertInline onInsert={handleInsert} />}
                 </tbody>
             </table>
@@ -377,14 +382,6 @@ export const FnbStoreImportDetailPage: FC = () => {
                 toggle={() => setModalShare(prev => ({ ...prev, isShow: !modalShare.isShow }))}
                 className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[600px] rounded-cbs-md"
             >
-                {/* <ModalShare
-                    toggle={() => setModalShare(prev => ({ ...prev, isShow: !modalShare.isShow }))}
-                    refetch={refetchInfo}
-                    // cashFlowID={cashFlowId}
-                    users={modalShare.users}
-                    modalType={modalShare.modalType}
-                    hasPermission={permissions.hasPermissionShare}
-                /> */}
             </ModalLarge>
         </main>
     );
