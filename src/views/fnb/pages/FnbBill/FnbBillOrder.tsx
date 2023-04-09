@@ -1,15 +1,13 @@
 /*=====1.LIBRARY=====*/
-import React, { FC, useCallback, useState, useEffect } from "react";
-import { Link, useHistory, useParams } from "react-router-dom";
-import debounce from "lodash/debounce";
+import { FC, useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 import moment from "moment";
 import { formatNumberMoney, convertCurrency } from "utils/converter";
-import { toast } from "react-toastify";
 
 /*=====2.CSS=====*/
 
 /*=====3.ICONS=====*/
-import QrCodeIcon from "assets/images/icons8-qr-code-100 1.svg";
+import zaloOA from "assets/images/WinggoZaloOA.jpg";
 
 /*=====4.PAGES/COMPONENTS=====*/
 
@@ -23,8 +21,7 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
 
 /*=====7.OTHER=====*/
-import { APP_ID } from "apis/localdb";
-import { FNB_CHANNEL, FNB_SERVICE, FNB_PAYMENT, FNB_ORDER_STATUS, FNB_SIZE } from "apis/localdb";
+import { FNB_CHANNEL, FNB_PAYMENT, FNB_SIZE } from "apis/localdb";
 
 export const FnbBillOrder: FC = () => {
     const { user } = useAuth();
@@ -94,7 +91,7 @@ export const FnbBillOrder: FC = () => {
                 <div>
                     <div className="flex">
                         <Link to ={`/fnb/home`}>
-                            <img src={`${process.env.REACT_APP_URL_S3}${info?.funda?.bankQrcode?.path}`} alt="" style={{ width: "90px", height: "90px" }} />
+                            <img src={`${process.env.REACT_APP_URL_S3}${info?.funda?.bankQrcode?.path}`} alt="Bank" style={{ width: "90px", height: "90px" }} />
 						</Link>
                         <div className="text-center mt-3">
                             <div className="font-bold text-[12px]">{info?.funda?.name}</div>
@@ -201,7 +198,7 @@ export const FnbBillOrder: FC = () => {
                             </tbody>
                         </table>
                     </div>
-                    <div className="border-t-0.5 border-b-0.5 border-cbs-border  mx-2 py-1 text-[12px]">
+                    <div className="border-t-0.5 border-b-0.5 border-cbs-border mx-2 py-1 text-[12px]">
                         <table className="table-fixed w-full">
                             <thead>
                                 <tr className="font-bold">
@@ -212,11 +209,18 @@ export const FnbBillOrder: FC = () => {
                             </thead>
                         </table>
                     </div>
-                    <div className="flex justify-between border-b-0.5 border-cbs-border  mx-2 py-1 text-[12px]">
+                    <div className="flex justify-between border-b-0.5 border-cbs-border mx-2 py-1 text-[12px]">
                         <div>Hình thức thanh toán</div>
                         <div>{info?.paymentMethod >=1 && FNB_PAYMENT[Number(info?.paymentMethod)-1].text}</div>
                     </div>
-                    <div className="text-center italic text-[12px]  mx-4 py-1 ">{info?.funda?.bankAccount}</div>
+                    <div className="text-center italic text-[12px] border-cbs-border mx-4 py-1 ">{info?.funda?.bankAccount}</div>
+                    <hr className="border-cbs-border" />
+                    <div className="text-[12px] justify-between mb-2">
+                        <p className="text-center mt-2"><b>CẢM ƠN QUÝ KHÁCH VÀ HẸN GẶP LẠI</b></p>
+                        <p className="text-center">Quét mã QR dưới đây và bấm quan tâm Zalo OA Trà sữa Winggo để nhận được thông báo/ưu đãi quan trọng dành riêng cho bạn</p>
+                        <div className="text-center"><img src={zaloOA} alt="ZaloOA" style={{ width: "90px", height: "90px" }} className="mx-auto"/></div>
+                        <p className="text-center"><i>Thông tin bao gồm: Lịch sử mua hàng, tích điểm và Voucher/mã ưu đãi của bạn</i></p>
+                    </div>
                 </div>
                 <div className="w-full h-[30px]"></div>
             </div>
