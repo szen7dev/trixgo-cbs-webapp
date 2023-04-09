@@ -19,7 +19,7 @@ import QrCodeIcon from "assets/images/icons8-qr-code-100 1.svg";
 
 import API from "apis/repository";
 import { convertObToUrl } from "utils";
-
+import { useAuth } from "services/hooks/auth/useAuth";
 import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
 
 /*=====7.OTHER=====*/
@@ -27,6 +27,7 @@ import { APP_ID } from "apis/localdb";
 import { FNB_CHANNEL, FNB_SERVICE, FNB_PAYMENT, FNB_ORDER_STATUS, FNB_SIZE } from "apis/localdb";
 
 export const FnbBillOrder: FC = () => {
+    const { user } = useAuth();
     const { orderID } = useParams<{ orderID: string }>()
     const [orderProducts, setOrderProducts] = useState([]);
 
@@ -183,7 +184,7 @@ export const FnbBillOrder: FC = () => {
                                     <td className="text-right">{formatNumberMoney(info?.discount)}</td>
                                 </tr>
                                 <tr>
-                                    <td className="text-left">Giảm giá</td>
+                                    <td className="text-left">Giảm giá (chỉ áp dụng đơn tại quán)</td>
                                     <td className="text-center px-1"></td>
                                     <td className="text-right">{formatNumberMoney(info?.salesoff)}</td>
                                 </tr>
@@ -191,6 +192,11 @@ export const FnbBillOrder: FC = () => {
                                     <td className="text-left">Trừ tích điểm (chỉ áp dụng đơn tại quán)</td>
                                     <td className="text-center px-1"></td>
                                     <td className="text-right">{formatNumberMoney(info?.credit)}</td>
+                                </tr>
+                                <tr>
+                                    <td className="text-left">Trừ voucher (chỉ áp dụng đơn tại quán)</td>
+                                    <td className="text-center px-1"></td>
+                                    <td className="text-right">{formatNumberMoney(info?.offer)}</td>
                                 </tr>
                             </tbody>
                         </table>

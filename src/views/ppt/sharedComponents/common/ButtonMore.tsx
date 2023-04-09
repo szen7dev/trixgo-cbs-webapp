@@ -35,26 +35,26 @@ const ButtonMore: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({ onClickC
 				leaveTo="transform opacity-0 scale-95"
 			>
 				<Menu.Items className="z-10 absolute right-0 mt-2 text-right origin-top-right border border-gray-300 bg-white divide-y divide-gray-100 rounded-md whitespace-nowrap" style={{ width: "264px" }}>
-					<Menu.Item onClick={() => onClickPrint?.apply(null)}>
-						<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
+					<Menu.Item>
+						<button onClick={() => onClickPrint?.apply(null)} className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
 							<img src={iconPrint} alt="Icon Edit" className="inline-block mr-6" />
 							In ấn
 						</button>
 					</Menu.Item>
-					<Menu.Item onClick={() => onClickCopy?.apply(null)}>
-						<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
+					<Menu.Item>
+						<button onClick={() => onClickCopy?.apply(null)} className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
 							<img src={iconCopy} alt="Icon Edit" className="inline-block mr-6" />
 							Copy link
 						</button>
 					</Menu.Item>
-					<Menu.Item onClick={() => onClickUpdate?.apply(null)}>
-						<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
+					<Menu.Item>
+						<button onClick={() => onClickUpdate?.apply(null)} className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
 							<img src={iconPencil} alt="Icon Edit" className="inline-block mr-6" />
 							Cập nhật
 						</button>
 					</Menu.Item>
-					<Menu.Item onClick={() => onClickRemove?.apply(null)}>
-						<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
+					<Menu.Item>
+						<button onClick={() => onClickRemove?.apply(null)} className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
 							<img src={iconTrash} alt="Icon trash" className="inline-block mr-6" />
 							Xóa
 						</button>

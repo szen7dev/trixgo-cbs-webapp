@@ -3,20 +3,20 @@ import * as React from 'react';
 import defaultAva from "assets/images/image 166.jpg";
 
 const FilterItem: React.FC = () => {
-    const [selectStar, setSelectStar] = React.useState(false)
+    // const [selectStar, setSelectStar] = React.useState(false)
     // dialog
-    const emails = ['username@gmail.com', 'user02@gmail.com'];
-    const [open, setOpen] = React.useState(false);
-    const [selectedValue, setSelectedValue] = React.useState(emails[1]);
+    // const emails = ['username@gmail.com', 'user02@gmail.com'];
+    // const [open, setOpen] = React.useState(false);
+    // const [selectedValue, setSelectedValue] = React.useState(emails[1]);
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
+    // const handleClickOpen = () => {
+    //     setOpen(true);
+    // };
 
-    const handleClose = (value: string) => {
-        setOpen(false);
-        // setSelectedValue(value);
-    };
+    // const handleClose = (value: string) => {
+    //     setOpen(false);
+    //     // setSelectedValue(value);
+    // };
     return (
         <div className='w-full px-1 overflow-x-auto absolute showScrollBar' >
             <table className="border-collapse border-0.5 border-cbs-border text-[13px] leading-4 w-full table-auto">
@@ -64,7 +64,7 @@ const FilterItem: React.FC = () => {
                         <td className="border-0.5 border-cbs-border py-4 px-2">
                             <a href="/pcm/kpis//:userID">
                                 <div className="flex gap-2 items-center">
-                                    <img src={defaultAva}
+                                    <img src={defaultAva} alt="Default ava"
                                         className={"w-[20px] h-[20px] rounded-full border-0.5 "}
                                     />
                                     <span className="">Đỗ Minh Phúc-SJVN</span>

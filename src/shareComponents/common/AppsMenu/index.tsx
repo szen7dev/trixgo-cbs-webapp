@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Menu, Transition } from "@headlessui/react";
 
 import iconGrid from "assets/images/icons8-menu-100.svg";
-import iconSearch from "assets/images/icons8-search-50.png";
+// import iconSearch from "assets/images/icons8-search-50.png";
 import supportLogo from "assets/logos/support.png";
 
 import API from "apis/repository";
@@ -24,9 +24,9 @@ export const AppsMenu: FC = () => {
     }
   }, [API.defaults.headers.Authorization]);
 
-  const handleSearchTextKeyboardEvent = (event: any) => {
-    event.stopPropagation();
-  };
+  // const handleSearchTextKeyboardEvent = (event: any) => {
+  //   event.stopPropagation();
+  // };
 
   return (
     <Menu as="div" className="relative inline-block text-left">

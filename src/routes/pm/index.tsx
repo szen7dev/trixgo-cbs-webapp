@@ -49,8 +49,9 @@ import ProjectAdminProjectDetail from "views/ppt/pages/ProjectAdminPage/pages/Pr
 import ProjectAdminProjectTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminProjectTab";
 import ProjectAdminPositionTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminPositionTab";
 import { PmProjectLayout } from "../../shareComponents/layouts/PmLayout/PmProjectLayout";
-import LayoutProjectSecondaryV2 from "views/ppt/sharedComponents/layouts/LayoutProjectSecondaryV2";
 import { PmProjectLayoutV2 } from "shareComponents/layouts/PmLayout/PmProjectLayoutV2";
+import ProjectBiddingDetailPage from "views/ppt/pages/ProjectBiddingDetailPage";
+// import {DocumentProjectLayout} from "views/document/sharedComponents/layouts/DocumentProjectLayout";
 
 const DocumentOfPackagePage = lazy(() => import("views/document/pages/DocumentOfPackagePage"))
 const DocumentOfTypePage = lazy(() => import("views/document/pages/DocumentOfTypePage"))
@@ -70,6 +71,7 @@ const ProjectMilestonePage = lazy(() => import("views/ppt/pages/ProjectMilestone
 const ProjectAdminManagementPage = lazy(() => import("views/ppt/pages/ProjectAdminManagementPage"))
 const ProjectSubjectCompanyOfAuthorPage = lazy(() => import("views/ppt/pages/ProjectSubjectCompanyOfAuthorPage"))
 const ProjectPaymentPage = lazy(() => import("views/ppt/pages/ProjectPaymentPage"))
+const ProjectBiddingPage = lazy(() => import("views/ppt/pages/ProjectBiddingPage"))
 const ProjectBudgetPage = lazy(() => import("views/ppt/pages/ProjectBudgetPage"))
 const ProjectBudgetDetailPage = lazy(() => import("views/ppt/pages/ProjectBudgetDetailPage"))
 const ProjectBudgetSpendingDetailPage = lazy(() => import("views/ppt/pages/ProjectBudgetSpendingDetailPage"))
@@ -293,6 +295,38 @@ const PCMRouter: FC = () => {
                       component={() => <ProjectCashFlowPlanPage outin={2} />}
                     />
                     <Route exact path="/pm/project/:id/cash-flow/:cashFlowID/:outin" component={ProjectCashFlowPlanChildPage} />
+                  </Route>
+                  <Route exact path={["/pm/project/:id/bidding", "/pm/project/:id/bidding/(2|3)"]}>
+                    <PmProjectLayout>
+                      <Route
+                        exact
+                        path="/pm/project/:id/bidding"
+                        component={ProjectBiddingPage}
+                      />
+                      <Route
+                        exact
+                        path="/pm/project/:id/bidding/2"
+                        component={() => <>Sample Data</>}
+                      />
+                      <Route
+                        exact
+                        path="/pm/project/:id/bidding/3"
+                        component={() => <>Sample Data</>}
+                      />
+                      <Route exact
+                        // path="/pm/project/:id/bidding/:id"
+                        path="/pm/project/:id/bidding/id5"
+                        component={ProjectBiddingDetailPage}
+                      />
+                    </PmProjectLayout>
+                  </Route>
+                  {/* url for checking layout /pm/project/:id/bidding/id5 
+                  remove when connect api
+                  */}
+                  <Route exact path={["/pm/project/:id/bidding/id5", "/pm/project/:id/bidding/:id"]}>
+                    <PmProjectLayout>
+                      <ProjectBiddingDetailPage />
+                    </PmProjectLayout>
                   </Route>
                   <Route exact path="/pm/project/:id/payment">
                     <PmProjectLayout>

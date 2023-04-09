@@ -166,13 +166,11 @@ export const SupportGrantPage: FC = () => {
   useEffect(() => {
     if (!location.hash) return;
 
-    try {
-      const companyID = location.hash.substring(1);
-      const companyName = window.sessionStorage.getItem('companyName');
+    const companyID = location.hash.substring(1);
+    const companyName = window.sessionStorage.getItem('companyName');
 
-      companyID && setCompanySelected(companyID);
-      companyName && setCompanyName(companyName);
-    } catch (error) { console.error(error) }
+    companyID && setCompanySelected(companyID);
+    companyName && setCompanyName(companyName);
   }, [location.hash])
 
   return (

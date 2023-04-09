@@ -7,6 +7,7 @@ import { DropdownSearchable } from "shareComponents/common";
 import { Contract } from "typings/cmcs";
 import CashFlowPlan from "typings/financial/cashFlowPlan";
 import { useGoods } from "services/hooks/items/useGoods";
+import { FNB_CHANNEL, FNB_BOOK_OUTIN, FNB_BOOK_TYPE, APP_ID } from "apis/localdb";
 
 type Props = {
   index: number,
@@ -73,6 +74,24 @@ const RowTableUpdateInline: FC<Props> = ({ index, contracts, cashFlow, itemsChec
         {index+1}
       </td>
       <td className="px-2 table-cell box-border border border-gray-300 align-middle">
+        {/* Ngày tháng */}
+        <input type="date" autoComplete="off" 
+          className={
+            "w-full h-full focus-visible:outline-blue-600 px-[16px] py-[9px]"
+          }
+          defaultValue={moment(cashFlow.date).format('YYYY-MM-DD')}
+          onBlur={debounce((e: React.FocusEvent<HTMLInputElement>) => {
+            const value = e.target.value;
+            if(!value) return;
+
+            onUpdate({ bookID: cashFlow._id, date: value }, callbackUpdate)
+          }, 700)}
+        />
+      </td>
+      <td className="px-2 table-cell box-border border border-gray-300 align-middle">
+        {FNB_BOOK_OUTIN[Number(cashFlow?.outin)-1].text}/{FNB_CHANNEL[Number(cashFlow?.revenueType)-1].text}/{FNB_BOOK_TYPE[Number(cashFlow?.expenseType)-1].text}
+      </td>
+      <td className="px-2 table-cell box-border border border-gray-300 align-middle">
            <DropdownSearchable
               placeholder="Hàng hoá nguyên vật liệu"
               onchangeValue={debounce((value: any) => {
@@ -91,7 +110,6 @@ const RowTableUpdateInline: FC<Props> = ({ index, contracts, cashFlow, itemsChec
                 id: "value",
                 text: "label",
               }}
-              // onScroll={onScrollAccount}
               onSearchInputChange={debounce((value)=> {
                 setKeyword(value);
               }, 500)}
@@ -148,7 +166,8 @@ const RowTableUpdateInline: FC<Props> = ({ index, contracts, cashFlow, itemsChec
         {convertCurrency(cashFlow?.amount)}
       </td>
       <td className="px-2 table-cell box-border border border-gray-300 align-middle">
-        {cashFlow?.userCreate?.fullname} {moment(cashFlow?.createAt).format("L")} {moment(cashFlow?.createAt).format("LT") }
+        {cashFlow?.userCreate?.fullname}
+        <p><i>{moment(cashFlow?.createAt).format("DD/MM/YYYY HH:mm")}</i></p>
       </td>
       
       <td className="px-2 table-cell box-border border border-gray-300 align-middle">

@@ -1,8 +1,6 @@
-import React, { FC, useState, useEffect } from "react";
+import { FC } from "react";
 import moment from "moment";
 import cn from "classnames";
-
-import { Paginate } from "shareComponents/common";
 
 import styles from "views/support/styles/support.module.css";
 
@@ -41,13 +39,11 @@ type Props = {
 const AccessList: FC<Props> = (props) => {
   const { timeType } = props;
   const listParam = checkTimeType(timeType);
-  const { 
-    listHistoryTraffic, 
+  const {
+    listHistoryTraffic,
     fetchNextPage,
-    fetchPreviousPage,
     hasNextPage,
     totalRecord,
-    totalPage 
   } = useListHistoryTraffic({ ...listParam });
 
   return (
@@ -152,7 +148,7 @@ const AccessList: FC<Props> = (props) => {
           ))}
         </tbody>
       </table>
-      
+
       {hasNextPage && (
         <div className="w-full flex justify-center my-5">
             <button onClick={fetchNextPage}>

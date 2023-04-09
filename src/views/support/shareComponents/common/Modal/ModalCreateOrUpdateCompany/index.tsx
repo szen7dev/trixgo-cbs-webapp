@@ -37,7 +37,7 @@ export const ModalCreateOrUpdateCompany: FC<ModalProps> = ({ toggle, modalType, 
   birthDay: "",
   website: "",
 } }) => {
-  const { user } = useAuth();
+  useAuth();
   const [keywordArea, setKeywordArea] = useState('');
   const { listAreas, nextPageList: nextPageListArea } = useArea({
     params: {

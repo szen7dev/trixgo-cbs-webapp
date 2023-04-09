@@ -1,4 +1,4 @@
-import { FC, useState, useCallback, ChangeEvent, useEffect } from "react";
+import { FC, useState, useCallback, ChangeEvent } from "react";
 import cn from "classnames";
 import moment from "moment";
 import debounce from 'lodash/debounce';
@@ -10,7 +10,7 @@ import CompanyLogo from "assets/images/thumbnail1.jpg";
 import DeleteIcon from "assets/images/icons8-remove.svg";
 import iconPencil from 'assets/images/icons8-pencil-96 1.png';
 import ThreeDotVerticalIcon from "assets/images/icon-3dots-vertical-gray.svg";
-import CameraIcon from "assets/images/camera-icon.svg";
+// import CameraIcon from "assets/images/camera-icon.svg";
 
 import styles from "views/support/styles/support.module.css";
 import { useQueryListCompany } from 'services/hooks/useCompanies';
@@ -24,7 +24,6 @@ export const SupportCompanyPage: FC = () => {
 	const [keyword, setKeyword] = useState('');
 	const [modalCreateCompany, setModalCreateCompany] = useState<boolean>(false);
 	const [companiesChecked, setCompaniesChecked] = useState<Array<any>>([]);
-    const [imgaeCompanyName, setImageCompanyName] = useState("");
 
 	const [initialValues, setInitialValues] = useState({
 		companyID: "",
@@ -40,7 +39,7 @@ export const SupportCompanyPage: FC = () => {
 		birthDay: "",
 		website: "",
 	})
-	
+
 	const { addFileToUpload } = useUpload({
 		typeUpload: 'company'
 	});
@@ -53,7 +52,7 @@ export const SupportCompanyPage: FC = () => {
 		refetch,
 		fetchNextPage,
 	} = useQueryListCompany({ keyword });
-	const { createCompanyAsync, updateCompanyAsync } = useCompany();
+	const { updateCompanyAsync } = useCompany();
 
 	const toggleModalCreateOrUpdateCompany = () => setModalCreateCompany(!modalCreateCompany);
 	// const prevPageAction = () => fetchPreviousPage();
@@ -118,11 +117,11 @@ export const SupportCompanyPage: FC = () => {
 	}, [companiesChecked]);
 
   	const getStateCheckedAll = useCallback(() => {
-		return companiesChecked.length == dataListCompanies.length;
-	}, [companiesChecked]);
+		return companiesChecked.length === dataListCompanies.length;
+	}, [companiesChecked, dataListCompanies]);
 
 	const onClickCheckAll = () => {
-		if (companiesChecked.length == dataListCompanies.length) {
+		if (companiesChecked.length === dataListCompanies.length) {
 			setCompaniesChecked([]);
 		} else {
 			setCompaniesChecked(dataListCompanies);
@@ -151,7 +150,7 @@ export const SupportCompanyPage: FC = () => {
 		if(name){
 			const companyID = event.target.name;
 			// Cập nhật hình ảnh
-			const { error, message } = await updateCompanyAsync({ companyID, image: name });
+			await updateCompanyAsync({ companyID, image: name });
 			setTimeout(() => {
 				refetch();
 			}, 1000);

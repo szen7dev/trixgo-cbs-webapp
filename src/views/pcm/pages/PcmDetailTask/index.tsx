@@ -631,41 +631,41 @@ const PcmDetailTask: FC = () => {
 
         <div className="task-management-header-right-block flex items-center">
           <DropdownOption>
-            <Menu.Item onClick={openMoveTaskToParent}>
-              <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+            <Menu.Item>
+              <div onClick={openMoveTaskToParent} className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
                   <div className={"flex-1 text-left ml-4"}>Di chuyển tới việc cha</div>
               </div>
             </Menu.Item>
-            <Menu.Item onClick={openMoveTaskToGroup}>
-              <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+            <Menu.Item>
+              <div onClick={openMoveTaskToGroup} className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
                   <div className={"flex-1 text-left ml-4"}>Di chuyển tới nhóm dữ liệu</div>
               </div>
             </Menu.Item>
             {(taskInfo.draft === 1 && isTempTask) ? (
-              <Menu.Item onClick={toggleModalMoveToOfficialTask}>
-                <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+              <Menu.Item>
+                <div onClick={toggleModalMoveToOfficialTask} className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
                     <div className={"flex-1 text-left ml-4"}>Chuyển thành việc chính thức</div>
                 </div>
               </Menu.Item>
             ) : ''}
-            <Menu.Item onClick={openUpdateMilestone}>
-              <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+            <Menu.Item>
+              <div onClick={openUpdateMilestone} className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
                   <div className={"flex-1 text-left ml-4"}>Gán phân loại cột mốc</div>
               </div>
             </Menu.Item>
             {/* IN ẤN */}
-            <Menu.Item onClick={() => history.push(`/pcm/detail/${taskInfo._id}/print/1`)}>
-              <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+            <Menu.Item>
+              <div onClick={() => history.push(`/pcm/detail/${taskInfo._id}/print/1`)} className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
                   <div className={"flex-1 text-left ml-4"}>In ấn mẫu biên bản họp</div>
               </div>
             </Menu.Item>
-            <Menu.Item onClick={() => history.push(`/pcm/detail/${taskInfo._id}/print/2`)}>
-              <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+            <Menu.Item>
+              <div onClick={() => history.push(`/pcm/detail/${taskInfo._id}/print/2`)} className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
                   <div className={"flex-1 text-left ml-4"}>In ấn mẫu báo cáo</div>
               </div>
             </Menu.Item>
-             <Menu.Item onClick={() => history.push(`/pcm/detail/${taskInfo._id}/print/3`)}>
-              <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+             <Menu.Item>
+              <div onClick={() => history.push(`/pcm/detail/${taskInfo._id}/print/3`)} className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
                   <div className={"flex-1 text-left ml-4"}>In ấn mẫu phụ lục ảnh</div>
               </div>
             </Menu.Item>

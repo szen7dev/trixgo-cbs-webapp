@@ -20,19 +20,14 @@ import PaginateV2 from "shareComponents/common/PaginateV2";
 
 /*=====6.HOOKS/APIS=====*/
 import { APP_ID } from "apis/localdb";
-import { useModal } from "services/hooks/useModal";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { useFnbProduct } from 'services/hooks/fnb/useFnbProduct';
-import { useFnbQuota } from 'services/hooks/fnb/useFnbQuota';
 import { useFunda } from 'services/hooks/items/useFunda';
+import { useFnbShift } from 'services/hooks/fnb/useFnbShift';
 
 /*=====7.OTHER=====*/
 import { FNB_INTERNAL } from "apis/localdb";
-
-const TYPE_PRODUCT = [
-	{ value: 1, text: "Thông thường" },
-	{ value: 2, text: "Topping" },
-]
+import { createLinkAndClick } from "utils";
 
 export const FnbShiftPage: FC = () => {
 	useEffect(() => {
@@ -64,34 +59,8 @@ export const FnbShiftPage: FC = () => {
 		isFetchList: true, 
 		isFetchInfo: false
 	});
-	// console.log({listWithPager});
-
-	const getStateChecked = useCallback((id: string) => {
-		return idsChecked.includes(id) ? true : false;
-	}, [idsChecked]);
-
-	const onClickCheckButton = (id: string) => {
-		setIdsChecked([id]);
-	};
-
-	const getStateCheckedAll = useCallback(() => {
-		return idsChecked.length == listWithPager.length;
-	}, [idsChecked]);
-
-	const onClickCheckAll = () => {
-		if (idsChecked.length == listWithPager.length) {
-			setIdsChecked([]);
-		} else {
-			const idsAll = listWithPager.map((e: any) => e._id);
-			setIdsChecked(idsAll);
-		}
-	};
 
 	const [modalCreateProject, setModalCreateProject] = useState<boolean>(false);
-	const toggleModalCreateProject = () => setModalCreateProject(!modalCreateProject);
-
-	const [initialValues, setInitialValues] = useState(null);
-	const onConfirmCreateProject = () => refetch();
 
 	useEffect(() => {
 		if (isSuccess && !(hasPermission)) {
@@ -103,6 +72,35 @@ export const FnbShiftPage: FC = () => {
 	type PaginateHandle = React.ElementRef<typeof PaginateV2>;
     const ref = React.useRef<PaginateHandle>(null);
     const [pageIndex, setPageIndex] = useState(0);
+
+	/**
+	 * 
+	 * Xử lý download template excel
+	 */
+	const [dataImport, setDataImport] = useState([]);
+	const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+		isExporting: false,
+	});
+  	const { exportExcelAsync, exportExcelAsync2 } = useFnbShift({});
+
+	const handleExportExcel2 = async () => {
+		try {
+		  setStateExport({ isExporting: true });
+		  const { error, data } = await exportExcelAsync2({
+			option: 1,
+		  });
+	
+		  if(error) {
+			return toast.warn(data?.message);
+		  }
+	
+		  data && createLinkAndClick(data, '_self');
+		} catch (error: any) {
+		  toast.error(error.message)
+		} finally {
+		  setStateExport({ isExporting: false });
+		}
+	}
 
 	return (
 		<main className="h-full overflow-auto">
@@ -120,12 +118,8 @@ export const FnbShiftPage: FC = () => {
 							500
 						)}
 					/>
-					{/* <FinancialCashFlowFilterButton /> */}
 					{(idsChecked && idsChecked.length) ? (
 						<div className="flex items-center gap-2 border-l-2 border-primary-border px-4 ml-4">
-							{/* <div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
-								<img src={DownloadIcon} alt="Download" />
-							</div> */}
 							{idsChecked.length == 1 ?
 								<>
 								<div
@@ -138,21 +132,26 @@ export const FnbShiftPage: FC = () => {
 						</div>
 					) : <></>}
 				</div>
+				<div className="flex items-center">
+					<button title="Tải dữ liệu Excel" className="ml-5" onClick={handleExportExcel2}>
+						Tải dữ liệu tổng hợp bất thường
+					</button>
+				</div>
 				<PaginateV2
-                        ref={ref}
-                        totalRecord={totalRecord}
-                        totalPages={totalPage}
-                        limit={20}
-                        hasNextPage={hasNextPage}
-                        isFetching={isLoading}
-                        nextPageAction={() => {
-                            fetchNextPage();
-                            setPageIndex(oldState => oldState+1)
-                        }}
-                        prevPageAction={() => {
-                            setPageIndex(oldState => oldState-1)
-                        }}
-                    />
+					ref={ref}
+					totalRecord={totalRecord}
+					totalPages={totalPage}
+					limit={20}
+					hasNextPage={hasNextPage}
+					isFetching={isLoading}
+					nextPageAction={() => {
+						fetchNextPage();
+						setPageIndex(oldState => oldState+1)
+					}}
+					prevPageAction={() => {
+						setPageIndex(oldState => oldState-1)
+					}}
+				/>
 			</header>
 
 			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
@@ -164,16 +163,6 @@ export const FnbShiftPage: FC = () => {
 								Điểm bán
 							</div>
 						</th>
-						{/* <th className="pb-1 pt-1 font-normal">
-							<div className="border-gray-300 font-normal pl-2">
-								Bàn giao ca
-							</div>
-						</th>
-						<th className="pb-1 pt-1 font-normal">
-							<div className="border-gray-300 font-normal pl-2">
-								Bàn giao nguyên liệu
-							</div>
-						</th> */}
 						<th className="pb-1 pt-1 font-normal w-[150px]">
 							<div className="border-gray-300 font-normal pl-2">
 								Cán bộ quản lý
@@ -210,16 +199,6 @@ export const FnbShiftPage: FC = () => {
 									{item?.name}
 								</Link>
 							</td>
-							{/* <td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
-								<Link to ={`/fnb/shift/${item._id}`}>
-									Bàn giao ca
-								</Link>
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
-								<Link to ={`/fnb/shift/${item._id}/material`}>
-									Bàn giao nguyên liệu
-								</Link>
-							</td> */}
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								
 							</td>

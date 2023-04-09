@@ -95,29 +95,30 @@ export const FnbStorePage: FC = () => {
 
 	const SelectYear = () => {
 		return (
-			<div className="selectInput flex border-0.5 rounded-md" style={{ maxHeight: "30px" }}>
-				<img src={iconSelectTime} alt="" className="absolute w-[30px] h-[30px]" style={{ padding: "1px" }} />
-				<FormControl
-					sx={{ minWidth: 120, maxHeight: "30px", padding: "0", border: "0", outline: "none" }}
-					className="relative"
-				>
-					<NativeSelect
-						defaultValue={0}
-						disableUnderline
-						inputProps={{
-							name: 'time',
-							id: 'selectInput',
-						}}
-						sx={{ maxHeight: "30px", fontSize: "14px", color: "#666666" }}
-						className="text-[14px] text-primary-gray"
-					>
-						<option value={0} className="my-2 py-2 text-[14px] text-primary-gray" style={{ lineHeight: "30px" }}>Tất cả</option>
-						<option value={10} className="my-2 py-2 text-[14px] text-primary-gray">Năm 2021</option>
-						<option value={20} className="my-2 py-2 text-[14px] text-primary-gray">Năm 2022</option>
-						<option value={30} className="my-2 py-2 text-[14px] text-primary-gray">Năm 2023</option>
-					</NativeSelect>
-				</FormControl>
-			</div>
+			<div></div>
+			// <div className="selectInput flex border-0.5 rounded-md" style={{ maxHeight: "30px" }}>
+			// 	<img src={iconSelectTime} alt="" className="absolute w-[30px] h-[30px]" style={{ padding: "1px" }} />
+			// 	<FormControl
+			// 		sx={{ minWidth: 120, maxHeight: "30px", padding: "0", border: "0", outline: "none" }}
+			// 		className="relative"
+			// 	>
+			// 		<NativeSelect
+			// 			defaultValue={0}
+			// 			disableUnderline
+			// 			inputProps={{
+			// 				name: 'time',
+			// 				id: 'selectInput',
+			// 			}}
+			// 			sx={{ maxHeight: "30px", fontSize: "14px", color: "#666666" }}
+			// 			className="text-[14px] text-primary-gray"
+			// 		>
+			// 			<option value={0} className="my-2 py-2 text-[14px] text-primary-gray" style={{ lineHeight: "30px" }}>Tất cả</option>
+			// 			<option value={10} className="my-2 py-2 text-[14px] text-primary-gray">Năm 2021</option>
+			// 			<option value={20} className="my-2 py-2 text-[14px] text-primary-gray">Năm 2022</option>
+			// 			<option value={30} className="my-2 py-2 text-[14px] text-primary-gray">Năm 2023</option>
+			// 		</NativeSelect>
+			// 	</FormControl>
+			// </div>
 		);
 	}
 
@@ -139,58 +140,59 @@ export const FnbStorePage: FC = () => {
 			setMonth(newMonth);
 		};
 		return (
-			<div className="selectInput flex " style={{ maxHeight: "30px" }}>
-				<ToggleButtonGroup
-					value={month}
-					exclusive
-					onChange={handleMonth}
-					aria-label="text alignment"
-					sx={{
-						display: "flex",
-						gap: "0.5rem",
-						border: "0",
-						borderRadius: "0",
-						marginLeft: "5px",
-					}}
-				>
-					<CustomToggleButton value="T1">
-						<span>T1</span>
-					</CustomToggleButton>
-					<CustomToggleButton value="T2" >
-						<span>T2</span>
-					</CustomToggleButton>
-					<CustomToggleButton value="T3">
-						<span>T3</span>
-					</CustomToggleButton>
-					<CustomToggleButton value="T4" >
-						<span>T4</span>
-					</CustomToggleButton>
-					<CustomToggleButton value="T5" >
-						<span>T5</span>
-					</CustomToggleButton>
-					<CustomToggleButton value="T6" >
-						<span>T6</span>
-					</CustomToggleButton>
-					<CustomToggleButton value="T7">
-						<span>T7</span>
-					</CustomToggleButton>
-					<CustomToggleButton value="T8" >
-						<span>T8</span>
-					</CustomToggleButton>
-					<CustomToggleButton value="T9">
-						<span>T9</span>
-					</CustomToggleButton>
-					<CustomToggleButton value="T10" >
-						<span>T10</span>
-					</CustomToggleButton>
-					<CustomToggleButton value="T11" >
-						<span>T11</span>
-					</CustomToggleButton>
-					<CustomToggleButton value="T12" >
-						<span>T12</span>
-					</CustomToggleButton>
-				</ToggleButtonGroup>
-			</div>
+			<div></div>
+			// <div className="selectInput flex " style={{ maxHeight: "30px" }}>
+			// 	<ToggleButtonGroup
+			// 		value={month}
+			// 		exclusive
+			// 		onChange={handleMonth}
+			// 		aria-label="text alignment"
+			// 		sx={{
+			// 			display: "flex",
+			// 			gap: "0.5rem",
+			// 			border: "0",
+			// 			borderRadius: "0",
+			// 			marginLeft: "5px",
+			// 		}}
+			// 	>
+			// 		<CustomToggleButton value="T1">
+			// 			<span>T1</span>
+			// 		</CustomToggleButton>
+			// 		<CustomToggleButton value="T2" >
+			// 			<span>T2</span>
+			// 		</CustomToggleButton>
+			// 		<CustomToggleButton value="T3">
+			// 			<span>T3</span>
+			// 		</CustomToggleButton>
+			// 		<CustomToggleButton value="T4" >
+			// 			<span>T4</span>
+			// 		</CustomToggleButton>
+			// 		<CustomToggleButton value="T5" >
+			// 			<span>T5</span>
+			// 		</CustomToggleButton>
+			// 		<CustomToggleButton value="T6" >
+			// 			<span>T6</span>
+			// 		</CustomToggleButton>
+			// 		<CustomToggleButton value="T7">
+			// 			<span>T7</span>
+			// 		</CustomToggleButton>
+			// 		<CustomToggleButton value="T8" >
+			// 			<span>T8</span>
+			// 		</CustomToggleButton>
+			// 		<CustomToggleButton value="T9">
+			// 			<span>T9</span>
+			// 		</CustomToggleButton>
+			// 		<CustomToggleButton value="T10" >
+			// 			<span>T10</span>
+			// 		</CustomToggleButton>
+			// 		<CustomToggleButton value="T11" >
+			// 			<span>T11</span>
+			// 		</CustomToggleButton>
+			// 		<CustomToggleButton value="T12" >
+			// 			<span>T12</span>
+			// 		</CustomToggleButton>
+			// 	</ToggleButtonGroup>
+			// </div>
 		);
 	}
 
@@ -236,7 +238,7 @@ export const FnbStorePage: FC = () => {
 					ref={ref}
 					totalRecord={totalRecord}
 					totalPages={totalPage}
-					limit={20}
+					limit={30}
 					hasNextPage={hasNextPage}
 					isFetching={isLoading}
 					nextPageAction={() => {
@@ -255,27 +257,22 @@ export const FnbStorePage: FC = () => {
 						<th className="pb-1 pt-1 text-center font-bold" style={{ width: "3.5%" }}>TT</th>
 						<th className="pb-1 pt-1" >
 							<div className=" pl-2 " style={{ maxWidth: "300px" }}>
-								Điểm bán
+								Tên
+							</div>
+						</th>
+						<th className="pb-1 pt-1 ">
+							<div className="pl-2">
+								Ngày bắt đầu
 							</div>
 						</th>
 						<th className="pb-1 pt-1 ">
 							<div className="  pl-2">
-								Doanh số
-							</div>
-						</th>
-						<th className="pb-1 pt-1 ">
-							<div className="  pl-2">
-								Nhập kho
+								Giá trị
 							</div>
 						</th>
 						<th className="pb-1 pt-1 ">
 							<div className=" pl-2">
-								Tỷ lệ %
-							</div>
-						</th>
-						<th className="pb-1 pt-1 w-[200px]">
-							<div className=" pl-2">
-								Đánh giá
+								Địa chỉ
 							</div>
 						</th>
 						<th className="pb-1 pt-1 ">
@@ -288,26 +285,22 @@ export const FnbStorePage: FC = () => {
 				{
 					(listWithPager[pageIndex] ?? []).map((item: any, i: any) => (
 						<tr key={item._id} className="text-[14px]">
-							<td className={"p-2 border-t-0.5 border-b-0.5 border-primary-border text-center"}>{Number(i + 1)}</td>
-							<td className={"p-2 border-t-0.5 border-b-0.5 border-primary-border text-cbs-highlight-color"}>
-								<Link to={`/fnb/store/${item._id}/import`}>
+							<td className={"p-2 border-0.5 border-primary-border text-center"}>{Number(i+1)}</td>
+							<td className={"p-2 border-0.5 border-primary-border text-cbs-highlight-color"}>
+								<Link to ={`/fnb/store/${item._id}/import`}>
 									{item?.name}
 								</Link>
 							</td>
-							<td className={"p-2 border-t-0.5 border-b-0.5 border-primary-border"}>
-								{formatNumberMoney(0 || 0)}
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{moment(item?.createAt).format('DD/MM/YYYY')}
 							</td>
-							<td className={"p-2 border-t-0.5 border-b-0.5 border-primary-border"}>
-								{formatNumberMoney(0 || 0)}
+							<td className={"p-2 border-0.5 border-primary-border"}>
+                                {formatNumberMoney(item?.totalAccExpense||0)}
 							</td>
-							<td className={"p-2 border-t-0.5 border-b-0.5 border-primary-border"}>
-								{formatNumberMoney(0 || 0)}
+                            <td className={"p-2 border-0.5 border-primary-border"}>
+								{item?.address}
 							</td>
-							<td className={"p-2 border-t-0.5 border-b-0.5 border-primary-border"}>
-								<p className="text-cbs-down-text">Rủi ro, vượt kiểm soát</p>
-								<p className="text-cbs-completed">An toàn</p>
-							</td>
-							<td className={"p-2 border-t-0.5 border-b-0.5 border-primary-border"}>
+							<td className={"p-2 border-0.5 border-primary-border"}>
 								{item?.description}
 							</td>
 						</tr>

@@ -128,8 +128,8 @@ export const UserMenu: FC = () => {
             </div>
           </Menu.Item> */}
 
-          <Menu.Item onClick={() => signOut()}>
-            <div className="flex items-center rounded-lg cursor-pointer hover:bg-lighter-gray p-2 pl-3">
+          <Menu.Item>
+            <div className="flex items-center rounded-lg cursor-pointer hover:bg-lighter-gray p-2 pl-3" onClick={() => signOut()}>
               <Menu.Button className="w-9 h-9 inline-flex items-center justify-center bg-secondary-light transition duration-150 rounded-full focus:outline-none">
                 <LogoutIcon className="w-5 h-5 text-primary-gray" />
               </Menu.Button>

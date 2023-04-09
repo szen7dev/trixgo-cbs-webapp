@@ -308,8 +308,8 @@ export const MediaDetailPage: FC = () => {
 										</Menu.Item>
 										{user?._id === media?.author?._id ? (
 											<>
-												<Menu.Item onClick={toggleModalEditMediaEdit}>
-													<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
+												<Menu.Item>
+													<button onClick={toggleModalEditMediaEdit} className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
 														<img src={iconPencil} alt="Icon Edit" className="inline-block mr-6" />
 														Cập nhật
 													</button>

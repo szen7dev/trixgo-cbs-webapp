@@ -16,22 +16,30 @@ import HumanRouterV2 from "./human/indexV2";
 /*=====4.CONFIG ROUTE=====*/
 const AccountingRouter = lazy(() => import("./accounting"));
 const AuthenticationRouter = lazy(() => import("./authentication"));
+const SampleRouter = lazy(() => import("./sample"));
+const BiddingRouter = lazy(() => import("./bidding/indexV2"));
 const CmcsRouterV2 = lazy(() => import("./cmcs/indexV2"));
 const DatahubRouterV2 = lazy(() => import("./datahub/indexV2"));
-const DocumentRouter = lazy(() => import("./document"));
+const DocumentV2Router = lazy(() => import("./documentV2"));
 const FinancialRouterV2 = lazy(() => import("./financial/indexV2"));
+const MarketRouterV2 = lazy(() => import("./market/indexV2"));
 const MediaRouter = lazy(() => import("./media"));
 const MessagesRouter = lazy(() => import("./messages"));
+const OperationRouterV2 = lazy(() => import("./operation/indexV2"));
 const OwnerRouterV2 = lazy(() => import('./owner/indexV2'));
 const PcmRouter = lazy(() => import('./pcm'));
 const PmRouter = lazy(() => import('./pm'));
+const WorkshopRouterV2 = lazy(() => import('./workshop/indexV2'));
 const PersonalRouterV2 = lazy(() => import("./personal/indexV2"));
 const QrcodeRouterV2 = lazy(() => import("./qrcode/indexV2"));
+const ReeRouterV2 = lazy(() => import("./ree/indexV2"));
 const InspectionRouter = lazy(() => import("./inspection/index"));
 const FnbRouter = lazy(() => import("./fnb/index"));
 const MobileRouter = lazy(() => import("./mobile/index"));
 const SupportRouter = lazy(() => import("./support"));
+const TimesheetRouterV2 = lazy(() => import("./timesheet/indexV2"));
 const ItemRouterV2 = lazy(() => import("./item/indexV2"));
+const BudgetRouterV2 = lazy(() => import("./budget/indexV2"));
 
 /*=====5.PAGES=====*/
 const ErrorPage = lazy(() => import("views/authentication/Error"));
@@ -60,6 +68,10 @@ const Routes: FC = () => {
             <Router>
                 <AuthProvider>
                     <RightClickMenuProvider>
+                        <Route path="/sample">
+                            <SampleRouter />
+                        </Route>
+
                         <ModalProvider>
                             <Switch>
                                 {/* =====PRINT===== */}
@@ -75,6 +87,11 @@ const Routes: FC = () => {
                                     <AuthenticationRouter />
                                 </Route>
 
+                                {/* =====SAMPLE UI===== */}
+                                <Route path="/sample">
+                                    <SampleRouter />
+                                </Route>
+
                                 {/* =====HOME===== */}
                                 <Route exact path="/">
                                     <PcmRouter />
@@ -87,6 +104,11 @@ const Routes: FC = () => {
                                     </AccountingLayoutV2>
                                 </Route>
 
+                                {/* =====BIDDING===== */}
+                                <Route path="/bidding">
+                                    <BiddingRouter />
+                                </Route>
+
                                 {/* =====CMCS===== */}
                                 <Route path="/cmcs">
                                     <CmcsRouterV2/>
@@ -94,7 +116,7 @@ const Routes: FC = () => {
 
                                 {/* =====DOCUMENT V2===== */}
                                 <Route path="/document">
-                                    <DocumentRouter />
+                                    <DocumentV2Router />
                                 </Route>
 
                                 {/* =====PCM===== */}
@@ -134,9 +156,38 @@ const Routes: FC = () => {
                                     <OwnerRouterV2 />
                                 </Route>
 
+                                <Route path="/budget">
+                                    <BudgetRouterV2 />
+                                </Route>
+
+                                {/* =====TIMESHEET===== */}
+                                <Route path="/timesheet">
+                                    <TimesheetRouterV2 />
+                                </Route>
+
+                                {/* =====WORKSHOP===== */}
+                                <Route path="/workshop">
+                                    <WorkshopRouterV2 />
+                                </Route>
+
+                                {/* =====MARKET===== */}
+                                <Route path="/market">
+                                    <MarketRouterV2 />
+                                </Route>
+
                                 {/* =====QRCODE===== */}
                                 <Route path="/qrcode">
                                     <QrcodeRouterV2 />
+                                </Route>
+
+                                {/* =====OPERATION===== */}
+                                <Route path="/operation">
+                                    <OperationRouterV2 />
+                                </Route>
+
+                                {/* =====REE===== */}
+                                <Route path="/ree">
+                                    <ReeRouterV2 />
                                 </Route>
 
                                 {/* =====MEDIA===== */}

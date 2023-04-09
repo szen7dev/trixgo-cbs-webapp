@@ -19,7 +19,7 @@ import QrCodeIcon from "assets/images/icons8-qr-code-100 1.svg";
 
 import API from "apis/repository";
 import { convertObToUrl } from "utils";
-
+import { useAuth } from "services/hooks/auth/useAuth";
 import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
 
 /*=====7.OTHER=====*/
@@ -27,6 +27,7 @@ import { APP_ID } from "apis/localdb";
 import { FNB_CHANNEL, FNB_SERVICE, FNB_PAYMENT, FNB_ORDER_STATUS, FNB_SIZE, FNB_SUGAR, FNB_ICE } from "apis/localdb";
 
 export const FnbBillList: FC = () => {
+    const { user } = useAuth();
     const { orderID } = useParams<{ orderID: string }>()
     const [orderProducts, setOrderProducts] = useState([]);
 

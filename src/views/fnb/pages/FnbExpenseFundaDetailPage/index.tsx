@@ -18,8 +18,6 @@ import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLa
 
 import RowTableInsertInline from "./components/RowTableInsertInline";
 import RowTableUpdateInline from "./components/RowTableUpdateInline";
-import RowTableView from "./components/RowTableView";
-import ModalShare from "./components/ModalShare";
 import PaginateV2 from "shareComponents/common/PaginateV2";
 import { useFunda } from 'services/hooks/items/useFunda';
 
@@ -77,25 +75,6 @@ export const FnbExpenseFundaDetailPage: FC = () => {
         },
         isFetchInfo: true
     })
-
-    // const {
-    //     insertAsync,
-    //     updateAsync,
-    //     deleteManyAsync,
-    //     list: listCashFlowPlans,
-    //     isLoading: isLoadingCashFlowPlans,
-    //     hasNextPage,
-    //     refetch,
-    //     fetchNextPage,
-    //     totalRecord
-    // } = useCashFlowPlan({
-    //     params: {
-    //         parentID: cashFlowId,
-    //         keyword,
-    //         sortKey: JSON.stringify(['createAt__1', '_id__1'])
-    //     },
-    //     isFetchList: true
-    // });
 
     const {
         listContracts,
@@ -300,6 +279,16 @@ export const FnbExpenseFundaDetailPage: FC = () => {
                         </th>
                         <th className="py-1">
                             <div className="border-gray-300 font-normal pl-2">
+                                Ngày tháng
+                            </div>
+                        </th>
+                        <th className="py-1 w-1/16">
+                            <div className="border-gray-300 font-normal pl-2">
+                                Phân loại
+                            </div>
+                        </th>
+                        <th className="py-1 w-1/5">
+                            <div className="border-gray-300 font-normal pl-2">
                                 Nội dung
                             </div>
                         </th>
@@ -334,24 +323,18 @@ export const FnbExpenseFundaDetailPage: FC = () => {
                 <tbody>
                 {
 					(listWithPager[pageIndex]??[]).map((item: any, i: number) => (
-                        // if(permissions.onlyView) {
-                        //     return <RowTableView key={item._id} cashFlow={item} />
-                        // }
-						// return (
-                            <RowTableUpdateInline
-                                index={i}
-                                key={item._id}
-                                contracts={listContracts}
-                                cashFlow={item}
-                                itemsChecked={itemsChecked}
-                                onUpdate={handleUpdate}
-                                onScrollContract={handleScroll}
-                                onChangeCheckbox={handleChangeCheckbox}
-                                onSearchContract={onChangeSearchContract}
-                            />
-                        // )
+                        <RowTableUpdateInline
+                            index={i}
+                            key={item._id}
+                            contracts={listContracts}
+                            cashFlow={item}
+                            itemsChecked={itemsChecked}
+                            onUpdate={handleUpdate}
+                            onScrollContract={handleScroll}
+                            onChangeCheckbox={handleChangeCheckbox}
+                            onSearchContract={onChangeSearchContract}
+                        />
 				    ))}
-                    {/* {(showRowInsert && permissions.hasPermissionCreateUpdate) && <RowTableInsertInline onInsert={handleInsert} />} */}
                     { <RowTableInsertInline onInsert={handleInsert} />}
                 </tbody>
             </table>
@@ -360,7 +343,7 @@ export const FnbExpenseFundaDetailPage: FC = () => {
                 <div className="w-full flex justify-center my-5">
                     <button onClick={fetchNextPage}>
                         <span className="text-primary">
-                            {/* {`Xem thêm (${totalRecord - listCashFlowPlans.length})`} */}
+
                         </span>
                     </button>
                 </div>
@@ -371,14 +354,6 @@ export const FnbExpenseFundaDetailPage: FC = () => {
                 toggle={() => setModalShare(prev => ({ ...prev, isShow: !modalShare.isShow }))}
                 className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[600px] rounded-cbs-md"
             >
-                {/* <ModalShare
-                    toggle={() => setModalShare(prev => ({ ...prev, isShow: !modalShare.isShow }))}
-                    refetch={refetchInfo}
-                    // cashFlowID={cashFlowId}
-                    users={modalShare.users}
-                    modalType={modalShare.modalType}
-                    hasPermission={permissions.hasPermissionShare}
-                /> */}
             </ModalLarge>
         </main>
     );

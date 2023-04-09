@@ -57,6 +57,7 @@ export const FnBProductPage: FC = () => {
     const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbProduct({
 		params: {
 			keyword,
+			limit: 20,
 			populates: JSON.stringify({
 				path: 'images',
 			})
@@ -219,15 +220,12 @@ export const FnBProductPage: FC = () => {
             }
             fetchData();
         }
-        
-        // console.log('=========DATA THAY ĐỔI RỒI==============')
     }, [dataImport])
 
 	return (
 		<main className="h-full overflow-auto">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
 				<div className="flex items-center">
-					{/* <p className="text-lg">Danh sách thực đơn</p> */}
 					<SearchInput
 						classNameWrapper=""
 						classNameInput="outline-none w-[296px]"
@@ -236,12 +234,8 @@ export const FnBProductPage: FC = () => {
 							500
 						)}
 					/>
-					{/* <FinancialCashFlowFilterButton /> */}
 					{(idsChecked && idsChecked.length) ? (
 						<div className="flex items-center gap-2 border-l-2 border-primary-border px-4 ml-4">
-							{/* <div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
-								<img src={DownloadIcon} alt="Download" />
-							</div> */}
 							{idsChecked.length == 1 ?
 								<>
 								<div
@@ -266,12 +260,12 @@ export const FnBProductPage: FC = () => {
 				<button className={"flex items-center justify-center mx-3 ml-1"}
 						onClick={handleDownloadTemplateImportExcel}
 					>
-						Tải mẫu Import Excel thực đơn
+						Tải mẫu Excel
 				</button> 
 				<button className={"flex items-center justify-center mx-3 ml-1"}>
 						<input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
 						accept=".xlsx, .xlsm, .xls, .csv"/>
-						<label className="custom-file-label" htmlFor="inputGroupFile">Import excel tạo thực đơn</label>
+						<label className="custom-file-label" htmlFor="inputGroupFile">Import excel</label>
 				</button>
 				<div className="flex items-center">
 					<button
@@ -283,15 +277,12 @@ export const FnBProductPage: FC = () => {
 					>
 						Tạo mới
 					</button>
-					{/* <button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
-						<img src={Vertical3Dots} alt="3Dots" />
-					</button> */}
 				</div>
 				<PaginateV2
 					ref={ref}
 					totalRecord={totalRecord}
 					totalPages={totalPage}
-					limit={10}
+					limit={20}
 					hasNextPage={hasNextPage}
 					isFetching={isLoading}
 					nextPageAction={() => {

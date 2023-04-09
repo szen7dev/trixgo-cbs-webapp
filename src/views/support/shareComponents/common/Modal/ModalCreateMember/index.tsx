@@ -33,7 +33,7 @@ export const ModalCreateMember: FC<Props> = ({ appID, companyID, onlyUserCompany
 		const check = idsChecked.includes(id);
 		if (check) {
 			const newList = [...idsChecked];
-			newList.splice(newList.findIndex((e: any) => e == id), 1);
+			newList.splice(newList.findIndex((e: any) => e.toString() === id.toString()), 1);
 			setIdsChecked(newList);
 		} else {
 			const newList = [...idsChecked];
@@ -43,11 +43,11 @@ export const ModalCreateMember: FC<Props> = ({ appID, companyID, onlyUserCompany
 	};
 
 	const getStateCheckedAll = useCallback(() => {
-		return idsChecked.length == listMembers.length;
-	}, [idsChecked]);
+		return idsChecked.length === listMembers.length;
+	}, [idsChecked, listMembers]);
 
 	const onClickCheckAll = () => {
-		if (idsChecked.length == listMembers.length) {
+		if (idsChecked.length === listMembers.length) {
 			setIdsChecked([]);
 		} else {
 			const idsAll = listMembers.map((e: any) => e._id);
