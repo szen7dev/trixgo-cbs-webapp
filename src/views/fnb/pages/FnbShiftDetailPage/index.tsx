@@ -10,7 +10,6 @@ import { toast } from "react-toastify";
 
 /*=====3.ICONS=====*/
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
-import iconDown from "assets/images/icons8-download-64 1.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import { SearchInput, ModalContainer } from "shareComponents/common";
@@ -20,23 +19,15 @@ import { CreateFnbShiftDetail } from "./modal";
 /*=====5.TYPINGS=====*/
 
 /*=====6.HOOKS/APIS=====*/
-import { useModal } from "services/hooks/useModal";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
-import { useFnbProduct } from 'services/hooks/fnb/useFnbProduct';
-import { useFnbQuota } from 'services/hooks/fnb/useFnbQuota';
 import { useFunda } from 'services/hooks/items/useFunda';
 import { useFnbShift } from 'services/hooks/fnb/useFnbShift';
 import { useAuth } from 'services/hooks/auth/useAuth';
-// import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
 
 /*=====7.OTHER=====*/
 import { createLinkAndClick } from "utils";
 import { APP_ID } from "apis/localdb";
 
-const TYPE_PRODUCT = [
-	{ value: 1, text: "Thông thường" },
-	{ value: 2, text: "Topping" },
-]
 export const FnbShiftDetailPage: FC = () => {
 	const { user } = useAuth();
 	const companyID = user?.company._id;
@@ -72,19 +63,6 @@ export const FnbShiftDetailPage: FC = () => {
 		setIdsChecked([id]);
 	};
 
-	const getStateCheckedAll = useCallback(() => {
-		return idsChecked.length == listWithPager.length;
-	}, [idsChecked]);
-
-	const onClickCheckAll = () => {
-		if (idsChecked.length == listWithPager.length) {
-			setIdsChecked([]);
-		} else {
-			const idsAll = listWithPager.map((e: any) => e._id);
-			setIdsChecked(idsAll);
-		}
-	};
-
 	const [modalCreateShiftDetail, setModalCreateShiftDetail] = useState<boolean>(false);
 	const toggleModalCreateShiftDetail = () => setModalCreateShiftDetail(!modalCreateShiftDetail);
 
@@ -114,6 +92,7 @@ export const FnbShiftDetailPage: FC = () => {
 		isExporting: false,
 	});
   	const { exportExcelAsync, exportExcelAsync2 } = useFnbShift({});
+
 	const handleExportExcel = async () => {
 		try {
 		  setStateExport({ isExporting: true });
@@ -206,16 +185,11 @@ export const FnbShiftDetailPage: FC = () => {
 						Tạo mới
 					</button>
 					<button title="Tải dữ liệu Excel" className="ml-5" onClick={handleExportExcel}>
-						{/* <img src={iconDown} title="Tải dữ liệu Excel"/> */}
 						Tải chấm công
 					</button>
 					<button title="Tải dữ liệu Excel" className="ml-5" onClick={handleExportExcel2}>
 						Tải doanh số
 					</button>
-
-					{/* <button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
-						<img src={Vertical3Dots} alt="3Dots" />
-					</button> */}
 				</div>
 				<PaginateV2
 					ref={ref}
