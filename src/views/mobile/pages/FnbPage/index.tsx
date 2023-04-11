@@ -158,7 +158,7 @@ const FnbPage: FC = () => {
                         </div>
                         <div className="relative text-primary-gray">
                             <i>
-                                <p>Trừ triết khấu</p>
+                                <p>Trừ chiết khấu</p>
                                 <p className="absolute top-0 right-0">{formatNumberMoney(item?.discount)}</p>
                             </i>
                         </div>
