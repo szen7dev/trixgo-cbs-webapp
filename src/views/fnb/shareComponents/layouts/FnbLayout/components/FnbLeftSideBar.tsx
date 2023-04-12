@@ -1,17 +1,13 @@
 /*=====1.LIBRARY=====*/
 import { FC, useCallback, useState } from "react";
 import { NavLink, Link } from 'react-router-dom';
-import moment from "moment";
 import debounce from "lodash/debounce";
 
 /*=====2.CSS=====*/
 
 /*=====3.ICONS=====*/
-import budgetLogo from "assets/logos/budget.png";
-import iconFolder from "assets/images/icons8-application-window-100.png";
 import iconPlus from "assets/images/icons8-plus-math-96 3.svg";
 import iconPlusBlue from "assets/images/icons8-plus-math-96 1.svg";
-import sampleAvaT from "assets/images/Frame 3581.svg";
 import iconStore from 'assets/images/icons8-store.svg';
 import iconExpense from 'assets/images/icons8-expense.svg';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -22,7 +18,7 @@ import contactIcon from 'assets/images/icons8-contacts-96.svg';
 import riskIcon from 'assets/images/icons8-high-risk-100.svg';
 import menuIcon from 'assets/images/icons8-order.svg';
 import shiftcon from 'assets/images/icons-shift.svg';
-import { ModalCreateOrUpdateCustomer, ModalConfirm } from 'views/item/shareComponents/common';
+import { ModalCreateOrUpdateCustomer } from 'views/item/shareComponents/common';
 
 /*=====4.PAGES/COMPONENTS=====*/
 
@@ -40,10 +36,8 @@ import { IconButton, InputBase, Paper } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import { useModal } from "services/hooks/useModal";
 import { ModalAddNewOrder } from "./ModalAddNewOrder";
-import { ModalAddNewContact } from "./ModalAddNewContact";
 import { useDispatch } from "react-redux";
 import { resetQueryFnb } from "redux/reducer/FnbSlice";
-import { formatNumberMoney } from "utils/converter";
 
 export const FnbLeftSideBar: FC = () => {
     const { user } = useAuth();
@@ -274,7 +268,7 @@ export const FnbLeftSideBar: FC = () => {
                                             <div className="w-[28px] h-[28px] min-w-[28px] min-h-[28px] rounded-full flex items-center justify-center text-white text-lg min-w-[28px] min-h-[28px]" style={{ background: "#FCC4A2" }}>{item?.name.charAt(0)}</div>
                                             <div className="w-full">
                                                 <div className="flex justify-between">
-                                                    <Link to={`/mobile/activity/${item?._id}`}>
+                                                    <Link to={`/mobile/activity/${item?._id}/w6g9o22`}>
                                                         <div>{item?.name} ({item?.numberOfOrders | 0})</div>
                                                     </Link>
                                                     {/* <div className="text-cbs-subtext">{formatNumberMoney(item?.remainLoyaltyPoints)}đ</div> */}
