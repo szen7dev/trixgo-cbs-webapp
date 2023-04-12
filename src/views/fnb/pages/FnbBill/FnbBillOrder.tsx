@@ -224,18 +224,18 @@ export const FnbBillOrder: FC = () => {
 
                     <hr className="border-cbs-border" />
                     <p className="text-center mt-2"><b>Quét QR truy cập Link WINGGO của Quý khách</b></p>
-                    <p className="text-center"><i>Lịch sử mua hàng, tích điểm và Voucher/mã ưu đãi của bạn</i></p>
+                    <p className="text-center"><i>Xem thông tin lịch sử mua hàng, tích điểm và Voucher/mã ưu đãi của bạn</i></p>
                     <div className="mb-5">
                         <main className="mb-1 ml-2 mr-2">
-                            <QRCode id="qrcode" value={JSON.stringify(value)} size={90} className="mx-auto mt-5"/>
+                            <QRCode id="qrcode" value={JSON.stringify(value)} size={125} className="mx-auto mt-5"/>
                         </main>
                     </div>
 
                     <hr className="border-cbs-border" />
-                    <div className="text-[12px] justify-between">
-                        <p className="text-center mt-2"><b>CẢM ƠN QUÝ KHÁCH ĐÃ LỰA CHỌN WINGGO</b></p>
-                        <p className="text-center">Quét mã QR dưới đây và bấm quan tâm Zalo OA Trà sữa Winggo để nhận được thông báo/ưu đãi quan trọng dành riêng cho bạn</p>
-                        <div className="text-center" style={{ height: "125px" }}><img src={zaloOA} alt="ZaloOA" style={{ width: "75px", height: "75px" }} className="mx-auto"/></div>
+                    <div className="text-[12px]">
+                        <p className="mt-2"><b>CẢM ƠN QUÝ KHÁCH ĐÃ LỰA CHỌN WINGGO</b></p>
+                        <p className="mb-5">Quét mã QR dưới đây và bấm quan tâm Zalo OA Trà sữa Winggo để nhận được thông báo/ưu đãi quan trọng dành riêng cho bạn</p>
+                        <div className="" style={{ height: "125px" }}><img src={zaloOA} alt="ZaloOA" style={{ width: "75px", height: "75px" }} className="float-right"/></div>
                         {/* <p className="text-center"><i>Thông tin bao gồm: Lịch sử mua hàng, tích điểm và Voucher/mã ưu đãi của bạn</i></p> */}
                     </div>
                 </div>
