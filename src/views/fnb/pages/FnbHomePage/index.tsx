@@ -7,7 +7,7 @@ import { debounce, toArray } from "lodash";
 import { useDispatch } from "react-redux";
 import { formatNumberMoney } from "utils/converter";
 import { toast } from "react-toastify";
-import Axios from "axios";
+import { useQueryClient } from 'react-query';
 
 /*=====2.CSS=====*/
 import "slick-carousel/slick/slick.css";
@@ -93,6 +93,8 @@ export const getIconApp = (salesChannel: any) => {
 }
 
 export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
+
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     document.title = "FnB";
@@ -361,6 +363,14 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
       toast.error(error.message)
     } finally {
       setStateExport({ isExporting: false });
+    }
+	}
+
+  const handleRefreshOrder = async () => {
+    try {
+      queryClient.refetchQueries('fnb-order-list')
+    } catch (error: any) {
+      toast.error(error.message)
     }
 	}
 
@@ -1120,7 +1130,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                   />
                 </label>
               )}
-                <button><img className="w-[24px] h-[24px] " src={iconRefresh} title="Cập nhật dữ liệu đơn hàng"/></button>
+                <button onClick={handleRefreshOrder}><img className="w-[24px] h-[24px] " src={iconRefresh} title="Cập nhật dữ liệu đơn hàng"/></button>
             </div>
           </div>
           {/* Chưa rõ chỗ này, hình như để phân trang */}
