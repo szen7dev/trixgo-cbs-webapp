@@ -315,7 +315,7 @@ export const DashboardV2: FC<Props> = () => {
 
   const checkActive = (relateds: string[], user: string) => {
     let result = "read border-b-0.5 border-primary-border hover:shadow-md hover:z-2 hover:relative";
-    if (relateds.includes(user)) {
+    if (relateds && Array.isArray(relateds) && relateds.includes(user)) {
       result = "unread border-b-0.5 border-primary-border hover:shadow-md hover:z-2 hover:relative";
     }
     return result;
@@ -1905,7 +1905,7 @@ export const DashboardV2: FC<Props> = () => {
 
 export const subContentHtml = (html?: string) => {
   const removeHtmlTag = parse(
-    (html || "").replace(/<[^>]*>?/gm, " ")
+    (html || "").replace?.(/<[^>]*>?/gm, " ")
   ).toString();
 
   const result =

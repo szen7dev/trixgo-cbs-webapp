@@ -19,7 +19,7 @@ import { useAuth } from "services/hooks/auth/useAuth";
 /*=====7.OTHER=====*/
 
 export const SampleLeftSideBar: FC = () => {
-  const { user } = useAuth();
+  useAuth();
 
   return (
       <div className="t-leftsidebar-navigation t-leftsidebar-navigation-type2 fixed left-0 top-14 bottom-0 transition-all duration-500 ease-out border-r border-secondary-light z-10 bg-primary-light">

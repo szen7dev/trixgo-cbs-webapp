@@ -1,4 +1,4 @@
-import React, {FC, useState, useEffect} from "react";
+import {FC, useState, useEffect} from "react";
 import iconTickBox from "assets/images/icons8-tick-box-48.svg";
 // import iconClock from "assets/images/icons8-clock-48.svg";
 // import taskUserAvt from "assets/images/task-user.svg";

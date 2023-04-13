@@ -48,13 +48,13 @@ export const ModalShare: FC<Props> = ({ expertTimesheetID, users, modalType, ref
 		}
 
 		return idsChecked.includes(id) ? true : false;
-	}, [idsChecked]);
+	}, [idsChecked, usersID, hasDefault]);
 
 	const onClickCheckButton = (id: string) => {
 		const isChecked = idsChecked.includes(id);
 		if (isChecked) {
 			const newList = [...idsChecked];
-            const index = newList.findIndex((e: any) => e == id);
+            const index = newList.findIndex((e: any) => e === id);
 			newList.splice(index, 1);
 
 			setIdsChecked(newList);
@@ -64,10 +64,10 @@ export const ModalShare: FC<Props> = ({ expertTimesheetID, users, modalType, ref
 		};
 	};
 
-	const getStateCheckedAll = useCallback(() => idsChecked.length == listUsersSystem.length, [idsChecked]);
+	const getStateCheckedAll = useCallback(() => idsChecked.length === listUsersSystem.length, [idsChecked, listUsersSystem]);
 
 	const onClickCheckAll = () => {
-		if (idsChecked.length == listUsersSystem.length) {
+		if (idsChecked.length === listUsersSystem.length) {
 			setIdsChecked([]);
 		} else {
 			const idsAll = listUsersSystem.map((e: any) => e._id);

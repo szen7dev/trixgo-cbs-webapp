@@ -1,14 +1,14 @@
 import React, { FC, useEffect, useState } from "react";
-import { useParams, Link, useHistory } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import iconBack from "assets/images/icon-back-gray.svg";
 import {formatNumberMoney} from "utils/cmcs";
 import PaginateV2 from "shareComponents/common/PaginateV2";
 
 // Hook
-import { useContractIpcCustom } from 'services/hooks/cmcs/useContractIPC';
+// import { useContractIpcCustom } from 'services/hooks/cmcs/useContractIPC';
+// import ContractIPCRepository from 'apis/cmcs/contractIPC';
 import { useProject } from 'services/hooks/items/useProject';
-import ContractIPCRepository from 'apis/cmcs/contractIPC';
-import { useContractDashboard, useGetListByMonthContract } from 'services/hooks/items/useContract';
+import { useGetListByMonthContract } from 'services/hooks/items/useContract';
 import moment from "moment";
 import { CONTRACT_COME_IN_STATUS } from "apis/localdb";
 const getStatusValue = (value: number) => {
@@ -39,7 +39,7 @@ const ProjectDashboardTab2DetailPage: FC<any> = () => {
         fetchPreviousPage,
         hasNextPage,
         isLoading } = useGetListByMonthContract({
-		params: { 
+		params: {
 			projectID, year, month,
 			populates: JSON.stringify(
 				{
@@ -50,24 +50,14 @@ const ProjectDashboardTab2DetailPage: FC<any> = () => {
 		}, isFetchList: true
 	});
 
-	console.log({  listWithPager,
-        totalRecord,
-        totalPage,
-        nextCursor,
-        refetch,
-        fetchNextPage,
-        fetchPreviousPage,
-        hasNextPage,
-        isLoading });
-
 	useEffect(() => {
 		document.title = `${projectInfo.sign} | Giá trị ký`
-	}, [projectInfo]);
-	
+	}, [projectInfo.sign]);
+
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
 			<div className={"sticky top-0 bg-white z-10"}>
-			
+
 			<div className={"header-table flex w-full top-0 bg-white pb-2"}>
 					<button
                         onClick={history.goBack}
@@ -81,7 +71,7 @@ const ProjectDashboardTab2DetailPage: FC<any> = () => {
 					</div>
 				</div>
 			</div>
-			
+
 			<div className="flex-1 overflow-y-auto">
 			<PaginateV2
 				ref={ref}
@@ -97,11 +87,11 @@ const ProjectDashboardTab2DetailPage: FC<any> = () => {
 				prevPageAction={() => {
 					setPageIndex(oldState => oldState-1)
 				}}
-			/>	
+			/>
 				<table className="text-black text-medium border-collapse space-x-0 space-y-0 w-full" style={{ borderSpacing: 0 }}>
 					<thead className="">
 						<tr className="text-primary-gray whitespace-nowrap align-middle text-left">
-							
+
 							<th className="px-3 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border w-1">
 								TT
 							</th>
@@ -126,7 +116,7 @@ const ProjectDashboardTab2DetailPage: FC<any> = () => {
 							<th className="py-2.5 px-3 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
 								Trạng thái
 							</th>
-						</tr>	
+						</tr>
 					</thead>
 					<tbody className="">
 						{

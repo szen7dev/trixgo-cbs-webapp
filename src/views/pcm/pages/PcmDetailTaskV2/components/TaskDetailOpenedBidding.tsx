@@ -3,7 +3,6 @@ import iconAssessment from "assets/images/icons8-assessments-64.svg";
 import taskUserAvt from "assets/images/task-user.svg";
 import demoSignature from "assets/images/demo-signature.png";
 import { Task } from "typings/task";
-import moment from "moment";
 
 type Props = {
     task: Task;
@@ -11,7 +10,6 @@ type Props = {
 
 export const TaskDetailOpenedBidding: FC<Props> = ({ task }) => {
     if(!task.openedUsers || !task.openedUsers?.length) return <></>;
-    console.log({ task })
 
     return (
         <div className={"task-signature flex items-start mt-5"}>

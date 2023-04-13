@@ -1,12 +1,11 @@
 import { FC } from "react";
 
-import fakeThumbnail from "assets/images/avatar.jpg";
 import iconFolder from "assets/images/icons8-application-window-100.png";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useAuth } from "services/hooks/auth/useAuth";
 
 export const LeftSideBar: FC = () => {
-  const { user } = useAuth();
+  useAuth();
 
   return (
     <div className="t-leftsidebar-navigation t-leftsidebar-navigation-v2 t-leftsidebar-navigation-type2 fixed left-64px top-14 bottom-0 transition-all duration-500 ease-out border-secondary-light z-10 bg-primary-light">

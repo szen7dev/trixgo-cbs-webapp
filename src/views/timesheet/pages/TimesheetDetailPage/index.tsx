@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState } from "react";
-import { map as _map } from "lodash";
 import { useDispatch } from "react-redux";
 import { useParams, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -12,7 +11,7 @@ import FileColorIcon from "assets/icons/FileColor";
 import StarIcon from "assets/images/star.svg";
 import { Paginate } from "shareComponents/common/Paginate";
 import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
-import { InputWidthAdjust, ShareButton } from "views/timesheet/shareComponents/common";
+import { InputWidthAdjust } from "views/timesheet/shareComponents/common";
 
 import {
   DetailMainRow,

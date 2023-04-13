@@ -1,12 +1,12 @@
 import { FC, useContext, useEffect, useMemo, useRef, useState } from "react";
 import trigangleDown from "assets/images/triangle-down.svg";
-// import iconUpload from "assets/images/icons8-upload-48.svg";
 import iconLink from "assets/images/icons8-link-96-v3.svg";
 import iconReply from "assets/images/icons8-reply-arrow-48.svg";
 import taskUserAvt from "assets/images/task-user.svg";
 import iconAttach from "assets/images/icons8-attach-48.svg";
-import iconChat from "assets/images/icons8-chat-96 1.svg";
-import iconTrash from "assets/images/icons8-delete-96 1.svg";
+// import iconUpload from "assets/images/icons8-upload-48.svg";
+// import iconChat from "assets/images/icons8-chat-96 1.svg";
+// import iconTrash from "assets/images/icons8-delete-96 1.svg";
 // import imageDemo from "assets/images/task-detail-image.png";
 // import { listEmoji } from "../../../../../messages/pages/MessageHome/sections/ChattingSection";
 import { ChildResponseComment } from "../ChildResponseComment";
@@ -29,7 +29,6 @@ import TaskRepository from "apis/task";
 import { useFileCore } from 'services/hooks/useFileCore';
 import { useOnClickOutside } from "../../../../../../services/hooks/useOnclickOutside";
 import { OptionsComment } from "../OptionsComment";
-import { makeStyles } from "@material-ui/styles";
 import { Popover } from "@mui/material";
 import React from "react";
 

@@ -95,13 +95,13 @@ const DetailsByAppDeviceSupport:FC<Props> = (props) => {
 
   for (const key in listAppDeviceAccess) {
       listAppDeviceAccess[key].data?.forEach(element => {
-        if(element.type == 1){
+        if(+element.type === 1){
           totalWebsite += element.amountAccesses;
         }
-        if(element.type == 2){
+        if(+element.type === 2){
           totalMobile += element.amountAccesses;
         }
-        if(element.type == 3){
+        if(+element.type === 3){
           totalTablet += element.amountAccesses;
         }
       });
