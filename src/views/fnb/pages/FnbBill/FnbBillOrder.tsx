@@ -221,16 +221,19 @@ export const FnbBillOrder: FC = () => {
                         <div>{info?.paymentMethod >=1 && FNB_PAYMENT[Number(info?.paymentMethod)-1].text}</div>
                     </div>
                     <div className="text-center italic text-[12px] border-cbs-border mx-4 py-1 ">{info?.funda?.bankAccount}</div>
-
-                    <hr className="border-cbs-border" />
-                    <p className="text-center mt-2"><b>Quét QR truy cập Link WINGGO của bạn</b></p>
-                    <p className="text-center"><i>Xem thông tin lịch sử mua hàng, tích điểm, voucher/mã ưu đãi và mã giới thiệu bạn bè để nhận Vocuher ưu đãi <b>15.000đ/01 bạn</b> bè của bạn</i></p>
-                    <div className="mb-5">
-                        <main className="mb-1 ml-2 mr-2">
-                            <QRCode id="qrcode" value={JSON.stringify(value)} size={175} className="mx-auto mt-5"/>
-                        </main>
-                    </div>
-
+                    {
+                        info?.customer._id.toString() != "63ae4832be33df0012ecadbd" ? <div>
+                            <hr className="border-cbs-border" />
+                            <p className="text-center mt-2"><b>Quét QR truy cập Link WINGGO của bạn</b></p>
+                            <p className="text-center"><i>Xem thông tin lịch sử mua hàng, tích điểm, voucher/mã ưu đãi và mã giới thiệu bạn bè để nhận Vocuher ưu đãi <b>15.000đ/01 bạn</b> bè của bạn</i></p>
+                            <div className="mb-5">
+                                <main className="mb-1 ml-2 mr-2">
+                                    <QRCode id="qrcode" value={JSON.stringify(value)} size={175} className="mx-auto mt-5"/>
+                                </main>
+                            </div>
+                        </div> : <></>
+                    }
+                    
                     <hr className="border-cbs-border" />
                     <div className="text-[12px] text-center ">
                         <p className=""><b>CẢM ƠN BẠN ĐÃ TIN TƯỞNG LỰA CHỌN WINGGO</b></p>
