@@ -5,7 +5,6 @@ import { Link, useParams, useHistory, useLocation } from "react-router-dom";
 
 import { useModal } from "services/hooks/useModal";
 import { SearchInput } from "shareComponents/common";
-// import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
 
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 import FolderIcon from "assets/images/icons8-folder.svg";
