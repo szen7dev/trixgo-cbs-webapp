@@ -90,25 +90,25 @@ export const FnbBillOrder: FC = () => {
     return (
         <main className="h-screen overflow-auto bg-cbs-border">
             <div className="mx-auto my-2 bg-white h-full p-2 flex flex-col justify-between">
-            {/* <div className="mx-auto bg-white h-full p-2 flex flex-col justify-between"> */}
                 <div>
-                    <div className="flex">
+                    <div className="relative mb-6">
                         <Link to ={`/fnb/home`}>
-                            <img src={`${process.env.REACT_APP_URL_S3}${info?.funda?.bankQrcode?.path}`} alt="Bank" style={{ width: "90px", height: "90px" }} />
+                            {/* <img src={`${process.env.REACT_APP_URL_S3}${info?.funda?.bankQrcode?.path}`} alt="Bank" style={{ width: "90px", height: "90px" }} /> */}
+                            <div className="mt-3">
+                                <div className="font-bold text-[12px]">{info?.funda?.name}</div>
+                                <div className="text-[12px]">{info?.funda?.address}</div>
+                                <div className="text-[12px]">{info?.funda?.phone}</div>
+                            </div>
 						</Link>
-                        <div className="text-center mt-3">
-                            <div className="font-bold text-[12px]">{info?.funda?.name}</div>
-                            <div className="text-[12px]">{info?.funda?.address}</div>
-                            <div className="text-[12px]">{info?.funda?.phone}</div>
-                        </div>
+                        <div><img src={zaloOA} alt="ZaloOA" style={{ width: "75px", height: "75px" }} className="absolute top-0 right-0"/></div>
                     </div>
                     <div className="text-center py-1">
                         <Link to={`/fnb/home/${info?._id}/print/2`}>
                             <div className="font-bold text-[12px]" title="Bấm vào đây để in Tem">HÓA ĐƠN THANH TOÁN <i className="text-cbs-primary">(in Tem)</i></div>
                         </Link>
                         <div className="text-[12px]">Số: <b>{info?.sign}</b> | Mã đơn app: <b>{FNB_CHANNEL[Number(info?.salesChannel)-1]?.sign}{info?.appOrderSign}</b></div>
-                        <div>
-                            <p><i>Nếu có điều chưa hài lòng về sản phẩm dịch vụ của Winggo, xin anh chị vui lòng liên hệ tới Hotline <b>0985692022</b> hoặc fanpage https://facebook.com/TraSuaWinggo để được hỗ trợ, trước khi đánh giá số * trên <b>Food App</b></i></p>
+                        <div className="text-[12px]">
+                            <p><i>Nếu có điều chưa hài lòng về sản phẩm dịch vụ của Winggo, xin bạn vui lòng liên hệ tới Hotline <b>0985692022</b> hoặc fanpage https://facebook.com/TraSuaWinggo để được hỗ trợ, trước khi đánh giá số Sao (*) trên <b>Food App</b></i></p>
                         </div>
                     </div>
 
@@ -223,20 +223,19 @@ export const FnbBillOrder: FC = () => {
                     <div className="text-center italic text-[12px] border-cbs-border mx-4 py-1 ">{info?.funda?.bankAccount}</div>
 
                     <hr className="border-cbs-border" />
-                    <p className="text-center mt-2"><b>Quét QR truy cập Link WINGGO của Quý khách</b></p>
-                    <p className="text-center"><i>Xem thông tin lịch sử mua hàng, tích điểm và Voucher/mã ưu đãi của bạn</i></p>
+                    <p className="text-center mt-2"><b>Quét QR truy cập Link WINGGO của bạn</b></p>
+                    <p className="text-center"><i>Xem thông tin lịch sử mua hàng, tích điểm, voucher/mã ưu đãi và mã giới thiệu bạn bè để nhận Vocuher ưu đãi <b>15.000đ/01 bạn</b> bè của bạn</i></p>
                     <div className="mb-5">
                         <main className="mb-1 ml-2 mr-2">
-                            <QRCode id="qrcode" value={JSON.stringify(value)} size={125} className="mx-auto mt-5"/>
+                            <QRCode id="qrcode" value={JSON.stringify(value)} size={175} className="mx-auto mt-5"/>
                         </main>
                     </div>
 
                     <hr className="border-cbs-border" />
-                    <div className="text-[12px]">
-                        <p className="mt-2"><b>CẢM ƠN QUÝ KHÁCH ĐÃ LỰA CHỌN WINGGO</b></p>
-                        <p className="mb-5">Quét mã QR dưới đây và bấm quan tâm Zalo OA Trà sữa Winggo để nhận được thông báo/ưu đãi quan trọng dành riêng cho bạn</p>
-                        <div className="" style={{ height: "125px" }}><img src={zaloOA} alt="ZaloOA" style={{ width: "75px", height: "75px" }} className="float-right"/></div>
-                        {/* <p className="text-center"><i>Thông tin bao gồm: Lịch sử mua hàng, tích điểm và Voucher/mã ưu đãi của bạn</i></p> */}
+                    <div className="text-[12px] text-center ">
+                        <p className=""><b>CẢM ƠN BẠN ĐÃ TIN TƯỞNG LỰA CHỌN WINGGO</b></p>
+                        <p className="">Quét mã QR Zalo OA của Winggo (trên cùng, bên tay phải), bấm quan tâm Zalo OA <b>Trà sữa Winggo</b> để nhận Vocuher ưu đãi <b>10.000đ</b> và thông báo/ưu đãi quan trọng dành riêng cho bạn</p>
+                        <p><i>Thông tin ưu đãi: https://winggo.vn/uu-dai</i></p>
                     </div>
                 </div>
                 <div className="w-full h-[100px]"></div>
