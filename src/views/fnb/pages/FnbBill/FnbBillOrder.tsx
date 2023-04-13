@@ -224,7 +224,7 @@ export const FnbBillOrder: FC = () => {
 
                     <hr className="border-cbs-border" />
                     <p className="text-center mt-2"><b>Quét QR truy cập Link WINGGO của bạn</b></p>
-                    <p className="text-center"><i>Xem thông tin lịch sử mua hàng, tích điểm, voucher/mã ưu đãi và mã giới thiệu bạn bè để nhận vocuher ưu đãi <b>15.000/01 bạn</b> bè của bạn</i></p>
+                    <p className="text-center"><i>Xem thông tin lịch sử mua hàng, tích điểm, voucher/mã ưu đãi và mã giới thiệu bạn bè để nhận Vocuher ưu đãi <b>15.000đ/01 bạn</b> bè của bạn</i></p>
                     <div className="mb-5">
                         <main className="mb-1 ml-2 mr-2">
                             <QRCode id="qrcode" value={JSON.stringify(value)} size={175} className="mx-auto mt-5"/>
@@ -234,8 +234,8 @@ export const FnbBillOrder: FC = () => {
                     <hr className="border-cbs-border" />
                     <div className="text-[12px] text-center ">
                         <p className=""><b>CẢM ƠN BẠN ĐÃ TIN TƯỞNG LỰA CHỌN WINGGO</b></p>
-                        <p className="">Quét mã QR Zalo OA của Winggo (trên cùng, bên tay phải) và bấm quan tâm Zalo OA <b>Trà sữa Winggo</b> để nhận thông báo/ưu đãi quan trọng dành riêng cho bạn</p>
-                        <p><i>Thông tin khuyến mãi: https://winggo.vn/uu-dai</i></p>
+                        <p className="">Quét mã QR Zalo OA của Winggo (trên cùng, bên tay phải), bấm quan tâm Zalo OA <b>Trà sữa Winggo</b> để nhận Vocuher ưu đãi <b>10.000đ</b> và thông báo/ưu đãi quan trọng dành riêng cho bạn</p>
+                        <p><i>Thông tin ưu đãi: https://winggo.vn/uu-dai</i></p>
                     </div>
                 </div>
                 <div className="w-full h-[100px]"></div>
