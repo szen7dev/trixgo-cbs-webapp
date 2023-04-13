@@ -1,13 +1,9 @@
 import { FC, useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom"
 
-// import image from 'assets/images/icons8-stacked-organizational-chart-highlighted-first-node-96 1.png';
-// import avatar from 'assets/images/avatar.jpg';
-// import { PCM_MILESTONE } from "apis/localdb/index";
 import Gantt from "./components/Gantt";
 import { usePcmProject } from "services/hooks/pcm/usePcmProject";
 import { useTask } from "services/hooks/useTask";
-import { Link } from "react-router-dom";
 
 let dataGranttInint:any = [
 	{ id: 1, text: "<b>Pháp lý</b>", start_date: null, duration: null, parent:null, progress: 0, open: true},
@@ -18,12 +14,6 @@ let dataGranttInint:any = [
 	{ id: 6, text: "<b>Bàn giao</b>", start_date: null, duration: null, parent:null, progress: 0, open: true},
 	{ id: 7, text: "<b>Quyết toán</b>", start_date: null, duration: null, parent:null, progress: 0, open: true},
 ]
-
-// const getTimeBetween = function (time1: any, time2: any) {
-//     const a = (new Date(time1)).getTime();
-//     const b = (new Date(time2)).getTime();
-//     return (a - b) / (1000);
-// };
 
 const ProjectSchedulePage: FC = () => {
 	const history = useHistory();
