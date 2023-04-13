@@ -1,12 +1,12 @@
 import { FC, ReactNode, useState } from "react";
 import cn from "classnames";
 
-import { HomeRightSideBar } from "shareComponents/layouts";
-import { LeftNavigate, MainHeader, MainHeaderV2 } from "shareComponents/common";
+import { LeftNavigate, MainHeaderV2 } from "shareComponents/common";
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
 
-import chevronRightIcon from "assets/images/icon-chevron-right.png";
-import chevronUpIcon from "assets/images/icon-chevron-up.png";
+// import { HomeRightSideBar } from "shareComponents/layouts";
+// import chevronRightIcon from "assets/images/icon-chevron-right.png";
+// import chevronUpIcon from "assets/images/icon-chevron-up.png";
 import DatahubLeftSideBar from "./components/WorkshopLeftSideBar";
 import { HomeHeaderContent } from "shareComponents/layouts/HomeLayout/components";
 
@@ -15,25 +15,18 @@ type Props = {
 };
 
 const WorkshopLayoutV2: FC<Props> = ({ children }) => {
-	const [isHeaderCollapse, setIsHeaderCollapse] = useState(false);
 	const [isLeftMenuCollapse, setIsLeftMenuCollapse] = useState(false);
-	const [isRightSideBarCollapse, setIsRightSideBarCollapse] = useState(false);
 
-	const handleHeaderEvent = () => {
-		setIsHeaderCollapse(!isHeaderCollapse);
-	};
 	const handleMenuEvent = () => {
 		setIsLeftMenuCollapse(!isLeftMenuCollapse);
 	};
-	const handleRightSideBarEvent = () => {
-		setIsRightSideBarCollapse(!isRightSideBarCollapse);
-	};
+
 	return (
 		<section
 			className={cn("home-layout relative bg-primary-light", {
 				"collapse-left": isLeftMenuCollapse,
-				"active-right": isRightSideBarCollapse,
-				"collapse-header": isHeaderCollapse,
+				"active-right": false,
+				"collapse-header": false,
 			})}
 		>
 			{/* Collapse menu button */}

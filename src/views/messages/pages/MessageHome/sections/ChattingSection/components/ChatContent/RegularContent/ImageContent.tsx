@@ -1,6 +1,6 @@
 import React, {FC, useCallback, useState} from "react";
 import {map as _map} from "lodash";
-import DoubleTickIcon from "assets/images/icons8-double-tick-96.svg";
+// import DoubleTickIcon from "assets/images/icons8-double-tick-96.svg";
 import {ModalFullContainer} from "shareComponents/common";
 import {ViewImage} from "./ViewImage";
 import moment from "moment";
@@ -20,7 +20,7 @@ type Props = {
 type ClassMatrix = {
     [key: string]: Array<any>;
 }
-export const ImagesContent:FC<Props> = ({ message, className, showSenderName, isMyMessage, context, isMini }) => {
+export const ImagesContent:FC<Props> = ({ message, className, isMyMessage, context, isMini }) => {
     const [modalShowImage, setModalShowImage] = useState<{ show: boolean, index: number }>({ show: false, index: 0 });
     const closeModalImage = () => setModalShowImage({ show: false, index: 0 });
 
@@ -53,9 +53,9 @@ export const ImagesContent:FC<Props> = ({ message, className, showSenderName, is
     }
 
     const renderImageDisplay = () => {
-        const map = (message.files.length>=5)?"map_more":("map_"+message.files.length);
+        const map = (message.files?.length>=5)?"map_more":("map_"+message.files?.length);
         const classNameMap = classMapping[map];
-        return _map(message.files.slice(0,5), (image,index:number)=> {
+        return _map(message.files?.slice?.(0,5), (image,index:number)=> {
             if (!image.file) return null;
             return <div
                 onClick={() => {
@@ -67,10 +67,10 @@ export const ImagesContent:FC<Props> = ({ message, className, showSenderName, is
                      src={image.file.fakeUrl ?? `${process.env.REACT_APP_URL_S3}${image.file.path??image.file.file.path}`}
                      alt={"image"}/>
                 {
-                    (index === 4 && message.files.length > 5) &&
+                    (index === 4 && message.files?.length > 5) &&
                     <div
                         className={"absolute w-full h-full bg-black bg-opacity-40 bottom-0 right-0 flex items-center justify-center text-xl text-white"}>
-                        {message.files.length - 5}+
+                        {message.files?.length - 5}+
                     </div>
                 }
                 {
@@ -91,11 +91,12 @@ export const ImagesContent:FC<Props> = ({ message, className, showSenderName, is
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
     const isDeleted = useCallback(() => {
-        if (message.parent.usersDelete&&message.parent.usersDelete.includes(profileId)) {
+        if (message.parent?.usersDelete&&message.parent.usersDelete.includes?.(profileId)) {
             return true
         }
-        return (message.parent.files??[]).some((file: { usersDelete: string | any[]; }) => file.usersDelete && file.usersDelete.includes(profileId));
+        return (message.parent?.files??[]).some((file: { usersDelete: string | any[]; }) => file.usersDelete && file.usersDelete?.includes?.(profileId));
     }, [message])
+
     const renderReply = () => {
         if (isDeleted()) {
             return <DeleteReply message={message} isMyMessage={isMyMessage}/>
@@ -124,7 +125,7 @@ export const ImagesContent:FC<Props> = ({ message, className, showSenderName, is
                     </div>
                 }
                 {
-                    message.content.length>0&&
+                    message.content?.length>0&&
                     <div className={"p-[7px]"}>
                         {message.content}
                     </div>
@@ -141,7 +142,7 @@ export const ImagesContent:FC<Props> = ({ message, className, showSenderName, is
                 </div>
                 <ModalFullContainer isModalOpen={modalShowImage.show} toggle={closeModalImage}>
                     <div className="flex overflow-hidden transition-all transform w-full h-full">
-                        <ViewImage message={message} show={modalShowImage.show} toggle={closeModalImage} imageList={message.files.map(file => (file.file?`${process.env.REACT_APP_URL_S3}${file.file.path??file.file.file.path}`:""))} index={modalShowImage.index} />
+                        <ViewImage message={message} show={modalShowImage.show} toggle={closeModalImage} imageList={message.files?.map?.(file => (file.file?`${process.env.REACT_APP_URL_S3}${file.file?.path??file.file?.file?.path}`:""))} index={modalShowImage.index} />
                     </div>
                 </ModalFullContainer>
             </div>

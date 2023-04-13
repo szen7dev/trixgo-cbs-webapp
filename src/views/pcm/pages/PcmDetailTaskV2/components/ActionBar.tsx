@@ -6,9 +6,9 @@ import { SendEmailNotification } from "./SendEmailNotification";
 import iconCopy from "assets/images/icons8-copy-96.svg";
 import iconPrint from "assets/images/icons8-print-96.svg";
 // import iconRemove from "assets/images/icons8-remove-96.svg";
-import {TaskHistoryLog} from "./TaskHistoryLog";
-import iconMember from "assets/images/icons8-member-48-white.svg";
 // import {SendToChat} from "./SendToChat";
+// import iconMember from "assets/images/icons8-member-48-white.svg";
+import { TaskHistoryLog } from "./TaskHistoryLog";
 import { OtherActions } from "./OtherActions";
 import CollapseShow from "assets/images/CBS-Collapse-Show.svg";
 import CollapseHide from "assets/images/CBS-Collapse-Hide.svg";
@@ -30,7 +30,7 @@ type Props = {
     refetchTaskInfo: () => void;
 }
 
-export const ActionTaskDetailBar: FC<Props> = ({ checkAssigneeBid, task, user, refetchTaskInfo, handleCollapse, collapse }) => {
+export const ActionTaskDetailBar: FC<Props> = ({ task, user, refetchTaskInfo, handleCollapse, collapse }) => {
     const [activeCopyTextTooltip, setActiveCopyTextTooltip] = useState(false);
     const history = useHistory();
 

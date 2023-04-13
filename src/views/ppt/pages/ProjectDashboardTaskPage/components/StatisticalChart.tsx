@@ -1,4 +1,3 @@
-import React, { FC } from 'react'
 import {
 	Chart as ChartJS,
 	CategoryScale,
@@ -56,7 +55,7 @@ export const options = {
 	}
 };
 
-const labels = Array.from({ length: 34 }).map((_, i) => 'MAR.HAR');
+const labels = Array.from({ length: 34 }).map((_) => 'MAR.HAR');
 // ['MAR.HAR', 'ARM.CAL', 'CHG.THT', 'PTIT.NHB', 'ARM.CAL', 'CHG.THT', 'MAR.HAR', 'ARM.CAL', 'CHG.THT', 'MAR.HAR', 'ARM.CAL', 'CHG.THT', 'MAR.HAR', 'ARM.CAL', 'CHG.THT', 'MAR.HAR', 'ARM.CAL', 'CHG.THT', 'MAR.HAR', 'ARM.CAL', 'CHG.THT', 'MAR.HAR', 'ARM.CAL', 'CHG.THT', 'MAR.HAR', 'ARM.CAL', 'CHG.THT', 'MAR.HAR', 'ARM.CAL', 'CHG.THT', 'MAR.HAR', 'ARM.CAL', 'CHG.THT', 'MAR.HAR'];
 
 export const data: ChartData<"bar", number[], string> = {

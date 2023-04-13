@@ -1,6 +1,6 @@
-import React, { ChangeEvent, FC, UIEvent, useState } from "react";
+import { FC } from "react";
 import moment from 'moment';
-import { Comment as CommentType, CommentPayload, CommentProps, Task } from "typings/task";
+import { Task } from "typings/task";
 import IconNote from 'assets/images/icons8-document-100 4.svg';
 import { Link } from "react-router-dom";
 

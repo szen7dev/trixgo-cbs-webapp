@@ -2,24 +2,16 @@
 import { FC } from "react";
 import { Link } from 'react-router-dom';
 
-/*=====2.CSS=====*/
-
 /*=====3.ICONS=====*/
-import reeLogo from "assets/logos/ree.png";
+// import reeLogo from "assets/logos/ree.png";
 // import fakeThumbnail from "assets/images/avatar.jpg";
 import iconFolder from "assets/images/icons8-application-window-100.png";
-
-/*=====4.PAGES/COMPONENTS=====*/
-
-/*=====5.TYPINGS=====*/
 
 /*=====6.HOOKS/APIS=====*/
 import { useAuth } from "services/hooks/auth/useAuth";
 
-/*=====7.OTHER=====*/
-
 export const ReeLeftSideBar: FC = () => {
-  const { user } = useAuth();
+  useAuth();
 
   return (
       <div className="t-leftsidebar-navigation t-leftsidebar-navigation-v2 t-leftsidebar-navigation-type2 fixed left-64px top-14 bottom-0 transition-all duration-500 ease-out border-secondary-light z-10 bg-primary-light">

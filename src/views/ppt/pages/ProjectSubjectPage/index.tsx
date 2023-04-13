@@ -37,10 +37,10 @@ const ProjectSubjectPage: FC = () => {
 		totalFinishMain = 0;
 		if(listCompany?.length){
 			const data: any = listCompany.map((item: any)=> {
-				const totalOverdueWork: any = listCompanyAndTaskOverdueWork?.find((item1: any) => item1._id == item._id)
-				const totalNextWeekWork: any = listCompanyAndTaskNextWeekWork?.find((item1: any) => item1._id == item._id)
-				const totalMoreThan7Days: any = listCompanyAndTaskMoreThan7Days?.find((item1: any) => item1._id == item._id)
-				const totalFinish: any = listCompanyAndTaskFinish?.find((item1: any) => item1._id == item._id)
+				const totalOverdueWork: any = listCompanyAndTaskOverdueWork?.find((item1: any) => item1._id === item._id)
+				const totalNextWeekWork: any = listCompanyAndTaskNextWeekWork?.find((item1: any) => item1._id === item._id)
+				const totalMoreThan7Days: any = listCompanyAndTaskMoreThan7Days?.find((item1: any) => item1._id === item._id)
+				const totalFinish: any = listCompanyAndTaskFinish?.find((item1: any) => item1._id === item._id)
 				// Tính tổng số lượng task
 				totalOverdueWorkMain 	+= Number(totalOverdueWork?.count) || 0;
 				totalNextWeekWorkMain 	+= Number(totalNextWeekWork?.count) || 0;
@@ -78,7 +78,7 @@ const ProjectSubjectPage: FC = () => {
 
 	useEffect(() => {
 		document.title = `${projectInfo.sign} | Công việc`
-	}, []);
+	}, [projectInfo.sign]);
 
 	const toggleVisible = ({ company, typeStatus }: any) => {
 		setVisibleDrawer(!visibleDrawer)

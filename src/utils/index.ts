@@ -49,6 +49,8 @@ export const convertInitialValueDropdown = (item: any, value = '_id', label = 'n
 }
 
 export const nl2p = function (text: string){
+    if(!text) return '';
+
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     const urlHasHrefRegex = /(href="https?:\/\/[^\s]+)/g;
     const arr = text?.split("\n") ?? [];
@@ -66,10 +68,11 @@ export const nl2p = function (text: string){
 }
 
 export const removeHTMLTags = (text: string) => {
-    return text.replace(/<[^>]+>/gi, '');
+    return text ? text.replace(/<[^>]+>/gi, '') : '';
 }
 
 export const sliceText = (text: string, from: number, to: number, isHaveDot = true) => {
+    if(!text) return '';
     return !isHaveDot ? text.slice(from, to) : (text.length > to ? `${text.slice(from, to)}...` : text.slice(from, to))
 }
 

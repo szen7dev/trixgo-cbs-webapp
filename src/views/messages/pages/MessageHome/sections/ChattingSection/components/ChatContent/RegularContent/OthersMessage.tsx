@@ -20,7 +20,7 @@ export const OthersMessage:FC<Props> = ({message,bgMessage, context, isMini}) =>
     const {handleStartPrivateChat} = UseMessageHelper();
     const selectedState = useSelector((state: RootState) => state.listMessage.data.selectedState[message.conversation]);
     const listSelectedMessage = useSelector((state: RootState) => state.listMessage.data.listSelectedMessage[message.conversation]);
-    const {socketRef, editorRef} = useContext(context);
+    const {socketRef, editorRef} = useContext<any>(context);
     const socket = socketRef.current;
     const editor = editorRef?.current;
     const currentUser = localStorage.getItem("currentUser")??"{}";

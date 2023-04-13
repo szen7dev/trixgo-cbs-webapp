@@ -7,7 +7,7 @@
  * ? 5. helpers, util importation
  * ? 6. typings importation
  */
-import { FC, useState, useEffect } from "react";
+import { FC, useEffect } from "react";
 
 import StatisticalChart from "./components/StatisticalChart";
 
@@ -18,35 +18,35 @@ import { useQueryListProjectWithListAmountTask } from "services/hooks/pcm/useSta
 import { Link, generatePath } from 'react-router-dom';
 import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 
-interface IData {
-	id: number,
-	name: string,
-	director: string,
-	secretary: string,
-	actions: {
-		type: string,
-		updateAt: number,
-		name: string
-	},
-	comment: {
-		user: string
-		message: string
-	},
-	mediaId: string
-}
+// interface IData {
+// 	id: number,
+// 	name: string,
+// 	director: string,
+// 	secretary: string,
+// 	actions: {
+// 		type: string,
+// 		updateAt: number,
+// 		name: string
+// 	},
+// 	comment: {
+// 		user: string
+// 		message: string
+// 	},
+// 	mediaId: string
+// }
 
-const getType = (key: number) => {
-	switch (key) {
-		case 1:
-			return 'đã cập nhật'
-		default:
-			return 'đã tạo mới'
-	}
-}
+// const getType = (key: number) => {
+// 	switch (key) {
+// 		case 1:
+// 			return 'đã cập nhật'
+// 		default:
+// 			return 'đã tạo mới'
+// 	}
+// }
 
-const getDate = (time: number): number => {
-	return (new Date()).setDate((new Date()).getDate() - 1 * time);
-}
+// const getDate = (time: number): number => {
+// 	return (new Date()).setDate((new Date()).getDate() - 1 * time);
+// }
 
 export type ItemTaskAmount = {
 	_id: string;
@@ -79,43 +79,43 @@ const ProjectDashboardTaskPage: FC = () => {
 		document.title = "Báo cáo công việc";
 	}, []);
 
-	const [type, setType] = useState<string>('all');
-	const [open, setOpen] = useState<{ show: boolean, mediaId: string }>({ show: false, mediaId: '' });
+	// const [type, setType] = useState<string>('all');
+	// const [open, setOpen] = useState<{ show: boolean, mediaId: string }>({ show: false, mediaId: '' });
 
-	const data: Array<IData> = Array.from(Array(30).keys()).map((_, i) => ({
-		id: i,
-		name: 'MAR.HAR.Court Yard By Marriott Ha Long Bay',
-		director: 'Lê Lưu Phong-CPMI',
-		secretary: 'Cao Thu Linh-CPMI',
-		actions: {
-			type: getType(i % 2),
-			updateAt: getDate(i),
-			name: 'Linh-CPMI'
-		},
-		comment: {
-			user: 'Phùng Thị Hà-PGI',
-			message: 'Hồ sơ dự án sao lâu không thấy cập nhật vậy chị Ngọc ơi, có vướng gì không?'
-		},
-		mediaId: i % 2 ? '61c6caf6f92c4e0d68779554' : '61c1ff7102022f1f1274edfb'
-	}));
+	// const data: Array<IData> = Array.from(Array(30).keys()).map((_, i) => ({
+	// 	id: i,
+	// 	name: 'MAR.HAR.Court Yard By Marriott Ha Long Bay',
+	// 	director: 'Lê Lưu Phong-CPMI',
+	// 	secretary: 'Cao Thu Linh-CPMI',
+	// 	actions: {
+	// 		type: getType(i % 2),
+	// 		updateAt: getDate(i),
+	// 		name: 'Linh-CPMI'
+	// 	},
+	// 	comment: {
+	// 		user: 'Phùng Thị Hà-PGI',
+	// 		message: 'Hồ sơ dự án sao lâu không thấy cập nhật vậy chị Ngọc ơi, có vướng gì không?'
+	// 	},
+	// 	mediaId: i % 2 ? '61c6caf6f92c4e0d68779554' : '61c1ff7102022f1f1274edfb'
+	// }));
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const handleChange = (e: any) => { setType(e.target.value) };
-	const handleClose = () => setOpen({ ...open, show: false });
+	// const handleChange = (e: any) => { setType(e.target.value) };
+	// const handleClose = () => setOpen({ ...open, show: false });
 
 	const { listProject,
 		listAmountTask,
 		listAmountTaskOverdueWork,
 		listAmountTaskNextWeekWork,
 		listAmountTaskMoreThan7Days,
-		listAmountTaskFinish, 
+		listAmountTaskFinish,
 	} = useQueryListProjectWithListAmountTask({
 		fromDate: '2021-01-01',
 		toDate: '2099-01-01'
 	});
 
-	const getPercentTypeTask 		= (_task: number, _totalTask: number) => {
-		if (_totalTask == 0) 
+	const getPercentTypeTask = (_task: number, _totalTask: number) => {
+		if (_totalTask == 0)
 			return 0;
 		return Math.ceil((_task / _totalTask) * 100);
 	}
@@ -216,17 +216,17 @@ const ProjectDashboardTaskPage: FC = () => {
 						</thead>
 						<tbody className="">
 							{listProject && listProject.map((project: any, index) => {
-								const itemTaskFinish			= listAmountTaskFinish.find((itemFinish: ItemTaskAmount) => itemFinish?._id == project?._id);
-								const itemTaskOverdueWork 		= listAmountTaskOverdueWork.find((itemFinish: ItemTaskAmount) => itemFinish?._id == project?._id)
-								const itemTaskNextWeekWork 	= listAmountTaskNextWeekWork.find((itemFinish: ItemTaskAmount) => itemFinish?._id == project?._id)
-								const itemTaskMoreThan7Days 	= listAmountTaskMoreThan7Days.find((itemFinish: ItemTaskAmount) => itemFinish?._id == project?._id)
+								const itemTaskFinish			= listAmountTaskFinish.find((itemFinish: ItemTaskAmount) => itemFinish?._id === project?._id);
+								const itemTaskOverdueWork 		= listAmountTaskOverdueWork.find((itemFinish: ItemTaskAmount) => itemFinish?._id === project?._id)
+								const itemTaskNextWeekWork 	= listAmountTaskNextWeekWork.find((itemFinish: ItemTaskAmount) => itemFinish?._id === project?._id)
+								const itemTaskMoreThan7Days 	= listAmountTaskMoreThan7Days.find((itemFinish: ItemTaskAmount) => itemFinish?._id === project?._id)
 
 								const totalTaskFinish = (itemTaskFinish && itemTaskFinish['count']) || 0
 								const totalTaskOverdueWork = (itemTaskOverdueWork && itemTaskOverdueWork['count']) || 0
 								const totalTaskNextWeekWork = (itemTaskNextWeekWork && itemTaskNextWeekWork['count']) || 0
 								const totalTaskMoreThan7Days = (itemTaskMoreThan7Days && itemTaskMoreThan7Days['count']) || 0
 
-								const totalTask 				= 
+								const totalTask 				=
 												totalTaskOverdueWork
 												+ totalTaskNextWeekWork
 												+ totalTaskMoreThan7Days;
@@ -280,12 +280,12 @@ const ProjectDashboardTaskPage: FC = () => {
 												</button>
 											</div>
 										</td>
-										<td className="pb-2 pl-5 pr-4 pt-2 border border-cbs-border text-white" 
-											style={{ 
+										<td className="pb-2 pl-5 pr-4 pt-2 border border-cbs-border text-white"
+											style={{
 												fontSize: '10px',
 											}}>
 											{
-												totalTaskFinish != 0 ? 
+												totalTaskFinish != 0 ?
 													<div className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2" >
 														{/* Hoàn thành */}
 														{
@@ -299,7 +299,7 @@ const ProjectDashboardTaskPage: FC = () => {
 														}
 													</div>
 											}
-											
+
 										</td>
 									</tr>
 								)

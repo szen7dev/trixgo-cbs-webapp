@@ -1,12 +1,12 @@
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import { useParams, Link, useHistory } from 'react-router-dom';
 import iconBack from "assets/images/icon-back-gray.svg";
-import {formatNumberMoney} from "utils/cmcs";
+import { formatNumberMoney } from "utils/cmcs";
 
 // Hook
-import { useContractIpcCustom } from 'services/hooks/cmcs/useContractIPC';
+// import { useContractIpcCustom } from 'services/hooks/cmcs/useContractIPC';
+// import ContractIPCRepository from 'apis/cmcs/contractIPC';
 import { useProject } from 'services/hooks/items/useProject';
-import ContractIPCRepository from 'apis/cmcs/contractIPC';
 import { useContractDashboard } from 'services/hooks/items/useContract';
 
 const ProjectDashboardTab2Page: FC<any> = () => {
@@ -29,6 +29,7 @@ const ProjectDashboardTab2Page: FC<any> = () => {
 		document.title = `${projectInfo.sign} | Giá trị ký`
 	}, [projectInfo]);
 	let total = 0;
+
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
 			<div className={"sticky top-0 bg-white z-10"}>
@@ -58,13 +59,13 @@ const ProjectDashboardTab2Page: FC<any> = () => {
 							<th className="py-2.5 px-3 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
 								Giá trị ký
 							</th>
-						</tr>	
+						</tr>
 					</thead>
 					<tbody className="">
 						{
 							contractAmountByMonth?.map((item: any, index: any) => {
 								total += item?.amount;
-								if(index == contractAmountByMonth.length-1){
+								if(index === contractAmountByMonth.length-1){
 									return (
 										<>
 											<tr key={index} className="text-left hover:bg-cbs-table-header cursor-pointer">

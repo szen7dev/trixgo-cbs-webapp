@@ -274,7 +274,7 @@ const AddNewTaskDialog: FC = () => {
                     />
                   </div>
                 }
-                onChange={(date: Date | null) => console.log("birthDate", date)}
+                onChange={() => alert('Tính năng đang phát triển')}
               />
             </div>
           </div>

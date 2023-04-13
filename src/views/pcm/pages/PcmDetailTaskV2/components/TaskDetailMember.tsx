@@ -1,4 +1,4 @@
-import { FC, useRef, useState } from "react";
+import { FC, useState } from "react";
 import moment from "moment";
 import iconAddGroup from "assets/images/icons8-add-user-group-man-man-64.svg";
 import taskUserAvt from "assets/images/task-user.svg";
@@ -8,7 +8,7 @@ import { Task } from "typings/task";
 import { User } from "typings/user";
 import { ModalUpdateTaskAssignee } from './ModalUpdateTaskAssignee';
 import { Popover } from "@mui/material";
-import { makeStyles } from "@material-ui/styles";
+// import { makeStyles } from "@material-ui/styles";
 import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
 import useModalPcm from "views/pcm/hooks/useModal";
 import ModalViewUsersRelated from "../../PcmDetailTask/components/Modal/ModalViewUsersRelated";
@@ -20,14 +20,14 @@ type Props = {
     refetchInfo: () => void;
 }
 
-const useStyles = makeStyles({
-    popover: {
-        pointerEvents: "none"
-    },
-    popoverContent: {
-        pointerEvents: "auto"
-    }
-});
+// const useStyles = makeStyles({
+//     popover: {
+//         pointerEvents: "none"
+//     },
+//     popoverContent: {
+//         pointerEvents: "auto"
+//     }
+// });
 
 export const TaskDetailMember: FC<Props> = ({ task, user, refetchInfo }) => {
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);

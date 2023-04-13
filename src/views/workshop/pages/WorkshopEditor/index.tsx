@@ -51,14 +51,14 @@ const WorkshopEditor: FC = () => {
             editorRef.current?.setContent(data.data.content);
           }
         } catch (error) {
-          console.log(error);
+          console.error(error);
         }
         isSetted.current = true;
       },
     }
   );
 
-  const { isLoading, mutate } = useMutation(SubjectRepositories.update, {
+  const { mutate } = useMutation(SubjectRepositories.update, {
     mutationKey: "update_subject",
     onSuccess(lesson) {
       try {

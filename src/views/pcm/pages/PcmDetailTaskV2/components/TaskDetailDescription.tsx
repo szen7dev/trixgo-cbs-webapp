@@ -25,9 +25,9 @@ type Props = {
 function checkCreateAtWith60minute(time: any){
     const timeStartComment = time;
     const nowDate = moment();
-    if (nowDate.diff(timeStartComment, 'minutes') < 60) { 
+    if (nowDate.diff(timeStartComment, 'minutes') < 60) {
         return true;
-    }else{ 
+    }else{
         return false;
     }
 }
@@ -182,7 +182,7 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                     }
                 </div>
                 <div className={"mt-2"} dangerouslySetInnerHTML={{
-                    __html: (editDescription && task.description) ? task.description : task.description?.replace(/\n/g, '<br />')
+                    __html: (editDescription && task.description) ? task.description : task.description?.replace?.(/\n/g, '<br />')
                 }} />
                 { task.authorAttachs?.length ? (
                     <div className={"mt-2"}>
@@ -237,8 +237,8 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                                                         {moment(file.createAt).format('DD/MM/YYYY HH:mm')} {moment(file.createAt).fromNow()}
                                                     </div>
                                                 </div>
-                                                <textarea 
-                                                    className={"p-2 w-full text-xs h-[60px] min-h-[60px] max-h-[60px] bg-cbs-form-input-bg"} 
+                                                <textarea
+                                                    className={"p-2 w-full text-xs h-[60px] min-h-[60px] max-h-[60px] bg-cbs-form-input-bg"}
                                                     placeholder={"Nhập nội dung ghi chú"}
                                                     name={file._id}
                                                     defaultValue={ file.description }
@@ -306,8 +306,8 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
                                                         asdasd{moment(file.createAt).format('DD/MM/YYYY HH:mm')} {moment(file.createAt).fromNow()}
                                                     </div>
                                                 </div>
-                                                <textarea 
-                                                    className={"p-2 w-full text-xs h-[60px] min-h-[60px] max-h-[60px] bg-cbs-form-input-bg"} 
+                                                <textarea
+                                                    className={"p-2 w-full text-xs h-[60px] min-h-[60px] max-h-[60px] bg-cbs-form-input-bg"}
                                                     placeholder={"Nhập nội dung ghi chú"}
                                                     name={file._id}
                                                     defaultValue={ file.description }

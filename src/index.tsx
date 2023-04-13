@@ -10,7 +10,7 @@ import App from "App";
 // import reportWebVitals from "reportWebVitals";
 // import * as serviceWorker from "./serviceWorker";
 
-if(['staging', 'production'].includes(process.env.REACT_APP_ENV)) {
+// if(['staging', 'production'].includes(process.env.REACT_APP_ENV)) {
   // Sentry.init({
   //   dsn: process.env.REACT_APP_SENTRY_DSN,
   //   integrations: [new BrowserTracing()],
@@ -29,7 +29,7 @@ if(['staging', 'production'].includes(process.env.REACT_APP_ENV)) {
   //   // We recommend adjusting this value in production
   //   tracesSampleRate: 1.0,
   // });
-}
+// }
 
 ReactDOM.render(
   <React.StrictMode>

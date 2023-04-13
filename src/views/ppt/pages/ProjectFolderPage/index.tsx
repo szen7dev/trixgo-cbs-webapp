@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from "react";
-import { RouteComponentProps, useHistory, useLocation, useParams, Link } from "react-router-dom";
+import { RouteComponentProps, useHistory, useParams, Link } from "react-router-dom";
 import { PCM_STATUS_TASK } from 'apis/localdb';
 import { useModal } from "services/hooks/useModal";
 
@@ -50,8 +50,6 @@ const FolderIcon: FC<{ type: string }> = ({ type }) => {
 	switch (type) {
 		case "file":
 			return <></>;
-		// return <img src={iconFile} alt="file" className="inline-block mr-3" />;
-
 		default:
 			return (
 				<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 inline text-cbs-subtext mr-3" viewBox="0 0 20 20" fill="currentColor">
@@ -282,7 +280,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 							{
 								listPcmPlanGroup.map((props: any, index: any) => {
 									let isGroupDefault = false;
-									if (dataUserInfo?.data?.groupDefault?.toString() == props._id?.toString()) {
+									if (dataUserInfo?.data?.groupDefault?.toString() === props._id?.toString()) {
 										isGroupDefault = true;
 									}
 									return (
@@ -302,7 +300,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 														if (index1 < 5) {
 															return <img src={`${process.env.REACT_APP_URL_S3_USER}/${member?.image}`} key={index1} alt="" className="w-6 h-6 rounded-full" />
 														}
-														if (index1 == 5) {
+														if (+index1 === 5) {
 															return <div key={index1} className="h-6 w-6 rounded-full -ml-1.5 bg-cbs-border text-white flex justify-center items-center" style={{ fontSize: "10px" }}>+{props.members.length - 5}</div>
 														}
 													})}
