@@ -215,6 +215,7 @@ export const FnbBillOrder: FC = () => {
 
                     <hr className="border-cbs-border" />
                         <p className="text-center mt-2"><b>Quét QR truy cập Link WINGGO của bạn</b></p>
+                        <p className="text-center"><i>Lưu lại Link WINGGO này để tra cứu khi cần</i></p>
                         <p className="text-center"><i>Xem thông tin lịch sử mua hàng, tích điểm, voucher/mã ưu đãi và mã giới thiệu bạn bè để nhận Vocuher ưu đãi <b>15.000đ/01 bạn</b> bè của bạn</i></p>
                     {
                         info?.customer._id.toString() != "63ae4832be33df0012ecadbd" ? <div>
