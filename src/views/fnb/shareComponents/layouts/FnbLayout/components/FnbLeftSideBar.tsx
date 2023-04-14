@@ -274,6 +274,7 @@ export const FnbLeftSideBar: FC = () => {
                                                     {/* <div className="text-cbs-subtext">{formatNumberMoney(item?.remainLoyaltyPoints)}đ</div> */}
                                                 </div>
                                                 <div className="text-cbs-subtext">{item?.phone}-{item?.note}</div>
+                                                <div className="text-cbs-subtext"><i>{item?._id}</i></div>
                                             </div>
                                         </div>
                                     ))

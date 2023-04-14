@@ -2,30 +2,19 @@
 import { FC, useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import moment from "moment";
-import { formatNumberMoney, convertCurrency } from "utils/converter";
+import { formatNumberMoney } from "utils/converter";
 import QRCode from "react-qr-code";
 
-/*=====2.CSS=====*/
-
-/*=====3.ICONS=====*/
-import zaloOA from "assets/images/WinggoZaloOA.jpg";
-
-/*=====4.PAGES/COMPONENTS=====*/
-
-/*=====5.TYPINGS=====*/
-
-/*=====6.HOOKS/APIS=====*/
+import zaloOA from "assets/images/WinggoZaloOA.png";
 
 import API from "apis/repository";
-import { convertObToUrl } from "utils";
-import { useAuth } from "services/hooks/auth/useAuth";
+import { convertObToUrl } from "utils"
 import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
 
 /*=====7.OTHER=====*/
 import { FNB_CHANNEL, FNB_PAYMENT, FNB_SIZE } from "apis/localdb";
 
 export const FnbBillOrder: FC = () => {
-    const { user } = useAuth();
     const { orderID } = useParams<{ orderID: string }>()
     const [orderProducts, setOrderProducts] = useState([]);
 
@@ -91,7 +80,7 @@ export const FnbBillOrder: FC = () => {
         <main className="h-screen overflow-auto bg-cbs-border">
             <div className="mx-auto my-2 bg-white h-full p-2 flex flex-col justify-between">
                 <div>
-                    <div className="relative mb-6">
+                    <div className="relative mb-6" style={{ height: "110px" }}>
                         <Link to ={`/fnb/home`}>
                             {/* <img src={`${process.env.REACT_APP_URL_S3}${info?.funda?.bankQrcode?.path}`} alt="Bank" style={{ width: "90px", height: "90px" }} /> */}
                             <div className="mt-3">
@@ -100,7 +89,9 @@ export const FnbBillOrder: FC = () => {
                                 <div className="text-[12px]">{info?.funda?.phone}</div>
                             </div>
 						</Link>
-                        <div><img src={zaloOA} alt="ZaloOA" style={{ width: "75px", height: "75px" }} className="absolute top-0 right-0"/></div>
+                        <div>
+                            <img src={zaloOA} alt="ZaloOA" style={{ width: "125px", height: "125px" }} className="absolute top-0 right-0 mb-2"/>
+                        </div>
                     </div>
                     <div className="text-center py-1">
                         <Link to={`/fnb/home/${info?._id}/print/2`}>
