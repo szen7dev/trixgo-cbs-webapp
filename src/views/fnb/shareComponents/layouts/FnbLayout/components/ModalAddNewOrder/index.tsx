@@ -303,23 +303,23 @@ export const ModalAddNewOrder: FC<Props> = () => {
         offer: voucherTotalPrice.toString(),
         voucherID: voucherId || ""
       }
-      // console.log({ dataAddNewOrder })
+      console.log({ dataAddNewOrder })
 
       const { data, status } = await API.post(
         `/api/fnb/orders`,
         dataAddNewOrder
       );
-      // console.log({ data, status })
+      console.log({ data, status })
 
       if (status !== 200) return toast.warning('Yêu cầu tạo đơn thất bại');
       if (data.error) return toast.warning(data.data.message);
 
-      // console.log({
-      //   isConnect: socket.connected,
-      //   companyID: user?.company?._id,
-      //   fundaID: dataAddNewOrder.fundaID,
-      //   orderInfo: data?.data,
-      // });
+      console.log({
+        isConnect: socket.connected,
+        companyID: user?.company?._id,
+        fundaID: dataAddNewOrder.fundaID,
+        orderInfo: data?.data,
+      });
 
       // Bắn Socket lên Server
       socket?.emit('FNB_CSS_ADD_NEW_ORDER', {
