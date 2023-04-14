@@ -1,7 +1,6 @@
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useParams, Link } from 'react-router-dom';
 
-// Hook
 import { useQueryListCompanyOfAssigneeAndAmountTask } from "services/hooks/pcm/useStatistical";
 
 import ModalInformation from "./components/ModalInformation";

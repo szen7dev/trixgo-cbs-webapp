@@ -6,81 +6,6 @@ import styles from 'views/support/styles/support.module.css'
 import { useListAppDeviceAccess } from 'services/hooks/useSupport';
 import { checkTimeType } from "utils/app";
 
-// const data = [
-//   {
-//     id: 1,
-//     name: "Quản lý công việc",
-//     "%": 12,
-//     mob: 1522,
-//     tab: 3566,
-//     web: 4800,
-//   },
-//   {
-//     id: 2,
-//     name: "Quản lý hồ sơ văn bản",
-//     "%": 12,
-//     mob: 1522,
-//     tab: 3566,
-//     web: 4800,
-//   },
-//   {
-//     id: 3,
-//     name: "Quản lý hợp đồng",
-//     "%": 12,
-//     mob: 1522,
-//     tab: 3566,
-//     web: 4800,
-//   },
-//   {
-//     id: 4,
-//     name: "Quản trị tài chính",
-//     "%": 12,
-//     mob: 1522,
-//     tab: 3566,
-//     web: 4800,
-//   },
-//   {
-//     id: 5,
-//     name: "Quản lý nhân sự",
-//     "%": 12,
-//     mob: 1522,
-//     tab: 3566,
-//     web: 4800,
-//   },
-//   {
-//     id: 6,
-//     name: "Quản lý dự án",
-//     "%": 12,
-//     mob: 1522,
-//     tab: 3566,
-//     web: 4800,
-//   },
-//   {
-//     id: 7,
-//     name: "Truyền thông",
-//     "%": 12,
-//     mob: 1522,
-//     tab: 3566,
-//     web: 4800,
-//   },
-//   {
-//     id: 8,
-//     name: "Kế toán",
-//     "%": 12,
-//     mob: 1522,
-//     tab: 3566,
-//     web: 4800,
-//   },
-//   {
-//     id: 9,
-//     name: "...",
-//     "%": 12,
-//     mob: 1522,
-//     tab: 3566,
-//     web: 4800,
-//   },
-// ];
-
 type Props = {
   timeType: string;
 };
@@ -104,16 +29,7 @@ const DetailsByAppDeviceSupport:FC<Props> = (props) => {
         if(+element.type === 3){
           totalTablet += element.amountAccesses;
         }
-      });
-    // if(listAppDeviceAccess[key].data[0].type === 1) {
-    //   totalMobile += listAppDeviceAccess[key].data[0].amountAccesses;
-    // }
-    // if(listAppDeviceAccess[key] && listAppDeviceAccess[key].data[1] && listAppDeviceAccess[key].data[1].type === 2) {
-    //   totalTablet += listAppDeviceAccess[key].data[1].amountAccesses;
-    // }
-    // if(listAppDeviceAccess[key] && listAppDeviceAccess[key].data[2] && listAppDeviceAccess[key].data[2].type === 3) {
-    //   totalWebsite += listAppDeviceAccess[key].data[2].amountAccesses;
-    // }
+      })
   }
 
   const totalAccess = totalMobile + totalTablet + totalWebsite;
