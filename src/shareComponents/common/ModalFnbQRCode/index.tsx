@@ -48,7 +48,7 @@ export const ModalFnbQRCode: FC<Props> = ({ isToggle, toggle, value }) => {
         <main className="mb-1 ml-2 mr-2">
           <header className="py-5 flex items-center w-full justify-between">
             <p className="font-bold text-xl">
-              Gửi hình ảnh cho bạn bè
+              Chụp màn hình gửi bạn bè
             </p>
             <img
               src={CloseIcon}
@@ -59,7 +59,7 @@ export const ModalFnbQRCode: FC<Props> = ({ isToggle, toggle, value }) => {
           </header>
           <QRCode id="qrcode" value={JSON.stringify(value)} size={275} />
 
-          <div className="flex justify-end mt-5">
+          {/* <div className="flex justify-end mt-5">
             <div>
               <button
                 onClick={downloadQR}
@@ -68,7 +68,7 @@ export const ModalFnbQRCode: FC<Props> = ({ isToggle, toggle, value }) => {
                 Tải xuống
               </button>
             </div>
-          </div>
+          </div> */}
 
         </main>
       </div>
