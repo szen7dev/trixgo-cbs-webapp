@@ -122,11 +122,11 @@ const FnbPage: FC = () => {
                 listVouchers.map((item: any, i: any) => (
                     <div key={item?._id} className="border p-2 mb-2">
                         <div>
-                            <img src={orderGift} className="w-[24px] h-[24px] float-left inline-block mr-2"/>
-                            <div className="inline-block float-left mr-3">{item.name} - <b className="text-cbs-primary text-base">{item?.sign}</b></div>
+                            <img src={orderGift} className="w-[24px] h-[24px] inline-block mr-2"/>
+                            <div className="inline-block mr-3">{item.name} - <b className="text-cbs-primary text-base">{item?.sign}</b></div>
                             {/* <input type="text" placeholder={"Điện thoại nhận"} className="w-[100px] h-[24px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none"/> */}
                         </div>
-                        <p><b>Ưu đãi {formatNumberMoney(item?.salesoffAmount)} | Giảm giá {formatNumberMoney(item?.salesoffRate)} % - Đơn hàng từ {formatNumberMoney(item?.minOrderAmount)}</b></p>
+                        <p className="mt-1 mb-1"><b>Ưu đãi {formatNumberMoney(item?.salesoffAmount)} | Giảm giá {formatNumberMoney(item?.salesoffRate)} % - Đơn hàng từ {formatNumberMoney(item?.minOrderAmount)}</b></p>
                         <p>
                             Thời hạn: {moment(item.expired).format('DD/MM/YYYY HH:mm')}
                             <span className="text-cbs-schedule-expired"> ({moment(item.expired).fromNow()})</span>
@@ -149,8 +149,8 @@ const FnbPage: FC = () => {
                         </p>
                         <p>Voucher: 
                              <b className="text-cbs-primary pr-1 pl-1">{item?.voucher?.sign}</b>
+                             <span className="text-primary-gray">- Ưu đãi {formatNumberMoney(item?.voucher?.salesoffAmount)} | Giảm giá {formatNumberMoney(item?.voucher?.salesoffRate)} % - Đơn hàng từ {formatNumberMoney(item?.voucher?.minOrderAmount)}</span>
                         </p>
-                        <p className="text-primary-gray">- Ưu đãi {formatNumberMoney(item?.voucher?.salesoffAmount)} | Giảm giá {formatNumberMoney(item?.voucher?.salesoffRate)} % - Đơn hàng từ {formatNumberMoney(item?.voucher?.minOrderAmount)}</p>
                         <p>Mã hiệu: {item?.sign} | {FNB_CHANNEL[Number(item?.salesChannel)-1]?.sign}{item?.appOrderSign}</p>
                         <div className="relative">
                             <p>Tổng giá trị</p>
