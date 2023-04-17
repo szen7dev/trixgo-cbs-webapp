@@ -122,11 +122,11 @@ const FnbPage: FC = () => {
                 listVouchers.map((item: any, i: any) => (
                     <div key={item?._id} className="border p-2 mb-2">
                         <div>
-                            <img src={orderGift} className="w-[24px] h-[24px] float-left inline-block mr-2"/>
-                            <div className="inline-block float-left mr-3">{item.name} - <b className="text-cbs-primary text-base">{item?.sign}</b></div>
+                            <img src={orderGift} className="w-[24px] h-[24px] inline-block mr-2"/>
+                            <div className="inline-block mr-3">{item.name} - <b className="text-cbs-primary text-base">{item?.sign}</b></div>
                             {/* <input type="text" placeholder={"Điện thoại nhận"} className="w-[100px] h-[24px] border-0.5 border-cbs-border bg-cbs-table-header px-1 py-1 outline-none"/> */}
                         </div>
-                        <p><b>Ưu đãi {formatNumberMoney(item?.salesoffAmount)} | Giảm giá {formatNumberMoney(item?.salesoffRate)} % - Đơn hàng từ {formatNumberMoney(item?.minOrderAmount)}</b></p>
+                        <p className="mt-1 mb-1"><b>Ưu đãi {formatNumberMoney(item?.salesoffAmount)} | Giảm giá {formatNumberMoney(item?.salesoffRate)} % - Đơn hàng từ {formatNumberMoney(item?.minOrderAmount)}</b></p>
                         <p>
                             Thời hạn: {moment(item.expired).format('DD/MM/YYYY HH:mm')}
                             <span className="text-cbs-schedule-expired"> ({moment(item.expired).fromNow()})</span>
