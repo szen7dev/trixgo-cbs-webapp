@@ -149,8 +149,8 @@ const FnbPage: FC = () => {
                         </p>
                         <p>Voucher: 
                              <b className="text-cbs-primary pr-1 pl-1">{item?.voucher?.sign}</b>
-                             <span className="text-primary-gray">- Ưu đãi {formatNumberMoney(item?.voucher?.salesoffAmount)} | Giảm giá {formatNumberMoney(item?.voucher?.salesoffRate)} % - Đơn hàng từ {formatNumberMoney(item?.voucher?.minOrderAmount)}</span>
                         </p>
+                        <p className="text-primary-gray">- Ưu đãi {formatNumberMoney(item?.voucher?.salesoffAmount)} | Giảm giá {formatNumberMoney(item?.voucher?.salesoffRate)} % - Đơn hàng từ {formatNumberMoney(item?.voucher?.minOrderAmount)}</p>
                         <p>Mã hiệu: {item?.sign} | {FNB_CHANNEL[Number(item?.salesChannel)-1]?.sign}{item?.appOrderSign}</p>
                         <div className="relative">
                             <p>Tổng giá trị</p>
