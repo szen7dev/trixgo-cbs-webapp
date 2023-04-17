@@ -21,6 +21,7 @@ const CreateFnbExpenseFundaDetail: FC<any> = ({ toggle, modalType, onConfirm, co
     date: "",
     name: "",
     note: "",
+    plan: 1,
     outin: 1,
     revenueType: 1,
     expenseType:1,
@@ -197,6 +198,22 @@ const CreateFnbExpenseFundaDetail: FC<any> = ({ toggle, modalType, onConfirm, co
                                         }}
                                         inlineSearch={true}
                                     />
+                                </div>
+                                
+                                <div className="mb-4">
+                                    <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtPlan">
+                                       Kế hoạch, thực tế
+                                    </label>
+                                    <div className={" flex items-center"}>
+                                        <div className={"flex items-center"}>
+                                            <Field type="radio" name="plan" value={1} className={"form-check-input mt-0"} onChange={() => setFieldValue('plan', 1)} />
+                                            <label htmlFor="plan" className={"text-left ml-3"}>Kế hoạch</label>
+                                        </div>
+                                        <div className={"flex items-center ml-3"}>
+                                            <Field type="radio" name="plan" value={2} className={"form-check-input mt-0"} onChange={() => setFieldValue('plan', 2)}/>
+                                            <label htmlFor="plan" className={"text-left ml-3"}>Thực tế</label>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div className="mb-4">
