@@ -26,7 +26,7 @@ import { useAuth } from 'services/hooks/auth/useAuth';
 import { read, utils } from 'xlsx';
 
 /*=====7.OTHER=====*/
-import { FNB_CHANNEL, FNB_BOOK_OUTIN, FNB_BOOK_TYPE, APP_ID } from "apis/localdb";
+import { FNB_BOOK_PLAN, FNB_CHANNEL, FNB_BOOK_OUTIN, FNB_BOOK_TYPE, FNB_BOOK_STORE, APP_ID } from "apis/localdb";
 import { createLinkAndClick } from "utils";
 
 export const FnbStoreImportPage: FC = () => {
@@ -59,18 +59,18 @@ export const FnbStoreImportPage: FC = () => {
 		setIdsChecked([id]);
 	};
 
-	const getStateCheckedAll = useCallback(() => {
-		return idsChecked.length == listWithPager.length;
-	}, [idsChecked]);
+	// const getStateCheckedAll = useCallback(() => {
+	// 	return idsChecked.length == listWithPager.length;
+	// }, [idsChecked]);
 
-	const onClickCheckAll = () => {
-		if (idsChecked.length == listWithPager.length) {
-			setIdsChecked([]);
-		} else {
-			const idsAll = listWithPager.map((e: any) => e._id);
-			setIdsChecked(idsAll);
-		}
-	};
+	// const onClickCheckAll = () => {
+	// 	if (idsChecked.length == listWithPager.length) {
+	// 		setIdsChecked([]);
+	// 	} else {
+	// 		const idsAll = listWithPager.map((e: any) => e._id);
+	// 		setIdsChecked(idsAll);
+	// 	}
+	// };
 
 	const [modalCreateShiftDetail, setModalCreateShiftDetail] = useState<boolean>(false);
 	const toggleModalCreateShiftDetail = () => setModalCreateShiftDetail(!modalCreateShiftDetail);
@@ -313,7 +313,11 @@ export const FnbStoreImportPage: FC = () => {
 								{moment(item?.date).format("DD/MM/YYYY")}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{FNB_BOOK_OUTIN[Number(item?.outin)-1].text}/{FNB_CHANNEL[Number(item?.revenueType)-1].text}/{FNB_BOOK_TYPE[Number(item?.expenseType)-1].text}
+								{FNB_BOOK_PLAN[Number(item?.plan)-1].text}/
+								{FNB_BOOK_OUTIN[Number(item?.outin)-1].text}/
+								{FNB_CHANNEL[Number(item?.revenueType)-1].text}/
+								{FNB_BOOK_TYPE[Number(item?.expenseType)-1].text}/
+								{(item?.storeType && item?.storeType >= 1) ? FNB_BOOK_STORE[Number(item?.storeType)-1].text : ''}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
 								<Link to={`/fnb/store/${fundaID}/import/${item?._id}`}>
