@@ -112,6 +112,7 @@ export const FnbStoreImportDetailPage: FC = () => {
         deleteManyAsync, isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbGeneralBook({ 
 		params: { 
 			keyword: keyword, 
+            limit: 20,
 			fundasID: [fundaID], 
 			parentID: detailID, 
 			populates: JSON.stringify({

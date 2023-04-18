@@ -26,6 +26,7 @@ const CreateFnbStoreImport: FC<any> = ({ toggle, modalType, onConfirm, companyID
     revenueType: 1,
     expenseType:1,
     appExpenseType: 1,
+    storeType: 1,
 } }) => {
     const { fundaID } = useParams<{ fundaID: string }>();
     const [keyword, setKeyword] = useState('');
@@ -159,44 +160,44 @@ const CreateFnbStoreImport: FC<any> = ({ toggle, modalType, onConfirm, companyID
 
                                 <div className="mb-4">
                                     <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtCampaignName">
-                                        Chiến dich
+                                        Chiến dịch
                                     </label>
                                     <DropdownSearchable
-                                            onchangeValue={(value: any) => {
-                                                setFieldValue("campaignName", {value, _id: value.id });
-                                            }}
-                                            onClearData={() => {
-                                                setFieldValue("campaignName", "");
-                                            }}
-                                            onSearchInputChange={debounce((value: any) => setKeywordDoctype(value), 600)}
-                                            // onScroll={handleScroll}
-                                            className="w-full mt-2 rounded-md border border-primary-border px-1 py-1 placeholder-primary-gray bg-cbs-table-header"
-                                            placeholder="Tìm kiếm cơ sở"
-                                            isMultiple={false}
-                                            allowClearValueSingleInput={true}
-                                            showTriangle={false}
-                                            maxWidthInput="max-w-full"
-                                            renderSelectedItem={(item: any) => (
-                                                <div className="max-w-full">
-                                                    <p className={"truncate"}>{item.text}</p>
-                                                </div>
-                                            )}
-                                            data={ 
-                                                listDoctypes?.map((doctype: any) =>  ({
-                                                    label: doctype.name,
-                                                    value: doctype._id,
-                                                }))
-                                            }
-                                            initialValue={{
-                                                value: initialValues?.campaignName?._id || "", 
-                                                label: initialValues?.campaignName?.name || "Chọn chiến dịch"
-                                            }}
-                                            formatItem={{
-                                                id: "value",
-                                                text: "label",
-                                            }}
-                                            inlineSearch={true}
-                                        />
+                                        onchangeValue={(value: any) => {
+                                            setFieldValue("campaignName", {value, _id: value.id });
+                                        }}
+                                        onClearData={() => {
+                                            setFieldValue("campaignName", "");
+                                        }}
+                                        onSearchInputChange={debounce((value: any) => setKeywordDoctype(value), 600)}
+                                        // onScroll={handleScroll}
+                                        className="w-full mt-2 rounded-md border border-primary-border px-1 py-1 placeholder-primary-gray bg-cbs-table-header"
+                                        placeholder="Tìm kiếm cơ sở"
+                                        isMultiple={false}
+                                        allowClearValueSingleInput={true}
+                                        showTriangle={false}
+                                        maxWidthInput="max-w-full"
+                                        renderSelectedItem={(item: any) => (
+                                            <div className="max-w-full">
+                                                <p className={"truncate"}>{item.text}</p>
+                                            </div>
+                                        )}
+                                        data={ 
+                                            listDoctypes?.map((doctype: any) =>  ({
+                                                label: doctype.name,
+                                                value: doctype._id,
+                                            }))
+                                        }
+                                        initialValue={{
+                                            value: initialValues?.campaignName?._id || "", 
+                                            label: initialValues?.campaignName?.name || "Chọn chiến dịch"
+                                        }}
+                                        formatItem={{
+                                            id: "value",
+                                            text: "label",
+                                        }}
+                                        inlineSearch={true}
+                                    />
                                 </div>
 
                                 <div className="mb-4">
@@ -301,6 +302,22 @@ const CreateFnbStoreImport: FC<any> = ({ toggle, modalType, onConfirm, companyID
                                         <div className={"flex items-center ml-3"}>
                                             <Field type="radio" name="expenseType" value={7} className={"form-check-input mt-0"} onChange={() => setFieldValue('expenseType', 7)} />
                                             <label htmlFor="expenseType" className={"text-left ml-3"}>Khác</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="mb-4">
+                                    <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtStoreType">
+                                        Phân loại nhập, xuất
+                                    </label>
+                                    <div className={" flex items-center"}>
+                                        <div className={"flex items-center"}>
+                                            <Field type="radio" name="storeType" value={1} className={"form-check-input mt-0"} onChange={() => setFieldValue('storeType', 1)} />
+                                            <label htmlFor="storeType" className={"text-left ml-3"}>Nhập kho</label>
+                                        </div>
+                                        <div className={"flex items-center ml-3"}>
+                                            <Field type="radio" name="storeType" value={2} className={"form-check-input mt-0"} onChange={() => setFieldValue('storeType', 2)}/>
+                                            <label htmlFor="storeType" className={"text-left ml-3"}>Xuất kho</label>
                                         </div>
                                     </div>
                                 </div>

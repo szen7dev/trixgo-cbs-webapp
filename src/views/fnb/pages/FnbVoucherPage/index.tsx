@@ -6,13 +6,11 @@ import debounce from "lodash/debounce";
 import { toast } from "react-toastify";
 import { APP_ID } from "apis/localdb";
 import { formatNumberMoney } from "utils/converter";
-import { validateFiles } from 'validation/file';
 import { read, utils } from 'xlsx';
 
 /*=====2.CSS=====*/
 
 /*=====3.ICONS=====*/
-import CameraIcon from "assets/images/camera-icon.svg";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
@@ -24,10 +22,8 @@ import PaginateV2 from "shareComponents/common/PaginateV2";
 /*=====5.TYPINGS=====*/
 
 /*=====6.HOOKS/APIS=====*/
-import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
-import { useUpload } from "services/hooks/useUpload";
+import { useCheckPerAccessOneMenu } from "services/hooks/auth/usePermissions";
 import { useAuth } from "services/hooks/auth/useAuth";
-import API from "apis/repository";
 
 /*=====7.OTHER=====*/
 import { createLinkAndClick } from "utils";
@@ -42,19 +38,6 @@ const TYPE_VOUCHER = [
 	{ value: 7, text: "Tặng khác" },
 ]
 
-// export const compareTwoTime = (time1: any, time2: any) => {
-//     const a = (new Date(time1)).getTime();
-//     const b = (new Date(time2)).getTime();
-//     if (a > b) {
-//         return 1;
-//     } else if (b > a) {
-//         return 2;
-//     } else {
-//         return 0;
-//     }
-// }
-// const currentTime = new Date()
-
 export const FnbVoucherPage: FC = () => {
 	useEffect(() => {
 		document.title = "FnB";
@@ -62,18 +45,22 @@ export const FnbVoucherPage: FC = () => {
 
 	const history = useHistory();
 	const { user } = useAuth();
-	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
+	const { permission } = useCheckPerAccessOneMenu({ appID: APP_ID.FNB.id, menuID: APP_ID.FNB.menuFnbApp.voucher.id, companyID: user?.company._id, type: "1", });
+
+	// useEffect(() => {
+	// 	if (!permission.read || permission.read == 0) {
+	// 		toast.error("Không có quyền truy cập");
+	// 		history.push("/fnb/home")
+	// 	}
+	// }, [permission]);
+
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
-	const fileInputRef = useRef<HTMLInputElement>(null);
-
-	const { addFileToUpload } = useUpload({
-		appID: APP_ID.FNB.id,
-		companyID: user?.company?._id,
-	});
 
     const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbVoucher({
 		params: {
+			keyword,
+			limit: 20,
 			populates: JSON.stringify({
 				path: "referrer customer userCreate",
                 select: "_id name fullname phone"
@@ -110,13 +97,6 @@ export const FnbVoucherPage: FC = () => {
 
 	const [initialValues, setInitialValues] = useState(null);
 	const onConfirmCreateFnbProduct = () => refetch();
-
-	useEffect(() => {
-		if (isSuccess && !(hasPermission)) {
-			toast.error("Bạn không có quyền truy cập chức năng này. Vui lòng liên hệ ban quản trị.");
-			history.push("/")
-		}
-	}, [hasPermission]);
 
 	type PaginateHandle = React.ElementRef<typeof PaginateV2>;
     const ref = React.useRef<PaginateHandle>(null);
@@ -256,7 +236,7 @@ export const FnbVoucherPage: FC = () => {
 					ref={ref}
 					totalRecord={totalRecord}
 					totalPages={totalPage}
-					limit={10}
+					limit={20}
 					hasNextPage={hasNextPage}
 					isFetching={isLoading}
 					nextPageAction={() => {
