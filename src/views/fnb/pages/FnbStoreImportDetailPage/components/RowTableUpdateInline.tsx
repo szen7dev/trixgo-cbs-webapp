@@ -5,13 +5,11 @@ import { convertCurrency, convertCurrencyToNumber } from "utils/converter";
 
 import { DropdownSearchable } from "shareComponents/common";
 import { Contract } from "typings/cmcs";
-import CashFlowPlan from "typings/financial/cashFlowPlan";
 import { useGoods } from "services/hooks/items/useGoods";
-import { FNB_CHANNEL, FNB_BOOK_OUTIN, FNB_BOOK_TYPE, APP_ID } from "apis/localdb";
+import { FNB_BOOK_PLAN, FNB_CHANNEL, FNB_BOOK_OUTIN, FNB_BOOK_TYPE, APP_ID, FNB_BOOK_STORE } from "apis/localdb";
 
 type Props = {
   index: number,
-  // cashFlow: CashFlowPlan.CashFlowPlan,
   cashFlow: any,
   contracts: Contract[],
   onUpdate: (values: any, callback: (response: any) => void) => Promise<any>;
@@ -21,7 +19,7 @@ type Props = {
   itemsChecked: string[]
 };
 
-const RowTableUpdateInline: FC<Props> = ({ index, contracts, cashFlow, itemsChecked, onUpdate, onScrollContract, onSearchContract, onChangeCheckbox }) => {
+const RowTableUpdateInline: FC<Props> = ({ index, cashFlow, itemsChecked, onUpdate, onChangeCheckbox }) => {
   const [sellerName, setSellerName] = useState(cashFlow.contract?.sellerInfo?.name);
   const [values, setValues] = useState({
     value: `${cashFlow.value}`,
@@ -40,20 +38,6 @@ const RowTableUpdateInline: FC<Props> = ({ index, contracts, cashFlow, itemsChec
   const getStateCheckbox = useCallback((id: string) => {
 		return itemsChecked.includes(id);
 	}, [itemsChecked]);
-
-  const handleChangeCheckbox = () => {
-    const cashFlowID = cashFlow._id;
-		const isChecked = itemsChecked.includes(cashFlowID);
-    let idsListNew: string[] = [];
-
-		if(isChecked) {
-      idsListNew = itemsChecked.filter(item => item !== cashFlowID);
-    } else {
-			idsListNew = [...itemsChecked, cashFlowID];
-		};
-
-    onChangeCheckbox(idsListNew)
-	};
 
   const [keyword, setKeyword] = useState('');
   const {
@@ -89,7 +73,11 @@ const RowTableUpdateInline: FC<Props> = ({ index, contracts, cashFlow, itemsChec
         />
       </td>
       <td className="px-2 table-cell box-border border border-gray-300 align-middle">
-        {FNB_BOOK_OUTIN[Number(cashFlow?.outin)-1].text}/{FNB_CHANNEL[Number(cashFlow?.revenueType)-1].text}/{FNB_BOOK_TYPE[Number(cashFlow?.expenseType)-1].text}
+        {FNB_BOOK_PLAN[Number(cashFlow?.plan)-1].text}/
+        {FNB_BOOK_OUTIN[Number(cashFlow?.outin)-1].text}/
+        {FNB_CHANNEL[Number(cashFlow?.revenueType)-1].text}/
+        {FNB_BOOK_TYPE[Number(cashFlow?.expenseType)-1].text}/
+        {(cashFlow?.storeType && cashFlow?.storeType >= 1) ? FNB_BOOK_STORE[Number(cashFlow?.storeType)-1].text : ''}
       </td>
       <td className="px-2 table-cell box-border border border-gray-300 align-middle">
            <DropdownSearchable

@@ -27,7 +27,7 @@ import { useFnbGeneralBook } from 'services/hooks/fnb/useFnbGeneralBook';
 import { useAuth } from 'services/hooks/auth/useAuth';
 
 /*=====7.OTHER=====*/
-import { FNB_CHANNEL, FNB_BOOK_OUTIN, FNB_BOOK_TYPE, APP_ID } from "apis/localdb";
+import { FNB_BOOK_PLAN, FNB_CHANNEL, FNB_BOOK_OUTIN, FNB_BOOK_TYPE, APP_ID, FNB_BOOK_STORE } from "apis/localdb";
 import { createLinkAndClick } from "utils";
 
 export const FnbExpenseFundaPage: FC = () => {
@@ -298,7 +298,11 @@ export const FnbExpenseFundaPage: FC = () => {
 								{moment(item?.date).format("DD/MM/YYYY")}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{FNB_BOOK_OUTIN[Number(item?.outin)-1].text}/{FNB_CHANNEL[Number(item?.revenueType)-1].text}/{FNB_BOOK_TYPE[Number(item?.expenseType)-1].text}
+								{FNB_BOOK_PLAN[Number(item?.plan)-1].text}/
+								{FNB_BOOK_OUTIN[Number(item?.outin)-1].text}/
+								{FNB_CHANNEL[Number(item?.revenueType)-1].text}/
+								{FNB_BOOK_TYPE[Number(item?.expenseType)-1].text}/
+								{(item?.storeType && item?.storeType >= 1) ? FNB_BOOK_STORE[Number(item?.storeType)-1].text : ''}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-primary"}>
 								<Link to={`/fnb/expense/${fundaID}/${item?._id}`}>
