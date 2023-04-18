@@ -26,6 +26,7 @@ const CreateFnbExpenseFundaDetail: FC<any> = ({ toggle, modalType, onConfirm, co
     revenueType: 1,
     expenseType:1,
     appExpenseType: 1,
+    storeType: 1,
 } }) => {
     const { fundaID } = useParams<{ fundaID: string }>();
     const [keyword, setKeyword] = useState('');
@@ -302,6 +303,22 @@ const CreateFnbExpenseFundaDetail: FC<any> = ({ toggle, modalType, onConfirm, co
                                         <div className={"flex items-center ml-3"}>
                                             <Field type="radio" name="expenseType" value={7} className={"form-check-input mt-0"} onChange={() => setFieldValue('expenseType', 7)} />
                                             <label htmlFor="expenseType" className={"text-left ml-3"}>Khác</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="mb-4">
+                                    <label className="block text-[13px] text-primary-gray mb-2 ml-3" htmlFor="txtStoreType">
+                                        Phân loại nhập, xuất
+                                    </label>
+                                    <div className={" flex items-center"}>
+                                        <div className={"flex items-center"}>
+                                            <Field type="radio" name="storeType" value={1} className={"form-check-input mt-0"} onChange={() => setFieldValue('storeType', 1)} />
+                                            <label htmlFor="storeType" className={"text-left ml-3"}>Nhập kho</label>
+                                        </div>
+                                        <div className={"flex items-center ml-3"}>
+                                            <Field type="radio" name="storeType" value={2} className={"form-check-input mt-0"} onChange={() => setFieldValue('storeType', 2)}/>
+                                            <label htmlFor="storeType" className={"text-left ml-3"}>Xuất kho</label>
                                         </div>
                                     </div>
                                 </div>

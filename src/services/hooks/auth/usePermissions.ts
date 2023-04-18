@@ -162,15 +162,11 @@ export const useCheckPerAccessOneMenu = (payload: { appID: string, menuID: strin
 // 6. hook check quyền truy cập chi tiết màn hình cụ thể của 1 user, được triệu gọi trong view
 export const useCheckPerAccessScreen = (payload: { appID: string, menuID: string, type: "1" | "2" | "3", companyID?: string }) => {
     const history = useHistory();
-    const { hasPermission, isSuccess: isSuccessApp, dataUserAccess } = useCheckPerAccessApp({ appID: payload.appID });
+    const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: payload.appID });
     const { hasPermission: hasPermissionMenu, isSuccess: isSuccessMenu, permission } = useCheckPerAccessOneMenu(payload);
 
     // Phân quyền theo nhóm chức năng
     useEffect(() => {
-        // if (isSuccessApp && isSuccessMenu && (!hasPermission || !hasPermissionMenu || permission?.read < 1)) {
-        //     toast.error("Bạn không có quyền truy cập tính năng này!");
-        //     history.push("/");
-        // };
         if (isSuccessApp && isSuccessMenu && (!hasPermission)) {
             toast.error("Bạn không có quyền truy cập tính năng này!");
             history.push("/");
@@ -181,5 +177,5 @@ export const useCheckPerAccessScreen = (payload: { appID: string, menuID: string
         createPermission: (permission?.create && permission.create > 0) ? true : false,
         updatePermission: (permission?.update && permission.update > 0) ? true : false,
         deletePermission: (permission?.delete && permission.delete > 0) ? true : false,
-    };
-};
+    }
+}

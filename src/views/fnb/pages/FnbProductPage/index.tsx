@@ -24,7 +24,7 @@ import PaginateV2 from "shareComponents/common/PaginateV2";
 /*=====5.TYPINGS=====*/
 
 /*=====6.HOOKS/APIS=====*/
-import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
+import { useCheckPerAccessOneMenu } from "services/hooks/auth/usePermissions";
 import { useUpload } from "services/hooks/useUpload";
 import { useAuth } from "services/hooks/auth/useAuth";
 import API from "apis/repository";
@@ -44,7 +44,9 @@ export const FnBProductPage: FC = () => {
 
 	const history = useHistory();
 	const { user } = useAuth();
-	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
+	
+	const { hasPermission, permission } = useCheckPerAccessOneMenu({ appID: APP_ID.FNB.id, menuID: APP_ID.FNB.menuFnbApp.product.id, companyID: user?.company._id, type: "1", });
+
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
 	const fileInputRef = useRef<HTMLInputElement>(null);
@@ -130,13 +132,6 @@ export const FnBProductPage: FC = () => {
 	const [initialValues, setInitialValues] = useState(null);
 	const onConfirmCreateFnbProduct = () => refetch();
 
-	useEffect(() => {
-		if (isSuccess && !(hasPermission)) {
-			toast.error("Bạn không có quyền truy cập chức năng này. Vui lòng liên hệ ban quản trị.");
-			history.push("/")
-		}
-	}, [hasPermission]);
-
 	type PaginateHandle = React.ElementRef<typeof PaginateV2>;
     const ref = React.useRef<PaginateHandle>(null);
     const [pageIndex, setPageIndex] = useState(0);
@@ -156,14 +151,6 @@ export const FnBProductPage: FC = () => {
             setStateExport({ isExporting: true });
             const { error, data } = await downloadTemplateExcelAsync({
                 filterParams: {  
-                    // departmentsID: [departmentID],
-                    // ...fromToDate,
-                    // datahubContactsID,
-                    // types,
-                    // directions,
-                    // contractsID,
-                    // storagesID,
-                    // keyword: keywordInput 
                 }
             });
 
@@ -221,6 +208,24 @@ export const FnBProductPage: FC = () => {
             fetchData();
         }
     }, [dataImport])
+
+	useEffect(() => {
+		if (!hasPermission) {
+			toast.error("Không có quyền truy cập");
+			history.push("/fnb/home")
+		}
+	}, [hasPermission, permission])
+
+	// useEffect(() => {
+	// 	if (permission.read == 0) {
+	// 		toast.error("Không có quyền truy cập");
+	// 		history.push("/fnb/home")
+	// 	}
+	// }, [hasPermission, permission])
+
+	// console.log({hasPermission})
+	// console.log({permission})
+	// console.log(permission.read)
 
 	return (
 		<main className="h-full overflow-auto">
