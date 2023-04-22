@@ -224,12 +224,12 @@ export const FnbBillOrder: FC = () => {
                                     <QRCode id="qrcode" value={JSON.stringify(value)} size={175} className="mx-auto mt-5"/>
                                 </main>
                             </div>
-                        </div> : <div className="text-center mb-3 mt-3"><b>Bạn cần cung cấp số điện thoại khi mua hàng để có Link Winggo</b></div>
+                        </div> : <div className="text-center mb-3 mt-3"><b>Bạn cần cung cấp số điện thoại khi mua hàng để có link Winggo</b></div>
                     }
                     
                     <hr className="border-cbs-border" />
                     <div className="text-[12px] text-center ">
-                        <p className=""><b>CẢM ƠN BẠN ĐÃ TIN TƯỞNG LỰA CHỌN WINGGO</b></p>
+                        <p className=""><b>CẢM ƠN BẠN ĐÃ TIN TƯỞNG VÀ LỰA CHỌN WINGGO</b></p>
                         <p className="">Quét mã QR Zalo OA của Winggo (trên cùng, bên tay phải), bấm quan tâm Zalo OA <b>Trà sữa Winggo</b> để nhận Vocuher ưu đãi <b>20.000đ</b> và thông báo/ưu đãi quan trọng dành riêng cho bạn</p>
                         <p><i>Thông tin ưu đãi: https://winggo.vn/uu-dai</i></p>
                     </div>
