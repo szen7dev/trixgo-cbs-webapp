@@ -212,7 +212,7 @@ export const FnbBillOrder: FC = () => {
                         <div>{info?.paymentMethod >=1 && FNB_PAYMENT[Number(info?.paymentMethod)-1].text}</div>
                     </div>
                     <div className="text-center italic text-[12px] border-cbs-border mx-4 py-1 ">{info?.funda?.bankAccount}</div>
-
+{/* 
                     <hr className="border-cbs-border" />
                         <p className="text-center mt-2"><b>Quét QR truy cập Link WINGGO của bạn</b></p>
                         <p className="text-center"><i>Lưu lại Link WINGGO này để tra cứu khi cần</i></p>
@@ -224,13 +224,16 @@ export const FnbBillOrder: FC = () => {
                                     <QRCode id="qrcode" value={JSON.stringify(value)} size={175} className="mx-auto mt-5"/>
                                 </main>
                             </div>
-                        </div> : <div className="text-center mb-3 mt-3"><b>Bạn cần cung cấp số điện thoại khi mua hàng để có link Winggo</b></div>
-                    }
+                        </div> : <div className="text-center mb-3 mt-3"><b>Bạn cần cung cấp số điện thoại khi mua hàng để có Link Winggo</b></div>
+                    } */}                   
                     
                     <hr className="border-cbs-border" />
-                    <div className="text-[12px] text-center ">
-                        <p className=""><b>CẢM ƠN BẠN ĐÃ TIN TƯỞNG VÀ LỰA CHỌN WINGGO</b></p>
-                        <p className="">Quét mã QR Zalo OA của Winggo (trên cùng, bên tay phải), bấm quan tâm Zalo OA <b>Trà sữa Winggo</b> để nhận Vocuher ưu đãi <b>20.000đ</b> và thông báo/ưu đãi quan trọng dành riêng cho bạn</p>
+                    <div className="text-[12px] text-center mt-3">
+                        <p className=""><b>CẢM ƠN BẠN ĐÃ TIN TƯỞNG LỰA CHỌN WINGGO</b></p>
+                        <p className="">Quét mã QR (trên cùng, bên tay phải), bấm quan tâm Zalo OA <b>Trà sữa Winggo</b> để nhận Vocuher ưu đãi <b>20.000đ</b></p>
+
+                        <hr className="border-cbs-border"/>
+                        <p className="text-center mt-3"><i>Xem thông tin lịch sử mua hàng, tích điểm, voucher/mã ưu đãi và mã giới thiệu bạn bè để nhận Vocuher ưu đãi <b>15.000đ/01 bạn</b> bè của bạn</i></p>
                         <p><i>Thông tin ưu đãi: https://winggo.vn/uu-dai</i></p>
                     </div>
                 </div>
