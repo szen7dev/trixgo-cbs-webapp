@@ -186,6 +186,7 @@ export const FnbExpenseFundaDetailPage: FC = () => {
 
     const handleUpdate = async (values: any, callback: (response: any) => void) => {
         try {
+            console.log(values)
             const { error, data } = await updateAsync(values);
 
             if(error) {
