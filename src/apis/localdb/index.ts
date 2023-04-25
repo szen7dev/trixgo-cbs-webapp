@@ -145,6 +145,13 @@ export const CONTACT_TYPES = [
     { value: 6, text: 'Khách mời' },
     { value: 7, text: 'Khác' },
 ]
+
+// LOẠI DANH BẠ
+export const CUSTOMER_TYPES = [
+    { value: 1, text: 'Biết tên' },
+    { value: 2, text: 'Vãng lai' },
+]
+
 // PHÂN LOẠI NHÂN SỰ
 export const CONTACT_SUB_TYPES = [
     { value: 1, text: 'Nhân viên' },
