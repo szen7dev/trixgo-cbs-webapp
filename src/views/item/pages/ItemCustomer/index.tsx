@@ -27,6 +27,8 @@ import { useCustomer } from "services/hooks/items/useCustomer";
 
 /*=====7.OTHER=====*/
 import { createLinkAndClick } from "utils";
+import { CONTACT_TYPES, GENDER_TYPES, CUSTOMER_TYPES } from "apis/localdb";
+
 export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
 	const history = useHistory();
     const { closeModal, openModal } = useModal();
@@ -375,17 +377,22 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                                 />
                             </div>
                         </th>
-                        <th className="w-1/5 py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Tên
-                            </div>
-                        </th> 
                         <th className="w-1/12 py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Phân loại
                             </div>
                         </th>
-                        <th className="w-1/6 py-1">
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Tên
+                            </div>
+                        </th> 
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Giới tính
+                            </div>
+                        </th> 
+                        <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Địa chỉ
                             </div>
@@ -400,9 +407,14 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                                 Điện thoại
                             </div>
                         </th>
-                        <th className={cn("py-1 font-normal", styles.theadTwelvePercent)}>
+                        <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Mô tả
+                                Ngày sinh
+                            </div>
+                        </th>
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Ghi chú
                             </div>
                         </th>
                         <th className="py-1">
@@ -429,17 +441,21 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                                     onChange={() => onClickCheckButton(item)}
                                 />
                             </td>
+                            <td className="py-1 px-2">{CONTACT_TYPES[Number(item.type)-1].text}</td>
                             <td className="py-1 px-2">
                                 <Link to={`/item/contact/${item._id}`}>
                                     {item.amountChilds>0? <b>{item.name}({item.amountChilds})</b>: item.name }
                                 </Link>
                             </td>
-                            <td className="py-1 px-2">{item.type}</td>
+                            <td className="py-1 px-2">{GENDER_TYPES[Number(item.gender)-1].text}</td>
                             <td className="py-1 px-2">{item.address}</td>
                             <td className="py-1 px-2">{item.taxid}</td>
                             <td className="py-1 px-2">{item.phone}</td>
-                            <td className="py-1 px-2">{item.description}</td>
-                            <td className="py-1 px-2">{item.nonResident}</td>
+                            <td className="py-1 px-2">
+                                {item.birthday ? moment(item.birthday).format('DD/MM/YYYY') : ''}
+                            </td>
+                            <td className="py-1 px-2">{item.note}</td>
+                            <td className="py-1 px-2">{CUSTOMER_TYPES[Number(item?.nonResident)-1].text}</td>
                             <td className="py-1 px-2">
                                 {item.modifyAt ? moment(item.modifyAt).format('HH:mm - DD/MM/YYYY') : ''} <br /> {item?.userUpdate?.bizfullname || ''}
                             </td>
