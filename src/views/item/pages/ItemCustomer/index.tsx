@@ -377,7 +377,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                                 />
                             </div>
                         </th>
-                        <th className="w-1/12 py-1">
+                        <th className="w-1/6 py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Phân loại
                             </div>
@@ -441,7 +441,10 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                                     onChange={() => onClickCheckButton(item)}
                                 />
                             </td>
-                            <td className="py-1 px-2">{CONTACT_TYPES[Number(item.type)-1].text}</td>
+                            <td className="py-1 px-2">
+                                {CONTACT_TYPES[Number(item.type)-1].text}
+                                <p className="text-xs"><i>{item._id}</i></p>
+                            </td>
                             <td className="py-1 px-2">
                                 <Link to={`/item/contact/${item._id}`}>
                                     {item.amountChilds>0? <b>{item.name}({item.amountChilds})</b>: item.name }
