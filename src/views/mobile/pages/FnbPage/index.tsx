@@ -23,8 +23,8 @@ import { ModalFnbQRCode } from "shareComponents/common/ModalFnbQRCode";
  * Hooks
  */
 
-const domain = 'http://localhost:3003';
-// const domain = 'https://service.app.trixgo.com';
+// const domain = 'http://localhost:3003';
+const domain = 'https://service.app.trixgo.com';
 
 const fixedHeaders = {
     "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbmZvVXNlciI6eyJlbWFpbCI6ImtpZW10aHV2aWVuLmZuYkBnbWFpbC5jb20iLCJmdWxsbmFtZSI6Iktp4buDbSB0aOG7rSB2acOqbi1JVEVTVCIsImJpemZ1bGxuYW1lIjoiS2nhu4NtIHRo4butIHZpw6puLUlURVNUIiwiY29tcGFueSI6eyJfaWQiOiI1ZTA0N2RjMDVlMzBkY2U3Mjg0OWE0YTQiLCJuYW1lIjoiQ8O0bmcgdHkgY-G7lSBwaOG6p24gZOG7i2NoIHbhu6Uga2nhu4NtIHRo4butIiwiaW1hZ2UiOiJmNDgwNDdhZWZmZTM3MzQ2OGQ5ZDE3YjIxZjE2MTc1Ni5wbmciLCJzaWduIjoiSVRFU1QifSwiZGVwYXJ0bWVudCI6eyJfaWQiOiI1ZTdjY2Q1MjBlM2FmZDNlYTRlNzBjMTYiLCJuYW1lIjoiSVRFU1QtUGjDsm5nIGvhur8gdG_DoW4iLCJzaWduIjpudWxsfSwiaW1hZ2UiOiJ1c2VyX2RlZmF1bHQucG5nIiwic2lnbmF0dXJlIjoic2lnbmF0dXJlX2RlZmF1bHQucG5nIiwic3RhdHVzIjoxLCJsZXZlbCI6MSwiX2lkIjoiNWY3MzYzZTJjMjI5Nzk0ZDhjMGJjNjkxIn0sImlhdCI6MTY3OTY1MTc0N30.QkLqjQDMGbPHc8LIRvk7BwVJ06Pk5t7ERrZoZgHIasw"
