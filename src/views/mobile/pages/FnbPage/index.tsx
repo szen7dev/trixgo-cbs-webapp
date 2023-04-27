@@ -141,7 +141,7 @@ const FnbPage: FC = () => {
                 <p className="px-1"><b>Giới thiệu thành công ({info?.achievements?.length})</b></p>
             </div>
             {
-                info?.achievements.map((item: any, i: any) => (
+                info?.achievements?.map((item: any, i: any) => (
                     <span key={item?._id}>{item.name}/</span>
                 ))
             }
