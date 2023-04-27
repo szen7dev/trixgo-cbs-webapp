@@ -16,6 +16,7 @@ import QRCodeIcon from "assets/images/document/qr-code.png";
 import voucherIcon from "assets/images/icons8-ticket-100.png";
 import orderIcon from "assets/images/icons8-order-history-100.png";
 import orderGift from "assets/images/icons8-gift-100.png";
+import orderRef from "assets/images/icons8-referral-100.png";
 import { ModalFnbQRCode } from "shareComponents/common/ModalFnbQRCode";
 
 /**
@@ -45,7 +46,7 @@ const FnbPage: FC = () => {
     const toggleModalQRCode = () => setIsToggleModalQRCode(!isToggleModalQRCode);
 
     useEffect(() => {
-        fetch(`${domain}/api/item/contacts?populates=%7B%22path%22:%22parent+userUpdate%22,%22select%22:%22name+bizfullname%22%7D&limit=20&contactID=${contactID}&select=name+sign+phone+purchasedValue+totalLoyaltyPoints+usedLoyaltyPoints+remainLoyaltyPoints`, {
+        fetch(`${domain}/api/item/contacts?populates=%7B%22path%22:%22parent+userUpdate+achievements%22,%22select%22:%22name+bizfullname%22%7D&limit=20&contactID=${contactID}&select=name+sign+phone+purchasedValue+totalLoyaltyPoints+usedLoyaltyPoints+remainLoyaltyPoints`, {
             headers: fixedHeaders,
         })
             .then(async (response) => {
@@ -135,6 +136,16 @@ const FnbPage: FC = () => {
                     </div>
                 ))
             }
+            <div className="flex items-center">
+                <img src={orderRef} alt="icon" className="w-6 h-6 rounded-full" />
+                <p className="px-1"><b>Giới thiệu thành công ({info?.achievements?.length})</b></p>
+            </div>
+            {
+                info?.achievements.map((item: any, i: any) => (
+                    <span key={item?._id}>{item.name}/</span>
+                ))
+            }
+            <hr className="border-zinc-200 border mt-2 mb-2" />
             <div className="flex items-center">
                 <img src={orderIcon} alt="icon" className="w-6 h-6 rounded-full" />
                 <p className="px-1"><b>Lịch sử mua hàng ({totalFnbOrder})</b></p>
