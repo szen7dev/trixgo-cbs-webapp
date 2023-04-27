@@ -16,14 +16,15 @@ import QRCodeIcon from "assets/images/document/qr-code.png";
 import voucherIcon from "assets/images/icons8-ticket-100.png";
 import orderIcon from "assets/images/icons8-order-history-100.png";
 import orderGift from "assets/images/icons8-gift-100.png";
+import orderRef from "assets/images/icons8-referral-100.png";
 import { ModalFnbQRCode } from "shareComponents/common/ModalFnbQRCode";
 
 /**
  * Hooks
  */
 
-// const domain = 'http://localhost:3003';
-const domain = 'https://service.app.trixgo.com';
+const domain = 'http://localhost:3003';
+// const domain = 'https://service.app.trixgo.com';
 
 const fixedHeaders = {
     "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbmZvVXNlciI6eyJlbWFpbCI6ImtpZW10aHV2aWVuLmZuYkBnbWFpbC5jb20iLCJmdWxsbmFtZSI6Iktp4buDbSB0aOG7rSB2acOqbi1JVEVTVCIsImJpemZ1bGxuYW1lIjoiS2nhu4NtIHRo4butIHZpw6puLUlURVNUIiwiY29tcGFueSI6eyJfaWQiOiI1ZTA0N2RjMDVlMzBkY2U3Mjg0OWE0YTQiLCJuYW1lIjoiQ8O0bmcgdHkgY-G7lSBwaOG6p24gZOG7i2NoIHbhu6Uga2nhu4NtIHRo4butIiwiaW1hZ2UiOiJmNDgwNDdhZWZmZTM3MzQ2OGQ5ZDE3YjIxZjE2MTc1Ni5wbmciLCJzaWduIjoiSVRFU1QifSwiZGVwYXJ0bWVudCI6eyJfaWQiOiI1ZTdjY2Q1MjBlM2FmZDNlYTRlNzBjMTYiLCJuYW1lIjoiSVRFU1QtUGjDsm5nIGvhur8gdG_DoW4iLCJzaWduIjpudWxsfSwiaW1hZ2UiOiJ1c2VyX2RlZmF1bHQucG5nIiwic2lnbmF0dXJlIjoic2lnbmF0dXJlX2RlZmF1bHQucG5nIiwic3RhdHVzIjoxLCJsZXZlbCI6MSwiX2lkIjoiNWY3MzYzZTJjMjI5Nzk0ZDhjMGJjNjkxIn0sImlhdCI6MTY3OTY1MTc0N30.QkLqjQDMGbPHc8LIRvk7BwVJ06Pk5t7ERrZoZgHIasw"
@@ -45,7 +46,7 @@ const FnbPage: FC = () => {
     const toggleModalQRCode = () => setIsToggleModalQRCode(!isToggleModalQRCode);
 
     useEffect(() => {
-        fetch(`${domain}/api/item/contacts?populates=%7B%22path%22:%22parent+userUpdate%22,%22select%22:%22name+bizfullname%22%7D&limit=20&contactID=${contactID}&select=name+sign+phone+purchasedValue+totalLoyaltyPoints+usedLoyaltyPoints+remainLoyaltyPoints`, {
+        fetch(`${domain}/api/item/contacts?populates=%7B%22path%22:%22parent+userUpdate+achievements%22,%22select%22:%22name+bizfullname%22%7D&limit=20&contactID=${contactID}&select=name+sign+phone+purchasedValue+totalLoyaltyPoints+usedLoyaltyPoints+remainLoyaltyPoints`, {
             headers: fixedHeaders,
         })
             .then(async (response) => {
@@ -135,6 +136,16 @@ const FnbPage: FC = () => {
                     </div>
                 ))
             }
+            <div className="flex items-center">
+                <img src={orderRef} alt="icon" className="w-6 h-6 rounded-full" />
+                <p className="px-1"><b>Giới thiệu thành công ({info?.achievements?.length})</b></p>
+            </div>
+            {
+                info?.achievements.map((item: any, i: any) => (
+                    <span key={item?._id}>{item.name}/</span>
+                ))
+            }
+            <hr className="border-zinc-200 border mt-2 mb-2" />
             <div className="flex items-center">
                 <img src={orderIcon} alt="icon" className="w-6 h-6 rounded-full" />
                 <p className="px-1"><b>Lịch sử mua hàng ({totalFnbOrder})</b></p>
