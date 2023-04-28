@@ -182,6 +182,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
     const response: any = await API.get(
       `/api/fnb/products?${convertObToUrl({
         type: 1,
+        status: 1,
         limit: 50,
         keyword: keywordSearchProduct,
         populates: JSON.stringify({
@@ -195,7 +196,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
     if (status !== 200) return;
 
     const response2 = await API.get(
-      `/api/fnb/products?type=2&limit=50&fundaID=${fundaID}`,
+      `/api/fnb/products?type=2&status=1&limit=50&fundaID=${fundaID}`,
     );
 
     const productsAsync = data.listRecords?.map?.(async (product: any) => {
