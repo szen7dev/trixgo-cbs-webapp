@@ -80,6 +80,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
   const [fundas, setFundas] = useState<any>([]);
   const [shifts, setShifts] = useState<any>([]);
   const [products, setProducts] = useState<any>([]);
+  const [vouchers, setVouchers] = useState<any>([]);
   const [productsInCart, setProductsInCart] = useState<any>([]);
 
   const [productIsParent, setProductIsParent] = useState<any>([]);
@@ -174,6 +175,28 @@ export const ModalAddNewOrder: FC<Props> = () => {
     fetchCateProduct();
 
   }, [fundaID])
+
+  useEffect(() => {
+    if(!customerID) return;
+
+    const fetchVouchers = async () => {
+      try {
+        const response: any = await API.get(
+          `/api/fnb/vouchers?customerID=${customerID}`,
+        );
+        console.log({ response })
+        const { data, status } = response?.data;
+        console.log({ data, status })
+        if (status !== 200) return;
+
+        setVouchers(data.listRecords);
+      } catch(err) {
+        console.error(err)
+      }
+    }
+
+    fetchVouchers();
+  }, [customerID])
 
   /**
    * Tìm kiếm sản phẩm của Cơ sở/Điểm bán
@@ -598,7 +621,6 @@ export const ModalAddNewOrder: FC<Props> = () => {
     };
     const { data, status } = await API.get(`/api/fnb/vouchers?sign=${sign}`);
     if (status !== 200) return 0;
-    console.log("fetchVoucher", data);
     if (data?.error) {
       setVoucherTotalPrice(0);
       setVoucherId("");
@@ -612,7 +634,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
       if (data?.data?.name) {
         setVoucherName(data?.data?.name);
       }
-  
+
       // Check dieu kien
       // 1. Đã sử dụng: nếu infoVocher.buyers[] chứa customerID
       if (data?.data?.buyers && data.data.buyers.includes(customerID)) {
@@ -636,7 +658,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
         return 0;
       }
 
-      // 3-Giá trị đơn hàng không đủ điều kiện áp dụng: total < infoVoucher.minOrderAmount 
+      // 3-Giá trị đơn hàng không đủ điều kiện áp dụng: total < infoVoucher.minOrderAmount
       if ((totalMoneyTmp || totalMoney) < data?.data?.minOrderAmount) {
         setVoucherTotalPrice(0);
         setVoucherId("");
@@ -1416,6 +1438,48 @@ export const ModalAddNewOrder: FC<Props> = () => {
                             {voucherStatus ?
                               <div className={`${voucherErrorStatus ? "text-red-500" : "text-primary"} ml-2 mb-5`}>Tình trạng: {voucherStatus}</div> : <></>
                             }
+
+                            {!!vouchers.length && (
+                              <RadioGroup
+                                row
+                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                name="voucher"
+                              >
+                                {vouchers.map((voucher: any) => (
+                                  <FormControlLabel
+                                    sx={{ marginLeft: "0" }}
+                                    value={voucher.sign}
+                                    key={voucher._id}
+                                    control={
+                                      <Radio
+                                        style={{}}
+                                        icon={<img src={RadioEmpty} alt={voucher.sign} />}
+                                        checkedIcon={<img src={RadioChecked} alt={voucher.sign} />}
+                                        key={voucher._id}
+                                        onChange={() => {
+                                          setVoucherId(voucher._id);
+                                          setVoucherInput(voucher.sign);
+
+                                          if (setTypingTimeoutVoucherRef.current) {
+                                            clearTimeout(setTypingTimeoutVoucherRef.current);
+                                          }
+
+                                          setTypingTimeoutVoucherRef.current = setTimeout(() => {
+                                            fetchVoucher(voucher.sign, values.customerID);
+                                          }, 500);
+                                        }}
+                                        checked={voucherId === voucher._id}
+                                      />
+                                    }
+                                    label={
+                                      <span className="text-[13px]">
+                                        {`${voucher.sign}-Ưu đãi ${formatNumberMoney(voucher.salesoffAmount)} | Giảm giá ${voucher.salesoffRate}% - Đơn hàng từ ${formatNumberMoney(voucher.minOrderAmount)}`}
+                                      </span>
+                                    }
+                                  />
+                                ))}
+                              </RadioGroup>
+                            )}
 
                           </> : <></>
                         }
