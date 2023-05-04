@@ -336,7 +336,9 @@ export const FnbVoucherPage: FC = () => {
 									<p className="text-xs text-primary-gray"><i>{item._id}</i></p>
 								</td>
 								<td className={"p-2 border-0.5 border-primary-border text-cbs-highlight-color"}>
-									{item?.name}
+									<Link to={`/fnb/voucher/${item._id}`}>
+										{item?.name}
+									</Link>
 								</td>
 								<td className={"p-2 border-0.5 border-primary-border"}>
 									{item?.sign}

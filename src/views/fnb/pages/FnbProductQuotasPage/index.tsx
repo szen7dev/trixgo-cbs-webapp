@@ -1,12 +1,7 @@
 import React, { FC, useCallback, useState, useEffect } from "react";
-import { Link, useHistory, useParams } from "react-router-dom";
-import { useModal } from "services/hooks/useModal";
+import { useHistory, useParams } from "react-router-dom";
 import debounce from "lodash/debounce";
 import { SearchInput, ModalContainer } from "shareComponents/common";
-import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
-import FolderIcon from "assets/images/icons8-folder.svg";
-import PolygonIcon from "assets/images/icon-polygon.svg";
-import DownloadIcon from "assets/images/icons8-download-96.svg";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import { CreateFnbProductQoutas } from "./modal";
 import moment from "moment";
@@ -16,13 +11,8 @@ import { APP_ID } from "apis/localdb";
 import { useFnbQuota } from 'services/hooks/fnb/useFnbQuota';
 import PaginateV2 from "shareComponents/common/PaginateV2";
 import { formatNumberMoney } from "utils/converter";
-import CameraIcon from "assets/images/camera-icon.svg";
 import { useFnbProduct } from 'services/hooks/fnb/useFnbProduct';
 
-const TYPE_PRODUCT = [
-	{ value: 1, text: "Thông thường" },
-	{ value: 2, text: "Topping" },
-]
 export const FnbProductQuotasPage: FC = () => {
 	useEffect(() => {
 		document.title = "FnB";
@@ -34,7 +24,7 @@ export const FnbProductQuotasPage: FC = () => {
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
     const { info: infoProduct } = useFnbProduct({ params: { productID }, isFetchList: false, isFetchInfo: true  });
-	// console.log({ infoProduct });
+
     const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbQuota({ 
 		params: { 
 			keyword: keyword, 
