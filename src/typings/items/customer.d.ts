@@ -35,6 +35,7 @@ export interface Customer {
 export type CustomerQueryPayload = QueryParam & {
     companyID?: string;
     contactID?: string;
+    voucherID?: string;
     isListParentOrListChilds?: string;
     parentID?: string;
 };

@@ -9,6 +9,7 @@ import type { Customer } from 'typings/items';
 interface useCustomer {
     isLoading: boolean;
     totalRecord: number;
+    totalPage: number;
     hasNextPage: boolean | undefined;
     list: Array<Customer.Customer>;
     info: Customer.Customer | undefined;
@@ -91,6 +92,7 @@ export const useCustomer = ({
         .filter(Boolean);
 
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
+    const totalPage = data?.pages[0]?.data?.totalPages || 0;
 
     // Tải mẫu import excel
     const { mutateAsync: downloadTemplateImportExcelCustomerAsync } =
@@ -116,6 +118,7 @@ export const useCustomer = ({
         list,
         info,
         totalRecord,
+        totalPage,
         hasNextPage,
         refetch,
         fetchNextPage,
