@@ -25,10 +25,10 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
   onConfirm,
   initialValues = {
     contactID: '',
-    type: '',
+    type: 2,
     name: '',
-    address: '',
-    taxid: '',
+    // address: '',
+    // taxid: '',
     phone: '',
     gender: 1,
     birthday: '',
@@ -276,7 +276,39 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
         />
       </section>
 
-      <section className="px-10 mt-2">
+      <section className="px-10 py-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription" title="Bắt buộc nhập thông tin">
+          Phân loại (*)
+        </label>
+        <div className={"flex items-center"}>
+            <div className={"flex items-center ml-3"}>
+                <input
+                  type="radio"
+                  value={1}
+                  name="type"
+                  className="form-check-input mt-0"
+                  defaultValue={formData.type}
+                  checked={formData.type == 1?true: false}
+                  onChange={onChange}
+                />
+                <label htmlFor="type" className={"text-left ml-3"}>Nhân viên</label>
+            </div>
+            <div className={"flex items-center ml-3"}>
+                <input
+                  type="radio"
+                  value={2}
+                  name="type"
+                  className="form-check-input mt-0"
+                  defaultValue={formData.type}
+                  checked={formData.type == 2?true: false}
+                  onChange={onChange}
+                />
+                <label htmlFor="type" className={"text-left ml-3"}>Khách hàng</label>
+            </div>
+          </div>
+      </section>
+
+      {/* <section className="px-10 mt-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtType">
           Phân loại nhân viên, khách hàng
         </label>
@@ -288,9 +320,9 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
           defaultValue={formData.type}
           onChange={onChange}
         />
-      </section>
+      </section> */}
 
-      <section className="px-10 py-2">
+      {/* <section className="px-10 py-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription">
           Địa chỉ
         </label>
@@ -316,7 +348,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
           defaultValue={formData.taxid}
           onChange={onChange}
         />
-      </section>
+      </section> */}
 
       <section className="px-10 mt-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription">

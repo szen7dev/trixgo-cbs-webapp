@@ -22,6 +22,7 @@ import PaginateV2 from "shareComponents/common/PaginateV2";
 /*=====5.TYPINGS=====*/
 
 /*=====6.HOOKS/APIS=====*/
+import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { useCheckPerAccessOneMenu } from "services/hooks/auth/usePermissions";
 import { useAuth } from "services/hooks/auth/useAuth";
 
@@ -45,6 +46,7 @@ export const FnbVoucherPage: FC = () => {
 
 	const history = useHistory();
 	const { user } = useAuth();
+	const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
 	const { permission } = useCheckPerAccessOneMenu({ appID: APP_ID.FNB.id, menuID: APP_ID.FNB.menuFnbApp.voucher.id, companyID: user?.company._id, type: "1", });
 
 	// useEffect(() => {
@@ -56,9 +58,9 @@ export const FnbVoucherPage: FC = () => {
 
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
-
     const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbVoucher({
 		params: {
+			isMember: 1,
 			keyword,
 			limit: 20,
 			populates: JSON.stringify({
@@ -69,7 +71,6 @@ export const FnbVoucherPage: FC = () => {
 		isFetchList: true,
 		isFetchInfo: false,
 	});
-	// console.log({listWithPager});
 
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
@@ -178,76 +179,79 @@ export const FnbVoucherPage: FC = () => {
 
 	return (
 		<main className="h-full overflow-auto">
-			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
-				<div className="flex items-center">
-					<SearchInput
-						classNameWrapper=""
-						classNameInput="outline-none w-[296px]"
-						onChange={debounce(
-							(event: any) => setKeyword(event.target.value),
-							500
-						)}
-					/>
-					{(idsChecked && idsChecked.length) ? (
-						<div className="flex items-center gap-2 border-l-2 border-primary-border px-4 ml-4">
-							{idsChecked.length == 1 ?
-								<>
-								<div
-									className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
-									onClick={() => {
-										const item = listWithPager[pageIndex].find((e: any) => e._id == idsChecked[0]);
-										setInitialValues({
-											...item,
-											startTime: item.startTime ? moment(item.startTime).format('MM/DD/YYYY') : '',
-											expiredTime: item.expiredTime ? moment(item.expiredTime).format('MM/DD/YYYY') : '',
-										});
-										toggleModalCreateFnbProduct();
-									}}
-								>
-									<img src={PencilIcon} alt="Pencil" />
-								</div>
-							</> : <></>
-							}
-						</div>
-					) : <></>}
-				</div>
-				<button className={"flex items-center justify-center mx-3 ml-1"}
-						onClick={handleDownloadTemplateImportExcel}
-					>
-						Tải mẫu Import excel
-				</button> 
-				<button className={"flex items-center justify-center mx-3 ml-1"}>
-						<input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
-						accept=".xlsx, .xlsm, .xls, .csv"/>
-						<label className="custom-file-label" htmlFor="inputGroupFile">Import excel</label>
-				</button>
-				<div className="flex items-center">
-					<button
-						className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold ml-6"
-						onClick={() => {
-							setInitialValues(null);
-							toggleModalCreateFnbProduct();
-						}}
-					>
-						Tạo mới
+			{hasPermission && dataUserAccess?.level == 0 ?
+				<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
+					<div className="flex items-center">
+						<SearchInput
+							classNameWrapper=""
+							classNameInput="outline-none w-[296px]"
+							onChange={debounce(
+								(event: any) => setKeyword(event.target.value),
+								500
+							)}
+						/>
+						{(idsChecked && idsChecked.length) ? (
+							<div className="flex items-center gap-2 border-l-2 border-primary-border px-4 ml-4">
+								{idsChecked.length == 1 ?
+									<>
+									<div
+										className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
+										onClick={() => {
+											const item = listWithPager[pageIndex].find((e: any) => e._id == idsChecked[0]);
+											setInitialValues({
+												...item,
+												startTime: item.startTime ? moment(item.startTime).format('MM/DD/YYYY') : '',
+												expiredTime: item.expiredTime ? moment(item.expiredTime).format('MM/DD/YYYY') : '',
+											});
+											toggleModalCreateFnbProduct();
+										}}
+									>
+										<img src={PencilIcon} alt="Pencil" />
+									</div>
+								</> : <></>
+								}
+							</div>
+						) : <></>}
+					</div>
+					<button className={"flex items-center justify-center mx-3 ml-1"}
+							onClick={handleDownloadTemplateImportExcel}
+						>
+							Tải mẫu Import excel
+					</button> 
+					<button className={"flex items-center justify-center mx-3 ml-1"}>
+							<input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
+							accept=".xlsx, .xlsm, .xls, .csv"/>
+							<label className="custom-file-label" htmlFor="inputGroupFile">Import excel</label>
 					</button>
-				</div>
-				<PaginateV2
-					ref={ref}
-					totalRecord={totalRecord}
-					totalPages={totalPage}
-					limit={20}
-					hasNextPage={hasNextPage}
-					isFetching={isLoading}
-					nextPageAction={() => {
-						fetchNextPage();
-						setPageIndex(oldState => oldState+1)
-					}}
-					prevPageAction={() => {
-						setPageIndex(oldState => oldState-1)
-					}}
-				/>
-			</header>
+					<div className="flex items-center">
+						<button
+							className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold ml-6"
+							onClick={() => {
+								setInitialValues(null);
+								toggleModalCreateFnbProduct();
+							}}
+						>
+							Tạo mới
+						</button>
+					</div>
+					<PaginateV2
+						ref={ref}
+						totalRecord={totalRecord}
+						totalPages={totalPage}
+						limit={20}
+						hasNextPage={hasNextPage}
+						isFetching={isLoading}
+						nextPageAction={() => {
+							fetchNextPage();
+							setPageIndex(oldState => oldState+1)
+						}}
+						prevPageAction={() => {
+							setPageIndex(oldState => oldState-1)
+						}}
+					/>
+				</header>
+			: <></>
+			}
 
 			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
 				<thead className="bg-cbs-table-header h-10 border-b border-primary-border">
@@ -336,7 +340,9 @@ export const FnbVoucherPage: FC = () => {
 									<p className="text-xs text-primary-gray"><i>{item._id}</i></p>
 								</td>
 								<td className={"p-2 border-0.5 border-primary-border text-cbs-highlight-color"}>
-									{item?.name}
+									<Link to={`/fnb/voucher/${item._id}`}>
+										{item?.name}
+									</Link>
 								</td>
 								<td className={"p-2 border-0.5 border-primary-border"}>
 									{item?.sign}
@@ -370,19 +376,20 @@ export const FnbVoucherPage: FC = () => {
 					)
                 }
 			</table>
-
-			<ModalContainer isModalOpen={modalCreateFnbProduct} toggle={toggleModalCreateFnbProduct}>
-				<div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light">
-					<CreateFnbVoucher
-						modalType={initialValues ? "update" : "create"}
-						show={modalCreateFnbProduct}
-						toggle={toggleModalCreateFnbProduct}
-						initialValues={initialValues ? initialValues : undefined}
-						onConfirm={onConfirmCreateFnbProduct}
-					/>
-				</div>
-			</ModalContainer>
-
+			{hasPermission && dataUserAccess?.level == 0 ?
+				<ModalContainer isModalOpen={modalCreateFnbProduct} toggle={toggleModalCreateFnbProduct}>
+					<div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light">
+						<CreateFnbVoucher
+							modalType={initialValues ? "update" : "create"}
+							show={modalCreateFnbProduct}
+							toggle={toggleModalCreateFnbProduct}
+							initialValues={initialValues ? initialValues : undefined}
+							onConfirm={onConfirmCreateFnbProduct}
+						/>
+					</div>
+				</ModalContainer>
+				: <></>
+			}
 		</main>
 	)
 }

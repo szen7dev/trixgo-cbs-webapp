@@ -1,0 +1,1 @@
+export { default as CreateFnbVoucherDetail } from "./CreateFnbVoucherDetail";

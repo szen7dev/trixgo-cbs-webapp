@@ -242,7 +242,7 @@ export const FnbContactDetailPage: FC = () => {
 								{GENDER_MISTAKE[item?.gender-1]}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
-								{moment(item?.birthday).format("L")}
+								{moment(item?.birthday).format("DD/MM/YYYY")}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{item?.address}
