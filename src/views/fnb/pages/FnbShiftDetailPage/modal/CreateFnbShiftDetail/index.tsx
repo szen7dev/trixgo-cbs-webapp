@@ -5,7 +5,6 @@ import { FC, useState } from "react";
 import { Dialog } from '@headlessui/react';
 import { Form, Formik, Field, ErrorMessage } from 'formik';
 import { toast } from 'react-toastify';
-import { DropdownSearchable } from "shareComponents/common";
 import debounce from "lodash/debounce";
 import { useParams } from "react-router-dom";
 import { FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
@@ -15,15 +14,12 @@ import { FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material"
  */
 import CheckBoxEmpty from "assets/images/Frame 3548.svg";
 import CheckedBox from "assets/images/Check-All.svg";
-import DemoAvatar from "assets/images/image 437.png";
 import IconCancel from "assets/images/icons8-cancel-96 1.svg";
 
 /**
  * Types, Services
  */
 import "react-datepicker/dist/react-datepicker.css";
-import { useFnbQuota } from 'services/hooks/fnb/useFnbQuota';
-import { useGoods } from "services/hooks/items/useGoods";
 import { useFnbShift } from 'services/hooks/fnb/useFnbShift';
 import { useGetUsersByCompany } from "services/hooks/auth/useAdmin";
 
@@ -33,11 +29,10 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
 } }) => {
     const { fundaID } = useParams<{ fundaID: string }>();
     const [keywordUser, setKeywordUser] = useState("");
-    const [keyword, setKeyword] = useState('');
     const [membersSelected, setMemberSelected] = useState<any>(initialValues?.staffs ?? []);
     const [submembersSelected, setSubmemberSelected] = useState<any>(initialValues?.subStaffs ?? []);
 
-    const { listMembers, nextPageGetUsersBySystem, hasnextPageGetUsersBySystem } = useGetUsersByCompany(companyID, keywordUser);
+    const { listMembers } = useGetUsersByCompany(companyID, keywordUser);
     const { insertAsync, updateAsync, refetch } = useFnbShift({
         params: {
             keyword: "", fundaID, populates: JSON.stringify({
@@ -127,17 +122,17 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
         setSubmemberSelected(newSubmembers);
     }
 
-    const {
-        deleteAsync,
-        list: listGoods,
-        hasNextPage,
-        refetch: refetchGood,
-        fetchNextPage,
-        totalRecord
-    } = useFnbShift({
-        params: { keyword }, // Khi keyword thay đổi giá trị => API thay đổi data => refretch kết quả
-        isFetchList: true
-    });
+    // const {
+    //     deleteAsync,
+    //     list: listGoods,
+    //     hasNextPage,
+    //     refetch: refetchGood,
+    //     fetchNextPage,
+    //     totalRecord
+    // } = useFnbShift({
+    //     params: { keyword }, // Khi keyword thay đổi giá trị => API thay đổi data => refretch kết quả
+    //     isFetchList: true
+    // });
 
     return (
         <Formik
