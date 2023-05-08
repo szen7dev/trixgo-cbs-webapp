@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
 import mailIcon from "assets/images/icons8-secure-mail-48.svg";
-// import chatIcon from "assets/images/icons8-chat-48.svg";
+import chatIcon from "assets/images/icons8-chat-48.svg";
 // import iconInspection from "assets/images/icons-inspection.svg";
 // import humanIcon from "assets/images/icons8-people-64.svg";
 import mediaIcon from "assets/images/icons8-commercial-64.svg";
@@ -260,7 +260,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
           <span className={"text-primary-gray mt-1"}>Hồ sơ</span>
         </Link> : <></>}
 
-      {/* {checkPermissionApp('5dfe4c1b51dc622100bb9d8f') ?
+      {checkPermissionApp('5dfe4c1b51dc622100bb9d8f') ?
         <Link to={`/messages`} className={"flex flex-col items-center mb-3"}>
           <div
             className={
@@ -282,7 +282,8 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
             )}
           </div>
           <span className={"text-primary-gray mt-1"}>Chat</span>
-        </Link> : <></>} */}
+        </Link> : <></>}
+        
         {checkPermissionApp('5df4ce16506d9b3c587948ca') ?
         <Link to={`/media/home`} className={"flex flex-col items-center mb-3"}>
           <div
