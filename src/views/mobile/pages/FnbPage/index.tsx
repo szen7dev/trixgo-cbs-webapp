@@ -46,7 +46,7 @@ const FnbPage: FC = () => {
     const toggleModalQRCode = () => setIsToggleModalQRCode(!isToggleModalQRCode);
 
     useEffect(() => {
-        fetch(`${domain}/api/item/contacts?populates=%7B%22path%22:%22parent+userUpdate+achievements%22,%22select%22:%22name+bizfullname%22%7D&limit=20&contactID=${contactID}&select=name+sign+phone+purchasedValue+totalLoyaltyPoints+usedLoyaltyPoints+remainLoyaltyPoints`, {
+        fetch(`${domain}/api/item/contacts?populates=%7B%22path%22:%22parent+userUpdate+achievements%22,%22select%22:%22name+bizfullname%22%7D&limit=10&contactID=${contactID}&select=name+sign+phone+purchasedValue+totalLoyaltyPoints+usedLoyaltyPoints+remainLoyaltyPoints`, {
             headers: fixedHeaders,
         })
             .then(async (response) => {
@@ -56,7 +56,7 @@ const FnbPage: FC = () => {
                 }
             });
 
-        fetch(`${domain}/api/fnb/vouchers?customerID=${contactID}&limit=20&status=1`, {
+        fetch(`${domain}/api/fnb/vouchers?customerID=${contactID}&limit=10&status=1`, {
             headers: fixedHeaders,
         })
             .then(async (response) => {
@@ -69,7 +69,7 @@ const FnbPage: FC = () => {
                 }
             });
 
-        fetch(`${domain}/api/fnb/orders?lastestID=&limit=50&statuss[]=5&customerID=${contactID}&populates=%7B%22path%22:%22voucher%22,%22select%22:%22_id+name+sign+salesoffAmount+salesoffRate+minOrderAmount%22%7D`, {
+        fetch(`${domain}/api/fnb/orders?lastestID=&limit=10&statuss[]=5&customerID=${contactID}&populates=%7B%22path%22:%22voucher%22,%22select%22:%22_id+name+sign+salesoffAmount+salesoffRate+minOrderAmount%22%7D`, {
             headers: fixedHeaders,
         })
             .then(async (response) => {
