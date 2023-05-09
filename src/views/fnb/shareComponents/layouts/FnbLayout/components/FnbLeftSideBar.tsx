@@ -70,7 +70,7 @@ export const FnbLeftSideBar: FC = () => {
     const [keyword, setKeyword] = useState("");
     const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useContact({
         params: {
-            select: "name note type phone",
+            select: "name note phone numberOfOrders",
             keyword: keyword,
             limit: 5
         },
@@ -127,7 +127,7 @@ export const FnbLeftSideBar: FC = () => {
         return false;
     }, [listAppRoleMenu]);
 
-    console.log(listWithPager)
+    // console.log(listWithPager)
 
     return (
         <div className="t-leftsidebar-navigation t-leftsidebar-navigation-v2 t-leftsidebar-navigation-type2 fixed left-64px top-14 bottom-0 transition-all duration-500 ease-out border-secondary-light z-10 bg-primary-light">

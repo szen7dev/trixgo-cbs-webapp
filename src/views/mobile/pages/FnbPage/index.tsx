@@ -23,8 +23,8 @@ import { ModalFnbQRCode } from "shareComponents/common/ModalFnbQRCode";
  * Hooks
  */
 
-// const domain = 'http://localhost:3003';
-const domain = 'https://service.app.trixgo.com';
+const domain = 'http://localhost:3003';
+// const domain = 'https://service.app.trixgo.com';
 
 const fixedHeaders = {
     "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbmZvVXNlciI6eyJlbWFpbCI6ImtpZW10aHV2aWVuLmZuYkBnbWFpbC5jb20iLCJmdWxsbmFtZSI6Iktp4buDbSB0aOG7rSB2acOqbi1JVEVTVCIsImJpemZ1bGxuYW1lIjoiS2nhu4NtIHRo4butIHZpw6puLUlURVNUIiwiY29tcGFueSI6eyJfaWQiOiI1ZTA0N2RjMDVlMzBkY2U3Mjg0OWE0YTQiLCJuYW1lIjoiQ8O0bmcgdHkgY-G7lSBwaOG6p24gZOG7i2NoIHbhu6Uga2nhu4NtIHRo4butIiwiaW1hZ2UiOiJmNDgwNDdhZWZmZTM3MzQ2OGQ5ZDE3YjIxZjE2MTc1Ni5wbmciLCJzaWduIjoiSVRFU1QifSwiZGVwYXJ0bWVudCI6eyJfaWQiOiI1ZTdjY2Q1MjBlM2FmZDNlYTRlNzBjMTYiLCJuYW1lIjoiSVRFU1QtUGjDsm5nIGvhur8gdG_DoW4iLCJzaWduIjpudWxsfSwiaW1hZ2UiOiJ1c2VyX2RlZmF1bHQucG5nIiwic2lnbmF0dXJlIjoic2lnbmF0dXJlX2RlZmF1bHQucG5nIiwic3RhdHVzIjoxLCJsZXZlbCI6MSwiX2lkIjoiNWY3MzYzZTJjMjI5Nzk0ZDhjMGJjNjkxIn0sImlhdCI6MTY3OTY1MTc0N30.QkLqjQDMGbPHc8LIRvk7BwVJ06Pk5t7ERrZoZgHIasw"
@@ -46,7 +46,7 @@ const FnbPage: FC = () => {
     const toggleModalQRCode = () => setIsToggleModalQRCode(!isToggleModalQRCode);
 
     useEffect(() => {
-        fetch(`${domain}/api/item/contacts?populates=%7B%22path%22:%22parent+userUpdate+achievements%22,%22select%22:%22name+bizfullname%22%7D&limit=20&contactID=${contactID}&select=name+sign+phone+purchasedValue+totalLoyaltyPoints+usedLoyaltyPoints+remainLoyaltyPoints`, {
+        fetch(`${domain}/api/item/contacts?populates=%7B%22path%22:%22parent+userUpdate+achievements%22,%22select%22:%22name+bizfullname%22%7D&limit=10&contactID=${contactID}&select=name+sign+phone+purchasedValue+totalLoyaltyPoints+usedLoyaltyPoints+remainLoyaltyPoints`, {
             headers: fixedHeaders,
         })
             .then(async (response) => {
@@ -56,7 +56,7 @@ const FnbPage: FC = () => {
                 }
             });
 
-        fetch(`${domain}/api/fnb/vouchers?customerID=${contactID}&limit=20&status=1`, {
+        fetch(`${domain}/api/fnb/vouchers?customerID=${contactID}&limit=10&status=1`, {
             headers: fixedHeaders,
         })
             .then(async (response) => {
@@ -69,7 +69,7 @@ const FnbPage: FC = () => {
                 }
             });
 
-        fetch(`${domain}/api/fnb/orders?lastestID=&limit=50&statuss[]=5&customerID=${contactID}&populates=%7B%22path%22:%22voucher%22,%22select%22:%22_id+name+sign+salesoffAmount+salesoffRate+minOrderAmount%22%7D`, {
+        fetch(`${domain}/api/fnb/orders?lastestID=&limit=10&statuss[]=5&customerID=${contactID}&populates=%7B%22path%22:%22voucher%22,%22select%22:%22_id+name+sign+salesoffAmount+salesoffRate+minOrderAmount%22%7D`, {
             headers: fixedHeaders,
         })
             .then(async (response) => {
