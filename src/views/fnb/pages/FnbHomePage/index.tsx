@@ -3,7 +3,7 @@ import React, { FC, useState, UIEvent, useEffect } from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import parse from "html-react-parser";
-import { debounce, toArray } from "lodash";
+import { debounce } from "lodash";
 import { useDispatch } from "react-redux";
 import { formatNumberMoney } from "utils/converter";
 import { toast } from "react-toastify";
@@ -54,7 +54,7 @@ import { useUpload } from 'services/hooks/useUpload';
 
 /*=====7.OTHER=====*/
 import { createLinkAndClick } from "utils";
-import { FNB_CHANNEL, FNB_SERVICE, FNB_PAYMENT, FNB_ORDER_STATUS, FNB_SHIFT, FNB_NORESIDENT_TYPES } from "apis/localdb";
+import { FNB_CHANNEL, FNB_SERVICE, FNB_ORDER_STATUS, FNB_SHIFT, FNB_NORESIDENT_TYPES } from "apis/localdb";
 import { useInfiniteQuery } from "react-query";
 import { setQueryFnb } from "redux/reducer/FnbSlice";
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
@@ -326,6 +326,29 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
     try {
       setStateExport({ isExporting: true });
       const { error, data } = await exportOrderAsync2({
+        filterParams: {
+          ...queryFnb,
+          keyword,
+        }
+      });
+
+      if(error) {
+        return toast.warn(data?.message);
+      }
+
+      data && createLinkAndClick(data, '_self');
+    } catch (error: any) {
+      toast.error(error.message)
+    } finally {
+      setStateExport({ isExporting: false });
+    }
+	}
+
+  const handleExportExcel22 = async () => {
+    try {
+      setStateExport({ isExporting: true });
+      const { error, data } = await exportOrderAsync2({
+        option: 2,
         filterParams: {
           ...queryFnb,
           keyword,
@@ -1106,7 +1129,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                   )
                 }
               >
-                Gán tình huống gặp phải
+                Gán tình huống
               </button>
               <button onClick={handleExportExcel2} title="Tải dữ liệu Excel">
                 Tải đơn hàng
@@ -1117,6 +1140,13 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               <button onClick={handleExportExcel} title="Tải dữ liệu Excel">
                 Tải KPI
               </button>
+              
+              {user?.email === 'hiepnh.winggo@gmail.com' && (
+                <button onClick={handleExportExcel22} title="Tải dữ liệu Excel">
+                  Tải Khách hàng
+                </button>
+              )}
+
               {idsChecked.length === 1 && (
                 <label className="w-8 h-8 rounded-md flex justify-center items-center cursor-pointer">
                   <IconImage />
