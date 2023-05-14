@@ -1141,7 +1141,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                 Tải KPI
               </button>
               
-              {user?.email === 'hiepnh.winggo@gmail.com' && (
+              {(user?.email === 'adwgo.winggo@gmail.com' || user?.email === 'hiepnh.winggo@gmail.com') && (
                 <button onClick={handleExportExcel22} title="Tải dữ liệu Excel">
                   Tải Khách hàng
                 </button>
