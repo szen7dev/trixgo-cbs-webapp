@@ -1,9 +1,8 @@
-import React, { FC, useState, useEffect } from "react";
+import { FC, useState, useRef, useEffect } from "react";
 import { RouteComponentProps, useHistory, useParams, Link } from "react-router-dom";
 import { PCM_STATUS_TASK } from 'apis/localdb';
 import { useModal } from "services/hooks/useModal";
 
-// import iconFile from 'assets/images/icons8-audit-96.png';
 import GroupDefaultIcon from "assets/images/icons8-star-96.png";
 import '../../style.css';
 // import { SetGroupDefault } from "./modal";
@@ -19,12 +18,16 @@ import { useAuth } from "services/hooks/auth/useAuth";
 // import { Paginate, SearchInput } from "shareComponents/common";
 // import debounce from "lodash/debounce";
 import nextIcon from "assets/images/icons-arrow-next.svg";
-// import downloadIcon from "assets/images/icons8-download-64.svg";
 import iconBack from "assets/images/icon-back-gray.svg";
+// import downloadIcon from "assets/images/icons8-download-64.svg";
 // import userAvt from "assets/images/task-user.svg";
 // import iconFolder from "assets/images/icons8-folder-96 4.svg";
-import iconAddNew from "assets/images/Frame 4048.svg";
+// import iconFile from 'assets/images/icons8-audit-96.png';
+import IconAddNew from "assets/images/Frame 4048.svg";
+import DownloadIcon from "assets/images/icons8-download-96.svg";
 import { ModalAddNewTask } from "shareComponents/common";
+import API from "apis/repository";
+import { toast } from "react-toastify";
 
 // interface IData {
 // 	id: number,
@@ -59,7 +62,7 @@ const FolderIcon: FC<{ type: string }> = ({ type }) => {
 	}
 }
 
-const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
+const ProjectFolderPage: FC<RouteComponentProps> = () => {
 	//_____Start history traffict
 	// const payloadHistoryTraffic: any = {
 	// 	appID: APP_ID.PCM.id,
@@ -72,16 +75,13 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 	// }, []);
 	//_____End history traffict
 	const history = useHistory();
-	// const location = useLocation();
-	// const [data, setData] = useState<IData[]>([]);
-	// const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const { openModal } = useModal();
 	const { id: projectID, groupID } = useParams<{ id: string, groupID: string }>();
 	const { infoDepartment } = usePcmProject({ departmentID: projectID });
-	// const { assigned, checkboxRef, handleCheckAll, handleChangeCheckbox } = useCheckedList(data);
 	const { dataUserInfo, refetchDataUserInfo } = useAuth();
 	const [keyword] = useState("");
-	// const [isFetchTask, setIsFetchTask] = useState(false);
+	const toastId = useRef(null);
+
 	const {
 		data: listPcmPlanGroup,
 		fetchNextPage,
@@ -121,7 +121,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 	});
 
 	if(!groupID){
-		listTasks = []
+		listTasks = [];
 	}
 
 	useEffect(() => {
@@ -129,6 +129,31 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 		refetchDataUserInfo()
 		document.title = `${infoDepartment?.data?.sign}-Thư mục dữ liệu`;
 	}, [groupID, infoDepartment]);
+
+	const handleDownloadFileInGroup = async () => {
+		try {
+            toast.info('Quá trình download đang thực hiện, vui lòng không reload trang', { autoClose: false, closeOnClick: false });
+
+            const response = await API.get(
+                `/api/subject_pcm/pcm_files/downloads-in-group?groupID=${groupID}`,
+            );
+            const { data: linkDownload } = response?.data;
+
+            if (response.status !== 200) return;
+
+            const a = document.createElement('a');
+            a.href = linkDownload;
+            a.download = 'download';
+            a.click();
+            a.remove();
+        } catch(error: any) {
+            console.error(error);
+            toast.error(error.message);
+        } finally {
+			toast.dismiss();
+		}
+	}
+
 	return (
 		<>
 			{/* Content  */}
@@ -161,38 +186,43 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 
 					{infoGroup?.data?.parent?.parent?.name ?
 					<>
-					<img src={nextIcon} alt={"-----"} className={"mx-4 h-[12px] w-[12px]"} />
-					<Link to={`/pm/project/${projectID}/folder/${infoGroup?.data?.parent?.parent?._id}`}>
-						<div className="flex gap-2">
-							{/* <img src={iconFolder} alt={"----"} className={"w-[18px]"} /> */}
-							<span className="truncate max-w-[150px]">{infoGroup?.data?.parent?.parent?.name}</span>
-						</div>
-					</Link>
+						<img src={nextIcon} alt={"-----"} className={"mx-4 h-[12px] w-[12px]"} />
+						<Link to={`/pm/project/${projectID}/folder/${infoGroup?.data?.parent?.parent?._id}`}>
+							<div className="flex gap-2">
+								{/* <img src={iconFolder} alt={"----"} className={"w-[18px]"} /> */}
+								<span className="truncate max-w-[150px]">{infoGroup?.data?.parent?.parent?.name}</span>
+							</div>
+						</Link>
 					</> : <></>}
-					{groupID ?
-						<button
-						className={"ml-6"}
-						onClick={() =>
-							openModal(
-								<div className="t-add-new-task-dialog text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
-									<ModalAddNewTask
-										defaultValues={{
-											group: infoGroup?.data,
-											project: infoGroup?.data?.project,
-											company: infoGroup?.data?.project?.company,
-										}}
-									/>
-								</div>
-							)
-						}
-					>
-						<img src={iconAddNew} alt={"-----"} className={"h-[24px] w-[24px]"}/>
-					</button> : <></>
-					}
 
-					{/* <button className={"ml-6"}>
-						<img src={downloadIcon} alt={"-----"} className={"h-[24px] w-[24px]"}/>
-					</button> */}
+					{groupID && (
+						<>
+							<button
+								className={"ml-6"}
+								onClick={() =>
+									openModal(
+										<div className="t-add-new-task-dialog text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
+											<ModalAddNewTask
+												defaultValues={{
+													group: infoGroup?.data,
+													project: infoGroup?.data?.project,
+													company: infoGroup?.data?.project?.company,
+												}}
+											/>
+										</div>
+									)
+								}
+							>
+								<img src={IconAddNew} alt={"Create group"} className={"h-[24px] w-[24px]"} />
+							</button>
+							<button
+								className="w-9 h-9 ml-3 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
+								onClick={handleDownloadFileInGroup}
+							>
+								<img src={DownloadIcon} alt="Download" className={"h-[24px] w-[24px]"} />
+							</button>
+						</>
+					)}
 				</div>
 
 				{/* <div className={"table-folder-project"}>
