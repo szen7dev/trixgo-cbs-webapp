@@ -103,7 +103,7 @@ const ProjectDashboardPortfolioPage: FC = () => {
 			<div className={cn(styles['content-container'], styles.scroll, " pt-0 flex-1 h-full overflow-auto")}>
 				<div className="sticky top-0  z-10 bg-white">
 					{/* tab */}
-					<div className="flex justify-between px-4 bg-white">
+					{/* <div className="flex justify-between px-4 bg-white">
 						<div>
 							<ul className="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
 								<li className="mr-2" role="presentation">
@@ -118,7 +118,7 @@ const ProjectDashboardPortfolioPage: FC = () => {
 								</li>
 							</ul>
 						</div>
-					</div>
+					</div> */}
 					{/* end tab */}
 					<div className="flex justify-between bg-white px-2 ">
 						{/* filter by year */}
@@ -203,12 +203,12 @@ const ProjectDashboardPortfolioPage: FC = () => {
 								<div className="w-full border h-2">
 									<div
 										className="bg-primary"
-										style={{ width: `${percentageBetweenTwoDate(new Date(projectInfo.startTime), new Date(projectInfo.expiredTime))}%`, marginTop: -0.25, height: 7 }}
+										style={{ width: `${percentageBetweenTwoDate(new Date(projectInfo.startTime), new Date(projectInfo.expiredTime)) <= 100 ? percentageBetweenTwoDate(new Date(projectInfo.startTime), new Date(projectInfo.expiredTime)) : 100}%`, marginTop: -0.25, height: 7 }}
 									></div>
 								</div>
 							</div>
 
-							<p className="w-1/6 text-primary text-sm px-4 pt-3"><b>{percentageBetweenTwoDate(new Date(projectInfo.startTime), new Date(projectInfo.expiredTime))}%</b></p>
+							<p className="w-1/6 text-primary text-sm px-4 pt-3"><b>{percentageBetweenTwoDate(new Date(projectInfo.startTime), new Date(projectInfo.expiredTime)) <= 100 ? percentageBetweenTwoDate(new Date(projectInfo.startTime), new Date(projectInfo.expiredTime)) : 100}%</b></p>
 						</div>
 					</div>
 					{/* end filter by year */}

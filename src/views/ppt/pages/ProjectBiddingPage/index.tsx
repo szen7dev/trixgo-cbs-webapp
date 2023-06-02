@@ -169,7 +169,7 @@ const ProjectBiddingPage: FC = () => {
     <div className={"flex flex-col relative h-full"}>
       <div className={"sticky top-0 z-10"}>
         <div className={"flex items-center px-4 py-2"}>
-          <div className={"flex items-center flex-1"}>
+          {/* <div className={"flex items-center flex-1"}>
             <DropdownSearchableV2
               className={"mr-4 border border-primary-border rounded-lg mb-2"}
               placeholder={"Loại gói thầu"}
@@ -202,20 +202,20 @@ const ProjectBiddingPage: FC = () => {
               disableSearch={true}
               data={[]}
             />
-          </div>
-          <button
+          </div> */}
+          {/* <button
             onClick={toggleModalCreateOrUpdate.bind(null, "create")}
             className={"h-[32px] rounded bg-cbs-green text-white font-bold px-4"}>
             Tạo mới
-          </button>
+          </button> */}
         </div>
         <div className={"flex items-center pb-2"}>
-          <div className={"border-0.5 border-primary-border flex items-center"}>
+          {/* <div className={"border-0.5 border-primary-border flex items-center"}>
             <div className="w-[300px] bg-cbs-gray h-5.5">
               <div className="bg-cbs-bg-light-blue-bar h-5.5 text-white text-center"
                 style={{ width: "30%" }}>30%</div>
             </div>
-          </div>
+          </div> */}
           <button className={"flex items-center justify-center mx-3 ml-6"}>
             <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"} />
           </button>
@@ -286,11 +286,11 @@ const ProjectBiddingPage: FC = () => {
               <th className="py-2.5 font-normal border-t-0.5 border-r-0.5 border-cbs-border px-1" style={{ minWidth: "120px" }}>
                 Trạng thái
               </th>
-              <th className="py-2.5 font-normal text-center border-t-0.5 border-r-0.5 border-cbs-border px-1" colSpan={9}>
+              {/* <th className="py-2.5 font-normal text-center border-t-0.5 border-r-0.5 border-cbs-border px-1" colSpan={9}>
                 Tiến trình
-              </th>
+              </th> */}
             </tr>
-            <tr className="border-0.5 border-cbs-border bg-cbs-table-header text-primary-gray whitespace-nowrap align-middle text-left">
+            {/* <tr className="border-0.5 border-cbs-border bg-cbs-table-header text-primary-gray whitespace-nowrap align-middle text-left">
               <th className="px-4 py-2.5 font-normal border-0.5 border-cbs-border w-1">
               </th>
               <th className="py-2.5 font-normal border-t-0.5 border-b-0.5 border-r-0.5 border-cbs-border px-1">
@@ -332,7 +332,7 @@ const ProjectBiddingPage: FC = () => {
               <th className="py-2.5 font-normal border-t-0.5 border-b-0.5 border-r-0.5 border-cbs-border px-1">
                 Tổng %
               </th>
-            </tr>
+            </tr> */}
           </thead>
           <tbody className="text-small">
             {
@@ -356,9 +356,9 @@ const ProjectBiddingPage: FC = () => {
                       className="pt-2.5 pb-3 px-1 border-b-0.5 border-r-0.5 border-cbs-border"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <NavLink to={`/bidding/plan/${projectID}/${item._id}`}>
+                      <NavLink to={`#`}>
                         <div style={{lineHeight: "20px"}}>
-                          <span className="bg-cbs-orage text-white mr-1 py-1 px-3 rounded">Cao</span>
+                          {/* <span className="bg-cbs-orage text-white mr-1 py-1 px-3 rounded">Cao</span> */}
                           {item.name}
                         </div>
                         <p className={"mt-1 text-gray-500"}>
@@ -396,7 +396,7 @@ const ProjectBiddingPage: FC = () => {
                       <span className="text-white bg-cbs-inline-badge-blue rounded-full py-1 px-2"> {BIDDING_PLAN_STATUS[item.status - 1]?.text}
                       </span>
                     </td>
-                    <td className="pt-2.5 pb-3 px-1 border-b-0.5 border-r-0.5 border-cbs-border text-center">
+                    {/* <td className="pt-2.5 pb-3 px-1 border-b-0.5 border-r-0.5 border-cbs-border text-center">
                       <ToggleCheckBox />
                     </td>
                     <td className="pt-2.5 pb-3 px-1 border-b-0.5 border-r-0.5  border-cbs-border text-center">
@@ -422,7 +422,7 @@ const ProjectBiddingPage: FC = () => {
                     </td>
                     <td className="pt-2.5 pb-3 px-1 border-b-0.5 border-r-0.5  border-cbs-border text-center">
                       {item?.percentOfCompletedPackage ? item?.percentOfCompletedPackage + "%" : ""}
-                    </td>
+                    </td> */}
                   </tr>
                 )
               })
