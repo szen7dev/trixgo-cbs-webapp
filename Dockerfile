@@ -9,8 +9,11 @@ RUN yarn install
 
 COPY . .
 
+RUN node -e 'console.log(v8.getHeapStatistics().heap_size_limit/(1024*1024))'
+ARG NODE_OPTIONS="--max-old-space-size=7168"
 ARG NODE_BUILD_ARGS=''
-RUN yarn run build $NODE_BUILD_ARGS
+RUN node -e 'console.log(v8.getHeapStatistics().heap_size_limit/(1024*1024))'
+RUN export NODE_OPTIONS=${NODE_OPTIONS} && yarn run build $NODE_BUILD_ARGS
 
 FROM nginx:alpine as publish
 COPY docker/nginx.conf /etc/nginx/nginx.conf
