@@ -74,13 +74,13 @@ const ReportContractor: React.FC<Props> = ({ projectID, ...props }) => {
 					</div>
 					<div>
 						<div className="my-5 whitespace-nowrap">
-							<Link to="#"><span className={cn(styles.circle, styles.plum, "inline-block h-2 w-2 rounded-md mr-3")}></span>Chưa thực hiện ({dataStatus1?.amount || 0} - {Math.ceil(dataStatus1?.amountPackagePrice / 1000000000 || 0)} Tỷ) </Link>
+							<Link to={`/pm/project/${projectID}/bidding`}><span className={cn(styles.circle, styles.plum, "inline-block h-2 w-2 rounded-md mr-3")}></span>Chưa thực hiện ({dataStatus1?.amount || 0} - {Math.ceil(dataStatus1?.amountPackagePrice / 1000000000 || 0)} Tỷ) </Link>
 						</div>
 						<div className="my-5 whitespace-nowrap">
-							<Link to="#"><span className={cn(styles.circle, styles.info, "inline-block h-2 w-2 rounded-md mr-3")}></span>Đang triển khai ({dataStatus2?.amount || 0} - {Math.ceil(dataStatus2?.amountPackagePrice / 1000000000 || 0)} Tỷ) </Link>
+							<Link to={`/pm/project/${projectID}/bidding`}><span className={cn(styles.circle, styles.info, "inline-block h-2 w-2 rounded-md mr-3")}></span>Đang triển khai ({dataStatus2?.amount || 0} - {Math.ceil(dataStatus2?.amountPackagePrice / 1000000000 || 0)} Tỷ) </Link>
 						</div>
 						<div className="my-5 whitespace-nowrap">
-							<Link to="#"><span className={cn(styles.circle, styles.lime, "inline-block h-2 w-2 rounded-md mr-3")}></span>Đã hoàn thành ({dataStatus3?.amount || 0} - {Math.ceil(dataStatus3?.amountPackagePrice / 1000000000 || 0)} Tỷ) </Link>
+							<Link to={`/pm/project/${projectID}/bidding`}><span className={cn(styles.circle, styles.lime, "inline-block h-2 w-2 rounded-md mr-3")}></span>Đã hoàn thành ({dataStatus3?.amount || 0} - {Math.ceil(dataStatus3?.amountPackagePrice / 1000000000 || 0)} Tỷ) </Link>
 						</div>
 					</div>
 				</div>
