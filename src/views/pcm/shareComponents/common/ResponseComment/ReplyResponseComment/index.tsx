@@ -67,7 +67,9 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
             }
         }
 
-        return arr.filter(item => item.value !== userId);
+        return arr.filter((item, index, self) => {
+            return item.value !== userId && index === self.findIndex((el) => el.value === item.value);
+        });
     }, [task, parent])
 
     const [selectedUser, setSelectedUser] = useState<Item[]>(initUsersSelected);
