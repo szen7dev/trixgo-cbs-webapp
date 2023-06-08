@@ -8,7 +8,6 @@ import iconAttach from "assets/images/icons8-attach-48.svg";
 // import iconChat from "assets/images/icons8-chat-96 1.svg";
 // import iconTrash from "assets/images/icons8-delete-96 1.svg";
 // import imageDemo from "assets/images/task-detail-image.png";
-// import { listEmoji } from "../../../../../messages/pages/MessageHome/sections/ChattingSection";
 import { ChildResponseComment } from "../ChildResponseComment";
 import { Comment as CommentType, CommentPayload, CommentProps, Task } from "typings/task";
 import moment from 'moment';
@@ -42,17 +41,8 @@ type Props = {
     onClickImage?: (comment: CommentType, index: number) => void,
     onConfirmUpdate?: () => void;
 }
-// const useStyles = makeStyles({
-//     popover: {
-//         pointerEvents: "none"
-//     },
-//     popoverContent: {
-//         pointerEvents: "auto"
-//     }
-// });
 
 export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, socket, isLastComment, onClickImage, onConfirmUpdate }) => {
-
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
     const handlePopoverClose = () => setAnchorEl(null);
@@ -75,14 +65,9 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
         }
     };
 
-    useEffect(() => {
-        scrollToBottom();
-    }, [])
-
     useOnClickOutside(detailRef, () => setShowDetail(false));
 
     const { state, dispatch } = useContext(CommentContext);
-    // const { current: socket }: any = useSocket();
 
     const { addFileToUpload } = useUpload({
         appID: APP_ID.PCM.id,
@@ -99,11 +84,6 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
         setIDFileUploaded,
         setUploadImage,
         setUploadFile,
-        // setUploadImageProgress,
-        // setUploadFileProgress,
-        // removeUploadedImage,
-        // removeUploadedFile,
-        // removeAllFiles
     }] = useUploadFile({});
 
     const commentsReply = (state.commentsReply[comment._id] || []).filter(Boolean);
@@ -116,6 +96,8 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
                 payload: comment.lastestReplyID
             });
         }
+
+        scrollToBottom();
     }, [])
 
     const receiversText = useMemo(() => {
