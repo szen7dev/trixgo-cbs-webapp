@@ -1,7 +1,7 @@
 /**
  * Libraries
  */
-import React, { ChangeEvent, FC, UIEvent, useRef, useState } from "react";
+import React, { ChangeEvent, FC, UIEvent, useRef, useState, useEffect } from "react";
 import { Formik, Form, ErrorMessage } from "formik";
 import { useHistory } from 'react-router-dom';
 import { object, string } from "yup";
@@ -28,6 +28,7 @@ import { PCM_PROPOSAL_TASK } from "apis/localdb";
 import { APP_ID } from "apis/localdb";
 import { humanFileSize } from 'utils/converter';
 import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
+import { useAuth } from "services/hooks/auth/useAuth";
 
 /**
  * Components, Assets
@@ -35,8 +36,6 @@ import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFi
 import { DropdownSearchable } from "shareComponents/common";
 import Close from "assets/icons/Close";
 import fakeThumbnail from "assets/images/avatar.jpg";
-// import IconClock from "assets/images/icons8-snooze-48 1.svg";
-// import TagIcon from "assets/images/icons8-price-tag-96.svg";
 
 import "react-day-picker/lib/style.css";
 import { Editor } from "@tinymce/tinymce-react";
@@ -82,17 +81,20 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
   const [companyID, setCompanyID] = useState(defaultValues?.company?._id || "");
   const [projectID, setProjectID] = useState(defaultValues?.project?._id || "");
   const [groupID, setGroupID] = useState(defaultValues?.group?._id || "");
+  const [taskID, setTaskID] = useState("");
   const [groupParentPicker, setGroupParentPicker] = useState<any>({});
   const [isNotiEmail, setIsNotiEmail] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
 
+  const { user } = useAuth();
   const { addTaskAsync } = useTask({});
 
   const { addFileToUpload } = useUpload({
     appID: APP_ID.PCM.id,
     companyID,
     projectID,
-    groupID
+    groupID,
+    taskID,
   });
 
   const [uploads, {
@@ -104,7 +106,6 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
     setUploadFile,
     removeUploadedImage,
     removeUploadedFile,
-    // removeAllFiles
   }] = useUploadFile({});
 
   const {
@@ -119,7 +120,6 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
   })
 
   const {
-    // list: listDoctypes,
     hasNextPage: hasNextPageDoctypes,
     fetchNextPage: fetchNextPageDoctypes,
     isFetching: isFetchingPageDoctypes
@@ -127,9 +127,8 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
     params: {
       type: 2,
       companyID,
-      // keyword: searchOtherField
     },
-    isFetchList: false // !!companyID
+    isFetchList: false
   })
 
   const {
@@ -170,6 +169,28 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
     keyword: searchFriendName
   }, true);
 
+  const addTaskSchema = object().shape({
+    projectID: string().required("Vui lòng nhập tên dự án!"),
+    assigneeID: string().required("Vui lòng nhập tên người nhận!"),
+    name: string().required("Vui lòng nhập tiêu đề!"),
+  });
+
+  const initialValues: InitialValues = {
+    projectID,
+    groupID,
+    fieldID: "",
+    assigneeID: "",
+    name: "",
+    startTime: moment().format('MM/DD/YYYY'),
+    expiredTime: moment().format('MM/DD/YYYY'),
+    expiredHour: "09:00",
+    description: "",
+    authorAttachs: [],
+    type: 1,
+    relatedIDs: [],
+    subType: '0',
+  };
+
   const handleCreateTask = async (values: any) => {
     try {
       let files: string[] = [];
@@ -194,6 +215,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
       closeModal();
       const { error, data } = await addTaskAsync({
         ...values,
+        taskID,
         isNotiEmail
       });
 
@@ -208,6 +230,26 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
       }
     }
   };
+
+  const createTaskTemp = async (values?: any) => {
+    try {
+      const payload = {
+        name: "No name",
+        assigneeID: user?._id,
+        draft: "1",
+        projectID,
+        groupID,
+      }
+      const { error, data } = await addTaskAsync({
+        ...payload,
+        ...values,
+      });
+
+      !error && setTaskID(data._id);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   const getCancelTokenRequest = (key: string, file: any) => {
     const CancelToken = Axios.CancelToken;
@@ -336,27 +378,11 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
     }
   }
 
-  const addTaskSchema = object().shape({
-    projectID: string().required("Vui lòng nhập tên dự án!"),
-    assigneeID: string().required("Vui lòng nhập tên người nhận!"),
-    name: string().required("Vui lòng nhập tiêu đề!"),
-  });
-
-  const initialValues: InitialValues = {
-    projectID,
-    groupID,
-    fieldID: "",
-    assigneeID: "",
-    name: "",
-    startTime: moment().format('MM/DD/YYYY'),
-    expiredTime: moment().format('MM/DD/YYYY'),
-    expiredHour: "09:00",
-    description: "",
-    authorAttachs: [],
-    type: 1,
-    relatedIDs: [],
-    subType: '0',
-  };
+  useEffect(() => {
+    if(projectID && groupID && !taskID) {
+      createTaskTemp();
+    }
+  }, [projectID, groupID, taskID])
 
   // nhac thoi han
   // const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);

@@ -13,20 +13,14 @@ import { useGetListAppOfUser } from "services/hooks/auth/usePermissions";
 
 export const APP_INFO = AppInfo;
 export const AppsMenu: FC = () => {
-  const { listAppOfUser, refetchAppUsers } = useGetListAppOfUser(); 
+  const { listAppOfUser, refetchAppUsers } = useGetListAppOfUser();
   const { user } = useAuth();
 
-  // console.log(listAppOfUser)
-  
   useEffect(() => {
     if (API.defaults.headers.Authorization) {
       refetchAppUsers();
     }
   }, [API.defaults.headers.Authorization]);
-
-  // const handleSearchTextKeyboardEvent = (event: any) => {
-  //   event.stopPropagation();
-  // };
 
   return (
     <Menu as="div" className="relative inline-block text-left">
@@ -64,7 +58,7 @@ export const AppsMenu: FC = () => {
                 </Link>
             </div>: <></>
           }
-          
+
         </Menu.Items>
       </Transition>
     </Menu>
