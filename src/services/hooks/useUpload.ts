@@ -73,6 +73,7 @@ export const useUpload = ({
     groupID,
     packageID,
     conversationID,
+    taskID,
     typeUpload
 }: GenerateLinkPayload) : UseUpload => {
 
@@ -89,6 +90,7 @@ export const useUpload = ({
                 groupID,
                 packageID,
                 conversationID,
+                taskID,
                 typeUpload
             })
         );
