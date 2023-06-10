@@ -116,6 +116,7 @@ export interface addTaskPayload {
   fieldID: string;
   groupID: string;
   assigneeID: string;
+  taskID?: string;
   subType: number;
   type: number;
   startTime: string;

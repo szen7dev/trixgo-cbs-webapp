@@ -92,6 +92,8 @@ export const getIconApp = (salesChannel: any) => {
   }
 }
 
+export const fnbAccessData = ['kiemthuvien4.fnb@gmail.com', 'adwgo.winggo@gmail.com', 'hiepnh.winggo@gmail.com', 'chinhnv.winggo@gmail.com','huongnt.winggo@gmail.com','hoangnh.winggo@gmail.com', 'hienpd.winggo@gmail.com','toannd.winggo@gmail.com', 'kiemsoat1.winggo@gmail.com','kiemsoat2.winggo@gmail.com','kiemsoat3.winggo@gmail.com','kiemsoat4.winggo@gmail.com','kiemsoat5.winggo@gmail.com','vund.winggo@gmail.com','quynhntd.winggo@gmail.com','nhungvth.winggo@gmail.com','tuyetnt.winggo@gmail.com']
+
 export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
 
   const queryClient = useQueryClient();
@@ -349,6 +351,29 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
       setStateExport({ isExporting: true });
       const { error, data } = await exportOrderAsync2({
         option: 2,
+        filterParams: {
+          ...queryFnb,
+          keyword,
+        }
+      });
+
+      if(error) {
+        return toast.warn(data?.message);
+      }
+
+      data && createLinkAndClick(data, '_self');
+    } catch (error: any) {
+      toast.error(error.message)
+    } finally {
+      setStateExport({ isExporting: false });
+    }
+	}
+
+  const handleExportExcel23 = async () => {
+    try {
+      setStateExport({ isExporting: true });
+      const { error, data } = await exportOrderAsync2({
+        option: 3,
         filterParams: {
           ...queryFnb,
           keyword,
@@ -1140,8 +1165,14 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               <button onClick={handleExportExcel} title="Tải dữ liệu Excel">
                 Tải KPI
               </button>
+
+              {( fnbAccessData.includes(`${user?.email}`)) && (
+                <button onClick={handleExportExcel23} title="Tải Phân loại doanh số">
+                  Tải Phân loại doanh số
+                </button>
+              )}
               
-              {(user?.email === 'adwgo.winggo@gmail.com' || user?.email === 'hiepnh.winggo@gmail.com') && (
+              {( fnbAccessData.includes(`${user?.email}`)) && (
                 <button onClick={handleExportExcel22} title="Tải dữ liệu Excel">
                   Tải Khách hàng
                 </button>

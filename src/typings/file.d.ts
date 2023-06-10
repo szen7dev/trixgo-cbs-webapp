@@ -9,6 +9,7 @@ export type GenerateLinkPayload = {
   groupID?: string;
   packageID?: string;
   conversationID?: string;
+  taskID?: string;
   typeUpload?: string;
   type?: number;
   mimeType?: string;
