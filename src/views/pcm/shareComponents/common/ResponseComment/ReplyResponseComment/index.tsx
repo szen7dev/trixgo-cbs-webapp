@@ -94,7 +94,8 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
         appID: APP_KEY.PCM_PLAN_TASK,
         companyID: task.company?._id,
         projectID: task.project?._id,
-        groupID: task.group?._id
+        groupID: task.group?._id,
+        taskID: task._id
     });
 
     const { createCommentAsync } = useCommentPcm({});
