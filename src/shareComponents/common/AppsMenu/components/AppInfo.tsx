@@ -84,7 +84,7 @@ export const APP_INFO = new Map([
     /* Ứng dụng Owner */
     ['61e04989fdebf77b072d1b10', {
         key: "61e04989fdebf77b072d1b10",
-        name: "Quản trị viên công ty",
+        name: "Quản trị viên doanh nghiệp",
         icon: ownerLogo,
         route: '/owner/home'
     }],
