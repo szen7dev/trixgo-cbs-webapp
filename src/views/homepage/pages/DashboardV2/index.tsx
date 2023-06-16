@@ -28,7 +28,7 @@ import TriangleDown from "assets/icons/TriangleDown";
 import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
 import businessBuiding from "assets/images/icons8-business-building-48.svg";
 import trashIcon from "assets/images/icons8-trash-96 1.svg";
-import mailIcon from "assets/images/icons8-email-96 1.svg";
+// import mailIcon from "assets/images/icons8-email-96 1.svg";
 
 import iconPhoto from "assets/images/icons8-photo.svg";
 import iconFile from "assets/images/icons8-attach.svg";
@@ -1444,7 +1444,7 @@ export const DashboardV2: FC<Props> = () => {
                     ? totalPageSubject
                     : totalPageFile
               }
-              limit={50}
+              limit={20}
               hasNextPage={
                 tabActive === 1
                   ? hasNextPageResponse
