@@ -56,7 +56,7 @@ const FnbPage: FC = () => {
                 }
             });
 
-        fetch(`${domain}/api/fnb/vouchers?customerID=${contactID}&limit=10&status=1`, {
+        fetch(`${domain}/api/fnb/vouchers?customerID=${contactID}&limit=50&status=1`, {
             headers: fixedHeaders,
         })
             .then(async (response) => {
