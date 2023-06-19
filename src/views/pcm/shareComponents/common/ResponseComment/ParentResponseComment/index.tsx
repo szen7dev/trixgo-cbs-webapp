@@ -74,6 +74,7 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
         companyID: task?.company?._id,
         projectID: task?.project?._id,
         groupID: task?.group?._id,
+        taskID: task._id
     });
 
     const { updateFileAsync } = useFileCore();
@@ -163,7 +164,7 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
         setUploadImage(images);
         setUploadFile(files);
 
-        toast.info('File đang được upload vui lòng không reload trang');
+        toast.info('File đang được upload vui lòng không reload trang', { autoClose: false, closeOnClick: false });
 
         // Upload images
         for (const [key, { file }] of Object.entries(images)) {
