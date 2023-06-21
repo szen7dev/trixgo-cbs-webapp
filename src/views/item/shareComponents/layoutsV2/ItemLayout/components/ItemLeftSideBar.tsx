@@ -23,7 +23,7 @@ export const ItemLeftSideBar: FC = () => {
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className={"flex-1 ml-2 text-left text-[14px]"}>Danh bạ công ty</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Danh bạ</span>
           </NavLink>
           <NavLink
             to="/item/storage"
@@ -35,7 +35,7 @@ export const ItemLeftSideBar: FC = () => {
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className={"flex-1 ml-2 text-left text-[14px]"}>Dụng cụ lưu trữ hồ sơ</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Dụng cụ lưu trữ</span>
           </NavLink>
           <NavLink
             to="/item/goods"
@@ -47,7 +47,7 @@ export const ItemLeftSideBar: FC = () => {
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className={"flex-1 ml-2 text-left text-[14px]"}>Hàng hóa, nguyên vật liệu, công cụ dụng cụ, tài sản</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Hoàng hóa nguyên liệu</span>
           </NavLink>
           <NavLink
             to="/item/fundas"
@@ -155,7 +155,7 @@ export const ItemLeftSideBar: FC = () => {
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className={"flex-1 ml-2 text-left text-[14px]"}>Loại hợp đồng lao động</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Loại hợp đồng</span>
           </NavLink>
           <NavLink
             to="/item/home/9"
@@ -239,7 +239,7 @@ export const ItemLeftSideBar: FC = () => {
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className={"flex-1 ml-2 text-left text-[14px]"}>Nội dung chứng chỉ nhân sự</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Chứng chỉ nhân sự</span>
           </NavLink>
           <NavLink
             to="/item/home/16"

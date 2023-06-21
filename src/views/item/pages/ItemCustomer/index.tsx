@@ -458,7 +458,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                                 {item.birthday ? moment(item.birthday).format('DD/MM/YYYY') : ''}
                             </td>
                             <td className="py-1 px-2">{item.note}</td>
-                            <td className="py-1 px-2">{CUSTOMER_TYPES[Number(item?.nonResident)-1].text}</td>
+                            <td className="py-1 px-2">{item?.nonResident > 1 ? CUSTOMER_TYPES[Number(item?.nonResident)-1].text : ''}</td>
                             <td className="py-1 px-2">
                                 {item.modifyAt ? moment(item.modifyAt).format('HH:mm - DD/MM/YYYY') : ''} <br /> {item?.userUpdate?.bizfullname || ''}
                             </td>

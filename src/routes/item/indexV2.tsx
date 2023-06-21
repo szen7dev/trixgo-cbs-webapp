@@ -3,7 +3,6 @@ import { FC } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 
 /*=====3.LAYOUTS=====*/
-import { ItemLayout } from "views/item/shareComponents/layouts";
 import { ProtectedRoute } from "routes/components";
 
 /*=====4.HOOK=====*/
