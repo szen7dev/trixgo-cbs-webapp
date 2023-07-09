@@ -5,11 +5,8 @@ import { Link, useParams, useHistory, useLocation } from "react-router-dom";
 import { useModal } from "services/hooks/useModal";
 import debounce from "lodash/debounce";
 import { SearchInput } from "shareComponents/common";
-// import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
 
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
-// import iconArrowRight from "assets/images/icon-arrow-right.svg";
-// import DownloadIcon from "assets/images/icons8-download-96.svg";
 import UploadFileIcon from "assets/images/icons8-upload-48.svg";
 import FolderIcon from "assets/images/icons8-folder.svg";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
@@ -140,13 +137,7 @@ const FunctionalTab: FC = () => {
 							<img src="/images/common/button_back.png" alt="Button Back" />
 						</button>
 					)}
-					<p className="text-lg ml-2">Danh sách</p>
-					{/* {breadcrumb.length ? breadcrumb.map(group => (
-						<>
-							{group?.name}
-							{(breadcrumb.length > 1 && groupID !== group._id) && <IconArrowRight />}
-						</>
-					)) : 'Danh sách'} */}
+					<p className="text-lg ml-2">Danh sách nhóm dữ liệu</p>
 					<SearchInput
 						classNameWrapper="ml-4"
 						classNameInput="outline-none w-[296px]"

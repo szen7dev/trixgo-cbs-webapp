@@ -83,7 +83,8 @@ const AdminMember: FC = () => {
 		<main className="h-full overflow-auto">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
 				<div className="flex items-center">
-					<p className="text-lg truncate max-w-xs" title={data?.data.name}>{data?.data.name}</p>
+					{/* <p className="text-lg truncate max-w-xs" title={data?.data.name}>{data?.data.name}</p> */}
+					<p className="text-lg truncate max-w-xs">Thành viên Dự án/Phòng ban</p>
 					<SearchInput
 						classNameWrapper="ml-4"
 						classNameInput="outline-none w-[296px]"
