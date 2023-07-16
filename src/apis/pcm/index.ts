@@ -251,21 +251,21 @@ const PcmRepository = {
      */
     async downloadTemplateExcel(payload: any): Promise<any> {
         const { data } = await API.get<any>(
-            `${URL}/products/download-template-excel`, payload
+            `${pcmURL}/pcm_plan_groups/download-template-excel`, payload
         );
         return data;
     },
     
     async importExcel(payload: any): Promise<any> {
         const { data } = await API.post<any>(
-            `${URL}/products/import-from-excel`, payload
+            `${pcmURL}/pcm_plan_groups/import-from-excel`, payload
         );
         return data;
     },
     
     async exportExcel(payload: any): Promise<any> {
         const { data } = await API.get<any>(
-            `${URL}/products/export-excel`, { params: payload }
+            `${pcmURL}/pcm_plan_groups/export-excel`, { params: payload }
         );
         return data;
     },

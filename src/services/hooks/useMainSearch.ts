@@ -113,10 +113,14 @@ export const useSearchTask = ({
             lastestID: pageParam || "",
             populates: JSON.stringify({
                 path: "assignee author project group lastLog lastComment",
-                select: "name fullname bizfullname image sign content author createAt sign files",
+                select: "name fullname image sign content author createAt sign files",
                 populate: {
                     path: "author files images",
-                    select: "bizfullname fullname image sign nameOrg path" 
+                    select: "fullname image sign nameOrg path createAt",
+                    // populate: {
+                    //     path: "author",
+                    //     select: "fullname" 
+                    // } 
                 }
             }),
             ...params,
