@@ -7,7 +7,7 @@ import { SearchInput } from "shareComponents/common";
 import debounce from "lodash/debounce";
 // import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
 
-import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
+// import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 import DownloadIcon from "assets/images/icons8-download-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
 import MemberIcon from "assets/images/member-icon.svg";
@@ -18,11 +18,15 @@ import { DepartmentRepositories } from "apis/item/department";
 import { ResponseData } from "typings/apis/response";
 import { Department } from "typings/items";
 import { toast } from "react-toastify";
+import { useUserSystem } from 'services/hooks/users/useUserSystem';
 
 const AdminMember: FC = () => {
+
 	// ID của dự án
 	const { id } = useParams<{ id: string }>();
 	const [keyword, setKeyword] = useState("");
+
+	// Cần thay thế bằng API tìm members của dự án
 	const { data, refetch } = useQuery(
 		['get_list_app_role_menu', id],
 		() => DepartmentRepositories.getInfoDepartment({
@@ -35,6 +39,19 @@ const AdminMember: FC = () => {
 			})
 		}),
 		{ refetchOnMount: false, refetchOnWindowFocus: false });
+
+	const projectID = id
+	const {
+		data: listMemberOfProject,
+		hasNextPage,
+		totalRecord,
+		refetch: refetchUser,
+		fetchNextPage,
+		} = useUserSystem({
+		projectID,
+		keyword,
+		limit: 20
+		}, !!projectID);
 
 	const queryClient = useQueryClient();
 	const { assigned, checked, checkboxRef, handleChangeCheckbox, handleCheckAll } = useCheckedList((data?.data.members || []) as any[]);
@@ -83,18 +100,17 @@ const AdminMember: FC = () => {
 		<main className="h-full overflow-auto">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
 				<div className="flex items-center">
-					<p className="text-lg truncate max-w-xs" title={data?.data.name}>{data?.data.name}</p>
+
+					<p className="text-lg truncate max-w-xs">Thành viên Dự án/Phòng ban</p>
 					<SearchInput
 						classNameWrapper="ml-4"
 						classNameInput="outline-none w-[296px]"
 						onChange={debounce(
-							(event: any) => {
-								setKeyword(event.target.value);
-							},
+							(event: any) => setKeyword(event.target.value),
 							500
 						)}
 					/>
-					{/* <FinancialCashFlowFilterButton /> */}
+
 					{(checked && checked.length) ? (
 						<div className="flex items-center gap-2 border-l-2 border-primary-border px-4 ml-4">
 							<div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
@@ -108,7 +124,7 @@ const AdminMember: FC = () => {
 												"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
 											}
 										>
-											<DeleteMembers appID={data?.data._id} idsChecked={checked.map(d => d._id)} setIdsChecked={() => null} refetchGetListAppRoleMenu={refetch} />
+											<DeleteMembers appID={data?.data._id} idsChecked={checked.map(d => d._id)} setIdsChecked={() => null} refetchGetListAppRoleMenu={refetchUser} />
 										</div>
 									)
 								}>
@@ -119,7 +135,7 @@ const AdminMember: FC = () => {
 				</div>
 				<div className="flex items-center">
 					<button
-						className="flex items-center justify-center text-primary-light bg-cbs-green w-[120px] h-8 rounded font-bold mr-6"
+						className="flex items-center justify-center text-primary-light bg-cbs-green w-[120px] h-8 rounded font-bold"
 						onClick={() =>
 							openModal(
 								<div
@@ -127,16 +143,16 @@ const AdminMember: FC = () => {
 										"inline-block w-[600px] h-[630px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded-lg"
 									}
 								>
-									<CreateNewAdminMember appRoleID={id} companyID={data?.data.company} refetchGetListAppRoleMenu={refetch} />
+									<CreateNewAdminMember appRoleID={id} companyID={data?.data.company} refetchGetListAppRoleMenu={refetchUser} />
 								</div>
 							)
 						}
 					>
 						Thêm thành viên
 					</button>
-					<button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
+					{/* <button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
 						<img src={Vertical3Dots} alt="3Dots" />
-					</button>
+					</button> */}
 				</div>
 			</header>
 
@@ -180,7 +196,8 @@ const AdminMember: FC = () => {
 				</thead>
 				<tbody className="bg-primary-light">
 					{/* Cần sửa typescript  */}
-					{data?.data.members && (data.data.members as any[]).map((member, index) =>
+					{/* {data?.data.members && (data.data.members as any[]).map((member, index) => */}
+					{listMemberOfProject.map((member, index) =>
 						<tr key={member._id} className="border-b border-primary-border h-10">
 							<td className="py-1 px-2 text-center">
 								<input
@@ -208,7 +225,7 @@ const AdminMember: FC = () => {
 								<input
 									className="cbs-checkbox"
 									type="checkbox"
-									checked={data.data.admins.includes(member._id) ? true : false}
+									checked={data?.data.admins.includes(member._id) ? true : false}
 									onChange={e => handleCheck(e, member._id, 'admin')}
 								/>
 							</td>
@@ -224,7 +241,7 @@ const AdminMember: FC = () => {
 													"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
 												}
 											>
-												<DeleteMembers appID={data?.data._id} idsChecked={[member._id]} setIdsChecked={() => null} refetchGetListAppRoleMenu={refetch} />
+												<DeleteMembers appID={data?.data._id} idsChecked={[member._id]} setIdsChecked={() => null} refetchGetListAppRoleMenu={refetchUser} />
 											</div>
 										)
 									}>
@@ -235,6 +252,17 @@ const AdminMember: FC = () => {
 					}
 				</tbody>
 			</table>
+
+			{hasNextPage && (
+				<div className="w-full flex justify-center my-5">
+					<button onClick={() => fetchNextPage()}>
+						<span className="text-primary">
+							{`Xem thêm (${totalRecord - listMemberOfProject.length})`}
+						</span>
+					</button>
+				</div>
+			)}
+
 		</main>
 	);
 };

@@ -54,8 +54,10 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
         };
         
         if (modalType == 'update') {
+            // console.log(values)
+
             const query = {
-                ...values,
+                // ...values,
                 voucherID: values._id,
                 template: parseInt(values.template),
                 type: parseInt(values.type),
@@ -67,6 +69,7 @@ const CreateFnbProduct: FC<any> = ({ toggle, modalType, onConfirm, initialValues
                 salesoffAmount: parseInt(values.salesoffAmount),
                 salesoffRate: parseInt(values.salesoffRate),
             };
+            
             const result = await updateAsync(query);
             if (!result.error) {
                 refetch();

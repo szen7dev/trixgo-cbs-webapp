@@ -245,6 +245,30 @@ const PcmRepository = {
         );
         return data;
     },
+
+    /**
+     * PHÂN QUYỀN DỮ LIỆU-QUẢN TRỊ VIÊN DỰ ÁN
+     */
+    async downloadTemplateExcel(payload: any): Promise<any> {
+        const { data } = await API.get<any>(
+            `${pcmURL}/pcm_plan_groups/download-template-excel`, payload
+        );
+        return data;
+    },
+    
+    async importExcel(payload: any): Promise<any> {
+        const { data } = await API.post<any>(
+            `${pcmURL}/pcm_plan_groups/import-from-excel`, payload
+        );
+        return data;
+    },
+    
+    async exportExcel(payload: any): Promise<any> {
+        const { data } = await API.get<any>(
+            `${pcmURL}/pcm_plan_groups/export-excel`, { params: payload }
+        );
+        return data;
+    },
 };
 
 export default PcmRepository;
