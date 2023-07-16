@@ -149,7 +149,7 @@ const FunctionalTab: FC = () => {
 					{(idsChecked && idsChecked.length) ? (
 						<div className="flex items-center gap-2 border-l-2 border-primary-border px-4 ml-4">
 							{/* <div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
-								<img src={DownloadIcon} alt="Download" />
+								<img src={TrashIcon} alt="Download" />
 							</div> */}
 							{idsChecked.length == 1 ?
 								<>
@@ -218,7 +218,7 @@ const FunctionalTab: FC = () => {
 				</div>
 				<div className="flex items-center">
 					<button
-						className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold mr-6"
+						className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold"
 						onClick={() =>
 							openModal(
 								<div
@@ -237,9 +237,9 @@ const FunctionalTab: FC = () => {
 					>
 						Tạo mới
 					</button>
-					<button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
+					{/* <button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
 						<img src={Vertical3Dots} alt="3Dots" />
-					</button>
+					</button> */}
 				</div>
 			</header>
 
@@ -276,7 +276,7 @@ const FunctionalTab: FC = () => {
 							<div className="font-normal pl-2">Cập nhật lần cuối</div>
 						</th>
 						<th className="w-1/3 pb-1 pt-1 font-normal">
-							<div className="font-normal pl-2">#</div>
+							<div className="font-normal pl-2">Xem thành viên</div>
 						</th>
 					</tr>
 				</thead>

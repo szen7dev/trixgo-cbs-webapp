@@ -2,7 +2,7 @@ import { FC, useState, useEffect } from "react";
 import {  useParams, useHistory } from 'react-router-dom';
 import { DepartmentRepository } from 'apis/item';
 
-import { validateFiles } from 'validation/file';
+// import { validateFiles } from 'validation/file';
 import { read, utils } from 'xlsx';
 
 import AppAdminTab from "./tabs/AppAdminTab";

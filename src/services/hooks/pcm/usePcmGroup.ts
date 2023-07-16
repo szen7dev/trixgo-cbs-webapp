@@ -17,7 +17,7 @@ export const usePcmPlanGroup = (params: any, isFetch?: boolean, isFetchInfo?: bo
         useMutation((payload: any) => PcmRepository.removeManyPcmPlanGroup(payload)
     );
 
-    // info group
+    // Info
     const {
         data: infoGroup,
         refetch: refetchInfoGroup
@@ -55,8 +55,25 @@ export const usePcmPlanGroup = (params: any, isFetch?: boolean, isFetchInfo?: bo
     const totalRecord = data?.pages[0]?.data?.totalRecord;
     const totalPage = data?.pages[0]?.data?.totalPage;
 
+    // Tải mẫu import excel
+    const { mutateAsync: downloadTemplateExcelAsync } =
+        useMutation((payload: any ) =>
+        PcmRepository.downloadTemplateExcel(payload)
+    );
+
+    // Import excel
+    const { mutateAsync: importExcelAsync } =
+        useMutation((payload: { dataImport: string }) =>
+        PcmRepository.importExcel(payload)
+    );
+
+    // Export excel
+    const { mutateAsync: exportExcelAsync } =
+        useMutation((payload: any) =>
+        PcmRepository.exportExcel(payload)
+    );
+
     return {
-        // get List
         isLoading,
         refetch,
         data: listPcmPlanGroup,
@@ -64,12 +81,13 @@ export const usePcmPlanGroup = (params: any, isFetch?: boolean, isFetchInfo?: bo
         hasNextPage,
         totalRecord,
         totalPage,
-        // create update remove
         createPcmPlanGroupMutateAsync,
         updatePcmPlanGroupMutateAsync,
         removeManyPcmPlanGroupMutateAsync,
-        // get Info
         infoGroup,
-        refetchInfoGroup
+        refetchInfoGroup,
+        downloadTemplateExcelAsync,
+        importExcelAsync,
+        exportExcelAsync
     };
 };
