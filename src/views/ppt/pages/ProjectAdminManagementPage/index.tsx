@@ -44,12 +44,12 @@ const ProjectAdminManagementPage: FC = (): any => {
     });
     const { downloadTemplateExcelAsync, importExcelAsync, exportExcelAsync } = usePcmPlanGroup({});
 
+    // console.log({projectID})
     const handleDownloadTemplateImportExcel = async () => {
-		try {
+		    try {
             setStateExport({ isExporting: true });
             const { error, data } = await downloadTemplateExcelAsync({
-                filterParams: {  
-                }
+              projectID: projectID
             });
 
             if(error) {
@@ -61,7 +61,7 @@ const ProjectAdminManagementPage: FC = (): any => {
             toast.error(error.message)
         } finally {
             setStateExport({ isExporting: false });
-        }
+      }
 	}
 
 	//_____Xử lý import excel (đọc file)
@@ -93,10 +93,10 @@ const ProjectAdminManagementPage: FC = (): any => {
     useEffect(() => {
         if(dataImport.length){
             const fetchData = async () => {
-                const data = await importExcelAsync({ dataImport: JSON.stringify(dataImport) });
+                const data = await importExcelAsync({ projectID: projectID, dataImport: JSON.stringify(dataImport) });
                 setDataImport([]);
                 // refetchTaskInfo?.()
-                console.log(data)
+                // console.log(data)
 
                 if(!data.error){
                     return toast.success("Import thành công");
@@ -144,12 +144,12 @@ const ProjectAdminManagementPage: FC = (): any => {
           <button className={"w-auto h-full p-2 text-sm text-primary"}
 						onClick={handleDownloadTemplateImportExcel}
 					>
-						Tải mẫu Excel phân quyền
+						Tải mẫu Excel
 				</button> 
 				<button className={"w-auto h-full p-2 text-sm text-primary"}>
 						<input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
 						accept=".xlsx, .xlsm, .xls, .csv"/>
-						<label className="custom-file-label" htmlFor="inputGroupFile">Import excel phân quyền</label>
+						<label className="custom-file-label" htmlFor="inputGroupFile">Phân quyền Dự án/Phòng ban</label>
 				</button>
         </div>
       </header>
