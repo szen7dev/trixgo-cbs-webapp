@@ -251,7 +251,9 @@ const PcmRepository = {
      */
     async downloadTemplateExcel(payload: any): Promise<any> {
         const { data } = await API.get<any>(
-            `${pcmURL}/pcm_plan_groups/download-template-excel`, payload
+            `${pcmURL}/pcm_plan_groups/download-template-excel`, {
+                params: payload
+            }
         );
         return data;
     },
