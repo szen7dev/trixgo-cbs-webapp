@@ -53,7 +53,7 @@ export const useDocumentPackage = (params: any, isFetchList?: boolean, isFetchIn
     const listDocumentPackageWithPager = (data?.pages || []).map((d: any) => d.data?.listRecords);
     const totalRecord = data?.pages[0]?.data?.totalRecord;
     const totalPage = data?.pages[0]?.data?.totalPage;
-    console.log({ totalRecord, totalPage });
+    // console.log({ totalRecord, totalPage });
     
     return {
         // get List

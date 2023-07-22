@@ -254,6 +254,8 @@ export const DashboardV2: FC<Props> = () => {
     isFetch: tabActive === 2 ? true : false,
   });
 
+  console.log(listDataForSubject)
+
   const {
     isLoadingFile,
     nextPageFile,
@@ -1704,6 +1706,7 @@ export const DashboardV2: FC<Props> = () => {
                               <div className="border-0.5 border-cbs-border rounded-full py-1 px-2">+{item?.lastComment?.files.length-1}</div>
                             )}
                         </div>
+
                         {/* Attach Images href={`${process.env.REACT_APP_URL_S3}${file.path}`} */}
                         <div className="flex wrap flex-wrap mr-2 text-primary-gray pb-2">
                           {

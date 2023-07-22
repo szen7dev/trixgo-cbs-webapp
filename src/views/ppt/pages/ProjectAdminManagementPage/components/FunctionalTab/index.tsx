@@ -5,11 +5,8 @@ import { Link, useParams, useHistory, useLocation } from "react-router-dom";
 import { useModal } from "services/hooks/useModal";
 import debounce from "lodash/debounce";
 import { SearchInput } from "shareComponents/common";
-// import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
 
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
-// import iconArrowRight from "assets/images/icon-arrow-right.svg";
-// import DownloadIcon from "assets/images/icons8-download-96.svg";
 import UploadFileIcon from "assets/images/icons8-upload-48.svg";
 import FolderIcon from "assets/images/icons8-folder.svg";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
@@ -140,13 +137,7 @@ const FunctionalTab: FC = () => {
 							<img src="/images/common/button_back.png" alt="Button Back" />
 						</button>
 					)}
-					<p className="text-lg ml-2">Danh sách</p>
-					{/* {breadcrumb.length ? breadcrumb.map(group => (
-						<>
-							{group?.name}
-							{(breadcrumb.length > 1 && groupID !== group._id) && <IconArrowRight />}
-						</>
-					)) : 'Danh sách'} */}
+					<p className="text-lg ml-2">Danh sách nhóm dữ liệu</p>
 					<SearchInput
 						classNameWrapper="ml-4"
 						classNameInput="outline-none w-[296px]"
@@ -158,7 +149,7 @@ const FunctionalTab: FC = () => {
 					{(idsChecked && idsChecked.length) ? (
 						<div className="flex items-center gap-2 border-l-2 border-primary-border px-4 ml-4">
 							{/* <div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
-								<img src={DownloadIcon} alt="Download" />
+								<img src={TrashIcon} alt="Download" />
 							</div> */}
 							{idsChecked.length == 1 ?
 								<>
@@ -227,7 +218,7 @@ const FunctionalTab: FC = () => {
 				</div>
 				<div className="flex items-center">
 					<button
-						className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold mr-6"
+						className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold"
 						onClick={() =>
 							openModal(
 								<div
@@ -246,9 +237,9 @@ const FunctionalTab: FC = () => {
 					>
 						Tạo mới
 					</button>
-					<button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
+					{/* <button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
 						<img src={Vertical3Dots} alt="3Dots" />
-					</button>
+					</button> */}
 				</div>
 			</header>
 
@@ -285,7 +276,7 @@ const FunctionalTab: FC = () => {
 							<div className="font-normal pl-2">Cập nhật lần cuối</div>
 						</th>
 						<th className="w-1/3 pb-1 pt-1 font-normal">
-							<div className="font-normal pl-2">#</div>
+							<div className="font-normal pl-2">Xem thành viên</div>
 						</th>
 					</tr>
 				</thead>

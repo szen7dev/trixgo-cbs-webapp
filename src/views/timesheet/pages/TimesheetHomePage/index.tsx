@@ -60,7 +60,7 @@ const TimeSheetHomePage: FC = () => {
         }
         throw new Error("Can not create!");
       } catch (err) {
-        console.error(err);
+        // console.error(err);
         return null;
       }
     },
@@ -78,7 +78,7 @@ const TimeSheetHomePage: FC = () => {
         }
         throw new Error("Can not create!");
       } catch (err) {
-        console.error(err);
+        // console.error(err);
         return null;
       }
     },

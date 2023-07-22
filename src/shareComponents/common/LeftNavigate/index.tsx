@@ -1,26 +1,21 @@
+/**
+ * BẢN CẮT GỌN, BỎ PHẦN SOCKET VÀ THÔNG BÁO CỦA CHAT
+ * File nguyên bản xem tại index_old.tsx
+ */
+
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
 import mailIcon from "assets/images/icons8-secure-mail-48.svg";
 import chatIcon from "assets/images/icons8-chat-48.svg";
-// import iconInspection from "assets/images/icons-inspection.svg";
-// import humanIcon from "assets/images/icons8-people-64.svg";
 import mediaIcon from "assets/images/icons8-commercial-64.svg";
-// import financialIcon from "assets/images/icons8-financial-64.svg";
 import projectIcon from "assets/images/icons-project.svg";
 import fnbIcon from "assets/images/icons-fnb.svg";
 import contractIcon from "assets/images/icons8-contract-64.svg";
 import fileIcon from "assets/images/icons-file.svg";
-// import biddingImage from "assets/menu/project/icons-project-bidding.svg"
 import { Link, useLocation } from "react-router-dom";
 import { useSocket } from "services/hooks/useSocket";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "redux/reducer";
-import { setAmountMissMessage } from "redux/reducer/messages/ListConversation";
-import { UseListConversation } from "services/hooks/messages/useListConversation";
+import { useDispatch } from "react-redux";
 import { usePcmPlanTaskNotification } from "services/hooks/pcm/usePcmDashboardV2";
-import { populates } from "../../../views/messages/shareComponents/layouts/MessagesLayoutV2";
-import { appendMessageToConversation, updateNewMessageToConversation } from "../../../redux/reducer/messages/ListMessage";
-import { pushMoreUnreadMessage } from "../../../redux/reducer/messages/UnreadMessages";
 import Favico from "react-favico-js";
 import { useGetListAppOfUser } from "services/hooks/auth/usePermissions";
 
@@ -51,103 +46,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
     return badge.amountUnreadTask || data?.data?.amountUnreadTask || 0;
   }, [data?.data?.amountUnreadTask, badge.amountUnreadTask])
 
-  useEffect(() => {
-    setTimeout(() => {
-      setEnabled(true);
-    }, 300);
-    if (firstRoute !== "messages") {
-      setTimeout(() => {
-        getListConversation({ keyword: "" });
-      }, 300);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!socket) return;
-
-    socket.on("CHATTING_SSC_RECEIVE_MESSAGE", onReceiveMessage);
-    socket.on("SUBJECT_PCM_SSC_UPDATE_COUNT_NOTIFICATION", onUpdateBadgeNotification);
-
-    return () => {
-      socket.off("CHATTING_SSC_RECEIVE_MESSAGE", onReceiveMessage);
-      socket.off("SUBJECT_PCM_SSC_UPDATE_COUNT_NOTIFICATION", onUpdateBadgeNotification);
-    };
-  }, [socket]);
-
-  const currentChat = useSelector((state: RootState) => state.listMessage.data.currentChat);
-  const amountMissMessage = useSelector((state: RootState) => state.listConversation.data.amountMissMessage);
-  const inSearchMode = useSelector((state: RootState) => state.searchMessage.data.inSearchMode[currentChat]);
-  const isReviewOldMessage = useSelector((state: RootState) => state.listMessage.data.isReviewOldMessage[currentChat]);
-  const { getListConversation } = UseListConversation();
-
-  const onUpdateBadgeNotification = ({ error, data }: any) => {
-    if(error || !Object.keys(data).length) return;
-
-    if(amountUnreadTask > 10) return;
-
-    setBadge({
-        amountUnreadTask: data.amountUnreadTask,
-    })
-  }
-
-  const onReceiveMessage = (data: any) => {
-    if (data?.infoMessage?.error) {
-      // Alert.alert(t('notification'), data.infoMessage.message);
-      getListConversation({ keyword: "" });
-      return;
-    }
-    dispatch(setAmountMissMessage(data.amountMissMessage))
-    // console.log(data)
-    socket.emit('CHATTING_CSS_GET_INFO_CONVERSATION', {
-      conversationID: data?.infoMessage?.conversation,
-      populates
-    });
-    if (data?.infoMessage?.sender?._id === profileId) {
-      dispatch(updateNewMessageToConversation({
-        conversationId: data?.infoMessage?.conversation,
-        newMessageId: data?.infoMessage?._id,
-        oldMessageId: data?.tmpid,
-        messageData: {
-          ...data?.infoMessage,
-          noAnimation: true
-        }
-      }));
-    } else {
-      playSound();
-      dispatch(appendMessageToConversation({
-        conversationId: data?.infoMessage?.conversation,
-        messageId: data?.infoMessage?._id,
-        messageData: {
-          ...data?.infoMessage,
-          noAnimation: true
-        }
-      }));
-      if (currentChat === data?.infoMessage?.conversation) {
-        dispatch(pushMoreUnreadMessage({ conversationId: data?.infoMessage?.conversation, messagesId: [data?.infoMessage?._id] }));
-      }
-      if (!inSearchMode && currentChat === data?.infoMessage?.conversation && !isReviewOldMessage) {
-        setTimeout(() => {
-          scrollToBottom();
-        }, 100)
-      }
-    }
-  };
-
-  const playSound = () => {
-    if (audioRef.current) {
-      if (!(audioRef.current.paused && audioRef.current.currentTime > 0 && !audioRef.current.ended)) {
-        audioRef.current.volume = 0.2;
-        audioRef.current.play();
-      }
-    }
-  }
-
-  const scrollToBottom = () => {
-    const conversationMessagesList = document.getElementById("conversation-messages-MessageList");
-    if (conversationMessagesList) {
-      conversationMessagesList.scrollTo({ top: conversationMessagesList.scrollHeight, behavior: "smooth" });
-    }
-  };
+  const amountMissMessage = 0
 
   const checkPermissionApp = useCallback((appID: string) => {
     let isPermission = false;
@@ -259,48 +158,6 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
           </div>
           <span className={"text-primary-gray mt-1"}>Hồ sơ</span>
         </Link> : <></>}
-        {/* {checkPermissionApp('5dfe4bf251dc622100bb9d8c') ?
-        <Link to={`/inspection/home`} className={"flex flex-col items-center mb-3"}>
-          <div
-            className={
-              "px-4 py-1 rounded-full relative " +
-              (firstRoute === "inspection"
-                ? "bg-cbs-hightlight-right-navigate"
-                : "")
-            }
-          >
-            <img width={'20px'} src={iconInspection} alt={"Nghiệm thu"} />
-          </div>
-          <span className={"text-primary-gray mt-1"}>Nghiệm thu</span>
-        </Link> : <></>} */}
-        {/* {checkPermissionApp('5dfe4bc751dc622100bb9d8a') ?
-        <Link to={`/financial/home`} className={"flex flex-col items-center mb-3"}>
-          <div
-            className={
-              "px-4 py-1 rounded-full relative " +
-              (firstRoute === "financial"
-                ? "bg-cbs-hightlight-right-navigate"
-                : "")
-            }
-          >
-            <img width={'20px'} src={financialIcon} alt={"Tài chính"} />
-          </div>
-          <span className={"text-primary-gray mt-1"}>Tài chính</span>
-        </Link> : <></>} */}
-      {/* {checkPermissionApp('61e049c9fdebf77b072d1b13') ?
-        <Link to={`/human/home`} className={"flex flex-col items-center mb-3"}>
-          <div
-            className={
-              "px-4 py-1 rounded-full relative " +
-              (firstRoute === "human"
-                ? "bg-cbs-hightlight-right-navigate"
-                : "")
-            }
-          >
-            <img width={'20px'} src={humanIcon} alt={"Nhân sự"} />
-          </div>
-          <span className={"text-primary-gray mt-1"}>Nhân sự</span>
-        </Link> : <></>} */}
       {checkPermissionApp('5dfe4c1b51dc622100bb9d8f') ?
         <Link to={`/messages`} className={"flex flex-col items-center mb-3"}>
           <div
@@ -312,15 +169,6 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
             }
           >
             <img width={'20px'} src={chatIcon} alt={"Chat"} />
-            {amountMissMessage > 0 && (
-              <span
-                className={
-                  "absolute -top-1 right-1 min-w-5 w-5 h-5 text-xs inline-block border-2 text-center border-white rounded-full bg-negative text-white"
-                }
-              >
-                {amountMissMessage <= 10 ? amountMissMessage : "9+"}
-              </span>
-            )}
           </div>
           <span className={"text-primary-gray mt-1"}>Chat</span>
         </Link> : <></>}
