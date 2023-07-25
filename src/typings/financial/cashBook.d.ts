@@ -153,7 +153,7 @@ export type CashBookAmountByPropertyResponse = APIResponse & {
  * EXCEL
  */
 export type CashBookDownloadPayload = {
-    
+    parentID?: string;
 }
 
 export type CashBookImportPayload = {

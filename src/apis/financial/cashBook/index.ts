@@ -31,9 +31,9 @@ export const CashbookRepository = {
     fetchAmountByProperty:
         (params: CashBookAmountByPropertyParams): Promise<CashBookAmountByPropertyResponse> => fetchAmountByProperty(params),
 
-     downloadTemplateExcel: (payload: CashBookDownloadPayload): Promise<any> => downloadTemplateExcel(payload),
-     importExcel: (payload: CashBookImportPayload): Promise<any> => importExcel(payload),
-     exportExcel: (payload: CashBookExportManyPayload): Promise<any> => exportExcel(payload),
+     downloadTemplateExcel  : (payload: CashBookDownloadPayload)            : Promise<any> => downloadTemplateExcel(payload),
+     importExcel            : (payload: CashBookImportPayload)              : Promise<any> => importExcel(payload),
+     exportExcel            : (payload: CashBookExportManyPayload)          : Promise<any> => exportExcel(payload),
 };
 
 async function insert(payload: CashBookInsertPayload): Promise<CashBookInfoResponse> {

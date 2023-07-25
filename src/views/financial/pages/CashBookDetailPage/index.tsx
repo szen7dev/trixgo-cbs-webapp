@@ -44,7 +44,7 @@ import { User } from "typings/user";
 
 export const CashBookDetailPage: FC = () => {
   const { cashbookId } = useParams<{ cashbookId: string }>();
-  console.log({cashbookId})
+  // console.log({cashbookId})
   const history = useHistory();
 
   /**
@@ -58,13 +58,11 @@ export const CashBookDetailPage: FC = () => {
   
   const { downloadTemplateExcelAsync, importExcelAsync, exportExcelAsync } = useCashBook({});
 
-  // console.log({projectID})
+  // console.log({cashbookId})
   const handleDownloadTemplateImportExcel = async () => {
       try {
             setStateExport({ isExporting: true });
-            const { error, data } = await downloadTemplateExcelAsync({
-              
-            });
+            const { error, data } = await downloadTemplateExcelAsync({ parentID: cashbookId });
 
             if(error) {
                 return toast.warn(data?.message);
