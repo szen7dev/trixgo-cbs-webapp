@@ -148,3 +148,24 @@ export type CashBookAmountByPropertyParams = {
 export type CashBookAmountByPropertyResponse = APIResponse & {
     data: CashBookAmountByProperty[];
 }
+
+/**
+ * EXCEL
+ */
+export type CashBookDownloadPayload = {
+    
+}
+
+export type CashBookImportPayload = {
+    parentID?: string;
+    dataImport: string;
+}
+
+export type CashBookExportManyPayload = {
+    name: string;
+    sign?: string;
+    note?: string;
+    openingBalance?: number;
+    arising?: number;
+    closingBalance?: number;
+}

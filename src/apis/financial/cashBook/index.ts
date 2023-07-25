@@ -12,7 +12,10 @@ import {
     CashBookAmountIncomeExpenseParams,
     CashBookAmountIncomeExpenseResponse,
     CashBookAmountByPropertyParams,
-    CashBookAmountByPropertyResponse
+    CashBookAmountByPropertyResponse,
+    CashBookDownloadPayload,
+    CashBookImportPayload,
+    CashBookExportManyPayload,
 } from 'typings/financial/cashBook';
 
 const CASH_BOOK_URL = "/api/fin/cash_books";
@@ -27,6 +30,10 @@ export const CashbookRepository = {
         (params: CashBookAmountIncomeExpenseParams): Promise<CashBookAmountIncomeExpenseResponse> => fetchAmountIncomeExpenseByParent(params),
     fetchAmountByProperty:
         (params: CashBookAmountByPropertyParams): Promise<CashBookAmountByPropertyResponse> => fetchAmountByProperty(params),
+
+     downloadTemplateExcel: (payload: CashBookDownloadPayload): Promise<any> => downloadTemplateExcel(payload),
+     importExcel: (payload: CashBookImportPayload): Promise<any> => importExcel(payload),
+     exportExcel: (payload: CashBookExportManyPayload): Promise<any> => exportExcel(payload),
 };
 
 async function insert(payload: CashBookInsertPayload): Promise<CashBookInfoResponse> {
@@ -82,6 +89,27 @@ async function fetchAmountIncomeExpenseByParent(params: CashBookAmountIncomeExpe
 async function fetchAmountByProperty(params: CashBookAmountByPropertyParams): Promise<CashBookAmountByPropertyResponse> {
     const { data } = await API.get(
         `${CASH_BOOK_URL}/get-amount-by-property?${convertObToUrl(params)}`
+    )
+    return data
+}
+
+async function downloadTemplateExcel(payload: any): Promise<any> {
+    const { data } = await API.get<any>(
+        `${CASH_BOOK_URL}/download-template-excel`, payload
+    )
+    return data
+}
+
+async function importExcel(payload: any): Promise<any> {
+    const { data } = await API.post<any>(
+        `${CASH_BOOK_URL}/import-from-excel`, payload
+    )
+    return data
+}
+
+async function exportExcel(payload: any): Promise<any> {
+    const { data } = await API.get<any>(
+        `${CASH_BOOK_URL}/export-excel`, payload
     )
     return data
 }
