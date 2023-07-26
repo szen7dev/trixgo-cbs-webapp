@@ -629,7 +629,7 @@ export const CashBookDetailPage: FC = () => {
                 Tồn
               </th>
               <th className="px-2 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
-                Mô tả/ghi chú 222
+                Mô tả/ghi chú sổ quỹ
               </th>
             </tr>
           </thead>
