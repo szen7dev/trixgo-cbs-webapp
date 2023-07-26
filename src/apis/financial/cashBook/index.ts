@@ -95,7 +95,7 @@ async function fetchAmountByProperty(params: CashBookAmountByPropertyParams): Pr
 
 async function downloadTemplateExcel(payload: any): Promise<any> {
     const { data } = await API.get<any>(
-        `${CASH_BOOK_URL}/download-template-excel`, payload
+        `${CASH_BOOK_URL}/download-template-excel?${convertObToUrl(payload)}`
     )
     return data
 }
@@ -109,7 +109,7 @@ async function importExcel(payload: any): Promise<any> {
 
 async function exportExcel(payload: any): Promise<any> {
     const { data } = await API.get<any>(
-        `${CASH_BOOK_URL}/export-excel`, payload
+        `${CASH_BOOK_URL}/export-excel?${convertObToUrl(payload)}`
     )
     return data
 }
