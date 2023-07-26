@@ -2,11 +2,11 @@ import { UIEvent, FC, useEffect, useState, useCallback, ChangeEvent } from "reac
 import { useParams, Link, useHistory } from 'react-router-dom';
 import { toast } from "react-toastify";
 import debounce from "lodash/debounce";
+import { read, utils } from 'xlsx';
 
 /**
  * Components
  */
-// import { DropdownFilterButton } from "views/document/sharedComponents/common";
 import {
   SearchInput,
   GroupActions,
@@ -22,6 +22,7 @@ import RowTableInsertInline from "./components/RowTableInsertInline";
 import RowTableUpdateInline from "./components/RowTableUpdateInline";
 import RowTableView from "./components/RowTableView";
 import ModalShare from "./components/ModalShare";
+import { createLinkAndClick } from "utils";
 
 /**
  * Utils
@@ -43,7 +44,80 @@ import { User } from "typings/user";
 
 export const CashBookDetailPage: FC = () => {
   const { cashbookId } = useParams<{ cashbookId: string }>();
+  // console.log({cashbookId})
   const history = useHistory();
+
+  /**
+   * LÀM VIỆC VỚI EXCEL
+   */
+  //_____Import, export excel
+  const [dataImport, setDataImport] = useState([]);
+  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+      isExporting: false,
+  });
+  
+  const { downloadTemplateExcelAsync, importExcelAsync, exportExcelAsync } = useCashBook({});
+
+  // console.log({cashbookId})
+  const handleDownloadTemplateImportExcel = async () => {
+      try {
+            setStateExport({ isExporting: true });
+            const { error, data } = await downloadTemplateExcelAsync({ parentID: cashbookId });
+
+            if(error) {
+                return toast.warn(data?.message);
+            }
+
+            data && createLinkAndClick(data, '_self');
+        } catch (error: any) {
+            toast.error(error.message)
+        } finally {
+            setStateExport({ isExporting: false });
+      }
+  }
+
+  //_____Xử lý import excel (đọc file)
+    const handleImport = ($event: any) => {
+        const files = $event.target.files;
+        if (files.length) {
+            const file = files[0];
+            const reader = new FileReader();
+            reader.onload = (event: any) => {
+                const wb = read(event.target.result);
+                const sheets = wb.SheetNames;
+
+                if (sheets.length) {
+                    const rows: any = utils.sheet_to_json(wb.Sheets[sheets[0]]); // Index=1 (tức Sheet số 2 từ trái sang)
+                    
+                    // Set data để Import
+                    setDataImport(rows)
+                }
+            }
+            
+            reader.readAsArrayBuffer(file);
+        }
+
+        // Đọc xong thì xóa value trong Input đi
+        $event.target.value = null;
+    }
+
+  //_____Gọi tới API để đẩy data lên
+    useEffect(() => {
+        if(dataImport.length){
+            const fetchData = async () => {
+                const data = await importExcelAsync({ parentID: cashbookId, dataImport: JSON.stringify(dataImport) });
+                setDataImport([]);
+                // refetchTaskInfo?.()
+                // console.log(data)
+
+                if(!data.error){
+                    return toast.success("Import thành công");
+                }
+                return toast.error(data.message);
+            }
+            fetchData();
+        }
+    }, [dataImport])
 
   const [keyword, setKeyword] = useState('');
   const [keywordContract, setKeywordContract] = useState('');
@@ -487,6 +561,16 @@ export const CashBookDetailPage: FC = () => {
             </button>
           </div>
         )}
+        <button className={"w-auto h-full p-2 text-sm text-primary"}
+          onClick={handleDownloadTemplateImportExcel}
+        >
+          Tải mẫu Excel
+        </button> 
+        <button className={"w-auto h-full p-2 text-sm text-primary"}>
+            <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
+            accept=".xlsx, .xlsm, .xls, .csv"/>
+            <label className="custom-file-label" htmlFor="inputGroupFile">Import dữ liệu sổ quỹ</label>
+        </button>
         <button
           className="w-10 h-10 rounded-full flex justify-center items-center"
           onClick={toggleVisible}
@@ -505,7 +589,7 @@ export const CashBookDetailPage: FC = () => {
       </div>
       <div className="flex-1 overflow-y-auto">
         <table
-          className="text-black text-medium border-separate space-x-0 space-y-0 w-full"
+          className="text-black text-medium border-collapse w-full"
           style={{ borderSpacing: 0 }}
         >
           <thead className="z-10 relative">
@@ -547,7 +631,7 @@ export const CashBookDetailPage: FC = () => {
                 Tồn
               </th>
               <th className="px-2 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
-                Mô tả/ghi chú
+                Mô tả/ghi chú 222
               </th>
             </tr>
           </thead>
