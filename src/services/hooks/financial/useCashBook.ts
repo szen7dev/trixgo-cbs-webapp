@@ -15,6 +15,9 @@ import type {
     CashBookAmountIncomeExpenseResponse,
     CashBookAmountByProperty,
     CashBookAmountByPropertyParams,
+    CashBookDownloadPayload,
+    CashBookImportPayload,
+    CashBookExportManyPayload,
 } from 'typings/financial/cashBook';
 
 /*=====3.INTERFACE DEFINE=====*/
@@ -33,6 +36,9 @@ interface UseCashBook {
     refetchInfo: () => void;
     fetchNextPage: () => void;
     fetchPreviousPage: () => void;
+    downloadTemplateExcelAsync: (payload: CashBookDownloadPayload) => Promise<any>;
+    importExcelAsync: (payload: CashBookImportPayload) => Promise<any>;
+    exportExcelAsync: (payload: CashBookExportManyPayload) => Promise<any>;
 }
 
 type UseCashBookProps = {
@@ -98,6 +104,22 @@ export const useCashBook = ({
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPage = data?.pages[0]?.data?.totalPage || 0;
 
+    // Tải mẫu import excel
+    const { mutateAsync: downloadTemplateExcelAsync } =
+        useMutation((payload: CashBookDownloadPayload ) => CashbookRepository.downloadTemplateExcel(payload)
+    );
+
+    // Import excel
+    const { mutateAsync: importExcelAsync } =
+        useMutation((payload: CashBookImportPayload) => CashbookRepository.importExcel(payload)
+    );
+
+    // Export excel
+    const { mutateAsync: exportExcelAsync } =
+        useMutation((payload: CashBookExportManyPayload) =>
+        CashbookRepository.exportExcel(payload)
+    );
+
     return {
         isLoading,
         isLoadingInfo,
@@ -113,6 +135,9 @@ export const useCashBook = ({
         refetchInfo,
         fetchNextPage,
         fetchPreviousPage,
+        downloadTemplateExcelAsync,
+        importExcelAsync,
+        exportExcelAsync
     }
 }
 

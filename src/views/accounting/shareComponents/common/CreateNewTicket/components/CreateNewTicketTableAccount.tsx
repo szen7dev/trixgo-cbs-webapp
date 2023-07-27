@@ -469,4 +469,4 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 	)
 }
 
-export default CreateNewTicketTableAccount;
+export default CreateNewTicketTableAccount
