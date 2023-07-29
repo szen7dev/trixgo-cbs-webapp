@@ -68,7 +68,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 		keyword: searchGoodValue,
 	});
 
-	const { handleBlur, setFieldValue, values } = formik;
+	const { setFieldValue, values } = formik;
 
 	const computeAmount = (item: any, index = 0) => {
 		setFieldValue(`selectedJournals.${index}.amount`, (+item.unitprice || 1) * (+item.quantity || 1))
@@ -82,10 +82,10 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 						<div className={"relative table border-collapse w-full text-center"}>
 							<div className={"sticky header flex table-row"}>
 								<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
-									TK nợ (*)
+									TK nợ
 								</div>
 								<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
-									TK có (*)
+									TK có
 								</div>
 								<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
 									Mã khách nợ (*)
