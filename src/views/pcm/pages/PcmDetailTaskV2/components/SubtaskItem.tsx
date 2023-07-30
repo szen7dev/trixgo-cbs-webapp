@@ -1,10 +1,10 @@
 import React, { FC, useRef, useState } from "react"
 import iconClock from "assets/images/icons8-clock-48.svg";
 import taskUserAvt from "assets/images/task-user.svg";
-import iconHorizontalDots from "assets/images/three-dots-horizontal-v2.svg";
-import iconChat from "assets/images/icons8-chat-96 1.svg";
-import iconTrash from "assets/images/icons8-delete-96 1.svg";
-import Close from "assets/icons/Close";
+// import iconHorizontalDots from "assets/images/three-dots-horizontal-v2.svg";
+// import iconChat from "assets/images/icons8-chat-96 1.svg";
+// import iconTrash from "assets/images/icons8-delete-96 1.svg";
+// import Close from "assets/icons/Close";
 import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import { Task } from "typings/task";
 import { useTask } from 'services/hooks/useTask';
@@ -81,9 +81,16 @@ export const SubtaskItem: FC<Props> = ({ task, userId, index }) => {
             />
             <div className="mx-2 px-2 w-full">
                 <p className="text-[14px]">
-                    <Link to={"/pcm/detail/" + task._id}>
-                        {index + 1}. {task.name}
-                    </Link>
+                    
+                    {task.subtype == 12 ? (
+                        <Link to={"/pcm/detail/" + task._id}>
+                            {index + 1}. {task.name}
+                        </Link>
+                    ) : (
+                        <Link to={"/pcm/detail/" + task._id}>
+                            {index + 1}. {task.name} | { task?.sign } | { task?.amount } 
+                        </Link>
+                    )}
                 </p>
                 <p className="text-[12px] text-cbs-highlight-color">
                     {task.assignee?.bizfullname}

@@ -28,7 +28,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
     type: 2,
     name: '',
     // address: '',
-    // taxid: '',
+    taxid: '',
     phone: '',
     gender: 1,
     birthday: '',
@@ -334,7 +334,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
           defaultValue={formData.address}
           onChange={onChange}
         />
-      </section>
+      </section> */}
 
       <section className="px-10 py-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtTaxid">
@@ -348,7 +348,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
           defaultValue={formData.taxid}
           onChange={onChange}
         />
-      </section> */}
+      </section>
 
       <section className="px-10 mt-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription">
