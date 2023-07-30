@@ -59,6 +59,8 @@ export type Task = {
   milestone: number;
   unit: string;
   unitPrice: number;
+  amount: number;
+  vatAmount: number;
   quantity: number;
   amountoftime: number;
   ontime: number;
