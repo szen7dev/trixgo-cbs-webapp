@@ -2,11 +2,11 @@ import React, { FC, useState } from "react";
 // import iconStar from "assets/images/icon-star.svg";
 import InlineBadgeSelect from "./InlineBadgeSelect";
 import { Task } from "typings/task";
-import { PCM_STATUS_TASK, PCM_PRIORITY_TASK, PCM_SUBTYPE } from 'apis/localdb';
+import { PCM_STATUS_TASK, PCM_PRIORITY_TASK, PCM_PROPOSAL_TASK } from 'apis/localdb';
 import { useTask } from 'services/hooks/useTask';
 import { toast } from "react-toastify";
 
-const optionsSubtype = PCM_SUBTYPE.map(subtype => ({
+const optionsSubtype = PCM_PROPOSAL_TASK.map(subtype => ({
     id: subtype.value,
     text: subtype.text,
     color: 'gray'
