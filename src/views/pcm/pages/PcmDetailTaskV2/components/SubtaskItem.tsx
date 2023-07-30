@@ -84,12 +84,12 @@ export const SubtaskItem: FC<Props> = ({ task, userId, index }) => {
                     
                     {task.subtype == 12 ? (
                         <Link to={"/pcm/detail/" + task._id}>
-                            {index + 1}. {task.name}
-                        </Link>
+                        {index + 1}. {task.name} | { task?.sign } | { task?.amount } 
+                    </Link>
                     ) : (
-                        <Link to={"/pcm/detail/" + task._id}>
-                            {index + 1}. {task.name} | { task?.sign } | { task?.amount } 
-                        </Link>
+                         <Link to={"/pcm/detail/" + task._id}>
+                         {index + 1}. {task.name}
+                     </Link>
                     )}
                 </p>
                 <p className="text-[12px] text-cbs-highlight-color">
