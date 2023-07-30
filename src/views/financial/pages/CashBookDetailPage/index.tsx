@@ -44,7 +44,6 @@ import { User } from "typings/user";
 
 export const CashBookDetailPage: FC = () => {
   const { cashbookId } = useParams<{ cashbookId: string }>();
-  // console.log({cashbookId})
   const history = useHistory();
 
   /**
@@ -55,10 +54,9 @@ export const CashBookDetailPage: FC = () => {
   const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
       isExporting: false,
   });
-  
-  const { downloadTemplateExcelAsync, importExcelAsync, exportExcelAsync } = useCashBook({});
 
-  // console.log({cashbookId})
+  const { downloadTemplateExcelAsync, importExcelAsync } = useCashBook({});
+
   const handleDownloadTemplateImportExcel = async () => {
       try {
             setStateExport({ isExporting: true });
@@ -88,12 +86,12 @@ export const CashBookDetailPage: FC = () => {
 
                 if (sheets.length) {
                     const rows: any = utils.sheet_to_json(wb.Sheets[sheets[0]]); // Index=1 (tức Sheet số 2 từ trái sang)
-                    
+
                     // Set data để Import
                     setDataImport(rows)
                 }
             }
-            
+
             reader.readAsArrayBuffer(file);
         }
 
@@ -565,7 +563,7 @@ export const CashBookDetailPage: FC = () => {
           onClick={handleDownloadTemplateImportExcel}
         >
           Tải mẫu Excel
-        </button> 
+        </button>
         <button className={"w-auto h-full p-2 text-sm text-primary"}>
             <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
             accept=".xlsx, .xlsm, .xls, .csv"/>
@@ -631,7 +629,7 @@ export const CashBookDetailPage: FC = () => {
                 Tồn
               </th>
               <th className="px-2 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
-                Mô tả/ghi chú 222
+                Mô tả/ghi chú sổ quỹ
               </th>
             </tr>
           </thead>

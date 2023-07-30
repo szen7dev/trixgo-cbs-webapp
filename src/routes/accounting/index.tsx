@@ -36,7 +36,7 @@ import {
   AccountingAdminAuthorTab,
   AccountingAdminDetail,
   AccountingAdminFunctionalTab
-} from "views/accounting/pages/AccountingAdminPage";
+} from "views/accounting/pages/AccountingAdminPage"
 
 const AccountingRouter: FC = () => {
   return (

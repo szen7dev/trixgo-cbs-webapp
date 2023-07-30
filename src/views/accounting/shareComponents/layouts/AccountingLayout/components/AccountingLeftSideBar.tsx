@@ -81,7 +81,7 @@ const LinkMenuLeftSideBar: FC = () => {
                 </NavLink>
                 <NavLink to={`/accounting/tbook`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
                   <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-                  <span className="truncate">Sổ tổng hợp tài khoản chữ T</span>
+                  <span className="truncate">Tổng hợp tài khoản chữ T</span>
                 </NavLink>
                 <NavLink to={`/accounting/diary`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
                   <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />

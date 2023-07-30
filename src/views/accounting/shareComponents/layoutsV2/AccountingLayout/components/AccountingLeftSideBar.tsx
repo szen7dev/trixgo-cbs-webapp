@@ -81,7 +81,7 @@ const LinkMenuLeftSideBar: FC = () => {
                 </NavLink>
                 <NavLink to={`/accounting/tbook`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                   <img width={'20px'} src={iconFolder} alt="Menu item" />
-                  <span className={"flex-1 ml-2 text-left text-[14px]"}>Sổ tổng hợp tài khoản chữ T</span>
+                  <span className={"flex-1 ml-2 text-left text-[14px]"}>Tổng hợp tài khoản chữ T</span>
                 </NavLink>
                 <NavLink to={`/accounting/diary`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                   <img width={'20px'} src={iconFolder} alt="Menu item" />
