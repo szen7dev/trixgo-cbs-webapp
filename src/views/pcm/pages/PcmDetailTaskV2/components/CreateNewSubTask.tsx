@@ -14,10 +14,6 @@ import { Task } from "typings/task";
 import { toArray } from 'lodash';
 import { PostImage, PostFile } from 'shareComponents/common';
 import taskUserAvt from "assets/images/task-user.svg";
-// import iconClose from "assets/images/Vector.svg";
-// import demoImg from "assets/images/demo-img 1.jpg";
-// import pinIcon from "assets/images/icons8-attach-96 1.svg";
-// import IconPhoto from "assets/images/icon-pic.svg";
 import iconAttach from "assets/images/icons8-attach-50.png";
 import { IconImage } from "views/media/shareComponents/common";
 import { Checkbox, FormControl, FormHelperText, MenuItem, Select, SelectChangeEvent } from "@mui/material";
@@ -27,6 +23,7 @@ import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFi
 import { APP_KEY } from "utils/constants";
 import { validateFiles } from 'validation/file';
 import classNames from 'classnames';
+import { useCustomer } from "services/hooks/items/useCustomer";
 
 type Props = {
     task: Task;
@@ -36,6 +33,7 @@ type Props = {
 }
 
 export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTask, confirmCreateNewSubTask }) => {
+    console.log({task})
     const initUsersSelected = useMemo(() => {
         let arr = [];
         if (task.accessUsers && task.accessUsers.length) {
@@ -59,6 +57,7 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
     const refDivFile = useRef<HTMLDivElement | null>(null);
     const [selectedUser, setSelectedUser] = useState<Item[]>(initUsersSelected);
     const [keywordAssignee, setKeywordAssignee] = useState('');
+    const [keywordContact, setKeywordContact] = useState('');
     const [isUploading, setIsUploading] = useState(false);
     const [isNotiEmail, setIsNotiEmail] = useState(false);
     const [tokens, setTokens] = useState<any[]>([]);
@@ -67,6 +66,25 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
         projectID: task.project?._id,
         keyword: keywordAssignee
     }, !!task.project?._id);
+
+    const {
+        list: listCustomers,
+        // hasNextPage,
+        // refetch,
+        fetchNextPage: fetchNextPage2,
+        // totalRecord
+    } = useCustomer({
+        params: { 
+            select: 'name phone',
+            populates: {
+                path: 'parent userUpdate funda',
+                select: 'name bizfullname'
+            },
+            keyword: keywordContact
+        },
+        isFetchList: true
+    })
+    // console.log({listCustomers})
 
     const [uploads, {
         setUploadImageProgress,
@@ -97,6 +115,10 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
 
     const handleSearchAssignee = (keyword: string) => {
         setKeywordAssignee(keyword);
+    };
+
+    const handleSearchCustomer = (keyword: string) => {
+        setKeywordContact(keyword);
     };
 
     const getCancelTokenRequest = (key: string, file: any) => {
@@ -372,6 +394,75 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
                                     </span>
                                 </div>
                             </div>
+
+                           {/* Hóa đơn */}
+                           {task.subtype == 12 ? (
+                                <div className="flex w-full px-4 pt-4">
+                                    <div className="w-3/6 mx-3 border-b">
+                                        <DropdownSearchable
+                                            placeholder={"Mã khách"}
+                                            className={"w-full flex-1"}
+                                            showTriangle={false}
+                                            maxWidthInput={"max-w-none"}
+                                            isMultiple={false}
+                                            allowClearValueSingleInput={true}
+                                            renderSelectedItem={(item) => (
+                                                <div className={"flex items-center"}>
+                                                    <img alt={"tag icon"} src={TagIcon} />
+                                                    <span>{item.text}</span>
+                                                </div>
+                                            )}
+                                            data={listCustomers.map((item) => ({
+                                                label: item.name,
+                                                value: item._id,
+                                            }))}
+                                            // initialValue={{
+                                            //     label: listCustomers[0].name,
+                                            //     value: listCustomers[0]._id
+                                            // }}
+                                            formatItem={{
+                                                id: "value",
+                                                text: "label",
+                                            }}
+                                            inlineSearch={true}
+                                            // onScroll={handleScroll}
+                                            onSearchInputChange={handleSearchCustomer}
+                                            onchangeValue={item => setFieldValue("contactID", item.id)}
+                                            onClearData={() => setFieldValue("contactID", "")}
+                                        />
+                                    </div>
+                                    <div className="w-1/6 border-b">
+                                        <input
+                                            name="sign"
+                                            className="w-full h-8 placeholder-gray-300 focus:outline-none"
+                                            placeholder="Mã hiệu"
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                        />
+                                    </div>
+                                    <div className="w-1/6 border-b mx-3">
+                                        <input
+                                            name="amount"
+                                            className="w-full h-8 placeholder-gray-300 focus:outline-none"
+                                            placeholder="Giá trị"
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                        />
+                                    </div>
+                                    <div className="w-1/6 border-b">
+                                        <input
+                                            name="vatAmount"
+                                            className="w-full h-8 placeholder-gray-300 focus:outline-none"
+                                            placeholder="VAT"
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                        />
+                                    </div>
+                                </div>
+                            ) : (
+                                <></>
+                            )}
+
                             <div className="p-4">
                                 {/* <label className="sr-only">Publish post</label> */}
                                 <textarea name="" rows={8}

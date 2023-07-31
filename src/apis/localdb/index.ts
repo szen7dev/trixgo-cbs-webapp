@@ -540,6 +540,7 @@ export const PCM_PROPOSAL_TASK = [
     { value: 9, text: 'Báo cáo', sign: 'Report', key: 'report' },
     { value: 10, text: 'Tiến độ, kế hoạch', sign: 'Schedule', key: 'schedule' },
     { value: 11, text: 'Họp', sign: 'MOM', key: 'mom' },
+    { value: 12, text: 'Hóa đơn', sign: 'MOM', key: 'mom' },
 ]
 
 export const PCM_SUBTYPE = [

@@ -207,7 +207,7 @@ export const usePcmReportCustom = ({
 // Khai báo kiểu
 type UsePcmPlanTaskCustom = {
     downloadExcelTaskAsync: (payload: PcmPlanTaskDownloadExcelPayload) => Promise<any>,
-    downloadTemplateImportExcelTaskAsync: (payload: { projectID: string }) => Promise<any>,
+    downloadTemplateImportExcelTaskAsync: (payload: { option: number, projectID: string }) => Promise<any>,
     importTaskFromExcelAsync: (payload: any) => Promise<any>,
 };
 

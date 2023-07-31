@@ -180,7 +180,7 @@ export const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdi
 
     date: string().required(MESSAGE_ERROR.required),
     name: string().required(MESSAGE_ERROR.required),
-    sign: string().required(MESSAGE_ERROR.required),
+    // sign: string().required(MESSAGE_ERROR.required),
 
     selectedJournals: array().of(
       object().shape({
@@ -205,7 +205,7 @@ export const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdi
       <Formik initialValues={initialValues} validationSchema={formValidation} enableReinitialize={true} onSubmit={handleSubmit}>
 
         {(formik) => {
-          const { handleBlur, setFieldValue, values } = formik;
+          const { values } = formik;
 
           return (
             <Form style={{ 'height': 'calc(100% - 110px)' }}>

@@ -384,7 +384,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 						<Field type="textarea" name="note" rows={2} className={"focus:outline-none flex-1"} placeholder={"Ghi chú"} />
 					</div>
 					<div className={"w-1/4 flex items-center"}>
-						<div className={"text-left text-gray-500 flex items-center mr-2"}>Mã hiệu (*)</div>
+						<div className={"text-left text-gray-500 flex items-center mr-2"}>Mã hiệu</div>
 						<Field type="text" name="sign" className={"focus:outline-none"} placeholder={"Mã hiệu"} />
 						<ErrorMessage
 							name="sign"

@@ -1,11 +1,10 @@
 import { FC, useCallback, useEffect, useState } from "react";
-import DatePicker from "react-datepicker";
+// import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ThreeDotsVertical from "assets/images/icon-3dots-vertical.svg";
 import { SearchInput, Paginate } from "shareComponents/common";
 import {
   CreateNewTicket,
-  DropdownFilterButton,
   ActionAccountingGroup,
   FilterDateGroup
 } from "views/accounting/shareComponents/common";
@@ -28,8 +27,8 @@ import { Popover } from "shareComponents/common";
 import useCheckedList from "services/hooks/ppt/useCheckedList";
 import debounce from "lodash/debounce";
 
-import cn from "classnames";
-import styles from 'views/accounting/styles/styles.module.css';
+// import cn from "classnames";
+// import styles from 'views/accounting/styles/styles.module.css';
 
 interface AccountingTicketsPageProps {
   type?: number
@@ -128,15 +127,15 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
 
   }
 
-  const handleOnFilter = useCallback((values) => {
+  // const handleOnFilter = useCallback((values) => {
 
-    // setPageParam(() => ({ ...values }));
-    return true;
-  }, []);
+  //   // setPageParam(() => ({ ...values }));
+  //   return true;
+  // }, []);
 
-  const handleOnCancelFilter = useCallback(() => {
-    // setPageParam({});
-  }, []);
+  // const handleOnCancelFilter = useCallback(() => {
+  //   // setPageParam({});
+  // }, []);
 
   // Xử lý sự kiện tìm kiếm
   const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {

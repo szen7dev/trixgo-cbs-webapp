@@ -46,21 +46,39 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
      */
     const handleDownloadTemplateImportExcel = async () => {
 		try {
-			setStateExport({ isExporting: true });
+			setStateExport({ isExporting: true })
 			const { error, data } = await downloadTemplateImportExcelTaskAsync({
-               projectID: task.project._id
-            });
-
+                option: 1,
+                projectID: task.project._id
+            })
 			if(error) {
-				return toast.warn(data?.message);
+				return toast.warn(data?.message)
 			}
-            // Tự động click vào link để download file mẫu
-			data && createLinkAndClick(data, '_self');
+			data && createLinkAndClick(data, '_self')
 		} catch (error) {
 			if(error instanceof Error)
 				toast.error(error.message)
 		} finally {
-			setStateExport({ isExporting: false });
+			setStateExport({ isExporting: false })
+		}
+	}
+
+    const handleDownloadTemplateImportExcel2 = async () => {
+		try {
+			setStateExport({ isExporting: true })
+			const { error, data } = await downloadTemplateImportExcelTaskAsync({
+                option: 2,
+                projectID: task.project._id
+            })
+			if(error) {
+				return toast.warn(data?.message)
+			}
+			data && createLinkAndClick(data, '_self')
+		} catch (error) {
+			if(error instanceof Error)
+				toast.error(error.message)
+		} finally {
+			setStateExport({ isExporting: false })
 		}
 	}
 
@@ -387,6 +405,14 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                             <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
                                 accept=".xlsx, .xlsm, .xls, .csv"/>
                             <label className="custom-file-label" htmlFor="inputGroupFile">Import excel tạo việc con</label>
+                        </button>
+
+                        <hr style={{ opacity: '.3', width: '90%', display: 'flex', alignContent: 'center', alignItems: 'center', margin: 2 }} />
+
+                        <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
+                            onClick={handleDownloadTemplateImportExcel2}
+                        >
+                            Tải Báo cáo hóa đơn
                         </button>
                     </div>
                 </div>
