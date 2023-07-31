@@ -254,7 +254,7 @@ export const DashboardV2: FC<Props> = () => {
     isFetch: tabActive === 2 ? true : false,
   });
 
-  console.log(listDataForSubject)
+  // console.log(listDataForSubject)
 
   const {
     isLoadingFile,
