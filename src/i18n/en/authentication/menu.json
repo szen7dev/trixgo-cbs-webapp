@@ -1,3 +1,13 @@
 {
-  "subject": "Subjects"
+  "subject": "Subjects",
+  "project": "Projects",
+  "fnb": "Fnb",
+  "contract": "Contracts",
+  "document": "Docs",
+  "chat": "Chat",
+  "admin": "Admin",
+  "activity": "Activities",
+  "mytask": "My tasks",
+  "star": "Stars",
+  "draft": "Draft"
 }

@@ -1,3 +1,14 @@
 {
-  "subject": "Chủ đề"
+  "subject": "Chủ đề",
+  "project": "Dự án",
+  "fnb": "Fnb",
+  "contract": "Hợp đồng",
+  "document": "Hồ sơ",
+  "chat": "Chat",
+  "admin": "Quản trị viên",
+  "activity": "Hoạt động",
+  "mytask": "Việc của tôi",
+  "star": "Đánh dấu sao",
+  "draft": "Việc nháp",
+  "dyreport": "Báo cáo động"
 }

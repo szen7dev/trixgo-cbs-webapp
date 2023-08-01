@@ -13,6 +13,7 @@ import paymentImage from "assets/menu/project/icons-project-payment.svg"
 import deliveryImage from "assets/menu/project/icons-project-delivery.svg"
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import { useTranslation } from "react-i18next";
 
 import { useModal } from "../../../../services/hooks/useModal";
 import { ModalAddNewTask } from "../../../common";
@@ -35,6 +36,7 @@ type Tab = {
 }
 
 export const HomeLeftMenuContent: FC = () => {
+    const { t } = useTranslation()
     const [enabled, setEnabled] = useState(false);
     const { data } = usePcmPlanTaskNotification({ enabled: enabled });
     const { openModal } = useModal();
@@ -86,19 +88,19 @@ export const HomeLeftMenuContent: FC = () => {
 
     const listTab: Tab[] = [
         {
-            label: "Hoạt động",
+            label: t("menu:activity"),
             icon: sendAndReceiveIcon,
             count: amountUnreadTask,
             route: '/pcm/home'
         },
         {
-            label: "Việc của tôi",
+            label: t("menu:mytask"),
             icon: mailOutLineIcon,
             count: amountMyTask,
             route: '/pcm/mine'
         },
         {
-            label: "Việc quan tâm",
+            label: t("menu:star"),
             icon: starIcon,
             count: 0,
             route: '/pcm/bookmark'
@@ -110,7 +112,7 @@ export const HomeLeftMenuContent: FC = () => {
         //     route: '/pcm/send'
         // },
         {
-            label: "Việc nháp",
+            label: t("menu:draft"),
             icon: fileIcon,
             count: 0,
             route: '/pcm/draft'
