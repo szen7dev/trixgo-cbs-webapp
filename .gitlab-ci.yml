@@ -30,7 +30,7 @@ build-docker-staging:
       REACT_APP_SENTRY_DSN=https://a6b2135ab06543f58500130a5ea06d09@o1167997.ingest.sentry.io/6294307
       EOF
   tags:
-    - docker
+    - docker-xlarge
   only:
     refs:
       - staging
@@ -63,7 +63,7 @@ build-docker-prod:
       REACT_APP_SENTRY_DSN=https://a6b2135ab06543f58500130a5ea06d09@o1167997.ingest.sentry.io/6294307
       EOF
   tags:
-    - docker
+    - docker-xlarge
   only:
     refs:
       - master
