@@ -205,14 +205,14 @@ export const HomeLeftMenuContent: FC = () => {
                 }
                 className={"bg-cbs-blue-button rounded-md flex items-center justify-center text-xl text-primary-gray py-2 px-4"}>
                 <img src={plusIcon} alt={"Tạo mới"} />
-                <span className={"ml-2"}>Tạo mới</span>
+                <span className={"ml-2"}>{t("menu:add")}</span>
             </button>
 
             <div className={"mt-4 pb-1 relative"}>
                 {hasPermission && dataUserAccess?.level == 0 ?
                     <NavLink to={`/pcm/admin`} className={"left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray"}>
                         <img width={'20px'} src={adminIcon} />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản trị viên</span>
+                        <span className={"flex-1 ml-2 text-left text-[14px]"}>{t("menu:admin")}</span>
                     </NavLink> : <></>
                 }
                 {
@@ -220,7 +220,7 @@ export const HomeLeftMenuContent: FC = () => {
                 }
                 <div onClick={() => setMenuState(!menuShowList)} className="text-primary-gray px-4 py-1 cursor-pointer hover:bg-slate-200">
                     {(menuShowList ? <ExpandLessIcon className="w-[20px]" fontSize="small"/> : <ExpandMoreIcon className="w-[20px]" fontSize="small"/>)}
-                    <span className="ml-2 text-[14px]">{(menuShowList ? 'Thu gọn' : 'Danh sách mở rộng')}</span>
+                    <span className="ml-2 text-[14px]">{(menuShowList ? `${t("menu:less")}` : `${t("menu:more")}`)}</span>
                 </div>
                 <div className={"transition-1s h-0 overflow-hidden " + (menuShowList ? ' h-[300px]' : '')}>
                     {

@@ -5,10 +5,13 @@
   "contract": "Hợp đồng",
   "document": "Hồ sơ",
   "chat": "Chat",
+  "add": "Tạo mới",
   "admin": "Quản trị viên",
   "activity": "Hoạt động",
   "mytask": "Việc của tôi",
   "star": "Đánh dấu sao",
   "draft": "Việc nháp",
+  "less": "Thu gọn",
+  "more": "Danh sách mở rộng",
   "dyreport": "Báo cáo động"
 }
