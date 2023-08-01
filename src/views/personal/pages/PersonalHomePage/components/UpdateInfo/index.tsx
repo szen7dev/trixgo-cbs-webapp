@@ -4,6 +4,7 @@ import { FC, FormEvent, useEffect, useState, memo, ChangeEvent} from "react";
 // import { useTranslation } from "react-i18next";
 import SwiperCore, { Pagination } from 'swiper';
 import cn from "classnames";
+import i18n from 'i18next';
 
 /*=====2.CSS=====*/
 import styles from "views/human/styles/style.module.css";
@@ -12,7 +13,8 @@ import 'swiper/swiper-bundle.min.css';
 /*=====3.ICONS=====*/
 import PersonalLogo from "assets/images/personal-logo.svg";
 import CameraIcon from "assets/images/camera-icon.svg";
-import SignatureLogo from "assets/images/signature-logo.svg";
+// import SignatureLogo from "assets/images/signature-logo.svg";
+
 /*=====4.PAGES/COMPONENTS=====*/
 /*=====5.TYPINGS=====*/
 import { UpdateUser, UpdateAvatarUser } from 'typings/personal/user';
@@ -50,7 +52,8 @@ export const UpdateInfo: FC = () => {
 	});
     // Cập nhật info
 	const handleSubmitUpdateUser = async (values: UpdateUser) => {
-	await updateUser(values);
+		await updateUser(values);
+		i18n.changeLanguage(values.lang)
 	}
     
 	const updateAvatar = async (values: UpdateAvatarUser) => {
@@ -211,7 +214,7 @@ export const UpdateInfo: FC = () => {
 					<p className="text-sm">Ngôn ngữ hiển thị</p>
 					<div className="flex items-center gap-14 mt-4">
 					<label>
-						<Field type="radio" name="lang" value="vi" className="mr-3" onChange={handleChange} checked={values.lang === 'vi'} />
+						<Field type="radio" name="lang" value="vn" className="mr-3" onChange={handleChange} checked={values.lang === 'vn'} />
 						Tiếng Việt
 					  </label>
 					  <label>

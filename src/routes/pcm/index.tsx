@@ -9,12 +9,12 @@ import { ModalProvider } from "views/document/contexts/modal";
 /*=====3.LAYOUTS=====*/
 import { HomeLayout } from "shareComponents/layouts";
 import LayoutSecondary from "views/ppt/sharedComponents/layouts/LayoutSecondary";
-import LayoutProjectSecondary from "views/ppt/sharedComponents/layouts/LayoutProjectSecondary";
+// import LayoutProjectSecondary from "views/ppt/sharedComponents/layouts/LayoutProjectSecondary";
 
 /*=====4.CONFIG ROUTE=====*/
 
 /*=====5.COMPONENTS=====*/
-import { ModalCreateDocument } from "views/document/sharedComponents/common";
+// import { ModalCreateDocument } from "views/document/sharedComponents/common";
 
 /*=====CONTEXTS=====*/
 import { ProviderModalPost as ProviderModalMedia } from "views/media/contexts/post";
@@ -42,6 +42,7 @@ import ProjectAdminPositionTab from "views/ppt/pages/ProjectAdminPage/pages/Proj
 import ProjectNew from "views/ppt/pages/ProjectNew";
 import ProjectKpis from "views/ppt/pages/ProjectKpis";
 import UserKpiDetail from "views/ppt/pages/ProjectKpis/UserKpiDetail";
+
 const PcmDetailTaskV2             = lazy(() => import('views/pcm/pages/PcmDetailTaskV2'));
 const PcmTagPage                  = lazy(() => import('views/pcm/pages/PcmTagPage'));
 const PcmTagProjectPage           = lazy(() => import('views/pcm/pages/PcmTagPage/PcmTagProjectPage'));

@@ -2,12 +2,11 @@
  * BẢN CẮT GỌN, BỎ PHẦN SOCKET VÀ THÔNG BÁO CỦA CHAT
  * File nguyên bản xem tại index_old.tsx
  */
-
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
 import mailIcon from "assets/images/icons8-secure-mail-48.svg";
 import chatIcon from "assets/images/icons8-chat-48.svg";
-import mediaIcon from "assets/images/icons8-commercial-64.svg";
+// import mediaIcon from "assets/images/icons8-commercial-64.svg";
 import projectIcon from "assets/images/icons-project.svg";
 import fnbIcon from "assets/images/icons-fnb.svg";
 import contractIcon from "assets/images/icons8-contract-64.svg";
@@ -18,11 +17,14 @@ import { useDispatch } from "react-redux";
 import { usePcmPlanTaskNotification } from "services/hooks/pcm/usePcmDashboardV2";
 import Favico from "react-favico-js";
 import { useGetListAppOfUser } from "services/hooks/auth/usePermissions";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   handleMenuEvent: () => void;
 };
 export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
+  const { t } = useTranslation()
+
   const { listAppOfUser } = useGetListAppOfUser();
   const currentUser = localStorage.getItem("currentUser") ?? "{}";
   const profileId = JSON.parse(currentUser)?._id;
@@ -101,7 +103,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
             )}
             {/*}*/}
           </div>
-          <span className={"text-primary-gray mt-1"}>Chủ đề</span>
+          <span className={"text-primary-gray mt-1"}>{t("menu:subject")}</span>
         </Link> : <></>
       }
       {checkPermissionApp('5dfe4b9051dc622100bb9d89') ?
@@ -114,22 +116,8 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
           >
             <img width={'20px'} src={projectIcon} alt={"Dự án"} />
           </div>
-          <span className={"text-primary-gray mt-1"}>Dự án</span>
+          <span className={"text-primary-gray mt-1"}>{t("menu:project")}</span>
         </Link> : <></>}
-      {checkPermissionApp('61e04971fdebf77b072d1b0f') ?
-      <Link to={`/fnb/home`} className={"flex flex-col items-center mb-3"}>
-        <div
-          className={
-            "px-4 py-1 rounded-full relative " +
-            (firstRoute === "fnb"
-              ? "bg-cbs-hightlight-right-navigate"
-              : "")
-          }
-        >
-          <img width={'20px'} src={fnbIcon} alt={"FnB"} />
-        </div>
-        <span className={"text-primary-gray mt-1"}>FnB</span>
-      </Link> : <></>}
       {checkPermissionApp('6131d6f83f4b736dc93253b2') ?
         <Link to={`/cmcs/home`} className={"flex flex-col items-center mb-3"}>
           <div
@@ -142,7 +130,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
           >
             <img width={'20px'} src={contractIcon} alt={"Hợp đồng"} />
           </div>
-          <span className={"text-primary-gray mt-1"}>Hợp đồng</span>
+          <span className={"text-primary-gray mt-1"}>{t("menu:contract")}</span>
         </Link> : <></>}
       {checkPermissionApp('5e47867080019357cce04746') ?
         <Link to={`/document/home`} className={"flex flex-col items-center mb-3"}>
@@ -156,8 +144,22 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
           >
             <img width={'20px'} src={fileIcon} alt={"Hồ sơ"} />
           </div>
-          <span className={"text-primary-gray mt-1"}>Hồ sơ</span>
+          <span className={"text-primary-gray mt-1"}>{t("menu:document")}</span>
         </Link> : <></>}
+      {checkPermissionApp('61e04971fdebf77b072d1b0f') ?
+      <Link to={`/fnb/home`} className={"flex flex-col items-center mb-3"}>
+        <div
+          className={
+            "px-4 py-1 rounded-full relative " +
+            (firstRoute === "fnb"
+              ? "bg-cbs-hightlight-right-navigate"
+              : "")
+          }
+        >
+          <img width={'20px'} src={fnbIcon} alt={"FnB"} />
+        </div>
+        <span className={"text-primary-gray mt-1"}>{t("menu:fnb")}</span>
+      </Link> : <></>}
       {checkPermissionApp('5dfe4c1b51dc622100bb9d8f') ?
         <Link to={`/messages`} className={"flex flex-col items-center mb-3"}>
           <div
@@ -170,24 +172,10 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
           >
             <img width={'20px'} src={chatIcon} alt={"Chat"} />
           </div>
-          <span className={"text-primary-gray mt-1"}>Chat</span>
-        </Link> : <></>}
-        {checkPermissionApp('5df4ce16506d9b3c587948ca') ?
-        <Link to={`/media/home`} className={"flex flex-col items-center mb-3"}>
-          <div
-            className={
-              "px-4 py-1 rounded-full relative " +
-              (firstRoute === "media"
-                ? "bg-cbs-hightlight-right-navigate"
-                : "")
-            }
-          >
-            <img width={'20px'} src={mediaIcon} alt={"Media"} />
-          </div>
-          <span className={"text-primary-gray mt-1"}>Media</span>
+          <span className={"text-primary-gray mt-1"}>{t("menu:chat")}</span>
         </Link> : <></>}
       <audio src={"/sounds/messages/teaser.mp3"} ref={audioRef} />
       <Favico counter={amountMissMessage} />
     </div>
-  );
-};
+  )
+}
