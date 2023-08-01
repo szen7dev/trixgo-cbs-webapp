@@ -1,4 +1,5 @@
 import React, { FC, useState, UIEvent, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import parse from "html-react-parser";
@@ -71,12 +72,14 @@ type Props = {
 };
 
 export const DashboardV2: FC<Props> = () => {
+  const { t } = useTranslation()
+  
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   const dispatch = useDispatch();
   // const [popBox1, setpopBox1] = React.useState(false)
   // const [popBox2, setpopBox2] = React.useState(false)
   const [filter, setFilter] = useState("all");
-  const { user } = useAuth();
+  const { user } = useAuth()
   const [pageIndex, setPageIndex] = useState(0);
   const ref = React.useRef<PaginateHandle>(null);
   const tabIndex = useAppSelector((state) => state.dashboardV2.data.tabIndex);
@@ -809,7 +812,8 @@ export const DashboardV2: FC<Props> = () => {
               selectOneByOne={true}
               countBadge={queryResponse.companyOfAuthorsID.length}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
-              placeholder={"Đơn vị tạo phản hồi"}
+              // placeholder={"Đơn vị tạo phản hồi"}
+              placeholder={t("homepage:companyAuthor")}
               onchangeValue={(value) => {
                 if (
                   !queryResponse.companyOfAuthorsID?.includes?.(

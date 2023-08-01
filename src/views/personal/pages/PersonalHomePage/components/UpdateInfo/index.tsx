@@ -211,7 +211,7 @@ export const UpdateInfo: FC = () => {
 					<p className="text-sm">Ngôn ngữ hiển thị</p>
 					<div className="flex items-center gap-14 mt-4">
 					<label>
-						<Field type="radio" name="lang" value="vi" className="mr-3" onChange={handleChange} checked={values.lang === 'vi'} />
+						<Field type="radio" name="lang" value="vn" className="mr-3" onChange={handleChange} checked={values.lang === 'vn'} />
 						Tiếng Việt
 					  </label>
 					  <label>

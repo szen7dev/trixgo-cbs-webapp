@@ -11,9 +11,6 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import { SignInPayload } from "typings/auth";
 
 import { Loader } from "shareComponents/common";
-import RegisterPage from "./Register";
-
-// import SignInLogo from "assets/images/signin-logo.svg";
 import SignInImage from "assets/images/signin-image.svg";
 import MailIcon from "assets/images/icons-email.svg";
 import LockIcon from "assets/images/icons-lock.svg";
@@ -47,7 +44,6 @@ const LoginPage: FC = () => {
   const { isLoading, signIn } = useAuth();
 
   const [selectedLocale, setSelectedLocale] = useState(LOCALES[1].id);
-  const [showRegister, setShowRegister] = useState(false);
 
   const initialValues: SignInPayload = {
     email: "",
@@ -63,8 +59,6 @@ const LoginPage: FC = () => {
     password: string()
       .required("* Password bắt buộc!"),
   });
-
-  const handleClickShowRegister = () => setShowRegister(!showRegister);
 
   return (
     <>
@@ -194,6 +188,7 @@ const LoginPage: FC = () => {
                               i18n.changeLanguage(locale.code);
                             }}
                           >
+                            {/* {console.log(locale.code)} */}
                             {selectedLocale !== locale.id && locale.flag}
                           </span>
                         ))}

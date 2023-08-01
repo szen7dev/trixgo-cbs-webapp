@@ -1,5 +1,7 @@
 import { useContext, useEffect } from "react";
 import OneSignalReact from "react-onesignal";
+import { useTranslation } from "react-i18next";
+import i18n from 'i18next';
 
 import { useHistory } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -137,8 +139,9 @@ export const useAuth = (): UseAuth => {
 
         // updateDevice(data.user._id);
 
-        toast.success("Đăng nhập thành công");
-        history.push("/");
+        toast.success("Đăng nhập thành công")
+        i18n.changeLanguage(data.user.lang)
+        history.push("/")
       } else {
         dispatch({ type: "SIGN_IN_ERROR" });
         toast.error(message);
