@@ -26,15 +26,15 @@ export const HomeLayout: FC<Props> = ({ children }) => {
   const [isLeftMenuCollapse, setIsLeftMenuCollapse] = useState(false);
   const [isRightSideBarCollapse, setIsRightSideBarCollapse] = useState(false);
 
-  const handleHeaderEvent = () => {
-    setIsHeaderCollapse(!isHeaderCollapse);
-  };
+  // const handleHeaderEvent = () => {
+  //   setIsHeaderCollapse(!isHeaderCollapse);
+  // };
   const handleMenuEvent = () => {
     setIsLeftMenuCollapse(!isLeftMenuCollapse);
   };
-  const handleRightSideBarEvent = () => {
-    setIsRightSideBarCollapse(!isRightSideBarCollapse);
-  };
+  // const handleRightSideBarEvent = () => {
+  //   setIsRightSideBarCollapse(!isRightSideBarCollapse);
+  // };
 
   return (
     <section

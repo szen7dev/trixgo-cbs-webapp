@@ -13,6 +13,7 @@ import paymentImage from "assets/menu/project/icons-project-payment.svg"
 import deliveryImage from "assets/menu/project/icons-project-delivery.svg"
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import { useTranslation } from "react-i18next";
 
 import { useModal } from "../../../../services/hooks/useModal";
 import { ModalAddNewTask } from "../../../common";
@@ -35,6 +36,7 @@ type Tab = {
 }
 
 export const HomeLeftMenuContent: FC = () => {
+    const { t } = useTranslation()
     const [enabled, setEnabled] = useState(false);
     const { data } = usePcmPlanTaskNotification({ enabled: enabled });
     const { openModal } = useModal();
@@ -86,19 +88,19 @@ export const HomeLeftMenuContent: FC = () => {
 
     const listTab: Tab[] = [
         {
-            label: "Hoạt động",
+            label: t("menu:activity"),
             icon: sendAndReceiveIcon,
             count: amountUnreadTask,
             route: '/pcm/home'
         },
         {
-            label: "Việc của tôi",
+            label: t("menu:mytask"),
             icon: mailOutLineIcon,
             count: amountMyTask,
             route: '/pcm/mine'
         },
         {
-            label: "Việc quan tâm",
+            label: t("menu:star"),
             icon: starIcon,
             count: 0,
             route: '/pcm/bookmark'
@@ -110,7 +112,7 @@ export const HomeLeftMenuContent: FC = () => {
         //     route: '/pcm/send'
         // },
         {
-            label: "Việc nháp",
+            label: t("menu:draft"),
             icon: fileIcon,
             count: 0,
             route: '/pcm/draft'
@@ -203,14 +205,14 @@ export const HomeLeftMenuContent: FC = () => {
                 }
                 className={"bg-cbs-blue-button rounded-md flex items-center justify-center text-xl text-primary-gray py-2 px-4"}>
                 <img src={plusIcon} alt={"Tạo mới"} />
-                <span className={"ml-2"}>Tạo mới</span>
+                <span className={"ml-2"}>{t("menu:add")}</span>
             </button>
 
             <div className={"mt-4 pb-1 relative"}>
                 {hasPermission && dataUserAccess?.level == 0 ?
                     <NavLink to={`/pcm/admin`} className={"left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray"}>
                         <img width={'20px'} src={adminIcon} />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản trị viên</span>
+                        <span className={"flex-1 ml-2 text-left text-[14px]"}>{t("menu:admin")}</span>
                     </NavLink> : <></>
                 }
                 {
@@ -218,7 +220,7 @@ export const HomeLeftMenuContent: FC = () => {
                 }
                 <div onClick={() => setMenuState(!menuShowList)} className="text-primary-gray px-4 py-1 cursor-pointer hover:bg-slate-200">
                     {(menuShowList ? <ExpandLessIcon className="w-[20px]" fontSize="small"/> : <ExpandMoreIcon className="w-[20px]" fontSize="small"/>)}
-                    <span className="ml-2 text-[14px]">{(menuShowList ? 'Thu gọn' : 'Danh sách mở rộng')}</span>
+                    <span className="ml-2 text-[14px]">{(menuShowList ? `${t("menu:less")}` : `${t("menu:more")}`)}</span>
                 </div>
                 <div className={"transition-1s h-0 overflow-hidden " + (menuShowList ? ' h-[300px]' : '')}>
                     {

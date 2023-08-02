@@ -1,5 +1,6 @@
 import { useContext, useEffect } from "react";
 import OneSignalReact from "react-onesignal";
+import i18n from 'i18next';
 
 import { useHistory } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -68,20 +69,20 @@ export const useAuth = (): UseAuth => {
       })
         .then(e => {
           OneSignalReact.isPushNotificationsEnabled().then(function (isEnabled) {
-            if (isEnabled)
-              console.log("Push notifications are enabled!");
-            else {
-              console.log("Push notifications are not enabled yet.");
+            if (isEnabled){
+              // console.log("Push notifications are enabled!");
+            }else {
+              // console.log("Push notifications are not enabled yet.");
               OneSignalReact.showSlidedownPrompt();
             }
           });
 
           // case 2: chờ submit allow subscribe tại màn hình hiện tại
           OneSignalReact.on('popoverAllowClick', function () {
-            console.log('Slide ALLOW CLICK: popoverAllowClick');
+            // console.log('Slide ALLOW CLICK: popoverAllowClick');
 
             OneSignalReact.getUserId(async function (oneSignalWebPushID) {
-              console.log("🚀 ~ file: useAuth.ts ~ line 96 ~ OneSignalReact.getUserId ~ oneSignalWebPushID", oneSignalWebPushID)
+              // console.log("🚀 ~ file: useAuth.ts ~ line 96 ~ OneSignalReact.getUserId ~ oneSignalWebPushID", oneSignalWebPushID)
               if (oneSignalWebPushID) {
                 const oneSignalId = localStorage.getItem(`oneSignalId_${_id}`);
                 if (!oneSignalId || oneSignalId !== oneSignalWebPushID) {
@@ -101,7 +102,7 @@ export const useAuth = (): UseAuth => {
 
           // case 1: đã subscribe page trước đó
           OneSignalReact.getUserId(async function (oneSignalWebPushID) {
-            console.log("🚀 ~ file: useAuth.ts ~ line 116 ~ OneSignalReact.getUserId ~ oneSignalWebPushID", oneSignalWebPushID)
+            // console.log("🚀 ~ file: useAuth.ts ~ line 116 ~ OneSignalReact.getUserId ~ oneSignalWebPushID", oneSignalWebPushID)
             if (oneSignalWebPushID) {
               const oneSignalId = localStorage.getItem(`oneSignalId_${_id}`);
               if (!oneSignalId || oneSignalId !== oneSignalWebPushID) {
@@ -137,8 +138,9 @@ export const useAuth = (): UseAuth => {
 
         // updateDevice(data.user._id);
 
-        toast.success("Đăng nhập thành công");
-        history.push("/");
+        toast.success("Đăng nhập thành công")
+        i18n.changeLanguage(data.user.lang)
+        history.push("/")
       } else {
         dispatch({ type: "SIGN_IN_ERROR" });
         toast.error(message);

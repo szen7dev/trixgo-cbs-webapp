@@ -1,0 +1,16 @@
+{
+  "subject": "Subjects",
+  "project": "Projects",
+  "fnb": "Fnb",
+  "contract": "Contracts",
+  "document": "Docs",
+  "chat": "Chat",
+  "add": "Create",
+  "admin": "Admin",
+  "activity": "Activities",
+  "mytask": "My tasks",
+  "star": "Stars",
+  "more": "More",
+  "less": "Less",
+  "draft": "Draft"
+}
