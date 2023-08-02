@@ -85,7 +85,7 @@ export const TaskDetailSubtask:FC<Props> = ({ task, userId }) => {
                     className={"bg-cbs-form-input-bg rounded px-4 py-2 text-primary-gray mt-4 ml-6"}
                     onClick={() => setShowCreateNewSubTask(true)}
                 >
-                    Thêm một mục
+                    {task.subtype == 12 ? "Thêm hóa đơn" : "Thêm việc con"}
                 </button>
             </div>
         </div>
