@@ -186,6 +186,7 @@ const LoginPage: FC = () => {
                             onClick={() => {
                               setSelectedLocale(locale.id);
                               i18n.changeLanguage(locale.code);
+                              localStorage.setItem("user_language", locale.code);
                             }}
                           >
                             {/* {console.log(locale.code)} */}
