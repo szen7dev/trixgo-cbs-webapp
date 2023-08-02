@@ -241,7 +241,7 @@ export const TaskDetailFolder: FC<Props> = ({
     }
 
     return (
-        <div className={"task-folder flex items-center text-primary-gray mt-5"}>
+        <div className={"task-folder flex items-center text-primary-gray mt-2"}>
             <div className={"flex items-center flex-1"}>
                 <span className={"mr-4"}>
                     <img src={iconFolder} alt={'-----'} />
