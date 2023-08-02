@@ -41,7 +41,7 @@ export const FnbContactDetailPage: FC = () => {
 	const { user } = useAuth();
 	const companyID = user?.company._id;
 	useEffect(() => {
-		document.title = "FnB";
+		document.title = "eShop";
 	}, []);
 	const history = useHistory();
 	const { fundaID } = useParams<{ fundaID: string }>();

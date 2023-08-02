@@ -31,7 +31,7 @@ export const FnbReportPage: FC = () => {
     const [pageIndex, setPageIndex] = useState(0);
 
 	useEffect(() => {
-		document.title = "FnB";
+		document.title = "eShop";
 	}, []);
 
 	const history = useHistory();
