@@ -1,9 +1,10 @@
 {
   "subject": "Chủ đề",
   "project": "Dự án",
-  "fnb": "Fnb",
+  "fnb": "eShop",
   "contract": "Hợp đồng",
   "document": "Hồ sơ",
+  "media": "Media",
   "chat": "Chat",
   "add": "Tạo mới",
   "admin": "Quản trị viên",

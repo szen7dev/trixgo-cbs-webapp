@@ -6,9 +6,9 @@ import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "re
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
 import mailIcon from "assets/images/icons8-secure-mail-48.svg";
 import chatIcon from "assets/images/icons8-chat-48.svg";
-// import mediaIcon from "assets/images/icons8-commercial-64.svg";
+import mediaIcon from "assets/images/icons8-commercial-64.svg";
 import projectIcon from "assets/images/icons-project.svg";
-import fnbIcon from "assets/images/icons-fnb.svg";
+import eshopIcon from "assets/images/icons8-eshop.svg";
 import contractIcon from "assets/images/icons8-contract-64.svg";
 import fileIcon from "assets/images/icons-file.svg";
 import { Link, useLocation } from "react-router-dom";
@@ -156,9 +156,23 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
               : "")
           }
         >
-          <img width={'20px'} src={fnbIcon} alt={"FnB"} />
+          <img width={'20px'} src={eshopIcon} alt={"FnB"} />
         </div>
         <span className={"text-primary-gray mt-1"}>{t("menu:fnb")}</span>
+      </Link> : <></>}
+      {checkPermissionApp('5df4ce16506d9b3c587948ca') ?
+      <Link to={`/media/home`} className={"flex flex-col items-center mb-3"}>
+        <div
+          className={
+            "px-4 py-1 rounded-full relative " +
+            (firstRoute === "media"
+              ? "bg-cbs-hightlight-right-navigate"
+              : "")
+          }
+        >
+          <img width={'20px'} src={mediaIcon} alt={"Media"} />
+        </div>
+        <span className={"text-primary-gray mt-1"}>{t("menu:media")}</span>
       </Link> : <></>}
       {checkPermissionApp('5dfe4c1b51dc622100bb9d8f') ?
         <Link to={`/messages`} className={"flex flex-col items-center mb-3"}>

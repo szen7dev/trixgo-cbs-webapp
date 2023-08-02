@@ -1,9 +1,10 @@
 {
   "subject": "Subjects",
   "project": "Projects",
-  "fnb": "Fnb",
+  "fnb": "eShop",
   "contract": "Contracts",
   "document": "Docs",
+  "media": "Media",
   "chat": "Chat",
   "add": "Create",
   "admin": "Admin",
