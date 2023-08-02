@@ -117,7 +117,6 @@ export const BudgetHomePage: FC = () => {
 		<main className="h-full">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
 				<div className="flex items-center">
-					<p className="text-lg ml-2">Danh mục ngân sách</p>
 					<SearchInput
 						classNameWrapper="ml-4"
 						classNameInput="outline-none w-[296px]"
@@ -279,5 +278,5 @@ export const BudgetHomePage: FC = () => {
 				</div>
 			)}
 		</main>
-	);
-};
+	)
+}
