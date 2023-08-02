@@ -27,7 +27,7 @@ export const OwnerLeftSideBar: FC = () => {
                 {/* title */}
                 <div className="t-leftsidebar-title flex items-center py-2 pl-3 pr-3 text-[14px] font-bold">
                     <img src={ownerLogo} alt="Thumbnail" className="w-10 h-10 rounded-full mr-3" />
-                    <span>Quản trị doanh nghiệp</span>
+                    <span>Quản trị viên</span>
                 </div>
 
                 {/* menu block */}

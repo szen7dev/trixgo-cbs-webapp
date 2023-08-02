@@ -72,7 +72,7 @@ export const OwnerLayoutV2: FC<Props> = ({ children }) => {
         <LeftNavigate handleMenuEvent={handleMenuEvent} />
         <section className={"main-content-wrapper flex-1"}>
           {/*  Main header */}
-          <MainHeaderV2 headerTitle={"Quản trị doanh nghiệp"}>
+          <MainHeaderV2 headerTitle={"Quản trị viên"}>
             <HomeHeaderContent />
           </MainHeaderV2>
 
