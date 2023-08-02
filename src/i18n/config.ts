@@ -26,8 +26,10 @@ export const resources = {
   },
 } as const;
 
+const currentLang = localStorage.getItem('user_language');
+
 i18n.use(initReactI18next).init({
-  lng: "vn",
+  lng: currentLang || "vn",
   ns: ["signIn", "register", "resetPassword", "human"],
   resources,
 });

@@ -25,7 +25,7 @@ import { useFunda } from 'services/hooks/items/useFunda';
 /*=====7.OTHER=====*/
 export const FnbExpensePage: FC = () => {
 	useEffect(() => {
-		document.title = "FnB";
+		document.title = "eShop";
 	}, []);
 	
 	const history = useHistory();

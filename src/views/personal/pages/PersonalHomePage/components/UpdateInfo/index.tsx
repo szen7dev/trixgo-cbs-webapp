@@ -1,7 +1,5 @@
 /*=====1.LIBRARY=====*/
 import { FC, FormEvent, useEffect, useState, memo, ChangeEvent} from "react";
-// import { Link } from "react-router-dom";
-// import { useTranslation } from "react-i18next";
 import SwiperCore, { Pagination } from 'swiper';
 import cn from "classnames";
 import i18n from 'i18next';
@@ -36,7 +34,6 @@ const infoValues = {
 	birthDay: "",
 	gender: '1',
 	lang: "vn",
-	// signature: "",
 };
 
 export const UpdateInfo: FC = () => {
@@ -54,6 +51,7 @@ export const UpdateInfo: FC = () => {
 	const handleSubmitUpdateUser = async (values: UpdateUser) => {
 		await updateUser(values);
 		i18n.changeLanguage(values.lang)
+		localStorage.setItem("user_language", values.lang);
 	}
     
 	const updateAvatar = async (values: UpdateAvatarUser) => {

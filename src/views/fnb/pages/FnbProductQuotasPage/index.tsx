@@ -15,7 +15,7 @@ import { useFnbProduct } from 'services/hooks/fnb/useFnbProduct';
 
 export const FnbProductQuotasPage: FC = () => {
 	useEffect(() => {
-		document.title = "FnB";
+		document.title = "eShop";
 	}, []);
 	
 	const history = useHistory();

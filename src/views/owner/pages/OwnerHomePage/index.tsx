@@ -22,7 +22,7 @@ SwiperCore.use([Pagination]);
 
 export const OwnerHomePage: FC = () => {
 	useEffect(() => {
-		document.title = "Note"
+		document.title = "Quản trị viên"
 	}, []);
 
 	return (

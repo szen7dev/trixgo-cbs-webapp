@@ -140,6 +140,7 @@ export const useAuth = (): UseAuth => {
 
         toast.success("Đăng nhập thành công")
         i18n.changeLanguage(data.user.lang)
+        localStorage.setItem("user_language", data.user.lang);
         history.push("/")
       } else {
         dispatch({ type: "SIGN_IN_ERROR" });
