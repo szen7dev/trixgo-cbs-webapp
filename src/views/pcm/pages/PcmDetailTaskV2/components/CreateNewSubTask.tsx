@@ -311,7 +311,7 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
                                     <input
                                         name="name"
                                         className="w-full h-8 placeholder-gray-300 focus:outline-none"
-                                        placeholder="Nội dung công việc"
+                                        placeholder={task.subtype == 12 ? "Hàng hóa" : "Nội dung công việc"}
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                     />
@@ -360,7 +360,7 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
                                         onDayChange={(day) => setFieldValue("expiredTime", moment(day).format("MM/DD/YYYY"))}
                                         inputProps={{
                                             className: "outline-none h-full max-w-full",
-                                            placeholder: "Thời hạn",
+                                            placeholder: `${task.subtype == 12 ? "Ngày hóa đơn" : "Thời hạn"}`,
                                             readOnly: true,
                                         }}
                                     />
@@ -435,7 +435,7 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
                                         <input
                                             name="sign"
                                             className="w-full h-8 placeholder-gray-300 focus:outline-none"
-                                            placeholder="Mã hiệu"
+                                            placeholder="Số hóa đơn"
                                             onChange={handleChange}
                                             onBlur={handleBlur}
                                         />
@@ -444,7 +444,7 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
                                         <input
                                             name="amount"
                                             className="w-full h-8 placeholder-gray-300 focus:outline-none"
-                                            placeholder="Giá trị"
+                                            placeholder="Giá trị tiền hàng"
                                             onChange={handleChange}
                                             onBlur={handleBlur}
                                         />
@@ -453,7 +453,7 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
                                         <input
                                             name="vatAmount"
                                             className="w-full h-8 placeholder-gray-300 focus:outline-none"
-                                            placeholder="VAT"
+                                            placeholder="Tiền thuế GTGT"
                                             onChange={handleChange}
                                             onBlur={handleBlur}
                                         />
