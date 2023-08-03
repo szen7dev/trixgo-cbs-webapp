@@ -11,7 +11,15 @@
   "activity": "Activities",
   "mytask": "My tasks",
   "star": "Stars",
-  "more": "More",
   "less": "Less",
-  "draft": "Draft"
+  "draft": "Draft",
+  "more": "More",
+  "dynamicReport": "Dynamic reports",
+  "givingTask": "Giving tasks",
+  "relatingTask": "Relating tasks",
+  "projectReport": "Report by project",
+  "humanReport": "Report by human",
+  "deliveredTracking": "Delivered tracking",
+  "paymentTracking": "Payment tracking",
+  "biddingTracking": "Bidding tracking"
 }

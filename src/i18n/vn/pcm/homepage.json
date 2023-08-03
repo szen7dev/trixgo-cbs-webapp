@@ -1,3 +1,12 @@
 {
-  "companyAuthor": "Đơn vị tạo phản hồi"
+  "companyAuthor": "Đơn vị tạo phản hồi",
+  "author": "Người phản hồi",
+  "project": "Dự án/Phòng ban",
+  "timecCreated": "Thời gian tạo",
+  "category": "Phân loại",
+  "all": "Tất cả",
+  "unread": "Chưa đọc",
+  "read": "Đã đọc",
+  "markAsRead": "Đánh dấu đã đọc",
+  "relaled": "Liên quan"
 }

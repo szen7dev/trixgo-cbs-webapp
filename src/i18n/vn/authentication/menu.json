@@ -14,5 +14,12 @@
   "draft": "Việc nháp",
   "less": "Thu gọn",
   "more": "Danh sách mở rộng",
-  "dyreport": "Báo cáo động"
+  "dynamicReport": "Báo cáo động",
+  "givingTask": "Việc giao người khác",
+  "relatingTask": "Việc liên quan",
+  "projectReport": "Báo cáo theo dự án",
+  "humanReport": "Báo cáo theo nhân sự",
+  "deliveredTracking": "Theo dõi báo cáo",
+  "paymentTracking": "Theo dõi thanh toán",
+  "biddingTracking": "Theo dõi hồ sơ thầu"
 }

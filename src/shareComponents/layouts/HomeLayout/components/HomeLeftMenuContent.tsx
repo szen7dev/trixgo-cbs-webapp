@@ -105,68 +105,62 @@ export const HomeLeftMenuContent: FC = () => {
             count: 0,
             route: '/pcm/bookmark'
         },
-        // {
-        //     label: "Đã gửi",
-        //     icon: sendAndReceiveIcon,
-        //     count: 0,
-        //     route: '/pcm/send'
-        // },
         {
             label: t("menu:draft"),
             icon: fileIcon,
             count: 0,
             route: '/pcm/draft'
         },
-    ];
+        {
+            label: t("menu:draft"),
+            icon: fileIcon,
+            count: 0,
+            route: '/pcm/report'
+        },
+    ]
 
     const listTabSub: Tab[] = [
         {
-            label: "Việc giao người khác",
+            label: t("menu:givingTask"),
             icon: uploadIcon,
             count: 0,
             route: '/pcm/assign'
         },
         {
-            label: "Báo cáo theo dự án",
+            label: t("menu:relatingTask"),
+            icon: linkIcon,
+            count: 0,
+            route: '/pcm/related'
+        },
+        {
+            label: t("menu:projectReport"),
             icon: tagIcon,
             count: 0,
             route: '/pcm/tags'
         },
         {
-            label: "Báo cáo theo nhân sự",
+            label: t("menu:humanReport"),
             icon: humanIcon,
             count: 0,
             route: '/pcm/users'
         },
         {
-            label: "Báo cáo, giao nộp",
+            label: t("menu:deliveredTracking"),
             icon: deliveryImage,
             count: 0,
             route: '/pcm/delivery'
         },
         {
-            label: "Thanh toán",
+            label: t("menu:paymentTracking"),
             icon: paymentImage,
             count: 0,
             route: '/pcm/payment'
         },
         {
-            label: "Việc liên quan",
-            icon: linkIcon,
-            count: 0,
-            route: '/pcm/related'
-        },
-        // {
-        //     label: "Thầu và mua sắm",
-        //     icon: biddingImage,
-        //     count: 0,
-        //     route: '/pcm/bidding'
-        // },
-        {
-            label: "Báo cáo động",
+            label:t("menu:biddingTracking"),
             icon: fileIcon,
             count: 0,
-            route: '/pcm/report'
+            route: '/pcm/bidding'
         },
     ];
 
