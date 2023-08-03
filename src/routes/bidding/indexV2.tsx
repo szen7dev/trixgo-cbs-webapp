@@ -12,7 +12,7 @@ import BiddingLayout from "views/bidding/shareComponents/layouts/BiddingLayout/L
 /*=====5.PAGES/COMPONENTS=====*/
 import ErrorPage from "views/authentication/Error";
 import { prefix } from "views/bidding/configs";
-import DatahubContractorLayout from "views/datahub/sharedComponents/layouts/DatahubContractorLayout";
+import DatahubContractorLayout from "views/datahub/sharedComponents/layoutsV2/DatahubContractorLayout";
 import { BiddingReportPage } from "views/bidding/pages/BiddingReportPage";
 
 const BiddingHomePage = lazy(() => import("views/bidding/pages/BiddingHomePageV2"));

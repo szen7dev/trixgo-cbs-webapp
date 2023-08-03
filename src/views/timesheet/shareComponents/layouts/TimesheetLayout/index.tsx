@@ -2,37 +2,30 @@ import { FC, ReactNode, useState } from "react";
 import cn from "classnames";
 
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
-import chevronRightIcon from "assets/images/icon-chevron-right.png";
-import chevronUpIcon from "assets/images/icon-chevron-up.png";
+// import chevronRightIcon from "assets/images/icon-chevron-right.png";
+// import chevronUpIcon from "assets/images/icon-chevron-up.png";
+// import { HomeRightSideBar } from "shareComponents/layouts/HomeRightSideBar";
 
-import { MainHeader } from "shareComponents/common";
-import { HomeRightSideBar } from "shareComponents/layouts/HomeRightSideBar";
+import { LeftNavigate, MainHeaderV2 } from "shareComponents/common";
 import { LeftSideBar } from "../LeftSideBar";
+import { HomeHeaderContent } from "shareComponents/layouts/HomeLayout/components";
 
 type Props = {
   children: ReactNode;
 };
 
 export const TimesheetLayout: FC<Props> = ({ children }) => {
-  const [isHeaderCollapse, setIsHeaderCollapse] = useState(false);
   const [isLeftMenuCollapse, setIsLeftMenuCollapse] = useState(false);
-  const [isRightSideBarCollapse, setIsRightSideBarCollapse] = useState(false);
 
-  const handleHeaderEvent = () => {
-    setIsHeaderCollapse(!isHeaderCollapse);
-  };
   const handleMenuEvent = () => {
     setIsLeftMenuCollapse(!isLeftMenuCollapse);
-  };
-  const handleRightSideBarEvent = () => {
-    setIsRightSideBarCollapse(!isRightSideBarCollapse);
   };
   return (
     <section
       className={cn("home-layout relative bg-primary-light", {
         "collapse-left": isLeftMenuCollapse,
-        "active-right": isRightSideBarCollapse,
-        "collapse-header": isHeaderCollapse,
+        "active-right": false,
+        "collapse-header": false,
       })}
     >
       {/* Collapse menu button */}
@@ -44,45 +37,26 @@ export const TimesheetLayout: FC<Props> = ({ children }) => {
         <img className="w-4" src={menuIcon} alt="Menu" />
       </button>
 
-      {/*  Main header */}
-      <MainHeader />
+      <div className={"flex"}>
+        <LeftNavigate handleMenuEvent={handleMenuEvent} />
+        <section className={"main-content-wrapper flex-1"}>
+          {/*  Main header */}
+          <MainHeaderV2 headerTitle={"Chấm công"}>
+            <HomeHeaderContent />
+          </MainHeaderV2>
 
-      {/* Left navigation */}
-      <LeftSideBar />
+          {/* Left navigation */}
 
-      {/* Content area */}
-      <main className="home-main-content transition-all duration-500 ease-out overflow-auto relative">
-        {children}
-      </main>
+          <LeftSideBar />
 
-      {/* Collapse header button */}
-      <button
-        title="Toggle header"
-        onClick={handleHeaderEvent}
-        className="tm-header-toggle-btn fixed top-16 right-3 z-50 w-8 h-8 pl-2 pr-2 rounded-md bg-secondary-light hover:bg-accent-light text-center transition-all duration-500 ease-out"
-      >
-        <img
-          className="w-3 inline-block transition-all duration-500 ease-out"
-          src={chevronUpIcon}
-          alt="Header toggle button"
-        />
-      </button>
+          {/* Content area */}
+          <main className="home-main-content home-main-content-v2 transition-all duration-500 ease-out overflow-auto relative">
+            {children}
+          </main>
 
-      {/* Right side bar */}
-      <HomeRightSideBar />
+        </section>
+      </div>
 
-      {/* Collapse right side bar button */}
-      <button
-        title="Toggle right sidebar"
-        onClick={handleRightSideBarEvent}
-        className="tm-right-sidebar-toggle-btn fixed bottom-2 right-2 z-10 w-10 h-10 pl-3 pr-3 rounded-full bg-secondary-light hover:bg-accent-light text-center transition-all duration-500 ease-out"
-      >
-        <img
-          className="w-5 inline-block transition-all duration-500 ease-out"
-          src={chevronRightIcon}
-          alt="Right sidebar toggle button"
-        />
-      </button>
     </section>
   );
 };

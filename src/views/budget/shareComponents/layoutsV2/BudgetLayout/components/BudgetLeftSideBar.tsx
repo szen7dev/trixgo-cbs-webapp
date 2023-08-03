@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 /*=====2.CSS=====*/
 
 /*=====3.ICONS=====*/
-import budgetLogo from "assets/logos/budget.png";
+// import budgetLogo from "assets/logos/budget.png";
 // import fakeThumbnail from "assets/images/avatar.jpg";
 import iconFolder from "assets/images/icons8-application-window-100.png";
 
