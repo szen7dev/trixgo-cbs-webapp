@@ -9,6 +9,9 @@ export const BudgetRepository = {
     deleteMany: (params: any): Promise<any> => deleteMany(params),
     fetchList: (params: any): Promise<any> => fetchList(params),
     fetchInfo: (params: any): Promise<any> => fetchInfo(params),
+    downloadTemplateExcel: (payload: any): Promise<any> => downloadTemplateExcel(payload),
+    importExcel: (payload: any): Promise<any> => importExcel(payload),
+    exportExcel: (payload: any): Promise<any> => exportExcel(payload),
 };
 
 async function insert(payload: any): Promise<any> {
@@ -44,6 +47,27 @@ async function fetchList(params: any): Promise<any> {
 async function fetchInfo(params: any): Promise<any> {
     const { data } = await API.get(
         `${BUDGET_URL}?${convertObToUrl(params)}`
+    )
+    return data
+}
+
+async function downloadTemplateExcel(payload: any): Promise<any> {
+    const { data } = await API.get<any>(
+        `${BUDGET_URL}/download-template-excel?${convertObToUrl(payload)}`
+    )
+    return data
+}
+
+async function importExcel(payload: any): Promise<any> {
+    const { data } = await API.post<any>(
+        `${BUDGET_URL}/import-excel`, payload
+    )
+    return data
+}
+
+async function exportExcel(payload: any): Promise<any> {
+    const { data } = await API.get<any>(
+        `${BUDGET_URL}/export-excel?${convertObToUrl(payload)}`
     )
     return data
 }
