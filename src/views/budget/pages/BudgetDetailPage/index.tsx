@@ -8,18 +8,21 @@ import classNames from 'classnames';
 import { RightClickMenuWrapper, Paginate } from "shareComponents/common";
 import { MenuChildRow, ModalBudget, RowBudgetGroup } from './components';
 import { formatNumberMoney } from "utils/converter";
+import { createLinkAndClick } from 'utils';
+import { read, utils } from 'xlsx';
+import { toast } from "react-toastify";
 
 /**
  * Hooks, Typings
  */
 import { useBudget } from 'services/hooks/budget/useBudget';
 import { useBudgetItem } from 'services/hooks/budget/useBudgetItem';
-
 import { BudgetGroupRepository, BudgetWorkRepository } from "apis/budget";
-
 import { BudgetItem } from 'typings/budget/budget-item';
 import { BudgetGroup } from 'typings/budget/budget-group';
 import { BudgetWork } from 'typings/budget/budget-work';
+
+import { usePcmPlanTaskCustom } from "services/hooks/pcm/usePcm";
 
 const executeSetState = (key: string, funcs: Array<Array<any>>, payload: any) => {
 	const keys = [
@@ -224,6 +227,79 @@ export const BudgetDetailPage: FC = () => {
 		toggleModal();
 	}
 
+	/**
+     * Xử lý download template excel
+     */
+	const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+		isExporting: false,
+	});
+
+	const { downloadTemplateImportExcelTaskAsync, importTaskFromExcelAsync } = usePcmPlanTaskCustom({});
+
+	const [dataImport, setDataImport] = useState([]);
+
+    const handleDownloadTemplateImportExcel = async () => {
+		try {
+			setStateExport({ isExporting: true })
+			const { error, data } = await downloadTemplateImportExcelTaskAsync({
+                option: 1,
+                projectID: '12334'
+            })
+			if(error) {
+				return toast.warn(data?.message)
+			}
+			data && createLinkAndClick(data, '_self')
+		} catch (error) {
+			if(error instanceof Error)
+				toast.error(error.message)
+		} finally {
+			setStateExport({ isExporting: false })
+		}
+	}
+
+    /**
+     * Xử lý import excel (đọc file)
+     */
+    const handleImport = ($event: any) => {
+        const files = $event.target.files;
+        if (files.length) {
+            const file = files[0];
+            const reader = new FileReader();
+            reader.onload = (event: any) => {
+                const wb = read(event.target.result);
+                const sheets = wb.SheetNames;
+
+                if (sheets.length) {
+                    const rows: any = utils.sheet_to_json(wb.Sheets[sheets[1]]); // Index=1 (tức Sheet số 2 từ trái sang)
+                    
+                    // Set data để Import
+                    setDataImport(rows)
+                }
+            }
+            
+            reader.readAsArrayBuffer(file);
+        }
+
+        // Đọc xong thì xóa value trong Input đi
+        $event.target.value = null;
+    }
+
+	// Gọi tới API để đẩy data lên
+    useEffect(() => {
+        if(dataImport.length){
+            const fetchData = async () => {
+                const data = await importTaskFromExcelAsync({ taskID: '123232', dataImport: JSON.stringify(dataImport) });
+                setDataImport([]);
+                // refetchTaskInfo?.()
+                if(!data.error){
+                    return toast.success("Import thành công");
+                }
+                return toast.error(data.message);
+            }
+            fetchData();
+        }
+    }, [dataImport])
+
 	return (
 		<main className="h-full">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
@@ -233,6 +309,19 @@ export const BudgetDetailPage: FC = () => {
 					</Link>
 
 					<p className="text-lg ml-2">{budgetInfo?.name}</p>
+
+					<button className={"px-4 py-2 hover:bg-cbs-table-header text-cbs-highlight-color"}
+						onClick={handleDownloadTemplateImportExcel}
+					>
+						Tải mẫu import excel
+					</button>
+
+					<button className={"px-4 py-2 hover:bg-cbs-table-header text-cbs-highlight-color"}
+					>
+						<input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
+							accept=".xlsx, .xlsm, .xls, .csv"/>
+						<label className="custom-file-label" htmlFor="inputGroupFile">Import excel tạo việc con</label>
+					</button>
 				</div>
 				<div className="flex items-center">
 					<button
