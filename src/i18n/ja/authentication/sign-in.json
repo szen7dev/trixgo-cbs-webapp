@@ -1,0 +1,13 @@
+{
+  "target": "",
+  "title": "Welcome to Trixgo",
+  "description": "Provide your details to continue to visit",
+  "email": "Email",
+  "password": "Password",
+  "emailPlaceholder": "Enter your email here",
+  "passwordPlaceholder": "Enter your password here",
+  "forgotPassword": "Forgot password?",
+  "register": "Register",
+  "registerQuestion": "Don't have an account?",
+  "submitButton": "Sign in"
+}

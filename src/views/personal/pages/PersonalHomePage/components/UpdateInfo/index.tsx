@@ -219,6 +219,10 @@ export const UpdateInfo: FC = () => {
 						<Field type="radio" name="lang" value="en" className="mr-3" onChange={handleChange} checked={values.lang === 'en'} />
 						English
 					  </label>
+					  <label>
+						<Field type="radio" name="lang" value="ja" className="mr-3" onChange={handleChange} checked={values.lang === 'ja'} />
+						Japanese
+					  </label>
 					</div>
 				  </div>
   

@@ -112,7 +112,7 @@ export const HomeLeftMenuContent: FC = () => {
             route: '/pcm/draft'
         },
         {
-            label: t("menu:draft"),
+            label: t("menu:dynamicReport"),
             icon: fileIcon,
             count: 0,
             route: '/pcm/report'
