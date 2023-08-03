@@ -1,6 +1,7 @@
 /*=====1.LIBRARY=====*/
 import React, { FC, useEffect, lazy } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 /*=====2.PROVIDERS=====*/
 import AuthProvider from "services/providers/Auth";
@@ -47,8 +48,9 @@ const PcmPrintTaskTypeFivePage = lazy(() => import('views/pcm/pages/PcmPrintTask
 const FnbPrintBillListPage = lazy(() => import('views/fnb/pages/FnbPrintBillListPage'))
 
 const Routes: FC = () => {
+    const { t } = useTranslation()
     useEffect(() => {
-        document.title = "Trixgo | Quản lý dự án";
+        document.title = `${t("menu:homeTitle")}`;
     }, [])
 
     return (
