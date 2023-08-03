@@ -32,27 +32,8 @@ export const BudgetLayoutV2: FC<Props> = ({ children }) => {
   const [isRightSideBarCollapse, setIsRightSideBarCollapse] = useState(false);
   const [isChatboxVisible, setIsChatboxVisible] = useState(false);
   const [isNewChatboxVisible, setIsNewChatboxVisible] = useState(false);
-
-  const handleHeaderEvent = () => {
-    setIsHeaderCollapse(!isHeaderCollapse);
-  };
   const handleMenuEvent = () => {
     setIsLeftMenuCollapse(!isLeftMenuCollapse);
-  };
-  const handleRightSideBarEvent = () => {
-    setIsRightSideBarCollapse(!isRightSideBarCollapse);
-  };
-  const closeMiniChatbox = () => {
-    setIsChatboxVisible(false);
-  };
-  const openMiniChatbox = () => {
-    setIsChatboxVisible(true);
-  };
-  const handleOpenNewChatbox = () => {
-    setIsNewChatboxVisible(true);
-  };
-  const handleCloseNewChatbox = () => {
-    setIsNewChatboxVisible(false);
   };
 
   return (
@@ -72,7 +53,7 @@ export const BudgetLayoutV2: FC<Props> = ({ children }) => {
         <LeftNavigate handleMenuEvent={handleMenuEvent} />
         <section className={"main-content-wrapper flex-1"}>
           {/*  Main header */}
-          <MainHeaderV2 headerTitle={"Quản lý ngân sách"}>
+          <MainHeaderV2 headerTitle={"Ngân sách"}>
             <HomeHeaderContent />
           </MainHeaderV2>
 

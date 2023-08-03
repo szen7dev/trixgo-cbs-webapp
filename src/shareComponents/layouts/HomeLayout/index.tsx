@@ -1,6 +1,7 @@
 /*=====1.LIBRARY=====*/
 import { FC, ReactNode, useState } from "react";
 import cn from "classnames";
+import { useTranslation } from "react-i18next";
 
 /*=====2.CSS=====*/
 
@@ -22,6 +23,7 @@ type Props = {
 };
 
 export const HomeLayout: FC<Props> = ({ children }) => {
+  const { t } = useTranslation()
   const [isHeaderCollapse, setIsHeaderCollapse] = useState(false);
   const [isLeftMenuCollapse, setIsLeftMenuCollapse] = useState(false);
   const [isRightSideBarCollapse, setIsRightSideBarCollapse] = useState(false);
@@ -51,7 +53,7 @@ export const HomeLayout: FC<Props> = ({ children }) => {
         <section className={"main-content-wrapper flex-1"}>
           {/*  Main header */}
           <MainHeaderV2
-            headerTitle={"Chủ đề"}
+            headerTitle={t("menu:subject")}
           >
             <HomeHeaderContent />
           </MainHeaderV2>

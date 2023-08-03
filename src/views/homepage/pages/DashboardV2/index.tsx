@@ -885,7 +885,7 @@ export const DashboardV2: FC<Props> = () => {
               reset={reset}
               countBadge={queryResponse.authorsID.length}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
-              placeholder={"Người tạo phản hồi"}
+              placeholder={t("homepage:author")}
               showTriangle={true}
               isMultiple={true}
               onchangeValue={(value) => {
@@ -985,7 +985,7 @@ export const DashboardV2: FC<Props> = () => {
               selectOneByOne={true}
               reset={reset}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
-              placeholder={"Dự án"}
+              placeholder={t("homepage:project")}
               prefixIcon={
                 <img className={"mr-2"} src={projectIcon} alt={"icon"} />
               }
@@ -1029,7 +1029,7 @@ export const DashboardV2: FC<Props> = () => {
               className={
                 "mr-2 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
               }
-              placeholder={"Thời gian tạo"}
+              placeholder={t("homepage:timecCreated")}
               iconBack={<TriangleDown />}
               iconFront={<img src={timelineIcon} alt={"----"} />}
               onValueChange={(val) => {
@@ -1156,7 +1156,7 @@ export const DashboardV2: FC<Props> = () => {
               selectOneByOne={true}
               reset={reset}
               className={"mr-2 border border-primary-border rounded-lg mb-2"}
-              placeholder={"Phân loại"}
+              placeholder={t("homepage:category")}
               prefixIcon={
                 <img className={"mr-2"} src={categoryIcon} alt={"icon"} />
               }
@@ -1390,41 +1390,41 @@ export const DashboardV2: FC<Props> = () => {
           <button
             onClick={() => setFilter("all")}
             className={
-              "py-1 px-6 mx-2 rounded-full border border-primary-border " +
+              "py-1 px-3 mx-1 rounded-full border border-primary-border " +
               (filter === "all"
                 ? "text-white bg-cbs-secondary border-none"
                 : "text-primary-gray bg-white")
             }
           >
-            Tất cả
+            {t("homepage:all")}
           </button>
           <button
             onClick={() => setFilter("unread")}
             className={
-              "py-1 px-6 mx-2 rounded-full border border-primary-border " +
+              "py-1 px-3 mx-1 rounded-full border border-primary-border " +
               (filter === "unread"
                 ? "text-white bg-cbs-secondary border-none"
                 : "text-primary-gray bg-white")
             }
           >
-            Chưa đọc
+            {t("homepage:unread")}
           </button>
           <button
             onClick={() => setFilter("read")}
             className={
-              "py-1 px-6 mx-2 rounded-full border border-primary-border " +
+              "py-1 px-3 mx-1 rounded-full border border-primary-border " +
               (filter === "read"
                 ? "text-white bg-cbs-secondary border-none"
                 : "text-primary-gray bg-white")
             }
           >
-            Đã đọc
+            {t("homepage:read")}
           </button>
           <button
             className={"text-primary mx-2"}
             onClick={() => setShowUpdateStatus(true)}
           >
-            Đánh dấu tất cả đã đọc
+           {t("homepage:markAsRead")}
           </button>
           {/* <button className={"flex items-center justify-center mx-3"}>
             <img src={downloadIcon} alt={"-----"} />
@@ -1579,7 +1579,7 @@ export const DashboardV2: FC<Props> = () => {
                               {item.author.fullname}
                             </p>
                             <span className={"text-xs text-primary-gray py-2"}>
-                              {item.task.related.length} liên quan
+                              {item.task.related.length} {t("homepage:markAsRead")}
                             </span>
                           </div>
                         </Link>
@@ -1671,7 +1671,7 @@ export const DashboardV2: FC<Props> = () => {
                                 : item.author.fullname}
                             </p>
                             <span className={"text-xs text-primary-gray py-2"}>
-                              {item.related.length} liên quan
+                              {item.related.length} {t("homepage:relaled")}
                             </span>
                           </div>
                         </Link>

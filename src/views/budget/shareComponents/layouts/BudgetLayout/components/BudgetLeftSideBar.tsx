@@ -30,7 +30,7 @@ export const BudgetLeftSideBar: FC = () => {
                 {/* title */}
                 <div className="t-leftsidebar-title flex items-center py-2 pl-3 pr-3 text-[14px] font-bold">
                     <img src={budgetLogo} alt="Thumbnail" className="w-10 h-10 rounded-full mr-3" />
-                    <span>Quản lý ngân sách</span>
+                    <span>Ngân sách</span>
                 </div>
 
                 {/* menu block */}
@@ -46,7 +46,7 @@ export const BudgetLeftSideBar: FC = () => {
                     }
                     <NavLink to={`/budget/home`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3">
                         <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-                        <span className="truncate">Trang chủ</span>
+                        <span className="truncate">Trang chủ 222</span>
                     </NavLink>
                 </div>
             </div>

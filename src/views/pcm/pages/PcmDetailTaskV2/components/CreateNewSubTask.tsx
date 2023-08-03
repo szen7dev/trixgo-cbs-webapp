@@ -33,7 +33,6 @@ type Props = {
 }
 
 export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTask, confirmCreateNewSubTask }) => {
-    console.log({task})
     const initUsersSelected = useMemo(() => {
         let arr = [];
         if (task.accessUsers && task.accessUsers.length) {

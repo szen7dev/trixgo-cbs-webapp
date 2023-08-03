@@ -11,7 +11,7 @@ type Props = {
 export const TaskDetailCompleteStatus: FC<Props> = ({ task, userId }) => {
     if(!task.parent || (task.subtype == 4 && task.assignee._id.toString() == userId?.toString())) return <></>
     return (
-        <div className={"task-complete flex items-center mt-5"}>
+        <div className={"task-complete flex items-center mt-2"}>
             <span className={"mr-4"}>
                 <img src={iconTaskCompleted} alt={'-----'} />
             </span>

@@ -1,3 +1,12 @@
 {
-  "companyAuthor": "Feedback generator"
+  "companyAuthor": "Company feedback",
+  "author": "User feedback",
+  "project": "Project/Department",
+  "timecCreated": "Timec created",
+  "category": "Category",
+  "all": "All",
+  "unread": "Unread",
+  "read": "Read",
+  "markAsRead": "Mark as read",
+  "relaled": "Relaled"
 }
