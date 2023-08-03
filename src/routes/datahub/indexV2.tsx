@@ -1,13 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { FC } from 'react'
 import { Route, Switch } from 'react-router-dom'
-
-import DatahubLayout from 'views/datahub/sharedComponents/layouts/DatahubLayout'
-
-import ErrorPage from 'views/authentication/Error'
-import LayoutSecondary from 'views/datahub/sharedComponents/layouts/LayoutSecondary'
-import DatahubContractorLayout from 'views/datahub/sharedComponents/layouts/DatahubContractorLayout'
+import LayoutSecondary from 'views/datahub/sharedComponents/layoutsV2/LayoutSecondary'
+import DatahubContractorLayout from 'views/datahub/sharedComponents/layoutsV2/DatahubContractorLayout'
 
 import {
 	DatahubContractorContract,

@@ -12,7 +12,7 @@ import { ProtectedRoute } from "routes/components";
 
 /*=====5.PAGES/COMPONENTS=====*/
 import ErrorPage from "views/authentication/Error";
-import LayoutSecondary from "views/cmcs/shareComponents/layouts/LayoutSecondary";
+import LayoutSecondary from "views/cmcs/shareComponents/layoutsV2/LayoutSecondary";
 import {CmcsLayoutV2} from "../../shareComponents/layouts/CmcsLayout";
 
 const CmcsAdminFunctionalTab       = lazy(() => import("views/cmcs/pages/CmcAdminPage/pages/CmcsAdminFunctionalTab"))
