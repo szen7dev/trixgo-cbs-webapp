@@ -233,15 +233,13 @@ export const BudgetDetailPage: FC = () => {
 	const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
 		isExporting: false,
 	});
-
-	const { downloadTemplateImportExcelTaskAsync, importTaskFromExcelAsync } = usePcmPlanTaskCustom({});
-
+	const { downloadTemplateExcelAsync, importExcelAsync } = useBudget({});
 	const [dataImport, setDataImport] = useState([]);
 
     const handleDownloadTemplateImportExcel = async () => {
 		try {
 			setStateExport({ isExporting: true })
-			const { error, data } = await downloadTemplateImportExcelTaskAsync({
+			const { error, data } = await downloadTemplateExcelAsync({
                 option: 1,
                 projectID: '12334'
             })
@@ -263,6 +261,7 @@ export const BudgetDetailPage: FC = () => {
     const handleImport = ($event: any) => {
         const files = $event.target.files;
         if (files.length) {
+			console.log({bab:12345555555555555555})
             const file = files[0];
             const reader = new FileReader();
             reader.onload = (event: any) => {
@@ -288,7 +287,7 @@ export const BudgetDetailPage: FC = () => {
     useEffect(() => {
         if(dataImport.length){
             const fetchData = async () => {
-                const data = await importTaskFromExcelAsync({ taskID: '123232', dataImport: JSON.stringify(dataImport) });
+                const data = await importExcelAsync({ taskID: '123232', dataImport: JSON.stringify(dataImport) });
                 setDataImport([]);
                 // refetchTaskInfo?.()
                 if(!data.error){
@@ -313,14 +312,14 @@ export const BudgetDetailPage: FC = () => {
 					<button className={"px-4 py-2 hover:bg-cbs-table-header text-cbs-highlight-color"}
 						onClick={handleDownloadTemplateImportExcel}
 					>
-						Tải mẫu import excel
+						Tải mẫu Import ngân sách
 					</button>
 
 					<button className={"px-4 py-2 hover:bg-cbs-table-header text-cbs-highlight-color"}
 					>
 						<input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
 							accept=".xlsx, .xlsm, .xls, .csv"/>
-						<label className="custom-file-label" htmlFor="inputGroupFile">Import excel tạo việc con</label>
+						<label className="custom-file-label" htmlFor="inputGroupFile">Import excel ngân sách</label>
 					</button>
 				</div>
 				<div className="flex items-center">
@@ -423,6 +422,7 @@ export const BudgetDetailPage: FC = () => {
 								<th className='py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-center'>A{index+1}</th>
 								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-left">
 									{budgetItem.name}
+									<p><i>{budgetItem._id}</i></p>
 								</th>
 								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-center">
 									{budgetItem.unit}

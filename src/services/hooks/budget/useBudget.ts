@@ -18,6 +18,9 @@ interface UseBudget {
     insertAsync: (payload: any) => Promise<any>;
     updateAsync: (payload: any) => Promise<any>;
     deleteManyAsync: (params: any) => Promise<any>;
+    downloadTemplateExcelAsync: (params: any) => Promise<any>;
+    importExcelAsync: (params: any) => Promise<any>;
+    exportExcelAsync: (params: any) => Promise<any>;
     list: Array<Budget>;
     info: Budget | undefined;
     refetch: () => void;
@@ -38,21 +41,21 @@ export const useBudget = ({
 }: UseBudgetProps): UseBudget => {
     const { mutateAsync: insertAsync } =
         useMutation((payload: any) => BudgetRepository.insert(payload)
-    );
+    )
 
     const { mutateAsync: updateAsync } =
         useMutation((payload: any) => BudgetRepository.update(payload)
-    );
+    )
 
     const { mutateAsync: deleteManyAsync } =
         useMutation((params: any) => BudgetRepository.deleteMany(params)
-    );
+    )
 
     const { data: detailData } =
         useQuery("budget__info", () => BudgetRepository.fetchInfo(params), {
             refetchOnWindowFocus: false,
             enabled: isFetchInfo,
-        });
+        })
 
     const info = detailData?.data;
 
@@ -77,7 +80,7 @@ export const useBudget = ({
             refetchOnWindowFocus: false,
             enabled: isFetchList
         }
-    );
+    )
 
     const list = []
         .concat(...(data?.pages || [])
@@ -87,11 +90,32 @@ export const useBudget = ({
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPage = data?.pages[0]?.data?.totalPage || 0;
 
+    // Tải mẫu import excel
+    const { mutateAsync: downloadTemplateExcelAsync } =
+        useMutation((payload: any ) =>
+        BudgetRepository.downloadTemplateExcel(payload)
+    )
+
+    // Import excel
+    const { mutateAsync: importExcelAsync } =
+        useMutation((payload: { dataImport: string }) =>
+        BudgetRepository.importExcel(payload)
+    )
+
+    // Export excel
+    const { mutateAsync: exportExcelAsync } =
+        useMutation((payload: any) =>
+        BudgetRepository.exportExcel(payload)
+    )
+
     return {
         isLoading,
         insertAsync,
         updateAsync,
         deleteManyAsync,
+        downloadTemplateExcelAsync,
+        importExcelAsync,
+        exportExcelAsync,
         list,
         info,
         totalRecord,
