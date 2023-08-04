@@ -18,6 +18,9 @@ interface UseBudgetWork {
     insertAsync: (payload: any) => Promise<any>;
     updateAsync: (payload: any) => Promise<any>;
     deleteManyAsync: (params: any) => Promise<any>;
+    downloadTemplateExcelAsync: (params: any) => Promise<any>;
+    importExcelAsync: (params: any) => Promise<any>;
+    exportExcelAsync: (params: any) => Promise<any>;
     list: Array<BudgetWork>;
     info: BudgetWork | undefined;
     refetch: () => void;
@@ -87,11 +90,32 @@ export const useBudgetWork = ({
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPage = data?.pages[0]?.data?.totalPage || 0;
 
+    // Tải mẫu import excel
+    const { mutateAsync: downloadTemplateExcelAsync } =
+        useMutation((payload: any ) =>
+        BudgetWorkRepository.downloadTemplateExcel(payload)
+    )
+
+    // Import excel
+    const { mutateAsync: importExcelAsync } =
+        useMutation((payload: { dataImport: string }) =>
+        BudgetWorkRepository.importExcel(payload)
+    )
+
+    // Export excel
+    const { mutateAsync: exportExcelAsync } =
+        useMutation((payload: any) =>
+        BudgetWorkRepository.exportExcel(payload)
+    )
+
     return {
         isLoading,
         insertAsync,
         updateAsync,
         deleteManyAsync,
+        downloadTemplateExcelAsync,
+        importExcelAsync,
+        exportExcelAsync,
         list,
         info,
         totalRecord,
