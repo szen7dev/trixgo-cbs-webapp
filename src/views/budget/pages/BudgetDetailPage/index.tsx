@@ -17,12 +17,11 @@ import { toast } from "react-toastify";
  */
 import { useBudget } from 'services/hooks/budget/useBudget';
 import { useBudgetItem } from 'services/hooks/budget/useBudgetItem';
+import { useBudgetWork } from "services/hooks/budget/useBudgetWork";
 import { BudgetGroupRepository, BudgetWorkRepository } from "apis/budget";
 import { BudgetItem } from 'typings/budget/budget-item';
 import { BudgetGroup } from 'typings/budget/budget-group';
 import { BudgetWork } from 'typings/budget/budget-work';
-
-import { usePcmPlanTaskCustom } from "services/hooks/pcm/usePcm";
 
 const executeSetState = (key: string, funcs: Array<Array<any>>, payload: any) => {
 	const keys = [
@@ -233,7 +232,7 @@ export const BudgetDetailPage: FC = () => {
 	const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
 		isExporting: false,
 	});
-	const { downloadTemplateExcelAsync, importExcelAsync } = useBudget({});
+	const { downloadTemplateExcelAsync, importExcelAsync } = useBudgetWork({});
 	const [dataImport, setDataImport] = useState([]);
 
     const handleDownloadTemplateImportExcel = async () => {
@@ -241,7 +240,7 @@ export const BudgetDetailPage: FC = () => {
 			setStateExport({ isExporting: true })
 			const { error, data } = await downloadTemplateExcelAsync({
                 option: 1,
-                projectID: '12334'
+                budgetID
             })
 			if(error) {
 				return toast.warn(data?.message)
@@ -261,7 +260,6 @@ export const BudgetDetailPage: FC = () => {
     const handleImport = ($event: any) => {
         const files = $event.target.files;
         if (files.length) {
-			console.log({bab:12345555555555555555})
             const file = files[0];
             const reader = new FileReader();
             reader.onload = (event: any) => {
@@ -287,7 +285,7 @@ export const BudgetDetailPage: FC = () => {
     useEffect(() => {
         if(dataImport.length){
             const fetchData = async () => {
-                const data = await importExcelAsync({ taskID: '123232', dataImport: JSON.stringify(dataImport) });
+                const data = await importExcelAsync({ budgetID, dataImport: JSON.stringify(dataImport) });
                 setDataImport([]);
                 // refetchTaskInfo?.()
                 if(!data.error){
