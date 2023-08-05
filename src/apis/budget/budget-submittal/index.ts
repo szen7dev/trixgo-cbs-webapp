@@ -1,7 +1,7 @@
 import API from "../../repository";
 import { convertObToUrl } from "utils";
 
-const BUDGET_URL = "/api/budget";
+const BUDGET_URL = "/api/budget/budget_submittals";
 
 export const BudgetSubmittalRepository = {
     insert: (payload: any): Promise<any> => insert(payload),

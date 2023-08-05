@@ -15,17 +15,18 @@ import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFi
 import { APP_KEY } from "utils/constants";
 import { validateFiles } from 'validation/file';
 import classNames from 'classnames';
+import { useBudgetWork } from "services/hooks/budget/useBudgetWork";
 import { useBudgetSubmittal } from "services/hooks/budget/useBudgetSubmittal";
 import { useUsersProject } from "services/hooks/users/useUserSystem";
 
 type Props = {
     task: Task;
     userId?: string;
-    cancelCreateNewSubTask: () => void;
-    confirmCreateNewSubTask: () => void;
+    cancelCreateSubmittal: () => void;
+    confirmCreateSubmittal: () => void;
 }
 
-export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateNewSubTask, confirmCreateNewSubTask }) => {
+export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateSubmittal, confirmCreateSubmittal }) => {
 
     const initUsersSelected = useMemo(() => {
         let arr = [];
@@ -47,25 +48,11 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateNewSub
         return arr.filter(item => item.value !== userId);
     }, [task])
 
-    const {
-		deleteManyAsync,
-		list: listBudgets,
-		// fetchNextPage,
-		hasNextPage,
-		totalRecord,
-		refetch
-	} = useBudgetSubmittal({
-		params: {
-			isMember: 1,
-			// keyword
-		},
-		isFetchList: true
-	})
-
     const refDivFile = useRef<HTMLDivElement | null>(null);
     const [selectedUser, setSelectedUser] = useState<Item[]>(initUsersSelected);
     const [keywordAssignee, setKeywordAssignee] = useState('');
     const [keywordContact, setKeywordContact] = useState('');
+    const [keywordBugetWork, setKeywordBugetWork] = useState('');
     const [isUploading, setIsUploading] = useState(false);
     const [isNotiEmail, setIsNotiEmail] = useState(false);
     const [tokens, setTokens] = useState<any[]>([]);
@@ -74,6 +61,34 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateNewSub
         projectID: task.project?._id,
         keyword: keywordAssignee
     }, !!task.project?._id);
+
+    const {
+		list: listBudgetWorks,
+		// fetchNextPage,
+		// hasNextPage,
+		// totalRecord,
+		// refetch
+	} = useBudgetWork({
+		params: {
+			keyword: keywordBugetWork
+		},
+		isFetchList: true
+	})
+
+    const {
+		insertAsync: insertBugetWorkAsync,
+		list: listBudgets,
+		// fetchNextPage,
+		hasNextPage,
+		totalRecord,
+		refetch
+	} = useBudgetSubmittal({
+		params: {
+			// isMember: 1,
+			// keyword
+		},
+		isFetchList: true
+	})
 
     const [uploads, {
         setUploadImageProgress,
@@ -106,8 +121,8 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateNewSub
         setKeywordAssignee(keyword);
     };
 
-    const handleSearchCustomer = (keyword: string) => {
-        setKeywordContact(keyword);
+    const handleSearchBudgetWork = (keyword: string) => {
+        setKeywordBugetWork(keyword);
     };
 
     const getCancelTokenRequest = (key: string, file: any) => {
@@ -126,13 +141,13 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateNewSub
         return source;
     }
 
-    const handleCancelCreateResponseComment = () => {
+    const handleCancelCreateSubmittal = () => {
         tokens.map(token => {
             token?.source?.cancel('Operation request canceled by the user.');
         })
 
         removeAllFiles();
-        cancelCreateNewSubTask();
+        cancelCreateSubmittal();
     }
 
     const handleSetFiles = async (filesSelected: FileList | null) => {
@@ -194,29 +209,14 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateNewSub
 		text && window.document.execCommand('insertText', false, text);
 	}
 
-    const handleAddChildTask = async (values: any) => {
+    const handleAddSubmittal = async (values: any) => {
         try {
-            const usersRelated = selectedUser.map(user => user.value);
-            let authorAttachs: string[] = [];
-
-            // Get MessageList file uploaded
-            for (const [, { _id }] of Object.entries(uploads.images)) {
-                _id && (authorAttachs = [...authorAttachs, _id]);
-            }
-
-            for (const [, { _id }] of Object.entries(uploads.files)) {
-                _id && (authorAttachs = [...authorAttachs, _id]);
-            }
-
             const dataUpdate: any = {
                 isUpdateNews: true,
-                parentID: task._id,
-                authorAttachs,
-                isNotiEmail,
-                relatedIDs: usersRelated
+                taskID: task._id,
             }
 
-            const { error, data } = await addTaskAsync({
+            const { error, data } = await insertBugetWorkAsync({
                 ...values,
                 ...dataUpdate
             });
@@ -224,7 +224,7 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateNewSub
             if (error) return toast.warning(data?.message);
 
             toast.success('Tạo mẩu tin thành công');
-            confirmCreateNewSubTask();
+            confirmCreateSubmittal();
         } catch (error) {
             if (typeof error === "string") {
                 toast.error(error);
@@ -232,28 +232,19 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateNewSub
                 toast.error(error.message);
             }
         } finally {
-            handleCancelCreateResponseComment();
+            handleCancelCreateSubmittal();
             setSelectedUser([]);
         }
     }
 
     const initialValues = {
         name: "",
-        description: "",
-        assigneeID: task.assignee?._id,
-        parentID: task.parent?._id,
-        groupID: task.group?._id,
-        projectID: task.project?._id,
-        expiredTime: null,
-        type: 2
+        note: "",
     };
 
     const validateSchema = object().shape({
-        name: string().required("Bạn cần nhập nội dung checklist"),
-        expiredTime: string()
-            .required("Bạn cần nhập thời hạn")
-            .typeError("Bạn cần nhập thời hạn"),
-        assigneeID: string().required("Bạn cần chọn người thực hiện"),
+        name: string().required("Bạn cần nhập nội dung"),
+        workID: string().required("Bạn cần chọn ngân sách tương ứng"),
     });
 
     return (
@@ -261,7 +252,7 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateNewSub
             <Formik
                 initialValues={initialValues}
                 validationSchema={validateSchema}
-                onSubmit={handleAddChildTask}
+                onSubmit={handleAddSubmittal}
             >
                 {({
                     values,
@@ -298,29 +289,46 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateNewSub
                                                 <span>{item.text}</span>
                                             </div>
                                         )}
-                                        data={listBudgets.map((item) => ({
-                                            label: item.name,
+                                        data={listBudgetWorks.map((item) => ({
+                                            label: `${item.sign}-${item.name}`,
                                             value: item._id,
                                         }))}
-                                        // initialValue={{
-                                        //     label: task.assignee?.name,
-                                        //     value: task.assignee?._id
-                                        // }}
                                         formatItem={{
                                             id: "value",
                                             text: "label",
                                         }}
                                         inlineSearch={true}
                                         onScroll={handleScroll}
-                                        onSearchInputChange={handleSearchAssignee}
-                                        onchangeValue={item => setFieldValue("assigneeID", item.id)}
-                                        onClearData={() => setFieldValue("assigneeID", "")}
+                                        onSearchInputChange={handleSearchBudgetWork}
+                                        onchangeValue={item => setFieldValue("workID", item.id)}
+                                        onClearData={() => setFieldValue("workID", "")}
+                                    />
+                                </div>
+                                <div className="w-1/6 border-b">
+                                    <input
+                                        type="number"
+                                        name="quantity"
+                                        className="w-full h-8 placeholder-gray-300 focus:outline-none"
+                                        placeholder={"Khối lượng"}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                    />
+                                </div>
+                                <div className="w-1/6 border-b">
+                                    <input
+                                        type="number"
+                                        name="unitPrice"
+                                        className="w-full h-8 placeholder-gray-300 focus:outline-none"
+                                        placeholder={"Đơn giá"}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
                                     />
                                 </div>
                             </div>
 
-                            <div className="flex w-full px-4 pb-4 mt-1">
-                                <div className="w-3/6">
+                             {/* Validate data */}
+                             <div className="flex w-full px-4 pb-4 mt-1">
+                                <div className="w-2/6">
                                     <span
                                         className="text-red-500"
                                         style={{ fontSize: 11 }}
@@ -333,16 +341,8 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateNewSub
                                         className="text-red-500"
                                         style={{ fontSize: 11 }}
                                     >
-                                        {getIn(touched, "assigneeID") &&
-                                            getIn(errors, "assigneeID")}
-                                    </span>
-                                </div>
-                                <div className="w-1/6 ">
-                                    <span
-                                        className="text-red-500"
-                                        style={{ fontSize: 11 }}
-                                    >
-                                        {touched.expiredTime && errors.expiredTime}
+                                        {getIn(touched, "workID") &&
+                                            getIn(errors, "workID")}
                                     </span>
                                 </div>
                             </div>
@@ -350,16 +350,16 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateNewSub
                             <div className="p-4">
                                 <textarea name="" rows={8}
                                     className="border-0.5 p-4 rounded-md w-full bg-white outline:none outlineNone"
-                                    placeholder="Nhập mô tả"
+                                    placeholder="Nhập ghi chú"
                                     onPaste={handlePasteFile}
                                     onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-                                        setFieldValue("description", e.target.value);
+                                        setFieldValue("note", e.target.value);
                                     }}
                                 ></textarea>
                             </div>
                             <div className={"flex items-center justify-between pt-0 p-4"}>
                                 <div className="flex items-center">
-                                    <button className={"py-2 px-4 rounded bg-cbs-form-input-bg text-primary-gray mr-2 font-bold"} onClick={handleCancelCreateResponseComment}>
+                                    <button className={"py-2 px-4 rounded bg-cbs-form-input-bg text-primary-gray mr-2 font-bold"} onClick={handleCancelCreateSubmittal}>
                                         Bỏ qua
                                     </button>
                                     <button

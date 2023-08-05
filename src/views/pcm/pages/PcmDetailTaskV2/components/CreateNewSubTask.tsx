@@ -365,7 +365,8 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
                                     />
                                 </div>
                             </div>
-
+                            
+                            {/* Validate data */}
                             <div className="flex w-full px-4 pb-4 mt-1">
                                 <div className="w-3/6">
                                     <span

@@ -4,10 +4,10 @@ import { useInfiniteQuery, useQuery, useMutation } from "react-query";
 /*=====2.TYPING/APIS=====*/
 import { BudgetSubmittalRepository } from "apis/budget";
 import type {
-    BudgetWork,
-    BudgetWorkInfoParams,
-    BudgetWorkListParams,
-} from 'typings/budget/budget-work';
+    BudgetSubmittal,
+    BudgetSubmittalInfoParams,
+    BudgetSubmittalListParams,
+} from 'typings/budget/budget-submittal';
 
 /*=====3.INTERFACE DEFINE=====*/
 interface UseBudgetSubmittal {
@@ -21,15 +21,15 @@ interface UseBudgetSubmittal {
     downloadTemplateExcelAsync: (params: any) => Promise<any>;
     importExcelAsync: (params: any) => Promise<any>;
     exportExcelAsync: (params: any) => Promise<any>;
-    list: Array<BudgetWork>;
-    info: BudgetWork | undefined;
+    list: Array<BudgetSubmittal>;
+    info: BudgetSubmittal | undefined;
     refetch: () => void;
     fetchNextPage: () => void;
     fetchPreviousPage: () => void;
 }
 
 type UseBudgetWorkProps = {
-    params?: BudgetWorkInfoParams | BudgetWorkListParams,
+    params?: BudgetSubmittalInfoParams | BudgetSubmittalListParams,
     isFetchList?: boolean,
     isFetchInfo?: boolean,
 }

@@ -69,8 +69,8 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
                     <CreateSubmitDetail
                         task={task}
                         userId={userId}
-                        cancelCreateNewSubTask={() => setShowCreateNewSubTask(false)}
-                        confirmCreateNewSubTask={refetchListTask}
+                        cancelCreateSubmittal={() => setShowCreateNewSubTask(false)}
+                        confirmCreateSubmittal={refetchListTask}
                     />
                 }
 
