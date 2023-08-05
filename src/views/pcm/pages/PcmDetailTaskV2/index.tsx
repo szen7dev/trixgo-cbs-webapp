@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
 import { Redirect, useHistory, useParams } from 'react-router-dom';
-
 import { ActionTaskDetailBar } from "./components/ActionBar";
 import { TaskDetailTitle } from "./components/TaskTitle";
 import { TaskDetailFolder } from "./components/TaskDetailFolder";
@@ -9,6 +8,7 @@ import { TaskDetailMember } from "./components/TaskDetailMember";
 import { TaskDetailSignature } from "./components/TaskDetailSignature";
 import { TaskDetailDescription } from "./components/TaskDetailDescription";
 import { TaskDetailSubtask } from "./components/TaskDetailSubtask";
+import { TaskDetailSubmit } from "./components/TaskDetailSubmit";
 import { TaskDetailRelatedTask } from "./components/TaskDetailRelatedTask";
 import { TaskDetailComment } from "./components/TaskDetailComment";
 import { useTask } from 'services/hooks/useTask';
@@ -20,7 +20,7 @@ import { TaskDetailOpenedBidding } from "./components/TaskDetailOpenedBidding";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 import { APP_ID } from 'apis/localdb';
-import { TaskDetailEvaluate } from "./components/TaskDetailEvaluate";
+// import { TaskDetailEvaluate } from "./components/TaskDetailEvaluate"; // Sử dụng sau
 import { TaskDetailAddCV } from "./components/TaskDetailAddCV";
 
 const PcmDetailTaskV2: FC = () => {
@@ -302,13 +302,16 @@ const PcmDetailTaskV2: FC = () => {
                         hasPermissionOpenBidding={permissions.hasPermissionOpenBidding}
                     />
                     <TaskDetailCompleteStatus task={taskInfo} userId={user?._id} />
+                    <TaskDetailDescription task={taskInfo} refetchInfo={refetchInfo} />
                     <TaskDetailMember task={taskInfo} user={user} refetchInfo={refetchInfo} />
                     <TaskDetailSignature task={taskInfo} />
                     <TaskDetailOpenedBidding task={taskInfo} />
-                    <TaskDetailDescription task={taskInfo} refetchInfo={refetchInfo} />
                     <TaskDetailSubtask task={taskInfo} userId={user?._id} />
+                    {
+                        (taskInfo?.subtype == 2 && user.company?._id.toString() === '6046bedeb55525368b11c5c3') ? <TaskDetailSubmit task={taskInfo} userId={user?._id} />: <></>
+                    }
                     <TaskDetailRelatedTask task={taskInfo} userId={user?._id} refetchInfo={refetchInfo} />
-                    <TaskDetailEvaluate task={taskInfo} userId={user?._id} refetchInfo={refetchInfo} />
+                    {/* <TaskDetailEvaluate task={taskInfo} userId={user?._id} refetchInfo={refetchInfo} /> */}
                     {
                         taskInfo?.linksDocs?.length ? <TaskDetailAddCV task={taskInfo} userId={user?._id} refetchInfo={refetchInfo} /> : <></>
                     }
