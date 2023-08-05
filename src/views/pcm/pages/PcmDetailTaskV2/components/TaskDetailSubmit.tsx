@@ -26,7 +26,7 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
             isSortChildTask: '1',
         },
         isFetch: true,
-    });
+    })
 
     useEffect(()=> {
         refetchListTask();
