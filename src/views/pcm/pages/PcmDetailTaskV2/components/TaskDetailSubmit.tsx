@@ -72,7 +72,7 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
                         {(listSubmittals && listSubmittals.map((item, index) => {
                             let amountRetain = 0, amountCheck = 0
                             if(item?.work){
-                                amountRetain = Number(item?.work.amount) - Number(item?.work.impleAmount)
+                                amountRetain = Number(item?.work?.amount) - Number(item?.work?.impleAmount)
                                 amountCheck = Number(amountRetain) - Number(item.amount)
                             }
                             return (
@@ -101,10 +101,10 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
                                             maximumFractionDigits: 0,
                                         })}
                                         <p>-----------------</p>
-                                        {item?.work.impleAmount.toLocaleString("en-US", {
+                                        {item?.work?.impleAmount.toLocaleString("en-US", {
                                             maximumFractionDigits: 0,
                                         })}/
-                                         {item?.work.amount.toLocaleString("en-US", {
+                                         {item?.work?.amount.toLocaleString("en-US", {
                                             maximumFractionDigits: 0,
                                         })}
                                     </td>
