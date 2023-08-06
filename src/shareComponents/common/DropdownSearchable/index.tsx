@@ -267,7 +267,7 @@ export const DropdownSearchable = forwardRef<DropdownSearchableHandle, Props>(({
               <img
                 alt={"Avt"}
                 src={readDataValue(option, "imageUrl")}
-                className={"w-9 h-9 object-cover rounded-full mr-3"}
+                className={"w-9 h-9 object-cover rounded mr-3"}
               />
             ) : null}
             <span className={"flex-1 ml-1 mr-1 whitespace-normal"}>
@@ -299,7 +299,7 @@ export const DropdownSearchable = forwardRef<DropdownSearchableHandle, Props>(({
           <div
             key={readDataValue(option, "id")}
             className={
-              "relative border rounded-full py-0.5 pl-1 mr-1 pr-8 mb-1 bg-white"
+              "relative border rounded py-0.5 pl-1 mr-1 pr-8 mb-1 bg-white"
             }
             title={renderSelectedItem
               ? modifyItem(option).text
@@ -368,7 +368,7 @@ export const DropdownSearchable = forwardRef<DropdownSearchableHandle, Props>(({
           {
             "text-gray-300": !value,
             border: bordered,
-            "rounded-full": bordered,
+            "rounded": bordered,
           }
         )}
         title={renderSelectedItem

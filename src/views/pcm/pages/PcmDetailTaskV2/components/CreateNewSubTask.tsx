@@ -325,7 +325,7 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
                                         allowClearValueSingleInput={true}
                                         renderSelectedItem={(item) => (
                                             <div className={"flex items-center"}>
-                                                <img alt={"tag icon"} src={TagIcon} />
+                                                {/* <img alt={"tag icon"} src={TagIcon} /> */}
                                                 <span>{item.text}</span>
                                             </div>
                                         )}
