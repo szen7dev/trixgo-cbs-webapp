@@ -66,6 +66,20 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
                                     <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Đánh giá (2-1)</th>
                                     <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Ghi chú</th>
                                 </tr>
+                                <tr className="text-primary-gray whitespace-nowrap align-middle text-left font-bold">
+                                    <th className="w-1pt-2.5 pb-3 px-2 border-b border-cbs-border border-l-0.5 border-r-0.5"></th>
+                                    <th className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5">Tổng</th>
+                                    <th className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5"></th>
+                                    <th className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5"></th>
+                                    <th className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 text-right">
+                                        {task?.amount.toLocaleString("vi", {
+                                            maximumFractionDigits: 0,
+                                        })}
+                                    </th>
+                                    <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5"></th>
+                                    <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5"></th>
+                                    <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5"></th>
+                                </tr>
                             </thead>
                         : <></>
                     }

@@ -225,7 +225,7 @@ async function fetchListBudgetWork(params: any) {
     const { data } = await API.get(
         `${BUDGET_WORK_URL}/budget_works`, {
         params: {
-            select: 'name amount unitPrice quantity',
+            select: 'name sign amount unitPrice quantity',
             ...params
         }
     }
