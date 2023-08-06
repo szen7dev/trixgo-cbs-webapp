@@ -382,7 +382,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 											<DropdownSearchable
 												classNameInput={"border-b border-gray-300 rounded-none"}
 												className={"w-[130px]"}
-												id="ticket-type" placeholder="Khoản mục phí"
+												id="ticket-type" placeholder="Khoản mục ngân sách"
 												showTriangle={false}
 												allowClearValueSingleInput={true}
 												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.budgetWork`, value)}
@@ -396,7 +396,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												)}
 												initialValue={item.budgetWork}
 												data={listBudgetWork.map((item: any) => ({
-													label: item.name,
+													label: `${item.sign}-${item.name}`,
 													value: item._id,
 												}))}
 												formatItem={{
