@@ -87,29 +87,29 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
                                         {item?.work?.unit}
                                     </td>
                                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 text-right">
-                                        {item.quantity.toLocaleString("en-US", {
+                                        {item.quantity.toLocaleString("vi", {
+                                            maximumFractionDigits: 3,
+                                        })}
+                                    </td>
+                                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 text-right">
+                                        {item.amount.toLocaleString("vi", {
                                             maximumFractionDigits: 0,
                                         })}
                                     </td>
                                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 text-right">
-                                        {item.amount.toLocaleString("en-US", {
-                                            maximumFractionDigits: 0,
-                                        })}
-                                    </td>
-                                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 text-right">
-                                        {amountRetain.toLocaleString("en-US", {
+                                        {amountRetain.toLocaleString("vi", {
                                             maximumFractionDigits: 0,
                                         })}
                                         <p>-----------------</p>
-                                        {item?.work?.impleAmount.toLocaleString("en-US", {
+                                        {item?.work?.impleAmount.toLocaleString("vi", {
                                             maximumFractionDigits: 0,
                                         })}/
-                                         {item?.work?.amount.toLocaleString("en-US", {
+                                         {item?.work?.amount.toLocaleString("vi", {
                                             maximumFractionDigits: 0,
                                         })}
                                     </td>
                                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5  text-right" style={{color: amountCheck < 0 ? "rgb(255, 0, 0)" : "#000000"}}>
-                                        {Number(amountCheck).toLocaleString("en-US", {
+                                        {Number(amountCheck).toLocaleString("vi", {
                                             maximumFractionDigits: 0,
                                         })}
                                         <p>-----------------</p>
