@@ -285,7 +285,6 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateSubmit
                                         allowClearValueSingleInput={true}
                                         renderSelectedItem={(item) => (
                                             <div className={"flex items-center"}>
-                                                {/* <img alt={"tag icon"} src={TagIcon} /> */}
                                                 <span>{item.text}</span>
                                             </div>
                                         )}

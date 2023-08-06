@@ -1,8 +1,8 @@
 import {FC, useState, useEffect} from "react";
 import iconNote from "assets/images/icons8-note-48.svg";
 import { CreateSubmitDetail } from "./CreateSubmitDetail";
-import { SubtaskItem } from "./SubtaskItem";
-import { useTask } from 'services/hooks/useTask';
+import { SubmittalItem } from "./SubmittalItem";
+import { useBudgetSubmittal } from 'services/hooks/budget/useBudgetSubmittal';
 import { Task } from "typings/task";
 
 type Props = {
@@ -11,29 +11,25 @@ type Props = {
 }
 
 export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
-    const progress = task.percentage;
-    const [showCreateNewSubTask, setShowCreateNewSubTask] = useState(false);
+    const [showCreateSubmittal, setShowCreateSubmittal] = useState(false);
     const {
-        listTasks: listSubTasks,
-        refetchListTask,
-        nextPageListTask,
+        list: listSubmittals,
+        refetch,
+        fetchNextPage,
         totalRecord,
-        totalTaskDone,
         hasNextPage
-    } = useTask({
+    } = useBudgetSubmittal({
         params: {
-            parentID: task?._id,
-            isSortChildTask: '1',
+            taskID: task?._id
         },
-        isFetch: true,
+        isFetchList: true,
     })
 
     useEffect(()=> {
-        refetchListTask();
+        refetch();
     }, [task.timeImportExcel])
 
     return (
-        (task.subtype == 4 && task.assignee._id.toString() == userId?.toString()) ?  <></> :
         <div className={"subtask mt-5 w-2/3"}>
             <div className={"flex items-center"}>
             <span className={"mr-4"}>
@@ -45,38 +41,35 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
                     </span>
                 </div>
                 <div className={"flex-1 flex items-center justify-end"}>
-                    {/* <button className={"bg-cbs-form-input-bg py-2 px-4 rounded mr-4 text-primary-gray"}>
-                        Việc hoàn thành ({totalTaskDone})
-                    </button> */}
                     {hasNextPage && (
-                        <button className={"bg-cbs-form-input-bg py-2 px-4 rounded text-primary-gray"} onClick={nextPageListTask}>
-                            Hiển thị thêm ({totalRecord - listSubTasks.length})
+                        <button className={"bg-cbs-form-input-bg py-2 px-4 rounded text-primary-gray"} onClick={fetchNextPage}>
+                            Hiển thị thêm ({totalRecord - listSubmittals.length})
                         </button>
                     )}
                 </div>
             </div>
             <div className={"list-subtask mt-4"}>
-                {/* {listSubTasks && listSubTasks.map((subtask, index) => (
-                    <SubtaskItem
+                {listSubmittals && listSubmittals.map((subtask, index) => (
+                    <SubmittalItem
                         key={subtask._id}
                         task={subtask}
                         userId={userId}
                         index={index}
                     />
-                ))} */}
+                ))}
 
-                {showCreateNewSubTask &&
+                {showCreateSubmittal &&
                     <CreateSubmitDetail
                         task={task}
                         userId={userId}
-                        cancelCreateSubmittal={() => setShowCreateNewSubTask(false)}
-                        confirmCreateSubmittal={refetchListTask}
+                        cancelCreateSubmittal={() => setShowCreateSubmittal(false)}
+                        confirmCreateSubmittal={refetch}
                     />
                 }
 
                 <button
                     className={"bg-cbs-form-input-bg rounded px-4 py-2 text-primary-gray mt-4 ml-6"}
-                    onClick={() => setShowCreateNewSubTask(true)}
+                    onClick={() => setShowCreateSubmittal(true)}
                 >
                     Thêm khoản mục
                 </button>

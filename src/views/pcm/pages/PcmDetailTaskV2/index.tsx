@@ -304,7 +304,9 @@ const PcmDetailTaskV2: FC = () => {
                     <TaskDetailCompleteStatus task={taskInfo} userId={user?._id} />
                     <TaskDetailDescription task={taskInfo} refetchInfo={refetchInfo} />
                     <TaskDetailMember task={taskInfo} user={user} refetchInfo={refetchInfo} />
-                    <TaskDetailSignature task={taskInfo} />
+                    {
+                        taskInfo?.signatures.length ? <TaskDetailSignature task={taskInfo} />: <></>
+                    }
                     <TaskDetailOpenedBidding task={taskInfo} />
                     <TaskDetailSubtask task={taskInfo} userId={user?._id} />
                     {
