@@ -2,11 +2,11 @@ import React, {FC, Fragment, useRef, useState} from "react"
 import {Dialog, Transition} from "@headlessui/react";
 import Close from "assets/icons/Close";
 import iconChecklist from "assets/images/icons8-checklist-64.svg";
-import {DropdownSearchableV2} from "shareComponents/common";
-import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
-import nextIcon from "assets/images/icons-arrow-next.svg";
+// import {DropdownSearchableV2} from "shareComponents/common";
+// import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
+// import nextIcon from "assets/images/icons-arrow-next.svg";
 import userIcon from "assets/images/icon-user-avatar.svg";
-import TriangleDown from "assets/icons/TriangleDown";
+// import TriangleDown from "assets/icons/TriangleDown";
 import { UseHistoryLogs } from "services/hooks/analysis/useHistoryLogs";
 import { Task } from "typings/task";
 import PaginateV2 from "shareComponents/common/PaginateV2";
@@ -41,7 +41,7 @@ export const TaskHistoryLog:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
     return (
         <>
             {(isLoading) && <Loader className="border-primary" />}
-            <button onClick={() => setIsShow(!isShow)} className={"rounded bg-cbs-form-input-bg h-[36px] text-primary-gray flex items-center justify-center px-3 mr-2"}>
+            <button onClick={() => setIsShow(!isShow)} className={"rounded hover:bg-cbs-form-input-bg h-[36px] text-primary-gray flex items-center justify-center px-3"}>
                 <img src={iconChecklist} alt={"----"} className={"w-[24px] mr-2"}/>
                 <span>Lịch sử hoạt động</span>
             </button>
