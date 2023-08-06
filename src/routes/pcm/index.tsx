@@ -44,7 +44,7 @@ import ProjectKpis from "views/ppt/pages/ProjectKpis";
 import UserKpiDetail from "views/ppt/pages/ProjectKpis/UserKpiDetail";
 
 const PcmDetailTaskV2             = lazy(() => import('views/pcm/pages/PcmDetailTaskV2'));
-const PcmDetailTaskSubmit         = lazy(() => import('views/pcm/pages/PcmDetailTaskSubmit'));
+// const PcmDetailTaskSubmit         = lazy(() => import('views/pcm/pages/PcmDetailTaskSubmit'));
 const PcmTagPage                  = lazy(() => import('views/pcm/pages/PcmTagPage'));
 const PcmTagProjectPage           = lazy(() => import('views/pcm/pages/PcmTagPage/PcmTagProjectPage'));
 const PcmTag3ProjectCompanyPage   = lazy(() => import('views/pcm/pages/PcmTagPage/PcmTag3ProjectCompanyPage'));
@@ -149,7 +149,7 @@ const PCMRouter: FC = () => {
                 <Route exact path="/pcm/report" component={PcmReportPage} />
                 <Route exact path="/pcm/report/:reportID" component={PcmTasksReportPage} />
                 <Route exact path="/pcm/detail/:id" component={PcmDetailTaskV2} />
-                <Route exact path="/pcm/detail/:id/submit" component={PcmDetailTaskSubmit} />
+                {/* <Route exact path="/pcm/detail/:id/submit" component={PcmDetailTaskSubmit} /> */}
                 <Route exact path="/pcm/tags/:tab?" component={PcmTagPage} />
                 <Route exact path="/pcm/tags/:tab?/project/:projectID/detail" component={PcmTagProjectPage} />
                 <Route exact path="/pcm/tags/:tab?/project/:projectID/company/:companyID" component={PcmTagProjectPage} />
