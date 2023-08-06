@@ -273,7 +273,7 @@ export const TaskDetailFolder: FC<Props> = ({
                     </button>
                 )}
                 {!isSigned && hasPermissionAddSignature && (
-                    <button className={"flex text-primary-gray items-center rounded bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={toggleModalOpenSign}>
+                    <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={toggleModalOpenSign}>
                         <img src={iconCheckmark} alt={"----"} className={"mr-2"} />
                         <span>Xác nhận</span>
                     </button>

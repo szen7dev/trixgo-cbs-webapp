@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 import iconBack from "assets/images/icon-back-gray.svg";
 import iconLinkCopy from "assets/images/icons8-link-96-v3.svg";
@@ -10,8 +10,8 @@ import iconPrint from "assets/images/icons8-print-96.svg";
 // import iconMember from "assets/images/icons8-member-48-white.svg";
 import { TaskHistoryLog } from "./TaskHistoryLog";
 import { OtherActions } from "./OtherActions";
-import CollapseShow from "assets/images/CBS-Collapse-Show.svg";
-import CollapseHide from "assets/images/CBS-Collapse-Hide.svg";
+// import CollapseShow from "assets/images/CBS-Collapse-Show.svg";
+// import CollapseHide from "assets/images/CBS-Collapse-Hide.svg";
 import IconDownload from "assets/images/icons8-download-48_2.png";
 import { Task } from "typings/task";
 import { AddUserRelated } from "./AddUserRelated";
@@ -125,7 +125,7 @@ export const ActionTaskDetailBar: FC<Props> = ({ task, user, refetchTaskInfo, ha
                 </button>
             </div>
 
-            <button onClick={() => {
+            {/* <button onClick={() => {
                 handleCollapse && handleCollapse()
             }} className={"flex items-center justify-center rounded bg-cbs-form-input-bg h-[36px] py-1 px-2 mx-3"}>
                 <img src={CollapseShow} alt={"----"} className={"object-contain max-h-full " + (!collapse ? "hidden" : "block")} />
@@ -135,7 +135,7 @@ export const ActionTaskDetailBar: FC<Props> = ({ task, user, refetchTaskInfo, ha
                         collapse ? "Mở rộng" : "Thu gọn"
                     }
                 </div>
-            </button>
+            </button> */}
             {/* <TaskHistoryLog/> */}
             <TaskHistoryLog task={task} userId={user?._id} refetchTaskInfo={refetchTaskInfo}/>
             {/* <button className={"rounded bg-cbs-green-medium h-[36px] text-white flex items-center justify-center px-3 mx-3"}>

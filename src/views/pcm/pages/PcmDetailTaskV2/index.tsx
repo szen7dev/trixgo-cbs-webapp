@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Redirect, useHistory, useParams } from 'react-router-dom';
 import { ActionTaskDetailBar } from "./components/ActionBar";
 import { TaskDetailTitle } from "./components/TaskTitle";
@@ -18,7 +18,7 @@ import { toast } from "react-toastify";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { TaskDetailOpenedBidding } from "./components/TaskDetailOpenedBidding";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
-import { useHistoryTraffics } from "services/hooks/auth/useAuth";
+// import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 import { APP_ID } from 'apis/localdb';
 // import { TaskDetailEvaluate } from "./components/TaskDetailEvaluate"; // Sử dụng sau
 import { TaskDetailAddCV } from "./components/TaskDetailAddCV";
@@ -45,7 +45,7 @@ const PcmDetailTaskV2: FC = () => {
         hasPermissionViewBidding: false,
     });
 
-    const { createHistoryTraffics } = useHistoryTraffics();
+    // const { createHistoryTraffics } = useHistoryTraffics();
     const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 
     const { id: taskId } = useParams<{ id: string }>();
@@ -58,14 +58,14 @@ const PcmDetailTaskV2: FC = () => {
             taskID: taskId
         },
         isFetchInfo: true
-    });
+    })
 
     useEffect(() => {
-        createHistoryTraffics({
-            appID: APP_ID.PCM.id,
-            menuID: APP_ID.PCM.menuPcmProject.subject.id,
-            type: 1,
-        });
+        // createHistoryTraffics({
+        //     appID: APP_ID.PCM.id,
+        //     menuID: APP_ID.PCM.menuPcmProject.subject.id,
+        //     type: 1,
+        // });
 
         (async () => {
             await updateStatusMultipleAsync({
@@ -105,7 +105,7 @@ const PcmDetailTaskV2: FC = () => {
         const authorAndAssigneeAndRelatedID = [...authorAndAssigneeID, ...relatedsID].filter(Boolean);
 
         /**
-         * Phân quyền theo phân loại
+         * PHÂN QUYỀN THEO CÁC PHÂN LOẠI
          * 4: Lựa chọn đấu thầu
          * default: Các loại còn lại
          */
@@ -264,6 +264,10 @@ const PcmDetailTaskV2: FC = () => {
             }
         }
     }, [taskInfo]);
+
+    useEffect(() => {
+        document.title = `Trixgo | ${taskInfo ? taskInfo?.name : "Chi tiết chủ đề"}`
+	}, [])
 
     const handleCollapse = () => {
         setCollapse(!collapse);
