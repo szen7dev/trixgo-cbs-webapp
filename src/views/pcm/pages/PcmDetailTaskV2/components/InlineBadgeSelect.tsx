@@ -36,7 +36,7 @@ const InlineBadgeSelect:FC<Props> = ({defaultValue, options, placeholder, onValu
             <button onClick={() => setShowOption(!showOption)} 
                 className={className}
                 style={{backgroundColor: itemSelected()?.color}}
-                >{placeholder}: {itemSelected()?.text}</button>
+                >{placeholder}{itemSelected()?.text}</button>
             {
                 showOption &&
                 <div className={"absolute z-20 bg-white w-[335px] shadow-lg rounded-md text-primary-gray"}>

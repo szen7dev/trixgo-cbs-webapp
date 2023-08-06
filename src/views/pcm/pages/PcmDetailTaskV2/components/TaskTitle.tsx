@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 const optionsSubtype = PCM_PROPOSAL_TASK.map(subtype => ({
     id: subtype.value,
     text: subtype.text,
-    color: 'gray'
+    color: '#DDDDDD'
 }))
 
 type Props = {
@@ -200,21 +200,21 @@ export const TaskDetailTitle: FC<Props> = ({ task, userId, refetchInfo }) => {
             </span>
             <InlineBadgeSelect
                 wrapperClassName={"-translate-y-1"}
-                className={`text-xs rounded-full text-white px-2 py-1 mx-1 ${PCM_STATUS_TASK[currentStatus - 1]?.class}`}
+                className={`text-[10px] text-white rounded px-1 py-0.5 mx-1 ${PCM_STATUS_TASK[currentStatus - 1]?.class}`}
                 defaultValue={task.status}
                 options={options}
-                placeholder={"Trạng thái"}
+                placeholder={""}
                 onValueChange={handleChangeStatus}
             />
             <InlineBadgeSelect
                 wrapperClassName={"-translate-y-1"}
-                className={`text-xs rounded-full text-white px-2 py-1 mx-1 ${PCM_PRIORITY_TASK[currentPriority - 1]?.class}`}
+                className={`text-[10px] text-white rounded px-1 py-0.5 mx-1 ${PCM_PRIORITY_TASK[currentPriority - 1]?.class}`}
                 defaultValue={currentPriority}
                 options={[
                     {
                         id: 1,
                         text: "Thấp",
-                        color: "#808080"
+                        color: "#DDDDDD"
                     },
                     {
                         id: 2,
@@ -227,38 +227,17 @@ export const TaskDetailTitle: FC<Props> = ({ task, userId, refetchInfo }) => {
                         color: "#ff0000"
                     },
                 ]}
-                placeholder={"Ưu tiên"}
+                placeholder={"Ưu tiên: "}
                 onValueChange={handleChangePriority}
             />
             <InlineBadgeSelect
                 wrapperClassName={"-translate-y-1"}
-                className={`text-xs rounded-full text-white px-2 py-1 mx-1`}
+                className={`text-[10px] text-secondary-gray rounded px-1 py-0.5 mx-1`}
                 defaultValue={task.subtype}
                 options={optionsSubtype}
-                placeholder={"Tính chất"}
+                placeholder={""}
                 onValueChange={handleChangeSubtype}
             />
-            {/* <InlineBadgeSelect
-                wrapperClassName={"-translate-y-1"}
-                className={"text-xs bg-cbs-form-input-bg rounded-full text-primary-gray px-2 py-1 mx-1"}
-                defaultValue={task.risk}
-                options={[
-                    {
-                        id: 1,
-                        text: "Thấp"
-                    },
-                    {
-                        id: 2,
-                        text: "Bình thường"
-                    },
-                    {
-                        id: 3,
-                        text: "Cao"
-                    },
-                ]}
-                placeholder={"Rủi ro"}
-                onValueChange={value => console.log(value)}
-            /> */}
         </div>
     )
 }
