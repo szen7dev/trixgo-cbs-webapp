@@ -82,7 +82,7 @@ export const ChildResponseComment: FC<Props> = ({ userId, comment, onClickImage,
                                                 showDetail &&
                                                 <div
                                                     ref={detailRef}
-                                                    className={"absolute top-full bg-white left-[50%] shadow-lg rounded-md max-w-[600px] min-w-[600px] p-3 z-10"}>
+                                                    className={"absolute top-full bg-white left-[50%] shadow-lg rounded-md max-w-[600px] min-w-[456px] p-3 z-10"}>
                                                     <table className={"table-fixed w-full"}>
                                                         <tbody>
                                                         <tr>
