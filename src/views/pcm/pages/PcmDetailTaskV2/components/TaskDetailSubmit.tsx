@@ -48,26 +48,27 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
                     )}
                 </div>
             </div>
-            {
-                listSubmittals.length ? <></> : <></>
-            }
             <div className={"list-subtask mt-4"}>
                 <table
                     className="text-black text-medium border-separate space-x-0 space-y-0 w-full"
                     style={{ borderSpacing: 0 }}
                     >
-                    <thead className="">
-                        <tr className="text-primary-gray whitespace-nowrap align-middle text-left">
-                            <th className="w-1 font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-l-0.5 border-r-0.5 border-t-0.5">TT</th>
-                            <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Nội dung</th>
-                            <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Đơn vị</th>
-                            <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Số lượng</th>
-                            <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Thành tiền đệ trình (1)</th>
-                            <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Ngân sách còn lại (2)</th>
-                            <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Đánh giá (2-1)</th>
-                            <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Ghi chú</th>
-                        </tr>
-                    </thead>
+                   {
+                        listSubmittals.length ? 
+                            <thead className="">
+                                <tr className="text-primary-gray whitespace-nowrap align-middle text-left">
+                                    <th className="w-1 font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-l-0.5 border-r-0.5 border-t-0.5">TT</th>
+                                    <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Nội dung</th>
+                                    <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Đơn vị</th>
+                                    <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Số lượng</th>
+                                    <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Thành tiền đệ trình (1)</th>
+                                    <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Ngân sách còn lại (2)</th>
+                                    <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Đánh giá (2-1)</th>
+                                    <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Ghi chú</th>
+                                </tr>
+                            </thead>
+                        : <></>
+                    }
                     <tbody className="text-small">
                         {(listSubmittals && listSubmittals.map((item, index) => {
                             let amountRetain = 0, amountCheck = 0
