@@ -1,7 +1,7 @@
 import {FC, useState, useEffect} from "react";
 import iconNote from "assets/images/icons8-note-48.svg";
 import { CreateSubmitDetail } from "./CreateSubmitDetail";
-import { SubmittalItem } from "./SubmittalItem";
+// import { SubmittalItem } from "./SubmittalItem";
 import { useBudgetSubmittal } from 'services/hooks/budget/useBudgetSubmittal';
 import { Task } from "typings/task";
 
@@ -49,15 +49,33 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
                 </div>
             </div>
             <div className={"list-subtask mt-4"}>
-                {listSubmittals && listSubmittals.map((subtask, index) => (
-                    <SubmittalItem
-                        key={subtask._id}
-                        task={subtask}
-                        userId={userId}
-                        index={index}
-                    />
-                ))}
-
+                <table className="text-black text-medium border-collapse w-full">
+                    <thead className="z-10 relative">
+                        <tr className="text-primary-gray whitespace-nowrap align-middle text-left">
+                            <th>TT</th>
+                            <th>Nội dung</th>
+                            <th>Đơn vị</th>
+                            <th>Số lượng</th>
+                            <th>Thành tiền đệ trình</th>
+                            <th>Ngân sách cho phép</th>
+                            <th>Ghi chú</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {listSubmittals && listSubmittals.map((item, index) => (
+                            <tr key={item._id} className="text-left cursor-pointer">
+                                <td>{Number(index + 1)}</td>
+                                <td>{item.name}</td>
+                                <td>{item?.unit}</td>
+                                <td>{item.quantity}</td>
+                                <td>{item.amount}</td>
+                                <td>{item.amount}</td>
+                                <td>{item.amount}</td>
+                                <td>{item.note}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
                 {showCreateSubmittal &&
                     <CreateSubmitDetail
                         task={task}
