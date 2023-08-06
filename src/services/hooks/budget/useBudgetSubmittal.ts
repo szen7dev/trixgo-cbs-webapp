@@ -18,6 +18,7 @@ interface UseBudgetSubmittal {
     insertAsync: (payload: any) => Promise<any>;
     updateAsync: (payload: any) => Promise<any>;
     deleteManyAsync: (params: any) => Promise<any>;
+    getListByPropertyAsync: (params: any) => Promise<any>;
     downloadTemplateExcelAsync: (params: any) => Promise<any>;
     importExcelAsync: (params: any) => Promise<any>;
     exportExcelAsync: (params: any) => Promise<any>;
@@ -91,6 +92,12 @@ export const useBudgetSubmittal = ({
     const totalPage = data?.pages[0]?.data?.totalPage || 0;
 
     // Tải mẫu import excel
+    const { mutateAsync: getListByPropertyAsync } =
+        useMutation((payload: any ) =>
+        BudgetSubmittalRepository.getListByProperty(payload)
+    )
+
+    // Tải mẫu import excel
     const { mutateAsync: downloadTemplateExcelAsync } =
         useMutation((payload: any ) =>
         BudgetSubmittalRepository.downloadTemplateExcel(payload)
@@ -113,6 +120,7 @@ export const useBudgetSubmittal = ({
         insertAsync,
         updateAsync,
         deleteManyAsync,
+        getListByPropertyAsync,
         downloadTemplateExcelAsync,
         importExcelAsync,
         exportExcelAsync,

@@ -12,7 +12,9 @@ type Props = {
 
 export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
     const [showCreateSubmittal, setShowCreateSubmittal] = useState(false);
+
     const {
+        // getListByPropertyAsync,
         list: listSubmittals,
         refetch,
         fetchNextPage,
@@ -28,6 +30,21 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
         },
         isFetchList: true,
     })
+
+    // const { getListByPropertyAsync } = useBudgetSubmittal({});
+    // const { error, data } = await getListByPropertyAsync({
+    //     filterParams: {  
+    //     }
+    // });
+
+    // const {
+    //     getListByPropertyAsync
+    // } = useBudgetSubmittal({
+    //     params: {
+    //         taskID: task?._id
+    //     },
+    // })
+    // console.log(getListByPropertyAsync)
 
     return (
         <div className={"subtask mt-5 w-2/3"}>

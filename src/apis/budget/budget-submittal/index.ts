@@ -9,6 +9,7 @@ export const BudgetSubmittalRepository = {
     deleteMany: (params: any): Promise<any> => deleteMany(params),
     fetchList: (params: any): Promise<any> => fetchList(params),
     fetchInfo: (params: any): Promise<any> => fetchInfo(params),
+    getListByProperty: (payload: any): Promise<any> => getListByProperty(payload),
     downloadTemplateExcel: (payload: any): Promise<any> => downloadTemplateExcel(payload),
     importExcel: (payload: any): Promise<any> => importExcel(payload),
     exportExcel: (payload: any): Promise<any> => exportExcel(payload),
@@ -47,6 +48,13 @@ async function fetchList(params: any): Promise<any> {
 async function fetchInfo(params: any): Promise<any> {
     const { data } = await API.get(
         `${BUDGET_URL}?${convertObToUrl(params)}`
+    )
+    return data
+}
+
+async function getListByProperty(payload: any): Promise<any> {
+    const { data } = await API.get<any>(
+        `${BUDGET_URL}/get-list-by-property?${convertObToUrl(payload)}`
     )
     return data
 }
