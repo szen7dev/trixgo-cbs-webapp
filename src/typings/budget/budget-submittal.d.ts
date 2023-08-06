@@ -8,7 +8,7 @@ export type BudgetSubmittal = {
     description: string;
     type: number;
     unit: string;
-    company: Company,
+    work?: any;
     date: string,
     modifyAt?: string;
     createAt?: string;

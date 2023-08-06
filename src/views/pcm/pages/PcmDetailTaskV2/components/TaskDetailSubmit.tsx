@@ -20,14 +20,14 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
         hasNextPage
     } = useBudgetSubmittal({
         params: {
+            populates: JSON.stringify({
+                path: "work",
+                select: "name sign unit quantity unitPrice amount impleQuantity impleUnitPrice impleAmount"
+            }),
             taskID: task?._id
         },
         isFetchList: true,
     })
-
-    useEffect(()=> {
-        refetch();
-    }, [task.timeImportExcel])
 
     return (
         <div className={"subtask mt-5 w-2/3"}>
@@ -48,32 +48,77 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
                     )}
                 </div>
             </div>
+            {
+                listSubmittals.length ? <></> : <></>
+            }
             <div className={"list-subtask mt-4"}>
-                <table className="text-black text-medium border-collapse w-full">
-                    <thead className="z-10 relative">
+                <table
+                    className="text-black text-medium border-separate space-x-0 space-y-0 w-full"
+                    style={{ borderSpacing: 0 }}
+                    >
+                    <thead className="">
                         <tr className="text-primary-gray whitespace-nowrap align-middle text-left">
-                            <th>TT</th>
-                            <th>Nội dung</th>
-                            <th>Đơn vị</th>
-                            <th>Số lượng</th>
-                            <th>Thành tiền đệ trình</th>
-                            <th>Ngân sách cho phép</th>
-                            <th>Ghi chú</th>
+                            <th className="w-1 font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-l-0.5 border-r-0.5 border-t-0.5">TT</th>
+                            <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Nội dung</th>
+                            <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Đơn vị</th>
+                            <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Số lượng</th>
+                            <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Thành tiền đệ trình (1)</th>
+                            <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Ngân sách còn lại (2)</th>
+                            <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Đánh giá (2-1)</th>
+                            <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Ghi chú</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {listSubmittals && listSubmittals.map((item, index) => (
-                            <tr key={item._id} className="text-left cursor-pointer">
-                                <td>{Number(index + 1)}</td>
-                                <td>{item.name}</td>
-                                <td>{item?.unit}</td>
-                                <td>{item.quantity}</td>
-                                <td>{item.amount}</td>
-                                <td>{item.amount}</td>
-                                <td>{item.amount}</td>
-                                <td>{item.note}</td>
-                            </tr>
-                        ))}
+                    <tbody className="text-small">
+                        {(listSubmittals && listSubmittals.map((item, index) => {
+                            let amountRetain = 0, amountCheck = 0
+                            if(item?.work){
+                                amountRetain = Number(item?.work.amount) - Number(item?.work.impleAmount)
+                                amountCheck = Number(amountRetain) - Number(item.amount)
+                            }
+                            return (
+                                <tr key={item._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
+                                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-l-0.5 border-r-0.5">{Number(index + 1)}</td>
+                                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5">
+                                        {item.name}
+                                        <p className="text-cbs-highlight-color"><i>{item?.work?.sign}-{item?.work?.name}</i></p>
+                                    </td>
+                                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5">
+                                        {item?.unit}
+                                        {item?.work?.unit}
+                                    </td>
+                                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 text-right">
+                                        {item.quantity.toLocaleString("en-US", {
+                                            maximumFractionDigits: 0,
+                                        })}
+                                    </td>
+                                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 text-right">
+                                        {item.amount.toLocaleString("en-US", {
+                                            maximumFractionDigits: 0,
+                                        })}
+                                    </td>
+                                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 text-right">
+                                        {amountRetain.toLocaleString("en-US", {
+                                            maximumFractionDigits: 0,
+                                        })}
+                                        <p>-----------------</p>
+                                        {item?.work.impleAmount.toLocaleString("en-US", {
+                                            maximumFractionDigits: 0,
+                                        })}/
+                                         {item?.work.amount.toLocaleString("en-US", {
+                                            maximumFractionDigits: 0,
+                                        })}
+                                    </td>
+                                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5  text-right" style={{color: amountCheck < 0 ? "rgb(255, 0, 0)" : "#000000"}}>
+                                        {Number(amountCheck).toLocaleString("en-US", {
+                                            maximumFractionDigits: 0,
+                                        })}
+                                        <p>-----------------</p>
+                                        {amountCheck < 0 ? "Vượt" : ""}
+                                    </td>
+                                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5">{item.note}</td>
+                                </tr>
+                            )
+                        }))}
                     </tbody>
                 </table>
                 {showCreateSubmittal &&
