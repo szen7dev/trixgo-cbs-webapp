@@ -257,25 +257,30 @@ const FunctionalTab: FC = () => {
 								/>
 							</div>
 						</th>
-						<th className="w-1/3 pb-1 pt-1">
+						<th className="pb-1 pt-1">
 							<div className="border-r-2 border-gray-300 font-normal pl-2">
 								Nội dung
 							</div>
 						</th>
-						<th className="w-1/3 pb-1 pt-1 font-normal">
+						<th className="pb-1 pt-1 font-normal">
 							<div className="border-r-2 border-gray-300 font-normal pl-2">
 								Mã hiệu
 							</div>
 						</th>
-						<th className="w-1/3 pb-1 pt-1 font-normal">
+						<th className="pb-1 pt-1 font-normal">
+							<div className="border-r-2 border-gray-300 font-normal pl-2">
+								Thuộc hợp đồng
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
 							<div className="border-r-2 border-gray-300 font-normal pl-2">
 								Thành viên
 							</div>
 						</th>
-						<th className="w-1/3 pb-1 pt-1 font-normal">
+						<th className="pb-1 pt-1 font-normal">
 							<div className="font-normal pl-2">Cập nhật lần cuối</div>
 						</th>
-						<th className="w-1/3 pb-1 pt-1 font-normal">
+						<th className="pb-1 pt-1 font-normal">
 							<div className="font-normal pl-2">Xem thành viên</div>
 						</th>
 					</tr>
@@ -303,6 +308,9 @@ const FunctionalTab: FC = () => {
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
 									{item?.sign}
+								</td>
+								<td className="py-1 px-2 text-primary-gray">
+									{item?.contract?.sign}-{item?.contract?.name}
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
 									<Link to={`/pm/project/${projectID}/admin/groups/${item._id}/members`}>

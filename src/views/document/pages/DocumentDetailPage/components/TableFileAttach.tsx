@@ -67,7 +67,7 @@ export const TableFileAttach: FC<TableFileAttachProps> = ({
                     alt=""
                     className="h-6 w-6 px-1 box-content"
                   />
-                  <a href={`${process.env.REACT_APP_URL_S3}${fileAttach?.file?.path}`} target="_blank" rel="noreferrer"> {fileAttach?.file?.nameOrg || "-"} </a>
+                  <a href={`${process.env.REACT_APP_URL_S3}${fileAttach?.file?.path}`} target="_blank" rel="noreferrer"> {fileAttach?.file?.name || "-"} </a>
                 </div>
               </td>
               <td className="py-2 align-middle">
@@ -90,7 +90,7 @@ export const TableFileAttach: FC<TableFileAttachProps> = ({
                         checked={fileAttach?.official == 2}
                         onChange={handleUpdateOfficial}
                     />
-                    official
+                    Chính thức
               </td>
             </tr>
           ))}

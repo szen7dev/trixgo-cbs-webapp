@@ -76,8 +76,6 @@ export const DashboardV2: FC<Props> = () => {
   
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   const dispatch = useDispatch();
-  // const [popBox1, setpopBox1] = React.useState(false)
-  // const [popBox2, setpopBox2] = React.useState(false)
   const [filter, setFilter] = useState("all");
   const { user } = useAuth()
   const [pageIndex, setPageIndex] = useState(0);
@@ -1713,7 +1711,8 @@ export const DashboardV2: FC<Props> = () => {
                         {/* Attach Images href={`${process.env.REACT_APP_URL_S3}${file.path}`} */}
                         <div className="flex wrap flex-wrap mr-2 text-primary-gray pb-2">
                           {
-                            (item?.lastComment?.images)?.slice(0, 3).map((file: any, subindex: any) => (
+                            (item?.lastComment?.images)?.slice(0, 3).map((file: any, subindex: any) =>
+                              (
                                 <button
                                   key={file._id}
                                   onClick={() => {

@@ -113,7 +113,7 @@ export const PcmPrintTaskComment:FC<Props> = ({ comment }) => {
                                                     <tr>
                                                         <td className={"truncate"}>
                                                             <a href={`${process.env.REACT_APP_URL_S3}${file.path}`} download className={"text-primary w-[60px]"}>
-                                                                {file.nameOrg}
+                                                                {file.name}
                                                             </a>
                                                         </td>
                                                         <td className={"text-primary w-1/4"}>
