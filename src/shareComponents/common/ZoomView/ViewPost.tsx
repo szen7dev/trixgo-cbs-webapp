@@ -3,7 +3,7 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import moment from 'moment';
 import _ from "lodash";
 import cn from 'classnames';
-import API from "apis/repository";
+// import API from "apis/repository";
 
 // ======= Custom hook =======
 import useCustomReducer from 'services/hooks/useCustomReducer';

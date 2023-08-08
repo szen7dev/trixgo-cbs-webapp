@@ -82,12 +82,13 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
   const [projectID, setProjectID] = useState(defaultValues?.project?._id || "");
   const [groupID, setGroupID] = useState(defaultValues?.group?._id || "");
   const [taskID, setTaskID] = useState("");
+  const [name, setName] = useState("");
   const [groupParentPicker, setGroupParentPicker] = useState<any>({});
   const [isNotiEmail, setIsNotiEmail] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
 
   const { user } = useAuth();
-  const { addTaskAsync } = useTask({});
+  const { addTaskAsync, updateTaskAsync } = useTask({});
 
   const { addFileToUpload } = useUpload({
     appID: APP_ID.PCM.id,
@@ -203,6 +204,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
       for (const [, { _id }] of Object.entries(uploads.files)) {
         _id && (files = [...files, _id]);
       }
+      console.log({ files, uploads });
 
       if (files.length) {
         values.authorAttachs = files;
@@ -239,6 +241,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
         draft: "1",
         projectID,
         groupID,
+        ...values,
       }
       const { error, data } = await addTaskAsync({
         ...payload,
@@ -377,6 +380,12 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
         break;
     }
   }
+
+  const handleBlurNameInput = async (e: any) => {
+    if(taskID) {
+      await updateTaskAsync({ taskID, name });
+    }
+  };
 
   useEffect(() => {
     if(projectID && groupID && !taskID) {
@@ -764,7 +773,12 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                         placeholder="Tiêu đề"
                         type="text"
                         className="border-0 flex-grow outline-none px-3 mt-0.5 w-3/4"
-                        onChange={(event) => setFieldValue("name", event.target.value)}
+                        onChange={(event) => {
+                          const value = event.target.value;
+                          setFieldValue("name", value);
+                          setName(value);
+                        }}
+                        onBlur={handleBlurNameInput}
                       />
                       <ErrorMessage
                         name="name"
