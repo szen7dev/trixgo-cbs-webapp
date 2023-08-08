@@ -45,8 +45,7 @@ const PcmDetailTaskV2: FC = () => {
         hasPermissionViewBidding: false,
     });
 
-    // const { createHistoryTraffics } = useHistoryTraffics();
-    const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
+    // const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 
     const { id: taskId } = useParams<{ id: string }>();
 
@@ -61,12 +60,6 @@ const PcmDetailTaskV2: FC = () => {
     })
 
     useEffect(() => {
-        // createHistoryTraffics({
-        //     appID: APP_ID.PCM.id,
-        //     menuID: APP_ID.PCM.menuPcmProject.subject.id,
-        //     type: 1,
-        // });
-
         (async () => {
             await updateStatusMultipleAsync({
                 taskIDs: [taskId],
@@ -76,20 +69,24 @@ const PcmDetailTaskV2: FC = () => {
     }, [])
 
     useEffect(() => {
-        if (!isSuccessApp || !taskInfo) return;
-        if (isSuccessApp && !hasPermission) {
-            toast.error("Bạn không có quyền truy cập tính năng này!");
-            return history.push("/");
-        };
+        // if (!isSuccessApp || !taskInfo) return;
+        if (!taskInfo) return;
+        // if (isSuccessApp && !hasPermission) {
+        //     toast.error("Bạn không có quyền truy cập tính năng này!");
+        //     return history.push("/");
+        // };
 
         if (taskInfo?.message === "permission_denied" ||
+            taskInfo?.message === "Not found task" ||
             taskInfo?.keyError === "permission_denied" ||
             taskInfo.error
         ) {
             toast.warn('Bạn không có quyền truy cập công việc này');
             return history.push(`/pcm/home`);
         }
-    }, [taskInfo, isSuccessApp, hasPermission])
+    }, [taskInfo])
+
+    // [taskInfo, isSuccessApp, hasPermission]
 
     useEffect(() => {
         if (!taskInfo || !user) return;
@@ -309,7 +306,7 @@ const PcmDetailTaskV2: FC = () => {
                     <TaskDetailDescription task={taskInfo} refetchInfo={refetchInfo} />
                     <TaskDetailMember task={taskInfo} user={user} refetchInfo={refetchInfo} />
                     {
-                        taskInfo?.signatures.length ? <TaskDetailSignature task={taskInfo} />: <></>
+                        taskInfo?.signatures?.length ? <TaskDetailSignature task={taskInfo} />: <></>
                     }
                     <TaskDetailOpenedBidding task={taskInfo} />
                     <TaskDetailSubtask task={taskInfo} userId={user?._id} />

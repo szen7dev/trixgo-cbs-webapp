@@ -71,8 +71,9 @@ const PcmTasksReportPage: FC = () => {
   }, [isSuccessApp, hasPermission]);
 
   useEffect(() => {
-    if(!infoReport) return;
-
+    if(!infoReport || !infoReport?.conditionPin)
+      return history.push("/pcm/report")
+      
     if(Object.keys(infoReport).length && Object.keys(infoReport?.conditionPin).length) {
       setParams(infoReport.conditionPin);
     }
