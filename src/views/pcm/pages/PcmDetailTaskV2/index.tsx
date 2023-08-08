@@ -57,7 +57,7 @@ const PcmDetailTaskV2: FC = () => {
             taskID: taskId
         },
         isFetchInfo: true
-    })
+    });
 
     useEffect(() => {
         (async () => {
@@ -76,18 +76,22 @@ const PcmDetailTaskV2: FC = () => {
         //     return history.push("/");
         // };
 
-        if (taskInfo?.message === "permission_denied" ||
-            taskInfo?.message === "Not found task" ||
-            taskInfo?.keyError === "permission_denied" ||
+        if (taskInfo.message === "permission_denied" ||
+            taskInfo.message === "Not found task" ||
+            taskInfo.keyError === "permission_denied" ||
             taskInfo.error
         ) {
             toast.warn('Bạn không có quyền truy cập công việc này');
             return history.push(`/pcm/home`);
         }
+
+        const { author, assignee, draft } = taskInfo;
+        if ((assignee._id === user?._id) && (author._id !== user?._id) && (draft === 1)) {
+            toast.warn('Bạn không có quyền truy cập công việc này');
+            return history.push(`/pcm/home`);
+        }
     }, [taskInfo])
-
-    // [taskInfo, isSuccessApp, hasPermission]
-
+    
     useEffect(() => {
         if (!taskInfo || !user) return;
 

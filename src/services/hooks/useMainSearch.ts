@@ -116,11 +116,11 @@ export const useSearchTask = ({
                 select: "name fullname image sign content author createAt sign files",
                 populate: {
                     path: "author files images",
-                    select: "fullname image sign nameOrg path createAt",
-                    // populate: {
-                    //     path: "author",
-                    //     select: "fullname" 
-                    // } 
+                    select: "fullname author image sign nameOrg path createAt",
+                    populate: {
+                        path: "author",
+                        select: "bizfullname image" 
+                    } 
                 }
             }),
             ...params,

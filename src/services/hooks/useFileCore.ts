@@ -18,7 +18,6 @@ type UseFileCoreParams = {
 }
 
 export const useFileCore = (props?: UseFileCoreParams) : UseFileCore => {
-
     const { mutateAsync: updateFileAsync } =
         useMutation((payload: FileUpdatePayload) =>
             FileRepository.updateFile(payload)
