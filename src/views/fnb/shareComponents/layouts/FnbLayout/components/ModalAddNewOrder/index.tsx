@@ -925,7 +925,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                         checked={(values.salesChannel === 2) ? true : false}
                                       />
                                     }
-                                    label={<span className="text-[13px]">Grab</span>}
+                                    label={<span className="text-[13px]" title="Grab Food">Grab F</span>}
                                   />
                                   <FormControlLabel
                                     sx={{ marginLeft: "0" }}
@@ -943,7 +943,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                         checked={(values.salesChannel === 3) ? true : false}
                                       />
                                     }
-                                    label={<span className="text-[13px]">Shopee</span>}
+                                    label={<span className="text-[13px]" title="Shopee Food">Shopee F</span>}
                                   />
                                   <FormControlLabel
                                     sx={{ marginLeft: "0" }}
@@ -1000,6 +1000,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                     label={<span className="text-[13px]">Loship</span>}
                                   />
                                   <FormControlLabel
+                                    className="border-r mr-1.5"
                                     sx={{ marginLeft: "0" }}
                                     value="7"
                                     control={
@@ -1015,8 +1016,48 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                         checked={(values.salesChannel === 7) ? true : false}
                                       />
                                     }
-                                    label={<span className="text-[13px]">Bee</span>}
+                                    label={<span className="text-[13px] mr-1.5">Bee</span>}
                                   />
+
+                                  <FormControlLabel
+                                    sx={{ marginLeft: "0" }}
+                                    title="Sàn TikTok Shop"
+                                    value="8"
+                                    control={
+                                      <Radio
+                                        style={{}}
+                                        icon={<img src={RadioEmpty} alt="" />}
+                                        checkedIcon={<img src={RadioChecked} alt="" />}
+                                        onChange={() => {
+                                          setFieldValue("salesChannel", 8);
+                                          setFieldValue("paymentMethod", "2")
+                                          setService("2");
+                                        }}
+                                        checked={(values.salesChannel === 8) ? true : false}
+                                      />
+                                    }
+                                    label={<span className="text-[13px]">TikTok Shop</span>}
+                                  />
+                                  <FormControlLabel
+                                    sx={{ marginLeft: "0" }}
+                                    title="Sàn thương mại shopee (không phải Shopee Food)"
+                                    value="9"
+                                    control={
+                                      <Radio
+                                        style={{}}
+                                        icon={<img src={RadioEmpty} alt="" />}
+                                        checkedIcon={<img src={RadioChecked} alt="" />}
+                                        onChange={() => {
+                                          setFieldValue("salesChannel", 9);
+                                          setFieldValue("paymentMethod", "2");
+                                          setService("2");
+                                        }}
+                                        checked={(values.salesChannel === 9) ? true : false}
+                                      />
+                                    }
+                                    label={<span className="text-[13px]">Shopee S</span>}
+                                  />
+
                                 </RadioGroup>
                               </FormControl>
                             </div>
