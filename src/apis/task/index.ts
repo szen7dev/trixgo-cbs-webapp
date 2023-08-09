@@ -37,7 +37,7 @@ const populatesTask = JSON.stringify({
   select: "_id name fullname bizfullname position email phone image sign signature _id name nameOrg description size path mimeType type author assignee createAt members admins company expiredTime project openedStatus date",
   populate: {
     path: "author assignee project storage position",
-    select: "_id bizfullname image sign signature name email phone"
+    select: "_id bizfullname fullname image sign signature name email phone"
   }
 })
 
@@ -135,7 +135,7 @@ const TaskRepository = {
   async taskInfo(payload: TaskInfoParams): Promise<any> {
     const { data } = await API.get(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl({
-        select: "name description type typeStatus status draft alert priority project contract parent checklist createAt field group author assignee related expiredTime startTime actualStartTime actualFinishTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures openedUsers comments amountComment amountResponse amountMarkedResponse startTime subtype flags milestone links openedStatus amountCurrentStatus amountSolution amountResponseOther accessUsers timeImportExcel milestone unit unitPrice quantity amountoftime judgement ontime quality viewedUsers linksDocs amount",
+        select: "name description type typeStatus status draft alert priority project contract parent checklist createAt field group author assignee related expiredTime startTime actualStartTime actualFinishTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures openedUsers comments amountComment amountResponse amountMarkedResponse startTime subtype flags milestone links openedStatus amountCurrentStatus amountSolution amountResponseOther accessUsers timeImportExcel milestone unit unitPrice quantity amountoftime judgement ontime quality viewedUsers linksDocs amount vatAmount",
         populates: populatesTask,
         ...payload
       })}`
