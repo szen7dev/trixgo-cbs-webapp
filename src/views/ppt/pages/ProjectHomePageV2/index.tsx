@@ -75,7 +75,7 @@ const ProjectHomePageV2: FC = () => {
 				</table>
 			</div> */}
 
-			<p className={"font-bold text-primary-gray mt-6"}>Hình ảnh gần đây</p>
+			{/* <p className={"font-bold text-primary-gray mt-6"}>Hình ảnh gần đây</p>
 			<div className={"swipe-image w-full mt-4 relative"}>
 				<Carousel
 					itemsToShow={6}
@@ -102,7 +102,7 @@ const ProjectHomePageV2: FC = () => {
 						))
 					}
 				</Carousel>
-			</div>
+			</div> */}
 			
 			{/* <table className={"mt-6 table-fixed w-full"}>
 				<thead>
