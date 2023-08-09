@@ -36,6 +36,8 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
 		isExporting: false,
 	});
 
+    // console.log(task)
+
     const { updateTaskAsync } = useTask({});
     useOnClickOutside(wrapperClass, () => setShowOption(false));
 	const { downloadTemplateImportExcelTaskAsync, importTaskFromExcelAsync } = usePcmPlanTaskCustom({});
@@ -318,7 +320,7 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                                         )
                                     }}
                                 >
-                                    Cập nhật giá trị thực hiện
+                                    Cập nhật khối lượng và giá trị
                                 </button>
 
                                 <button

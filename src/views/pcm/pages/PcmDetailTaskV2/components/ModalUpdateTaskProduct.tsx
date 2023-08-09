@@ -18,6 +18,8 @@ export const ModalUpdateTaskProduct: FC<Props> = ({ task, closeModal, onConfirm 
 		quantity: task.quantity,
 		unitPrice: task.unitPrice,
 		amountoftime: task.amountoftime,
+		amount: task.amount,
+		vatAmount: task.vatAmount,
 	});
 
 	const { updateTaskAsync } = useTask({});
@@ -56,7 +58,7 @@ export const ModalUpdateTaskProduct: FC<Props> = ({ task, closeModal, onConfirm 
 		<div>
 			<div className="flex items-center px-6 py-2.5 justify-between">
 				<h3 className="text-2x-large font-bold" >
-					Cập nhật thông tin sản lượng
+					Cập nhật khối lượng và giá trị
 				</h3>
 				<button
 					type="button"
@@ -106,6 +108,24 @@ export const ModalUpdateTaskProduct: FC<Props> = ({ task, closeModal, onConfirm 
 						type="number"
 						name='unitPrice'
 						defaultValue={task.unitPrice}
+						onChange={handleChange}
+					/>
+					<p className='mb-2'>Thành tiền</p>
+					<input
+						className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 mb-3 placeholder-primary-gray bg-cbs-table-header"}
+						placeholder={"Thành tiền"}
+						type="number"
+						name='amount'
+						defaultValue={task.amount}
+						onChange={handleChange}
+					/>
+					<p className='mb-2'>Thuế GTGT</p>
+					<input
+						className={"w-full rounded-md border border-primary-border px-2 py-1 pb-3 mb-3 placeholder-primary-gray bg-cbs-table-header"}
+						placeholder={"Thuế GTGT"}
+						type="number"
+						name='vatAmount'
+						defaultValue={task.vatAmount}
 						onChange={handleChange}
 					/>
 					<p className='mb-2'>Dự kiến thời lượng</p>
