@@ -7,7 +7,7 @@ import { NavLink } from 'react-router-dom';
 // import shieldIcon from "assets/images/icons8-user-shield-48.svg";
 // import paperPenIcon from "assets/images/icons-paper-pen.svg";
 // import fileIcon from "assets/images/icon-file.svg";
-// import documentIcon from "assets/images/icons8-document.svg";
+import documentIcon from "assets/images/icons8-document.svg";
 
 import rocketIcon from "assets/images/icons8-rocket.svg"
 import reportIcon from "assets/images/icons8-report.svg";
@@ -40,12 +40,12 @@ export const PmLeftMenuContent:FC = () => {
             count: 0,
             route: '/pm/dashboard-task'
         },
-        // {
-        //     label: "Báo cáo hồ sơ",
-        //     icon: documentIcon,
-        //     count: 0,
-        //     route: '/pm/dashboard-document'
-        // },
+        {
+            label: "Báo cáo hồ sơ",
+            icon: documentIcon,
+            count: 0,
+            route: '/pm/dashboard-document'
+        },
     ]
 
     const renderNav = (nav: {
