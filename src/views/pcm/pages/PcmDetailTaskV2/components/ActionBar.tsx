@@ -118,7 +118,7 @@ export const ActionTaskDetailBar: FC<Props> = ({ task, user, refetchTaskInfo, ha
                     (task.subtype == 4 && task.assignee._id.toString() == user?._id.toString()) ? <></> : <AddUserRelated task={task} onConfirmAddUserRelated={refetchTaskInfo} />
                 }
                 {
-                    (task.subtype == 4 && task.assignee._id.toString() == user?._id.toString()) ? <></> : 
+                    (task.subtype == 4) ? <></> : 
                     <button
                         onClick={handleDownloadFiles}
                         className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mx-3 relative"}
