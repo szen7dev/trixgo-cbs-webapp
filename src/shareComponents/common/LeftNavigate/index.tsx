@@ -77,7 +77,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
         <img className="w-4" src={menuIcon} alt="Menu" />
       </button>
 
-      {checkPermissionApp('5dfe4b9051dc622100bb9d89') ?
+      {checkPermissionApp('5eabfdc72171391e5f6a0468') ?
         <Link to={`/`} className={"flex flex-col items-center mb-3"}>
           <div
             className={
