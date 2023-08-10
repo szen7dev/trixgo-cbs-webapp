@@ -6,7 +6,7 @@ import { useTask } from "services/hooks/useTask";
 
 type Props = {
     taskId: string;
-    taskUpcoming: string;
+    taskUpcoming?: string;
     onConfirm?: () => void;
 }
 
