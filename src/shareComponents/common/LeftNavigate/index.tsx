@@ -77,8 +77,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
         <img className="w-4" src={menuIcon} alt="Menu" />
       </button>
 
-      {checkPermissionApp('5eabfdc72171391e5f6a0468') ?
-        <Link to={`/`} className={"flex flex-col items-center mb-3"}>
+      <Link to={`/`} className={"flex flex-col items-center mb-3"}>
           <div
             className={
               "px-4 py-1 rounded-full relative " +
@@ -104,8 +103,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
             {/*}*/}
           </div>
           <span className={"text-primary-gray mt-1"}>{t("menu:subject")}</span>
-        </Link> : <></>
-      }
+        </Link>
       {checkPermissionApp('5dfe4b9051dc622100bb9d89') ?
         <Link to={`/pm/projects`} className={"flex flex-col items-center mb-3"}>
           <div
