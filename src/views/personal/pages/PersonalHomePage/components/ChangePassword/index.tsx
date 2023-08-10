@@ -1,5 +1,5 @@
 /*=====1.LIBRARY=====*/
-import { FC, FormEvent, useEffect, useState, memo, ChangeEvent, useMemo } from "react";
+import { FC, useEffect, useState, memo, ChangeEvent } from "react";
 // import { Link } from "react-router-dom";
 // import { useTranslation } from "react-i18next";
 import SwiperCore, { Pagination } from 'swiper';
@@ -26,7 +26,7 @@ import { useUpload } from 'services/hooks/useUpload';
 import { useUser } from 'services/hooks/personal/useUser';
 import { useAuth } from "services/hooks/auth/useAuth";
 import { toast } from "react-toastify";
-import { resolve } from "path";
+// import { resolve } from "path";
 
 /*=====7.OTHER=====*/
 

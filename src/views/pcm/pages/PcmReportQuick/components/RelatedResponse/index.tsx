@@ -419,35 +419,6 @@ export const RelatedResponse: FC<Props> = ({ project }) => {
           </div>
         </div>
         <div className="flex justify-between items-center">
-          {/* <div className="flex items-end my-5 space-x-8">
-            <div>
-              <p className="text-x-large">Phản hồi liên quan</p>
-            </div>
-            <button
-              className={getClassTab(RelatedResponseTab.ALL)}
-              onClick={onClickTabAll}
-            >
-              <span className="text-[13px]">Tất cả ({amountResponse})</span>
-            </button>
-          </div> */}
-          {/* <div className="flex justify-center w-10 h-10 rounded-full bg-gray-200">
-            <button className="w-full" onClick={() => setIsExpand(!isExpand)}>
-              <div className="flex flex-col items-center space-y-1">
-                <img
-                  src={ChevronUpIcon}
-                  alt="Cheveron Icon"
-                  className={`${isExpand ? "transform rotate-180" : "transform rotate-0"
-                    } w-3`}
-                />
-                <img
-                  src={ChevronUpIcon}
-                  alt="Cheveron Icon"
-                  className={`${isExpand ? "transform rotate-0" : "transform rotate-180"
-                    } w-3`}
-                />
-              </div>
-            </button>
-          </div> */}
         </div>
         {(amountComment && amountComment > LIMIT_PER_PAGE_RESPONSE) ? (
           <p className="mb-5 text-sm text-primary">

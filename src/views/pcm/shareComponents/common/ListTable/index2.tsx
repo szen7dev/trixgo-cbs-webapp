@@ -7,7 +7,7 @@ import cn from "classnames";
 import styles from "views/pcm/styles/pcm_task.module.css";
 import { ListProgress } from "../Progress";
 import { Executor } from "../Executor";
-import { PCM_PROPOSAL_TASK, PCM_STATUS_TASK } from "apis/localdb/index";
+import { PCM_STATUS_TASK } from "apis/localdb/index";
 
 type Task = {
   data: Array<any>;

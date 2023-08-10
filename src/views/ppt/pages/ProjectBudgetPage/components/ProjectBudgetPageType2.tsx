@@ -1,11 +1,11 @@
 import React, {FC, useState} from "react";
-import {DropdownSearchableV2} from "shareComponents/common";
-import categoryIcon from "assets/images/icons8-category-48.svg";
-import contractIcon from "assets/images/icons8-contract-64-blue.svg";
+// import {DropdownSearchableV2} from "shareComponents/common";
+// import categoryIcon from "assets/images/icons8-category-48.svg";
+// import contractIcon from "assets/images/icons8-contract-64-blue.svg";
 import {NavigateTabBudgetPage} from "./NavigateTabBudgetPage";
-import downloadIcon from "assets/images/icons8-download-64.svg";
-import iconPencil from "assets/images/icons8-pencil-96 1.png";
-import nextIcon from "assets/images/icons-arrow-next.svg";
+// import downloadIcon from "assets/images/icons8-download-64.svg";
+// import iconPencil from "assets/images/icons8-pencil-96 1.png";
+// import nextIcon from "assets/images/icons-arrow-next.svg";
 import { useContract } from "services/hooks/items/useContract";
 import {Project} from "typings/items/project";
 import PaginateV2 from "shareComponents/common/PaginateV2";

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import iconAdd from "../../../../../assets/images/icons8-add-96-2.svg";
-import iconStar from "../../../../../assets/images/icons8-star-96 3.svg";
+// import iconStar from "../../../../../assets/images/icons8-star-96 3.svg";
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 

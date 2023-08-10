@@ -1,9 +1,8 @@
-import React, { FC, HTMLAttributes, useMemo } from 'react';
+import { FC, HTMLAttributes } from 'react';
 import { Link } from 'react-router-dom';
 
 import { DataBlock2 } from 'typings/ppt/department';
 import { convertToInternationalCurrencySystem } from 'utils/ppt';
-
 interface Props {
 	data?: DataBlock2
 }
