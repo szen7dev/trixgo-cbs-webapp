@@ -140,7 +140,10 @@ export const ActionTaskDetailBar: FC<Props> = ({ task, user, refetchTaskInfo, ha
                 </div>
             </button> */}
             {/* <TaskHistoryLog/> */}
-            <TaskHistoryLog task={task} userId={user?._id} refetchTaskInfo={refetchTaskInfo}/>
+            {
+                (task.subtype == 4) ? <></> :
+                <TaskHistoryLog task={task} userId={user?._id} refetchTaskInfo={refetchTaskInfo}/>
+            }
             {/* <button className={"rounded bg-cbs-green-medium h-[36px] text-white flex items-center justify-center px-3 mx-3"}>
                 <img src={iconMember} alt={"----"} className={"w-[24px] mr-2"}/>
                 <span>Chia sẻ</span>
