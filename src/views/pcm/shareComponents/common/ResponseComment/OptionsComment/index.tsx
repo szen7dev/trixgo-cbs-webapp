@@ -1,9 +1,9 @@
-import React, {FC, useRef, useState} from "react";
+import {FC, useRef, useState} from "react";
 import {useOnClickOutside} from "services/hooks/useOnclickOutside";
 import DotsVerticalIcon from "assets/icons/DotsVertical";
 import iconUpload from "assets/images/icons8-upload-48.svg";
-import iconReply from "assets/images/icons8-reply-arrow-48.svg";
-import iconReplyAll from "assets/images/icons8-reply-all-arrow-96.svg";
+// import iconReply from "assets/images/icons8-reply-arrow-48.svg";
+// import iconReplyAll from "assets/images/icons8-reply-all-arrow-96.svg";
 
 type Props = {
     handleUploadAttachments: (files: FileList | null) => void

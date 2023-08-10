@@ -1,12 +1,10 @@
-import {FC, useState, useMemo, ChangeEvent, useRef} from "react";
+import {FC, useState, useMemo, useRef} from "react";
 import taskUserAvt from "assets/images/task-user.svg";
 import trigangleDown from "assets/images/triangle-down.svg";
 import iconUpload from "assets/images/icons8-upload-48.svg";
 import iconLink from "assets/images/icons8-link-96-v3.svg";
 import iconAttach from "assets/images/icons8-attach-48.svg";
-// import imageDemo from "assets/images/task-detail-image.png";
-// import {listEmoji} from "../../../../../messages/pages/MessageHome/sections/ChattingSection";
-import type { Comment as CommentType, CommentProps, Task } from "typings/task";
+import type { Comment as CommentType, CommentProps } from "typings/task";
 import moment from "moment";
 import { nl2p, removeHTMLTags, sliceText } from 'utils';
 import { humanFileSize } from 'utils/converter';

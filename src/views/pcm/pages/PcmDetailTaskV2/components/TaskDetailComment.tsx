@@ -115,9 +115,6 @@ export const TaskDetailComment: FC<Props> = ({ task, refetchInfo }) => {
                 <button onClick={() => setFilter(1)} className={"text-primary-gray text-[16px] " + (filter === 1 ? "font-bold border-b border-primary-gray" : "")}>
                     Phản hồi liên quan ({task.amountResponse || 0})
                 </button>
-                {/* <button onClick={() => setFilter(6)} className={"text-primary-gray text-[16px] mx-4 " + (filter === 6 ? "font-bold border-b border-primary-gray" : "")}>
-                    Fille ({task.authorAttachs || 0})
-                </button> */}
                 {((task.subType === 4 && task.openedStatus === 1) || task.assignee?._id === user?._id || task.subType !== 4) && (
                     <button onClick={() => setFilter(2)} className={"text-primary-gray text-[16px] mx-4 " + (filter === 2 ? "font-bold border-b border-primary-gray" : "")}>
                         Nội dung chốt ({task.amountMarkedResponse || 0})
@@ -129,9 +126,9 @@ export const TaskDetailComment: FC<Props> = ({ task, refetchInfo }) => {
                 <button onClick={() => setFilter(4)} className={"text-primary-gray text-[16px] mx-4 " + (filter === 4 ? "font-bold border-b border-primary-gray" : "")}>
                     Giải pháp ({task.amountSolution || 0})
                 </button>
-                <button onClick={() => setFilter(5)} className={"text-primary-gray text-[16px] mx-4 " + (filter === 5 ? "font-bold border-b border-primary-gray" : "")}>
+                {/* <button onClick={() => setFilter(5)} className={"text-primary-gray text-[16px] mx-4 " + (filter === 5 ? "font-bold border-b border-primary-gray" : "")}>
                     Khác ({task.amountResponseOther || 0})
-                </button>
+                </button> */}
                 <div className={"flex flex-1 items-center justify-end"}>
                     <button onClick={() => setCollapseComment(!collapseComment)} className={"flex items-center justify-center w-[40px] h-[40px]"}>
                         <img src={CollapseShow} alt={"----"} className={!collapseComment ? "hidden" : "block"} />
@@ -147,7 +144,6 @@ export const TaskDetailComment: FC<Props> = ({ task, refetchInfo }) => {
             )}
 
             <div className={"list-comment mt-4"}>
-                {/* !totalRecord && !_comments?.length */}
                 {_comments.map((comment: CommentProps, index: number) => (
                     <ParentResponseComment
                         key={comment._id}

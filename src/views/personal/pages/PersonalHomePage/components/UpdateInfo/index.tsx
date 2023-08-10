@@ -54,9 +54,9 @@ export const UpdateInfo: FC = () => {
 		localStorage.setItem("user_language", values.lang);
 	}
     
-	const updateAvatar = async (values: UpdateAvatarUser) => {
-		await updateAvatarUser(values);
-	}
+	// const updateAvatar = async (values: UpdateAvatarUser) => {
+	// 	await updateAvatarUser(values);
+	// }
 	  
 	useEffect(() => {
 	refetchDataUserInfo()
