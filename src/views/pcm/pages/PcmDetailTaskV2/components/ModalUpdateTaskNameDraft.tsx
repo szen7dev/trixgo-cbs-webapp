@@ -2,7 +2,6 @@ import React, { FC, useState } from "react";
 
 import { useModal } from "services/hooks/useModal";
 import { toast } from "react-toastify";
-import { usePcmReport } from "services/hooks/pcm/usePcm";
 import { useTask } from "services/hooks/useTask";
 
 type Props = {
@@ -50,7 +49,7 @@ export const ModalUpdateTaskNameDraft: FC<Props> = ({ taskId, taskName, onConfir
   return (
     <main className="relative h-full">
       <header className="px-10 py-5 flex items-center justify-between">
-        <p className="font-bold text-xl">Cập nhật tên công việc nháp</p>
+        <p className="font-bold text-xl">Cập nhật tiêu đề công việc</p>
         <img
           src={`${process.env.PUBLIC_URL}/images/common/icon-small-bold-close.svg`}
           alt="Close"

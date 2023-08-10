@@ -11,6 +11,7 @@ import { createLinkAndClick } from 'utils';
 import { read, utils } from 'xlsx';
 import { useModal } from "services/hooks/useModal";
 import { ModalUpdateTaskNameDraft } from "./ModalUpdateTaskNameDraft";
+import { ModalUpdateTaskUpcoming } from "./ModalUpdateTaskUpcoming";
 import { ModalConfirm } from "shareComponents/common";
 import { useTask } from "services/hooks/useTask";
 import { ModalMoveTaskToParent } from "./ModalMoveTaskToParent";
@@ -27,6 +28,7 @@ type Props = {
 }
 
 export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
+    console.log(task)
     const { openModal, closeModal } = useModal();
     const wrapperClass = useRef<HTMLDivElement>(null)
     const [showOption, setShowOption] = useState(false);
@@ -299,6 +301,22 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
                         </button>
 
                         <hr style={{ opacity: '.3', width: '90%', display: 'flex', alignContent: 'center', alignItems: 'center', margin: 2 }} />
+
+                        <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
+                            onClick={() => {
+                                openModal(
+                                <div
+                                    className={
+                                    "inline-block w-[521px] h-[200px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
+                                    }
+                                >
+                                    <ModalUpdateTaskUpcoming taskId={task._id} taskUpcoming={task.upcoming} onConfirm={refetchTaskInfo} />
+                                </div>
+                                )
+                            }}
+                        >
+                            Cập nhật theo quy trình động
+                        </button>
 
                         {task.author._id.toString() == userId?.toString() && (
                             <>

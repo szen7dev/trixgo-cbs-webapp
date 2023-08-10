@@ -109,6 +109,7 @@ export type Task = {
   error?: boolean;
   timeImportExcel?: string;
   keyError?: string;
+  upcoming?: string;
 };
 
 export interface addTaskPayload {
@@ -163,6 +164,7 @@ export interface updateTaskPayload {
   linksDocs?: Array<string>;
   usersDeleteID?: Array<string>;
   isUpdateNews?: boolean;
+  upcoming?: string;
 }
 
 export interface updateStatusMultiplePayload {
