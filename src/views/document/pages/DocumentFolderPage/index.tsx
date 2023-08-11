@@ -113,14 +113,6 @@ export const DocumentFolderPage: FC = () => {
                     Số lượng hồ sơ
                   </span>
                 </th>
-                <th
-                  className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border"
-                  style={{ minWidth: "150px" }}
-                >
-                  <span className="pl-2 border-l border-cbs-border">
-                    Thành viên
-                  </span>
-                </th>
               </tr>
             </thead>
             <tbody className="">
@@ -173,38 +165,6 @@ export const DocumentFolderPage: FC = () => {
                       })}
                     </td>
                     <td className="py-2 px-2">{elm?.numberOfDocs || 0}</td>
-                    <td className="py-2 px-2">
-                      <div className="flex">
-                        {Array.isArray(elm.members) &&
-                          (elm?.members?.length > 5 ? (
-                            <>
-                              {elm.members.slice(0, 4).map((member) => (
-                                <img
-                                  key={member._id}
-                                  src={`${process.env.REACT_APP_URL_S3_USER}/${member.image}`}
-                                  alt=""
-                                  className="w-6 h-6 rounded-full"
-                                />
-                              ))}
-                              <div
-                                className="h-6 w-6 rounded-full -ml-1.5 bg-cbs-border text-white flex justify-center items-center"
-                                style={{ fontSize: "10px" }}
-                              >
-                                +{elm.members.length - 4}
-                              </div>
-                            </>
-                          ) : (
-                            elm.members.map((member) => (
-                              <img
-                                key={member._id}
-                                src={`${process.env.REACT_APP_URL_S3_USER}/${member.image}`}
-                                alt=""
-                                className="w-6 h-6 rounded-full"
-                              />
-                            ))
-                          ))}
-                      </div>
-                    </td>
                   </tr>
                 );
               })}

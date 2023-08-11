@@ -1,53 +1,24 @@
-import { FC, useState, useRef, useEffect } from "react";
+import { FC, useState, useEffect } from "react";
 import { RouteComponentProps, useHistory, useParams, Link } from "react-router-dom";
 import { PCM_STATUS_TASK } from 'apis/localdb';
 import { useModal } from "services/hooks/useModal";
 
 import GroupDefaultIcon from "assets/images/icons8-star-96.png";
 import '../../style.css';
-// import { SetGroupDefault } from "./modal";
 
 // HOOK
-// import useCheckedList from "services/hooks/ppt/useCheckedList";
 import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
 import { usePcmProject } from "services/hooks/pcm/usePcmProject";
 import { useTask } from "services/hooks/useTask";
 import moment from "moment";
 import { useAuth } from "services/hooks/auth/useAuth";
-// import { useHistoryTraffics } from "services/hooks/auth/useAuth";
-// import { Paginate, SearchInput } from "shareComponents/common";
-// import debounce from "lodash/debounce";
 import nextIcon from "assets/images/icons-arrow-next.svg";
 import iconBack from "assets/images/icon-back-gray.svg";
-// import downloadIcon from "assets/images/icons8-download-64.svg";
-// import userAvt from "assets/images/task-user.svg";
-// import iconFolder from "assets/images/icons8-folder-96 4.svg";
-// import iconFile from 'assets/images/icons8-audit-96.png';
 import IconAddNew from "assets/images/Frame 4048.svg";
 import DownloadIcon from "assets/images/icons8-download-96.svg";
 import { ModalAddNewTask } from "shareComponents/common";
 import API from "apis/repository";
 import { toast } from "react-toastify";
-
-// interface IData {
-// 	id: number,
-// 	type: string,
-// 	content: string,
-// 	created_by: string,
-// 	created_at: string,
-// 	code: string,
-// 	count: number,
-// 	status: number,
-// 	path: string,
-// }
-
-// const IconArrowRight = () => (
-// 	<div className="">
-// 		<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-// 			<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-// 		</svg>
-// 	</div>
-// )
 
 const FolderIcon: FC<{ type: string }> = ({ type }) => {
 	switch (type) {
@@ -63,24 +34,12 @@ const FolderIcon: FC<{ type: string }> = ({ type }) => {
 }
 
 const ProjectFolderPage: FC<RouteComponentProps> = () => {
-	//_____Start history traffict
-	// const payloadHistoryTraffic: any = {
-	// 	appID: APP_ID.PCM.id,
-	// 	menuID: APP_ID.PCM.menuPcmProject.folder.id,
-	// 	type: "1"
-	//   };
-	// const { createHistoryTraffics } = useHistoryTraffics();
-	// useEffect(() => {
-	// 	createHistoryTraffics({...payloadHistoryTraffic, type: 1});
-	// }, []);
-	//_____End history traffict
 	const history = useHistory();
 	const { openModal } = useModal();
 	const { id: projectID, groupID } = useParams<{ id: string, groupID: string }>();
 	const { infoDepartment } = usePcmProject({ departmentID: projectID });
 	const { dataUserInfo, refetchDataUserInfo } = useAuth();
-	const [keyword] = useState("");
-	const toastId = useRef(null);
+	const [keyword] = useState("")
 
 	const {
 		data: listPcmPlanGroup,
@@ -224,55 +183,6 @@ const ProjectFolderPage: FC<RouteComponentProps> = () => {
 						</>
 					)}
 				</div>
-
-				{/* <div className={"table-folder-project"}>
-					<table className={"table-fixed w-full border-collapse"}>
-						<thead className={"sticky top-0"}>
-							<tr>
-								<th className={"w-1/3 border-b-0.5 border-primary-border px-4 py-2 text-left text-primary-gray font-normal"}>
-									Tên
-								</th>
-								<th className={"w-1/4 border-b-0.5 border-primary-border px-4 py-2 text-left text-primary-gray font-normal"}>
-									Người tạo
-								</th>
-								<th className={"w-1/4 border-b-0.5 border-primary-border px-4 py-2 text-left text-primary-gray font-normal"}>
-									Cập nhật lần cuối
-								</th>
-								<th className={"border-b-0.5 border-primary-border px-4 py-2 text-left text-primary-gray font-normal"}>
-									Thành viên
-								</th>
-							</tr>
-						</thead>
-						<tbody>
-						{
-							[...Array(4)].map((e,i) => (
-								<tr key={i}>
-									<td className={"px-4 py-2 border-b-0.5 border-primary-border align-middle"}>
-										<Link to={`/pm/project/60a8cb540400462461cbff9f/folder/624bcf04c9e6180a5570fbfa`}>
-											<div className={"flex items-center"}>
-												<FolderIcon type="folder" />
-												<p className={"ml-4"}>Báo cáo tổng hợp giai đoạn</p>
-											</div>
-										</Link>
-									</td>
-									<td className={"px-4 py-2 border-b-0.5 border-primary-border align-middle"}>
-										<div className={"flex items-center"}>
-											<img src={userAvt} alt={"-----"} className={"w-[24px] h-[24px] min-w-[24px] min-h-[24] max-w-[24px] max-h-[24px] rounded-full overflow-hidden"}/>
-											<p className={"ml-4"}>Nguyễn Phan Thanh Hương-CPMI</p>
-										</div>
-									</td>
-									<td className={"px-4 py-2 border-b-0.5 border-primary-border text-primary-gray align-middle"}>
-										15:30 22/12/2012 (2 day ago)
-									</td>
-									<td className={"px-4 py-2 border-b-0.5 border-primary-border text-primary-gray align-middle"}>
-										122
-									</td>
-								</tr>
-							))
-						}
-						</tbody>
-					</table>
-				</div> */}
 
 				<div className="flex-1 overflow-y-auto">
 					<table className="text-black text-medium border-separate space-x-0 space-y-0 w-full border-collapse	" style={{ borderSpacing: 0 }}>

@@ -29,7 +29,7 @@ const ProjectDashboardPortfolioPage: FC = () => {
 	// ---------
 
 	useEffect(() => {
-		document.title = "Báo cáo đầu tư";
+		document.title = "Trixgo | Báo cáo đầu tư";
 	}, []);
 
 	return (
@@ -37,6 +37,7 @@ const ProjectDashboardPortfolioPage: FC = () => {
 			<div className="custom-scroll overflow-y-auto p-4 pt-0 flex-1">
 				{/* Content */}
 				<PortfolioAnalysisContainer />
+				
 				{/* Table */}
 				<PortfolioTableContainer />
 			</div>
