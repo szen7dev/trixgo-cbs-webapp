@@ -1,5 +1,4 @@
 import React, {
-  FC,
   ReactNode,
   useEffect,
   useRef,
@@ -8,8 +7,6 @@ import React, {
 } from "react";
 import { map as _map } from "lodash";
 import classNames from "classnames";
-// import API from "../../apis/repository";
-// import {GetSearchSelectResponse} from "../../typings/apis/searchSelect";
 import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import Close from "assets/icons/Close";
 import BlueCheck from "assets/images/blue-check.svg";
@@ -26,8 +23,6 @@ type Props = {
   id?: string;
   data?: Array<Item>;
   placeholder?: string;
-  // searchUrl?: string;
-  // searchParam?: string;
   initialValue?: Item | Item[];
   onchangeValue?: (item: Item) => void;
   className?: string;
@@ -61,13 +56,9 @@ type DropdownSearchableV2Handle = {
   resetDropdown: () => void;
   setValuesDropdown: (value: any) => void;
 }
-// type Params = {
-//     [key: string]: string;
-// }
+
 export const DropdownSearchableV2 = forwardRef<DropdownSearchableV2Handle, Props>(({
   data,
-  // searchUrl,
-  // searchParam,
   id,
   placeholder = "Lựa chọn",
   initialValue,
@@ -323,7 +314,7 @@ export const DropdownSearchableV2 = forwardRef<DropdownSearchableV2Handle, Props
               <div
                   key={readDataValue(option, "id")}
                   className={
-                    "relative border rounded-3xl p-2 mr-1.5 pr-8 mb-1.5 bg-white"
+                    "relative border rounded p-2 mr-1.5 pr-8 mb-1.5 bg-white"
                   }
                   title={
                     renderSelectedItem
