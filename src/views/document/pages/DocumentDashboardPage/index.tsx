@@ -157,9 +157,9 @@ export const DocumentDashboardPage: FC = () => {
 			<div className="flex flex-col text-sm text-black overflow-x-hidden bg-gray-100 px-3.5">
 				{/* Statistical  */}
 				<div className="flex flex-col bg-white text-cbs-subtext mt-4" style={{ height: "250px" }}>
-					<div className="flex justify-between flex-wrap items-center pl-6 pr-2.5">
+					{/* <div className="flex justify-between flex-wrap items-center pl-6 pr-2.5">
 						<h3 className="text-x-large mt-2.5">Thống kê hồ sơ theo dự án/phòng ban</h3>
-						{/* <div className="flex items-center mt-2.5">
+						<div className="flex items-center mt-2.5">
 							<ul className="flex text-x-small" onChange={handleChange.bind(this)}>
 								<li className="pr-3 pl-1">
 									<label>
@@ -187,8 +187,8 @@ export const DocumentDashboardPage: FC = () => {
 								</li>
 							</ul>
 							<button className="rounded-md border border-cbs-border p-2">Chọn thời gian</button>
-						</div> */}
-					</div>
+						</div>
+					</div> */}
 					<div className="flex-1">
 						<StatisticalChart listProject={listProject} listAmountDocument={listAmountDocument}/>
 					</div>
@@ -200,13 +200,9 @@ export const DocumentDashboardPage: FC = () => {
 						<thead className="bg-white sticky top-0 z-10">
 							<tr className="text-left whitespace-nowrap  border-b border-cbs-border">
 								<th className="font-normal pl-4 pr-3">Dự án</th>
-								<th className="font-normal pl-4 pr-3">Tổng số/Đã hoàn thành</th>
 								<th className="font-normal pl-4 pr-3">
-									Giám đốc dự án/PM/Thư ký
-								</th>
-								<th colSpan={3} className="font-normal pl-4 pr-3">
 									<div className="flex flex-nowrap justify-between items-center">
-										<div>Hoạt động gần đây nhất</div>
+										<div>Tiến trình dự án</div>
 										<div className="rounded-full flex my-2.5 bg-cbs-left-menu">
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
@@ -229,6 +225,7 @@ export const DocumentDashboardPage: FC = () => {
 										</div>
 									</div>
 								</th>
+								<th className="font-normal pl-4 pr-3">Tổng số/Đã hoàn thành</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -248,27 +245,24 @@ export const DocumentDashboardPage: FC = () => {
 								}
 								return (
 									<tr key={index}>
-										<td className="pb-2 pl-5 pr-4 pt-2.5 border border-cbs-border min-w-[360px]">
-											<div>
+										<td className="pb-2 pl-5 pr-4 pt-2.5 border border-cbs-border">
 											<Link 
 												className="text-black" 
 												to={generatePath("/pcm/project/:id/document", { id: department._id })}>	{department.sign}.{department.name}
 											</Link>
-												{/* <p className="text-black">
-													{department.sign}.{department.name}
-												</p> */}
-												<div className="flex justify-between mt-2.5">
-													<span>{moment(department.startTime).format("DD/MM/YYYY")}</span>
-													<span>{moment(department.expiredTime).format("DD/MM/YYYY")}</span>
-												</div>
-												<div className="border border-cbs-border h-1.5 box-border mt-2">
-													<div
-														className="bg-cbs-subtext h-full"
-														style={{ width: `${limitMinMaxDif(dif)}%` }}
-													></div>
-												</div>
-											</div>
 										</td>
+										<td className="pb-2 pl-5 pr-4 pt-2.5 border border-cbs-border">
+											<div className="flex justify-between mt-2.5">
+												<span>{moment(department.startTime).format("DD/MM/YYYY")}</span>
+												<span>{moment(department.expiredTime).format("DD/MM/YYYY")}</span>
+											</div>
+											<div className="border border-cbs-border h-1.5 box-border mt-2">
+												<div
+													className="bg-cbs-subtext h-full"
+													style={{ width: `${limitMinMaxDif(dif)}%` }}
+												></div>
+											</div>
+										</td>	
 										<td className="pb-2 pl-5 pr-4 pt-2.5 border border-cbs-border">
 											<div className="flex justify-between items-end mt-2.5">
 												<span className="text-2x-large text-black mr-auto">
@@ -284,92 +278,7 @@ export const DocumentDashboardPage: FC = () => {
 													}}
 												></div>
 											</div>
-										</td>
-										<td className="pb-2 pl-5 pr-4 pt-2.5 border border-cbs-border text-black">
-											<div className="whitespace-nowrap">
-												{department?.pm?.image && (
-													<img
-														src={`${process.env.REACT_APP_URL_S3_USER}/${department?.pm?.image}`}
-														alt="Director"
-														className="inline-block w-6 h-6 rounded-3xl mr-2.5"
-													/>
-												)}
-												{department?.pm?.bizfullname || department?.pm?.fullname}
-											</div>
-											<div className="whitespace-nowrap pl-9 w-max pt-1.5">
-												{department?.assistant?.image && (
-													<img
-														src={`${process.env.REACT_APP_URL_S3_USER}/${department?.assistant?.image}`}
-														alt="Secretary"
-														className="inline-block w-6 h-6 rounded-3xl mr-2.5"
-													/>
-												)}
-												{department?.assistant?.bizfullname || department?.assistant?.fullname}
-											</div>
-										</td>
-										<td
-											className="pb-2 pl-5 pr-1 pt-2.5 border border-r-0 border-cbs-border align-middle"
-											style={{ minWidth: "155px" }}
-										>
-											<p>
-												{/* <b>{department?.assistant?.fullname}</b>
-							 {department?.assistant?.fullname} hồ sơ
-							 <Link to="/">hồ sơ</Link> */}
-											</p>
-										</td>
-										<td className="pb-2 pl-1 pr-4 pt-2.5 border border-l-0 border-cbs-border align-middle text-right">
-											<div className="whitespace-nowrap">
-												<button
-													className={cn(
-														"text-small px-3 py-2 rounded-sm text-white"
-														//   getClass(d.actions.updateAt).class
-													)}
-												>
-													{/* {getClass(d.actions.updateAt).message} */}
-												</button>
-											</div>
-										</td>
-										<td
-											className="pl-5 border border-cbs-border relative"
-											style={{ minWidth: "420px" }}
-										>
-											{/* <div className="flex">
-												<div className="flex pb-2 pt-3 pr-2.5">
-													<div className="w-10 h-10 rounded-full overflow-hidden min-w-max mr-3">
-														<img
-															src="https://gamek.mediacdn.vn/133514250583805952/2021/9/17/photo-1-1631856680040545802895.jpg"
-															alt=""
-															width={40}
-															height={40}
-															className="h-full object-cover"
-														/>
-													</div>
-													<div>
-														<p className="font-bold"></p>
-														<p className="text-black mt-2"></p>
-													</div>
-												</div>
-												<div
-													className="whitespace-nowrap"
-													style={{ width: "75px" }}
-												>
-													10:22 AM
-												</div>
-											</div> */}
-											<button
-												className="absolute bottom-0 right-0 whitespace-nowrap w-max bg-cbs-table-header rounded-tl-md px-3 py-1.5 text-x-small"
-											//   onClick={() =>
-											//     setOpen({ show: true, mediaId: d.mediaId })
-											//   }
-											>
-												{/* <img
-													src={iconComment}
-													alt="Comment"
-													className="inline-block w-4 h-4 mr-1"
-												/>
-												<span className="align-middle">21.3k</span> */}
-											</button>
-										</td>
+										</td>									
 									</tr>
 								);
 							})}
