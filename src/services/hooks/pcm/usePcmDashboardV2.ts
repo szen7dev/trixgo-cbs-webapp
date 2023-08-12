@@ -141,6 +141,7 @@ export const usePcmDynamicReport = ({status}: any): any => {
     async () => {
       return pcmDashboardV2.pcmDynamicReport({
         reportType: 1,
+        upcoming: 1,
         status
       });
     },
@@ -154,6 +155,7 @@ export const usePcmDynamicReport = ({status}: any): any => {
     async () => {
       return pcmDashboardV2.pcmDynamicReport({
         option: 1, 
+        upcoming: 1,
         reportType: 1,
         status
       });
@@ -168,6 +170,7 @@ export const usePcmDynamicReport = ({status}: any): any => {
     async () => {
       return pcmDashboardV2.pcmDynamicReport({
         option: 2, 
+        upcoming: 1,
         reportType: 1, 
         status
       });
@@ -182,6 +185,7 @@ export const usePcmDynamicReport = ({status}: any): any => {
     async () => {
       return pcmDashboardV2.pcmDynamicReport({
         option: 5, 
+        upcoming: 1,
         reportType: 1, 
         status
       });
@@ -196,6 +200,7 @@ export const usePcmDynamicReport = ({status}: any): any => {
     async () => {
       return pcmDashboardV2.pcmDynamicReport({
         option: 6, 
+        upcoming: 1,
         reportType: 1,
         status
       });
@@ -210,6 +215,7 @@ export const usePcmDynamicReport = ({status}: any): any => {
     async () => {
       return pcmDashboardV2.pcmDynamicReport({
         option: 7, 
+        upcoming: 1,
         reportType: 1
       });
     },

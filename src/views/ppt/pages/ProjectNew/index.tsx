@@ -25,6 +25,7 @@ const ProjectNew: FC = () => {
     const toDate = useAppSelector(state => state.dashboardV2.data.pcmMine.toDate);
     const statusIDs = status.map((e: any) => e.id);
     const { data, dataForCompanies, dataForAuthors, dataForProject, dataForProposal, dataForStatus } = usePcmDynamicReport({
+        upcoming: 1,
         status: statusIDs
     });
     const dataMyTask = data?.data;

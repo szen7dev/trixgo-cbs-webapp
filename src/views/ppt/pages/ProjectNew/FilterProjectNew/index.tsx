@@ -57,6 +57,7 @@ const FilterProjectNew: FC<any> = ({ user, listDataCompany, listDataUser, listDa
     }, [status]);
 
     const querySearchTask: any = {
+        upcoming: 1,
         priority: priority,
         isExpired: isExpired,
         reportType: "1",
