@@ -295,7 +295,7 @@ export const FilterNav: FC<Props> = ({ type = 0, children }) => {
     return (
         <div className="t-home flex flex-col h-full overflow-hidden">
             <div className={"sticky top-0 bg-white z-10"}>
-                <div className={"filter-bar flex flex-wrap px-4 py-2"}>
+                <div className={"filter-bar flex flex-wrap px-4 py-1"}>
                     {(isLoadingResponse ||
                         isLoadingListTask ||
                         isFetchingNextPageSubject ||

@@ -148,7 +148,7 @@ const PcmHomeV2: FC<Props> = ({ type = 1, subtype, option, draft }) => {
             {(isFetchingListTask ||
                 isFetchingListTask) && <Loader className="border-primary" />}
 
-            <div className={"filter-bar flex flex-wrap px-4 py-2"}></div>
+            <div className={"filter-bar flex flex-wrap px-4 py-1"}></div>
 
             <div className={"header-table flex px-4 w-full top-0 bg-white pb-4 flex-wrap"}>
                 <div className={"border-0.5 border-primary-border flex items-center"}>

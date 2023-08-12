@@ -1,6 +1,6 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import FilterProjectNew from "./FilterProjectNew";
-import arrowDownIcon from "assets/images/Polygon 3.svg";
+// import arrowDownIcon from "assets/images/Polygon 3.svg";
 // import arrowRightIcon from "assets/images/arrowRight.svg";
 // import defaultAva from "assets/images/image 166.jpg";
 import { usePcmDynamicReport } from "services/hooks/pcm/usePcmDashboardV2";
@@ -35,19 +35,19 @@ const ProjectNew: FC = () => {
     const listDataStatus = dataForStatus?.data?.listDataStatus || [];
 
     return (
-        <div className="py-4 px-3 bg-cbs-bg-gray	">
-            <div className="flex text-lg mb-5">
+        <div className="py-4 px-3 bg-cbs-bg-gray">
+            {/* <div className="flex text-lg mb-5">
                 <div className="mr-[60px]">
                     <div className="flex gap-2 font-bold text-primary-gray">
                         <span>Tổng quan</span> <img src={arrowDownIcon} alt="" />
                     </div>
                 </div>
-                {/* <a href="" className="mr-[60px]">
+                <a href="" className="mr-[60px]">
                     <div className="flex gap-2 font-bold text-primary-gray">
-                        <span>Tổng quan</span> <img src={arrowRightIcon} alt="" />
+                        <span>Tổng quan</span> <img src={arrowDownIcon} alt="" />
                     </div>
-                </a> */}
-            </div>
+                </a>
+            </div> */}
             <div className="flex gap-2 mb-3.5">
                 <div className="bg-white py-1 px-2 border-0.5 border-cbs-border rounded-md" style={{ width: "15%", maxWidth: "250px" }}>
                     <div className="flex items-center gap-2 pb-1">

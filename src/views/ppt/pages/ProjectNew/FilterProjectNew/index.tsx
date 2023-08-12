@@ -90,7 +90,7 @@ const FilterProjectNew: FC<any> = ({ user, listDataCompany, listDataUser, listDa
             }
             <div className={"sticky top-0 bg-white z-10"}>
                 <div className={"flex items-center"}>
-                    <div className={"filter-bar flex flex-wrap px-4 py-2"}>
+                    <div className={"filter-bar flex flex-wrap px-4 py-1"}>
                         <div className="flex gap-1 items-center  my-2 mr-4">
                             <input type="checkbox" />
                             <button>
