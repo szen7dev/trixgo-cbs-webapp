@@ -10,8 +10,6 @@ import { DepartmentEnumType } from 'typings/ppt'
 import { dateLoadedPercentage, switchOnTimeBudget, convertToInternationalCurrencySystem } from 'utils/ppt';
 
 import { PROJECT_STAGE } from 'apis/localdb'
-// Assets
-import SearchIcon from "assets/images/icons8-search-120.png";
 import classNames from 'classnames';
 
 // console.log(DepartmentEnumType);
@@ -191,4 +189,4 @@ const PortfolioTableContainer: FC = () => {
 	</div>
 };
 
-export default PortfolioTableContainer;
+export default PortfolioTableContainer

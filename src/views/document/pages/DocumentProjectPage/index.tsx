@@ -18,8 +18,7 @@ import {
 
 // ========== Hooks ==========
 import {
-    useQueryListDocument,
-    useQueryDetailDocument,
+     useQueryDetailDocument,
 } from "services/hooks/ppt/useDocument";
 import { useQueryDetailDepartment } from "services/hooks/items/useDepartment";
 import { useMutationDocumentChild } from "services/hooks/document/useDocumentChild";
@@ -30,7 +29,7 @@ import { useDocumentCustom, useListFilterDocument } from "services/hooks/documen
 import {APP_ID, DIRECTION_TYPES, DOCUMENT_TYPES, DOCUMENT_TYPES_SORT} from 'apis/localdb';
 import { createLinkAndClick } from "utils";
 
-import {useProject, useProjectCustom} from "services/hooks/items/useProject";
+import {useProject} from "services/hooks/items/useProject";
 import maleUserIcon from "assets/images/icons8-male-user-64.svg";
 import categoryIcon from "assets/images/icons8-category-48.svg";
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
@@ -40,17 +39,14 @@ import contractIcon from "assets/images/icons8-contract-64-blue.svg";
 import echoDbIcon from "assets/images/icons8-amazon-echo-48.svg";
 import downloadIcon from "assets/images/icons8-download-64.svg";
 import iconPencil from "assets/images/icons8-pencil-96 1.png";
-import nextIcon from "assets/images/icons-arrow-next.svg";
 import {NavigateTab} from "../../sharedComponents/common";
 import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
-import {useDatahubContact} from "services/hooks/datahub/contact/useDatahubContact";
 import {useContractIsMembers} from "services/hooks/items/useContract";
 import {debounce} from "lodash";
 import {useStorage} from "services/hooks/items/useStorage";
 import {useDispatch} from "react-redux";
 import {useAppSelector} from "redux/reducer";
 import {setFilterDropdown, resetAllFilterAndKeyword} from "redux/reducer/DocumentProjectSlice";
-import { PmDocumentHeaderSearchInput } from "shareComponents/layouts/PmLayout/components";
 import { useQueryListCompany } from "services/hooks/useCompanies";
 
 const payloadHistoryTraffic: any = {
@@ -81,7 +77,7 @@ export const DocumentProjectPage: FC = () => {
     type PaginateHandle = React.ElementRef<typeof PaginateV2>;
     type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
     type TimeRangeHandle = React.ElementRef<typeof TimeRangeDropdown>;
-    // console.log({projectID})
+
     const ref = React.useRef<PaginateHandle>(null);
     const datahubRef = React.useRef<DropdownHandle>(null);
     const typesRef = React.useRef<DropdownHandle>(null);
@@ -93,8 +89,6 @@ export const DocumentProjectPage: FC = () => {
     const [pageIndex, setPageIndex] = useState(0);
     const [recordSelected, setSelectRecord] = useState<any>({});
 
-    // console.log({projectInfo})
-
     useEffect(() => {
         document.title = `${projectInfo.sign} | Hồ sơ văn bản`;
     }, [projectInfo]);
@@ -105,7 +99,6 @@ export const DocumentProjectPage: FC = () => {
     //_____End history traffict
     const location = useLocation()
     const { id: departmentID } = useParams<{ id: string }>();
-    // console.log({departmentID})
     const [isShow, setIsShow] = useState<boolean>(false);
 
     //_____Import, export excel
@@ -129,7 +122,6 @@ export const DocumentProjectPage: FC = () => {
     const [storageKeyword, setStorageKeyword] = useState("");
     const [storagesID, setStoragesID] = useState<string[]>([]);
 
-    // const { data: listDatahubContact } = useDatahubContact({ keyword: keywordDatahubContact }, true, false); // Danh bạ hệ thống
 	const { data: listDatahubContact } = useQueryListCompany({ keyword: keywordDatahubContact }); // Danh bạ hệ thống mới
 
     const { listContracts } = useContractIsMembers({ params: {keyword: contractKeyword, populates: JSON.stringify({"path": "project", "select":"name sign"})}, isFetch: true });
@@ -336,7 +328,7 @@ export const DocumentProjectPage: FC = () => {
             fetchData();
         }
         
-        console.log('=========DATA THAY ĐỔI RỒI==============')
+        // console.log('=========DATA THAY ĐỔI RỒI==============')
     }, [dataImport])
 
     const resetAllFilter = () => {
@@ -523,7 +515,7 @@ export const DocumentProjectPage: FC = () => {
                         <DropdownSearchableV2
                             ref={contractsRef}
                             className={"mr-4 border border-primary-border rounded-lg mb-2"}
-                            placeholder={"Thuộc hợp đồng"}
+                            placeholder={"Hợp đồng"}
                             prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"}/>}
                             isMultiple={true}
                             disableSearch={false}
@@ -688,16 +680,16 @@ export const DocumentProjectPage: FC = () => {
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '10%' }}>
                                 Mã hiệu
                             </th>
-                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '5%' }}>
-                                Ngày văn bản
-                            </th>
-                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '5%' }}>
+                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
                                 Mã hiệu lưu
                             </th>
-                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '5%' }}>
+                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+                                Ngày văn bản
+                            </th>
+                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
                                 Số lượng
                             </th>
-                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '10%' }}>
+                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
                                 Tình trạng
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
@@ -753,16 +745,15 @@ export const DocumentProjectPage: FC = () => {
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
                                         {document?.publish?.name ? document?.publish?.name : <p className="text-cbs-highlight-color"><i>{document?.datahubContact?.name}</i></p>}
-                                        {/* <p><i>{document?.datahubContact?.name}</i></p> */}
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
                                         {document?.sign}
                                     </td>
-                                    <td className="py-2.5 border-b border-cbs-border px-2 w-24 text-right">
-                                        {moment(document.date).isValid() && moment(document.date).format("DD/MM/YYYY")}
-                                    </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
                                         {document?.storeSign}
+                                    </td>
+                                    <td className="py-2.5 border-b border-cbs-border px-2 w-24 text-right">
+                                        {moment(document.date).isValid() && moment(document.date).format("DD/MM/YYYY")}
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2 whitespace-nowrap text-right">
                                         {document.amount}

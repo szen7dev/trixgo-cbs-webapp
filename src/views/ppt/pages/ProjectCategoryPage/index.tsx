@@ -9,25 +9,22 @@ import { useQueryListDepartmentsIsMember } from "services/hooks/items/useDepartm
 import projectImage from "assets/images/project.jpg";
 
 // ========== Global Components ==========
-import { SearchInput, ButtonCreate, ButtonMore } from "shareComponents/common";
+// import { SearchInput, ButtonCreate, ButtonMore } from "shareComponents/common";
 
 // ========== App common Components ==========
-// import DropdownFilterButton from "views/pages/document/components/DocumentFilterButton";
 import { APP_ID, PROJECT_STAGE } from 'apis/localdb'
 
 // Utils
 import { dateLoadedPercentage, formatDate } from "utils/ppt";
 import 'views/document/styles/document.css'
-import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
-import { useHistoryTraffics } from "services/hooks/auth/useAuth";
+// import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
+// import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 
 const { REACT_APP_URL_S3, REACT_APP_URL_S3_PROJECT } = process.env;
 
 const ProjectCategoryPage: FC = () => {
 	// Khai báo active Tab
-	const { tab } = useParams<{ tab: string}>();
-	// console.log({tab})
-
+	const { tab } = useParams<{ tab: string}>()
 	const getTypeValue = (tab?: any) => {
         switch(tab) {
             case '2':
@@ -50,28 +47,13 @@ const ProjectCategoryPage: FC = () => {
 
 	const type = getTypeValue(tab)
 	const isBudget = getBudgetValue(tab)
-	// console.log({type})
-	// console.log({isBudget})
-
-	//_____Start history traffict
-	const payloadHistoryTraffic: any = {
-		appID: APP_ID.PCM.id,
-		menuID: APP_ID.PCM.menuPcmApp.projects.id,
-		type: "1"
-	  };
-	const { createHistoryTraffics } = useHistoryTraffics();
-	useEffect(() => {
-		createHistoryTraffics({...payloadHistoryTraffic, type: 1});
-	}, []);
-	//_____End history traffict
-
 	const [keyword, setKeyword] = useState('');
 	
-	const { createPermission, updatePermission, deletePermission } = useCheckPerAccessScreen({
-		appID: APP_ID.PCM.id,
-		menuID: APP_ID.PCM.menuPcmApp.projects.id,
-		type: "1"
-	});
+	// const { createPermission, updatePermission, deletePermission } = useCheckPerAccessScreen({
+	// 	appID: APP_ID.PCM.id,
+	// 	menuID: APP_ID.PCM.menuPcmApp.projects.id,
+	// 	type: "1"
+	// });
 
 	const { data: listDepartments, fetchNextPage, hasNextPage, totalRecord } = useQueryListDepartmentsIsMember({
 		limit: 20,
@@ -82,7 +64,7 @@ const ProjectCategoryPage: FC = () => {
 	});
 
 	useEffect(() => {
-		document.title = "Danh sách dự án";
+		document.title = "Trixgo | Danh sách dự án";
 	}, []);
 
 	const onChangeSearch = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,12 +75,6 @@ const ProjectCategoryPage: FC = () => {
 		<div className="flex flex-col text-sm text-black overflow-hidden h-full">
 			<div className="px-4 flex items-center w-full text-primary-gray bg-white py-2">
 				<div className={"inline-flex items-center border-collapse border-0.5 border-primary-border"}>
-					{/* <button className={"border-r-0.5 border-primary-border px-4 py-2 bg-cbs-soft-blue text-primary"}>
-						Dự án
-					</button>
-					<button className={"px-4 py-2 text-primary-gray"}>
-						Phòng ban
-					</button> */}
 					<Link to={"/pm/projects"}>
 						<button className={"px-4 py-2 border-r-0.5 border-primary-border " + (!tab ? "bg-cbs-soft-blue text-primary":"bg-white text-primary-gray")}>
 							Dự án
@@ -120,11 +96,6 @@ const ProjectCategoryPage: FC = () => {
 					loader={hasNextPage ? <div className="w-full pt-2 text-center">
 						Loading...
 					</div> : <></>}
-					// endMessage={
-					// 	<p style={{ textAlign: 'center' }}>
-					// 		<b>Yay! You have seen it all</b>
-					// 	</p>
-					// }
 					scrollableTarget="scrollable"
 					className="flex flex-wrap w-full px-2 pt-2 pb-20 gap-y-4 text-primary-gray"
 				>

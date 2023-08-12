@@ -367,7 +367,7 @@ const DocumentHomePageV2: FC = () => {
                     />
                     <DropdownSearchableV2
                         className={"mr-4 border border-primary-border rounded-lg mb-2"}
-                        placeholder={"Thuộc hợp đồng"}
+                        placeholder={"Hợp đồng"}
                         prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"} />}
                         isMultiple={true}
                         disableSearch={false}

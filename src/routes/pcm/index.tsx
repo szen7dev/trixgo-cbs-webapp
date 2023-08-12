@@ -44,7 +44,6 @@ import ProjectKpis from "views/ppt/pages/ProjectKpis";
 import UserKpiDetail from "views/ppt/pages/ProjectKpis/UserKpiDetail";
 
 const PcmDetailTaskV2             = lazy(() => import('views/pcm/pages/PcmDetailTaskV2'));
-// const PcmDetailTaskSubmit         = lazy(() => import('views/pcm/pages/PcmDetailTaskSubmit'));
 const PcmTagPage                  = lazy(() => import('views/pcm/pages/PcmTagPage'));
 const PcmTagProjectPage           = lazy(() => import('views/pcm/pages/PcmTagPage/PcmTagProjectPage'));
 const PcmTag3ProjectCompanyPage   = lazy(() => import('views/pcm/pages/PcmTagPage/PcmTag3ProjectCompanyPage'));

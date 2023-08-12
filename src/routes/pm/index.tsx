@@ -9,7 +9,6 @@ import { ModalProvider } from "views/document/contexts/modal";
 /*=====3.LAYOUTS=====*/
 import { PmLayout } from "shareComponents/layouts";
 import LayoutSecondary from "views/ppt/sharedComponents/layouts/LayoutSecondary";
-import LayoutProjectSecondary from "views/ppt/sharedComponents/layouts/LayoutProjectSecondary";
 
 /*=====4.CONFIG ROUTE=====*/
 
@@ -51,7 +50,6 @@ import ProjectAdminPositionTab from "views/ppt/pages/ProjectAdminPage/pages/Proj
 import { PmProjectLayout } from "../../shareComponents/layouts/PmLayout/PmProjectLayout";
 import { PmProjectLayoutV2 } from "shareComponents/layouts/PmLayout/PmProjectLayoutV2";
 import ProjectBiddingDetailPage from "views/ppt/pages/ProjectBiddingDetailPage";
-// import {DocumentProjectLayout} from "views/document/sharedComponents/layouts/DocumentProjectLayout";
 
 const DocumentOfPackagePage = lazy(() => import("views/document/pages/DocumentOfPackagePage"))
 const DocumentOfTypePage = lazy(() => import("views/document/pages/DocumentOfTypePage"))

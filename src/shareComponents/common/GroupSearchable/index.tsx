@@ -1,11 +1,8 @@
-import React, { FC, ReactNode, useEffect, useRef, useState, UIEvent, useImperativeHandle, forwardRef } from "react";
+import { useRef, useState, UIEvent, useImperativeHandle, forwardRef } from "react";
 import { map as _map } from "lodash";
 import classNames from "classnames";
-// import API from "../../apis/repository";
-// import {GetSearchSelectResponse} from "../../typings/apis/searchSelect";
 import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import Close from "assets/icons/Close";
-import BlueCheck from "assets/images/blue-check.svg";
 import iconBack from "assets/images/VectorArrow.svg";
 import iconFolder from "assets/images/icons8-folder-48 3.svg";
 
@@ -150,7 +147,7 @@ export const GroupSearchable = forwardRef<GroupSearchableHandle, Props>(({
                                 {
                                     "text-gray-300": !value.label,
                                     border: true,
-                                    "rounded-full": true,
+                                    "rounded": true,
                                 }
                             )}
                             title={value.label}
