@@ -41,7 +41,7 @@ const FilterItem = ({ item, userId }: any) => {
 
     return (
         <div>
-            <div className="flex justify-between gap-6 py-3">
+            <div className="flex justify-between gap-6 py-1">
                 <div className="flex">
                     <div className="w-[50px]">
                         <input type="checkbox" />

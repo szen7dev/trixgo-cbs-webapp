@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const MenuTab: FC<{ tab: string }> = ({ tab }) => {
     return (
-        <div className={"filter-bar flex flex-wrap px-4 py-2 header-table flex px-4 w-full sticky z-10 top-0 bg-white pb-4"}>
+        <div className={"filter-bar flex flex-wrap px-4 py-1 header-table flex px-4 w-full sticky z-10 top-0 bg-white pb-4"}>
             <Link to={"/pcm/tags"}>
                 <button
                     className={
