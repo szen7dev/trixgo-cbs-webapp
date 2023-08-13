@@ -1885,6 +1885,10 @@ img {
 .task-description .tox.tox-tinymce {
   @apply rounded-md;
 }
+.task-comment a{
+  text-decoration: underline !important;
+  color: #3b82f6 !important;
+}
 .task-comment .tox.tox-tinymce {
   @apply border-0 border-t border-primary-border;
 }
