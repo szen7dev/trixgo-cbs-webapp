@@ -132,6 +132,7 @@ export interface addTaskPayload {
 export interface updateTaskPayload {
   taskID: string;
   description?: string;
+  descriptioncv?: string;
   contractID?: string;
   groupID?: string;
   assigneeID?: string;

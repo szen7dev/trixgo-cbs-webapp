@@ -20,20 +20,20 @@ export const useSocket = (): UseSocket => {
 
             const socket = io(url, {
                 transports: ['websocket'],
-                upgrade: false,
-                jsonp: false,
+                upgrade: true,
+                jsonp: true,
             });
 
             socket.connect();
             socket.on('connect', () => {
-                // console.log('--------connected to SocketController server-------');
+                console.log('--------connected to SocketController server-------');
             });
 
             socket.on('error', (error: any) => {
-                // console.log("--------error to SocketController server-------", error);
+                console.log("--------error to SocketController server-------", error);
             });
             socket.on('connect_error', (con_error: any) => {
-                // console.log("--------connect_error to SocketController server-------", con_error);
+                console.log("--------connect_error to SocketController server-------", con_error);
             });
 
             socketRef.current = socket;

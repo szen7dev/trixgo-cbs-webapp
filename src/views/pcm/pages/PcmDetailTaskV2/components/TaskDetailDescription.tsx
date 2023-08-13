@@ -50,11 +50,13 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
     const handleUpdateDescription = async () => {
         if (editorRef.current) {
             const contentRaw = editorRef.current.getContent({ format: 'raw' });
+            const contentRawCv = editorRef.current.getContent({ format: 'text' });
 
             await updateTaskAsync({
                 taskID: task._id,
                 isUpdateNews: true,
-                description: contentRaw
+                description: contentRaw,
+                descriptioncv: contentRawCv,
             });
             refetchInfo?.();
             setEditDescription(false);
