@@ -206,7 +206,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
       for (const [, { _id }] of Object.entries(uploads.files)) {
         _id && (files = [...files, _id]);
       }
-      console.log({ files, uploads });
+      // console.log({ files, uploads });
 
       if (files.length) {
         values.authorAttachs = files;
@@ -215,7 +215,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
       if (!values.groupID) {
         values.groupID = groupID;
       }
-      console.log({ values })
+      // console.log({ values })
 
       closeModal();
       const { error, data } = await addTaskAsync({
