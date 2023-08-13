@@ -28,7 +28,7 @@ type Props = {
 }
 
 export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
-    console.log(task)
+    // console.log(task)
     const { openModal, closeModal } = useModal();
     const wrapperClass = useRef<HTMLDivElement>(null)
     const [showOption, setShowOption] = useState(false);

@@ -278,7 +278,7 @@ export const ModalCloneTask: FC<Props> = ({ task }) => {
                 fileType: 2,
                 source,
                 progress: percentCompleted => {
-                    console.log(`${percentCompleted}%`, key);
+                    // console.log(`${percentCompleted}%`, key);
                     setUploadFileProgress(key, percentCompleted)
                 }
             })

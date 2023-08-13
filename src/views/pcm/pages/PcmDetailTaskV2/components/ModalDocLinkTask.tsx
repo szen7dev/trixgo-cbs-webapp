@@ -73,7 +73,7 @@ export const ModalDocLinkTask: FC<Props> = ({ taskID, projectID, linksDocs, clos
 	// if(!isLoading && (!listDocument || !listDocument.length)) {
 	// 	return <></>
 	// }
-	console.log({ listDocument })
+	// console.log({ listDocument })
 	return (
 		<div>
 			<div className="flex items-center px-6 py-2.5 justify-between">
