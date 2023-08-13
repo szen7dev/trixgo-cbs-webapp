@@ -66,6 +66,8 @@ import { UpdateStatusDialog } from "./UpdateStatusDialog";
 import { ModalCreateResultSearch } from "./ModalCreateResultSearch";
 import { ImageProps } from "typings/common";
 import { toast } from "react-toastify";
+import { useSocket } from "services/hooks/useSocket";
+import { APP_KEY } from "utils/constants";
 
 type Props = {
   type?: number;
@@ -85,6 +87,7 @@ export const DashboardV2: FC<Props> = () => {
   const [showUpdateStatus, setShowUpdateStatus] = useState(false);
   const [isShowImageFullScreen, setIsShowImageFullScreen] = useState(false);
   const { openModal, closeModal } = useModal();
+  const { current: socket }: any = useSocket();
 
   const [defaultState, setDefaultState] = useState({
     mediaID: '',
@@ -220,7 +223,7 @@ export const DashboardV2: FC<Props> = () => {
   const [isParent, setIsParent] = useState<any>(-1);
   const [subtypes, setSubtypes] = useState<string[]>([]);
   const [status, setStatus] = useState<string[]>([]);
-  const [selectStar, setSelectStar] = React.useState(false);
+  // const [selectStar, setSelectStar] = React.useState(false);
 
   const querySearchTask: any = {
     keyword: keywordForSubject,
@@ -254,7 +257,6 @@ export const DashboardV2: FC<Props> = () => {
     params: querySearchTask,
     isFetch: tabActive === 2 ? true : false,
   });
-  // console.log(listDataForSubject)
 
   const {
     isLoadingFile,
@@ -334,7 +336,6 @@ export const DashboardV2: FC<Props> = () => {
       </div>
     )
   }
-  // popover
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
   const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -401,6 +402,27 @@ export const DashboardV2: FC<Props> = () => {
         toast.error(error);
     }
   };
+
+  useEffect(() => {
+    const onEventAddComment = (result: any) => {
+      const { data, error } = result;
+
+      if (error || !user) return;
+      const { infoObject, app } = data;
+      const accessUsers = infoObject.accessUsers;
+
+      if(app !== APP_KEY.PCM_PLAN_TASK) return;
+      if(!accessUsers.includes(user._id)) return;
+
+      refetchListTask();
+    }
+
+    socket?.on("COMMENT_SSC_ADD_COMMENT", onEventAddComment);
+
+    return () => {
+        socket?.off("COMMENT_SSC_ADD_COMMENT", onEventAddComment);
+    }
+  }, [socket])
 
   return (
     <div className="t-home flex flex-col h-full overflow-hidden">

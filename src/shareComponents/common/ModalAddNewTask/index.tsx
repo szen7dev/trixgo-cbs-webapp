@@ -52,6 +52,7 @@ interface InitialValues {
   fieldID: string,
   assigneeID: string,
   name: string,
+  descriptioncv: string;
   startTime: string,
   expiredTime: string,
   description: string,
@@ -182,6 +183,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
     fieldID: "",
     assigneeID: "",
     name: "",
+    descriptioncv: "",
     startTime: moment().format('MM/DD/YYYY'),
     expiredTime: moment().format('MM/DD/YYYY'),
     expiredHour: "09:00",
@@ -213,6 +215,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
       if (!values.groupID) {
         values.groupID = groupID;
       }
+      console.log({ values })
 
       closeModal();
       const { error, data } = await addTaskAsync({
@@ -809,7 +812,11 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
 
               <div className={"px-6 my-3"}>
                 <Editor
-                  onEditorChange={(value) => setFieldValue("description", value)}
+                  onEditorChange={(value) => {
+                    const contentText = editorRef.current?.getContent({ format: 'text' });
+                    setFieldValue("description", value);
+                    setFieldValue("descriptioncv", contentText);
+                  }}
                   onInit={(evt, editor) => editorRef.current = editor}
                   onPaste={handlePasteFile}
                   apiKey={process.env.REACT_APP_TINYMCE_API_KEY}
