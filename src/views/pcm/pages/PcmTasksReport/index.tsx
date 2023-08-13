@@ -61,22 +61,21 @@ const PcmTasksReportPage: FC = () => {
   });
 
   useEffect(() => {
-    // if (!isSuccessApp) return;
-    // if (isSuccessApp && !hasPermission) {
-		// 	toast.error("Bạn không có quyền truy cập tính năng này!");
-		// 	history.push("/pcm/report");
-		// };
-
-    document.title = "Quản lý công việc";
+    document.title = "Trixgo | Báo cáo động";
   }, [isSuccessApp, hasPermission]);
 
   useEffect(() => {
-    if(!infoReport || !infoReport?.conditionPin)
-      return history.push("/pcm/report")
-      
+    if(!infoReport) return;
+
+    if(!infoReport?.conditionPin) return;
+
     if(Object.keys(infoReport).length && Object.keys(infoReport?.conditionPin).length) {
       setParams(infoReport.conditionPin);
     }
+  }, [JSON.stringify(infoReport)])
+
+  useEffect(() => {
+    if(!infoReport?.conditionPin) return;
   }, [JSON.stringify(infoReport)])
 
   useEffect(() => {
