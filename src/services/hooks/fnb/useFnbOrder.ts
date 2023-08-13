@@ -2,7 +2,7 @@
 import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 
 /*=====2.TYPING/APIS=====*/
-import fnbRepository from 'apis/fnb/order';
+import fnbRepository from 'apis/fnb/order'
 
 export const useFnbOrder = ({
     params = {},
