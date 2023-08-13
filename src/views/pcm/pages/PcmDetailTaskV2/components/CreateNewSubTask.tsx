@@ -182,7 +182,7 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
                 fileType: 1,
                 source,
                 progress: percentCompleted => {
-                    console.log(`${percentCompleted}%`, key);
+                    // console.log(`${percentCompleted}%`, key);
                     setUploadImageProgress(key, percentCompleted)
                 }
             })
@@ -197,7 +197,7 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
                 fileType: 2,
                 source,
                 progress: percentCompleted => {
-                    console.log(`${percentCompleted}%`, key);
+                    // console.log(`${percentCompleted}%`, key);
                     setUploadFileProgress(key, percentCompleted)
                 }
             })

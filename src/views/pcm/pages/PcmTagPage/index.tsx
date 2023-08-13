@@ -20,6 +20,8 @@ const PcmTagPage: FC = () => {
 		enabled: tab === "3" || tab === "4",
 	});
 
+	// console.log(listDataProject)
+
 	return (
 		<main className="h-full overflow-auto">
 			{(isLoading || isLoading2) && <Loader className="border-primary" />}
