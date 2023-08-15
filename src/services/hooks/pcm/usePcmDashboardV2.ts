@@ -250,7 +250,7 @@ export const useListFileFromSearch = (payload: any): any => {
       return pcmDashboardV2.pcmFiles({
         populates: JSON.stringify({
           path: "author task project",
-          select: "_id name fullname image createAt related sign",
+          select: "_id name fullname image createAt related sign subtype",
         }),
         lastestID: pageParam || "",
         limit: "50",
