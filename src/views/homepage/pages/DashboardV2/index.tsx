@@ -424,6 +424,8 @@ export const DashboardV2: FC<Props> = () => {
     }
   }, [socket])
 
+  // console.log(listDataForFile)
+
   return (
     <div className="t-home flex flex-col h-full overflow-hidden">
       <div className={"sticky top-0 bg-white z-10"}>
@@ -1890,14 +1892,8 @@ export const DashboardV2: FC<Props> = () => {
                         "py-2 border-b-0.5 border-primary-border align-middle text-cbs-highlight-color break-all pr-2"
                       }
                     >
-                      <a
-                        href={`${process.env.REACT_APP_URL_S3}${item.path}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-cbs-highlight-color"
-                      >
-                        {item.nameOrg}
-                      </a>
+                      {(item.task && item.task?.subtype != 4) ? <a href={`${process.env.REACT_APP_URL_S3}${item.path}`} target="_blank" rel="noopener noreferrer" className="text-cbs-highlight-color">{item.nameOrg}</a> : item.nameOrg}
+                      
                     </td>
                     <td
                       className={
