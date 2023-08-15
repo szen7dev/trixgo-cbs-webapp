@@ -1713,51 +1713,59 @@ export const DashboardV2: FC<Props> = () => {
                             {subContentHtml(item.lastComment?.content)}
                           </p>
                         </Link>
-                        {/* Attach files */}
-                        <div className="flex mr-2 gap-2 text-primary-gray pb-2">
-                          {
-                            (item?.lastComment?.files)?.slice(0, 3).map((file: any, subindex: any) => (
-                                <a key={file._id} href={`${process.env.REACT_APP_URL_S3}${file.path}`}>
-                                  <div className="border-0.5 border-cbs-border rounded-full px-3 py-1 flex">
-                                    <img src={iconFile} className="mr-[5px] w-5 h-5" />
-                                    <span>{file?.nameOrg.substring(0, 20)}...</span>
-                                  </div>
-                                </a>
-                            ))
-                          }
-                           {item?.lastComment?.files.length > 3 && (
-                              <div className="border-0.5 border-cbs-border rounded-full py-1 px-2">+{item?.lastComment?.files.length-1}</div>
-                            )}
-                        </div>
 
-                        {/* Attach Images href={`${process.env.REACT_APP_URL_S3}${file.path}`} */}
-                        <div className="flex wrap flex-wrap mr-2 text-primary-gray pb-2">
-                          {
-                            (item?.lastComment?.images)?.slice(0, 3).map((file: any, subindex: any) =>
-                              (
-                                <button
-                                  key={file._id}
-                                  onClick={() => {
-                                    setDefaultState({
-                                      mediaID: file._id,
-                                      images: item?.lastComment?.images,
-                                      index: subindex,
-                                      createAt: file.createAt
-                                    });
-                                    setIsShowImageFullScreen(true);
-                                  }}
-                                >
-                                  <div className="border-0.5 border-cbs-border rounded-full px-3 py-1 flex">
-                                    <img src={iconPhoto} className="mr-[5px] w-6 h-6" />
-                                    <span>{file?.nameOrg.substring(0, 10)}...</span>
-                                  </div>
-                                </button>
-                            ))
-                          }
-                           {item?.lastComment?.images.length > 3 && (
-                              <div className="border-0.5 border-cbs-border rounded-full py-1 px-2">+{item?.lastComment?.images.length-1}</div>
-                            )}
-                        </div>
+                        {item.subtype != 4 ? (
+                            <div className="flex mr-2 gap-2 text-primary-gray pb-2">
+                              {
+                                (item?.lastComment?.files)?.slice(0, 3).map((file: any, subindex: any) => (
+                                    <a key={file._id} href={`${process.env.REACT_APP_URL_S3}${file.path}`}>
+                                      <div className="border-0.5 border-cbs-border rounded-full px-3 py-1 flex">
+                                        <img src={iconFile} className="mr-[5px] w-5 h-5" />
+                                        <span>{file?.nameOrg.substring(0, 20)}...</span>
+                                      </div>
+                                    </a>
+                                ))
+                              }
+                              {item?.lastComment?.files.length > 3 && (
+                                  <div className="border-0.5 border-cbs-border rounded-full py-1 px-2">+{item?.lastComment?.files.length-1}</div>
+                                )}
+                            </div>
+                        ) : (
+                          <></>
+                        )}
+
+                        {item.subtype != 4 ? (
+                            <div className="flex wrap flex-wrap mr-2 text-primary-gray pb-2">
+                            {
+                              (item?.lastComment?.images)?.slice(0, 3).map((file: any, subindex: any) =>
+                                (
+                                  <button
+                                    key={file._id}
+                                    onClick={() => {
+                                      setDefaultState({
+                                        mediaID: file._id,
+                                        images: item?.lastComment?.images,
+                                        index: subindex,
+                                        createAt: file.createAt
+                                      });
+                                      setIsShowImageFullScreen(true);
+                                    }}
+                                  >
+                                    <div className="border-0.5 border-cbs-border rounded-full px-3 py-1 flex">
+                                      <img src={iconPhoto} className="mr-[5px] w-6 h-6" />
+                                      <span>{file?.nameOrg.substring(0, 10)}...</span>
+                                    </div>
+                                  </button>
+                              ))
+                            }
+                             {item?.lastComment?.images.length > 3 && (
+                                <div className="border-0.5 border-cbs-border rounded-full py-1 px-2">+{item?.lastComment?.images.length-1}</div>
+                              )}
+                          </div>
+                        ) : (
+                          <></>
+                        )}
+                        
                       </td>
                       <td className={"w-[100px] align-middle"}>
                         <div className="justify-items-end absolute ml-[10px] hidden group-hover:block homeboxbutton">
