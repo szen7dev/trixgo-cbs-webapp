@@ -240,7 +240,7 @@ const PCMRouter: FC = () => {
                       <ProjectMilestonePage />
                     </PmProjectLayout>
                   </Route>
-                  <Route exact path="/pm/project/:id/folder" render={(props) => (
+                  {/* <Route exact path="/pm/project/:id/folder" render={(props) => (
                     <PmProjectLayout>
                       <ProjectFolderPage {...props} />
                     </PmProjectLayout>
@@ -249,7 +249,7 @@ const PCMRouter: FC = () => {
                     <PmProjectLayout>
                       <ProjectFolderPage {...props} />
                     </PmProjectLayout>
-                  )} />
+                  )} /> */}
                   <Route exact path="/pm/project/:id/schedule">
                     <PmProjectLayout>
                       <ProjectSchedulePage />
@@ -346,7 +346,16 @@ const PCMRouter: FC = () => {
                       <ProjectSubjectCompanyOfAssigneePage />
                     </PmProjectLayout>
                   </Route>
-
+                  <Route exact path="/pm/project/:id/subject/folder" render={(props) => (
+                    <PmProjectLayout>
+                      <ProjectFolderPage {...props} />
+                    </PmProjectLayout>
+                  )} />
+                  <Route exact path="/pm/project/:id/subject/folder/:groupID" render={(props) => (
+                    <PmProjectLayout>
+                      <ProjectFolderPage {...props} />
+                    </PmProjectLayout>
+                  )} />
                   <Route
                     exact
                     path={["/pm/project/:id/document", "/pm/project/:id/document/:type(1|2|3|4)"]}

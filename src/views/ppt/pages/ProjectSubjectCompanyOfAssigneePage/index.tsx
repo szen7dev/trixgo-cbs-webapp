@@ -153,14 +153,14 @@ export const ProjectSubjectCompanyOfAssigneePage: FC<Props> = ({ type = 1 }) => 
               </svg>
             </button>
             {/* <p className="text-lg">infoCompany</p> */}
-            <SearchInput
+            {/* <SearchInput
               classNameWrapper="ml-4"
               classNameInput="outline-none w-[296px]"
               onChange={debounce(
                 (event: any) => setKeyword(event.target.value),
                 500
               )}
-            />
+            /> */}
           </div>
         </header>
       </div>

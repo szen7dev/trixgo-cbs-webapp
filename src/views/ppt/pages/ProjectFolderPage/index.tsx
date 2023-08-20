@@ -20,7 +20,7 @@ import { ModalAddNewTask } from "shareComponents/common";
 import API from "apis/repository";
 import { toast } from "react-toastify";
 
-const FolderIcon: FC<{ type: string }> = ({ type }) => {
+const FolderIcon: FC<{ type: string }> = ({ type }) => {	
 	switch (type) {
 		case "file":
 			return <></>;
@@ -34,6 +34,8 @@ const FolderIcon: FC<{ type: string }> = ({ type }) => {
 }
 
 const ProjectFolderPage: FC<RouteComponentProps> = () => {
+	const { tab } = useParams<{ tab: string}>()
+
 	const history = useHistory();
 	const { openModal } = useModal();
 	const { id: projectID, groupID } = useParams<{ id: string, groupID: string }>();
@@ -117,7 +119,23 @@ const ProjectFolderPage: FC<RouteComponentProps> = () => {
 		<>
 			{/* Content  */}
 			<div className="flex flex-col h-full overflow-hidden">
-				<div className={"nav-drawing flex items-center text-lg p-4 text-primary-gray"}>
+
+				<div className={"px-4 flex items-center w-full text-primary-gray bg-white py-2"}>
+					<div className={"inline-flex items-center border-collapse border-0.5 border-primary-border"}>
+						<Link to={`/pm/project/${projectID}/subject`}>
+							<button className={"px-4 py-2 border-r-0.5 border-primary-border bg-white text-primary-gray"}>
+								Theo tiến độ
+							</button>
+						</Link>
+						<Link to={`/pm/project/${projectID}/subject/folder`}>
+							<button className={"px-4 py-2 border-r-0.5 border-primary-border bg-cbs-soft-blue text-primary"}>
+								Theo thư mục
+							</button>
+						</Link>
+					</div>
+				</div>
+
+				<div className={"nav-drawing flex items-center text-lg p-2 text-primary-gray"}>
 					{groupID ?
 						<button className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mr-3"}
 							onClick={history.goBack}
@@ -126,7 +144,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = () => {
 						</button> : <></>
 					}
 					{infoGroup?.data?.sign ?
-						<Link to={`/pm/project/${projectID}/folder/${infoGroup?.data?.parent?._id ? infoGroup?.data?.parent?._id : ""}`}>
+						<Link to={`/pm/project/${projectID}/subject/folder/${infoGroup?.data?.parent?._id ? infoGroup?.data?.parent?._id : ""}`}>
 							<div className="flex gap-2">
 								{/* <img src={iconFolder} alt={"----"} className={"w-[18px]"} /> */}
 								<span className="truncate max-w-[150px]">{infoGroup?.data?.parent?.name || infoGroup?.data?.name}</span>
@@ -135,7 +153,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = () => {
 
 					{infoGroup?.data?.parent?.sign ? <>
 						<img src={nextIcon} alt={"-----"} className={"mx-4 h-[12px] w-[12px]"} />
-						<Link to={`/pm/project/${projectID}/folder/${infoGroup?.data?.parent?._id}`}>
+						<Link to={`/pm/project/${projectID}/subject/folder/${infoGroup?.data?.parent?._id}`}>
 							<div className="flex gap-2">
 								{/* <img src={iconFolder} alt={"----"} className={"w-[18px]"} /> */}
 								<span className="truncate max-w-[150px]">{infoGroup?.data?.name}</span>
@@ -146,7 +164,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = () => {
 					{infoGroup?.data?.parent?.parent?.name ?
 					<>
 						<img src={nextIcon} alt={"-----"} className={"mx-4 h-[12px] w-[12px]"} />
-						<Link to={`/pm/project/${projectID}/folder/${infoGroup?.data?.parent?.parent?._id}`}>
+						<Link to={`/pm/project/${projectID}/subject/folder/${infoGroup?.data?.parent?.parent?._id}`}>
 							<div className="flex gap-2">
 								{/* <img src={iconFolder} alt={"----"} className={"w-[18px]"} /> */}
 								<span className="truncate max-w-[150px]">{infoGroup?.data?.parent?.parent?.name}</span>
@@ -208,11 +226,11 @@ const ProjectFolderPage: FC<RouteComponentProps> = () => {
 
 									</span>
 								</th>
-								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
+								{/* <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
 									<span className="pl-2 border-cbs-border">
 
 									</span>
-								</th>
+								</th> */}
 							</tr>
 						</thead>
 
@@ -226,7 +244,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = () => {
 									return (
 										<tr key={props._id} className="text-left hover:bg-cbs-active-comment cursor-pointer border-b-0.5 border-cbs-border">
 											<td className="px-2 py-2 border-b-0.5 border-cbs-border">
-												<Link to={`/pm/project/${projectID}/folder/${props._id}`} className="align-top">
+												<Link to={`/pm/project/${projectID}/subject/folder/${props._id}`} className="align-top">
 													<FolderIcon type="folder" />
 													{props.name} {isGroupDefault && <img src={GroupDefaultIcon} alt="file" className="inline-block mr-3" title="Group default" />}
 												</Link>
@@ -234,7 +252,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = () => {
 											<td className="py-2 px-2 border-b-0.5 border-cbs-border"></td>
 											<td className="py-2 px-2 border-b-0.5 border-cbs-border"></td>
 											<td className="py-2 px-2 border-b-0.5 border-cbs-border text-cbs-primary"></td>
-											<td className="py-2 px-2 border-b-0.5 border-cbs-border">
+											{/* <td className="py-2 px-2 border-b-0.5 border-cbs-border">
 												<div className="flex">
 													{props.members.map((member: any, index1: any) => {
 														if (index1 < 5) {
@@ -245,7 +263,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = () => {
 														}
 													})}
 												</div>
-											</td>
+											</td> */}
 										</tr>
 									)
 								})
@@ -259,7 +277,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = () => {
 										<tr key={props._id} className="text-left hover:bg-cbs-active-comment cursor-pointer border-b-0.5 border-cbs-border">
 											<td className="px-2 py-2 border-b-0.5 border-cbs-border">
 												<Link to={`/pcm/detail/${props._id}`} className="align-top">
-													<FolderIcon type="file" />
+												<FolderIcon type="file" />
 													{props.name}
 												</Link>
 											</td>
@@ -271,14 +289,14 @@ const ProjectFolderPage: FC<RouteComponentProps> = () => {
 												</div>
 											</td>
 											<td className="py-2 px-2 text-cbs-primary border-b-0.5 border-cbs-border">{props.status && PCM_STATUS_TASK[props.status - 1]?.text}</td>
-											<td className="py-2 px-2 border-b-0.5 border-cbs-border">
+											{/* <td className="py-2 px-2 border-b-0.5 border-cbs-border">
 												<div className="pr-4">
 													<p className="text-right">{props.amountChecklist}/{props.amountFinishedChecklist}</p>
 													<div className="rounded border-0.5 border-cbs-border h-1 box-content mt-1">
 														<div className="h-full bg-cbs-schedule-after-7days" style={{ width: `${percent}%` }}></div>
 													</div>
 												</div>
-											</td>
+											</td> */}
 										</tr>
 									)
 								})
