@@ -248,7 +248,7 @@ export const DocumentDashboardPage: FC = () => {
 										<td className="pb-2 pl-5 pr-4 pt-2.5 border border-cbs-border">
 											<Link 
 												className="text-black" 
-												to={generatePath("/pcm/project/:id/document", { id: department._id })}>	{department.sign}.{department.name}
+												to={generatePath("/pm/project/:id/document", { id: department._id })}>	{department.sign}.{department.name}
 											</Link>
 										</td>
 										<td className="pb-2 pl-5 pr-4 pt-2.5 border border-cbs-border">
