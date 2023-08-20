@@ -31,7 +31,7 @@ const ProjectSchedulePage: FC = () => {
 		listTasks,
 	  } = useTask({
 		params: {
-			projectID: departmentID, isPassPermision: "1", unlimit: "1"
+			projectID: departmentID, isPassPermision: "1", unlimit: "1", isMileStone: "1"
 		},
 		isFetch: true
 	});

@@ -337,7 +337,7 @@ const ProjectBiddingPage: FC = () => {
           <tbody className="text-small">
             {
               (listDocumentPackageWithPager[pageIndex] ?? []).map((item: any) => {
-                console.log(item)
+                // console.log(item)
                 return (
                   <tr key={item._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
                     <td
@@ -356,7 +356,7 @@ const ProjectBiddingPage: FC = () => {
                       className="pt-2.5 pb-3 px-1 border-b-0.5 border-r-0.5 border-cbs-border"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <NavLink to={`#`}>
+                      <NavLink to={`/pm/project/${projectID}/bidding/${item._id}`}>
                         <div style={{lineHeight: "20px"}}>
                           {/* <span className="bg-cbs-orage text-white mr-1 py-1 px-3 rounded">Cao</span> */}
                           {item.name}
