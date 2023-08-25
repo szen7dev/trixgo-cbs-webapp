@@ -2,7 +2,7 @@
  * BẢN CẮT GỌN, BỎ PHẦN SOCKET VÀ THÔNG BÁO CỦA CHAT
  * File nguyên bản xem tại index_old.tsx
  */
-import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { FC, useCallback, useMemo, useRef, useState } from "react";
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
 import mailIcon from "assets/images/icons8-secure-mail-48.svg";
 import chatIcon from "assets/images/icons8-chat-48.svg";
@@ -26,16 +26,12 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
   const { t } = useTranslation()
 
   const { listAppOfUser } = useGetListAppOfUser();
-  const currentUser = localStorage.getItem("currentUser") ?? "{}";
-  const profileId = JSON.parse(currentUser)?._id;
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const { pathname } = useLocation();
   const pathBreak = pathname.split("/");
   const firstRoute = pathBreak[1];
 
-  const { current: socket }: any = useSocket();
-  const dispatch = useDispatch();
   const [enabled, setEnabled] = useState(false);
 
   const { data } = usePcmPlanTaskNotification({ enabled: enabled });
