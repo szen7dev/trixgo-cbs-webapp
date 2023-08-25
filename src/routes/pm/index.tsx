@@ -336,22 +336,22 @@ const PCMRouter: FC = () => {
                       <ProjectSubjectCompanyOfAuthorPage />
                     </PmProjectLayout>
                   </Route>
-                  <Route exact path="/pm/project/:id/subject">
+                  <Route exact path="/pm/project/:id/folder">
                     <PmProjectLayout>
                       <ProjectSubjectPage />
                     </PmProjectLayout>
                   </Route>
-                  <Route exact path="/pm/project/:id/subject/company/:companyID">
+                  <Route exact path="/pm/project/:id/folder/company/:companyID">
                     <PmProjectLayout>
                       <ProjectSubjectCompanyOfAssigneePage />
                     </PmProjectLayout>
                   </Route>
-                  <Route exact path="/pm/project/:id/subject/folder" render={(props) => (
+                  <Route exact path="/pm/project/:id/folder/folder" render={(props) => (
                     <PmProjectLayout>
                       <ProjectFolderPage {...props} />
                     </PmProjectLayout>
                   )} />
-                  <Route exact path="/pm/project/:id/subject/folder/:groupID" render={(props) => (
+                  <Route exact path="/pm/project/:id/folder/folder/:groupID" render={(props) => (
                     <PmProjectLayout>
                       <ProjectFolderPage {...props} />
                     </PmProjectLayout>

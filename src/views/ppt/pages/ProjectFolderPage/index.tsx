@@ -122,12 +122,12 @@ const ProjectFolderPage: FC<RouteComponentProps> = () => {
 
 				<div className={"px-4 flex items-center w-full text-primary-gray bg-white py-2"}>
 					<div className={"inline-flex items-center border-collapse border-0.5 border-primary-border"}>
-						<Link to={`/pm/project/${projectID}/subject`}>
+						<Link to={`/pm/project/${projectID}/folder`}>
 							<button className={"px-4 py-2 border-r-0.5 border-primary-border bg-white text-primary-gray"}>
 								Theo tiến độ
 							</button>
 						</Link>
-						<Link to={`/pm/project/${projectID}/subject/folder`}>
+						<Link to={`/pm/project/${projectID}/folder/folder`}>
 							<button className={"px-4 py-2 border-r-0.5 border-primary-border bg-cbs-soft-blue text-primary"}>
 								Theo thư mục
 							</button>
@@ -144,7 +144,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = () => {
 						</button> : <></>
 					}
 					{infoGroup?.data?.sign ?
-						<Link to={`/pm/project/${projectID}/subject/folder/${infoGroup?.data?.parent?._id ? infoGroup?.data?.parent?._id : ""}`}>
+						<Link to={`/pm/project/${projectID}/folder/folder/${infoGroup?.data?.parent?._id ? infoGroup?.data?.parent?._id : ""}`}>
 							<div className="flex gap-2">
 								{/* <img src={iconFolder} alt={"----"} className={"w-[18px]"} /> */}
 								<span className="truncate max-w-[150px]">{infoGroup?.data?.parent?.name || infoGroup?.data?.name}</span>
@@ -153,7 +153,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = () => {
 
 					{infoGroup?.data?.parent?.sign ? <>
 						<img src={nextIcon} alt={"-----"} className={"mx-4 h-[12px] w-[12px]"} />
-						<Link to={`/pm/project/${projectID}/subject/folder/${infoGroup?.data?.parent?._id}`}>
+						<Link to={`/pm/project/${projectID}/folder/folder/${infoGroup?.data?.parent?._id}`}>
 							<div className="flex gap-2">
 								{/* <img src={iconFolder} alt={"----"} className={"w-[18px]"} /> */}
 								<span className="truncate max-w-[150px]">{infoGroup?.data?.name}</span>
@@ -164,7 +164,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = () => {
 					{infoGroup?.data?.parent?.parent?.name ?
 					<>
 						<img src={nextIcon} alt={"-----"} className={"mx-4 h-[12px] w-[12px]"} />
-						<Link to={`/pm/project/${projectID}/subject/folder/${infoGroup?.data?.parent?.parent?._id}`}>
+						<Link to={`/pm/project/${projectID}/folder/folder/${infoGroup?.data?.parent?.parent?._id}`}>
 							<div className="flex gap-2">
 								{/* <img src={iconFolder} alt={"----"} className={"w-[18px]"} /> */}
 								<span className="truncate max-w-[150px]">{infoGroup?.data?.parent?.parent?.name}</span>
@@ -244,7 +244,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = () => {
 									return (
 										<tr key={props._id} className="text-left hover:bg-cbs-active-comment cursor-pointer border-b-0.5 border-cbs-border">
 											<td className="px-2 py-2 border-b-0.5 border-cbs-border">
-												<Link to={`/pm/project/${projectID}/subject/folder/${props._id}`} className="align-top">
+												<Link to={`/pm/project/${projectID}/folder/folder/${props._id}`} className="align-top">
 													<FolderIcon type="folder" />
 													{props.name} {isGroupDefault && <img src={GroupDefaultIcon} alt="file" className="inline-block mr-3" title="Group default" />}
 												</Link>

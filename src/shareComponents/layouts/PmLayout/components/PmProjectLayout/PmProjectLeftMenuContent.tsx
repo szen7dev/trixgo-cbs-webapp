@@ -1,10 +1,6 @@
 import React, { FC } from "react";
 import { useModal } from "services/hooks/useModal";
-import { ModalAddNewTask } from "../../../../common";
 import { NavLink, useParams, useRouteMatch, generatePath } from 'react-router-dom';
-import projectIcon from "assets/images/icons-project.svg";
-import shieldIcon from "assets/images/icons8-user-shield-48.svg";
-import reportIcon from "assets/images/icons8-report.svg";
 
 import drawingImage from "assets/menu/project/icons-project-drawing.svg";
 import biddingImage from "assets/menu/project/icons-project-bidding.svg";
@@ -19,7 +15,6 @@ import photoImage from "assets/menu/project/icons-project-photo.svg";
 import inspectionImage from "assets/menu/project/icons-project-inspection.svg";
 import scheduleImage from "assets/menu/project/icons-project-schedule.svg";
 import subjectImage from "assets/menu/project/icons-project-subject.svg";
-// import resourceImage from "assets/menu/project/resource.png";
 import adminIcon from "assets/images/icons8-user-shield-48.svg"
 
 import { useAuth } from "services/hooks/auth/useAuth";
@@ -56,8 +51,6 @@ export const PmProjectLeftMenuContent: FC = () => {
                 return photoImage;
             case 'inspection':
                 return inspectionImage;
-            // case 'resource':
-            //     return resourceImage;
             case 'schedule':
                 return scheduleImage;
             case 'subject':
@@ -94,20 +87,6 @@ export const PmProjectLeftMenuContent: FC = () => {
 
     return (
         <>
-            {/* <button
-                onClick={() =>
-                    openModal(
-                        <div className="t-add-new-task-dialog text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
-                            <ModalAddNewTask />
-                        </div>
-                    )
-                }
-                className={"bg-cbs-blue-button rounded-md flex items-center justify-center text-xl text-primary-gray py-2 px-4"}>
-                <img src={projectIcon} alt={"Tạo mới"}/>
-                <span className={"ml-2"}>Tạo mới</span>
-            </button> */}
-            {/* title */}
-
             <div className="t-leftsidebar-title flex items-center py-2 pl-3 pr-3 text-[14px] font-bold">
                 <img src={imgUrl} alt="Thumbnail" className="w-10 h-10 mr-3" />
                 <span className="truncate" title={detailDepartment?.sign + "." + detailDepartment?.name}>{detailDepartment?.sign}.{detailDepartment?.name}</span>

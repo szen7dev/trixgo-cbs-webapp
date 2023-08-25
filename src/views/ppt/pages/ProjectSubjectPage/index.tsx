@@ -89,25 +89,14 @@ const ProjectSubjectPage: FC = () => {
 
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
-			{/* <div className={"sticky top-0 bg-white z-10"}> */}
 			<div className={"px-4 flex items-center w-full text-primary-gray bg-white py-2"}>
-				{/* <div className={"header-table flex px-4 w-full top-0 bg-white pb-4"}> */}
 				<div className={"inline-flex items-center border-collapse border-0.5 border-primary-border"}>
-					{/* <button
-						className={"py-1 border-b-2 border-primary text-primary mr-5"}>
-						Theo đơn vị thực hiện
-					</button>
-					<button
-						className={"py-1 border-b-2 border-primary text-primary "}>
-						Theo đơn vị thực hiện
-					</button> */}
-
-					<Link to={`/pm/project/${projectID}/subject`}>
+					<Link to={`/pm/project/${projectID}/folder`}>
 						<button className={"px-4 py-2 border-r-0.5 border-primary-border bg-cbs-soft-blue text-primary"}>
 							Theo tiến độ
 						</button>
 					</Link>
-					<Link to={`/pm/project/${projectID}/subject/folder`}>
+					<Link to={`/pm/project/${projectID}/folder/folder`}>
 						<button className={"px-4 py-2 border-r-0.5 border-primary-border bg-white text-primary-gray"}>
 							Theo thư mục
 						</button>
@@ -169,7 +158,7 @@ const ProjectSubjectPage: FC = () => {
 											{index+1}
 										</td>
 										<td className="pt-2.5 pb-3 px-2 border-0.5 border-cbs-border">
-											<Link to={`/pm/project/${projectID}/subject/company/${company._id}`}>
+											<Link to={`/pm/project/${projectID}/folder/company/${company._id}`}>
 												{company.name}
 											</Link>
 										</td>
