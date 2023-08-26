@@ -23,21 +23,15 @@ type Props = {
 };
 
 const DocumentLayoutV2: FC<Props> = ({ children }) => {
-    const [isHeaderCollapse, setIsHeaderCollapse] = useState(false);
+    const [isHeaderCollapse] = useState(false);
     const [isLeftMenuCollapse, setIsLeftMenuCollapse] = useState(false);
-    const [isRightSideBarCollapse, setIsRightSideBarCollapse] = useState(false);
+    const [isRightSideBarCollapse] = useState(false);
 
-    const handleHeaderEvent = () => {
-        setIsHeaderCollapse(!isHeaderCollapse);
-    };
     const handleMenuEvent = () => {
         setIsLeftMenuCollapse(!isLeftMenuCollapse);
     };
-    const handleRightSideBarEvent = () => {
-        setIsRightSideBarCollapse(!isRightSideBarCollapse);
-    };
-
     return (
+
         <section
             className={cn("home-layout relative bg-primary-light", {
                 "collapse-left": isLeftMenuCollapse,
