@@ -37,18 +37,6 @@ const ProjectNew: FC = () => {
 
     return (
         <div className="py-4 px-3 bg-cbs-bg-gray">
-            {/* <div className="flex text-lg mb-5">
-                <div className="mr-[60px]">
-                    <div className="flex gap-2 font-bold text-primary-gray">
-                        <span>Tổng quan</span> <img src={arrowDownIcon} alt="" />
-                    </div>
-                </div>
-                <a href="" className="mr-[60px]">
-                    <div className="flex gap-2 font-bold text-primary-gray">
-                        <span>Tổng quan</span> <img src={arrowDownIcon} alt="" />
-                    </div>
-                </a>
-            </div> */}
             <div className="flex gap-2 mb-3.5">
                 <div className="bg-white py-1 px-2 border-0.5 border-cbs-border rounded-md" style={{ width: "15%", maxWidth: "250px" }}>
                     <div className="flex items-center gap-2 pb-1">
@@ -133,7 +121,7 @@ const ProjectNew: FC = () => {
                     </div>
                 </div>
                 <div className="w-1/5 bg-white py-3.5 px-4  border-0.5 border-cbs-border rounded-md" style={{ maxWidth: "250px" }}>
-                    <div className=" font-bold text-sm">Theo đơn vị giao việc <span>({listDataCompany.length})</span></div>
+                    <div className=" font-bold text-sm">Đơn vị tạo việc <span>({listDataCompany.length})</span></div>
                     <div className="overflow-y-auto" style={{ height: "140px" }}>
                         {listDataCompany.map((item: any, index: number) => {
                             const selected = companiesOfAuthor.find((e: any) => e.id === item?._id?.companyOfAuthor?._id) ? true : false;
@@ -169,13 +157,10 @@ const ProjectNew: FC = () => {
                             )
                         })
                         }
-                        {/* <div className="flex gap-2 justify-between pt-2">
-                            <a href="" className="text-cbs-subtext">Xem thêm <span>(12)</span></a>
-                        </div> */}
                     </div>
                 </div>
                 <div className="w-1/4 bg-white py-3.5 px-4  border-0.5 border-cbs-border rounded-md" style={{ maxWidth: "300px" }}>
-                    <div className=" font-bold text-sm">Theo người giao việc <span>({listDataUser.length})</span></div>
+                    <div className=" font-bold text-sm">Người tạo việc <span>({listDataUser.length})</span></div>
                     <div className="overflow-y-auto" style={{ height: "140px" }}>
                         {listDataUser.map((item: any, index: number) => {
                             const selected = authorsID.find((e: any) => e.id === item?._id?.author?._id) ? true : false;
@@ -207,14 +192,10 @@ const ProjectNew: FC = () => {
                             )
                         })
                         }
-
-                        {/* <div className="flex gap-2 justify-between pt-2">
-                            <a href=""  className="text-cbs-subtext">Xem thêm <span>(12)</span></a>
-                        </div> */}
                     </div>
                 </div>
                 <div className="w-1/4 bg-white py-3.5 px-4  border-0.5 border-cbs-border rounded-md" style={{ maxWidth: "300px" }}>
-                    <div className=" font-bold text-sm">Theo dự án <span>({listDataProject.length})</span></div>
+                    <div className=" font-bold text-sm">Dự án <span>({listDataProject.length})</span></div>
                     <div className="overflow-y-auto" style={{ height: "140px" }}>
                         {listDataProject.map((item: any, index: number) => {
                             const selected = projectsID.find((e: any) => e.id === item?._id?.project?._id) ? true : false;
@@ -247,14 +228,10 @@ const ProjectNew: FC = () => {
                             )
                         })
                         }
-                        {/*
-                        <div className="flex gap-2 justify-between pt-2">
-                            <a href="" className="text-cbs-subtext">Xem thêm <span>(12)</span></a>
-                        </div> */}
                     </div>
                 </div>
                 <div className="w-1/5 bg-white py-3.5 px-4  border-0.5 border-cbs-border rounded-md" style={{ maxWidth: "250px" }}>
-                    <div className=" font-bold text-sm	">Theo tính chất <span>({listDataSubtype.length})</span></div>
+                    <div className=" font-bold text-sm	">Tính chất <span>({listDataSubtype.length})</span></div>
                     <div className="overflow-y-auto" style={{ height: "140px" }}>
                         {listDataSubtype.map((item: any, index: number) => {
                             const selected = subtypes.find((e: any) => e.id === item?._id?.subtype) ? true : false;

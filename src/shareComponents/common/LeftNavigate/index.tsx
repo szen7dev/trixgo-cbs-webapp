@@ -9,11 +9,9 @@ import chatIcon from "assets/images/icons8-chat-48.svg";
 import mediaIcon from "assets/images/icons8-commercial-64.svg";
 import projectIcon from "assets/images/icons-project.svg";
 import eshopIcon from "assets/images/icons8-eshop.svg";
-import contractIcon from "assets/images/icons8-contract-64.svg";
-import fileIcon from "assets/images/icons-file.svg";
+import contractIcon from "assets/images/icons8-contract.svg";
+import documentIcon from "assets/images/icons8-document.svg";
 import { Link, useLocation } from "react-router-dom";
-import { useSocket } from "services/hooks/useSocket";
-import { useDispatch } from "react-redux";
 import { usePcmPlanTaskNotification } from "services/hooks/pcm/usePcmDashboardV2";
 import Favico from "react-favico-js";
 import { useGetListAppOfUser } from "services/hooks/auth/usePermissions";
@@ -122,7 +120,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
                 : "")
             }
           >
-            <img width={'20px'} src={contractIcon} alt={"Hợp đồng"} />
+            <img width={'20px'} src={contractIcon} alt={t("menu:contract")} />
           </div>
           <span className={"text-primary-gray mt-1"}>{t("menu:contract")}</span>
         </Link> : <></>}
@@ -136,7 +134,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
                 : "")
             }
           >
-            <img width={'20px'} src={fileIcon} alt={"Hồ sơ"} />
+            <img width={'20px'} src={documentIcon} alt={"Hồ sơ"} />
           </div>
           <span className={"text-primary-gray mt-1"}>{t("menu:document")}</span>
         </Link> : <></>}
