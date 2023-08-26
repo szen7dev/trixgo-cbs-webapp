@@ -1,7 +1,7 @@
 import React, {FC} from "react";
 import {NavLink} from "react-router-dom";
 import adminIcon from "assets/images/icons8-user-shield-48.svg";
-import contractIcon from "assets/images/icons8-contract-64.svg";
+import contractIcon from "assets/images/icons8-contract.svg";
 import {
     useCheckPerAccessApp,
     useGetListAppMenu,

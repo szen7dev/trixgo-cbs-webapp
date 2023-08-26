@@ -5,7 +5,7 @@ import { Route, Switch, matchPath } from "react-router-dom";
 /*=====2.PROVIDERS=====*/
 
 /*=====3.LAYOUTS=====*/
-import { CmcsLayout, CmcsContractLayout } from "views/cmcs/shareComponents/layoutsV2";
+import { CmcsContractLayout } from "views/cmcs/shareComponents/layoutsV2";
 import { ProtectedRoute } from "routes/components";
 
 /*=====4.CONFIG ROUTE=====*/

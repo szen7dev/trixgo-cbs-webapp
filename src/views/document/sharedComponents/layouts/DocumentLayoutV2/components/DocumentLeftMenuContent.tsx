@@ -1,6 +1,6 @@
 import React, {FC} from "react"
 import {NavLink} from "react-router-dom";
-import fileIcon from "assets/images/icon-file.svg";
+import documentIcon from "assets/images/icons8-document.svg";
 
 const DocumentLeftMenuContent:FC = () => {
     const listTab : {
@@ -11,7 +11,7 @@ const DocumentLeftMenuContent:FC = () => {
     }[] = [
         {
             label: "Trang chủ",
-            icon: fileIcon,
+            icon: documentIcon,
             count: 0,
             route: '/document/home'
         }
