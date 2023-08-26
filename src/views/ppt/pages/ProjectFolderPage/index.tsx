@@ -129,7 +129,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = () => {
 						</Link>
 						<Link to={`/pm/project/${projectID}/folder/folder`}>
 							<button className={"px-4 py-2 border-r-0.5 border-primary-border bg-cbs-soft-blue text-primary"}>
-								Theo thư mục
+								Theo cấu trúc dữ liệu
 							</button>
 						</Link>
 					</div>

@@ -98,7 +98,7 @@ const ProjectSubjectPage: FC = () => {
 					</Link>
 					<Link to={`/pm/project/${projectID}/folder/folder`}>
 						<button className={"px-4 py-2 border-r-0.5 border-primary-border bg-white text-primary-gray"}>
-							Theo thư mục
+							Theo cấu trúc dữ liệu
 						</button>
             		</Link>
 				</div>
