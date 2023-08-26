@@ -81,7 +81,7 @@ export const ProjectBudgetPageType6Detail:FC<Props> = ({ projectInfo }) => {
                     <button onClick={history.goBack}>
                         <img src="/images/common/button_back.png" alt="Button Back" />
                     </button>
-                    <p className="text-lg ml-2">Kế hoạch thanh toán tháng {month} năm {year}</p>
+                    <p className="text-lg ml-2">Tổng hợp công nợ tháng {month} năm {year}</p>
                 </div>
             </div>
             <div className="flex-1 overflow-y-auto">

@@ -124,12 +124,12 @@ const ProjectFolderPage: FC<RouteComponentProps> = () => {
 					<div className={"inline-flex items-center border-collapse border-0.5 border-primary-border"}>
 						<Link to={`/pm/project/${projectID}/folder`}>
 							<button className={"px-4 py-2 border-r-0.5 border-primary-border bg-white text-primary-gray"}>
-								Theo tiến độ
+								Theo thời hạn
 							</button>
 						</Link>
 						<Link to={`/pm/project/${projectID}/folder/folder`}>
 							<button className={"px-4 py-2 border-r-0.5 border-primary-border bg-cbs-soft-blue text-primary"}>
-								Theo thư mục
+								Theo cấu trúc dữ liệu
 							</button>
 						</Link>
 					</div>

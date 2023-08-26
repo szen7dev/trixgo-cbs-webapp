@@ -87,10 +87,10 @@ export const ProjectBudgetPageType6:FC<Props> = ({projectInfo}) => {
                             STT
                         </th>
                         <th className={"w-5/12 bg-cbs-table-header p-2 border-0.5 border-primary-border text-normal text-left"}>
-                            Kế hoạch thanh toán theo hợp đồng
+                            Tổng hợp công nợ
                         </th>
                         <th className={"bg-cbs-table-header p-2 border-0.5 border-primary-border text-normal text-left"}>
-                            Giá trị kế hoạch
+                            Công nợ phải thanh toán
                         </th>
                     </tr>
                     </thead>
@@ -102,7 +102,7 @@ export const ProjectBudgetPageType6:FC<Props> = ({projectInfo}) => {
                                    {i+1}
                                 </td>
                                 <td className={"p-2 border-0.5 border-primary-border text-[14px]"}>
-                                    <Link to={`/pm/project/${projectInfo._id}/budget/type/6/month/${item._id.month}/year/${item._id.year}`}>Kế hoạch thanh toán tháng {item._id.month} năm {item._id.year}</Link>
+                                    <Link to={`/pm/project/${projectInfo._id}/budget/type/6/month/${item._id.month}/year/${item._id.year}`}>Tổng hợp công nợ tháng {item._id.month} năm {item._id.year}</Link>
                                 </td>
                                 <td className={"p-2 border-0.5 border-primary-border text-[14px]"}>
                                     {formatNumberMoney(item.amount)}

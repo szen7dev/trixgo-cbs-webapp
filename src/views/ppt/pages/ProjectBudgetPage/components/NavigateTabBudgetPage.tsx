@@ -9,6 +9,9 @@ export const NavigateTabBudgetPage:FC = () => {
             <Link to={`/pm/project/${projectID}/budget/type/1`} className={"px-4 py-2 border-r-0.5 border-primary-border " + (type === "1" ? "bg-cbs-soft-blue text-primary":"bg-white text-primary-gray")}>
                 Hợp đồng
             </Link>
+            <Link to={`/pm/project/${projectID}/budget/type/6`} className={"px-4 py-2 border-r-0.5 border-primary-border " + (type === "6" || month ? "bg-cbs-soft-blue text-primary":"bg-white text-primary-gray")}>
+                Công nợ
+            </Link>
             <Link to={`/pm/project/${projectID}/budget/type/2`} className={"px-4 py-2 border-r-0.5 border-primary-border " + (type === "2" ? "bg-cbs-soft-blue text-primary":"bg-white text-primary-gray")}>
                 Bảo lãnh tạm ứng
             </Link>
@@ -20,9 +23,6 @@ export const NavigateTabBudgetPage:FC = () => {
             </Link>
             <Link to={`/pm/project/${projectID}/budget/type/5`} className={"px-4 py-2 border-r-0.5 border-primary-border " + (type === "5" ? "bg-cbs-soft-blue text-primary":"bg-white text-primary-gray")}>
                 Kế hoạch chi
-            </Link>
-            <Link to={`/pm/project/${projectID}/budget/type/6`} className={"px-4 py-2 border-r-0.5 border-primary-border " + (type === "6" || month ? "bg-cbs-soft-blue text-primary":"bg-white text-primary-gray")}>
-                Kế hoạch thanh toán
             </Link>
         </div>
     )

@@ -216,9 +216,9 @@ const ProjectBiddingPage: FC = () => {
                 style={{ width: "30%" }}>30%</div>
             </div>
           </div> */}
-          <button className={"flex items-center justify-center mx-3 ml-6"}>
+          {/* <button className={"flex items-center justify-center mx-3 ml-6"}>
             <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"} />
-          </button>
+          </button> */}
           {
             Object.values(assigned).filter(Boolean).length === 1 &&
             <button
@@ -356,9 +356,9 @@ const ProjectBiddingPage: FC = () => {
                       className="pt-2.5 pb-3 px-1 border-b-0.5 border-r-0.5 border-cbs-border"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <NavLink to={`/pm/project/${projectID}/bidding/${item._id}`}>
+                      {/* <NavLink to={`/pm/project/${projectID}/bidding/${item._id}`}>
                         <div style={{lineHeight: "20px"}}>
-                          {/* <span className="bg-cbs-orage text-white mr-1 py-1 px-3 rounded">Cao</span> */}
+                          <span className="bg-cbs-orage text-white mr-1 py-1 px-3 rounded">Cao</span>
                           {item.name}
                         </div>
                         <p className={"mt-1 text-gray-500"}>
@@ -367,8 +367,8 @@ const ProjectBiddingPage: FC = () => {
                         <p>
                           {item?.bidder?.name ? "Đơn vị trúng thầu:" + item?.bidder?.name : ""}
                         </p>
-                      </NavLink>
-                      {/* {item.name} */}
+                      </NavLink> */}
+                      {item.name}
                       {/* <p className={"mt-1 text-gray-500"}>
                         {item.userCreate?.bizfullname}
                         {moment(item.createAt).format("DD/MM/YYYY HH:mm")}
