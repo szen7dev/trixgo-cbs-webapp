@@ -1,52 +1,11 @@
-/**
- * ? Import orders:
- * ? 1. react importation
- * ? 2. third party libraries importation
- * ? 3. libs, services, data, api importation
- * ? 4. components, assets importation
- * ? 5. helpers, util importation
- * ? 6. typings importation
- */
 import { FC, useEffect } from "react";
-
 import StatisticalChart from "./components/StatisticalChart";
-
 import CaretDownIcon from "assets/images/icon-caret-down.png";
 import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
 import { useQueryListProjectWithListAmountTask } from "services/hooks/pcm/useStatistical";
 import { Link, generatePath } from 'react-router-dom';
 import { useHistoryTraffics } from "services/hooks/auth/useAuth";
-
-// interface IData {
-// 	id: number,
-// 	name: string,
-// 	director: string,
-// 	secretary: string,
-// 	actions: {
-// 		type: string,
-// 		updateAt: number,
-// 		name: string
-// 	},
-// 	comment: {
-// 		user: string
-// 		message: string
-// 	},
-// 	mediaId: string
-// }
-
-// const getType = (key: number) => {
-// 	switch (key) {
-// 		case 1:
-// 			return 'đã cập nhật'
-// 		default:
-// 			return 'đã tạo mới'
-// 	}
-// }
-
-// const getDate = (time: number): number => {
-// 	return (new Date()).setDate((new Date()).getDate() - 1 * time);
-// }
 
 export type ItemTaskAmount = {
 	_id: string;
@@ -79,30 +38,6 @@ const ProjectDashboardTaskPage: FC = () => {
 		document.title = "Báo cáo công việc";
 	}, []);
 
-	// const [type, setType] = useState<string>('all');
-	// const [open, setOpen] = useState<{ show: boolean, mediaId: string }>({ show: false, mediaId: '' });
-
-	// const data: Array<IData> = Array.from(Array(30).keys()).map((_, i) => ({
-	// 	id: i,
-	// 	name: 'MAR.HAR.Court Yard By Marriott Ha Long Bay',
-	// 	director: 'Lê Lưu Phong-CPMI',
-	// 	secretary: 'Cao Thu Linh-CPMI',
-	// 	actions: {
-	// 		type: getType(i % 2),
-	// 		updateAt: getDate(i),
-	// 		name: 'Linh-CPMI'
-	// 	},
-	// 	comment: {
-	// 		user: 'Phùng Thị Hà-PGI',
-	// 		message: 'Hồ sơ dự án sao lâu không thấy cập nhật vậy chị Ngọc ơi, có vướng gì không?'
-	// 	},
-	// 	mediaId: i % 2 ? '61c6caf6f92c4e0d68779554' : '61c1ff7102022f1f1274edfb'
-	// }));
-
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	// const handleChange = (e: any) => { setType(e.target.value) };
-	// const handleClose = () => setOpen({ ...open, show: false });
-
 	const { listProject,
 		listAmountTask,
 		listAmountTaskOverdueWork,
@@ -127,35 +62,6 @@ const ProjectDashboardTaskPage: FC = () => {
 				<div className="flex flex-col bg-white text-cbs-subtext mt-4" style={{ height: "250px" }}>
 					<div className="flex justify-between flex-wrap items-center pl-6 pr-2.5">
 						<h3 className="text-x-large mt-2.5">Thống kê công việc theo dự án/phòng ban</h3>
-						{/* <div className="flex items-center mt-2.5">
-							<ul className="flex text-x-small" onChange={handleChange.bind(this)}>
-								<li className="pr-3 pl-1">
-									<label>
-										<input type="radio" name="type" id="" value="all" defaultChecked={type === 'all'} className="mr-2.5" />
-										Tất cả
-									</label>
-								</li>
-								<li className="pr-3 pl-1">
-									<label>
-										<input type="radio" name="type" id="" value="week" defaultChecked={type === 'week'} className="mr-2.5" />
-										Tuần này
-									</label>
-								</li>
-								<li className="pr-3 pl-1">
-									<label>
-										<input type="radio" name="type" id="" value="month" defaultChecked={type === 'month'} className="mr-2.5" />
-										Tháng này
-									</label>
-								</li>
-								<li className="pr-3 pl-1">
-									<label>
-										<input type="radio" name="type" id="" value="quater" defaultChecked={type === 'quater'} className="mr-2.5" />
-										Quý này
-									</label>
-								</li>
-							</ul>
-							<button className="rounded-md border border-cbs-border p-2">Chọn thời gian</button>
-						</div> */}
 					</div>
 					<div className="flex-1">
 						<StatisticalChart listProject={listProject} listAmountTask={listAmountTask}/>
@@ -198,7 +104,7 @@ const ProjectDashboardTaskPage: FC = () => {
 											<div className="flex items-center">
 												<div className="w-3 h-3 bg-cbs-schedule-nextweek" />
 												<span className="ml-1 text-primary-gray font-normal">
-													Tuần tới
+													7 ngày tới
 												</span>
 											</div>
 											<div className="flex items-center">
@@ -237,21 +143,15 @@ const ProjectDashboardTaskPage: FC = () => {
 											<input type="checkbox" className="cbs-checkbox" />
 										</td>
 										<td className="pb-2 pl-2.5 pr-4 pt-2.5 border border-l-0 border-cbs-border min-w-[360px]">
-											{/* { project.sign }{ project.name } */}
-											<Link to={generatePath("/pm/project/:id/subject", { id: project._id })}>
+											<Link to={generatePath("/pm/project/:id/folder", { id: project._id })}>
 												{project.sign}.{project.name}
-												{/* CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây */}
 											</Link>
 										</td>
-										{/* <td className="pb-2 pl-5 pr-4 pt-2.5 border border-cbs-border">
-											{ project?.company?.name || '' }
-										</td> */}
 										<td className="pb-2 px-3 pt-2 border border-r-0 border-cbs-border align-middle" style={{ minWidth: "155px", fontSize: '10px' }}>
 											<div className="flex w-full h-3 mt-2">
 												<button
 													className="flex items-center justify-center bg-red-500"
 													style={{ width: `${getPercentTypeTask(totalTaskOverdueWork, totalTask)}%` }}
-												// onClick={() => onClickBar("OUT_DATE")}
 												>
 													{/* Quá Hạn */}
 													<span className="text-white">
@@ -261,7 +161,6 @@ const ProjectDashboardTaskPage: FC = () => {
 												<button
 													className="flex items-center justify-center bg-yellow-500"
 													style={{ width: `${getPercentTypeTask(totalTaskNextWeekWork, totalTask)}%` }}
-												// onClick={() => onClickBar("NEXT_WEEK")}
 												>
 													<span className="text-white">
 														{/* Tuần Tới */}
@@ -271,7 +170,6 @@ const ProjectDashboardTaskPage: FC = () => {
 												<button
 													className="flex items-center justify-center bg-green-500"
 													style={{ width: `${getPercentTypeTask(totalTaskMoreThan7Days, totalTask)}%` }}
-												// onClick={() => onClickBar("MORE_THAN_SEVEN_DAYS")}
 												>
 													<span className="text-white">
 														{/* > 7 Ngày */}
@@ -312,4 +210,4 @@ const ProjectDashboardTaskPage: FC = () => {
 	);
 };
 
-export default ProjectDashboardTaskPage;
+export default ProjectDashboardTaskPage
