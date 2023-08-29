@@ -146,6 +146,7 @@ export interface DocumentQueryPayload extends QueryParam {
         keyword?: string;
         storageID?: string;
         storagesID?: string[];
+        isParent?: string;
     },
     isFetchList?: boolean;
 }
