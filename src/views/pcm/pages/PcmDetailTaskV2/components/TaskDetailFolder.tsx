@@ -248,7 +248,7 @@ export const TaskDetailFolder: FC<Props> = ({
                 </span>
                 <div className={"flex"}>
                     Nhóm: {task?.project?.sign} {">"}{" "}
-                    <Link to={`/pm/project/${task?.project?._id}/subject/folder/${task?.group?._id}`}>
+                    <Link to={`/pm/project/${task?.project?._id}/folder/folder/${task?.group?._id}`}>
                         {/* {getGroupTitle(task?.group)} */}
                         {task?.group?.sign}.{task?.group?.name}{">"}{" "}
                         {PCM_PROPOSAL_TASK[task.subtype]?.text}

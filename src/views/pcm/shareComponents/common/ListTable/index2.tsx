@@ -5,7 +5,7 @@ import parse from "html-react-parser";
 import cn from "classnames";
 
 import styles from "views/pcm/styles/pcm_task.module.css";
-import { ListProgress } from "../Progress";
+// import { ListProgress } from "../Progress";
 import { Executor } from "../Executor";
 import { PCM_STATUS_TASK } from "apis/localdb/index";
 
@@ -80,15 +80,9 @@ export const ListTable: FC<Props> = ({
           <th className="px-2 py-2 text-[13px] font-normal border text-left">
             Trạng thái
           </th>
-          <th className="px-2 py-2 text-[13px]  font-normal border text-left">
-            Tiến trình
-          </th>
           <th className="px-2 py-2 text-[13px] font-normal border text-left w-1/4">
             Mô tả/ghi chú
           </th>
-          {/* <th className="px-2 py-2 text-[13px] font-normal border text-left w-1/4">
-            Thảo luận
-          </th> */}
         </tr>
       </thead>
       <tbody>
@@ -122,30 +116,9 @@ export const ListTable: FC<Props> = ({
               <td className="p-2 border" style={{color: `#${PCM_STATUS_TASK[taskOutDate.status - 1].backgroud}`}}>
                   {PCM_STATUS_TASK[taskOutDate.status - 1].text}
               </td>
-              <td className="p-2 border">
-                <ListProgress
-                  color="bg-red-500"
-                  checklist={taskOutDate.checklist}
-                  percentage={taskOutDate.percentage}
-                />
-              </td>
               <td className={cn(styles["dont-break-out"], "p-2 border")}>
                 {subContentHtml(taskOutDate.description)}
               </td>
-              {/* <td className="border p-2">
-                {taskOutDate.lastLog && (
-                  <span className={cn(styles["dont-break-out"])}>
-                    {subContentHtml(taskOutDate.lastLog?.content)}
-                    <span> - </span>
-                    <span className="text-primary text-[13px]">
-                      {taskOutDate.lastLog?.author?.fullname}
-                    </span>
-                    <span className="text-primary-gray mx-2 text-[13px]">
-                      {moment(taskOutDate.lastLog?.createAt).fromNow()}
-                    </span>
-                  </span>
-                )}
-              </td> */}
             </tr>
           ))}
 
@@ -182,30 +155,9 @@ export const ListTable: FC<Props> = ({
               <td className="p-2 border" style={{color: `#${PCM_STATUS_TASK[tasksNexWeek.status - 1].backgroud}`}}>
                   {PCM_STATUS_TASK[tasksNexWeek.status - 1].text}
               </td>
-              <td className="p-2 border">
-                <ListProgress
-                  color="bg-yellow-500"
-                  checklist={tasksNexWeek.checklist}
-                  percentage={tasksNexWeek.percentage}
-                />
-              </td>
               <td className={cn(styles["dont-break-out"], "p-2 border")}>
                 {subContentHtml(tasksNexWeek.description)}
               </td>
-              {/* <td className="border p-2">
-                {tasksNexWeek.lastLog && (
-                  <span className={cn(styles["dont-break-out"])}>
-                    {subContentHtml(tasksNexWeek.lastLog?.content)}
-                    <span> - </span>
-                    <span className="text-primary text-[13px]">
-                      {tasksNexWeek.lastLog?.author.fullname}
-                    </span>
-                    <span className="text-primary-gray mx-2 text-[13px]">
-                      {moment(tasksNexWeek.lastLog?.createAt).fromNow()}
-                    </span>
-                  </span>
-                )}
-              </td> */}
             </tr>
           ))}
 
@@ -244,30 +196,9 @@ export const ListTable: FC<Props> = ({
               <td className="p-2 border" style={{color: `#${PCM_STATUS_TASK[taskMoreThanSevenDay.status - 1].backgroud}`}}>
                   {PCM_STATUS_TASK[taskMoreThanSevenDay.status - 1].text}
               </td>
-              <td className="p-2 border">
-                <ListProgress
-                  color="bg-green-500"
-                  checklist={taskMoreThanSevenDay.checklist}
-                  percentage={taskMoreThanSevenDay.percentage}
-                />
-              </td>
               <td className={cn(styles["dont-break-out"], "p-2 border")}>
                 {subContentHtml(taskMoreThanSevenDay.description)}
               </td>
-              {/* <td className="border p-2">
-                {taskMoreThanSevenDay.lastLog && (
-                  <span className={cn(styles["dont-break-out"])}>
-                    {subContentHtml(taskMoreThanSevenDay.lastLog?.content)}
-                    <span> - </span>
-                    <span className="text-primary text-[13px]">
-                      {taskMoreThanSevenDay.lastLog?.author?.bizfullname}
-                    </span>
-                    <span className="text-primary-gray mx-2 text-[13px]">
-                      {moment(taskMoreThanSevenDay.lastLog?.createAt).fromNow()}
-                    </span>
-                  </span>
-                )}
-              </td> */}
             </tr>
           ))}
 
@@ -304,30 +235,9 @@ export const ListTable: FC<Props> = ({
               <td className="p-2 border" style={{color: `#${PCM_STATUS_TASK[taskSuccess.status - 1].backgroud}`}}>
                   {PCM_STATUS_TASK[taskSuccess.status - 1].text}
               </td>
-              <td className="p-2 border">
-                <ListProgress
-                  color="bg-green-500"
-                  checklist={taskSuccess.checklist}
-                  percentage={taskSuccess.percentage}
-                />
-              </td>
               <td className={cn(styles["dont-break-out"], "p-2 border")}>
                 {subContentHtml(taskSuccess.description)}
               </td>
-              {/* <td className="border p-2">
-                {taskSuccess.lastLog && (
-                  <span className={cn(styles["dont-break-out"])}>
-                    {subContentHtml(taskSuccess.lastLog?.content)}
-                    <span> - </span>
-                    <span className="text-primary text-[13px]">
-                      {taskSuccess.lastLog?.author?.bizfullname}
-                    </span>
-                    <span className="text-primary-gray mx-2 text-[13px]">
-                      {moment(taskSuccess.lastLog?.createAt).fromNow()}
-                    </span>
-                  </span>
-                )}
-              </td> */}
             </tr>
         ))}
       </tbody>

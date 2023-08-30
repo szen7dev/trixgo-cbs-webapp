@@ -5,14 +5,10 @@ import moment from "moment";
 import useCheckedList from 'services/hooks/ppt/useCheckedList';
 import { useTask } from "services/hooks/useTask";
 
-import XIcon from 'assets/icons/X';
-import CaretDownIcon from "assets/images/icon-caret-down.png";
-import DownloadIcon from "assets/images/icons8-download-48_2.png";
-import SendEmailIcon from "assets/images/icons8-send-email-96.svg";
-import PrintIcon from "assets/images/icons8-print-32.png";
-// import HumanAvatar from "assets/images/human-avatar.svg";
+// import XIcon from 'assets/icons/X';
+// import CaretDownIcon from "assets/images/icon-caret-down.png";
+// import DownloadIcon from "assets/images/icons8-download-48_2.png";
 import { Link } from 'react-router-dom';
-
 interface Props {
 	open: boolean,
 	onClose: (open: boolean) => unknown,
@@ -56,21 +52,9 @@ const ModalInformation: FC<Props> = ({ open, onClose, dataPopup }) => {
 						>
 							<div className="relative w-screen max-w-[680px]">
 								<div className="h-full flex flex-col bg-white shadow-xl overflow-y-scroll">
-									<div className="px-6 py-3 inline-flex justify-between items-center">
-										<Dialog.Title className="text-2x-large text-gray-900 truncate max-w-lg">Thông tin trao đổi</Dialog.Title>
-										<button
-											type="button"
-											className="rounded-md text-cbs-subtext hover:text-black focus:outline-none"
-											onClick={() => onClose(false)}
-										>
-											<span className="sr-only">Close panel</span>
-											<XIcon className="h-5 w-5" aria-hidden="true" />
-										</button>
-									</div>
-									{/* Header */}
 									<div className='px-6 pt-2'>
 										<div className="flex mt-4 mb-3 pl-5 justify-between items-center">
-											<div className="flex items-center">
+											{/* <div className="flex items-center">
 												<input type="checkbox" className='cbs-checkbox' ref={checkboxRef} onClick={handleCheckAll} />
 												<button>
 													<img
@@ -87,21 +71,7 @@ const ModalInformation: FC<Props> = ({ open, onClose, dataPopup }) => {
 														alt="DownloadIcon"
 													/>
 												</button>
-												<button>
-													<img
-														className="w-6 mx-1 opacity-80"
-														src={SendEmailIcon}
-														alt="SendEmailIcon"
-													/>
-												</button>
-												<button>
-													<img
-														className="w-6 mx-1 opacity-70"
-														src={PrintIcon}
-														alt="PrintIcon"
-													/>
-												</button>
-											</div>
+											</div> */}
 
 											<div className="flex space-x-5">
 												<div className="flex items-center">
@@ -113,7 +83,7 @@ const ModalInformation: FC<Props> = ({ open, onClose, dataPopup }) => {
 												<div className="flex items-center">
 													<div className="w-3 h-3 bg-yellow-500" />
 													<span className="ml-1 text-primary-gray font-normal">
-														Tuần tới
+														7 ngày tới
 													</span>
 												</div>
 												<div className="flex items-center">
@@ -127,11 +97,17 @@ const ModalInformation: FC<Props> = ({ open, onClose, dataPopup }) => {
 										</div>
 									</div>
 
-									<div className="px-6 pt-2 relative flex-1 overflow-y-auto">
+									<div className="relative flex-1 overflow-y-auto">
 										{/* Content */}
 										{listTasks?.map((task: any, index) => {
 											let colorActualFinishTime  = `red`;
 											let textActualFinishTime  = `Quá hạn`;
+
+											if(+task.status === 3){
+												colorActualFinishTime  = `blue`;
+												textActualFinishTime  = `Hoàn thành`;
+											}
+
 											if(+typeStatusPopup === 2){
 												colorActualFinishTime  = `yellow`;
 												textActualFinishTime  = `Tuần tới`;
@@ -154,11 +130,6 @@ const ModalInformation: FC<Props> = ({ open, onClose, dataPopup }) => {
 															</Link>
 															<div className="flex justify-between items-center my-2">
 																<div className="flex items-center">
-																	{/* <img
-																		src={HumanAvatar}
-																		className="w-6 rounded-full"
-																		alt="Avatar"
-																	/> */}
 																	<img
 																		src={`${process.env.REACT_APP_URL_S3_USER}/${task.assignee.image}`}
 																		alt="Thumbnail"

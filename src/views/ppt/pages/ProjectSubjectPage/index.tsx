@@ -125,27 +125,27 @@ const ProjectSubjectPage: FC = () => {
 										<div className="flex items-center">
 											<div className="w-3 h-3 bg-cbs-schedule-expired" />
 											<span className="ml-1 text-primary-gray font-normal">
-												Quá hạn({totalOverdueWorkMain})
+												Quá hạn ({totalOverdueWorkMain})
 											</span>
 										</div>
 										<div className="flex items-center">
 											<div className="w-3 h-3 bg-cbs-schedule-nextweek" />
 											<span className="ml-1 text-primary-gray font-normal">
-												Tuần tới({totalNextWeekWorkMain})
+												7 ngày tới ({totalNextWeekWorkMain})
 											</span>
 										</div>
 										<div className="flex items-center">
 											<div className="w-3 h-3 bg-cbs-schedule-after-7days" />
 											<span className="ml-1 text-primary-gray font-normal">
 												{" "}
-												{">7 ngày"}({totalMoreThan7DaysMain})
+												{">7 ngày"} ({totalMoreThan7DaysMain})
 											</span>
 										</div>
 									</div>
 								</div>
 							</th>
 							<th className="py-2.5 px-3 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
-								Hoàn thành({totalFinishMain})
+								Hoàn thành ({totalFinishMain})
 							</th>
 						</tr>
 					</thead>
