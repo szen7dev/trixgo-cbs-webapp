@@ -13,7 +13,10 @@ import type {
     InsertTimeSheetChildPayload,
     InsertTimeSheetChildResponse,
     UpdateTimeSheetChildPayload,
-    UpdateTimeSheetChildResponse
+    UpdateTimeSheetChildResponse,
+    // DownloadPayload,
+    // ImportPayload,
+    // ExportManyPayload,
 } from 'typings/time-sheet';
 
 // Time Sheet Parent
@@ -26,7 +29,11 @@ interface UseQueryListTimeSheetParent {
     refetch: () => void;
     fetchNextPage: () => void;
     fetchPrevPage: () => void;
+    // insertAsync: (payload: DownloadPayload) => Promise<TimeSheetParent>;
+    // updateAsync: (payload: ImportPayload) => Promise<TimeSheetParent>;
+    // deleteManyAsync: (params: ExportManyPayload) => Promise<any>;
 }
+
 export const useQueryListTimeSheetParent = (): UseQueryListTimeSheetParent => {
     const result = useInfiniteQuery(
         `list_time-sheet.parent`, async () =>
@@ -62,6 +69,22 @@ export const useQueryListTimeSheetParent = (): UseQueryListTimeSheetParent => {
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPages = data?.pages[0]?.data?.totalPage || 0;
 
+    // // Tải mẫu import excel
+    // const { mutateAsync: downloadTemplateExcelAsync } =
+    //     useMutation((payload: DownloadPayload ) => TimeSheetChildRepository.downloadTemplateExcel(payload)
+    // );
+
+    // // Import excel
+    // const { mutateAsync: importExcelAsync } =
+    //     useMutation((payload: ImportPayload) => TimeSheetChildRepository.importExcel(payload)
+    // );
+
+    // // Export excel
+    // const { mutateAsync: exportExcelAsync } =
+    //     useMutation((payload: ExportManyPayload) =>
+    //     TimeSheetChildRepository.exportExcel(payload)
+    // );
+
     return {
         loading: isLoading,
         data: listTimeSheet,
@@ -71,6 +94,9 @@ export const useQueryListTimeSheetParent = (): UseQueryListTimeSheetParent => {
         refetch,
         fetchNextPage,
         fetchPrevPage,
+        // downloadTemplateExcelAsync,
+        // importExcelAsync,
+        // exportExcelAsync
     }
 }
 

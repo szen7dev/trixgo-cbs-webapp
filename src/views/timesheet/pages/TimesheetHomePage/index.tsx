@@ -255,14 +255,14 @@ const TimeSheetHomePage: FC = () => {
                 {TYPE[timeSheetParent.type]}
               </div>
               <div className={"px-2 py-4 table-cell box-border border-b"}>
-                {timeSheetParent.project.name}
+                {timeSheetParent?.project?.name}
               </div>
               <div
                 className={
                   "px-2 py-4 table-cell box-border border-b text-right"
                 }
               >
-                {timeSheetParent.hours}
+                {timeSheetParent?.hours}
               </div>
               <div
                 className={
