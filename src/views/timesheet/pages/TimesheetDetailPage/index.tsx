@@ -12,6 +12,7 @@ import StarIcon from "assets/images/star.svg";
 import { Paginate } from "shareComponents/common/Paginate";
 import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
 import { InputWidthAdjust } from "views/timesheet/shareComponents/common";
+import { createLinkAndClick } from "utils";
 
 import {
   DetailMainRow,
@@ -28,6 +29,8 @@ import {
   useQueryListTimeSheetChild,
   useMutationTimeSheetChild,
 } from "services/hooks/useTimeSheet";
+import { useCashBook } from 'services/hooks/financial/useCashBook';
+
 import { useAuth } from "services/hooks/auth/useAuth";
 import { setMainRowCollapsed } from "redux/reducer/Timesheet";
 import { User } from "typings/user";
@@ -164,6 +167,30 @@ const TimeSheetDetailPage: FC = () => {
 
   const dispatch = useDispatch();
 
+  //_____Import, export excel
+  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+      isExporting: false,
+  });
+
+  const { downloadTemplateExcelAsync, importExcelAsync } = useCashBook({});
+
+  const handleDownloadExcel = async () => {
+      try {
+            setStateExport({ isExporting: true });
+            const { error, data } = await downloadTemplateExcelAsync({ parentID: timeSheetParentID, option: '1' });
+
+            if(error) {
+                return toast.warn(data?.message);
+            }
+
+            data && createLinkAndClick(data, '_self');
+        } catch (error: any) {
+            toast.error(error.message)
+        } finally {
+            setStateExport({ isExporting: false });
+      }
+  }
+
   if(!timeSheetInfo || loading || !user) return <Loader className="border-primary" />
 
   return (
@@ -190,6 +217,11 @@ const TimeSheetDetailPage: FC = () => {
           </p>
         </div>
         <div className={"flex-1 flex items-center justify-end"}>
+          <button className={"mr-2 text-primary"}
+            onClick={handleDownloadExcel}
+           >
+             Tải Excel bảng chấm công
+           </button>
           <button
             className="text-gray-400 mr-2"
             onClick={() => {
@@ -252,7 +284,7 @@ const TimeSheetDetailPage: FC = () => {
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Ngày tháng
+              Ngày
             </div>
             <div
               className={
