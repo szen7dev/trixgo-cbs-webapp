@@ -334,14 +334,12 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
   }
 
   const handlePasteFile = (event: any) => {
-		// event.preventDefault();
-
 		if(event.clipboardData?.files?.length) {
 		  return handleUploadAttach(event.clipboardData.files)
 		}
 
-		const text = event.clipboardData.getData('text/plain');
-		text && window.document.execCommand('insertText', false, text);
+		// const text = event.clipboardData.getData('text/plain');
+		// text && window.document.execCommand('insertText', false, text);
 	}
 
   const handleRemoveUpload = (file: FileProp | FilePropsUpload, type: 'FILE' | 'IMAGE') => {

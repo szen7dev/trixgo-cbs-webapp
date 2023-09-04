@@ -2,7 +2,7 @@
  * BẢN CẮT GỌN, BỎ PHẦN SOCKET VÀ THÔNG BÁO CỦA CHAT
  * File nguyên bản xem tại index_old.tsx
  */
-import { FC, useCallback, useMemo, useRef, useState } from "react";
+import { FC, useCallback, useMemo, useRef, useState, useEffect } from "react";
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
 import mailIcon from "assets/images/icons8-secure-mail-48.svg";
 import chatIcon from "assets/images/icons8-chat-48.svg";
@@ -16,12 +16,15 @@ import { usePcmPlanTaskNotification } from "services/hooks/pcm/usePcmDashboardV2
 import Favico from "react-favico-js";
 import { useGetListAppOfUser } from "services/hooks/auth/usePermissions";
 import { useTranslation } from "react-i18next";
+import { useSocket } from "services/hooks/useSocket";
 
 type Props = {
   handleMenuEvent: () => void;
 };
+
 export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
+  const { current: socket }: any = useSocket();
 
   const { listAppOfUser } = useGetListAppOfUser();
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -30,7 +33,7 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
   const pathBreak = pathname.split("/");
   const firstRoute = pathBreak[1];
 
-  const [enabled, setEnabled] = useState(false);
+  const [enabled] = useState(false);
 
   const { data } = usePcmPlanTaskNotification({ enabled: enabled });
 
@@ -56,6 +59,21 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
     }
     return isPermission;
   }, [listAppOfUser]);
+
+  useEffect(() => {
+    if (!socket) return;
+    
+    const onUpdateBadgeNotification = ({ error, data }: any) => {
+      if(error || !Object.keys(data).length) return;
+      setBadge({ amountUnreadTask: data.amountUnreadTask });
+    }
+
+    socket.on("SUBJECT_PCM_SSC_UPDATE_COUNT_NOTIFICATION", onUpdateBadgeNotification);
+
+    return () => {
+      socket.off("SUBJECT_PCM_SSC_UPDATE_COUNT_NOTIFICATION", onUpdateBadgeNotification);
+    };
+  }, [socket]);
 
   return (
     <div
