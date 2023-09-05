@@ -39,7 +39,7 @@ import {
 
 import {
   DocumentDashboardPage,
-} from "views/document/pages";
+} from "views/document/pages"
 
 import ProjectAdminFunctionalTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminFunctionalTab";
 import ProjectAdminDetail from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminDetail";
