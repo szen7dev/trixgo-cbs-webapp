@@ -36,11 +36,11 @@ type Tab = {
 }
 
 export const HomeLeftMenuContent: FC = () => {
+    useAuth();
     const { t } = useTranslation()
     const [enabled, setEnabled] = useState(false);
     const { data } = usePcmPlanTaskNotification({ enabled: enabled });
     const { openModal } = useModal();
-    const { user } = useAuth();
     const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
     const dispatch = useDispatch();
     const [menuShowList, setMenuState] = useState(false);

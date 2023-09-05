@@ -22,6 +22,7 @@ import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { APP_ID } from 'apis/localdb';
 // import { TaskDetailEvaluate } from "./components/TaskDetailEvaluate"; // Sử dụng sau
 import { TaskDetailAddCV } from "./components/TaskDetailAddCV";
+import { useSocket } from "services/hooks/useSocket";
 
 const PcmDetailTaskV2: FC = () => {
     const [collapse, setCollapse] = useState(false);
@@ -51,6 +52,7 @@ const PcmDetailTaskV2: FC = () => {
 
     const history = useHistory();
     const { user } = useAuth();
+    const { current: socket }: any = useSocket();
 
     const { info: taskInfo, isLoadingInfo, refetchInfo, updateStatusMultipleAsync } = useTask({
         params: {
@@ -60,13 +62,19 @@ const PcmDetailTaskV2: FC = () => {
     });
 
     useEffect(() => {
+        document.title = `Trixgo | ${taskInfo ? taskInfo?.name : "Chi tiết chủ đề"}`;
+
         (async () => {
             await updateStatusMultipleAsync({
                 taskIDs: [taskId],
                 option: 1
             });
         })()
-    }, [])
+	}, [])
+
+    useEffect(() => {
+        socket && socket.emit('SUBJECT_PCM_CSS_UPDATE_COUNT_NOTIFICATION', { taskID: taskId });
+    }, [socket])
 
     useEffect(() => {
         // if (!isSuccessApp || !taskInfo) return;
@@ -265,10 +273,6 @@ const PcmDetailTaskV2: FC = () => {
             }
         }
     }, [taskInfo]);
-
-    useEffect(() => {
-        document.title = `Trixgo | ${taskInfo ? taskInfo?.name : "Chi tiết chủ đề"}`
-	}, [])
 
     const handleCollapse = () => {
         setCollapse(!collapse);
