@@ -6,6 +6,8 @@ export const supporters = [
   "tungtt@pgipartner.com",
   "thupt@pgipartner.com",
   "hapt@pgipartner.com",
+  "nhantt.trx@gmail.com",
+  "hiepnh@trixgo.com",
 ];
 
 export function isSupporter(user: User): boolean {
