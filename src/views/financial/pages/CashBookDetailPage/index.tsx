@@ -607,7 +607,7 @@ export const CashBookDetailPage: FC = () => {
               <th className="px-2 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
                 Ngày tháng
               </th>
-              <th className="px-2 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border" style={{ width: "20%" }}>
+              <th className="px-2 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border" style={{ width: "32%" }}>
                 Nội dung
               </th>
               <th className="px-2 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
