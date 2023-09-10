@@ -409,7 +409,7 @@ export const DashboardV2: FC<Props> = () => {
 
       if (error || !user) return;
       const { infoObject, app } = data;
-      const accessUsers = infoObject.accessUsers;
+      const accessUsers = infoObject?.accessUsers ?? {};
 
       if(app !== APP_KEY.PCM_PLAN_TASK) return;
       if(!accessUsers.includes(user._id)) return;
@@ -417,14 +417,20 @@ export const DashboardV2: FC<Props> = () => {
       refetchListTask();
     }
 
+    const onEventUpdateNotification = (result: any) => {
+      const { data, error } = result;
+      if (error || !data.infoTask) return;
+      refetchListTask();
+    }
+
     socket?.on("COMMENT_SSC_ADD_COMMENT", onEventAddComment);
+    socket?.on("SUBJECT_PCM_SSC_UPDATE_NOTIFICATION", onEventUpdateNotification);
 
     return () => {
         socket?.off("COMMENT_SSC_ADD_COMMENT", onEventAddComment);
+        socket?.off("SUBJECT_PCM_CSS_UPDATE_NOTIFICATION", onEventUpdateNotification);
     }
   }, [socket])
-
-  // console.log(listDataForFile)
 
   return (
     <div className="t-home flex flex-col h-full overflow-hidden">

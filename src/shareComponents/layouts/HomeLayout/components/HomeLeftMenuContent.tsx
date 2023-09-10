@@ -61,28 +61,28 @@ export const HomeLeftMenuContent: FC = () => {
     const { current: socket }: any = useSocket();
 
     useEffect(() => {
-        if (!socket) return;
-
         const onUpdateBadgeNotification = ({ error, data }: any) => {
             if(error || !Object.keys(data).length) return;
 
-            const {
-                amountUnreadTask,
-                amountMyTask1,
-                amountMyTask2,
-                amountMyTask3,
-            } = data;
+            if(data.amountUnreadTask) {
+                const {
+                    amountUnreadTask,
+                    amountMyTask1,
+                    amountMyTask2,
+                    amountMyTask3,
+                } = data;
 
-            setBadge({
-                amountUnreadTask,
-                amountMyTask: Number(amountMyTask1 + amountMyTask2 + amountMyTask3) || 0,
-            })
+                setBadge({
+                    amountUnreadTask,
+                    amountMyTask: Number(amountMyTask1 + amountMyTask2 + amountMyTask3) || 0,
+                })
+            }
         }
 
-        socket.on("SUBJECT_PCM_SSC_UPDATE_COUNT_NOTIFICATION", onUpdateBadgeNotification);
+        socket?.on("SUBJECT_PCM_SSC_UPDATE_NOTIFICATION", onUpdateBadgeNotification);
 
         return () => {
-          socket.off("SUBJECT_PCM_SSC_UPDATE_COUNT_NOTIFICATION", onUpdateBadgeNotification);
+          socket?.off("SUBJECT_PCM_SSC_UPDATE_NOTIFICATION", onUpdateBadgeNotification);
         };
     }, [socket]);
 

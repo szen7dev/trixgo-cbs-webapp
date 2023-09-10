@@ -19,7 +19,7 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import { TaskDetailOpenedBidding } from "./components/TaskDetailOpenedBidding";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 // import { useHistoryTraffics } from "services/hooks/auth/useAuth";
-import { APP_ID } from 'apis/localdb';
+// import { APP_ID } from 'apis/localdb';
 // import { TaskDetailEvaluate } from "./components/TaskDetailEvaluate"; // Sử dụng sau
 import { TaskDetailAddCV } from "./components/TaskDetailAddCV";
 import { useSocket } from "services/hooks/useSocket";
@@ -63,18 +63,20 @@ const PcmDetailTaskV2: FC = () => {
 
     useEffect(() => {
         document.title = `Trixgo | ${taskInfo ? taskInfo?.name : "Chi tiết chủ đề"}`;
+	}, [])
 
+    useEffect(() => {
         (async () => {
             await updateStatusMultipleAsync({
                 taskIDs: [taskId],
                 option: 1
             });
+            socket?.emit('SUBJECT_PCM_CSS_UPDATE_NOTIFICATION', {
+                taskID: taskId,
+                isGetCountNotification: true
+            });
         })()
-	}, [])
-
-    useEffect(() => {
-        socket && socket.emit('SUBJECT_PCM_CSS_UPDATE_COUNT_NOTIFICATION', { taskID: taskId });
-    }, [socket])
+    }, [socket, taskId])
 
     useEffect(() => {
         // if (!isSuccessApp || !taskInfo) return;

@@ -61,17 +61,18 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
   }, [listAppOfUser]);
 
   useEffect(() => {
-    if (!socket) return;
-    
     const onUpdateBadgeNotification = ({ error, data }: any) => {
       if(error || !Object.keys(data).length) return;
-      setBadge({ amountUnreadTask: data.amountUnreadTask });
-    }
 
-    socket.on("SUBJECT_PCM_SSC_UPDATE_COUNT_NOTIFICATION", onUpdateBadgeNotification);
+      if(data.amountUnreadTask) {
+        setBadge({ amountUnreadTask: data.amountUnreadTask });
+      }
+    }
+    
+    socket?.on("SUBJECT_PCM_SSC_UPDATE_NOTIFICATION", onUpdateBadgeNotification);
 
     return () => {
-      socket.off("SUBJECT_PCM_SSC_UPDATE_COUNT_NOTIFICATION", onUpdateBadgeNotification);
+      socket?.off("SUBJECT_PCM_SSC_UPDATE_NOTIFICATION", onUpdateBadgeNotification);
     };
   }, [socket]);
 
