@@ -101,7 +101,7 @@ const PcmDetailTaskV2: FC = () => {
             return history.push(`/pcm/home`);
         }
     }, [taskInfo])
-    
+
     useEffect(() => {
         if (!taskInfo || !user) return;
 
@@ -321,7 +321,7 @@ const PcmDetailTaskV2: FC = () => {
                     <TaskDetailOpenedBidding task={taskInfo} />
                     <TaskDetailSubtask task={taskInfo} userId={user?._id} />
                     {
-                        (taskInfo?.subtype == 2 && ["6046bedeb55525368b11c5c3","5e047dc05e30dce72849a4a4"].includes(user.company?._id.toString())) ? 
+                        (taskInfo?.subtype == 2 && ["6046bedeb55525368b11c5c3","5e047dc05e30dce72849a4a4"].includes(user.company?._id.toString())) ?
                         <TaskDetailSubmit task={taskInfo} userId={user?._id} />: <></>
                     }
                     <TaskDetailRelatedTask task={taskInfo} userId={user?._id} refetchInfo={refetchInfo} />

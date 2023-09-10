@@ -27,8 +27,8 @@ import { validateFiles } from 'validation/file';
 import { PCM_PROPOSAL_TASK } from "apis/localdb";
 import { APP_ID } from "apis/localdb";
 import { humanFileSize } from 'utils/converter';
-import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
 import { useAuth } from "services/hooks/auth/useAuth";
+import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
 
 /**
  * Components, Assets
@@ -810,10 +810,12 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
 
               <div className={"px-6 my-3"}>
                 <Editor
-                  onEditorChange={(value) => {
-                    const contentText = editorRef.current?.getContent({ format: 'text' });
-                    setFieldValue("description", value);
-                    setFieldValue("descriptioncv", contentText);
+                  onEditorChange={(_, editor) => {
+                    const contentRaw = editor.getContent({ format: 'raw' });
+                    const contentRawCv = editor.getContent({ format: 'text' });
+
+                    setFieldValue("description", contentRaw);
+                    setFieldValue("descriptioncv", contentRawCv);
                   }}
                   onInit={(evt, editor) => editorRef.current = editor}
                   onPaste={handlePasteFile}
