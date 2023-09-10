@@ -7,7 +7,7 @@ import { useModal } from "services/hooks/useModal";
 export const Modal: FC = () => {
   const { isModalOpen, closeModal, isManualClose, modalContent } = useModal();
 
-  const handleCloseModal = () => isManualClose ? null : closeModal();
+  const handleCloseModal = () => isManualClose ? closeModal() : null;
 
   return (
     <Transition show={isModalOpen} as={Fragment}>

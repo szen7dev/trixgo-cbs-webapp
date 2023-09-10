@@ -4,7 +4,7 @@ import { Route, Switch, Redirect, matchPath } from "react-router-dom";
 import { ProtectedRoute } from "routes/components";
 
 /*=====2.PROVIDERS=====*/
-import { ModalProvider } from "views/document/contexts/modal";
+// import { ModalProvider } from "views/document/contexts/modal";
 
 /*=====3.LAYOUTS=====*/
 import { HomeLayout } from "shareComponents/layouts";

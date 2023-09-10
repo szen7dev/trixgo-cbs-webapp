@@ -20,7 +20,7 @@ import { ModalAddNewTask } from "shareComponents/common";
 import API from "apis/repository";
 import { toast } from "react-toastify";
 
-const FolderIcon: FC<{ type: string }> = ({ type }) => {	
+const FolderIcon: FC<{ type: string }> = ({ type }) => {
 	switch (type) {
 		case "file":
 			return <></>;
@@ -34,7 +34,7 @@ const FolderIcon: FC<{ type: string }> = ({ type }) => {
 }
 
 const ProjectFolderPage: FC<RouteComponentProps> = () => {
-	const { tab } = useParams<{ tab: string}>()
+	// const { tab } = useParams<{ tab: string}>()
 
 	const history = useHistory();
 	const { openModal } = useModal();

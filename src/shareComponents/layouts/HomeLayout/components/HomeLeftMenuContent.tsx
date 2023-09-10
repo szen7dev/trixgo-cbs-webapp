@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import adminIcon from "assets/images/icons8-user-shield-48.svg"
 import plusIcon from "assets/images/icons8-plus-math-96.svg"
 import sendAndReceiveIcon from "assets/images/icons-send-and-receive.svg"
@@ -14,14 +14,14 @@ import deliveryImage from "assets/menu/project/icons-project-delivery.svg"
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { useTranslation } from "react-i18next";
+import { NavLink } from 'react-router-dom';
 
 import { useModal } from "../../../../services/hooks/useModal";
 import { ModalAddNewTask } from "../../../common";
-import { NavLink } from 'react-router-dom';
 
 /*=====6.HOOKS/APIS=====*/
 import { useAuth } from "services/hooks/auth/useAuth";
-import { useCheckPerAccessApp, useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/auth/usePermissions";
+import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
 import { usePcmPlanTaskNotification } from "services/hooks/pcm/usePcmDashboardV2";
 import { useDispatch } from "react-redux";
@@ -37,13 +37,16 @@ type Tab = {
 
 export const HomeLeftMenuContent: FC = () => {
     useAuth();
-    const { t } = useTranslation()
-    const [enabled, setEnabled] = useState(false);
-    const { data } = usePcmPlanTaskNotification({ enabled: enabled });
-    const { openModal } = useModal();
-    const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
+
     const dispatch = useDispatch();
+    const [enabled, setEnabled] = useState(false);
     const [menuShowList, setMenuState] = useState(false);
+
+    const { t } = useTranslation()
+    const { openModal } = useModal(true);
+    const { current: socket }: any = useSocket();
+    const { data } = usePcmPlanTaskNotification({ enabled: enabled });
+    const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 
     const [badge, setBadge] = useState({
         amountUnreadTask: data?.data?.amountUnreadTask,
@@ -57,8 +60,6 @@ export const HomeLeftMenuContent: FC = () => {
     const amountMyTask = useMemo(() => {
         return badge.amountMyTask || Number(data?.data?.amountMyTask1 + data?.data?.amountMyTask2 + data?.data?.amountMyTask3) || 0;
     }, [data?.data, badge.amountMyTask])
-
-    const { current: socket }: any = useSocket();
 
     useEffect(() => {
         const onUpdateBadgeNotification = ({ error, data }: any) => {
@@ -165,9 +166,11 @@ export const HomeLeftMenuContent: FC = () => {
     ];
 
     useEffect(() => {
-        setTimeout(() => {
+        const timeout = setTimeout(() => {
             setEnabled(true);
         }, 300);
+
+        return () => clearTimeout(timeout);
     }, []);
 
     const renderNav = (nav: {
@@ -187,6 +190,7 @@ export const HomeLeftMenuContent: FC = () => {
             </NavLink>
         )
     }
+
     return (
         <>
             <button
