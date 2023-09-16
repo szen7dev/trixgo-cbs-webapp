@@ -19,10 +19,9 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import { TaskDetailOpenedBidding } from "./components/TaskDetailOpenedBidding";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 // import { useHistoryTraffics } from "services/hooks/auth/useAuth";
-import { APP_ID } from 'apis/localdb';
+// import { APP_ID } from 'apis/localdb';
 // import { TaskDetailEvaluate } from "./components/TaskDetailEvaluate"; // Sử dụng sau
 import { TaskDetailAddCV } from "./components/TaskDetailAddCV";
-import { useSocket } from "services/hooks/useSocket";
 
 const PcmDetailTaskV2: FC = () => {
     const [collapse, setCollapse] = useState(false);
@@ -46,13 +45,10 @@ const PcmDetailTaskV2: FC = () => {
         hasPermissionViewBidding: false,
     });
 
-    // const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
-
     const { id: taskId } = useParams<{ id: string }>();
 
     const history = useHistory();
     const { user } = useAuth();
-    const { current: socket }: any = useSocket();
 
     const { info: taskInfo, isLoadingInfo, refetchInfo, updateStatusMultipleAsync } = useTask({
         params: {
@@ -63,26 +59,19 @@ const PcmDetailTaskV2: FC = () => {
 
     useEffect(() => {
         document.title = `Trixgo | ${taskInfo ? taskInfo?.name : "Chi tiết chủ đề"}`;
+	}, [])
 
+    useEffect(() => {
         (async () => {
             await updateStatusMultipleAsync({
                 taskIDs: [taskId],
                 option: 1
             });
         })()
-	}, [])
+    }, [taskId])
 
     useEffect(() => {
-        socket && socket.emit('SUBJECT_PCM_CSS_UPDATE_COUNT_NOTIFICATION', { taskID: taskId });
-    }, [socket])
-
-    useEffect(() => {
-        // if (!isSuccessApp || !taskInfo) return;
         if (!taskInfo) return;
-        // if (isSuccessApp && !hasPermission) {
-        //     toast.error("Bạn không có quyền truy cập tính năng này!");
-        //     return history.push("/");
-        // };
 
         if (taskInfo.message === "permission_denied" ||
             taskInfo.message === "Not found task" ||
@@ -99,7 +88,7 @@ const PcmDetailTaskV2: FC = () => {
             return history.push(`/pcm/home`);
         }
     }, [taskInfo])
-    
+
     useEffect(() => {
         if (!taskInfo || !user) return;
 
@@ -319,7 +308,7 @@ const PcmDetailTaskV2: FC = () => {
                     <TaskDetailOpenedBidding task={taskInfo} />
                     <TaskDetailSubtask task={taskInfo} userId={user?._id} />
                     {
-                        (taskInfo?.subtype == 2 && ["6046bedeb55525368b11c5c3","5e047dc05e30dce72849a4a4"].includes(user.company?._id.toString())) ? 
+                        (taskInfo?.subtype == 2 && ["6046bedeb55525368b11c5c3","5e047dc05e30dce72849a4a4"].includes(user.company?._id.toString())) ?
                         <TaskDetailSubmit task={taskInfo} userId={user?._id} />: <></>
                     }
                     <TaskDetailRelatedTask task={taskInfo} userId={user?._id} refetchInfo={refetchInfo} />

@@ -27,14 +27,14 @@ function checkCreateAtWith60minute(time: any){
     const nowDate = moment();
     if (nowDate.diff(timeStartComment, 'minutes') < 60) {
         return true;
-    }else{
+    } else{
         return false;
     }
 }
 
 export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
-    const { updateFileAsync } = useFileCore();
     const editorRef = useRef<EditorType>();
+    const { updateFileAsync } = useFileCore();
     const [editDescription, setEditDescription] = useState(false);
     const [isHasPermissionUpdateDescription, setIsPermissionUpdateDescription] = useState(false);
     const [isShowImageFullScreen, setIsShowImageFullScreen] = useState(false);
@@ -90,6 +90,7 @@ export const TaskDetailDescription: FC<Props> = ({ task, refetchInfo }) => {
         });
 		toast.success('Cập nhật ghi chú thành công', { autoClose: 2000 });
     }, 1000);
+
     return (
         <div className={"task-description flex items-start mt-5"}>
             <span className={"mr-4"}>

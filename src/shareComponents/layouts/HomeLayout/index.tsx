@@ -27,10 +27,11 @@ export const HomeLayout: FC<Props> = ({ children }) => {
   const [isHeaderCollapse, setIsHeaderCollapse] = useState(false);
   const [isLeftMenuCollapse, setIsLeftMenuCollapse] = useState(false);
   const [isRightSideBarCollapse, setIsRightSideBarCollapse] = useState(false);
-  
+
   const handleMenuEvent = () => {
     setIsLeftMenuCollapse(!isLeftMenuCollapse);
   };
+
   return (
     <section
       className={cn("home-layout relative bg-primary-light", {
@@ -45,9 +46,7 @@ export const HomeLayout: FC<Props> = ({ children }) => {
         <LeftNavigate handleMenuEvent={handleMenuEvent} />
         <section className={"main-content-wrapper flex-1"}>
           {/*  Main header */}
-          <MainHeaderV2
-            headerTitle={t("menu:subject")}
-          >
+          <MainHeaderV2 headerTitle={t("menu:subject")}>
             <HomeHeaderContent />
           </MainHeaderV2>
           <div className="flex w-full">

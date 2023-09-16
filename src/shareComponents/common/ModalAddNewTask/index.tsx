@@ -27,8 +27,9 @@ import { validateFiles } from 'validation/file';
 import { PCM_PROPOSAL_TASK } from "apis/localdb";
 import { APP_ID } from "apis/localdb";
 import { humanFileSize } from 'utils/converter';
-import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
 import { useAuth } from "services/hooks/auth/useAuth";
+import { useFileCore } from "services/hooks/useFileCore";
+import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
 
 /**
  * Components, Assets
@@ -43,6 +44,8 @@ import { Editor as EditorType } from "tinymce";
 import iconAttach from "assets/images/icons8-attach-48.svg";
 import { FileProp, FilePropsUpload } from "typings/common";
 import { GroupSearchable } from "../GroupSearchable";
+import { useSocket } from "services/hooks/useSocket";
+// import { useSocket } from "services/hooks/useSocket";
 // import { Popover } from "@mui/material";
 // import { borderRadius } from "@mui/system";
 
@@ -69,6 +72,7 @@ type Props = {
 
 export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
   const history = useHistory();
+  const { current: socket }: any = useSocket();
   const { closeModal } = useModal(true);
   const editorRef = useRef<EditorType>();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -76,6 +80,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
   const groupSearchableRef = React.useRef<GroupSearchableHandle>(null);
 
   const [tokens, setTokens] = useState<any[]>([]);
+  const [attachmentsCanceled, setAttachmentsCanceled] = useState<Array<{ type: 'FILE' | 'IMAGE', key: number }>>([]);
   const [searchDepartmentValue, setSearchDepartmentValue] = useState("");
   const [searchFriendName, setSearchFriendName] = useState("");
   const [searchContract, setSearchContract] = useState("");
@@ -90,6 +95,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
 
   const { user } = useAuth();
   const { addTaskAsync, updateTaskAsync } = useTask({});
+  const { deleteFilesAsync } = useFileCore();
 
   const { addFileToUpload } = useUpload({
     appID: APP_ID.PCM.id,
@@ -197,16 +203,31 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
   const handleCreateTask = async (values: any) => {
     try {
       let files: string[] = [];
+      const filesCanceled: number[] = [];
+      const imagesCanceled: number[] = [];
+      const filesDelete: string[] = [];
+
+      attachmentsCanceled.map(attachment => {
+        if(attachment.type === 'IMAGE') imagesCanceled[imagesCanceled.length] = attachment.key;
+        else filesCanceled[filesCanceled.length] = attachment.key;
+      })
 
       // Get list file uploaded
-      for (const [, { _id }] of Object.entries(uploads.images)) {
-        _id && (files = [...files, _id]);
+      for (const [key, { _id }] of Object.entries(uploads.images)) {
+        if(imagesCanceled.includes(+key)) {
+          filesDelete[filesDelete.length] = _id;
+        } else if(_id) {
+          files = [...files, _id];
+        }
       }
 
-      for (const [, { _id }] of Object.entries(uploads.files)) {
-        _id && (files = [...files, _id]);
+      for (const [key, { _id }] of Object.entries(uploads.files)) {
+        if(filesCanceled.includes(+key)) {
+          filesDelete[filesDelete.length] = _id;
+        } else if(_id) {
+          files = [...files, _id];
+        }
       }
-      // console.log({ files, uploads });
 
       if (files.length) {
         values.authorAttachs = files;
@@ -215,9 +236,11 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
       if (!values.groupID) {
         values.groupID = groupID;
       }
-      // console.log({ values })
 
-      closeModal();
+      if(filesDelete.length) {
+        await deleteFilesAsync(filesDelete);
+      }
+
       const { error, data } = await addTaskAsync({
         ...values,
         taskID,
@@ -226,7 +249,18 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
 
       if (error) return toast.warning(data.message);
 
-      history.push(`/pcm/detail/${data._id}`);
+      socket?.emit('SUBJECT_PCM_CSS_ADD_TASK', {
+          taskID,
+      });
+      socket?.emit('SUBJECT_PCM_CSS_UPDATE_NOTIFICATION', {
+          taskID,
+          isGetCountNotification: true
+      });
+
+      setTimeout(() => {
+        closeModal();
+        history.push(`/pcm/detail/${data._id}`);
+      }, 300)
     } catch (error) {
       if (typeof error === "string") {
         toast.error(error);
@@ -348,6 +382,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
       token && token?.source?.cancel('Operation request canceled by the user.');
 
       type === 'IMAGE' ? removeUploadedImage(file.id) : removeUploadedFile(file.id);
+      setAttachmentsCanceled(attachments => ([...attachments, { type, key: +file.id }]));
     } else {
       const token = tokens.find(item => (item.key == file._id) && (item?.file?.name === file?.name))
       token && token?.source?.cancel('Operation request canceled by the user.');
@@ -810,10 +845,12 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
 
               <div className={"px-6 my-3"}>
                 <Editor
-                  onEditorChange={(value) => {
-                    const contentText = editorRef.current?.getContent({ format: 'text' });
-                    setFieldValue("description", value);
-                    setFieldValue("descriptioncv", contentText);
+                  onEditorChange={(_, editor) => {
+                    const contentRaw = editor.getContent({ format: 'raw' });
+                    const contentRawCv = editor.getContent({ format: 'text' });
+
+                    setFieldValue("description", contentRaw);
+                    setFieldValue("descriptioncv", contentRawCv);
                   }}
                   onInit={(evt, editor) => editorRef.current = editor}
                   onPaste={handlePasteFile}
@@ -881,12 +918,14 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
               </div>
 
               <div className="px-6 mb-3">
-                {(!!Object.keys(uploads.files).length || !!Object.keys(uploads.images).length) &&
-                  [...toArray(uploads.files), ...toArray(uploads.images)].map(file => {
+                {Object.keys(uploads.files).length ?
+                  [...toArray(uploads.files)].map(file => {
                     if (!file || Object.keys(file).length === 1) return;
 
                     const { file: fileInfo, progress, id } = file;
                     const isProgress = progress < 100;
+
+                    if(!fileInfo) return;
 
                     return (
                       <div key={`${id}-${fileInfo.name}-${fileInfo.size}`} className="bg-cbs-file-upload-bg max-w-[600px] px-2 py-1 mb-3 flex items-center">
@@ -899,12 +938,39 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                             <div style={{ width: `${progress}%` }} className={"bg-primary absolute top-0 left-0 h-full"}></div>
                           )}
                         </div>
-                        <button className="ml-auto" onClick={handleRemoveUpload.bind(null, file, 'FILE')}>
+                        <button className="ml-auto" type="button" onClick={handleRemoveUpload.bind(null, file, 'FILE')}>
                           <Close />
                         </button>
                       </div>
                     )
-                  })}
+                  }) : null}
+
+                {Object.keys(uploads.images).length ?
+                  [...toArray(uploads.images)].map(file => {
+                    if (!file || Object.keys(file).length === 1) return;
+
+                    const { file: fileInfo, progress, id } = file;
+                    const isProgress = progress < 100;
+
+                    if(!fileInfo) return;
+
+                    return (
+                      <div key={`${id}-${fileInfo.name}-${fileInfo.size}`} className="bg-cbs-file-upload-bg max-w-[600px] px-2 py-1 mb-3 flex items-center">
+                        <p className={`truncate mr-2 font-bold ${isProgress ? 'text-black' : 'text-primary'}`} title={fileInfo.name}>
+                          {fileInfo.name}
+                        </p>
+                        <span className="mr-2 text-primary-gray font-bold">({humanFileSize(fileInfo.size)})</span>
+                        <div className={`w-1/5 h-[12px] ${isProgress && 'mr-2 border border-primary bg-white relative'}`}>
+                          {isProgress && (
+                            <div style={{ width: `${progress}%` }} className={"bg-primary absolute top-0 left-0 h-full"}></div>
+                          )}
+                        </div>
+                        <button className="ml-auto" type="button" onClick={handleRemoveUpload.bind(null, file, 'IMAGE')}>
+                          <Close />
+                        </button>
+                      </div>
+                    )
+                  }) : null}
 
                 {/* <div key={`${id}-${fileInfo.name}-${fileInfo.size}`} className="bg-cbs-file-upload-bg max-w-[600px] px-2 py-1 mb-3 flex items-center">
                   <p className="truncate mr-2 text-black font-bold" title={fileInfo.name}>{fileInfo.name}</p>

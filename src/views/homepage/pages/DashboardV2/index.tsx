@@ -1,9 +1,9 @@
 import React, { FC, useState, UIEvent, useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import moment from "moment";
 import { Link } from "react-router-dom";
-import parse from "html-react-parser";
+import { useTranslation } from "react-i18next";
 import { useQueryListCompany } from "services/hooks/useCompanies";
+import moment from "moment";
+import parse from "html-react-parser";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "views/pcm/styles/pcm.module.css";
@@ -19,6 +19,7 @@ import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
 // import defaultAva from "assets/images/image 166.jpg";
 // import iconPdf from "assets/images/icons8-attach.svg";
 // import downloadIcon from "assets/images/icons8-attach.svg";
+// import mailIcon from "assets/images/icons8-email-96 1.svg";
 // import sendMailIcon from "assets/images/icons8-attach.svg";
 import userIcon from "assets/images/icon-user-avatar.svg";
 import maleUserIcon from "assets/images/icons8-male-user-64.svg";
@@ -29,7 +30,6 @@ import TriangleDown from "assets/icons/TriangleDown";
 import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
 import businessBuiding from "assets/images/icons8-business-building-48.svg";
 import trashIcon from "assets/images/icons8-trash-96 1.svg";
-// import mailIcon from "assets/images/icons8-email-96 1.svg";
 
 import iconPhoto from "assets/images/icons8-photo.svg";
 import iconFile from "assets/images/icons8-attach.svg";
@@ -72,11 +72,11 @@ import { APP_KEY } from "utils/constants";
 type Props = {
   type?: number;
 };
+type PaginateHandle = React.ElementRef<typeof PaginateV2>;
 
 export const DashboardV2: FC<Props> = () => {
   const { t } = useTranslation()
-  
-  type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+
   const dispatch = useDispatch();
   const [filter, setFilter] = useState("all");
   const { user } = useAuth()
@@ -104,6 +104,7 @@ export const DashboardV2: FC<Props> = () => {
       </button>
     )
   }
+
   const keywordForResponse = useAppSelector(
     (state) => state.dashboardV2.data.keywordForResponse
   );
@@ -409,7 +410,7 @@ export const DashboardV2: FC<Props> = () => {
 
       if (error || !user) return;
       const { infoObject, app } = data;
-      const accessUsers = infoObject.accessUsers;
+      const accessUsers = infoObject?.accessUsers ?? [];
 
       if(app !== APP_KEY.PCM_PLAN_TASK) return;
       if(!accessUsers.includes(user._id)) return;
@@ -417,14 +418,20 @@ export const DashboardV2: FC<Props> = () => {
       refetchListTask();
     }
 
+    const onEventCreateNewTask = (result: any) => {
+      const { data, error } = result;
+      if (error || !data.infoTask || !user) return;
+      refetchListTask();
+    }
+
     socket?.on("COMMENT_SSC_ADD_COMMENT", onEventAddComment);
+    socket?.on("SUBJECT_PCM_SSC_ADD_TASK", onEventCreateNewTask);
 
     return () => {
         socket?.off("COMMENT_SSC_ADD_COMMENT", onEventAddComment);
+        socket?.off("SUBJECT_PCM_SSC_ADD_TASK", onEventCreateNewTask);
     }
   }, [socket])
-
-  // console.log(listDataForFile)
 
   return (
     <div className="t-home flex flex-col h-full overflow-hidden">
@@ -1701,7 +1708,7 @@ export const DashboardV2: FC<Props> = () => {
                       <td className={"w-td-dashboard"}>
                         <Link to={"/pcm/detail/" + item._id}>
                           <div className={"task-title truncate text-[14px] mt-2"} style={{ lineHeight: "20px" }}>
-                            {item?.priority == 3 ? 
+                            {item?.priority == 3 ?
                               <span className="bg-cbs-orage text-white mr-1 py-1 px-3 rounded-md">Cao</span>
                               : <></>
                             }
@@ -1767,7 +1774,7 @@ export const DashboardV2: FC<Props> = () => {
                         ) : (
                           <></>
                         )}
-                        
+
                       </td>
                       <td className={"w-[100px] align-middle"}>
                         <div className="justify-items-end absolute ml-[10px] hidden group-hover:block homeboxbutton">
@@ -1893,7 +1900,7 @@ export const DashboardV2: FC<Props> = () => {
                       }
                     >
                       {(item.task && item.task?.subtype != 4) ? <a href={`${process.env.REACT_APP_URL_S3}${item.path}`} target="_blank" rel="noopener noreferrer" className="text-cbs-highlight-color">{item.nameOrg}</a> : item.nameOrg}
-                      
+
                     </td>
                     <td
                       className={

@@ -19,7 +19,7 @@ import { ModalUpdateTaskGroup } from "./ModalUpdateTaskGroup";
 import { ModalUpdateTaskProduct } from "./ModalUpdateTaskProduct";
 import { ModalUpdateTaskEvaluate } from "./ModalUpdateTaskEvaluate";
 import { ModalAssignMilestone } from "./ModalAssignMilestone";
-import { ModalDocLinkTask } from "./ModalDocLinkTask";
+import { ModalDocLinkTask } from "./ModalDocLinkTask"
 
 type Props = {
     task: Task;

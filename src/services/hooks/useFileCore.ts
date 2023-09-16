@@ -11,6 +11,7 @@ import { FileUpdatePayload } from "typings/file";
 
 type UseFileCore = {
     updateFileAsync: (payload: FileUpdatePayload) => Promise<any>,
+    deleteFilesAsync: (payload: string[]) => Promise<any>,
 };
 
 type UseFileCoreParams = {
@@ -23,7 +24,10 @@ export const useFileCore = (props?: UseFileCoreParams) : UseFileCore => {
             FileRepository.updateFile(payload)
         );
 
+    const { mutateAsync: deleteFilesAsync } = useMutation((payload: string[]) => FileRepository.deleteFiles(payload));
+
     return {
-        updateFileAsync
+        updateFileAsync,
+        deleteFilesAsync,
     };
 };

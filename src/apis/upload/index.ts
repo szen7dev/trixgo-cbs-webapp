@@ -46,6 +46,11 @@ const FileRepository = {
         );
         return data;
     },
+    async deleteFiles(payload: string[]): Promise<any> {
+        const pairs = payload.map(function (value) { return "ids[]=" + encodeURIComponent(value) });
+        const { data } = await API.delete<any>(`${fileURL}?${pairs.join('&')}`);
+        return data;
+    }
 };
 
 export default FileRepository;
