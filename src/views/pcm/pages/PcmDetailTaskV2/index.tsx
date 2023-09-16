@@ -22,7 +22,6 @@ import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 // import { APP_ID } from 'apis/localdb';
 // import { TaskDetailEvaluate } from "./components/TaskDetailEvaluate"; // Sử dụng sau
 import { TaskDetailAddCV } from "./components/TaskDetailAddCV";
-import { useSocket } from "services/hooks/useSocket";
 
 const PcmDetailTaskV2: FC = () => {
     const [collapse, setCollapse] = useState(false);
@@ -46,13 +45,10 @@ const PcmDetailTaskV2: FC = () => {
         hasPermissionViewBidding: false,
     });
 
-    // const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
-
     const { id: taskId } = useParams<{ id: string }>();
 
     const history = useHistory();
     const { user } = useAuth();
-    const { current: socket }: any = useSocket();
 
     const { info: taskInfo, isLoadingInfo, refetchInfo, updateStatusMultipleAsync } = useTask({
         params: {
@@ -71,20 +67,11 @@ const PcmDetailTaskV2: FC = () => {
                 taskIDs: [taskId],
                 option: 1
             });
-            socket?.emit('SUBJECT_PCM_CSS_UPDATE_NOTIFICATION', {
-                taskID: taskId,
-                isGetCountNotification: true
-            });
         })()
-    }, [socket, taskId])
+    }, [taskId])
 
     useEffect(() => {
-        // if (!isSuccessApp || !taskInfo) return;
         if (!taskInfo) return;
-        // if (isSuccessApp && !hasPermission) {
-        //     toast.error("Bạn không có quyền truy cập tính năng này!");
-        //     return history.push("/");
-        // };
 
         if (taskInfo.message === "permission_denied" ||
             taskInfo.message === "Not found task" ||

@@ -410,7 +410,7 @@ export const DashboardV2: FC<Props> = () => {
 
       if (error || !user) return;
       const { infoObject, app } = data;
-      const accessUsers = infoObject?.accessUsers ?? {};
+      const accessUsers = infoObject?.accessUsers ?? [];
 
       if(app !== APP_KEY.PCM_PLAN_TASK) return;
       if(!accessUsers.includes(user._id)) return;
@@ -418,18 +418,18 @@ export const DashboardV2: FC<Props> = () => {
       refetchListTask();
     }
 
-    const onEventUpdateNotification = (result: any) => {
+    const onEventCreateNewTask = (result: any) => {
       const { data, error } = result;
-      if (error || !data.infoTask) return;
+      if (error || !data.infoTask || !user) return;
       refetchListTask();
     }
 
     socket?.on("COMMENT_SSC_ADD_COMMENT", onEventAddComment);
-    socket?.on("SUBJECT_PCM_SSC_UPDATE_NOTIFICATION", onEventUpdateNotification);
+    socket?.on("SUBJECT_PCM_SSC_ADD_TASK", onEventCreateNewTask);
 
     return () => {
         socket?.off("COMMENT_SSC_ADD_COMMENT", onEventAddComment);
-        socket?.off("SUBJECT_PCM_CSS_UPDATE_NOTIFICATION", onEventUpdateNotification);
+        socket?.off("SUBJECT_PCM_SSC_ADD_TASK", onEventCreateNewTask);
     }
   }, [socket])
 

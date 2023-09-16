@@ -227,7 +227,7 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
                     path: 'project author'
                 })
             });
-            socket?.emit('SUBJECT_PCM_CSS_UPDATE_NOTIFICATION', { taskID: task?._id });
+            socket?.emit('SUBJECT_PCM_CSS_UPDATE_NOTIFICATION', { taskID: task?._id, isGetCountNotification: true });
 
             // Clear text input
             removeAllFiles();

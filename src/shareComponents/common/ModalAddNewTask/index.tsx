@@ -44,6 +44,7 @@ import { Editor as EditorType } from "tinymce";
 import iconAttach from "assets/images/icons8-attach-48.svg";
 import { FileProp, FilePropsUpload } from "typings/common";
 import { GroupSearchable } from "../GroupSearchable";
+import { useSocket } from "services/hooks/useSocket";
 // import { useSocket } from "services/hooks/useSocket";
 // import { Popover } from "@mui/material";
 // import { borderRadius } from "@mui/system";
@@ -71,6 +72,7 @@ type Props = {
 
 export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
   const history = useHistory();
+  const { current: socket }: any = useSocket();
   const { closeModal } = useModal(true);
   const editorRef = useRef<EditorType>();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -235,8 +237,6 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
         values.groupID = groupID;
       }
 
-      closeModal();
-
       if(filesDelete.length) {
         await deleteFilesAsync(filesDelete);
       }
@@ -249,7 +249,18 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
 
       if (error) return toast.warning(data.message);
 
-      history.push(`/pcm/detail/${data._id}`);
+      socket?.emit('SUBJECT_PCM_CSS_ADD_TASK', {
+          taskID,
+      });
+      socket?.emit('SUBJECT_PCM_CSS_UPDATE_NOTIFICATION', {
+          taskID,
+          isGetCountNotification: true
+      });
+
+      setTimeout(() => {
+        closeModal();
+        history.push(`/pcm/detail/${data._id}`);
+      }, 300)
     } catch (error) {
       if (typeof error === "string") {
         toast.error(error);
