@@ -21,7 +21,7 @@ const PageTwoDetail: FC = () => {
   const [data, setData] = useState<{ id: number; [key: string]: any }[]>([]);
 
   useEffect(() => {
-    document.title = "CHG.THT-Lựa chọn nhà thầu";
+    document.title = "Trixgo | Sổ quỹ"
     setData(
       Array.from({ length: 5 }).map((_, index) => ({
         id: index,

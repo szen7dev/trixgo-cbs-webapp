@@ -10,6 +10,7 @@ export { default as DatahubHomeDetail } from "views/datahub/pages/DatahubHomeDet
 export { default as DatahubProject } from "views/datahub/pages/DatahubProject";
 export { default as DatahubType } from "views/datahub/pages/DatahubType";
 export { default as DatahubType2 } from "views/datahub/pages/DatahubType2";
+export { default as DatahubType3 } from "views/datahub/pages/DatahubType3";
 export { default as DatahubTypeDetail } from "views/datahub/pages/DatahubTypeDetail";
 export { default as DatahubInspection } from "views/datahub/pages/DatahubInspection";
 export { default as DatahubInspectionDetail } from "views/datahub/pages/DatahubInspectionDetail";

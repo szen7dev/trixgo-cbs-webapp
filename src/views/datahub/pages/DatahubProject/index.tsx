@@ -37,7 +37,7 @@ const DatahubProject: FC = () => {
 	const { assigned, checked, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data?.data.listRecords || []);
 
 	useEffect(() => {
-		document.title = "CHG.THT-Lựa chọn nhà thầu";
+		document.title = "DataHub | Danh mục dự án"
 	}, []);
 
 	const [pkg, setPkg] = useState(pkgs[0]);

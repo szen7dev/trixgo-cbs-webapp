@@ -22,7 +22,7 @@ const PageTwo: FC = () => {
   const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data);
 
   useEffect(() => {
-    document.title = "CHG.THT-Lựa chọn nhà thầu";
+    document.title = "Trixgo | Sổ quỹ"
     setData(
       Array.from({ length: 30 }).map((_, index) => ({
         id: index,
