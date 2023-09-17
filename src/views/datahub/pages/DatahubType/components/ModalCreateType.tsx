@@ -19,7 +19,7 @@ const POPULAR = [
 type Props = {
 	type: 'create' | 'edit',
 	datahubID?: string,
-	datahubType: 1 | 2,
+	datahubType: 1 | 2 | 3,
 	parent?: string,
 
 	toggle: () => void

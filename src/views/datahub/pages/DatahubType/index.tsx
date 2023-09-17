@@ -37,7 +37,7 @@ const DatahubType: FC = () => {
 	const { assigned, checked, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data?.data.listRecords || []);
 
 	useEffect(() => {
-		document.title = "CHG.THT-Lựa chọn nhà thầu"
+		document.title = "DataHub | Phân loại hệ thống"
 	}, []);
 
 	return (

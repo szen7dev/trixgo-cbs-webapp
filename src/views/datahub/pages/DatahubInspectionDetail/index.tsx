@@ -74,7 +74,7 @@ const DatahubInspectionDetail: FC = () => {
 	}, useRowSelect)
 
 	useEffect(() => {
-		document.title = "CHG.THT-Lựa chọn nhà thầu"
+		document.title = "DataHub | Biểu mẫu nghiệm thu"
 	}, []);
 
 	return (
