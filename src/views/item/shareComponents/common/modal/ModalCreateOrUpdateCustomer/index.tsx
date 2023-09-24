@@ -34,6 +34,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
     birthday: '',
     description: '',
     note: '',
+    email: '',
     nonResident: '',
     funda: {},
   }
@@ -214,6 +215,20 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
           name="phone"
           className="w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"
           defaultValue={formData.phone}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-10 py-2">
+        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtEmail">
+          Email
+        </label>
+        <input
+          type="text"
+          placeholder="Email"
+          name="email"
+          className="w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.email}
           onChange={onChange}
         />
       </section>

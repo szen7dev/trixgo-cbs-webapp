@@ -24,6 +24,7 @@
     phone: string,
     address: string,
     note: string,
+    email: string,
  }
  
  type Props = {
@@ -50,6 +51,7 @@
             phone: values.phone,
             address: values.address,
             note: values.note,
+            email: values.email,
         };
         const result = await insertAsync(query);
         if (!result.error) {
@@ -73,7 +75,8 @@
         name: "",
         phone: "",
         address: "",
-        note: "" 
+        note: "" ,
+        email: ""
     };
  
      return (
@@ -114,6 +117,15 @@
                                                         <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtPhone" placeholder="Nhập nội dung" {...getFieldProps('phone')} />
                                                         <ErrorMessage
                                                             name="phone"
+                                                            component="span"
+                                                            className="font-normal leading-7 text-sm text-negative"
+                                                        />
+                                                    </div>
+                                                    <div className="mb-3">
+                                                        <div className="ml-3 mb-3 text-primary-gray">Email</div>
+                                                        <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtEmail" placeholder="Nhập nội dung" {...getFieldProps('email')} />
+                                                        <ErrorMessage
+                                                            name="email"
                                                             component="span"
                                                             className="font-normal leading-7 text-sm text-negative"
                                                         />

@@ -14,6 +14,7 @@ export interface Customer {
     note: string;
     taxid: string | null;
     phone: string | null;
+    email: string | null;
     description: string | null;
     funda: any,
     gender: number;
@@ -64,6 +65,7 @@ interface ModalProps {
         address: string,
         taxid: string,
         phone: string,
+        email: string,
         gender: number,
         description: string,
         birthday: string,
