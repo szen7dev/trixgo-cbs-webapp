@@ -45,6 +45,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
         note: '',
         taxid: '',
         phone: '',
+        email: '',
         description: '',
         funda: '',
         gender: 1,
@@ -80,6 +81,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
             address: '',
             taxid: '',
             phone: '',
+            email: '',
             description: '',
             nonResident: '',
         }))
@@ -107,7 +109,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, type, name, address, taxid, phone, description, funda, note, gender, birthday, nonResident } = newListIDChecked[0];
+            const { _id, type, name, address, taxid, phone, email, description, funda, note, gender, birthday, nonResident } = newListIDChecked[0];
             setInitialValues({
                 parent: parentID,
                 contactID: _id,
@@ -115,7 +117,8 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                 name,
                 address: address || '',
                 taxid: taxid || '',
-                phone: phone || '',
+                phone: phone || '', 
+                email: email || '', 
                 description: description || '',
                 funda: funda,
                 note,
@@ -187,6 +190,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                 address: '',
                 taxid: '',
                 phone: '',
+                email: '',
                 description: '',
                 nonResident: '1',
             };
@@ -443,7 +447,8 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                             </td>
                             <td className="py-1 px-2">
                                 {CONTACT_TYPES[Number(item.type)-1].text}
-                                <p className="text-xs"><i>{item._id}</i></p>
+                                {/* <p className="text-xs"><i>{item._id}</i></p> */}
+                                <p className="text-xs"><i>{item.email}</i></p>
                             </td>
                             <td className="py-1 px-2">
                                 <Link to={`/item/contact/${item._id}`}>

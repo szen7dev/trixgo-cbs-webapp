@@ -307,6 +307,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
           sugar: p.sugar,
           ice: p.ice,
           note: p.note,
+          doctype: p?.doctype,
           variantsSelected: p.variantsSelected,
           variantsID: p.variantsSelected ? p.variantsSelected.map((v: any) => v._id) : [],
           unitPrice: price,
@@ -892,7 +893,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   name="salesChannel"
                                 >
                                   <FormControlLabel
-                                    sx={{ marginLeft: "0" }}
+                                    sx={{ marginLeft: "0", marginRight: "8px" }}
                                     value="1"
                                     control={
                                       <Radio
@@ -910,7 +911,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                     label={<span className="text-[13px]">Offline</span>}
                                   />
                                   <FormControlLabel
-                                    sx={{ marginLeft: "0" }}
+                                    sx={{ marginLeft: "0", marginRight: "8px" }}
                                     value="2"
                                     control={
                                       <Radio
@@ -928,7 +929,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                     label={<span className="text-[13px]" title="Grab Food">Grab F</span>}
                                   />
                                   <FormControlLabel
-                                    sx={{ marginLeft: "0" }}
+                                    sx={{ marginLeft: "0", marginRight: "8px" }}
                                     value="3"
                                     control={
                                       <Radio
@@ -946,7 +947,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                     label={<span className="text-[13px]" title="Shopee Food">Shopee F</span>}
                                   />
                                   <FormControlLabel
-                                    sx={{ marginLeft: "0" }}
+                                    sx={{ marginLeft: "0", marginRight: "8px" }}
                                     value="4"
                                     control={
                                       <Radio
@@ -964,7 +965,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                     label={<span className="text-[13px]">Gojek</span>}
                                   />
                                   <FormControlLabel
-                                    sx={{ marginLeft: "0" }}
+                                    sx={{ marginLeft: "0", marginRight: "8px" }}
                                     value="5"
                                     control={
                                       <Radio
@@ -982,7 +983,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                     label={<span className="text-[13px]">Baemin</span>}
                                   />
                                   <FormControlLabel
-                                    sx={{ marginLeft: "0" }}
+                                    sx={{ marginLeft: "0", marginRight: "8px" }}
                                     value="6"
                                     control={
                                       <Radio
@@ -1001,7 +1002,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   />
                                   <FormControlLabel
                                     className="border-r mr-1.5"
-                                    sx={{ marginLeft: "0" }}
+                                    sx={{ marginLeft: "0", marginRight: "8px" }}
                                     value="7"
                                     control={
                                       <Radio
@@ -1020,7 +1021,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                   />
 
                                   <FormControlLabel
-                                    sx={{ marginLeft: "0" }}
+                                    sx={{ marginLeft: "0", marginRight: "8px" }}
                                     title="Sàn TikTok Shop"
                                     value="8"
                                     control={
@@ -1036,11 +1037,11 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                         checked={(values.salesChannel === 8) ? true : false}
                                       />
                                     }
-                                    label={<span className="text-[13px]">TikTok Shop</span>}
+                                    label={<span className="text-[13px]">TikTok</span>}
                                   />
                                   <FormControlLabel
-                                    sx={{ marginLeft: "0" }}
-                                    title="Sàn thương mại shopee (không phải Shopee Food)"
+                                    sx={{ marginLeft: "0", marginRight: "8px" }}
+                                    title="Sàn Shopee (không phải Shopee Food)"
                                     value="9"
                                     control={
                                       <Radio
@@ -1056,6 +1057,46 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                       />
                                     }
                                     label={<span className="text-[13px]">Shopee S</span>}
+                                  />
+                                  
+                                  <FormControlLabel
+                                    sx={{ marginLeft: "0", marginRight: "8px" }}
+                                    title="Sàn Lazada"
+                                    value="10"
+                                    control={
+                                      <Radio
+                                        style={{}}
+                                        icon={<img src={RadioEmpty} alt="" />}
+                                        checkedIcon={<img src={RadioChecked} alt="" />}
+                                        onChange={() => {
+                                          setFieldValue("salesChannel", 10);
+                                          setFieldValue("paymentMethod", "2")
+                                          setService("2");
+                                        }}
+                                        checked={(values.salesChannel === 10) ? true : false}
+                                      />
+                                    }
+                                    label={<span className="text-[13px]">Lazada</span>}
+                                  />
+                                  
+                                  <FormControlLabel
+                                    sx={{ marginLeft: "0", marginRight: "8px" }}
+                                    title="Sàn Reels"
+                                    value="11"
+                                    control={
+                                      <Radio
+                                        style={{}}
+                                        icon={<img src={RadioEmpty} alt="" />}
+                                        checkedIcon={<img src={RadioChecked} alt="" />}
+                                        onChange={() => {
+                                          setFieldValue("salesChannel", 11);
+                                          setFieldValue("paymentMethod", "2")
+                                          setService("2");
+                                        }}
+                                        checked={(values.salesChannel === 11) ? true : false}
+                                      />
+                                    }
+                                    label={<span className="text-[13px]">Reels</span>}
                                   />
 
                                 </RadioGroup>
