@@ -18,6 +18,8 @@ import { DropdownSearchable } from "shareComponents/common";
 import { useModal } from "services/hooks/useModal";
 import { useCustomer } from "services/hooks/items/useCustomer";
 import { useFunda } from "services/hooks/items/useFunda";
+import { useGetUsersByCompany } from "services/hooks/auth/useAdmin";
+import { useAuth } from 'services/hooks/auth/useAuth';
 
 /*=====7.OTHER=====*/
 export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
@@ -37,11 +39,19 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
     email: '',
     nonResident: '',
     funda: {},
+    sale: {},
   }
 }) => {
+	const { user } = useAuth();
+  const [keywordUser, setKeywordUser] = useState("");
+  
+	const companyID = `${user?.company._id}`;
+  const { listMembers } = useGetUsersByCompany(companyID, keywordUser);
+
   const { closeModal } = useModal();
   const [formData, setFormData] = useState(initialValues);
   const { refetch: refetchCustomer, insertAsync, updateAsync } = useCustomer({});
+
   const handleSubmit = async () => {
     if(!formData.name) {
       return toast.warn('Vui lòng nhập nội dung');
@@ -69,7 +79,6 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
             ...formData, 
             type: `${formData.type}`, 
             gender: `${formData.gender}`,
-            // fundaID: formData.funda._id
           });
 
           if (error) {
@@ -109,7 +118,6 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
     const bottom = scrollHeight - scrollTop === clientHeight;
-    // bottom && nextPageListArea();
   }
   const [keywordFunda, setKeywordFunda] = useState('');
   const {
@@ -289,6 +297,52 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
           defaultValue={moment(formData.birthday).format("YYYY-MM-DD")}
           onChange={onChange}
         />
+      </section>
+
+      <section className="px-10 mt-2">
+          <label className="block text-gray-700 text-sm font-bold" htmlFor="txtInitialDay">
+            Nhân viên Sale
+          </label>
+          <DropdownSearchable
+            onchangeValue={(value: any) => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    saleID: value?.id
+                }))
+            }}
+            onClearData={() => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    saleID: ""
+                }))
+            }}
+            onSearchInputChange={debounce((value: any) => setKeywordUser(value), 600)}
+            onScroll={handleScroll}
+            className="w-full mt-2 rounded-md border border-primary-border px-1 py-1 placeholder-primary-gray bg-cbs-table-header"
+            placeholder="Tìm kiếm tài khoản"
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            showTriangle={false}
+            maxWidthInput="max-w-full"
+            renderSelectedItem={(item: any) => (
+                <div className="max-w-full">
+                    <p className={"truncate"}>{item.text}</p>
+                </div>
+            )}
+            data={listMembers.map((member:any) => ({
+                label: member.fullname,
+                value: member._id,
+            }))}
+            initialValue={{
+              value: formData?.sale?._id || "", 
+              label: formData?.sale?.fullname || "Chọn tài khoản"
+            }}
+            formatItem={{
+                id: "value",
+                text: "label",
+            }}
+            inlineSearch={true}
+          />
       </section>
 
       <section className="px-10 py-2">
