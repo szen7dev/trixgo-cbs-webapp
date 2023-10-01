@@ -1,18 +1,11 @@
 import React, { UIEvent, FC, useState } from "react";
-
 import { useModal } from "services/hooks/useModal";
-import { useStorage } from "services/hooks/items/useStorage";
 import { useFunda } from "services/hooks/items/useFunda";
 import { toast } from "react-toastify";
-import { ModalProps } from 'typings/items/doctype';
-import { Form, Formik, Field, ErrorMessage } from 'formik';
 import moment from "moment";
 import { DropdownSearchable } from "shareComponents/common";
 import { useArea } from "services/hooks/items/useArea";
 import debounce from 'lodash/debounce';
-import { Checkbox, FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
-import CheckBoxEmpty from "assets/images/Frame 3548.svg";
-import CheckedBox from "assets/images/Check-All.svg";
 import { useDoctype } from "services/hooks/items/useDoctype";
 
 export const ModalCreateOrUpdateFunda: FC<any> = ({
@@ -30,6 +23,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
     initialDay: new Date(),
     campaign: 1,
     internal: 1,
+    platform: 1,
   }
 }) => {
   const { closeModal } = useModal();
@@ -55,7 +49,7 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
       return toast.warn('Vui lòng nhập nội dung');
     }
 
-    const formDataFormat = { ...formData, campaign: +formData.campaign, internal: +formData.internal };
+    const formDataFormat = { ...formData, campaign: +formData.campaign, internal: +formData.internal, platform: +formData.platform };
     try {
       // Handle api here!
       switch (modalType) {
@@ -311,6 +305,38 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
       </section>
 
       <section className="px-10 mt-2">
+          <label className="block text-gray-700 text-sm font-bold" htmlFor="txtPlatform">
+            Phân loại mảng hoạt động
+          </label>
+          <div className={"flex items-center"}>
+            <div className={"flex items-center ml-3"}>
+                <input
+                  type="radio"
+                  value={1}
+                  name="platform"
+                  className="form-check-input mt-0"
+                  defaultValue={formData.platform}
+                  checked={formData.platform == 1?true: false}
+                  onChange={onChange}
+                />
+                <label htmlFor="platform" className={"text-left ml-3"}>Bán tại điểm bán</label>
+            </div>
+            <div className={"flex items-center ml-3"}>
+                <input
+                  type="radio"
+                  value={2}
+                  name="platform"
+                  className="form-check-input mt-0"
+                  defaultValue={formData.platform}
+                  checked={formData.platform == 2?true: false}
+                  onChange={onChange}
+                />
+                <label htmlFor="platform" className={"text-left ml-3"}>Bán qua sàn bán lẻ</label>
+            </div>
+          </div>
+      </section>
+
+      <section className="px-10 mt-2">
           <label className="block text-gray-700 text-sm font-bold" htmlFor="txtCampaign">
             Chiến dịch quảng cáo
           </label>
@@ -395,47 +421,6 @@ export const ModalCreateOrUpdateFunda: FC<any> = ({
               </div>
               ))
             }
-              {/* <div className="w-1/3 flex gap-2 items-start px-1">
-                  <FormControl sx={{ marginTop: "-5px" }} >
-                      <FormControlLabel
-                          sx={{ marginLeft: "0", marginRight: "0", fontSize: "13px", alignItems: "flex-start", }}
-                          // value={variant._id}
-                          // id={variant._id}
-                          // onChange={e => handleChooseVariant(e, itemInCart._id, variant)}
-                          control={
-                              <Checkbox
-                                  sx={{ minWidth: "34px", }}
-                                  icon={<img src={CheckBoxEmpty} alt="" />}
-                                  checkedIcon={<img src={CheckedBox} alt="" />}
-                              />
-                          }
-                          label={<div className="text-[13px]" style={{ paddingTop: "7px" }}>
-                              Pudding trứng (6k)
-                          </div>}
-                      />
-                  </FormControl  >
-              </div>
-              <div className="w-1/3 flex gap-2 items-start px-1">
-                  <FormControl sx={{ marginTop: "-5px" }} >
-                      <FormControlLabel
-                          sx={{ marginLeft: "0", marginRight: "0", fontSize: "13px", alignItems: "flex-start", }}
-                          // value={variant._id}
-                          // id={variant._id}
-                          // onChange={e => handleChooseVariant(e, itemInCart._id, variant)}
-                          control={
-                              <Checkbox
-                                  sx={{ minWidth: "34px", }}
-                                  icon={<img src={CheckBoxEmpty} alt="" />}
-                                  checkedIcon={<img src={CheckedBox} alt="" />}
-                                  checked={true}
-                              />
-                          }
-                          label={<div className="text-[13px]" style={{ paddingTop: "7px" }}>
-                              Pudding trứng (6k)
-                          </div>}
-                      />
-                  </FormControl  >
-              </div> */}
           </div>
       </section>
       
