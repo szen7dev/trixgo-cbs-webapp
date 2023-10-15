@@ -69,7 +69,7 @@ const FnbPage: FC = () => {
                 }
             });
 
-        fetch(`${domain}/api/fnb/orders?lastestID=&limit=10&statuss[]=5&customerID=${contactID}&populates=%7B%22path%22:%22voucher%22,%22select%22:%22_id+name+sign+salesoffAmount+salesoffRate+minOrderAmount%22%7D`, {
+        fetch(`${domain}/api/fnb/orders?lastestID=&limit=10&statuss[]=5&customerID=${contactID}&populates=%7B%22path%22:%22voucher%22,%22select%22:%22_id+name+sign+note+salesoffAmount+salesoffRate+minOrderAmount%22%7D`, {
             headers: fixedHeaders,
         })
             .then(async (response) => {
@@ -161,6 +161,7 @@ const FnbPage: FC = () => {
                         <p>Voucher: 
                              <b className="text-cbs-primary pr-1 pl-1">{item?.voucher?.sign}</b>
                              <span className="text-primary-gray">- Ưu đãi {formatNumberMoney(item?.voucher?.salesoffAmount)} | Giảm giá {formatNumberMoney(item?.voucher?.salesoffRate)} % - Đơn hàng từ {formatNumberMoney(item?.voucher?.minOrderAmount)}</span>
+                             <p className="text-primary-gray"><i>{item?.voucher?.note}</i></p>
                         </p>
                         <p>Mã hiệu: {item?.sign} | {FNB_CHANNEL[Number(item?.salesChannel)-1]?.sign}{item?.appOrderSign}</p>
                         <div className="relative">

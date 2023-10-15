@@ -1158,7 +1158,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                           </div>
                         </div>
 
-                        <div className="flex justify-between pt-1">
+                        {/* <div className="flex justify-between pt-1">
                           <div>
                             <span>Nguồn doanh số</span>
                             <div>
@@ -1339,7 +1339,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                               />
                             </div>
                           </div>
-                        </div>
+                        </div> */}
 
                       </div>
                       <div className="flex justify-between	gap-2 border-t-0.5 border-b-0.5 px-3">
@@ -1742,6 +1742,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                     label={
                                       <span className="text-[13px]">
                                         {`${voucher.sign}-Ưu đãi ${formatNumberMoney(voucher.salesoffAmount)} | Giảm giá ${voucher.salesoffRate}% - Đơn hàng từ ${formatNumberMoney(voucher.minOrderAmount)}`}
+                                        <p><i>{voucher?.note}</i></p>
                                       </span>
                                     }
                                   />
