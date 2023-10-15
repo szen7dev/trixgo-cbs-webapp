@@ -17,6 +17,7 @@ export interface Customer {
     email: string | null;
     description: string | null;
     funda: any,
+    sale: any,
     gender: number;
     birthday: string;
     nonResident: string;
@@ -72,6 +73,7 @@ interface ModalProps {
         note: string,
         nonResident: string,
         funda: any,
+        sale: any,
     }
     onConfirm?(): void
 }

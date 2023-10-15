@@ -2,7 +2,7 @@
  * Libraries
  */
 import React, { FC, useEffect, useRef, useState } from "react";
-import { Formik, Form, ErrorMessage } from "formik";
+import { Formik, Form, ErrorMessage, Field } from "formik";
 import { useHistory } from 'react-router-dom';
 import { number, object, string } from "yup";
 import { toast } from "react-toastify";
@@ -11,6 +11,8 @@ import { formatNumberMoney } from 'utils/converter';
 import { useSocket } from "services/hooks/useSocket";
 import { useAuth } from 'services/hooks/auth/useAuth';
 import { useQueryClient } from 'react-query';
+import DatePicker from "react-datepicker";
+import moment from "moment";
 
 /**
  * Hooks, Typings
@@ -34,16 +36,18 @@ import { convertObToUrl } from "utils";
 import { FormControl, FormControlLabel, IconButton, InputBase, Paper, Radio, RadioGroup } from "@mui/material";
 import { ItemInCartMenu } from "./itemInCartDetail";
 // import SearchIcon from "assets/icons/Search";
-
 interface InitialValues {
   fundaID: string,
   shiftID: string,
   customerID: string,
+  affiliateID: string,
   seasons: number,
   paymentMethod: string,
   salesChannel: number,
+  sources: number,
   name: string,
   note: string,
+  date: string,
   appOrderSign: string,
 }
 
@@ -99,6 +103,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
   const [creditTemp, setCreditTemp] = useState(0);
   const [creditInput, setCreditInput] = useState(0);
   const [customerID, setCustomerID] = useState("");
+  const [affiliateID, setAffiliateID] = useState("");
 
   const setTypingTimeoutVoucherRef: any = useRef(null);
 
@@ -695,8 +700,6 @@ export const ModalAddNewOrder: FC<Props> = () => {
   }
 
   const addOrderSchema = object().shape({
-    // fundaID: string().required("Vui lòng chọn cơ sở"),
-    // shiftID: string().required("Vui lòng chọn ca"),
     customerID: string().required("Vui lòng chọn mã khách hàng"),
     salesChannel: number().required("Vui lòng chọn kênh bán hàng"),
     paymentMethod: number().required("Vui lòng chọn phương thức thanh toán"),
@@ -707,13 +710,16 @@ export const ModalAddNewOrder: FC<Props> = () => {
     fundaID,
     shiftID,
     customerID: "",
+    affiliateID: "",
     seasons: 1,
     paymentMethod: "1",
+    sources: 1,
     salesChannel: 1,
     name: "",
     note: "",
+    date: "",
     appOrderSign: "",
-  };
+  }
 
   return (
     <>
@@ -738,23 +744,19 @@ export const ModalAddNewOrder: FC<Props> = () => {
                   <div className="flex">
                     <div className="boxlef w-2/3">
                       <div className="px-3">
-                        <div className={"flex py-1 "}>
+                        <div className={"flex"}>
                           <div className={"w-1/3 flex items-start"}>
-                            <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full h-full"}>Cơ sở</div>
+                            <div className={"h-full text-left  text-gray-500 flex items-center mr-2 w-1/5 h-full h-full"}>Cơ sở</div>
                             <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                               <DropdownSearchable
                                 ref={dropdownFundaRef}
                                 onchangeValue={(value: any) => {
                                   setFundaID(value?.id)
                                   setFieldValue("fundaID", value?.id);
-                                  // setShiftID("");
-                                  // setFieldValue("shiftID", "");
                                 }}
                                 onClearData={() => {
                                   setFundaID("")
                                   setFieldValue("fundaID", "");
-                                  // setShiftID("");
-                                  // setFieldValue("shiftID", "");
                                 }}
                                 onSearchInputChange={
                                   debounce(
@@ -803,7 +805,6 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                 onClearData={() => {
                                   setShiftID("")
                                   setFieldValue("shiftID", "");
-                                  // groupSearchableRef.current && groupSearchableRef.current.resetGroupSearchable();
                                 }}
                                 className={"max-w-full h-full flex-1"}
                                 placeholder="Chọn ca làm"
@@ -882,7 +883,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="flex justify-between pt-1 my-1">
+
+                        <div className="flex justify-between pt-1">
                           <div>
                             <span>Phân loại kênh bán hàng</span>
                             <div>
@@ -1155,6 +1157,190 @@ export const ModalAddNewOrder: FC<Props> = () => {
                             />
                           </div>
                         </div>
+
+                        {/* <div className="flex justify-between pt-1">
+                          <div>
+                            <span>Nguồn doanh số</span>
+                            <div>
+                              <FormControl sx={{ marginTop: "-5px" }} >
+                                <RadioGroup
+                                  row
+                                  aria-labelledby="demo-row-radio-buttons-group-label"
+                                  name="salesChannel"
+                                >
+                                  <FormControlLabel
+                                    sx={{ marginLeft: "0", marginRight: "8px" }}
+                                    value="1"
+                                    control={
+                                      <Radio
+                                        style={{}}
+                                        icon={<img src={RadioEmpty} alt="" />}
+                                        checkedIcon={<img src={RadioChecked} alt="" />}
+                                        onChange={() => {
+                                          setFieldValue("sources", 1);
+                                        }}
+                                        checked={(values.sources === 1) ? true : false}
+                                      />
+                                    }
+                                    label={<span className="text-[13px]">Thông thường</span>}
+                                  />
+                                  <FormControlLabel
+                                    sx={{ marginLeft: "0", marginRight: "8px" }}
+                                    value="2"
+                                    control={
+                                      <Radio
+                                        style={{}}
+                                        icon={<img src={RadioEmpty} alt="" />}
+                                        checkedIcon={<img src={RadioChecked} alt="" />}
+                                        onChange={() => {
+                                          setFieldValue("sources", 2);
+                                        }}
+                                        checked={(values.sources === 2) ? true : false}
+                                      />
+                                    }
+                                    label={<span className="text-[13px]" title="Video">Video</span>}
+                                  />
+                                  <FormControlLabel
+                                    sx={{ marginLeft: "0", marginRight: "8px" }}
+                                    value="3"
+                                    control={
+                                      <Radio
+                                        style={{}}
+                                        icon={<img src={RadioEmpty} alt="" />}
+                                        checkedIcon={<img src={RadioChecked} alt="" />}
+                                        onChange={() => {
+                                          setFieldValue("sources", 3);
+                                        }}
+                                        checked={(values.sources === 3) ? true : false}
+                                      />
+                                    }
+                                    label={<span className="text-[13px]" title="Affiliate">Affiliate</span>}
+                                  />
+                                  <FormControlLabel
+                                    sx={{ marginLeft: "0", marginRight: "8px" }}
+                                    value="4"
+                                    control={
+                                      <Radio
+                                        style={{}}
+                                        icon={<img src={RadioEmpty} alt="" />}
+                                        checkedIcon={<img src={RadioChecked} alt="" />}
+                                        onChange={() => {
+                                          setFieldValue("sources", 4);
+                                        }}
+                                        checked={(values.sources === 4) ? true : false}
+                                      />
+                                    }
+                                    label={<span className="text-[13px]" title="Live Stream">Live Stream</span>}
+                                  />
+                                  <FormControlLabel
+                                    sx={{ marginLeft: "0", marginRight: "8px" }}
+                                    value="5"
+                                    control={
+                                      <Radio
+                                        style={{}}
+                                        icon={<img src={RadioEmpty} alt="" />}
+                                        checkedIcon={<img src={RadioChecked} alt="" />}
+                                        onChange={() => {
+                                          setFieldValue("sources", 5);
+                                        }}
+                                        checked={(values.sources === 5) ? true : false}
+                                      />
+                                    }
+                                    label={<span className="text-[13px]" title="Quảng cáo">Quảng cáo</span>}
+                                  />
+                                </RadioGroup>
+                              </FormControl>
+                            </div>
+                            <ErrorMessage
+                              name="sources"
+                              component="div"
+                              className="font-normal text-xs text-negative pl-3"
+                            />
+                          </div>
+                          <div className={"w-1/4 flex items-start pl-3"}>
+                            <div className={"h-full text-left flex items-center mr-2 w-1/5 h-full"}>Ngày</div>
+                            <DatePicker
+                              wrapperClassName={"w-auto"}
+                              name="date"
+                              showTimeSelect
+                              selected={(values.date && new Date(values.date)) || new Date()}
+                              timeIntervals={1}
+                              timeFormat="HH:mm"
+                              customInput={
+                                <div className={"relative w-auto ml-2 min-h-fit"}>
+                                  <Field
+                                    readOnly
+                                    placeholder={"Thời gian đơn hàng"}
+                                    type="text"
+                                    name="date"
+                                    className="focus:outline-none placeholder:text-sm"
+                                    value={
+                                      values.date
+                                        ? moment(values.date).format(
+                                          "DD/MM/YYYY HH:mm"
+                                        )
+                                        : ""
+                                    }
+                                  />
+                                </div>
+                              }
+                              onChange={(date: Date | null) => {
+                                setFieldValue("date", date)
+                              }
+                              }
+                            />
+                            <ErrorMessage
+                              name="date"
+                              component="span"
+                              className="font-normal leading-7 text-sm text-negative"
+                            />
+                          </div>
+                          <div className={"w-1/4 flex items-start pl-3"}>
+                            <div className={"h-full text-left flex items-center mr-2 w-1/5 h-full"}>Affiliate</div>
+                            <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
+                              <DropdownSearchable
+                                onchangeValue={(value: any) => {
+                                  setAffiliateID(value.id);
+                                  setFieldValue("affiliateID", value.id);
+                                }}
+                                onClearData={() => {
+                                  setFieldValue("affiliateID", "")
+                                }}
+                                onSearchInputChange={
+                                  debounce(
+                                    (value) => setSearchContact(value),
+                                    200)
+                                }
+                                placeholder={"Mã Affiliate"}
+                                className={"max-w-full h-full flex-1"}
+                                focusedClass={"border-b border-primary"}
+                                allowClearValueSingleInput={true}
+                                showTriangle={false}
+                                maxWidthInput="max-w-full"
+                                renderSelectedItem={(item: any) => (
+                                  <div className="max-w-full">
+                                    <p className={"truncate"}>{item.text}</p>
+                                  </div>
+                                )}
+                                data={contacts.map(contact => ({
+                                  label: `${contact.name}-${contact.phone}`,
+                                  value: contact._id,
+                                }))}
+                                formatItem={{
+                                  id: "value",
+                                  text: "label",
+                                }}
+                                inlineSearch={true}
+                              />
+                              <ErrorMessage
+                                name="affiliateID"
+                                component="div"
+                                className="font-normal text-xs text-negative pl-3"
+                              />
+                            </div>
+                          </div>
+                        </div> */}
+
                       </div>
                       <div className="flex justify-between	gap-2 border-t-0.5 border-b-0.5 px-3">
                         <div className="flex justify-between	gap-2 w-1/2">
@@ -1556,6 +1742,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                                     label={
                                       <span className="text-[13px]">
                                         {`${voucher.sign}-Ưu đãi ${formatNumberMoney(voucher.salesoffAmount)} | Giảm giá ${voucher.salesoffRate}% - Đơn hàng từ ${formatNumberMoney(voucher.minOrderAmount)}`}
+                                        <p><i>{voucher?.note}</i></p>
                                       </span>
                                     }
                                   />

@@ -37,6 +37,7 @@ import API from "apis/repository";
 import { createLinkAndClick } from "utils";
 const CAMPAIGN_CONSTANT = ["Tắt", "Bật"];
 const INTERNAL_CONSTANT = ["Hệ thống", "Nhượng quyền"];
+const PLATFORM_CONSTANT = ["Bán tại điểm bán", "Bán qua sàn bán lẻ"];
 
 export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
     const { user } = useAuth();
@@ -61,6 +62,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
         initialDay: new Date(),
         campaign: 1,
         internal: 1,
+        platform: 1,
         activeCampaign: []
     });
 
@@ -117,7 +119,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, name, sign, phone, bankAccount, loyaltyPointsRate, description, address, initialDay, campaign, internal, area1, area2, area3, activeCampaign} = newListIDChecked[0];
+            const { _id, name, sign, phone, bankAccount, loyaltyPointsRate, description, address, initialDay, platform, campaign, internal, area1, area2, area3, activeCampaign} = newListIDChecked[0];
             setInitialValues({
                 fundaID: _id,
                 name,
@@ -128,7 +130,8 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                 description,
                 address,
                 initialDay,
-                campaign: +campaign,
+                campaign,
+                platform,
                 internal,
                 area1, 
                 area2,
@@ -203,6 +206,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                 initialDay: new Date(),
                 campaign: 1,
                 internal: 1,
+                platform: 1,
                 activeCampaign: []
             };
         }
@@ -211,7 +215,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
             <div
                 className={"inline-block w-[521px] h-[300px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "800px",
+                    height: "1050px",
                 }}
             >
                 <ModalCreateOrUpdateFunda
@@ -223,94 +227,10 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
         )
     }
 
-     /**
-     * LÀM VIỆC VỚI EXCEL
-     */
-    //_____Import, export excel
-    const [dataImport, setDataImport] = useState([]);
-    const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
-        isExporting: false,
-    });
-    // const { downloadTemplateExcelAsync, importExcelAsync, exportExcelAsync } = useFunda({});
-
-    // const handleDownloadTemplateImportExcel = async () => {
-	// 	try {
-    //         setStateExport({ isExporting: true });
-    //         const { error, data } = await downloadTemplateExcelAsync({
-    //             filterParams: {  
-    //                 // departmentsID: [departmentID],
-    //                 // ...fromToDate,
-    //                 // datahubContactsID,
-    //                 // types,
-    //                 // directions,
-    //                 // contractsID,
-    //                 // storagesID,
-    //                 // keyword: keywordInput 
-    //             }
-    //         });
-
-    //         if(error) {
-    //             return toast.warn(data?.message);
-    //         }
-
-    //         data && createLinkAndClick(data, '_self');
-    //     } catch (error: any) {
-    //         toast.error(error.message)
-    //     } finally {
-    //         setStateExport({ isExporting: false });
-    //     }
-	// }
-
-	// //_____Xử lý import excel (đọc file)
-    // const handleImport = ($event: any) => {
-    //     const files = $event.target.files;
-    //     if (files.length) {
-    //         const file = files[0];
-    //         const reader = new FileReader();
-    //         reader.onload = (event: any) => {
-    //             const wb = read(event.target.result);
-    //             const sheets = wb.SheetNames;
-
-    //             if (sheets.length) {
-    //                 const rows: any = utils.sheet_to_json(wb.Sheets[sheets[0]]); // Index=1 (tức Sheet số 2 từ trái sang)
-                    
-    //                 // Set data để Import
-    //                 setDataImport(rows)
-    //             }
-    //         }
-            
-    //         reader.readAsArrayBuffer(file);
-    //     }
-
-    //     // Đọc xong thì xóa value trong Input đi
-    //     $event.target.value = null;
-    // }
-
-	// //_____Gọi tới API để đẩy data lên
-    // useEffect(() => {
-    //     if(dataImport.length){
-    //         const fetchData = async () => {
-    //             const data = await importExcelAsync({ dataImport: JSON.stringify(dataImport) });
-    //             setDataImport([]);
-    //             // refetchTaskInfo?.()
-    //             console.log(data)
-
-    //             if(!data.error){
-    //                 return toast.success("Import thành công");
-    //             }
-    //             return toast.error(data.message);
-    //         }
-    //         fetchData();
-    //     }
-        
-    //     console.log('=========DATA THAY ĐỔI RỒI==============')
-    // }, [dataImport])
-
     /**
      * UPLOAD HÌNH ẢNH
      */
     const fileInputRef = useRef<HTMLInputElement>(null);
-    // console.log({fileInputRef})
 
     const { addFileToUpload } = useUpload({
 		appID: APP_ID.FNB.id,
@@ -371,21 +291,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                             classNameInput="outline-none w-[296px]"
                             onChange={onChangeSearch}
                         />
-{/* 
-                        <button className={"flex items-center justify-center mx-3 ml-3"}
-                                onClick={handleDownloadTemplateImportExcel}
-                            >
-                                Tải mẫu Import Excel
-                        </button>
 
-                        <button className={"flex items-center justify-center mx-3 ml-3"}>
-                            <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden
-                             onChange={handleImport}
-                            accept=".xlsx, .xlsm, .xls, .csv"/>
-                            <label className="custom-file-label" htmlFor="inputGroupFile">Import Excel</label>
-                        </button> */}
-
-                        {/* Nếu chọn 1 phẩn tử => chỉ cho update */}
                         {itemsChecked.length === 1 ? (
                             <button
                                 className="mr-3"
@@ -510,7 +416,10 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                             <td className="py-1 px-2">{item?.address}, {item?.area3?.name}, {item?.area2?.name}, {item?.area1?.name}</td>
                             <td className="py-1 px-2">{moment(item.initialDay).format('L')}</td>
                             <td className="py-1 px-2">{CAMPAIGN_CONSTANT[item?.campaign-1]}</td>
-                            <td className="py-1 px-2">{INTERNAL_CONSTANT[item?.internal-1]}</td>
+                            <td className="py-1 px-2">
+                                <p>{INTERNAL_CONSTANT[item?.internal-1]}</p>
+                                <p className="text-primary ">{PLATFORM_CONSTANT[item?.platform-1]}</p>
+                            </td>
                             <td className="py-1 px-2 text-primary-gray">
                                  <Link to={`/item/fundas/${item._id}/members`}  className="underline text-sky-600">
                                     Xem thành viên
@@ -559,5 +468,5 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                 </div>
             )}
         </main>
-    );
-};
+    )
+}

@@ -122,18 +122,6 @@ const CreateFnbShiftDetail: FC<any> = ({ toggle, modalType, onConfirm, companyID
         setSubmemberSelected(newSubmembers);
     }
 
-    // const {
-    //     deleteAsync,
-    //     list: listGoods,
-    //     hasNextPage,
-    //     refetch: refetchGood,
-    //     fetchNextPage,
-    //     totalRecord
-    // } = useFnbShift({
-    //     params: { keyword }, // Khi keyword thay đổi giá trị => API thay đổi data => refretch kết quả
-    //     isFetchList: true
-    // });
-
     return (
         <Formik
             initialValues={initialValues}

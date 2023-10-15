@@ -48,6 +48,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
         email: '',
         description: '',
         funda: '',
+        sale: '',
         gender: 1,
         birthday: '',
         nonResident: '1'
@@ -63,8 +64,8 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
     } = useCustomer({
         params: { 
             populates: {
-                path: 'parent userUpdate funda',
-                select: 'name bizfullname'
+                path: 'parent userUpdate funda sale',
+                select: 'name bizfullname fullname'
             },
             keyword, isListParentOrListChilds: "1", parentID 
         }, // Khi keyword thay đổi giá trị => API tự động cập nhật lại Data => cập nhật lại view
@@ -109,7 +110,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, type, name, address, taxid, phone, email, description, funda, note, gender, birthday, nonResident } = newListIDChecked[0];
+            const { _id, type, name, address, taxid, phone, email, description, funda, sale, note, gender, birthday, nonResident } = newListIDChecked[0];
             setInitialValues({
                 parent: parentID,
                 contactID: _id,
@@ -121,6 +122,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                 email: email || '', 
                 description: description || '',
                 funda: funda,
+                sale: sale,
                 note,
                 gender,
                 birthday,
@@ -227,16 +229,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
 		try {
             setStateExport({ isExporting: true });
             const { error, data } = await downloadTemplateImportExcelCustomerAsync({
-                filterParams: {  
-                    // departmentsID: [departmentID],
-                    // ...fromToDate,
-                    // datahubContactsID,
-                    // types,
-                    // directions,
-                    // contractsID,
-                    // storagesID,
-                    // keyword: keywordInput 
-                }
+                filterParams: {  }
             });
 
             if(error) {
@@ -295,7 +288,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
             fetchData();
         }
         
-        console.log('=========DATA THAY ĐỔI RỒI==============')
+        // console.log('=========DATA THAY ĐỔI RỒI==============')
     }, [dataImport])
     
     return (
@@ -381,12 +374,12 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                                 />
                             </div>
                         </th>
-                        <th className="w-1/6 py-1">
+                        <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Phân loại
                             </div>
                         </th>
-                        <th className="py-1">
+                        <th className="py-1 w-1/6">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Tên
                             </div>
@@ -447,13 +440,13 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                             </td>
                             <td className="py-1 px-2">
                                 {CONTACT_TYPES[Number(item.type)-1].text}
-                                {/* <p className="text-xs"><i>{item._id}</i></p> */}
                                 <p className="text-xs"><i>{item.email}</i></p>
                             </td>
                             <td className="py-1 px-2">
                                 <Link to={`/item/contact/${item._id}`}>
                                     {item.amountChilds>0? <b>{item.name}({item.amountChilds})</b>: item.name }
                                 </Link>
+                                <p className="text-primary">Sale: {item?.sale?.fullname || ''}</p>
                             </td>
                             <td className="py-1 px-2">{GENDER_TYPES[Number(item.gender)-1].text}</td>
                             <td className="py-1 px-2">{item.address}</td>
