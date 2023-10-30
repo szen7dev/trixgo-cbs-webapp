@@ -27,9 +27,6 @@ import { Popover } from "shareComponents/common";
 import useCheckedList from "services/hooks/ppt/useCheckedList";
 import debounce from "lodash/debounce";
 
-// import cn from "classnames";
-// import styles from 'views/accounting/styles/styles.module.css';
-
 interface AccountingTicketsPageProps {
   type?: number
 }
@@ -124,18 +121,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
       default:
         break;
     }
-
   }
-
-  // const handleOnFilter = useCallback((values) => {
-
-  //   // setPageParam(() => ({ ...values }));
-  //   return true;
-  // }, []);
-
-  // const handleOnCancelFilter = useCallback(() => {
-  //   // setPageParam({});
-  // }, []);
 
   // Xử lý sự kiện tìm kiếm
   const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
