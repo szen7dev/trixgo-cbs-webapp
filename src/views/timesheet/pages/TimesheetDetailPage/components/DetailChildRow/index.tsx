@@ -4,10 +4,6 @@ import debounce from "lodash/debounce";
 import moment from "moment";
 
 import {DropdownSearchable} from "shareComponents/common";
-
-// import MenuChildRow from "./MenuChildRow";
-
-// import { useRightClickMenu } from "services/hooks/useRightClickMenu";
 import { useQueryListFriend } from "services/hooks/users/useFriend";
 
 import type {
@@ -36,7 +32,6 @@ export const DetailChildRow: FC<Props> = ({
   hasPermission,
   onUpdatedTimeSheetChild,
 }) => {
-  // const { closeRightClick, openRightClick } = useRightClickMenu();
 
   const [searchAssigneeStr, setSearchAssigneeStr] = React.useState(
     rowData.assignee?.fullname || ""
@@ -59,27 +54,6 @@ export const DetailChildRow: FC<Props> = ({
     [onUpdatedTimeSheetChild, rowData, hasPermission]
   );
 
-  // const handleContextMenu = React.useCallback(
-  //   (e) => {
-  //     e.preventDefault();
-  //     openRightClick({
-  //       content: <MenuChildRow />,
-  //       x: e.pageX,
-  //       y: e.pageY,
-  //     });
-  //   },
-  //   [openRightClick]
-  // );
-
-  // React.useEffect(() => {
-  //   document.addEventListener("click", closeRightClick);
-  //   document.addEventListener("contextmenu", handleContextMenu);
-  //   return () => {
-  //     document.addEventListener("click", closeRightClick);
-  //     document.removeEventListener("contextmenu", handleContextMenu);
-  //   };
-  // }, [closeRightClick, handleContextMenu]);
-
   return (
     <div
       style={
@@ -95,11 +69,6 @@ export const DetailChildRow: FC<Props> = ({
       className={"transition duration-300 ease-in-out child-row table-row "}
       data-row-index={rowData._id}
     >
-      <div
-        className={
-          "financial-planning-table-action-sidebar w-6 bg-gray-300 text-white table-cell relative align-middle border border-gray-300"
-        }
-      ></div>
       <div
         className={
           "table-cell relative box-border border border-gray-300 align-middle bg-white"
@@ -231,13 +200,6 @@ export const DetailChildRow: FC<Props> = ({
           className={
             "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
           }
-          // onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-          //   const value = e.target.innerText;
-          //   handleClickUpdateTimeSheet({
-          //     ...rowData,
-          //     amount: `${value}`,
-          //   });
-          // }}
         >
           {`${rowData.amount}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         </p>

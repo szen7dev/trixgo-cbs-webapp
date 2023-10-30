@@ -16,7 +16,7 @@ import { createLinkAndClick } from "utils";
 
 import {
   DetailMainRow,
-  AccessingUsers,
+  // AccessingUsers,
   ModalShare
 } from "./components";
 import { CreateRow } from "./components/Form";
@@ -32,7 +32,7 @@ import {
 import { useCashBook } from 'services/hooks/financial/useCashBook';
 
 import { useAuth } from "services/hooks/auth/useAuth";
-import { setMainRowCollapsed } from "redux/reducer/Timesheet";
+// import { setMainRowCollapsed } from "redux/reducer/Timesheet";
 import { User } from "typings/user";
 import { Loader } from "shareComponents/common";
 
@@ -234,37 +234,13 @@ const TimeSheetDetailPage: FC = () => {
               toggleModalShare('members', timeSheetInfo.members)
             }}
           >Thành viên ({timeSheetInfo.members?.length})</button>
-          <AccessingUsers users={permissions.usersShared} />
+          {/* <AccessingUsers users={permissions.usersShared} /> */}
           {/* <ShareButton /> */}
         </div>
       </div>
       <div className={"financial-planning-table"}>
         <div className={"relative table border-collapse w-full"}>
           <div className={"header table-row sticky z-10"}>
-            <div
-              className={
-                "financial-planning-table-action-sidebar w-6 bg-gray-300 text-white table-cell align-middle"
-              }
-            >
-              <div className={"flex flex-col items-center justify-center"}>
-                <button
-                  className={"rounded bg-gray-600 mb-1 block w-5 h-5"}
-                  onClick={() =>
-                    dispatch(setMainRowCollapsed({ _id: timeSheetParentID, collapsed: true }))
-                  }
-                >
-                  1
-                </button>
-                <button
-                  className={"rounded bg-gray-600 mb-1 block w-5 h-5"}
-                  onClick={() =>
-                    dispatch(setMainRowCollapsed({ _id: timeSheetParentID, collapsed: false }))
-                  }
-                >
-                  2
-                </button>
-              </div>
-            </div>
             <div
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"

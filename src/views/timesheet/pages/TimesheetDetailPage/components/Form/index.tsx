@@ -18,12 +18,6 @@ export const CreateRow: FC<DetailChildRowCreateFormProps> = ({
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  // const [searchAssigneeStr, setSearchAssigneeStr] = React.useState("");
-
-  // const { data: listFriend } = useQueryListFriend({
-  //   keyword: searchAssigneeStr,
-  // });
-
   const handleClickUpdateTimeSheet = React.useCallback(
     async (value) => {
       const isCreated = await onInsert({
@@ -55,11 +49,6 @@ export const CreateRow: FC<DetailChildRowCreateFormProps> = ({
     >
       <div
         className={
-          "financial-planning-table-action-sidebar w-6 bg-gray-300 text-white table-cell relative align-middle border border-gray-300"
-        }
-      ></div>
-      <div
-        className={
           "table-cell relative box-border border border-gray-300 align-middle bg-white"
         }
       >
@@ -76,8 +65,6 @@ export const CreateRow: FC<DetailChildRowCreateFormProps> = ({
         }
       >
         <input
-          // contentEditable={"true"}
-          // suppressContentEditableWarning={true}
           placeholder="Nhập nội dung..."
           className={
             "w-full h-full focus-visible:outline-blue-600 px-[16px] py-[9px]"
