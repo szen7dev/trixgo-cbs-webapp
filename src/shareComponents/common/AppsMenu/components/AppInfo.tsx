@@ -58,7 +58,7 @@ export const APP_INFO = new Map([
     /* Ứng dụng Timesheet */
     ['61e049cffdebf77b072d1b14', {
         key: "61e049cffdebf77b072d1b14",
-        name: "Quản lý chấm công",
+        name: "Chấm công tính lương",
         icon: timesheetLogo,
         route: '/timesheet/home'
     }],
