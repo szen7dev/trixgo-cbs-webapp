@@ -46,13 +46,13 @@ export const DetailMainRow: FC<Props> = ({
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
         }
       ></div>
-      <div
+      {/* <div
         className={
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
         }
       >
         <input type="checkbox" className="form-check-input cursor-pointer" />
-      </div>
+      </div> */}
       <div
         className={
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
@@ -82,6 +82,11 @@ export const DetailMainRow: FC<Props> = ({
           )}
         </div>
       </div>
+      <div
+        className={
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
+        }
+      ></div>
       <div
         className={
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"

@@ -95,6 +95,7 @@ export type TimeSheetChild = {
     date: string;
     parent?: TimeSheetParent;
     assignee?: User,
+    work: strinstring | null,
     note?: string,
 }
 

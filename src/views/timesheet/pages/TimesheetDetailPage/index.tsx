@@ -73,6 +73,8 @@ const TimeSheetDetailPage: FC = () => {
     refetch: onRefreshTimeSheetChild,
   } = useQueryListTimeSheetChild(timeSheetParentID);
 
+  // console.log({listTimeSheetChild})
+
   const { onUpdateTimeSheetAsync, onCreateTimeSheetAsync } = useMutationTimeSheetChild();
 
   useEffect(() => {
@@ -116,6 +118,7 @@ const TimeSheetDetailPage: FC = () => {
   const handleUpdatedTimeSheet = React.useCallback(
     async (values) => {
       try {
+        // console.log(values)
         const isUpdated = await onUpdateTimeSheetAsync({
           ...values,
           expertTimesheetID: values._id,
@@ -262,19 +265,19 @@ const TimeSheetDetailPage: FC = () => {
             >
               Ngày
             </div>
-            <div
+            {/* <div
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
               Hoàn thành
-            </div>
+            </div> */}
             <div
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Số giờ
+              KL
             </div>
             <div
               className={
@@ -296,6 +299,13 @@ const TimeSheetDetailPage: FC = () => {
               }
             >
               Người thực hiện
+            </div>
+            <div
+              className={
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+              }
+            >
+              Công việc/Bill
             </div>
             <div
               className={
