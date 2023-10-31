@@ -1,16 +1,20 @@
-import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import timesheetIcon from "assets/images/icons8-timesheet.svg";
+import humanIcon from "assets/images/icons8-human.svg";
+import accountingIcon from "assets/images/icons8-accounting.svg";
+import financialIcon from "assets/images/icons8-financial.svg";
+import eshopIcon from "assets/images/icons8-eshop.svg";
+import documentIcon from "assets/images/icons8-document.svg";
+import { useTranslation } from "react-i18next";
+
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
 import mailIcon from "assets/images/icons8-secure-mail-48.svg";
 import chatIcon from "assets/images/icons8-chat-48.svg";
-// import iconInspection from "assets/images/icons-inspection.svg";
-// import humanIcon from "assets/images/icons8-people-64.svg";
 import mediaIcon from "assets/images/icons8-commercial-64.svg";
-// import financialIcon from "assets/images/icons8-financial-64.svg";
 import projectIcon from "assets/images/icons-project.svg";
 import fnbIcon from "assets/images/icons-fnb.svg";
 import contractIcon from "assets/images/icons8-contract-64.svg";
 import fileIcon from "assets/images/icons-file.svg";
-// import biddingImage from "assets/menu/project/icons-project-bidding.svg"
 import { Link, useLocation } from "react-router-dom";
 import { useSocket } from "services/hooks/useSocket";
 import { useDispatch, useSelector } from "react-redux";
@@ -28,6 +32,8 @@ type Props = {
   handleMenuEvent: () => void;
 };
 export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
+  const { t } = useTranslation();
+
   const { listAppOfUser } = useGetListAppOfUser();
   const currentUser = localStorage.getItem("currentUser") ?? "{}";
   const profileId = JSON.parse(currentUser)?._id;
@@ -92,12 +98,10 @@ export const LeftNavigate: FC<Props> = ({ handleMenuEvent }) => {
 
   const onReceiveMessage = (data: any) => {
     if (data?.infoMessage?.error) {
-      // Alert.alert(t('notification'), data.infoMessage.message);
       getListConversation({ keyword: "" });
       return;
     }
     dispatch(setAmountMissMessage(data.amountMissMessage))
-    // console.log(data)
     socket.emit('CHATTING_CSS_GET_INFO_CONVERSATION', {
       conversationID: data?.infoMessage?.conversation,
       populates

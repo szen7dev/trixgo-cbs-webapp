@@ -37,82 +37,83 @@ const LinkMenuLeftSideBar: FC = () => {
             <img width={'20px'} src={iconFolder} alt="Menu item" />
             <span className={"flex-1 ml-2 text-left text-[14px]"}>Trang chủ</span>
           </NavLink>
+          <NavLink to={`/accounting/admin`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+              <img width={'20px'} src={iconFolder} alt="Menu item" />
+              <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản trị ứng dụng</span>
+          </NavLink>
+          <NavLink to={`/accounting/dashboard`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+              <img width={'20px'} src={iconFolder} alt="Menu item" />
+              <span className={"flex-1 ml-2 text-left text-[14px]"}>Báo cáo quản trị</span>
+          </NavLink>
+          <NavLink to={`/accounting/detail`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+              <img width={'20px'} src={iconFolder} alt="Menu item" />
+              <span className={"flex-1 ml-2 text-left text-[14px]"}>Chi tiết tài khoản</span>
+            </NavLink>
+            <NavLink to={`/accounting/tbook`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+              <img width={'20px'} src={iconFolder} alt="Menu item" />
+              <span className={"flex-1 ml-2 text-left text-[14px]"}>Tổng hợp tài khoản chữ T</span>
+            </NavLink>
+            <NavLink to={`/accounting/diary`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+              <img width={'20px'} src={iconFolder} alt="Menu item" />
+              <span className={"flex-1 ml-2 text-left text-[14px]"}>Sổ nhật ký chung</span>
+            </NavLink>
+            <NavLink to={`/accounting/import-export`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+              <img width={'20px'} src={iconFolder} alt="Menu item" />
+              <span className={"flex-1 ml-2 text-left text-[14px]"}>Nhập xuất tồn</span>
+            </NavLink>
+            <NavLink to={`/accounting/debt-tracking`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+              <img width={'20px'} src={iconFolder} alt="Menu item" />
+              <span className={"flex-1 ml-2 text-left text-[14px]"}>Theo dõi công nợ</span>
+            </NavLink>
+            <NavLink to={`/accounting/vat`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+              <img width={'20px'} src={iconFolder} alt="Menu item" />
+              <span className={"flex-1 ml-2 text-left text-[14px]"}>Bảng kê VAT</span>
+            </NavLink>
+            <NavLink to={`/accounting/financial-report`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+              <img width={'20px'} src={iconFolder} alt="Menu item" />
+              <span className={"flex-1 ml-2 text-left text-[14px]"}>Báo cáo tài chính</span>
+            </NavLink>
+            <NavLink to={`/accounting/support-tools`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+              <img width={'20px'} src={iconFolder} alt="Menu item" />
+              <span className={"flex-1 ml-2 text-left text-[14px]"}>Công cụ hỗ trợ</span>
+            </NavLink>
           <div >
             {
-              !menuItems.includes(fundaID) ? <><NavLink to={`/accounting/dashboard`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                <img width={'20px'} src={iconFolder} alt="Menu item" />
-                <span className={"flex-1 ml-2 text-left text-[14px]"}>Báo cáo quản trị</span>
-              </NavLink>
-                <NavLink to={`/accounting/${fundaID}/accbill`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                  <img width={'20px'} src={iconFolder} alt="Menu item" />
-                  <span className={"flex-1 ml-2 text-left text-[14px]"}>Phiếu kế toán</span>
-                </NavLink>
-                <NavLink to={`/accounting/${fundaID}/receipt`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                  <img width={'20px'} src={iconFolder} alt="Menu item" />
-                  <span className={"flex-1 ml-2 text-left text-[14px]"}>Phiếu thu</span>
-                </NavLink>
-                <NavLink to={`/accounting/${fundaID}/payment`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                  <img width={'20px'} src={iconFolder} alt="Menu item" />
-                  <span className={"flex-1 ml-2 text-left text-[14px]"}>Phiếu chi</span>
-                </NavLink>
-                <NavLink to={`/accounting/${fundaID}/goods-import`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                  <img width={'20px'} src={iconFolder} alt="Menu item" />
-                  <span className={"flex-1 ml-2 text-left text-[14px]"}>Phiếu nhập</span>
-                </NavLink>
-                <NavLink to={`/accounting/${fundaID}/goods-export`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                  <img width={'20px'} src={iconFolder} alt="Menu item" />
-                  <span className={"flex-1 ml-2 text-left text-[14px]"}>Phiếu xuất</span>
-                </NavLink>
-                <NavLink to={`/accounting/${fundaID}/invoices`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                  <img width={'20px'} src={iconFolder} alt="Menu item" />
-                  <span className={"flex-1 ml-2 text-left text-[14px]"}>Hóa đơn dịch vụ</span>
-                </NavLink>
-                <NavLink to={`/accounting/${fundaID}/debit-note`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                  <img width={'20px'} src={iconFolder} alt="Menu item" />
-                  <span className={"flex-1 ml-2 text-left text-[14px]"}>Giấy báo nợ</span>
-                </NavLink>
-                <NavLink to={`/accounting/${fundaID}/credit-note`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                  <img width={'20px'} src={iconFolder} alt="Menu item" />
-                  <span className={"flex-1 ml-2 text-left text-[14px]"}>Giấy báo có</span>
-                </NavLink>
-                <NavLink to={`/accounting/detail`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                  <img width={'20px'} src={iconFolder} alt="Menu item" />
-                  <span className={"flex-1 ml-2 text-left text-[14px]"}>Chi tiết tài khoản</span>
-                </NavLink>
-                <NavLink to={`/accounting/tbook`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                  <img width={'20px'} src={iconFolder} alt="Menu item" />
-                  <span className={"flex-1 ml-2 text-left text-[14px]"}>Tổng hợp tài khoản chữ T</span>
-                </NavLink>
-                <NavLink to={`/accounting/diary`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                  <img width={'20px'} src={iconFolder} alt="Menu item" />
-                  <span className={"flex-1 ml-2 text-left text-[14px]"}>Sổ nhật ký chung</span>
-                </NavLink>
-                <NavLink to={`/accounting/import-export`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                  <img width={'20px'} src={iconFolder} alt="Menu item" />
-                  <span className={"flex-1 ml-2 text-left text-[14px]"}>Nhập xuất tồn</span>
-                </NavLink>
-                <NavLink to={`/accounting/debt-tracking`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                  <img width={'20px'} src={iconFolder} alt="Menu item" />
-                  <span className={"flex-1 ml-2 text-left text-[14px]"}>Theo dõi công nợ</span>
-                </NavLink>
-                <NavLink to={`/accounting/vat`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                  <img width={'20px'} src={iconFolder} alt="Menu item" />
-                  <span className={"flex-1 ml-2 text-left text-[14px]"}>Bảng kê VAT</span>
-                </NavLink>
-                <NavLink to={`/accounting/financial-report`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                  <img width={'20px'} src={iconFolder} alt="Menu item" />
-                  <span className={"flex-1 ml-2 text-left text-[14px]"}>Báo cáo tài chính</span>
-                </NavLink>
-                <NavLink to={`/accounting/support-tools`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                  <img width={'20px'} src={iconFolder} alt="Menu item" />
-                  <span className={"flex-1 ml-2 text-left text-[14px]"}>Công cụ hỗ trợ</span>
-                </NavLink>
-                <NavLink to={`/accounting/admin`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                  <img width={'20px'} src={iconFolder} alt="Menu item" />
-                  <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản trị ứng dụng</span>
-                </NavLink></> : <></>
+              !menuItems.includes(fundaID) ? <>
+                  <NavLink to={`/accounting/${fundaID}/accbill`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                    <img width={'20px'} src={iconFolder} alt="Menu item" />
+                    <span className={"flex-1 ml-2 text-left text-[14px]"}>Phiếu kế toán</span>
+                  </NavLink>
+                  <NavLink to={`/accounting/${fundaID}/receipt`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                    <img width={'20px'} src={iconFolder} alt="Menu item" />
+                    <span className={"flex-1 ml-2 text-left text-[14px]"}>Phiếu thu</span>
+                  </NavLink>
+                  <NavLink to={`/accounting/${fundaID}/payment`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                    <img width={'20px'} src={iconFolder} alt="Menu item" />
+                    <span className={"flex-1 ml-2 text-left text-[14px]"}>Phiếu chi</span>
+                  </NavLink>
+                  <NavLink to={`/accounting/${fundaID}/goods-import`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                    <img width={'20px'} src={iconFolder} alt="Menu item" />
+                    <span className={"flex-1 ml-2 text-left text-[14px]"}>Phiếu nhập</span>
+                  </NavLink>
+                  <NavLink to={`/accounting/${fundaID}/goods-export`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                    <img width={'20px'} src={iconFolder} alt="Menu item" />
+                    <span className={"flex-1 ml-2 text-left text-[14px]"}>Phiếu xuất</span>
+                  </NavLink>
+                  <NavLink to={`/accounting/${fundaID}/invoices`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                    <img width={'20px'} src={iconFolder} alt="Menu item" />
+                    <span className={"flex-1 ml-2 text-left text-[14px]"}>Hóa đơn dịch vụ</span>
+                  </NavLink>
+                  <NavLink to={`/accounting/${fundaID}/debit-note`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                    <img width={'20px'} src={iconFolder} alt="Menu item" />
+                    <span className={"flex-1 ml-2 text-left text-[14px]"}>Giấy báo nợ</span>
+                  </NavLink>
+                  <NavLink to={`/accounting/${fundaID}/credit-note`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                    <img width={'20px'} src={iconFolder} alt="Menu item" />
+                    <span className={"flex-1 ml-2 text-left text-[14px]"}>Giấy báo có</span>
+                  </NavLink>
+                </> : <></>
             }
-
           </div>
         </div>
 

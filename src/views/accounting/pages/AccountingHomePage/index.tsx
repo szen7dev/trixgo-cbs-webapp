@@ -197,5 +197,3 @@ export const AccountingHomePage: FC = () => {
     </main>
   );
 };
-
-// export default ItemFundaPage;

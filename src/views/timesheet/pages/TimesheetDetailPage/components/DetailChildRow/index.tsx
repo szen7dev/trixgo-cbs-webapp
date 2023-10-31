@@ -4,11 +4,11 @@ import debounce from "lodash/debounce";
 import moment from "moment";
 
 import {DropdownSearchable} from "shareComponents/common";
-
-// import MenuChildRow from "./MenuChildRow";
-
-// import { useRightClickMenu } from "services/hooks/useRightClickMenu";
-import { useQueryListFriend } from "services/hooks/users/useFriend";
+import { useUserSystem } from "services/hooks/users/useUserSystem";
+import {
+	useQueryListBudgetWork,
+} from "services/hooks/cmcs/useContractIncome";
+import { LIMIT_DROPDOWN } from "apis/localdb/index";
 
 import type {
   TimeSheetChild,
@@ -36,15 +36,27 @@ export const DetailChildRow: FC<Props> = ({
   hasPermission,
   onUpdatedTimeSheetChild,
 }) => {
-  // const { closeRightClick, openRightClick } = useRightClickMenu();
+
+  const [searchBudgetWorkValue, setSearchBudgetWorkValue] = React.useState(
+    rowData.work?.name || ""
+	);
 
   const [searchAssigneeStr, setSearchAssigneeStr] = React.useState(
     rowData.assignee?.fullname || ""
   );
 
-  const { data: listFriend } = useQueryListFriend({
-    keyword: searchAssigneeStr,
-  });
+  const {
+    data: listUsersSystem,
+    hasNextPage,
+    fetchNextPage,
+  } = useUserSystem({ keyword: searchAssigneeStr }, true);
+  // console.log({listUsersSystem})
+
+  const { listBudgetWork } = useQueryListBudgetWork({
+		limit: LIMIT_DROPDOWN,
+		keyword: searchBudgetWorkValue,
+	});
+  // console.log({listBudgetWork})
 
   const handleClickUpdateTimeSheet = React.useCallback(
     (value) => {
@@ -58,27 +70,6 @@ export const DetailChildRow: FC<Props> = ({
     },
     [onUpdatedTimeSheetChild, rowData, hasPermission]
   );
-
-  // const handleContextMenu = React.useCallback(
-  //   (e) => {
-  //     e.preventDefault();
-  //     openRightClick({
-  //       content: <MenuChildRow />,
-  //       x: e.pageX,
-  //       y: e.pageY,
-  //     });
-  //   },
-  //   [openRightClick]
-  // );
-
-  // React.useEffect(() => {
-  //   document.addEventListener("click", closeRightClick);
-  //   document.addEventListener("contextmenu", handleContextMenu);
-  //   return () => {
-  //     document.addEventListener("click", closeRightClick);
-  //     document.removeEventListener("contextmenu", handleContextMenu);
-  //   };
-  // }, [closeRightClick, handleContextMenu]);
 
   return (
     <div
@@ -95,11 +86,6 @@ export const DetailChildRow: FC<Props> = ({
       className={"transition duration-300 ease-in-out child-row table-row "}
       data-row-index={rowData._id}
     >
-      <div
-        className={
-          "financial-planning-table-action-sidebar w-6 bg-gray-300 text-white table-cell relative align-middle border border-gray-300"
-        }
-      ></div>
       <div
         className={
           "table-cell relative box-border border border-gray-300 align-middle bg-white"
@@ -155,7 +141,7 @@ export const DetailChildRow: FC<Props> = ({
           }}
         />
       </div>
-      <div
+      {/* <div
         className={
           "table-cell relative box-border border border-gray-300 text-end bg-white"
         }
@@ -175,7 +161,7 @@ export const DetailChildRow: FC<Props> = ({
             }}
           />
         </p>
-      </div>
+      </div> */}
       <div
         className={
           "table-cell relative box-border border border-gray-300 align-middle bg-white"
@@ -231,13 +217,6 @@ export const DetailChildRow: FC<Props> = ({
           className={
             "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
           }
-          // onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-          //   const value = e.target.innerText;
-          //   handleClickUpdateTimeSheet({
-          //     ...rowData,
-          //     amount: `${value}`,
-          //   });
-          // }}
         >
           {`${rowData.amount}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         </p>
@@ -269,7 +248,7 @@ export const DetailChildRow: FC<Props> = ({
               {item.text}
             </p>
           )}
-          data={listFriend}
+          data={listUsersSystem}
           initialValue={rowData?.assignee ?? parent?.assignee}
           formatItem={{
             id: "_id",
@@ -283,6 +262,51 @@ export const DetailChildRow: FC<Props> = ({
             handleClickUpdateTimeSheet({
               ...rowData,
               assigneeID: value.id,
+            })
+          }
+        />
+      </div>
+      <div
+        className={
+          "px-[16px] py-[9px] table-cell relative box-border border border-gray-300 bg-white"
+        }
+      >
+        <DropdownSearchable
+          id="ticket-creator"
+          className={"w-full pl-0 -mb-1 outline-none "}
+          bordered
+          isMultiple={false}
+          allowClearValueSingleInput
+          showTriangle
+          placeholder="Ngân sách"
+          renderSelectedItem={(item) => (
+            <p
+              style={{
+                textOverflow: "ellipsis",
+                maxWidth: "100%",
+                minWidth: 0,
+                width: "100px",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+              }}
+            >
+              {item.text}
+            </p>
+          )}
+          data={listBudgetWork}
+          initialValue={rowData?.work}
+          formatItem={{
+            id: "_id",
+            text: "name",
+          }}
+          onSearchInputChange={debounce(
+            (value) => setSearchBudgetWorkValue(value),
+            500
+          )}
+          onchangeValue={(value) =>
+            handleClickUpdateTimeSheet({
+              ...rowData,
+              workID: value.id,
             })
           }
         />

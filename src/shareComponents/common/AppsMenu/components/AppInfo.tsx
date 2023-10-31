@@ -7,20 +7,15 @@ import financialLogo from "assets/logos/financial.png";
 import humanLogo from "assets/logos/human.png";
 import marketLogo from "assets/logos/market.png";
 import mediaLogo from "assets/logos/media.png";
-// import npsLogo from "assets/logos/nps.png";
 import operationLogo from "assets/logos/operation.png";
 import ownerLogo from "assets/logos/owner.png";
-// import paymentLogo from "assets/logos/payment.png";
 import fnbLogo from "assets/logos/fnb.png";
 import pcmLogo from "assets/logos/pcm.png";
 import projectLogo from "assets/logos/project.png";
-// import profileLogo from "assets/logos/profile.png";
 import qrcodeLogo from "assets/logos/qrcode.png";
 import reeLogo from "assets/logos/ree.png";
-import supportLogo from "assets/logos/support.png";
 import timesheetLogo from "assets/logos/timesheet.png";
 import workshopLogo from "assets/logos/workshop.png";
-import personalLogo from "assets/logos/personal.png";
 import messagesLogo from "assets/logos/messages.png";
 import budgetLogo from "assets/logos/budget.png";
 import inspectionLogo from "assets/logos/inspection.png";
@@ -63,7 +58,7 @@ export const APP_INFO = new Map([
     /* Ứng dụng Timesheet */
     ['61e049cffdebf77b072d1b14', {
         key: "61e049cffdebf77b072d1b14",
-        name: "Quản lý chấm công",
+        name: "Chấm công tính lương",
         icon: timesheetLogo,
         route: '/timesheet/home'
     }],
