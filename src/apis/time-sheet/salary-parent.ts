@@ -17,7 +17,7 @@ import type {
 
 export async function fetchListTimeSheet<T>(params?: ListTimeSheetPayload): Promise<T> {
     const { data } = await API.get(
-        `${TIME_SHEET_URL}/expert_timesheets`, {
+        `${TIME_SHEET_URL}/expert_salary`, {
         params: {
             populates: {
                 "path": "assignee project work",
