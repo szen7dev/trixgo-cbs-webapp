@@ -108,7 +108,7 @@ const TimeSheetHomePage: FC = () => {
         }
       >
         <div className={"flex items-center flex-1"}>
-          <div className={"text-lg"}>Chấm công và tính lương chuyên gia</div>
+          <div className={"text-lg"}>Bảng chấm công</div>
           <SearchInput
             classNameWrapper={"ml-4"}
             onChange={(event) => console.log(event.target.value)}
