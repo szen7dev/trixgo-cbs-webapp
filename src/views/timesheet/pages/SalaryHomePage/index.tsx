@@ -11,16 +11,16 @@ import { Paginate } from "shareComponents/common/Paginate";
 import {
   SearchInput,
   DialogForm,
-  ActionGroupButton,
+  ActionGroupButton2,
   FilterButton,
 } from "views/timesheet/shareComponents/common";
 
 import { useModal } from "services/hooks/useModal";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import {
-  useQueryListTimeSheetParent,
-  useMutationTimeSheetParent,
-} from "services/hooks/useTimeSheet";
+  useQueryListSalaryParent,
+  useMutationSalaryParent,
+} from "services/hooks/useSalary";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
 enum TYPE {
@@ -34,27 +34,27 @@ const SalaryHomePage: FC = () => {
   const { openDeleteConfirm } = useDeleteConfirm();
   const {
     data,
-    refetch: refreshListTimeSheet,
+    refetch: refreshListSalary,
     totalPages,
     totalRecord,
     fetchNextPage,
     fetchPrevPage,
     loading,
     hasNextPage,
-  } = useQueryListTimeSheetParent();
+  } = useQueryListSalaryParent();
 
   const {
-    onCreateTimeSheetParentAsync,
-    onUpdateTimeSheetParentAsync,
-    onDeleteTimeSheetParentAsync,
-  } = useMutationTimeSheetParent();
+    onCreateSalaryParentAsync,
+    onUpdateSalaryParentAsync,
+    onDeleteSalaryParentAsync,
+  } = useMutationSalaryParent();
 
-  const handleCreateTimeSheet = React.useCallback(
+  const handleCreateSalary = React.useCallback(
     async (values) => {
       try {
-        const isCreated = await onCreateTimeSheetParentAsync(values);
+        const isCreated = await onCreateSalaryParentAsync(values);
         if (!isCreated.error) {
-          refreshListTimeSheet();
+          refreshListSalary();
           closeModal();
           return null;
         }
@@ -64,15 +64,15 @@ const SalaryHomePage: FC = () => {
         return null;
       }
     },
-    [closeModal, onCreateTimeSheetParentAsync, refreshListTimeSheet]
+    [closeModal, onCreateSalaryParentAsync, refreshListSalary]
   );
 
-  const handleUpdateTimeSheet = React.useCallback(
+  const handleUpdateSalary = React.useCallback(
     async (values) => {
       try {
-        const isUpdated = await onUpdateTimeSheetParentAsync(values);
+        const isUpdated = await onUpdateSalaryParentAsync(values);
         if (!isUpdated.error) {
-          refreshListTimeSheet();
+          refreshListSalary();
           closeModal();
           return null;
         }
@@ -82,23 +82,23 @@ const SalaryHomePage: FC = () => {
         return null;
       }
     },
-    [closeModal, onUpdateTimeSheetParentAsync, refreshListTimeSheet]
+    [closeModal, onUpdateSalaryParentAsync, refreshListSalary]
   );
 
-  const handleClickDeleteTimeSheet = React.useCallback(
-    (timeSheetID) => {
+  const handleClickDeleteSalary = React.useCallback(
+    (SalaryID) => {
       openDeleteConfirm({
         deleteAction: async () => {
-          const res = await onDeleteTimeSheetParentAsync({
-            expertTimesheetID: timeSheetID,
+          const res = await onDeleteSalaryParentAsync({
+            expertSalaryID: SalaryID,
           });
           if (res.status === 200) {
-            refreshListTimeSheet();
+            refreshListSalary();
           }
         },
       });
     },
-    [onDeleteTimeSheetParentAsync, refreshListTimeSheet, openDeleteConfirm]
+    [onDeleteSalaryParentAsync, refreshListSalary, openDeleteConfirm]
   );
   return (
     <div className={"financial-cashflow-listing paginate-wrapper relative"}>
@@ -117,10 +117,10 @@ const SalaryHomePage: FC = () => {
             <>
               <FilterButton />
               <div className={"mr-3 w-4 border-r border-gray-400 h-[16px]"} />
-              <ActionGroupButton
+              <ActionGroupButton2
                 recordSelected={recordSelected}
-                onUpdateTimeSheet={handleUpdateTimeSheet}
-                onDeleteTimeSheet={handleClickDeleteTimeSheet}
+                onUpdateSalary={handleUpdateSalary}
+                onDeleteSalary={handleClickDeleteSalary}
               />
             </>
           )}
@@ -132,7 +132,7 @@ const SalaryHomePage: FC = () => {
               <div className="t-main-search text-left transition-all transform bg-primary-light shadow-xl rounded my-20 align-top inline-block">
                 <DialogForm
                   title="Tạo mới"
-                  onSubmit={handleCreateTimeSheet}
+                  onSubmit={handleCreateSalary}
                   projectName={""}
                   assigneeName={""}
                 />
@@ -142,9 +142,9 @@ const SalaryHomePage: FC = () => {
         >
           Tạo mới
         </button>
-        <button className="rounded-full h-10 w-10 flex items-center justify-center bg-gray-100 ml-5">
+        {/* <button className="rounded-full h-10 w-10 flex items-center justify-center bg-gray-100 ml-5">
           <img alt={"Icon"} src={ThreeDotsVertical} />
-        </button>
+        </button> */}
       </div>
       <div className={"financial-cashflow-table"}>
         <div className={"relative table border-collapse w-full"}>
@@ -214,8 +214,8 @@ const SalaryHomePage: FC = () => {
               Trạng thái/Phê duyệt
             </div>
           </div>
-          {data.map((timeSheetParent) => (
-            <div className={"body-table table-row"} key={timeSheetParent._id}>
+          {data.map((salaryParent) => (
+            <div className={"body-table table-row"} key={salaryParent._id}>
               <div
                 className={
                   "px-6 py-4 table-cell box-border border-b align-middle w-3"
@@ -225,11 +225,11 @@ const SalaryHomePage: FC = () => {
                   className="form-check-input"
                   type="checkbox"
                   id="flexCheckDefault"
-                  checked={recordSelected?._id === timeSheetParent._id}
+                  checked={recordSelected?._id === salaryParent._id}
                   onChange={(e) => {
                     // chỉ cho chọn 1
                     if (e.target.checked) {
-                      toggleRecord(timeSheetParent);
+                      toggleRecord(salaryParent);
                       return null;
                     }
                     toggleRecord({});
@@ -242,55 +242,55 @@ const SalaryHomePage: FC = () => {
                   "px-2 py-4 table-cell box-border border-b align-middle w-2/12"
                 }
               >
-                <NavLink to={`/timesheet/home/${timeSheetParent._id}`}>
-                  {timeSheetParent.name}
+                <NavLink to={`/salary/home/${salaryParent._id}`}>
+                  {salaryParent.name}
                 </NavLink>
                 <p className={"mt-1 text-gray-500"}>
-                  {timeSheetParent?.userCreate?.fullname}
-                  {moment(timeSheetParent.createAt).isValid() &&
-                    moment(timeSheetParent.createAt).format(DATE_FORMAT)}
+                  {salaryParent?.userCreate?.fullname}
+                  {moment(salaryParent.createAt).isValid() &&
+                    moment(salaryParent.createAt).format(DATE_FORMAT)}
                 </p>
               </div>
               <div className={"px-2 py-4 table-cell box-border border-b"}>
-                {TYPE[timeSheetParent.type]}
+                {TYPE[salaryParent.type]}
               </div>
               <div className={"px-2 py-4 table-cell box-border border-b"}>
-                {timeSheetParent?.project?.name}
+                {salaryParent?.project?.name}
               </div>
               <div
                 className={
                   "px-2 py-4 table-cell box-border border-b text-right"
                 }
               >
-                {timeSheetParent?.hours}
+                {salaryParent?.hours}
               </div>
               <div
                 className={
                   "px-2 py-4 table-cell box-border border-b text-right"
                 }
               >
-                {`${timeSheetParent?.amount}`.replace(
+                {`${salaryParent?.amount}`.replace(
                   /\B(?=(\d{3})+(?!\d))/g,
                   ","
                 )}
               </div>
               <div className={"px-2 py-4 table-cell box-border border-b"}>
-                {timeSheetParent.note}
+                {salaryParent.note}
               </div>
               <div className={"px-2 py-4 table-cell box-border border-b"}>
                 <div className={"flex items-center text-primary"}>
                   <span className={"mr-3"}>
-                    {timeSheetParent.timeApproved
+                    {salaryParent.timeApproved
                       ? "Đã phê duyệt"
                       : "Chưa phê duyệt"}
                   </span>
-                  {timeSheetParent.timeApproved && (
+                  {salaryParent.timeApproved && (
                     <img src={VerifyIcon} alt={"icon"} />
                   )}
                 </div>
                 <p className={"mt-1 text-gray-500"}>
-                  {moment(timeSheetParent.timeApproved).isValid() &&
-                    moment(timeSheetParent.timeApproved).format(DATE_FORMAT)}
+                  {moment(salaryParent.timeApproved).isValid() &&
+                    moment(salaryParent.timeApproved).format(DATE_FORMAT)}
                 </p>
                 {/* <p className={"mt-1 text-gray-500"}>
                   Nguyễn Hữu Hiệp-PG 12/12/2021 15:45

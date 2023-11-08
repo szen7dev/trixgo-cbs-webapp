@@ -1,43 +1,43 @@
 import { useInfiniteQuery, useMutation, useQuery } from "react-query";
-import { TimeSheetParentRepository, TimeSheetChildRepository } from 'apis/time-sheet';
+import { SalaryParentRepository, SalaryChildRepository } from 'apis/time-sheet';
 
 import type {
-    TimeSheetParent,
-    InsertTimeSheetParentPayload,
-    InsertTimeSheetParentResponse,
-    UpdateTimeSheetParentPayload,
-    UpdateTimeSheetParentResponse,
-    DeleteTimeSheetParentPayload,
-    DeleteTimeSheetParentResponse,
-    TimeSheetChild,
-    InsertTimeSheetChildPayload,
-    InsertTimeSheetChildResponse,
-    UpdateTimeSheetChildPayload,
-    UpdateTimeSheetChildResponse,
+    SalaryParent,
+    InsertSalaryParentPayload,
+    InsertSalaryParentResponse,
+    UpdateSalaryParentPayload,
+    UpdateSalaryParentResponse,
+    DeleteSalaryParentPayload,
+    DeleteSalaryParentResponse,
+    SalaryChild,
+    InsertSalaryChildPayload,
+    InsertSalaryChildResponse,
+    UpdateSalaryChildPayload,
+    UpdateSalaryChildResponse,
     // DownloadPayload,
     // ImportPayload,
     // ExportManyPayload,
-} from 'typings/time-sheet';
+} from 'typings/salary';
 
 // Time Sheet Parent
-interface UseQueryListTimeSheetParent {
+interface UseQueryListSalaryParent {
     loading: boolean;
-    data: TimeSheetParent[];
+    data: SalaryParent[];
     hasNextPage?: boolean;
     totalPages: number;
     totalRecord: number;
     refetch: () => void;
     fetchNextPage: () => void;
     fetchPrevPage: () => void;
-    // insertAsync: (payload: DownloadPayload) => Promise<TimeSheetParent>;
-    // updateAsync: (payload: ImportPayload) => Promise<TimeSheetParent>;
+    // insertAsync: (payload: DownloadPayload) => Promise<SalaryParent>;
+    // updateAsync: (payload: ImportPayload) => Promise<SalaryParent>;
     // deleteManyAsync: (params: ExportManyPayload) => Promise<any>;
 }
 
-export const useQueryListTimeSheetParent = (): UseQueryListTimeSheetParent => {
+export const useQueryListSalaryParent = (): UseQueryListSalaryParent => {
     const result = useInfiniteQuery(
-        `list_time-sheet.parent`, async () =>
-        TimeSheetParentRepository.fetchListTimeSheet({
+        `list_salary.parent`, async () =>
+        SalaryParentRepository.fetchListSalary({
             populates: {
                 "path": "assignee project userCreate",
                 "select": "fullname bizfullname name"
@@ -61,7 +61,7 @@ export const useQueryListTimeSheetParent = (): UseQueryListTimeSheetParent => {
         hasNextPage
     } = result;
 
-    const listTimeSheet = []
+    const listSalary = []
         .concat(
             ...(data?.pages || []).map((d: any) => d.data?.listRecords)
         )
@@ -71,23 +71,23 @@ export const useQueryListTimeSheetParent = (): UseQueryListTimeSheetParent => {
 
     // // Tải mẫu import excel
     // const { mutateAsync: downloadTemplateExcelAsync } =
-    //     useMutation((payload: DownloadPayload ) => TimeSheetChildRepository.downloadTemplateExcel(payload)
+    //     useMutation((payload: DownloadPayload ) => SalaryChildRepository.downloadTemplateExcel(payload)
     // );
 
     // // Import excel
     // const { mutateAsync: importExcelAsync } =
-    //     useMutation((payload: ImportPayload) => TimeSheetChildRepository.importExcel(payload)
+    //     useMutation((payload: ImportPayload) => SalaryChildRepository.importExcel(payload)
     // );
 
     // // Export excel
     // const { mutateAsync: exportExcelAsync } =
     //     useMutation((payload: ExportManyPayload) =>
-    //     TimeSheetChildRepository.exportExcel(payload)
+    //     SalaryChildRepository.exportExcel(payload)
     // );
 
     return {
         loading: isLoading,
-        data: listTimeSheet,
+        data: listSalary,
         hasNextPage,
         totalPages,
         totalRecord,
@@ -100,26 +100,26 @@ export const useQueryListTimeSheetParent = (): UseQueryListTimeSheetParent => {
     }
 }
 
-interface UseQueryDetailTimeSheetParent {
+interface UseQueryDetailSalaryParent {
     loading: boolean;
-    data?: TimeSheetParent;
+    data?: SalaryParent;
     error: boolean;
     refetch: () => void;
 }
 
-export const useQueryDetailTimeSheetParent = (expertTimesheetID: string): UseQueryDetailTimeSheetParent => {
+export const useQueryDetailSalaryParent = (expertSalaryID: string): UseQueryDetailSalaryParent => {
     const {
         isLoading,
         data,
         refetch,
     } = useQuery(
-        `time-sheet.parent.${expertTimesheetID}`, async () =>
-        TimeSheetParentRepository.fetchDetailTimeSheet({
+        `salary.parent.${expertSalaryID}`, async () =>
+        SalaryParentRepository.fetchDetailSalary({
             populates: {
                 path: "assignee project userCreate members admins",
                 select: "_id fullname bizfullname name sign image"
             },
-            expertTimesheetID
+            expertSalaryID
         }), {
         getNextPageParam: ({ data }: any) => {
             return data?.nextCursor || undefined;
@@ -136,33 +136,33 @@ export const useQueryDetailTimeSheetParent = (expertTimesheetID: string): UseQue
     }
 }
 
-interface UseMutationTimeSheetParent {
-    onCreateTimeSheetParentAsync: (payload: InsertTimeSheetParentPayload) =>
-        Promise<InsertTimeSheetParentResponse>;
-    onUpdateTimeSheetParentAsync: (payload: UpdateTimeSheetParentPayload) =>
-        Promise<UpdateTimeSheetParentResponse>;
-    onDeleteTimeSheetParentAsync: (payload: DeleteTimeSheetParentPayload) =>
-        Promise<DeleteTimeSheetParentResponse>;
+interface UseMutationSalaryParent {
+    onCreateSalaryParentAsync: (payload: InsertSalaryParentPayload) =>
+        Promise<InsertSalaryParentResponse>;
+    onUpdateSalaryParentAsync: (payload: UpdateSalaryParentPayload) =>
+        Promise<UpdateSalaryParentResponse>;
+    onDeleteSalaryParentAsync: (payload: DeleteSalaryParentPayload) =>
+        Promise<DeleteSalaryParentResponse>;
 }
-export const useMutationTimeSheetParent = (): UseMutationTimeSheetParent => {
-    const insertMutation = useMutation((payload: InsertTimeSheetParentPayload) =>
-        TimeSheetParentRepository.insertTimeSheet(payload));
-    const updateMutation = useMutation((payload: UpdateTimeSheetParentPayload) =>
-        TimeSheetParentRepository.updateTimeSheet(payload));
-    const deleteMutation = useMutation((payload: DeleteTimeSheetParentPayload) =>
-        TimeSheetParentRepository.deleteTimeSheet(payload));
+export const useMutationSalaryParent = (): UseMutationSalaryParent => {
+    const insertMutation = useMutation((payload: InsertSalaryParentPayload) =>
+        SalaryParentRepository.insertSalary(payload));
+    const updateMutation = useMutation((payload: UpdateSalaryParentPayload) =>
+        SalaryParentRepository.updateSalary(payload));
+    const deleteMutation = useMutation((payload: DeleteSalaryParentPayload) =>
+        SalaryParentRepository.deleteSalary(payload));
 
     return {
-        onCreateTimeSheetParentAsync: insertMutation.mutateAsync,
-        onUpdateTimeSheetParentAsync: updateMutation.mutateAsync,
-        onDeleteTimeSheetParentAsync: deleteMutation.mutateAsync,
+        onCreateSalaryParentAsync: insertMutation.mutateAsync,
+        onUpdateSalaryParentAsync: updateMutation.mutateAsync,
+        onDeleteSalaryParentAsync: deleteMutation.mutateAsync,
     }
 }
 
 // Time Sheet Children
-interface UseQueryListTimeSheetChild {
+interface UseQueryListSalaryChild {
     loading: boolean;
-    data: TimeSheetChild[];
+    data: SalaryChild[];
     hasNextPage?: boolean;
     totalPages: number;
     totalRecord: number;
@@ -170,11 +170,11 @@ interface UseQueryListTimeSheetChild {
     fetchNextPage: () => void;
     fetchPrevPage: () => void;
 }
-export const useQueryListTimeSheetChild = (timeSheetParentID: string): UseQueryListTimeSheetChild => {
+export const useQueryListSalaryChild = (SalaryParentID: string): UseQueryListSalaryChild => {
     const result = useInfiniteQuery(
         `list_time-sheet.child`, async ({ pageParam }: any) =>
-        TimeSheetChildRepository.fetchListTimeSheet({
-            parentID: timeSheetParentID,
+        SalaryChildRepository.fetchListSalary({
+            parentID: SalaryParentID,
             lastestID: pageParam,
         }), {
         getNextPageParam: ({ data }: any) => {
@@ -192,7 +192,7 @@ export const useQueryListTimeSheetChild = (timeSheetParentID: string): UseQueryL
         hasNextPage
     } = result;
 
-    const listTimeSheet = []
+    const listSalary = []
         .concat(
             ...(data?.pages || []).map((d: any) => d.data?.listRecords)
         )
@@ -202,7 +202,7 @@ export const useQueryListTimeSheetChild = (timeSheetParentID: string): UseQueryL
 
     return {
         loading: isLoading,
-        data: listTimeSheet,
+        data: listSalary,
         hasNextPage,
         totalPages,
         totalRecord,
@@ -212,22 +212,22 @@ export const useQueryListTimeSheetChild = (timeSheetParentID: string): UseQueryL
     }
 }
 
-interface UseMutationTimeSheetChild {
-    onCreateTimeSheetAsync: (payload: InsertTimeSheetChildPayload) =>
-        Promise<InsertTimeSheetChildResponse>;
-    onUpdateTimeSheetAsync: (payload: UpdateTimeSheetChildPayload) =>
-        Promise<UpdateTimeSheetChildResponse>;
+interface UseMutationSalaryChild {
+    onCreateSalaryAsync: (payload: InsertSalaryChildPayload) =>
+        Promise<InsertSalaryChildResponse>;
+    onUpdateSalaryAsync: (payload: UpdateSalaryChildPayload) =>
+        Promise<UpdateSalaryChildResponse>;
 }
 
-export const useMutationTimeSheetChild = (): UseMutationTimeSheetChild => {
-    const insertMutation = useMutation((payload: InsertTimeSheetChildPayload) =>
-        TimeSheetChildRepository.insertTimeSheet(payload));
+export const useMutationSalaryChild = (): UseMutationSalaryChild => {
+    const insertMutation = useMutation((payload: InsertSalaryChildPayload) =>
+        SalaryChildRepository.insertSalary(payload));
 
-    const updateMutation = useMutation((payload: UpdateTimeSheetChildPayload) =>
-        TimeSheetChildRepository.updateTimeSheet(payload));
+    const updateMutation = useMutation((payload: UpdateSalaryChildPayload) =>
+        SalaryChildRepository.updateSalary(payload));
 
     return {
-        onCreateTimeSheetAsync: insertMutation.mutateAsync,
-        onUpdateTimeSheetAsync: updateMutation.mutateAsync,
+        onCreateSalaryAsync: insertMutation.mutateAsync,
+        onUpdateSalaryAsync: updateMutation.mutateAsync,
     }
 }

@@ -142,9 +142,9 @@ const TimeSheetHomePage: FC = () => {
         >
           Tạo mới
         </button>
-        <button className="rounded-full h-10 w-10 flex items-center justify-center bg-gray-100 ml-5">
+        {/* <button className="rounded-full h-10 w-10 flex items-center justify-center bg-gray-100 ml-5">
           <img alt={"Icon"} src={ThreeDotsVertical} />
-        </button>
+        </button> */}
       </div>
       <div className={"financial-cashflow-table"}>
         <div className={"relative table border-collapse w-full"}>

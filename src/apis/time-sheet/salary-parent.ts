@@ -4,23 +4,23 @@ import { TIME_SHEET_URL } from '.';
 import { convertObToUrl } from "utils";
 
 import type {
-    ListTimeSheetPayload,
-    QueryTimeSheetParentResponse,
-    InsertTimeSheetParentPayload,
-    InsertTimeSheetParentResponse,
-    UpdateTimeSheetParentPayload,
-    UpdateTimeSheetParentResponse,
-    DeleteTimeSheetParentPayload,
-    DeleteTimeSheetParentResponse,
-    QueryDetailTimeSheetParentResponse
-} from 'typings/time-sheet';
+    ListSalaryPayload,
+    QuerySalaryParentResponse,
+    InsertSalaryParentPayload,
+    InsertSalaryParentResponse,
+    UpdateSalaryParentPayload,
+    UpdateSalaryParentResponse,
+    DeleteSalaryParentPayload,
+    DeleteSalaryParentResponse,
+    QueryDetailSalaryParentResponse
+} from 'typings/salary';
 
-export async function fetchListTimeSheet<T>(params?: ListTimeSheetPayload): Promise<T> {
+export async function fetchListSalary<T>(params?: ListSalaryPayload): Promise<T> {
     const { data } = await API.get(
         `${TIME_SHEET_URL}/expert_salary`, {
         params: {
             populates: {
-                "path": "assignee project work",
+                "path": "assignee human project work",
                 "select": "_id fullname bizfullname name"
             },
             ...params,
@@ -30,45 +30,45 @@ export async function fetchListTimeSheet<T>(params?: ListTimeSheetPayload): Prom
     return data;
 }
 
-export async function insertTimeSheet<P, R>(payload: P): Promise<R> {
-    const { data } = await API.post(`${TIME_SHEET_URL}/expert_timesheets`, payload);
+export async function insertSalary<P, R>(payload: P): Promise<R> {
+    const { data } = await API.post(`${TIME_SHEET_URL}/expert_salary`, payload);
     return data;
 }
 
-export async function updateTimeSheet<P, R>(payload: P): Promise<R> {
-    const { data } = await API.put(`${TIME_SHEET_URL}/expert_timesheets`, payload);
+export async function updateSalary<P, R>(payload: P): Promise<R> {
+    const { data } = await API.put(`${TIME_SHEET_URL}/expert_salary`, payload);
     return data;
 }
 
-export async function deleteTimeSheet<P, R>(payload: P): Promise<R> {
-    const { data } = await API.delete(`${TIME_SHEET_URL}/expert_timesheets`, {
+export async function deleteSalary<P, R>(payload: P): Promise<R> {
+    const { data } = await API.delete(`${TIME_SHEET_URL}/expert_salary`, {
         data: payload
     });
     return data;
 }
 
-interface TimeSheetParentRepository {
-    fetchListTimeSheet: (params: ListTimeSheetPayload) => Promise<QueryTimeSheetParentResponse>;
-    fetchDetailTimeSheet: (params: ListTimeSheetPayload) => Promise<QueryDetailTimeSheetParentResponse>;
-    insertTimeSheet: (payload: InsertTimeSheetParentPayload) => Promise<InsertTimeSheetParentResponse>;
-    updateTimeSheet: (payload: UpdateTimeSheetParentPayload) => Promise<UpdateTimeSheetParentResponse>;
-    deleteTimeSheet: (payload: DeleteTimeSheetParentPayload) => Promise<DeleteTimeSheetParentResponse>;
+interface SalaryParentRepository {
+    fetchListSalary: (params: ListSalaryPayload) => Promise<QuerySalaryParentResponse>;
+    fetchDetailSalary: (params: ListSalaryPayload) => Promise<QueryDetailSalaryParentResponse>;
+    insertSalary: (payload: InsertSalaryParentPayload) => Promise<InsertSalaryParentResponse>;
+    updateSalary: (payload: UpdateSalaryParentPayload) => Promise<UpdateSalaryParentResponse>;
+    deleteSalary: (payload: DeleteSalaryParentPayload) => Promise<DeleteSalaryParentResponse>;
 }
 
-export const timeSheetParentRepository: TimeSheetParentRepository = {
-    fetchListTimeSheet: async (params) => {
-        return fetchListTimeSheet(params)
+export const salaryParentRepository: SalaryParentRepository = {
+    fetchListSalary: async (params) => {
+        return fetchListSalary(params)
     },
-    fetchDetailTimeSheet: async (params) => {
-        return fetchListTimeSheet(params)
+    fetchDetailSalary: async (params) => {
+        return fetchListSalary(params)
     },
-    insertTimeSheet: async (payload) => {
-        return insertTimeSheet(payload)
+    insertSalary: async (payload) => {
+        return insertSalary(payload)
     },
-    updateTimeSheet: (payload) => {
-        return updateTimeSheet(payload);
+    updateSalary: (payload) => {
+        return updateSalary(payload);
     },
-    deleteTimeSheet: (payload) => {
-        return deleteTimeSheet(payload);
+    deleteSalary: (payload) => {
+        return deleteSalary(payload);
     }
 }
