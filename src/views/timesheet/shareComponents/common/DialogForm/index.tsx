@@ -25,6 +25,7 @@ interface CreateOrEditDialogProps {
   assigneeName: string;
   onSubmit?: (values: string) => void;
   expertTimesheetID?: string;
+  expertSalaryID?: string;
 }
 
 const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
