@@ -583,7 +583,7 @@ export const CashBookDetailPage: FC = () => {
           className="text-gray-400 mr-2"
           onClick={() => toggleModalShare('members', cashBookInfo.members)}
         >Thành viên ({cashBookInfo.members?.length})</button>
-        <AccessingUsers users={permissions.usersShared} />
+        {/* <AccessingUsers users={permissions.usersShared} /> */}
       </div>
       <div className="flex-1 overflow-y-auto">
         <table

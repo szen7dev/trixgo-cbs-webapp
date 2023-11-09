@@ -23,7 +23,7 @@ type Props = {
   collapsed: boolean;
   isLastRow: boolean;
   index: number;
-  onUpdatedTimeSheetChild: (values: UpdateTimeSheetChildPayload) => void;
+  onUpdatedSalaryChild: (values: UpdateTimeSheetChildPayload) => void;
   hasPermission: boolean;
 };
 
@@ -34,7 +34,7 @@ export const DetailChildRow: FC<Props> = ({
   isLastRow,
   index,
   hasPermission,
-  onUpdatedTimeSheetChild,
+  onUpdatedSalaryChild,
 }) => {
 
   const [searchBudgetWorkValue, setSearchBudgetWorkValue] = React.useState(
@@ -63,12 +63,12 @@ export const DetailChildRow: FC<Props> = ({
       if(!hasPermission) {
         return toast.warn('Bạn không có quyền cập nhật nội dung này')
       }
-      onUpdatedTimeSheetChild({
+      onUpdatedSalaryChild({
         ...rowData,
         ...value,
       });
     },
-    [onUpdatedTimeSheetChild, rowData, hasPermission]
+    [onUpdatedSalaryChild, rowData, hasPermission]
   );
 
   return (

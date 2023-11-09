@@ -14,11 +14,11 @@ import TriangleDown from 'assets/icons/TriangleDown';
  */
 import { useUserSystem } from "services/hooks/users/useUserSystem";
 import { UserSystemProps } from 'typings/users/userSystem';
-import { useMutationTimeSheetParent } from "services/hooks/useTimeSheet";
+import { useMutationSalaryParent } from "services/hooks/useSalary";
 import type { User } from "typings/user";
 
 type Props = {
-    expertTimesheetID: string,
+    expertSalaryID: string,
 	modalType: 'admins' | 'members',
 	toggle: () => void,
 	refetch?: () => void,
@@ -26,7 +26,7 @@ type Props = {
 	hasPermission: boolean,
 }
 
-export const ModalShare: FC<Props> = ({ expertTimesheetID, users, modalType, refetch, toggle, hasPermission }) => {
+export const ModalShare: FC<Props> = ({ expertSalaryID, users, modalType, refetch, toggle, hasPermission }) => {
 	const usersID = users?.map(user => user._id.toString()) ?? [];
 	const [hasDefault, setHasDefault] = useState(false);
 	const [isShow, setIsShow] = useState(true);
@@ -40,7 +40,7 @@ export const ModalShare: FC<Props> = ({ expertTimesheetID, users, modalType, ref
         totalRecord
     } = useUserSystem({ keyword }, true);
 
-    const { onUpdateTimeSheetParentAsync } = useMutationTimeSheetParent();
+    const { onUpdateSalaryParentAsync } = useMutationSalaryParent();
 
 	const getStateChecked = useCallback((id: string) => {
 		if(!hasDefault && usersID?.includes(id)) {
@@ -86,8 +86,8 @@ export const ModalShare: FC<Props> = ({ expertTimesheetID, users, modalType, ref
 		}
 
         try {
-            const { error, data } = await onUpdateTimeSheetParentAsync({
-                expertTimesheetID,
+            const { error, data } = await onUpdateSalaryParentAsync({
+                expertSalaryID,
                 [modalType]: idsChecked,
             })
 

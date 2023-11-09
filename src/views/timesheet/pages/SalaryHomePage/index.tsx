@@ -185,19 +185,19 @@ const SalaryHomePage: FC = () => {
             >
               Dự án/phòng ban
             </div>
-            <div
+            {/* <div
               className={
                 "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
               }
             >
               Tổng thời gian (giờ)
-            </div>
+            </div> */}
             <div
               className={
                 "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
               }
             >
-              Tổng chi phí (VND)
+              Lương
             </div>
             <div
               className={
@@ -211,7 +211,7 @@ const SalaryHomePage: FC = () => {
                 "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
               }
             >
-              Trạng thái/Phê duyệt
+              Trạng thái
             </div>
           </div>
           {data.map((salaryParent) => (
@@ -242,7 +242,7 @@ const SalaryHomePage: FC = () => {
                   "px-2 py-4 table-cell box-border border-b align-middle w-2/12"
                 }
               >
-                <NavLink to={`/salary/home/${salaryParent._id}`}>
+                <NavLink to={`/timesheet/salary/${salaryParent._id}`}>
                   {salaryParent.name}
                 </NavLink>
                 <p className={"mt-1 text-gray-500"}>
@@ -257,19 +257,19 @@ const SalaryHomePage: FC = () => {
               <div className={"px-2 py-4 table-cell box-border border-b"}>
                 {salaryParent?.project?.name}
               </div>
-              <div
+              {/* <div
                 className={
                   "px-2 py-4 table-cell box-border border-b text-right"
                 }
               >
                 {salaryParent?.hours}
-              </div>
+              </div> */}
               <div
                 className={
                   "px-2 py-4 table-cell box-border border-b text-right"
                 }
               >
-                {`${salaryParent?.amount}`.replace(
+                {`${salaryParent?.salary}`.replace(
                   /\B(?=(\d{3})+(?!\d))/g,
                   ","
                 )}
@@ -292,9 +292,6 @@ const SalaryHomePage: FC = () => {
                   {moment(salaryParent.timeApproved).isValid() &&
                     moment(salaryParent.timeApproved).format(DATE_FORMAT)}
                 </p>
-                {/* <p className={"mt-1 text-gray-500"}>
-                  Nguyễn Hữu Hiệp-PG 12/12/2021 15:45
-                </p> */}
               </div>
             </div>
           ))}

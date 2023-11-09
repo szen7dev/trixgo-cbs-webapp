@@ -9,6 +9,7 @@ export type SalaryParent = {
     type: 1;
     hours: number;
     unitprice: number;
+    salary: number;
     amount: number;
     status: number;
     timeApproved: string | null;
