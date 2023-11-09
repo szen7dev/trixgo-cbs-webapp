@@ -170,11 +170,11 @@ interface UseQueryListSalaryChild {
     fetchNextPage: () => void;
     fetchPrevPage: () => void;
 }
-export const useQueryListSalaryChild = (SalaryParentID: string): UseQueryListSalaryChild => {
+export const useQueryListSalaryChild = (salaryParentID: string): UseQueryListSalaryChild => {
     const result = useInfiniteQuery(
         `list_time-sheet.child`, async ({ pageParam }: any) =>
         SalaryChildRepository.fetchListSalary({
-            parentID: SalaryParentID,
+            parentID: salaryParentID,
             lastestID: pageParam,
         }), {
         getNextPageParam: ({ data }: any) => {

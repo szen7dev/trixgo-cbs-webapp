@@ -6,7 +6,7 @@ import { ProtectedRoute } from "routes/components";
 import { TimesheetLayout } from "views/timesheet/shareComponents/layouts";
 
 /*=====PAGES=====*/
-import { TimesheetHomePage, TimesheetDetailPage, SalaryHomePage } from "views/timesheet/pages";
+import { TimesheetHomePage, TimesheetDetailPage, SalaryHomePage, SalaryDetailPage } from "views/timesheet/pages";
 
 const TimesheetAppRouter: FC = () => {
   return (
@@ -23,12 +23,17 @@ const TimesheetAppRouter: FC = () => {
             path={"/timesheet/home/:id"}
             component={TimesheetDetailPage}
           />
-        </Switch>
-        <ProtectedRoute
+          <ProtectedRoute
             exact
             path="/timesheet/salary"
             component={SalaryHomePage}
           />
+        <ProtectedRoute
+            exact
+            path={"/timesheet/salary/:id"}
+            component={SalaryDetailPage}
+          />
+        </Switch>
       </TimesheetLayout>
     </>
   );

@@ -7,21 +7,21 @@ import { DetailChildRow } from "../DetailChildRow";
 import type { TimeSheetChild, TimeSheetParent } from "typings/time-sheet";
 
 type Props = {
-  timeSheetParentInfo?: TimeSheetParent;
-  listTimeSheetChild: TimeSheetChild[];
-  onUpdatedTimeSheetChild: (values: any) => void;
-  isFetchTimeSheetChild: boolean;
+  salaryParentInfo?: TimeSheetParent;
+  listSalaryChild: TimeSheetChild[];
+  onUpdatedSalaryChild: (values: any) => void;
+  isFetchSalaryChild: boolean;
   hasPermission: boolean;
 };
 
 export const DetailMainRow: FC<Props> = ({
-  timeSheetParentInfo,
-  listTimeSheetChild,
-  onUpdatedTimeSheetChild,
-  isFetchTimeSheetChild,
+  salaryParentInfo,
+  listSalaryChild,
+  onUpdatedSalaryChild,
+  isFetchSalaryChild,
   hasPermission
 }) => {
-  if (isFetchTimeSheetChild) {
+  if (isFetchSalaryChild) {
     return <Loader className="border-primary" />;
   }
 
@@ -39,7 +39,7 @@ export const DetailMainRow: FC<Props> = ({
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-2/12"
         }
       >
-        {timeSheetParentInfo?.name}
+        {salaryParentInfo?.name}
       </div>
       <div
         className={
@@ -58,7 +58,7 @@ export const DetailMainRow: FC<Props> = ({
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
         }
       >
-        <div className="flex justify-end">{timeSheetParentInfo?.hours}</div>
+        <div className="flex justify-end">{salaryParentInfo?.hours}</div>
       </div>
       <div
         className={
@@ -66,7 +66,7 @@ export const DetailMainRow: FC<Props> = ({
         }
       >
         <div className="flex justify-end">
-          {convertCurrency(timeSheetParentInfo?.unitprice)}
+          {convertCurrency(salaryParentInfo?.unitprice)}
         </div>
       </div>
       <div
@@ -75,8 +75,8 @@ export const DetailMainRow: FC<Props> = ({
         }
       >
         <div className="flex justify-end">
-          {/* {convertCurrency(timeSheetParentInfo?.amount)} */}
-          {`${timeSheetParentInfo?.amount}`.replace(
+          {/* {convertCurrency(salaryParentInfo?.amount)} */}
+          {`${salaryParentInfo?.amount}`.replace(
             /\B(?=(\d{3})+(?!\d))/g,
             ","
           )}
@@ -97,16 +97,16 @@ export const DetailMainRow: FC<Props> = ({
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-4/12"
         }
       ></div>
-      {_map(listTimeSheetChild, (childRow, index) => (
+      {_map(listSalaryChild, (childRow, index) => (
         <DetailChildRow
           key={childRow._id}
           isLastRow={false}
           collapsed={false}
           rowData={childRow}
-          parent={timeSheetParentInfo}
+          parent={salaryParentInfo}
           index={index}
           hasPermission={hasPermission}
-          onUpdatedTimeSheetChild={onUpdatedTimeSheetChild}
+          onUpdatedSalaryChild={onUpdatedSalaryChild}
         />
       ))}
     </>

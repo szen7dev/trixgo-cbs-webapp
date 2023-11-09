@@ -62,6 +62,8 @@ const TimeSheetDetailPage: FC = () => {
   const { user } = useAuth();
 
   const { data: timeSheetInfo, refetch, loading } = useQueryDetailTimeSheetParent(timeSheetParentID);
+  // console.log({timeSheetInfo})
+
   const {
     data: listTimeSheetChild,
     loading: isFetchTimeSheetChild,

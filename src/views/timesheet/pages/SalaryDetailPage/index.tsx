@@ -25,21 +25,21 @@ import { CreateRow } from "./components/Form";
  * Hooks, Typings
  */
 import {
-  useQueryDetailTimeSheetParent,
-  useQueryListTimeSheetChild,
-  useMutationTimeSheetChild,
-} from "services/hooks/useTimeSheet";
+  useQueryDetailSalaryParent,
+  useQueryListSalaryChild,
+  useMutationSalaryChild,
+} from "services/hooks/useSalary";
+
 import { useCashBook } from 'services/hooks/financial/useCashBook';
 
 import { useAuth } from "services/hooks/auth/useAuth";
-// import { setMainRowCollapsed } from "redux/reducer/Timesheet";
 import { User } from "typings/user";
 import { Loader } from "shareComponents/common";
 
-const TimeSheetDetailPage: FC = () => {
+const SalaryDetailPage: FC = () => {
   const history = useHistory();
   const params = useParams<{ id: string }>();
-  const timeSheetParentID = params["id"];
+  const salaryParentID = params["id"];
 
   const [modalShare, setModalShare] = useState<{ isShow: boolean, users: User[] | undefined, modalType: 'members' | 'admins' }>({
     isShow: false,
@@ -61,28 +61,29 @@ const TimeSheetDetailPage: FC = () => {
 
   const { user } = useAuth();
 
-  const { data: timeSheetInfo, refetch, loading } = useQueryDetailTimeSheetParent(timeSheetParentID);
+  const { data: salaryInfo, refetch, loading } = useQueryDetailSalaryParent(salaryParentID);
+  // console.log({salaryInfo})
   const {
-    data: listTimeSheetChild,
-    loading: isFetchTimeSheetChild,
+    data: listSalaryChild,
+    loading: isFetchSalaryChild,
     totalPages,
     totalRecord,
     hasNextPage,
     fetchNextPage,
     fetchPrevPage,
-    refetch: onRefreshTimeSheetChild,
-  } = useQueryListTimeSheetChild(timeSheetParentID);
+    refetch: onRefreshSalaryChild,
+  } = useQueryListSalaryChild(salaryParentID);
 
-  // console.log({listTimeSheetChild})
+  // console.log({listSalaryChild})
 
-  const { onUpdateTimeSheetAsync, onCreateTimeSheetAsync } = useMutationTimeSheetChild();
+  const { onUpdateSalaryAsync, onCreateSalaryAsync } = useMutationSalaryChild();
 
   useEffect(() => {
-    if(!timeSheetInfo || !user || loading) return;
+    if(!salaryInfo || !user || loading) return;
 
-    const usersShared = [...timeSheetInfo?.admins, ...timeSheetInfo?.members];
-    const adminsID    = timeSheetInfo.admins.map(item => item._id);
-    const membersID   = timeSheetInfo.members.map(item => item._id);
+    const usersShared = [...salaryInfo?.admins, ...salaryInfo?.members];
+    const adminsID    = salaryInfo.admins.map(item => item._id);
+    const membersID   = salaryInfo.members.map(item => item._id);
 
     const usersIDShared = [
       ...adminsID,
@@ -90,10 +91,10 @@ const TimeSheetDetailPage: FC = () => {
     ];
     let authorID = '';
 
-    if(typeof timeSheetInfo.userCreate === 'string') {
-      authorID = timeSheetInfo.userCreate;
+    if(typeof salaryInfo.userCreate === 'string') {
+      authorID = salaryInfo.userCreate;
     } else{
-      authorID = timeSheetInfo.userCreate?._id;
+      authorID = salaryInfo.userCreate?._id;
     }
 
     usersIDShared.push(authorID);
@@ -113,15 +114,15 @@ const TimeSheetDetailPage: FC = () => {
       hasPermissionCreateUpdate,
       hasPermissionShare
     })
-  }, [JSON.stringify(timeSheetInfo)])
+  }, [JSON.stringify(salaryInfo)])
 
-  const handleUpdatedTimeSheet = React.useCallback(
+  const handleUpdatedSalary = React.useCallback(
     async (values) => {
       try {
         // console.log(values)
-        const isUpdated = await onUpdateTimeSheetAsync({
+        const isUpdated = await onUpdateSalaryAsync({
           ...values,
-          expertTimesheetID: values._id,
+          expertSalaryID: values._id,
           hours: `${values.hours}`,
           amount: `${values.amount}`,
           state: `${values.state}`,
@@ -130,7 +131,7 @@ const TimeSheetDetailPage: FC = () => {
           status: `${values.status}`,
         });
         if (!isUpdated.error) {
-          onRefreshTimeSheetChild();
+          onRefreshSalaryChild();
           refetch(); // refetch time sheet parent
         }
       } catch (err) {
@@ -138,22 +139,22 @@ const TimeSheetDetailPage: FC = () => {
         return null;
       }
     },
-    [onRefreshTimeSheetChild, onUpdateTimeSheetAsync, refetch]
+    [onRefreshSalaryChild, onUpdateSalaryAsync, refetch]
   );
 
-  const handleCreateTimeSheet = React.useCallback(
+  const handleCreateSalary = React.useCallback(
     async (values) => {
       try {
         if (!values.name) {
           throw new Error("Name is required");
         }
-        const isCreated = await onCreateTimeSheetAsync({
+        const isCreated = await onCreateSalaryAsync({
           name: values.name,
-          parentID: timeSheetParentID,
+          parentID: salaryParentID,
         });
         if (!isCreated.error) {
           refetch();
-          onRefreshTimeSheetChild();
+          onRefreshSalaryChild();
           return true;
         }
         throw new Error("ERROR~");
@@ -162,7 +163,7 @@ const TimeSheetDetailPage: FC = () => {
         return false;
       }
     },
-    [timeSheetParentID, onCreateTimeSheetAsync, onRefreshTimeSheetChild, refetch]
+    [salaryParentID, onCreateSalaryAsync, onRefreshSalaryChild, refetch]
   );
 
   const toggleModalShare = (modalType: 'admins' | 'members', users: User[] | undefined) =>
@@ -180,7 +181,7 @@ const TimeSheetDetailPage: FC = () => {
   const handleDownloadExcel = async () => {
       try {
             setStateExport({ isExporting: true });
-            const { error, data } = await downloadTemplateExcelAsync({ parentID: timeSheetParentID, option: '1' });
+            const { error, data } = await downloadTemplateExcelAsync({ parentID: salaryParentID, option: '1' });
 
             if(error) {
                 return toast.warn(data?.message);
@@ -194,7 +195,7 @@ const TimeSheetDetailPage: FC = () => {
       }
   }
 
-  if(!timeSheetInfo || loading || !user) return <Loader className="border-primary" />
+  if(!salaryInfo || loading || !user) return <Loader className="border-primary" />
 
   return (
     <div className={"financial-planning-detail"}>
@@ -208,35 +209,35 @@ const TimeSheetDetailPage: FC = () => {
           <div className={"flex"}>
             <InputWidthAdjust
               className={"text-lg w-auto mr-2"}
-              value={timeSheetInfo.name}
+              value={salaryInfo.name}
             />
             <img alt={"star-icon"} src={StarIcon} />
           </div>
           <p className={"text-gray-400"}>
             Chỉnh sửa lần cuối cách đây{" "}
-            {moment(timeSheetInfo.modifyAt).isValid() &&
-              moment(timeSheetInfo.modifyAt).fromNow()}{" "}
-            bởi {timeSheetInfo.userCreate?.fullname}
+            {moment(salaryInfo.modifyAt).isValid() &&
+              moment(salaryInfo.modifyAt).fromNow()}{" "}
+            bởi {salaryInfo.userCreate?.fullname}
           </p>
         </div>
         <div className={"flex-1 flex items-center justify-end"}>
           <button className={"mr-2 text-primary"}
             onClick={handleDownloadExcel}
            >
-             Tải Excel bảng chấm công
+             Tải Bảng lương
            </button>
           <button
             className="text-gray-400 mr-2"
             onClick={() => {
-              toggleModalShare('admins', timeSheetInfo.admins)
+              toggleModalShare('admins', salaryInfo.admins)
             }}
-          >Admin ({timeSheetInfo.admins?.length})</button> |
+          >Admin ({salaryInfo.admins?.length})</button> |
           <button
             className="text-gray-400 mr-2 ml-2"
             onClick={() => {
-              toggleModalShare('members', timeSheetInfo.members)
+              toggleModalShare('members', salaryInfo.members)
             }}
-          >Thành viên ({timeSheetInfo.members?.length})</button>
+          >Thành viên ({salaryInfo.members?.length})</button>
           {/* <AccessingUsers users={permissions.usersShared} /> */}
           {/* <ShareButton /> */}
         </div>
@@ -315,29 +316,29 @@ const TimeSheetDetailPage: FC = () => {
               Mô tả/ghi chú
             </div>
           </div>
-          {timeSheetInfo?._id && Array.isArray(listTimeSheetChild) && (
+          {salaryInfo?._id && Array.isArray(listSalaryChild) && (
             <DetailMainRow
-              timeSheetParentInfo={timeSheetInfo}
-              listTimeSheetChild={listTimeSheetChild}
-              onUpdatedTimeSheetChild={handleUpdatedTimeSheet}
-              isFetchTimeSheetChild={isFetchTimeSheetChild}
+              salaryParentInfo={salaryInfo}
+              listSalaryChild={listSalaryChild}
+              onUpdatedSalaryChild={handleUpdatedSalary}
+              isFetchSalaryChild={isFetchSalaryChild}
               hasPermission={permissions.hasPermissionCreateUpdate}
             />
           )}
 
-          {permissions.hasPermissionCreateUpdate && <CreateRow onInsert={handleCreateTimeSheet} />}
+          {permissions.hasPermissionCreateUpdate && <CreateRow onInsert={handleCreateSalary} />}
         </div>
       </div>
-      <Paginate
+      {/* <Paginate
         totalPages={totalPages}
         totalRecord={totalRecord}
         nextPageAction={fetchNextPage}
         prevPageAction={fetchPrevPage}
-        isFetching={isFetchTimeSheetChild}
+        isFetching={isFetchSalaryChild}
         hasNextPage={hasNextPage}
-      />
+      /> */}
 
-      <ModalLarge
+      {/* <ModalLarge
         show={modalShare.isShow}
         toggle={() => setModalShare(prev => ({ ...prev, isShow: !modalShare.isShow }))}
         className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[600px] rounded-cbs-md"
@@ -345,14 +346,14 @@ const TimeSheetDetailPage: FC = () => {
         <ModalShare
           toggle={() => setModalShare(prev => ({ ...prev, isShow: !modalShare.isShow }))}
           refetch={refetch}
-          expertTimesheetID={timeSheetParentID}
+          expertSalaryID={salaryParentID}
           users={modalShare.users}
           modalType={modalShare.modalType}
           hasPermission={permissions.hasPermissionShare}
         />
-      </ModalLarge>
+      </ModalLarge> */}
     </div>
   );
 };
 
-export default TimeSheetDetailPage;
+export default SalaryDetailPage;
