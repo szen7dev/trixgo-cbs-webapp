@@ -5,25 +5,22 @@ import moment from "moment";
 
 import {DropdownSearchable} from "shareComponents/common";
 import { useUserSystem } from "services/hooks/users/useUserSystem";
-import {
-	useQueryListBudgetWork,
-} from "services/hooks/cmcs/useContractIncome";
 import { LIMIT_DROPDOWN } from "apis/localdb/index";
 
 import type {
-  TimeSheetChild,
-  TimeSheetParent,
-  UpdateTimeSheetChildPayload,
-} from "typings/time-sheet";
+  SalaryChild,
+  SalaryParent,
+  UpdateSalaryChildPayload,
+} from "typings/salary";
 import { toast } from "react-toastify";
 
 type Props = {
-  parent?: TimeSheetParent;
-  rowData: TimeSheetChild;
+  parent?: SalaryParent;
+  rowData: SalaryChild;
   collapsed: boolean;
   isLastRow: boolean;
   index: number;
-  onUpdatedSalaryChild: (values: UpdateTimeSheetChildPayload) => void;
+  onUpdatedSalaryChild: (values: UpdateSalaryChildPayload) => void;
   hasPermission: boolean;
 };
 
@@ -42,7 +39,7 @@ export const DetailChildRow: FC<Props> = ({
 	);
 
   const [searchAssigneeStr, setSearchAssigneeStr] = React.useState(
-    rowData.assignee?.fullname || ""
+    rowData.human?.fullname || ""
   );
 
   const {
@@ -52,13 +49,7 @@ export const DetailChildRow: FC<Props> = ({
   } = useUserSystem({ keyword: searchAssigneeStr }, true);
   // console.log({listUsersSystem})
 
-  const { listBudgetWork } = useQueryListBudgetWork({
-		limit: LIMIT_DROPDOWN,
-		keyword: searchBudgetWorkValue,
-	});
-  // console.log({listBudgetWork})
-
-  const handleClickUpdateTimeSheet = React.useCallback(
+  const handleClickUpdateSalary = React.useCallback(
     (value) => {
       if(!hasPermission) {
         return toast.warn('Bạn không có quyền cập nhật nội dung này')
@@ -109,7 +100,7 @@ export const DetailChildRow: FC<Props> = ({
           className={"w-full h-full focus:outline-blue-600 p-2"}
           onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
             const value = e.target.innerText;
-            handleClickUpdateTimeSheet({
+            handleClickUpdateSalary({
               ...rowData,
               name: value,
             });
@@ -134,34 +125,13 @@ export const DetailChildRow: FC<Props> = ({
           placeholder="Chọn thời gian"
           onDayChange={(date: Date | null) => {
             if (moment(date).isValid())
-              handleClickUpdateTimeSheet({
+              handleClickUpdateSalary({
                 ...rowData,
                 date: moment(date).toJSON(),
               });
           }}
         />
       </div>
-      {/* <div
-        className={
-          "table-cell relative box-border border border-gray-300 text-end bg-white"
-        }
-      >
-        <p
-          className={"w-full h-full focus:outline-blue-600 px-[16px] py-[9px]"}
-        >
-          <input
-            type="checkbox"
-            className="form-check-input cursor-pointer"
-            checked={rowData.status === 1 ? true : false}
-            onChange={(e) => {
-              handleClickUpdateTimeSheet({
-                ...rowData,
-                status: e.target.checked ? 1 : 0,
-              });
-            }}
-          />
-        </p>
-      </div> */}
       <div
         className={
           "table-cell relative box-border border border-gray-300 align-middle bg-white"
@@ -175,13 +145,13 @@ export const DetailChildRow: FC<Props> = ({
           }
           onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
             const value = e.target.innerText;
-            handleClickUpdateTimeSheet({
+            handleClickUpdateSalary({
               ...rowData,
-              hours: `${value}`,
+              salary: `${value}`,
             });
           }}
         >
-          {rowData.hours}
+          {rowData.salary}
         </p>
       </div>
       <div
@@ -197,13 +167,13 @@ export const DetailChildRow: FC<Props> = ({
           }
           onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
             const value = e.target.innerText;
-            handleClickUpdateTimeSheet({
+            handleClickUpdateSalary({
               ...rowData,
-              unitprice: `${value}`,
+              reward: `${value}`,
             });
           }}
         >
-          {`${rowData.unitprice}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+          {`${rowData.reward}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         </p>
       </div>
       <div
@@ -218,7 +188,7 @@ export const DetailChildRow: FC<Props> = ({
             "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
           }
         >
-          {`${rowData.amount}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+          {`${rowData.punishment}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         </p>
       </div>
       <div
@@ -249,7 +219,7 @@ export const DetailChildRow: FC<Props> = ({
             </p>
           )}
           data={listUsersSystem}
-          initialValue={rowData?.assignee ?? parent?.assignee}
+          initialValue={rowData?.human}
           formatItem={{
             id: "_id",
             text: "fullname",
@@ -259,9 +229,9 @@ export const DetailChildRow: FC<Props> = ({
             500
           )}
           onchangeValue={(value) =>
-            handleClickUpdateTimeSheet({
+            handleClickUpdateSalary({
               ...rowData,
-              assigneeID: value.id,
+              humanID: value.id,
             })
           }
         />
@@ -271,45 +241,7 @@ export const DetailChildRow: FC<Props> = ({
           "px-[16px] py-[9px] table-cell relative box-border border border-gray-300 bg-white"
         }
       >
-        <DropdownSearchable
-          id="ticket-creator"
-          className={"w-full pl-0 -mb-1 outline-none "}
-          bordered
-          isMultiple={false}
-          allowClearValueSingleInput
-          showTriangle
-          placeholder="Ngân sách"
-          renderSelectedItem={(item) => (
-            <p
-              style={{
-                textOverflow: "ellipsis",
-                maxWidth: "100%",
-                minWidth: 0,
-                width: "100px",
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-              }}
-            >
-              {item.text}
-            </p>
-          )}
-          data={listBudgetWork}
-          initialValue={rowData?.work}
-          formatItem={{
-            id: "_id",
-            text: "name",
-          }}
-          onSearchInputChange={debounce(
-            (value) => setSearchBudgetWorkValue(value),
-            500
-          )}
-          onchangeValue={(value) =>
-            handleClickUpdateTimeSheet({
-              ...rowData,
-              workID: value.id,
-            })
-          }
-        />
+        
       </div>
       <div
         className={
@@ -322,7 +254,7 @@ export const DetailChildRow: FC<Props> = ({
           className={"w-full h-full focus:outline-blue-600 px-[16px] py-[9px]"}
           onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
             const value = e.target.innerText;
-            handleClickUpdateTimeSheet({
+            handleClickUpdateSalary({
               ...rowData,
               note: value,
             });

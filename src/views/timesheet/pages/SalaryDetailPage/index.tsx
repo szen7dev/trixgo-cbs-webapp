@@ -123,12 +123,12 @@ const SalaryDetailPage: FC = () => {
         const isUpdated = await onUpdateSalaryAsync({
           ...values,
           expertSalaryID: values._id,
-          hours: `${values.hours}`,
-          amount: `${values.amount}`,
           state: `${values.state}`,
-          unitprice: `${values.unitprice}`,
           type: `${values.type}`,
           status: `${values.status}`,
+          salary: `${values.salary}`,
+          reward: `${values.reward}`,
+          punishment: `${values.punishment}`,
         });
         if (!isUpdated.error) {
           onRefreshSalaryChild();
@@ -145,12 +145,18 @@ const SalaryDetailPage: FC = () => {
   const handleCreateSalary = React.useCallback(
     async (values) => {
       try {
-        if (!values.name) {
-          throw new Error("Name is required");
-        }
+        // if (!values.name) {
+        //   throw new Error("Name is required");
+        // }
         const isCreated = await onCreateSalaryAsync({
           name: values.name,
           parentID: salaryParentID,
+          salary: "",
+          reward: "",
+          punishment: "",
+          advance: "",
+          remaining: "",
+          paid: ""
         });
         if (!isCreated.error) {
           refetch();
@@ -266,33 +272,26 @@ const SalaryDetailPage: FC = () => {
             >
               Ngày
             </div>
-            {/* <div
-              className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
-              }
-            >
-              Hoàn thành
-            </div> */}
             <div
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              KL
+              Lương
             </div>
             <div
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Đơn giá
+              Thưởng
             </div>
             <div
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Thành tiền
+              Phạt
             </div>
             <div
               className={

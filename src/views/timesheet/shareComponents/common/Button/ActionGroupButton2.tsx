@@ -33,9 +33,9 @@ const ActionGroupButton2: FC<ActionGroupButtonProps> = (props) => {
               onSubmit={onUpdateSalary}
               expertSalaryID={record?._id}
               projectName={record.project.name}
-              assigneeName={record.assignee.fullname}
+              assigneeName={record.human.fullname}
               defaultValues={{
-                assignee: record.assignee,
+                assignee: record.human,
                 name: record.name,
                 note: record.note,
                 project: record.project,

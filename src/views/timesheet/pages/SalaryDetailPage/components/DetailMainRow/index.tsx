@@ -4,11 +4,11 @@ import { convertCurrency } from 'utils/converter';
 import { Loader } from "shareComponents/common/Loader";
 import { DetailChildRow } from "../DetailChildRow";
 
-import type { TimeSheetChild, TimeSheetParent } from "typings/time-sheet";
+import type { SalaryChild, SalaryParent } from "typings/salary";
 
 type Props = {
-  salaryParentInfo?: TimeSheetParent;
-  listSalaryChild: TimeSheetChild[];
+  salaryParentInfo?: SalaryParent;
+  listSalaryChild: SalaryChild[];
   onUpdatedSalaryChild: (values: any) => void;
   isFetchSalaryChild: boolean;
   hasPermission: boolean;
@@ -46,13 +46,6 @@ export const DetailMainRow: FC<Props> = ({
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
         }
       ></div>
-      {/* <div
-        className={
-          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
-        }
-      >
-        <input type="checkbox" className="form-check-input cursor-pointer" />
-      </div> */}
       <div
         className={
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
@@ -75,8 +68,7 @@ export const DetailMainRow: FC<Props> = ({
         }
       >
         <div className="flex justify-end">
-          {/* {convertCurrency(salaryParentInfo?.amount)} */}
-          {`${salaryParentInfo?.amount}`.replace(
+          {`${salaryParentInfo?.salary}`.replace(
             /\B(?=(\d{3})+(?!\d))/g,
             ","
           )}

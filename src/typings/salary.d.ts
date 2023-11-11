@@ -19,7 +19,7 @@ export type SalaryParent = {
     userCreate: User;
     state: 1;
     name: string;
-    assignee: User;
+    human: User;
     project: Project;
     note: string;
     createAt: string;
@@ -47,7 +47,7 @@ export type QueryDetailSalaryParentResponse = APIResponse & {
 
 export type InsertSalaryParentPayload = {
     name: string;
-    assignee: User;
+    human: User;
     type: 1;
     project: Project;
     note: string;
@@ -56,7 +56,7 @@ export type InsertSalaryParentPayload = {
 export type InsertSalaryParentResponse = {
     error: boolean;
     data: SalaryParent & {
-        assignee: string;
+        human: string;
         project: string;
         message?: string;
     }
@@ -78,7 +78,7 @@ export type DeleteSalaryParentPayload = {
 
 export type DeleteSalaryParentResponse = APIResponse & {
     data: SalaryParent & {
-        assignee: string;
+        human: string;
         project: string;
     }
 }
@@ -86,18 +86,21 @@ export type DeleteSalaryParentResponse = APIResponse & {
 export type SalaryChild = {
     _id: string;
     type: 1;
-    hours: number;
-    unitprice: number;
-    amount: number;
     status: number;
     timeApproved: string | null;
     state: 1;
     name: string;
     date: string;
     parent?: SalaryParent;
-    assignee?: User,
-    work: strinstring | null,
-    note?: string,
+    human?: User;
+    work: strinstring | null;
+    note?: string;
+    salary: number;
+    reward: number;
+    punishment: number;
+    advance: number;
+    remaining: number;
+    paid: number;
 }
 
 export type QueryListSalaryChildPayload = QueryParams & {
@@ -116,40 +119,46 @@ export type QuerySalaryChildResponse = APIResponse & {
 
 export type InsertSalaryChildPayload = {
     parentID: string;
-    assigneeID?: string;
+    humanID?: string;
     name: string;
     date?: string;
     status?: string;
-    hours?: string;
-    unitprice?: string;
-    amount?: string;
-    assignee?: string;
+    salary: string;
+    reward: string;
+    punishment: string;
+    advance: string;
+    remaining: string;
+    paid: string;
+    human?: string;
     note?: string;
 }
 
 export type InsertSalaryChildResponse = {
     error: boolean;
     data: SalaryChild & {
-        assignee?: string;
+        human?: string;
         project: string;
     }
 }
 
 export type UpdateSalaryChildPayload = {
     expertSalaryID: string;
-    assigneeID?: string;
+    humanID?: string;
     name?: string;
     date?: string;
     status?: string;
-    hours?: string;
-    unitprice?: string;
-    amount?: string;
-    assignee?: string;
+    human?: string;
     note?: string;
     members?: string[];
     membersRemove?: string[];
     admins?: string[];
     adminsRemove?: string[];
+    salary: string;
+    reward: string;
+    punishment: string;
+    advance: string;
+    remaining: string;
+    paid: string;
 }
 
 export type UpdateSalaryChildResponse = InsertSalaryChildResponse;
