@@ -91,7 +91,7 @@ export const DetailChildRow: FC<Props> = ({
       </div>
       <div
         className={
-          "px-[16px] py-[9px] table-cell relative box-border border border-gray-300 bg-white"
+          "px-[2px] py-[2px] table-cell relative box-border border border-gray-300 bg-white"
         }
       >
         <DropdownSearchable
