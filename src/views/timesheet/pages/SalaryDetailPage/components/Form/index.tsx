@@ -114,7 +114,6 @@ export const CreateRow: FC<DetailChildRowCreateFormProps> = ({
         }
       >
         <p
-          // contentEditable={"true"}
           suppressContentEditableWarning={true}
           className={
             "w-full h-full focus:outline-blue-600 p-2 flex justify-end"
@@ -127,7 +126,6 @@ export const CreateRow: FC<DetailChildRowCreateFormProps> = ({
         }
       >
         <p
-          // contentEditable={"true"}
           suppressContentEditableWarning={true}
           className={
             "w-full h-full focus:outline-blue-600 p-2 flex justify-end"
@@ -150,7 +148,16 @@ export const CreateRow: FC<DetailChildRowCreateFormProps> = ({
         }
       >
         <p
-          // contentEditable={"true"}
+          suppressContentEditableWarning={true}
+          className={"w-full h-full focus:outline-blue-600 p-2"}
+        />
+      </div>
+      <div
+        className={
+          "table-cell relative box-border border border-gray-300 bg-white"
+        }
+      >
+        <p
           suppressContentEditableWarning={true}
           className={"w-full h-full focus:outline-blue-600 p-2"}
         />
