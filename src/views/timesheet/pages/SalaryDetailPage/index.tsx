@@ -21,9 +21,6 @@ import {
 } from "./components";
 import { CreateRow } from "./components/Form";
 
-/**
- * Hooks, Typings
- */
 import {
   useQueryDetailSalaryParent,
   useQueryListSalaryChild,
@@ -123,12 +120,12 @@ const SalaryDetailPage: FC = () => {
         const isUpdated = await onUpdateSalaryAsync({
           ...values,
           expertSalaryID: values._id,
-          hours: `${values.hours}`,
-          amount: `${values.amount}`,
           state: `${values.state}`,
-          unitprice: `${values.unitprice}`,
           type: `${values.type}`,
           status: `${values.status}`,
+          salary: `${values.salary}`,
+          reward: `${values.reward}`,
+          punishment: `${values.punishment}`,
         });
         if (!isUpdated.error) {
           onRefreshSalaryChild();
@@ -145,12 +142,18 @@ const SalaryDetailPage: FC = () => {
   const handleCreateSalary = React.useCallback(
     async (values) => {
       try {
-        if (!values.name) {
-          throw new Error("Name is required");
-        }
+        // if (!values.name) {
+        //   throw new Error("Name is required");
+        // }
         const isCreated = await onCreateSalaryAsync({
           name: values.name,
           parentID: salaryParentID,
+          salary: "",
+          reward: "",
+          punishment: "",
+          advance: "",
+          remaining: "",
+          paid: ""
         });
         if (!isCreated.error) {
           refetch();
@@ -181,7 +184,7 @@ const SalaryDetailPage: FC = () => {
   const handleDownloadExcel = async () => {
       try {
             setStateExport({ isExporting: true });
-            const { error, data } = await downloadTemplateExcelAsync({ parentID: salaryParentID, option: '1' });
+            const { error, data } = await downloadTemplateExcelAsync({ parentID: salaryParentID, option: '2' });
 
             if(error) {
                 return toast.warn(data?.message);
@@ -257,63 +260,70 @@ const SalaryDetailPage: FC = () => {
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Nội dung
-            </div>
-            <div
-              className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
-              }
-            >
-              Ngày
+              Nhân sự
             </div>
             {/* <div
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Hoàn thành
+              Nội dung
             </div> */}
             <div
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              KL
+              Ngày ghi nhận
             </div>
             <div
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Đơn giá
+              Lương
             </div>
             <div
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Thành tiền
+              Thưởng
             </div>
             <div
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Người thực hiện
+              Phạt
             </div>
             <div
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Công việc/Bill
+              Đã tạm ứng
             </div>
             <div
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Mô tả/ghi chú
+              Còn lại phải trả
+            </div>
+            <div
+              className={
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+              }
+            >
+              Đã chi trả
+            </div>
+            <div
+              className={
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+              }
+            >
+              Ghi chú
             </div>
           </div>
           {salaryInfo?._id && Array.isArray(listSalaryChild) && (
@@ -329,16 +339,16 @@ const SalaryDetailPage: FC = () => {
           {permissions.hasPermissionCreateUpdate && <CreateRow onInsert={handleCreateSalary} />}
         </div>
       </div>
-      {/* <Paginate
+      <Paginate
         totalPages={totalPages}
         totalRecord={totalRecord}
         nextPageAction={fetchNextPage}
         prevPageAction={fetchPrevPage}
         isFetching={isFetchSalaryChild}
         hasNextPage={hasNextPage}
-      /> */}
+      />
 
-      {/* <ModalLarge
+      <ModalLarge
         show={modalShare.isShow}
         toggle={() => setModalShare(prev => ({ ...prev, isShow: !modalShare.isShow }))}
         className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[600px] rounded-cbs-md"
@@ -351,7 +361,7 @@ const SalaryDetailPage: FC = () => {
           modalType={modalShare.modalType}
           hasPermission={permissions.hasPermissionShare}
         />
-      </ModalLarge> */}
+      </ModalLarge>
     </div>
   );
 };
