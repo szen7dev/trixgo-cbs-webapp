@@ -91,108 +91,6 @@ export const DetailChildRow: FC<Props> = ({
       </div>
       <div
         className={
-          "table-cell relative box-border border border-gray-300 align-middle bg-white"
-        }
-      >
-        <p
-          contentEditable={"true"}
-          suppressContentEditableWarning={true}
-          className={"w-full h-full focus:outline-blue-600 p-2"}
-          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-            const value = e.target.innerText;
-            handleClickUpdateSalary({
-              ...rowData,
-              name: value,
-            });
-          }}
-        >
-          {rowData.name}
-        </p>
-      </div>
-      <div
-        className={
-          "px-[16px] py-[9px] table-cell relative box-border border border-gray-300 bg-white"
-        }
-      >
-        <DayPickerInput
-          // className="w-16"
-          // selected={null}
-          value={
-            (moment(rowData.date).isValid() &&
-              moment(rowData.date).format("DD/MM/YYYY")) ||
-            ""
-          }
-          placeholder="Chọn thời gian"
-          onDayChange={(date: Date | null) => {
-            if (moment(date).isValid())
-              handleClickUpdateSalary({
-                ...rowData,
-                date: moment(date).toJSON(),
-              });
-          }}
-        />
-      </div>
-      <div
-        className={
-          "table-cell relative box-border border border-gray-300 align-middle bg-white"
-        }
-      >
-        <p
-          contentEditable={"true"}
-          suppressContentEditableWarning={true}
-          className={
-            "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
-          }
-          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-            const value = e.target.innerText;
-            handleClickUpdateSalary({
-              ...rowData,
-              salary: `${value}`,
-            });
-          }}
-        >
-          {rowData.salary}
-        </p>
-      </div>
-      <div
-        className={
-          "table-cell relative box-border border border-gray-300 bg-white w-1/12"
-        }
-      >
-        <p
-          contentEditable={"true"}
-          suppressContentEditableWarning={true}
-          className={
-            "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
-          }
-          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-            const value = e.target.innerText;
-            handleClickUpdateSalary({
-              ...rowData,
-              reward: `${value}`,
-            });
-          }}
-        >
-          {`${rowData.reward}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-        </p>
-      </div>
-      <div
-        className={
-          "table-cell relative box-border border border-gray-300 bg-white w-1/12"
-        }
-      >
-        <p
-          // contentEditable={"true"}
-          suppressContentEditableWarning={true}
-          className={
-            "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
-          }
-        >
-          {`${rowData.punishment}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-        </p>
-      </div>
-      <div
-        className={
           "px-[16px] py-[9px] table-cell relative box-border border border-gray-300 bg-white"
         }
       >
@@ -236,12 +134,180 @@ export const DetailChildRow: FC<Props> = ({
           }
         />
       </div>
+      {/* <div
+        className={
+          "table-cell relative box-border border border-gray-300 align-middle bg-white"
+        }
+      >
+        <p
+          contentEditable={"true"}
+          suppressContentEditableWarning={true}
+          className={"w-full h-full focus:outline-blue-600 p-2"}
+          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+            const value = e.target.innerText;
+            handleClickUpdateSalary({
+              ...rowData,
+              name: value,
+            });
+          }}
+        >
+          {rowData.name}
+        </p>
+      </div> */}
       <div
         className={
           "px-[16px] py-[9px] table-cell relative box-border border border-gray-300 bg-white"
         }
       >
-        
+        <DayPickerInput
+          // className="w-16"
+          // selected={null}
+          value={
+            (moment(rowData.date).isValid() &&
+              moment(rowData.date).format("DD/MM/YYYY")) ||
+            ""
+          }
+          placeholder="Chọn thời gian"
+          onDayChange={(date: Date | null) => {
+            if (moment(date).isValid())
+              handleClickUpdateSalary({
+                ...rowData,
+                date: moment(date).toJSON(),
+              });
+          }}
+        />
+      </div>
+      <div
+        className={
+          "table-cell relative box-border border border-gray-300 align-middle bg-white"
+        }
+      >
+        <p
+          contentEditable={"true"}
+          suppressContentEditableWarning={true}
+          className={
+            "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
+          }
+          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+            const value = e.target.innerText;
+            handleClickUpdateSalary({
+              ...rowData,
+              salary: `${value}`,
+            });
+          }}
+        >
+          {`${rowData.salary}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+        </p>
+      </div>
+      <div
+        className={
+          "table-cell relative box-border border border-gray-300 bg-white w-1/12"
+        }
+      >
+        <p
+          contentEditable={"true"}
+          suppressContentEditableWarning={true}
+          className={
+            "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
+          }
+          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+            const value = e.target.innerText;
+            handleClickUpdateSalary({
+              ...rowData,
+              reward: `${value}`,
+            });
+          }}
+        >
+          {`${rowData.reward}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+        </p>
+      </div>
+      <div
+        className={
+          "table-cell relative box-border border border-gray-300 align-middle bg-white"
+        }
+      >
+        <p
+          contentEditable={"true"}
+          suppressContentEditableWarning={true}
+          className={
+            "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
+          }
+          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+            const value = e.target.innerText;
+            handleClickUpdateSalary({
+              ...rowData,
+              punishment: `${value}`,
+            });
+          }}
+        >
+          {`${rowData.punishment}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+        </p>
+      </div>
+      <div
+        className={
+          "table-cell relative box-border border border-gray-300 align-middle bg-white"
+        }
+      >
+        <p
+          contentEditable={"true"}
+          suppressContentEditableWarning={true}
+          className={
+            "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
+          }
+          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+            const value = e.target.innerText;
+            handleClickUpdateSalary({
+              ...rowData,
+              advance: `${value}`,
+            });
+          }}
+        >
+          {`${rowData.advance}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+        </p>
+      </div>
+      <div
+        className={
+          "table-cell relative box-border border border-gray-300 align-middle bg-white"
+        }
+      >
+        <p
+          contentEditable={"true"}
+          suppressContentEditableWarning={true}
+          className={
+            "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
+          }
+          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+            const value = e.target.innerText;
+            handleClickUpdateSalary({
+              ...rowData,
+              remaining: `${value}`,
+            });
+          }}
+        >
+          {`${rowData.remaining}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+        </p>
+      </div>
+      <div
+        className={
+          "table-cell relative box-border border border-gray-300 align-middle bg-white"
+        }
+      >
+        <p
+          contentEditable={"true"}
+          suppressContentEditableWarning={true}
+          className={
+            "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
+          }
+          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+            const value = e.target.innerText;
+            handleClickUpdateSalary({
+              ...rowData,
+              paid: `${value}`,
+            });
+          }}
+        >
+          {`${rowData.paid}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+        </p>
       </div>
       <div
         className={
@@ -264,5 +330,5 @@ export const DetailChildRow: FC<Props> = ({
         </p>
       </div>
     </div>
-  );
-};
+  )
+}

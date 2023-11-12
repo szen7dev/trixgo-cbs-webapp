@@ -31,16 +31,12 @@ export const DetailMainRow: FC<Props> = ({
         className={
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-3"
         }
-      >
-        {"A"}
-      </div>
+      >{"A"}</div>
       <div
         className={
-          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-2/12"
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
         }
-      >
-        {salaryParentInfo?.name}
-      </div>
+      >{salaryParentInfo?.name}</div>
       <div
         className={
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
@@ -51,15 +47,8 @@ export const DetailMainRow: FC<Props> = ({
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
         }
       >
-        <div className="flex justify-end">{salaryParentInfo?.hours}</div>
-      </div>
-      <div
-        className={
-          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
-        }
-      >
         <div className="flex justify-end">
-          {convertCurrency(salaryParentInfo?.unitprice)}
+          {convertCurrency(salaryParentInfo?.salary)}
         </div>
       </div>
       <div
@@ -68,7 +57,16 @@ export const DetailMainRow: FC<Props> = ({
         }
       >
         <div className="flex justify-end">
-          {`${salaryParentInfo?.salary}`.replace(
+          {convertCurrency(salaryParentInfo?.reward)}
+        </div>
+      </div>
+      <div
+        className={
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
+        }
+      >
+        <div className="flex justify-end">
+          {`${salaryParentInfo?.punishment}`.replace(
             /\B(?=(\d{3})+(?!\d))/g,
             ","
           )}
@@ -78,12 +76,38 @@ export const DetailMainRow: FC<Props> = ({
         className={
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
         }
-      ></div>
+      >
+        <div className="flex justify-end">
+          {`${salaryParentInfo?.advance}`.replace(
+            /\B(?=(\d{3})+(?!\d))/g,
+            ","
+          )}
+        </div>
+      </div>
       <div
         className={
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
         }
-      ></div>
+      >
+        <div className="flex justify-end">
+          {`${salaryParentInfo?.remaining}`.replace(
+            /\B(?=(\d{3})+(?!\d))/g,
+            ","
+          )}
+        </div>
+      </div>
+      <div
+        className={
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
+        }
+      >
+        <div className="flex justify-end">
+          {`${salaryParentInfo?.paid}`.replace(
+            /\B(?=(\d{3})+(?!\d))/g,
+            ","
+          )}
+        </div>
+      </div>
       <div
         className={
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-4/12"

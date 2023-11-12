@@ -7,10 +7,6 @@ import { Project } from "./items/project";
 export type SalaryParent = {
     _id: string;
     type: 1;
-    hours: number;
-    unitprice: number;
-    salary: number;
-    amount: number;
     status: number;
     timeApproved: string | null;
     author: User;
@@ -24,6 +20,12 @@ export type SalaryParent = {
     note: string;
     createAt: string;
     modifyAt: string;
+    salary: number;
+    reward: number;
+    punishment: number;
+    advance: number;
+    remaining: number;
+    paid: number;
 }
 
 export type ListSalaryPayload = QueryParams & {

@@ -21,9 +21,6 @@ import {
 } from "./components";
 import { CreateRow } from "./components/Form";
 
-/**
- * Hooks, Typings
- */
 import {
   useQueryDetailSalaryParent,
   useQueryListSalaryChild,
@@ -187,7 +184,7 @@ const SalaryDetailPage: FC = () => {
   const handleDownloadExcel = async () => {
       try {
             setStateExport({ isExporting: true });
-            const { error, data } = await downloadTemplateExcelAsync({ parentID: salaryParentID, option: '1' });
+            const { error, data } = await downloadTemplateExcelAsync({ parentID: salaryParentID, option: '2' });
 
             if(error) {
                 return toast.warn(data?.message);
@@ -263,14 +260,21 @@ const SalaryDetailPage: FC = () => {
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Nội dung
+              Nhân sự
             </div>
+            {/* <div
+              className={
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+              }
+            >
+              Nội dung
+            </div> */}
             <div
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Ngày
+              Ngày ghi nhận
             </div>
             <div
               className={
@@ -298,21 +302,28 @@ const SalaryDetailPage: FC = () => {
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Người thực hiện
+              Đã tạm ứng
             </div>
             <div
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Công việc/Bill
+              Còn lại phải trả
             </div>
             <div
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Mô tả/ghi chú
+              Đã chi trả
+            </div>
+            <div
+              className={
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+              }
+            >
+              Ghi chú
             </div>
           </div>
           {salaryInfo?._id && Array.isArray(listSalaryChild) && (
