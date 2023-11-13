@@ -5,7 +5,7 @@ import SortingIcon from "assets/images/icons8-sorting-100.svg";
 import TagIcon from "assets/images/icons8-price-tag-96.svg";
 import DateIcon from "assets/images/icons8-calendar-100.svg";
 
-import {DropdownSearchable} from "shareComponents/common";
+import { DropdownSearchable } from "shareComponents/common";
 import { InputClearable } from "../Input";
 
 const FilterButton: FC = () => {

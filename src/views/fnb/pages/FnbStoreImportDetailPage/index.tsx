@@ -3,7 +3,7 @@ import React, { UIEvent, FC, useState, useCallback, ChangeEvent, useEffect } fro
 import cn from "classnames";
 import debounce from "lodash/debounce";
 import { toast } from "react-toastify";
-import { useParams, Link, useHistory } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 
 /*=====2.CSS=====*/
 import styles from "views/support/styles/support.module.css";
@@ -12,14 +12,14 @@ import styles from "views/support/styles/support.module.css";
 import DeleteIcon from "assets/images/icons8-remove.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
-import { SearchInput, ModalConfirm, Loader } from "shareComponents/common";
+import { SearchInput, ModalConfirm } from "shareComponents/common";
 import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
 // import { AccessingUsers } from "../../sharedComponents/common";
 
 import RowTableInsertInline from "./components/RowTableInsertInline";
 import RowTableUpdateInline from "./components/RowTableUpdateInline";
-import RowTableView from "./components/RowTableView";
-import ModalShare from "./components/ModalShare";
+// import RowTableView from "./components/RowTableView";
+// import ModalShare from "./components/ModalShare";
 import PaginateV2 from "shareComponents/common/PaginateV2";
 import { useFunda } from 'services/hooks/items/useFunda';
 
@@ -29,7 +29,7 @@ import { useFunda } from 'services/hooks/items/useFunda';
 import { useModal } from "services/hooks/useModal";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { useContract } from "services/hooks/items/useContract";
-import { useCashFlowPlan } from "services/hooks/financial/useCashFlow";
+// import { useCashFlowPlan } from "services/hooks/financial/useCashFlow";
 import CashFlowPlan from "typings/financial/cashFlowPlan";
 import { User } from "typings/user";
 import { useFnbGeneralBook } from 'services/hooks/fnb/useFnbGeneralBook';
@@ -39,11 +39,11 @@ export const FnbStoreImportDetailPage: FC = () => {
     const { fundaID, detailID } = useParams<{ fundaID: string, detailID: string }>();
     const { closeModal, openModal } = useModal();
 
-    const [showRowInsert, setShowRowInsert] = useState(true);
+    const [, setShowRowInsert] = useState(true);
     const [keywordContract, setKeywordContract] = useState('');
     const [keyword, setKeyword] = useState('');
     const [itemsChecked, setItemsChecked] = useState<string[]>([]);
-    const [dataCashFlow, setDataCashFlow] = useState<CashFlowPlan.CashFlowPlan[]>([]);
+    const [, setDataCashFlow] = useState<CashFlowPlan.CashFlowPlan[]>([]);
 
     const [permissions, setPermissions] = useState<{
         usersShared: User[];
@@ -65,18 +65,18 @@ export const FnbStoreImportDetailPage: FC = () => {
         modalType: 'members'
     });
 
-    const { user } = useAuth();
+    useAuth();
 
-    const { info: cashFlowInfo, isLoadingInfo, refetchInfo } = useCashFlowPlan({
-        params: {
-            // cashFlowID: cashFlowId,
-            populates: JSON.stringify({
-                path: 'admins members userCreate',
-                select: '_id bizfullname image'
-            })
-        },
-        isFetchInfo: true
-    })
+    // const { info: cashFlowInfo, isLoadingInfo, refetchInfo } = useCashFlowPlan({
+    //     params: {
+    //         // cashFlowID: cashFlowId,
+    //         populates: JSON.stringify({
+    //             path: 'admins members userCreate',
+    //             select: '_id bizfullname image'
+    //         })
+    //     },
+    //     isFetchInfo: true
+    // })
 
     // const {
     //     insertAsync,
@@ -106,19 +106,19 @@ export const FnbStoreImportDetailPage: FC = () => {
         isFetch: true
     })
 
-    const {  
+    const {
         insertAsync,
         updateAsync,
-        deleteManyAsync, isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbGeneralBook({ 
-		params: { 
-			keyword: keyword, 
+        deleteManyAsync, isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbGeneralBook({
+		params: {
+			keyword: keyword,
             limit: 20,
-			fundasID: [fundaID], 
-			parentID: detailID, 
+			fundasID: [fundaID],
+			parentID: detailID,
 			populates: JSON.stringify({
 				path: 'userCreate goods',
 				// select: 'fullname',
-			}) 
+			})
 		}, isFetchList: true, isFetchInfo: false  });
 
     const { info: infoFunda } = useFunda({ params: { fundaID }, isFetchList: false, isFetchInfo: true  });
@@ -172,7 +172,6 @@ export const FnbStoreImportDetailPage: FC = () => {
 
     const handleInsert = async (values: any) => {
         try {
-            console.log({values});
             setShowRowInsert(false);
             const dataInsert = {
                 fundaID,
@@ -229,8 +228,8 @@ export const FnbStoreImportDetailPage: FC = () => {
         }
     }
 
-    const toggleModalShare = (modalType: 'admins' | 'members', users: User[] | undefined) =>
-        setModalShare({ isShow: !modalShare.isShow, users, modalType });
+    // const toggleModalShare = (modalType: 'admins' | 'members', users: User[] | undefined) =>
+    //     setModalShare({ isShow: !modalShare.isShow, users, modalType });
 
     type PaginateHandle = React.ElementRef<typeof PaginateV2>;
     const ref = React.useRef<PaginateHandle>(null);
@@ -238,7 +237,7 @@ export const FnbStoreImportDetailPage: FC = () => {
 
     return (
         <main className="relative h-full overflow-auto">
-            
+
             <header className="sticky top-0 bg-primary-light z-10">
                 <div className="h-[50px] border border-primary-border flex items-center justify-between px-5">
                     <div className="flex items-center">
@@ -251,7 +250,7 @@ export const FnbStoreImportDetailPage: FC = () => {
                             classNameInput="outline-none w-[296px]"
                             onChange={onChangeSearch}
                         />
-                   
+
                         {/* Xóa 1 hoặc nhiều */}
                         {(itemsChecked.length && permissions.hasPermissionDelete) ? (
                             <button
@@ -269,7 +268,7 @@ export const FnbStoreImportDetailPage: FC = () => {
                                 <img src={DeleteIcon} alt="Delete" />
                             </button>
                         ) : ''}
-                        
+
                     </div>
                     <div className={"flex-1 flex items-center justify-end"}>
                         <PaginateV2
@@ -289,7 +288,7 @@ export const FnbStoreImportDetailPage: FC = () => {
                         />
                     </div>
                 </div>
-            	
+
             </header>
 
             <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
@@ -363,7 +362,7 @@ export const FnbStoreImportDetailPage: FC = () => {
                             onSearchContract={onChangeSearchContract}
                         />
 				    ))}
-                    
+
                     { <RowTableInsertInline onInsert={handleInsert} />}
                 </tbody>
             </table>

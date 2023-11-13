@@ -17,6 +17,7 @@ export const useAuth = (): UseAuth => {
   const history = useHistory();
   const queryClient = useQueryClient();
   const dispatchRedux = useDispatch()
+
   useEffect(() => {
     if (
       localStorage.getItem("currentUser") === null ||

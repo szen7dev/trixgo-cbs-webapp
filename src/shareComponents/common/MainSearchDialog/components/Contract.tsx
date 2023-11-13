@@ -17,18 +17,8 @@ import { useContractIsMembers } from "services/hooks/items/useContract";
 import moment from "moment";
 
 type ContractProps = {
-  //
+  [k: string]: Record<string, any>;
 };
-
-interface IContract {
-  _id: string;
-  value: number;
-}
-
-const data = Array.from({ length: 15 }).map((e, i) => ({
-  _id: "123" + i,
-  value: Math.floor(Math.random() * 1_000_000_000),
-}));
 
 function getColumnsContract(): TableOptions<any>["columns"] {
   return [

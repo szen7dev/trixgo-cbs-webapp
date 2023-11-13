@@ -31,7 +31,6 @@ export const DetailChildRow: FC<Props> = ({
   parent,
   rowData,
   collapsed,
-  isLastRow,
   index,
   hasPermission,
   onUpdatedTimeSheetChild,
@@ -47,16 +46,12 @@ export const DetailChildRow: FC<Props> = ({
 
   const {
     data: listUsersSystem,
-    hasNextPage,
-    fetchNextPage,
   } = useUserSystem({ keyword: searchAssigneeStr }, true);
-  // console.log({listUsersSystem})
 
   const { listBudgetWork } = useQueryListBudgetWork({
 		limit: LIMIT_DROPDOWN,
 		keyword: searchBudgetWorkValue,
 	});
-  // console.log({listBudgetWork})
 
   const handleClickUpdateTimeSheet = React.useCallback(
     (value) => {

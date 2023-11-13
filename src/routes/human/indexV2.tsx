@@ -1,6 +1,6 @@
 /*=====1.LIBRARY=====*/
 import { FC } from "react";
-import { Route, Switch, matchPath } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 
 /*=====2.PROVIDERS=====*/
 
@@ -13,20 +13,16 @@ import LayoutSecondary from 'views/ppt/sharedComponents/layouts/LayoutSecondary'
 /*=====5.PAGES/COMPONENTS=====*/
 import ErrorPage from "views/authentication/Error";
 
-import { 
-        HumanCetificateFilterPage, 
-        HumanOtherFilterPage, 
-        HumanExpiredPage, 
-        HumanHomePage, 
+import {
+        HumanOtherFilterPage,
+        HumanExpiredPage,
+        HumanHomePage,
         HumanPartnerPage,
         HumanCapacityPage,
         HumanCertificatePage,
-        HumanInfo, 
-        HumanDepartment,
+        HumanInfo,
         HumanCertificateExpiredPage
     } from "views/human/pages";
-    
-import { HumanHomePageV2 } from "views/human/pages/HumanHomePage/indexV2";
 
 const HumanRouterV2: FC = () => {
     return (
@@ -48,7 +44,7 @@ const HumanRouterV2: FC = () => {
                             <LayoutSecondary pages={[
                                 { id: '1', title: 'Thời hạn hợp đồng nhỏ hơn 4 tháng', path: '/human/expired', navExact: true },
                                 {
-                                    id: '2', title: 'Thời hạn chứng chỉ nhỏ hơn 5 tháng', path: '/human/expired/2', 
+                                    id: '2', title: 'Thời hạn chứng chỉ nhỏ hơn 5 tháng', path: '/human/expired/2',
                                 }
                             ]}>
                                 <Route exact path="/human/expired" component={HumanExpiredPage} />

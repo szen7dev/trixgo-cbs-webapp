@@ -34,7 +34,7 @@ interface UseQueryListSalaryParent {
     // deleteManyAsync: (params: ExportManyPayload) => Promise<any>;
 }
 
-export const useQueryListSalaryParent = (): UseQueryListSalaryParent => {
+export const useQueryListSalaryParent = (params?: any): UseQueryListSalaryParent => {
     const result = useInfiniteQuery(
         `list_salary.parent`, async () =>
         SalaryParentRepository.fetchListSalary({
@@ -42,6 +42,7 @@ export const useQueryListSalaryParent = (): UseQueryListSalaryParent => {
                 "path": "assignee project userCreate",
                 "select": "fullname bizfullname name"
             },
+            ...params
         }), {
         getNextPageParam: ({ data }: any) => {
             return data?.nextCursor || undefined;

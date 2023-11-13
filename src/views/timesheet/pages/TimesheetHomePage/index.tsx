@@ -4,9 +4,9 @@ import moment from "moment";
 
 import TriangleDown from "assets/icons/TriangleDown";
 import VerifyIcon from "assets/images/icons8-verified-check-circle-for-approved-valid-content-96.svg";
-import ThreeDotsVertical from "assets/images/icon-3dots-vertical.svg";
 
 import { Paginate } from "shareComponents/common/Paginate";
+import debounce from "lodash/debounce";
 
 import {
   SearchInput,
@@ -29,6 +29,7 @@ enum TYPE {
 
 const TimeSheetHomePage: FC = () => {
   const [recordSelected, toggleRecord] = React.useState<any>({});
+  const [keyword, setKeyword] = React.useState("");
 
   const { openModal, closeModal } = useModal();
   const { openDeleteConfirm } = useDeleteConfirm();
@@ -41,7 +42,7 @@ const TimeSheetHomePage: FC = () => {
     fetchPrevPage,
     loading,
     hasNextPage,
-  } = useQueryListTimeSheetParent();
+  } = useQueryListTimeSheetParent({ keyword });
 
   const {
     onCreateTimeSheetParentAsync,
@@ -100,6 +101,7 @@ const TimeSheetHomePage: FC = () => {
     },
     [onDeleteTimeSheetParentAsync, refreshListTimeSheet, openDeleteConfirm]
   );
+
   return (
     <div className={"financial-cashflow-listing paginate-wrapper relative"}>
       <div
@@ -111,7 +113,9 @@ const TimeSheetHomePage: FC = () => {
           <div className={"text-lg"}>Bảng chấm công</div>
           <SearchInput
             classNameWrapper={"ml-4"}
-            onChange={(event) => console.log(event.target.value)}
+            onChange={debounce((e) => {
+              setKeyword(e.target.value);
+            }, 1000)}
           />
           {Object.keys(recordSelected).length > 1 && (
             <>

@@ -14,9 +14,6 @@ import type {
     InsertTimeSheetChildResponse,
     UpdateTimeSheetChildPayload,
     UpdateTimeSheetChildResponse,
-    // DownloadPayload,
-    // ImportPayload,
-    // ExportManyPayload,
 } from 'typings/time-sheet';
 
 // Time Sheet Parent
@@ -29,19 +26,17 @@ interface UseQueryListTimeSheetParent {
     refetch: () => void;
     fetchNextPage: () => void;
     fetchPrevPage: () => void;
-    // insertAsync: (payload: DownloadPayload) => Promise<TimeSheetParent>;
-    // updateAsync: (payload: ImportPayload) => Promise<TimeSheetParent>;
-    // deleteManyAsync: (params: ExportManyPayload) => Promise<any>;
 }
 
-export const useQueryListTimeSheetParent = (): UseQueryListTimeSheetParent => {
+export const useQueryListTimeSheetParent = (params?: any): UseQueryListTimeSheetParent => {
     const result = useInfiniteQuery(
-        `list_time-sheet.parent`, async () =>
+        [`list_time-sheet.parent`, params], async () =>
         TimeSheetParentRepository.fetchListTimeSheet({
             populates: {
                 "path": "assignee project userCreate",
                 "select": "fullname bizfullname name"
             },
+            ...params
         }), {
         getNextPageParam: ({ data }: any) => {
             return data?.nextCursor || undefined;
@@ -94,9 +89,6 @@ export const useQueryListTimeSheetParent = (): UseQueryListTimeSheetParent => {
         refetch,
         fetchNextPage,
         fetchPrevPage,
-        // downloadTemplateExcelAsync,
-        // importExcelAsync,
-        // exportExcelAsync
     }
 }
 
