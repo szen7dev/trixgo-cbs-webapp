@@ -26,7 +26,7 @@ import { useCashBook } from 'services/hooks/financial/useCashBook';
 
 import { useAuth } from "services/hooks/auth/useAuth";
 import { User } from "typings/user";
-import { Loader } from "shareComponents/common";
+import { Loader, Paginate } from "shareComponents/common";
 
 const SalaryDetailPage: FC = () => {
   const history = useHistory();
@@ -327,16 +327,16 @@ const SalaryDetailPage: FC = () => {
           {permissions.hasPermissionCreateUpdate && <CreateRow onInsert={handleCreateSalary} />}
         </div>
       </div>
-      <Paginate
+      {/* <Paginate
         totalPages={totalPages}
         totalRecord={totalRecord}
         nextPageAction={fetchNextPage}
         prevPageAction={fetchPrevPage}
         isFetching={isFetchSalaryChild}
         hasNextPage={hasNextPage}
-      />
+      /> */}
 
-      <ModalLarge
+      {/* <ModalLarge
         show={modalShare.isShow}
         toggle={() => setModalShare(prev => ({ ...prev, isShow: !modalShare.isShow }))}
         className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[600px] rounded-cbs-md"
@@ -349,7 +349,7 @@ const SalaryDetailPage: FC = () => {
           modalType={modalShare.modalType}
           hasPermission={permissions.hasPermissionShare}
         />
-      </ModalLarge>
+      </ModalLarge> */}
     </div>
   );
 };
