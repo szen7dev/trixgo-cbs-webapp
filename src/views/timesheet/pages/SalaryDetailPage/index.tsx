@@ -52,7 +52,7 @@ const SalaryDetailPage: FC = () => {
   });
 
   const { user } = useAuth();
-  console.log({ user })
+  // console.log({ user })
 
   const { data: salaryInfo, refetch, loading } = useQueryDetailSalaryParent(salaryParentID);
 
