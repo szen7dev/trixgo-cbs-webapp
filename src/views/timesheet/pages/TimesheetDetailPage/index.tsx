@@ -62,7 +62,6 @@ const TimeSheetDetailPage: FC = () => {
   const { user } = useAuth();
 
   const { data: timeSheetInfo, refetch, loading } = useQueryDetailTimeSheetParent(timeSheetParentID);
-  // console.log({timeSheetInfo})
 
   const {
     data: listTimeSheetChild,
@@ -74,8 +73,6 @@ const TimeSheetDetailPage: FC = () => {
     fetchPrevPage,
     refetch: onRefreshTimeSheetChild,
   } = useQueryListTimeSheetChild(timeSheetParentID);
-
-  // console.log({listTimeSheetChild})
 
   const { onUpdateTimeSheetAsync, onCreateTimeSheetAsync } = useMutationTimeSheetChild();
 
@@ -115,7 +112,7 @@ const TimeSheetDetailPage: FC = () => {
       hasPermissionCreateUpdate,
       hasPermissionShare
     })
-  }, [JSON.stringify(timeSheetInfo)])
+  }, [JSON.stringify(timeSheetInfo), JSON.stringify(user)])
 
   const handleUpdatedTimeSheet = React.useCallback(
     async (values) => {

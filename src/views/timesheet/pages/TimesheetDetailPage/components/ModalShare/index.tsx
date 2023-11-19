@@ -1,4 +1,4 @@
-import { FC, useEffect, useState, useCallback } from 'react';
+import { FC, useEffect, useState, useCallback, useMemo } from 'react';
 import debounce from 'lodash/debounce';
 import { toast } from "react-toastify";
 import { captureException } from "@sentry/react";
@@ -27,7 +27,7 @@ type Props = {
 }
 
 export const ModalShare: FC<Props> = ({ expertTimesheetID, users, modalType, refetch, toggle, hasPermission }) => {
-	const usersID = users?.map(user => user._id.toString()) ?? [];
+	const usersID = useMemo(() => users?.map(user => user._id.toString()) ?? [], [users]);
 	const [hasDefault, setHasDefault] = useState(false);
 	const [isShow, setIsShow] = useState(true);
 	const [keyword, setKeyword] = useState("");

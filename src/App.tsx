@@ -10,7 +10,7 @@ import "react-datepicker/dist/react-datepicker.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import "swiper/swiper.min.css";
 import "styles/output.css";
-import {DeleteConfirm} from "./shareComponents/common";
+import { DeleteConfirm } from "./shareComponents/common";
 // import {OneSignalController} from "shareComponents/common/OneSignal";
 const queryClient = new QueryClient();
 

@@ -271,7 +271,7 @@ export const DetailChildRow: FC<Props> = ({
         }
       >
         <p
-          contentEditable={"true"}
+          // contentEditable={"true"}
           suppressContentEditableWarning={true}
           className={
             "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"

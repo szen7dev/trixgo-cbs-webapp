@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import { useParams, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import moment from "moment";
@@ -9,15 +8,11 @@ import moment from "moment";
  */
 import FileColorIcon from "assets/icons/FileColor";
 import StarIcon from "assets/images/star.svg";
-import { Paginate } from "shareComponents/common/Paginate";
-import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
 import { InputWidthAdjust } from "views/timesheet/shareComponents/common";
 import { createLinkAndClick } from "utils";
 
 import {
   DetailMainRow,
-  // AccessingUsers,
-  ModalShare
 } from "./components";
 import { CreateRow } from "./components/Form";
 
@@ -31,7 +26,7 @@ import { useCashBook } from 'services/hooks/financial/useCashBook';
 
 import { useAuth } from "services/hooks/auth/useAuth";
 import { User } from "typings/user";
-import { Loader } from "shareComponents/common";
+import { Loader, Paginate } from "shareComponents/common";
 
 const SalaryDetailPage: FC = () => {
   const history = useHistory();
@@ -57,26 +52,20 @@ const SalaryDetailPage: FC = () => {
   });
 
   const { user } = useAuth();
+  // console.log({ user })
 
   const { data: salaryInfo, refetch, loading } = useQueryDetailSalaryParent(salaryParentID);
-  // console.log({salaryInfo})
+
   const {
     data: listSalaryChild,
     loading: isFetchSalaryChild,
-    totalPages,
-    totalRecord,
-    hasNextPage,
-    fetchNextPage,
-    fetchPrevPage,
     refetch: onRefreshSalaryChild,
   } = useQueryListSalaryChild(salaryParentID);
-
-  // console.log({listSalaryChild})
 
   const { onUpdateSalaryAsync, onCreateSalaryAsync } = useMutationSalaryChild();
 
   useEffect(() => {
-    if(!salaryInfo || !user || loading) return;
+    if(!salaryInfo || !user) return;
 
     const usersShared = [...salaryInfo?.admins, ...salaryInfo?.members];
     const adminsID    = salaryInfo.admins.map(item => item._id);
@@ -111,12 +100,11 @@ const SalaryDetailPage: FC = () => {
       hasPermissionCreateUpdate,
       hasPermissionShare
     })
-  }, [JSON.stringify(salaryInfo)])
+  }, [JSON.stringify(salaryInfo), JSON.stringify(user)])
 
   const handleUpdatedSalary = React.useCallback(
     async (values) => {
       try {
-        // console.log(values)
         const isUpdated = await onUpdateSalaryAsync({
           ...values,
           expertSalaryID: values._id,
@@ -172,29 +160,29 @@ const SalaryDetailPage: FC = () => {
   const toggleModalShare = (modalType: 'admins' | 'members', users: User[] | undefined) =>
     setModalShare({ isShow: !modalShare.isShow, users, modalType });
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   //_____Import, export excel
-  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+  const [, setStateExport] = useState<{ isExporting: boolean }>({
       isExporting: false,
   });
 
-  const { downloadTemplateExcelAsync, importExcelAsync } = useCashBook({});
+  const { downloadTemplateExcelAsync } = useCashBook({});
 
   const handleDownloadExcel = async () => {
       try {
-            setStateExport({ isExporting: true });
-            const { error, data } = await downloadTemplateExcelAsync({ parentID: salaryParentID, option: '2' });
+        setStateExport({ isExporting: true });
+        const { error, data } = await downloadTemplateExcelAsync({ parentID: salaryParentID, option: '1' });
 
-            if(error) {
-                return toast.warn(data?.message);
-            }
+        if(error) {
+            return toast.warn(data?.message);
+        }
 
-            data && createLinkAndClick(data, '_self');
-        } catch (error: any) {
-            toast.error(error.message)
-        } finally {
-            setStateExport({ isExporting: false });
+        data && createLinkAndClick(data, '_self');
+      } catch (error: any) {
+        toast.error(error.message)
+      } finally {
+        setStateExport({ isExporting: false });
       }
   }
 
@@ -339,16 +327,16 @@ const SalaryDetailPage: FC = () => {
           {permissions.hasPermissionCreateUpdate && <CreateRow onInsert={handleCreateSalary} />}
         </div>
       </div>
-      <Paginate
+      {/* <Paginate
         totalPages={totalPages}
         totalRecord={totalRecord}
         nextPageAction={fetchNextPage}
         prevPageAction={fetchPrevPage}
         isFetching={isFetchSalaryChild}
         hasNextPage={hasNextPage}
-      />
+      /> */}
 
-      <ModalLarge
+      {/* <ModalLarge
         show={modalShare.isShow}
         toggle={() => setModalShare(prev => ({ ...prev, isShow: !modalShare.isShow }))}
         className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[600px] rounded-cbs-md"
@@ -361,7 +349,7 @@ const SalaryDetailPage: FC = () => {
           modalType={modalShare.modalType}
           hasPermission={permissions.hasPermissionShare}
         />
-      </ModalLarge>
+      </ModalLarge> */}
     </div>
   );
 };
