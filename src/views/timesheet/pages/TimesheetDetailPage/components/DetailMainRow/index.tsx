@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { map as _map } from "lodash";
-import { convertCurrency } from 'utils/converter';
+import { convertCurrency } from "utils/converter";
 import { Loader } from "shareComponents/common/Loader";
 import { DetailChildRow } from "../DetailChildRow";
 
@@ -12,6 +12,7 @@ type Props = {
   onUpdatedTimeSheetChild: (values: any) => void;
   isFetchTimeSheetChild: boolean;
   hasPermission: boolean;
+  pageIndex: number;
 };
 
 export const DetailMainRow: FC<Props> = ({
@@ -19,7 +20,8 @@ export const DetailMainRow: FC<Props> = ({
   listTimeSheetChild,
   onUpdatedTimeSheetChild,
   isFetchTimeSheetChild,
-  hasPermission
+  hasPermission,
+  pageIndex,
 }) => {
   if (isFetchTimeSheetChild) {
     return <Loader className="border-primary" />;
@@ -97,14 +99,14 @@ export const DetailMainRow: FC<Props> = ({
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-4/12"
         }
       ></div>
-      {_map(listTimeSheetChild, (childRow, index) => (
+      {_map(listTimeSheetChild[pageIndex] ?? [], (childRow, index) => (
         <DetailChildRow
           key={childRow._id}
           isLastRow={false}
           collapsed={false}
           rowData={childRow}
           parent={timeSheetParentInfo}
-          index={index}
+          index={+index}
           hasPermission={hasPermission}
           onUpdatedTimeSheetChild={onUpdatedTimeSheetChild}
         />
