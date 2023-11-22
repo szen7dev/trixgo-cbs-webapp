@@ -1,6 +1,4 @@
 module.exports = {
-    mode: 'jit',
-		presets: [
-			require('./tailwindcss-config.js')
-		],
+  mode: "jit",
+  presets: [require("./tailwindcss-config.js")],
 };

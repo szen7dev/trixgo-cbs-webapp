@@ -1,5 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { FC, useEffect, useState, useRef } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import moment from "moment";
@@ -9,16 +8,11 @@ import moment from "moment";
  */
 import FileColorIcon from "assets/icons/FileColor";
 import StarIcon from "assets/images/star.svg";
-import { Paginate } from "shareComponents/common/Paginate";
 import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
 import { InputWidthAdjust } from "views/timesheet/shareComponents/common";
 import { createLinkAndClick } from "utils";
 
-import {
-  DetailMainRow,
-  // AccessingUsers,
-  ModalShare
-} from "./components";
+import { DetailMainRow, ModalShare } from "./components";
 import { CreateRow } from "./components/Form";
 
 /**
@@ -29,22 +23,32 @@ import {
   useQueryListTimeSheetChild,
   useMutationTimeSheetChild,
 } from "services/hooks/useTimeSheet";
-import { useCashBook } from 'services/hooks/financial/useCashBook';
+import { useCashBook } from "services/hooks/financial/useCashBook";
 
 import { useAuth } from "services/hooks/auth/useAuth";
-// import { setMainRowCollapsed } from "redux/reducer/Timesheet";
 import { User } from "typings/user";
 import { Loader } from "shareComponents/common";
+import PaginateV2 from "shareComponents/common/PaginateV2";
+
+type PaginateHandle = React.ElementRef<typeof PaginateV2>;
 
 const TimeSheetDetailPage: FC = () => {
   const history = useHistory();
   const params = useParams<{ id: string }>();
+  const [pageIndex, setPageIndex] = useState(0);
+
+  const ref = useRef<PaginateHandle>(null);
+
   const timeSheetParentID = params["id"];
 
-  const [modalShare, setModalShare] = useState<{ isShow: boolean, users: User[] | undefined, modalType: 'members' | 'admins' }>({
+  const [modalShare, setModalShare] = useState<{
+    isShow: boolean;
+    users: User[] | undefined;
+    modalType: "members" | "admins";
+  }>({
     isShow: false,
     users: [],
-    modalType: 'members'
+    modalType: "members",
   });
 
   const [permissions, setPermissions] = useState<{
@@ -61,58 +65,65 @@ const TimeSheetDetailPage: FC = () => {
 
   const { user } = useAuth();
 
-  const { data: timeSheetInfo, refetch, loading } = useQueryDetailTimeSheetParent(timeSheetParentID);
+  const {
+    data: timeSheetInfo,
+    refetch,
+    loading,
+  } = useQueryDetailTimeSheetParent(timeSheetParentID);
 
   const {
-    data: listTimeSheetChild,
+    dataNotFilter: listTimeSheetChild,
     loading: isFetchTimeSheetChild,
     totalPages,
     totalRecord,
+    limit,
     hasNextPage,
     fetchNextPage,
     fetchPrevPage,
     refetch: onRefreshTimeSheetChild,
   } = useQueryListTimeSheetChild(timeSheetParentID);
 
-  const { onUpdateTimeSheetAsync, onCreateTimeSheetAsync } = useMutationTimeSheetChild();
+  const { onUpdateTimeSheetAsync, onCreateTimeSheetAsync } =
+    useMutationTimeSheetChild();
 
   useEffect(() => {
-    if(!timeSheetInfo || !user || loading) return;
+    if (!timeSheetInfo || !user || loading) return;
 
     const usersShared = [...timeSheetInfo?.admins, ...timeSheetInfo?.members];
-    const adminsID    = timeSheetInfo.admins.map(item => item._id);
-    const membersID   = timeSheetInfo.members.map(item => item._id);
+    const adminsID = timeSheetInfo.admins.map((item) => item._id);
+    const membersID = timeSheetInfo.members.map((item) => item._id);
 
-    const usersIDShared = [
-      ...adminsID,
-      ...membersID,
-    ];
-    let authorID = '';
+    const usersIDShared = [...adminsID, ...membersID];
+    let authorID = "";
 
-    if(typeof timeSheetInfo.userCreate === 'string') {
+    if (typeof timeSheetInfo.userCreate === "string") {
       authorID = timeSheetInfo.userCreate;
-    } else{
+    } else {
       authorID = timeSheetInfo.userCreate?._id;
     }
 
     usersIDShared.push(authorID);
 
-    if(!usersIDShared.includes(user._id)) {
-      toast.warn('Bạn đang không có quyền truy cập');
-      history.push('/timesheet/home');
+    if (!usersIDShared.includes(user._id)) {
+      toast.warn("Bạn đang không có quyền truy cập");
+      history.push("/timesheet/home");
     }
 
-    const hasPermissionCreateUpdate = adminsID.includes(user._id) || authorID === user._id;
+    const hasPermissionCreateUpdate =
+      adminsID.includes(user._id) || authorID === user._id;
     const hasPermissionShare = authorID === user._id;
-    const onlyView = membersID.includes(user._id) && !adminsID.includes(user._id) && authorID !== user._id;
+    const onlyView =
+      membersID.includes(user._id) &&
+      !adminsID.includes(user._id) &&
+      authorID !== user._id;
 
     setPermissions({
       usersShared,
       onlyView,
       hasPermissionCreateUpdate,
-      hasPermissionShare
-    })
-  }, [JSON.stringify(timeSheetInfo), JSON.stringify(user)])
+      hasPermissionShare,
+    });
+  }, [JSON.stringify(timeSheetInfo), JSON.stringify(user)]);
 
   const handleUpdatedTimeSheet = React.useCallback(
     async (values) => {
@@ -133,7 +144,6 @@ const TimeSheetDetailPage: FC = () => {
           refetch(); // refetch time sheet parent
         }
       } catch (err) {
-        console.error(err);
         return null;
       }
     },
@@ -150,50 +160,60 @@ const TimeSheetDetailPage: FC = () => {
           name: values.name,
           parentID: timeSheetParentID,
         });
-        if (!isCreated.error) {
-          refetch();
-          onRefreshTimeSheetChild();
-          return true;
+        if (isCreated.error) {
+          throw new Error("ERROR~");
         }
-        throw new Error("ERROR~");
+
+        refetch();
+        onRefreshTimeSheetChild();
+
+        return true;
       } catch (err) {
-        console.error(err);
         return false;
       }
     },
-    [timeSheetParentID, onCreateTimeSheetAsync, onRefreshTimeSheetChild, refetch]
+    [
+      timeSheetParentID,
+      onCreateTimeSheetAsync,
+      onRefreshTimeSheetChild,
+      refetch,
+    ]
   );
 
-  const toggleModalShare = (modalType: 'admins' | 'members', users: User[] | undefined) =>
-    setModalShare({ isShow: !modalShare.isShow, users, modalType });
-
-  const dispatch = useDispatch();
+  const toggleModalShare = (
+    modalType: "admins" | "members",
+    users: User[] | undefined
+  ) => setModalShare({ isShow: !modalShare.isShow, users, modalType });
 
   //_____Import, export excel
-  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
-      isExporting: false,
+  const [, setStateExport] = useState<{ isExporting: boolean }>({
+    isExporting: false,
   });
 
-  const { downloadTemplateExcelAsync, importExcelAsync } = useCashBook({});
+  const { downloadTemplateExcelAsync } = useCashBook({});
 
   const handleDownloadExcel = async () => {
-      try {
-            setStateExport({ isExporting: true });
-            const { error, data } = await downloadTemplateExcelAsync({ parentID: timeSheetParentID, option: '1' });
+    try {
+      setStateExport({ isExporting: true });
+      const { error, data } = await downloadTemplateExcelAsync({
+        parentID: timeSheetParentID,
+        option: "1",
+      });
 
-            if(error) {
-                return toast.warn(data?.message);
-            }
-
-            data && createLinkAndClick(data, '_self');
-        } catch (error: any) {
-            toast.error(error.message)
-        } finally {
-            setStateExport({ isExporting: false });
+      if (error) {
+        return toast.warn(data?.message);
       }
-  }
 
-  if(!timeSheetInfo || loading || !user) return <Loader className="border-primary" />
+      data && createLinkAndClick(data, "_self");
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setStateExport({ isExporting: false });
+    }
+  };
+
+  if (!timeSheetInfo || loading || !user)
+    return <Loader className="border-primary" />;
 
   return (
     <div className={"financial-planning-detail"}>
@@ -219,28 +239,49 @@ const TimeSheetDetailPage: FC = () => {
           </p>
         </div>
         <div className={"flex-1 flex items-center justify-end"}>
-          <button className={"mr-2 text-primary"}
-            onClick={handleDownloadExcel}
-           >
-             Tải Excel bảng chấm công
-           </button>
+          <button className={"mr-2 text-primary"} onClick={handleDownloadExcel}>
+            Tải Excel bảng chấm công
+          </button>
           <button
             className="text-gray-400 mr-2"
             onClick={() => {
-              toggleModalShare('admins', timeSheetInfo.admins)
+              toggleModalShare("admins", timeSheetInfo.admins);
             }}
-          >Admin ({timeSheetInfo.admins?.length})</button> |
+          >
+            Admin ({timeSheetInfo.admins?.length})
+          </button>{" "}
+          |
           <button
             className="text-gray-400 mr-2 ml-2"
             onClick={() => {
-              toggleModalShare('members', timeSheetInfo.members)
+              toggleModalShare("members", timeSheetInfo.members);
             }}
-          >Thành viên ({timeSheetInfo.members?.length})</button>
+          >
+            Thành viên ({timeSheetInfo.members?.length})
+          </button>
           {/* <AccessingUsers users={permissions.usersShared} /> */}
           {/* <ShareButton /> */}
         </div>
       </div>
-      <div className={"financial-planning-table"}>
+
+      <PaginateV2
+        ref={ref}
+        totalRecord={totalRecord}
+        totalPages={totalPages}
+        hasNextPage={hasNextPage}
+        limit={limit}
+        isFetching={isFetchTimeSheetChild}
+        nextPageAction={() => {
+          setPageIndex((oldState) => oldState + 1);
+          fetchNextPage();
+        }}
+        prevPageAction={() => {
+          setPageIndex((oldState) => oldState - 1);
+          fetchPrevPage();
+        }}
+      />
+
+      <div className={"financial-planning-table mt-2"}>
         <div className={"relative table border-collapse w-full"}>
           <div className={"header table-row sticky z-10"}>
             <div
@@ -321,28 +362,27 @@ const TimeSheetDetailPage: FC = () => {
               onUpdatedTimeSheetChild={handleUpdatedTimeSheet}
               isFetchTimeSheetChild={isFetchTimeSheetChild}
               hasPermission={permissions.hasPermissionCreateUpdate}
+              pageIndex={pageIndex}
             />
           )}
 
-          {permissions.hasPermissionCreateUpdate && <CreateRow onInsert={handleCreateTimeSheet} />}
+          {permissions.hasPermissionCreateUpdate && (
+            <CreateRow onInsert={handleCreateTimeSheet} />
+          )}
         </div>
       </div>
-      <Paginate
-        totalPages={totalPages}
-        totalRecord={totalRecord}
-        nextPageAction={fetchNextPage}
-        prevPageAction={fetchPrevPage}
-        isFetching={isFetchTimeSheetChild}
-        hasNextPage={hasNextPage}
-      />
 
       <ModalLarge
         show={modalShare.isShow}
-        toggle={() => setModalShare(prev => ({ ...prev, isShow: !modalShare.isShow }))}
+        toggle={() =>
+          setModalShare((prev) => ({ ...prev, isShow: !modalShare.isShow }))
+        }
         className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[600px] rounded-cbs-md"
       >
         <ModalShare
-          toggle={() => setModalShare(prev => ({ ...prev, isShow: !modalShare.isShow }))}
+          toggle={() =>
+            setModalShare((prev) => ({ ...prev, isShow: !modalShare.isShow }))
+          }
           refetch={refetch}
           expertTimesheetID={timeSheetParentID}
           users={modalShare.users}

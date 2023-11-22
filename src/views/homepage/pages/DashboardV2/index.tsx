@@ -33,8 +33,8 @@ import trashIcon from "assets/images/icons8-trash-96 1.svg";
 
 import iconPhoto from "assets/images/icons8-photo.svg";
 import iconFile from "assets/images/icons8-attach.svg";
-import StarIcon from '@mui/icons-material/Star';
-import StarBorderIcon from '@mui/icons-material/StarBorder';
+import StarIcon from "@mui/icons-material/Star";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
 import { ModalZoomView } from "shareComponents/common";
 import { ModalConfirm } from "shareComponents/common";
 
@@ -75,11 +75,11 @@ type Props = {
 type PaginateHandle = React.ElementRef<typeof PaginateV2>;
 
 export const DashboardV2: FC<Props> = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   const dispatch = useDispatch();
   const [filter, setFilter] = useState("all");
-  const { user } = useAuth()
+  const { user } = useAuth();
   const [pageIndex, setPageIndex] = useState(0);
   const ref = React.useRef<PaginateHandle>(null);
   const tabIndex = useAppSelector((state) => state.dashboardV2.data.tabIndex);
@@ -90,20 +90,24 @@ export const DashboardV2: FC<Props> = () => {
   const { current: socket }: any = useSocket();
 
   const [defaultState, setDefaultState] = useState({
-    mediaID: '',
+    mediaID: "",
     images: [] as ImageProps[],
     index: 0,
-    createAt: ""
+    createAt: "",
   });
 
   const StarToggle = () => {
-    const [selectStar, setSelectStar] = React.useState(false)
+    const [selectStar, setSelectStar] = React.useState(false);
     return (
       <button onClick={() => setSelectStar(!selectStar)} className="h-[16px]">
-        {(selectStar ? <StarIcon sx={{ color: '#FFCA28', width: 16, height: 16 }} /> : <StarBorderIcon sx={{ color: '#FFCA28', width: 16, height: 16 }} />)}
+        {selectStar ? (
+          <StarIcon sx={{ color: "#FFCA28", width: 16, height: 16 }} />
+        ) : (
+          <StarBorderIcon sx={{ color: "#FFCA28", width: 16, height: 16 }} />
+        )}
       </button>
-    )
-  }
+    );
+  };
 
   const keywordForResponse = useAppSelector(
     (state) => state.dashboardV2.data.keywordForResponse
@@ -197,10 +201,14 @@ export const DashboardV2: FC<Props> = () => {
     projectsID: project,
     fromDate: fromCreateDate,
     toDate: toCreateDate,
-    isGroup: (queryResponse.companyOfAuthorsID.length ||
+    isGroup:
+      queryResponse.companyOfAuthorsID.length ||
       queryResponse.authorsID.length ||
       queryResponse.projectsID.length ||
-      queryResponse.official != 0 || keywordForResponse) ? "1" : "0",
+      queryResponse.official != 0 ||
+      keywordForResponse
+        ? "1"
+        : "0",
     enabled: tabActive === 1 ? true : false,
   };
 
@@ -236,9 +244,12 @@ export const DashboardV2: FC<Props> = () => {
     isParent: isParent,
     subtypes: subtypes,
     status: status,
-    isGroup: (querySubject.companiesOfAssignee.length ||
+    isGroup:
+      querySubject.companiesOfAssignee.length ||
       querySubject.assigneesID.length ||
-      keywordForSubject) ? "1" : "0",
+      keywordForSubject
+        ? "1"
+        : "0",
     ...querySubject,
   };
   if (filter !== "all") {
@@ -253,7 +264,7 @@ export const DashboardV2: FC<Props> = () => {
     hasNextPage: hasNextPageSubject,
     isLoadingListTask,
     isFetching: isFetchingNextPageSubject,
-    refetchListTask
+    refetchListTask,
   } = useSearchTask({
     params: querySearchTask,
     isFetch: tabActive === 2 ? true : false,
@@ -272,9 +283,12 @@ export const DashboardV2: FC<Props> = () => {
     fromDate: fromCreateDate,
     toDate: toCreateDate,
     projectsID: project,
-    isGroup: (queryFile.companyOfAuthorsID.length ||
+    isGroup:
+      queryFile.companyOfAuthorsID.length ||
       queryFile.authorsID.length ||
-      keywordForFile) ? "1" : "0",
+      keywordForFile
+        ? "1"
+        : "0",
     ...queryFile,
     enabled: tabActive === 3 ? true : false,
   });
@@ -302,10 +316,11 @@ export const DashboardV2: FC<Props> = () => {
       onReset();
       dispatch(setTabActive(2));
       dispatch(setTabIndex(1));
-    }
+    };
   }, []);
 
-  const { refetch: refetchPcmPlanTaskNotification } = usePcmPlanTaskNotification({ enabled: false });
+  const { refetch: refetchPcmPlanTaskNotification } =
+    usePcmPlanTaskNotification({ enabled: false });
 
   const { updateStatusMultipleAsync, updateTaskAsync } = useTask({
     params: {},
@@ -319,9 +334,11 @@ export const DashboardV2: FC<Props> = () => {
   };
 
   const checkActive = (relateds: string[], user: string) => {
-    let result = "read border-b-0.5 border-primary-border hover:shadow-md hover:z-2 hover:relative";
+    let result =
+      "read border-b-0.5 border-primary-border hover:shadow-md hover:z-2 hover:relative";
     if (relateds && Array.isArray(relateds) && relateds.includes(user)) {
-      result = "unread border-b-0.5 border-primary-border hover:shadow-md hover:z-2 hover:relative";
+      result =
+        "unread border-b-0.5 border-primary-border hover:shadow-md hover:z-2 hover:relative";
     }
     return result;
   };
@@ -335,8 +352,8 @@ export const DashboardV2: FC<Props> = () => {
       >
         <ModalCreateResultSearch condition={querySearchTask} />
       </div>
-    )
-  }
+    );
+  };
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
   const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -362,45 +379,43 @@ export const DashboardV2: FC<Props> = () => {
         />
       </div>
     );
-  }
+  };
 
   const handleDeleteTask = async (task: any) => {
     try {
       closeModal();
-      if(!user) return;
+      if (!user) return;
 
       const { error, data } = await updateTaskAsync({
         taskID: task._id,
-        usersDeleteID: [user._id]
-      })
+        usersDeleteID: [user._id],
+      });
 
-      if(error) return toast.warn(data?.message);
+      if (error) return toast.warn(data?.message);
 
       refetchListTask();
     } catch (error: any) {
       return toast.error(error.message);
     }
-  }
+  };
 
   const handleMarkTask = async (task: any) => {
     try {
-      if(!user) return;
+      if (!user) return;
 
-      const isMarked = (task?.flags?.includes(user?._id) ?? false);
+      const isMarked = task?.flags?.includes(user?._id) ?? false;
       const dataUpdate = {
         taskID: task._id,
-        ...isMarked ? { flagsRemoves: [user._id] } : { flags: [user._id] }
-      }
+        ...(isMarked ? { flagsRemoves: [user._id] } : { flags: [user._id] }),
+      };
       const { error, data } = await updateTaskAsync(dataUpdate);
 
-      if(error) return toast.warn(data?.message);
+      if (error) return toast.warn(data?.message);
 
       refetchListTask();
     } catch (error) {
-      if(error instanceof Error)
-        toast.error(error.message);
-      if(typeof error === 'string')
-        toast.error(error);
+      if (error instanceof Error) toast.error(error.message);
+      if (typeof error === "string") toast.error(error);
     }
   };
 
@@ -412,26 +427,26 @@ export const DashboardV2: FC<Props> = () => {
       const { infoObject, app } = data;
       const accessUsers = infoObject?.accessUsers ?? [];
 
-      if(app !== APP_KEY.PCM_PLAN_TASK) return;
-      if(!accessUsers.includes(user._id)) return;
+      if (app !== APP_KEY.PCM_PLAN_TASK) return;
+      if (!accessUsers.includes(user._id)) return;
 
       refetchListTask();
-    }
+    };
 
     const onEventCreateNewTask = (result: any) => {
       const { data, error } = result;
       if (error || !data.infoTask || !user) return;
       refetchListTask();
-    }
+    };
 
     socket?.on("COMMENT_SSC_ADD_COMMENT", onEventAddComment);
     socket?.on("SUBJECT_PCM_SSC_ADD_TASK", onEventCreateNewTask);
 
     return () => {
-        socket?.off("COMMENT_SSC_ADD_COMMENT", onEventAddComment);
-        socket?.off("SUBJECT_PCM_SSC_ADD_TASK", onEventCreateNewTask);
-    }
-  }, [socket])
+      socket?.off("COMMENT_SSC_ADD_COMMENT", onEventAddComment);
+      socket?.off("SUBJECT_PCM_SSC_ADD_TASK", onEventCreateNewTask);
+    };
+  }, [socket]);
 
   return (
     <div className="t-home flex flex-col h-full overflow-hidden">
@@ -1079,12 +1094,16 @@ export const DashboardV2: FC<Props> = () => {
                 },
                 {
                   text: "Cách đây 1 tuần",
-                  fromDate: moment().subtract(7, "days").format("YYYY-MM-DD 00:00"),
+                  fromDate: moment()
+                    .subtract(7, "days")
+                    .format("YYYY-MM-DD 00:00"),
                   toDate: moment().format("YYYY-MM-DD HH:mm"),
                 },
                 {
                   text: "Cách đây 1 tháng",
-                  fromDate: moment().subtract(1, "months").format("YYYY-MM-DD 00:00"),
+                  fromDate: moment()
+                    .subtract(1, "months")
+                    .format("YYYY-MM-DD 00:00"),
                   toDate: moment().format("YYYY-MM-DD HH:mm"),
                 },
               ]}
@@ -1338,15 +1357,18 @@ export const DashboardV2: FC<Props> = () => {
 
           {tabIndex === 2 && (
             <button
-              className={"bg-green-success rounded text-white px-2 h-[32px] ml-2"}
+              className={
+                "bg-green-success rounded text-white px-2 h-[32px] ml-2"
+              }
               onClick={onSaveResultSearch}
             >
               Lưu
             </button>
           )}
-
         </div>
-        <div className={"header-table flex px-4 w-full top-0 bg-white mb-1 pb-2"}>
+        <div
+          className={"header-table flex px-4 w-full top-0 bg-white mb-1 pb-2"}
+        >
           <div className={"flex gap-7 items-center justify-center mr-2"}>
             <div className="flex gap-2 items-center">
               {/* <input
@@ -1453,7 +1475,7 @@ export const DashboardV2: FC<Props> = () => {
             className={"text-primary mx-2"}
             onClick={() => setShowUpdateStatus(true)}
           >
-           {t("homepage:markAsRead")}
+            {t("homepage:markAsRead")}
           </button>
           {/* <button className={"flex items-center justify-center mx-3"}>
             <img src={downloadIcon} alt={"-----"} />
@@ -1468,30 +1490,30 @@ export const DashboardV2: FC<Props> = () => {
                 tabActive === 1
                   ? totalRecordResponse
                   : tabActive === 2
-                    ? totalRecordSubject
-                    : totalRecordFile
+                  ? totalRecordSubject
+                  : totalRecordFile
               }
               totalPages={
                 tabActive === 1
                   ? totalPageResponse
                   : tabActive === 2
-                    ? totalPageSubject
-                    : totalPageFile
+                  ? totalPageSubject
+                  : totalPageFile
               }
               limit={20}
               hasNextPage={
                 tabActive === 1
                   ? hasNextPageResponse
                   : tabActive === 2
-                    ? hasNextPageSubject
-                    : hasNextPageFile
+                  ? hasNextPageSubject
+                  : hasNextPageFile
               }
               isFetching={
                 tabActive === 1
                   ? isFetchingResponse
                   : tabActive === 2
-                    ? isFetchingNextPageSubject
-                    : isFetchingFile
+                  ? isFetchingNextPageSubject
+                  : isFetchingFile
               }
               nextPageAction={() => {
                 switch (tabActive) {
@@ -1562,18 +1584,26 @@ export const DashboardV2: FC<Props> = () => {
                   return (
                     <tr
                       key={index}
-                      className={"read border-b-0.5 border-primary-border hover:shadow-md hover:z-2 hover:relative"}
+                      className={
+                        "read border-b-0.5 border-primary-border hover:shadow-md hover:z-2 hover:relative"
+                      }
                     >
                       <td className={"w-[100px]"}>
                         <div
-                          className={"flex gap-4 items-center justify-center py-4"}
+                          className={
+                            "flex gap-4 items-center justify-center py-4"
+                          }
                         >
                           <input
                             className="form-check-input"
                             type="checkbox"
                             value=""
                             id="check"
-                            style={{ width: "16px", height: "16px", marginTop: "5px" }}
+                            style={{
+                              width: "16px",
+                              height: "16px",
+                              marginTop: "5px",
+                            }}
                           />
                           <StarToggle />
                         </div>
@@ -1591,7 +1621,9 @@ export const DashboardV2: FC<Props> = () => {
                               className={
                                 "w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"
                               }
-                              aria-owns={open ? "mouse-over-popover" : undefined}
+                              aria-owns={
+                                open ? "mouse-over-popover" : undefined
+                              }
                               aria-haspopup="true"
                               onMouseEnter={handlePopoverOpen}
                               onMouseLeave={handlePopoverClose}
@@ -1608,7 +1640,8 @@ export const DashboardV2: FC<Props> = () => {
                               {item.author.fullname}
                             </p>
                             <span className={"text-xs text-primary-gray py-2"}>
-                              {item.task.related.length} {t("homepage:markAsRead")}
+                              {item.task.related.length}{" "}
+                              {t("homepage:markAsRead")}
                             </span>
                           </div>
                         </Link>
@@ -1652,11 +1685,15 @@ export const DashboardV2: FC<Props> = () => {
                   return (
                     <tr
                       key={index}
-                      className={checkActive(item.news, `${user?._id}`) + " group"}
+                      className={
+                        checkActive(item.news, `${user?._id}`) + " group"
+                      }
                     >
                       <td className={"w-[60px]"}>
                         <div
-                          className={"flex gap-4 items-center justify-center py-4 px-1"}
+                          className={
+                            "flex gap-4 items-center justify-center py-4 px-1"
+                          }
                         >
                           {/* <input
                             className="form-check-input mt-[5px]"
@@ -1665,7 +1702,15 @@ export const DashboardV2: FC<Props> = () => {
                             style={{ width: "13px", height: "13px", marginTop: "5px" }}
                           /> */}
                           <button onClick={handleMarkTask.bind(null, item)}>
-                            {((item?.flags?.includes(user?._id) ?? false) ? <StarIcon sx={{ color: '#FFCA28', width: 20, height: 20 }} /> : <StarBorderIcon sx={{ color: '#FFCA28', width: 20, height: 20 }} />)}
+                            {item?.flags?.includes(user?._id) ?? false ? (
+                              <StarIcon
+                                sx={{ color: "#FFCA28", width: 20, height: 20 }}
+                              />
+                            ) : (
+                              <StarBorderIcon
+                                sx={{ color: "#FFCA28", width: 20, height: 20 }}
+                              />
+                            )}
                           </button>
                         </div>
                       </td>
@@ -1673,15 +1718,18 @@ export const DashboardV2: FC<Props> = () => {
                         <Link to={"/pcm/detail/" + item._id}>
                           <div className={"py-2"}>
                             <img
-                              src={`${process.env.REACT_APP_URL_S3_USER}/${item.lastComment
-                                ? item.lastComment.author.image
-                                : item.author.image
-                                }`}
+                              src={`${process.env.REACT_APP_URL_S3_USER}/${
+                                item.lastComment
+                                  ? item.lastComment.author.image
+                                  : item.author.image
+                              }`}
                               alt={"avatar"}
                               className={
                                 "w-[36px] h-[36px] max-w-[36px] max-h-[36px] min-w-[36px] min-h-[36px] rounded-full overflow-hidden"
                               }
-                              aria-owns={open ? "mouse-over-popover" : undefined}
+                              aria-owns={
+                                open ? "mouse-over-popover" : undefined
+                              }
                               aria-haspopup="true"
                               onMouseEnter={handlePopoverOpen}
                               onMouseLeave={handlePopoverClose}
@@ -1707,11 +1755,17 @@ export const DashboardV2: FC<Props> = () => {
                       </td>
                       <td className={"w-td-dashboard"}>
                         <Link to={"/pcm/detail/" + item._id}>
-                          <div className={"task-title truncate text-[14px] mt-2"} style={{ lineHeight: "20px" }}>
-                            {item?.priority == 3 ?
-                              <span className="bg-cbs-orage text-white mr-1 py-1 px-3 rounded-md">Cao</span>
-                              : <></>
-                            }
+                          <div
+                            className={"task-title truncate text-[14px] mt-2"}
+                            style={{ lineHeight: "20px" }}
+                          >
+                            {item?.priority == 3 ? (
+                              <span className="bg-cbs-orage text-white mr-1 py-1 px-3 rounded-md">
+                                Cao
+                              </span>
+                            ) : (
+                              <></>
+                            )}
                             {item.project.sign}.{subContentHtml(item.name)}
                           </div>
                           <p
@@ -1724,70 +1778,99 @@ export const DashboardV2: FC<Props> = () => {
                         </Link>
 
                         {item.subtype != 4 ? (
-                            <div className="flex mr-2 gap-2 text-primary-gray pb-2">
-                              {
-                                (item?.lastComment?.files)?.slice(0, 3).map((file: any, subindex: any) => (
-                                    <a key={file._id} href={`${process.env.REACT_APP_URL_S3}${file.path}`}>
-                                      <div className="border-0.5 border-cbs-border rounded-full px-3 py-1 flex">
-                                        <img src={iconFile} className="mr-[5px] w-5 h-5" />
-                                        <span>{file?.nameOrg.substring(0, 20)}...</span>
-                                      </div>
-                                    </a>
-                                ))
-                              }
-                              {item?.lastComment?.files.length > 3 && (
-                                  <div className="border-0.5 border-cbs-border rounded-full py-1 px-2">+{item?.lastComment?.files.length-1}</div>
-                                )}
-                            </div>
-                        ) : (
-                          <></>
-                        )}
-
-                        {item.subtype != 4 ? (
-                            <div className="flex wrap flex-wrap mr-2 text-primary-gray pb-2">
-                            {
-                              (item?.lastComment?.images)?.slice(0, 3).map((file: any, subindex: any) =>
-                                (
-                                  <button
-                                    key={file._id}
-                                    onClick={() => {
-                                      setDefaultState({
-                                        mediaID: file._id,
-                                        images: item?.lastComment?.images,
-                                        index: subindex,
-                                        createAt: file.createAt
-                                      });
-                                      setIsShowImageFullScreen(true);
-                                    }}
-                                  >
-                                    <div className="border-0.5 border-cbs-border rounded-full px-3 py-1 flex">
-                                      <img src={iconPhoto} className="mr-[5px] w-6 h-6" />
-                                      <span>{file?.nameOrg.substring(0, 10)}...</span>
-                                    </div>
-                                  </button>
-                              ))
-                            }
-                             {item?.lastComment?.images.length > 3 && (
-                                <div className="border-0.5 border-cbs-border rounded-full py-1 px-2">+{item?.lastComment?.images.length-1}</div>
-                              )}
+                          <div className="flex mr-2 gap-2 text-primary-gray pb-2">
+                            {item?.lastComment?.files
+                              ?.slice(0, 3)
+                              .map((file: any, subindex: any) => (
+                                <a
+                                  key={file._id}
+                                  href={`${process.env.REACT_APP_URL_S3}${file.path}`}
+                                >
+                                  <div className="border-0.5 border-cbs-border rounded-full px-3 py-1 flex">
+                                    <img
+                                      src={iconFile}
+                                      className="mr-[5px] w-5 h-5"
+                                      alt="File"
+                                    />
+                                    <span>
+                                      {file?.nameOrg.substring(0, 20)}...
+                                    </span>
+                                  </div>
+                                </a>
+                              ))}
+                            {item?.lastComment?.files.length > 3 && (
+                              <div className="border-0.5 border-cbs-border rounded-full py-1 px-2">
+                                +{item?.lastComment?.files.length - 1}
+                              </div>
+                            )}
                           </div>
                         ) : (
                           <></>
                         )}
 
+                        {item.subtype != 4 ? (
+                          <div className="flex wrap flex-wrap mr-2 text-primary-gray pb-2">
+                            {item?.lastComment?.images
+                              ?.slice(0, 3)
+                              .map((file: any, subindex: any) => (
+                                <button
+                                  key={file._id}
+                                  onClick={() => {
+                                    setDefaultState({
+                                      mediaID: file._id,
+                                      images: item?.lastComment?.images,
+                                      index: subindex,
+                                      createAt: file.createAt,
+                                    });
+                                    setIsShowImageFullScreen(true);
+                                  }}
+                                >
+                                  <div className="border-0.5 border-cbs-border rounded-full px-3 py-1 flex">
+                                    <img
+                                      src={iconPhoto}
+                                      className="mr-[5px] w-6 h-6"
+                                      alt="File"
+                                    />
+                                    <span>
+                                      {file?.nameOrg.substring(0, 10)}...
+                                    </span>
+                                  </div>
+                                </button>
+                              ))}
+                            {item?.lastComment?.images.length > 3 && (
+                              <div className="border-0.5 border-cbs-border rounded-full py-1 px-2">
+                                +{item?.lastComment?.images.length - 1}
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <></>
+                        )}
                       </td>
                       <td className={"w-[100px] align-middle"}>
                         <div className="justify-items-end absolute ml-[10px] hidden group-hover:block homeboxbutton">
-                          <button className="w-[40px] h-[40px] rounded-full hover:bg-cbs-form-input-bg" onClick={toggleModalConfirmDeleteTask.bind(null, item)}>
-                            <img src={trashIcon} className="m-auto" />
+                          <button
+                            className="w-[40px] h-[40px] rounded-full hover:bg-cbs-form-input-bg"
+                            onClick={toggleModalConfirmDeleteTask.bind(
+                              null,
+                              item
+                            )}
+                          >
+                            <img
+                              src={trashIcon}
+                              className="m-auto"
+                              alt="Trash"
+                            />
                           </button>
                           {/* <button className="w-[40px] h-[40px] rounded-full hover:bg-cbs-form-input-bg">
                             <img src={mailIcon} className="m-auto" />
                           </button> */}
                         </div>
-                        <div className={
-                          "task-date whitespace-nowrap py-2 text-right pr-4"
-                        }>
+                        <div
+                          className={
+                            "task-date whitespace-nowrap py-2 text-right pr-4"
+                          }
+                        >
                           {showTime(item.modifyAt)}
                         </div>
                       </td>
@@ -1899,8 +1982,18 @@ export const DashboardV2: FC<Props> = () => {
                         "py-2 border-b-0.5 border-primary-border align-middle text-cbs-highlight-color break-all pr-2"
                       }
                     >
-                      {(item.task && item.task?.subtype != 4) ? <a href={`${process.env.REACT_APP_URL_S3}${item.path}`} target="_blank" rel="noopener noreferrer" className="text-cbs-highlight-color">{item.nameOrg}</a> : item.nameOrg}
-
+                      {item.task && item.task?.subtype != 4 ? (
+                        <a
+                          href={`${process.env.REACT_APP_URL_S3}${item.path}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-cbs-highlight-color"
+                        >
+                          {item.nameOrg}
+                        </a>
+                      ) : (
+                        item.nameOrg
+                      )}
                     </td>
                     <td
                       className={

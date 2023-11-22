@@ -23,6 +23,7 @@ import {
 } from "services/hooks/useTimeSheet";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
+
 enum TYPE {
   "Chuyên gia" = 1,
 }
@@ -170,7 +171,7 @@ const TimeSheetHomePage: FC = () => {
             </div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border-b align-middle w-2/12 text-gray-500"
+                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
               }
             >
               Nội dung
@@ -194,14 +195,14 @@ const TimeSheetHomePage: FC = () => {
                 "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
               }
             >
-              Tổng thời gian (giờ)
+              Khối lượng
             </div>
             <div
               className={
                 "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
               }
             >
-              Tổng chi phí (VND)
+              Chi phí
             </div>
             <div
               className={
@@ -210,13 +211,13 @@ const TimeSheetHomePage: FC = () => {
             >
               Ghi chú
             </div>
-            <div
+            {/* <div
               className={
                 "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
               }
             >
               Trạng thái/Phê duyệt
-            </div>
+            </div> */}
           </div>
           {data.map((timeSheetParent) => (
             <div className={"body-table table-row"} key={timeSheetParent._id}>
@@ -281,7 +282,7 @@ const TimeSheetHomePage: FC = () => {
               <div className={"px-2 py-4 table-cell box-border border-b"}>
                 {timeSheetParent.note}
               </div>
-              <div className={"px-2 py-4 table-cell box-border border-b"}>
+              {/* <div className={"px-2 py-4 table-cell box-border border-b"}>
                 <div className={"flex items-center text-primary"}>
                   <span className={"mr-3"}>
                     {timeSheetParent.timeApproved
@@ -296,10 +297,10 @@ const TimeSheetHomePage: FC = () => {
                   {moment(timeSheetParent.timeApproved).isValid() &&
                     moment(timeSheetParent.timeApproved).format(DATE_FORMAT)}
                 </p>
-                {/* <p className={"mt-1 text-gray-500"}>
+                <p className={"mt-1 text-gray-500"}>
                   Nguyễn Hữu Hiệp-PG 12/12/2021 15:45
-                </p> */}
-              </div>
+                </p>
+              </div> */}
             </div>
           ))}
         </div>

@@ -1,7 +1,6 @@
 // MỤC ĐÍCH: TƯƠNG TÁC VỚI DB
-import { useInfiniteQuery, useMutation, useQuery } from "react-query";
+import { useInfiniteQuery, useQuery } from "react-query";
 import pcmDashboardV2 from "apis/pcm/pcmDashboardV2";
-import TaskRepository from "apis/task";
 import DatahubRepository from "apis/datahub";
 
 export const useListResponseFromSearch = (payload: any): any => {
@@ -131,18 +130,18 @@ export const usePcmPlanTaskNotification = (payload: any): any => {
 
   return {
     data,
-    refetch
+    refetch,
   };
 };
 
-export const usePcmDynamicReport = ({status}: any): any => {
+export const usePcmDynamicReport = ({ status }: any): any => {
   const { data } = useQuery(
     [`pcmDynamicReportForMyJob`, status],
     async () => {
       return pcmDashboardV2.pcmDynamicReport({
         reportType: 1,
         upcoming: 1,
-        status
+        status,
       });
     },
     {
@@ -154,10 +153,10 @@ export const usePcmDynamicReport = ({status}: any): any => {
     [`pcmDynamicReportForCompanies`, status],
     async () => {
       return pcmDashboardV2.pcmDynamicReport({
-        option: 1, 
+        option: 1,
         upcoming: 1,
         reportType: 1,
-        status
+        status,
       });
     },
     {
@@ -169,10 +168,10 @@ export const usePcmDynamicReport = ({status}: any): any => {
     [`pcmDynamicReportForAuthors`, status],
     async () => {
       return pcmDashboardV2.pcmDynamicReport({
-        option: 2, 
+        option: 2,
         upcoming: 1,
-        reportType: 1, 
-        status
+        reportType: 1,
+        status,
       });
     },
     {
@@ -184,10 +183,10 @@ export const usePcmDynamicReport = ({status}: any): any => {
     [`pcmDynamicReportForProject`, status],
     async () => {
       return pcmDashboardV2.pcmDynamicReport({
-        option: 5, 
+        option: 5,
         upcoming: 1,
-        reportType: 1, 
-        status
+        reportType: 1,
+        status,
       });
     },
     {
@@ -199,10 +198,10 @@ export const usePcmDynamicReport = ({status}: any): any => {
     [`pcmDynamicReportForProposal`, status],
     async () => {
       return pcmDashboardV2.pcmDynamicReport({
-        option: 6, 
+        option: 6,
         upcoming: 1,
         reportType: 1,
-        status
+        status,
       });
     },
     {
@@ -214,9 +213,9 @@ export const usePcmDynamicReport = ({status}: any): any => {
     [`pcmDynamicReportForStatus`],
     async () => {
       return pcmDashboardV2.pcmDynamicReport({
-        option: 7, 
+        option: 7,
         upcoming: 1,
-        reportType: 1
+        reportType: 1,
       });
     },
     {
@@ -231,7 +230,7 @@ export const usePcmDynamicReport = ({status}: any): any => {
     dataForProject,
     dataForProposal,
     dataForStatus,
-    refetch
+    refetch,
   };
 };
 
@@ -300,15 +299,16 @@ export const usePcmCommentGetListByProperty = (payload: any): any => {
     },
     {
       refetchOnWindowFocus: false,
-      enabled: payload.enabled === true ? true : false
+      enabled: payload.enabled === true ? true : false,
     }
   );
 
   return {
     isLoading: data.isLoading,
     listDataProject: data.data?.data?.listDataProject || [],
-    listDataProjectCompanyAuthor: data.data?.data?.listDataProjectCompanyAuthor || [],
-  }
+    listDataProjectCompanyAuthor:
+      data.data?.data?.listDataProjectCompanyAuthor || [],
+  };
 };
 
 export const usePcmPlanTaskGetListByProperty = (payload: any): any => {
@@ -321,13 +321,13 @@ export const usePcmPlanTaskGetListByProperty = (payload: any): any => {
     },
     {
       refetchOnWindowFocus: false,
-      enabled: payload.enabled === true ? true : false
+      enabled: payload.enabled === true ? true : false,
     }
   );
   return {
     isLoading: data.isLoading,
     listDataProject: data.data?.data?.listDataProject || [],
     listDataProjectCompany: data.data?.data?.listDataProjectCompany || [],
-    dataTotal: data?.data
-  }
+    dataTotal: data?.data,
+  };
 };

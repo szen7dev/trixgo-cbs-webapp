@@ -2,7 +2,7 @@ import { FC } from "react";
 
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ToastContainer } from "react-toastify";
-import { ReactQueryDevtools } from 'react-query/devtools'
+import { ReactQueryDevtools } from "react-query/devtools";
 
 import "i18n/config";
 import Routes from "routes";
@@ -11,7 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "swiper/swiper.min.css";
 import "styles/output.css";
 import { DeleteConfirm } from "./shareComponents/common";
-// import {OneSignalController} from "shareComponents/common/OneSignal";
+
 const queryClient = new QueryClient();
 
 const App: FC = () => {
@@ -29,9 +29,8 @@ const App: FC = () => {
         draggable
         pauseOnHover
       />
-      {/* <OneSignalController/> */}
-			<ReactQueryDevtools initialIsOpen={false} />
-        <DeleteConfirm />
+      <ReactQueryDevtools initialIsOpen={false} />
+      <DeleteConfirm />
     </QueryClientProvider>
   );
 };

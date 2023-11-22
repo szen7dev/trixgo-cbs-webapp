@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { map as _map } from "lodash";
-import { convertCurrency } from 'utils/converter';
+import { convertCurrency } from "utils/converter";
 import { Loader } from "shareComponents/common/Loader";
 import { DetailChildRow } from "../DetailChildRow";
 
@@ -12,6 +12,7 @@ type Props = {
   onUpdatedSalaryChild: (values: any) => void;
   isFetchSalaryChild: boolean;
   hasPermission: boolean;
+  pageIndex: number;
 };
 
 export const DetailMainRow: FC<Props> = ({
@@ -19,7 +20,8 @@ export const DetailMainRow: FC<Props> = ({
   listSalaryChild,
   onUpdatedSalaryChild,
   isFetchSalaryChild,
-  hasPermission
+  hasPermission,
+  pageIndex,
 }) => {
   if (isFetchSalaryChild) {
     return <Loader className="border-primary" />;
@@ -31,12 +33,16 @@ export const DetailMainRow: FC<Props> = ({
         className={
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-3"
         }
-      >{"A"}</div>
+      >
+        {"A"}
+      </div>
       <div
         className={
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
         }
-      >{salaryParentInfo?.name}</div>
+      >
+        {salaryParentInfo?.name}
+      </div>
       <div
         className={
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
@@ -78,10 +84,7 @@ export const DetailMainRow: FC<Props> = ({
         }
       >
         <div className="flex justify-end">
-          {`${salaryParentInfo?.advance}`.replace(
-            /\B(?=(\d{3})+(?!\d))/g,
-            ","
-          )}
+          {`${salaryParentInfo?.advance}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         </div>
       </div>
       <div
@@ -102,10 +105,7 @@ export const DetailMainRow: FC<Props> = ({
         }
       >
         <div className="flex justify-end">
-          {`${salaryParentInfo?.paid}`.replace(
-            /\B(?=(\d{3})+(?!\d))/g,
-            ","
-          )}
+          {`${salaryParentInfo?.paid}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         </div>
       </div>
       <div
@@ -113,18 +113,18 @@ export const DetailMainRow: FC<Props> = ({
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-4/12"
         }
       ></div>
-      {_map(listSalaryChild, (childRow, index) => (
+      {_map(listSalaryChild[pageIndex] ?? [], (childRow, index) => (
         <DetailChildRow
           key={childRow._id}
           isLastRow={false}
           collapsed={false}
           rowData={childRow}
           parent={salaryParentInfo}
-          index={index}
+          index={+index}
           hasPermission={hasPermission}
           onUpdatedSalaryChild={onUpdatedSalaryChild}
         />
       ))}
     </>
   );
-}
+};
