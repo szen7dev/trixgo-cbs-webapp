@@ -179,7 +179,7 @@ interface UseQueryListTimeSheetChild {
 }
 export const useQueryListTimeSheetChild = (
   timeSheetParentID: string,
-  limit = 10
+  limit = 50
 ): UseQueryListTimeSheetChild => {
   const result = useInfiniteQuery(
     `list_time-sheet.child`,

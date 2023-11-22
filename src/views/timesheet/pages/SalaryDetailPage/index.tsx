@@ -8,10 +8,11 @@ import moment from "moment";
  */
 import FileColorIcon from "assets/icons/FileColor";
 import StarIcon from "assets/images/star.svg";
+import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
 import { InputWidthAdjust } from "views/timesheet/shareComponents/common";
 import { createLinkAndClick } from "utils";
 
-import { DetailMainRow } from "./components";
+import { DetailMainRow, ModalShare } from "./components";
 import { CreateRow } from "./components/Form";
 
 import {
@@ -368,13 +369,13 @@ const SalaryDetailPage: FC = () => {
             />
           )}
 
-          {permissions.hasPermissionCreateUpdate && (
+          {/* {permissions.hasPermissionCreateUpdate && (
             <CreateRow onInsert={handleCreateSalary} />
-          )}
+          )} */}
         </div>
       </div>
 
-      {/* <ModalLarge
+      <ModalLarge
         show={modalShare.isShow}
         toggle={() => setModalShare(prev => ({ ...prev, isShow: !modalShare.isShow }))}
         className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[600px] rounded-cbs-md"
@@ -387,7 +388,7 @@ const SalaryDetailPage: FC = () => {
           modalType={modalShare.modalType}
           hasPermission={permissions.hasPermissionShare}
         />
-      </ModalLarge> */}
+      </ModalLarge>
     </div>
   );
 };

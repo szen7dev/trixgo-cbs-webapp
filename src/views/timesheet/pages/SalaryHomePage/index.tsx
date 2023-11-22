@@ -169,18 +169,18 @@ const SalaryHomePage: FC = () => {
             </div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border-b align-middle w-2/12 text-gray-500"
+                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
               }
             >
               Nội dung
             </div>
-            <div
+            {/* <div
               className={
                 "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
               }
             >
               Phân loại
-            </div>
+            </div> */}
             <div
               className={
                 "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
@@ -188,13 +188,6 @@ const SalaryHomePage: FC = () => {
             >
               Dự án/phòng ban
             </div>
-            {/* <div
-              className={
-                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
-              }
-            >
-              Tổng thời gian (giờ)
-            </div> */}
             <div
               className={
                 "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
@@ -209,13 +202,13 @@ const SalaryHomePage: FC = () => {
             >
               Ghi chú
             </div>
-            <div
+            {/* <div
               className={
                 "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
               }
             >
               Trạng thái
-            </div>
+            </div> */}
           </div>
           {data.map((salaryParent) => (
             <div className={"body-table table-row"} key={salaryParent._id}>
@@ -254,19 +247,12 @@ const SalaryHomePage: FC = () => {
                     moment(salaryParent.createAt).format(DATE_FORMAT)}
                 </p>
               </div>
-              <div className={"px-2 py-4 table-cell box-border border-b"}>
+              {/* <div className={"px-2 py-4 table-cell box-border border-b"}>
                 {TYPE[salaryParent.type]}
-              </div>
+              </div> */}
               <div className={"px-2 py-4 table-cell box-border border-b"}>
                 {salaryParent?.project?.name}
               </div>
-              {/* <div
-                className={
-                  "px-2 py-4 table-cell box-border border-b text-right"
-                }
-              >
-                {salaryParent?.hours}
-              </div> */}
               <div
                 className={
                   "px-2 py-4 table-cell box-border border-b text-right"
@@ -280,7 +266,7 @@ const SalaryHomePage: FC = () => {
               <div className={"px-2 py-4 table-cell box-border border-b"}>
                 {salaryParent.note}
               </div>
-              <div className={"px-2 py-4 table-cell box-border border-b"}>
+              {/* <div className={"px-2 py-4 table-cell box-border border-b"}>
                 <div className={"flex items-center text-primary"}>
                   <span className={"mr-3"}>
                     {salaryParent.timeApproved
@@ -295,7 +281,7 @@ const SalaryHomePage: FC = () => {
                   {moment(salaryParent.timeApproved).isValid() &&
                     moment(salaryParent.timeApproved).format(DATE_FORMAT)}
                 </p>
-              </div>
+              </div> */}
             </div>
           ))}
         </div>
