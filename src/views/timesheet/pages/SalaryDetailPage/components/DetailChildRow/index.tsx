@@ -108,7 +108,7 @@ export const DetailChildRow: FC<Props> = ({
                 textOverflow: "ellipsis",
                 maxWidth: "100%",
                 minWidth: 0,
-                width: "100px",
+                width: "150px",
                 whiteSpace: "nowrap",
                 overflow: "hidden",
               }}
