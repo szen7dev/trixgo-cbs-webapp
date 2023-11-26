@@ -193,7 +193,7 @@ const SalaryDetailPage: FC = () => {
       setStateExport({ isExporting: true });
       const { error, data } = await downloadTemplateExcelAsync({
         parentID: salaryParentID,
-        option: "1",
+        option: "2",
       });
 
       if (error) {
