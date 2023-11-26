@@ -441,6 +441,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                             <td className="py-1 px-2">
                                 {CONTACT_TYPES[Number(item.type)-1].text}
                                 <p className="text-xs"><i>{item.email}</i></p>
+                                {/* <p>{item._id}</p> */}
                             </td>
                             <td className="py-1 px-2">
                                 <Link to={`/item/contact/${item._id}`}>

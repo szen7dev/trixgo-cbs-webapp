@@ -12,6 +12,8 @@ type Props = {
     fitContent?: boolean
 };
 
+export type RefPaginateHandle = React.ElementRef<typeof PaginateV2>;
+
 type PaginateHandle = {
     resetPaginate: () => void
 }
