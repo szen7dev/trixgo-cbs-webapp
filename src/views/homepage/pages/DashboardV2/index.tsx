@@ -37,6 +37,7 @@ import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import { ModalZoomView } from "shareComponents/common";
 import { ModalConfirm } from "shareComponents/common";
+import { ModalErrorDetailItem } from "views/fnb/pages/FnbHomePage/components/ModalErrorDetailItem";
 
 import { useUserSystem } from "services/hooks/users/useUserSystem";
 import { useAuth } from "services/hooks/auth/useAuth";
@@ -1477,6 +1478,18 @@ export const DashboardV2: FC<Props> = () => {
           >
             {t("homepage:markAsRead")}
           </button>
+              <button
+                className="text-cbs-schedule-nextweek"
+                onClick={() =>
+                  openModal(
+                    <div className=" text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block" style={{ width: "640px" }}>
+                      <ModalErrorDetailItem defaultValues={{ orderID: '' }} />
+                    </div>
+                  )
+                }
+              >
+                Gán tình huống
+              </button>
           {/* <button className={"flex items-center justify-center mx-3"}>
             <img src={downloadIcon} alt={"-----"} />
           </button>
