@@ -23,7 +23,9 @@ import type {
 interface UseQueryListSalaryParent {
   loading: boolean;
   data: SalaryParent[];
+  dataNotFilter: Array<SalaryParent[]>;
   hasNextPage?: boolean;
+  limit: number;
   totalPages: number;
   totalRecord: number;
   refetch: () => void;
@@ -35,7 +37,8 @@ interface UseQueryListSalaryParent {
 }
 
 export const useQueryListSalaryParent = (
-  params?: any
+  params?: any,
+  limit = 10
 ): UseQueryListSalaryParent => {
   const result = useInfiniteQuery(
     `list_salary.parent`,
@@ -45,6 +48,7 @@ export const useQueryListSalaryParent = (
           path: "assignee project userCreate",
           select: "fullname bizfullname name",
         },
+        limit,
         ...params,
       }),
     {
@@ -70,6 +74,11 @@ export const useQueryListSalaryParent = (
   const listSalary = []
     .concat(...(data?.pages || []).map((d: any) => d.data?.listRecords))
     .filter(Boolean);
+
+  const dataNotFilter = (data?.pages || []).map(
+    (d: any) => d.data?.listRecords
+  );
+
   const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
   const totalPages = data?.pages[0]?.data?.totalPage || 0;
 
@@ -92,7 +101,9 @@ export const useQueryListSalaryParent = (
   return {
     loading: isLoading,
     data: listSalary,
+    dataNotFilter,
     hasNextPage,
+    limit,
     totalPages,
     totalRecord,
     refetch,

@@ -1,12 +1,12 @@
-import React, { FC } from "react";
+import React, { FC, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import moment from "moment";
 
 import TriangleDown from "assets/icons/TriangleDown";
-import VerifyIcon from "assets/images/icons8-verified-check-circle-for-approved-valid-content-96.svg";
+// import VerifyIcon from "assets/images/icons8-verified-check-circle-for-approved-valid-content-96.svg";
 
-import { Paginate } from "shareComponents/common/Paginate";
 import debounce from "lodash/debounce";
+import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
 
 import {
   SearchInput,
@@ -31,16 +31,20 @@ enum TYPE {
 const TimeSheetHomePage: FC = () => {
   const [recordSelected, toggleRecord] = React.useState<any>({});
   const [keyword, setKeyword] = React.useState("");
+  const [pageIndex, setPageIndex] = useState(0);
+
+  const ref = useRef<RefPaginateHandle>(null);
 
   const { openModal, closeModal } = useModal();
   const { openDeleteConfirm } = useDeleteConfirm();
   const {
-    data,
+    dataNotFilter,
     refetch: refreshListTimeSheet,
     totalPages,
     totalRecord,
     fetchNextPage,
     fetchPrevPage,
+    limit,
     loading,
     hasNextPage,
   } = useQueryListTimeSheetParent({ keyword });
@@ -62,7 +66,6 @@ const TimeSheetHomePage: FC = () => {
         }
         throw new Error("Can not create!");
       } catch (err) {
-        // console.error(err);
         return null;
       }
     },
@@ -151,6 +154,24 @@ const TimeSheetHomePage: FC = () => {
           <img alt={"Icon"} src={ThreeDotsVertical} />
         </button> */}
       </div>
+
+      <PaginateV2
+        ref={ref}
+        totalRecord={totalRecord}
+        totalPages={totalPages}
+        hasNextPage={hasNextPage}
+        limit={limit}
+        isFetching={loading}
+        nextPageAction={() => {
+          setPageIndex((oldState) => oldState + 1);
+          fetchNextPage();
+        }}
+        prevPageAction={() => {
+          setPageIndex((oldState) => oldState - 1);
+          fetchPrevPage();
+        }}
+      />
+
       <div className={"financial-cashflow-table"}>
         <div className={"relative table border-collapse w-full"}>
           <div className={"header table-row sticky z-10"}>
@@ -219,7 +240,7 @@ const TimeSheetHomePage: FC = () => {
               Trạng thái/Phê duyệt
             </div> */}
           </div>
-          {data.map((timeSheetParent) => (
+          {dataNotFilter[pageIndex] && dataNotFilter[pageIndex].map((timeSheetParent: any) => (
             <div className={"body-table table-row"} key={timeSheetParent._id}>
               <div
                 className={
@@ -305,14 +326,6 @@ const TimeSheetHomePage: FC = () => {
           ))}
         </div>
       </div>
-      <Paginate
-        totalPages={totalPages}
-        totalRecord={totalRecord}
-        nextPageAction={fetchNextPage}
-        prevPageAction={fetchPrevPage}
-        isFetching={loading}
-        hasNextPage={hasNextPage}
-      />
     </div>
   );
 };

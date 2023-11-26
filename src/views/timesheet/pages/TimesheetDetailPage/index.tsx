@@ -28,16 +28,14 @@ import { useCashBook } from "services/hooks/financial/useCashBook";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { User } from "typings/user";
 import { Loader } from "shareComponents/common";
-import PaginateV2 from "shareComponents/common/PaginateV2";
-
-type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
 
 const TimeSheetDetailPage: FC = () => {
   const history = useHistory();
   const params = useParams<{ id: string }>();
   const [pageIndex, setPageIndex] = useState(0);
 
-  const ref = useRef<PaginateHandle>(null);
+  const ref = useRef<RefPaginateHandle>(null);
 
   const timeSheetParentID = params["id"];
 

@@ -23,7 +23,9 @@ import type {
 interface UseQueryListTimeSheetParent {
   loading: boolean;
   data: TimeSheetParent[];
+  dataNotFilter: Array<TimeSheetParent[]>;
   hasNextPage?: boolean;
+  limit: number;
   totalPages: number;
   totalRecord: number;
   refetch: () => void;
@@ -32,7 +34,8 @@ interface UseQueryListTimeSheetParent {
 }
 
 export const useQueryListTimeSheetParent = (
-  params?: any
+  params?: any,
+  limit = 10
 ): UseQueryListTimeSheetParent => {
   const result = useInfiniteQuery(
     [`list_time-sheet.parent`, params],
@@ -42,6 +45,7 @@ export const useQueryListTimeSheetParent = (
           path: "assignee project userCreate",
           select: "fullname bizfullname name",
         },
+        limit,
         ...params,
       }),
     {
@@ -67,6 +71,11 @@ export const useQueryListTimeSheetParent = (
   const listTimeSheet = []
     .concat(...(data?.pages || []).map((d: any) => d.data?.listRecords))
     .filter(Boolean);
+
+  const dataNotFilter = (data?.pages || []).map(
+    (d: any) => d.data?.listRecords
+  );
+
   const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
   const totalPages = data?.pages[0]?.data?.totalPage || 0;
 
@@ -89,7 +98,9 @@ export const useQueryListTimeSheetParent = (
   return {
     loading: isLoading,
     data: listTimeSheet,
+    dataNotFilter,
     hasNextPage,
+    limit,
     totalPages,
     totalRecord,
     refetch,
