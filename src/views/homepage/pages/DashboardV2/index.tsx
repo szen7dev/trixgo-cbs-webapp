@@ -1488,7 +1488,7 @@ export const DashboardV2: FC<Props> = () => {
                   )
                 }
               >
-                Gán tình huống
+                Gán thành tích/vi phạm
               </button>
           {/* <button className={"flex items-center justify-center mx-3"}>
             <img src={downloadIcon} alt={"-----"} />

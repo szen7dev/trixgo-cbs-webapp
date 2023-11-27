@@ -1154,7 +1154,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                   )
                 }
               >
-                Gán tình huống
+                Gán thành tích/vi phạm
               </button>
               <button onClick={handleExportExcel2} title="Tải dữ liệu Excel">
                 Tải đơn hàng
