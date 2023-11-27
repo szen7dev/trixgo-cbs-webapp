@@ -1,13 +1,11 @@
 /**
  * Libraries
  */
-import React, { ChangeEvent, FC, UIEvent, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Formik, Form, ErrorMessage, Field } from "formik";
-import { useHistory } from 'react-router-dom';
 import { object, string } from "yup";
 import { toArray } from 'lodash';
 import { toast } from "react-toastify";
-import moment from "moment";
 import debounce from "lodash/debounce";
 import Axios from "axios";
 import { useSocket } from "services/hooks/useSocket";
@@ -29,14 +27,14 @@ import RadioEmpty from "assets/images/Ellipse 27.svg";
 import RadioChecked from "assets/images/icons8-checked-40 (2) 2.svg";
 
 import "react-day-picker/lib/style.css";
-import { FileProp, FileProps, FilePropsUpload } from "typings/common";
-import { Button, FormControl, FormControlLabel, MenuItem, Popover, Radio, RadioGroup, Select, SelectChangeEvent } from "@mui/material";
+import { FileProps, FilePropsUpload } from "typings/common";
+import { FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { DropdownSearchable } from "shareComponents/common";
 import API from "apis/repository";
 
 import { useUpload } from 'services/hooks/useUpload';
-import { PostImage, PostFile } from 'shareComponents/common';
+import { PostImage } from 'shareComponents/common';
 import { IconImage } from 'views/media/shareComponents/common';
 
 interface InitialValues {
@@ -56,11 +54,10 @@ type Props = {
 }
 
 export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
-    const history = useHistory();
     const { closeModal } = useModal();
     const { user } = useAuth();
 
-    const [isUploading, setIsUploading] = useState(false);
+    const [, setIsUploading] = useState(false);
     const [tokens, setTokens] = useState<any[]>([]);
 
     const [mistakes, setMistakes] = useState<any>([]);
@@ -75,11 +72,8 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
 
     const [uploads, {
         setUploadImageProgress,
-        setUploadFileProgress,
         setIDImageUploaded,
-        setIDFileUploaded,
         setUploadImage,
-        setUploadFile,
         removeAllFiles,
         removeUploadedImage,
         removeUploadedFile
@@ -112,7 +106,7 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
         const { error, message } = await validateFiles(filesSelected);
         if (error) return toast.warn(message);
 
-        const [files, images] = modifyUploadedFilesV2({
+        const [, images] = modifyUploadedFilesV2({
             imgLastKey: Object.keys(uploads.images).length || null,
             fileLastKey: Object.keys(uploads.files).length || null,
         }, filesSelected);
@@ -330,7 +324,7 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                                         <div className="w-full ">
                                             <div className="my-3">
                                                 <div className={"w-full flex items-start"}>
-                                                    <div className={"max-w-1/2 w-1/2 h-full text-left  text-primary-gray font-bold text-[13px] flex items-center mr-2  h-full h-full"}>Phân loại tình huống</div>
+                                                    <div className={"max-w-1/2 w-1/2 h-full text-left  text-primary-gray font-bold text-[13px] flex items-center mr-2  h-full h-full"}>Tình huống</div>
                                                     <div className={" flex-1 max-w-1/2 w-1/2 h-full h-full"}>
                                                         <DropdownSearchable
                                                             onchangeValue={(value: any) => {
@@ -375,7 +369,7 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                                             </div>
                                             <div className="my-3">
                                                 <div className={"w-full flex items-start"}>
-                                                    <div className={"max-w-1/2 w-1/2 h-full text-left  text-primary-gray font-bold texxt-[13px] flex items-center mr-2  h-full h-full"}>Nhân sự gặp phải</div>
+                                                    <div className={"max-w-1/2 w-1/2 h-full text-left  text-primary-gray font-bold texxt-[13px] flex items-center mr-2  h-full h-full"}>Nhân sự</div>
                                                     <div className={" flex-1 max-w-1/2 w-1/2 h-full h-full"}>
                                                         <DropdownSearchable
                                                             onchangeValue={(value: any) => {
@@ -593,7 +587,7 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                                                 <div className={"flex py-2"}>
                                                     <div className={"w-full flex items-center"}>
                                                         <div className={"h-full text-left flex items-center px-1 "}>
-                                                            <span className="text-primary-gray font-bold pr-3">Giá trị phạt</span>
+                                                            <span className="text-primary-gray font-bold pr-3">Phạt vi phạm</span>
                                                             <Field type="text" name="amount" placeholder=""
                                                                 className="w-[100px] h-[30px] border-0.5 border-cbs-bg-input-search bg-cbs-bg-input-search px-3 py-1 outline-none text-right"
                                                             />
@@ -603,7 +597,7 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                                                 <div className={"flex py-2"}>
                                                     <div className={"w-full flex items-center"}>
                                                         <div className={"h-full text-left flex items-center px-1 "}>
-                                                            <span className="text-primary-gray font-bold pr-3">Giá trị thưởng</span>
+                                                            <span className="text-primary-gray font-bold pr-3">Thưởng thành tích</span>
                                                             <Field type="text" name="bonus" placeholder=""
                                                                 className="w-[100px] h-[30px] border-0.5 border-cbs-bg-input-search bg-cbs-bg-input-search px-3 py-1 outline-none text-right"
                                                             />
