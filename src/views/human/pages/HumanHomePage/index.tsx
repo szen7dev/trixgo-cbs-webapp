@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Menu } from '@headlessui/react';
 import { toast } from "react-toastify";
 import debounce from 'lodash/debounce';
+import moment from "moment";
 
 /*=====2.CSS=====*/
 import "views/human/styles/style.module.css";
@@ -26,25 +27,80 @@ import type { Human } from "typings/human";
 /*=====6.HOOKS/APIS=====*/
 import { useFetchListHuman, useCreateContactMutation, useHumanCustom } from "services/hooks/useHuman";
 import { useHistoryTraffics } from "services/hooks/auth/useAuth";
-// import { usePcmProject } from "services/hooks/pcm/usePcmProject";
+
+import { useListAccessByContract, useListFilterContract } from "services/hooks/cmcs/useContract";
+import { useProjectCustom } from "services/hooks/items/useProject";
 
 /*=====7.OTHER=====*/
 import { APP_ID } from "apis/localdb"
 import { createLinkAndClick } from 'utils';
+import { FilterNav } from "./filterNav";
+import downloadIcon from "assets/images/icons8-download-96.svg";
+import iconPencil from "assets/images/icons8-pencil-96 1.png";
+import iconMaleUser from "assets/images/icons8-male-user-64.svg";
+import PaginateV2 from "shareComponents/common/PaginateV2";
+import React from "react";
+import { useAppSelector } from "redux/reducer";
 
 export const HumanHomePage: FC = () => {
-  const { t } = useTranslation(["human"]);
-	const { id: departmentID } = useParams<{ id: string }>();
-  // const history = useHistory();
 
-  const [pageParam, setPageParam] = useState<any>({departmentID});
+  // page pagination
+  const { keywordInput } = useAppSelector(
+    (state) => state.cmcsHome.data
+  );
+  useEffect(() => {
+    setPageIndex(0);
+    ref.current && ref.current.resetPaginate();
+  }, [keywordInput]);
+  type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+  const ref = React.useRef<PaginateHandle>(null);
+  const [pageIndex, setPageIndex] = useState(0);
+  const [recordSelected, setSelectRecord] = useState<any>({});
+
+  const [fromToDate, setFromToDate] = useState({ fromDate: "", toDate: "" })
+
+  const [projectKeyword, setProjectKeyword] = useState("");
+  const [projectsID, setProjectsID] = useState<string[]>([]);
+
+  const { listProjectsUserIsMember } = useProjectCustom({ paramsProjectsUserIsMember: { keyword: projectKeyword }, isFetchProjectsUserIsMember: true });
+
+  const [listAccessByContractSellKeyword, setListAccessByContractSellKeyword] = useState("");
+  const [buyerInfosID, setBuyerInfosID] = useState<string[]>([]);
+
+  const [listAccessByContractBuyKeyword, setListAccessByContractBuyKeyword] = useState("");
+  const [sellerInfosID, setSellerInfosID] = useState<string[]>([]);
+
+  const { listAccessByContract: listAccessByContractSell } = useListAccessByContract({ params: { keyword: listAccessByContractSellKeyword, option: 1 }, isFetchList: true });
+  const { listAccessByContract: listAccessByContractBuy } = useListAccessByContract({ params: { keyword: listAccessByContractBuyKeyword, option: 2 }, isFetchList: true });
+
+  const [statuss, setStatuss] = useState<string[]>([]);
+  const [ontimes, setOntimes] = useState<string[]>([]);
+  const [onbudgets, setOnbudgets] = useState<string[]>([]);
+  const { isLoading, totalRecord, totalPage, hasNextPage, listCmcsByFilterWithPager, fetchNextPageListCmcsByFilter } = useListFilterContract({
+    params: {
+      ...fromToDate,
+      projectsID,
+      buyerInfosID,
+      sellerInfosID,
+      statuss,
+      ontimes,
+      onbudgets,
+      keyword: keywordInput
+    },
+    isFetchList: true
+  })
+
+  const { t } = useTranslation(["human"]);
+  const { id: departmentID } = useParams<{ id: string }>();
+  const [pageParam, setPageParam] = useState<any>({ departmentID });
   const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
-		isExporting: false,
-	});
+    isExporting: false,
+  });
   const { openModal } = useModal();
 
   // Lấy ra data/messageList data ngay lúc đầu vào màn hình
   const humans = useFetchListHuman(pageParam);
+  // console.log(humans)
 
   // Tạo mẩu tin mới, khởi tạo sẵn hàm createContactMutateAsync để khi user
   // bấm vào nút tạo thì gọi luôn đến api tạo mẩu tin
@@ -87,150 +143,165 @@ export const HumanHomePage: FC = () => {
 
     setPageParam(optionFilter);
     return true;
-  }, []);
-
-  // const handleOnCancelFilter = useCallback(() => {
-  //   setPageParam({departmentID});
-  // }, []);
-
+  }, [])
+  
   const handleOnCancelFilter = useCallback(() => {
     setPageParam({});
   }, []);
 
   const handleExportReport = async () => {
-		try {
-			setStateExport({ isExporting: true });
-			const { error, data } = await exportHumanAsync({
+    try {
+      setStateExport({ isExporting: true });
+      const { error, data } = await exportHumanAsync({
         filterParams: pageParam
       });
 
-			if(error) {
-				return toast.warn(data?.message);
-			}
+      if (error) {
+        return toast.warn(data?.message);
+      }
 
-			data && createLinkAndClick(data, '_self');
-		} catch (error: any) {
+      data && createLinkAndClick(data, '_self');
+    } catch (error: any) {
       toast.error(error.message)
-		} finally {
-			setStateExport({ isExporting: false });
-		}
-	}
+    } finally {
+      setStateExport({ isExporting: false });
+    }
+  }
 
-  if(stateExport.isExporting) {
+  if (stateExport.isExporting) {
     return <Loader className="border-primary" />
   }
 
   return (
-    <section className="w-full">
-      <div className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-12 px-6 border border-gray-200">
-        <div className="flex items-center">
-          <p className="text-lg">Danh sách</p>
-        {/* <img
-          src={BackIcon}
-          alt="Back"
-          onClick={() => history.goBack()}
-          className="cursor-pointer"  />
-          &ensp;
-          <p className="text-lg truncate">{infoDepartment?.data?.sign}.{infoDepartment?.data?.name}</p> */}
-          <div className="relative pl-4">
-            <span>
-              <img
-                src={SearchIcon}
-                alt="Search"
-                className="absolute top-2 left-7 w-4 h-4"
-              />
-            </span>
-            <InputClearable
-              placeholder="Nhập từ khóa tìm kiếm"
-              className="w-[296px] h-[30px] pl-10 outline-none bg-cbs-table-header"
-              onChange={debounce((value) => {
-                handleOnFilter({
-                  keyword: value,
-                })
-              }, 800)}
-              initialValue={pageParam.keyword}
-              isSlider={false}
+    <FilterNav>
+      <section className="w-full">
+        <div className={"flex items-center mb-2.5"}>
+          <div className="w-[50px] text-center mx-1">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              value=""
+              id="flexCheckDefault"
             />
           </div>
-          <DropdownFilterButton
-            onSubmit={handleOnFilter}
-            onCancel={handleOnCancelFilter}
-            initialValues={pageParam}
+          <button className={"flex items-center justify-center w-[50px] mx-1"} onClick={handleExportReport}>
+            <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"} />
+          </button>
+          <button
+            className={"flex items-center justify-center w-[50px] mx-1"}>
+            <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"} />
+          </button>
+          <PaginateV2
+            ref={ref}
+            totalRecord={totalRecord}
+            totalPages={totalPage}
+            limit={10}
+            hasNextPage={hasNextPage}
+            isFetching={isLoading}
+            nextPageAction={() => {
+              fetchNextPageListCmcsByFilter();
+              setPageIndex(oldState => oldState + 1)
+            }}
+            prevPageAction={() => {
+              setPageIndex(oldState => oldState - 1)
+            }}
           />
         </div>
 
-        <div className="task-management-header-right-block flex items-center">
-          <button
-            className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold mr-4"
-            onClick={() =>
-              openModal(
-                // <div className={ "inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0" } >
-                  <div
-                    className={
-                      "inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"
-                    }
-                  >
-                  <NewHumanModal onFinish={handleFinishForm} />
-                </div>
-              )
-            }
-          >
-            Tạo mới
-          </button>
+        <table className={"table-fixed border-collapse w-full"}>
+          <thead>
+            <tr className={"sticky top-0 z-5 border-0.5"}>
+              <th className={"bg-cbs-table-header text-primary-gray text-center font-normal w-[50px] border-0 border-primary-border align-middle py-3 px-2"}>
+              </th>
+              <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-[200px] border-0 border-primary-border py-3 px-2"}>
+                Họ và tên
+              </th>
+              <th className={"bg-cbs-table-header text-primary-gray text-left font-normal  w-[300px] border-0 border-primary-border py-3 px-2"}>
+                Thường chú
+              </th>
+              <th className={"bg-cbs-table-header text-primary-gray text-left  font-normal  w-[250px] border-0 border-primary-border py-3 px-2"}>
+                Nguyên quán
+              </th>
+              <th className={"bg-cbs-table-header text-primary-gray text-left w-[90px] font-normal border-0 border-primary-border py-3 px-2"}>
+                Giới tính
+              </th>
+              <th className={"bg-cbs-table-header text-primary-gray w-[90px] text-left font-normal border-0 border-primary-border py-3 px-2"}>
+                Phòng ban
+              </th>
+              <th className={"bg-cbs-table-header text-primary-gray text-left w-[120px] font-normal border-0 border-primary-border py-3 px-2"}>
+                Chức vụ
+              </th>
+              <th className={"bg-cbs-table-header text-primary-gray text-left w-[110px] font-normal border-0 border-primary-border py-3 px-2"}>
+                Loại hợp đồng
+              </th>
+              <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-[100px] border-0 border-primary-border py-3 px-2"}>
+                Tình trạng
+              </th>
+              <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-[100px] border-0 border-primary-border py-3 px-2"}>
+                Ghi chú
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {humans.listHuman.map((item: Human) => {
+              return (
+                <tr className="border-b-0.5" key={item._id}>
+                  <td className={"border-0 border-primary-border w-[50px] py-3 px-2 text-center"}>
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value=""
+                      id="flexCheckDefault"
+                    />
+                  </td>
+                  <td className={"border-0 border-primary-border py-3 px-2"}>
+                    <Link to={`/human/home/hid=${item._id}`}>
+                      <span>{`${item.name}`} - {`${item.phone}`}</span>
+                      <p className="text-primary-gray">{`${item?.email}`}</p>
+                      <p className="text-primary-gray">{ moment(item?.birthday).format("DD/MM/YYYY")}</p>
+                    </Link>
+                  </td>
+                  <td className={"border-0 border-primary-border py-3 px-2  "}>{`${item.address}`}</td>
+                  <td className={"border-0 border-primary-border py-3 px-2  "}>{}</td>
+                  <td className={"border-0 border-primary-border py-3 px-2  "}>{}</td>
+                  <td className={"border-0 border-primary-border py-3 px-2  "}>{}</td>
+                  <td className={"border-0 border-primary-border py-3 px-2  "}>{}</td>
+                  <td className={"border-0 border-primary-border py-3 px-2  "}>{}</td>
 
-          <DropdownOption>
-            <Menu.Item>
-              <div onClick={handleExportReport} className={"w-full hover:bg-gray-100 flex items-center px-4 py-3"}>
-                <img src="/images/common/icons8-download-48.png" alt="Download Excel" />
-                <div className={"flex-1 text-left ml-4"}>
-                  Download Excel
-                </div>
-              </div>
-            </Menu.Item>
-          </DropdownOption>
-        </div>
-      </div>
+                </tr>
 
-      <div className="px-6 py-4 grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 xs:grid-cols-2 gap-3">
-        {humans.listHuman.map((item: Human) => {
-          return (
-            <div
-              key={item._id}
-              className="relative flex flex-col justify-between items-center rounded-lg"
-              style={{
-                boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-                border: "1px solid #cccccc",
-              }}
-            >
-              {/* <div className="absolute top-2 right-2 w-[32px] h-[32px] cursor-pointer flex justify-center items-center bg-cbs-gray rounded-full">
-                <img src={ThreeDotIcon} alt="Three Dot" style={{ margin: 0 }} />
-              </div> */}
-              <div className="text-center ml-2 mr-2 pt-[20px] pb-[17px] h-[220px]">
-                <div className="flex justify-center mb-6">
-                  <img src={`${process.env.REACT_APP_URL_S3_CONTACT}/${item.image}`} alt="Avatar" className="w-20 h-20 rounded-full" />
-                </div>
-                <span className="text-xl font-normal">{`${item.name}`}</span>
-                <p className="text-sm pt-2 text-secondary-gray">{item?.company?.sign}.{item?.position?.name}</p>
-              </div>
-              <Link
-                to={`/human/home/hid=${item._id}`}
-                className="w-full text-center"
-              >
-                <div className="py-3 text-sm w-full rounded-bl-lg rounded-br-lg border border-primary-gray bg-primary text-primary-light">
-                  {t("view-info")}
-                </div>
-              </Link>
-            </div>
-          );
-        })}
-      </div>
-      {!!humans.totalRecord && humans.totalRecord - humans.listHuman.length > 0 && (
-        <div className="w-full flex justify-center my-5">
-          <button onClick={() => humans.fetchNextPageHuman()}>
-            <span className="text-primary">{`Xem thêm (${humans.totalRecord - humans.listHuman.length })`}</span>
-          </button>
-        </div>
-      )}
-    </section>
-  );
-};
+                // <div
+                //   key={item._id}
+                //   className="relative flex flex-col justify-between items-center rounded-lg"
+                //   style={{
+                //     boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                //     border: "1px solid #cccccc",
+                //   }}
+                // >
+                //   <div className="absolute top-2 right-2 w-[32px] h-[32px] cursor-pointer flex justify-center items-center bg-cbs-gray rounded-full">
+                //     <img src={ThreeDotIcon} alt="Three Dot" style={{ margin: 0 }} />
+                //   </div>
+                //   <div className="text-center ml-2 mr-2 pt-[20px] pb-[17px] h-[220px]">
+                //     <div className="flex justify-center mb-6">
+                //       <img src={`${process.env.REACT_APP_URL_S3_CONTACT}/${item.image}`} alt="Avatar" className="w-20 h-20 rounded-full" />
+                //     </div>
+                //     <span className="text-xl font-normal">{`${item.name}`}</span>
+                //     <p className="text-sm pt-2 text-secondary-gray">{item?.company?.sign}.{item?.position?.name}</p>
+                //   </div>
+                //   <Link
+                //     to={`/human/home/hid=${item._id}`}
+                //     className="w-full text-center"
+                //   >
+                //     <div className="py-3 text-sm w-full rounded-bl-lg rounded-br-lg border border-primary-gray bg-primary text-primary-light">
+                //       {t("view-info")}
+                //     </div>
+                //   </Link>
+                // </div>
+              );
+            })}
+          </tbody>
+        </table>
+      </section>
+    </FilterNav>
+  )
+}
