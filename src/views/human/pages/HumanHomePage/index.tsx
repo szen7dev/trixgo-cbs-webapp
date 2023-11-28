@@ -1,307 +1,467 @@
-/*=====1.LIBRARY=====*/
-import { FC, useEffect, useCallback, useState } from "react";
-import { Link, useParams, useHistory } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import { Menu } from '@headlessui/react';
-import { toast } from "react-toastify";
-import debounce from 'lodash/debounce';
-import moment from "moment";
-
-/*=====2.CSS=====*/
-import "views/human/styles/style.module.css";
-
-/*=====3.ICONS=====*/
-// import BackIcon from "assets/images/icon-back.svg";
-import SearchIcon from "assets/images/icons8-search.svg";
-// import ThreeDotIcon from "assets/images/icon-3dots.png";
-
-/*=====4.PAGES/COMPONENTS=====*/
-import { InputClearable, DropdownOption, Loader } from "shareComponents/common";
-import { NewHumanModal } from "views/human/shareComponents/common/NewHumanModal";
-import { useModal } from "services/hooks/useModal";
-import { DropdownFilterButton } from "views/human/shareComponents/common";
-
-/*=====5.TYPINGS=====*/
-import type { Human } from "typings/human";
-
-/*=====6.HOOKS/APIS=====*/
-import { useFetchListHuman, useCreateContactMutation, useHumanCustom } from "services/hooks/useHuman";
-import { useHistoryTraffics } from "services/hooks/auth/useAuth";
-
-import { useListAccessByContract, useListFilterContract } from "services/hooks/cmcs/useContract";
-import { useProjectCustom } from "services/hooks/items/useProject";
-
-/*=====7.OTHER=====*/
-import { APP_ID } from "apis/localdb"
-import { createLinkAndClick } from 'utils';
-import { FilterNav } from "./filterNav";
+import React, {FC, useContext, useEffect, useState} from "react";
+import { Loader, DropdownSearchableV2 } from "shareComponents/common";
+import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
+import maleUserIcon from "assets/images/icons8-business-building-48.svg";
+import categoryIcon from "assets/images/icons8-category-48.svg";
+import TriangleDown from "assets/icons/TriangleDown";
+import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
+import contractIcon from "assets/images/icons8-contract-64-blue.svg";
 import downloadIcon from "assets/images/icons8-download-96.svg";
+import projectIcon from "assets/images/icons8-project-50.svg";
 import iconPencil from "assets/images/icons8-pencil-96 1.png";
-import iconMaleUser from "assets/images/icons8-male-user-64.svg";
+import moment from "moment";
 import PaginateV2 from "shareComponents/common/PaginateV2";
-import React from "react";
-import { useAppSelector } from "redux/reducer";
+import {DOCUMENT_TYPES, DIRECTION_TYPES, DOCUMENT_TYPES_SORT} from "apis/localdb";
+import {useDatahubContact} from "services/hooks/datahub/contact/useDatahubContact";
+import {useProjectCustom} from "services/hooks/items/useProject";
+import {debounce} from "lodash";
+import {useContractIsMembers} from "services/hooks/items/useContract";
+import {Link} from "react-router-dom";
+import {useAppSelector} from "redux/reducer";
+import {setFilterDropdown} from "redux/reducer/DocumentHomeSlice";
+import {useDispatch} from "react-redux";
+import { toast } from "react-toastify";
+import { createLinkAndClick } from "utils";
+import { useQueryListCompany } from "services/hooks/useCompanies";
+
+import { useDocumentCustom, useListFilterDocument} from "services/hooks/document/useDocument";
+import { useFetchListHuman, useCreateContactMutation, useHumanCustom } from "services/hooks/useHuman";
 
 export const HumanHomePage: FC = () => {
+    type PaginateHandle = React.ElementRef<typeof PaginateV2>;
 
-  // page pagination
-  const { keywordInput } = useAppSelector(
-    (state) => state.cmcsHome.data
-  );
-  useEffect(() => {
-    setPageIndex(0);
-    ref.current && ref.current.resetPaginate();
-  }, [keywordInput]);
-  type PaginateHandle = React.ElementRef<typeof PaginateV2>;
-  const ref = React.useRef<PaginateHandle>(null);
-  const [pageIndex, setPageIndex] = useState(0);
-  const [recordSelected, setSelectRecord] = useState<any>({});
+    const dispatch = useDispatch();
+    const { keywordInput } = useAppSelector(
+        (state) => state.documentHome.data
+    );
 
-  const [fromToDate, setFromToDate] = useState({ fromDate: "", toDate: "" })
+    useEffect(() => {
+        setPageIndex(0);
+        ref.current && ref.current.resetPaginate();
+    }, [keywordInput]);
 
-  const [projectKeyword, setProjectKeyword] = useState("");
-  const [projectsID, setProjectsID] = useState<string[]>([]);
+    const [recordSelected, setSelectRecord] = useState<any>({});
 
-  const { listProjectsUserIsMember } = useProjectCustom({ paramsProjectsUserIsMember: { keyword: projectKeyword }, isFetchProjectsUserIsMember: true });
+    const ref = React.useRef<PaginateHandle>(null);
+    const [pageIndex, setPageIndex] = useState(0);
+    const [fromToDate, setFromToDate] = useState({ fromDate: "", toDate: "" })
 
-  const [listAccessByContractSellKeyword, setListAccessByContractSellKeyword] = useState("");
-  const [buyerInfosID, setBuyerInfosID] = useState<string[]>([]);
+    const [keywordDatahubContact, setKeywordDatahubContact] = useState("");
+    const [datahubContactsID, setDatahubContactsID] = useState<string[]>([]);
 
-  const [listAccessByContractBuyKeyword, setListAccessByContractBuyKeyword] = useState("");
-  const [sellerInfosID, setSellerInfosID] = useState<string[]>([]);
+    const [projectKeyword, setProjectKeyword] = useState("");
+    const [departmentsID, setDepartmentsID] = useState<string[]>([]);
 
-  const { listAccessByContract: listAccessByContractSell } = useListAccessByContract({ params: { keyword: listAccessByContractSellKeyword, option: 1 }, isFetchList: true });
-  const { listAccessByContract: listAccessByContractBuy } = useListAccessByContract({ params: { keyword: listAccessByContractBuyKeyword, option: 2 }, isFetchList: true });
+    const [types, setTypes] = useState<string[]>([]);
 
-  const [statuss, setStatuss] = useState<string[]>([]);
-  const [ontimes, setOntimes] = useState<string[]>([]);
-  const [onbudgets, setOnbudgets] = useState<string[]>([]);
-  const { isLoading, totalRecord, totalPage, hasNextPage, listCmcsByFilterWithPager, fetchNextPageListCmcsByFilter } = useListFilterContract({
-    params: {
-      ...fromToDate,
-      projectsID,
-      buyerInfosID,
-      sellerInfosID,
-      statuss,
-      ontimes,
-      onbudgets,
-      keyword: keywordInput
-    },
-    isFetchList: true
-  })
+    const [directions, setDirections] = useState<string[]>([]);
 
-  const { t } = useTranslation(["human"]);
-  const { id: departmentID } = useParams<{ id: string }>();
-  const [pageParam, setPageParam] = useState<any>({ departmentID });
-  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
-    isExporting: false,
-  });
-  const { openModal } = useModal();
+    const [contractKeyword, setContractKeyword] = useState("");
+    const [contractsID, setContractsID] = useState<string[]>([]);
 
-  // Lấy ra data/messageList data ngay lúc đầu vào màn hình
-  const humans = useFetchListHuman(pageParam);
-  // console.log(humans)
+    const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+        isExporting: false,
+    });
+    const { exportDocumentAsync } = useDocumentCustom({});
+    // const { data: listDatahubContact } = useDatahubContact({ keyword: keywordDatahubContact }, true, false); // Danh bạ hệ thống
+	const { data: listDatahubContact } = useQueryListCompany({ keyword: keywordDatahubContact }); // Danh bạ hệ thống mới
+    
+    const { listProjectsUserIsMember } = useProjectCustom({ paramsProjectsUserIsMember: { keyword: projectKeyword }, isFetchProjectsUserIsMember: true });
+    const { listContracts } = useContractIsMembers({ params: { keyword: contractKeyword, populates: JSON.stringify({ "path": "project", "select": "name sign" }) }, isFetch: true });
 
-  // Tạo mẩu tin mới, khởi tạo sẵn hàm createContactMutateAsync để khi user
-  // bấm vào nút tạo thì gọi luôn đến api tạo mẩu tin
-  const { createContactMutateAsync } = useCreateContactMutation();
-  const { createHistoryTraffics } = useHistoryTraffics();
-  const { exportHumanAsync } = useHumanCustom({});
+    const { listDocumentWithPager, isLoading, totalRecord, totalPage, fetchNextPageDocument, hasNextPage, refetchListDocument, isFetching } = useListFilterDocument({
+        params: {
+            ...fromToDate,
+            datahubContactsID,
+            types,
+            departmentsID,
+            directions,
+            contractsID,
+            keyword: keywordInput
+        },
+        isFetchList: true
+    });
 
-  useEffect(() => {
-    createHistoryTraffics(
-      {
-        "appID": APP_ID.HUMAN.id,
-        "menuID": APP_ID.CMCS.menuCmcsApp.income.id,
-        "type": 1
-      }
-    )
-  }, [])
+    const handleExport = async () => {
+        try {
+            setStateExport({ isExporting: true });
+            const { error, data } = await exportDocumentAsync({
+                filterParams: {  
+                    ...fromToDate,
+                    datahubContactsID,
+                    types,
+                    departmentsID,
+                    directions,
+                    contractsID,
+                    keyword: keywordInput
+                }
+            });
 
-  const handleFinishForm = useCallback(async (values) => {
-    const res = await createContactMutateAsync(values);
-    if (!res.error) {
-      humans.refetchListHuman()
-      return true;
-    }
-    return false;
-  }, [createContactMutateAsync, humans]);
+            if(error) {
+                return toast.warn(data?.message);
+            }
 
-  const handleOnFilter = useCallback((values) => {
-    const optionFilter = {
-      ...values,
-      type: values.type?._id ?? values.type,
-      gender: values.gender?._id ?? values.gender,
-      realStatus: values.realStatus?._id ?? values.realStatus,
-      insuranceStatus: values.insuranceStatus?._id ?? values.insuranceStatus,
-      familyPolicy: values.familyPolicy?._id ?? values.familyPolicy,
-      departmentID: values.department?._id ?? values.department,
-      positionID: values.position?._id ?? values.position,
-      contractTypeID: values.contractType?._id ?? values.contractType,
-      workingStatusID: values.workingStatus?._id ?? values.workingStatus,
+            data && createLinkAndClick(data, '_self');
+        } catch (error: any) {
+            toast.error(error.message)
+        } finally {
+            setStateExport({ isExporting: false });
+        }
     }
 
-    setPageParam(optionFilter);
-    return true;
-  }, [])
-  
-  const handleOnCancelFilter = useCallback(() => {
-    setPageParam({});
-  }, []);
-
-  const handleExportReport = async () => {
-    try {
-      setStateExport({ isExporting: true });
-      const { error, data } = await exportHumanAsync({
-        filterParams: pageParam
-      });
-
-      if (error) {
-        return toast.warn(data?.message);
-      }
-
-      data && createLinkAndClick(data, '_self');
-    } catch (error: any) {
-      toast.error(error.message)
-    } finally {
-      setStateExport({ isExporting: false });
+    if(stateExport.isExporting) {
+        return <Loader className="border-primary" />
     }
-  }
+    return (
+        <div className="flex flex-1 flex-col overflow-hidden h-full">
+            {isLoading || isFetching && <Loader absolute={true} className="border-primary" />}
+            <div className={"sticky top-0 z-10"}>
+                <div className={"flex flex-wrap items-center px-4 py-2"}>
+                    <DropdownSearchableV2
+                        className={"mr-4 border border-primary-border rounded-lg mb-2"}
+                        placeholder={"Đơn vị ban hành"}
+                        prefixIcon={<img className={"mr-2"} src={maleUserIcon} alt={"icon"} />}
+                        isMultiple={true}
+                        allowClearValueSingleInput={true}
+                        data={listDatahubContact}
+                        formatItem={{
+                            id: "_id",
+                            text: "name"
+                        }}
+                        onSearchInputChange={debounce(
+                            (valueSearch) => setKeywordDatahubContact(valueSearch),
+                            500
+                        )}
+                        onchangeValue={item => {
+                            const cloneIDs = [...datahubContactsID];
+                            cloneIDs.push(item._id);
+                            setDatahubContactsID(cloneIDs);
+                            dispatch(setFilterDropdown({ keyFilter: "datahubContactsID", dataFilter: cloneIDs }))
 
-  if (stateExport.isExporting) {
-    return <Loader className="border-primary" />
-  }
+                            setPageIndex(0);
+                            ref.current && ref.current.resetPaginate();
+                        }}
+                        onClearData={() => {
+                            setDatahubContactsID([]);
+                            dispatch(setFilterDropdown({ keyFilter: "datahubContactsID", dataFilter: [] }))
 
-  return (
-    <FilterNav>
-      <section className="w-full">
-        <div className={"flex items-center mb-2.5"}>
-          <div className="w-[50px] text-center mx-1">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              value=""
-              id="flexCheckDefault"
-            />
-          </div>
-          <button className={"flex items-center justify-center w-[50px] mx-1"} onClick={handleExportReport}>
-            <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"} />
-          </button>
-          <button
-            className={"flex items-center justify-center w-[50px] mx-1"}>
-            <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"} />
-          </button>
-          <PaginateV2
-            ref={ref}
-            totalRecord={totalRecord}
-            totalPages={totalPage}
-            limit={10}
-            hasNextPage={hasNextPage}
-            isFetching={isLoading}
-            nextPageAction={() => {
-              fetchNextPageListCmcsByFilter();
-              setPageIndex(oldState => oldState + 1)
-            }}
-            prevPageAction={() => {
-              setPageIndex(oldState => oldState - 1)
-            }}
-          />
-        </div>
+                            setPageIndex(0);
+                            ref.current && ref.current.resetPaginate();
+                        }}
+                        onMultipleRemoveValue={id => {
+                            const cloneIDs = [...datahubContactsID];
+                            const newList = cloneIDs.filter(selectId => selectId !== id);
+                            setDatahubContactsID(newList);
+                            dispatch(setFilterDropdown({ keyFilter: "datahubContactsID", dataFilter: newList }))
 
-        <table className={"table-fixed border-collapse w-full"}>
-          <thead>
-            <tr className={"sticky top-0 z-5 border-0.5"}>
-              <th className={"bg-cbs-table-header text-primary-gray text-center font-normal w-[50px] border-0 border-primary-border align-middle py-3 px-2"}>
-              </th>
-              <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-[200px] border-0 border-primary-border py-3 px-2"}>
-                Họ và tên
-              </th>
-              <th className={"bg-cbs-table-header text-primary-gray text-left font-normal  w-[300px] border-0 border-primary-border py-3 px-2"}>
-                Thường chú
-              </th>
-              <th className={"bg-cbs-table-header text-primary-gray text-left  font-normal  w-[250px] border-0 border-primary-border py-3 px-2"}>
-                Nguyên quán
-              </th>
-              <th className={"bg-cbs-table-header text-primary-gray text-left w-[90px] font-normal border-0 border-primary-border py-3 px-2"}>
-                Giới tính
-              </th>
-              <th className={"bg-cbs-table-header text-primary-gray w-[90px] text-left font-normal border-0 border-primary-border py-3 px-2"}>
-                Phòng ban
-              </th>
-              <th className={"bg-cbs-table-header text-primary-gray text-left w-[120px] font-normal border-0 border-primary-border py-3 px-2"}>
-                Chức vụ
-              </th>
-              <th className={"bg-cbs-table-header text-primary-gray text-left w-[110px] font-normal border-0 border-primary-border py-3 px-2"}>
-                Loại hợp đồng
-              </th>
-              <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-[100px] border-0 border-primary-border py-3 px-2"}>
-                Tình trạng
-              </th>
-              <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-[100px] border-0 border-primary-border py-3 px-2"}>
-                Ghi chú
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {humans.listHuman.map((item: Human) => {
-              return (
-                <tr className="border-b-0.5" key={item._id}>
-                  <td className={"border-0 border-primary-border w-[50px] py-3 px-2 text-center"}>
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value=""
-                      id="flexCheckDefault"
+                            setPageIndex(0);
+                            ref.current && ref.current.resetPaginate();
+                        }}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.text}</p>
+                        )}
+                        selectOneByOne={true}
                     />
-                  </td>
-                  <td className={"border-0 border-primary-border py-3 px-2"}>
-                    <Link to={`/human/home/hid=${item._id}`}>
-                      <span>{`${item.name}`} - {`${item.phone}`}</span>
-                      <p className="text-primary-gray">{`${item?.email}`}</p>
-                      <p className="text-primary-gray">{ moment(item?.birthday).format("DD/MM/YYYY")}</p>
-                    </Link>
-                  </td>
-                  <td className={"border-0 border-primary-border py-3 px-2  "}>{`${item.address}`}</td>
-                  <td className={"border-0 border-primary-border py-3 px-2  "}>{}</td>
-                  <td className={"border-0 border-primary-border py-3 px-2  "}>{}</td>
-                  <td className={"border-0 border-primary-border py-3 px-2  "}>{}</td>
-                  <td className={"border-0 border-primary-border py-3 px-2  "}>{}</td>
-                  <td className={"border-0 border-primary-border py-3 px-2  "}>{}</td>
+                    <DropdownSearchableV2
+                        className={"mr-4 border border-primary-border rounded-lg mb-2"}
+                        placeholder={"Tính chất hồ sơ"}
+                        prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"} />}
+                        isMultiple={true}
+                        disableSearch={true}
+                        allowClearValueSingleInput={true}
+                        data={DOCUMENT_TYPES_SORT}
+                        formatItem={{
+                            "id": "value"
+                        }}
+                        onchangeValue={item => {
+                            const cloneIDs = [...types];
+                            cloneIDs.push(item.value);
+                            setTypes(cloneIDs);
+                            dispatch(setFilterDropdown({ keyFilter: "types", dataFilter: cloneIDs }))
 
-                </tr>
+                            setPageIndex(0);
+                            ref.current && ref.current.resetPaginate();
+                        }}
+                        onClearData={() => {
+                            setTypes([]);
+                            dispatch(setFilterDropdown({ keyFilter: "types", dataFilter: [] }))
 
-                // <div
-                //   key={item._id}
-                //   className="relative flex flex-col justify-between items-center rounded-lg"
-                //   style={{
-                //     boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-                //     border: "1px solid #cccccc",
-                //   }}
-                // >
-                //   <div className="absolute top-2 right-2 w-[32px] h-[32px] cursor-pointer flex justify-center items-center bg-cbs-gray rounded-full">
-                //     <img src={ThreeDotIcon} alt="Three Dot" style={{ margin: 0 }} />
-                //   </div>
-                //   <div className="text-center ml-2 mr-2 pt-[20px] pb-[17px] h-[220px]">
-                //     <div className="flex justify-center mb-6">
-                //       <img src={`${process.env.REACT_APP_URL_S3_CONTACT}/${item.image}`} alt="Avatar" className="w-20 h-20 rounded-full" />
-                //     </div>
-                //     <span className="text-xl font-normal">{`${item.name}`}</span>
-                //     <p className="text-sm pt-2 text-secondary-gray">{item?.company?.sign}.{item?.position?.name}</p>
-                //   </div>
-                //   <Link
-                //     to={`/human/home/hid=${item._id}`}
-                //     className="w-full text-center"
-                //   >
-                //     <div className="py-3 text-sm w-full rounded-bl-lg rounded-br-lg border border-primary-gray bg-primary text-primary-light">
-                //       {t("view-info")}
-                //     </div>
-                //   </Link>
-                // </div>
-              );
-            })}
-          </tbody>
-        </table>
-      </section>
-    </FilterNav>
-  )
+                            setPageIndex(0);
+                            ref.current && ref.current.resetPaginate();
+                        }}
+                        onMultipleRemoveValue={id => {
+                            const cloneIDs = [...types];
+                            const newList = cloneIDs.filter(selectId => selectId !== id);
+                            setTypes(newList);
+                            dispatch(setFilterDropdown({ keyFilter: "types", dataFilter: newList }))
+
+                            setPageIndex(0);
+                            ref.current && ref.current.resetPaginate();
+                        }}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.text}</p>
+                        )}
+                        selectOneByOne={true}
+                    />
+                    <DropdownSearchableV2
+                        className={"mr-4 border border-primary-border rounded-lg mb-2"}
+                        placeholder={"Dự án"}
+                        prefixIcon={<img className={"mr-2"} src={projectIcon} alt={"icon"} />}
+                        isMultiple={true}
+                        allowClearValueSingleInput={true}
+                        data={listProjectsUserIsMember}
+                        formatItem={{
+                            id: "_id",
+                            text: "name"
+                        }}
+                        onSearchInputChange={debounce(valueSearch => setProjectKeyword(valueSearch), 500)}
+                        onchangeValue={item => {
+                            const cloneIDs = [...departmentsID];
+                            cloneIDs.push(item._id);
+                            setDepartmentsID(cloneIDs);
+                            dispatch(setFilterDropdown({ keyFilter: "departmentsID", dataFilter: cloneIDs }))
+
+                            setPageIndex(0);
+                            ref.current && ref.current.resetPaginate();
+                        }}
+                        onClearData={() => {
+                            setDepartmentsID([]);
+                            dispatch(setFilterDropdown({ keyFilter: "departmentsID", dataFilter: [] }))
+
+                            setPageIndex(0);
+                            ref.current && ref.current.resetPaginate();
+                        }}
+                        onMultipleRemoveValue={id => {
+                            const cloneIDs = [...departmentsID];
+                            const newList = cloneIDs.filter(selectId => selectId !== id);
+                            setDepartmentsID(newList);
+                            dispatch(setFilterDropdown({ keyFilter: "departmentsID", dataFilter: newList }))
+
+                            setPageIndex(0);
+                            ref.current && ref.current.resetPaginate();
+                        }}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.sign}.{item.text}</p>
+                        )}
+                        selectOneByOne={true}
+                    />
+                    <TimeRangeDropdown
+                        className={
+                            "mr-4 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
+                        }
+                        placeholder={"Ngày nhận"}
+                        iconBack={<TriangleDown />}
+                        iconFront={<img src={timelineIcon} alt={"----"} />}
+                        onValueChange={(val) => {
+                            setFromToDate(val)
+                            dispatch(setFilterDropdown({ keyFilter: "fromDate", dataFilter: val.fromDate }))
+                            dispatch(setFilterDropdown({ keyFilter: "toDate", dataFilter: val.toDate }))
+                            setPageIndex(0);
+                            ref.current && ref.current.resetPaginate();
+                        }}
+                        options={[
+                            {
+                                text: "Tất cả",
+                                fromDate: "",
+                                toDate: "",
+                            },
+                            {
+                                text: "Cách đây 1 tuần",
+                                fromDate: moment().subtract(7, "days").format("YYYY-MM-DD h:mm"),
+                                toDate: moment().add(1, "minutes").format("YYYY-MM-DD h:mm"),
+                            },
+                            {
+                                text: "Cách đây 1 tháng",
+                                fromDate: moment().subtract(1, "months").format("YYYY-MM-DD h:mm"),
+                                toDate: moment().add(1, "minutes").format("YYYY-MM-DD h:mm"),
+                            },
+                        ]}
+                    />
+                    <DropdownSearchableV2
+                        className={"mr-4 border border-primary-border rounded-lg mb-2"}
+                        placeholder={"Hướng hồ sơ"}
+                        prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"} />}
+                        isMultiple={true}
+                        disableSearch={true}
+                        allowClearValueSingleInput={true}
+                        data={DIRECTION_TYPES}
+                        formatItem={{
+                            "id": "value"
+                        }}
+                        onchangeValue={item => {
+                            const cloneIDs = [...directions];
+                            cloneIDs.push(item.value);
+                            setDirections(cloneIDs);
+                            dispatch(setFilterDropdown({ keyFilter: "directions", dataFilter: cloneIDs }))
+
+                            setPageIndex(0);
+                            ref.current && ref.current.resetPaginate();
+                        }}
+                        onClearData={() => {
+                            setDirections([]);
+                            dispatch(setFilterDropdown({ keyFilter: "directions", dataFilter: [] }))
+
+                            setPageIndex(0);
+                            ref.current && ref.current.resetPaginate();
+                        }}
+                        onMultipleRemoveValue={id => {
+                            const cloneIDs = [...directions];
+                            const newList = cloneIDs.filter(selectId => selectId !== id);
+                            setDirections(newList);
+                            dispatch(setFilterDropdown({ keyFilter: "directions", dataFilter: newList }))
+
+                            setPageIndex(0);
+                            ref.current && ref.current.resetPaginate();
+                        }}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.text}</p>
+                        )}
+                        selectOneByOne={true}
+                    />
+                    <DropdownSearchableV2
+                        className={"mr-4 border border-primary-border rounded-lg mb-2"}
+                        placeholder={"Hợp đồng"}
+                        prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"} />}
+                        isMultiple={true}
+                        disableSearch={false}
+                        allowClearValueSingleInput={true}
+                        data={listContracts}
+                        formatItem={{
+                            id: "_id",
+                            text: "name"
+                        }}
+                        onSearchInputChange={debounce(valueSearch => setContractKeyword(valueSearch), 500)}
+                        onchangeValue={item => {
+                            const cloneIDs = [...contractsID];
+                            cloneIDs.push(item._id);
+                            setContractsID(cloneIDs);
+                            dispatch(setFilterDropdown({ keyFilter: "contractsID", dataFilter: cloneIDs }))
+
+                            setPageIndex(0);
+                            ref.current && ref.current.resetPaginate();
+                        }}
+                        onClearData={() => {
+                            setContractsID([]);
+                            dispatch(setFilterDropdown({ keyFilter: "contractsID", dataFilter: [] }))
+
+                            setPageIndex(0);
+                            ref.current && ref.current.resetPaginate();
+                        }}
+                        onMultipleRemoveValue={id => {
+                            const cloneIDs = [...contractsID];
+                            const newList = cloneIDs.filter(selectId => selectId !== id);
+                            setContractsID(newList);
+                            dispatch(setFilterDropdown({ keyFilter: "contractsID", dataFilter: newList }))
+
+                            setPageIndex(0);
+                            ref.current && ref.current.resetPaginate();
+                        }}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.project.sign}.{item.name}-{item.sign}</p>
+                        )}
+                        selectOneByOne={true}
+                    />
+                </div>
+                <div className={"flex items-center pb-2"}>
+                    <span className={"text-lg mx-4"}>Danh sách nhân sự</span>
+                    <button className={"flex items-center justify-center mx-3 ml-6"}
+                        onClick={handleExport.bind(null)}
+                    >
+                        <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"}/>
+                    </button>
+                    <PaginateV2
+                        ref={ref}
+                        totalRecord={totalRecord}
+                        totalPages={totalPage}
+                        limit={20}
+                        hasNextPage={hasNextPage}
+                        isFetching={isLoading}
+                        nextPageAction={() => {
+                            fetchNextPageDocument();
+                            setPageIndex(oldState => oldState + 1)
+                        }}
+                        prevPageAction={() => {
+                            setPageIndex(oldState => oldState - 1)
+                        }}
+                    />
+                </div>
+            </div>
+            <div className="flex-1 overflow-y-auto">
+                {(!listDocumentWithPager[pageIndex] || listDocumentWithPager[pageIndex].length === 0) && !isLoading && !isFetching && (
+                    <h2 className="text-center">Không có kết quả được trả về</h2>
+                )}
+
+                {!isLoading && listDocumentWithPager[pageIndex] && listDocumentWithPager[pageIndex].length > 0 && (
+                    <table className={"table-fixed border-collapse w-full"}>
+                        <thead>
+                            <tr className={"sticky top-0 z-5"}>
+                                <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-1/5 border-b-0.5 border-primary-border align-middle py-3"}>
+                                    Nội dung
+                                </th>
+                                <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-1/6 border-b-0.5 border-primary-border align-middle py-3"}>
+                                    Đơn vị ban hành
+                                </th>
+                                <th className={"bg-cbs-table-header text-primary-gray text-left font-normal border-b-0.5 border-primary-border align-middle py-3"}>
+                                    Mã hiệu
+                                </th>
+                                <th className={"bg-cbs-table-header text-primary-gray text-left font-normal border-b-0.5 border-primary-border align-middle py-3"}>
+                                    Ngày văn bản
+                                </th>
+                                <th className={"bg-cbs-table-header text-primary-gray text-left font-normal border-b-0.5 border-primary-border align-middle py-3"}>
+                                    Mã hiệu lưu
+                                </th>
+                                <th className={"bg-cbs-table-header w-[70px] text-primary-gray text-center font-normal border-b-0.5 border-primary-border align-middle py-3"}>
+                                    Số lượng
+                                </th>
+                                <th className={"bg-cbs-table-header text-primary-gray text-left font-normal border-b-0.5 border-primary-border align-middle py-3"}>
+                                    Tình trạng
+                                </th>
+                                <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-1/7 border-b-0.5 border-primary-border align-middle py-3"}>
+                                    Ghi chú
+                                </th>
+                                <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-1/7 border-b-0.5 border-primary-border align-middle py-3"}>
+                                    Địa chỉ lưu trữ
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                (listDocumentWithPager[pageIndex] ?? []).map((document, i) => (
+                                    <tr key={i}>
+                                        <td className={"border-b-0.5 border-primary-border py-3"}>
+                                            <Link to={`/document/home/${document._id}`}>{document.name}</Link>
+                                            <p className={"mt-1 text-primary-gray text-xs"}>{document.author?.fullname}-{document.createAt}</p>
+                                        </td>
+                                        <td className={"border-b-0.5 border-primary-border py-3"}>
+                                            {document.publish?.name}
+                                        </td>
+                                        <td className={"border-b-0.5 border-primary-border py-3 break-all"}>
+                                            {document.sign}
+                                        </td>
+                                        <td className={"border-b-0.5 border-primary-border py-3 text-center"}>
+                                            {moment(document.date).format('DD/MM/YYYY')}
+                                        </td>
+                                        <td className={"border-b-0.5 border-primary-border py-3 break-all"}>
+                                            {document.storeSign}
+                                        </td>
+                                        <td className={"border-b-0.5 border-primary-border py-3 text-right pr-2"}>
+                                            {document.amount}
+                                        </td>
+                                        <td className={"border-b-0.5 border-primary-border py-3"}>
+                                            {document.status}
+                                        </td>
+                                        <td className={"border-b-0.5 border-primary-border py-3"}>
+                                            {document.note}
+                                        </td>
+                                        <td className={"border-b-0.5 border-primary-border py-3"}>
+                                            {document.storage?.name}
+                                        </td>
+                                    </tr>
+                                ))}
+                        </tbody>
+                    </table>
+                )}
+            </div>
+        </div>
+    )
 }
