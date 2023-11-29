@@ -650,6 +650,7 @@ export const DocumentProjectPage: FC = () => {
                     />
                 </div>
             </div>
+            
             <div className="flex-1 overflow-y-auto">
                 {/* Content */}
                 {isLoading || isFetching && <Loader absolute={true} className="border-primary" />}

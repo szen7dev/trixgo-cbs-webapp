@@ -462,7 +462,7 @@ export const DashboardV2: FC<Props> = () => {
           {tabIndex === 2 && (
             <DropdownSearchableV2
               reset={reset}
-              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              className={"mr-1 border border-primary-border rounded-lg mb-2"}
               placeholder={"Đơn vị thực hiện"}
               countBadge={querySubject.companiesOfAssignee.length}
               showTriangle={true}
@@ -525,9 +525,9 @@ export const DashboardV2: FC<Props> = () => {
               renderItem={(item) => (
                 <p className={"min-w-[300px]"}>{item.text}</p>
               )}
-              prefixIcon={
-                <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
-              }
+              // prefixIcon={
+              //   <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
+              // }
             />
           )}
 
@@ -535,7 +535,7 @@ export const DashboardV2: FC<Props> = () => {
             <DropdownSearchableV2
               selectOneByOne={true}
               reset={reset}
-              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              className={"mr-1 border border-primary-border rounded-lg mb-2"}
               placeholder={"Người thực hiện"}
               showTriangle={true}
               isMultiple={true}
@@ -626,20 +626,20 @@ export const DashboardV2: FC<Props> = () => {
                   </div>
                 </div>
               )}
-              prefixIcon={
-                <img className={"mr-2"} src={maleUserIcon} alt={"icon"} />
-              }
+              // prefixIcon={
+              //   <img className={"mr-2"} src={maleUserIcon} alt={"icon"} />
+              // }
             />
           )}
 
           {tabIndex === 2 && (
             <TimeRangeDropdown
               className={
-                "mr-2 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
+                "mr-1 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
               }
               placeholder={"Thời hạn"}
               iconBack={<TriangleDown />}
-              iconFront={<img src={timelineIcon} alt={"----"} />}
+              // iconFront={<img src={timelineIcon} alt={"----"} />}
               onValueChange={(val) => {
                 setFromExpiredDate(val.fromDate);
                 setToExpiredDate(val.toDate);
@@ -676,7 +676,7 @@ export const DashboardV2: FC<Props> = () => {
               selectOneByOne={true}
               reset={reset}
               countBadge={queryFile.companyOfAuthorsID.length}
-              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              className={"mr-1 border border-primary-border rounded-lg mb-2"}
               placeholder={"Đơn vị tạo"}
               onchangeValue={(value) => {
                 dispatch(setTabActive(tabIndex));
@@ -735,9 +735,9 @@ export const DashboardV2: FC<Props> = () => {
               renderItem={(item) => (
                 <p className={"min-w-[300px]"}>{item.text}</p>
               )}
-              prefixIcon={
-                <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
-              }
+              // prefixIcon={
+              //   <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
+              // }
             />
           )}
 
@@ -750,7 +750,7 @@ export const DashboardV2: FC<Props> = () => {
                   ? (queryFile.authorsID && queryFile.authorsID.length) || 0
                   : 0
               }
-              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              className={"mr-1 border border-primary-border rounded-lg mb-2"}
               placeholder={"Người tạo"}
               showTriangle={true}
               isMultiple={true}
@@ -845,9 +845,9 @@ export const DashboardV2: FC<Props> = () => {
                   </div>
                 </div>
               )}
-              prefixIcon={
-                <img className={"mr-2"} src={maleUserIcon} alt={"icon"} />
-              }
+              // prefixIcon={
+              //   <img className={"mr-2"} src={maleUserIcon} alt={"icon"} />
+              // }
             />
           )}
 
@@ -856,7 +856,7 @@ export const DashboardV2: FC<Props> = () => {
               reset={reset}
               selectOneByOne={true}
               countBadge={queryResponse.companyOfAuthorsID.length}
-              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              className={"mr-1 border border-primary-border rounded-lg mb-2"}
               // placeholder={"Đơn vị tạo phản hồi"}
               placeholder={t("homepage:companyAuthor")}
               onchangeValue={(value) => {
@@ -918,9 +918,9 @@ export const DashboardV2: FC<Props> = () => {
               renderItem={(item) => (
                 <p className={"min-w-[300px]"}>{item.text}</p>
               )}
-              prefixIcon={
-                <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
-              }
+              // prefixIcon={
+              //   <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
+              // }
             />
           )}
 
@@ -929,7 +929,7 @@ export const DashboardV2: FC<Props> = () => {
               selectOneByOne={true}
               reset={reset}
               countBadge={queryResponse.authorsID.length}
-              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              className={"mr-1 border border-primary-border rounded-lg mb-2"}
               placeholder={t("homepage:author")}
               showTriangle={true}
               isMultiple={true}
@@ -1019,9 +1019,9 @@ export const DashboardV2: FC<Props> = () => {
                   </div>
                 </div>
               )}
-              prefixIcon={
-                <img className={"mr-2"} src={maleUserIcon} alt={"icon"} />
-              }
+              // prefixIcon={
+              //   <img className={"mr-2"} src={maleUserIcon} alt={"icon"} />
+              // }
             />
           )}
 
@@ -1029,11 +1029,11 @@ export const DashboardV2: FC<Props> = () => {
             <DropdownSearchableV2
               selectOneByOne={true}
               reset={reset}
-              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              className={"mr-1 border border-primary-border rounded-lg mb-2"}
               placeholder={t("homepage:project")}
-              prefixIcon={
-                <img className={"mr-2"} src={projectIcon} alt={"icon"} />
-              }
+              // prefixIcon={
+              //   <img className={"mr-2"} src={projectIcon} alt={"icon"} />
+              // }
               isMultiple={true}
               onchangeValue={(value) => {
                 if (!project?.includes?.(value.id as string)) {
@@ -1072,11 +1072,11 @@ export const DashboardV2: FC<Props> = () => {
           {(tabIndex === 1 || tabIndex === 3) && (
             <TimeRangeDropdown
               className={
-                "mr-2 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
+                "mr-1 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
               }
               placeholder={t("homepage:timecCreated")}
               iconBack={<TriangleDown />}
-              iconFront={<img src={timelineIcon} alt={"----"} />}
+              // iconFront={<img src={timelineIcon} alt={"----"} />}
               onValueChange={(val) => {
                 setFromCreateDate(val.fromDate);
                 settoCreateDate(val.toDate);
@@ -1116,11 +1116,11 @@ export const DashboardV2: FC<Props> = () => {
               selectOneByOne={true}
               disableSearch={true}
               reset={reset}
-              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              className={"mr-1 border border-primary-border rounded-lg mb-2"}
               placeholder={"Quá hạn"}
-              prefixIcon={
-                <img className={"mr-2"} src={timeTableIcon} alt={"icon"} />
-              }
+              // prefixIcon={
+              //   <img className={"mr-2"} src={timeTableIcon} alt={"icon"} />
+              // }
               onchangeValue={(val) => {
                 setIsExpired(val.id);
                 dispatch(setTabActive(tabIndex));
@@ -1147,11 +1147,11 @@ export const DashboardV2: FC<Props> = () => {
             <DropdownSearchableV2
               selectOneByOne={true}
               reset={reset}
-              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              className={"mr-1 border border-primary-border rounded-lg mb-2"}
               placeholder={"Trạng thái"}
-              prefixIcon={
-                <img className={"mr-2"} src={categoryIcon} alt={"icon"} />
-              }
+              // prefixIcon={
+              //   <img className={"mr-2"} src={categoryIcon} alt={"icon"} />
+              // }
               isMultiple={true}
               disableSearch={true}
               onchangeValue={(value) => {
@@ -1204,11 +1204,11 @@ export const DashboardV2: FC<Props> = () => {
             <DropdownSearchableV2
               selectOneByOne={true}
               reset={reset}
-              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              className={"mr-1 border border-primary-border rounded-lg mb-2"}
               placeholder={t("homepage:category")}
-              prefixIcon={
-                <img className={"mr-2"} src={categoryIcon} alt={"icon"} />
-              }
+              // prefixIcon={
+              //   <img className={"mr-2"} src={categoryIcon} alt={"icon"} />
+              // }
               isMultiple={false}
               disableSearch={true}
               data={[
@@ -1242,11 +1242,11 @@ export const DashboardV2: FC<Props> = () => {
             <DropdownSearchableV2
               selectOneByOne={true}
               reset={reset}
-              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              className={"mr-1 border border-primary-border rounded-lg mb-2"}
               placeholder={"Loại"}
-              prefixIcon={
-                <img className={"mr-2"} src={categoryIcon} alt={"icon"} />
-              }
+              // prefixIcon={
+              //   <img className={"mr-2"} src={categoryIcon} alt={"icon"} />
+              // }
               isMultiple={true}
               disableSearch={true}
               onchangeValue={(value) => {
@@ -1321,11 +1321,11 @@ export const DashboardV2: FC<Props> = () => {
               selectOneByOne={true}
               disableSearch={true}
               reset={reset}
-              className={"mr-2 border border-primary-border rounded-lg mb-2"}
+              className={"mr-1 border border-primary-border rounded-lg mb-2"}
               placeholder={"Cấp"}
-              prefixIcon={
-                <img className={"mr-2"} src={categoryIcon} alt={"icon"} />
-              }
+              // prefixIcon={
+              //   <img className={"mr-2"} src={categoryIcon} alt={"icon"} />
+              // }
               onchangeValue={(val) => {
                 setIsParent(val.id);
                 dispatch(setTabActive(tabIndex));
@@ -1791,7 +1791,7 @@ export const DashboardV2: FC<Props> = () => {
                         </Link>
 
                         {item.subtype != 4 ? (
-                          <div className="flex mr-2 gap-2 text-primary-gray pb-2">
+                          <div className="flex mr-1 gap-2 text-primary-gray pb-2">
                             {item?.lastComment?.files
                               ?.slice(0, 3)
                               .map((file: any, subindex: any) => (
@@ -1822,7 +1822,7 @@ export const DashboardV2: FC<Props> = () => {
                         )}
 
                         {item.subtype != 4 ? (
-                          <div className="flex wrap flex-wrap mr-2 text-primary-gray pb-2">
+                          <div className="flex wrap flex-wrap mr-1 text-primary-gray pb-2">
                             {item?.lastComment?.images
                               ?.slice(0, 3)
                               .map((file: any, subindex: any) => (

@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Menu } from '@headlessui/react';
 import { toast } from "react-toastify";
 import debounce from 'lodash/debounce';
+import moment from "moment";
 
 /*=====2.CSS=====*/
 import "views/human/styles/style.module.css";
@@ -26,9 +27,9 @@ import type { Human } from "typings/human";
 /*=====6.HOOKS/APIS=====*/
 import { useFetchListHuman, useCreateContactMutation, useHumanCustom } from "services/hooks/useHuman";
 import { useHistoryTraffics } from "services/hooks/auth/useAuth";
+
 import { useListAccessByContract, useListFilterContract } from "services/hooks/cmcs/useContract";
 import { useProjectCustom } from "services/hooks/items/useProject";
-// import { usePcmProject } from "services/hooks/pcm/usePcmProject";
 
 /*=====7.OTHER=====*/
 import { APP_ID } from "apis/localdb"
@@ -41,7 +42,7 @@ import PaginateV2 from "shareComponents/common/PaginateV2";
 import React from "react";
 import { useAppSelector } from "redux/reducer";
 
-export const HumanHomePageV2: FC = () => {
+export const HumanHomePage: FC = () => {
 
   // page pagination
   const { keywordInput } = useAppSelector(
@@ -88,12 +89,9 @@ export const HumanHomePageV2: FC = () => {
     },
     isFetchList: true
   })
-  // end page pagination
-  // 
+
   const { t } = useTranslation(["human"]);
   const { id: departmentID } = useParams<{ id: string }>();
-  // const history = useHistory();
-
   const [pageParam, setPageParam] = useState<any>({ departmentID });
   const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
     isExporting: false,
@@ -102,6 +100,7 @@ export const HumanHomePageV2: FC = () => {
 
   // Lấy ra data/messageList data ngay lúc đầu vào màn hình
   const humans = useFetchListHuman(pageParam);
+  // console.log(humans)
 
   // Tạo mẩu tin mới, khởi tạo sẵn hàm createContactMutateAsync để khi user
   // bấm vào nút tạo thì gọi luôn đến api tạo mẩu tin
@@ -144,12 +143,8 @@ export const HumanHomePageV2: FC = () => {
 
     setPageParam(optionFilter);
     return true;
-  }, []);
-
-  // const handleOnCancelFilter = useCallback(() => {
-  //   setPageParam({departmentID});
-  // }, []);
-
+  }, [])
+  
   const handleOnCancelFilter = useCallback(() => {
     setPageParam({});
   }, []);
@@ -218,9 +213,6 @@ export const HumanHomePageV2: FC = () => {
             <tr className={"sticky top-0 z-5 border-0.5"}>
               <th className={"bg-cbs-table-header text-primary-gray text-center font-normal w-[50px] border-0 border-primary-border align-middle py-3 px-2"}>
               </th>
-              <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-[90px] border-0 border-primary-border py-3 px-2"}>
-                Mã hiệu
-              </th>
               <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-[200px] border-0 border-primary-border py-3 px-2"}>
                 Họ và tên
               </th>
@@ -245,94 +237,71 @@ export const HumanHomePageV2: FC = () => {
               <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-[100px] border-0 border-primary-border py-3 px-2"}>
                 Tình trạng
               </th>
+              <th className={"bg-cbs-table-header text-primary-gray text-left font-normal w-[100px] border-0 border-primary-border py-3 px-2"}>
+                Ghi chú
+              </th>
             </tr>
           </thead>
           <tbody>
-            <tr className="border-b-0.5">
-              <td className={"border-0 border-primary-border w-[50px] py-3 px-2 text-center"}>
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="flexCheckDefault"
-                />
-              </td>
-              <td className={"border-0 border-primary-border py-3 px-2"}>
-                truongpv
-              </td>
-              <td className={"border-0 border-primary-border py-3 px-2"}>
-                <span>Phan Văn Trường-PGI</span>
-                <br />
-                <span className="text-primary-gray">truongpv@pgipartner.com</span>
-                <br />
-                <span className="text-primary-gray">06/05/1991 - 0975925192</span>
-              </td>
-              <td className={"border-0 border-primary-border py-3 px-2  "}>
-                Số 30C Doãn Kế Thiện - Phường Mai Dịch,Quận Cầu Giấy,Thành phố Hà Nội
-              </td>
-              <td className={"border-0 border-primary-border py-3 px-2  "}>
-                Thị trấn Quỹ Nhất,Huyện Nghĩa Hưng,Tỉnh Nam Định
-              </td>
-              <td className={"border-0 border-primary-border py-3 px-2  "}>
-                Nam
-              </td>
-              <td className={"border-0 border-primary-border py-3 px-2  "}>
-                Phòng giá
-              </td>
-              <td className={"border-0 border-primary-border py-3 px-2  "}>
-                Phó tổng giám đốc
-              </td>
-              <td className={"border-0 border-primary-border py-3 px-2  "}>
-                Tạm thời
-              </td>
-              <td className={"border-0 border-primary-border py-3 px-2 "}>
-                Đã nghỉ
-              </td>
-            </tr>
-            <tr className="border-b-0.5">
-              <td className={"border-0 border-primary-border w-[50px] py-3 px-2 text-center"}>
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="flexCheckDefault"
-                />
-              </td>
-              <td className={"border-0 border-primary-border py-3 px-2"}>
-                truongpv
-              </td>
-              <td className={"border-0 border-primary-border py-3 px-2"}>
-                <span>Phan Văn Trường-PGI</span>
-                <br />
-                <span className="text-primary-gray">truongpv@pgipartner.com</span>
-                <br />
-                <span className="text-primary-gray">06/05/1991 - 0975925192</span>
-              </td>
-              <td className={"border-0 border-primary-border py-3 px-2  "}>
-                Số 30C Doãn Kế Thiện - Phường Mai Dịch,Quận Cầu Giấy,Thành phố Hà Nội
-              </td>
-              <td className={"border-0 border-primary-border py-3 px-2  "}>
-                Thị trấn Quỹ Nhất,Huyện Nghĩa Hưng,Tỉnh Nam Định
-              </td>
-              <td className={"border-0 border-primary-border py-3 px-2  "}>
-                Nam
-              </td>
-              <td className={"border-0 border-primary-border py-3 px-2  "}>
-                Phòng giá
-              </td>
-              <td className={"border-0 border-primary-border py-3 px-2  "}>
-                Phó tổng giám đốc
-              </td>
-              <td className={"border-0 border-primary-border py-3 px-2  "}>
-                Tạm thời
-              </td>
-              <td className={"border-0 border-primary-border py-3 px-2 "}>
-                Đã nghỉ
-              </td>
-            </tr>
+            {humans.listHuman.map((item: Human) => {
+              return (
+                <tr className="border-b-0.5" key={item._id}>
+                  <td className={"border-0 border-primary-border w-[50px] py-3 px-2 text-center"}>
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value=""
+                      id="flexCheckDefault"
+                    />
+                  </td>
+                  <td className={"border-0 border-primary-border py-3 px-2"}>
+                    <Link to={`/human/home/hid=${item._id}`}>
+                      <span>{`${item.name}`} - {`${item.phone}`}</span>
+                      <p className="text-primary-gray">{`${item?.email}`}</p>
+                      <p className="text-primary-gray">{ moment(item?.birthday).format("DD/MM/YYYY")}</p>
+                    </Link>
+                  </td>
+                  <td className={"border-0 border-primary-border py-3 px-2  "}>{`${item.address}`}</td>
+                  <td className={"border-0 border-primary-border py-3 px-2  "}>{}</td>
+                  <td className={"border-0 border-primary-border py-3 px-2  "}>{}</td>
+                  <td className={"border-0 border-primary-border py-3 px-2  "}>{}</td>
+                  <td className={"border-0 border-primary-border py-3 px-2  "}>{}</td>
+                  <td className={"border-0 border-primary-border py-3 px-2  "}>{}</td>
+
+                </tr>
+
+                // <div
+                //   key={item._id}
+                //   className="relative flex flex-col justify-between items-center rounded-lg"
+                //   style={{
+                //     boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                //     border: "1px solid #cccccc",
+                //   }}
+                // >
+                //   <div className="absolute top-2 right-2 w-[32px] h-[32px] cursor-pointer flex justify-center items-center bg-cbs-gray rounded-full">
+                //     <img src={ThreeDotIcon} alt="Three Dot" style={{ margin: 0 }} />
+                //   </div>
+                //   <div className="text-center ml-2 mr-2 pt-[20px] pb-[17px] h-[220px]">
+                //     <div className="flex justify-center mb-6">
+                //       <img src={`${process.env.REACT_APP_URL_S3_CONTACT}/${item.image}`} alt="Avatar" className="w-20 h-20 rounded-full" />
+                //     </div>
+                //     <span className="text-xl font-normal">{`${item.name}`}</span>
+                //     <p className="text-sm pt-2 text-secondary-gray">{item?.company?.sign}.{item?.position?.name}</p>
+                //   </div>
+                //   <Link
+                //     to={`/human/home/hid=${item._id}`}
+                //     className="w-full text-center"
+                //   >
+                //     <div className="py-3 text-sm w-full rounded-bl-lg rounded-br-lg border border-primary-gray bg-primary text-primary-light">
+                //       {t("view-info")}
+                //     </div>
+                //   </Link>
+                // </div>
+              );
+            })}
           </tbody>
         </table>
       </section>
     </FilterNav>
-  );
-};
+  )
+}

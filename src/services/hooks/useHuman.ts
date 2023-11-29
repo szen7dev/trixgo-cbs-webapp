@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useQuery, useMutation } from "react-query";
-import HumanRepository from 'apis/human';
+import HumanRepository from 'apis/human/indexOld';
 import type {
     Human,
     ContactDocumentPayload,

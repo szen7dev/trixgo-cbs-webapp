@@ -304,186 +304,361 @@ export const FilterNav: FC<Props> = ({ type = 0, children }) => {
                         isFetchingFile) && <Loader className="border-primary" />
                     }
 
-                    {(tabIndex === 1) && (
-                        <DropdownSearchableV2
-                            selectOneByOne={true}
-                            reset={reset}
-                            className={"mr-2 border border-primary-border rounded-lg mb-2"}
-                            placeholder={"Giới tính"}
-                            prefixIcon={
-                                <img className={"mr-2"} src={maleUserIcon} alt={"icon"} />
+                    <DropdownSearchableV2
+                        selectOneByOne={true}
+                        reset={reset}
+                        className={"mr-1 border border-primary-border rounded-lg mb-2"}
+                        placeholder={"Phân loại"}
+                        isMultiple={true}
+                        onchangeValue={(value) => {
+                            if (!project?.includes?.(value.id as string)) {
+                                const newData: any = [...project, value.id];
+                                setProject(newData);
                             }
-                            isMultiple={true}
-                            onchangeValue={(value) => {
-                                if (!project?.includes?.(value.id as string)) {
-                                    const newData: any = [...project, value.id];
-                                    setProject(newData);
-                                }
-                                setSearchProject("");
-                                dispatch(setTabActive(tabIndex));
-                                setPageIndex(0);
-                                ref.current && ref.current.resetPaginate();
-                            }}
-                            onMultipleRemoveValue={(id: any) => {
-                                const newList = project.filter((item: any) => item !== id);
-                                setProject(newList);
-                            }}
-                            onClearData={() => setProject([])}
-                            onSearchInputChange={debounce(
-                                (value) => setSearchProject(value),
-                                500
-                            )}
-                            onScroll={handleScrollProject}
-                            data={listProject.map((item) => ({
-                                label: `${item.sign}.${item.name}`,
-                                value: item._id,
-                            }))}
-                            formatItem={{
-                                id: "value",
-                                text: "label",
-                            }}
-                            renderItem={(item) => (
-                                <p className={"min-w-[300px]"}>{item.text}</p>
-                            )}
-                        />
-                    )}
+                            setSearchProject("");
+                            dispatch(setTabActive(tabIndex));
+                            setPageIndex(0);
+                            ref.current && ref.current.resetPaginate();
+                        }}
+                        onMultipleRemoveValue={(id: any) => {
+                            const newList = project.filter((item: any) => item !== id);
+                            setProject(newList);
+                        }}
+                        onClearData={() => setProject([])}
+                        onSearchInputChange={debounce(
+                            (value) => setSearchProject(value),
+                            500
+                        )}
+                        onScroll={handleScrollProject}
+                        data={listProject.map((item) => ({
+                            label: `${item.sign}.${item.name}`,
+                            value: item._id,
+                        }))}
+                        formatItem={{
+                            id: "value",
+                            text: "label",
+                        }}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.text}</p>
+                        )}
+                    />
 
-                    {(tabIndex === 1) && (
-                        <DropdownSearchableV2
-                            selectOneByOne={true}
-                            reset={reset}
-                            className={"mr-2 border border-primary-border rounded-lg mb-2"}
-                            placeholder={"Phòng ban"}
-                            prefixIcon={
-                                <img className={"mr-2"} src={categoryIcon} alt={"icon"} />
+                    <DropdownSearchableV2
+                        selectOneByOne={true}
+                        reset={reset}
+                        className={"mr-1 border border-primary-border rounded-lg mb-2"}
+                        placeholder={"Phân loại"}
+                        isMultiple={true}
+                        onchangeValue={(value) => {
+                            if (!project?.includes?.(value.id as string)) {
+                                const newData: any = [...project, value.id];
+                                setProject(newData);
                             }
-                            isMultiple={true}
-                            onchangeValue={(value) => {
-                                if (!project?.includes?.(value.id as string)) {
-                                    const newData: any = [...project, value.id];
-                                    setProject(newData);
-                                }
-                                setSearchProject("");
-                                dispatch(setTabActive(tabIndex));
-                                setPageIndex(0);
-                                ref.current && ref.current.resetPaginate();
-                            }}
-                            onMultipleRemoveValue={(id: any) => {
-                                const newList = project.filter((item: any) => item !== id);
-                                setProject(newList);
-                            }}
-                            onClearData={() => setProject([])}
-                            onSearchInputChange={debounce(
-                                (value) => setSearchProject(value),
-                                500
-                            )}
-                            onScroll={handleScrollProject}
-                            data={listProject.map((item) => ({
-                                label: `${item.sign}.${item.name}`,
-                                value: item._id,
-                            }))}
-                            formatItem={{
-                                id: "value",
-                                text: "label",
-                            }}
-                            renderItem={(item) => (
-                                <p className={"min-w-[300px]"}>{item.text}</p>
-                            )}
-                        />
-                    )}
+                            setSearchProject("");
+                            dispatch(setTabActive(tabIndex));
+                            setPageIndex(0);
+                            ref.current && ref.current.resetPaginate();
+                        }}
+                        onMultipleRemoveValue={(id: any) => {
+                            const newList = project.filter((item: any) => item !== id);
+                            setProject(newList);
+                        }}
+                        onClearData={() => setProject([])}
+                        onSearchInputChange={debounce(
+                            (value) => setSearchProject(value),
+                            500
+                        )}
+                        onScroll={handleScrollProject}
+                        data={listProject.map((item) => ({
+                            label: `${item.sign}.${item.name}`,
+                            value: item._id,
+                        }))}
+                        formatItem={{
+                            id: "value",
+                            text: "label",
+                        }}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.text}</p>
+                        )}
+                    />
 
-                    {(tabIndex === 1) && (
-                        <DropdownSearchableV2
-                            selectOneByOne={true}
-                            reset={reset}
-                            className={"mr-2 border border-primary-border rounded-lg mb-2"}
-                            placeholder={"Chức vụ"}
-                            prefixIcon={
-                                <img className={"mr-2"} src={timelineIcon} alt={"icon"} />
+                    <DropdownSearchableV2
+                        selectOneByOne={true}
+                        reset={reset}
+                        className={"mr-1 border border-primary-border rounded-lg mb-2"}
+                        placeholder={"Phân loại"}
+                        isMultiple={true}
+                        onchangeValue={(value) => {
+                            if (!project?.includes?.(value.id as string)) {
+                                const newData: any = [...project, value.id];
+                                setProject(newData);
                             }
-                            isMultiple={true}
-                            onchangeValue={(value) => {
-                                if (!project?.includes?.(value.id as string)) {
-                                    const newData: any = [...project, value.id];
-                                    setProject(newData);
-                                }
-                                setSearchProject("");
-                                dispatch(setTabActive(tabIndex));
-                                setPageIndex(0);
-                                ref.current && ref.current.resetPaginate();
-                            }}
-                            onMultipleRemoveValue={(id: any) => {
-                                const newList = project.filter((item: any) => item !== id);
-                                setProject(newList);
-                            }}
-                            onClearData={() => setProject([])}
-                            onSearchInputChange={debounce(
-                                (value) => setSearchProject(value),
-                                500
-                            )}
-                            onScroll={handleScrollProject}
-                            data={listProject.map((item) => ({
-                                label: `${item.sign}.${item.name}`,
-                                value: item._id,
-                            }))}
-                            formatItem={{
-                                id: "value",
-                                text: "label",
-                            }}
-                            renderItem={(item) => (
-                                <p className={"min-w-[300px]"}>{item.text}</p>
-                            )}
-                        />
-                    )}
+                            setSearchProject("");
+                            dispatch(setTabActive(tabIndex));
+                            setPageIndex(0);
+                            ref.current && ref.current.resetPaginate();
+                        }}
+                        onMultipleRemoveValue={(id: any) => {
+                            const newList = project.filter((item: any) => item !== id);
+                            setProject(newList);
+                        }}
+                        onClearData={() => setProject([])}
+                        onSearchInputChange={debounce(
+                            (value) => setSearchProject(value),
+                            500
+                        )}
+                        onScroll={handleScrollProject}
+                        data={listProject.map((item) => ({
+                            label: `${item.sign}.${item.name}`,
+                            value: item._id,
+                        }))}
+                        formatItem={{
+                            id: "value",
+                            text: "label",
+                        }}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.text}</p>
+                        )}
+                    />
 
-                    {(tabIndex === 1) && (
-                        <DropdownSearchableV2
-                            selectOneByOne={true}
-                            reset={reset}
-                            className={"mr-2 border border-primary-border rounded-lg mb-2"}
-                            placeholder={"Loại hợp đồng"}
-                            prefixIcon={
-                                <img className={"mr-2"} src={contractIcon} alt={"icon"} />
+                    <DropdownSearchableV2
+                        selectOneByOne={true}
+                        reset={reset}
+                        className={"mr-1 border border-primary-border rounded-lg mb-2"}
+                        placeholder={"Phân loại"}
+                        isMultiple={true}
+                        onchangeValue={(value) => {
+                            if (!project?.includes?.(value.id as string)) {
+                                const newData: any = [...project, value.id];
+                                setProject(newData);
                             }
-                            isMultiple={true}
-                            onchangeValue={(value) => {
-                                if (!project?.includes?.(value.id as string)) {
-                                    const newData: any = [...project, value.id];
-                                    setProject(newData);
-                                }
-                                setSearchProject("");
-                                dispatch(setTabActive(tabIndex));
-                                setPageIndex(0);
-                                ref.current && ref.current.resetPaginate();
-                            }}
-                            onMultipleRemoveValue={(id: any) => {
-                                const newList = project.filter((item: any) => item !== id);
-                                setProject(newList);
-                            }}
-                            onClearData={() => setProject([])}
-                            onSearchInputChange={debounce(
-                                (value) => setSearchProject(value),
-                                500
-                            )}
-                            onScroll={handleScrollProject}
-                            data={listProject.map((item) => ({
-                                label: `${item.sign}.${item.name}`,
-                                value: item._id,
-                            }))}
-                            formatItem={{
-                                id: "value",
-                                text: "label",
-                            }}
-                            renderItem={(item) => (
-                                <p className={"min-w-[300px]"}>{item.text}</p>
-                            )}
-                        />
-                    )}
+                            setSearchProject("");
+                            dispatch(setTabActive(tabIndex));
+                            setPageIndex(0);
+                            ref.current && ref.current.resetPaginate();
+                        }}
+                        onMultipleRemoveValue={(id: any) => {
+                            const newList = project.filter((item: any) => item !== id);
+                            setProject(newList);
+                        }}
+                        onClearData={() => setProject([])}
+                        onSearchInputChange={debounce(
+                            (value) => setSearchProject(value),
+                            500
+                        )}
+                        onScroll={handleScrollProject}
+                        data={listProject.map((item) => ({
+                            label: `${item.sign}.${item.name}`,
+                            value: item._id,
+                        }))}
+                        formatItem={{
+                            id: "value",
+                            text: "label",
+                        }}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.text}</p>
+                        )}
+                    />
 
-                    {(tabIndex === 1 || tabIndex === 3) && (
+                    <DropdownSearchableV2
+                        selectOneByOne={true}
+                        reset={reset}
+                        className={"mr-1 border border-primary-border rounded-lg mb-2"}
+                        placeholder={"Phân loại"}
+                        isMultiple={true}
+                        onchangeValue={(value) => {
+                            if (!project?.includes?.(value.id as string)) {
+                                const newData: any = [...project, value.id];
+                                setProject(newData);
+                            }
+                            setSearchProject("");
+                            dispatch(setTabActive(tabIndex));
+                            setPageIndex(0);
+                            ref.current && ref.current.resetPaginate();
+                        }}
+                        onMultipleRemoveValue={(id: any) => {
+                            const newList = project.filter((item: any) => item !== id);
+                            setProject(newList);
+                        }}
+                        onClearData={() => setProject([])}
+                        onSearchInputChange={debounce(
+                            (value) => setSearchProject(value),
+                            500
+                        )}
+                        onScroll={handleScrollProject}
+                        data={listProject.map((item) => ({
+                            label: `${item.sign}.${item.name}`,
+                            value: item._id,
+                        }))}
+                        formatItem={{
+                            id: "value",
+                            text: "label",
+                        }}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.text}</p>
+                        )}
+                    />
+
+                    <DropdownSearchableV2
+                        selectOneByOne={true}
+                        reset={reset}
+                        className={"mr-1 border border-primary-border rounded-lg mb-2"}
+                        placeholder={"Phân loại"}
+                        isMultiple={true}
+                        onchangeValue={(value) => {
+                            if (!project?.includes?.(value.id as string)) {
+                                const newData: any = [...project, value.id];
+                                setProject(newData);
+                            }
+                            setSearchProject("");
+                            dispatch(setTabActive(tabIndex));
+                            setPageIndex(0);
+                            ref.current && ref.current.resetPaginate();
+                        }}
+                        onMultipleRemoveValue={(id: any) => {
+                            const newList = project.filter((item: any) => item !== id);
+                            setProject(newList);
+                        }}
+                        onClearData={() => setProject([])}
+                        onSearchInputChange={debounce(
+                            (value) => setSearchProject(value),
+                            500
+                        )}
+                        onScroll={handleScrollProject}
+                        data={listProject.map((item) => ({
+                            label: `${item.sign}.${item.name}`,
+                            value: item._id,
+                        }))}
+                        formatItem={{
+                            id: "value",
+                            text: "label",
+                        }}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.text}</p>
+                        )}
+                    />
+
+                    <DropdownSearchableV2
+                        selectOneByOne={true}
+                        reset={reset}
+                        className={"mr-1 border border-primary-border rounded-lg mb-2"}
+                        placeholder={"Phân loại"}
+                        isMultiple={true}
+                        onchangeValue={(value) => {
+                            if (!project?.includes?.(value.id as string)) {
+                                const newData: any = [...project, value.id];
+                                setProject(newData);
+                            }
+                            setSearchProject("");
+                            dispatch(setTabActive(tabIndex));
+                            setPageIndex(0);
+                            ref.current && ref.current.resetPaginate();
+                        }}
+                        onMultipleRemoveValue={(id: any) => {
+                            const newList = project.filter((item: any) => item !== id);
+                            setProject(newList);
+                        }}
+                        onClearData={() => setProject([])}
+                        onSearchInputChange={debounce(
+                            (value) => setSearchProject(value),
+                            500
+                        )}
+                        onScroll={handleScrollProject}
+                        data={listProject.map((item) => ({
+                            label: `${item.sign}.${item.name}`,
+                            value: item._id,
+                        }))}
+                        formatItem={{
+                            id: "value",
+                            text: "label",
+                        }}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.text}</p>
+                        )}
+                    />
+
+                    <DropdownSearchableV2
+                        selectOneByOne={true}
+                        reset={reset}
+                        className={"mr-1 border border-primary-border rounded-lg mb-2"}
+                        placeholder={"Phân loại"}
+                        isMultiple={true}
+                        onchangeValue={(value) => {
+                            if (!project?.includes?.(value.id as string)) {
+                                const newData: any = [...project, value.id];
+                                setProject(newData);
+                            }
+                            setSearchProject("");
+                            dispatch(setTabActive(tabIndex));
+                            setPageIndex(0);
+                            ref.current && ref.current.resetPaginate();
+                        }}
+                        onMultipleRemoveValue={(id: any) => {
+                            const newList = project.filter((item: any) => item !== id);
+                            setProject(newList);
+                        }}
+                        onClearData={() => setProject([])}
+                        onSearchInputChange={debounce(
+                            (value) => setSearchProject(value),
+                            500
+                        )}
+                        onScroll={handleScrollProject}
+                        data={listProject.map((item) => ({
+                            label: `${item.sign}.${item.name}`,
+                            value: item._id,
+                        }))}
+                        formatItem={{
+                            id: "value",
+                            text: "label",
+                        }}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.text}</p>
+                        )}
+                    />
+
+                    <DropdownSearchableV2
+                        selectOneByOne={true}
+                        reset={reset}
+                        className={"mr-1 border border-primary-border rounded-lg mb-2"}
+                        placeholder={"Phân loại"}
+                        isMultiple={true}
+                        onchangeValue={(value) => {
+                            if (!project?.includes?.(value.id as string)) {
+                                const newData: any = [...project, value.id];
+                                setProject(newData);
+                            }
+                            setSearchProject("");
+                            dispatch(setTabActive(tabIndex));
+                            setPageIndex(0);
+                            ref.current && ref.current.resetPaginate();
+                        }}
+                        onMultipleRemoveValue={(id: any) => {
+                            const newList = project.filter((item: any) => item !== id);
+                            setProject(newList);
+                        }}
+                        onClearData={() => setProject([])}
+                        onSearchInputChange={debounce(
+                            (value) => setSearchProject(value),
+                            500
+                        )}
+                        onScroll={handleScrollProject}
+                        data={listProject.map((item) => ({
+                            label: `${item.sign}.${item.name}`,
+                            value: item._id,
+                        }))}
+                        formatItem={{
+                            id: "value",
+                            text: "label",
+                        }}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.text}</p>
+                        )}
+                    />
+
+                    {/* {(tabIndex === 1 || tabIndex === 3) && (
                         <TimeRangeDropdown
                             className={
-                                "mr-2 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
+                                "mr-1 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
                             }
                             placeholder={"Tình trạng"}
                             iconBack={<TriangleDown />}
@@ -516,7 +691,7 @@ export const FilterNav: FC<Props> = ({ type = 0, children }) => {
                                 },
                             ]}
                         />
-                    )}
+                    )} */}
 
                 </div>
 
