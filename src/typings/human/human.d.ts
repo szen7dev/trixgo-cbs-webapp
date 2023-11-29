@@ -10,6 +10,16 @@ export interface HumanProps extends Omit<HumanInsertPayload, 'parentID' | 'depar
     name?: string;
     sign: string;
     image: string;
+    phone: string;
+    email: string;
+    birthday: string;
+    gender: number;
+    area?: any;
+    area1?: any;
+    area2?: any;
+    contractType?: any;
+    department?: any;
+    workingStatus?: any;
     sender?: {
         _id: string;
         name: string;
@@ -128,6 +138,7 @@ export interface HumanUpdateResponse extends APIResponse {
 
 export interface HumanQueryPayload extends QueryParam {
     params?: {
+        populates?: any;
         datahubContact?: string;
         type?: string;
         contract?: string;
@@ -147,6 +158,7 @@ export interface HumanQueryPayload extends QueryParam {
         storageID?: string;
         storagesID?: string[];
         isParent?: string;
+        phone?: string;
     },
     isFetchList?: boolean;
 }

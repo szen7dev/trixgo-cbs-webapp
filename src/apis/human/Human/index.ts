@@ -34,10 +34,10 @@ export const humanRepository: HumanRepository = {
 async function fetchListHuman(params : any) {
     const { data } = await API.get(`${CONTACT_URL}`, {
         params: {
-            select: 'name sign author project date createAt description note store amount status storeSign publish datahubContact',
+            select: 'name phone email sign author createAt note status area area1 area2 department position gender birthday contractType workingStatus',
             populates: {
-                "path": "author sender storage publish datahubContact",
-                "select": "fullname bizfullname sign image name"
+                "path": "author area area1 area2 department position contractType workingStatus",
+                "select": "fullname sign image name"
             },
             ...params,
         }
@@ -48,10 +48,10 @@ async function fetchListHuman(params : any) {
 async function fetchFilterListHuman(params : any) {
     const { data } = await API.get(`${CONTACT_URL}/filter-human`, {
         params: {
-            select: 'name sign author project date createAt description note store amount status storeSign publish datahubContact',
+            select: 'name phone email sign author createAt note status area area1 area2 department position gender birthday contractType workingStatus',
             populates: {
-                "path": "author sender storage project publish datahubContact",
-                "select": "fullname bizfullname sign image name"
+                "path": "author area area1 area2 department position contractType workingStatus",
+                "select": "fullname sign image name"
             },
             ...params,
         }
