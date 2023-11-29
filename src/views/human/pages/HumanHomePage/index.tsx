@@ -352,6 +352,9 @@ export const HumanHomePage: FC = () => {
            <div className={"sticky top-0 z-10"}>
                 <div className={"flex flex-wrap items-center px-4 py-2"}>
                     <div className={"flex items-center flex-1"}>
+                        <div className="relative flex items-center">
+                            <input placeholder="Tìm kiếm" className="pl-3 pr-3 mr-2 w-[150px] h-[36px] bg-cbs-table-header border border-primary-border rounded-lg mb-2"/>
+                        </div>
                         <DropdownSearchableV2
                             ref={datahubRef}
                             className={"mr-4 border border-primary-border rounded-lg mb-2"}
@@ -400,7 +403,7 @@ export const HumanHomePage: FC = () => {
                         />
                         <DropdownSearchableV2
                             ref={typesRef}
-                            className={"mr-4 border border-primary-border rounded-lg mb-2"}
+                            className={"mr-2 border border-primary-border rounded-lg mb-2"}
                             placeholder={"Tính chất hồ sơ"}
                             prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"}/>}
                             isMultiple={true}
