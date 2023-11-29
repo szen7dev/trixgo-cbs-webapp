@@ -353,7 +353,7 @@ export const HumanHomePage: FC = () => {
                 <div className={"flex flex-wrap items-center px-4 py-2"}>
                     <div className={"flex items-center flex-1"}>
                         <div className="relative flex items-center">
-                            <input placeholder="Tìm kiếm" className="pl-3 pr-3 mr-2 w-[150px] h-[36px] bg-cbs-table-header border border-primary-border rounded-lg mb-2"/>
+                            <input placeholder="Tìm kiếm" className="pl-3 pr-3 mr-2 w-[175px] h-[32px] bg-cbs-table-header border border-primary-border rounded-lg mb-2"/>
                         </div>
                         <DropdownSearchableV2
                             ref={datahubRef}
@@ -607,15 +607,15 @@ export const HumanHomePage: FC = () => {
                             selectOneByOne={true}
                         />
                     </div>
-                    <button
+                    {/* <button
                         onClick={() => handleCreate()}
                         className={"h-[32px] rounded bg-cbs-green text-white font-bold px-4 mb-2"}>
                         Tạo mới
-                    </button>
+                    </button> */}
                 </div>
                 <div className={"flex items-center pb-2"}>
                     
-                    <button className={"flex items-center justify-center mx-3 ml-6"}
+                    {/* <button className={"flex items-center justify-center mx-3 ml-6"}
                         onClick={handleExport.bind(null)}
                     >
                         <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"}/>
@@ -637,7 +637,7 @@ export const HumanHomePage: FC = () => {
                             className={"flex items-center justify-center mx-3 ml-6"}>
                             <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"}/>
                         </button>
-                    }
+                    } */}
                     <PaginateV2
                         ref={ref}
                         totalRecord={totalRecord}
