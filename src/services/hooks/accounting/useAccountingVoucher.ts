@@ -1,7 +1,7 @@
 import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 
 import AccountingVoucherRepository from 'apis/accounting/voucher';
-import HumanRepository from 'apis/human';
+import HumanRepository from 'apis/human/indexOld';
 
 type UseAccountingVoucherProp = {
     listAccountingVoucher: Array<any>;

@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import ContractIncomeRepository from 'apis/cmcs/contractIncome';
-import HumanRepository from 'apis/human';
+import HumanRepository from 'apis/human/indexOld';
 
 type UseContractCustom = {
     exportContractAsync: (payload: any) => Promise<any>,

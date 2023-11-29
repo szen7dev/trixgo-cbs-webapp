@@ -9,23 +9,24 @@ import contractIcon from "assets/images/icons8-contract-64-blue.svg";
 import downloadIcon from "assets/images/icons8-download-96.svg";
 import projectIcon from "assets/images/icons8-project-50.svg";
 import iconPencil from "assets/images/icons8-pencil-96 1.png";
-import moment from "moment";
-import PaginateV2 from "shareComponents/common/PaginateV2";
-import {DOCUMENT_TYPES, DIRECTION_TYPES, DOCUMENT_TYPES_SORT} from "apis/localdb";
-import {useDatahubContact} from "services/hooks/datahub/contact/useDatahubContact";
 import {useProjectCustom} from "services/hooks/items/useProject";
 import {debounce} from "lodash";
-import {useContractIsMembers} from "services/hooks/items/useContract";
 import {Link} from "react-router-dom";
 import {useAppSelector} from "redux/reducer";
-import {setFilterDropdown} from "redux/reducer/DocumentHomeSlice";
 import {useDispatch} from "react-redux";
 import { toast } from "react-toastify";
 import { createLinkAndClick } from "utils";
-import { useQueryListCompany } from "services/hooks/useCompanies";
+import moment from "moment";
+import PaginateV2 from "shareComponents/common/PaginateV2";
+import {setFilterDropdown} from "redux/reducer/DocumentHomeSlice";
 
+import { DOCUMENT_TYPES, DIRECTION_TYPES, DOCUMENT_TYPES_SORT } from "apis/localdb";
+import { useDatahubContact } from "services/hooks/datahub/contact/useDatahubContact";
+import { useContractIsMembers } from "services/hooks/items/useContract";
+import { useQueryListCompany } from "services/hooks/useCompanies";
 import { useDocumentCustom, useListFilterDocument} from "services/hooks/document/useDocument";
-import { useFetchListHuman, useCreateContactMutation, useHumanCustom } from "services/hooks/useHuman";
+import { useHumanCustom, useListFilterHuman} from "services/hooks/human/useHuman";
+// import { useFetchListHuman, useCreateContactMutation, useHumanCustom } from "services/hooks/useHuman";
 
 export const HumanHomePage: FC = () => {
     type PaginateHandle = React.ElementRef<typeof PaginateV2>;
@@ -69,7 +70,7 @@ export const HumanHomePage: FC = () => {
     const { listProjectsUserIsMember } = useProjectCustom({ paramsProjectsUserIsMember: { keyword: projectKeyword }, isFetchProjectsUserIsMember: true });
     const { listContracts } = useContractIsMembers({ params: { keyword: contractKeyword, populates: JSON.stringify({ "path": "project", "select": "name sign" }) }, isFetch: true });
 
-    const { listDocumentWithPager, isLoading, totalRecord, totalPage, fetchNextPageDocument, hasNextPage, refetchListDocument, isFetching } = useListFilterDocument({
+    const { listHumanWithPager, isLoading, totalRecord, totalPage, fetchNextPageHuman, hasNextPage, refetchListHuman, isFetching } = useListFilterHuman({
         params: {
             ...fromToDate,
             datahubContactsID,
@@ -377,7 +378,7 @@ export const HumanHomePage: FC = () => {
                         hasNextPage={hasNextPage}
                         isFetching={isLoading}
                         nextPageAction={() => {
-                            fetchNextPageDocument();
+                            fetchNextPageHuman();
                             setPageIndex(oldState => oldState + 1)
                         }}
                         prevPageAction={() => {
@@ -387,11 +388,11 @@ export const HumanHomePage: FC = () => {
                 </div>
             </div>
             <div className="flex-1 overflow-y-auto">
-                {(!listDocumentWithPager[pageIndex] || listDocumentWithPager[pageIndex].length === 0) && !isLoading && !isFetching && (
+                {(!listHumanWithPager[pageIndex] || listHumanWithPager[pageIndex].length === 0) && !isLoading && !isFetching && (
                     <h2 className="text-center">Không có kết quả được trả về</h2>
                 )}
 
-                {!isLoading && listDocumentWithPager[pageIndex] && listDocumentWithPager[pageIndex].length > 0 && (
+                {!isLoading && listHumanWithPager[pageIndex] && listHumanWithPager[pageIndex].length > 0 && (
                     <table className={"table-fixed border-collapse w-full"}>
                         <thead>
                             <tr className={"sticky top-0 z-5"}>
@@ -426,7 +427,7 @@ export const HumanHomePage: FC = () => {
                         </thead>
                         <tbody>
                             {
-                                (listDocumentWithPager[pageIndex] ?? []).map((document, i) => (
+                                (listHumanWithPager[pageIndex] ?? []).map((document, i) => (
                                     <tr key={i}>
                                         <td className={"border-b-0.5 border-primary-border py-3"}>
                                             <Link to={`/document/home/${document._id}`}>{document.name}</Link>
