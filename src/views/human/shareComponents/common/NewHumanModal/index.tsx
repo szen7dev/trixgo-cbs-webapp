@@ -298,7 +298,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                             style={{ width: 100 }}
                             className="flex items-center"
                           >
-                            <img alt="Tag" src={TagIcon} className="mr-1" />
+                            {/* <img alt="Tag" src={TagIcon} className="mr-1" /> */}
                             <p
                               style={{
                                 textOverflow: "ellipsis",
@@ -347,7 +347,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                             style={{ width: 100 }}
                             className="flex items-center"
                           >
-                            <img alt="Tag" src={TagIcon} className="mr-1" />
+                            {/* <img alt="Tag" src={TagIcon} className="mr-1" /> */}
                             <p
                               style={{
                                 textOverflow: "ellipsis",
@@ -397,7 +397,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                             style={{ width: 100 }}
                             className="flex items-center"
                           >
-                            <img alt="Tag" src={TagIcon} className="mr-1" />
+                            {/* <img alt="Tag" src={TagIcon} className="mr-1" /> */}
                             <p
                               style={{
                                 textOverflow: "ellipsis",
@@ -442,7 +442,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                         maxWidthInput="max-w-none"
                         renderSelectedItem={(item) => (
                           <div className="flex items-center">
-                            <img alt="Tag" src={TagIcon} className="mr-1" />
+                            {/* <img alt="Tag" src={TagIcon} className="mr-1" /> */}
                             <span>{item.text}</span>
                           </div>
                         )}
@@ -483,7 +483,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                             style={{ width: 100 }}
                             className="flex items-center"
                           >
-                            <img alt="Tag" src={TagIcon} className="mr-1" />
+                            {/* <img alt="Tag" src={TagIcon} className="mr-1" /> */}
                             <p
                               style={{
                                 textOverflow: "ellipsis",
@@ -529,7 +529,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                             style={{ width: 100 }}
                             className="flex items-center"
                           >
-                            <img alt="Tag" src={TagIcon} className="mr-1" />
+                            {/* <img alt="Tag" src={TagIcon} className="mr-1" /> */}
                             <p
                               style={{
                                 textOverflow: "ellipsis",
@@ -572,7 +572,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                             style={{ width: 100 }}
                             className="flex items-center"
                           >
-                            <img alt="Tag" src={TagIcon} className="mr-1" />
+                            {/* <img alt="Tag" src={TagIcon} className="mr-1" /> */}
                             <p
                               style={{
                                 textOverflow: "ellipsis",
@@ -615,7 +615,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                             style={{ width: 100 }}
                             className="flex items-center"
                           >
-                            <img alt="Tag" src={TagIcon} className="mr-1" />
+                            {/* <img alt="Tag" src={TagIcon} className="mr-1" /> */}
                             <p
                               style={{
                                 textOverflow: "ellipsis",
@@ -668,7 +668,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                             style={{ width: 100 }}
                             className="flex items-center"
                           >
-                            <img alt="Tag" src={TagIcon} className="mr-1" />
+                            {/* <img alt="Tag" src={TagIcon} className="mr-1" /> */}
                             <p
                               style={{
                                 textOverflow: "ellipsis",
@@ -901,7 +901,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                             style={{ width: 100 }}
                             className="flex items-center"
                           >
-                            <img alt="Tag" src={TagIcon} className="mr-1" />
+                            {/* <img alt="Tag" src={TagIcon} className="mr-1" /> */}
                             <p
                               style={{
                                 textOverflow: "ellipsis",
@@ -946,7 +946,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                             style={{ width: 100 }}
                             className="flex items-center"
                           >
-                            <img alt="Tag" src={TagIcon} className="mr-1" />
+                            {/* <img alt="Tag" src={TagIcon} className="mr-1" /> */}
                             <p
                               style={{
                                 textOverflow: "ellipsis",
@@ -994,7 +994,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                             style={{ width: 100 }}
                             className="flex items-center"
                           >
-                            <img alt="Tag" src={TagIcon} className="mr-1" />
+                            {/* <img alt="Tag" src={TagIcon} className="mr-1" /> */}
                             <p
                               style={{
                                 textOverflow: "ellipsis",

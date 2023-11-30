@@ -1,8 +1,5 @@
 import type { APIResponse, QueryParam } from './commons';
 import {Author, Project} from "../ppt";
-
-// export type { Human } from 'typings/ppt/Human';
-
 export interface HumanProps extends Omit<HumanInsertPayload, 'parentID' | 'departmentID' | 'packageID' |'senderID' | 'receiverID' | 'propertyID' | 'fieldID' |'storageID'> {
     _id: string;
     author?: Author;
@@ -20,66 +17,23 @@ export interface HumanProps extends Omit<HumanInsertPayload, 'parentID' | 'depar
     contractType?: any;
     department?: any;
     workingStatus?: any;
-    sender?: {
-        _id: string;
-        name: string;
-    };
-    receiver?: {
-        _id: string;
-        name: string;
-    };
-    date?: string;
-    receivedDate?: string;
-    style?: string;
-    direction?: number;
-    storeSign?: {
-        _id: string;
-        name: string;
-    };
-    amount: number;
-    status: string;
+    identity?: any;
+    address?: any;
+    taxid?: any;
+    insuranceSign?: any;
+    insuranceDate?: any;
+    position?: any;
+    contractDate?: any;
     note: string;
-    storage: {
-        _id: string;
-        name: string;
-    };
+    // storage: {
+    //     _id: string;
+    //     name: string;
+    // };
     createAt: string;
     updatedAt: string;
     userCreate?: Author;
     userUpdate?: Author;
-    package?: {
-        _id: string;
-        name: string;
-        sign: string;
-        members: string[];
-    };
-    contract?: {
-        _id: string;
-        name: string;
-    };
-    field?: {
-        _id: string;
-        name: string;
-    };
-    datahubContact?: {
-        _id: string;
-        name: string;
-    };
-    publish?: {
-        _id: string;
-        name: string;
-    };
-    property: {
-        _id: string;
-        name: string;
-    },
     type?: number;
-    amountDelivery?: number;
-    requestResponse?: boolean;
-    completeStatus?: number;
-    expiredResponse?: string;
-    approver?: string;
-    value?: string;
     parent: {
         _id: string;
         name: string;
@@ -118,15 +72,12 @@ interface HumanInsertPayload {
 export interface HumanInsertPayload extends HumanInsertPayload {
     "parentID": string;
 }
-
 export interface HumanInsertResponse extends APIResponse {
     data: HumanProps
 }
-
 export interface HumanUpdatePayload extends Omit<HumanInsertPayload, 'parentID'> {
     "HumanID": string;
 }
-
 export interface HumanUpdateResponse extends APIResponse {
     data: HumanProps & {
         property: string;
@@ -135,7 +86,6 @@ export interface HumanUpdateResponse extends APIResponse {
         userUpdate: string;
     }
 }
-
 export interface HumanQueryPayload extends QueryParam {
     params?: {
         populates?: any;
@@ -162,7 +112,6 @@ export interface HumanQueryPayload extends QueryParam {
     },
     isFetchList?: boolean;
 }
-
 export interface HumanQueryResponse extends APIResponse {
     data: {
         listRecords: HumanProps[];
@@ -172,7 +121,6 @@ export interface HumanQueryResponse extends APIResponse {
         nextCursor: string | null;
     }
 }
-
 export interface HumanExportResponse extends APIResponse {
     data: String
 }
