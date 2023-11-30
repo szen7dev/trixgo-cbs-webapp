@@ -609,21 +609,20 @@ export const HumanHomePage: FC = () => {
                             selectOneByOne={true}
                         />
                     </div>
-                    <button
+                    {/* <button
                         onClick={() => handleCreate()}
                         className={"h-[32px] rounded bg-cbs-green text-white font-bold px-4 mb-2"}>
                         Tạo mới
-                    </button>
+                    </button> */}
                 </div>
                 <div className={"flex items-center pb-2"}>
-                    
                     <button className={"flex items-center justify-center mx-3 ml-6"}
                         onClick={handleExport.bind(null)}
                     >   
                         Download
                         <img src={downloadIcon} alt={"-----"} className={"ml-2 w-[18px] h-[18px]"}/>
                     </button>
-                    <button className={"flex items-center justify-center mx-3 ml-3"}
+                    {/* <button className={"flex items-center justify-center mx-3 ml-3"}
                             onClick={handleDownloadTemplateImportExcel}
                         >
                             Mẫu Import Excel nhân sự
@@ -632,15 +631,15 @@ export const HumanHomePage: FC = () => {
                         <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
                         accept=".xlsx, .xlsm, .xls, .csv"/>
                         <label className="custom-file-label" htmlFor="inputGroupFile">Import Excel tạo nhân sự</label>
-                    </button>
-                    {
+                    </button> */}
+                    {/* {
                         recordSelected._id&&
                         <button
                             onClick={handleOnClickUpdate(recordSelected)}
                             className={"flex items-center justify-center mx-3 ml-6"}>
                             <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"}/>
                         </button>
-                    }
+                    } */}
                     <PaginateV2
                         ref={ref}
                         totalRecord={totalRecord}
@@ -754,8 +753,8 @@ export const HumanHomePage: FC = () => {
                                         {document?.area?.name}, {document?.area?.parent?.name}, {document?.area?.parent?.parent?.name}
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
-                                        <p>Mã số thuế: {document?.taxid}</p>
-                                        <p>Mã bảo hiểm: {document?.insuranceSign} - Cấp ngày:  {moment(document.insuranceDate).isValid() && moment(document.insuranceDate).format("DD/MM/YYYY")}</p>
+                                        <p>MST: {document?.taxid}</p>
+                                        <p>MBH: {document?.insuranceSign} - {moment(document.insuranceDate).isValid() && moment(document.insuranceDate).format("DD/MM/YYYY")}</p>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2 w-24">
                                         <p>{document?.department?.name}</p>
