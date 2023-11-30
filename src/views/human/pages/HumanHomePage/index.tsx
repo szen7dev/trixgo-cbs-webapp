@@ -47,11 +47,11 @@ import {useAppSelector} from "redux/reducer";
 import {setFilterDropdown, resetAllFilterAndKeyword} from "redux/reducer/DocumentProjectSlice";
 import { useQueryListCompany } from "services/hooks/useCompanies";
 
-const payloadHistoryTraffic: any = {
-    appID: APP_ID.PCM.id,
-    menuID: APP_ID.PCM.menuPcmProject.document.id,
-    type: "1"
-};
+// const payloadHistoryTraffic: any = {
+//     appID: APP_ID.PCM.id,
+//     menuID: APP_ID.PCM.menuPcmProject.document.id,
+//     type: "1"
+// };
 
 export const HumanHomePage: FC = () => {
     const [keyword, setKeyword] = useState('');
@@ -90,7 +90,7 @@ export const HumanHomePage: FC = () => {
     const [recordSelected, setSelectRecord] = useState<any>({});
 
     useEffect(() => {
-        document.title = `${projectInfo.sign} | Hồ sơ văn bản`;
+        document.title = `Trixgo | Quản lý nhân sự`;
     }, [projectInfo]);
 
     //_____Start history traffict
@@ -142,11 +142,11 @@ export const HumanHomePage: FC = () => {
             //     "path": "area area1 area2 department position",
             //     "select": "name sign"
             // },
+            type: '1',
             keyword
         },
         isFetchList: true
     });
-
     // console.log(listHumanWithPager)
 
     const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -236,10 +236,6 @@ export const HumanHomePage: FC = () => {
     const toggleModalConfirm = () => {
         setIsShow(!isShow);
     };
-
-    useEffect(() => {
-        createHistoryTraffics({...payloadHistoryTraffic, type: 1});
-    }, []);
 
     /**
      * 
@@ -365,21 +361,55 @@ export const HumanHomePage: FC = () => {
                             <input 
                             placeholder="Tìm kiếm" 
                             className="pl-3 pr-3 mr-2 w-[175px] h-[32px] bg-cbs-table-header border border-primary-border rounded-lg mb-2"
-                            // onChange={debounce((value) => {
-                            //     handleOnFilter({
-                            //       keyword: value,
-                            //     })
-                            //   }, 800)}
-                            //   initialValue={pageParam.keyword}
                             onChange={onChangeSearch}
                             />
                         </div>
-
                         {/* <DropdownSearchableV2
+                            ref={directionsRef}
+                            className={"mr-4 border border-primary-border rounded-lg mb-2"}
+                            placeholder={"Phân loại"}
+                            prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"}/>}
+                            isMultiple={true}
+                            disableSearch={true}
+                            allowClearValueSingleInput={true}
+                            data={DIRECTION_TYPES}
+                            formatItem={{
+                                "id": "value"
+                            }}
+                            onchangeValue={item => {
+                                const cloneIDs = [...directions];
+                                cloneIDs.push(item.value);
+                                setDirections(cloneIDs);
+                                dispatch(setFilterDropdown({keyFilter: "directions", dataFilter: cloneIDs}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onClearData={() => {
+                                setDirections([]);
+                                dispatch(setFilterDropdown({keyFilter: "directions", dataFilter: []}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            onMultipleRemoveValue={id => {
+                                const cloneIDs = [...directions];
+                                const newList = cloneIDs.filter(selectId => selectId !== id);
+                                setDirections(newList);
+                                dispatch(setFilterDropdown({keyFilter: "directions", dataFilter: newList}))
+
+                                setPageIndex(0);
+                                ref.current&&ref.current.resetPaginate();
+                            }}
+                            renderItem={(item) => (
+                                <p className={"min-w-[300px]"}>{item.text}</p>
+                            )}
+                            selectOneByOne={true}
+                        />
+                        <DropdownSearchableV2
                             ref={datahubRef}
                             className={"mr-4 border border-primary-border rounded-lg mb-2"}
-                            placeholder={"Đơn vị ban hành"}
-                            prefixIcon={<img className={"mr-2"} src={maleUserIcon} alt={"icon"}/>}
+                            placeholder={"Phân loại"}
                             isMultiple={true}
                             allowClearValueSingleInput={true}
                             data={listDatahubContact}
