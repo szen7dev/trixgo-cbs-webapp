@@ -54,6 +54,8 @@ const payloadHistoryTraffic: any = {
 };
 
 export const HumanHomePage: FC = () => {
+    const [keyword, setKeyword] = useState('');
+
     const dispatch = useDispatch();
     const {keywordInput} = useAppSelector(
         (state) => state.documentProject.data
@@ -140,9 +142,16 @@ export const HumanHomePage: FC = () => {
             //     "path": "area area1 area2 department position",
             //     "select": "name sign"
             // },
+            keyword
         },
         isFetchList: true
     });
+
+    // console.log(listHumanWithPager)
+
+    const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
+        setKeyword(event.target.value);
+    }, 500);
 
     const { downloadTemplateImportExcelDocumentAsync, importDocumentFromExcelAsync, exportDocumentAsync } = useDocumentCustom({});
     const { onFetchDetailDepartmentAsync } = useQueryDetailDepartment();
@@ -353,9 +362,20 @@ export const HumanHomePage: FC = () => {
                 <div className={"flex flex-wrap items-center px-4 py-2"}>
                     <div className={"flex items-center flex-1"}>
                         <div className="relative flex items-center">
-                            <input placeholder="Tìm kiếm" className="pl-3 pr-3 mr-2 w-[175px] h-[32px] bg-cbs-table-header border border-primary-border rounded-lg mb-2"/>
+                            <input 
+                            placeholder="Tìm kiếm" 
+                            className="pl-3 pr-3 mr-2 w-[175px] h-[32px] bg-cbs-table-header border border-primary-border rounded-lg mb-2"
+                            // onChange={debounce((value) => {
+                            //     handleOnFilter({
+                            //       keyword: value,
+                            //     })
+                            //   }, 800)}
+                            //   initialValue={pageParam.keyword}
+                            onChange={onChangeSearch}
+                            />
                         </div>
-                        <DropdownSearchableV2
+
+                        {/* <DropdownSearchableV2
                             ref={datahubRef}
                             className={"mr-4 border border-primary-border rounded-lg mb-2"}
                             placeholder={"Đơn vị ban hành"}
@@ -401,6 +421,7 @@ export const HumanHomePage: FC = () => {
                             )}
                             selectOneByOne={true}
                         />
+
                         <DropdownSearchableV2
                             ref={typesRef}
                             className={"mr-2 border border-primary-border rounded-lg mb-2"}
@@ -605,7 +626,7 @@ export const HumanHomePage: FC = () => {
                                 <p className={"min-w-[300px]"}>{item.text}</p>
                             )}
                             selectOneByOne={true}
-                        />
+                        /> */}
                     </div>
                     {/* <button
                         onClick={() => handleCreate()}
@@ -614,23 +635,23 @@ export const HumanHomePage: FC = () => {
                     </button> */}
                 </div>
                 <div className={"flex items-center pb-2"}>
-                    
-                    {/* <button className={"flex items-center justify-center mx-3 ml-6"}
+                    <button className={"flex items-center justify-center mx-3 ml-6"}
                         onClick={handleExport.bind(null)}
-                    >
-                        <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"}/>
+                    >   
+                        Download
+                        <img src={downloadIcon} alt={"-----"} className={"ml-2 w-[18px] h-[18px]"}/>
                     </button>
-                    <button className={"flex items-center justify-center mx-3 ml-3"}
+                    {/* <button className={"flex items-center justify-center mx-3 ml-3"}
                             onClick={handleDownloadTemplateImportExcel}
                         >
-                            Tải mẫu Import Excel
+                            Mẫu Import Excel nhân sự
                     </button>
                     <button className={"flex items-center justify-center mx-3 ml-3"}>
                         <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
                         accept=".xlsx, .xlsm, .xls, .csv"/>
-                        <label className="custom-file-label" htmlFor="inputGroupFile">Import excel tạo Hồ sơ</label>
-                    </button>
-                    {
+                        <label className="custom-file-label" htmlFor="inputGroupFile">Import Excel tạo nhân sự</label>
+                    </button> */}
+                    {/* {
                         recordSelected._id&&
                         <button
                             onClick={handleOnClickUpdate(recordSelected)}
@@ -678,25 +699,25 @@ export const HumanHomePage: FC = () => {
                                 />
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                                Nhân sự
+                                Nhân sự/Mã định danh/Ngày sinh
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                                Thường chú
+                                Điện thoại/Email
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" >
-                                Nguyên quán
+                                Thường trú/Nơi ở hiện tại
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                                Giới tính
+                                Mã số thuế/Bảo hiểm
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                                Phòng ban
+                                Phòng ban/Vị trí
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                                Loại hợp đồng
+                                Loại hợp đồng/Ngày ký
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                                Tình trạng
+                                Tình trạng làm việc
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
                                 Ghi chú
@@ -732,28 +753,37 @@ export const HumanHomePage: FC = () => {
                                             }}
                                         />
                                     </td>
-                                    <td className="px-2 w-[271px] py-2.5 border-b border-cbs-border">
+                                    <td className="px-2 py-2.5 border-b border-cbs-border">
                                         <Link to={linkRef}>
-                                        <span>{`${document.name}`} - {`${document?.phone}`}</span>
-                                        <p className="text-primary-gray">{document?.email != null && document?.email }</p>
-                                        <p className="text-primary-gray">{ document?.birthday != null && moment(document?.birthday).format("DD/MM/YYYY")}</p>
+                                        <p>
+                                            {`${document.name}`}
+                                            - {(document?.gender && document?.gender >= 1) && GENDER_TYPES[document?.gender -1].text}
+                                        </p>
+                                        <p className="text-primary-gray mt-1">{document?.identity != null && document?.identity }</p>
+                                        <p className="text-primary-gray mt-1">Ngày sinh: { document?.birthday != null && moment(document?.birthday).format("DD/MM/YYYY")}</p>
                                         </Link>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
-                                        {document?.area?.name}
+                                        <p>{`${document.name}`} - {`${document?.phone}`}</p>
+                                        <p className="text-primary-gray">{document?.email != null && document?.email }</p>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
-                                        {document?.area1?.name}
+                                        {document.address},
+                                        {document?.area?.name}, {document?.area?.parent?.name}, {document?.area?.parent?.parent?.name}
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
-                                        {(document?.gender && document?.gender >= 1) && GENDER_TYPES[document?.gender -1].text}
+                                        <p>MST: {document?.taxid}</p>
+                                        <p>MBH: {document?.insuranceSign} - {moment(document.insuranceDate).isValid() && moment(document.insuranceDate).format("DD/MM/YYYY")}</p>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2 w-24">
-                                        {document?.department?.name}
-                                        {/* {moment(document.date).isValid() && moment(document.date).format("DD/MM/YYYY")} */}
+                                        <p>{document?.department?.name}</p>
+                                        <p>{document?.position?.name}</p>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
                                         {document?.contractType?.name}
+                                        <p><i>
+                                            {moment(document.contractDate).isValid() && moment(document.contractDate).format("DD/MM/YYYY")}
+                                            </i></p>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
                                         {document?.workingStatus?.name}
