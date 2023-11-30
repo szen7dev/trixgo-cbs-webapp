@@ -100,7 +100,9 @@ async function importHumanFromExcel(data: any) {
     return result;
 }
 
-async function exportHuman(data: any) {
-    const { data: result } = await API.post(`${CONTACT_URL}/export-Human`, data);
-    return result;
+async function exportHuman<T>(params: any): Promise<T> {
+    const { data } = await API.get<any>(
+        `${CONTACT_URL}/export-excel`, params
+    );
+    return data;
 }

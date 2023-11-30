@@ -5,53 +5,27 @@ import { toast } from "react-toastify";
 import moment from "moment";
 import { read, utils } from 'xlsx';
 
-// ========== Context ==========
-import { ModalContext } from "views/document/contexts/modal";
-
-// ========= Global Components =========
 import {
     DropdownSearchableV2,
     Loader,
 } from "shareComponents/common";
 
-// ========== Hooks ==========
-import {
-     useQueryDetailDocument,
-} from "services/hooks/ppt/useDocument";
-import { useQueryDetailDepartment } from "services/hooks/items/useDepartment";
-import { useMutationDocumentChild } from "services/hooks/document/useDocumentChild";
-import { useHistoryTraffics } from "services/hooks/auth/useAuth";
-import { useDocumentCustom, useListFilterDocument } from "services/hooks/document/useDocument";
-import { useHumanCustom, useListFilterHuman} from "services/hooks/human/useHuman";
-
-// ========== Utils ==========
-import {APP_ID, DIRECTION_TYPES, DOCUMENT_TYPES, DOCUMENT_TYPES_SORT, GENDER_TYPES } from 'apis/localdb';
+// ========== Utils ========== //
+import { GENDER_TYPES } from 'apis/localdb';
 import { createLinkAndClick } from "utils";
-
-import {useProject} from "services/hooks/items/useProject";
-import maleUserIcon from "assets/images/icons8-male-user-64.svg";
-import categoryIcon from "assets/images/icons8-category-48.svg";
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
 import TriangleDown from "assets/icons/TriangleDown";
-import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
-import contractIcon from "assets/images/icons8-contract-64-blue.svg";
-import echoDbIcon from "assets/images/icons8-amazon-echo-48.svg";
 import downloadIcon from "assets/images/icons8-download-64.svg";
-import iconPencil from "assets/images/icons8-pencil-96 1.png";
 import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
-import {useContractIsMembers} from "services/hooks/items/useContract";
 import {debounce} from "lodash";
-import {useStorage} from "services/hooks/items/useStorage";
 import {useDispatch} from "react-redux";
 import {useAppSelector} from "redux/reducer";
-import {setFilterDropdown, resetAllFilterAndKeyword} from "redux/reducer/DocumentProjectSlice";
-import { useQueryListCompany } from "services/hooks/useCompanies";
+import {setFilterDropdown} from "redux/reducer/DocumentProjectSlice";
 
-// const payloadHistoryTraffic: any = {
-//     appID: APP_ID.PCM.id,
-//     menuID: APP_ID.PCM.menuPcmProject.document.id,
-//     type: "1"
-// };
+// ========== Hooks ========== //
+import { useHumanCustom, useListFilterHuman} from "services/hooks/human/useHuman";
+import {useProjectCustom} from "services/hooks/items/useProject";
+import {useProject} from "services/hooks/items/useProject";
 
 export const HumanHomePage: FC = () => {
     const [keyword, setKeyword] = useState('');
@@ -81,7 +55,7 @@ export const HumanHomePage: FC = () => {
     const ref = React.useRef<PaginateHandle>(null);
     const datahubRef = React.useRef<DropdownHandle>(null);
     const typesRef = React.useRef<DropdownHandle>(null);
-    const directionsRef = React.useRef<DropdownHandle>(null);
+    const typeRef = React.useRef<DropdownHandle>(null);
     const contractsRef = React.useRef<DropdownHandle>(null);
     const storagesRef = React.useRef<DropdownHandle>(null);
     const fromToRef = React.useRef<TimeRangeHandle>(null);
@@ -93,56 +67,28 @@ export const HumanHomePage: FC = () => {
         document.title = `Trixgo | Quản lý nhân sự`;
     }, [projectInfo]);
 
-    //_____Start history traffict
-    const { createHistoryTraffics } = useHistoryTraffics();
-
-    //_____End history traffict
     const location = useLocation()
-    const { id: departmentID } = useParams<{ id: string }>();
-    const [isShow, setIsShow] = useState<boolean>(false);
 
     //_____Import, export excel
-    const [dataImport, setDataImport] = useState([]);
     const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
         isExporting: false,
     });
 
+    const [genders, setGenders] = useState<string[]>([]);
+
+    const [projectKeyword, setProjectKeyword] = useState("");
+    const [departmentsID, setDepartmentsID] = useState<string[]>([]);
+
     const [fromToDate, setFromToDate] = useState({fromDate: "", toDate: ""})
-
-    const [keywordDatahubContact, setKeywordDatahubContact] = useState("");
-    const [datahubContactsID, setDatahubContactsID] = useState<string[]>([]);
-
-    const [types, setTypes] = useState<string[]>([]);
-
-    const [directions, setDirections] = useState<string[]>([]);
-
-    const [contractKeyword, setContractKeyword] = useState("");
-    const [contractsID, setContractsID] = useState<string[]>([]);
-
-    const [storageKeyword, setStorageKeyword] = useState("");
-    const [storagesID, setStoragesID] = useState<string[]>([]);
-
-	const { data: listDatahubContact } = useQueryListCompany({ keyword: keywordDatahubContact }); // Danh bạ hệ thống mới
-
-    const { listContracts } = useContractIsMembers({ params: {keyword: contractKeyword, populates: JSON.stringify({"path": "project", "select":"name sign"})}, isFetch: true });
-    const { list: listStorages } = useStorage({ params: { companyID: typeof projectInfo.company === "string" ? projectInfo.company : "", keyword: storageKeyword,}, isFetchList: (!isloadingProjectInfo && typeof projectInfo._id === "string")});
+    
+    const { listProjectsUserIsMember } = useProjectCustom({ paramsProjectsUserIsMember: { keyword: projectKeyword }, isFetchProjectsUserIsMember: true });
 
     const { listHumanWithPager, isLoading, isFetching, totalRecord, totalPage, fetchNextPageHuman, hasNextPage, refetchListHuman } = useListFilterHuman({
         params: {
-            // isParent: "1",
-            // departmentsID: [departmentID],
-            // ...fromToDate,
-            // datahubContactsID,
-            // types,
-            // directions,
-            // contractsID,
-            // storagesID,
-            // keyword: keywordInput,
-            // populates: {
-            //     "path": "area area1 area2 department position",
-            //     "select": "name sign"
-            // },
+            ...fromToDate,
             type: '1',
+            genders,
+            departmentsID,
             keyword
         },
         isFetchList: true
@@ -153,130 +99,20 @@ export const HumanHomePage: FC = () => {
         setKeyword(event.target.value);
     }, 500);
 
-    const { downloadTemplateImportExcelDocumentAsync, importDocumentFromExcelAsync, exportDocumentAsync } = useDocumentCustom({});
-    const { onFetchDetailDepartmentAsync } = useQueryDetailDepartment();
-    const { insertDocumentChildAsync, updateDocumentChildAsync } = useMutationDocumentChild();
-    const { toggleModal, updateModal } = useContext(ModalContext);
-    const { onFetchDetailDocumentAsync }   = useQueryDetailDocument();
+    const { exportHumanAsync } = useHumanCustom({});
 
-    const handleCreate = React.useCallback(async () => {
-        const result = await onFetchDetailDepartmentAsync(departmentID);
-        toggleModal();
-        updateModal({
-            departmentId: departmentID,
-            departmentInfo: result,
-            title: "Thêm mới",
-            onSubmit: async (values: any) => {
-                const result = await insertDocumentChildAsync({
-                    ...values,
-                    departmentID,
-                });
-                if (result.status === 200) {
-                    setSelectRecord({});
-                    resetAllFilter();
-                    dispatch(resetAllFilterAndKeyword({}));
-                    refetchListHuman();
-                    setPageIndex(0);
-                    ref.current&&ref.current.resetPaginate();
-                    toggleModal();
-                    updateModal({
-                        departmentInfo: {},
-                    });
-                }
-            },
-        });
-    }, [
-        departmentID,
-        insertDocumentChildAsync,
-        onFetchDetailDepartmentAsync,
-        refetchListHuman,
-        toggleModal,
-        updateModal,
-    ]);
-
-    const handleOnClickUpdate = React.useCallback((record) => async () => {
-            const result = await onFetchDetailDocumentAsync(record._id);
-            toggleModal();
-            updateModal({
-                departmentId: departmentID,
-                departmentInfo: result,
-                title: "Cập nhật",
-                initialValues: result,
-                onSubmit: async (values: any) => {
-                    const result = await updateDocumentChildAsync({
-                        ...values,
-                        documentID: record._id,
-                    });
-                    if (result.status === 200) {
-                        setSelectRecord({});
-                        resetAllFilter();
-                        dispatch(resetAllFilterAndKeyword({}));
-                        refetchListHuman();
-                        setPageIndex(0);
-                        ref.current&&ref.current.resetPaginate();
-                        toggleModal();
-                        updateModal({
-                            departmentInfo: {},
-                            initialValues: {},
-                        });
-                    }
-                },
-            });
-        },
-        [
-            departmentID,
-            onFetchDetailDocumentAsync,
-            refetchListHuman,
-            toggleModal,
-            updateDocumentChildAsync,
-            updateModal,
-        ]
-    );
-
-    const toggleModalConfirm = () => {
-        setIsShow(!isShow);
-    };
-
-    /**
-     * 
-     * Xử lý download template excel
-     */
-    const handleDownloadTemplateImportExcel = async () => {
-		try {
-            setStateExport({ isExporting: true });
-            const { error, data } = await downloadTemplateImportExcelDocumentAsync({
-                projectID: departmentID
-            });
-
-            if(error) {
-                return toast.warn(data?.message);
-            }
-
-            data && createLinkAndClick(data, '_self');
-        } catch (error: any) {
-            toast.error(error.message)
-        } finally {
-            setStateExport({ isExporting: false });
-        }
-	}
-
-    /**
-     * 
-     * Tải dữ liệu excel
-     */
+    // Làm việc với Excel
     const handleExport = async () => {
         try {
+            // console.log()
             setStateExport({ isExporting: true });
-            const { error, data } = await exportDocumentAsync({
+            const { error, data } = await exportHumanAsync({
                 filterParams: {  
-                    departmentsID: [departmentID],
                     ...fromToDate,
-                    datahubContactsID,
-                    types,
-                    directions,
-                    contractsID,
-                    storagesID,
-                    keyword: keywordInput 
+                    type: '1',
+                    genders,
+                    departmentsID,
+                    keyword
                 }
             });
 
@@ -290,62 +126,6 @@ export const HumanHomePage: FC = () => {
         } finally {
             setStateExport({ isExporting: false });
         }
-    }
-
-    /**
-     * Xử lý import excel (đọc file)
-     */
-    const handleImport = ($event: any) => {
-        const files = $event.target.files;
-        if (files.length) {
-            const file = files[0];
-            const reader = new FileReader();
-            reader.onload = (event: any) => {
-                const wb = read(event.target.result);
-                const sheets = wb.SheetNames;
-
-                if (sheets.length) {
-                    const rows: any = utils.sheet_to_json(wb.Sheets[sheets[1]]); // Index=1 (tức Sheet số 2 từ trái sang)
-                    
-                    // Set data để Import
-                    setDataImport(rows)
-                }
-            }
-            
-            reader.readAsArrayBuffer(file);
-        }
-
-        // Đọc xong thì xóa value trong Input đi
-        $event.target.value = null;
-    }
-
-    // Gọi tới API để đẩy data lên
-    useEffect(() => {
-        if(dataImport.length){
-            const fetchData = async () => {
-                const data = await importDocumentFromExcelAsync({ projectID, dataImport: JSON.stringify(dataImport) });
-                setDataImport([]);
-                // refetchTaskInfo?.()
-
-                if(!data.error){
-                    return toast.success("Import thành công");
-                }
-                return toast.error(data.message);
-            }
-
-            fetchData();
-        }
-        
-        // console.log('=========DATA THAY ĐỔI RỒI==============')
-    }, [dataImport])
-
-    const resetAllFilter = () => {
-        datahubRef.current&&datahubRef.current.resetDropdown();
-        typesRef.current&&typesRef.current.resetDropdown();
-        directionsRef.current&&directionsRef.current.resetDropdown();
-        storagesRef.current&&storagesRef.current.resetDropdown();
-        contractsRef.current&&contractsRef.current.resetDropdown();
-        fromToRef.current&&fromToRef.current.resetTimeRange();
     }
 
     if(stateExport.isExporting) {
@@ -360,43 +140,42 @@ export const HumanHomePage: FC = () => {
                         <div className="relative flex items-center">
                             <input 
                             placeholder="Tìm kiếm" 
-                            className="pl-3 pr-3 mr-2 w-[175px] h-[32px] bg-cbs-table-header border border-primary-border rounded-lg mb-2"
+                            className="pl-3 pr-3 mr-1 w-[175px] h-[32px] bg-cbs-table-header border border-primary-border rounded-lg mb-2"
                             onChange={onChangeSearch}
                             />
                         </div>
-                        {/* <DropdownSearchableV2
-                            ref={directionsRef}
-                            className={"mr-4 border border-primary-border rounded-lg mb-2"}
-                            placeholder={"Phân loại"}
-                            prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"}/>}
+                        <DropdownSearchableV2
+                            ref={typeRef}
+                            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+                            placeholder={"Giới tính"}
                             isMultiple={true}
                             disableSearch={true}
                             allowClearValueSingleInput={true}
-                            data={DIRECTION_TYPES}
+                            data={GENDER_TYPES}
                             formatItem={{
                                 "id": "value"
                             }}
                             onchangeValue={item => {
-                                const cloneIDs = [...directions];
+                                const cloneIDs = [...genders];
                                 cloneIDs.push(item.value);
-                                setDirections(cloneIDs);
-                                dispatch(setFilterDropdown({keyFilter: "directions", dataFilter: cloneIDs}))
+                                setGenders(cloneIDs);
+                                dispatch(setFilterDropdown({keyFilter: "genders", dataFilter: cloneIDs}))
 
                                 setPageIndex(0);
                                 ref.current&&ref.current.resetPaginate();
                             }}
                             onClearData={() => {
-                                setDirections([]);
-                                dispatch(setFilterDropdown({keyFilter: "directions", dataFilter: []}))
+                                setGenders([]);
+                                dispatch(setFilterDropdown({keyFilter: "genders", dataFilter: []}))
 
                                 setPageIndex(0);
                                 ref.current&&ref.current.resetPaginate();
                             }}
                             onMultipleRemoveValue={id => {
-                                const cloneIDs = [...directions];
+                                const cloneIDs = [...genders];
                                 const newList = cloneIDs.filter(selectId => selectId !== id);
-                                setDirections(newList);
-                                dispatch(setFilterDropdown({keyFilter: "directions", dataFilter: newList}))
+                                setGenders(newList);
+                                dispatch(setFilterDropdown({keyFilter: "genders", dataFilter: newList}))
 
                                 setPageIndex(0);
                                 ref.current&&ref.current.resetPaginate();
@@ -406,42 +185,43 @@ export const HumanHomePage: FC = () => {
                             )}
                             selectOneByOne={true}
                         />
+
                         <DropdownSearchableV2
                             ref={datahubRef}
-                            className={"mr-4 border border-primary-border rounded-lg mb-2"}
-                            placeholder={"Phân loại"}
+                            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+                            placeholder={"Phòng ban"}
                             isMultiple={true}
                             allowClearValueSingleInput={true}
-                            data={listDatahubContact}
+                            data={listProjectsUserIsMember}
                             formatItem={{
                                 id: "_id",
                                 text: "name"
                             }}
                             onSearchInputChange={debounce(
-                                (valueSearch) => setKeywordDatahubContact(valueSearch),
+                                (valueSearch) => setProjectKeyword(valueSearch),
                                 500
                             )}
                             onchangeValue={item => {
-                                const cloneIDs = [...datahubContactsID];
+                                const cloneIDs = [...departmentsID];
                                 cloneIDs.push(item._id);
-                                setDatahubContactsID(cloneIDs);
-                                dispatch(setFilterDropdown({keyFilter: "datahubContactsID", dataFilter: cloneIDs}))
+                                setDepartmentsID(cloneIDs);
+                                dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: cloneIDs}))
 
                                 setPageIndex(0);
                                 ref.current&&ref.current.resetPaginate();
                             }}
                             onClearData={() => {
-                                setDatahubContactsID([]);
-                                dispatch(setFilterDropdown({keyFilter: "datahubContactsID", dataFilter: []}))
+                                setDepartmentsID([]);
+                                dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: []}))
 
                                 setPageIndex(0);
                                 ref.current&&ref.current.resetPaginate();
                             }}
                             onMultipleRemoveValue={id => {
-                                const cloneIDs = [...datahubContactsID];
+                                const cloneIDs = [...departmentsID];
                                 const newList = cloneIDs.filter(selectId => selectId !== id);
-                                setDatahubContactsID(newList);
-                                dispatch(setFilterDropdown({keyFilter: "datahubContactsID", dataFilter: newList}))
+                                setDepartmentsID(newList);
+                                dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: newList}))
 
                                 setPageIndex(0);
                                 ref.current&&ref.current.resetPaginate();
@@ -452,56 +232,13 @@ export const HumanHomePage: FC = () => {
                             selectOneByOne={true}
                         />
 
-                        <DropdownSearchableV2
-                            ref={typesRef}
-                            className={"mr-2 border border-primary-border rounded-lg mb-2"}
-                            placeholder={"Tính chất hồ sơ"}
-                            prefixIcon={<img className={"mr-2"} src={categoryIcon} alt={"icon"}/>}
-                            isMultiple={true}
-                            disableSearch={true}
-                            allowClearValueSingleInput={true}
-                            data={DOCUMENT_TYPES_SORT}
-                            formatItem={{
-                                "id": "value"
-                            }}
-                            onchangeValue={item => {
-                                const cloneIDs = [...types];
-                                cloneIDs.push(item.value);
-                                setTypes(cloneIDs);
-                                dispatch(setFilterDropdown({keyFilter: "types", dataFilter: cloneIDs}))
-
-                                setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
-                            }}
-                            onClearData={() => {
-                                setTypes([]);
-                                dispatch(setFilterDropdown({keyFilter: "types", dataFilter: []}))
-
-                                setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
-                            }}
-                            onMultipleRemoveValue={id => {
-                                const cloneIDs = [...types];
-                                const newList = cloneIDs.filter(selectId => selectId !== id);
-                                setTypes(newList);
-                                dispatch(setFilterDropdown({keyFilter: "types", dataFilter: newList}))
-
-                                setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
-                            }}
-                            renderItem={(item) => (
-                                <p className={"min-w-[300px]"}>{item.text}</p>
-                            )}
-                            selectOneByOne={true}
-                        />
                         <TimeRangeDropdown
                             ref={fromToRef}
                             className={
-                                "mr-4 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
+                                "mr-1 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
                             }
-                            placeholder={"Ngày nhận"}
+                            placeholder={"Ngày tháng"}
                             iconBack={<TriangleDown />}
-                            iconFront={<img src={timelineIcon} alt={"----"} />}
                             onValueChange={(val) => {
                                 setFromToDate(val)
                                 dispatch(setFilterDropdown({keyFilter: "fromDate", dataFilter: val.fromDate}))
@@ -527,142 +264,7 @@ export const HumanHomePage: FC = () => {
                                   },
                             ]}
                         />
-                        <DropdownSearchableV2
-                            ref={directionsRef}
-                            className={"mr-4 border border-primary-border rounded-lg mb-2"}
-                            placeholder={"Hướng hồ sơ"}
-                            prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"}/>}
-                            isMultiple={true}
-                            disableSearch={true}
-                            allowClearValueSingleInput={true}
-                            data={DIRECTION_TYPES}
-                            formatItem={{
-                                "id": "value"
-                            }}
-                            onchangeValue={item => {
-                                const cloneIDs = [...directions];
-                                cloneIDs.push(item.value);
-                                setDirections(cloneIDs);
-                                dispatch(setFilterDropdown({keyFilter: "directions", dataFilter: cloneIDs}))
-
-                                setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
-                            }}
-                            onClearData={() => {
-                                setDirections([]);
-                                dispatch(setFilterDropdown({keyFilter: "directions", dataFilter: []}))
-
-                                setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
-                            }}
-                            onMultipleRemoveValue={id => {
-                                const cloneIDs = [...directions];
-                                const newList = cloneIDs.filter(selectId => selectId !== id);
-                                setDirections(newList);
-                                dispatch(setFilterDropdown({keyFilter: "directions", dataFilter: newList}))
-
-                                setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
-                            }}
-                            renderItem={(item) => (
-                                <p className={"min-w-[300px]"}>{item.text}</p>
-                            )}
-                            selectOneByOne={true}
-                        />
-                        <DropdownSearchableV2
-                            ref={contractsRef}
-                            className={"mr-4 border border-primary-border rounded-lg mb-2"}
-                            placeholder={"Hợp đồng"}
-                            prefixIcon={<img className={"mr-2"} src={contractIcon} alt={"icon"}/>}
-                            isMultiple={true}
-                            disableSearch={false}
-                            allowClearValueSingleInput={true}
-                            data={listContracts}
-                            formatItem={{
-                                id: "_id",
-                                text: "name"
-                            }}
-                            onSearchInputChange={debounce(valueSearch => setContractKeyword(valueSearch), 500)}
-                            onchangeValue={item => {
-                                const cloneIDs = [...contractsID];
-                                cloneIDs.push(item._id);
-                                setContractsID(cloneIDs);
-                                dispatch(setFilterDropdown({keyFilter: "contractsID", dataFilter: cloneIDs}))
-
-                                setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
-                            }}
-                            onClearData={() => {
-                                setContractsID([]);
-                                dispatch(setFilterDropdown({keyFilter: "contractsID", dataFilter: []}))
-
-                                setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
-                            }}
-                            onMultipleRemoveValue={id => {
-                                const cloneIDs = [...contractsID];
-                                const newList = cloneIDs.filter(selectId => selectId !== id);
-                                setContractsID(newList);
-                                dispatch(setFilterDropdown({keyFilter: "contractsID", dataFilter: newList}))
-
-                                setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
-                            }}
-                            renderItem={(item) => (
-                                <p className={"min-w-[300px]"}>{item.project.sign}.{item.name}-{item.sign}</p>
-                            )}
-                            selectOneByOne={true}
-                        />
-                        <DropdownSearchableV2
-                            ref={storagesRef}
-                            className={"mr-4 border border-primary-border rounded-lg mb-2"}
-                            placeholder={"Địa chỉ lưu trữ"}
-                            prefixIcon={<img className={"mr-2"} src={echoDbIcon} alt={"icon"}/>}
-                            disableSearch={false}
-                            isMultiple={true}
-                            allowClearValueSingleInput={true}
-                            data={listStorages}
-                            formatItem={{
-                                id: "_id",
-                                text: "name"
-                            }}
-                            onSearchInputChange={debounce(valueSearch => setStorageKeyword(valueSearch), 500)}
-                            onchangeValue={item => {
-                                const cloneIDs = [...storagesID];
-                                cloneIDs.push(item._id);
-                                setStoragesID(cloneIDs);
-                                dispatch(setFilterDropdown({keyFilter: "storagesID", dataFilter: cloneIDs}))
-
-                                setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
-                            }}
-                            onClearData={() => {
-                                setStoragesID([]);
-                                dispatch(setFilterDropdown({keyFilter: "storagesID", dataFilter: []}))
-
-                                setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
-                            }}
-                            onMultipleRemoveValue={id => {
-                                const cloneIDs = [...storagesID];
-                                const newList = cloneIDs.filter(selectId => selectId !== id);
-                                setStoragesID(newList);
-                                dispatch(setFilterDropdown({keyFilter: "storagesID", dataFilter: newList}))
-
-                                setPageIndex(0);
-                                ref.current&&ref.current.resetPaginate();
-                            }}
-                            renderItem={(item) => (
-                                <p className={"min-w-[300px]"}>{item.text}</p>
-                            )}
-                            selectOneByOne={true}
-                        /> */}
                     </div>
-                    {/* <button
-                        onClick={() => handleCreate()}
-                        className={"h-[32px] rounded bg-cbs-green text-white font-bold px-4 mb-2"}>
-                        Tạo mới
-                    </button> */}
                 </div>
                 <div className={"flex items-center pb-2"}>
                     <button className={"flex items-center justify-center mx-3 ml-6"}
@@ -671,24 +273,7 @@ export const HumanHomePage: FC = () => {
                         Download
                         <img src={downloadIcon} alt={"-----"} className={"ml-2 w-[18px] h-[18px]"}/>
                     </button>
-                    {/* <button className={"flex items-center justify-center mx-3 ml-3"}
-                            onClick={handleDownloadTemplateImportExcel}
-                        >
-                            Mẫu Import Excel nhân sự
-                    </button>
-                    <button className={"flex items-center justify-center mx-3 ml-3"}>
-                        <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
-                        accept=".xlsx, .xlsm, .xls, .csv"/>
-                        <label className="custom-file-label" htmlFor="inputGroupFile">Import Excel tạo nhân sự</label>
-                    </button> */}
-                    {/* {
-                        recordSelected._id&&
-                        <button
-                            onClick={handleOnClickUpdate(recordSelected)}
-                            className={"flex items-center justify-center mx-3 ml-6"}>
-                            <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"}/>
-                        </button>
-                    } */}
+                    
                     <PaginateV2
                         ref={ref}
                         totalRecord={totalRecord}
