@@ -54,6 +54,8 @@ const payloadHistoryTraffic: any = {
 };
 
 export const HumanHomePage: FC = () => {
+    const [keyword, setKeyword] = useState('');
+
     const dispatch = useDispatch();
     const {keywordInput} = useAppSelector(
         (state) => state.documentProject.data
@@ -140,11 +142,16 @@ export const HumanHomePage: FC = () => {
             //     "path": "area area1 area2 department position",
             //     "select": "name sign"
             // },
+            keyword
         },
         isFetchList: true
     });
 
     // console.log(listHumanWithPager)
+
+    const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
+        setKeyword(event.target.value);
+    }, 500);
 
     const { downloadTemplateImportExcelDocumentAsync, importDocumentFromExcelAsync, exportDocumentAsync } = useDocumentCustom({});
     const { onFetchDetailDepartmentAsync } = useQueryDetailDepartment();
@@ -355,9 +362,20 @@ export const HumanHomePage: FC = () => {
                 <div className={"flex flex-wrap items-center px-4 py-2"}>
                     <div className={"flex items-center flex-1"}>
                         <div className="relative flex items-center">
-                            <input placeholder="Tìm kiếm" className="pl-3 pr-3 mr-2 w-[175px] h-[32px] bg-cbs-table-header border border-primary-border rounded-lg mb-2"/>
+                            <input 
+                            placeholder="Tìm kiếm" 
+                            className="pl-3 pr-3 mr-2 w-[175px] h-[32px] bg-cbs-table-header border border-primary-border rounded-lg mb-2"
+                            // onChange={debounce((value) => {
+                            //     handleOnFilter({
+                            //       keyword: value,
+                            //     })
+                            //   }, 800)}
+                            //   initialValue={pageParam.keyword}
+                            onChange={onChangeSearch}
+                            />
                         </div>
-                        <DropdownSearchableV2
+
+                        {/* <DropdownSearchableV2
                             ref={datahubRef}
                             className={"mr-4 border border-primary-border rounded-lg mb-2"}
                             placeholder={"Đơn vị ban hành"}
@@ -403,6 +421,7 @@ export const HumanHomePage: FC = () => {
                             )}
                             selectOneByOne={true}
                         />
+
                         <DropdownSearchableV2
                             ref={typesRef}
                             className={"mr-2 border border-primary-border rounded-lg mb-2"}
@@ -607,7 +626,7 @@ export const HumanHomePage: FC = () => {
                                 <p className={"min-w-[300px]"}>{item.text}</p>
                             )}
                             selectOneByOne={true}
-                        />
+                        /> */}
                     </div>
                     {/* <button
                         onClick={() => handleCreate()}
