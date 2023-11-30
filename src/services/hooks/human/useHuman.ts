@@ -6,7 +6,6 @@ import type {
     HumanUpdatePayload,
     HumanUpdateResponse,
     HumanQueryPayload,
-    // Human,
     HumanProps,
 } from 'typings/human/human';
 
