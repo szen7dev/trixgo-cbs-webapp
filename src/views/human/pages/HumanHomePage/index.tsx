@@ -243,14 +243,24 @@ export const HumanHomePage: FC = () => {
                                     toDate: "",
                                 },
                                 {
-                                    text: "Cách đây 1 tuần",
-                                    fromDate: moment().subtract(7, "days").format("YYYY-MM-DD h:mm"),
+                                    text: "Trong vòng 5 năm",
+                                    fromDate: moment().subtract(5, "years").format("YYYY-MM-DD h:mm"),
                                     toDate: moment().add(1, "minutes").format("YYYY-MM-DD h:mm"),
                                 },
                                 {
-                                    text: "Cách đây 1 tháng",
-                                    fromDate: moment().subtract(1, "months").format("YYYY-MM-DD h:mm"),
-                                    toDate: moment().add(1, "minutes").format("YYYY-MM-DD h:mm"),
+                                    text: "Từ 5-10 năm",
+                                    fromDate: moment().subtract(10, "years").format("YYYY-MM-DD h:mm"),
+                                    toDate: moment().subtract(5, "years").format("YYYY-MM-DD h:mm"),
+                                },
+                                {
+                                    text: "Từ 10-15 năm",
+                                    fromDate: moment().subtract(15, "years").format("YYYY-MM-DD h:mm"),
+                                    toDate: moment().subtract(10, "years").format("YYYY-MM-DD h:mm"),
+                                },
+                                {
+                                    text: "Từ 15 năm trở lên",
+                                    fromDate: moment().subtract(100, "years").format("YYYY-MM-DD h:mm"),
+                                    toDate: moment().subtract(15, "years").format("YYYY-MM-DD h:mm"),
                                 },
                             ]}
                         />

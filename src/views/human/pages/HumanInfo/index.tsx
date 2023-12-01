@@ -61,6 +61,10 @@ export const HumanInfo: FC = () => {
         refreshDetailHuman();
         return true;
       }
+      // console.log(res)
+      // console.log(res.data.message)
+      // return toast.error(res?.error);
+
       return false;
     },
     [detailHuman._id, updateContactMutateAsync, refreshDetailHuman]
@@ -145,17 +149,6 @@ export const HumanInfo: FC = () => {
     },
     [handleFinishForm, openModal]
   );
-
-  // useEffect(() => {
-  //   if (!isSuccessApp) return;
-
-  //   if(dataUserAccess)
-
-  //   if (isSuccessApp && !hasPermission) {
-	// 		toast.error("Bạn không có quyền truy cập tính năng này!");
-	// 		// history.push("/");
-	// 	};
-  // }, [dataUserAccess])
 
   useEffect(() => {
     if(!user || !Object.keys(detailHuman).length || !dataUserAccess) return;
