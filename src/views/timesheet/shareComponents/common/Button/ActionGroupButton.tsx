@@ -60,7 +60,7 @@ const ActionGroupButton: FC<ActionGroupButtonProps> = (props) => {
 
   return (
     <div className={"flex items-center"}>
-      <button className={"flex items-center mr-3"}>
+      {/* <button className={"flex items-center mr-3"}>
         <img className={"w-[24px] h-[24px]"} alt={"icon"} src={DownloadIcon} />
       </button>
       <button className={"flex items-center mr-3"}>
@@ -71,14 +71,14 @@ const ActionGroupButton: FC<ActionGroupButtonProps> = (props) => {
       </button>
       <button className={"flex items-center mr-3"}>
         <img className={"w-[24px] h-[24px]"} alt={"icon"} src={SendEmailIcon} />
-      </button>
+      </button> */}
       <button
         className={"flex items-center mr-3"}
         onClick={handleClickUpdateTimeSheet(recordSelected)}
       >
         <img className={"w-[24px] h-[24px]"} alt={"icon"} src={PencilIcon} />
       </button>
-      <button
+      {/* <button
         className={"flex items-center mr-3"}
         onClick={handleClickDeleteTimeSheet(recordSelected?._id)}
       >
@@ -86,7 +86,7 @@ const ActionGroupButton: FC<ActionGroupButtonProps> = (props) => {
       </button>
       <button className={"flex items-center mr-3"}>
         <img className={"w-[24px] h-[24px]"} alt={"icon"} src={PrintIcon} />
-      </button>
+      </button> */}
     </div>
   );
 };
