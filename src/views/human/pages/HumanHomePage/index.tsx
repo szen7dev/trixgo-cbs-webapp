@@ -25,7 +25,6 @@ import {setFilterDropdown} from "redux/reducer/DocumentProjectSlice";
 // ========== Hooks ========== //
 import { useHumanCustom, useListFilterHuman} from "services/hooks/human/useHuman";
 import {useProjectCustom} from "services/hooks/items/useProject";
-import {useProject} from "services/hooks/items/useProject";
 
 export const HumanHomePage: FC = () => {
     const [keyword, setKeyword] = useState('');
@@ -39,14 +38,6 @@ export const HumanHomePage: FC = () => {
         setPageIndex(0);
         ref.current&&ref.current.resetPaginate();
     }, [keywordInput]);
-
-    const { id: projectID } = useParams<{ id: string }>();
-    const { info: projectInfo, isLoading: isloadingProjectInfo } = useProject({
-        params: {
-            departmentID: projectID
-        },
-        isFetchInfo: true
-    })
 
     type PaginateHandle = React.ElementRef<typeof PaginateV2>;
     type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
@@ -65,7 +56,7 @@ export const HumanHomePage: FC = () => {
 
     useEffect(() => {
         document.title = `Trixgo | Quản lý nhân sự`;
-    }, [projectInfo]);
+    });
 
     const location = useLocation()
 
@@ -104,7 +95,6 @@ export const HumanHomePage: FC = () => {
     // Làm việc với Excel
     const handleExport = async () => {
         try {
-            // console.log()
             setStateExport({ isExporting: true });
             const { error, data } = await exportHumanAsync({
                 filterParams: {  
@@ -237,7 +227,7 @@ export const HumanHomePage: FC = () => {
                             className={
                                 "mr-1 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
                             }
-                            placeholder={"Ngày tháng"}
+                            placeholder={"Thâm niên"}
                             iconBack={<TriangleDown />}
                             onValueChange={(val) => {
                                 setFromToDate(val)
@@ -253,22 +243,32 @@ export const HumanHomePage: FC = () => {
                                     toDate: "",
                                 },
                                 {
-                                    text: "Cách đây 1 tuần",
-                                    fromDate: moment().subtract(7, "days").format("YYYY-MM-DD h:mm"),
+                                    text: "Trong vòng 5 năm",
+                                    fromDate: moment().subtract(5, "years").format("YYYY-MM-DD h:mm"),
                                     toDate: moment().add(1, "minutes").format("YYYY-MM-DD h:mm"),
-                                  },
-                                  {
-                                    text: "Cách đây 1 tháng",
-                                    fromDate: moment().subtract(1, "months").format("YYYY-MM-DD h:mm"),
-                                    toDate: moment().add(1, "minutes").format("YYYY-MM-DD h:mm"),
-                                  },
+                                },
+                                {
+                                    text: "Từ 5-10 năm",
+                                    fromDate: moment().subtract(10, "years").format("YYYY-MM-DD h:mm"),
+                                    toDate: moment().subtract(5, "years").format("YYYY-MM-DD h:mm"),
+                                },
+                                {
+                                    text: "Từ 10-15 năm",
+                                    fromDate: moment().subtract(15, "years").format("YYYY-MM-DD h:mm"),
+                                    toDate: moment().subtract(10, "years").format("YYYY-MM-DD h:mm"),
+                                },
+                                {
+                                    text: "Từ 15 năm trở lên",
+                                    fromDate: moment().subtract(100, "years").format("YYYY-MM-DD h:mm"),
+                                    toDate: moment().subtract(15, "years").format("YYYY-MM-DD h:mm"),
+                                },
                             ]}
                         />
                     </div>
                 </div>
                 <div className={"flex items-center pb-2"}>
                     <button className={"flex items-center justify-center mx-3 ml-6"}
-                        onClick={handleExport.bind(null)}
+                        onClick={handleExport}
                     >   
                         Download
                         <img src={downloadIcon} alt={"-----"} className={"ml-2 w-[18px] h-[18px]"}/>
@@ -314,25 +314,25 @@ export const HumanHomePage: FC = () => {
                                 />
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                                Nhân sự/Mã định danh/Ngày sinh
+                                Nhân sự
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
                                 Điện thoại/Email
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" >
-                                Thường trú/Nơi ở hiện tại
+                                Nơi ở hiện tại
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                                Mã số thuế/Bảo hiểm
+                                Thuế, bảo hiểm
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                                Phòng ban/Vị trí
+                                Phòng ban
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                                Loại hợp đồng/Ngày ký
+                                Hợp đồng lao động
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                                Tình trạng làm việc
+                                Tình trạng
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
                                 Ghi chú
@@ -379,7 +379,7 @@ export const HumanHomePage: FC = () => {
                                         </Link>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
-                                        <p>{`${document.name}`} - {`${document?.phone}`}</p>
+                                        <p>{`${document?.phone}`}</p>
                                         <p className="text-primary-gray">{document?.email != null && document?.email }</p>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">

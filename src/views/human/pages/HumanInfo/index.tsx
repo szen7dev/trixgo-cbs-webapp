@@ -61,6 +61,10 @@ export const HumanInfo: FC = () => {
         refreshDetailHuman();
         return true;
       }
+      // console.log(res)
+      // console.log(res.data.message)
+      // return toast.error(res?.error);
+
       return false;
     },
     [detailHuman._id, updateContactMutateAsync, refreshDetailHuman]
@@ -146,17 +150,6 @@ export const HumanInfo: FC = () => {
     [handleFinishForm, openModal]
   );
 
-  // useEffect(() => {
-  //   if (!isSuccessApp) return;
-
-  //   if(dataUserAccess)
-
-  //   if (isSuccessApp && !hasPermission) {
-	// 		toast.error("Bạn không có quyền truy cập tính năng này!");
-	// 		// history.push("/");
-	// 	};
-  // }, [dataUserAccess])
-
   useEffect(() => {
     if(!user || !Object.keys(detailHuman).length || !dataUserAccess) return;
 
@@ -203,7 +196,7 @@ export const HumanInfo: FC = () => {
                 rounded-br-md
               "
             >
-              <div className="py-2 h-1/4 flex items-center gap-5 pl-8 hover:bg-accent-light">
+              {/* <div className="py-2 h-1/4 flex items-center gap-5 pl-8 hover:bg-accent-light">
                 <img src={DownloadIcon} alt="Download" className="w-[22px]" />
                 <span className="text-[13px]">
                   {i18n("menu-dropdown.download")}
@@ -226,7 +219,7 @@ export const HumanInfo: FC = () => {
                 <span className="text-[13px]">
                   {i18n("menu-dropdown.copy")}
                 </span>
-              </div>
+              </div> */}
               <div
                 className="py-2 h-1/4 flex items-center gap-5 pl-8 hover:bg-accent-light"
                 onClick={handleClickUpdateButton(detailHuman)}
@@ -240,12 +233,12 @@ export const HumanInfo: FC = () => {
                   {i18n("menu-dropdown.update")}
                 </span>
               </div>
-              <div className="py-2 h-1/4 flex items-center gap-5 pl-8 hover:bg-accent-light">
+              {/* <div className="py-2 h-1/4 flex items-center gap-5 pl-8 hover:bg-accent-light">
                 <img src={DeleteIcon} alt="Delete" className="w-[22px]" />
                 <span className="text-[13px]">
                   {i18n("menu-dropdown.delete")}
                 </span>
-              </div>
+              </div> */}
             </div>
           )}
         </div>

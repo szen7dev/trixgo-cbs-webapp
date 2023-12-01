@@ -278,7 +278,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                 const data = await importCustomerFromExcelAsync({ dataImport: JSON.stringify(dataImport) });
                 setDataImport([]);
                 // refetchTaskInfo?.()
-                console.log(data)
+                // console.log(data)
 
                 if(!data.error){
                     return toast.success("Import thành công");
