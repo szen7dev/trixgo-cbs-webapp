@@ -379,7 +379,7 @@ export const HumanHomePage: FC = () => {
                                         </Link>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
-                                        <p>{`${document.name}`} - {`${document?.phone}`}</p>
+                                        <p>{`${document?.phone}`}</p>
                                         <p className="text-primary-gray">{document?.email != null && document?.email }</p>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
