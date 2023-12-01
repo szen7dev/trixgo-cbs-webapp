@@ -118,6 +118,12 @@ export const HomeLeftMenuContent: FC = () => {
             count: 0,
             route: '/pcm/report'
         },
+        {
+            label: t("menu:kpiReport"),
+            icon: fileIcon,
+            count: 0,
+            route: '/pcm/kpi-report'
+        },
     ]
 
     const listTabSub: Tab[] = [

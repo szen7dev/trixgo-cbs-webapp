@@ -1,6 +1,6 @@
 /*=====1.LIBRARY=====*/
-import React, { FC, useCallback, useState, useEffect } from "react";
-import { Link, useHistory, useParams } from "react-router-dom";
+import React, { FC, useState, useEffect } from "react";
+import { Link, useHistory, useParams, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import debounce from "lodash/debounce";
 import moment from "moment";
@@ -12,29 +12,23 @@ import { formatNumberMoney } from "utils/converter";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
-import { SearchInput, ModalContainer } from "shareComponents/common";
+import { SearchInput } from "shareComponents/common";
 import PaginateV2 from "shareComponents/common/PaginateV2";
-// import { CreateFnbProductQoutas } from "./modal";
 
 /*=====5.TYPINGS=====*/
 
 /*=====6.HOOKS/APIS=====*/
 import { APP_ID } from "apis/localdb";
-import { useModal } from "services/hooks/useModal";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { useFnbProduct } from 'services/hooks/fnb/useFnbProduct';
-import { useFnbQuota } from 'services/hooks/fnb/useFnbQuota';
 import { useFunda } from 'services/hooks/items/useFunda';
+import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
 
 /*=====7.OTHER=====*/
-import { FNB_INTERNAL } from "apis/localdb";
-
-const TYPE_PRODUCT = [
-	{ value: 1, text: "Thông thường" },
-	{ value: 2, text: "Topping" },
-]
+import { createLinkAndClick } from "utils";
 
 export const FnbRiskReportPage: FC = () => {
+	const location = useLocation()
 	useEffect(() => {
 		document.title = "eShop";
 	}, []);
@@ -46,11 +40,7 @@ export const FnbRiskReportPage: FC = () => {
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
     const { info: infoProduct } = useFnbProduct({ params: { productID }, isFetchList: false, isFetchInfo: true  });
-	// console.log({ infoProduct });
 
-	/**
-	 * List mẩu tin
-	 */
     const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFunda({ 
 		params: { 
 			keyword: keyword,  
@@ -64,34 +54,6 @@ export const FnbRiskReportPage: FC = () => {
 		isFetchList: true, 
 		isFetchInfo: false
 	});
-	// console.log({listWithPager});
-
-	const getStateChecked = useCallback((id: string) => {
-		return idsChecked.includes(id) ? true : false;
-	}, [idsChecked]);
-
-	const onClickCheckButton = (id: string) => {
-		setIdsChecked([id]);
-	};
-
-	const getStateCheckedAll = useCallback(() => {
-		return idsChecked.length == listWithPager.length;
-	}, [idsChecked]);
-
-	const onClickCheckAll = () => {
-		if (idsChecked.length == listWithPager.length) {
-			setIdsChecked([]);
-		} else {
-			const idsAll = listWithPager.map((e: any) => e._id);
-			setIdsChecked(idsAll);
-		}
-	};
-
-	const [modalCreateProject, setModalCreateProject] = useState<boolean>(false);
-	const toggleModalCreateProject = () => setModalCreateProject(!modalCreateProject);
-
-	const [initialValues, setInitialValues] = useState(null);
-	const onConfirmCreateProject = () => refetch();
 
 	useEffect(() => {
 		if (isSuccess && !(hasPermission)) {
@@ -104,41 +66,63 @@ export const FnbRiskReportPage: FC = () => {
     const ref = React.useRef<PaginateHandle>(null);
     const [pageIndex, setPageIndex] = useState(0);
 
+	let linkRef: any;
+	if(location.pathname.includes("/fnb/")){
+		linkRef = `/fnb/risk-report/`
+	}else{
+		linkRef = `/pcm/kpi-report/`
+	}
+
+	const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+		isExporting: false,
+	});
+	const { exportOrderAsync } = useFnbOrder({});
+	const handleExportExcel = async () => {
+		try {
+		  setStateExport({ isExporting: true });
+		  const { error, data } = await exportOrderAsync({
+			filterParams: {
+			}
+		  });
+	
+		  if(error) {
+			return toast.warn(data?.message);
+		  }
+	
+		  data && createLinkAndClick(data, '_self');
+		} catch (error: any) {
+		  toast.error(error.message)
+		} finally {
+		  setStateExport({ isExporting: false });
+		}
+	}
+
 	return (
 		<main className="h-full overflow-auto">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
 				<div className="flex items-center">
-					<button onClick={history.goBack}>
+					{/* <button onClick={history.goBack}>
                         <img src="/images/common/button_back.png" alt="Button Back" />
-                    </button>
+                    </button> */}
 					<p className="text-lg">{infoProduct?.name}</p>
 					<SearchInput
-						classNameWrapper="ml-4"
+						classNameWrapper="mr-3"
 						classNameInput="outline-none w-[296px]"
 						onChange={debounce(
 							(event: any) => setKeyword(event.target.value),
 							500
 						)}
 					/>
-					{/* <FinancialCashFlowFilterButton /> */}
+					<button onClick={handleExportExcel} title="Tải dữ liệu Excel">
+						Tải báo cáo KPI
+					</button>
+
 					{(idsChecked && idsChecked.length) ? (
 						<div className="flex items-center gap-2 border-l-2 border-primary-border px-4 ml-4">
-							{/* <div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
-								<img src={DownloadIcon} alt="Download" />
-							</div> */}
 							{idsChecked.length == 1 ?
 								<>
 								<div
 									className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
-									// onClick={() => {
-									// 	const item = listWithPager[pageIndex].find((e: any) => e._id == idsChecked[0]);
-									// 	setInitialValues({
-									// 		...item,
-									// 		startTime: item.startTime ? moment(item.startTime).format('MM/DD/YYYY') : '',
-									// 		expiredTime: item.expiredTime ? moment(item.expiredTime).format('MM/DD/YYYY') : '',
-									// 	});
-									// 	toggleModalCreateProject();
-									// }}
 								>
 									<img src={PencilIcon} alt="Pencil" />
 								</div>
@@ -147,35 +131,21 @@ export const FnbRiskReportPage: FC = () => {
 						</div>
 					) : <></>}
 				</div>
-				{/* <div className="flex items-center">
-					<button
-						className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold ml-6"
-						onClick={() => {
-							setInitialValues(null);
-							toggleModalCreateProject();
-						}}
-					>
-						Tạo mới
-					</button>
-					<button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
-						<img src={Vertical3Dots} alt="3Dots" />
-					</button>
-				</div> */}
 				<PaginateV2
-                        ref={ref}
-                        totalRecord={totalRecord}
-                        totalPages={totalPage}
-                        limit={20}
-                        hasNextPage={hasNextPage}
-                        isFetching={isLoading}
-                        nextPageAction={() => {
-                            fetchNextPage();
-                            setPageIndex(oldState => oldState+1)
-                        }}
-                        prevPageAction={() => {
-                            setPageIndex(oldState => oldState-1)
-                        }}
-                    />
+					ref={ref}
+					totalRecord={totalRecord}
+					totalPages={totalPage}
+					limit={20}
+					hasNextPage={hasNextPage}
+					isFetching={isLoading}
+					nextPageAction={() => {
+						fetchNextPage();
+						setPageIndex(oldState => oldState+1)
+					}}
+					prevPageAction={() => {
+						setPageIndex(oldState => oldState-1)
+					}}
+				/>
 			</header>
 
 			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
@@ -225,7 +195,7 @@ export const FnbRiskReportPage: FC = () => {
 						<tr key={item._id} className="text-[14px]">
 							<td className={"p-2 border-t-0.5 border-b-0.5 border-primary-border text-center"}>{Number(i + 1)}</td>
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-highlight-color"}>
-								<Link to ={`/fnb/risk-report/${item._id}`}>
+								<Link to ={`${linkRef}${item._id}`}>
 									{item?.name}
 								</Link>
 							</td>

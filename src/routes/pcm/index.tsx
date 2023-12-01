@@ -9,7 +9,8 @@ import { ProtectedRoute } from "routes/components";
 /*=====3.LAYOUTS=====*/
 import { HomeLayout } from "shareComponents/layouts";
 import LayoutSecondary from "views/ppt/sharedComponents/layouts/LayoutSecondary";
-// import LayoutProjectSecondary from "views/ppt/sharedComponents/layouts/LayoutProjectSecondary";
+import { FnbRiskReportPage } from "views/fnb/pages/FnbRiskReportPage/index";
+import { FnbRiskReportDetailPage } from "views/fnb/pages/FnbRiskReportDetailPage/index";
 
 /*=====4.CONFIG ROUTE=====*/
 
@@ -111,7 +112,8 @@ const PCMRouter: FC = () => {
                     />
                   </LayoutSecondary>
                 </Route>
-
+                <Route exact path="/pcm/kpi-report" component={FnbRiskReportPage} />
+                <Route exact path="/pcm/kpi-report/:fundaID" component={FnbRiskReportDetailPage} />
                 <Route exact path="/pcm/projects" component={ProjectCategoryPage} />
                 <Route exact path="/pcm/market" component={ProjectMarketPage} />
                 <Route exact path="/pcm/new" component={ProjectNew} />
