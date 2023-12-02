@@ -4,7 +4,7 @@ import debounce from "lodash/debounce";
 import { SearchInput, ModalContainer } from "shareComponents/common";
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 import FolderIcon from "assets/images/icons8-folder.svg";
-import DownloadIcon from "assets/images/icons8-download-96.svg";
+import DownloadIcon from "assets/images/icons8-download-64.svg";
 import styles from 'views/cmcs/styles/styles.module.css';
 import cn from "classnames";
 import moment from "moment";
@@ -85,28 +85,6 @@ const CmcsAdminContractTab: FC = () => {
 							500
 						)}
 					/>
-					{/* <FinancialCashFlowFilterButton /> */}
-					{(idsChecked && idsChecked.length) ? (
-						<div className="flex items-center gap-2 border-l-2 border-primary-border px-4 ml-4">
-							<div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
-								<img src={DownloadIcon} alt="Download" />
-							</div>
-						</div>
-					) : <></>}
-				</div>
-				<div className="flex items-center">
-					{/* <button
-						className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold mr-6"
-						onClick={() => {
-							setInitialValues(null);
-							toggleModalCreateProject();
-						}}
-					>
-						Tạo mới
-					</button> */}
-					<button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
-						<img src={Vertical3Dots} alt="3Dots" />
-					</button>
 				</div>
 				<div className={"flex-1 flex items-center justify-end"}>
                     <PaginateV2

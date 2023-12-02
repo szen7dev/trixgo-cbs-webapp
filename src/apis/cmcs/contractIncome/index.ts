@@ -84,6 +84,11 @@ async function exportContract<T>(params: any): Promise<T> {
     return data;
 }
 
+async function importContract(data: any) {
+    const { data: result } = await API.post(`${ITEM_URL}/contracts/import-from-excel`, data);
+    return result;
+}
+
 const ContractIncomeRepository = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fetchListIsMember: async (params: any): Promise<any> => fetchListIsMember<any>(params),
@@ -95,6 +100,7 @@ const ContractIncomeRepository = {
     requestUpdateContract,
     requestDeleteContract,
     exportContract,
+    importContract
 };
 
 export default ContractIncomeRepository

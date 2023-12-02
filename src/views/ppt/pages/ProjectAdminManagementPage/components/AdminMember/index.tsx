@@ -8,7 +8,7 @@ import debounce from "lodash/debounce";
 // import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
 
 // import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
-import DownloadIcon from "assets/images/icons8-download-96.svg";
+import DownloadIcon from "assets/images/icons8-download-64.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
 import MemberIcon from "assets/images/member-icon.svg";
 

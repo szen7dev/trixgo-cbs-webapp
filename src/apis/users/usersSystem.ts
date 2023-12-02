@@ -66,5 +66,18 @@ export const UserSystemRepository = {
             params: { usersID }
         })
         return data;
+    },
+
+    async importUserSystem(data: any) {
+        const { data: result } = await API.post(`${USER_URL}/import-from-excel`, data);
+        return result;
     }
+
+    // async importUserSystem(payload: UserSystemPayload): Promise<any> {
+    //     const { data } = await API.post<Promise<any>>(
+    //         `${USER_URL}/import-from-excel`,
+    //         payload
+    //     )
+    //     return data;
+    // }
 }

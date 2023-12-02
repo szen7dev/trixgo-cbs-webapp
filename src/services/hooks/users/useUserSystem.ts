@@ -14,6 +14,7 @@ interface UseUserSystem {
     fetchNextPage: () => void;
     createUserSystemAsync: (payload: UserSystemPayload) => Promise<any>;
     updateUserSystemAsync: (payload: UserSystemPayload) => Promise<any>;
+    importUserSystemAsync: (data: any) => Promise<any>;
     deleteUserSystemAsync: (usersID: string[]) => Promise<any>;
     isFetching: boolean;
 }
@@ -63,6 +64,12 @@ export const useUserSystem = (params?: QueryParam, isFetch?: boolean): UseUserSy
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPages = data?.pages[0]?.data?.totalPage || 0;
 
+    // Import excel
+    const { mutateAsync: importUserSystemAsync } =
+        useMutation((payload: { dataImport: string }) =>
+            UserSystemRepository.importUserSystem(payload)
+        );
+
     return {
         loading: isLoading,
         data: listUsers,
@@ -73,6 +80,7 @@ export const useUserSystem = (params?: QueryParam, isFetch?: boolean): UseUserSy
         fetchNextPage,
         createUserSystemAsync,
         updateUserSystemAsync,
+        importUserSystemAsync,
         deleteUserSystemAsync,
         isFetching
     }

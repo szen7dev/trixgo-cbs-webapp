@@ -33,7 +33,7 @@ import PaginateV2 from "shareComponents/common/PaginateV2";
 import { useTask } from "services/hooks/useTask";
 import { createLinkAndClick } from "utils";
 import { usePcmPlanTaskCustom } from "services/hooks/pcm/usePcm";
-import downloadIcon from "assets/images/icons8-download-96.svg";
+import downloadIcon from "assets/images/icons8-download-64.svg";
 
 type Props = {
   type?: number;

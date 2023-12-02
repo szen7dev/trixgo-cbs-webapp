@@ -9,7 +9,7 @@ import { convertCurrency } from 'utils/converter';
 
 // import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 // import FolderIcon from "assets/images/icons8-folder.svg";
-// import DownloadIcon from "assets/images/icons8-download-96.svg";
+// import DownloadIcon from "assets/images/icons8-download-64.svg";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
 import { CreateOrUpdateBudget } from "./components";

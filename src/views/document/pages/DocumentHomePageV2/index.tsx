@@ -6,7 +6,7 @@ import categoryIcon from "assets/images/icons8-category-48.svg";
 import TriangleDown from "assets/icons/TriangleDown";
 import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
 import contractIcon from "assets/images/icons8-contract-64-blue.svg";
-import downloadIcon from "assets/images/icons8-download-96.svg";
+import downloadIcon from "assets/images/icons8-download-64.svg";
 import projectIcon from "assets/images/icons8-project-50.svg";
 import iconPencil from "assets/images/icons8-pencil-96 1.png";
 import { useDocumentCustom, useListFilterDocument} from "services/hooks/document/useDocument";

@@ -4,6 +4,7 @@ import HumanRepository from 'apis/human/indexOld';
 
 type UseContractCustom = {
     exportContractAsync: (payload: any) => Promise<any>,
+    importContractAsync: (data: any) => Promise<any>,
 };
 
 type UseContractCustomParams = {
@@ -18,8 +19,14 @@ export const useContractCustom = ({
             ContractIncomeRepository.exportContract(payload)
         );
 
+    const { mutateAsync: importContractAsync } =
+    useMutation((payload: any) =>
+        ContractIncomeRepository.importContract(payload)
+    );
+
     return {
-        exportContractAsync
+        exportContractAsync,
+        importContractAsync,
     }
 }
 
@@ -208,6 +215,7 @@ export const useQueryListContract = ({ limit, keyword }: any): any => {
         fetchNextPageDoctype
     }
 }
+
 export const useQueryListBudgetWork = ({ limit, keyword }: any): any => {
     const res = useInfiniteQuery(
         [`list_budgetWork,${keyword}`, keyword],

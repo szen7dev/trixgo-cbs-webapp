@@ -35,7 +35,7 @@ import { useProjectCustom } from "services/hooks/items/useProject";
 import { APP_ID } from "apis/localdb"
 import { createLinkAndClick } from 'utils';
 import { FilterNav } from "./filterNav";
-import downloadIcon from "assets/images/icons8-download-96.svg";
+import downloadIcon from "assets/images/icons8-download-64.svg";
 import iconPencil from "assets/images/icons8-pencil-96 1.png";
 import iconMaleUser from "assets/images/icons8-male-user-64.svg";
 import PaginateV2 from "shareComponents/common/PaginateV2";

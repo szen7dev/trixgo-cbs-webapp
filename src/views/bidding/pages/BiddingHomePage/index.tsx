@@ -11,7 +11,7 @@ import styles from "../../styles/style.module.css";
 import TriangleDown from "assets/icons/TriangleDown";
 import icon from "assets/images/icons8-bid-100.svg"
 import ThreeDotsVertical from "assets/images/icon-3dots-vertical.svg";
-import DownloadIcon from "assets/images/icons8-download-96.svg";
+import DownloadIcon from "assets/images/icons8-download-64.svg";
 import ShareIcon from "assets/images/icons8-share-rounded-96.svg";
 import CopyIcon from "assets/images/icons8-copy-96.svg";
 import SendEmailIcon from "assets/images/icons8-send-email-96.svg";

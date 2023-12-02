@@ -3,6 +3,7 @@ import cn from "classnames";
 import debounce from "lodash/debounce";
 import moment from "moment";
 import { toast } from "react-toastify";
+import { read, utils } from 'xlsx';
 // import { useQuery } from "react-query";
 
 /**
@@ -162,6 +163,51 @@ export const OwnerMemberPage: FC = () => {
     companySelected && setInitialValues(previousValue => ({ ...previousValue, companyID: companySelected }));
   }, [companySelected]);
 
+  //_____Import, export excel
+  const [dataImport, setDataImport] = useState([]);
+  const { importUserSystemAsync } = useUserSystem({});
+
+  const handleImport = ($event: any) => {
+      const files = $event.target.files;
+      if (files.length) {
+          const file = files[0];
+          const reader = new FileReader();
+          reader.onload = (event: any) => {
+              const wb = read(event.target.result);
+              const sheets = wb.SheetNames;
+
+              if (sheets.length) {
+                  const rows: any = utils.sheet_to_json(wb.Sheets[sheets[0]]); // Index=1 (tức Sheet số 2 từ trái sang)
+                  
+                  // Set data để Import
+                  setDataImport(rows)
+              }
+          }
+          
+          reader.readAsArrayBuffer(file);
+      }
+
+      // Đọc xong thì xóa value trong Input đi
+      $event.target.value = null;
+  }
+
+  // Gọi tới API để đẩy data lên
+    useEffect(() => {
+        if(dataImport.length){
+            const fetchData = async () => {
+                const data = await importUserSystemAsync({ dataImport: JSON.stringify(dataImport) });
+                setDataImport([]);
+                // console.log(dataImport)
+
+                if(!data.error){
+                    return toast.success("Import thành công");
+                }
+                return toast.error(data.message);
+            }
+            fetchData();
+        }
+    }, [dataImport])
+
   return (
     <main className="relative h-full">
       <header className="sticky top-0 bg-primary-light z-10">
@@ -178,6 +224,12 @@ export const OwnerMemberPage: FC = () => {
               classNameInput="outline-none w-[296px]"
               onChange={onChangeSearchUser}
             />
+
+            <button className={"flex items-center justify-center mx-3 ml-3"}>
+                <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
+                accept=".xlsx, .xlsm, .xls, .csv"/>
+                <label className="custom-file-label" htmlFor="inputGroupFile">Import excel tạo tài khoản</label>
+            </button>
 
             {usersChecked.length === 1 ? (
               <button

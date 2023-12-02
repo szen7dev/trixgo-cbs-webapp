@@ -5,6 +5,7 @@ import moment from "moment";
 import { Menu } from '@headlessui/react';
 import { toast } from "react-toastify";
 import { debounce } from "lodash";
+import { read, utils } from 'xlsx';
 
 import { useModal } from "services/hooks/useModal";
 import { CONTRACT_COME_IN_STATUS, DATE_FORMAT } from "apis/localdb/index";
@@ -48,7 +49,7 @@ const CmcIncomePage: FC = () => {
   const { updateContractMutateAsync } = useUpdateContractMutation();
   const { deleteContractMutateAsync } = useDeleteContractMutation();
 
-  const { exportContractAsync } = useContractCustom({});
+  const { exportContractAsync, importContractAsync } = useContractCustom({});
 
   const prevPageAction = () => {
     if (!contractIncome.nextCursor) {
@@ -129,6 +130,50 @@ const CmcIncomePage: FC = () => {
       </div>
     )
   }
+  
+  //_____Import, export excel
+  const [dataImport, setDataImport] = useState([]);
+
+  const handleImport = ($event: any) => {
+      const files = $event.target.files;
+      if (files.length) {
+          const file = files[0];
+          const reader = new FileReader();
+          reader.onload = (event: any) => {
+              const wb = read(event.target.result);
+              const sheets = wb.SheetNames;
+
+              if (sheets.length) {
+                  const rows: any = utils.sheet_to_json(wb.Sheets[sheets[0]]); // Index=1 (tức Sheet số 2 từ trái sang)
+                  
+                  // Set data để Import
+                  setDataImport(rows)
+              }
+          }
+          
+          reader.readAsArrayBuffer(file);
+      }
+
+      // Đọc xong thì xóa value trong Input đi
+      $event.target.value = null;
+  }
+
+  // Gọi tới API để đẩy data lên
+    useEffect(() => {
+        if(dataImport.length){
+            const fetchData = async () => {
+                const data = await importContractAsync({ dataImport: JSON.stringify(dataImport) });
+                setDataImport([]);
+                // console.log(dataImport)
+
+                if(!data.error){
+                    return toast.success("Import thành công");
+                }
+                return toast.error(data.message);
+            }
+            fetchData();
+        }
+    }, [dataImport])
 
   const handleExportReport = async () => {
     try {
@@ -159,17 +204,24 @@ const CmcIncomePage: FC = () => {
         <div className="flex items-center">
           <p className="text-lg">Hợp đồng bán ra</p>
           <SearchInput
-            classNameWrapper="ml-4"
+            classNameWrapper="ml-2"
             classNameInput="outline-none w-[296px]"
             onChange={debounce(
 							(event: any) => setKeyword(event.target.value),
 							500
 						)}
           />
+          
+          <button className={"flex items-center justify-center mx-3 ml-3"}>
+              <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
+              accept=".xlsx, .xlsm, .xls, .csv"/>
+              <label className="custom-file-label" htmlFor="inputGroupFile">Import excel tạo tài khoản</label>
+          </button>
+
           {itemChecked && (
             <div className="border-l-2 border-primary-border ml-5 pl-5">
               <ActionMenuTopBar
-                deleteAction={handleDeleteAction}
+                // deleteAction={handleDeleteAction}
                 editAction={handleEditAction}
                 updatePermission={updatePermission}
                 deletePermission={deletePermission}

@@ -13,7 +13,7 @@ import PrintIcon from "assets/images/icons8-print-96.png";
 import CopyIcon from "assets/images/icons8-copy-96.png";
 import PencilIcon from "assets/images/icons8-pencil.svg";
 import DeleteIcon from "assets/images/icons8-remove.svg";
-import DownloadIcon from "assets/images/icons8-download-96.svg";
+import DownloadIcon from "assets/images/icons8-download-64.svg";
 import BookmarkIcon from "assets/images/icons8-bookmark-96.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
