@@ -215,7 +215,7 @@ const CmcIncomePage: FC = () => {
           <button className={"flex items-center justify-center mx-3 ml-3"}>
               <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
               accept=".xlsx, .xlsm, .xls, .csv"/>
-              <label className="custom-file-label" htmlFor="inputGroupFile">Import excel tạo tài khoản</label>
+              <label className="custom-file-label" htmlFor="inputGroupFile">Import excel tạo hợp đồng</label>
           </button>
 
           {itemChecked && (
