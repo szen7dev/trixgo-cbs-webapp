@@ -89,7 +89,7 @@ const Routes: FC = () => {
                                 <Route path="/human">
                                     <HumanLayoutV2>
                                         <HumanRouterV2 />
-                                        </HumanLayoutV2>
+                                    </HumanLayoutV2>
                                 </Route>
                                 <Route path="/accounting/:fundaID">
                                     <AccountingLayoutV2>
