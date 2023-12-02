@@ -1,4 +1,4 @@
-import { FC, useRef, useState, useCallback } from "react";
+import { FC, useRef, useState, useCallback, memo } from "react";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
 import toArray from "lodash/toArray";
@@ -12,7 +12,6 @@ import UploadFileIcon from "assets/images/icons8-upload-document.svg";
 import PencilIcon from "assets/images/icons8-pencil.svg";
 import DeleteIcon from "assets/images/icons8-remove.svg";
 import PDFIcon from "assets/images/icons8-pdf.svg";
-import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import { useModal } from "services/hooks/useModal";
 import {
   useQueryContactDocument,
@@ -63,7 +62,7 @@ interface WorkExperienceProps {
   companyID: any;
 }
 
-export const ExperienceAppointment: FC<WorkExperienceProps> = (props) => {
+export const ExperienceAppointment: FC<WorkExperienceProps> = memo((props) => {
   const { t: i18n } = useTranslation(["human"]);
   const ref = useRef<HTMLDivElement>(null);
   const { openModal, closeModal } = useModal();
@@ -108,8 +107,6 @@ export const ExperienceAppointment: FC<WorkExperienceProps> = (props) => {
   });
 
   const [openFileOption, setOpenFileOption] = useState("");
-
-  useOnClickOutside(ref, () => setOpenFileOption(""));
 
   const handleFinishFormCreate = useCallback(
     async (values) => {
@@ -523,4 +520,6 @@ export const ExperienceAppointment: FC<WorkExperienceProps> = (props) => {
       )}
     </div>
   );
-};
+});
+
+ExperienceAppointment.displayName = 'ExperienceAppointment'

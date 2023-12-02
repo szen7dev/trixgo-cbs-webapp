@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, memo } from "react";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
 
@@ -23,7 +23,7 @@ export enum INSURANCE_STATUS {
   'Thêm mới' = 3,
 }
 
-export const GeneralInfo: FC<Props> = (props) => {
+export const GeneralInfo: FC<Props> = memo((props) => {
   const { t: i18n } = useTranslation(["human"]);
 
   const { info } = props;
@@ -187,7 +187,6 @@ export const GeneralInfo: FC<Props> = (props) => {
                 {info?.insuranceDate && moment(info?.insuranceDate).isValid() && moment(info?.insuranceDate).format(DATE_FORMAT)}
               </td>
             </tr>
-            
             <tr className="border h-7 leading-7">
               <td className="border text-primary-gray w-1/6 pl-4">
                 {i18n("insuranceStatus")}
@@ -327,4 +326,6 @@ export const GeneralInfo: FC<Props> = (props) => {
       </div>
     </div>
   );
-};
+});
+
+GeneralInfo.displayName = "GeneralInfo"

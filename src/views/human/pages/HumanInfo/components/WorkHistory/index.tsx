@@ -1,4 +1,4 @@
-import { FC, useRef, useState, useCallback } from "react";
+import { FC, useRef, useState, useCallback, memo } from "react";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
 import className from "classnames";
@@ -13,7 +13,6 @@ import UploadFileIcon from "assets/images/icons8-upload-document.svg";
 import PencilIcon from "assets/images/icons8-pencil.svg";
 import DeleteIcon from "assets/images/icons8-remove.svg";
 import PDFIcon from "assets/images/icons8-pdf.svg";
-import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import { useModal } from "services/hooks/useModal";
 import { FormWorkHistory } from "./components";
 import { useQueryContactDocument, useMutationContactDocument } from "services/hooks/useHuman";
@@ -32,7 +31,7 @@ interface PropWorkHistory {
 
 const DATE_FORMAT = "DD/MM/YYYY";
 
-export const WorkHistory: FC<PropWorkHistory> = (props) => {
+export const WorkHistory: FC<PropWorkHistory> = memo((props) => {
 	const { t: i18n } = useTranslation(["human"]);
 	const ref = useRef<HTMLDivElement>(null);
 	const { openModal, closeModal } = useModal();
@@ -75,8 +74,6 @@ export const WorkHistory: FC<PropWorkHistory> = (props) => {
 	} = useQueryContactDocument(humanId, {
 		type: 1, companyID
 	});
-
-	useOnClickOutside(ref, () => setOpenFileOptionById(""));
 
 	const handleFinishFormCreate = useCallback(
 		async (values) => {
@@ -454,4 +451,6 @@ export const WorkHistory: FC<PropWorkHistory> = (props) => {
 			)}
 		</div>
 	);
-};
+});
+
+WorkHistory.displayName = "WorkHistory"

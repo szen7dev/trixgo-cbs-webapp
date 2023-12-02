@@ -1,10 +1,11 @@
-import { FC } from "react";
-import { map as _map } from "lodash";
+import { FC, memo, useState } from "react";
+import { map as _map, debounce } from "lodash";
 import { convertCurrency } from "utils/converter";
 import { Loader } from "shareComponents/common/Loader";
 import { DetailChildRow } from "../DetailChildRow";
 
 import type { SalaryChild, SalaryParent } from "typings/salary";
+import { useUserSystem } from "services/hooks/users/useUserSystem";
 
 type Props = {
   salaryParentInfo?: SalaryParent;
@@ -15,7 +16,7 @@ type Props = {
   pageIndex: number;
 };
 
-export const DetailMainRow: FC<Props> = ({
+export const DetailMainRow: FC<Props> = memo(({
   salaryParentInfo,
   listSalaryChild,
   onUpdatedSalaryChild,
@@ -23,6 +24,13 @@ export const DetailMainRow: FC<Props> = ({
   hasPermission,
   pageIndex,
 }) => {
+  const [searchAssigneeStr, setSearchAssigneeStr] = useState('');
+  const { data: listUsersSystem } = useUserSystem({ keyword: searchAssigneeStr }, true);
+
+  const onSearchUser = debounce((value) => {
+    setSearchAssigneeStr(value)
+  }, 500)
+
   if (isFetchSalaryChild) {
     return <Loader className="border-primary" />;
   }
@@ -122,9 +130,13 @@ export const DetailMainRow: FC<Props> = ({
           parent={salaryParentInfo}
           index={+index}
           hasPermission={hasPermission}
+          listUserSearched={listUsersSystem}
           onUpdatedSalaryChild={onUpdatedSalaryChild}
+          onSearchUser={onSearchUser}
         />
       ))}
     </>
   );
-};
+});
+
+DetailMainRow.displayName = 'DetailMainRow'

@@ -9,18 +9,18 @@ import { toast } from "react-toastify";
 /*=====3.ICONS=====*/
 import BackIcon from "assets/images/icon-back.svg";
 import ThreeDotVerticalIcon from "assets/images/icon-3dots-vertical.svg";
-import PrintIcon from "assets/images/icons8-print-96.png";
-import CopyIcon from "assets/images/icons8-copy-96.png";
 import PencilIcon from "assets/images/icons8-pencil.svg";
-import DeleteIcon from "assets/images/icons8-remove.svg";
-import DownloadIcon from "assets/images/icons8-download-64.svg";
-import BookmarkIcon from "assets/images/icons8-bookmark-96.svg";
+// import PrintIcon from "assets/images/icons8-print-96.png";
+// import CopyIcon from "assets/images/icons8-copy-96.png";
+// import DeleteIcon from "assets/images/icons8-remove.svg";
+// import DownloadIcon from "assets/images/icons8-download-64.svg";
+// import BookmarkIcon from "assets/images/icons8-bookmark-96.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import { GeneralInfo, WorkHistory, WorkExperience, ExperienceAppointment, Education, Certificate } from "./components";
-import { useOnClickOutside } from "services/hooks/useOnclickOutside";
+// import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import { Loader } from "shareComponents/common";
-import {NewHumanModal} from "views/human/shareComponents/common";
+import { NewHumanModal } from "views/human/shareComponents/common";
 
 /*=====5.TYPINGS=====*/
 import type { Human } from "typings/human";
@@ -46,29 +46,26 @@ export const HumanInfo: FC = () => {
   const { updateContactMutateAsync } = useUpdateContactMutation();
   const { dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.HUMAN.id });
 
-  useOnClickOutside(refMenuDropdown, () => setOpenHumanOption(!openHumanOption));
+  // useOnClickOutside(refMenuDropdown, () => setOpenHumanOption(!openHumanOption));
 
   const { detailHuman, loading, refetch: refreshDetailHuman } = useFetchDetailHuman(id);
 
-  const handleFinishForm = useCallback(
-    async (values) => {
-      const res = await updateContactMutateAsync({
-        ...values,
-        contactID: detailHuman._id,
-        province: values?.province?.toString(),
-      });
-      if (!res.error) {
-        refreshDetailHuman();
-        return true;
-      }
-      // console.log(res)
-      // console.log(res.data.message)
-      // return toast.error(res?.error);
+  const handleFinishForm = async (values: any) => {
+    const res = await updateContactMutateAsync({
+      ...values,
+      contactID: detailHuman._id,
+      province: values?.province?.toString(),
+    });
 
-      return false;
-    },
-    [detailHuman._id, updateContactMutateAsync, refreshDetailHuman]
-  );
+    if (res.error) {
+      toast.error(res.data?.message ?? "Bad request");
+      return false
+    }
+
+    toast.success("Cập nhật thành công");
+    refreshDetailHuman();
+    return true
+  }
 
   const handleClickUpdateButton = useCallback(
     (defaultValues: Human) => () => {

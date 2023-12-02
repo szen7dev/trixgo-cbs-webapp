@@ -1,4 +1,4 @@
-import { FC, useRef, useState, useCallback } from "react";
+import { FC, useRef, useState, useCallback, memo } from "react";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
 import toArray from "lodash/toArray";
@@ -12,7 +12,6 @@ import UploadFileIcon from "assets/images/icons8-upload-document.svg";
 import PencilIcon from "assets/images/icons8-pencil.svg";
 import DeleteIcon from "assets/images/icons8-remove.svg";
 import PDFIcon from "assets/images/icons8-pdf.svg";
-import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import { useModal } from "services/hooks/useModal";
 import {
   useQueryContactDocument,
@@ -25,7 +24,6 @@ import useCustomReducer from "services/hooks/ppt/useCustomReducer";
 import {
   uploadActions,
   uploadReducer,
-  IMethodFiles,
 } from "views/human/Reducers/Upload";
 import { IFile, modifyUploadedFilesV2 } from "views/human/utils";
 import { useUpload } from "services/hooks/useUpload";
@@ -50,7 +48,7 @@ interface CertificateProps {
   companyID: any;
 }
 
-export const Certificate: FC<CertificateProps> = (props) => {
+export const Certificate: FC<CertificateProps> = memo((props) => {
   const { t: i18n } = useTranslation(["human"]);
   const ref = useRef<HTMLDivElement>(null);
   const { openModal, closeModal } = useModal();
@@ -94,8 +92,6 @@ export const Certificate: FC<CertificateProps> = (props) => {
   });
 
   const [openFileOption, setOpenFileOption] = useState("");
-
-  useOnClickOutside(ref, () => setOpenFileOption(""));
 
   const handleFinishFormCreate = useCallback(
     async (values) => {
@@ -524,4 +520,6 @@ export const Certificate: FC<CertificateProps> = (props) => {
       )}
     </div>
   );
-};
+});
+
+Certificate.displayName = 'Certificate'
