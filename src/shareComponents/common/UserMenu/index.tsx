@@ -45,7 +45,7 @@ export const UserMenu: FC = () => {
               </div>
 
               <div className="flex flex-1 justify-between items-center pl-3">
-                <Link to={`/pcm/home`} className="flex flex-col">
+                <Link to={`/personal/home`} className="flex flex-col">
                   <span className="font-bold">{user?.fullname}</span>
                   <span className="font-normal text-sm leading-4">
                     Xem hồ sơ của bạn
@@ -58,21 +58,24 @@ export const UserMenu: FC = () => {
           {/*  Divider */}
           <hr className="h-px border-secondary-gray my-1 mx-3" />
 
-          <Menu.Item>
-            <div className="flex items-center rounded-lg cursor-pointer hover:bg-lighter-gray p-2 pl-3">
-              <Menu.Button className="w-9 h-9 inline-flex items-center justify-center bg-secondary-light transition duration-150 rounded-full focus:outline-none">
-                <CogIcon isFill className="w-5 h-5 text-primary-gray" />
-              </Menu.Button>
+          <Link to={`/personal/home`} className="font-bold">
+            <Menu.Item>
+              <div className="flex items-center rounded-lg cursor-pointer hover:bg-lighter-gray p-2 pl-3">
+                <Menu.Button className="w-9 h-9 inline-flex items-center justify-center bg-secondary-light transition duration-150 rounded-full focus:outline-none">
+                  <CogIcon isFill className="w-5 h-5 text-primary-gray" />
+                </Menu.Button>
 
-              <div className="flex flex-1 justify-between items-center pl-3">
-                <div className="flex flex-col">
-                  <Link to={`/personal/home`} className="font-bold">
-                    Tài khoản
-                  </Link>
+                <div className="flex flex-1 justify-between items-center pl-3">
+                  <div className="flex flex-col">
+                    
+                      Tài khoản
+                  
+                  </div>
                 </div>
               </div>
-            </div>
-          </Menu.Item>
+            </Menu.Item>
+          </Link>
+
           <Menu.Item>
             <div className="flex items-center rounded-lg cursor-pointer hover:bg-lighter-gray p-2 pl-3" onClick={() => signOut()}>
               <Menu.Button className="w-9 h-9 inline-flex items-center justify-center bg-secondary-light transition duration-150 rounded-full focus:outline-none">

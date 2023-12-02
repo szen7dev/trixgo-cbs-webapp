@@ -1,11 +1,12 @@
 /*=====1.LIBRARY=====*/
-import { FC } from "react";
-import { NavLink } from 'react-router-dom';
+import { FC, useState, useEffect } from "react";
+import { NavLink, useHistory } from 'react-router-dom';
+import { toast } from "react-toastify";
 
 /*=====2.CSS=====*/
 
 /*=====3.ICONS=====*/
-import ownerLogo from "assets/logos/owner.png";
+// import ownerLogo from "assets/logos/owner.png";
 // import fakeThumbnail from "assets/images/avatar.jpg";
 import iconFolder from "assets/images/icons8-application-window-100.png";
 
@@ -14,12 +15,27 @@ import iconFolder from "assets/images/icons8-application-window-100.png";
 /*=====5.TYPINGS=====*/
 
 /*=====6.HOOKS/APIS=====*/
-import { useAuth } from "services/hooks/auth/useAuth";
+// import { useAuth } from "services/hooks/auth/useAuth";
+import { APP_ID } from "apis/localdb";
+import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 
 /*=====7.OTHER=====*/
 
 export const OwnerLeftSideBar: FC = () => {
-    const { user } = useAuth();
+	useEffect(() => {
+		document.title = "Quản trị viên";
+	}, []);
+
+    // const { user } = useAuth();
+    const history = useHistory();
+    const { hasPermission, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.OWNER.id });
+
+    useEffect(() => {
+		if (isSuccess && !(hasPermission)) {
+			toast.error("Bạn không có quyền truy cập chức năng này. Vui lòng liên hệ ban quản trị.");
+			history.push("/")
+		}
+	}, [hasPermission]);
 
     return (
         <div className="t-leftsidebar-navigation t-leftsidebar-navigation-v2 t-leftsidebar-navigation-type2 fixed left-64px top-14 bottom-0 transition-all duration-500 ease-out border-secondary-light z-10 bg-primary-light">
@@ -42,5 +58,5 @@ export const OwnerLeftSideBar: FC = () => {
                 </div>
             </div>
         </div>
-    );
-};
+    )
+}
