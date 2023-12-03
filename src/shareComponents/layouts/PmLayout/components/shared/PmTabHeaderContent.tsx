@@ -1,7 +1,7 @@
 import React, {ChangeEvent, FC, Fragment, useRef, useState} from "react";
 import searchIcon from "assets/images/icons8-search-120.png";
 import debounce from "lodash/debounce";
-import {useOnClickOutside} from "services/hooks/useOnclickOutside";
+// import {useOnClickOutside} from "services/hooks/useOnclickOutside";
 import userAvt from "assets/images/task-user.svg";
 import {DropdownSearchable} from "../../../../common";
 
@@ -12,7 +12,7 @@ export const PmTabHeaderContent:FC = () => {
     const [search, setSearch] = useState("");
     const [showResult, setShowResult] = useState(false);
 
-    useOnClickOutside(wrapperClass, () => setShowResult(false))
+    // useOnClickOutside(wrapperClass, () => setShowResult(false))
 
     const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
         debounce((e) => setSearch(e.target.value), 600)

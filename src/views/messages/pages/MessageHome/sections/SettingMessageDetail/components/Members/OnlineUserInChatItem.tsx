@@ -5,7 +5,7 @@ import AddAdminIcon from "assets/images/icons8-admin-settings-male-96.svg";
 import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 import {ItemListConversation, ItemMemberMessage} from "typings/apis/messages/listConversation";
 import moment from "moment";
-import {useOnClickOutside} from "services/hooks/useOnclickOutside";
+// import {useOnClickOutside} from "services/hooks/useOnclickOutside";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {toast} from "react-toastify";
 import {useDeleteConfirm} from "services/hooks/useDeleteConfirm";
@@ -25,7 +25,7 @@ export const OnlineUserInChatItem:FC<Props> = ({user,index, chat}) => {
     const {handleStartPrivateChat, isAuthor, isMasterAuthor} = UseMessageHelper();
     const [showOption, setShowOption] = useState(false);
     const wrapper = useRef<HTMLDivElement>(null);
-    useOnClickOutside(wrapper, () => setShowOption(false));
+    // useOnClickOutside(wrapper, () => setShowOption(false));
 
     const onlineStatus = useCallback(() => {
         if (!user.timeLastSeen) {

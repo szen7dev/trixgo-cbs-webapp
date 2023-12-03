@@ -2,7 +2,7 @@ import React, {FC, useCallback, useRef, useState} from "react";
 import {map as _map} from "lodash";
 import {listEmoji} from "../MainChatContent";
 import {ItemMessage} from "typings/apis/messages/listMessage";
-import {useOnClickOutside} from "services/hooks/useOnclickOutside";
+// import {useOnClickOutside} from "services/hooks/useOnclickOutside";
 import {ReactionDetails} from "./ReactionDetails";
 type Props = {
     message: ItemMessage
@@ -10,7 +10,7 @@ type Props = {
 export const ReactionList:FC<Props> = ({message}) => {
     const [showReactionGroup, setShowReactionGroup] = useState(false);
     const reactionWrapper = useRef<HTMLDivElement>(null)
-    useOnClickOutside(reactionWrapper, () => setShowReactionGroup(false))
+    // useOnClickOutside(reactionWrapper, () => setShowReactionGroup(false))
     const arrayReaction = useCallback(() => {
         if (!message.reactions) return {};
         const uniqueChars : {[key: string]: { icon: string; number: number } } = {};

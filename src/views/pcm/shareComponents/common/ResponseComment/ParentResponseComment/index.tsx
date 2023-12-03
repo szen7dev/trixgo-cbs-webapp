@@ -26,7 +26,7 @@ import { ReplyResponseComment } from "../ReplyResponseComment";
 import { captureException } from "@sentry/react";
 import TaskRepository from "apis/task";
 import { useFileCore } from 'services/hooks/useFileCore';
-import { useOnClickOutside } from "../../../../../../services/hooks/useOnclickOutside";
+// import { useOnClickOutside } from "../../../../../../services/hooks/useOnclickOutside";
 import { OptionsComment } from "../OptionsComment";
 import { Popover } from "@mui/material";
 import React from "react";
@@ -65,7 +65,7 @@ export const ParentResponseComment: FC<Props> = ({ userId, task, comment, tab, s
         }
     };
 
-    useOnClickOutside(detailRef, () => setShowDetail(false));
+    // useOnClickOutside(detailRef, () => setShowDetail(false));
 
     const { state, dispatch } = useContext(CommentContext);
 

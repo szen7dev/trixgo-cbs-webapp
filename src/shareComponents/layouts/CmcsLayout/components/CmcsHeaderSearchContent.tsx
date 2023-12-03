@@ -1,5 +1,5 @@
 import React, {ChangeEvent, FC, useEffect, useRef, useState} from "react";
-import {useOnClickOutside} from "services/hooks/useOnclickOutside";
+// import {useOnClickOutside} from "services/hooks/useOnclickOutside";
 import searchIcon from "assets/images/icons8-search-120.png";
 import {Link, useLocation, useParams} from "react-router-dom";
 import {Oval} from "react-loader-spinner";
@@ -28,9 +28,9 @@ export const CmcsHeaderSearchContent:FC = () => {
         }
     }, [keywordInput])
 
-    useOnClickOutside(wrapperClass, () => {
-        setShowResult(false)
-    })
+    // useOnClickOutside(wrapperClass, () => {
+    //     setShowResult(false)
+    // })
 
     const setTypingTimeoutRef: any = useRef(null);
     const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {

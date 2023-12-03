@@ -5,7 +5,7 @@ import taskUserAvt from "assets/images/task-user.svg";
 // import iconChat from "assets/images/icons8-chat-96 1.svg";
 // import iconTrash from "assets/images/icons8-delete-96 1.svg";
 // import Close from "assets/icons/Close";
-import { useOnClickOutside } from "services/hooks/useOnclickOutside";
+// import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import { Task } from "typings/task";
 import { useTask } from 'services/hooks/useTask';
 import moment from "moment";
@@ -50,7 +50,7 @@ export const SubtaskItem: FC<Props> = ({ task, userId, index }) => {
 
     const { updateTaskAsync } = useTask({});
 
-    useOnClickOutside(wrapperClass, () => setShowOption(false));
+    // useOnClickOutside(wrapperClass, () => setShowOption(false));
 
     const handleUpdateStatusTask = async () => {
         if (task.status === 3) return;

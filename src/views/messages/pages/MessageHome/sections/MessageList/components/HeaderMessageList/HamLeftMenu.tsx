@@ -2,7 +2,7 @@ import React, {FC, useRef, useState} from "react";
 import BookmarkIcon from "assets/images/icons8-bookmark-96.svg";
 import AddFolderIcon from "assets/images/icons8-add-folder-96.svg";
 import SettingIcon from "assets/images/icons8-setting-100.svg";
-import {useOnClickOutside} from "services/hooks/useOnclickOutside";
+// import {useOnClickOutside} from "services/hooks/useOnclickOutside";
 import {useDispatch} from "react-redux";
 import {openCreateUpdateFolder} from "redux/reducer/messages/CreateUpdateFolder";
 import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
@@ -14,7 +14,7 @@ export const HamLeftMenu:FC = () => {
     const dispatch = useDispatch();
     const [showOption, setShowOption] = useState(false);
     const el = useRef<HTMLDivElement>(null);
-    useOnClickOutside(el, () => setShowOption(false))
+    // useOnClickOutside(el, () => setShowOption(false))
     const {handleStartPrivateChat} = UseMessageHelper();
     return (
         <div ref={el} className={"relative mr-[14px] flex items-center justify-between flex-1"}>

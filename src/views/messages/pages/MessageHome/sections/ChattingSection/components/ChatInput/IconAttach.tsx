@@ -1,6 +1,6 @@
 import React, {FC, useContext, useEffect, useRef, useState} from "react";
 import attachIcon from "assets/images/icons8-attach-96.svg";
-import {useOnClickOutside} from "services/hooks/useOnclickOutside";
+// import {useOnClickOutside} from "services/hooks/useOnclickOutside";
 import ImagesIcon from "assets/images/icons8-photo-gallery-96.svg";
 import NPSIcon from "assets/images/icons8-transverse-wave-graph-uncertainty-performance-statistics-report-96.svg";
 import AlarmIcon from "assets/images/icons8-retro-alarm-clock-96.svg";
@@ -29,7 +29,7 @@ export const IconAttach:FC<Props> = ({handleUploadFiles}) => {
     const dispatch = useDispatch();
     const [showOption, setShowOption] = useState(false);
     const el = useRef<HTMLDivElement>(null);
-    useOnClickOutside(el, () => setShowOption(false))
+    // useOnClickOutside(el, () => setShowOption(false))
 
     const handleSetFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (!event.target.files || !event.target.files.length) return;

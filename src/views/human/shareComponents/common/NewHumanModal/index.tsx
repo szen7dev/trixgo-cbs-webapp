@@ -13,12 +13,12 @@ import moment from "moment";
 import DatePicker from "react-datepicker";
 import debounce from "lodash/debounce";
 
-import { useOnClickOutside } from "services/hooks/useOnclickOutside";
+// import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import { useModal } from "services/hooks/useModal";
 import { DropdownSearchable } from "shareComponents/common";
 
 import CloseIcon from "assets/images/icon-small-bold-close.svg";
-import TagIcon from "assets/images/icons8-price-tag-96.svg";
+// import TagIcon from "assets/images/icons8-price-tag-96.svg";
 import { CONTACT_POLICY, INSURANCE_STATUS } from "apis/localdb";
 import {
   useQueryListDepartments,
@@ -186,7 +186,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
     };
   }, [initialValues]);
 
-  useOnClickOutside(ref, () => setOpenOption(!openOption));
+  // useOnClickOutside(ref, () => setOpenOption(!openOption));
 
   const handleSubmit = useCallback(
     async (values: any) => {

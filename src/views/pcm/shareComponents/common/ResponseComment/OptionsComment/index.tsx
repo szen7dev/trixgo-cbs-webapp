@@ -1,5 +1,5 @@
 import {FC, useRef, useState} from "react";
-import {useOnClickOutside} from "services/hooks/useOnclickOutside";
+// import {useOnClickOutside} from "services/hooks/useOnclickOutside";
 import DotsVerticalIcon from "assets/icons/DotsVertical";
 import iconUpload from "assets/images/icons8-upload-48.svg";
 // import iconReply from "assets/images/icons8-reply-arrow-48.svg";
@@ -12,7 +12,7 @@ export const OptionsComment:FC<Props> = ({handleUploadAttachments}) => {
     const wrapperClass = useRef<HTMLDivElement>(null)
     const [showOption, setShowOption] = useState(false);
 
-    useOnClickOutside(wrapperClass, () => setShowOption(false));
+    // useOnClickOutside(wrapperClass, () => setShowOption(false));
     return (
         <div ref={wrapperClass} className={"relative z-5 inline-block"}>
             <button onClick={() => setShowOption(!showOption)} className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg mr-3"}>

@@ -1,7 +1,7 @@
 import { useRef, useState, UIEvent, useImperativeHandle, forwardRef } from "react";
 import { map as _map } from "lodash";
 import classNames from "classnames";
-import { useOnClickOutside } from "services/hooks/useOnclickOutside";
+// import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import Close from "assets/icons/Close";
 import iconBack from "assets/images/VectorArrow.svg";
 import iconFolder from "assets/images/icons8-folder-48 3.svg";
@@ -46,12 +46,12 @@ export const GroupSearchable = forwardRef<GroupSearchableHandle, Props>(({
     const [showOption, setShowOption] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
 
-    useOnClickOutside(wrapperRef, () => {
-        const item = groupCurrentPicker?.value ? groupCurrentPicker : groupParentPicker;
-        setValue(item);
-        handleSetValue(item);
-        setShowOption(false);
-    });
+    // useOnClickOutside(wrapperRef, () => {
+    //     const item = groupCurrentPicker?.value ? groupCurrentPicker : groupParentPicker;
+    //     setValue(item);
+    //     handleSetValue(item);
+    //     setShowOption(false);
+    // });
 
     useImperativeHandle(groupSearchableRef, () => ({
         resetGroupSearchable() {

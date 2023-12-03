@@ -7,7 +7,7 @@ import iconAttach from "assets/images/icons8-attach-48.svg";
 // import iconLink from "assets/images/icons8-link-96-v3.svg";
 // import imageDemo from "assets/images/task-detail-image.png";
 
-import {useOnClickOutside} from "services/hooks/useOnclickOutside";
+// import {useOnClickOutside} from "services/hooks/useOnclickOutside";
 import { Task } from "typings/task";
 import { humanFileSize } from "utils/converter";
 
@@ -19,7 +19,7 @@ export const PcmPrintTaskChild:FC<Props> = ({ task }) => {
     const [showDetail, setShowDetail] = useState(false);
     const detailRef = useRef<HTMLDivElement>(null);
 
-    useOnClickOutside(detailRef, () => setShowDetail(false));
+    // useOnClickOutside(detailRef, () => setShowDetail(false));
 
     const receiversText = useMemo(() => {
         if (!task.related) return 'Tới';

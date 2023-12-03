@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { object, string } from "yup";
 
-import { useOnClickOutside } from "services/hooks/useOnclickOutside";
+// import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 
 import CloseIcon from "assets/images/icon-close.svg";
 import ExpandIcon from "assets/images/icon-expand-arrow.svg";
@@ -32,7 +32,7 @@ const RegisterPage: FC<Props> = (props) => {
     description: "",
   };
 
-  useOnClickOutside(optionRef, () => setOpenSelect(!openSelect));
+  // useOnClickOutside(optionRef, () => setOpenSelect(!openSelect));
 
   const registerSchema = object().shape({
     fullName: string().required("First and last name required!"),

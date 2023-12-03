@@ -1,6 +1,6 @@
 import React, {ChangeEvent, FC, useContext, useRef, useState} from "react";
 import searchIcon from "assets/images/icons8-search-120.png";
-import {useOnClickOutside} from "services/hooks/useOnclickOutside";
+// import {useOnClickOutside} from "services/hooks/useOnclickOutside";
 import {useUserSystem} from "services/hooks/users/useUserSystem";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {MessageContext, populates} from "../../../../../../shareComponents/layouts/MessagesLayoutV2";
@@ -20,13 +20,13 @@ export const SearchUserAndConversation:FC = () => {
     const [search, setSearch] = useState("");
     const [showResult, setShowResult] = useState(false);
 
-    useOnClickOutside(wrapperClass, () => {
-        setShowResult(false);
-        setSearch("");
-        if (inputRef.current) {
-            inputRef.current.value = "";
-        }
-    })
+    // useOnClickOutside(wrapperClass, () => {
+    //     setShowResult(false);
+    //     setSearch("");
+    //     if (inputRef.current) {
+    //         inputRef.current.value = "";
+    //     }
+    // })
 
     const setTypingTimeoutRef: any = useRef(null);
     async function handleSearchChange(e: React.ChangeEvent<HTMLInputElement>) {
