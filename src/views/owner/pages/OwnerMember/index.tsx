@@ -32,7 +32,7 @@ import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import { UserSystemProps } from "typings/users/userSystem";
 
 export const OwnerMemberPage: FC = () => {
-  const { closeModal, openModal } = useModal();
+  // const { closeModal, openModal } = useModal();
   const currentUser = localStorage.getItem("currentUser") ?? "{}";
   const profile = JSON.parse(currentUser);
   const LIMIT_PER_PAGE_USER = 20;
@@ -45,12 +45,14 @@ export const OwnerMemberPage: FC = () => {
     userID: "",
     fullname: "",
     email: "",
+    phone: "",
     departmentID: "",
     positionID: "",
     level: 1,
     positionName: "",
     departmentName: "",
-    status: 1
+    status: 1,
+    storageUse: 0,
   });
 
   const [modalCreateOrUpdateUser, setModalCreateOrUpdateUser] = useState<boolean>(false);
@@ -87,12 +89,14 @@ export const OwnerMemberPage: FC = () => {
       userID: "",
       fullname: "",
       email: "",
+      phone: "",
       departmentID: "",
       positionID: "",
       level: -1,
       positionName: "",
       departmentName: "",
-      status: 1
+      status: 1,
+      storageUse: 0,
     }))
   }
 
@@ -109,18 +113,20 @@ export const OwnerMemberPage: FC = () => {
     };
 
     if (newListIDChecked.length === 1) {
-      const { _id, fullname, email, department, position, level, status } = newListIDChecked[0];
+      const { _id, fullname, email, phone, department, position, level, status, storageUse } = newListIDChecked[0];
       setInitialValues({
         userID: _id,
         companyID: companySelected,
         fullname: fullname,
-        email: email,
+        email: email ? `${email}` : "",
+        phone: phone ? `${phone}` : "",
         departmentID: department?._id,
         positionID: position?._id,
-        level: level,
+        level: Number(level),
         positionName: position?.name,
         departmentName: department?.name,
-        status
+        status,
+        storageUse: Number(storageUse)
       });
     } else {
       clearData();
@@ -143,21 +149,6 @@ export const OwnerMemberPage: FC = () => {
       setUsersChecked(listUsersSystem);
     }
   };
-
-  const handleConfirmDelete = async () => {
-    const ids = usersChecked.map(item => item._id);
-    const result = await deleteUserSystemAsync(ids);
-
-    if (result.error) {
-      return toast.error(result?.data?.message);
-    }
-
-    toast.success('Xoá dữ liệu thành công');
-    closeModal();
-    setUsersChecked([]);
-    clearData();
-    refetchUser();
-  }
 
   useEffect(() => {
     companySelected && setInitialValues(previousValue => ({ ...previousValue, companyID: companySelected }));
@@ -243,29 +234,6 @@ export const OwnerMemberPage: FC = () => {
               </button>
             ) : ''}
 
-            {/* {usersChecked.length ? (
-              <button
-                onClick={() =>
-                  openModal(
-                    <div
-                      className={
-                        "inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
-                      }
-                    >
-                      <ModalConfirm onConfirm={handleConfirmDelete} />
-                    </div>
-                  )
-                }>
-                <img src={DeleteIcon} alt="Delete" />
-              </button>
-            ) : ''} */}
-
-            {/* <FinancialCashFlowFilterButton />
-            {itemChecked && (
-              <div className="border-l-2 border-primary-border ml-5 pl-5">
-                <ActionGroupFinancial />
-              </div>
-            )} */}
           </div>
           <div className="flex items-center">
             {companySelected ? (
@@ -280,9 +248,6 @@ export const OwnerMemberPage: FC = () => {
                 Tạo mới
               </button>
             ) : ''}
-            {/* <div className="w-10 h-10 bg-secondary-light rounded-full flex items-center justify-center ml-5 cursor-pointer">
-              <img src={ThreeDotVerticalIcon} alt="Three Dot" />
-            </div> */}
           </div>
         </div>
       </header>

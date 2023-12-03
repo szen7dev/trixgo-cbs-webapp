@@ -58,7 +58,7 @@ export type UserSystemProps = {
         name: string,
         sign: string
     },
-    email: string,
+    email?: string,
     phone?: string,
     image: string,
     fullname: string,
@@ -70,7 +70,7 @@ export type UserSystemProps = {
     numLog: number,
     lang: string,
     imgUrl?: string;
-    storageUse?: number | undefined;
+    storageUse?: number;
 }
 
 interface ModalProps {

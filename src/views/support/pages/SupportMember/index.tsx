@@ -129,14 +129,14 @@ export const SupportMemberPage: FC = () => {
         userID: _id,
         companyID: companySelected,
         fullname: fullname,
-        email: email,
+        email: email || "",
+        phone: phone || "",
         departmentID: department?._id,
         positionID: position?._id,
         level: level,
         positionName: position?.name,
         departmentName: department?.name,
         status,
-        phone: phone || "",
         storageUse: storageUse || 0
       });
     } else {
