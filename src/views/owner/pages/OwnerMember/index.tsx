@@ -243,7 +243,7 @@ export const OwnerMemberPage: FC = () => {
               </button>
             ) : ''}
 
-            {usersChecked.length ? (
+            {/* {usersChecked.length ? (
               <button
                 onClick={() =>
                   openModal(
@@ -258,7 +258,7 @@ export const OwnerMemberPage: FC = () => {
                 }>
                 <img src={DeleteIcon} alt="Delete" />
               </button>
-            ) : ''}
+            ) : ''} */}
 
             {/* <FinancialCashFlowFilterButton />
             {itemChecked && (
@@ -280,9 +280,9 @@ export const OwnerMemberPage: FC = () => {
                 Tạo mới
               </button>
             ) : ''}
-            <div className="w-10 h-10 bg-secondary-light rounded-full flex items-center justify-center ml-5 cursor-pointer">
+            {/* <div className="w-10 h-10 bg-secondary-light rounded-full flex items-center justify-center ml-5 cursor-pointer">
               <img src={ThreeDotVerticalIcon} alt="Three Dot" />
-            </div>
+            </div> */}
           </div>
         </div>
       </header>
