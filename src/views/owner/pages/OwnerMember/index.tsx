@@ -4,35 +4,23 @@ import debounce from "lodash/debounce";
 import moment from "moment";
 import { toast } from "react-toastify";
 import { read, utils } from 'xlsx';
-// import { useQuery } from "react-query";
 
 /**
  * Components
  */
 import { SearchInput, ModalContainer } from "shareComponents/common";
-import { ModalConfirm } from "views/support/shareComponents/common";
 import { ModalCreateOrUpdateUser } from 'views/support/shareComponents/common';
 
-// import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
-// import ActionGroupFinancial from "views/pages/financial/planning/components/FinancialCashFlow/ActionGroupFinancial";
-
-/**
- * Assets
- */
-import ThreeDotVerticalIcon from "assets/images/icon-3dots-vertical-gray.svg";
 import styles from "views/support/styles/support.module.css";
-import DeleteIcon from "assets/images/icons8-remove.svg";
 import iconPencil from 'assets/images/icons8-pencil-96 1.png';
 
 /**
  * Hooks
  */
-import { useModal } from "services/hooks/useModal";
 import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import { UserSystemProps } from "typings/users/userSystem";
 
 export const OwnerMemberPage: FC = () => {
-  // const { closeModal, openModal } = useModal();
   const currentUser = localStorage.getItem("currentUser") ?? "{}";
   const profile = JSON.parse(currentUser);
   const LIMIT_PER_PAGE_USER = 20;
@@ -68,7 +56,6 @@ export const OwnerMemberPage: FC = () => {
     totalRecord,
     refetch: refetchUser,
     fetchNextPage: fetchNextPageUser,
-    deleteUserSystemAsync,
   } = useUserSystem({
     companyID: companySelected,
     keyword: keywordUser,
