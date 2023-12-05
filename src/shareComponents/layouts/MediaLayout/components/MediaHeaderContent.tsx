@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FC, useEffect, useRef, useState } from "react";
 import searchIcon from "assets/images/icons8-search-120.png";
-import { useOnClickOutside } from "services/hooks/useOnclickOutside";
+// import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import { useSearchTask } from "services/hooks/useMainSearch";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "redux/reducer";
@@ -29,7 +29,7 @@ import companyDefault from "assets/images/company_default.png";
 
 export const MediaHeaderContent: FC = () => {
   const wrapperClass = useRef<HTMLDivElement>(null);
-  useOnClickOutside(wrapperClass, () => dispatch(setShowModalResult(false)));
+  // useOnClickOutside(wrapperClass, () => dispatch(setShowModalResult(false)));
   const history = useHistory();
 
   const tabIndex = useAppSelector((state) => state.dashboardV2.data.tabIndex);

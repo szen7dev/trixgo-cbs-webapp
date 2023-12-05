@@ -1,19 +1,20 @@
 import { FC, useCallback, useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { useModal } from "services/hooks/useModal";
 import debounce from "lodash/debounce";
 import { SearchInput, ModalContainer } from "shareComponents/common";
-import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
-import FolderIcon from "assets/images/icons8-folder.svg";
-import PolygonIcon from "assets/images/icon-polygon.svg";
-import DownloadIcon from "assets/images/icons8-download-96.svg";
+
+// import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
+// import FolderIcon from "assets/images/icons8-folder.svg";
+import DownloadIcon from "assets/images/icons8-download-64.svg";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
-import { CreateProject } from "../modal";
-import { usePcmProject } from "services/hooks/pcm/usePcmProject";
+
 import moment from "moment";
-import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { toast } from "react-toastify";
-import { APP_ID } from "apis/localdb";
+import { APP_ID, DEPARTMENT_STATUS } from "apis/localdb";
+import { CreateProject } from "../modal";
+
+import { usePcmProject } from "services/hooks/pcm/usePcmProject";
+import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 
 const ProjectAdminProjectTab: FC = () => {
 	const history = useHistory();
@@ -75,7 +76,7 @@ const ProjectAdminProjectTab: FC = () => {
 							500
 						)}
 					/>
-					{/* <FinancialCashFlowFilterButton /> */}
+
 					{(idsChecked && idsChecked.length) ? (
 						<div className="flex items-center gap-2 border-l-2 border-primary-border px-4 ml-4">
 							<div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
@@ -104,16 +105,13 @@ const ProjectAdminProjectTab: FC = () => {
 				</div>
 				<div className="flex items-center">
 					<button
-						className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold mr-6"
+						className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold"
 						onClick={() => {
 							setInitialValues(null);
 							toggleModalCreateProject();
 						}}
 					>
 						Tạo mới
-					</button>
-					<button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
-						<img src={Vertical3Dots} alt="3Dots" />
 					</button>
 				</div>
 			</header>
@@ -195,11 +193,11 @@ const ProjectAdminProjectTab: FC = () => {
 								</td>
 								<td className="py-1 px-2">
 									<Link to={`/pcm/admin/${item._id}/project`}>
-										<div className="flex items-start">
-											<img src={FolderIcon} alt="Folder" className="w-6 h-6 mr-2" />
+										<div className="">
 											<p>{item.name}</p>
 										</div>
 									</Link>
+									<p className="text-primary-gray"><i>{item._id}</i></p>
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
 									{item.type}
@@ -220,7 +218,7 @@ const ProjectAdminProjectTab: FC = () => {
 									{item.completedMilestones}
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
-									Đang triển khai
+									{(item.status && item.status >= 1) ? DEPARTMENT_STATUS[Number(item.status) - 1].text : ""}
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
 									{item.members ? item.members.length : ""}

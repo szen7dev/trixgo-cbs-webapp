@@ -9,7 +9,7 @@ import moment from "moment";
 import { nl2p, removeHTMLTags, sliceText } from 'utils';
 import { humanFileSize } from 'utils/converter';
 import { toast } from "react-toastify";
-import {useOnClickOutside} from "../../../../../../services/hooks/useOnclickOutside";
+// import {useOnClickOutside} from "../../../../../../services/hooks/useOnclickOutside";
 
 type Props = {
     userId?: string;
@@ -24,7 +24,7 @@ export const ChildResponseComment: FC<Props> = ({ userId, comment, onClickImage,
     const [showDetail, setShowDetail] = useState(false);
     const detailRef = useRef<HTMLDivElement>(null);
 
-    useOnClickOutside(detailRef, () => setShowDetail(false));
+    // useOnClickOutside(detailRef, () => setShowDetail(false));
 
     const receiversText = useMemo(() => {
         if (!comment.receivers) return 'Tới';

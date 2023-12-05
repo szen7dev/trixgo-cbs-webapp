@@ -12,7 +12,7 @@ import iconPhone from 'assets/images/icons8-phone-1001.svg';
 import iconEmail from 'assets/images/icons8-email-1002.svg';
 import ThreeDotsVertical from "assets/images/icon-3dots-vertical.svg";
 import SortingIcon from "assets/images/icons8-sorting-100.svg";
-import DownloadIcon from "assets/images/icons8-download-96.svg";
+import DownloadIcon from "assets/images/icons8-download-64.svg";
 import ShareIcon from "assets/images/icons8-share-rounded-96.svg";
 import CopyIcon from "assets/images/icons8-copy-96.svg";
 import SendEmailIcon from "assets/images/icons8-send-email-96.svg";

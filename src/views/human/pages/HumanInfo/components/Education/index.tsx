@@ -1,4 +1,4 @@
-import { FC, useRef, useState, useCallback } from "react";
+import { FC, useRef, useState, useCallback, memo } from "react";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
 import toArray from "lodash/toArray";
@@ -13,7 +13,6 @@ import PencilIcon from "assets/images/icons8-pencil.svg";
 import DeleteIcon from "assets/images/icons8-remove.svg";
 import PDFIcon from "assets/images/icons8-pdf.svg";
 import { useModal } from "services/hooks/useModal";
-import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import { useQueryContactDocument, useMutationContactDocument } from "services/hooks/useHuman";
 import { FormEducation } from "./components";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
@@ -30,7 +29,7 @@ interface EducationProps {
   companyID: any
 }
 
-export const Education: FC<EducationProps> = (props) => {
+export const Education: FC<EducationProps> = memo((props) => {
   const { t: i18n } = useTranslation(["human"]);
   const ref = useRef<HTMLDivElement>(null);
   const { openModal, closeModal } = useModal();
@@ -79,8 +78,6 @@ export const Education: FC<EducationProps> = (props) => {
   });
 
   const [openFileOption, setOpenFileOption] = useState("");
-
-  useOnClickOutside(ref, () => setOpenFileOption(""));
 
   const handleFinishFormCreate = useCallback(
     async (values) => {
@@ -453,4 +450,6 @@ export const Education: FC<EducationProps> = (props) => {
       )}
     </div>
   );
-};
+});
+
+Education.displayName = "Education"

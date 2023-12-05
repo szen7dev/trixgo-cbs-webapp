@@ -5,7 +5,7 @@ import taskUserAvt from "assets/images/task-user.svg";
 import trigangleDown from "assets/images/triangle-down.svg";
 import iconAttach from "assets/images/icons8-attach-48.svg";
 
-import { useOnClickOutside } from "services/hooks/useOnclickOutside";
+// import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import { CommentProps, Task } from "typings/task";
 import { humanFileSize } from "utils/converter";
 import { useCommentPcm } from "services/hooks/useTask";
@@ -22,7 +22,7 @@ export const PcmPrintTaskComment:FC<Props> = ({ comment }) => {
     const [showDetail, setShowDetail] = useState(false);
     const detailRef = useRef<HTMLDivElement>(null);
 
-    useOnClickOutside(detailRef, () => setShowDetail(false));
+    // useOnClickOutside(detailRef, () => setShowDetail(false));
 
     const receiversText = useMemo(() => {
         if (!comment.receivers) return 'Tới';

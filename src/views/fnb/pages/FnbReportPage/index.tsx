@@ -6,7 +6,7 @@ import { SearchInput, ModalContainer } from "shareComponents/common";
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 import FolderIcon from "assets/images/icons8-folder.svg";
 import PolygonIcon from "assets/images/icon-polygon.svg";
-import DownloadIcon from "assets/images/icons8-download-96.svg";
+import DownloadIcon from "assets/images/icons8-download-64.svg";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import GraySquare from "assets/images/Frame 4415.svg";
 

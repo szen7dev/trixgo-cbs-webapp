@@ -306,12 +306,7 @@ export const HumanHomePage: FC = () => {
                         <thead className="">
                         <tr className="text-primary-gray whitespace-nowrap align-middle text-left">
                             <th className="px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '30px' }}>
-                                <input
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    value=""
-                                    id="flexCheckDefault"
-                                />
+                                TT
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
                                 Nhân sự
@@ -353,20 +348,7 @@ export const HumanHomePage: FC = () => {
                                     className="text-left hover:bg-cbs-active-comment"
                                 >
                                     <td className="px-4 py-2.5 border-b border-cbs-border">
-                                        <input
-                                            className="form-check-input"
-                                            type="checkbox"
-                                            id="flexCheckDefault"
-                                            checked={document._id === recordSelected._id}
-                                            onChange={(e) => {
-                                                if (e.target.checked) {
-                                                    setSelectRecord(document);
-                                                    return null;
-                                                }
-                                                setSelectRecord({});
-                                                return null;
-                                            }}
-                                        />
+                                        {index + 1}
                                     </td>
                                     <td className="px-2 py-2.5 border-b border-cbs-border">
                                         <Link to={linkRef}>

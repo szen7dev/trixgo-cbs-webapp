@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { map as _map } from "lodash";
 import classNames from "classnames";
-import { useOnClickOutside } from "services/hooks/useOnclickOutside";
+// import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import Close from "assets/icons/Close";
 import BlueCheck from "assets/images/blue-check.svg";
 import TriangleDown from "assets/icons/TriangleDown";
@@ -101,7 +101,7 @@ export const DropdownSearchableV2 = forwardRef<DropdownSearchableV2Handle, Props
   const wrapperRef = useRef<HTMLDivElement>(null);
   const inputSearchRef = useRef<HTMLInputElement>(null);
 
-  useOnClickOutside(wrapperRef, () => setShowOption(false));
+  // useOnClickOutside(wrapperRef, () => setShowOption(false));
 
   useImperativeHandle(dropdownsearchRef, () => ({
     resetDropdown() {

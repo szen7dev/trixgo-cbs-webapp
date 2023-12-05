@@ -1,6 +1,6 @@
 import React, {ReactNode, useState, useRef, useEffect, forwardRef, useImperativeHandle} from "react";
 import BlueCheck from "assets/images/blue-check.svg";
-import {useOnClickOutside} from "services/hooks/useOnclickOutside";
+// import {useOnClickOutside} from "services/hooks/useOnclickOutside";
 import moment from "moment";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 
@@ -49,7 +49,7 @@ const TimeRangeDropdown = forwardRef<TimeRangeHandle, Props>(
     }, [useCustomDate])
 
     const wrapperRef = useRef<HTMLDivElement>(null);
-    useOnClickOutside(wrapperRef, () => setShowOption(false));
+    // useOnClickOutside(wrapperRef, () => setShowOption(false));
 
     const handleSelectOption = ({fromDate, toDate}: {
         text: string,

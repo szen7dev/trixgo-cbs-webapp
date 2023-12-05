@@ -15,7 +15,7 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import nextIcon from "assets/images/icons-arrow-next.svg";
 import iconBack from "assets/images/icon-back-gray.svg";
 import IconAddNew from "assets/images/Frame 4048.svg";
-import DownloadIcon from "assets/images/icons8-download-96.svg";
+import DownloadIcon from "assets/images/icons8-download-64.svg";
 import { ModalAddNewTask } from "shareComponents/common";
 import API from "apis/repository";
 import { toast } from "react-toastify";

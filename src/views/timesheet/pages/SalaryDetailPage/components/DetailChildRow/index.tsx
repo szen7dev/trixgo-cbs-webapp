@@ -1,11 +1,8 @@
 import React, { FC } from "react";
 import DayPickerInput from "react-day-picker/DayPickerInput";
-import debounce from "lodash/debounce";
 import moment from "moment";
 
-import {DropdownSearchable} from "shareComponents/common";
-import { useUserSystem } from "services/hooks/users/useUserSystem";
-import { LIMIT_DROPDOWN } from "apis/localdb/index";
+import { DropdownSearchable } from "shareComponents/common";
 
 import type {
   SalaryChild,
@@ -20,35 +17,21 @@ type Props = {
   collapsed: boolean;
   isLastRow: boolean;
   index: number;
-  onUpdatedSalaryChild: (values: UpdateSalaryChildPayload) => void;
   hasPermission: boolean;
+  listUserSearched: any[];
+  onUpdatedSalaryChild: (values: UpdateSalaryChildPayload) => void;
+  onSearchUser: (value: string) => void;
 };
 
 export const DetailChildRow: FC<Props> = ({
-  parent,
   rowData,
   collapsed,
-  isLastRow,
   index,
   hasPermission,
+  listUserSearched,
   onUpdatedSalaryChild,
+  onSearchUser,
 }) => {
-
-  const [searchBudgetWorkValue, setSearchBudgetWorkValue] = React.useState(
-    rowData.work?.name || ""
-	);
-
-  const [searchAssigneeStr, setSearchAssigneeStr] = React.useState(
-    rowData.human?.fullname || ""
-  );
-
-  const {
-    data: listUsersSystem,
-    hasNextPage,
-    fetchNextPage,
-  } = useUserSystem({ keyword: searchAssigneeStr }, true);
-  // console.log({listUsersSystem})
-
   const handleClickUpdateSalary = React.useCallback(
     (value) => {
       if(!hasPermission) {
@@ -116,16 +99,13 @@ export const DetailChildRow: FC<Props> = ({
               {item.text}
             </p>
           )}
-          data={listUsersSystem}
+          data={listUserSearched}
           initialValue={rowData?.human}
           formatItem={{
             id: "_id",
             text: "fullname",
           }}
-          onSearchInputChange={debounce(
-            (value) => setSearchAssigneeStr(value),
-            500
-          )}
+          onSearchInputChange={onSearchUser}
           onchangeValue={(value) =>
             handleClickUpdateSalary({
               ...rowData,

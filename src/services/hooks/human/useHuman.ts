@@ -1,4 +1,4 @@
-import {useMutation, useInfiniteQuery} from 'react-query';
+import { useMutation, useInfiniteQuery } from 'react-query';
 
 import { humanRepository } from 'apis/human/Human';
 

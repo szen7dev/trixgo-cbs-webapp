@@ -35,7 +35,7 @@ export const FnbRiskReportPage: FC = () => {
 	
 	const history = useHistory();
 	const { productID } = useParams<{ productID: string }>();
-	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
+	// const { hasPermission, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
 
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
@@ -45,22 +45,18 @@ export const FnbRiskReportPage: FC = () => {
 		params: { 
 			keyword: keyword,  
 			limit: 30,  
-			isMember: 1,
-			// productID, 
-			// populates: JSON.stringify({
-			// 	path: 'goods', select: "name unit"
-			// }) 
+			isMember: 1
 		}, 
 		isFetchList: true, 
 		isFetchInfo: false
 	});
 
-	useEffect(() => {
-		if (isSuccess && !(hasPermission)) {
-			toast.error("Bạn không có quyền truy cập chức năng này. Vui lòng liên hệ ban quản trị.");
-			history.push("/")
-		}
-	}, [hasPermission]);
+	// useEffect(() => {
+	// 	if (isSuccess && !(hasPermission)) {
+	// 		toast.error("Bạn không có quyền truy cập chức năng này. Vui lòng liên hệ ban quản trị.");
+	// 		history.push("/")
+	// 	}
+	// }, [hasPermission]);
 
 	type PaginateHandle = React.ElementRef<typeof PaginateV2>;
     const ref = React.useRef<PaginateHandle>(null);

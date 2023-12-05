@@ -3,35 +3,24 @@ import cn from "classnames";
 import debounce from "lodash/debounce";
 import moment from "moment";
 import { toast } from "react-toastify";
-// import { useQuery } from "react-query";
+import { read, utils } from 'xlsx';
 
 /**
  * Components
  */
 import { SearchInput, ModalContainer } from "shareComponents/common";
-import { ModalConfirm } from "views/support/shareComponents/common";
 import { ModalCreateOrUpdateUser } from 'views/support/shareComponents/common';
 
-// import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
-// import ActionGroupFinancial from "views/pages/financial/planning/components/FinancialCashFlow/ActionGroupFinancial";
-
-/**
- * Assets
- */
-import ThreeDotVerticalIcon from "assets/images/icon-3dots-vertical-gray.svg";
 import styles from "views/support/styles/support.module.css";
-import DeleteIcon from "assets/images/icons8-remove.svg";
 import iconPencil from 'assets/images/icons8-pencil-96 1.png';
 
 /**
  * Hooks
  */
-import { useModal } from "services/hooks/useModal";
 import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import { UserSystemProps } from "typings/users/userSystem";
 
 export const OwnerMemberPage: FC = () => {
-  const { closeModal, openModal } = useModal();
   const currentUser = localStorage.getItem("currentUser") ?? "{}";
   const profile = JSON.parse(currentUser);
   const LIMIT_PER_PAGE_USER = 20;
@@ -44,12 +33,14 @@ export const OwnerMemberPage: FC = () => {
     userID: "",
     fullname: "",
     email: "",
+    phone: "",
     departmentID: "",
     positionID: "",
     level: 1,
     positionName: "",
     departmentName: "",
-    status: 1
+    status: 1,
+    storageUse: 0,
   });
 
   const [modalCreateOrUpdateUser, setModalCreateOrUpdateUser] = useState<boolean>(false);
@@ -65,7 +56,6 @@ export const OwnerMemberPage: FC = () => {
     totalRecord,
     refetch: refetchUser,
     fetchNextPage: fetchNextPageUser,
-    deleteUserSystemAsync,
   } = useUserSystem({
     companyID: companySelected,
     keyword: keywordUser,
@@ -86,12 +76,14 @@ export const OwnerMemberPage: FC = () => {
       userID: "",
       fullname: "",
       email: "",
+      phone: "",
       departmentID: "",
       positionID: "",
       level: -1,
       positionName: "",
       departmentName: "",
-      status: 1
+      status: 1,
+      storageUse: 0,
     }))
   }
 
@@ -108,18 +100,20 @@ export const OwnerMemberPage: FC = () => {
     };
 
     if (newListIDChecked.length === 1) {
-      const { _id, fullname, email, department, position, level, status } = newListIDChecked[0];
+      const { _id, fullname, email, phone, department, position, level, status, storageUse } = newListIDChecked[0];
       setInitialValues({
         userID: _id,
         companyID: companySelected,
         fullname: fullname,
-        email: email,
+        email: email ? `${email}` : "",
+        phone: phone ? `${phone}` : "",
         departmentID: department?._id,
         positionID: position?._id,
-        level: level,
+        level: Number(level),
         positionName: position?.name,
         departmentName: department?.name,
-        status
+        status,
+        storageUse: Number(storageUse)
       });
     } else {
       clearData();
@@ -143,24 +137,54 @@ export const OwnerMemberPage: FC = () => {
     }
   };
 
-  const handleConfirmDelete = async () => {
-    const ids = usersChecked.map(item => item._id);
-    const result = await deleteUserSystemAsync(ids);
-
-    if (result.error) {
-      return toast.error(result?.data?.message);
-    }
-
-    toast.success('Xoá dữ liệu thành công');
-    closeModal();
-    setUsersChecked([]);
-    clearData();
-    refetchUser();
-  }
-
   useEffect(() => {
     companySelected && setInitialValues(previousValue => ({ ...previousValue, companyID: companySelected }));
   }, [companySelected]);
+
+  //_____Import, export excel
+  const [dataImport, setDataImport] = useState([]);
+  const { importUserSystemAsync } = useUserSystem({});
+
+  const handleImport = ($event: any) => {
+      const files = $event.target.files;
+      if (files.length) {
+          const file = files[0];
+          const reader = new FileReader();
+          reader.onload = (event: any) => {
+              const wb = read(event.target.result);
+              const sheets = wb.SheetNames;
+
+              if (sheets.length) {
+                  const rows: any = utils.sheet_to_json(wb.Sheets[sheets[0]]); // Index=1 (tức Sheet số 2 từ trái sang)
+                  
+                  // Set data để Import
+                  setDataImport(rows)
+              }
+          }
+          
+          reader.readAsArrayBuffer(file);
+      }
+
+      // Đọc xong thì xóa value trong Input đi
+      $event.target.value = null;
+  }
+
+  // Gọi tới API để đẩy data lên
+    useEffect(() => {
+        if(dataImport.length){
+            const fetchData = async () => {
+                const data = await importUserSystemAsync({ dataImport: JSON.stringify(dataImport) });
+                setDataImport([]);
+                // console.log(dataImport)
+
+                if(!data.error){
+                    return toast.success("Import thành công");
+                }
+                return toast.error(data.message);
+            }
+            fetchData();
+        }
+    }, [dataImport])
 
   return (
     <main className="relative h-full">
@@ -179,6 +203,12 @@ export const OwnerMemberPage: FC = () => {
               onChange={onChangeSearchUser}
             />
 
+            <button className={"flex items-center justify-center mx-3 ml-3"}>
+                <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
+                accept=".xlsx, .xlsm, .xls, .csv"/>
+                <label className="custom-file-label" htmlFor="inputGroupFile">Import excel tạo tài khoản</label>
+            </button>
+
             {usersChecked.length === 1 ? (
               <button
                 className="mr-3"
@@ -191,29 +221,6 @@ export const OwnerMemberPage: FC = () => {
               </button>
             ) : ''}
 
-            {usersChecked.length ? (
-              <button
-                onClick={() =>
-                  openModal(
-                    <div
-                      className={
-                        "inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
-                      }
-                    >
-                      <ModalConfirm onConfirm={handleConfirmDelete} />
-                    </div>
-                  )
-                }>
-                <img src={DeleteIcon} alt="Delete" />
-              </button>
-            ) : ''}
-
-            {/* <FinancialCashFlowFilterButton />
-            {itemChecked && (
-              <div className="border-l-2 border-primary-border ml-5 pl-5">
-                <ActionGroupFinancial />
-              </div>
-            )} */}
           </div>
           <div className="flex items-center">
             {companySelected ? (
@@ -228,9 +235,6 @@ export const OwnerMemberPage: FC = () => {
                 Tạo mới
               </button>
             ) : ''}
-            <div className="w-10 h-10 bg-secondary-light rounded-full flex items-center justify-center ml-5 cursor-pointer">
-              <img src={ThreeDotVerticalIcon} alt="Three Dot" />
-            </div>
           </div>
         </div>
       </header>

@@ -3,7 +3,7 @@ import React, { FC, useCallback, useState } from "react";
 import { useModal } from "services/hooks/useModal";
 import moment from "moment";
 import { toast } from "react-toastify";
-import downloadIcon from "assets/images/icons8-download-96.svg";
+import downloadIcon from "assets/images/icons8-download-64.svg";
 
 import { DATE_FORMAT, CONTRACT_IPC_TYPES, CONTRACT_IPC_PLANS } from "apis/localdb/index";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";

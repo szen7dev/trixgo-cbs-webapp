@@ -1,7 +1,7 @@
 import React, {FC, useRef, useState, useEffect} from "react";
 import DotsVerticalIcon from "assets/icons/DotsVertical";
 import Close from "assets/icons/Close";
-import { useOnClickOutside } from "services/hooks/useOnclickOutside";
+// import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import { Link } from 'react-router-dom';
 import { Task } from "typings/task";
 import { usePcmPlanTaskCustom } from "services/hooks/pcm/usePcm";
@@ -41,7 +41,7 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
     // console.log(task)
 
     const { updateTaskAsync } = useTask({});
-    useOnClickOutside(wrapperClass, () => setShowOption(false));
+    // useOnClickOutside(wrapperClass, () => setShowOption(false));
 	const { downloadTemplateImportExcelTaskAsync, importTaskFromExcelAsync } = usePcmPlanTaskCustom({});
     
     /**

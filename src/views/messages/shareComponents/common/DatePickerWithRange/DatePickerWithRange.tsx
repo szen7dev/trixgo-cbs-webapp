@@ -1,7 +1,7 @@
 import React, {FC, useRef, useState} from "react";
 import TriangleDown from "assets/icons/TriangleDown";
 import {map as _map} from "lodash";
-import {useOnClickOutside} from "services/hooks/useOnclickOutside";
+// import {useOnClickOutside} from "services/hooks/useOnclickOutside";
 import BlueCheck from "assets/images/blue-check.svg";
 import cn from "classnames";
 import DateIcon from "assets/images/icons8-calendar-100.svg";
@@ -26,7 +26,7 @@ export const DatePickerWithRange:FC<Props> = ({onValueChange}) => {
         toDate: ""
     })
     const wrapperRef = useRef<HTMLDivElement>(null);
-    useOnClickOutside(wrapperRef, () => setShowOption(false));
+    // useOnClickOutside(wrapperRef, () => setShowOption(false));
 
     const dateOption = [
         {

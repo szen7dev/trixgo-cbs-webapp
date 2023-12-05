@@ -1,15 +1,9 @@
-/**
- * Libraries
- */
 import { FC } from 'react';
 import { Dialog } from '@headlessui/react';
 import { Form, Formik, Field, ErrorMessage } from 'formik';
 import { string, object } from 'yup';
 import { toast } from 'react-toastify';
 import moment from 'moment';
-/**
- * Types, Services
- */
 
 import "react-datepicker/dist/react-datepicker.css";
 import { CustomDatePickerFormik } from 'shareComponents/common/Form/CustomForm';
@@ -36,7 +30,7 @@ const CreateProject: FC<any> = ({ toggle, modalType, onConfirm, initialValues = 
     contractAdvancePaymentPaid: "",
     contractAmountPaid: ""
 } }) => {
-    console.log({ initialValues })
+    // console.log({ initialValues })
     const { createProjectMutateAsync, refetchPcmProject, updateProjectMutateAsync } = usePcmProject({ keyword: "" });
 
     const companySchema = object().shape({

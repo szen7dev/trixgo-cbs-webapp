@@ -42,10 +42,10 @@ export const FormWorkExperience: React.FC<WorkExperienceProps> = ({
   const [searchPositionValue, setSearchPositionValue] = React.useState('');
   const [searchFieldValue, setSearchFieldValue] = React.useState('');
   const [searchContract, setSearchContractValue] = React.useState('');
-  
+
   const { closeModal } = useModal();
   const { t: i18n } = useTranslation(["human"]);
-  const { listDoctypes: listPositions } = useQueryListDoctype({ 
+  const { listDoctypes: listPositions } = useQueryListDoctype({
     limit: 50,
     type: 13,
     keyword: searchPositionValue,
@@ -226,7 +226,7 @@ export const FormWorkExperience: React.FC<WorkExperienceProps> = ({
                       />
                     </div>
                   </div>
-                  
+
                   {/* -------------- Line 2 --------------- */}
                   <div className="flex justify-between items-center h-10 border-b border-gray-200">
                     <div className="w-1/4 flex items-center">

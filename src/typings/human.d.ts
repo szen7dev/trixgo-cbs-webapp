@@ -1,6 +1,7 @@
 type APIResponse = {
     error?: boolean;
     status?: number;
+    data?: any;
 }
 
 type Populate = {

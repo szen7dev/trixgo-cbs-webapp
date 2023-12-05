@@ -193,9 +193,9 @@ const ProjectAdminPositionTab: FC = () => {
                             >
                             Tạo mới
                         </button>
-                        <div className="w-10 h-10 bg-secondary-light rounded-full flex items-center justify-center ml-5 cursor-pointer">
+                        {/* <div className="w-10 h-10 bg-secondary-light rounded-full flex items-center justify-center ml-5 cursor-pointer">
                             <img src={`${process.env.PUBLIC_URL}/images/common/icon-3dots-vertical-gray.svg`} alt="Three Dot" />
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </header>
@@ -242,7 +242,10 @@ const ProjectAdminPositionTab: FC = () => {
                                     onChange={() => onClickCheckButton(position)}
                                 />
                             </td>
-                            <td className="py-1 px-2">{position.name}</td>
+                            <td className="py-1 px-2">
+                                {position.name}
+                                <p className="text-primary-gray"><i>{position._id}</i></p>
+                            </td>
                             <td className="py-1 px-2">{position.description}</td>
                             <td className="py-1 px-2">
                                 {position.modifyAt ? moment(position.modifyAt).format('DD/MM/YYYY - HH:mm') : ''}

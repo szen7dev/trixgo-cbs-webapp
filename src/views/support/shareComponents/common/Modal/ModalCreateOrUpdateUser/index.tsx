@@ -73,7 +73,7 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
       fullname: values.fullname,
       level: +values.level,
       status: +values.status,
-      phone: `${values.phone}`,
+      phone: values.phone,
       storageUse: values.storageUse
     }
 
@@ -187,9 +187,9 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
 
                 <div className="mb-4">
                   <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="phone">
-                    SĐT
+                    Điện thoại
                   </label>
-                  <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="phone" type="number" placeholder="Nhập SĐT" {...getFieldProps('phone')} />
+                  <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="phone" placeholder="Điện thoại" {...getFieldProps('phone')} />
                   <ErrorMessage
                     name="phone"
                     component="span"

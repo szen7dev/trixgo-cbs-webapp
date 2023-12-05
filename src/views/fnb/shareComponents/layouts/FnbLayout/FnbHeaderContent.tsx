@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FC, useEffect, useRef, useState } from "react";
 import searchIcon from "assets/images/icons8-search-120.png";
-import { useOnClickOutside } from "services/hooks/useOnclickOutside";
+// import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "redux/reducer";
 import { useModal } from "services/hooks/useModal";
@@ -14,7 +14,7 @@ import { ModalDetailItem } from "views/fnb/pages/FnbHomePage/components/ModalDet
 export const FnbHeaderContent: FC = () => {
   const wrapperClass = useRef<HTMLDivElement>(null);
   const { openModal } = useModal();
-  useOnClickOutside(wrapperClass, () => dispatch(setShowModalFnbResult(false)));
+  // useOnClickOutside(wrapperClass, () => dispatch(setShowModalFnbResult(false)));
   const history = useHistory();
   const showResult = useAppSelector(
     (state) => state.fnbSlice.data.showModalResult

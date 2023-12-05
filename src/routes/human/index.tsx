@@ -1,6 +1,6 @@
 /*=====1.LIBRARY=====*/
 import { FC } from "react";
-import { Route, Switch, matchPath } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 
 /*=====2.PROVIDERS=====*/
 
@@ -14,7 +14,6 @@ import LayoutSecondary from 'views/ppt/sharedComponents/layouts/LayoutSecondary'
 import ErrorPage from "views/authentication/Error";
 
 import { 
-        HumanCetificateFilterPage, 
         HumanOtherFilterPage, 
         HumanExpiredPage, 
         HumanHomePage, 
@@ -22,7 +21,6 @@ import {
         HumanCapacityPage,
         HumanCertificatePage,
         HumanInfo, 
-        HumanDepartment,
         HumanCertificateExpiredPage
     } from "views/human/pages";
 
