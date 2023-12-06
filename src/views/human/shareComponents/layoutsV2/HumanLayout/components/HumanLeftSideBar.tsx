@@ -30,6 +30,10 @@ export const HumanLeftSideBar: FC = () => {
                         <img width={'20px'} src={iconPeople} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Trang chủ</span>
                     </NavLink>
+                    {/* <NavLink to={`/human/capacity`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray">
+                        <img width={'20px'} src={iconPeople} alt="Menu item" />
+                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Tra cứu hồ sơ nhân sự</span>
+                    </NavLink> */}
                     {/* <NavLink to={`/human/partner`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray">
                         <img width={'20px'} src={iconPeople} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Nhân sự đối tác</span>

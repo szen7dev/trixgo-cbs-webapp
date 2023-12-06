@@ -258,6 +258,4 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   );
 };
 
-export { default as SearchFormDialog} from './SearchForm';
-export { default as AddNewTaskDialog} from './AddNewTaskDialog';
 export default CreateOrEditDialog;
