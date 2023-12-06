@@ -1,6 +1,6 @@
 import { FC, ChangeEvent, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import debounce from "lodash/debounce";
 import moment from "moment";
 
@@ -17,7 +17,7 @@ import {
 } from "shareComponents/common";
 import { ModalContainer } from "shareComponents/common";
 import { ModalCreateCashBook, ModalUpdateCashBook } from "./components";
-import { TOAST_DEFAULT_OPTIONS } from 'utils/constants';
+// import { TOAST_DEFAULT_OPTIONS } from 'utils/constants';
 
 /**
  * Hooks
@@ -25,21 +25,21 @@ import { TOAST_DEFAULT_OPTIONS } from 'utils/constants';
 import useCheckedList from "services/hooks/ppt/useCheckedList";
 import { useCashBook } from 'services/hooks/financial/useCashBook';
 import { CashBook } from "typings/financial/cashBook";
-import { APP_ID } from 'apis/localdb';
-import { useHistoryTraffics } from "services/hooks/auth/useAuth";
+import { APP_ID, CASHBOOK_STATUS } from 'apis/localdb';
+// import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 
 export const CashBookPage: FC = () => {
-  //_____Start history traffict
-	const payloadHistoryTraffic: any = {
-		appID: APP_ID.FINANCIAL.id,
-		menuID: APP_ID.FINANCIAL.menuFinancialApp.cashbook.id,
-		type: "1"
-  };
-	const { createHistoryTraffics } = useHistoryTraffics();
-	useEffect(() => {
-  	createHistoryTraffics({...payloadHistoryTraffic, type: 1});
-	}, []);
-	//_____End history traffict
+  // //_____Start history traffict
+	// const payloadHistoryTraffic: any = {
+	// 	appID: APP_ID.FINANCIAL.id,
+	// 	menuID: APP_ID.FINANCIAL.menuFinancialApp.cashbook.id,
+	// 	type: "1"
+  // };
+	// const { createHistoryTraffics } = useHistoryTraffics();
+	// useEffect(() => {
+  // 	createHistoryTraffics({...payloadHistoryTraffic, type: 1});
+	// }, []);
+	// //_____End history traffict
 
   const [keyword, setKeyword] = useState('');
   const [cashBookIdSelected, setCashBookIdSelected] = useState('');
@@ -50,7 +50,6 @@ export const CashBookPage: FC = () => {
   const location = useLocation();
 
   const {
-    deleteManyAsync,
     list: listCashBook,
     refetch,
     fetchNextPage,
@@ -86,32 +85,6 @@ export const CashBookPage: FC = () => {
   const toggleCreateModal = () => setVisibleCreateModal(!visibleCreateModal);
   const toggleUpdateModal = () => setVisibleUpdateModal(!visibleUpdateModal);
 
-  const handleConfirmDelete = async () => {
-    try {
-      const ids = Object.entries(assigned).filter(([_, value]) => value).map(item => item[0]);
-      const { error, data } = await deleteManyAsync({ cashBooksID: ids });
-
-      if (error) {
-        return toast.warn(data?.message);
-      }
-
-      if (data.length) {
-        return data.map((item: any) => toast.warn(item.message));
-      }
-
-      refetch();
-      toast.success('Xóa dữ liệu thành công', TOAST_DEFAULT_OPTIONS);
-    } catch (error) {
-      if (typeof error === "string") {
-        toast.error(error, TOAST_DEFAULT_OPTIONS);
-      } else if (error instanceof Error) {
-        toast.error(error.message, TOAST_DEFAULT_OPTIONS);
-      }
-    } finally {
-      toggleDeleteModal();
-    }
-  }
-
   return (
     <div className="flex flex-col h-full overflow-hidden">
       <div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1">
@@ -123,12 +96,11 @@ export const CashBookPage: FC = () => {
             500
           )}
         />
-        {/* <DropdownFilterButton /> */}
+
         <GroupActions
           className="flex items-center flex-1"
-          onClickTrash={toggleDeleteModal}
           onClickPencil={toggleUpdateModal}
-          types={['trash', 'edit']}
+          types={['edit']}
           disabled={{
             pencil: Object.values(assigned).filter(Boolean).length !== 1,
             trash: !Object.values(assigned).some(value => value)
@@ -136,7 +108,6 @@ export const CashBookPage: FC = () => {
         />
 
         <ButtonCreate onClick={toggleCreateModal} />
-        {/* <ButtonMore /> */}
       </div>
       <div className="flex-1 overflow-y-auto">
         <table
@@ -168,13 +139,13 @@ export const CashBookPage: FC = () => {
               </th>
               <th
                 className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-b border-cbs-border"
-                style={{ minWidth: "150px" }}
+                style={{}}
               >
                 <span className="pl-2 border-l border-cbs-border">Khởi tạo</span>
               </th>
               <th
                 className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-b border-cbs-border"
-                style={{ minWidth: "150px" }}
+                style={{ }}
               >
                 <span className="pl-2 border-l border-cbs-border">Cập nhật lần cuối</span>
               </th>
@@ -183,6 +154,12 @@ export const CashBookPage: FC = () => {
                 style={{ minWidth: "150px" }}
               >
                 <span className="pl-2 border-l border-cbs-border">Người được truy cập</span>
+              </th>
+              <th
+                className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-b border-cbs-border"
+                style={{ }}
+              >
+                <span className="pl-2 border-l border-cbs-border">Trạng thái</span>
               </th>
             </tr>
           </thead>
@@ -258,6 +235,9 @@ export const CashBookPage: FC = () => {
                       ) : ''}
                     </div>
                   </td>
+                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                    {CASHBOOK_STATUS[Number(item.active)-1].text}
+                  </td>
                 </tr>
               )) : <></>}
           </tbody>
@@ -274,21 +254,13 @@ export const CashBookPage: FC = () => {
         </div>
       )}
 
-      {/* <Paginate
-        className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white"
-        totalPages={totalPage}
-        totalRecord={totalRecord}
-        hasNextPage={hasNextPage}
-        prevPageAction={fetchPreviousPage}
-        nextPageAction={fetchNextPage}
-      /> */}
-
       {/* Modal Create Cashbook */}
       <ModalContainer isModalOpen={visibleCreateModal} toggle={toggleCreateModal}>
         <div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl">
           <ModalCreateCashBook toggle={toggleCreateModal} onConfirm={refetch} />
         </div>
       </ModalContainer>
+
       {/* Modal Update Cashbook */}
       <ModalContainer isModalOpen={visibleUpdateModal} toggle={toggleUpdateModal}>
         <div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl">
@@ -297,28 +269,6 @@ export const CashBookPage: FC = () => {
             onConfirm={refetch}
             cashBookID={cashBookIdSelected}
           />
-        </div>
-      </ModalContainer>
-      {/* Modal confirm delete */}
-      <ModalContainer isModalOpen={isShowDeleteModal} toggle={toggleDeleteModal}>
-        <div className="inline-flex flex-col text-black w-full max-w-lg my-8 overflow-hidden text-left transition-all transform bg-white">
-          <div className="p-5 mb-4">
-            <span className="text-xl leading-6 font-bold"> Bạn có muốn xóa không? </span>
-            <p className="mt-2 text-primary-gray">
-              Dữ liệu của bạn sẽ bị xóa vĩnh viễn và bạn không thể khôi phục lại dữ liệu này
-            </p>
-          </div>
-          <div className="text-right pt-6 pb-5 px-8 text-base leading-5 border-t border-gray-100">
-            <button className="py-1.5 px-5 mr-2 uppercase" onClick={toggleDeleteModal}>
-              Hủy
-            </button>
-            <button
-              className="py-1.5 px-3 border border-primary bg-primary hover:bg-opacity-90 text-white rounded-md"
-              onClick={handleConfirmDelete}
-            >
-              Xác nhận
-            </button>
-          </div>
         </div>
       </ModalContainer>
     </div>

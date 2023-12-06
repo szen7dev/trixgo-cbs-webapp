@@ -214,25 +214,36 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
                     Phòng ban
                   </label>
                   <DropdownSearchable
-                    placeholder="Tìm kiếm"
-                    className="border border-primary-border rounded"
-                    classNameInput="h-[36px]"
+                    id="department"
+                    className={"w-full pl-0 -mb-1 outline-none "}
+                    bordered
                     isMultiple={false}
-                    allowClearValueSingleInput={false}
-                    showTriangle={true}
-                    maxWidthInput="max-w-none"
-                    renderSelectedItem={(item: any) => <span>{item.text}</span>}
-                    classNameItem="p-0"
+                    allowClearValueSingleInput
+                    showTriangle
+                    placeholder="Tìm kiếm phòng ban"
+                    renderSelectedItem={(item) => (
+                      <p
+                        style={{
+                          textOverflow: "ellipsis",
+                          maxWidth: "100%",
+                          minWidth: 0,
+                          width: "150px",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                        }}
+                      >
+                        {item.text}
+                      </p>
+                    )}
                     data={listDepartments}
-                    formatItem={{
-                      id: "_id",
-                      text: "name",
-                    }}
                     initialValue={{
                       _id: initialValues.departmentID,
                       name: initialValues.departmentName
                     }}
-                    inlineSearch={true}
+                    formatItem={{
+                      id: "_id",
+                      text: "name",
+                    }}
                     onSearchInputChange={handleSearchDepartment}
                     onScroll={handleScrollDepartment}
                     onchangeValue={(value: any) => setFieldValue("departmentID", value._id)}
@@ -248,28 +259,40 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
                   <label className="block text-gray-700 text-sm font-bold mb-2">
                     Chức danh
                   </label>
+
                   <DropdownSearchable
-                    placeholder="Tìm kiếm"
-                    className="border border-primary-border rounded"
-                    classNameInput="h-[36px]"
+                    id="position"
+                    className={"w-full pl-0 -mb-1 outline-none "}
+                    bordered
                     isMultiple={false}
-                    allowClearValueSingleInput={false}
-                    showTriangle={true}
-                    maxWidthInput="max-w-none"
-                    renderSelectedItem={(item: any) => <span>{item.text}</span>}
-                    classNameItem="p-0"
+                    allowClearValueSingleInput
+                    showTriangle
+                    placeholder="Tìm kiếm chức danh"
+                    renderSelectedItem={(item) => (
+                      <p
+                        style={{
+                          textOverflow: "ellipsis",
+                          maxWidth: "100%",
+                          minWidth: 0,
+                          width: "150px",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                        }}
+                      >
+                        {item.text}
+                      </p>
+                    )}
                     data={listPositions}
+                    initialValue={{
+                      _id: initialValues.positionID,
+                      name: initialValues.positionName
+                    }}
                     formatItem={{
                       id: "_id",
                       text: "name",
                     }}
-                    initialValue={{
-                      _id: initialValues.positionID,
-                      name: initialValues.positionName,
-                    }}
-                    inlineSearch={true}
                     onSearchInputChange={handleSearchPosition}
-                    onScroll={handleScrollPosition}
+                    onScroll={handleScrollDepartment}
                     onchangeValue={(value: any) => setFieldValue("positionID", value._id)}
                     onClearData={() => setFieldValue("positionID", '')}
                   />

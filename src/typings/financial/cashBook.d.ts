@@ -13,6 +13,7 @@ export type CashBook = {
     sign: string;
     note: string;
     date: string;
+    active: number;
     income: number;
     expense: number;
     previousInventory?: number;

@@ -776,6 +776,12 @@ export const CONTACT_STATUS = [
     { value: 3, text: 'Ngừng giao dịch', key: 'completed' },
 ]
 
+// TRẠNG THÁI SỔ QUỸ
+export const CASHBOOK_STATUS = [
+    { value: 1, text: 'Đang hoạt động', key: 'open' },
+    { value: 2, text: 'Đã khóa chuyển sổ khác', key: 'in_progress' },
+]
+
 /**
  * CHUNG CHO CÁC ỨNG DỤNG
  */

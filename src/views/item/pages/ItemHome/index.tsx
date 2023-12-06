@@ -1,8 +1,10 @@
-import { FC, useState, useCallback, useEffect, useMemo } from "react";
+import { FC, useState, useCallback, useMemo, useEffect } from "react";
 import cn from "classnames";
 import debounce from "lodash/debounce";
 import moment from "moment";
 import { toast } from "react-toastify";
+import { read, utils } from 'xlsx';
+import { createLinkAndClick } from "utils";
 
 /**
  * Components
@@ -14,7 +16,6 @@ import { ModalCreateOrUpdateDoctype, ModalConfirm } from '../../shareComponents/
  * Assets
  */
 import styles from "views/support/styles/support.module.css";
-import DeleteIcon from "assets/images/icons8-remove.svg";
 import iconPencil from 'assets/images/icons8-pencil-96 1.png';
 
 /**
@@ -29,9 +30,6 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
     const { closeModal, openModal } = useModal();
     const [keywordDoctype, setKeywordDoctype] = useState('');
     const [doctypesChecked, setDoctypesChecked] = useState<Array<Doctype.Doctype>>([]);
-    // const [itemState, setItemState] = useState({
-    //     href: ''
-    // });
 
     const [initialValues, setInitialValues] = useState({
         doctypeID: '',
@@ -116,29 +114,6 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
         }
     };
 
-    const handleConfirmDelete = async () => {
-        try {
-            const ids = doctypesChecked.map(item => item._id);
-            const { error, data } = await deleteManyAsync(ids);
-
-            if (error) {
-                return toast.warn(data?.message);
-            }
-
-            toast.success('Xoá dữ liệu thành công', { autoClose: 1500 });
-            closeModal();
-            clearData();
-            refetchListDoctype();
-            setDoctypesChecked([]);
-        } catch (error) {
-            if (typeof error === "string") {
-                toast.error(error);
-            } else if (error instanceof Error) {
-                toast.error(error.message);
-            }
-        }
-    }
-
     const handleOpenModalCreateOrUpdate = (modalType: 'create' | 'update') => {
         let initValues: any = {...initialValues};
         setDoctypesChecked([]);
@@ -167,6 +142,56 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
         )
     }
 
+    //_____Import excel
+    const [dataImport, setDataImport] = useState([]);
+    const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+        isExporting: false,
+    });
+    const { importFromExcelAsync } = useDoctype({});
+
+    /**
+     * Xử lý import excel (đọc file)
+     */
+    const handleImport = ($event: any) => {
+        const files = $event.target.files;
+        if (files.length) {
+            const file = files[0];
+            const reader = new FileReader();
+            reader.onload = (event: any) => {
+                const wb = read(event.target.result);
+                const sheets = wb.SheetNames;
+
+                if (sheets.length) {
+                    const rows: any = utils.sheet_to_json(wb.Sheets[sheets[0]]); // Index=1 (tức Sheet số 2 từ trái sang)
+                    
+                    // Set data để Import
+                    setDataImport(rows)
+                }
+            }
+            
+            reader.readAsArrayBuffer(file);
+        }
+
+        // Đọc xong thì xóa value trong Input đi
+        $event.target.value = null;
+    }
+
+    // Gọi tới API để đẩy data lên
+    useEffect(() => {
+        if(dataImport.length){
+            const fetchData = async () => {
+                const data = await importFromExcelAsync({ type, dataImport: JSON.stringify(dataImport) });
+                setDataImport([]);
+
+                if(!data.error){
+                    return toast.success("Import thành công");
+                }
+                return toast.error(data.message);
+            }
+            fetchData();
+        }
+    }, [dataImport])
+
     return (
         <main className="relative h-full">
             <header className="sticky top-0 bg-primary-light z-10">
@@ -179,29 +204,18 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
                             onChange={onChangeSearchDoctype}
                         />
 
+                        <button className={"flex items-center justify-center mx-3 ml-3"}>
+                            <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
+                            accept=".xlsx, .xlsm, .xls, .csv"/>
+                            <label className="custom-file-label" htmlFor="inputGroupFile">Import excel tạo danh mục</label>
+                        </button>
+
                         {doctypesChecked.length === 1 ? (
                             <button
                                 className="mr-3"
                                 onClick={() => handleOpenModalCreateOrUpdate('update')}
                             >
                                 <img src={iconPencil} alt="icon pencil" />
-                            </button>
-                        ) : ''}
-
-                        {doctypesChecked.length ? (
-                            <button
-                                onClick={() =>
-                                    openModal(
-                                        <div
-                                            className={
-                                                "inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
-                                            }
-                                        >
-                                            <ModalConfirm onConfirm={handleConfirmDelete} />
-                                        </div>
-                                    )
-                                }>
-                                <img src={DeleteIcon} alt="Delete" />
                             </button>
                         ) : ''}
                     </div>
@@ -265,11 +279,6 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
                                 <Link to={`/item/home/${type}/${doctype._id}`}>
                                     {doctype.amountChilds>0? <b>{doctype?.name}({doctype.amountChilds})</b>: doctype.name }
                                 </Link>
-                                {/* {itemState.href ? (
-                                    <Link to={`${itemState.href}/${doctype._id}`}>
-                                        {doctype.name}
-                                    </Link>
-                                ) : doctype.name} */}
                             </td>
                             <td className="py-1 px-2">{doctype.description}</td>
                             <td className="py-1 px-2">
@@ -290,5 +299,5 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
                 </div>
             )}
         </main>
-    );
-};
+    )
+}
