@@ -1,21 +1,9 @@
 import { FC, useEffect, useState } from 'react';
 import { toast } from "react-toastify";
-
-/**
- * Libraries
- */
 import { Dialog } from '@headlessui/react';
 import { Form, Formik, ErrorMessage } from 'formik';
 import { string, object } from 'yup';
-
-/**
- * Utils
- */
 import { TOAST_DEFAULT_OPTIONS } from 'utils/constants';
-
-/**
- * Hooks
- */
 import { useCashBook } from 'services/hooks/financial/useCashBook';
 
 interface ModalProps {
@@ -34,7 +22,8 @@ export const ModalUpdateCashBook: FC<ModalProps> = ({ cashBookID, toggle, onConf
 		cashBookID,
 		name: '',
 		sign: '',
-		note: ''
+		note: '',
+		active: 1,
 	})
 
 	useEffect(() => {
@@ -44,7 +33,8 @@ export const ModalUpdateCashBook: FC<ModalProps> = ({ cashBookID, toggle, onConf
 			cashBookID,
 			name: cashBookInfo.name,
 			sign: cashBookInfo.sign,
-			note: cashBookInfo.note
+			note: cashBookInfo.note,
+			active: cashBookInfo.active,
 		})
 	}, [cashBookID, cashBookInfo])
 
@@ -145,6 +135,22 @@ export const ModalUpdateCashBook: FC<ModalProps> = ({ cashBookID, toggle, onConf
 									/>
 									<ErrorMessage
 										name="note"
+										component="span"
+										className="font-normal text-negative italic"
+									/>
+								</label>
+								<label className='mt-4 block'>
+									<div className='mb-1.5'>
+										Trạng thái hoạt động
+									</div>
+									<input
+										type="number"
+										placeholder="1-Đang hoạt động|2-Đã khóa chuyển sổ khác"
+										className="py-1.5 px-3 bg-cbs-gray w-full border-0.5 border-cbs-border focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"
+										{...formik.getFieldProps('active')}
+									/>
+									<ErrorMessage
+										name="active"
 										component="span"
 										className="font-normal text-negative italic"
 									/>

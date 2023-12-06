@@ -18,6 +18,7 @@ interface UseDoctype {
     updateAsync: (params: any) => Promise<any>;
     deleteManyAsync: (ids: Array<string>) => Promise<any>;
     isFetching: boolean;
+    importFromExcelAsync: (payload: any) => Promise<any>;
 }
 
 type UseDocTypeParams = {
@@ -75,6 +76,12 @@ export const useDoctype = ({
 
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
 
+    // Import excel
+    const { mutateAsync: importFromExcelAsync } =
+        useMutation((payload: { type?: string, dataImport: string }) =>
+        DoctypeRepository.importFromExcel(payload)
+    );
+
     return {
         isLoading,
         list,
@@ -85,7 +92,8 @@ export const useDoctype = ({
         insertAsync,
         updateAsync,
         deleteManyAsync,
-        isFetching
+        isFetching,
+        importFromExcelAsync
     }
 }
 

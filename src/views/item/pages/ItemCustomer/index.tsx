@@ -6,6 +6,7 @@ import moment from "moment";
 import { toast } from "react-toastify";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { read, utils } from 'xlsx';
+import { createLinkAndClick } from "utils";
 
 /*=====2.CSS=====*/
 import styles from "views/support/styles/support.module.css";
@@ -26,7 +27,6 @@ import { useModal } from "services/hooks/useModal";
 import { useCustomer } from "services/hooks/items/useCustomer";
 
 /*=====7.OTHER=====*/
-import { createLinkAndClick } from "utils";
 import { CONTACT_TYPES, GENDER_TYPES, CUSTOMER_TYPES } from "apis/localdb";
 
 export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {

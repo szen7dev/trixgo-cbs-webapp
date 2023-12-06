@@ -12,6 +12,7 @@ interface DoctypeRepository {
     deleteDoctype: (ids: Array<string>) => Promise<any>;
     fetchListDoctype: (params: Doctype.DoctypeListParams) => Promise<Doctype.DoctypeQueryResponse>;
     fetchDetailDoctype: (docTypeID: string, params?: Doctype.DoctypeListParams) => Promise<Doctype.DoctypeQueryDetailResponse>;
+    importFromExcel: (data: any) => Promise<any>;
 }
 
 export const doctypeRepository: DoctypeRepository = {
@@ -20,6 +21,7 @@ export const doctypeRepository: DoctypeRepository = {
     deleteDoctype: (ids: Array<string>) => deleteDoctype(ids),
     fetchListDoctype: async (params) => fetchListDoctype(params),
     fetchDetailDoctype: async (doctypeID, params) => fetchListDoctype({...params, doctypeID}),
+    importFromExcel: params => importFromExcel(params), 
 }
 
 /*=====APIS=====*/
@@ -65,4 +67,10 @@ async function deleteDoctype(ids: Array<string>) {
         });
 
     return data;
+}
+
+// Import excel
+async function importFromExcel(data: any) {
+    const { data: result } = await API.post(`${ITEM_URL}/doctypes/import-from-excel`, data);
+    return result;
 }
