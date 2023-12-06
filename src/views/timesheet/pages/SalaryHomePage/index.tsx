@@ -3,15 +3,12 @@ import { NavLink } from "react-router-dom";
 import moment from "moment";
 
 import TriangleDown from "assets/icons/TriangleDown";
-// import VerifyIcon from "assets/images/icons8-verified-check-circle-for-approved-valid-content-96.svg";
-
-import { Paginate } from "shareComponents/common/Paginate";
 import debounce from "lodash/debounce";
 import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
 
 import {
   SearchInput,
-  DialogForm,
+  DialogSalaryForm,
   ActionGroupButton2,
   FilterButton,
 } from "views/timesheet/shareComponents/common";
@@ -103,6 +100,7 @@ const SalaryHomePage: FC = () => {
     },
     [onDeleteSalaryParentAsync, refreshListSalary, openDeleteConfirm]
   );
+  
   return (
     <div className={"financial-cashflow-listing paginate-wrapper relative"}>
       <div
@@ -135,8 +133,8 @@ const SalaryHomePage: FC = () => {
           onClick={() =>
             openModal(
               <div className="t-main-search text-left transition-all transform bg-primary-light shadow-xl rounded my-20 align-top inline-block">
-                <DialogForm
-                  title="Tạo mới"
+                <DialogSalaryForm
+                  title="Tạo mới bảng lương"
                   onSubmit={handleCreateSalary}
                   projectName={""}
                   assigneeName={""}
@@ -147,9 +145,6 @@ const SalaryHomePage: FC = () => {
         >
           Tạo mới
         </button>
-        {/* <button className="rounded-full h-10 w-10 flex items-center justify-center bg-gray-100 ml-5">
-          <img alt={"Icon"} src={ThreeDotsVertical} />
-        </button> */}
       </div>
 
       <PaginateV2
@@ -194,13 +189,6 @@ const SalaryHomePage: FC = () => {
             >
               Nội dung
             </div>
-            {/* <div
-              className={
-                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
-              }
-            >
-              Phân loại
-            </div> */}
             <div
               className={
                 "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
@@ -213,7 +201,21 @@ const SalaryHomePage: FC = () => {
                 "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
               }
             >
-              Lương
+              Tổng lương
+            </div>
+            <div
+              className={
+                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
+              }
+            >
+              Đã thanh toán
+            </div>
+            <div
+              className={
+                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
+              }
+            >
+              Còn lại chưa thanh toán
             </div>
             <div
               className={
@@ -222,13 +224,6 @@ const SalaryHomePage: FC = () => {
             >
               Ghi chú
             </div>
-            {/* <div
-              className={
-                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
-              }
-            >
-              Trạng thái
-            </div> */}
           </div>
           {dataNotFilter[pageIndex] && dataNotFilter[pageIndex].map((salaryParent) => (
             <div className={"body-table table-row"} key={salaryParent._id}>
@@ -255,7 +250,7 @@ const SalaryHomePage: FC = () => {
               </div>
               <div
                 className={
-                  "px-2 py-4 table-cell box-border border-b align-middle w-2/12"
+                  "px-2 py-4 table-cell box-border border-b align-middle"
                 }
               >
                 <NavLink to={`/timesheet/salary/${salaryParent._id}`}>
@@ -267,9 +262,6 @@ const SalaryHomePage: FC = () => {
                     moment(salaryParent.createAt).format(DATE_FORMAT)}
                 </p>
               </div>
-              {/* <div className={"px-2 py-4 table-cell box-border border-b"}>
-                {TYPE[salaryParent.type]}
-              </div> */}
               <div className={"px-2 py-4 table-cell box-border border-b"}>
                 {salaryParent?.project?.name}
               </div>
@@ -278,7 +270,27 @@ const SalaryHomePage: FC = () => {
                   "px-2 py-4 table-cell box-border border-b text-right"
                 }
               >
-                {`${salaryParent?.salary}`.replace(
+               {`${Number(salaryParent?.salary + salaryParent?.reward - salaryParent?.punishment)}`.replace(
+                  /\B(?=(\d{3})+(?!\d))/g,
+                  ","
+                )}
+              </div>
+              <div
+                className={
+                  "px-2 py-4 table-cell box-border border-b text-right"
+                }
+              >
+                {`${Number(salaryParent?.advance + salaryParent?.paid)}`.replace(
+                  /\B(?=(\d{3})+(?!\d))/g,
+                  ","
+                )}
+              </div>
+              <div
+                className={
+                  "px-2 py-4 table-cell box-border border-b text-right"
+                }
+              >
+                {`${Number(salaryParent?.salary + salaryParent?.reward - salaryParent?.punishment - salaryParent?.advance - salaryParent?.paid)}`.replace(
                   /\B(?=(\d{3})+(?!\d))/g,
                   ","
                 )}
@@ -286,22 +298,6 @@ const SalaryHomePage: FC = () => {
               <div className={"px-2 py-4 table-cell box-border border-b"}>
                 {salaryParent.note}
               </div>
-              {/* <div className={"px-2 py-4 table-cell box-border border-b"}>
-                <div className={"flex items-center text-primary"}>
-                  <span className={"mr-3"}>
-                    {salaryParent.timeApproved
-                      ? "Đã phê duyệt"
-                      : "Chưa phê duyệt"}
-                  </span>
-                  {salaryParent.timeApproved && (
-                    <img src={VerifyIcon} alt={"icon"} />
-                  )}
-                </div>
-                <p className={"mt-1 text-gray-500"}>
-                  {moment(salaryParent.timeApproved).isValid() &&
-                    moment(salaryParent.timeApproved).format(DATE_FORMAT)}
-                </p>
-              </div> */}
             </div>
           ))}
         </div>
