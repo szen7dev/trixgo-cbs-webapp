@@ -16,8 +16,6 @@ import ResponseContext from 'views/pcm/contexts/response/comment.context';
 /**
  * Assets
  */
-import IconDownload from "assets/images/icons8-reply-arrow-96.svg";
-import ChevronUpIcon from "assets/images/icon-chevron-up.png";
 import { IconPaperClip, IconImage } from "shareComponents/common/Icon";
 
 /**
@@ -45,11 +43,6 @@ import { RelatedResponseItem } from "../RelatedResponseItem";
 import { LoadImage } from "views/pcm/shareComponents/common";
 import { FileUploadRow } from "views/pcm/shareComponents/common";
 import { ModalZoomView } from "shareComponents/common";
-
-enum RelatedResponseTab {
-  ALL = "ALL",
-  MARKED = "MARKED",
-}
 
 type Props = {
   project: Project
@@ -219,16 +212,6 @@ export const RelatedResponse: FC<Props> = ({ project }) => {
       dispatch({ type: 'ADD_COMMENT', payload: data });
       toast.success('Tạo phản hồi thành công');
 
-      // socket?.emit('COMMENT_CSS_ADD_COMMENT', {
-      //   app: APP_KEY.PCM_PLAN_TASK,
-      //   objectID: project._id,
-      //   infoComment: data,
-      //   commentType: 'RESPONSE',
-      //   populates: JSON.stringify({
-      //     path: 'project author'
-      //   })
-      // })
-
       socket.emit('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', {
           receivers: data.receivers
       });
@@ -392,7 +375,7 @@ export const RelatedResponse: FC<Props> = ({ project }) => {
               />
             </div>
             <div className="flex justify-between w-full pt-5 pb-6 mb-0.5">
-              {/* <div className="flex">
+              <div className="flex">
                 <label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer mr-4">
                   <IconPaperClip className="-rotate-45" />
                   <input type="file" name="files" className="hidden" multiple onChange={e => handleSetFiles(e.target.files)} />
@@ -401,7 +384,7 @@ export const RelatedResponse: FC<Props> = ({ project }) => {
                   <IconImage />
                   <input type="file" name="images" className="hidden" accept="image/*" multiple onChange={e => handleSetFiles(e.target.files)} />
                 </label>
-              </div> */}
+              </div>
               <div>
                 <button type="button" className="mx-3 px-3 py-2 rounded bg-gray-300 text-primary-gray" onClick={handleSkip}>Reset</button>
                 <button

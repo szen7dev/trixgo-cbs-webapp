@@ -883,19 +883,6 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                       "insertdatetime media table paste code help wordcount",
                     ],
                     fullpage_default_title: "My default page title",
-
-                    // images_upload_url: "/api/upload/image",
-                    // file_picker_types: "image",
-                    // images_upload_handler: imagesUploadHandler,
-                    // menubar: user?.email === 'contact@trixgo.com',
-                    // toolbar: user?.email === 'contact@trixgo.com' ?
-                    //     "undo redo | formatselect | " +
-                    //     "bold italic backcolor | alignleft aligncenter " +
-                    //     "alignright alignjustify | bullist numlist outdent indent | " +
-                    //     "removeformat | help | image" : false,
-                    // content_style: "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                    // content_css: "document",
-                    // save_enablewhendirty: true,
                     setup(editor) {
                       editor.on("Paste input Undo Redo", () => {
                         editor.save();
@@ -971,19 +958,9 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                       </div>
                     )
                   }) : null}
-
-                {/* <div key={`${id}-${fileInfo.name}-${fileInfo.size}`} className="bg-cbs-file-upload-bg max-w-[600px] px-2 py-1 mb-3 flex items-center">
-                  <p className="truncate mr-2 text-black font-bold" title={fileInfo.name}>{fileInfo.name}</p>
-                  <span className="mr-2 text-primary-gray font-bold">({humanFileSize(fileInfo.size)})</span>
-                  <div className="w-1/5 mr-2 border border-primary bg-white h-[12px] relative">
-                    <div style={{ width: `${progress}%` }} className={"bg-primary absolute top-0 left-0 h-full"}></div>
-                  </div>
-                  <button className="ml-auto"><Close /></button>
-                </div> */}
-
               </div>
               <div className={"flex items-center border-t py-3 px-6"}>
-                {/* <label title="Chọn file đính kèm hoặc dán ảnh trực tiếp vào ô soạn thảo">
+                <label title="Chọn file đính kèm hoặc dán ảnh trực tiếp vào ô soạn thảo">
                   <img
                     src={iconAttach}
                     alt="Icon attach"
@@ -998,7 +975,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                     ref={fileInputRef}
                     onChange={(e: ChangeEvent<HTMLInputElement>) => handleUploadAttach(e.target.files)}
                   />
-                </label> */}
+                </label>
                 <div className={"flex items-center ml-4 testclass"}>
                   <input
                     type="checkbox"
