@@ -377,7 +377,7 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
             </div>
             <div className={"flex items-center justify-between mt-2"}>
                 <div className="flex pl-12">
-                    <label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer mr-2">
+                    {/* <label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer mr-2">
                         <IconImage />
                         <input
                             type="file"
@@ -402,7 +402,7 @@ export const ReplyResponseComment: FC<Props> = ({ task, parent, userId, tab, soc
                             multiple
                             onChange={e => handleSetFiles(e.target.files)}
                         />
-                    </label>
+                    </label> */}
                 </div>
                 <div>
                     <button
