@@ -324,10 +324,10 @@ export const DocumentDetailPage: FC = () => {
                 <img src={iconUpload} alt="" className="mr-2.5 h-6 w-6" />
               )}
             /> */}
-            <label className="px-[10px] py-[5px] h-10 rounded-md bg-gray-100 flex justify-center items-center text-primary text-[13px] cursor-pointer">
+            {/* <label className="px-[10px] py-[5px] h-10 rounded-md bg-gray-100 flex justify-center items-center text-primary text-[13px] cursor-pointer">
               <img src={iconUpload} alt="" className="mr-2.5 h-6 w-6" /> Thêm file
               <input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={handleSetFiles} />
-            </label>
+            </label> */}
           </div>
           <TableFileAttach fileAttachs={documentFiles} handleDeleteFileAttach={handleOpenModalConfirmDelete} documentID={params.docID}>
             {Number(totalDocumentFile) - documentFiles.length > 0 && (

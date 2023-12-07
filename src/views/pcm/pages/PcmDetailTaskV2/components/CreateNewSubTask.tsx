@@ -577,7 +577,7 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
                             <div className={"flex items-center justify-between pt-0 p-4"}>
                                 <div className="flex gap-3 items-center">
                                     <div className="flex mt-2">
-                                        <label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer mr-2">
+                                        {/* <label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer mr-2">
                                             <IconImage />
                                             <input
                                                 type="file"
@@ -602,7 +602,7 @@ export const CreateNewSubTask: FC<Props> = ({ task, userId, cancelCreateNewSubTa
                                                 multiple
                                                 onChange={e => handleSetFiles(e.target.files)}
                                             />
-                                        </label>
+                                        </label> */}
                                     </div>
                                     <div className="flex gap-2 items-center">
                                         <label className="text-primary-gray mt-3">

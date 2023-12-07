@@ -472,17 +472,16 @@ export const RelatedResponse: FC<Props> = ({ task }) => {
                 />
               </div>
               <div className="flex justify-between w-full pt-5 pb-6 mb-0.5">
-                <div className="flex">
+                {/* <div className="flex">
                   <label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer mr-4">
                     <IconPaperClip className="-rotate-45" />
-                    {/* accept="application/*" */}
                     <input type="file" name="files" className="hidden" multiple onChange={e => handleSetFiles(e.target.files)} />
                   </label>
                   <label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer">
                     <IconImage />
                     <input type="file" name="images" className="hidden" accept="image/*" multiple onChange={e => handleSetFiles(e.target.files)} />
                   </label>
-                </div>
+                </div> */}
                 <div>
                   <button type="button" className="mx-3 px-3 py-2 rounded bg-gray-300 text-primary-gray" onClick={handleSkip}>Bỏ qua</button>
                   <button

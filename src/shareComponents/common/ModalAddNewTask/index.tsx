@@ -983,7 +983,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
 
               </div>
               <div className={"flex items-center border-t py-3 px-6"}>
-                <label title="Chọn file đính kèm hoặc dán ảnh trực tiếp vào ô soạn thảo">
+                {/* <label title="Chọn file đính kèm hoặc dán ảnh trực tiếp vào ô soạn thảo">
                   <img
                     src={iconAttach}
                     alt="Icon attach"
@@ -998,7 +998,7 @@ export const ModalAddNewTask: FC<Props> = ({ defaultValues = {} }) => {
                     ref={fileInputRef}
                     onChange={(e: ChangeEvent<HTMLInputElement>) => handleUploadAttach(e.target.files)}
                   />
-                </label>
+                </label> */}
                 <div className={"flex items-center ml-4 testclass"}>
                   <input
                     type="checkbox"
