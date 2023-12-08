@@ -134,6 +134,10 @@ const SalaryDetailPage: FC = () => {
           salary: `${values.salary}`,
           reward: `${values.reward}`,
           punishment: `${values.punishment}`,
+          revenueBonus: `${values.revenueBonus}`,
+          mealAllowance: `${values.mealAllowance}`,
+          insurance: `${values.insurance}`,
+          pitax: `${values.pitax}`,
         });
         if (!isUpdated.error) {
           onRefreshSalaryChild();
@@ -289,25 +293,18 @@ const SalaryDetailPage: FC = () => {
             </div>
             <div
               className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100 w-1/8"
               }
             >
               Nhân sự
             </div>
             {/* <div
               className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
-              }
-            >
-              Nội dung
-            </div> */}
-            <div
-              className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100 w-50"
               }
             >
               Ngày ghi nhận
-            </div>
+            </div> */}
             <div
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
@@ -320,14 +317,42 @@ const SalaryDetailPage: FC = () => {
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Thưởng
+              Thưởng hiệu quả
             </div>
             <div
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Phạt
+              Thưởng đóng góp
+            </div>
+            <div
+              className={
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+              }
+            >
+              Phụ cấp tiền ăn
+            </div>
+            <div
+              className={
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+              }
+            >
+              Trừ vi phạm
+            </div>
+            <div
+              className={
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+              }
+            >
+              Trừ bảo hiểm
+            </div>
+            <div
+              className={
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+              }
+            >
+              Trừ thuế TNCN
             </div>
             <div
               className={
@@ -368,10 +393,6 @@ const SalaryDetailPage: FC = () => {
               pageIndex={pageIndex}
             />
           )}
-
-          {/* {permissions.hasPermissionCreateUpdate && (
-            <CreateRow onInsert={handleCreateSalary} />
-          )} */}
         </div>
       </div>
 
