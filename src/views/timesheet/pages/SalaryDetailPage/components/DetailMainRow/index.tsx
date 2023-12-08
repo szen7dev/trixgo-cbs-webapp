@@ -51,11 +51,11 @@ export const DetailMainRow: FC<Props> = memo(({
       >
         {salaryParentInfo?.name}
       </div>
-      <div
+      {/* <div
         className={
-          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-50"
         }
-      ></div>
+      ></div> */}
       <div
         className={
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
@@ -63,6 +63,15 @@ export const DetailMainRow: FC<Props> = memo(({
       >
         <div className="flex justify-end">
           {convertCurrency(salaryParentInfo?.salary)}
+        </div>
+      </div>
+      <div
+        className={
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
+        }
+      >
+        <div className="flex justify-end">
+          {convertCurrency(salaryParentInfo?.revenueBonus)}
         </div>
       </div>
       <div
@@ -80,10 +89,37 @@ export const DetailMainRow: FC<Props> = memo(({
         }
       >
         <div className="flex justify-end">
+          {convertCurrency(salaryParentInfo?.mealAllowance)}
+        </div>
+      </div>
+      <div
+        className={
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
+        }
+      >
+        <div className="flex justify-end">
           {`${salaryParentInfo?.punishment}`.replace(
             /\B(?=(\d{3})+(?!\d))/g,
             ","
           )}
+        </div>
+      </div>
+      <div
+        className={
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
+        }
+      >
+        <div className="flex justify-end">
+          {convertCurrency(salaryParentInfo?.insurance)}
+        </div>
+      </div>
+      <div
+        className={
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
+        }
+      >
+        <div className="flex justify-end">
+          {convertCurrency(salaryParentInfo?.pitax)}
         </div>
       </div>
       <div

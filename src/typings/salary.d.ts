@@ -26,6 +26,10 @@ export type SalaryParent = {
     advance: number;
     remaining: number;
     paid: number;
+    revenueBonus: number;
+    mealAllowance: number;
+    insurance: number;
+    pitax: number;
 }
 
 export type ListSalaryPayload = QueryParams & {
@@ -103,6 +107,10 @@ export type SalaryChild = {
     advance: number;
     remaining: number;
     paid: number;
+    revenueBonus: number;
+    mealAllowance: number;
+    insurance: number;
+    pitax: number;
 }
 
 export type QueryListSalaryChildPayload = QueryParams & {
@@ -161,6 +169,10 @@ export type UpdateSalaryChildPayload = {
     advance: string;
     remaining: string;
     paid: string;
+    revenueBonus: string;
+    mealAllowance: string;
+    insurance: string;
+    pitax: string;
 }
 
 export type UpdateSalaryChildResponse = InsertSalaryChildResponse;
