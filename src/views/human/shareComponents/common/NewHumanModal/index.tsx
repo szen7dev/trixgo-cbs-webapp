@@ -13,12 +13,10 @@ import moment from "moment";
 import DatePicker from "react-datepicker";
 import debounce from "lodash/debounce";
 
-// import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import { useModal } from "services/hooks/useModal";
 import { DropdownSearchable } from "shareComponents/common";
 
 import CloseIcon from "assets/images/icon-small-bold-close.svg";
-// import TagIcon from "assets/images/icons8-price-tag-96.svg";
 import { CONTACT_POLICY, INSURANCE_STATUS } from "apis/localdb";
 import {
   useQueryListDepartments,
@@ -26,6 +24,7 @@ import {
   useFetchListArea,
 } from "services/hooks/useHuman";
 import { usePosition } from "services/hooks/items/usePosition";
+import { useUserSystem } from "services/hooks/users/useUserSystem";
 
 import type { MutationContactPayload } from "typings/human";
 
@@ -71,7 +70,6 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
   onFinish,
   title,
 }) => {
-  const [openOption, setOpenOption] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const { t: i18n } = useTranslation(["human"]);
   const { closeModal } = useModal();
@@ -104,6 +102,13 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
   //   type: 13,
   //   keyword: searchPositionValue,
   // });
+
+  const [searchUserStr, setSearchUserStr] = React.useState(
+    initialValues.linkUser?.fullname || ""
+  );
+  const {
+    data: listUsersSystem,
+  } = useUserSystem({ keyword: searchUserStr }, true);
 
   const {
     deletePositionAsync,
@@ -182,6 +187,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
       contractDate: "",
       contractValid: "",
       contractExpire: "",
+      linkUser: "",
       ...initialValues,
     };
   }, [initialValues]);
@@ -242,6 +248,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
         department: values?.department?.value,
         position: values?.position?.value,
         workingStatus: values?.workingStatus?.value,
+        linkUser: values?.linkUser?.value,
         contractType: values?.contractType?.id,
       };
       const isSuccess = await onFinish(formatData);
@@ -1233,7 +1240,6 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                   </div>
 
                   {/* -------------- Line 10 --------------- */}
-
                   <div className="flex justify-between items-center h-10 border-b border-gray-200">
                     <div className="w-1/5 flex items-center">
                       <span className="w-4/12 text-primary-gray">
@@ -1315,6 +1321,58 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                         className="p-1 pl-2 pr-2 focus:outline-none focus:border-primary"
                       />
                     </div>
+                  </div>
+
+                  <div className="flex justify-between items-center h-10 border-b border-gray-200">
+                    <div className="w-1/5 flex items-center">
+                        <span className="w-6/12 text-primary-gray">
+                          Link với tài khoản
+                        </span>
+                        <DropdownSearchable
+                          onchangeValue={(value) =>
+                            setFieldValue("linkUser", value)
+                          }
+                          onSearchInputChange={debounce(
+                            (value) => setSearchUserStr(value),
+                            500
+                          )}
+                          placeholder="Link với tài khoản"
+                          className="w-full pl-0 -mb-1 outline-none"
+                          isMultiple={false}
+                          allowClearValueSingleInput={true}
+                          showTriangle={false}
+                          maxWidthInput="max-w-none"
+                          renderSelectedItem={(item) => (
+                            <div
+                              style={{ width: 100 }}
+                              className="flex items-center"
+                            >
+                              <p
+                                style={{
+                                  textOverflow: "ellipsis",
+                                  maxWidth: "100%",
+                                  minWidth: 0,
+                                  whiteSpace: "nowrap",
+                                  overflow: "hidden",
+                                  flex: "1 1 auto",
+                                }}
+                              >
+                                {item.text}
+                              </p>
+                            </div>
+                          )}
+                          initialValue={defaultValues?.linkUser}
+                          data={listUsersSystem.map((linkUser) => ({
+                            value: linkUser._id,
+                            label: linkUser.fullname,
+                          }))}
+                          formatItem={{
+                            id: "value",
+                            text: "label",
+                          }}
+                          inlineSearch={true}
+                        />
+                      </div>
                   </div>
 
                   <div className="absolute flex justify-end items-center bottom-0 -ml-6 px-6 h-12 w-full border-t border-gray-300 text-primary-light">

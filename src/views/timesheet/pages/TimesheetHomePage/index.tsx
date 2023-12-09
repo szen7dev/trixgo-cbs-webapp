@@ -1,10 +1,7 @@
 import React, { FC, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import moment from "moment";
-
 import TriangleDown from "assets/icons/TriangleDown";
-// import VerifyIcon from "assets/images/icons8-verified-check-circle-for-approved-valid-content-96.svg";
-
 import debounce from "lodash/debounce";
 import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
 

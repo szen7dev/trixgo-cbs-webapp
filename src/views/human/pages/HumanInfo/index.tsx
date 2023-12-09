@@ -10,15 +10,9 @@ import { toast } from "react-toastify";
 import BackIcon from "assets/images/icon-back.svg";
 import ThreeDotVerticalIcon from "assets/images/icon-3dots-vertical.svg";
 import PencilIcon from "assets/images/icons8-pencil.svg";
-// import PrintIcon from "assets/images/icons8-print-96.png";
-// import CopyIcon from "assets/images/icons8-copy-96.png";
-// import DeleteIcon from "assets/images/icons8-remove.svg";
-// import DownloadIcon from "assets/images/icons8-download-64.svg";
-// import BookmarkIcon from "assets/images/icons8-bookmark-96.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import { GeneralInfo, WorkHistory, WorkExperience, ExperienceAppointment, Education, Certificate } from "./components";
-// import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import { Loader } from "shareComponents/common";
 import { NewHumanModal } from "views/human/shareComponents/common";
 
@@ -45,8 +39,6 @@ export const HumanInfo: FC = () => {
   const { openModal } = useModal();
   const { updateContactMutateAsync } = useUpdateContactMutation();
   const { dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.HUMAN.id });
-
-  // useOnClickOutside(refMenuDropdown, () => setOpenHumanOption(!openHumanOption));
 
   const { detailHuman, loading, refetch: refreshDetailHuman } = useFetchDetailHuman(id);
 
@@ -101,6 +93,10 @@ export const HumanInfo: FC = () => {
               workingStatus: defaultValues?.workingStatus && {
                 value: defaultValues?.workingStatus?._id,
                 label: defaultValues?.workingStatus?.name
+              },
+              linkUser: defaultValues?.linkUser && {
+                value: defaultValues?.linkUser?._id,
+                label: defaultValues?.linkUser?.fullname
               },
               contractType: defaultValues?.contractType && {
                 value: defaultValues?.contractType?._id,
@@ -290,6 +286,9 @@ export const HumanInfo: FC = () => {
             dayOff: detailHuman.dayOff,
             contractDate: detailHuman.contractDate,
             workingStatus: detailHuman.workingStatus,
+            linkUser: detailHuman.linkUser,
+            userCreate: detailHuman.userCreate,
+            userUpdate: detailHuman.userUpdate,
             contractValid: detailHuman.contractValid,
             other: detailHuman.other,
             contractExpire: detailHuman.contractExpire,
@@ -300,7 +299,8 @@ export const HumanInfo: FC = () => {
             signerIn: detailHuman.signerIn,
             signerOut: detailHuman.signerOut,
             sallaryBasic: detailHuman.sallaryBasic,
-            documents: detailHuman.documents
+            documents: detailHuman.documents,
+            modifyAt: detailHuman.modifyAt,
           }}
         />
         <WorkHistory humanId={id} companyID={detailHuman?.company?._id}/>
@@ -314,5 +314,5 @@ export const HumanInfo: FC = () => {
         <Certificate humanId={id} companyID={detailHuman?.company?._id}/>
       </section>
     </main>
-  );
-};
+  )
+}
