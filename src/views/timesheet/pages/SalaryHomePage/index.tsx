@@ -1,7 +1,10 @@
-import React, { FC, useRef, useState } from "react";
-import { NavLink } from "react-router-dom";
-import moment from "moment";
+import React, { FC, useRef, useState, useEffect } from "react";
+import { NavLink, useHistory } from 'react-router-dom';
+import { APP_ID } from "apis/localdb";
+import { toast } from "react-toastify";
+import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 
+import moment from "moment";
 import TriangleDown from "assets/icons/TriangleDown";
 import debounce from "lodash/debounce";
 import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
@@ -23,6 +26,15 @@ import {
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
 
 const SalaryHomePage: FC = () => {
+  const history = useHistory()
+  const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.TIMESHEET.id })
+  useEffect(() => {
+    if (!dataUserAccess || dataUserAccess?.level != 0) {
+      toast.error("Bạn không có quyền truy cập chức năng này");
+      history.push("/")
+    }
+  }, [hasPermission])
+
   const [recordSelected, toggleRecord] = React.useState<any>({});
   const [keyword, setKeyword] = React.useState("");
   const [pageIndex, setPageIndex] = useState(0);

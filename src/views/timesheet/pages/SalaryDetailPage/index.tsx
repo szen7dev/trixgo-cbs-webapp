@@ -1,8 +1,10 @@
 import React, { FC, useEffect, useState, useRef } from "react";
-import { useParams, useHistory } from "react-router-dom";
-import { toast } from "react-toastify";
+import { NavLink, useParams, useHistory } from "react-router-dom";
 import moment from "moment";
 import {debounce} from "lodash";
+import { APP_ID } from "apis/localdb";
+import { toast } from "react-toastify";
+import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 
 /**
  * Components, Assets
@@ -14,7 +16,6 @@ import { InputWidthAdjust } from "views/timesheet/shareComponents/common";
 import { createLinkAndClick } from "utils";
 
 import { DetailMainRow, ModalShare } from "./components";
-// import { CreateRow } from "./components/Form";
 
 import {
   useQueryDetailSalaryParent,
@@ -32,7 +33,15 @@ import PaginateV2 from "shareComponents/common/PaginateV2";
 type PaginateHandle = React.ElementRef<typeof PaginateV2>;
 
 const SalaryDetailPage: FC = () => {
-  const history = useHistory();
+  const history = useHistory()
+  const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.TIMESHEET.id })
+  useEffect(() => {
+    if (!dataUserAccess || dataUserAccess?.level != 0) {
+      toast.error("Bạn không có quyền truy cập chức năng này");
+      history.push("/")
+    }
+  }, [hasPermission])
+
   const params = useParams<{ id: string }>();
   const [pageIndex, setPageIndex] = useState(0);
 

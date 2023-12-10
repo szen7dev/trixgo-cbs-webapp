@@ -1,13 +1,11 @@
 /*=====1.LIBRARY=====*/
-import { FC, useState, useEffect } from "react";
+import { FC, useEffect } from "react";
 import { NavLink, useHistory } from 'react-router-dom';
 import { toast } from "react-toastify";
 
 /*=====2.CSS=====*/
 
 /*=====3.ICONS=====*/
-// import ownerLogo from "assets/logos/owner.png";
-// import fakeThumbnail from "assets/images/avatar.jpg";
 import iconFolder from "assets/images/icons8-application-window-100.png";
 
 /*=====4.PAGES/COMPONENTS=====*/
@@ -15,7 +13,6 @@ import iconFolder from "assets/images/icons8-application-window-100.png";
 /*=====5.TYPINGS=====*/
 
 /*=====6.HOOKS/APIS=====*/
-// import { useAuth } from "services/hooks/auth/useAuth";
 import { APP_ID } from "apis/localdb";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 
@@ -26,7 +23,6 @@ export const OwnerLeftSideBar: FC = () => {
 		document.title = "Quản trị viên";
 	}, []);
 
-    // const { user } = useAuth();
     const history = useHistory();
     const { hasPermission, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.OWNER.id });
 
