@@ -592,6 +592,12 @@ export const DOCRE_SHEET_TYPES = [
     { value: 3, text: 'Theo dõi vật tư khác' },
 ]
 
+// PHÂN LOẠI CHẤM CÔNG
+export const TIMESHEET_TYPES = [
+    { value: 1, text: 'Quản lý' },
+    { value: 2, text: 'Sản xuất' },
+]
+
 /**
  * FNB
  */

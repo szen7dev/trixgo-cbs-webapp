@@ -4,6 +4,7 @@ import moment from "moment";
 import TriangleDown from "assets/icons/TriangleDown";
 import debounce from "lodash/debounce";
 import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
+import { TIMESHEET_TYPES } from "apis/localdb";
 
 import {
   SearchInput,
@@ -20,10 +21,6 @@ import {
 } from "services/hooks/useTimeSheet";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
-
-enum TYPE {
-  "Chuyên gia" = 1,
-}
 
 const TimeSheetHomePage: FC = () => {
   const [recordSelected, toggleRecord] = React.useState<any>({});
@@ -156,8 +153,8 @@ const TimeSheetHomePage: FC = () => {
         ref={ref}
         totalRecord={totalRecord}
         totalPages={totalPages}
-        hasNextPage={hasNextPage}
         limit={limit}
+        hasNextPage={hasNextPage}
         isFetching={loading}
         nextPageAction={() => {
           setPageIndex((oldState) => oldState + 1);
@@ -275,7 +272,7 @@ const TimeSheetHomePage: FC = () => {
                 </p>
               </div>
               <div className={"px-2 py-4 table-cell box-border border-b"}>
-                {TYPE[timeSheetParent.type]}
+                {TIMESHEET_TYPES[Number(timeSheetParent.type - 1)].text}
               </div>
               <div className={"px-2 py-4 table-cell box-border border-b"}>
                 {timeSheetParent?.project?.name}
@@ -300,25 +297,6 @@ const TimeSheetHomePage: FC = () => {
               <div className={"px-2 py-4 table-cell box-border border-b"}>
                 {timeSheetParent.note}
               </div>
-              {/* <div className={"px-2 py-4 table-cell box-border border-b"}>
-                <div className={"flex items-center text-primary"}>
-                  <span className={"mr-3"}>
-                    {timeSheetParent.timeApproved
-                      ? "Đã phê duyệt"
-                      : "Chưa phê duyệt"}
-                  </span>
-                  {timeSheetParent.timeApproved && (
-                    <img src={VerifyIcon} alt={"icon"} />
-                  )}
-                </div>
-                <p className={"mt-1 text-gray-500"}>
-                  {moment(timeSheetParent.timeApproved).isValid() &&
-                    moment(timeSheetParent.timeApproved).format(DATE_FORMAT)}
-                </p>
-                <p className={"mt-1 text-gray-500"}>
-                  Nguyễn Hữu Hiệp-PG 12/12/2021 15:45
-                </p>
-              </div> */}
             </div>
           ))}
         </div>
@@ -327,4 +305,4 @@ const TimeSheetHomePage: FC = () => {
   );
 };
 
-export default TimeSheetHomePage;
+export default TimeSheetHomePage

@@ -39,13 +39,14 @@ export const useQueryListTimeSheetParent = (
 ): UseQueryListTimeSheetParent => {
   const result = useInfiniteQuery(
     [`list_time-sheet.parent`, params],
-    async () =>
+    async ({ pageParam }: any) =>
       TimeSheetParentRepository.fetchListTimeSheet({
         populates: {
           path: "assignee project userCreate",
           select: "fullname bizfullname name",
         },
         limit,
+        lastestID: pageParam,
         ...params,
       }),
     {
