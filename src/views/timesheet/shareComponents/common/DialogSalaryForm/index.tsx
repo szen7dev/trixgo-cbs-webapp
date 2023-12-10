@@ -4,19 +4,12 @@ import debounce from "lodash/debounce";
 
 import Close from "assets/icons/Close";
 import { DropdownSearchable } from "shareComponents/common";
-
 import { useModal } from "services/hooks/useModal";
 import { useQueryListDepartments } from "services/hooks/items/useDepartment";
 import { useUserSystem } from "services/hooks/users/useUserSystem";
+import { TIMESHEET_TYPES } from "apis/localdb";
 
 import type { InsertTimeSheetParentPayload } from "typings/time-sheet";
-
-const types = [
-  {
-    value: 1,
-    label: "Chuyên gia",
-  },
-];
 
 interface CreateOrEditDialogProps {
   title: string;
@@ -174,13 +167,13 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                     focusedClass={"border-b border-primary"}
                     maxWidthInput={"max-w-none"}
                     renderSelectedItem={(item) => <span>{item.text}</span>}
-                    data={types}
-                    initialValue={types.filter(
+                    data={TIMESHEET_TYPES}
+                    initialValue={TIMESHEET_TYPES.filter(
                       (elm) => elm.value === defaultValues?.type
                     )}
                     formatItem={{
                       id: "value",
-                      text: "label",
+                      text: "text",
                     }}
                     onchangeValue={(value) =>
                       setFieldValue("type", value.value)

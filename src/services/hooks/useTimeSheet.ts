@@ -35,17 +35,18 @@ interface UseQueryListTimeSheetParent {
 
 export const useQueryListTimeSheetParent = (
   params?: any,
-  limit = 10
+  limit = 50
 ): UseQueryListTimeSheetParent => {
   const result = useInfiniteQuery(
     [`list_time-sheet.parent`, params],
-    async () =>
+    async ({ pageParam }: any) =>
       TimeSheetParentRepository.fetchListTimeSheet({
         populates: {
           path: "assignee project userCreate",
           select: "fullname bizfullname name",
         },
         limit,
+        lastestID: pageParam,
         ...params,
       }),
     {

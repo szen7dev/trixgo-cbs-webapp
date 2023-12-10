@@ -4,6 +4,7 @@ import moment from "moment";
 import TriangleDown from "assets/icons/TriangleDown";
 import debounce from "lodash/debounce";
 import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
+import { TIMESHEET_TYPES } from "apis/localdb";
 
 import {
   SearchInput,
@@ -20,10 +21,6 @@ import {
 } from "services/hooks/useTimeSheet";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
-
-enum TYPE {
-  "Chuyên gia" = 1,
-}
 
 const TimeSheetHomePage: FC = () => {
   const [recordSelected, toggleRecord] = React.useState<any>({});
@@ -147,17 +144,14 @@ const TimeSheetHomePage: FC = () => {
         >
           Tạo mới
         </button>
-        {/* <button className="rounded-full h-10 w-10 flex items-center justify-center bg-gray-100 ml-5">
-          <img alt={"Icon"} src={ThreeDotsVertical} />
-        </button> */}
       </div>
 
       <PaginateV2
         ref={ref}
         totalRecord={totalRecord}
         totalPages={totalPages}
-        hasNextPage={hasNextPage}
         limit={limit}
+        hasNextPage={hasNextPage}
         isFetching={loading}
         nextPageAction={() => {
           setPageIndex((oldState) => oldState + 1);
@@ -174,74 +168,57 @@ const TimeSheetHomePage: FC = () => {
           <div className={"header table-row sticky z-10"}>
             <div
               className={
-                "px-6 py-4 table-cell box-border border-b align-middle w-3"
+                "px-2 py-2 table-cell box-border border-b align-middle w-3"
               }
-            >
-              <div className={"flex items-center"}>
-                <input
-                  className="form-check-input mr-2"
-                  type="checkbox"
-                  value=""
-                  id="flexCheckDefault"
-                />
-                <TriangleDown />
-              </div>
-            </div>
+            ></div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500 w-1/3"
               }
             >
               Nội dung
             </div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
               Phân loại
             </div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
               Dự án/phòng ban
             </div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
               Khối lượng
             </div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
               Chi phí
             </div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
               Ghi chú
             </div>
-            {/* <div
-              className={
-                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
-              }
-            >
-              Trạng thái/Phê duyệt
-            </div> */}
           </div>
           {dataNotFilter[pageIndex] && dataNotFilter[pageIndex].map((timeSheetParent: any) => (
             <div className={"body-table table-row"} key={timeSheetParent._id}>
               <div
                 className={
-                  "px-6 py-4 table-cell box-border border-b align-middle w-3"
+                  "px-2 py-2 table-cell box-border border-b align-middle w-3"
                 }
               >
                 <input
@@ -250,7 +227,6 @@ const TimeSheetHomePage: FC = () => {
                   id="flexCheckDefault"
                   checked={recordSelected?._id === timeSheetParent._id}
                   onChange={(e) => {
-                    // chỉ cho chọn 1
                     if (e.target.checked) {
                       toggleRecord(timeSheetParent);
                       return null;
@@ -262,34 +238,34 @@ const TimeSheetHomePage: FC = () => {
               </div>
               <div
                 className={
-                  "px-2 py-4 table-cell box-border border-b align-middle w-2/12"
+                  "px-1 py-1 table-cell box-border border-b align-middle w-2/12"
                 }
               >
                 <NavLink to={`/timesheet/home/${timeSheetParent._id}`}>
                   {timeSheetParent.name}
                 </NavLink>
                 <p className={"mt-1 text-gray-500"}>
-                  {timeSheetParent?.userCreate?.fullname}
+                  {timeSheetParent?.userCreate?.fullname} | 
                   {moment(timeSheetParent.createAt).isValid() &&
                     moment(timeSheetParent.createAt).format(DATE_FORMAT)}
                 </p>
               </div>
-              <div className={"px-2 py-4 table-cell box-border border-b"}>
-                {TYPE[timeSheetParent.type]}
+              <div className={"px-2 py-2 table-cell box-border border-b"}>
+                {TIMESHEET_TYPES[Number(timeSheetParent.type - 1)].text}
               </div>
-              <div className={"px-2 py-4 table-cell box-border border-b"}>
+              <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {timeSheetParent?.project?.name}
               </div>
               <div
                 className={
-                  "px-2 py-4 table-cell box-border border-b text-right"
+                  "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
                 {timeSheetParent?.hours}
               </div>
               <div
                 className={
-                  "px-2 py-4 table-cell box-border border-b text-right"
+                  "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
                 {`${timeSheetParent?.amount}`.replace(
@@ -297,28 +273,9 @@ const TimeSheetHomePage: FC = () => {
                   ","
                 )}
               </div>
-              <div className={"px-2 py-4 table-cell box-border border-b"}>
+              <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {timeSheetParent.note}
               </div>
-              {/* <div className={"px-2 py-4 table-cell box-border border-b"}>
-                <div className={"flex items-center text-primary"}>
-                  <span className={"mr-3"}>
-                    {timeSheetParent.timeApproved
-                      ? "Đã phê duyệt"
-                      : "Chưa phê duyệt"}
-                  </span>
-                  {timeSheetParent.timeApproved && (
-                    <img src={VerifyIcon} alt={"icon"} />
-                  )}
-                </div>
-                <p className={"mt-1 text-gray-500"}>
-                  {moment(timeSheetParent.timeApproved).isValid() &&
-                    moment(timeSheetParent.timeApproved).format(DATE_FORMAT)}
-                </p>
-                <p className={"mt-1 text-gray-500"}>
-                  Nguyễn Hữu Hiệp-PG 12/12/2021 15:45
-                </p>
-              </div> */}
             </div>
           ))}
         </div>
@@ -327,4 +284,4 @@ const TimeSheetHomePage: FC = () => {
   );
 };
 
-export default TimeSheetHomePage;
+export default TimeSheetHomePage
