@@ -38,7 +38,7 @@ interface UseQueryListSalaryParent {
 
 export const useQueryListSalaryParent = (
   params?: any,
-  limit = 10
+  limit = 50
 ): UseQueryListSalaryParent => {
   const result = useInfiniteQuery(
     `list_salary.parent`,
@@ -242,7 +242,7 @@ export const useQueryListSalaryChild = (
     hasNextPage,
     totalPages,
     totalRecord,
-    limit: params.limit || 10,
+    limit: params.limit || 50,
     refetch,
     fetchNextPage,
     fetchPrevPage,
