@@ -196,15 +196,15 @@ interface UseQueryListSalaryChild {
 }
 export const useQueryListSalaryChild = (
   salaryParentID: string,
-  limit = 50,
+  params: any,
 ): UseQueryListSalaryChild => {
   const result = useInfiniteQuery(
-    `list_time-sheet.child`,
+    [`list_time-sheet.child`, params],
     async ({ pageParam }: any) =>
       SalaryChildRepository.fetchListSalary({
         parentID: salaryParentID,
         lastestID: pageParam,
-        limit
+        ...params
       }),
     {
       getNextPageParam: ({ data }: any) => {
@@ -242,7 +242,7 @@ export const useQueryListSalaryChild = (
     hasNextPage,
     totalPages,
     totalRecord,
-    limit,
+    limit: params.limit || 10,
     refetch,
     fetchNextPage,
     fetchPrevPage,

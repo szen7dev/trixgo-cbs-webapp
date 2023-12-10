@@ -89,7 +89,10 @@ const SalaryDetailPage: FC = () => {
     limit,
     fetchNextPage,
     fetchPrevPage,
-  } = useQueryListSalaryChild(salaryParentID);
+  } = useQueryListSalaryChild(salaryParentID, {
+    keyword,
+    limit: 50
+  });
 
   const { onUpdateSalaryAsync, onCreateSalaryAsync } = useMutationSalaryChild();
 
@@ -193,6 +196,7 @@ const SalaryDetailPage: FC = () => {
   };
 
   const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log({ value: event.target.value })
     setKeyword(event.target.value)
   }, 500)
 
