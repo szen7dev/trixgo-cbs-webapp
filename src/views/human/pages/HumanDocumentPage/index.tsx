@@ -21,7 +21,7 @@ import {useAppSelector} from "redux/reducer";
 import {setFilterDropdown} from "redux/reducer/DocumentProjectSlice";
 
 // ========== Hooks ========== //
-import { useHumanCustom, useListFilterHuman} from "services/hooks/human/useHuman";
+import { useHumanCustom, useListFilterHuman} from "services/hooks/human/useDocumentHuman";
 import {useProjectCustom} from "services/hooks/items/useProject";
 
 export const HumanDocumentPage: FC = () => {
@@ -49,7 +49,7 @@ export const HumanDocumentPage: FC = () => {
     const [pageIndex, setPageIndex] = useState(0);
 
     useEffect(() => {
-        document.title = `Trixgo | Quản lý nhân sự`;
+        document.title = `Trixgo | Hồ sơ nhân sự`;
     });
 
     const location = useLocation()
@@ -71,7 +71,6 @@ export const HumanDocumentPage: FC = () => {
     const { listHumanWithPager, isLoading, isFetching, totalRecord, totalPage, fetchNextPageHuman, hasNextPage, refetchListHuman } = useListFilterHuman({
         params: {
             ...fromToDate,
-            type: '1',
             genders,
             departmentsID,
             keyword
@@ -93,7 +92,6 @@ export const HumanDocumentPage: FC = () => {
             const { error, data } = await exportHumanAsync({
                 filterParams: {  
                     ...fromToDate,
-                    type: '1',
                     genders,
                     departmentsID,
                     keyword
@@ -128,7 +126,7 @@ export const HumanDocumentPage: FC = () => {
                             onChange={onChangeSearch}
                             />
                         </div>
-                        <DropdownSearchableV2
+                        {/* <DropdownSearchableV2
                             ref={typeRef}
                             className={"mr-1 border border-primary-border rounded-lg mb-2"}
                             placeholder={"Giới tính"}
@@ -214,14 +212,14 @@ export const HumanDocumentPage: FC = () => {
                                 <p className={"min-w-[300px]"}>{item.text}</p>
                             )}
                             selectOneByOne={true}
-                        />
+                        /> */}
 
                         <TimeRangeDropdown
                             ref={fromToRef}
                             className={
                                 "mr-1 border border-primary-border rounded-lg mb-2 p-1 pl-2 "
                             }
-                            placeholder={"Thâm niên"}
+                            placeholder={"Thời hạn"}
                             iconBack={<TriangleDown />}
                             onValueChange={(val) => {
                                 setFromToDate(val)
@@ -237,24 +235,29 @@ export const HumanDocumentPage: FC = () => {
                                     toDate: "",
                                 },
                                 {
-                                    text: "Trong vòng 5 năm",
-                                    fromDate: moment().subtract(5, "years").format("YYYY-MM-DD h:mm"),
-                                    toDate: moment().add(1, "minutes").format("YYYY-MM-DD h:mm"),
-                                },
-                                {
-                                    text: "Từ 5-10 năm",
-                                    fromDate: moment().subtract(10, "years").format("YYYY-MM-DD h:mm"),
-                                    toDate: moment().subtract(5, "years").format("YYYY-MM-DD h:mm"),
-                                },
-                                {
-                                    text: "Từ 10-15 năm",
-                                    fromDate: moment().subtract(15, "years").format("YYYY-MM-DD h:mm"),
-                                    toDate: moment().subtract(10, "years").format("YYYY-MM-DD h:mm"),
-                                },
-                                {
-                                    text: "Từ 15 năm trở lên",
+                                    text: "Quá hạn",
                                     fromDate: moment().subtract(100, "years").format("YYYY-MM-DD h:mm"),
-                                    toDate: moment().subtract(15, "years").format("YYYY-MM-DD h:mm"),
+                                    toDate: moment().subtract(1, "minutes").format("YYYY-MM-DD h:mm"),
+                                },
+                                {
+                                    text: "Trong vòng 1 tháng tới",
+                                    fromDate: moment().add(1, "minutes").format("YYYY-MM-DD h:mm"),
+                                    toDate: moment().add(1, "months").format("YYYY-MM-DD h:mm"),
+                                },
+                                {
+                                    text: "Từ 1 tới 3 tháng tới",
+                                    fromDate: moment().add(1, "months").format("YYYY-MM-DD h:mm"),
+                                    toDate: moment().add(3, "months").format("YYYY-MM-DD h:mm"),
+                                },
+                                {
+                                    text: "Từ 3-6 tháng tới",
+                                    fromDate: moment().add(3, "months").format("YYYY-MM-DD h:mm"),
+                                    toDate: moment().add(6, "months").format("YYYY-MM-DD h:mm"),
+                                },
+                                {
+                                    text: "Từ 6 tháng trở lên",
+                                    fromDate: moment().add(6, "months").format("YYYY-MM-DD h:mm"),
+                                    toDate: moment().add(100, "years").format("YYYY-MM-DD h:mm"),
                                 },
                             ]}
                         />
@@ -303,25 +306,22 @@ export const HumanDocumentPage: FC = () => {
                                 TT
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+                                Hồ sơ
+                            </th>
+                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
                                 Nhân sự
                             </th>
-                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                                Điện thoại/Email
-                            </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" >
-                                Nơi ở hiện tại
+                                Mã hiệu hồ sơ
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                                Thuế, bảo hiểm
+                                Ngày cấp
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                                Phòng ban
+                                Nơi cấp
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                                Hợp đồng lao động
-                            </th>
-                            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                                Tình trạng
+                                Thời hạn
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
                                 Ghi chú
@@ -331,10 +331,10 @@ export const HumanDocumentPage: FC = () => {
                         <tbody className="">
                         {listHumanWithPager[pageIndex].map((document, index) => {
                             let linkRef;
-                            if(location.pathname.includes("/human/home/")){
-                                linkRef = `/human/home/hid=${document._id}`
+                            if(location.pathname.includes("/human/document/")){
+                                linkRef = `/human/home/hid=${document?.contact?._id}`
                             }else{
-                                linkRef = `/human/home/hid=${document._id}`
+                                linkRef = `/human/home/hid=${document?.contact?._id}`
                             }
                             return (
                                 <tr
@@ -346,38 +346,24 @@ export const HumanDocumentPage: FC = () => {
                                     </td>
                                     <td className="px-2 py-2.5 border-b border-cbs-border">
                                         <Link to={linkRef}>
-                                        <p>
                                             {`${document.name}`}
-                                            - {(document?.gender && document?.gender >= 1) && GENDER_TYPES[document?.gender -1].text}
-                                        </p>
-                                        <p className="text-primary-gray mt-1">{document?.identity != null && document?.identity }</p>
-                                        <p className="text-primary-gray mt-1">Ngày sinh: { document?.birthday != null && moment(document?.birthday).format("DD/MM/YYYY")}</p>
+                                            {/* <p><i>{document._id}</i></p> */}
                                         </Link>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
-                                        <p>{`${document?.phone}`}</p>
-                                        <p className="text-primary-gray">{document?.email != null && document?.email }</p>
+                                        <p>{`${document?.contact?.name}`}</p>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
-                                        {document.address},
-                                        {document?.area?.name}, {document?.area?.parent?.name}, {document?.area?.parent?.parent?.name}
-                                    </td>
-                                    <td className="py-2.5 border-b border-cbs-border px-2">
-                                        <p>MST: {document?.taxid}</p>
-                                        <p>MBH: {document?.insuranceSign} - {moment(document.insuranceDate).isValid() && moment(document.insuranceDate).format("DD/MM/YYYY")}</p>
+                                        {document?.sign}
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2 w-24">
-                                        <p>{document?.department?.name}</p>
-                                        <p>{document?.position?.name}</p>
+                                        {moment(document.fromDate).isValid() && moment(document.fromDate).format("DD/MM/YYYY")}
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
-                                        {document?.contractType?.name}
-                                        <p><i>
-                                            {moment(document.contractDate).isValid() && moment(document.contractDate).format("DD/MM/YYYY")}
-                                            </i></p>
+                                        {document?.place}
                                     </td>
-                                    <td className="py-2.5 border-b border-cbs-border px-2">
-                                        {document?.workingStatus?.name}
+                                    <td className="py-2.5 border-b border-cbs-border px-2 w-24">
+                                        {moment(document.toDate).isValid() && moment(document.toDate).format("DD/MM/YYYY")}
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
                                         {document.note}

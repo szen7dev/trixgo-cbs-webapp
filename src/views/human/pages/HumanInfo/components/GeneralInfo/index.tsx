@@ -27,7 +27,7 @@ export const GeneralInfo: FC<Props> = memo((props) => {
   const { t: i18n } = useTranslation(["human"]);
 
   const { info } = props;
-  console.log(info)
+  // console.log(info)
 
   return (
     <div className="border-b-8 border-accent-light px-4 py-6">
