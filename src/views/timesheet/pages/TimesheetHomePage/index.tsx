@@ -186,7 +186,7 @@ const TimeSheetHomePage: FC = () => {
             </div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
+                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500 w-1/3"
               }
             >
               Nội dung
@@ -226,13 +226,6 @@ const TimeSheetHomePage: FC = () => {
             >
               Ghi chú
             </div>
-            {/* <div
-              className={
-                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
-              }
-            >
-              Trạng thái/Phê duyệt
-            </div> */}
           </div>
           {dataNotFilter[pageIndex] && dataNotFilter[pageIndex].map((timeSheetParent: any) => (
             <div className={"body-table table-row"} key={timeSheetParent._id}>
@@ -259,7 +252,7 @@ const TimeSheetHomePage: FC = () => {
               </div>
               <div
                 className={
-                  "px-2 py-4 table-cell box-border border-b align-middle w-2/12"
+                  "px-1 py-1 table-cell box-border border-b align-middle w-2/12"
                 }
               >
                 <NavLink to={`/timesheet/home/${timeSheetParent._id}`}>
