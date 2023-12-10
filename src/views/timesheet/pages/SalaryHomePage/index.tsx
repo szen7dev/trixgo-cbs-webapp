@@ -182,64 +182,54 @@ const SalaryHomePage: FC = () => {
           <div className={"header table-row sticky z-10"}>
             <div
               className={
-                "px-6 py-4 table-cell box-border border-b align-middle w-3"
+                "px-2 py-2 table-cell box-border border-b align-middle w-3"
               }
-            >
-              <div className={"flex items-center"}>
-                <input
-                  className="form-check-input mr-2"
-                  type="checkbox"
-                  value=""
-                  id="flexCheckDefault"
-                />
-                <TriangleDown />
-              </div>
-            </div>
+            ></div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
               Nội dung
             </div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
               Phân loại
             </div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
               Dự án/phòng ban
             </div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
               Tổng lương
             </div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
               Đã thanh toán
             </div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
               Còn lại chưa thanh toán
             </div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
               Ghi chú

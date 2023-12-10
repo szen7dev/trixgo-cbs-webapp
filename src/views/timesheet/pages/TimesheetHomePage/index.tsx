@@ -168,57 +168,47 @@ const TimeSheetHomePage: FC = () => {
           <div className={"header table-row sticky z-10"}>
             <div
               className={
-                "px-6 py-4 table-cell box-border border-b align-middle w-3"
+                "px-2 py-2 table-cell box-border border-b align-middle w-3"
               }
-            >
-              <div className={"flex items-center"}>
-                <input
-                  className="form-check-input mr-2"
-                  type="checkbox"
-                  value=""
-                  id="flexCheckDefault"
-                />
-                <TriangleDown />
-              </div>
-            </div>
+            ></div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500 w-1/3"
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500 w-1/3"
               }
             >
               Nội dung
             </div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
               Phân loại
             </div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
               Dự án/phòng ban
             </div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
               Khối lượng
             </div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
               Chi phí
             </div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
               Ghi chú
@@ -228,7 +218,7 @@ const TimeSheetHomePage: FC = () => {
             <div className={"body-table table-row"} key={timeSheetParent._id}>
               <div
                 className={
-                  "px-6 py-4 table-cell box-border border-b align-middle w-3"
+                  "px-2 py-2 table-cell box-border border-b align-middle w-3"
                 }
               >
                 <input
@@ -260,22 +250,22 @@ const TimeSheetHomePage: FC = () => {
                     moment(timeSheetParent.createAt).format(DATE_FORMAT)}
                 </p>
               </div>
-              <div className={"px-2 py-4 table-cell box-border border-b"}>
+              <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {TIMESHEET_TYPES[Number(timeSheetParent.type - 1)].text}
               </div>
-              <div className={"px-2 py-4 table-cell box-border border-b"}>
+              <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {timeSheetParent?.project?.name}
               </div>
               <div
                 className={
-                  "px-2 py-4 table-cell box-border border-b text-right"
+                  "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
                 {timeSheetParent?.hours}
               </div>
               <div
                 className={
-                  "px-2 py-4 table-cell box-border border-b text-right"
+                  "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
                 {`${timeSheetParent?.amount}`.replace(
@@ -283,7 +273,7 @@ const TimeSheetHomePage: FC = () => {
                   ","
                 )}
               </div>
-              <div className={"px-2 py-4 table-cell box-border border-b"}>
+              <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {timeSheetParent.note}
               </div>
             </div>
