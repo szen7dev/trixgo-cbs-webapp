@@ -27,6 +27,7 @@ export const GeneralInfo: FC<Props> = memo((props) => {
   const { t: i18n } = useTranslation(["human"]);
 
   const { info } = props;
+  // console.log(info)
 
   return (
     <div className="border-b-8 border-accent-light px-4 py-6">
@@ -319,6 +320,20 @@ export const GeneralInfo: FC<Props> = memo((props) => {
               </td>
               <td className="border w-2/6 pl-4">
                 {info?.signerOut}
+              </td>
+            </tr>
+            <tr className="border h-7 leading-7">
+              <td className="border text-primary-gray w-1/6 pl-4">
+                Link tài khoản
+              </td>
+              <td className="border w-2/6 pl-4">
+                {info?.linkUser?.fullname}
+              </td>
+              <td className="border text-primary-gray w-1/6 pl-4">
+                Cập nhật lần cuối
+              </td>
+              <td className="border w-2/6 pl-4">
+                {info?.userUpdate?.fullname} - {moment(info?.modifyAt).isValid() && moment(info?.modifyAt).format("DD/MM/YYYY hh:mm")}
               </td>
             </tr>
           </tbody>

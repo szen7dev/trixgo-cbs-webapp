@@ -86,6 +86,21 @@ type WorkingStatus = {
     _id: string;
 }
 
+type linkUser = {
+    fullname: string;
+    _id: string;
+}
+
+type userCreate = {
+    fullname: string;
+    _id: string;
+}
+
+type userUpdate = {
+    fullname: string;
+    _id: string;
+}
+
 export type ContractType = {
     name: string;
     _id: string;
@@ -96,10 +111,6 @@ export type ContractType = {
     };
 }
 
-/**
- * Lĩnh vực chuyên môn
- * Chuyên ngành đào tạo
-*/
 export type Field2 = {
     name: string;
     _id: string;
@@ -149,6 +160,9 @@ export type Human = {
     major?: Major[];
     other?: Other;
     workingStatus?: WorkingStatus;
+    linkUser?: linkUser;
+    userCreate?: userCreate;
+    userUpdate?: userUpdate;
     contractType?: ContractType;
     _id?: string;
     image?: string;
@@ -187,6 +201,7 @@ export type Human = {
     signerOut?: string;
     insuanceDate?: string;
     documents?: any;
+    modifyAt?: any;
 }
 
 export interface HumanPayload extends QueryParam {

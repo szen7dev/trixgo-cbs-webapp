@@ -309,6 +309,7 @@ export const Certificate: FC<CertificateProps> = memo((props) => {
             <div style={{ width: "15%" }}>
               <p style={{ maxWidth: "90%" }}>{contactDocument.name}</p>
               <p style={{ maxWidth: "90%" }}>{contactDocument.place}</p>
+              {/* <p><i>{contactDocument._id}</i></p> */}
             </div>
             <p style={{ width: "10%" }}>
               {contactDocument.sign && (

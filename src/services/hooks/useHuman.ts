@@ -10,7 +10,6 @@ import type {
     Area,
     CreateContactResponse,
     MutationContactPayload,
-
     CreateContactDocumentPayload,
     UpdateContactDocumentPayload,
     UpdateFileContactDocumentPayload,

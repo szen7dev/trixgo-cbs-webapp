@@ -1,14 +1,12 @@
 /*=====1.LIBRARY=====*/
-import { FC, useRef, useState, useCallback, useEffect, ChangeEvent } from "react";
+import { FC, useRef, useState, useCallback, ChangeEvent } from "react";
 import cn from "classnames";
 import debounce from "lodash/debounce";
 import moment from "moment";
 import { toast } from "react-toastify";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { validateFiles } from 'validation/file';
-import { read, utils } from 'xlsx';
 import { APP_ID } from "apis/localdb";
-import { formatNumberMoney } from "utils/converter";
 
 /*=====2.CSS=====*/
 import styles from "views/support/styles/support.module.css";
@@ -27,14 +25,12 @@ import { Storage } from "typings/items";
 
 /*=====6.HOOKS/APIS=====*/
 import { useModal } from "services/hooks/useModal";
-import { useStorage } from "services/hooks/items/useStorage";
 import { useFunda } from "services/hooks/items/useFunda";
 import { useUpload } from "services/hooks/useUpload";
 import { useAuth } from "services/hooks/auth/useAuth";
 import API from "apis/repository";
 
 /*=====7.OTHER=====*/
-import { createLinkAndClick } from "utils";
 const CAMPAIGN_CONSTANT = ["Tắt", "Bật"];
 const INTERNAL_CONSTANT = ["Hệ thống", "Nhượng quyền"];
 const PLATFORM_CONSTANT = ["Bán tại điểm bán", "Bán qua sàn bán lẻ"];
@@ -63,7 +59,9 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
         campaign: 1,
         internal: 1,
         platform: 1,
-        activeCampaign: []
+        activeCampaign: [],
+        trialStaffSalary: 0,
+        officialStaffSalar: 0,
     });
 
     const {
@@ -80,13 +78,12 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
             isListParentOfListChilds: "1", 
             populates: { 
                 "path": "area1 area2 area3 images",
-                // "select": "name"
             }, 
             parentID 
         },
         isFetchList: true
     });
-    // console.log({ listFunda });
+
     // Reset form
     const clearData = () => {
         setInitialValues(previousValue => ({
@@ -119,7 +116,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, name, sign, phone, bankAccount, loyaltyPointsRate, description, address, initialDay, platform, campaign, internal, area1, area2, area3, activeCampaign} = newListIDChecked[0];
+            const { _id, name, sign, phone, bankAccount, loyaltyPointsRate, description, address, initialDay, platform, campaign, internal, area1, area2, area3, activeCampaign, trialStaffSalary, officialStaffSalar } = newListIDChecked[0];
             setInitialValues({
                 fundaID: _id,
                 name,
@@ -136,7 +133,9 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                 area1, 
                 area2,
                 area3,
-                activeCampaign
+                activeCampaign,
+                trialStaffSalary: Number(trialStaffSalary),
+                officialStaffSalar: Number(officialStaffSalar),
             });
         } else {
             clearData();
@@ -207,7 +206,9 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                 campaign: 1,
                 internal: 1,
                 platform: 1,
-                activeCampaign: []
+                activeCampaign: [],
+                trialStaffSalary: 0,
+                officialStaffSalar: 0,
             };
         }
 
@@ -373,7 +374,12 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                         </th>
                         <th className={cn("py-1 font-normal", styles.theadTwelvePercent)}>
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                               Chiến dịch quảng cáo
+                                Lương thử việc/giờ
+                            </div>
+                        </th>
+                        <th className={cn("py-1 font-normal", styles.theadTwelvePercent)}>
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Lương chính thức/giờ
                             </div>
                         </th>
                         <th className={cn("py-1 font-normal", styles.theadTwelvePercent)}>
@@ -415,7 +421,9 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                             <td className="py-1 px-2">{item?.description}</td>
                             <td className="py-1 px-2">{item?.address}, {item?.area3?.name}, {item?.area2?.name}, {item?.area1?.name}</td>
                             <td className="py-1 px-2">{moment(item.initialDay).format('L')}</td>
-                            <td className="py-1 px-2">{CAMPAIGN_CONSTANT[item?.campaign-1]}</td>
+                            <td className="py-1 px-2">{item?.trialStaffSalary}</td>
+                            <td className="py-1 px-2">{item?.officialStaffSalar}</td>
+                            {/* <td className="py-1 px-2">{CAMPAIGN_CONSTANT[item?.campaign-1]}</td> */}
                             <td className="py-1 px-2">
                                 <p>{INTERNAL_CONSTANT[item?.internal-1]}</p>
                                 <p className="text-primary ">{PLATFORM_CONSTANT[item?.platform-1]}</p>

@@ -1,9 +1,7 @@
-import React, { FC, Fragment, useContext, useState, useEffect } from "react";
-import { Link, useParams, useLocation } from "react-router-dom";
-import { Transition } from "@headlessui/react";
+import React, { FC, useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import moment from "moment";
-import { read, utils } from 'xlsx';
 
 import {
     DropdownSearchableV2,
@@ -45,14 +43,10 @@ export const HumanHomePage: FC = () => {
 
     const ref = React.useRef<PaginateHandle>(null);
     const datahubRef = React.useRef<DropdownHandle>(null);
-    const typesRef = React.useRef<DropdownHandle>(null);
     const typeRef = React.useRef<DropdownHandle>(null);
-    const contractsRef = React.useRef<DropdownHandle>(null);
-    const storagesRef = React.useRef<DropdownHandle>(null);
     const fromToRef = React.useRef<TimeRangeHandle>(null);
 
     const [pageIndex, setPageIndex] = useState(0);
-    const [recordSelected, setSelectRecord] = useState<any>({});
 
     useEffect(() => {
         document.title = `Trixgo | Quản lý nhân sự`;
@@ -87,8 +81,8 @@ export const HumanHomePage: FC = () => {
     // console.log(listHumanWithPager)
 
     const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
-        setKeyword(event.target.value);
-    }, 500);
+        setKeyword(event.target.value)
+    }, 500)
 
     const { exportHumanAsync } = useHumanCustom({});
 

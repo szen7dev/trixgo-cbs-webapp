@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState, useRef } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import moment from "moment";
+import {debounce} from "lodash";
 
 /**
  * Components, Assets
@@ -36,8 +37,8 @@ const SalaryDetailPage: FC = () => {
   const [pageIndex, setPageIndex] = useState(0);
 
   const ref = useRef<PaginateHandle>(null);
-
   const salaryParentID = params["id"];
+  const [keyword, setKeyword] = useState('');
 
   const [modalShare, setModalShare] = useState<{
     isShow: boolean;
@@ -150,36 +151,6 @@ const SalaryDetailPage: FC = () => {
     [onRefreshSalaryChild, onUpdateSalaryAsync, refetch]
   );
 
-  const handleCreateSalary = React.useCallback(
-    async (values) => {
-      try {
-        // if (!values.name) {
-        //   throw new Error("Name is required");
-        // }
-        const isCreated = await onCreateSalaryAsync({
-          name: values.name,
-          parentID: salaryParentID,
-          salary: "",
-          reward: "",
-          punishment: "",
-          advance: "",
-          remaining: "",
-          paid: "",
-        });
-        if (isCreated.error) {
-          throw new Error("ERROR~");
-        }
-
-        refetch();
-        onRefreshSalaryChild();
-        return true;
-      } catch (err) {
-        return false;
-      }
-    },
-    [salaryParentID, onCreateSalaryAsync, onRefreshSalaryChild, refetch]
-  );
-
   const toggleModalShare = (
     modalType: "admins" | "members",
     users: User[] | undefined
@@ -211,6 +182,10 @@ const SalaryDetailPage: FC = () => {
       setStateExport({ isExporting: false });
     }
   };
+
+  const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
+    setKeyword(event.target.value)
+  }, 500)
 
   if (!salaryInfo || loading || !user)
     return <Loader className="border-primary" />;
@@ -263,23 +238,31 @@ const SalaryDetailPage: FC = () => {
           {/* <ShareButton /> */}
         </div>
       </div>
-
-      <PaginateV2
-        ref={ref}
-        totalRecord={totalRecord}
-        totalPages={totalPages}
-        limit={limit}
-        hasNextPage={hasNextPage}
-        isFetching={isFetchSalaryChild}
-        nextPageAction={() => {
-          setPageIndex((oldState) => oldState + 1);
-          fetchNextPage();
-        }}
-        prevPageAction={() => {
-          setPageIndex((oldState) => oldState - 1);
-          fetchPrevPage();
-        }}
-      />
+      <div className="flex-1 flex items-center justify-end">
+        <div className="relative flex items-center">
+            <input 
+            placeholder="Tìm kiếm" 
+            className="pl-3 pr-3 mr-1 w-[275px] h-[32px] bg-cbs-table-header border border-primary-border rounded-lg mb-2"
+            onChange={onChangeSearch}
+            />
+        </div>
+        <PaginateV2
+          ref={ref}
+          totalRecord={totalRecord}
+          totalPages={totalPages}
+          limit={limit}
+          hasNextPage={hasNextPage}
+          isFetching={isFetchSalaryChild}
+          nextPageAction={() => {
+            setPageIndex((oldState) => oldState + 1);
+            fetchNextPage();
+          }}
+          prevPageAction={() => {
+            setPageIndex((oldState) => oldState - 1);
+            fetchPrevPage();
+          }}
+        />
+      </div>
 
       <div className={"financial-planning-table mt-2"}>
         <div className={"relative table border-collapse w-full"}>

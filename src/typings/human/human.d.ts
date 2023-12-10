@@ -14,6 +14,7 @@ export interface HumanProps extends Omit<HumanInsertPayload, 'parentID' | 'depar
     area?: any;
     area1?: any;
     area2?: any;
+    contact?: any;
     contractType?: any;
     department?: any;
     workingStatus?: any;
@@ -39,7 +40,10 @@ export interface HumanProps extends Omit<HumanInsertPayload, 'parentID' | 'depar
         name: string;
         sign: string;
     },
-    amountHumanChild?:number
+    amountHumanChild?:number;
+    place: any;
+    fromDate: any;
+    toDate: any;
 }
 
 interface HumanInsertPayload {
