@@ -196,7 +196,7 @@ interface UseQueryListSalaryChild {
 }
 export const useQueryListSalaryChild = (
   salaryParentID: string,
-  limit = 50
+  limit = 50,
 ): UseQueryListSalaryChild => {
   const result = useInfiniteQuery(
     `list_time-sheet.child`,
@@ -204,7 +204,7 @@ export const useQueryListSalaryChild = (
       SalaryChildRepository.fetchListSalary({
         parentID: salaryParentID,
         lastestID: pageParam,
-        limit,
+        limit
       }),
     {
       getNextPageParam: ({ data }: any) => {

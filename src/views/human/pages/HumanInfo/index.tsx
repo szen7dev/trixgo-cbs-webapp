@@ -27,11 +27,9 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 
 /*=====7.OTHER=====*/
-
 export const HumanInfo: FC = () => {
   const [openHumanOption, setOpenHumanOption] = useState(false);
   const refMenuDropdown = useRef<HTMLDivElement>(null);
-
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
   const { t: i18n } = useTranslation(["human"]);
@@ -39,7 +37,6 @@ export const HumanInfo: FC = () => {
   const { openModal } = useModal();
   const { updateContactMutateAsync } = useUpdateContactMutation();
   const { dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.HUMAN.id });
-
   const { detailHuman, loading, refetch: refreshDetailHuman } = useFetchDetailHuman(id);
 
   const handleFinishForm = async (values: any) => {
