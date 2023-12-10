@@ -89,7 +89,10 @@ const SalaryDetailPage: FC = () => {
     limit,
     fetchNextPage,
     fetchPrevPage,
-  } = useQueryListSalaryChild(salaryParentID);
+  } = useQueryListSalaryChild(salaryParentID, {
+    keyword,
+    limit: 50
+  });
 
   const { onUpdateSalaryAsync, onCreateSalaryAsync } = useMutationSalaryChild();
 
