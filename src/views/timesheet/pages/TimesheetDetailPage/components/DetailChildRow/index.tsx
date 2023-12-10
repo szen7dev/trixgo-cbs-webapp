@@ -119,8 +119,6 @@ export const DetailChildRow: FC<Props> = ({
         }
       >
         <DayPickerInput
-          // className="w-16"
-          // selected={null}
           value={
             (moment(rowData.date).isValid() &&
               moment(rowData.date).format("DD/MM/YYYY")) ||
@@ -135,28 +133,9 @@ export const DetailChildRow: FC<Props> = ({
               });
           }}
         />
+        <p className="text-gray-400"><i>Created: {moment(rowData.createAt).format("DD/MM/YYYY hh:mm")}</i></p>
+        <p className="text-gray-400"><i>Modify: {moment(rowData.modifyAt).format("DD/MM/YYYY hh:mm")}</i></p>
       </div>
-      {/* <div
-        className={
-          "table-cell relative box-border border border-gray-300 text-end bg-white"
-        }
-      >
-        <p
-          className={"w-full h-full focus:outline-blue-600 px-[16px] py-[9px]"}
-        >
-          <input
-            type="checkbox"
-            className="form-check-input cursor-pointer"
-            checked={rowData.status === 1 ? true : false}
-            onChange={(e) => {
-              handleClickUpdateTimeSheet({
-                ...rowData,
-                status: e.target.checked ? 1 : 0,
-              });
-            }}
-          />
-        </p>
-      </div> */}
       <div
         className={
           "table-cell relative box-border border border-gray-300 align-middle bg-white"
