@@ -144,9 +144,6 @@ const TimeSheetHomePage: FC = () => {
         >
           Tạo mới
         </button>
-        {/* <button className="rounded-full h-10 w-10 flex items-center justify-center bg-gray-100 ml-5">
-          <img alt={"Icon"} src={ThreeDotsVertical} />
-        </button> */}
       </div>
 
       <PaginateV2
@@ -240,7 +237,6 @@ const TimeSheetHomePage: FC = () => {
                   id="flexCheckDefault"
                   checked={recordSelected?._id === timeSheetParent._id}
                   onChange={(e) => {
-                    // chỉ cho chọn 1
                     if (e.target.checked) {
                       toggleRecord(timeSheetParent);
                       return null;
@@ -259,7 +255,7 @@ const TimeSheetHomePage: FC = () => {
                   {timeSheetParent.name}
                 </NavLink>
                 <p className={"mt-1 text-gray-500"}>
-                  {timeSheetParent?.userCreate?.fullname}
+                  {timeSheetParent?.userCreate?.fullname} | 
                   {moment(timeSheetParent.createAt).isValid() &&
                     moment(timeSheetParent.createAt).format(DATE_FORMAT)}
                 </p>

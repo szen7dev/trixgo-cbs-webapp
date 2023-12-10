@@ -8,6 +8,7 @@ import moment from "moment";
 import TriangleDown from "assets/icons/TriangleDown";
 import debounce from "lodash/debounce";
 import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
+import { TIMESHEET_TYPES } from "apis/localdb";
 
 import {
   SearchInput,
@@ -206,6 +207,13 @@ const SalaryHomePage: FC = () => {
                 "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
               }
             >
+              Phân loại
+            </div>
+            <div
+              className={
+                "px-2 py-4 table-cell box-border border-b align-middle text-gray-500"
+              }
+            >
               Dự án/phòng ban
             </div>
             <div
@@ -241,7 +249,7 @@ const SalaryHomePage: FC = () => {
             <div className={"body-table table-row"} key={salaryParent._id}>
               <div
                 className={
-                  "px-6 py-4 table-cell box-border border-b align-middle w-3"
+                  "px-2 py-2 table-cell box-border border-b align-middle w-3"
                 }
               >
                 <input
@@ -250,7 +258,6 @@ const SalaryHomePage: FC = () => {
                   id="flexCheckDefault"
                   checked={recordSelected?._id === salaryParent._id}
                   onChange={(e) => {
-                    // chỉ cho chọn 1
                     if (e.target.checked) {
                       toggleRecord(salaryParent);
                       return null;
@@ -262,24 +269,27 @@ const SalaryHomePage: FC = () => {
               </div>
               <div
                 className={
-                  "px-2 py-4 table-cell box-border border-b align-middle"
+                  "px-2 py-2 table-cell box-border border-b align-middle"
                 }
               >
                 <NavLink to={`/timesheet/salary/${salaryParent._id}`}>
                   {salaryParent.name}
                 </NavLink>
                 <p className={"mt-1 text-gray-500"}>
-                  {salaryParent?.userCreate?.fullname}
+                  {salaryParent?.userCreate?.fullname} | 
                   {moment(salaryParent.createAt).isValid() &&
                     moment(salaryParent.createAt).format(DATE_FORMAT)}
                 </p>
               </div>
-              <div className={"px-2 py-4 table-cell box-border border-b"}>
+              <div className={"px-2 py-2 table-cell box-border border-b"}>
+                {TIMESHEET_TYPES[Number(salaryParent.type - 1)].text}
+              </div>
+              <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {salaryParent?.project?.name}
               </div>
               <div
                 className={
-                  "px-2 py-4 table-cell box-border border-b text-right"
+                  "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
                {`${Number(salaryParent?.salary + salaryParent?.reward - salaryParent?.punishment)}`.replace(
@@ -289,7 +299,7 @@ const SalaryHomePage: FC = () => {
               </div>
               <div
                 className={
-                  "px-2 py-4 table-cell box-border border-b text-right"
+                  "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
                 {`${Number(salaryParent?.advance + salaryParent?.paid)}`.replace(
@@ -299,7 +309,7 @@ const SalaryHomePage: FC = () => {
               </div>
               <div
                 className={
-                  "px-2 py-4 table-cell box-border border-b text-right"
+                  "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
                 {`${Number(salaryParent?.salary + salaryParent?.reward - salaryParent?.punishment - salaryParent?.advance - salaryParent?.paid)}`.replace(
@@ -307,7 +317,7 @@ const SalaryHomePage: FC = () => {
                   ","
                 )}
               </div>
-              <div className={"px-2 py-4 table-cell box-border border-b"}>
+              <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {salaryParent.note}
               </div>
             </div>

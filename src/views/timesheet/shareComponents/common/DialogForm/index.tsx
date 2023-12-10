@@ -9,18 +9,6 @@ import { useUserSystem } from "services/hooks/users/useUserSystem";
 import { TIMESHEET_TYPES } from "apis/localdb";
 
 import type { InsertTimeSheetParentPayload } from "typings/time-sheet";
-
-const types = [
-  {
-    value: 1,
-    label: "Khối quản lý",
-  },
-  {
-    value: 2,
-    label: "Khối trực tiếp",
-  },
-];
-
 interface CreateOrEditDialogProps {
   title: string;
   defaultValues?: InsertTimeSheetParentPayload;
