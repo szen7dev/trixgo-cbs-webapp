@@ -196,7 +196,6 @@ const SalaryDetailPage: FC = () => {
   };
 
   const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log({ value: event.target.value })
     setKeyword(event.target.value)
   }, 500)
 
