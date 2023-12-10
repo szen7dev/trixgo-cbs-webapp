@@ -94,9 +94,11 @@ export type TimeSheetChild = {
     name: string;
     date: string;
     parent?: TimeSheetParent;
-    assignee?: User,
-    work: strinstring | null,
-    note?: string,
+    assignee?: User
+    work: strinstring | null
+    note?: string
+    createAt?: string | null
+    modifyAt?: string | null
 }
 
 export type QueryListTimeSheetChildPayload = QueryParams & {
