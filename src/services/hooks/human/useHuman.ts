@@ -14,6 +14,7 @@ type UseHumanCustom = {
     downloadTemplateImportExcelHumanAsync: (payload: any) => Promise<any>,
     importHumanFromExcelAsync: (payload: any) => Promise<any>,
     exportHumanAsync: (payload: any) => Promise<any>,
+    exportHumanByFilterAsync: (payload: any) => Promise<any>,
 };
 
 type UseHumanCustomParams = {
@@ -21,9 +22,7 @@ type UseHumanCustomParams = {
 }
 
 // Custom hook mới cho Human
-export const useHumanCustom = ({
-    params = {}
-}: UseHumanCustomParams) : UseHumanCustom => {
+export const useHumanCustom = (_: UseHumanCustomParams) : UseHumanCustom => {
 
     // Tải mẫu import excel
     const { mutateAsync: downloadTemplateImportExcelHumanAsync } =
@@ -43,10 +42,17 @@ export const useHumanCustom = ({
         humanRepository.exportHuman(payload)
     );
 
+    // Export excel by filter
+    const { mutateAsync: exportHumanByFilterAsync } =
+        useMutation((payload: any) =>
+        humanRepository.exportHumanByFilter(payload)
+    );
+
     return {
         downloadTemplateImportExcelHumanAsync,
         importHumanFromExcelAsync,
-        exportHumanAsync
+        exportHumanAsync,
+        exportHumanByFilterAsync
     }
 }
 
@@ -72,6 +78,7 @@ export interface UseQueryListHuman {
     totalPage: number;
     hasNextPage?: boolean;
     nextCursor?: string | null,
+    lastestIDs?: Array<string | undefined>,
     listHuman: Array<HumanProps>;
     listHumanWithPager: Array<HumanProps[]>;
     refetchListHuman: () => void;
@@ -134,13 +141,14 @@ export const useListHuman = ({ params = {},  isFetchList = false }: HumanQueryPa
 }
 
 export const useListFilterHuman = ({ params = {},  isFetchList = false }: HumanQueryPayload): UseQueryListHuman => {
-
     const res = useInfiniteQuery(
         [`list_filter_Human`, { params }],
-        async ({ pageParam }: any) =>
-            humanRepository.fetchFilterList({
-                lastestID: pageParam, ...params
-            }),
+        async ({ pageParam }: any) => {
+            return humanRepository.fetchFilterList({
+                lastestID: pageParam,
+                ...params,
+            });
+        },
         {
             getNextPageParam: ({ data }: any) => {
                 return data?.nextCursor || undefined;
@@ -166,6 +174,7 @@ export const useListFilterHuman = ({ params = {},  isFetchList = false }: HumanQ
         )
         .filter(Boolean);
     const listHumanWithPager = (data?.pages || []).map((d: any) => d.data?.listRecords);
+    const listLastestID = (data?.pages || []).map((d: any) => d.data?.lastestID as string);
 
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPage = data?.pages[0]?.data?.totalPage || 0;
@@ -179,6 +188,7 @@ export const useListFilterHuman = ({ params = {},  isFetchList = false }: HumanQ
         totalPage,
         hasNextPage,
         nextCursor,
+        lastestIDs: listLastestID,
         refetchListHuman: refetch,
         fetchNextPageHuman: fetchNextPage,
         fetchPrevPageHuman: fetchPreviousPage,
