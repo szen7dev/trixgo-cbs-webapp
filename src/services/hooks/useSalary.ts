@@ -41,14 +41,15 @@ export const useQueryListSalaryParent = (
   limit = 50
 ): UseQueryListSalaryParent => {
   const result = useInfiniteQuery(
-    `list_salary.parent`,
-    async () =>
+    [`list_salary.parent`, params],
+    async ({ pageParam }: any) =>
       SalaryParentRepository.fetchListSalary({
         populates: {
-          path: "assignee project userCreate",
-          select: "fullname bizfullname name",
+          path: "assignee project userCreate userUpdate",
+          select: "fullname name",
         },
         limit,
+        lastestID: pageParam,
         ...params,
       }),
     {

@@ -238,13 +238,13 @@ const TimeSheetHomePage: FC = () => {
               </div>
               <div
                 className={
-                  "px-1 py-1 table-cell box-border border-b align-middle w-2/12"
+                  "px-1 py-2 table-cell box-border border-b align-middle w-2/12"
                 }
               >
                 <NavLink to={`/timesheet/home/${timeSheetParent._id}`}>
                   {timeSheetParent.name}
                 </NavLink>
-                <p className={"mt-1 text-gray-500"}>
+                <p className={"text-gray-500 text-[12px]"}>
                   {timeSheetParent?.userCreate?.fullname} | 
                   {moment(timeSheetParent.createAt).isValid() &&
                     moment(timeSheetParent.createAt).format(DATE_FORMAT)}

@@ -42,8 +42,8 @@ export const useQueryListTimeSheetParent = (
     async ({ pageParam }: any) =>
       TimeSheetParentRepository.fetchListTimeSheet({
         populates: {
-          path: "assignee project userCreate",
-          select: "fullname bizfullname name",
+          path: "assignee project userCreate userUpdate",
+          select: "fullname name",
         },
         limit,
         lastestID: pageParam,
@@ -125,7 +125,7 @@ export const useQueryDetailTimeSheetParent = (
     async () =>
       TimeSheetParentRepository.fetchDetailTimeSheet({
         populates: {
-          path: "assignee project userCreate members admins",
+          path: "assignee project userCreate userUpdate members admins",
           select: "_id fullname bizfullname name sign image",
         },
         expertTimesheetID,
@@ -264,5 +264,5 @@ export const useMutationTimeSheetChild = (): UseMutationTimeSheetChild => {
   return {
     onCreateTimeSheetAsync: insertMutation.mutateAsync,
     onUpdateTimeSheetAsync: updateMutation.mutateAsync,
-  };
-};
+  }
+}

@@ -1,8 +1,4 @@
 import React, { FC } from "react";
-import DayPickerInput from "react-day-picker/DayPickerInput";
-import moment from "moment";
-
-import { DropdownSearchable } from "shareComponents/common";
 
 import type {
   SalaryChild,
@@ -28,9 +24,7 @@ export const DetailChildRow: FC<Props> = ({
   collapsed,
   index,
   hasPermission,
-  listUserSearched,
-  onUpdatedSalaryChild,
-  onSearchUser,
+  onUpdatedSalaryChild
 }) => {
   const handleClickUpdateSalary = React.useCallback(
     (value) => {
@@ -78,64 +72,7 @@ export const DetailChildRow: FC<Props> = ({
         }
       >
         {rowData?.human?.fullname}
-        {/* <DropdownSearchable
-          id="ticket-creator"
-          className={"w-full pl-0 -mb-1 outline-none "}
-          bordered
-          isMultiple={false}
-          allowClearValueSingleInput
-          showTriangle
-          placeholder="Người thực hiện"
-          renderSelectedItem={(item) => (
-            <p
-              style={{
-                textOverflow: "ellipsis",
-                maxWidth: "100%",
-                minWidth: 0,
-                width: "150px",
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-              }}
-            >
-              {item.text}
-            </p>
-          )}
-          data={listUserSearched}
-          initialValue={rowData?.human}
-          formatItem={{
-            id: "_id",
-            text: "fullname",
-          }}
-          onSearchInputChange={onSearchUser}
-          onchangeValue={(value) =>
-            handleClickUpdateSalary({
-              ...rowData,
-              humanID: value.id,
-            })
-          }
-        /> */}
       </div>
-      {/* <div
-        className={
-          "px-[5px] py-[2px] table-cell relative box-border border border-gray-300 bg-white w-50"
-        }
-      >
-        <DayPickerInput
-          value={
-            (moment(rowData.date).isValid() &&
-              moment(rowData.date).format("DD/MM/YYYY")) ||
-            ""
-          }
-          placeholder="Chọn thời gian"
-          onDayChange={(date: Date | null) => {
-            if (moment(date).isValid())
-              handleClickUpdateSalary({
-                ...rowData,
-                date: moment(date).toJSON(),
-              });
-          }}
-        />
-      </div> */}
       <div
         className={
           "table-cell relative box-border border border-gray-300 align-middle bg-white"
