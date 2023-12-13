@@ -65,10 +65,10 @@ export const HumanHomePage: FC = () => {
     const [departmentsID, setDepartmentsID] = useState<string[]>([]);
 
     const [fromToDate, setFromToDate] = useState({fromDate: "", toDate: ""})
-    
+
     const { listProjectsUserIsMember } = useProjectCustom({ paramsProjectsUserIsMember: { keyword: projectKeyword }, isFetchProjectsUserIsMember: true });
 
-    const { listHumanWithPager, isLoading, isFetching, totalRecord, totalPage, fetchNextPageHuman, hasNextPage, refetchListHuman } = useListFilterHuman({
+    const { listHumanWithPager, isLoading, isFetching, totalRecord, totalPage, fetchNextPageHuman, hasNextPage, lastestIDs } = useListFilterHuman({
         params: {
             ...fromToDate,
             type: '1',
@@ -78,21 +78,46 @@ export const HumanHomePage: FC = () => {
         },
         isFetchList: true
     });
-    // console.log(listHumanWithPager)
 
     const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
         setKeyword(event.target.value)
     }, 500)
 
-    const { exportHumanAsync } = useHumanCustom({});
+    const { exportHumanAsync, exportHumanByFilterAsync } = useHumanCustom({});
 
     // Làm việc với Excel
     const handleExport = async () => {
         try {
             setStateExport({ isExporting: true });
             const { error, data } = await exportHumanAsync({
-                filterParams: {  
+                filterParams: {
                     ...fromToDate,
+                    type: '1',
+                    genders,
+                    departmentsID,
+                    keyword
+                }
+            });
+
+            if(error) {
+                return toast.warn(data?.message);
+            }
+
+            data && createLinkAndClick(data, '_self');
+        } catch (error: any) {
+            toast.error(error.message)
+        } finally {
+            setStateExport({ isExporting: false });
+        }
+    }
+
+    const handleExportByFilter = async () => {
+        try {
+            setStateExport({ isExporting: true });
+            const { error, data } = await exportHumanByFilterAsync({
+                filterParams: {
+                    ...fromToDate,
+                    lastestID: lastestIDs && lastestIDs[pageIndex],
                     type: '1',
                     genders,
                     departmentsID,
@@ -122,8 +147,8 @@ export const HumanHomePage: FC = () => {
                 <div className={"flex flex-wrap items-center px-4 py-2"}>
                     <div className={"flex items-center flex-1"}>
                         <div className="relative flex items-center">
-                            <input 
-                            placeholder="Tìm kiếm" 
+                            <input
+                            placeholder="Tìm kiếm"
                             className="pl-3 pr-3 mr-1 w-[175px] h-[32px] bg-cbs-table-header border border-primary-border rounded-lg mb-2"
                             onChange={onChangeSearch}
                             />
@@ -261,13 +286,19 @@ export const HumanHomePage: FC = () => {
                     </div>
                 </div>
                 <div className={"flex items-center pb-2"}>
-                    <button className={"flex items-center justify-center mx-3 ml-6"}
+                    <button className={"flex items-center justify-center mx-1 ml-6"}
                         onClick={handleExport}
-                    >   
+                    >
+                        Download all
+                        <img src={downloadIcon} alt={"-----"} className={"ml-2 w-[18px] h-[18px]"}/>
+                    </button>
+                    <button className={"flex items-center justify-center mx-1"}
+                        onClick={handleExportByFilter}
+                    >
                         Download
                         <img src={downloadIcon} alt={"-----"} className={"ml-2 w-[18px] h-[18px]"}/>
                     </button>
-                    
+
                     <PaginateV2
                         ref={ref}
                         totalRecord={totalRecord}

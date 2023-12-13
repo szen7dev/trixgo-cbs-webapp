@@ -124,6 +124,7 @@ export interface HumanQueryResponse extends APIResponse {
         totalRecord: number;
         totalPage: number;
         nextCursor: string | null;
+        lastestID: string | null;
     }
 }
 export interface HumanExportResponse extends APIResponse {

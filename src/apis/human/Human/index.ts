@@ -19,6 +19,7 @@ interface HumanRepository {
     downloadTemplateImportExcelHuman: (data: any) => Promise<HumanExportResponse>;
     importHumanFromExcel: (data: any) => Promise<HumanExportResponse>;
     exportHuman: (data: any) => Promise<HumanExportResponse>;
+    exportHumanByFilter: (data: any) => Promise<HumanExportResponse>;
 }
 
 export const humanRepository: HumanRepository = {
@@ -26,9 +27,10 @@ export const humanRepository: HumanRepository = {
     update: data => updateHuman(data),
     fetchList: params => fetchListHuman(params),
     fetchFilterList: params => fetchFilterListHuman(params),
-    downloadTemplateImportExcelHuman: params => downloadTemplateImportExcelHuman(params), 
-    importHumanFromExcel: params => importHumanFromExcel(params), 
-    exportHuman: params => exportHuman(params), 
+    downloadTemplateImportExcelHuman: params => downloadTemplateImportExcelHuman(params),
+    importHumanFromExcel: params => importHumanFromExcel(params),
+    exportHuman: params => exportHuman(params),
+    exportHumanByFilter: params => exportHumanByFilter(params),
 }
 
 async function fetchListHuman(params : any) {
@@ -93,7 +95,7 @@ async function downloadTemplateImportExcelHuman(data: any) {
     const { data: result } = await API.post(`${CONTACT_URL}/download-template-excel`, data);
     return result;
 }
-    
+
 // Import Human từ dữ liệu file excel
 async function importHumanFromExcel(data: any) {
     const { data: result } = await API.post(`${CONTACT_URL}/import-from-excel`, data);
@@ -103,6 +105,13 @@ async function importHumanFromExcel(data: any) {
 async function exportHuman<T>(params: any): Promise<T> {
     const { data } = await API.post<any>(
         `${CONTACT_URL}/export-excel`, params
+    );
+    return data;
+}
+
+async function exportHumanByFilter<T>(params: any): Promise<T> {
+    const { data } = await API.post<any>(
+        `${CONTACT_URL}/export-excel-by-filter`, params
     );
     return data;
 }
