@@ -5,6 +5,9 @@ import {debounce} from "lodash";
 import { APP_ID } from "apis/localdb";
 import { toast } from "react-toastify";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
+import {
+  DropdownSearchableV2,
+} from "shareComponents/common";
 
 /**
  * Components, Assets
@@ -14,8 +17,9 @@ import StarIcon from "assets/images/star.svg";
 import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
 import { InputWidthAdjust } from "views/timesheet/shareComponents/common";
 import { createLinkAndClick } from "utils";
-
 import { DetailMainRow, ModalShare } from "./components";
+import {setFilterDropdown} from "redux/reducer/DocumentProjectSlice";
+import {useDispatch} from "react-redux";
 
 import {
   useQueryDetailSalaryParent,
@@ -23,6 +27,7 @@ import {
   useMutationSalaryChild,
 } from "services/hooks/useSalary";
 
+import {useProjectCustom} from "services/hooks/items/useProject";
 import { useCashBook } from "services/hooks/financial/useCashBook";
 
 import { useAuth } from "services/hooks/auth/useAuth";
@@ -30,9 +35,15 @@ import { User } from "typings/user";
 import { Loader } from "shareComponents/common";
 import PaginateV2 from "shareComponents/common/PaginateV2";
 
-type PaginateHandle = React.ElementRef<typeof PaginateV2>;
-
 const SalaryDetailPage: FC = () => {
+  type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
+  type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+  const [projectKeyword, setProjectKeyword] = useState("");
+  const [departmentsID, setDepartmentsID] = useState<string[]>([]);
+
+  const dispatch = useDispatch();
+
+  const datahubRef = React.useRef<DropdownHandle>(null);
   const history = useHistory()
   const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.TIMESHEET.id })
   useEffect(() => {
@@ -91,10 +102,13 @@ const SalaryDetailPage: FC = () => {
     fetchPrevPage,
   } = useQueryListSalaryChild(salaryParentID, {
     keyword,
+    departmentsID,
     limit: 50
   });
 
-  const { onUpdateSalaryAsync, onCreateSalaryAsync } = useMutationSalaryChild();
+  const { listProjectsUserIsMember } = useProjectCustom({ paramsProjectsUserIsMember: { keyword: projectKeyword }, isFetchProjectsUserIsMember: true });
+
+  const { onUpdateSalaryAsync } = useMutationSalaryChild();
 
   useEffect(() => {
     if (!salaryInfo || !user) return;
@@ -246,8 +260,6 @@ const SalaryDetailPage: FC = () => {
           >
             Thành viên ({salaryInfo.members?.length})
           </button>
-          {/* <AccessingUsers users={permissions.usersShared} /> */}
-          {/* <ShareButton /> */}
         </div>
       </div>
       <div className="flex-1 flex items-center justify-end">
@@ -258,6 +270,52 @@ const SalaryDetailPage: FC = () => {
             onChange={onChangeSearch}
             />
         </div>
+        <DropdownSearchableV2
+            ref={datahubRef}
+            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            placeholder={"Phòng ban"}
+            isMultiple={true}
+            allowClearValueSingleInput={true}
+            data={listProjectsUserIsMember}
+            formatItem={{
+                id: "_id",
+                text: "name"
+            }}
+            onSearchInputChange={debounce(
+                (valueSearch) => setProjectKeyword(valueSearch),
+                500
+            )}
+            onchangeValue={item => {
+                const cloneIDs = [...departmentsID];
+                cloneIDs.push(item._id);
+                setDepartmentsID(cloneIDs);
+                dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: cloneIDs}))
+
+                setPageIndex(0);
+                ref.current&&ref.current.resetPaginate();
+            }}
+            onClearData={() => {
+                setDepartmentsID([]);
+                dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: []}))
+
+                setPageIndex(0);
+                ref.current&&ref.current.resetPaginate();
+            }}
+            onMultipleRemoveValue={id => {
+                const cloneIDs = [...departmentsID];
+                const newList = cloneIDs.filter(selectId => selectId !== id);
+                setDepartmentsID(newList);
+                dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: newList}))
+
+                setPageIndex(0);
+                ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+        />
+
         <PaginateV2
           ref={ref}
           totalRecord={totalRecord}
@@ -293,13 +351,6 @@ const SalaryDetailPage: FC = () => {
             >
               Nhân sự
             </div>
-            {/* <div
-              className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100 w-50"
-              }
-            >
-              Ngày ghi nhận
-            </div> */}
             <div
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"

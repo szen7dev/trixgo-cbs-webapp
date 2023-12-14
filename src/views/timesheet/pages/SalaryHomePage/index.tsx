@@ -112,7 +112,7 @@ const SalaryHomePage: FC = () => {
       });
     },
     [onDeleteSalaryParentAsync, refreshListSalary, openDeleteConfirm]
-  );
+  )
   
   return (
     <div className={"financial-cashflow-listing paginate-wrapper relative"}>

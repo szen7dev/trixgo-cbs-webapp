@@ -1,8 +1,6 @@
 import React, { FC, useRef } from "react";
 import debounce from "lodash/debounce";
 
-// import { useQueryListFriend } from "services/hooks/users/useFriend";
-
 import type { InsertTimeSheetChildPayload } from "typings/time-sheet";
 
 type DetailChildRowCreateFormProps = {
@@ -88,20 +86,12 @@ export const CreateRow: FC<DetailChildRowCreateFormProps> = ({
           "p-2 table-cell relative box-border border border-gray-300 bg-white"
         }
       ></div>
-      {/* <div
-        className={
-          "table-cell relative box-border border border-gray-300 text-end bg-white"
-        }
-      >
-        <p className={"w-full h-full focus:outline-blue-600 p-2"}></p>
-      </div> */}
       <div
         className={
           "table-cell relative box-border border border-gray-300 align-middle bg-white"
         }
       >
         <p
-          // contentEditable={"true"}
           suppressContentEditableWarning={true}
           className={
             "w-full h-full focus:outline-blue-600 p-2 flex justify-end"
@@ -114,7 +104,6 @@ export const CreateRow: FC<DetailChildRowCreateFormProps> = ({
         }
       >
         <p
-          // contentEditable={"true"}
           suppressContentEditableWarning={true}
           className={
             "w-full h-full focus:outline-blue-600 p-2 flex justify-end"
@@ -127,7 +116,6 @@ export const CreateRow: FC<DetailChildRowCreateFormProps> = ({
         }
       >
         <p
-          // contentEditable={"true"}
           suppressContentEditableWarning={true}
           className={
             "w-full h-full focus:outline-blue-600 p-2 flex justify-end"
@@ -150,11 +138,10 @@ export const CreateRow: FC<DetailChildRowCreateFormProps> = ({
         }
       >
         <p
-          // contentEditable={"true"}
           suppressContentEditableWarning={true}
           className={"w-full h-full focus:outline-blue-600 p-2"}
         />
       </div>
     </div>
-  );
-};
+  )
+}

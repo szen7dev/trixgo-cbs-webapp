@@ -45,16 +45,9 @@ export const DetailMainRow: FC<Props> = ({
       </div>
       <div
         className={
-          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-2/12"
         }
       ></div>
-      {/* <div
-        className={
-          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
-        }
-      >
-        <input type="checkbox" className="form-check-input cursor-pointer" />
-      </div> */}
       <div
         className={
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
@@ -77,7 +70,6 @@ export const DetailMainRow: FC<Props> = ({
         }
       >
         <div className="flex justify-end">
-          {/* {convertCurrency(timeSheetParentInfo?.amount)} */}
           {`${timeSheetParentInfo?.amount}`.replace(
             /\B(?=(\d{3})+(?!\d))/g,
             ","

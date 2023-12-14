@@ -101,10 +101,10 @@ const TimeSheetDetailPage: FC = () => {
 
     usersIDShared.push(authorID);
 
-    if (!usersIDShared.includes(user._id)) {
-      toast.warn("Bạn đang không có quyền truy cập");
-      history.push("/timesheet/home");
-    }
+    // if (!usersIDShared.includes(user._id)) {
+    //   toast.warn("Bạn đang không có quyền truy cập");
+    //   history.push("/timesheet/home");
+    // }
 
     const hasPermissionCreateUpdate =
       adminsID.includes(user._id) || authorID === user._id;
@@ -230,7 +230,7 @@ const TimeSheetDetailPage: FC = () => {
           </div>
           <p className={"text-gray-400"}>
             Chỉnh sửa lần cuối cách đây{" "}
-            {moment(timeSheetInfo.modifyAt).isValid() &&
+              {moment(timeSheetInfo.modifyAt).isValid() &&
               moment(timeSheetInfo.modifyAt).fromNow()}{" "}
             bởi {timeSheetInfo.userCreate?.fullname}
           </p>
@@ -256,8 +256,6 @@ const TimeSheetDetailPage: FC = () => {
           >
             Thành viên ({timeSheetInfo.members?.length})
           </button>
-          {/* <AccessingUsers users={permissions.usersShared} /> */}
-          {/* <ShareButton /> */}
         </div>
       </div>
 
@@ -302,13 +300,6 @@ const TimeSheetDetailPage: FC = () => {
             >
               Ngày
             </div>
-            {/* <div
-              className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
-              }
-            >
-              Hoàn thành
-            </div> */}
             <div
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
@@ -388,7 +379,7 @@ const TimeSheetDetailPage: FC = () => {
         />
       </ModalLarge>
     </div>
-  );
-};
+  )
+}
 
-export default TimeSheetDetailPage;
+export default TimeSheetDetailPage

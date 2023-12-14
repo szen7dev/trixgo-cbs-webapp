@@ -99,6 +99,8 @@ export type TimeSheetChild = {
     note?: string
     createAt?: string | null
     modifyAt?: string | null
+    userCreate?: any
+    userUpdate?: any | null
 }
 
 export type QueryListTimeSheetChildPayload = QueryParams & {

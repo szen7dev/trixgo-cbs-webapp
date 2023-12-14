@@ -51,11 +51,6 @@ export const DetailMainRow: FC<Props> = memo(({
       >
         {salaryParentInfo?.name}
       </div>
-      {/* <div
-        className={
-          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-50"
-        }
-      ></div> */}
       <div
         className={
           "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"

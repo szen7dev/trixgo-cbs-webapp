@@ -133,8 +133,8 @@ export const DetailChildRow: FC<Props> = ({
               });
           }}
         />
-        <p className="text-gray-400"><i>Created: {moment(rowData.createAt).format("DD/MM/YYYY hh:mm")}</i></p>
-        <p className="text-gray-400"><i>Modify: {moment(rowData.modifyAt).format("DD/MM/YYYY hh:mm")}</i></p>
+        <p className="text-gray-400 text-[10px]"><i>Cre: {rowData?.userCreate?.fullname} {moment(rowData.createAt).format("DD/MM/YY hh:mm")}</i></p>
+        <p className="text-gray-400 text-[10px]"><i>Mod: {rowData?.userUpdate?.fullname} {moment(rowData.modifyAt).format("DD/MM/YY hh:mm")}</i></p>
       </div>
       <div
         className={
@@ -186,7 +186,6 @@ export const DetailChildRow: FC<Props> = ({
         }
       >
         <p
-          // contentEditable={"true"}
           suppressContentEditableWarning={true}
           className={
             "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
