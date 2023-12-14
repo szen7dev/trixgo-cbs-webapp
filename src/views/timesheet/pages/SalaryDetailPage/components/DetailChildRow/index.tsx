@@ -72,6 +72,7 @@ export const DetailChildRow: FC<Props> = ({
         }
       >
         {rowData?.human?.fullname}
+        <p className="text-gray-400 text-[10px]"><i>{rowData?.project?.name} ({rowData?.convertFactor})</i></p>
       </div>
       <div
         className={

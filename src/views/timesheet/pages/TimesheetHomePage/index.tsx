@@ -117,7 +117,6 @@ const TimeSheetHomePage: FC = () => {
           />
           {Object.keys(recordSelected).length > 1 && (
             <>
-              <FilterButton />
               <div className={"mr-3 w-4 border-r border-gray-400 h-[16px]"} />
               <ActionGroupButton
                 recordSelected={recordSelected}

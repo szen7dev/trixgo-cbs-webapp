@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 
 import moment from "moment";
-import TriangleDown from "assets/icons/TriangleDown";
 import debounce from "lodash/debounce";
 import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
 import { TIMESHEET_TYPES } from "apis/localdb";
@@ -14,7 +13,6 @@ import {
   SearchInput,
   DialogSalaryForm,
   ActionGroupButton2,
-  FilterButton,
 } from "views/timesheet/shareComponents/common";
 
 import { useModal } from "services/hooks/useModal";
@@ -54,7 +52,7 @@ const SalaryHomePage: FC = () => {
     fetchPrevPage,
     loading,
     hasNextPage,
-  } = useQueryListSalaryParent({ keyword });
+  } = useQueryListSalaryParent({ keyword })
 
   const {
     onCreateSalaryParentAsync,
@@ -131,7 +129,6 @@ const SalaryHomePage: FC = () => {
           />
           {Object.keys(recordSelected).length > 1 && (
             <>
-              <FilterButton />
               <div className={"mr-3 w-4 border-r border-gray-400 h-[16px]"} />
               <ActionGroupButton2
                 recordSelected={recordSelected}
@@ -282,7 +279,7 @@ const SalaryHomePage: FC = () => {
                   "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
-               {`${Number(salaryParent?.salary + salaryParent?.reward - salaryParent?.punishment)}`.replace(
+               {`${Number(salaryParent?.salary + salaryParent?.revenueBonus + salaryParent?.reward * salaryParent?.convertFactor + salaryParent?.mealAllowance - salaryParent?.punishment * salaryParent?.convertFactor - salaryParent?.insurance - salaryParent?.pitax)}`.replace(
                   /\B(?=(\d{3})+(?!\d))/g,
                   ","
                 )}
@@ -302,7 +299,7 @@ const SalaryHomePage: FC = () => {
                   "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
-                {`${Number(salaryParent?.salary + salaryParent?.reward - salaryParent?.punishment - salaryParent?.advance - salaryParent?.paid)}`.replace(
+                {`${Number(salaryParent?.salary + salaryParent?.revenueBonus + salaryParent?.reward * salaryParent?.convertFactor + salaryParent?.mealAllowance - salaryParent?.punishment * salaryParent?.convertFactor - salaryParent?.insurance - salaryParent?.pitax - salaryParent?.advance - salaryParent?.paid)}`.replace(
                   /\B(?=(\d{3})+(?!\d))/g,
                   ","
                 )}
