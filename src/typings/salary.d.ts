@@ -30,6 +30,7 @@ export type SalaryParent = {
     mealAllowance: number;
     insurance: number;
     pitax: number;
+    convertFactor: number;
 }
 
 export type ListSalaryPayload = QueryParams & {
@@ -111,6 +112,8 @@ export type SalaryChild = {
     mealAllowance: number;
     insurance: number;
     pitax: number;
+    convertFactor: number;
+    project: any;
 }
 
 export type QueryListSalaryChildPayload = QueryParams & {
