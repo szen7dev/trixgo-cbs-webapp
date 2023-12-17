@@ -222,7 +222,7 @@ export const ItemAccountPage: FC = () => {
         <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
             <thead className="bg-cbs-table-header h-[38px] border-b border-primary-border">
                 <tr className="text-left text-sm">
-                    <th className={cn("py-1 text-center", styles.theadInput)}>
+                    <th className={cn("py-1 text-center w-2/12", styles.theadInput)}>
                         <div className="border-r-2 border-gray-300 flex items-center justify-center">
                             <input
                                 className="form-check-input"
@@ -253,7 +253,7 @@ export const ItemAccountPage: FC = () => {
             <tbody>
                 {listAccounts.length ? listAccounts.map((item: any) => (
                     <tr key={item._id} className="border-b border-primary-border h-10">
-                        <td className="py-1 px-2 text-center">
+                        <td className="py-1 px-2 text-center w-2/12">
                             <input
                                 className="form-check-input"
                                 type="checkbox"
@@ -263,8 +263,9 @@ export const ItemAccountPage: FC = () => {
                         </td>
                         <td className="py-1 px-2">
                             <Link to={`/accounting/admin/account/${item._id}`}>
-                                {item.amountChilds>0? <b>{item?.name}({item.amountChilds})</b>: item.name }
+                                {item.amountChilds>0? <b>{item?.name} ({item.amountChilds})</b>: item.name }
                             </Link>
+                            <p className="text-gray-500 text-[12px]"><i>{item._id}</i></p>
                         </td>
                         <td className="py-1 px-2">{item.description}</td>
                         <td className="py-1 px-2">

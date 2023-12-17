@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect } from "react";
 import cn from "classnames";
 import moment from "moment";
 
@@ -28,11 +28,13 @@ export const OwnerGrantPage: FC = () => {
     endTime: ""
   });
 
-  const { data: listApps, loading: loadingApp } = useApp();
+  const { data: listApps, loading: loadingApp } = useApp({
+    lock: 1
+  });
   const { data: dataAppsCompany } = useAppCompany({
     limit: 100,
     companyID: companySelected
-  });
+  })
 
   const toggleModalCreateOrUpdateAppCompany = () => setModalCreateOrUpdateAppCompany(!modalCreateOrUpdateAppCompany);
 
@@ -74,7 +76,6 @@ export const OwnerGrantPage: FC = () => {
 
     const appsCompany: any[] = [];
 
-    // Array.from(APP_INFO.entries()).map(app => {
     listApps.map(app => {
       const appCompany = dataAppsCompany.find(appCompany => appCompany?.app?._id === app._id);
 
@@ -124,46 +125,12 @@ export const OwnerGrantPage: FC = () => {
     }
   }, [listChecked.length])
 
-  // useEffect(() => {
-  //   if (!location.hash) return;
-
-  //   try {
-  //     const companyID = location.hash.substring(1);
-  //     const companyName = window.sessionStorage.getItem('companyName');
-
-  //     companyID && setCompanySelected(companyID);
-  //     companyName && setCompanyName(companyName);
-  //   } catch (error) { console.error(error) }
-  // }, [location.hash])
-
   return (
     <main className="relative h-full">
       <header className="h-10 border border-primary-border flex items-center justify-between px-5">
         <p className="text-lg">
           {companyName}
         </p>
-
-        {/* <div className="flex items-center justify-between">
-          <button
-            className={
-              cn("flex items-center justify-center text-primary-light bg-cbs-green px-2 h-8 rounded font-bold mr-2",
-                (listChecked.length === 1 && !isUpdate) ? "" : "hidden")
-            }
-            onClick={toggleModalCreateOrUpdateAppCompany}
-          >
-            Tạo mới
-          </button>
-          <button
-            className={
-              cn("flex items-center justify-center text-primary-light bg-cbs-green px-2 h-8 rounded font-bold mr-2",
-                (listChecked.length === 1 && isUpdate) ? "" : "hidden")
-            }
-            onClick={toggleModalCreateOrUpdateAppCompany}
-          >
-            Cập nhật
-          </button>
-        </div> */}
-
       </header>
 
       <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
@@ -242,5 +209,5 @@ export const OwnerGrantPage: FC = () => {
         </div>
       </ModalContainer>
     </main>
-  );
-};
+  )
+}

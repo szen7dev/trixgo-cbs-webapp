@@ -132,7 +132,7 @@ const AccountingRouter: FC = () => {
       />
       <ProtectedRoute
         exact
-        path="/accounting/detail"
+        path="/accounting/detail/:accountID?"
         component={AccountingDetailPage}
       />
       <ProtectedRoute
@@ -194,10 +194,10 @@ const AccountingRouter: FC = () => {
               }
             },
             { id: "3", title: "Cấu hình khác", path: "/accounting/admin/3" },
-            { id: "4", title: "Account", path: "/accounting/admin/account" },
-            { id: "5", title: "Funda", path: "/accounting/admin/funda" },
-            { id: "6", title: "Warehouse", path: "/accounting/admin/warehouse" },
-            { id: "7", title: "Goods", path: "/accounting/admin/goods" },
+            { id: "4", title: "Tài khoản", path: "/accounting/admin/account" },
+            { id: "5", title: "Đơn vị cơ sở", path: "/accounting/admin/funda" },
+            { id: "6", title: "Kho bãi", path: "/accounting/admin/warehouse" },
+            { id: "7", title: "Hàng hóa, nguyên liệu", path: "/accounting/admin/goods" },
           ]}
         >
           <Route exact path="/accounting/admin" component={AccountingAdminFunctionalTab} />

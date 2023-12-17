@@ -17,10 +17,7 @@ import CommentProvider from 'views/pcm/contexts/comment/comment.provider';
 import { toast } from "react-toastify";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { TaskDetailOpenedBidding } from "./components/TaskDetailOpenedBidding";
-import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
-// import { useHistoryTraffics } from "services/hooks/auth/useAuth";
-// import { APP_ID } from 'apis/localdb';
-// import { TaskDetailEvaluate } from "./components/TaskDetailEvaluate"; // Sử dụng sau
+// import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { TaskDetailAddCV } from "./components/TaskDetailAddCV";
 
 const PcmDetailTaskV2: FC = () => {
