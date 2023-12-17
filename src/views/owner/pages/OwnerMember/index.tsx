@@ -289,28 +289,31 @@ export const OwnerMemberPage: FC = () => {
         </thead>
 
         <tbody>
-          {listUsersSystem.length ? listUsersSystem.map(user => (
-            <tr key={user._id} className="border-b border-primary-border h-10">
+          {listUsersSystem.length ? listUsersSystem.map(item => (
+            <tr key={item._id} className="border-b border-primary-border h-10">
               <td className="py-1 px-2 text-center">
                 <input
                   className="form-check-input"
                   type="checkbox"
-                  checked={getStateChecked(user._id)}
-                  onChange={() => onClickCheckButton(user)}
+                  checked={getStateChecked(item._id)}
+                  onChange={() => onClickCheckButton(item)}
                 />
               </td>
-              <td className="py-1 px-2">{user.fullname}</td>
-              <td className="py-1 px-2">{user.email}</td>
-              <td className="py-1 px-2">{user.department?.name}</td>
-              <td className="py-1 px-2">{user.position?.name}</td>
-              <td className={cn('py-1 px-2', user.level === 0 ? 'text-primary' : '')}>
-                {user.level === 0 ? 'Admin' : 'Member'}
+              <td className="py-1 px-2">
+                {item.fullname}
+                <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
+              </td>
+              <td className="py-1 px-2">{item.email}</td>
+              <td className="py-1 px-2">{item.department?.name}</td>
+              <td className="py-1 px-2">{item.position?.name}</td>
+              <td className={cn('py-1 px-2', item.level === 0 ? 'text-primary' : '')}>
+                {item.level === 0 ? 'Admin' : 'Member'}
               </td>
               <td className="py-1 px-2">
-                {user.lastLog ? moment(user.lastLog).format('DD/MM/YYYY - HH:mm') : ''}
+                {item.lastLog ? moment(item.lastLog).format('DD/MM/YYYY - HH:mm') : ''}
               </td>
-              <td className={cn('py-1 px-2', user.status === 1 ? 'text-primary' : '')}>
-                {user.status === 1 ? 'Đang hoạt động' : 'Đã tạm khóa'}
+              <td className={cn('py-1 px-2', item.status === 1 ? 'text-primary' : '')}>
+                {item.status === 1 ? 'Đang hoạt động' : 'Đã tạm khóa'}
               </td>
             </tr>
           )) : <></>}
@@ -339,5 +342,5 @@ export const OwnerMemberPage: FC = () => {
         </div>
       )}
     </main>
-  );
-};
+  )
+}

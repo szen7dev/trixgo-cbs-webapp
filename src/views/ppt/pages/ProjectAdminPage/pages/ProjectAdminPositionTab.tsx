@@ -203,7 +203,7 @@ const ProjectAdminPositionTab: FC = () => {
             <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
                 <thead className="bg-cbs-table-header h-[38px] border-b border-primary-border">
                     <tr className="text-left text-sm">
-                        <th className={cn("py-1 text-center", styles.theadInput)}>
+                        <th className="pb-1 pt-1 text-center" style={{ width: "1.5%" }}>
                             <div className="border-r-2 border-gray-300 flex items-center justify-center">
                                 <input
                                     className="form-check-input"

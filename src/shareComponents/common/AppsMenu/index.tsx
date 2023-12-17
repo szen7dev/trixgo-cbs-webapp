@@ -1,26 +1,20 @@
 import { FC, Fragment, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import { Menu, Transition } from "@headlessui/react";
-
-import iconGrid from "assets/images/icons8-menu-100.svg";
-// import iconSearch from "assets/images/icons8-search-50.png";
-import supportLogo from "assets/logos/support.png";
-
-import API from "apis/repository";
 import { APP_INFO as AppInfo } from "./components";
-import { useAuth } from "services/hooks/auth/useAuth";
+import API from "apis/repository";
 import { useGetListAppOfUser } from "services/hooks/auth/usePermissions";
+import iconGrid from "assets/images/icons8-menu-100.svg";
 
 export const APP_INFO = AppInfo;
 export const AppsMenu: FC = () => {
-  const { listAppOfUser, refetchAppUsers } = useGetListAppOfUser();
-  const { user } = useAuth();
+  const { listAppOfUser, refetchAppUsers } = useGetListAppOfUser()
 
   useEffect(() => {
     if (API.defaults.headers.Authorization) {
-      refetchAppUsers();
+      refetchAppUsers()
     }
-  }, [API.defaults.headers.Authorization]);
+  }, [API.defaults.headers.Authorization])
 
   return (
     <Menu as="div" className="relative inline-block text-left">
@@ -49,18 +43,8 @@ export const AppsMenu: FC = () => {
             ))
             }
           </div>
-
-          {user && user?.email === "contact@trixgo.com" ?
-            <div className="flex flex-wrap">
-                <Link key={50} to={'/support/home'} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
-                  <img src={supportLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
-                  <span className="block">Support</span>
-                </Link>
-            </div>: <></>
-          }
-
         </Menu.Items>
       </Transition>
     </Menu>
-  );
-};
+  )
+}

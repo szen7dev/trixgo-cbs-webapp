@@ -276,9 +276,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
         if(dataImport.length){
             const fetchData = async () => {
                 const data = await importCustomerFromExcelAsync({ dataImport: JSON.stringify(dataImport) });
-                setDataImport([]);
-                // refetchTaskInfo?.()
-                // console.log(data)
+                setDataImport([])
 
                 if(!data.error){
                     return toast.success("Import thành công");
@@ -287,8 +285,6 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
             }
             fetchData();
         }
-        
-        // console.log('=========DATA THAY ĐỔI RỒI==============')
     }, [dataImport])
     
     return (
@@ -441,7 +437,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                             <td className="py-1 px-2">
                                 {CONTACT_TYPES[Number(item.type)-1].text}
                                 <p className="text-xs"><i>{item.email}</i></p>
-                                {/* <p>{item._id}</p> */}
+                                <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
                             </td>
                             <td className="py-1 px-2">
                                 <Link to={`/item/contact/${item._id}`}>
@@ -459,7 +455,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                             <td className="py-1 px-2">{item.note}</td>
                             <td className="py-1 px-2">{item?.nonResident > 1 ? CUSTOMER_TYPES[Number(item?.nonResident)-1].text : ''}</td>
                             <td className="py-1 px-2">
-                                {item.modifyAt ? moment(item.modifyAt).format('HH:mm - DD/MM/YYYY') : ''} <br /> {item?.userUpdate?.bizfullname || ''}
+                                {item.modifyAt ? moment(item.modifyAt).format('DD/MM/YYYY - HH:mm') : ''} <br /> {item?.userUpdate?.bizfullname || ''}
                             </td>
                         </tr>
                     )) : <></>}
@@ -476,5 +472,5 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                 </div>
             )}
         </main>
-    );
-};
+    )
+}

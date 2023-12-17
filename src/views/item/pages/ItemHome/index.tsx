@@ -4,7 +4,6 @@ import debounce from "lodash/debounce";
 import moment from "moment";
 import { toast } from "react-toastify";
 import { read, utils } from 'xlsx';
-import { createLinkAndClick } from "utils";
 
 /**
  * Components
@@ -265,24 +264,25 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
                 </thead>
 
                 <tbody>
-                    {listDoctypes.length ? listDoctypes.map((doctype: any) => (
-                        <tr key={doctype._id} className="border-b border-primary-border h-10">
+                    {listDoctypes.length ? listDoctypes.map((item: any) => (
+                        <tr key={item._id} className="border-b border-primary-border h-10">
                             <td className="py-1 px-2 text-center">
                                 <input
                                     className="form-check-input"
                                     type="checkbox"
-                                    checked={getStateChecked(doctype._id)}
-                                    onChange={() => onClickCheckButton(doctype)}
+                                    checked={getStateChecked(item._id)}
+                                    onChange={() => onClickCheckButton(item)}
                                 />
                             </td>
                             <td className="py-1 px-2">
-                                <Link to={`/item/home/${type}/${doctype._id}`}>
-                                    {doctype.amountChilds>0? <b>{doctype?.name}({doctype.amountChilds})</b>: doctype.name }
+                                <Link to={`/item/home/${type}/${item._id}`}>
+                                    {item.amountChilds>0? <b>{item?.name}({item.amountChilds})</b>: item.name }
                                 </Link>
+                                <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
                             </td>
-                            <td className="py-1 px-2">{doctype.description}</td>
+                            <td className="py-1 px-2">{item.description}</td>
                             <td className="py-1 px-2">
-                                {doctype.modifyAt ? moment(doctype.modifyAt).format('DD/MM/YYYY - HH:mm') : ''}
+                                {item.modifyAt ? moment(item.modifyAt).format('DD/MM/YYYY - HH:mm') : ''}
                             </td>
                         </tr>
                     )) : <></>}

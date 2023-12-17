@@ -2,11 +2,8 @@ import { FC, useCallback, useState } from "react";
 import moment from "moment";
 import debounce from "lodash/debounce";
 import { Link, useParams, useHistory, useLocation } from "react-router-dom";
-
 import { useModal } from "services/hooks/useModal";
 import { SearchInput } from "shareComponents/common";
-
-import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 import FolderIcon from "assets/images/icons8-folder.svg";
 import DownloadIcon from "assets/images/icons8-download-64.svg";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
@@ -153,9 +150,6 @@ const PackageDocument: FC = () => {
 					>
 						Tạo mới
 					</button>
-					{/* <button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
-						<img src={Vertical3Dots} alt="3Dots" />
-					</button> */}
 				</div>
 			</header>
 
@@ -190,7 +184,7 @@ const PackageDocument: FC = () => {
 						<th className="w-1/3 pb-1 pt-1 font-normal">
 							<div className="font-normal pl-2">Cập nhật lần cuối</div>
 						</th>
-						<th className="w-1/3 pb-1 pt-1 font-normal">#</th>
+						<th className="w-1/3 pb-1 pt-1 font-normal">Thành viên truy cập</th>
 					</tr>
 				</thead>
 
@@ -207,18 +201,13 @@ const PackageDocument: FC = () => {
 									/>
 								</td>
 								<td className="py-1 px-2">
-									{/* <Link to={`/pcm/project/${projectID}/admin/packages/${item._id}`}>
-										<div className="flex">
-											<img src={FolderIcon} alt="Folder" className="w-6 h-6 mr-2" />
-											<p>{item.name}</p>
-										</div>
-									</Link> */}
 									<button onClick={() => onClickPackage(item._id, item.name)}>
 										<div className="flex text-left">
 											<img src={FolderIcon} alt="Folder" className="w-6 h-6 mr-2" />
 											<p>{item.name}</p>
 										</div>
 									</button>
+									<p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
 									{item?.sign}
@@ -256,4 +245,4 @@ const PackageDocument: FC = () => {
 	);
 };
 
-export default PackageDocument;
+export default PackageDocument

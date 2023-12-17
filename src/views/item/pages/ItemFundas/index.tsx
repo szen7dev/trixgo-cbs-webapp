@@ -301,25 +301,8 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                                 <img src={iconPencil} alt="icon pencil" />
                             </button>
                         ) : ''}
-
-                        {/* Xóa 1 hoặc nhiều */}
-                        {itemsChecked.length ? (
-                            <button
-                                onClick={() =>
-                                    openModal(
-                                        <div
-                                            className={
-                                                "inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
-                                            }
-                                        >
-                                            <ModalConfirm onConfirm={handleConfirmDelete} />
-                                        </div>
-                                    )
-                                }>
-                                <img src={DeleteIcon} alt="Delete" />
-                            </button>
-                        ) : ''}
                     </div>
+
                     <div className="flex items-center">
                         <button
                             className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold"
@@ -416,6 +399,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                                     {item.amountChilds>0? <b>{item?.name}({item.amountChilds})</b>: item.name }
                                 </Link>
                                 <p>TKNH: <b>{item?.bankAccount}</b></p>
+                                <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
                             </td>
                             <td className="py-1 px-2">{item?.sign}</td>
                             <td className="py-1 px-2">{item?.description}</td>

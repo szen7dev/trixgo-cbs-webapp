@@ -3,14 +3,12 @@ import { FC, useState, useCallback } from "react";
 import cn from "classnames";
 import debounce from "lodash/debounce";
 import moment from "moment";
-import { toast } from "react-toastify";
 import { Link, useParams, useHistory } from "react-router-dom";
 
 /*=====2.CSS=====*/
 import styles from "views/support/styles/support.module.css";
 
 /*=====3.ICONS=====*/
-import DeleteIcon from "assets/images/icons8-remove.svg";
 import iconPencil from 'assets/images/icons8-pencil-96 1.png';
 
 /*=====4.PAGES/COMPONENTS=====*/
@@ -46,7 +44,7 @@ export const ItemStoragePage: FC<{ type: number }> = ({ type }) => {
         fetchNextPage,
         totalRecord
     } = useStorage({
-        params: { keyword, isListParentOfListChilds: "1", parentID }, // Khi keyword thay đổi giá trị => API thay đổi data => refretch kết quả
+        params: { keyword, isListParentOfListChilds: "1", parentID },
         isFetchList: true
     });
 
@@ -109,30 +107,6 @@ export const ItemStoragePage: FC<{ type: number }> = ({ type }) => {
         } else {
             setItemsChecked(listStorages);
         }
-    };
-
-    // Xóa 1 hoặc nhiều mẩu tin
-    const handleConfirmDelete = async () => {
-        try {
-            const ids = itemsChecked.map(item => item._id);
-            const { error, data } = await deleteAsync(ids);
-
-            if (error) {
-                return toast.warn(data?.message);
-            }
-
-            toast.success('Xoá dữ liệu thành công', { autoClose: 1500 });
-            closeModal();
-            clearData();
-            refetch();
-            setItemsChecked([]);
-        } catch (error) {
-            if (typeof error === "string") {
-                toast.error(error);
-            } else if (error instanceof Error) {
-                toast.error(error.message);
-            }
-        }
     }
 
     const handleOpenModalCreateOrUpdate = (modalType: 'create' | 'update') => {
@@ -187,24 +161,6 @@ export const ItemStoragePage: FC<{ type: number }> = ({ type }) => {
                                 onClick={() => handleOpenModalCreateOrUpdate('update')}
                             >
                                 <img src={iconPencil} alt="icon pencil" />
-                            </button>
-                        ) : ''}
-
-                        {/* Xóa 1 hoặc nhiều */}
-                        {itemsChecked.length ? (
-                            <button
-                                onClick={() =>
-                                    openModal(
-                                        <div
-                                            className={
-                                                "inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
-                                            }
-                                        >
-                                            <ModalConfirm onConfirm={handleConfirmDelete} />
-                                        </div>
-                                    )
-                                }>
-                                <img src={DeleteIcon} alt="Delete" />
                             </button>
                         ) : ''}
                     </div>
@@ -268,6 +224,7 @@ export const ItemStoragePage: FC<{ type: number }> = ({ type }) => {
                                 <Link to={`/item/storage/${item._id}`}>
                                     {item.amountChilds>0? <b>{item?.name}({item.amountChilds})</b>: item.name }
                                 </Link>
+                                <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
                                </td>
                             <td className="py-1 px-2">{item.description}</td>
                             <td className="py-1 px-2">
@@ -288,5 +245,5 @@ export const ItemStoragePage: FC<{ type: number }> = ({ type }) => {
                 </div>
             )}
         </main>
-    );
-};
+    )
+}
