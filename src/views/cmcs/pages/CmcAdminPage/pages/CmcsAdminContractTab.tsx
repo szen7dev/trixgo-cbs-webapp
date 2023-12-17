@@ -1,10 +1,7 @@
 import React, { FC, useCallback, useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import debounce from "lodash/debounce";
-import { SearchInput, ModalContainer } from "shareComponents/common";
-import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
-import FolderIcon from "assets/images/icons8-folder.svg";
-import DownloadIcon from "assets/images/icons8-download-64.svg";
+import { SearchInput } from "shareComponents/common";
 import styles from 'views/cmcs/styles/styles.module.css';
 import cn from "classnames";
 import moment from "moment";
@@ -17,7 +14,6 @@ import { formatNumberMoney } from "utils/cmcs";
 import PaginateV2 from "shareComponents/common/PaginateV2";
 
 const CmcsAdminContractTab: FC = () => {
-	// Phân trang
 	type PaginateHandle = React.ElementRef<typeof PaginateV2>;
 	const ref = React.useRef<PaginateHandle>(null);
 	const [pageIndex, setPageIndex] = React.useState(0);
@@ -181,6 +177,7 @@ const CmcsAdminContractTab: FC = () => {
 										{item.name}
 										<p className="text-primary-gray">{item?.project?.sign} | {item.sign}</p>
 									</Link>
+									<p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
 								</td>
 								<td className="py-1 px-2"> {moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
 								<td className="py-1 px-2 text-right">{formatNumberMoney((item.value || 0) + (item.vatValue || 0) + (item.plus || 0) + (item.vatPlus || 0))} </td>
@@ -198,7 +195,7 @@ const CmcsAdminContractTab: FC = () => {
 
 			</table>
 		</main>
-	);
-};
+	)
+}
 
-export default CmcsAdminContractTab;
+export default CmcsAdminContractTab

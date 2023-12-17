@@ -21,11 +21,6 @@ import budgetLogo from "assets/logos/budget.png";
 import inspectionLogo from "assets/logos/inspection.png";
 import defaultLogo from "assets/logos/default.png";
 
-/* createdAt:1/13/2022, 10:49:33 PM 
-* Author: TuanNV
-* Danh sách App trong App Menu
-*/
-
 export const APP_INFO = new Map([
     /* Ứng dụng Operation */
     ['61e04a0dfdebf77b072d1b18', {
@@ -86,7 +81,7 @@ export const APP_INFO = new Map([
     /* Ứng dụng Payment */
     ['61e04971fdebf77b072d1b0f', {
         key: "61e04971fdebf77b072d1b0f",
-        name: "fnb",
+        name: "eShop",
         icon: fnbLogo,
         route: '/fnb/home'
     }],
@@ -181,4 +176,4 @@ export const APP_INFO = new Map([
         icon: inspectionLogo,
         route: '/inspection/home'
     }],
-]);
+])

@@ -6,16 +6,12 @@ import LogoutIcon from "assets/icons/Logout";
 import { useAuth } from "services/hooks/auth/useAuth";
 
 export const UserMenu: FC = () => {
-  const { user, signOut } = useAuth();
+  const { user, signOut } = useAuth()
 
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div className="flex items-center justify-center ml-6">
-        {/* <Menu.Button className="flex justify-center items-center group focus:outline-none border rounded-lg border-primary-border p-1.5"> */}
         <Menu.Button className="flex justify-center items-center group focus:outline-none">
-          {/* <span className={"text-2xl text-primary-gray mr-2"}>
-              Tài khoản
-          </span> */}
           <img
             src={`${process.env.REACT_APP_URL_S3_USER}/${user?.image}`}
             alt="User Avatar"
@@ -66,11 +62,7 @@ export const UserMenu: FC = () => {
                 </Menu.Button>
 
                 <div className="flex flex-1 justify-between items-center pl-3">
-                  <div className="flex flex-col">
-                    
-                      Tài khoản
-                  
-                  </div>
+                  <div className="flex flex-col">Tài khoản</div>
                 </div>
               </div>
             </Menu.Item>

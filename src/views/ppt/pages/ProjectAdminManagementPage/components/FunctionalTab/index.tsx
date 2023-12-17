@@ -148,9 +148,6 @@ const FunctionalTab: FC = () => {
 					/>
 					{(idsChecked && idsChecked.length) ? (
 						<div className="flex items-center gap-2 border-l-2 border-primary-border px-4 ml-4">
-							{/* <div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
-								<img src={TrashIcon} alt="Download" />
-							</div> */}
 							{idsChecked.length == 1 ?
 								<>
 									<div
@@ -194,25 +191,6 @@ const FunctionalTab: FC = () => {
 								</>
 								: <></>
 							}
-							{/* <div
-								className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
-								onClick={() =>
-									openModal(
-										<div
-											className={
-												"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
-											}
-										>
-											<DeleteGroup
-												idsChecked={idsChecked}
-												onConfirm={refetchPcmPlanGroup}
-											/>
-										</div>
-									)
-								}
-							>
-								<img src={TrashIcon} alt="Trash" />
-							</div> */}
 						</div>
 					) : <></>}
 				</div>
@@ -237,9 +215,6 @@ const FunctionalTab: FC = () => {
 					>
 						Tạo mới
 					</button>
-					{/* <button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
-						<img src={Vertical3Dots} alt="3Dots" />
-					</button> */}
 				</div>
 			</header>
 
@@ -247,7 +222,6 @@ const FunctionalTab: FC = () => {
 				<thead className="bg-cbs-table-header h-10 border-b border-primary-border">
 					<tr className="text-left text-sm text-primary-gray">
 						<th className="pl-2 pb-1 pt-1 text-center" style={{ width: "3.5%" }}>
-							{/* border-r-2 border-gray-300 */}
 							<div className="flex items-center justify-center">
 								<input
 									className="form-check-input"
@@ -305,6 +279,7 @@ const FunctionalTab: FC = () => {
 											<p>{item.name}</p>
 										</div>
 									</button>
+									<p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
 									{item?.sign}

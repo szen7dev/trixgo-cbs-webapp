@@ -5,7 +5,6 @@ import debounce from "lodash/debounce";
 import moment from "moment";
 import { toast } from "react-toastify";
 import { Link, useParams, useHistory } from "react-router-dom";
-import { validateFiles } from 'validation/file';
 import { read, utils } from 'xlsx';
 
 /*=====2.CSS=====*/
@@ -59,7 +58,6 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
         isFetchList: true
     });
 
-    // console.log({ listStorages });
     // Reset form
     const clearData = () => {
         setInitialValues(previousValue => ({
@@ -200,14 +198,8 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
             setStateExport({ isExporting: true });
             const { error, data } = await downloadTemplateExcelAsync({
                 filterParams: {  
-                    // departmentsID: [departmentID],
                     // ...fromToDate,
                     // datahubContactsID,
-                    // types,
-                    // directions,
-                    // contractsID,
-                    // storagesID,
-                    // keyword: keywordInput 
                 }
             });
 
@@ -254,8 +246,6 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
             const fetchData = async () => {
                 const data = await importExcelAsync({ dataImport: JSON.stringify(dataImport) });
                 setDataImport([]);
-                // refetchTaskInfo?.()
-                console.log(data)
 
                 if(!data.error){
                     return toast.success("Import thành công");
@@ -264,8 +254,6 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
             }
             fetchData();
         }
-        
-        console.log('=========DATA THAY ĐỔI RỒI==============')
     }, [dataImport])
 
     return (
@@ -404,6 +392,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                                 <Link to={`/item/storage/${item._id}`}>
                                     {item.amountChilds>0? <b>{item?.name}({item.amountChilds})</b>: item.name }
                                 </Link>
+                                <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
                             </td>
                             <td className="py-1 px-2">{item?.sign}</td>
                             <td className="py-1 px-2">{item?.unit}</td>
