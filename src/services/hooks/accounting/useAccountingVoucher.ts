@@ -1,20 +1,7 @@
 import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 
 import AccountingVoucherRepository from 'apis/accounting/voucher';
-import HumanRepository from 'apis/human/indexOld';
-
-type UseAccountingVoucherProp = {
-    listAccountingVoucher: Array<any>;
-    isLoading: boolean;
-    fetchNextPage: () => void,
-    fetchPreviousPage: () => void,
-    totalRecord: number | undefined,
-    totalPage: number | undefined,
-    hasNextPage: boolean | undefined
-};
-
 export const UseAccountingVoucherList = (pageParam: any, type: number, inputFilter: any = {}, limit = 10): any => {
-
     const {
         status,
         data,

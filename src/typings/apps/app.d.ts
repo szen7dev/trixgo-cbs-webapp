@@ -6,6 +6,7 @@ interface QueryParam {
     populates?: string;
     lastestID?: string;
     limit?: number;
+    lock?: number;
 }
 
 export interface DataResponse {

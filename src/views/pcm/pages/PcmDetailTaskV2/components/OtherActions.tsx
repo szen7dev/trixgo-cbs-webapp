@@ -1,7 +1,6 @@
-import React, {FC, useRef, useState, useEffect} from "react";
+import {FC, useRef, useState, useEffect} from "react";
 import DotsVerticalIcon from "assets/icons/DotsVertical";
 import Close from "assets/icons/Close";
-// import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import { Link } from 'react-router-dom';
 import { Task } from "typings/task";
 import { usePcmPlanTaskCustom } from "services/hooks/pcm/usePcm";
@@ -28,7 +27,6 @@ type Props = {
 }
 
 export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
-    // console.log(task)
     const { openModal, closeModal } = useModal();
     const wrapperClass = useRef<HTMLDivElement>(null)
     const [showOption, setShowOption] = useState(false);
@@ -38,10 +36,7 @@ export const OtherActions:FC<Props> = ({ task, userId, refetchTaskInfo }) => {
 		isExporting: false,
 	});
 
-    // console.log(task)
-
     const { updateTaskAsync } = useTask({});
-    // useOnClickOutside(wrapperClass, () => setShowOption(false));
 	const { downloadTemplateImportExcelTaskAsync, importTaskFromExcelAsync } = usePcmPlanTaskCustom({});
     
     /**

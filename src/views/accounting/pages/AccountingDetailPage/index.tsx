@@ -1,32 +1,70 @@
-import { FC, useCallback } from "react";
-
+import { FC, useCallback, useState, useEffect } from "react";
+import { NavLink, useHistory, useParams } from "react-router-dom"
 import cn from "classnames";
-
-import { DropdownSearchable, Paginate } from "shareComponents/common";
-import { DropdownFilterButton } from "views/accounting/shareComponents/common";
 import styles from 'views/accounting/styles/styles.module.css';
+import DotsVerticalIcon from "assets/icons/DotsVertical";
+import Close from "assets/icons/Close";
+import moment from "moment";
+import { DATE_FORMAT, DATE_FORMAT_TIME, VOUCHER_TYPES } from "apis/localdb/index";
+import { formatNumberMoney } from "utils/cmcs"
+import {
+  useJournallList
+} from "services/hooks/accounting/useGeneralJournal";
+import API from "apis/repository";
 
-import ThreeDotVerticalIcon from "assets/images/icon-3dots-vertical-gray.svg";
-import PolygonIcon from "assets/images/icon-polygon.svg";
+const ITEM_ACCOUNT = "/api/item/accounts";
 
 export const AccountingDetailPage: FC = () => {
-  const handleOnFilter = useCallback((values) => {
-    // setPageParam(() => ({ ...values }));
-    return true;
-  }, []);
+  const [showOption, setShowOption] = useState(false)
+  const [fromToDate, setFromToDate] = useState({ fromDate: "", toDate: "" })
+  const [pageIndex, setPageIndex] = useState(0)
 
-  const handleOnCancelFilter = useCallback(() => {
-    // setPageParam({});
-  }, []);
+  const params: any = useParams();
+
+  const [infoAccount, setInfoAccount] = useState({} as any);
+
+  useEffect(() => {
+    const fetchDetailAccount = async (accountID: any) => {
+      const { data } = await API.get(
+        `${ITEM_ACCOUNT}?accountID=${accountID}`, {
+        params: {
+          // populates: {
+          //   "path": "customer contract ipc subtype userCreate userUpdate company",
+          //   "select": "name description bizfullname",
+          // }
+        }
+      }
+      )
+      setInfoAccount(data?.data || {})
+      return data
+    }
+    params.accountID && fetchDetailAccount(params.accountID)
+  }, [params.accountID]);
+
+  const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch, isFetching } = useJournallList({
+    params: {
+        ...fromToDate,
+        limit: 20,
+        accountID: params?.accountID,
+        // types,
+        // directions,
+        // contractsID,
+        // keyword: keywordInput
+    },
+    isFetchList: true
+})
+// console.log(listDataWithPager)
+// console.log({infoAccount})
+
   return (
     <main className="h-full">
-      <header className="h-[50px] w-full border border-primary-border flex items-center justify-between px-6">
+      <header className="h-[50px] w-full border border-primary-border flex items-center justify-between px-2">
         <p className="text-lg">111-Tiền mặt</p>
 
         <div className="flex items-center">
-          <p className="text-primary mr-3">From 1/1/2021 - To 31/12/202</p>
+          {/* <p className="text-primary mr-3">From 1/1/2021 - To 31/12/202</p> */}
 
-          <DropdownSearchable
+          {/* <DropdownSearchable
             placeholder="Tìm kiếm"
             className="w-[322px] px-2 bg-cbs-table-header"
             classNameInput="h-[30px] bg-cbs-table-header"
@@ -55,39 +93,43 @@ export const AccountingDetailPage: FC = () => {
               text: "content",
             }}
             inlineSearch={true}
-          />
+          /> */}
+          <div className={"relative z-5 inline-block"}>
+            <button onClick={() => setShowOption(!showOption)} 
+              className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg"}
+              >
+                <DotsVerticalIcon/>
+            </button>
+            {
+                showOption &&
+                <div className={"absolute right-0 z-20 bg-white w-[335px] shadow-lg rounded-md text-primary-gray"}>
+                    <div className={"flex items-center mx-4 py-2 border-b-0.5 border-primary-border"}>
+                        <div className={"flex-1"}>Chức năng khác</div>
+                        <button onClick={() => setShowOption(false)}>
+                            <Close/>
+                        </button>
+                    </div>
 
-          <DropdownFilterButton
-            onSubmit={handleOnFilter}
-            onCancel={handleOnCancelFilter}
-            initialValues={{}}
-          />
-          <div className="w-10 h-10 ml-3 bg-cbs-gray rounded-full flex items-center justify-center cursor-pointer hover:bg-accent-light">
-            <img src={ThreeDotVerticalIcon} alt="Three Dot" />
+                    <div className={"mb-4"}>
+                        <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}>
+                            Tải excel
+                        </button>
+                    </div>
+                </div>
+            }
           </div>
+          
         </div>
       </header>
 
       <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
         <thead className="bg-cbs-table-header h-10 border-b border-primary-border">
           <tr className="text-left text-sm text-primary-gray">
-            <th
-              className={cn(
-                "py-1 px-2 text-center border-r border-primary-border",
-                styles.theadInput
-              )}
+            {/* <th
+              className="py-1 px-2 font-normal border-r border-primary-border w-3"
             >
-              <div className="flex items-center justify-center">
-                <input
-                  className="form-check-input mr-2"
-                  type="checkbox"
-                  value=""
-                  id="flexCheckDefault"
-                  defaultChecked
-                />
-                <img src={PolygonIcon} alt="Polygon" />
-              </div>
-            </th>
+              TT
+            </th> */}
             <th
               className={cn(
                 "py-1 px-2 font-normal border-r border-primary-border",
@@ -153,10 +195,10 @@ export const AccountingDetailPage: FC = () => {
                 styles.theadCode
               )}
             >
-              Dư nợ/có
+              Dư Nợ-Có
             </th>
             <th className="w-1/12 py-1 px-2 font-normal border-r border-primary-border">
-              Hợp đồng
+              Hợp đồng/Ngân sách
             </th>
             <th className="w-1/12 py-1 px-2 font-normal">Ghi chú</th>
           </tr>
@@ -169,9 +211,7 @@ export const AccountingDetailPage: FC = () => {
               styles.bgBlueLight
             )}
           >
-            <td className="py-1 px-2 text-center border-r border-primary-border">
-              {""}
-            </td>
+            {/* <td className="py-1 px-2 border-r border-primary-border w-3">{""}</td> */}
             <td className="py-1 px-2 border-r border-primary-border">{""}</td>
             <td className="py-1 px-2 border-r border-primary-border">{""}</td>
             <td className="py-1 px-2 font-bold border-r border-primary-border">
@@ -182,127 +222,140 @@ export const AccountingDetailPage: FC = () => {
             <td className="py-1 px-2 border-r border-primary-border">{""}</td>
             <td className="py-1 px-2 border-r border-primary-border">{""}</td>
             <td className="py-1 px-2 border-r border-primary-border">{""}</td>
-            <td className="py-1 px-2 font-bold border-r border-primary-border">
-              20.000.000
+            <td className="py-1 px-2 font-bold border-r border-primary-border text-right">
+              0
             </td>
             <td className="py-1 px-2 border-r border-primary-border">{""}</td>
             <td className="py-1 px-2 border-r border-primary-border">{""}</td>
           </tr>
 
-          <tr className="border-b border-primary-border h-10">
-            <td className="py-1 px-2 text-center border-r border-primary-border">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                style={{ marginLeft: "-23px" }}
-              />
-            </td>
-            <td className="py-1 px-2 border-r border-primary-border">
-              5/11/2021
-            </td>
-            <td className="py-1 px-2 border-r border-primary-border">
-              Giấy báo nợ
-            </td>
-            <td className="py-1 px-2 text-primary border-r border-primary-border">
-              Chi phí xăng xe phục vụ việc đi lại của nhóm dự án CHG
-            </td>
-            <td className="py-1 px-2 border-r border-primary-border">
-              PGI.PKT13
-            </td>
-            <td className="py-1 px-2 border-r border-primary-border">
-              Công ty xăng dầu số 2 Vạn Phúc
-            </td>
-            <td className="py-1 px-2 border-r border-primary-border">
-              4111-Vốn đầu tư của chủ sở hữu
-            </td>
-            <td className="py-1 px-2 border-r border-primary-border">
-              10.000.000
-            </td>
-            <td className="py-1 px-2 border-r border-primary-border">{""}</td>
-            <td className="py-1 px-2 border-r border-primary-border">
-              30.000.000
-            </td>
-            <td className="py-1 px-2 border-r border-primary-border">
-              Mua bán xăng xe định kỳ cho hoạt động
-            </td>
-            <td className="py-1 px-2 border-r border-primary-border">
-              Đã lưu chứng từ gốc tại công ty
-            </td>
-          </tr>
+          {
+            (listDataWithPager[pageIndex] ?? []).map((item, index) => {
+              // console.log(item?.debit)
+              // console.log(infoAccount?.nestedChilds)
+              // console.log('==================')
 
-          <tr className="border-b border-primary-border h-10">
-            <td className="py-1 px-2 text-center border-r border-primary-border">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                style={{ marginLeft: "-23px" }}
-              />
-            </td>
-            <td className="py-1 px-2 border-r border-primary-border">
-              5/11/2021
-            </td>
-            <td className="py-1 px-2 border-r border-primary-border">
-              Giấy báo nợ
-            </td>
-            <td className="py-1 px-2 text-primary border-r border-primary-border">
-              Chi phí xăng xe phục vụ việc đi lại của nhóm dự án CHG
-            </td>
-            <td className="py-1 px-2 border-r border-primary-border">
-              PGI.PKT13
-            </td>
-            <td className="py-1 px-2 border-r border-primary-border">
-              Công ty xăng dầu số 2 Vạn Phúc
-            </td>
-            <td className="py-1 px-2 border-r border-primary-border">
-              4111-Vốn đầu tư của chủ sở hữu
-            </td>
-            <td className="py-1 px-2 border-r border-primary-border">
-              10.000.000
-            </td>
-            <td className="py-1 px-2 border-r border-primary-border">{""}</td>
-            <td className="py-1 px-2 border-r border-primary-border">
-              30.000.000
-            </td>
-            <td className="py-1 px-2 border-r border-primary-border">
-              Mua bán xăng xe định kỳ cho hoạt động
-            </td>
-            <td className="py-1 px-2 border-r border-primary-border">
-              Đã lưu chứng từ gốc tại công ty
-            </td>
-          </tr>
+              if(item?.debit && infoAccount?.nestedChilds?.includes(item?.debit?._id)){
+                return (
+                  <tr key={index} className="border-b border-primary-border h-10">
+                    <td className="py-1 px-2 border-r border-primary-border">
+                      {moment(item?.voucher?.date).format('DD/MM/YYYY')}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border">
+                      {(item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].text : ''}
+                    </td>
+                    <td className="py-1 px-2 text-primary border-r border-primary-border">
+                      <NavLink to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/${item?.voucher?._id}`}>
+                        {item?.voucher?.name}
+                      </NavLink>
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border">
+                      {item?.voucher?.sign}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border">
+                      {item?.customerDebit?.name}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border">
+                      {item?.credit?.name}-{item?.credit?.description}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(item?.amount)}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border">
 
-          <tr className="border-b border-primary-border h-[643px]">
-            <td className="py-1 px-2 text-center border-r border-primary-border">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                style={{ marginLeft: "-23px" }}
-              />
-            </td>
-            <td className="py-1 px-2 border-r border-primary-border">...</td>
-            <td className="py-1 px-2 border-r border-primary-border">...</td>
-            <td className="py-1 px-2 text-primary border-r border-primary-border">
-              ...
-            </td>
-            <td className="py-1 px-2 border-r border-primary-border">...</td>
-            <td className="py-1 px-2 border-r border-primary-border">...</td>
-            <td className="py-1 px-2 border-r border-primary-border">...</td>
-            <td className="py-1 px-2 border-r border-primary-border">
-              10.000.000
-            </td>
-            <td className="py-1 px-2 border-r border-primary-border">...</td>
-            <td className="py-1 px-2 border-r border-primary-border">
-              45.000.000
-            </td>
-            <td className="py-1 px-2 border-r border-primary-border">...</td>
-            <td className="py-1 px-2 border-r border-primary-border">...</td>
-          </tr>
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border">
+                      
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border">
+                     
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border">
+                      {item?.note}
+                    </td>
+                  </tr>
+                )
+              }else{
+                return (
+                  <tr key={index} className="border-b border-primary-border h-10">
+                    <td className="py-1 px-2 border-r border-primary-border">
+                      {moment(item?.voucher?.date).format('DD/MM/YYYY')}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border">
+                      {(item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].text : ''}
+                    </td>
+                    <td className="py-1 px-2 text-primary border-r border-primary-border">
+                      <NavLink to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/${item?.voucher?._id}`}>
+                        {item?.voucher?.name}
+                      </NavLink>
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border">
+                      {item?.voucher?.sign}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border">
+                      {item?.customerCredit?.name}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border">
+                      {item?.debit?.name}-{item?.debit?.description}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border">
+                      
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(item?.amount)}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border">
+                      
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border">
+                     
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border">
+                      {item?.note}
+                    </td>
+                  </tr>
+                )
+              }
+            })
+        }
+
+          {/* {
+            (listDataWithPager[pageIndex] ?? []).map((item, index) => (
+              <tr key={index} className="border-b border-primary-border h-10">
+                <td className="py-1 px-2 border-r border-primary-border">
+                  {moment(item?.voucher?.date).format('DD/MM/YYYY')}
+                </td>
+                <td className="py-1 px-2 border-r border-primary-border">
+                  {(item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].text : ''}
+                </td>
+                <td className="py-1 px-2 text-primary border-r border-primary-border">
+                  {item?.voucher?.name}
+                </td>
+                <td className="py-1 px-2 border-r border-primary-border">
+                  {item?.voucher?.sign}
+                </td>
+                <td className="py-1 px-2 border-r border-primary-border">
+                  Công ty xăng dầu số 2 Vạn Phúc
+                </td>
+                <td className="py-1 px-2 border-r border-primary-border">
+                  4111-Vốn đầu tư của chủ sở hữu
+                </td>
+                <td className="py-1 px-2 border-r border-primary-border">
+                  10.000.000
+                </td>
+                <td className="py-1 px-2 border-r border-primary-border">{""}</td>
+                <td className="py-1 px-2 border-r border-primary-border">
+                  30.000.000
+                </td>
+                <td className="py-1 px-2 border-r border-primary-border">
+                  Mua bán xăng xe định kỳ cho hoạt động
+                </td>
+                <td className="py-1 px-2 border-r border-primary-border">
+                  Đã lưu chứng từ gốc tại công ty
+                </td>
+            </tr>
+            ))
+        } */}
 
           <tr
             className={cn(
@@ -310,9 +363,6 @@ export const AccountingDetailPage: FC = () => {
               styles.bgFooterYellow
             )}
           >
-            <td className="py-1 px-2 text-center border-r border-primary-border">
-              {""}
-            </td>
             <td className="py-1 px-2 border-r border-primary-border">{""}</td>
             <td className="py-1 px-2 border-r border-primary-border">{""}</td>
             <td className="py-1 px-2 font-bold border-r border-primary-border">
@@ -321,22 +371,20 @@ export const AccountingDetailPage: FC = () => {
             <td className="py-1 px-2 border-r border-primary-border">{""}</td>
             <td className="py-1 px-2 border-r border-primary-border">{""}</td>
             <td className="py-1 px-2 border-r border-primary-border">{""}</td>
-            <td className="py-1 px-2 font-bold border-r border-primary-border">
-              30.000.000
+            <td className="py-1 px-2 font-bold border-r border-primary-border text-right">
+              0
             </td>
-            <td className="py-1 px-2 font-bold border-r border-primary-border">
-              5.000.000
+            <td className="py-1 px-2 font-bold border-r border-primary-border text-right">
+            0
             </td>
-            <td className="py-1 px-2 font-bold border-r border-primary-border">
-              45.000.000
+            <td className="py-1 px-2 font-bold border-r border-primary-border text-right">
+            0
             </td>
             <td className="py-1 px-2 border-r border-primary-border">{""}</td>
             <td className="py-1 px-2 border-r border-primary-border">{""}</td>
           </tr>
         </tbody>
       </table>
-
-      <Paginate />
     </main>
-  );
-};
+  )
+}

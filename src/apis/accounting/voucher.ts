@@ -20,6 +20,7 @@ async function fetchList<T>(params: any): Promise<T> {
     )
     return data
 }
+
 async function fetchListJournalDetail<T>(params: any): Promise<T> {
     const { data } = await API.get(
         `${APP_ACCOUNTING_JOURNAL}`,
@@ -80,7 +81,6 @@ async function requestDeleteAccountingVoucher(voucherID: string): Promise<any> {
 }
 
 const AccountingVoucherIPCRepository = {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fetchList: async (params: any): Promise<any> => fetchList<any>(params),
     fetchListJournalDetail: async (params: any): Promise<any> => fetchListJournalDetail<any>(params),
     fetchDetailAccountingVoucher: async (params: {

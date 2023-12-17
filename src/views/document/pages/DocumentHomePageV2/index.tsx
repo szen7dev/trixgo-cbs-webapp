@@ -1,33 +1,32 @@
-import React, {FC, useContext, useEffect, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
+import moment from "moment";
+import {debounce} from "lodash";
+import {Link} from "react-router-dom";
+import { toast } from "react-toastify";
+import { createLinkAndClick } from "utils";
+
+import {useDispatch} from "react-redux";
+import {useAppSelector} from "redux/reducer";
+import {setFilterDropdown} from "redux/reducer/DocumentHomeSlice";
+
+import { useDocumentCustom, useListFilterDocument} from "services/hooks/document/useDocument";
+import { useQueryListCompany } from "services/hooks/useCompanies";
+import {useContractIsMembers} from "services/hooks/items/useContract";
+import {useProjectCustom} from "services/hooks/items/useProject";
+
+import {DIRECTION_TYPES, DOCUMENT_TYPES_SORT} from "apis/localdb";
+
 import { Loader, DropdownSearchableV2 } from "shareComponents/common";
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
+import TriangleDown from "assets/icons/TriangleDown";
+import PaginateV2 from "shareComponents/common/PaginateV2";
+
 import maleUserIcon from "assets/images/icons8-business-building-48.svg";
 import categoryIcon from "assets/images/icons8-category-48.svg";
-import TriangleDown from "assets/icons/TriangleDown";
 import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
 import contractIcon from "assets/images/icons8-contract-64-blue.svg";
 import downloadIcon from "assets/images/icons8-download-64.svg";
 import projectIcon from "assets/images/icons8-project-50.svg";
-import iconPencil from "assets/images/icons8-pencil-96 1.png";
-import { useDocumentCustom, useListFilterDocument} from "services/hooks/document/useDocument";
-import moment from "moment";
-import PaginateV2 from "shareComponents/common/PaginateV2";
-import {DOCUMENT_TYPES, DIRECTION_TYPES, DOCUMENT_TYPES_SORT} from "apis/localdb";
-import {useDatahubContact} from "services/hooks/datahub/contact/useDatahubContact";
-import {useProjectCustom} from "services/hooks/items/useProject";
-import {debounce} from "lodash";
-import {useContractIsMembers} from "services/hooks/items/useContract";
-import {Link} from "react-router-dom";
-import {useAppSelector} from "redux/reducer";
-import {setFilterDropdown} from "redux/reducer/DocumentHomeSlice";
-import {useDispatch} from "react-redux";
-import { toast } from "react-toastify";
-import { createLinkAndClick } from "utils";
-import { useQueryListCompany } from "services/hooks/useCompanies";
-
-// import {ModalContext} from "../../contexts/modal";
-// import {useQueryDetailDocument} from "services/hooks/ppt/useDocument";
-// import {useMutationDocumentChild} from "services/hooks/document/useDocumentChild";
 
 const DocumentHomePageV2: FC = () => {
     type PaginateHandle = React.ElementRef<typeof PaginateV2>;
@@ -65,8 +64,7 @@ const DocumentHomePageV2: FC = () => {
         isExporting: false,
     });
     const { exportDocumentAsync } = useDocumentCustom({});
-    // const { data: listDatahubContact } = useDatahubContact({ keyword: keywordDatahubContact }, true, false); // Danh bạ hệ thống
-	const { data: listDatahubContact } = useQueryListCompany({ keyword: keywordDatahubContact }); // Danh bạ hệ thống mới
+	const { data: listDatahubContact } = useQueryListCompany({ keyword: keywordDatahubContact })
     
     const { listProjectsUserIsMember } = useProjectCustom({ paramsProjectsUserIsMember: { keyword: projectKeyword }, isFetchProjectsUserIsMember: true });
     const { listContracts } = useContractIsMembers({ params: { keyword: contractKeyword, populates: JSON.stringify({ "path": "project", "select": "name sign" }) }, isFetch: true });
@@ -82,7 +80,7 @@ const DocumentHomePageV2: FC = () => {
             keyword: keywordInput
         },
         isFetchList: true
-    });
+    })
 
     const handleExport = async () => {
         try {
@@ -111,54 +109,10 @@ const DocumentHomePageV2: FC = () => {
         }
     }
 
-    // const { toggleModal, updateModal } = useContext(ModalContext);
-    // const { onFetchDetailDocumentAsync }   = useQueryDetailDocument();
-    // const { updateDocumentChildAsync } = useMutationDocumentChild();
-    //
-    // const handleOnClickUpdate = React.useCallback(
-    //     (record) => async () => {
-    //         const result = await onFetchDetailDocumentAsync(record._id);
-    //         toggleModal();
-    //         updateModal({
-    //             departmentId: departmentID,
-    //             departmentInfo: {
-    //                 company: {
-    //                     _id: record.company,
-    //                 },
-    //             },
-    //             title: "Cập nhật",
-    //             initialValues: result,
-    //             onSubmit: async (values: any) => {
-    //                 const result = await updateDocumentChildAsync({
-    //                     ...values,
-    //                     documentID: record._id,
-    //                 });
-    //                 if (result.status === 200) {
-    //                     refetchListDocument();
-    //                     setPageIndex(0);
-    //                     ref.current&&ref.current.resetPaginate();
-    //                     toggleModal();
-    //                     updateModal({
-    //                         departmentInfo: {},
-    //                         initialValues: {},
-    //                     });
-    //                 }
-    //             },
-    //         });
-    //     },
-    //     [
-    //         departmentID,
-    //         onFetchDetailDocumentAsync,
-    //         refetchListDocument,
-    //         toggleModal,
-    //         updateDocumentChildAsync,
-    //         updateModal,
-    //     ]
-    // );
-
     if(stateExport.isExporting) {
         return <Loader className="border-primary" />
     }
+
     return (
         <div className="flex flex-1 flex-col overflow-hidden h-full">
             {isLoading || isFetching && <Loader absolute={true} className="border-primary" />}
@@ -422,14 +376,7 @@ const DocumentHomePageV2: FC = () => {
                     >
                         <img src={downloadIcon} alt={"-----"} className={"w-[18px] h-[18px]"}/>
                     </button>
-                    {/*{*/}
-                    {/*    recordSelected._id&&*/}
-                    {/*    <button*/}
-                    {/*        onClick={handleOnClickUpdate(recordSelected)}*/}
-                    {/*        className={"flex items-center justify-center mx-3 ml-6"}>*/}
-                    {/*        <img src={iconPencil} alt={"-----"} className={"w-[18px] h-[18px]"}/>*/}
-                    {/*    </button>*/}
-                    {/*}*/}
+
                     <PaginateV2
                         ref={ref}
                         totalRecord={totalRecord}
@@ -543,7 +490,8 @@ const DocumentHomePageV2: FC = () => {
                                             {document.storage?.name}
                                         </td>
                                     </tr>
-                                ))}
+                                ))
+                            }
                         </tbody>
                     </table>
                 )}
