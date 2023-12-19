@@ -10,7 +10,6 @@ import cn from "classnames";
 import {LeftMenu, LeftNavigate, MainHeaderV2} from "shareComponents/common";
 import DocumentHeaderContent from "./components/DocumentHeaderContent";
 import DocumentLeftMenuContent from "./components/DocumentLeftMenuContent";
-// import MiniChatbox from "shareComponents/common/MiniChat/components/MiniChatBox";
 
 /*=====5.TYPINGS=====*/
 

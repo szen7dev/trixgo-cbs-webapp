@@ -1,11 +1,12 @@
-import { FC, useCallback, useState, useEffect } from "react";
-import { NavLink, useHistory, useParams } from "react-router-dom"
+import React, { FC, useCallback, useState, useEffect } from "react";
+import { NavLink, useParams } from "react-router-dom"
 import cn from "classnames";
 import styles from 'views/accounting/styles/styles.module.css';
 import DotsVerticalIcon from "assets/icons/DotsVertical";
 import Close from "assets/icons/Close";
+import {debounce} from "lodash";
 import moment from "moment";
-import { DATE_FORMAT, DATE_FORMAT_TIME, VOUCHER_TYPES } from "apis/localdb/index";
+import { VOUCHER_TYPES, LIMIT_DROPDOWN } from "apis/localdb/index";
 import { formatNumberMoney } from "utils/cmcs";
 import {
   FilterDateGroup
@@ -15,17 +16,35 @@ import {
   useJournalByProperty
 } from "services/hooks/accounting/useGeneralJournal";
 import API from "apis/repository";
+import { DropdownSearchableV2 } from "shareComponents/common";
+import {useProjectCustom} from "services/hooks/items/useProject";
+import {useDispatch} from "react-redux";
+import {setFilterDropdown} from "redux/reducer/DocumentProjectSlice";
+import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
+import {
+	useQueryListAccount,
+} from "services/hooks/cmcs/useContractIncome";
+
+import { DropdownSearchable, Paginate } from "shareComponents/common";
 
 const ITEM_ACCOUNT = "/api/item/accounts";
 
 export const AccountingDetailPage: FC = () => {
   const [showOption, setShowOption] = useState(false)
   const [pageIndex, setPageIndex] = useState(0)
+  const dispatch = useDispatch();
 
+  type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+  type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
+  const ref = React.useRef<PaginateHandle>(null);
+  const datahubRef = React.useRef<DropdownHandle>(null);
+  const [departmentsID, setDepartmentsID] = useState<string[]>([]);
+  const [accountKeyword, setAccountKeyword] = useState("");
   const [inputFilter, setInputFilter] = useState({ keyword: '', fromDate: new Date(new Date().getFullYear(), 0, 1), toDate: new Date(new Date().getFullYear(), 11, 31) });
 
   const params: any = useParams()
   let accountID : any
+  
   if(params?.accountID){
     accountID = params?.accountID
   }else{
@@ -33,6 +52,13 @@ export const AccountingDetailPage: FC = () => {
   }
 
   const [infoAccount, setInfoAccount] = useState({} as any);
+
+	const [searchAccount, setSearchAccount] = useState();
+
+  const { listAccount } = useQueryListAccount({
+		limit: LIMIT_DROPDOWN,
+		keyword: searchAccount,
+	})
 
   useEffect(() => {
     const fetchDetailAccount = async (accountID: any) => {
@@ -51,6 +77,8 @@ export const AccountingDetailPage: FC = () => {
     }
     params.accountID && fetchDetailAccount(params.accountID)
   }, [params.accountID]);
+
+  // accountID = departmentsID
 
   const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch, isFetching } = useJournallList({
     params: {
@@ -78,6 +106,8 @@ const { listJournalByProperty: dataS, listJournalByPropertyIsLoading, refetchLis
 // console.log(dataS)
 // console.log(listDataWithPager)
 // console.log({infoAccount})
+console.log({accountID})
+console.log({departmentsID})
 
 let soDuDauKy = 0, soDuCuoiKy = 0
 let phatSinhNo = 0, phatSinhCo = 0
@@ -123,10 +153,7 @@ const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: to
       <header className="h-[50px] w-full border border-primary-border flex items-center justify-between px-2">
         <p className="text-lg">{infoAccount?.name}-{infoAccount?.description}</p>
 
-        <div className="flex items-center">
-          <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
-
-          {/* <DropdownSearchable
+          <DropdownSearchable
             placeholder="Tìm kiếm"
             className="w-[322px] px-2 bg-cbs-table-header"
             classNameInput="h-[30px] bg-cbs-table-header"
@@ -136,26 +163,65 @@ const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: to
             maxWidthInput="max-w-none"
             renderSelectedItem={(item) => <span>{item.text}</span>}
             classNameItem="p-0"
-            data={[
-              {
-                _id: 1,
-                content: "111-Tiền mặt",
-              },
-              {
-                _id: 2,
-                content: "222-Tiền mặt",
-              },
-              {
-                _id: 3,
-                content: "333-Tiền mặt",
-              },
-            ]}
+            data={listAccount}
             formatItem={{
               id: "_id",
-              text: "content",
+              text: "name",
             }}
-            inlineSearch={true}
-          /> */}
+            onSearchInputChange={debounce(
+              (valueSearch) => setAccountKeyword(valueSearch),
+              500
+          )}
+          />
+
+        {/* <DropdownSearchableV2
+            ref={datahubRef}
+            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            placeholder={"Tài khoản"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listAccount}
+            formatItem={{
+                id: "_id",
+                text: "name"
+            }}
+            onSearchInputChange={debounce(
+                (valueSearch) => setAccountKeyword(valueSearch),
+                500
+            )}
+            onchangeValue={item => {
+                const cloneIDs = [...departmentsID];
+                cloneIDs.push(item._id);
+                setDepartmentsID(cloneIDs);
+                dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: cloneIDs}))
+
+                setPageIndex(0);
+                ref.current&&ref.current.resetPaginate();
+            }}
+            onClearData={() => {
+                setDepartmentsID([]);
+                dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: []}))
+
+                setPageIndex(0);
+                ref.current&&ref.current.resetPaginate();
+            }}
+            onMultipleRemoveValue={id => {
+                const cloneIDs = [...departmentsID];
+                const newList = cloneIDs.filter(selectId => selectId !== id);
+                setDepartmentsID(newList);
+                dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: newList}))
+
+                setPageIndex(0);
+                ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+        /> */}
+
+        <div className="flex items-center">
+          <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
           <div className={"relative z-5 inline-block"}>
             <button onClick={() => setShowOption(!showOption)} 
               className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg"}
