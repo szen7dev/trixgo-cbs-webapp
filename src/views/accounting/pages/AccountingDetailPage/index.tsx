@@ -101,6 +101,8 @@ if(dataS?.debitFT.length){
 if(dataS?.creditFT.length){
   phatSinhCo = Number(dataS.creditFT[0].amount)
 }
+
+let balance = soDuDauKy
 soDuCuoiKy = Number(soDuDauKy) + Number(phatSinhNo) - Number(phatSinhCo)
 
 // console.log('================')
@@ -289,6 +291,9 @@ const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: to
                 // console.log('==================')
 
                 if(item?.debit && (infoAccount?.nestedChilds?.includes(item?.debit?._id) || accountID.toString() === item?.debit?._id.toString())){
+                  
+                  balance = Number(balance) + Number(item.amount)
+
                   return (
                     <tr key={index} className="border-b border-primary-border h-10">
                       <td className="py-1 px-2 border-r border-primary-border">
@@ -314,11 +319,11 @@ const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: to
                       <td className="py-1 px-2 border-r border-primary-border text-right">
                         {formatNumberMoney(item?.amount)}
                       </td>
-                      <td className="py-1 px-2 border-r border-primary-border">
-
-                      </td>
-                      <td className="py-1 px-2 border-r border-primary-border">
+                      <td className="py-1 px-2 border-r border-primary-border text-right">
                         
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border text-right">
+                        {formatNumberMoney(balance)}
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
                       
@@ -329,6 +334,8 @@ const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: to
                     </tr>
                   )
                 }else{
+                  balance = Number(balance) - Number(item.amount)
+
                   return (
                     <tr key={index} className="border-b border-primary-border h-10">
                       <td className="py-1 px-2 border-r border-primary-border">
@@ -351,16 +358,16 @@ const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: to
                       <td className="py-1 px-2 border-r border-primary-border">
                         {item?.debit?.name}-{item?.debit?.description}
                       </td>
-                      <td className="py-1 px-2 border-r border-primary-border">
+                      <td className="py-1 px-2 border-r border-primary-border text-right">
                         
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border text-right">
                         {formatNumberMoney(item?.amount)}
                       </td>
-                      <td className="py-1 px-2 border-r border-primary-border">
-                        
+                      <td className="py-1 px-2 border-r border-primary-border text-right">
+                        {formatNumberMoney(balance)}
                       </td>
-                      <td className="py-1 px-2 border-r border-primary-border">
+                      <td className="py-1 px-2 border-r border-primary-border text-right">
                       
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
