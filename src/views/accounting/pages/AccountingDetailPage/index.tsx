@@ -25,11 +25,11 @@ export const AccountingDetailPage: FC = () => {
   const [inputFilter, setInputFilter] = useState({ keyword: '', fromDate: new Date(new Date().getFullYear(), 0, 1), toDate: new Date(new Date().getFullYear(), 11, 31) });
 
   const params: any = useParams()
-  let accountID
+  let accountID : any
   if(params?.accountID){
     accountID = params?.accountID
   }else{
-    accountID = "64c0ca9af8a43a0011a3435d"
+    accountID = "64c0ca9af8a43a0011a3435d" //**************** */
   }
 
   const [infoAccount, setInfoAccount] = useState({} as any);
@@ -58,6 +58,8 @@ export const AccountingDetailPage: FC = () => {
         toDate: inputFilter.toDate,
         limit: 50,
         accountID,
+        forward: 0,
+        cancel: 0,
     },
     isFetchList: true
 })
@@ -286,7 +288,7 @@ const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: to
                 // console.log(infoAccount?.nestedChilds)
                 // console.log('==================')
 
-                if(item?.debit && infoAccount?.nestedChilds?.includes(item?.debit?._id)){
+                if(item?.debit && (infoAccount?.nestedChilds?.includes(item?.debit?._id) || accountID.toString() === item?.debit?._id.toString())){
                   return (
                     <tr key={index} className="border-b border-primary-border h-10">
                       <td className="py-1 px-2 border-r border-primary-border">
