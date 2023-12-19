@@ -6,9 +6,13 @@ import DotsVerticalIcon from "assets/icons/DotsVertical";
 import Close from "assets/icons/Close";
 import moment from "moment";
 import { DATE_FORMAT, DATE_FORMAT_TIME, VOUCHER_TYPES } from "apis/localdb/index";
-import { formatNumberMoney } from "utils/cmcs"
+import { formatNumberMoney } from "utils/cmcs";
 import {
-  useJournallList
+  FilterDateGroup
+} from "views/accounting/shareComponents/common";
+import {
+  useJournallList,
+  useJournalByProperty
 } from "services/hooks/accounting/useGeneralJournal";
 import API from "apis/repository";
 
@@ -16,10 +20,17 @@ const ITEM_ACCOUNT = "/api/item/accounts";
 
 export const AccountingDetailPage: FC = () => {
   const [showOption, setShowOption] = useState(false)
-  const [fromToDate, setFromToDate] = useState({ fromDate: "", toDate: "" })
   const [pageIndex, setPageIndex] = useState(0)
 
-  const params: any = useParams();
+  const [inputFilter, setInputFilter] = useState({ keyword: '', fromDate: new Date(new Date().getFullYear(), 0, 1), toDate: new Date(new Date().getFullYear(), 11, 31) });
+
+  const params: any = useParams()
+  let accountID
+  if(params?.accountID){
+    accountID = params?.accountID
+  }else{
+    accountID = "64c0ca9af8a43a0011a3435d"
+  }
 
   const [infoAccount, setInfoAccount] = useState({} as any);
 
@@ -43,26 +54,73 @@ export const AccountingDetailPage: FC = () => {
 
   const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch, isFetching } = useJournallList({
     params: {
-        ...fromToDate,
-        limit: 20,
-        accountID: params?.accountID,
-        // types,
-        // directions,
-        // contractsID,
-        // keyword: keywordInput
+        fromDate: inputFilter.fromDate,
+        toDate: inputFilter.toDate,
+        limit: 50,
+        accountID,
     },
     isFetchList: true
 })
+
+const { listJournalByProperty: dataS, listJournalByPropertyIsLoading, refetchListJournalByProperty } = useJournalByProperty({
+  params: {
+      option: 3,
+      optionTerm: 1,
+      fromDate: inputFilter.fromDate,
+      toDate: inputFilter.toDate,
+      arrAccIDs: [accountID],
+  },
+  isFetchList: true
+})
+
+// console.log(dataS)
 // console.log(listDataWithPager)
 // console.log({infoAccount})
+
+let soDuDauKy = 0, soDuCuoiKy = 0
+let phatSinhNo = 0, phatSinhCo = 0
+
+if(dataS?.debitO.length){
+  soDuDauKy = Number(soDuDauKy) + Number(dataS.debitO[0].amount)
+}
+if(dataS?.creditO.length){
+  soDuDauKy = Number(soDuDauKy) - Number(dataS.creditO[0].amount)
+}
+if(dataS?.debitOF.length){
+  soDuDauKy = Number(soDuDauKy) + Number(dataS.debitOF[0].amount)
+}
+if(dataS?.creditOF.length){
+  soDuDauKy = Number(soDuDauKy) - Number(dataS.creditOF[0].amount)
+}
+
+if(dataS?.debitFT.length){
+  phatSinhNo = Number(dataS.debitFT[0].amount)
+}
+if(dataS?.creditFT.length){
+  phatSinhCo = Number(dataS.creditFT[0].amount)
+}
+soDuCuoiKy = Number(soDuDauKy) + Number(phatSinhNo) - Number(phatSinhCo)
+
+// console.log('================')
+// console.log(inputFilter.fromDate)
+// console.log(inputFilter.toDate)
+
+const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: toDate
+  if (input) {
+    setInputFilter(() => ({ ...inputFilter, toDate: date }))
+  } else {
+    setInputFilter(() => ({ ...inputFilter, fromDate: date }))
+  }
+
+}, [])
 
   return (
     <main className="h-full">
       <header className="h-[50px] w-full border border-primary-border flex items-center justify-between px-2">
-        <p className="text-lg">111-Tiền mặt</p>
+        <p className="text-lg">{infoAccount?.name}-{infoAccount?.description}</p>
 
         <div className="flex items-center">
-          {/* <p className="text-primary mr-3">From 1/1/2021 - To 31/12/202</p> */}
+          <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
 
           {/* <DropdownSearchable
             placeholder="Tìm kiếm"
@@ -125,11 +183,6 @@ export const AccountingDetailPage: FC = () => {
       <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
         <thead className="bg-cbs-table-header h-10 border-b border-primary-border">
           <tr className="text-left text-sm text-primary-gray">
-            {/* <th
-              className="py-1 px-2 font-normal border-r border-primary-border w-3"
-            >
-              TT
-            </th> */}
             <th
               className={cn(
                 "py-1 px-2 font-normal border-r border-primary-border",
@@ -211,7 +264,6 @@ export const AccountingDetailPage: FC = () => {
               styles.bgBlueLight
             )}
           >
-            {/* <td className="py-1 px-2 border-r border-primary-border w-3">{""}</td> */}
             <td className="py-1 px-2 border-r border-primary-border">{""}</td>
             <td className="py-1 px-2 border-r border-primary-border">{""}</td>
             <td className="py-1 px-2 font-bold border-r border-primary-border">
@@ -223,140 +275,100 @@ export const AccountingDetailPage: FC = () => {
             <td className="py-1 px-2 border-r border-primary-border">{""}</td>
             <td className="py-1 px-2 border-r border-primary-border">{""}</td>
             <td className="py-1 px-2 font-bold border-r border-primary-border text-right">
-              0
+              {formatNumberMoney(soDuDauKy)}
             </td>
             <td className="py-1 px-2 border-r border-primary-border">{""}</td>
             <td className="py-1 px-2 border-r border-primary-border">{""}</td>
           </tr>
+            {
+              (listDataWithPager[pageIndex] ?? []).map((item, index) => {
+                // console.log(item?.debit)
+                // console.log(infoAccount?.nestedChilds)
+                // console.log('==================')
 
-          {
-            (listDataWithPager[pageIndex] ?? []).map((item, index) => {
-              // console.log(item?.debit)
-              // console.log(infoAccount?.nestedChilds)
-              // console.log('==================')
+                if(item?.debit && infoAccount?.nestedChilds?.includes(item?.debit?._id)){
+                  return (
+                    <tr key={index} className="border-b border-primary-border h-10">
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {moment(item?.voucher?.date).format('DD/MM/YYYY')}
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {(item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].text : ''}
+                      </td>
+                      <td className="py-1 px-2 text-primary border-r border-primary-border">
+                        <NavLink to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/${item?.voucher?._id}`}>
+                          {item?.voucher?.name}
+                        </NavLink>
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {item?.voucher?.sign}
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {item?.customerDebit?.name}
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {item?.credit?.name}-{item?.credit?.description}
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border text-right">
+                        {formatNumberMoney(item?.amount)}
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
 
-              if(item?.debit && infoAccount?.nestedChilds?.includes(item?.debit?._id)){
-                return (
-                  <tr key={index} className="border-b border-primary-border h-10">
-                    <td className="py-1 px-2 border-r border-primary-border">
-                      {moment(item?.voucher?.date).format('DD/MM/YYYY')}
-                    </td>
-                    <td className="py-1 px-2 border-r border-primary-border">
-                      {(item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].text : ''}
-                    </td>
-                    <td className="py-1 px-2 text-primary border-r border-primary-border">
-                      <NavLink to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/${item?.voucher?._id}`}>
-                        {item?.voucher?.name}
-                      </NavLink>
-                    </td>
-                    <td className="py-1 px-2 border-r border-primary-border">
-                      {item?.voucher?.sign}
-                    </td>
-                    <td className="py-1 px-2 border-r border-primary-border">
-                      {item?.customerDebit?.name}
-                    </td>
-                    <td className="py-1 px-2 border-r border-primary-border">
-                      {item?.credit?.name}-{item?.credit?.description}
-                    </td>
-                    <td className="py-1 px-2 border-r border-primary-border text-right">
-                      {formatNumberMoney(item?.amount)}
-                    </td>
-                    <td className="py-1 px-2 border-r border-primary-border">
-
-                    </td>
-                    <td className="py-1 px-2 border-r border-primary-border">
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
                       
-                    </td>
-                    <td className="py-1 px-2 border-r border-primary-border">
-                     
-                    </td>
-                    <td className="py-1 px-2 border-r border-primary-border">
-                      {item?.note}
-                    </td>
-                  </tr>
-                )
-              }else{
-                return (
-                  <tr key={index} className="border-b border-primary-border h-10">
-                    <td className="py-1 px-2 border-r border-primary-border">
-                      {moment(item?.voucher?.date).format('DD/MM/YYYY')}
-                    </td>
-                    <td className="py-1 px-2 border-r border-primary-border">
-                      {(item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].text : ''}
-                    </td>
-                    <td className="py-1 px-2 text-primary border-r border-primary-border">
-                      <NavLink to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/${item?.voucher?._id}`}>
-                        {item?.voucher?.name}
-                      </NavLink>
-                    </td>
-                    <td className="py-1 px-2 border-r border-primary-border">
-                      {item?.voucher?.sign}
-                    </td>
-                    <td className="py-1 px-2 border-r border-primary-border">
-                      {item?.customerCredit?.name}
-                    </td>
-                    <td className="py-1 px-2 border-r border-primary-border">
-                      {item?.debit?.name}-{item?.debit?.description}
-                    </td>
-                    <td className="py-1 px-2 border-r border-primary-border">
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {item?.note}
+                      </td>
+                    </tr>
+                  )
+                }else{
+                  return (
+                    <tr key={index} className="border-b border-primary-border h-10">
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {moment(item?.voucher?.date).format('DD/MM/YYYY')}
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {(item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].text : ''}
+                      </td>
+                      <td className="py-1 px-2 text-primary border-r border-primary-border">
+                        <NavLink to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/${item?.voucher?._id}`}>
+                          {item?.voucher?.name}
+                        </NavLink>
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {item?.voucher?.sign}
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {item?.customerCredit?.name}
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {item?.debit?.name}-{item?.debit?.description}
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border text-right">
+                        {formatNumberMoney(item?.amount)}
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
                       
-                    </td>
-                    <td className="py-1 px-2 border-r border-primary-border text-right">
-                      {formatNumberMoney(item?.amount)}
-                    </td>
-                    <td className="py-1 px-2 border-r border-primary-border">
-                      
-                    </td>
-                    <td className="py-1 px-2 border-r border-primary-border">
-                     
-                    </td>
-                    <td className="py-1 px-2 border-r border-primary-border">
-                      {item?.note}
-                    </td>
-                  </tr>
-                )
-              }
-            })
-        }
-
-          {/* {
-            (listDataWithPager[pageIndex] ?? []).map((item, index) => (
-              <tr key={index} className="border-b border-primary-border h-10">
-                <td className="py-1 px-2 border-r border-primary-border">
-                  {moment(item?.voucher?.date).format('DD/MM/YYYY')}
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border">
-                  {(item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].text : ''}
-                </td>
-                <td className="py-1 px-2 text-primary border-r border-primary-border">
-                  {item?.voucher?.name}
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border">
-                  {item?.voucher?.sign}
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border">
-                  Công ty xăng dầu số 2 Vạn Phúc
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border">
-                  4111-Vốn đầu tư của chủ sở hữu
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border">
-                  10.000.000
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border">{""}</td>
-                <td className="py-1 px-2 border-r border-primary-border">
-                  30.000.000
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border">
-                  Mua bán xăng xe định kỳ cho hoạt động
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border">
-                  Đã lưu chứng từ gốc tại công ty
-                </td>
-            </tr>
-            ))
-        } */}
-
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {item?.note}
+                      </td>
+                    </tr>
+                  )
+                }
+              })
+          }
           <tr
             className={cn(
               "border-b border-primary-border h-10",
@@ -372,13 +384,13 @@ export const AccountingDetailPage: FC = () => {
             <td className="py-1 px-2 border-r border-primary-border">{""}</td>
             <td className="py-1 px-2 border-r border-primary-border">{""}</td>
             <td className="py-1 px-2 font-bold border-r border-primary-border text-right">
-              0
+              {formatNumberMoney(phatSinhNo)}
             </td>
             <td className="py-1 px-2 font-bold border-r border-primary-border text-right">
-            0
+              {formatNumberMoney(phatSinhCo)}
             </td>
             <td className="py-1 px-2 font-bold border-r border-primary-border text-right">
-            0
+              {formatNumberMoney(soDuCuoiKy)}
             </td>
             <td className="py-1 px-2 border-r border-primary-border">{""}</td>
             <td className="py-1 px-2 border-r border-primary-border">{""}</td>

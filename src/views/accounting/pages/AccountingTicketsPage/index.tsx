@@ -36,7 +36,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
   const { openModal } = useModal();
   const { fundaID } = useParams<any>();
   const [pageParam, setPageParam] = useState('');
-  const [inputFilter, setInputFilter] = useState({ fundaID, keyword: '', fromDate: new Date(new Date().getFullYear() - 1, 0, 1), toDate: new Date(new Date().getFullYear(), 11, 31) });
+  const [inputFilter, setInputFilter] = useState({ fundaID, keyword: '', fromDate: new Date(new Date().getFullYear(), 0, 1), toDate: new Date(new Date().getFullYear(), 11, 31) });
   const [prevCursor, setPrevCursor] = useState([null]);
 
   //  keyword, fundaID, fromDate, endDate
@@ -144,52 +144,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
         <div className={"flex items-center flex-1"}>
           <div className={"text-lg"}>Danh sách</div>
           <SearchInput classNameWrapper={"ml-4"} onChange={onChangeSearch} />
-
-          {/* <DropdownFilterButton
-            onSubmit={handleOnFilter}
-            onCancel={handleOnCancelFilter}
-            initialValues={{}}
-          /> */}
-
           <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
-
-          {/* <div className="relative">
-            <span className={cn(
-              "text-sm mb-2",
-              styles.bgWhiteLight, styles.labelDateSearch
-            )} >Từ ngày</span>
-            <DatePicker
-              selected={fromDate}
-              onChange={(date: Date | null) => setFromDate(date)}
-              dateFormat="dd/MM/yyyy"
-              customInput={
-                <input
-                  type="text"
-                  placeholder="Từ ngày"
-                  className="h-[38px] px-2 border border-primary-border rounded"
-                />
-              }
-            />
-          </div>
-
-          <div className="relative">
-            <span className={cn(
-              "text-sm mb-2",
-              styles.bgWhiteLight, styles.labelDateSearch
-            )} >Đến ngày</span>
-            <DatePicker
-              selected={endDate}
-              onChange={(date: Date | null) => setEndDate(date)}
-              dateFormat="dd/MM/yyyy"
-              customInput={
-                <input
-                  type="text"
-                  placeholder="Đến ngày"
-                  className="h-[38px] px-2 border border-primary-border rounded"
-                />
-              }
-            />
-          </div> */}
         </div>
         <button
           onClick={() =>

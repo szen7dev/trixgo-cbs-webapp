@@ -7,6 +7,7 @@ interface JournalRepository {
     update: (data: any) => Promise<any>;
     fetchListJournal: (data: any) => Promise<any>;
     fetchFilterListData: (data: any) => Promise<any>;
+    fetchListByProperty: (data: any) => Promise<any>;
     downloadTemplateExcel: (data: any) => Promise<any>;
     importFromExcel: (data: any) => Promise<any>;
     exportExcel: (data: any) => Promise<any>;
@@ -17,6 +18,7 @@ export const JournalRepository: JournalRepository = {
     update: data => updateData(data),
     fetchListJournal: params => fetchListJournal(params),
     fetchFilterListData: params => fetchFilterListData(params),
+    fetchListByProperty: params => fetchListByProperty(params),
     downloadTemplateExcel: params => downloadTemplateExcel(params), 
     importFromExcel: params => importFromExcel(params), 
     exportExcel: params => exportExcel(params), 
@@ -28,7 +30,7 @@ async function fetchListJournal(params : any) {
             // select: 'name sign author project date createAt description note store amount status storeSign publish datahubContact',
             populates: {
                 "path": "voucher debit credit customerCredit customerDebit warehouse goods contract budgetWork",
-                "select": "type name sign description unit",
+                "select": "type name sign description unit date",
             },
             ...params,
         }
@@ -42,8 +44,17 @@ async function fetchFilterListData(params : any) {
             select: 'name sign author project date createAt description note store amount status storeSign publish datahubContact',
             populates: {
                 "path": "author sender storage project publish datahubContact",
-                "select": "fullname bizfullname sign image name"
+                "select": "fullname bizfullname sign image name date"
             },
+            ...params,
+        }
+    })
+    return data
+}
+
+async function fetchListByProperty(params : any) {
+    const { data } = await API.get(`${ACCOUNTING_JOURNAL}/get-list-by-property`, {
+        params: {
             ...params,
         }
     })

@@ -1,4 +1,4 @@
-import {useMutation, useInfiniteQuery} from 'react-query';
+import {useMutation, useInfiniteQuery, useQuery} from 'react-query';
 import { JournalRepository } from 'apis/accounting/journal';
 import type {
     DocumentProps,
@@ -121,67 +121,19 @@ export const useJournallList = ({ params = {},  isFetchList = false }: any): Use
     }
 }
 
-// export const taskInfo(payload: TaskInfoParams): Promise<any> {
-//     const { data } = await API.get(
-//       `${pcmURL}/pcm_plan_tasks?${convertObToUrl({
-//         select: "name description type typeStatus status draft alert priority project contract parent checklist createAt field group author assignee related expiredTime startTime actualStartTime actualFinishTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures openedUsers comments amountComment amountResponse amountMarkedResponse startTime subtype flags milestone links openedStatus amountCurrentStatus amountSolution amountResponseOther accessUsers timeImportExcel milestone unit unitPrice quantity amountoftime judgement ontime quality viewedUsers linksDocs amount vatAmount upcoming",
-//         populates: populatesTask,
-//         ...payload
-//       })}`
-//     );
+export const useJournalByProperty = ({ params = {},  isFetchList = false }: any): any => {
 
-//     return data;
-//   },
+    const { data: detailData, isLoading: listJournalByPropertyIsLoading, refetch: refetchListJournalByProperty } =
+    useQuery([`journal_by_property`,{...params, isFetchList }],() => JournalRepository.fetchListByProperty(params), {
+        refetchOnWindowFocus: false,
+        enabled: isFetchList,
+    });
+    
+    const listJournalByProperty = detailData?.data;
 
-// export const useListFilterDocument = ({ params = {},  isFetchList = false }: DocumentQueryPayload): UseQueryListDocument => {
-
-//     const res = useInfiniteQuery(
-//         [`list_filter_document`, { params }],
-//         async ({ pageParam }: any) =>
-//             DocumentRepository.fetchFilterList({
-//                 lastestID: pageParam, ...params
-//             }),
-//         {
-//             getNextPageParam: ({ data }: any) => {
-//                 return data?.nextCursor || undefined;
-//             },
-//             refetchOnWindowFocus: false,
-//             cacheTime: 0,
-//             enabled: isFetchList ?? true, // https://react-query.tanstack.com/guides/disabling-queries
-//         }
-//     );
-//     const {
-//         isLoading,
-//         data,
-//         refetch,
-//         fetchNextPage,
-//         fetchPreviousPage,
-//         hasNextPage,
-//         isFetching
-//     } = res;
-
-//     const listDocument = []
-//         .concat(
-//             ...(data?.pages || []).map((d: any) => d.data?.listRecords)
-//         )
-//         .filter(Boolean);
-//     const listDocumentWithPager = (data?.pages || []).map((d: any) => d.data?.listRecords);
-
-//     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
-//     const totalPage = data?.pages[0]?.data?.totalPage || 0;
-//     const nextCursor = data?.pages && data?.pages[0]?.data?.nextCursor;
-
-//     return {
-//         isLoading,
-//         listDocument,
-//         listDocumentWithPager,
-//         totalRecord,
-//         totalPage,
-//         hasNextPage,
-//         nextCursor,
-//         refetchListDocument: refetch,
-//         fetchNextPageDocument: fetchNextPage,
-//         fetchPrevPageDocument: fetchPreviousPage,
-//         isFetching
-//     }
-// }
+    return {
+        listJournalByProperty,
+        listJournalByPropertyIsLoading,
+        refetchListJournalByProperty
+    }
+}
