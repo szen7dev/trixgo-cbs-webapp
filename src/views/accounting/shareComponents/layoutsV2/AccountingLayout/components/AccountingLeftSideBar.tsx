@@ -41,7 +41,7 @@ const LinkMenuLeftSideBar: FC = () => {
               <img width={'7px'} src={iconFolder} alt="Menu item" />
               <span className={"flex-1 ml-2 text-left text-[14px]"}>Chi tiết tài khoản</span>
             </NavLink>
-            {/* <NavLink to={`/accounting/tbook`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+            <NavLink to={`/accounting/tbook`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
               <img width={'7px'} src={iconFolder} alt="Menu item" />
               <span className={"flex-1 ml-2 text-left text-[14px]"}>Tổng hợp tài khoản chữ T</span>
             </NavLink>
@@ -68,7 +68,7 @@ const LinkMenuLeftSideBar: FC = () => {
             <NavLink to={`/accounting/support-tools`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
               <img width={'7px'} src={iconFolder} alt="Menu item" />
               <span className={"flex-1 ml-2 text-left text-[14px]"}>Công cụ hỗ trợ</span>
-            </NavLink> */}
+            </NavLink>
           <div >
             {
               !menuItems.includes(fundaID) ? <>

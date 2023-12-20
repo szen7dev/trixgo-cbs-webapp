@@ -84,7 +84,7 @@ export const AccountingDetailPage: FC = () => {
     params: {
         fromDate: inputFilter.fromDate,
         toDate: inputFilter.toDate,
-        limit: 50,
+        limit: 5,
         accountID,
         forward: 0,
         cancel: 0,
@@ -106,8 +106,8 @@ const { listJournalByProperty: dataS, listJournalByPropertyIsLoading, refetchLis
 // console.log(dataS)
 // console.log(listDataWithPager)
 // console.log({infoAccount})
-console.log({accountID})
-console.log({departmentsID})
+// console.log({accountID})
+// console.log({departmentsID})
 
 let soDuDauKy = 0, soDuCuoiKy = 0
 let phatSinhNo = 0, phatSinhCo = 0
@@ -153,7 +153,7 @@ const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: to
       <header className="h-[50px] w-full border border-primary-border flex items-center justify-between px-2">
         <p className="text-lg">{infoAccount?.name}-{infoAccount?.description}</p>
 
-          <DropdownSearchable
+          {/* <DropdownSearchable
             placeholder="Tìm kiếm"
             className="w-[322px] px-2 bg-cbs-table-header"
             classNameInput="h-[30px] bg-cbs-table-header"
@@ -172,9 +172,9 @@ const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: to
               (valueSearch) => setAccountKeyword(valueSearch),
               500
           )}
-          />
+          /> */}
 
-        {/* <DropdownSearchableV2
+        <DropdownSearchableV2
             ref={datahubRef}
             className={"mr-1 border border-primary-border rounded-lg mb-2"}
             placeholder={"Tài khoản"}
@@ -218,7 +218,7 @@ const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: to
                 <p className={"min-w-[300px]"}>{item.text}</p>
             )}
             selectOneByOne={true}
-        /> */}
+        />
 
         <div className="flex items-center">
           <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
@@ -246,7 +246,21 @@ const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: to
                 </div>
             }
           </div>
-          
+          <PaginateV2
+              ref={ref}
+              totalRecord={totalRecord}
+              totalPages={totalPage}
+              limit={5}
+              hasNextPage={hasNextPage}
+              isFetching={isLoading}
+              nextPageAction={() => {
+                fetchNextPage();
+                  setPageIndex(oldState => oldState+1)
+              }}
+              prevPageAction={() => {
+                  setPageIndex(oldState => oldState-1)
+              }}
+          />
         </div>
       </header>
 
