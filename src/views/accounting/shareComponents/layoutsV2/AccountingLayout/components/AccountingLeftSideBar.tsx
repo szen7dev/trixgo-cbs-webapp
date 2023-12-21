@@ -8,6 +8,7 @@ import iconFolder from "assets/images/bullet.svg";
 const LinkMenuLeftSideBar: FC = () => {
   const { user } = useAuth();
   const { fundaID } = useParams<any>();
+  
   const menuItems = [
     "home",
     "accbill",
@@ -27,7 +28,7 @@ const LinkMenuLeftSideBar: FC = () => {
         <div className="t-link-menu-container">
             <NavLink to={`/accounting/admin`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
               <img width={'7px'} src={iconFolder} alt="Menu item" />
-              <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản trị ứng dụng</span>
+              <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản trị ứng dụng (ok)</span>
             </NavLink>
             <NavLink to={`/accounting/home`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                 <img width={'7px'} src={iconFolder} alt="Menu item" />
@@ -39,7 +40,7 @@ const LinkMenuLeftSideBar: FC = () => {
             </NavLink> */}
             <NavLink to={`/accounting/detail`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
               <img width={'7px'} src={iconFolder} alt="Menu item" />
-              <span className={"flex-1 ml-2 text-left text-[14px]"}>Chi tiết tài khoản</span>
+              <span className={"flex-1 ml-2 text-left text-[14px]"}>Chi tiết tài khoản (ok)</span>
             </NavLink>
             <NavLink to={`/accounting/tbook`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
               <img width={'7px'} src={iconFolder} alt="Menu item" />
@@ -47,7 +48,7 @@ const LinkMenuLeftSideBar: FC = () => {
             </NavLink>
             <NavLink to={`/accounting/diary`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
               <img width={'7px'} src={iconFolder} alt="Menu item" />
-              <span className={"flex-1 ml-2 text-left text-[14px]"}>Sổ nhật ký chung</span>
+              <span className={"flex-1 ml-2 text-left text-[14px]"}>Sổ nhật ký chung (ok)</span>
             </NavLink>
             <NavLink to={`/accounting/import-export`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
               <img width={'7px'} src={iconFolder} alt="Menu item" />

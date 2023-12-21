@@ -6,27 +6,23 @@ import DotsVerticalIcon from "assets/icons/DotsVertical";
 import Close from "assets/icons/Close";
 import {debounce} from "lodash";
 import moment from "moment";
-import { VOUCHER_TYPES, LIMIT_DROPDOWN } from "apis/localdb/index";
 import { formatNumberMoney } from "utils/cmcs";
 import {
   FilterDateGroup
 } from "views/accounting/shareComponents/common";
-import {
-  useJournallList,
-  useJournalByProperty
-} from "services/hooks/accounting/useGeneralJournal";
-import API from "apis/repository";
 import { DropdownSearchableV2 } from "shareComponents/common";
-import {useProjectCustom} from "services/hooks/items/useProject";
 import {useDispatch} from "react-redux";
 import {setFilterDropdown} from "redux/reducer/DocumentProjectSlice";
 import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
 import {
 	useQueryListAccount,
 } from "services/hooks/cmcs/useContractIncome";
-
-import { DropdownSearchable, Paginate } from "shareComponents/common";
-
+import { VOUCHER_TYPES, LIMIT_DROPDOWN } from "apis/localdb/index";
+import API from "apis/repository";
+import {
+  useJournallList,
+  useJournalByProperty
+} from "services/hooks/accounting/useGeneralJournal";
 const ITEM_ACCOUNT = "/api/item/accounts";
 
 export const AccountingDetailPage: FC = () => {
@@ -90,18 +86,18 @@ export const AccountingDetailPage: FC = () => {
         cancel: 0,
     },
     isFetchList: true
-})
+  })
 
-const { listJournalByProperty: dataS, listJournalByPropertyIsLoading, refetchListJournalByProperty } = useJournalByProperty({
-  params: {
-      option: 3,
-      optionTerm: 1,
-      fromDate: inputFilter.fromDate,
-      toDate: inputFilter.toDate,
-      arrAccIDs: [accountID],
-  },
-  isFetchList: true
-})
+  const { listJournalByProperty: dataS, listJournalByPropertyIsLoading, refetchListJournalByProperty } = useJournalByProperty({
+    params: {
+        option: 3,
+        optionTerm: 1,
+        fromDate: inputFilter.fromDate,
+        toDate: inputFilter.toDate,
+        arrAccIDs: [accountID],
+    },
+    isFetchList: true
+  })
 
 // console.log(dataS)
 // console.log(listDataWithPager)
@@ -262,6 +258,7 @@ const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: to
               }}
           />
         </div>
+        
       </header>
 
       <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
