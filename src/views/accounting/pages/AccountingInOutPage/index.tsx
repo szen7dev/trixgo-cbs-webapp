@@ -130,26 +130,26 @@ const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: to
         
       </header>
 
-      <table className="table-fixed border-collapse w-full">
-        <thead className="">
+      <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
+        <thead className="bg-cbs-table-header h-10 border-b border-primary-border">
           <tr className="text-left text-sm text-primary-gray">
-            <th className="py-1 px-2 font-normal border-r border-primary-border">
-              Tài khoản
+            <th className="py-1 px-2 font-normal border-r border-primary-border" style={{width: "5%"}}>
+              TK
             </th>
-            <th className="py-1 px-2 font-normal border-r border-primary-border">
+            <th className="py-1 px-2 font-normal border-r border-primary-border w-1/6">
               Mô tả
             </th>
-            <th className="py-1 px-2 font-normal border-r border-primary-border">
-              TỒN ĐẦU KỲ
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
+              Tồn đầu kỳ
             </th>
-            <th className="py-1 px-2 font-normal border-r border-primary-border">
-              NHẬP
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
+              Nhập trong kỳ
             </th>
-            <th className="py-1 px-2 font-normal border-r border-primary-border">
-              XUẤT
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
+              Xuất trong kỳ
             </th>
-            <th className="py-1 px-2 font-normal border-r border-primary-border">
-              TỒN CUỐI KỲ
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
+              Tồn cuối kỳ
             </th>
           </tr>
         </thead>
@@ -161,8 +161,13 @@ const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: to
                 <td className="py-1 px-2 border-r border-primary-border">
                   {item.name}
                 </td>
+                <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
+                  <NavLink to={`/accounting/import-export/${item?._id}`}>
+                    {item?.description}
+                    </NavLink>
+                </td>
                 <td className="py-1 px-2 border-r border-primary-border">
-                  {item?.description}
+                 
                 </td>
                 <td className="py-1 px-2 border-r border-primary-border">
                  

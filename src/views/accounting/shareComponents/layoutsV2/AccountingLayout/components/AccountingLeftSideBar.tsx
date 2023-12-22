@@ -34,10 +34,10 @@ const LinkMenuLeftSideBar: FC = () => {
                 <img width={'7px'} src={iconFolder} alt="Menu item" />
                 <span className={"flex-1 ml-2 text-left text-[14px]"}>Trang chủ</span>
             </NavLink>
-            {/* <NavLink to={`/accounting/dashboard`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+            <NavLink to={`/accounting/dashboard`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                 <img width={'7px'} src={iconFolder} alt="Menu item" />
                 <span className={"flex-1 ml-2 text-left text-[14px]"}>Báo cáo quản trị</span>
-            </NavLink> */}
+            </NavLink>
             <NavLink to={`/accounting/detail`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
               <img width={'7px'} src={iconFolder} alt="Menu item" />
               <span className={"flex-1 ml-2 text-left text-[14px]"}>Chi tiết tài khoản (ok)</span>
@@ -52,7 +52,7 @@ const LinkMenuLeftSideBar: FC = () => {
             </NavLink>
             <NavLink to={`/accounting/import-export`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
               <img width={'7px'} src={iconFolder} alt="Menu item" />
-              <span className={"flex-1 ml-2 text-left text-[14px]"}>Nhập xuất tồn</span>
+              <span className={"flex-1 ml-2 text-left text-[14px]"}>Nhập xuất tồn (ok)</span>
             </NavLink>
             <NavLink to={`/accounting/debt-tracking`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
               <img width={'7px'} src={iconFolder} alt="Menu item" />

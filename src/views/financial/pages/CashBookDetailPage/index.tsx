@@ -220,7 +220,7 @@ export const CashBookDetailPage: FC = () => {
 
   // Danh sách tài khoản
   const {
-    list: listAccount,
+    listData: listAccount,
     hasNextPage: hasNextPageListAccount,
     fetchNextPage: fetchNextPageListAccount
   } = useAccount({
@@ -233,7 +233,7 @@ export const CashBookDetailPage: FC = () => {
 
   // Danh sách tài khoản (searching)
   const {
-    list: listAccountSearch,
+    listData: listAccountSearch,
     hasNextPage: hasNextPageListAccountSearch,
     fetchNextPage: fetchNextPageListAccountSearch
   } = useAccount({

@@ -11,8 +11,8 @@ interface useAccount {
     totalRecord: number;
     totalPage: number;
     hasNextPage: boolean | undefined;
-    listData: Array<[]>;
-    listDataWithPager: Array<[]>;
+    listData: Array<Account.Account>;
+    listDataWithPager: Array<Account.Account>;
     nextCursor?: string | null;
     info: Account.Account | undefined;
     refetch: () => void;

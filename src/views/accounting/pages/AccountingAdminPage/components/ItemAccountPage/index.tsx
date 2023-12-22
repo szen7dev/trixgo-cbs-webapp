@@ -39,7 +39,7 @@ export const ItemAccountPage: FC = () => {
 
     const {
         deleteAsync,
-        list: listAccounts,
+        listData: listAccounts,
         hasNextPage,
         refetch,
         fetchNextPage,

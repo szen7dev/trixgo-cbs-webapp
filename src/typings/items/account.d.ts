@@ -3,8 +3,9 @@ import type { QueryParam, APIResponse } from './commons';
 export interface Account {
     _id: string;
     name: string;
-    modifyAt: string,
+    modifyAt: string;
     description: string | null;
+    map?: any;
 }
 
 export type AccountQueryPayload = QueryParam & {

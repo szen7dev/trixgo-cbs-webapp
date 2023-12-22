@@ -152,6 +152,11 @@ const AccountingRouter: FC = () => {
       />
       <ProtectedRoute
         exact
+        path="/accounting/import-export/:accountID"
+        component={AccountingInOutPage}
+      />
+      <ProtectedRoute
+        exact
         path="/accounting/debt-tracking"
         component={AccountingDebtPage}
       />
