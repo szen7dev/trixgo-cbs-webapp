@@ -264,7 +264,6 @@ export const useQueryListAccount = ({ limit, keyword }: any): any => {
     const res = useInfiniteQuery(
         [`list_account,${keyword}`, keyword],
         async ({ pageParam }: any) =>
-            // mai request BE check lại api này
             HumanRepository.fetchListAccount({
                 limit: limit || 10,
                 lastestID: pageParam || "",
@@ -291,12 +290,14 @@ export const useQueryListAccount = ({ limit, keyword }: any): any => {
             ...(data?.pages || []).map((d: any) => d.data?.listRecords)
         )
         .filter(Boolean);
-    const totalRecord = data?.pages[0]?.data?.totalRecord;
-    const totalPages = data?.pages[0]?.data?.totalPages;
+    const listAccountWithPager = (data?.pages || []).map((d: any) => d.data?.listRecords);
+    const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
+    const totalPages = data?.pages[0]?.data?.totalPages || 0;
 
     return {
         loading: isLoading,
         listAccount,
+        listAccountWithPager,
         totalRecord,
         totalPages,
         hasNextPage,

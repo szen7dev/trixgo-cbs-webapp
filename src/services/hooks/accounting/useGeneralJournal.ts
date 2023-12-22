@@ -60,7 +60,7 @@ export interface UseQueryListData {
     totalRecord: number;
     totalPage: number;
     hasNextPage?: boolean;
-    nextCursor?: string | null,
+    nextCursor?: string | null;
     listData: Array<[]>;
     listDataWithPager: Array<DocumentProps[]>;
     refetch: () => void;
@@ -99,8 +99,9 @@ export const useJournallList = ({ params = {},  isFetchList = false }: any): Use
         .concat(
             ...(data?.pages || []).map((d: any) => d.data?.listRecords)
         )
-        .filter(Boolean);
-    const listDataWithPager = (data?.pages || []).map((d: any) => d.data?.listRecords);
+        .filter(Boolean)
+
+    const listDataWithPager = (data?.pages || []).map((d: any) => d.data?.listRecords)
 
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPage = data?.pages[0]?.data?.totalPage || 0;

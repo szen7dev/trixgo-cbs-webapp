@@ -19,6 +19,7 @@ export type AccountQueryResponse = APIResponse & {
         listRecords: Account[];
         limit: number;
         totalRecord: number;
+        totalPage: number;
         totalPages: number;
         nextCursor: string | null;
     }

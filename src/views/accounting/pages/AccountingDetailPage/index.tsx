@@ -105,6 +105,10 @@ export const AccountingDetailPage: FC = () => {
 // console.log({accountID})
 // console.log({departmentsID})
 
+console.log(listDataWithPager)
+console.log({totalRecord})
+console.log({totalPage})
+
 let soDuDauKy = 0, soDuCuoiKy = 0
 let phatSinhNo = 0, phatSinhCo = 0
 
