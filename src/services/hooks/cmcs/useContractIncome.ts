@@ -295,7 +295,7 @@ export const useQueryListAccount = ({ limit, keyword }: any): any => {
     const totalPages = data?.pages[0]?.data?.totalPages || 0;
 
     return {
-        loading: isLoading,
+        isLoading,
         listAccount,
         listAccountWithPager,
         totalRecord,

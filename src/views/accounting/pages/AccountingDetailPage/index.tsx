@@ -1,16 +1,16 @@
 import React, { FC, useCallback, useState, useEffect } from "react";
-import { NavLink, useParams } from "react-router-dom"
+import { useHistory, NavLink, useLocation } from "react-router-dom"
 import cn from "classnames";
 import styles from 'views/accounting/styles/styles.module.css';
 import DotsVerticalIcon from "assets/icons/DotsVertical";
 import Close from "assets/icons/Close";
-import {debounce} from "lodash";
+import { debounce } from "lodash";
 import moment from "moment";
 import { formatNumberMoney } from "utils/cmcs";
 import {
   FilterDateGroup
 } from "views/accounting/shareComponents/common";
-import { DropdownSearchableV2 } from "shareComponents/common";
+import { DropdownSearchableV2, Loader } from "shareComponents/common";
 import {useDispatch} from "react-redux";
 import {setFilterDropdown} from "redux/reducer/DocumentProjectSlice";
 import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
@@ -23,130 +23,129 @@ import {
   useJournallList,
   useJournalByProperty
 } from "services/hooks/accounting/useGeneralJournal";
+import { toast } from "react-toastify";
 const ITEM_ACCOUNT = "/api/item/accounts";
 
 export const AccountingDetailPage: FC = () => {
   const [showOption, setShowOption] = useState(false)
   const [pageIndex, setPageIndex] = useState(0)
   const dispatch = useDispatch();
+  const history = useHistory();
+  const location = useLocation()
+
+  const searchParams = new URLSearchParams(location.search)
+  const accountIdParams = searchParams.get("accountId")
 
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
   const ref = React.useRef<PaginateHandle>(null);
   const datahubRef = React.useRef<DropdownHandle>(null);
   const [departmentsID, setDepartmentsID] = useState<string[]>([]);
-  const [accountKeyword, setAccountKeyword] = useState("");
-  const [inputFilter, setInputFilter] = useState({ keyword: '', fromDate: new Date(new Date().getFullYear(), 0, 1), toDate: new Date(new Date().getFullYear(), 11, 31) });
 
-  const params: any = useParams()
-  let accountID : any
-  
-  if(params?.accountID){
-    accountID = params?.accountID
-  }else{
-    accountID = "64c0ca9af8a43a0011a3435d" //**************** */
-  }
+  const [accountId, setAccountId] = useState<string | null>(accountIdParams);
+  const [accountKeyword, setAccountKeyword] = useState("");
+
+  const [inputFilter, setInputFilter] = useState({
+    keyword: '',
+    fromDate: new Date(new Date().getFullYear(), 0, 1),
+    toDate: new Date(new Date().getFullYear(), 11, 31)
+  });
 
   const [infoAccount, setInfoAccount] = useState({} as any);
 
-	const [searchAccount, setSearchAccount] = useState();
-
-  const { listAccount } = useQueryListAccount({
+  const { listAccount, isLoading: isLoadingListAccount } = useQueryListAccount({
 		limit: LIMIT_DROPDOWN,
-		keyword: searchAccount,
+		keyword: accountKeyword,
 	})
 
-  useEffect(() => {
-    const fetchDetailAccount = async (accountID: any) => {
-      const { data } = await API.get(
-        `${ITEM_ACCOUNT}?accountID=${accountID}`, {
-        params: {
-          // populates: {
-          //   "path": "customer contract ipc subtype userCreate userUpdate company",
-          //   "select": "name description bizfullname",
-          // }
-        }
-      }
-      )
-      setInfoAccount(data?.data || {})
-      return data
-    }
-    params.accountID && fetchDetailAccount(params.accountID)
-  }, [params.accountID]);
-
-  // accountID = departmentsID
-
-  const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch, isFetching } = useJournallList({
+  const { listDataWithPager, isLoading: isLoadingJournallList, totalRecord, totalPage, fetchNextPage, hasNextPage } = useJournallList({
     params: {
         fromDate: inputFilter.fromDate,
         toDate: inputFilter.toDate,
         limit: 5,
-        accountID,
+        accountID: accountId,
         forward: 0,
         cancel: 0,
     },
     isFetchList: true
   })
 
-  const { listJournalByProperty: dataS, listJournalByPropertyIsLoading, refetchListJournalByProperty } = useJournalByProperty({
+  const { listJournalByProperty: dataS } = useJournalByProperty({
     params: {
         option: 3,
         optionTerm: 1,
         fromDate: inputFilter.fromDate,
         toDate: inputFilter.toDate,
-        arrAccIDs: [accountID],
+        arrAccIDs: [accountId],
     },
     isFetchList: true
   })
 
-// console.log(dataS)
-// console.log(listDataWithPager)
-// console.log({infoAccount})
-// console.log({accountID})
-// console.log({departmentsID})
+  let soDuDauKy = 0, soDuCuoiKy = 0
+  let phatSinhNo = 0, phatSinhCo = 0
 
-// console.log(listDataWithPager)
-// console.log({totalRecord})
-// console.log({totalPage})
-
-let soDuDauKy = 0, soDuCuoiKy = 0
-let phatSinhNo = 0, phatSinhCo = 0
-
-if(dataS?.debitO.length){
-  soDuDauKy = Number(soDuDauKy) + Number(dataS.debitO[0].amount)
-}
-if(dataS?.creditO.length){
-  soDuDauKy = Number(soDuDauKy) - Number(dataS.creditO[0].amount)
-}
-if(dataS?.debitOF.length){
-  soDuDauKy = Number(soDuDauKy) + Number(dataS.debitOF[0].amount)
-}
-if(dataS?.creditOF.length){
-  soDuDauKy = Number(soDuDauKy) - Number(dataS.creditOF[0].amount)
-}
-
-if(dataS?.debitFT.length){
-  phatSinhNo = Number(dataS.debitFT[0].amount)
-}
-if(dataS?.creditFT.length){
-  phatSinhCo = Number(dataS.creditFT[0].amount)
-}
-
-let balance = soDuDauKy
-soDuCuoiKy = Number(soDuDauKy) + Number(phatSinhNo) - Number(phatSinhCo)
-
-// console.log('================')
-// console.log(inputFilter.fromDate)
-// console.log(inputFilter.toDate)
-
-const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: toDate
-  if (input) {
-    setInputFilter(() => ({ ...inputFilter, toDate: date }))
-  } else {
-    setInputFilter(() => ({ ...inputFilter, fromDate: date }))
+  if(dataS?.debitO?.length){
+    soDuDauKy = Number(soDuDauKy) + Number(dataS.debitO[0].amount)
+  }
+  if(dataS?.creditO?.length){
+    soDuDauKy = Number(soDuDauKy) - Number(dataS.creditO[0].amount)
+  }
+  if(dataS?.debitOF?.length){
+    soDuDauKy = Number(soDuDauKy) + Number(dataS.debitOF[0].amount)
+  }
+  if(dataS?.creditOF?.length){
+    soDuDauKy = Number(soDuDauKy) - Number(dataS.creditOF[0].amount)
   }
 
-}, [])
+  if(dataS?.debitFT?.length){
+    phatSinhNo = Number(dataS.debitFT[0].amount)
+  }
+  if(dataS?.creditFT?.length){
+    phatSinhCo = Number(dataS.creditFT[0].amount)
+  }
+
+  let balance = soDuDauKy
+  soDuCuoiKy = Number(soDuDauKy) + Number(phatSinhNo) - Number(phatSinhCo)
+
+  const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: toDate
+    if (input) {
+      setInputFilter(() => ({ ...inputFilter, toDate: date }))
+    } else {
+      setInputFilter(() => ({ ...inputFilter, fromDate: date }))
+    }
+  }, [])
+
+  useEffect(() => {
+    if(isLoadingListAccount || accountId || !listAccount?.length) return
+
+    const accId = listAccount[0]._id
+
+    setAccountId(accId)
+    history.push({ search: `?accountId=${accId}` })
+  }, [isLoadingListAccount, accountId])
+
+  useEffect(() => {
+    if(!accountId) return
+
+    const fetchDetailAccount = async (accountId: string) => {
+      const response = await API.get(
+        `${ITEM_ACCOUNT}?accountID=${accountId}`
+      )
+      const { data, error } = response.data
+
+      if(!data || error) {
+        return toast.error("Error fetching account detail")
+      }
+
+      setInfoAccount(data)
+    }
+
+    fetchDetailAccount(accountId)
+  }, [accountId]);
+
+  if(!accountId || isLoadingJournallList || isLoadingListAccount) {
+    return <Loader className="border-primary" />
+  }
 
   return (
     <main className="h-full">
@@ -190,30 +189,30 @@ const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: to
                 500
             )}
             onchangeValue={item => {
-                const cloneIDs = [...departmentsID];
-                cloneIDs.push(item._id);
-                setDepartmentsID(cloneIDs);
-                dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: cloneIDs}))
+                const cloneIDs = [...departmentsID, item._id];
+
+                history.push({ search: `?accountId=${item._id}` })
+                setAccountId(item._id);
+                dispatch(setFilterDropdown({ keyFilter: "departmentsID", dataFilter: cloneIDs }));
 
                 setPageIndex(0);
                 ref.current&&ref.current.resetPaginate();
             }}
-            onClearData={() => {
-                setDepartmentsID([]);
-                dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: []}))
+            // onClearData={() => {
+            //     setAccountId("")
+            //     dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: []}))
 
-                setPageIndex(0);
-                ref.current&&ref.current.resetPaginate();
-            }}
-            onMultipleRemoveValue={id => {
-                const cloneIDs = [...departmentsID];
-                const newList = cloneIDs.filter(selectId => selectId !== id);
-                setDepartmentsID(newList);
-                dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: newList}))
+            //     setPageIndex(0);
+            //     ref.current&&ref.current.resetPaginate();
+            // }}
+            // onMultipleRemoveValue={id => {
+            //     const cloneIDs = [...departmentsID];
+            //     const newList = cloneIDs.filter(selectId => selectId !== id);
+            //     dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: newList}))
 
-                setPageIndex(0);
-                ref.current&&ref.current.resetPaginate();
-            }}
+            //     setPageIndex(0);
+            //     ref.current&&ref.current.resetPaginate();
+            // }}
             renderItem={(item) => (
                 <p className={"min-w-[300px]"}>{item.text}</p>
             )}
@@ -223,7 +222,7 @@ const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: to
         <div className="flex items-center">
           <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
           <div className={"relative z-5 inline-block"}>
-            <button onClick={() => setShowOption(!showOption)} 
+            <button onClick={() => setShowOption(!showOption)}
               className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg"}
               >
                 <DotsVerticalIcon/>
@@ -252,7 +251,7 @@ const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: to
               totalPages={totalPage}
               limit={5}
               hasNextPage={hasNextPage}
-              isFetching={isLoading}
+              isFetching={isLoadingJournallList}
               nextPageAction={() => {
                 fetchNextPage();
                   setPageIndex(oldState => oldState+1)
@@ -262,7 +261,7 @@ const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: to
               }}
           />
         </div>
-        
+
       </header>
 
       <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
@@ -371,8 +370,8 @@ const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: to
                 // console.log(infoAccount?.nestedChilds)
                 // console.log('==================')
 
-                if(item?.debit && (infoAccount?.nestedChilds?.includes(item?.debit?._id) || accountID.toString() === item?.debit?._id.toString())){
-                  
+                if(item?.debit && (infoAccount?.nestedChilds?.includes(item?.debit?._id) || accountId.toString() === item?.debit?._id.toString())){
+
                   balance = Number(balance) + Number(item.amount)
 
                   return (
@@ -401,13 +400,13 @@ const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: to
                         {formatNumberMoney(item?.amount)}
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border text-right">
-                        
+
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border text-right">
                         {formatNumberMoney(balance)}
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
-                      
+
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
                         {item?.note}
@@ -440,7 +439,7 @@ const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: to
                         {item?.debit?.name}-{item?.debit?.description}
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border text-right">
-                        
+
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border text-right">
                         {formatNumberMoney(item?.amount)}
@@ -449,7 +448,7 @@ const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: to
                         {formatNumberMoney(balance)}
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border text-right">
-                      
+
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
                         {item?.note}

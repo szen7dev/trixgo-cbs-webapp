@@ -132,7 +132,7 @@ const AccountingRouter: FC = () => {
       />
       <ProtectedRoute
         exact
-        path="/accounting/detail/:accountID?"
+        path="/accounting/detail"
         component={AccountingDetailPage}
       />
       <ProtectedRoute
