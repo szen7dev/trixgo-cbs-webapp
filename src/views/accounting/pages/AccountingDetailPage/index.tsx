@@ -12,7 +12,7 @@ import {
 } from "views/accounting/shareComponents/common";
 import { DropdownSearchableV2, Loader } from "shareComponents/common";
 import {useDispatch} from "react-redux";
-import {setFilterDropdown} from "redux/reducer/DocumentProjectSlice";
+// import {setFilterDropdown} from "redux/reducer/DocumentProjectSlice";
 import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
 import {
 	useQueryListAccount,
@@ -29,7 +29,7 @@ const ITEM_ACCOUNT = "/api/item/accounts";
 export const AccountingDetailPage: FC = () => {
   const [showOption, setShowOption] = useState(false)
   const [pageIndex, setPageIndex] = useState(0)
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation()
 
@@ -40,7 +40,7 @@ export const AccountingDetailPage: FC = () => {
   type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
   const ref = React.useRef<PaginateHandle>(null);
   const datahubRef = React.useRef<DropdownHandle>(null);
-  const [departmentsID, setDepartmentsID] = useState<string[]>([]);
+  // const [departmentsID, setDepartmentsID] = useState<string[]>([]);
 
   const [accountId, setAccountId] = useState<string | null>(accountIdParams);
   const [accountKeyword, setAccountKeyword] = useState("");
@@ -151,28 +151,6 @@ export const AccountingDetailPage: FC = () => {
     <main className="h-full">
       <header className="h-[50px] w-full border border-primary-border flex items-center justify-between px-2">
         <p className="text-lg">{infoAccount?.name}-{infoAccount?.description}</p>
-
-          {/* <DropdownSearchable
-            placeholder="Tìm kiếm"
-            className="w-[322px] px-2 bg-cbs-table-header"
-            classNameInput="h-[30px] bg-cbs-table-header"
-            isMultiple={false}
-            allowClearValueSingleInput={false}
-            showTriangle={true}
-            maxWidthInput="max-w-none"
-            renderSelectedItem={(item) => <span>{item.text}</span>}
-            classNameItem="p-0"
-            data={listAccount}
-            formatItem={{
-              id: "_id",
-              text: "name",
-            }}
-            onSearchInputChange={debounce(
-              (valueSearch) => setAccountKeyword(valueSearch),
-              500
-          )}
-          /> */}
-
         <DropdownSearchableV2
             ref={datahubRef}
             className={"mr-1 border border-primary-border rounded-lg mb-2"}
@@ -182,39 +160,26 @@ export const AccountingDetailPage: FC = () => {
             data={listAccount}
             formatItem={{
                 id: "_id",
-                text: "name"
+                text: "name",
+                description: "description",
             }}
             onSearchInputChange={debounce(
                 (valueSearch) => setAccountKeyword(valueSearch),
                 500
             )}
             onchangeValue={item => {
-                const cloneIDs = [...departmentsID, item._id];
+                // const cloneIDs = [...departmentsID, item._id];
 
                 history.push({ search: `?accountId=${item._id}` })
                 setAccountId(item._id);
-                dispatch(setFilterDropdown({ keyFilter: "departmentsID", dataFilter: cloneIDs }));
+
+                // dispatch(setFilterDropdown({ keyFilter: "departmentsID", dataFilter: cloneIDs }));
 
                 setPageIndex(0);
                 ref.current&&ref.current.resetPaginate();
             }}
-            // onClearData={() => {
-            //     setAccountId("")
-            //     dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: []}))
-
-            //     setPageIndex(0);
-            //     ref.current&&ref.current.resetPaginate();
-            // }}
-            // onMultipleRemoveValue={id => {
-            //     const cloneIDs = [...departmentsID];
-            //     const newList = cloneIDs.filter(selectId => selectId !== id);
-            //     dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: newList}))
-
-            //     setPageIndex(0);
-            //     ref.current&&ref.current.resetPaginate();
-            // }}
             renderItem={(item) => (
-                <p className={"min-w-[300px]"}>{item.text}</p>
+                <p className={"min-w-[300px]"}>{item.text}-{item.description}</p>
             )}
             selectOneByOne={true}
         />

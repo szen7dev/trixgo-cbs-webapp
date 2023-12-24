@@ -56,5 +56,5 @@ export const {
     setFilterDropdown,
     setKeyword,
     resetAllFilterAndKeyword
-} = documentProjectSlice.actions;
-export default documentProjectSlice.reducer;
+} = documentProjectSlice.actions
+export default documentProjectSlice.reducer
