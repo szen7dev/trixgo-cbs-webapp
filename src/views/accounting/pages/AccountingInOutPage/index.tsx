@@ -50,15 +50,24 @@ export const AccountingInOutPage: FC = () => {
     isFetchList: true
   })
 
-  // const { listJournalByProperty: dataS, listJournalByPropertyIsLoading, refetchListJournalByProperty } = useJournalByProperty({
-  //   params: {
-  //       option: 3,
-  //       optionTerm: 1,
-  //       fromDate: inputFilter.fromDate,
-  //       toDate: inputFilter.toDate,
-  //       // arrAccIDs: [accountID],
-  //   },
-  //   isFetchList: true
+  const { listJournalByProperty: dataAll, listJournalByPropertyIsLoading, refetchListJournalByProperty } = useJournalByProperty({
+    params: {
+        option: 4,
+        optionTerm: 1,
+        fromDate: inputFilter.fromDate,
+        toDate: inputFilter.toDate,
+    },
+    isFetchList: true
+  })
+
+  // let arrDebitO = Array<[]>, arrCreditO = Array<[]>, arrDebitOF = Array<[]>, arrCreditOF = Array<[]>, arrDebitFT = Array<[]>, arrCreditFT = Array<[]>
+
+  // dataAll.debitO.forEach((element: any) =>{
+  //     let key = element._id.account;
+  //     if (!Array.isArray(arrDebitO[key])) {
+  //         arrDebitO[key] = [];
+  //     }
+  //     arrDebitO[key].push(element)
   // })
 
 // console.log(listAccountWithPager)
