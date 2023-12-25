@@ -1,9 +1,8 @@
 import { FC } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import cn from "classnames";
 import styles from 'views/accounting/styles/styles.module.css';
-import moment from "moment";
+import cn from "classnames";
 
 type Props = {
   fromDate: any
@@ -28,7 +27,7 @@ export const FilterDateGroup: FC<Props> = ({ fromDate, endDate, onChangeDate }) 
             <input
               type="text"
               placeholder="Từ ngày"
-              className="h-[38px] px-2 border border-primary-border rounded"
+              className="h-[32px] px-2 border border-primary-border rounded"
             />
           }
         />
@@ -48,7 +47,7 @@ export const FilterDateGroup: FC<Props> = ({ fromDate, endDate, onChangeDate }) 
             <input
               type="text"
               placeholder="Đến ngày"
-              className="h-[38px] px-2 border border-primary-border rounded"
+              className="h-[32px] px-2 border border-primary-border rounded"
             />
           }
         />

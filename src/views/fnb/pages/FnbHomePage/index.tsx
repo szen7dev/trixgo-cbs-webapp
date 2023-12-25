@@ -1408,8 +1408,8 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
         initialData={defaultState}
       />
     </div>
-  );
-};
+  )
+}
 
 export const subContentHtml = (html?: string) => {
   const removeHtmlTag = parse(
@@ -1421,7 +1421,7 @@ export const subContentHtml = (html?: string) => {
       ? `${removeHtmlTag.slice(0, 150)}...`
       : removeHtmlTag;
   return result;
-};
+}
 
 export const showTime = (time: any) => {
   const toDay = new Date();
@@ -1434,4 +1434,4 @@ export const showTime = (time: any) => {
   } else {
     return moment(time).format("DD/MM/YYYY");
   }
-};
+}

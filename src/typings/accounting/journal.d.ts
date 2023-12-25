@@ -28,6 +28,14 @@ export interface DocumentProps extends Omit<DocumentInserPayload, 'parentID' | '
         name: string;
     }
     amount: number;
+    contract?: {
+        _id: string;
+        name: string;
+    }
+    goods?: {
+        _id: string;
+        name: string;
+    }
 }
 
 interface DocumentInserPayload {

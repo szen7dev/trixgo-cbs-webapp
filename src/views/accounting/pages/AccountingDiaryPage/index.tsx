@@ -1,96 +1,114 @@
-import { FC, useCallback } from "react";
-
+import React, { FC, useCallback, useState, useEffect } from "react";
+import { NavLink, useParams } from "react-router-dom"
 import cn from "classnames";
-
-import { DropdownSearchable } from "shareComponents/common";
-import { DropdownFilterButton } from "views/accounting/shareComponents/common";
-import { Paginate } from "shareComponents/common";
-
-import ThreeDotsVertical from "assets/images/icon-3dots-vertical-gray.svg";
-import PolygonIcon from "assets/images/icon-polygon.svg";
-import { Test } from './components';
 import styles from 'views/accounting/styles/styles.module.css';
+import DotsVerticalIcon from "assets/icons/DotsVertical";
+import Close from "assets/icons/Close";
+import {debounce} from "lodash";
+import moment from "moment";
+import { formatNumberMoney } from "utils/cmcs";
+import {
+  FilterDateGroup
+} from "views/accounting/shareComponents/common";
+import { DropdownSearchableV2 } from "shareComponents/common";
+import {useDispatch} from "react-redux";
+import {setFilterDropdown} from "redux/reducer/DocumentProjectSlice";
+import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
+import {
+	useQueryListAccount,
+} from "services/hooks/cmcs/useContractIncome";
+import { VOUCHER_TYPES, LIMIT_DROPDOWN } from "apis/localdb/index";
+import API from "apis/repository";
+import {
+  useJournallList,
+  useJournalByProperty
+} from "services/hooks/accounting/useGeneralJournal";
+const ITEM_ACCOUNT = "/api/item/accounts";
 
 export const AccountingDiaryPage: FC = () => {
-  const handleOnFilter = useCallback((values) => {
+  const [showOption, setShowOption] = useState(false)
+  const [pageIndex, setPageIndex] = useState(0)
+  const dispatch = useDispatch();
 
-    // setPageParam(() => ({ ...values }));
-    return true;
-  }, []);
+  type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+  const ref = React.useRef<PaginateHandle>(null);
 
-  const handleOnCancelFilter = useCallback(() => {
-    // setPageParam({});
-  }, []);
+  const [inputFilter, setInputFilter] = useState({ keyword: '', fromDate: new Date(new Date().getFullYear(), 0, 1), toDate: new Date(new Date().getFullYear(), 11, 31) });
+
+  const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch, isFetching } = useJournallList({
+    params: {
+        fromDate: inputFilter.fromDate,
+        toDate: inputFilter.toDate,
+        limit: 10,
+        // accountID,
+        forward: 0,
+        cancel: 0,
+    },
+    isFetchList: true
+  })
+
+  const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: toDate
+    if (input) {
+      setInputFilter(() => ({ ...inputFilter, toDate: date }))
+    } else {
+      setInputFilter(() => ({ ...inputFilter, fromDate: date }))
+    }
+  
+  }, [])  
+
   return (
     <main className="h-full">
       <header className="h-[50px] w-full border border-primary-border flex items-center justify-between px-6">
         <p className="text-lg">Sổ nhật ký chung</p>
 
         <div className="flex items-center">
-          <p className="text-primary mr-3">From 1/1/2021 - To 31/12/202</p>
+          <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
+          <div className={"relative z-5 inline-block"}>
+            <button onClick={() => setShowOption(!showOption)} 
+              className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg"}
+              >
+                <DotsVerticalIcon/>
+            </button>
+            {
+                showOption &&
+                <div className={"absolute right-0 z-20 bg-white w-[335px] shadow-lg rounded-md text-primary-gray"}>
+                    <div className={"flex items-center mx-4 py-2 border-b-0.5 border-primary-border"}>
+                        <div className={"flex-1"}>Chức năng khác</div>
+                        <button onClick={() => setShowOption(false)}>
+                            <Close/>
+                        </button>
+                    </div>
 
-          <DropdownSearchable
-            placeholder="Tìm kiếm"
-            className="w-[322px] px-2 bg-cbs-table-header"
-            classNameInput="h-[30px] bg-cbs-table-header"
-            isMultiple={false}
-            allowClearValueSingleInput={false}
-            showTriangle={true}
-            maxWidthInput="max-w-none"
-            renderSelectedItem={(item) => <span>{item.text}</span>}
-            classNameItem="p-0"
-            data={[
-              {
-                _id: 1,
-                content: "131-Phải thu của khách hàng",
-              },
-              {
-                _id: 2,
-                content: "131-Phải thu của khách hàng",
-              },
-              {
-                _id: 3,
-                content: "131-Phải thu của khách hàng",
-              },
-            ]}
-            formatItem={{
-              id: "_id",
-              text: "content",
-            }}
-            inlineSearch={true}
-          />
-          <DropdownFilterButton
-            onSubmit={handleOnFilter}
-            onCancel={handleOnCancelFilter}
-            initialValues={{}}
-          />
-          <div className="w-10 h-10 ml-3 bg-cbs-gray rounded-full flex items-center justify-center cursor-pointer hover:bg-accent-light">
-            <img src={ThreeDotsVertical} alt="Three Dot" />
+                    <div className={"mb-4"}>
+                        <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}>
+                            Tải excel
+                        </button>
+                    </div>
+                </div>
+            }
           </div>
+          <PaginateV2
+              ref={ref}
+              totalRecord={totalRecord}
+              totalPages={totalPage}
+              limit={10}
+              hasNextPage={hasNextPage}
+              isFetching={isLoading}
+              nextPageAction={() => {
+                fetchNextPage();
+                  setPageIndex(oldState => oldState+1)
+              }}
+              prevPageAction={() => {
+                  setPageIndex(oldState => oldState-1)
+              }}
+          />
         </div>
       </header>
 
       <section className="mt-4">
-        <table className="table-auto w-full text-left">
+      <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
           <thead className="h-10 bg-cbs-table-header border border-primary-border text-primary-gray">
             <tr>
-              <th
-                className={cn(
-                  "text-center border-r border-primary-border",
-                  styles.theadInput
-                )}
-              >
-                <div className="flex items-center justify-center">
-                  <input
-                    className="form-check-input mr-2"
-                    type="checkbox"
-                    value=""
-                    id="flexCheckDefault"
-                    defaultChecked
-                  />
-                  <img src={PolygonIcon} alt="Polygon" />
-                </div>
-              </th>
               <th
                 className={cn(
                   "border-r border-primary-border px-2 font-normal",
@@ -129,10 +147,10 @@ export const AccountingDiaryPage: FC = () => {
               <th className="w-1/12 border-r border-primary-border px-2 font-normal">
                 Tài khoản đối ứng
               </th>
-              <th className="w-1/12 border-r border-primary-border px-2 font-normal">
+              <th className="border-r border-primary-border px-2 font-normal">
                 Số tiền nợ
               </th>
-              <th className="w-1/12 border-r border-primary-border px-2 font-normal">
+              <th className="border-r border-primary-border px-2 font-normal">
                 Số tiền có
               </th>
               <th
@@ -151,19 +169,19 @@ export const AccountingDiaryPage: FC = () => {
               >
                 Sản phẩm
               </th>
+              <th className="border-r border-primary-border px-2 font-normal">
+                Ghi chú
+              </th>
             </tr>
           </thead>
 
           <tbody>
-            <tr
+            {/* <tr
               className={cn(
                 "border-b border-primary-border h-11",
                 styles.bgFooterYellow
               )}
             >
-              <td className="py-1 px-2 text-center border-r border-primary-border">
-                {""}
-              </td>
               <td className="px-2 py-1 border-r border-primary-border">{""}</td>
               <td className="px-2 py-1 border-r border-primary-border">{""}</td>
               <td className="px-2 py-1 font-bold border-r border-primary-border">
@@ -180,54 +198,105 @@ export const AccountingDiaryPage: FC = () => {
               </td>
               <td className="px-2 py-1 border-r border-primary-border">{""}</td>
               <td className="px-2 py-1 border-r border-primary-border">{""}</td>
-            </tr>
+            </tr> */}
 
-            <tr className="border-b border-primary-border h-11">
-              <td className="py-1 px-2 text-center border-r border-primary-border">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="flexCheckDefault"
-                  style={{ marginLeft: "-21px" }}
-                />
-              </td>
-              <td className="px-2 py-1 border-r border-primary-border">
-                5/11/2021
-              </td>
-              <td className="px-2 py-1 border-r border-primary-border">
-                Giấy báo nợ
-              </td>
-              <td className="text-primary px-2 py-1 border-r border-primary-border">
-                Chi phí xăng xe phục vụ việc đi lại của nhóm dự án CHG
-              </td>
-              <td className="px-2 py-1 border-r border-primary-border">
-                PGI.PKT13
-              </td>
-              <td className="px-2 py-1 border-r border-primary-border">
-                Công ty xăng dầu số 2 Vạn Phúc
-              </td>
-              <td className="px-2 py-1 border-r border-primary-border">
-                641-Chi phí
-              </td>
-              <td className="px-2 py-1 border-r border-primary-border">
-                10.000.000
-              </td>
-              <td className="px-2 py-1 border-r border-primary-border">{""}</td>
-              <td className="px-2 py-1 border-r border-primary-border">
-                Mua bán xăng xe định kỳ cho hoạt động
-              </td>
-              <td className="px-2 py-1 border-r border-primary-border">
-                Than hoạt tính K58
-              </td>
-            </tr>
+            {
+              (listDataWithPager[pageIndex] ?? []).map((item, index) => {
+                // console.log(item)
 
-            <Test />
+                if(item?.debit){
+                  // console.log('111111111111111111111111111111')
+                  // console.log(item)
+                  return (
+                    <tr key={index} className="border-b border-primary-border h-10">
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {moment(item?.voucher?.date).format('DD/MM/YYYY')}
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {(item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].text : ''}
+                      </td>
+                      <td className="py-1 px-2 text-primary border-r border-primary-border">
+                        <NavLink to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/${item?.voucher?._id}`}>
+                          {item?.voucher?.name}
+                        </NavLink>
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {item?.voucher?.sign}
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {item?.customerDebit?.name}
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {item?.debit?.name}-{item?.debit?.description}
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border text-right">
+                        {formatNumberMoney(item?.amount)}
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {item?.contract?.name}
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {item?.goods?.name}
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {item?.note}
+                      </td>
+                    </tr>
+                  )
+                }     
+                
+                if(item?.credit){
+                  // console.log('22222222222222222222222222')
+                  // console.log(item)
+                  return (
+                    <tr key={index} className="border-b border-primary-border h-10">
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {moment(item?.voucher?.date).format('DD/MM/YYYY')}
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {(item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].text : ''}
+                      </td>
+                      <td className="py-1 px-2 text-primary border-r border-primary-border">
+                        <NavLink to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/${item?.voucher?._id}`}>
+                          {item?.voucher?.name}
+                        </NavLink>
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {item?.voucher?.sign}
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {item?.customerCredit?.name}
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {item?.credit?.name}-{item?.credit?.description}
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border text-right">
+                        
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {formatNumberMoney(item?.amount)}
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {item?.contract?.name}
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {item?.goods?.name}
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {item?.note}
+                      </td>
+                    </tr>
+                  )
+                }     
+                
+              })
+          }
           </tbody>
         </table>
       </section>
-
-      <Paginate />
     </main>
-  );
-};
+  )
+}

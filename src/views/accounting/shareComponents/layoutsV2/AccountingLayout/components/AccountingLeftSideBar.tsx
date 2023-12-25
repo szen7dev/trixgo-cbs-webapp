@@ -8,6 +8,7 @@ import iconFolder from "assets/images/bullet.svg";
 const LinkMenuLeftSideBar: FC = () => {
   const { user } = useAuth();
   const { fundaID } = useParams<any>();
+  
   const menuItems = [
     "home",
     "accbill",
@@ -27,31 +28,31 @@ const LinkMenuLeftSideBar: FC = () => {
         <div className="t-link-menu-container">
             <NavLink to={`/accounting/admin`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
               <img width={'7px'} src={iconFolder} alt="Menu item" />
-              <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản trị ứng dụng</span>
+              <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản trị ứng dụng (ok)</span>
             </NavLink>
             <NavLink to={`/accounting/home`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                 <img width={'7px'} src={iconFolder} alt="Menu item" />
                 <span className={"flex-1 ml-2 text-left text-[14px]"}>Trang chủ</span>
             </NavLink>
-            {/* <NavLink to={`/accounting/dashboard`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+            <NavLink to={`/accounting/dashboard`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                 <img width={'7px'} src={iconFolder} alt="Menu item" />
                 <span className={"flex-1 ml-2 text-left text-[14px]"}>Báo cáo quản trị</span>
-            </NavLink> */}
+            </NavLink>
             <NavLink to={`/accounting/detail`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
               <img width={'7px'} src={iconFolder} alt="Menu item" />
-              <span className={"flex-1 ml-2 text-left text-[14px]"}>Chi tiết tài khoản</span>
+              <span className={"flex-1 ml-2 text-left text-[14px]"}>Chi tiết tài khoản (ok)</span>
             </NavLink>
-            {/* <NavLink to={`/accounting/tbook`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+            <NavLink to={`/accounting/tbook`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
               <img width={'7px'} src={iconFolder} alt="Menu item" />
               <span className={"flex-1 ml-2 text-left text-[14px]"}>Tổng hợp tài khoản chữ T</span>
             </NavLink>
             <NavLink to={`/accounting/diary`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
               <img width={'7px'} src={iconFolder} alt="Menu item" />
-              <span className={"flex-1 ml-2 text-left text-[14px]"}>Sổ nhật ký chung</span>
+              <span className={"flex-1 ml-2 text-left text-[14px]"}>Sổ nhật ký chung (ok)</span>
             </NavLink>
             <NavLink to={`/accounting/import-export`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
               <img width={'7px'} src={iconFolder} alt="Menu item" />
-              <span className={"flex-1 ml-2 text-left text-[14px]"}>Nhập xuất tồn</span>
+              <span className={"flex-1 ml-2 text-left text-[14px]"}>Nhập xuất tồn (ok)</span>
             </NavLink>
             <NavLink to={`/accounting/debt-tracking`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
               <img width={'7px'} src={iconFolder} alt="Menu item" />
@@ -68,7 +69,7 @@ const LinkMenuLeftSideBar: FC = () => {
             <NavLink to={`/accounting/support-tools`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
               <img width={'7px'} src={iconFolder} alt="Menu item" />
               <span className={"flex-1 ml-2 text-left text-[14px]"}>Công cụ hỗ trợ</span>
-            </NavLink> */}
+            </NavLink>
           <div >
             {
               !menuItems.includes(fundaID) ? <>

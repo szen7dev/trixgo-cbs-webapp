@@ -1,321 +1,197 @@
-import { FC, useCallback } from "react";
-
+import React, { FC, useCallback, useState, useEffect } from "react";
+import { NavLink, useParams } from "react-router-dom"
 import cn from "classnames";
-
-import { DropdownFilterButton } from "views/accounting/shareComponents/common";
-import { DropdownSearchable } from "shareComponents/common";
 import styles from 'views/accounting/styles/styles.module.css';
-
-import ThreeDotVerticalIcon from "assets/images/icon-3dots-vertical-gray.svg";
+import DotsVerticalIcon from "assets/icons/DotsVertical";
+import Close from "assets/icons/Close";
+import {debounce} from "lodash";
+import moment from "moment";
+import { formatNumberMoney } from "utils/cmcs";
+import {
+  FilterDateGroup
+} from "views/accounting/shareComponents/common";
+import { DropdownSearchableV2 } from "shareComponents/common";
+import {useDispatch} from "react-redux";
+import {setFilterDropdown} from "redux/reducer/DocumentProjectSlice";
+import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
+import {
+	useAccount,
+} from "services/hooks/items/useAccount";
+import { VOUCHER_TYPES, LIMIT_DROPDOWN } from "apis/localdb/index";
+import API from "apis/repository";
+import {
+  useJournallList,
+  useJournalByProperty
+} from "services/hooks/accounting/useGeneralJournal";
+const ITEM_ACCOUNT = "/api/item/accounts";
 
 export const AccountingInOutPage: FC = () => {
-  const handleOnFilter = useCallback((values) => {
+  const [showOption, setShowOption] = useState(false)
+  const [pageIndex, setPageIndex] = useState(0)
+  const dispatch = useDispatch();
 
-    // setPageParam(() => ({ ...values }));
-    return true;
-  }, []);
+  type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+  type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
+  const ref = React.useRef<PaginateHandle>(null);
+  const datahubRef = React.useRef<DropdownHandle>(null);
+  const [departmentsID, setDepartmentsID] = useState<string[]>([]);
+  const [accountKeyword, setAccountKeyword] = useState("");
+  const [inputFilter, setInputFilter] = useState({ keyword: '', fromDate: new Date(new Date().getFullYear(), 0, 1), toDate: new Date(new Date().getFullYear(), 11, 31) });
+  
+  const [infoAccount, setInfoAccount] = useState({} as any);
 
-  const handleOnCancelFilter = useCallback(() => {
-    // setPageParam({});
-  }, []);
+	const [searchAccount, setSearchAccount] = useState();
+
+  const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage } = useAccount({
+    params: {
+      limit: 5,
+      keyword: searchAccount,
+    },
+    isFetchList: true
+  })
+
+  const { listJournalByProperty: dataAll, listJournalByPropertyIsLoading, refetchListJournalByProperty } = useJournalByProperty({
+    params: {
+        option: 4,
+        optionTerm: 1,
+        fromDate: inputFilter.fromDate,
+        toDate: inputFilter.toDate,
+    },
+    isFetchList: true
+  })
+
+  // let arrDebitO = Array<[]>, arrCreditO = Array<[]>, arrDebitOF = Array<[]>, arrCreditOF = Array<[]>, arrDebitFT = Array<[]>, arrCreditFT = Array<[]>
+
+  // dataAll.debitO.forEach((element: any) =>{
+  //     let key = element._id.account;
+  //     if (!Array.isArray(arrDebitO[key])) {
+  //         arrDebitO[key] = [];
+  //     }
+  //     arrDebitO[key].push(element)
+  // })
+
+// console.log(listAccountWithPager)
+// console.log({totalRecord})
+// console.log({totalPages})
+
+// console.log(dataS)
+// console.log(listDataWithPager)
+// console.log({infoAccount})
+// console.log({accountID})
+// console.log({departmentsID})
+
+const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: toDate
+  if (input) {
+    setInputFilter(() => ({ ...inputFilter, toDate: date }))
+  } else {
+    setInputFilter(() => ({ ...inputFilter, fromDate: date }))
+  }
+
+}, [])
+
   return (
-    <main className="h-full text-sm">
-      <header className="h-[50px] w-full border border-primary-border flex items-center justify-between px-6">
-        <p className="text-lg">156-Hàng hóa</p>
+    <main className="h-full">
+      <header className="h-[50px] w-full border border-primary-border flex items-center justify-between px-2">
+        <p className="text-lg">---Tên cơ sở được lựa chọn---</p>
 
         <div className="flex items-center">
-          <p className="text-primary mr-3">From 1/1/2021 - To 31/12/202</p>
+          <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
+          <div className={"relative z-5 inline-block"}>
+            <button onClick={() => setShowOption(!showOption)} 
+              className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg"}
+              >
+                <DotsVerticalIcon/>
+            </button>
+            {
+                showOption &&
+                <div className={"absolute right-0 z-20 bg-white w-[335px] shadow-lg rounded-md text-primary-gray"}>
+                    <div className={"flex items-center mx-4 py-2 border-b-0.5 border-primary-border"}>
+                        <div className={"flex-1"}>Chức năng khác</div>
+                        <button onClick={() => setShowOption(false)}>
+                            <Close/>
+                        </button>
+                    </div>
 
-          <DropdownSearchable
-            placeholder="Tìm kiếm"
-            className="w-[322px] px-2 bg-cbs-table-header"
-            classNameInput="h-[30px] bg-cbs-table-header"
-            isMultiple={false}
-            allowClearValueSingleInput={false}
-            showTriangle={true}
-            maxWidthInput="max-w-none"
-            renderSelectedItem={(item) => <span>{item.text}</span>}
-            classNameItem="p-0"
-            data={[
-              {
-                _id: 1,
-                content: "131-Phải thu của khách hàng",
-              },
-              {
-                _id: 2,
-                content: "131-Phải thu của khách hàng",
-              },
-              {
-                _id: 3,
-                content: "131-Phải thu của khách hàng",
-              },
-            ]}
-            formatItem={{
-              id: "_id",
-              text: "content",
-            }}
-            inlineSearch={true}
-          />
-
-          <DropdownFilterButton
-            onSubmit={handleOnFilter}
-            onCancel={handleOnCancelFilter}
-            initialValues={{}}
-          />
-          <div className="w-10 h-10 ml-3 bg-cbs-gray rounded-full flex items-center justify-center cursor-pointer hover:bg-accent-light">
-            <img src={ThreeDotVerticalIcon} alt="Three Dot" />
+                    <div className={"mb-4"}>
+                        <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}>
+                            Tải excel
+                        </button>
+                    </div>
+                </div>
+            }
           </div>
+          <PaginateV2
+              ref={ref}
+              totalRecord={totalRecord}
+              totalPages={totalPage}
+              limit={5}
+              hasNextPage={hasNextPage}
+              isFetching={isLoading}
+              nextPageAction={() => {
+                fetchNextPage();
+                  setPageIndex(oldState => oldState+1)
+              }}
+              prevPageAction={() => {
+                  setPageIndex(oldState => oldState-1)
+              }}
+          />
         </div>
+        
       </header>
 
-      <section className="h-9 bg-cbs-table-header border border-primary-border flex items-center justify-between text-primary-gray">
-        <div className="w-1/6 h-full border-r border-primary-border flex items-center px-2">
-          Nguyên vật liệu/hàng hóa
-        </div>
-        <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2">
-          Mã hiệu
-        </div>
-        <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2">
-          Đơn vị
-        </div>
-        <div className="w-1/6 h-full border-r border-primary-border flex items-center justify-center px-2">
-          TỒN ĐẦU KỲ
-        </div>
-        <div className="w-1/6 h-full border-r border-primary-border flex items-center justify-center px-2">
-          NHẬP
-        </div>
-        <div className="w-1/6 h-full border-r border-primary-border flex items-center justify-center px-2">
-          XUẤT
-        </div>
-        <div className="w-1/6 text-center">TỒN CUỐI KỲ</div>
-      </section>
+      <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
+        <thead className="bg-cbs-table-header h-10 border-b border-primary-border">
+          <tr className="text-left text-sm text-primary-gray">
+            <th className="py-1 px-2 font-normal border-r border-primary-border" style={{width: "5%"}}>
+              TK
+            </th>
+            <th className="py-1 px-2 font-normal border-r border-primary-border w-1/6">
+              Mô tả
+            </th>
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
+              Tồn đầu kỳ
+            </th>
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
+              Nhập trong kỳ
+            </th>
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
+              Xuất trong kỳ
+            </th>
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
+              Tồn cuối kỳ
+            </th>
+          </tr>
+        </thead>
 
-      <section className="h-9 bg-cbs-table-header border border-primary-border flex items-center justify-between text-primary-gray">
-        <div className="w-1/6 h-full border-r border-primary-border flex items-center px-2">
-          {""}
-        </div>
-        <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2">
-          {""}
-        </div>
-        <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2">
-          {""}
-        </div>
-        <div className="w-1/6 h-full border-r border-primary-border flex items-center">
-          <div className="w-1/5 h-full border-r border-primary-border flex items-center justify-center">
-            SL
-          </div>
-          <div className="w-2/5 h-full border-r border-primary-border flex items-center justify-center">
-            Đơn giá
-          </div>
-          <div className="w-2/5 h-full flex items-center justify-center">
-            Thành tiền
-          </div>
-        </div>
-        <div className="w-1/6 h-full border-r border-primary-border flex items-center">
-          <div className="w-1/5 h-full border-r border-primary-border flex items-center justify-center">
-            SL
-          </div>
-          <div className="w-2/5 h-full border-r border-primary-border flex items-center justify-center">
-            Đơn giá
-          </div>
-          <div className="w-2/5 h-full flex items-center justify-center">
-            Thành tiền
-          </div>
-        </div>
-        <div className="w-1/6 h-full border-r border-primary-border flex items-center">
-          <div className="w-1/5 h-full border-r border-primary-border flex items-center justify-center">
-            SL
-          </div>
-          <div className="w-2/5 h-full border-r border-primary-border flex items-center justify-center">
-            Đơn giá
-          </div>
-          <div className="w-2/5 h-full flex items-center justify-center">
-            Thành tiền
-          </div>
-        </div>
-        <div className="w-1/6 h-full border-r border-primary-border flex items-center">
-          <div className="w-1/5 h-full border-r border-primary-border flex items-center justify-center">
-            SL
-          </div>
-          <div className="w-2/5 h-full border-r border-primary-border flex items-center justify-center">
-            Đơn giá
-          </div>
-          <div className="w-2/5 h-full flex items-center justify-center">
-            Thành tiền
-          </div>
-        </div>
-      </section>
-
-      <section>
-        <div className="h-9 border border-primary-border flex items-center justify-between">
-          <div className="w-1/6 h-full border-r border-primary-border flex items-center px-2 text-primary">
-            Xi măng PC30-Hoàng Thạch
-          </div>
-          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2">
-            PC30
-          </div>
-          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2">
-            Kg
-          </div>
-          <div className="w-1/6 h-full border-r border-primary-border flex items-center">
-            <div className="w-1/5 h-full border-r border-primary-border flex items-center justify-center">
-              15.000
-            </div>
-            <div className="w-2/5 h-full border-r border-primary-border flex items-center justify-center">
-              1.000
-            </div>
-            <div className="w-2/5 h-full flex items-center justify-center">
-              15.000.000
-            </div>
-          </div>
-          <div className="w-1/6 h-full border-r border-primary-border flex items-center">
-            <div className="w-1/5 h-full border-r border-primary-border flex items-center justify-center">
-              15.000
-            </div>
-            <div className="w-2/5 h-full border-r border-primary-border flex items-center justify-center">
-              1.000
-            </div>
-            <div className="w-2/5 h-full flex items-center justify-center">
-              15.000.000
-            </div>
-          </div>
-          <div className="w-1/6 h-full border-r border-primary-border flex items-center">
-            <div className="w-1/5 h-full border-r border-primary-border flex items-center justify-center">
-              15.000
-            </div>
-            <div className="w-2/5 h-full border-r border-primary-border flex items-center justify-center">
-              1.000
-            </div>
-            <div className="w-2/5 h-full flex items-center justify-center">
-              15.000.000
-            </div>
-          </div>
-          <div className="w-1/6 h-full border-r border-primary-border flex items-center">
-            <div className="w-1/5 h-full border-r border-primary-border flex items-center justify-center">
-              15.000
-            </div>
-            <div className="w-2/5 h-full border-r border-primary-border flex items-center justify-center">
-              1.000
-            </div>
-            <div className="w-2/5 h-full flex items-center justify-center">
-              15.000.000
-            </div>
-          </div>
-        </div>
-
-        <div className="h-[751px] border border-primary-border flex items-center justify-between">
-          <div className="w-1/6 h-full border-r border-primary-border flex items-center px-2 text-primary">
-            {""}
-          </div>
-          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2">
-            {""}
-          </div>
-          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2">
-            {""}
-          </div>
-          <div className="w-1/6 h-full border-r border-primary-border flex items-center">
-            <div className="w-1/5 h-full border-r border-primary-border flex items-center justify-center">
-              {""}
-            </div>
-            <div className="w-2/5 h-full border-r border-primary-border flex items-center justify-center">
-              {""}
-            </div>
-            <div className="w-2/5 h-full flex items-center justify-center">
-              {""}
-            </div>
-          </div>
-          <div className="w-1/6 h-full border-r border-primary-border flex items-center">
-            <div className="w-1/5 h-full border-r border-primary-border flex items-center justify-center">
-              {""}
-            </div>
-            <div className="w-2/5 h-full border-r border-primary-border flex items-center justify-center">
-              {""}
-            </div>
-            <div className="w-2/5 h-full flex items-center justify-center">
-              {""}
-            </div>
-          </div>
-          <div className="w-1/6 h-full border-r border-primary-border flex items-center">
-            <div className="w-1/5 h-full border-r border-primary-border flex items-center justify-center">
-              {""}
-            </div>
-            <div className="w-2/5 h-full border-r border-primary-border flex items-center justify-center">
-              {""}
-            </div>
-            <div className="w-2/5 h-full flex items-center justify-center">
-              {""}
-            </div>
-          </div>
-          <div className="w-1/6 h-full border-r border-primary-border flex items-center">
-            <div className="w-1/5 h-full border-r border-primary-border flex items-center justify-center">
-              {""}
-            </div>
-            <div className="w-2/5 h-full border-r border-primary-border flex items-center justify-center">
-              {""}
-            </div>
-            <div className="w-2/5 h-full flex items-center justify-center">
-              {""}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <footer
-        className={cn(
-          "h-9 w-full border border-primary-border flex items-center justify-between bottom-0",
-          styles.bgFooterYellow
-        )}
-      >
-        <div className="w-1/6 h-full flex items-center px-2 tont-bold">
-          Tổng
-        </div>
-        <div className="w-1/12 h-full flex items-center px-2">{""}</div>
-        <div className="w-1/12 h-full flex items-center px-2">{""}</div>
-        <div className="w-1/6 h-full flex items-center">
-          <div className="w-1/5 h-full flex items-center justify-center">
-            {""}
-          </div>
-          <div className="w-2/5 h-full flex items-center justify-center">
-            {""}
-          </div>
-          <div className="w-2/5 h-full flex items-center justify-center font-bold">
-            15.000.000
-          </div>
-        </div>
-        <div className="w-1/6 h-full flex items-center">
-          <div className="w-1/5 h-full flex items-center justify-center">
-            {""}
-          </div>
-          <div className="w-2/5 h-full flex items-center justify-center">
-            {""}
-          </div>
-          <div className="w-2/5 h-full flex items-center justify-center font-bold">
-            15.000.000
-          </div>
-        </div>
-        <div className="w-1/6 h-full flex items-center">
-          <div className="w-1/5 h-full flex items-center justify-center">
-            {""}
-          </div>
-          <div className="w-2/5 h-full flex items-center justify-center">
-            {""}
-          </div>
-          <div className="w-2/5 h-full flex items-center justify-center">
-            15.000.000
-          </div>
-        </div>
-        <div className="w-1/6 h-full flex items-center">
-          <div className="w-1/5 h-full flex items-center justify-center">
-            {""}
-          </div>
-          <div className="w-2/5 h-full flex items-center justify-center">
-            {""}
-          </div>
-          <div className="w-2/5 h-full flex items-center justify-center font-bold">
-            15.000.000
-          </div>
-        </div>
-      </footer>
+        <tbody className="">
+          {
+            (listDataWithPager[pageIndex] ?? []).map((item: any, index: any) => (
+              <tr key={index} className="border-b border-primary-border h-10">
+                <td className="py-1 px-2 border-r border-primary-border">
+                  {item.name}
+                </td>
+                <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
+                  <NavLink to={`/accounting/import-export/${item?._id}`}>
+                    {item?.description}
+                    </NavLink>
+                </td>
+                <td className="py-1 px-2 border-r border-primary-border">
+                 
+                </td>
+                <td className="py-1 px-2 border-r border-primary-border">
+                 
+                </td>
+                <td className="py-1 px-2 border-r border-primary-border">
+                 
+                </td>
+                <td className="py-1 px-2 border-r border-primary-border">
+                 
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
     </main>
-  );
-};
+  )
+}

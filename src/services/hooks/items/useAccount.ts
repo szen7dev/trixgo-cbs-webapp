@@ -9,8 +9,11 @@ import type { Account } from 'typings/items';
 interface useAccount {
     isLoading: boolean;
     totalRecord: number;
+    totalPage: number;
     hasNextPage: boolean | undefined;
-    list: Array<Account.Account>;
+    listData: Array<Account.Account>;
+    listDataWithPager: Array<Account.Account>;
+    nextCursor?: string | null;
     info: Account.Account | undefined;
     refetch: () => void;
     fetchNextPage: () => void;
@@ -82,20 +85,27 @@ export const useAccount = ({
         }
     );
 
-    const list = []
-        .concat(...(data?.pages || [])
-        .map((d: any) => d.data?.listRecords))
-        .filter(Boolean);
+    const listData = []
+        .concat(
+            ...(data?.pages || []).map((d: any) => d.data?.listRecords)
+        )
+        .filter(Boolean)
+
+    const listDataWithPager = (data?.pages || []).map((d: any) => d.data?.listRecords)
 
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
+    const totalPage = data?.pages[0]?.data?.totalPage || 0;
+    const nextCursor = data?.pages && data?.pages[0]?.data?.nextCursor;
 
-    // Return data
     return {
         isLoading,
-        list,
+        listData,
+        listDataWithPager,
         info,
         totalRecord,
+        totalPage,
         hasNextPage,
+        nextCursor,
         refetch,
         fetchNextPage,
         insertAsync,

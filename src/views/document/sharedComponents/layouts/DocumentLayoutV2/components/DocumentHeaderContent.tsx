@@ -27,10 +27,6 @@ const DocumentHeaderContent:FC =  () => {
         }
     }, [keywordInput])
 
-    // useOnClickOutside(wrapperClass, () => {
-    //     setShowResult(false)
-    // })
-
     const setTypingTimeoutRef: any = useRef(null);
     const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (setTypingTimeoutRef.current) {

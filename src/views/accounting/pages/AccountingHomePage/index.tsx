@@ -1,40 +1,26 @@
 /*=====1.LIBRARY=====*/
-import { FC, useState, useCallback } from "react";
+import { FC, useState } from "react";
 import cn from "classnames";
 import debounce from "lodash/debounce";
-import moment from "moment";
-import { toast } from "react-toastify";
-import { Link, useParams, useHistory } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 /*=====2.CSS=====*/
 import styles from "views/support/styles/support.module.css";
 
 /*=====3.ICONS=====*/
-import DeleteIcon from "assets/images/icons8-remove.svg";
-import iconPencil from 'assets/images/icons8-pencil-96 1.png';
 
 /*=====4.PAGES/COMPONENTS=====*/
 import { SearchInput } from "shareComponents/common";
 
 /*=====5.TYPINGS=====*/
-import { Funda } from "typings/items";
 
 /*=====6.HOOKS/APIS=====*/
 import { useModal } from "services/hooks/useModal";
 import { useFunda } from "services/hooks/items/useFunda";
 
 export const AccountingHomePage: FC = () => {
-  const history = useHistory();
-  const { closeModal, openModal } = useModal();
   const [keyword, setKeyword] = useState('');
   const { parentID } = useParams<{ parentID: string }>();
-
-  const [itemsChecked, setItemsChecked] = useState<Array<Funda.Funda>>([]);
-  const [initialValues, setInitialValues] = useState({
-    fundaID: '',
-    name: '',
-    description: '',
-  });
 
   const {
     deleteAsync,
@@ -46,92 +32,11 @@ export const AccountingHomePage: FC = () => {
   } = useFunda({
     params: { keyword, isListParentOfListChilds: "1", parentID }, // Khi keyword thay đổi giá trị => API thay đổi data => refretch kết quả
     isFetchList: true
-  });
+  })
 
-  // Reset form
-  const clearData = () => {
-    setInitialValues(previousValue => ({
-      ...previousValue,
-      fundaID: '',
-      name: '',
-      description: '',
-    }))
-  }
-
-  // Gọi lại API refetch lại danh sách sau khi tạo/update thành công
-  const handleConfirmCreateOrUpdate = () => refetch();
-
-  // Xử lý sự kiện tìm kiếm
   const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
     setKeyword(event.target.value);
   }, 500);
-
-  // Làm việc với update mẩu tin  
-  const onClickCheckButton = (doc: Funda.Funda) => {
-    const check = itemsChecked.find(item => item._id === doc._id);
-    let newListIDChecked = [];
-
-    if (check) {
-      newListIDChecked = itemsChecked.filter(item => item._id !== doc._id)
-      setItemsChecked(newListIDChecked);
-    } else {
-      newListIDChecked = [...itemsChecked, doc];
-      setItemsChecked(newListIDChecked);
-    };
-
-    if (newListIDChecked.length === 1) {
-      const { _id, name, description } = newListIDChecked[0];
-      setInitialValues({
-        fundaID: _id,
-        name,
-        description: description || '',
-      });
-    } else {
-      clearData();
-    }
-  };
-
-  // Check chọn 1 hoặc nhiều mẩu tin
-  const getStateChecked = useCallback((id: string) => {
-    const user = itemsChecked.find(item => item._id === id);
-    return user ? true : false;
-  }, [itemsChecked]);
-
-  const getStateCheckedAll = useCallback(() => {
-    return itemsChecked.length == listFundas.length;
-  }, [itemsChecked]);
-
-  const onClickCheckAll = () => {
-    if (itemsChecked.length == listFundas.length) {
-      setItemsChecked([]);
-    } else {
-      setItemsChecked(listFundas);
-    }
-  };
-
-  // Xóa 1 hoặc nhiều mẩu tin
-  const handleConfirmDelete = async () => {
-    try {
-      const ids = itemsChecked.map(item => item._id);
-      const { error, data } = await deleteAsync(ids);
-
-      if (error) {
-        return toast.warn(data?.message);
-      }
-
-      toast.success('Xoá dữ liệu thành công', { autoClose: 1500 });
-      closeModal();
-      clearData();
-      refetch();
-      setItemsChecked([]);
-    } catch (error) {
-      if (typeof error === "string") {
-        toast.error(error);
-      } else if (error instanceof Error) {
-        toast.error(error.message);
-      }
-    }
-  }
 
   return (
     <main className="relative h-full">
@@ -139,16 +44,11 @@ export const AccountingHomePage: FC = () => {
         <div className="h-[50px] border border-primary-border flex items-center justify-between px-5">
           <div className="flex items-center">
             <p className="text-lg ml-2">Đơn vị cơ sở</p>
-
             <SearchInput
               classNameWrapper="ml-4 mr-2"
               classNameInput="outline-none w-[296px]"
               onChange={onChangeSearch}
             />
-            {/* Nếu chọn 1 phẩn tử => chỉ cho update */}
-
-            {/* Xóa 1 hoặc nhiều */}
-
           </div>
 
         </div>
@@ -195,5 +95,5 @@ export const AccountingHomePage: FC = () => {
         </div>
       )}
     </main>
-  );
-};
+  )
+}

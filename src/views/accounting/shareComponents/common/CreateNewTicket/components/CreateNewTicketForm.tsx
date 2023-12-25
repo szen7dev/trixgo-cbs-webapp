@@ -66,6 +66,9 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 
 	}, [values.contract.value])
 
+	// console.log({contractId})
+	// console.log(values)
+
 	return (
 		<>
 			<div className={"px-6 pb-2 border-b border-gray-800 income-form-modal"}>
@@ -87,7 +90,6 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 									style={{ maxWidth: '300px' }}
 									className="flex items-center"
 								>
-									<img alt="Tag" src={TagIcon} className="mr-1" />
 									<p
 										style={{
 											textOverflow: "ellipsis",
@@ -166,7 +168,6 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 							renderSelectedItem={(item) => {
 								return (
 									<div className="flex">
-										<img alt="Tag" src={TagIcon} className="mr-1" />
 										<Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 top-0 w-[330px] h-fit whitespace-normal" >
 											<p className="text-1-line-clamp">{`${item.text}`}</p>
 										</Popover>
@@ -199,7 +200,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 						<DropdownSearchable
 							onchangeValue={(value: any) => setFieldValue("contract", value)}
 							className={"flex-1"}
-							placeholder="Mã khách"
+							placeholder="Hợp đồng"
 							isMultiple={false}
 							allowClearValueSingleInput={true}
 							onClearData={() => setFieldValue("contract", '')}
@@ -208,7 +209,6 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 							renderSelectedItem={(item) => {
 								return (
 									<div className="flex">
-										<img alt="Tag" src={TagIcon} className="mr-1" />
 										<Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 top-0 w-[330px] h-fit whitespace-normal" >
 											<p className="text-1-line-clamp">{`${item.text}`}</p>
 										</Popover>
@@ -245,7 +245,6 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 							renderSelectedItem={(item) => {
 								return (
 									<div className="flex">
-										<img alt="Tag" src={TagIcon} className="mr-1" />
 										<Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 top-0 w-[330px] h-fit whitespace-normal" >
 											<p className="text-1-line-clamp">{`${item.text}`}</p>
 										</Popover>
@@ -282,7 +281,6 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 							renderSelectedItem={(item) => {
 								return (
 									<div className="flex">
-										<img alt="Tag" src={TagIcon} className="mr-1" />
 										<Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 top-0 w-[330px] h-fit whitespace-normal" >
 											<p className="text-1-line-clamp">{`${item.text}`}</p>
 										</Popover>
