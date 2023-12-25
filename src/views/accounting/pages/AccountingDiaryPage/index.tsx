@@ -33,9 +33,13 @@ export const AccountingDiaryPage: FC = () => {
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   const ref = React.useRef<PaginateHandle>(null);
 
-  const [inputFilter, setInputFilter] = useState({ keyword: '', fromDate: new Date(new Date().getFullYear(), 0, 1), toDate: new Date(new Date().getFullYear(), 11, 31) });
+  const [inputFilter, setInputFilter] = useState({
+    keyword: '',
+    fromDate: new Date(new Date().getFullYear(), 0, 1),
+    toDate: new Date(new Date().getFullYear(), 11, 31)
+  });
 
-  const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch, isFetching } = useJournallList({
+  const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage } = useJournallList({
     params: {
         fromDate: inputFilter.fromDate,
         toDate: inputFilter.toDate,
@@ -47,14 +51,15 @@ export const AccountingDiaryPage: FC = () => {
     isFetchList: true
   })
 
-  const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: toDate
+  const handleOnChangeDate = useCallback((date, input) => {
+     // input = 0: fromDate, 1: toDate
     if (input) {
-      setInputFilter(() => ({ ...inputFilter, toDate: date }))
+      setInputFilter((value) => ({ ...value, toDate: date }))
     } else {
-      setInputFilter(() => ({ ...inputFilter, fromDate: date }))
+      setInputFilter((value) => ({ ...value, fromDate: date }))
     }
-  
-  }, [])  
+
+  }, [])
 
   return (
     <main className="h-full">
@@ -64,7 +69,7 @@ export const AccountingDiaryPage: FC = () => {
         <div className="flex items-center">
           <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
           <div className={"relative z-5 inline-block"}>
-            <button onClick={() => setShowOption(!showOption)} 
+            <button onClick={() => setShowOption(!showOption)}
               className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg"}
               >
                 <DotsVerticalIcon/>
@@ -202,13 +207,11 @@ export const AccountingDiaryPage: FC = () => {
 
             {
               (listDataWithPager[pageIndex] ?? []).map((item, index) => {
-                // console.log(item)
+                const jsx = [];
 
                 if(item?.debit){
-                  // console.log('111111111111111111111111111111')
-                  // console.log(item)
-                  return (
-                    <tr key={index} className="border-b border-primary-border h-10">
+                  jsx.push(
+                    <tr key={index + "debit"} className="border-b border-primary-border h-10">
                       <td className="py-1 px-2 border-r border-primary-border">
                         {moment(item?.voucher?.date).format('DD/MM/YYYY')}
                       </td>
@@ -233,7 +236,7 @@ export const AccountingDiaryPage: FC = () => {
                         {formatNumberMoney(item?.amount)}
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
-                        
+
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
                         {item?.contract?.name}
@@ -246,13 +249,11 @@ export const AccountingDiaryPage: FC = () => {
                       </td>
                     </tr>
                   )
-                }     
-                
+                }
+
                 if(item?.credit){
-                  // console.log('22222222222222222222222222')
-                  // console.log(item)
-                  return (
-                    <tr key={index} className="border-b border-primary-border h-10">
+                  jsx.push(
+                    <tr key={index + "credit"} className="border-b border-primary-border h-10">
                       <td className="py-1 px-2 border-r border-primary-border">
                         {moment(item?.voucher?.date).format('DD/MM/YYYY')}
                       </td>
@@ -274,7 +275,7 @@ export const AccountingDiaryPage: FC = () => {
                         {item?.credit?.name}-{item?.credit?.description}
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border text-right">
-                        
+
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
                         {formatNumberMoney(item?.amount)}
@@ -290,8 +291,9 @@ export const AccountingDiaryPage: FC = () => {
                       </td>
                     </tr>
                   )
-                }     
-                
+                }
+
+                return jsx
               })
           }
           </tbody>

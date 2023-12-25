@@ -143,7 +143,7 @@ export const AccountingDetailPage: FC = () => {
     fetchDetailAccount(accountId)
   }, [accountId]);
 
-  if(!accountId || isLoadingJournallList || isLoadingListAccount) {
+  if(!accountId || isLoadingJournallList) {
     return <Loader className="border-primary" />
   }
 
