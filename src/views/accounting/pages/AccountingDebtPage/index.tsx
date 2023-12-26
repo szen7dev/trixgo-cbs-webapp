@@ -22,7 +22,7 @@ export const AccountingDebtPage: FC = () => {
   return (
     <main className="h-full">
       <header className="h-[50px] w-full border border-primary-border flex items-center justify-between px-6">
-        <p className="text-lg">Theo dõi công nợ</p>
+        <p className="text-lg">Theo dõi công nợ New</p>
 
         <div className="flex items-center">
           <p className="text-primary mr-3">From 1/1/2021 - To 31/12/202</p>
@@ -168,6 +168,1222 @@ export const AccountingDebtPage: FC = () => {
             </div>
           </div>
         </Link>
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            141
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Tạm ứng
+          </div>
+
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            331
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Phải trả cho người bán
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            141
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Tạm ứng
+          </div>
+
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            331
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Phải trả cho người bán
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            141
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Tạm ứng
+          </div>
+
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            331
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Phải trả cho người bán
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            141
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Tạm ứng
+          </div>
+
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            331
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Phải trả cho người bán
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            141
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Tạm ứng
+          </div>
+
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            331
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Phải trả cho người bán
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            141
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Tạm ứng
+          </div>
+
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            331
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Phải trả cho người bán
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            141
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Tạm ứng
+          </div>
+
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            331
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Phải trả cho người bán
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            141
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Tạm ứng
+          </div>
+
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            331
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Phải trả cho người bán
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            141
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Tạm ứng
+          </div>
+
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            331
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Phải trả cho người bán
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            141
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Tạm ứng
+          </div>
+
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            331
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Phải trả cho người bán
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            141
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Tạm ứng
+          </div>
+
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            331
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Phải trả cho người bán
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            141
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Tạm ứng
+          </div>
+
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            331
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Phải trả cho người bán
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            141
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Tạm ứng
+          </div>
+
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            331
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Phải trả cho người bán
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            141
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Tạm ứng
+          </div>
+
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            331
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Phải trả cho người bán
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            141
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Tạm ứng
+          </div>
+
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            331
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Phải trả cho người bán
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            141
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Tạm ứng
+          </div>
+
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
+
+        <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
+          <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
+            331
+          </div>
+          <div
+            className={cn(
+              "h-full border-r border-primary-border flex items-center px-2 text-primary font-bold",
+              styles.theadDes
+            )}
+          >
+            Phải trả cho người bán
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full border-r border-primary-border flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+          <div className="w-1/5 h-full flex items-center px-2">
+            <div className="w-1/2 h-full border-r border-primary-border flex items-center">
+              15.000.000
+            </div>
+            <div className="w-1/2 h-full flex items-center pl-2">
+              15.000.000
+            </div>
+          </div>
+        </div>
         <div className="h-9 border border-primary-border flex items-center justify-between text-primary-gray">
           <div className="w-1/12 h-full border-r border-primary-border flex items-center px-2 text-primary font-bold">
             141

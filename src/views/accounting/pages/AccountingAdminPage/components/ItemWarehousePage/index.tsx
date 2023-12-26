@@ -265,6 +265,7 @@ export const ItemWarehousePage: FC = () => {
                             <Link to={`/accounting/admin/warehouse/${item._id}`}>
                                 {item.amountChilds>0? <b>{item?.name}({item.amountChilds})</b>: item.name }
                             </Link>
+                            <p className="text-gray-500 text-[12px]"><i>{item._id}</i></p>
                         </td>
                         <td className="py-1 px-2">{item.description}</td>
                         <td className="py-1 px-2">

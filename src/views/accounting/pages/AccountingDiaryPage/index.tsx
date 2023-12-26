@@ -58,7 +58,6 @@ export const AccountingDiaryPage: FC = () => {
     } else {
       setInputFilter((value) => ({ ...value, fromDate: date }))
     }
-
   }, [])
 
   return (
@@ -243,6 +242,7 @@ export const AccountingDiaryPage: FC = () => {
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
                         {item?.goods?.name}
+                        <p className="text-primary-gray"><i>{item?.warehouse?.name}</i></p>
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
                         {item?.note}
@@ -285,6 +285,7 @@ export const AccountingDiaryPage: FC = () => {
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
                         {item?.goods?.name}
+                        <p className="text-primary-gray"><i>{item?.warehouse?.name}</i></p>
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
                         {item?.note}
