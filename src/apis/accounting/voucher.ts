@@ -9,7 +9,7 @@ async function fetchList<T>(params: any): Promise<T> {
         `${APP_ACCOUNTING}`,
         {
             params: {
-                select: "name date type createAt sign amount note",
+                select: "name date type createAt sign amount note forward forwardIs",
                 populates: {
                     "path": "customer userCreate company contract",
                     "select": "name sign bizfullname"
