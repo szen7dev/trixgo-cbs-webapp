@@ -42,10 +42,10 @@ const LinkMenuLeftSideBar: FC = () => {
               <img width={'7px'} src={iconFolder} alt="Menu item" />
               <span className={"flex-1 ml-2 text-left text-[14px]"}>Chi tiết tài khoản (ok)</span>
             </NavLink>
-            <NavLink to={`/accounting/tbook`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+            {/* <NavLink to={`/accounting/tbook`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
               <img width={'7px'} src={iconFolder} alt="Menu item" />
               <span className={"flex-1 ml-2 text-left text-[14px]"}>Tổng hợp tài khoản chữ T</span>
-            </NavLink>
+            </NavLink> */}
             <NavLink to={`/accounting/diary`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
               <img width={'7px'} src={iconFolder} alt="Menu item" />
               <span className={"flex-1 ml-2 text-left text-[14px]"}>Sổ nhật ký chung (ok)</span>

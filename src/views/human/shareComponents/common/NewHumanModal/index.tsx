@@ -17,7 +17,7 @@ import { useModal } from "services/hooks/useModal";
 import { DropdownSearchable } from "shareComponents/common";
 
 import CloseIcon from "assets/images/icon-small-bold-close.svg";
-import { CONTACT_POLICY, INSURANCE_STATUS } from "apis/localdb";
+// import { CONTACT_POLICY, INSURANCE_STATUS } from "apis/localdb";
 import {
   useQueryListDepartments,
   useQueryListDoctype,
@@ -43,6 +43,19 @@ enum GENDER {
 enum PERSONAL_STATUS {
   "T" = 1,
   "A",
+}
+
+enum INSURANCE_STATUS {
+  "Chưa nộp" = 1,
+  "Đã nộp",
+  "Thêm mới",
+}
+
+enum CONTACT_POLICY {
+  "Không" = 1,
+  "Bộ đội phục viên",
+  "Con thương bệnh binh",
+  "Gia đình chính sách",
 }
 
 export function convertEnumToArray(enumVariable: any): Array<{
