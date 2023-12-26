@@ -44,7 +44,7 @@ export const AccountingInOutPage: FC = () => {
 
   const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage } = useAccount({
     params: {
-      limit: 5,
+      limit: 50,
       keyword: searchAccount,
     },
     isFetchList: true
@@ -123,7 +123,7 @@ const handleOnChangeDate = useCallback((date, input) => {
               ref={ref}
               totalRecord={totalRecord}
               totalPages={totalPage}
-              limit={5}
+              limit={50}
               hasNextPage={hasNextPage}
               isFetching={isLoading}
               nextPageAction={() => {

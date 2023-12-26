@@ -42,6 +42,10 @@ export interface DocumentProps extends Omit<DocumentInserPayload, 'parentID' | '
         _id: string;
         name: string;
     }
+    budgetWork?: {
+        _id: string;
+        name: string;
+    }
 }
 
 interface DocumentInserPayload {
