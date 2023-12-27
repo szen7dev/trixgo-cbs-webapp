@@ -139,7 +139,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                   </div>
                 </div>
 
-                <div>
+                {/* <div>
                   <p className="text-[13px] text-primary-gray mb-1">
                     Phân loại
                   </p>
@@ -164,7 +164,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                       setFieldValue("type", value.value)
                     }
                   />
-                </div>
+                </div> */}
 
                 <div>
                   <p className="text-[13px] text-primary-gray mb-1">
