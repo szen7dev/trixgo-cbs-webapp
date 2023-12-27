@@ -18,6 +18,7 @@ export type SalaryParent = {
     human: User;
     project: Project;
     note: string;
+    date: string;
     createAt: string;
     modifyAt: string;
     salary: number;

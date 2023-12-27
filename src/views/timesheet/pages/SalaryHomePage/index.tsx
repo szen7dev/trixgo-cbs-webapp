@@ -80,6 +80,8 @@ const SalaryHomePage: FC = () => {
 
   const handleUpdateSalary = React.useCallback(
     async (values) => {
+      // console.log(values)
+
       try {
         const isUpdated = await onUpdateSalaryParentAsync(values);
         if (!isUpdated.error) {
@@ -194,7 +196,7 @@ const SalaryHomePage: FC = () => {
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
-              Phân loại
+              Hệ số chuyển đổi KPI sang giá trị
             </div>
             <div
               className={
@@ -267,9 +269,11 @@ const SalaryHomePage: FC = () => {
                   {moment(salaryParent.createAt).isValid() &&
                     moment(salaryParent.createAt).format(DATE_FORMAT)}
                 </p>
+                <p><i> {moment(salaryParent.date).isValid() &&
+                    moment(salaryParent.date).format(DATE_FORMAT)}</i></p>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
-                {TIMESHEET_TYPES[Number(salaryParent.type - 1)].text}
+                {salaryParent.convertFactor}
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {salaryParent?.project?.name}

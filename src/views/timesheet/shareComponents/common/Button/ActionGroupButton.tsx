@@ -34,6 +34,7 @@ const ActionGroupButton: FC<ActionGroupButtonProps> = (props) => {
                 note: record.note,
                 project: record.project,
                 type: record.type,
+                convertFactor: record.convertFactor,
               }}
             />
           </div>
@@ -54,33 +55,12 @@ const ActionGroupButton: FC<ActionGroupButtonProps> = (props) => {
 
   return (
     <div className={"flex items-center"}>
-      {/* <button className={"flex items-center mr-3"}>
-        <img className={"w-[24px] h-[24px]"} alt={"icon"} src={DownloadIcon} />
-      </button>
-      <button className={"flex items-center mr-3"}>
-        <img className={"w-[24px] h-[24px]"} alt={"icon"} src={ShareIcon} />
-      </button>
-      <button className={"flex items-center mr-3"}>
-        <img className={"w-[24px] h-[24px]"} alt={"icon"} src={CopyIcon} />
-      </button>
-      <button className={"flex items-center mr-3"}>
-        <img className={"w-[24px] h-[24px]"} alt={"icon"} src={SendEmailIcon} />
-      </button> */}
       <button
         className={"flex items-center mr-3"}
         onClick={handleClickUpdateTimeSheet(recordSelected)}
       >
         <img className={"w-[24px] h-[24px]"} alt={"icon"} src={PencilIcon} />
       </button>
-      {/* <button
-        className={"flex items-center mr-3"}
-        onClick={handleClickDeleteTimeSheet(recordSelected?._id)}
-      >
-        <img className={"w-[24px] h-[24px]"} alt={"icon"} src={TrashIcon} />
-      </button>
-      <button className={"flex items-center mr-3"}>
-        <img className={"w-[24px] h-[24px]"} alt={"icon"} src={PrintIcon} />
-      </button> */}
     </div>
   );
 };
