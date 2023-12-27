@@ -71,14 +71,13 @@ export const AccountingInOutPage: FC = () => {
 // console.log({accountID})
 // console.log({departmentsID})
 
-const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: toDate
+const handleOnChangeDate = useCallback((date, input) => {
   if (input) {
-    setInputFilter(() => ({ ...inputFilter, toDate: date }))
+    setInputFilter((value) => ({ ...value, toDate: date }))
   } else {
-    setInputFilter(() => ({ ...inputFilter, fromDate: date }))
+    setInputFilter((value) => ({ ...value, fromDate: date }))
   }
-
-}, [])
+ }, [])
 
   return (
     <main className="h-full">

@@ -183,7 +183,12 @@ export const FnbRiskReportDetailPage: FC = () => {
 						</th>
 						<th className="pb-1 pt-1 font-normal">
 							<div className="pl-2">
-								Giá trị phạt 
+								Thưởng
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="pl-2">
+								Phạt
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal">
@@ -218,6 +223,9 @@ export const FnbRiskReportDetailPage: FC = () => {
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{STATUS_MISTAKE[item?.status-1]}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(item?.bonus||0)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{formatNumberMoney(item?.amount||0)}
@@ -256,5 +264,5 @@ export const FnbRiskReportDetailPage: FC = () => {
 		        initialData={defaultState}
 		    />
 		</main>
-	);
-};
+	)
+}

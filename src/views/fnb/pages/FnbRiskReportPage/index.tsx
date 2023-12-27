@@ -160,7 +160,12 @@ export const FnbRiskReportPage: FC = () => {
 						</th>
 						<th className="pb-1 pt-1 font-normal w-[200px]">
 							<div className="border-gray-300 font-normal pl-2">
-								Tổng giá trị bị phạt
+								Tổng thưởng
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal w-[200px]">
+							<div className="border-gray-300 font-normal pl-2">
+								Tổng phạt
 							</div>
 						</th>
 						<th className="pb-1 pt-1 font-normal w-[150px]">
@@ -168,11 +173,11 @@ export const FnbRiskReportPage: FC = () => {
 								Ngày bắt đầu
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal">
+						{/* <th className="pb-1 pt-1 font-normal">
 							<div className="border-gray-300 font-normal pl-2">
 								Cán bộ quản lý
 							</div>
-						</th>
+						</th> */}
 						<th className="pb-1 pt-1 font-normal">
 							<div className="border-gray-300 font-normal pl-2">
 								Địa chỉ
@@ -199,14 +204,17 @@ export const FnbRiskReportPage: FC = () => {
 								{formatNumberMoney(item?.numberOfMistakes)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
+								{formatNumberMoney(item?.amountOfBonus)}
+							</td>
+							<td className={"p-2 border-0.5 border-primary-border"}>
 								{formatNumberMoney(item?.amountOfMistakes)}
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{moment(item?.createAt).format('DD/MM/YYYY')}
 							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
+							{/* <td className={"p-2 border-0.5 border-primary-border"}>
 								
-							</td>
+							</td> */}
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{item?.address}
 							</td>

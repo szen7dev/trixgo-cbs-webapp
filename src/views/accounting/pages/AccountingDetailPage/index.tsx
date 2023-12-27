@@ -143,7 +143,7 @@ export const AccountingDetailPage: FC = () => {
     fetchDetailAccount(accountId)
   }, [accountId]);
 
-  if(!accountId || isLoadingJournallList || isLoadingListAccount) {
+  if(!accountId || isLoadingJournallList) {
     return <Loader className="border-primary" />
   }
 
@@ -300,7 +300,7 @@ export const AccountingDetailPage: FC = () => {
               Dư Nợ-Có
             </th>
             <th className="w-1/12 py-1 px-2 font-normal border-r border-primary-border">
-              Hợp đồng/Ngân sách
+              Hợp đồng/Ngân sách/Sản phẩm
             </th>
             <th className="w-1/12 py-1 px-2 font-normal">Ghi chú</th>
           </tr>
@@ -371,7 +371,9 @@ export const AccountingDetailPage: FC = () => {
                         {formatNumberMoney(balance)}
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
-
+                        {item?.contract?.name}
+                        <p className="text-gray-500 text-[12px]"><i>{item?.budgetWork?.name}</i></p>
+                        <p className="text-gray-500 text-[12px]"><i>{item?.goods?.name}</i></p>
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
                         {item?.note}
@@ -412,8 +414,10 @@ export const AccountingDetailPage: FC = () => {
                       <td className="py-1 px-2 border-r border-primary-border text-right">
                         {formatNumberMoney(balance)}
                       </td>
-                      <td className="py-1 px-2 border-r border-primary-border text-right">
-
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {item?.contract?.name}
+                        <p className="text-gray-500 text-[12px]"><i>{item?.budgetWork?.name}</i></p>
+                        <p className="text-gray-500 text-[12px]"><i>{item?.goods?.name}</i></p>
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
                         {item?.note}

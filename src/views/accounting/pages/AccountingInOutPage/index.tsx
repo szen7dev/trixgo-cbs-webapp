@@ -44,7 +44,7 @@ export const AccountingInOutPage: FC = () => {
 
   const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage } = useAccount({
     params: {
-      limit: 5,
+      limit: 50,
       keyword: searchAccount,
     },
     isFetchList: true
@@ -80,13 +80,12 @@ export const AccountingInOutPage: FC = () => {
 // console.log({accountID})
 // console.log({departmentsID})
 
-const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: toDate
-  if (input) {
-    setInputFilter(() => ({ ...inputFilter, toDate: date }))
-  } else {
-    setInputFilter(() => ({ ...inputFilter, fromDate: date }))
-  }
-
+const handleOnChangeDate = useCallback((date, input) => {
+ if (input) {
+   setInputFilter((value) => ({ ...value, toDate: date }))
+ } else {
+   setInputFilter((value) => ({ ...value, fromDate: date }))
+ }
 }, [])
 
   return (
@@ -124,7 +123,7 @@ const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: to
               ref={ref}
               totalRecord={totalRecord}
               totalPages={totalPage}
-              limit={5}
+              limit={50}
               hasNextPage={hasNextPage}
               isFetching={isLoading}
               nextPageAction={() => {

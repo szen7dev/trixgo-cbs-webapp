@@ -34,6 +34,7 @@ const ActionGroupButton2: FC<ActionGroupButtonProps> = (props) => {
                 note: record.note,
                 project: record.project,
                 type: record.type,
+                convertFactor: record.convertFactor,
               }}
             />
           </div>

@@ -51,6 +51,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
     assignee: {},
     type: "",
     project: {},
+    convertFactor: "",
     note: "",
     ...defaultValues,
   };
@@ -124,37 +125,21 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                 </div>
 
                 <div>
-                  <p className="text-[13px] text-primary-gray mb-1">
-                    Người thực hiện
-                  </p>
-                  <DropdownSearchable
-                    className={
-                      "w-full flex-1 border rounded border-gray-200 py-1 px-3"
-                    }
-                    focusedClass={"border-b border-primary"}
-                    maxWidthInput={"max-w-none"}
-                    showTriangle
-                    inlineSearch
-                    allowClearValueSingleInput
-                    renderSelectedItem={(item) => <span>{item.text}</span>}
-                    data={listUsersSystem}
-                    onScroll={handleScrollAssginee}
-                    initialValue={defaultValues?.assignee}
-                    formatItem={{
-                      id: "_id",
-                      text: "fullname",
-                    }}
-                    onSearchInputChange={debounce(
-                      (value) => setSearchAssigneeStr(value),
-                      500
-                    )}
-                    onchangeValue={(value) =>
-                      setFieldValue("assigneeID", value.id)
-                    }
-                  />
+                  <p className="text-primary-gray text-[13px] mb-1">Hệ số chuyển đổi KPI sang giá trị</p>
+                  <div className="rounded border px-2 py-1 bg-cbs-table-header">
+                    <Field
+                      type="text"
+                      name="convertFactor"
+                      placeholder="Nhập giá trị"
+                      className="w-full h-6 outline-none"
+                      onBlur={(e: React.FormEvent<HTMLInputElement>) => {
+                        handleBlur(e);
+                      }}
+                    />
+                  </div>
                 </div>
 
-                <div>
+                {/* <div>
                   <p className="text-[13px] text-primary-gray mb-1">
                     Phân loại
                   </p>
@@ -179,7 +164,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                       setFieldValue("type", value.value)
                     }
                   />
-                </div>
+                </div> */}
 
                 <div>
                   <p className="text-[13px] text-primary-gray mb-1">
@@ -213,6 +198,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                     }
                   />
                 </div>
+
                 <div>
                   <p className="text-primary-gray text-[13px] mb-1">Ghi chú</p>
                   <div className="rounded border px-2 py-1 bg-cbs-table-header">
@@ -227,6 +213,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                     />
                   </div>
                 </div>
+
               </div>
 
               <div className={"fixed bottom-0 w-full bg-white"}>
