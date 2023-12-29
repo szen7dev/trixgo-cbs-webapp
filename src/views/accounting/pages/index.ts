@@ -6,6 +6,8 @@ export * from './AccountingDetailPage';
 export * from './AccountingTBookPage';
 export * from './AccountingDiaryPage';
 export * from './AccountingInOutPage';
+export * from './AccountingInOutDetailPage1';
+export * from './AccountingInOutDetailPage2';
 export * from './AccountingDebtPage';
 export * from './ReceivablesCustomers';
 export * from './ReceivablesCustomersCode';

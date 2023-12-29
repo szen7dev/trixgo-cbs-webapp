@@ -1,83 +1,52 @@
-import React, { FC, useCallback, useState, useEffect } from "react";
+import { FC, useCallback, useState } from "react";
 import { NavLink, useParams } from "react-router-dom"
-import cn from "classnames";
-import styles from 'views/accounting/styles/styles.module.css';
 import DotsVerticalIcon from "assets/icons/DotsVertical";
 import Close from "assets/icons/Close";
-import {debounce} from "lodash";
-import moment from "moment";
+import cn from "classnames";
+import styles from 'views/accounting/styles/styles.module.css';
 import { formatNumberMoney } from "utils/cmcs";
 import {
   FilterDateGroup
 } from "views/accounting/shareComponents/common";
-import { DropdownSearchableV2 } from "shareComponents/common";
-import {useDispatch} from "react-redux";
-import {setFilterDropdown} from "redux/reducer/DocumentProjectSlice";
-import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
 import {
-	useAccount,
-} from "services/hooks/items/useAccount";
-import { VOUCHER_TYPES, LIMIT_DROPDOWN } from "apis/localdb/index";
-import API from "apis/repository";
-import {
-  useJournallList,
   useJournalByProperty
 } from "services/hooks/accounting/useGeneralJournal";
-const ITEM_ACCOUNT = "/api/item/accounts";
 
-export const AccountingInOutPage: FC = () => {
+export const AccountingInOutDetailPage1: FC = () => {
   const [showOption, setShowOption] = useState(false)
-  const [pageIndex, setPageIndex] = useState(0)
-  const dispatch = useDispatch();
-
-  type PaginateHandle = React.ElementRef<typeof PaginateV2>;
-  type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
-  const ref = React.useRef<PaginateHandle>(null);
-  const datahubRef = React.useRef<DropdownHandle>(null);
-  const [departmentsID, setDepartmentsID] = useState<string[]>([]);
-  const [accountKeyword, setAccountKeyword] = useState("");
   const [inputFilter, setInputFilter] = useState({ keyword: '', fromDate: new Date(new Date().getFullYear(), 0, 1), toDate: new Date(new Date().getFullYear(), 11, 31) });
-  
-  const [infoAccount, setInfoAccount] = useState({} as any);
+ 
+  const params: any = useParams();
 
-	const [searchAccount, setSearchAccount] = useState();
-
-  const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage } = useAccount({
+  const { listJournalByProperty: dataAll } = useJournalByProperty({
     params: {
-      limit: 5,
-      keyword: searchAccount,
+        option: 9,
+        optionTerm: 1,
+        fromDate: inputFilter.fromDate,
+        toDate: inputFilter.toDate,
+        arrAccIDs: [params.accountID]
     },
     isFetchList: true
   })
 
-  // const { listJournalByProperty: dataS, listJournalByPropertyIsLoading, refetchListJournalByProperty } = useJournalByProperty({
-  //   params: {
-  //       option: 3,
-  //       optionTerm: 1,
-  //       fromDate: inputFilter.fromDate,
-  //       toDate: inputFilter.toDate,
-  //       // arrAccIDs: [accountID],
-  //   },
-  //   isFetchList: true
-  // })
+  let tonDauKy = 0, nhapTrongKy = 0, xuatTrongKy = 0, tonCuoiKy = 0
 
-// console.log(listAccountWithPager)
-// console.log({totalRecord})
-// console.log({totalPages})
+  if(dataAll && dataAll?.arrCombine){
+    for(const item of dataAll?.arrCombine){
+      tonDauKy = tonDauKy + item.kcNoDauKy + item.noDauKy - item.kcCoDauKy - item.coDauKy
+      nhapTrongKy = nhapTrongKy + item.noTrongKy
+      xuatTrongKy = xuatTrongKy + item.coTrongKy
+      tonCuoiKy = tonCuoiKy + item.kcNoDauKy + item.noDauKy + item.noTrongKy - item.kcCoDauKy - item.coDauKy - item.coTrongKy
+    }
+  }
 
-// console.log(dataS)
-// console.log(listDataWithPager)
-// console.log({infoAccount})
-// console.log({accountID})
-// console.log({departmentsID})
-
-const handleOnChangeDate = useCallback((date, input) => {
+  const handleOnChangeDate = useCallback((date, input) => {
   if (input) {
     setInputFilter((value) => ({ ...value, toDate: date }))
   } else {
     setInputFilter((value) => ({ ...value, fromDate: date }))
   }
- }, [])
+  }, [])
 
   return (
     <main className="h-full">
@@ -110,21 +79,6 @@ const handleOnChangeDate = useCallback((date, input) => {
                 </div>
             }
           </div>
-          <PaginateV2
-              ref={ref}
-              totalRecord={totalRecord}
-              totalPages={totalPage}
-              limit={5}
-              hasNextPage={hasNextPage}
-              isFetching={isLoading}
-              nextPageAction={() => {
-                fetchNextPage();
-                  setPageIndex(oldState => oldState+1)
-              }}
-              prevPageAction={() => {
-                  setPageIndex(oldState => oldState-1)
-              }}
-          />
         </div>
         
       </header>
@@ -132,122 +86,78 @@ const handleOnChangeDate = useCallback((date, input) => {
       <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
         <thead className="bg-cbs-table-header h-10 border-b border-primary-border">
           <tr className="text-left text-sm text-primary-gray">
-            <th className="py-1 px-2 font-normal border-r border-primary-border" style={{width: "3.5%"}}>
-              TK
-            </th>
-            <th className="py-1 px-2 font-normal border-r border-primary-border w-1/12">
-              Mô tả
-            </th>
-            <th colSpan={3} className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
-              TỒN ĐẦU KỲ
-            </th>
-            <th colSpan={3} className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
-              NHẬP
-            </th>
-            <th colSpan={3} className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
-              XUẤT
-            </th>
-            <th colSpan={3} className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
-              TỒN CUỐI KỲ
-            </th>
-          </tr>
-          <tr className="text-left text-sm text-primary-gray">
             <th className="py-1 px-2 font-normal border-r border-primary-border">
-              
+              Sản phẩm, nguyên liệu
             </th>
             <th className="py-1 px-2 font-normal border-r border-primary-border">
-             
+              Đơn vị
             </th>
-            <th className="py-1 px-2 font-normal border-r border-primary-border">
-              SL
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
+              Tồn đầu kỳ
             </th>
-            <th className="py-1 px-2 font-normal border-r border-primary-border">
-              Đơn giá
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
+              Nhập trong kỳ
             </th>
-            <th className="py-1 px-2 font-normal border-r border-primary-border">
-              Thành tiền
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
+              Xuất trong kỳ
             </th>
-            <th className="py-1 px-2 font-normal border-r border-primary-border">
-              SL
-            </th>
-            <th className="py-1 px-2 font-normal border-r border-primary-border">
-              Đơn giá
-            </th>
-            <th className="py-1 px-2 font-normal border-r border-primary-border">
-              Thành tiền
-            </th>
-            <th className="py-1 px-2 font-normal border-r border-primary-border">
-              SL
-            </th>
-            <th className="py-1 px-2 font-normal border-r border-primary-border">
-              Đơn giá
-            </th>
-            <th className="py-1 px-2 font-normal border-r border-primary-border">
-              Thành tiền
-            </th>
-            <th className="py-1 px-2 font-normal border-r border-primary-border">
-              SL
-            </th>
-            <th className="py-1 px-2 font-normal border-r border-primary-border">
-              Đơn giá
-            </th>
-            <th className="py-1 px-2 font-normal border-r border-primary-border">
-              Thành tiền
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
+              Tồn cuối kỳ
             </th>
           </tr>
         </thead>
 
         <tbody className="">
-          {
-            (listDataWithPager[pageIndex] ?? []).map((item: any, index: any) => (
+          { 
+            dataAll?.arrCombine.map((item: any, index: any) => (
               <tr key={index} className="border-b border-primary-border h-10">
-                <td className="py-1 px-2 border-r border-primary-border">
-                  {item.name}
-                </td>
                 <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
                   <NavLink to={`/accounting/import-export/${item?._id}`}>
-                    {item?.description}
-                    </NavLink>
+                    {item.name}
+                  </NavLink>
                 </td>
                 <td className="py-1 px-2 border-r border-primary-border">
-                 
+                    {item?.unit}
                 </td>
-                <td className="py-1 px-2 border-r border-primary-border">
-                 
+                <td className="py-1 px-2 border-r border-primary-border text-right">
+                  {formatNumberMoney(Number(item.kcNoDauKy + item.noDauKy - item.kcCoDauKy - item.coDauKy))}
                 </td>
-                <td className="py-1 px-2 border-r border-primary-border">
-                 
+                <td className="py-1 px-2 border-r border-primary-border text-right">
+                  {formatNumberMoney(Number(item.noTrongKy))}
                 </td>
-                <td className="py-1 px-2 border-r border-primary-border">
-                 
-                 </td>
-                 <td className="py-1 px-2 border-r border-primary-border">
-                  
-                 </td>
-                 <td className="py-1 px-2 border-r border-primary-border">
-                  
-                 </td>
-                 <td className="py-1 px-2 border-r border-primary-border">
-                 
-                 </td>
-                 <td className="py-1 px-2 border-r border-primary-border">
-                  
-                 </td>
-                 <td className="py-1 px-2 border-r border-primary-border">
-                  
-                 </td>
-                 <td className="py-1 px-2 border-r border-primary-border">
-                 
-                 </td>
-                 <td className="py-1 px-2 border-r border-primary-border">
-                  
-                 </td>
-                 <td className="py-1 px-2 border-r border-primary-border">
-                  
-                 </td>
+                <td className="py-1 px-2 border-r border-primary-border text-right">
+                  {formatNumberMoney(Number(item.coTrongKy))}
+                </td>
+                <td className="py-1 px-2 border-r border-primary-border text-right">
+                  {formatNumberMoney(Number(item.kcNoDauKy + item.noDauKy + item.noTrongKy - item.kcCoDauKy - item.coDauKy - item.coTrongKy))}
+                </td>
               </tr>
             ))
           }
+
+            <tr className={cn(
+              "border-b border-primary-border h-10 font-bold",
+              styles.bgFooterYellow
+            )}>
+              <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
+                Tổng
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border">
+                  
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(tonDauKy)}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(nhapTrongKy)}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(xuatTrongKy)}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(tonCuoiKy)}
+              </td>
+            </tr>
         </tbody>
       </table>
     </main>
