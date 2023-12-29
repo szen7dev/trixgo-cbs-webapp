@@ -23,6 +23,7 @@ import {
   AccountingInOutDetailPage1,
   AccountingInOutDetailPage2,
   AccountingDebtPage,
+  AccountingDebtDetailPage1,
   ReceivablesCustomers,
   ReceivablesCustomersCode,
   AccountingVatPage,
@@ -161,6 +162,11 @@ const AccountingRouter: FC = () => {
         exact
         path="/accounting/debt-tracking"
         component={AccountingDebtPage}
+      />
+      <ProtectedRoute
+        exact
+        path="/accounting/debt-tracking/:accountID"
+        component={AccountingDebtDetailPage1}
       />
       <ProtectedRoute
         exact

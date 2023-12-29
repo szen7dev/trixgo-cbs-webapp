@@ -56,7 +56,7 @@ const LinkMenuLeftSideBar: FC = () => {
             </NavLink>
             <NavLink to={`/accounting/debt-tracking`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
               <img width={'7px'} src={iconFolder} alt="Menu item" />
-              <span className={"flex-1 ml-2 text-left text-[14px]"}>Theo dõi công nợ</span>
+              <span className={"flex-1 ml-2 text-left text-[14px]"}>Theo dõi công nợ (ok)</span>
             </NavLink>
             <NavLink to={`/accounting/vat`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
               <img width={'7px'} src={iconFolder} alt="Menu item" />

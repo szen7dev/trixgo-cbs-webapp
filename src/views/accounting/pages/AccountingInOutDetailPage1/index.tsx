@@ -29,6 +29,8 @@ export const AccountingInOutDetailPage1: FC = () => {
     isFetchList: true
   })
 
+  // console.log(dataAll?.arrCombine)
+
   let tonDauKy = 0, nhapTrongKy = 0, xuatTrongKy = 0, tonCuoiKy = 0
 
   if(dataAll && dataAll?.arrCombine){
