@@ -33,6 +33,7 @@ export const AccountingVatOutPage: FC = () => {
         limit: 10,
         forward: 0,
         cancel: 0,
+        vat: 2,
     },
     isFetchList: true
   })
