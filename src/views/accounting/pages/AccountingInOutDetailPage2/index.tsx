@@ -20,7 +20,7 @@ import {
 import { VOUCHER_TYPES, LIMIT_DROPDOWN } from "apis/localdb/index";
 import API from "apis/repository";
 import {
-  useJournallList,
+  useJournalList,
   useJournalByProperty
 } from "services/hooks/accounting/useGeneralJournal";
 const ITEM_ACCOUNT = "/api/item/accounts";

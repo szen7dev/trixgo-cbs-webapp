@@ -69,7 +69,7 @@ export interface UseQueryListData {
     isFetching: boolean;
 }
 
-export const useJournallList = ({ params = {},  isFetchList = false }: any): UseQueryListData => {
+export const useJournalList = ({ params = {},  isFetchList = false }: any): UseQueryListData => {
 
     const res = useInfiniteQuery(
         [`list_journal`, { params }],
