@@ -52,7 +52,6 @@ export const AccountingDiaryPage: FC = () => {
   })
 
   const handleOnChangeDate = useCallback((date, input) => {
-     // input = 0: fromDate, 1: toDate
     if (input) {
       setInputFilter((value) => ({ ...value, toDate: date }))
     } else {
@@ -178,32 +177,7 @@ export const AccountingDiaryPage: FC = () => {
               </th>
             </tr>
           </thead>
-
           <tbody>
-            {/* <tr
-              className={cn(
-                "border-b border-primary-border h-11",
-                styles.bgFooterYellow
-              )}
-            >
-              <td className="px-2 py-1 border-r border-primary-border">{""}</td>
-              <td className="px-2 py-1 border-r border-primary-border">{""}</td>
-              <td className="px-2 py-1 font-bold border-r border-primary-border">
-                Tổng hợp
-              </td>
-              <td className="px-2 py-1 border-r border-primary-border">{""}</td>
-              <td className="px-2 py-1 border-r border-primary-border">{""}</td>
-              <td className="px-2 py-1 border-r border-primary-border">{""}</td>
-              <td className="px-2 py-1 font-bold border-r border-primary-border">
-                10.000.000
-              </td>
-              <td className="px-2 py-1 font-bold border-r border-primary-border">
-                10.000.000
-              </td>
-              <td className="px-2 py-1 border-r border-primary-border">{""}</td>
-              <td className="px-2 py-1 border-r border-primary-border">{""}</td>
-            </tr> */}
-
             {
               (listDataWithPager[pageIndex] ?? []).map((item, index) => {
                 const jsx = [];
@@ -218,7 +192,7 @@ export const AccountingDiaryPage: FC = () => {
                         {(item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].text : ''}
                       </td>
                       <td className="py-1 px-2 text-primary border-r border-primary-border">
-                        <NavLink to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/${item?.voucher?._id}`}>
+                        <NavLink to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/detail/${item?.voucher?._id}`}>
                           {item?.voucher?.name}
                         </NavLink>
                       </td>
@@ -261,7 +235,7 @@ export const AccountingDiaryPage: FC = () => {
                         {(item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].text : ''}
                       </td>
                       <td className="py-1 px-2 text-primary border-r border-primary-border">
-                        <NavLink to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/${item?.voucher?._id}`}>
+                        <NavLink to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/detail/${item?.voucher?._id}`}>
                           {item?.voucher?.name}
                         </NavLink>
                       </td>

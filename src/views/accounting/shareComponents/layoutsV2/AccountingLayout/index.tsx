@@ -7,8 +7,8 @@ import menuIcon from "assets/images/icon-mobile-menu-black.png";
 import { HomeHeaderContent } from "shareComponents/layouts/HomeLayout/components";
 
 type Props = {
-  children: ReactNode;
-};
+  children: ReactNode
+}
 
 export const AccountingLayout: FC<Props> = ({ children }) => {
   const [isHeaderCollapse, setIsHeaderCollapse] = useState(false);
@@ -27,7 +27,7 @@ export const AccountingLayout: FC<Props> = ({ children }) => {
         "collapse-header": isHeaderCollapse,
       })}
     >
-      {/* Collapse menu button */}
+
       <button title="Toggle left sidebar" onClick={handleMenuEvent} className="home-left-sidebar-collapse-btn transition-all duration-500 ease-out fixed top-3 left-2 z-40 p-2">
         <img className="w-4" src={menuIcon} alt="Menu" />
       </button>

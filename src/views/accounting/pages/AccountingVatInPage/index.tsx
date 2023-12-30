@@ -140,7 +140,7 @@ export const AccountingVatInPage: FC = () => {
                 return (
                   <tr key={index + "debit"} className="border-b border-primary-border h-10">
                       <td className="py-1 px-2 border-r border-primary-border text-primary">
-                        <NavLink to={`/accounting/${ (item?.type && item?.type >= 1) ? VOUCHER_TYPES[Number(item?.type - 1)].slug : ''}/${item?._id}`}>
+                        <NavLink to={`/accounting/${ (item?.type && item?.type >= 1) ? VOUCHER_TYPES[Number(item?.type - 1)].slug : ''}/detail/${item?._id}`}>
                           {item?.sign}/{item?.signInvoice}
                         </NavLink>
                       </td>

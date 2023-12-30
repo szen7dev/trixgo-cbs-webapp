@@ -35,6 +35,8 @@ interface AccountingTicketsPageProps {
 export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1 }) => {
   const { openModal } = useModal();
   const { fundaID } = useParams<any>();
+  // console.log({fundaID})
+  
   const [pageParam, setPageParam] = useState('');
   const [inputFilter, setInputFilter] = useState({ fundaID, keyword: '', fromDate: new Date(new Date().getFullYear(), 0, 1), toDate: new Date(new Date().getFullYear(), 11, 31) });
   const [prevCursor, setPrevCursor] = useState([null]);
@@ -225,7 +227,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                       <input className="cbs-checkbox" type="checkbox" checked={Boolean(assigned[item._id])} onChange={e => handleChangeCheckbox(e, item)} />
                     </td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-medium" style={{ maxWidth: '250px' }}>
-                      <NavLink to={`/accounting/${VOUCHER_TYPES.find(item => item.value === type)?.slug}/${item._id}`}>
+                      <NavLink to={`/accounting/${VOUCHER_TYPES.find(item => item.value === type)?.slug}/detail/${item._id}`}>
                         <Popover onMouseEnterTooltip={false} tooltip={`${item.name}`} classTooltip="w-[336px] whitespace-normal left-0" >
                           <p className="text-2-line-clamp">{`${item.name}`}</p>
                         </Popover>
@@ -251,7 +253,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                       <input className="cbs-checkbox" type="checkbox" checked={Boolean(assigned[item._id])} onChange={e => handleChangeCheckbox(e, item)} />
                     </td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-cbs-highlight-color text-medium" style={{ maxWidth: '250px' }}>
-                      <NavLink to={`/accounting/${VOUCHER_TYPES.find(item => item.value === type)?.slug}/${item._id}`}>
+                      <NavLink to={`/accounting/${VOUCHER_TYPES.find(item => item.value === type)?.slug}/detail/${item._id}`}>
                         <Popover onMouseEnterTooltip={false} tooltip={`${item.name}`} classTooltip="w-[336px] whitespace-normal left-0" >
                           <p className="text-2-line-clamp">{`${item.name}`}</p>
                         </Popover>

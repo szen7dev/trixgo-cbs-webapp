@@ -168,12 +168,8 @@ export const AccountingDetailPage: FC = () => {
                 500
             )}
             onchangeValue={item => {
-                // const cloneIDs = [...departmentsID, item._id];
-
                 history.push({ search: `?accountId=${item._id}` })
                 setAccountId(item._id);
-
-                // dispatch(setFilterDropdown({ keyFilter: "departmentsID", dataFilter: cloneIDs }));
 
                 setPageIndex(0);
                 ref.current&&ref.current.resetPaginate();
@@ -348,7 +344,7 @@ export const AccountingDetailPage: FC = () => {
                         {(item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].text : ''}
                       </td>
                       <td className="py-1 px-2 text-primary border-r border-primary-border">
-                        <NavLink to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/${item?.voucher?._id}`}>
+                        <NavLink to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/detail/${item?.voucher?._id}`}>
                           {item?.voucher?.name}
                         </NavLink>
                       </td>
@@ -392,7 +388,7 @@ export const AccountingDetailPage: FC = () => {
                         {(item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].text : ''}
                       </td>
                       <td className="py-1 px-2 text-primary border-r border-primary-border">
-                        <NavLink to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/${item?.voucher?._id}`}>
+                        <NavLink to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/detail/${item?.voucher?._id}`}>
                           {item?.voucher?.name}
                         </NavLink>
                       </td>
