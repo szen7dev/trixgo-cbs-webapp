@@ -38,15 +38,7 @@ const CostAnalysis: FC = () => {
               data={[
                 {
                   _id: 1,
-                  content: "Thuốc làm đẹp da Hababa",
-                },
-                {
-                  _id: 2,
-                  content: "Thuốc làm đẹp da Hababa",
-                },
-                {
-                  _id: 3,
-                  content: "Thuốc làm đẹp da Hababa",
+                  content: "Demo............",
                 },
               ]}
               formatItem={{
@@ -146,54 +138,9 @@ const CostAnalysis: FC = () => {
                   style={{ marginLeft: "-21px" }}
                 />
               </td>
-              <td>Thuốc làm đẹp da Hababa</td>
-              <td>HaZ8822</td>
-              <td>Kho khu vực Hà Nội</td>
-            </tr>
-
-            <tr className="border-b border-primary-border h-11">
-              <td className="py-1 px-2 text-center">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="flexCheckDefault"
-                  style={{ marginLeft: "-21px" }}
-                />
-              </td>
-              <td>Thuốc làm đẹp da Hababa</td>
-              <td>HaZ8822</td>
-              <td>Kho khu vực Hà Nội</td>
-            </tr>
-
-            <tr className="border-b border-primary-border h-11">
-              <td className="py-1 px-2 text-center">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="flexCheckDefault"
-                  style={{ marginLeft: "-21px" }}
-                />
-              </td>
-              <td>Thuốc làm đẹp da Hababa</td>
-              <td>HaZ8822</td>
-              <td>Kho khu vực Hà Nội</td>
-            </tr>
-
-            <tr className="border-b border-primary-border h-11">
-              <td className="py-1 px-2 text-center">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="flexCheckDefault"
-                  style={{ marginLeft: "-21px" }}
-                />
-              </td>
-              <td>Thuốc làm đẹp da Hababa</td>
-              <td>HaZ8822</td>
-              <td>Kho khu vực Hà Nội</td>
+              <td>Demo............</td>
+              <td>Demo</td>
+              <td>Demo</td>
             </tr>
           </tbody>
         </table>
@@ -202,4 +149,4 @@ const CostAnalysis: FC = () => {
   );
 };
 
-export default CostAnalysis;
+export default CostAnalysis

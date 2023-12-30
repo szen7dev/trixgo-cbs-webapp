@@ -6,14 +6,10 @@ import cn from "classnames";
 
 /*=====3.ICONS=====*/
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
-import chevronRightIcon from "assets/images/icon-chevron-right.png";
-import chevronUpIcon from "assets/images/icon-chevron-up.png";
-import iconChat from "assets/images/icons8-chat-96.png";
 
 /*=====4.PAGES/COMPONENTS=====*/
-import { LeftNavigate, MainHeader, MainHeaderV2 } from "shareComponents/common";
+import { LeftNavigate, MainHeaderV2 } from "shareComponents/common";
 import { OwnerLeftSideBar } from './components';
-import { HomeRightSideBar } from "shareComponents/layouts";
 import { HomeHeaderContent } from "shareComponents/layouts/HomeLayout/components";
 
 /*=====5.TYPINGS=====*/
@@ -29,31 +25,11 @@ type Props = {
 export const OwnerLayoutV2: FC<Props> = ({ children }) => {
   const [isHeaderCollapse, setIsHeaderCollapse] = useState(false);
   const [isLeftMenuCollapse, setIsLeftMenuCollapse] = useState(false);
-  const [isRightSideBarCollapse, setIsRightSideBarCollapse] = useState(false);
-  const [isChatboxVisible, setIsChatboxVisible] = useState(false);
-  const [isNewChatboxVisible, setIsNewChatboxVisible] = useState(false);
+  const [isRightSideBarCollapse, setIsRightSideBarCollapse] = useState(false)
 
-  const handleHeaderEvent = () => {
-    setIsHeaderCollapse(!isHeaderCollapse);
-  };
   const handleMenuEvent = () => {
     setIsLeftMenuCollapse(!isLeftMenuCollapse);
-  };
-  const handleRightSideBarEvent = () => {
-    setIsRightSideBarCollapse(!isRightSideBarCollapse);
-  };
-  const closeMiniChatbox = () => {
-    setIsChatboxVisible(false);
-  };
-  const openMiniChatbox = () => {
-    setIsChatboxVisible(true);
-  };
-  const handleOpenNewChatbox = () => {
-    setIsNewChatboxVisible(true);
-  };
-  const handleCloseNewChatbox = () => {
-    setIsNewChatboxVisible(false);
-  };
+  }
 
   return (
     <section
@@ -72,7 +48,7 @@ export const OwnerLayoutV2: FC<Props> = ({ children }) => {
         <LeftNavigate handleMenuEvent={handleMenuEvent} />
         <section className={"main-content-wrapper flex-1"}>
           {/*  Main header */}
-          <MainHeaderV2 headerTitle={"Quản trị viên"}>
+          <MainHeaderV2 headerTitle={"Quản trị ứng dụng"}>
             <HomeHeaderContent />
           </MainHeaderV2>
 

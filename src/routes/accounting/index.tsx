@@ -86,11 +86,11 @@ const AccountingRouter: FC = () => {
         <Redirect to="/accounting/home" />
       </Route>
       <ProtectedRoute exact path="/accounting/home" component={AccountingHomePage} />
-      {/* <ProtectedRoute
+      <ProtectedRoute
         exact
         path="/accounting/dashboard"
         component={AccountingDashboardPage}
-      /> */}
+      />
       <ProtectedRoute
         exact
         path="/accounting/accbill/:fundaID?"
@@ -176,11 +176,11 @@ const AccountingRouter: FC = () => {
         path="/accounting/detail"
         component={AccountingDetailPage}
       />
-      {/* <ProtectedRoute
+      <ProtectedRoute
         exact
         path="/accounting/tbook"
         component={AccountingTBookPage}
-      /> */}
+      />
       <ProtectedRoute
         exact
         path="/accounting/diary"

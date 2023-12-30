@@ -221,8 +221,6 @@ export const DocumentDetailPage: FC = () => {
 
           fetchData();
       }
-      
-      console.log('=========DATA THAY ĐỔI RỒI==============')
   }, [dataImport])
 
   return (

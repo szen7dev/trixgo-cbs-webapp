@@ -1,5 +1,4 @@
 import React, { FC, memo } from "react";
-// import iconFolder from "assets/images/icons8-application-window-100.png";
 import { NavLink, useRouteMatch, generatePath, useParams } from 'react-router-dom';
 import { useAuth } from "services/hooks/auth/useAuth";
 import { useQueryDetailDepartment } from "services/hooks/items/useDepartment";
@@ -70,13 +69,6 @@ const ProjectLeftSideBar: FC = () => {
 						<img width={'20px'} src={homeImage} alt="Menu item" />
 						<span className={"flex-1 ml-2 text-left text-[14px]"}>Trang chủ</span>
 					</NavLink>
-					{/* <NavLink
-						to={{ pathname: generatePath('/pcm/project/:id/subject', match.params) }}
-						className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
-					>
-						<img width={'20px'} src={'/images/pcm/folder.png'} alt="Menu item" />
-						<span className={"flex-1 ml-2 text-left text-[14px]"}>Quản lý công việc</span>
-					</NavLink> */}
 					{listAppMenu && listAppMenu.length ?
 						<>
 							{listAppMenu.map((item: any, index: number) => {

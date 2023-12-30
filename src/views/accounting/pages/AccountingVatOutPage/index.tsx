@@ -7,24 +7,37 @@ import { formatNumberMoney } from "utils/cmcs";
 import {
   FilterDateGroup
 } from "views/accounting/shareComponents/common";
-import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
 import { VOUCHER_TYPES } from "apis/localdb/index";
 import {
   useVoucherList
 } from "services/hooks/accounting/useAccVoucher";
+import {debounce} from "lodash";
+import { DropdownSearchableV2 } from "shareComponents/common";
+import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
+import { useFunda } from "services/hooks/items/useFunda";
 
 export const AccountingVatOutPage: FC = () => {
-  const [showOption, setShowOption] = useState(false)
   const [pageIndex, setPageIndex] = useState(0)
-
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+  type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
   const ref = React.useRef<PaginateHandle>(null);
+  const accountRef = React.useRef<DropdownHandle>(null);
+
+  const [fundaId, setFundaId] = useState<string | null>();
+  const [fundaKeyword, setFundaKeyword] = useState("");
+
+  const [showOption, setShowOption] = useState(false)
 
   const [inputFilter, setInputFilter] = useState({
     keyword: '',
     fromDate: new Date(new Date().getFullYear(), 0, 1),
     toDate: new Date(new Date().getFullYear(), 11, 31)
   });
+
+  const { list: listFunda } = useFunda({
+		params: { keyword: fundaKeyword },
+    isFetchList: true
+	})
 
   const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage } = useVoucherList({
     params: {
@@ -34,6 +47,7 @@ export const AccountingVatOutPage: FC = () => {
         forward: 0,
         cancel: 0,
         vat: 2,
+        fundaID: fundaId,
     },
     isFetchList: true
   })
@@ -50,8 +64,33 @@ export const AccountingVatOutPage: FC = () => {
 
   return (
     <main className="h-full">
-      <header className="h-[50px] w-full border border-primary-border flex items-center justify-between px-6">
-        <p className="text-lg">Bảng kê hóa đơn bán ra</p>
+      <header className="h-[50px] w-full border border-primary-border flex items-center px-2">
+        <p className="text-lg mr-5">Bảng kê hóa đơn bán ra</p>
+        <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            placeholder={"Đơn vị cơ sở"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listFunda}
+            formatItem={{
+                id: "_id",
+                text: "name",
+            }}
+            onSearchInputChange={debounce(
+                (valueSearch) => setFundaKeyword(valueSearch),
+                500
+            )}
+            onchangeValue={item => {
+                setFundaId(item._id);
+                setPageIndex(0);
+                ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+        />
 
         <div className="flex items-center">
           <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
@@ -143,6 +182,7 @@ export const AccountingVatOutPage: FC = () => {
                         <NavLink to={`/accounting/${ (item?.type && item?.type >= 1) ? VOUCHER_TYPES[Number(item?.type - 1)].slug : ''}/detail/${item?._id}`}>
                           {item?.sign}/{item?.signInvoice}
                         </NavLink>
+                        <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.funda?.name}</p>
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
                         {moment(item?.date).format('DD/MM/YYYY')}

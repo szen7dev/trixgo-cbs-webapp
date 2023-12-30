@@ -1,9 +1,6 @@
 import React, { FC, ReactNode, useEffect, useRef, useState, UIEvent, useImperativeHandle, forwardRef } from "react";
 import { map as _map } from "lodash";
 import classNames from "classnames";
-// import API from "../../apis/repository";
-// import {GetSearchSelectResponse} from "../../typings/apis/searchSelect";
-// import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import Close from "assets/icons/Close";
 import BlueCheck from "assets/images/blue-check.svg";
 import TriangleDown from "assets/icons/TriangleDown";
@@ -25,8 +22,6 @@ type Props = {
   id?: string;
   data?: Array<Item>;
   placeholder?: string;
-  // searchUrl?: string;
-  // searchParam?: string;
   initialValue?: Item | Item[];
   onchangeValue?: (item: Item) => void;
   className?: string;
@@ -59,8 +54,6 @@ type DropdownSearchableHandle = {
 
 export const DropdownSearchable = forwardRef<DropdownSearchableHandle, Props>(({
   data,
-  // searchUrl,
-  // searchParam,
   id,
   placeholder = "Lựa chọn",
   initialValue,
@@ -97,8 +90,6 @@ export const DropdownSearchable = forwardRef<DropdownSearchableHandle, Props>(({
   const [searchTerm, setSearchTerm] = useState("");
   const wrapperRef = useRef<HTMLDivElement>(null);
   const inputSearchRef = useRef<HTMLInputElement>(null);
-
-  // useOnClickOutside(wrapperRef, () => setShowOption(false));
 
   useImperativeHandle(dropdownsearchRef, () => ({
     setValueRef(value) {
@@ -331,7 +322,6 @@ export const DropdownSearchable = forwardRef<DropdownSearchableHandle, Props>(({
             onChange={(e) => handleSearchingValue(e.target.value)}
           />
         )}
-        {/*</div>*/}
         {showTriangle && (
           <div
             className={

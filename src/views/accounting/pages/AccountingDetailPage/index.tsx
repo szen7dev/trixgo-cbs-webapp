@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useState, useEffect } from "react";
-import { useHistory, NavLink, useLocation } from "react-router-dom"
+import { useHistory, NavLink, useLocation } from "react-router-dom";
 import cn from "classnames";
 import styles from 'views/accounting/styles/styles.module.css';
 import DotsVerticalIcon from "assets/icons/DotsVertical";
@@ -11,12 +11,10 @@ import {
   FilterDateGroup
 } from "views/accounting/shareComponents/common";
 import { DropdownSearchableV2, Loader } from "shareComponents/common";
-import {useDispatch} from "react-redux";
-// import {setFilterDropdown} from "redux/reducer/DocumentProjectSlice";
 import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
-import {
-	useQueryListAccount,
-} from "services/hooks/cmcs/useContractIncome";
+import { useQueryListAccount } from "services/hooks/cmcs/useContractIncome";
+import { useFunda } from "services/hooks/items/useFunda";
+import { useWarehouse } from "services/hooks/items/useWarehouse";
 import { VOUCHER_TYPES, LIMIT_DROPDOWN } from "apis/localdb/index";
 import API from "apis/repository";
 import {
@@ -29,21 +27,24 @@ const ITEM_ACCOUNT = "/api/item/accounts";
 export const AccountingDetailPage: FC = () => {
   const [showOption, setShowOption] = useState(false)
   const [pageIndex, setPageIndex] = useState(0)
-  // const dispatch = useDispatch();
+  
   const history = useHistory();
   const location = useLocation()
-
   const searchParams = new URLSearchParams(location.search)
   const accountIdParams = searchParams.get("accountId")
 
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
   const ref = React.useRef<PaginateHandle>(null);
-  const datahubRef = React.useRef<DropdownHandle>(null);
-  // const [departmentsID, setDepartmentsID] = useState<string[]>([]);
+  const accountRef = React.useRef<DropdownHandle>(null);
 
   const [accountId, setAccountId] = useState<string | null>(accountIdParams);
+  const [fundaId, setFundaId] = useState<string | null>();
+  const [warehouseId, setWarehouseId] = useState<string | null>();
+
   const [accountKeyword, setAccountKeyword] = useState("");
+  const [fundaKeyword, setFundaKeyword] = useState("");
+  const [warehouseKeyword, setWarehouseKeyword] = useState("");
 
   const [inputFilter, setInputFilter] = useState({
     keyword: '',
@@ -58,14 +59,26 @@ export const AccountingDetailPage: FC = () => {
 		keyword: accountKeyword,
 	})
 
+  const { list: listFunda } = useFunda({
+		params: { keyword: fundaKeyword },
+    isFetchList: true
+	})
+
+  const { list: listWarehouse } = useWarehouse({
+		params: { keyword: warehouseKeyword },
+    isFetchList: true
+	})
+
   const { listDataWithPager, isLoading: isLoadingJournallList, totalRecord, totalPage, fetchNextPage, hasNextPage } = useJournalList({
     params: {
-        fromDate: inputFilter.fromDate,
-        toDate: inputFilter.toDate,
         limit: 5,
-        accountID: accountId,
         forward: 0,
         cancel: 0,
+        fromDate: inputFilter.fromDate,
+        toDate: inputFilter.toDate,
+        accountID: accountId,
+        fundaID: fundaId,
+        warehouseID: warehouseId,
     },
     isFetchList: true
   })
@@ -77,6 +90,8 @@ export const AccountingDetailPage: FC = () => {
         fromDate: inputFilter.fromDate,
         toDate: inputFilter.toDate,
         arrAccIDs: [accountId],
+        fundaID: fundaId,
+        warehouseID: warehouseId,
     },
     isFetchList: true
   })
@@ -149,10 +164,10 @@ export const AccountingDetailPage: FC = () => {
 
   return (
     <main className="h-full">
-      <header className="h-[50px] w-full border border-primary-border flex items-center justify-between px-2">
-        <p className="text-lg">{infoAccount?.name}-{infoAccount?.description}</p>
+      <header className="h-[50px] w-full border border-primary-border flex items-center px-2">
+        <p className="text-lg mr-5">{infoAccount?.name}-{infoAccount?.description}</p>
         <DropdownSearchableV2
-            ref={datahubRef}
+            ref={accountRef}
             className={"mr-1 border border-primary-border rounded-lg mb-2"}
             placeholder={"Tài khoản"}
             isMultiple={false}
@@ -176,6 +191,58 @@ export const AccountingDetailPage: FC = () => {
             }}
             renderItem={(item) => (
                 <p className={"min-w-[300px]"}>{item.text}-{item.description}</p>
+            )}
+            selectOneByOne={true}
+        />
+
+        <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            placeholder={"Đơn vị cơ sở"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listFunda}
+            formatItem={{
+                id: "_id",
+                text: "name",
+            }}
+            onSearchInputChange={debounce(
+                (valueSearch) => setFundaKeyword(valueSearch),
+                500
+            )}
+            onchangeValue={item => {
+                setFundaId(item._id);
+                setPageIndex(0);
+                ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+        />
+
+        <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            placeholder={"Kho bãi"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listWarehouse}
+            formatItem={{
+                id: "_id",
+                text: "name",
+            }}
+            onSearchInputChange={debounce(
+                (valueSearch) => setWarehouseKeyword(valueSearch),
+                500
+            )}
+            onchangeValue={item => {
+                setWarehouseId(item._id);
+                setPageIndex(0);
+                ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
             )}
             selectOneByOne={true}
         />
@@ -206,21 +273,23 @@ export const AccountingDetailPage: FC = () => {
                 </div>
             }
           </div>
-          <PaginateV2
-              ref={ref}
-              totalRecord={totalRecord}
-              totalPages={totalPage}
-              limit={5}
-              hasNextPage={hasNextPage}
-              isFetching={isLoadingJournallList}
-              nextPageAction={() => {
-                fetchNextPage();
-                  setPageIndex(oldState => oldState+1)
-              }}
-              prevPageAction={() => {
-                  setPageIndex(oldState => oldState-1)
-              }}
-          />
+          <div className="absolute right-0">
+            <PaginateV2
+                ref={ref}
+                totalRecord={totalRecord}
+                totalPages={totalPage}
+                limit={5}
+                hasNextPage={hasNextPage}
+                isFetching={isLoadingJournallList}
+                nextPageAction={() => {
+                  fetchNextPage();
+                    setPageIndex(oldState => oldState+1)
+                }}
+                prevPageAction={() => {
+                    setPageIndex(oldState => oldState-1)
+                }}
+            />
+          </div>
         </div>
 
       </header>
@@ -343,10 +412,11 @@ export const AccountingDetailPage: FC = () => {
                       <td className="py-1 px-2 border-r border-primary-border">
                         {(item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].text : ''}
                       </td>
-                      <td className="py-1 px-2 text-primary border-r border-primary-border">
-                        <NavLink to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/detail/${item?.voucher?._id}`}>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        <NavLink className="text-primary" to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/detail/${item?.voucher?._id}`}>
                           {item?.voucher?.name}
                         </NavLink>
+                        <p><i>{item?.funda?.name}</i></p>
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
                         {item?.voucher?.sign}
@@ -387,10 +457,11 @@ export const AccountingDetailPage: FC = () => {
                       <td className="py-1 px-2 border-r border-primary-border">
                         {(item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].text : ''}
                       </td>
-                      <td className="py-1 px-2 text-primary border-r border-primary-border">
-                        <NavLink to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/detail/${item?.voucher?._id}`}>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        <NavLink className="text-primary" to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/detail/${item?.voucher?._id}`}>
                           {item?.voucher?.name}
                         </NavLink>
+                        <p><i>{item?.funda?.name}</i></p>
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
                         {item?.voucher?.sign}

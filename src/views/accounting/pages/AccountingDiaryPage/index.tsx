@@ -1,5 +1,5 @@
-import React, { FC, useCallback, useState, useEffect } from "react";
-import { NavLink, useParams } from "react-router-dom"
+import React, { FC, useCallback, useState } from "react";
+import { NavLink } from "react-router-dom"
 import cn from "classnames";
 import styles from 'views/accounting/styles/styles.module.css';
 import DotsVerticalIcon from "assets/icons/DotsVertical";
@@ -11,42 +11,44 @@ import {
   FilterDateGroup
 } from "views/accounting/shareComponents/common";
 import { DropdownSearchableV2 } from "shareComponents/common";
-import {useDispatch} from "react-redux";
-import {setFilterDropdown} from "redux/reducer/DocumentProjectSlice";
 import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
+import { VOUCHER_TYPES } from "apis/localdb/index";
 import {
-	useQueryListAccount,
-} from "services/hooks/cmcs/useContractIncome";
-import { VOUCHER_TYPES, LIMIT_DROPDOWN } from "apis/localdb/index";
-import API from "apis/repository";
-import {
-  useJournalList,
-  useJournalByProperty
+  useJournalList
 } from "services/hooks/accounting/useGeneralJournal";
-const ITEM_ACCOUNT = "/api/item/accounts";
+import { useFunda } from "services/hooks/items/useFunda";
 
 export const AccountingDiaryPage: FC = () => {
   const [showOption, setShowOption] = useState(false)
   const [pageIndex, setPageIndex] = useState(0)
-  const dispatch = useDispatch();
 
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+  type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
   const ref = React.useRef<PaginateHandle>(null);
+  const accountRef = React.useRef<DropdownHandle>(null);
+
+  const [fundaId, setFundaId] = useState<string | null>();
+  const [fundaKeyword, setFundaKeyword] = useState("");
 
   const [inputFilter, setInputFilter] = useState({
     keyword: '',
     fromDate: new Date(new Date().getFullYear(), 0, 1),
     toDate: new Date(new Date().getFullYear(), 11, 31)
-  });
+  })
+
+  const { list: listFunda } = useFunda({
+		params: { keyword: fundaKeyword },
+    isFetchList: true
+	})
 
   const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage } = useJournalList({
     params: {
         fromDate: inputFilter.fromDate,
         toDate: inputFilter.toDate,
         limit: 10,
-        // accountID,
         forward: 0,
         cancel: 0,
+        fundaID: fundaId,
     },
     isFetchList: true
   })
@@ -61,8 +63,32 @@ export const AccountingDiaryPage: FC = () => {
 
   return (
     <main className="h-full">
-      <header className="h-[50px] w-full border border-primary-border flex items-center justify-between px-6">
-        <p className="text-lg">Sổ nhật ký chung</p>
+      <header className="h-[50px] w-full border border-primary-border flex items-center px-2">
+        <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            placeholder={"Đơn vị cơ sở"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listFunda}
+            formatItem={{
+                id: "_id",
+                text: "name",
+            }}
+            onSearchInputChange={debounce(
+                (valueSearch) => setFundaKeyword(valueSearch),
+                500
+            )}
+            onchangeValue={item => {
+                setFundaId(item._id);
+                setPageIndex(0);
+                ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+        />
 
         <div className="flex items-center">
           <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
@@ -90,21 +116,23 @@ export const AccountingDiaryPage: FC = () => {
                 </div>
             }
           </div>
-          <PaginateV2
-              ref={ref}
-              totalRecord={totalRecord}
-              totalPages={totalPage}
-              limit={10}
-              hasNextPage={hasNextPage}
-              isFetching={isLoading}
-              nextPageAction={() => {
-                fetchNextPage();
-                  setPageIndex(oldState => oldState+1)
-              }}
-              prevPageAction={() => {
-                  setPageIndex(oldState => oldState-1)
-              }}
-          />
+          <div className="absolute right-0">
+            <PaginateV2
+                ref={ref}
+                totalRecord={totalRecord}
+                totalPages={totalPage}
+                limit={10}
+                hasNextPage={hasNextPage}
+                isFetching={isLoading}
+                nextPageAction={() => {
+                  fetchNextPage();
+                    setPageIndex(oldState => oldState+1)
+                }}
+                prevPageAction={() => {
+                    setPageIndex(oldState => oldState-1)
+                }}
+            />
+          </div>
         </div>
       </header>
 
@@ -191,10 +219,11 @@ export const AccountingDiaryPage: FC = () => {
                       <td className="py-1 px-2 border-r border-primary-border">
                         {(item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].text : ''}
                       </td>
-                      <td className="py-1 px-2 text-primary border-r border-primary-border">
-                        <NavLink to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/detail/${item?.voucher?._id}`}>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        <NavLink className="text-primary" to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/detail/${item?.voucher?._id}`}>
                           {item?.voucher?.name}
                         </NavLink>
+                        <p><i>{item?.funda?.name}</i></p>
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
                         {item?.voucher?.sign}
@@ -234,10 +263,11 @@ export const AccountingDiaryPage: FC = () => {
                       <td className="py-1 px-2 border-r border-primary-border">
                         {(item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].text : ''}
                       </td>
-                      <td className="py-1 px-2 text-primary border-r border-primary-border">
-                        <NavLink to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/detail/${item?.voucher?._id}`}>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        <NavLink className="text-primary" to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/detail/${item?.voucher?._id}`}>
                           {item?.voucher?.name}
                         </NavLink>
+                        <p><i>{item?.funda?.name}</i></p>
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
                         {item?.voucher?.sign}
