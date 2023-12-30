@@ -1,26 +1,20 @@
-import React, { FC, useEffect, useState } from "react";
-import Back from "assets/icons/Back";
+import { FC, useEffect, useState } from "react";
 import DotsVerticalIcon from "assets/icons/DotsVertical";
-import { NavLink, useHistory, useParams } from "react-router-dom"
+import { useHistory, useParams } from "react-router-dom"
 import { ActionAccountingGroup } from "views/accounting/shareComponents/common";
-
 import LogIcon from "assets/icons/Log";
-import FolderIcon from "assets/images/icons8-folder-100.svg";
 import { VOUCHER_TYPES, DATE_FORMAT_TIME } from "apis/localdb/index";
 import { Paginate } from "shareComponents/common";
-
 import {
   useJournalDetailList
 } from "services/hooks/accounting/useAccountingVoucher";
 import { formatNumberMoney, convertDisplayDate } from "utils/cmcs"
-
 import API from "apis/repository";
 const APP_ACCOUNTING_VOUCHER = "/api/accounting/vouchers";
 
 export const AccountingTicketDetailPage: FC = () => {
 
   const params: any = useParams();
-
   const [voucherDetail, setVoucherDetail] = useState({} as any);
 
   useEffect(() => {
@@ -30,7 +24,7 @@ export const AccountingTicketDetailPage: FC = () => {
         params: {
           populates: {
             "path": "customer contract ipc subtype userCreate userUpdate company",
-            "select": "name description bizfullname",
+            "select": "name description fullname",
           }
         }
       }
@@ -72,21 +66,31 @@ export const AccountingTicketDetailPage: FC = () => {
 
   return (
     <div className={"relative min-h-full pb-10"}>
-      <div className="shadow-lg flex border-b border-gray-200 align-items-center px-6 py-2 sticky top-0 bg-white z-10">
-        <div className="cursor-pointer" onClick={() => history.goBack()}>
-          <Back />
-        </div>
-        <button type="button" className="rounded-full h-10 w-10 flex items-center justify-center bg-gray-100 ml-5">
-          <DotsVerticalIcon />
-        </button>
-      </div>
       <div className={"content-detail-ticket"}>
         <div className={"px-6 py-2"}>
           <div className={"title-ticket-detail flex"}>
             <div className={"flex-1 flex items-center"}>
-              <div className={"text-xl"}>
-                {voucherDetail?.name}
-              </div>
+              <button
+                type="button"
+                className="p-2 rounded-3xl mr-2"
+                onClick={() => history.goBack()}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                  />
+                </svg>
+              </button>
+              <p className="text-lg">{voucherDetail?.name}</p>
               <span className={"text-sm rounded-full bg-primary text-white h-5 leading-5 ml-2 px-2"}>
                 {VOUCHER_TYPES.find(item => item.value === voucherDetail?.type)?.text}
               </span>
@@ -98,58 +102,58 @@ export const AccountingTicketDetailPage: FC = () => {
             </button>
           </div>
           <div className={"infor-ticket flex mt-1 items-center"}>
-            <p className={"flex-1"}><span className={"text-gray-500"}>Khởi tạo:</span>  {voucherDetail?.userCreate?.bizfullname} {convertDisplayDate(voucherDetail?.createAt, DATE_FORMAT_TIME)}</p>
-            <p><span className={"text-gray-500"}>Cập nhật:</span> {voucherDetail?.userUpdate?.bizfullname} {convertDisplayDate(voucherDetail?.updatedAt, DATE_FORMAT_TIME)}</p>
-            <button type="button" className={"ml-2"}>
+            <p className={"flex-1"}><span className={"text-gray-500"}>Khởi tạo:</span>  {voucherDetail?.userCreate?.fullname} {convertDisplayDate(voucherDetail?.createAt, DATE_FORMAT_TIME)}</p>
+            <button type="button" className={"mr-2"}>
               <LogIcon />
             </button>
+            <p><span className={"text-gray-500"}>Cập nhật:</span> {voucherDetail?.userUpdate?.fullname} {convertDisplayDate(voucherDetail?.updatedAt, DATE_FORMAT_TIME)}</p>
           </div>
-          <div className={"extra-infor-ticket flex text-gray-500 items-center mt-2"}>
+          {/* <div className={"extra-infor-ticket flex text-gray-500 items-center mt-2"}>
             <span className={"mr-1"}>
               <img alt={"icon-folder"} src={FolderIcon} />
             </span>
             Phân vùng: {voucherDetail?.company?.name} | Hợp đồng: {voucherDetail?.contract?.name} - {voucherDetail?.contract?.sign} - Ngày {convertDisplayDate(voucherDetail?.contract?.date)} | {voucherDetail?.ipc?.name}
-          </div>
+          </div> */}
         </div>
-        <div className={"relative table border-collapse w-full text-center"}>
+        <div className={"relative table border-collapse w-full"}>
           <div className={"header flex table-row"}>
-            <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300 align-middle"}>
+            <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300"}>
               TK nợ
             </div>
-            <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300 align-middle"}>
+            <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300"}>
               TK có
             </div>
-            <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300 align-middle"}>
+            <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300"}>
               Mã khách nợ
             </div>
-            <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300 align-middle"}>
+            <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300"}>
               Mã khách có
             </div>
-            <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300 align-middle"}>
+            <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300"}>
               Sản phẩm/Hàng hóa
             </div>
-            <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300 align-middle"}>
+            <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300"}>
               Kho bãi
             </div>
-            <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300 align-middle"}>
+            <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300"}>
               Tồn kho
             </div>
-            <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300 align-middle"}>
+            <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300"}>
               Số lượng
             </div>
-            <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300 align-middle"}>
+            <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300"}>
               Đơn giá
             </div>
-            <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300 align-middle"}>
+            <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300"}>
               Thành tiền
             </div>
-            <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300 align-middle"}>
+            <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300"}>
               Hợp đồng
             </div>
-            <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300 align-middle"}>
+            <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300"}>
               Ngân sách
             </div>
-            <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300 align-middle"}>
+            <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300"}>
               Ghi chú
             </div>
           </div>
@@ -157,43 +161,43 @@ export const AccountingTicketDetailPage: FC = () => {
           {journalDetailList?.listJournalDetail?.map((item: any) => {
             return (
               <div key={item._id} className={"flex table-row"}>
-                <div className={"px-2 py-4 table-cell text-left box-border border-b border-t border-gray-300 align-middle"}>
+                <div className={"px-2 py-4 table-cell text-left box-border border-b border-t border-gray-300"}>
                   {item?.debit?.name} - {item?.debit?.description}
                 </div>
-                <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 align-middle"}>
+                <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
                   {item?.credit?.name} - {item?.credit?.description}
                 </div>
-                <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 align-middle"}>
+                <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
                   {item?.customerDebit?.name}
                 </div>
-                <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 align-middle"}>
+                <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
                   {item?.customerCredit?.name}
                 </div>
-                <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 align-middle"}>
+                <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
                   {item?.goods?.name}
                 </div>
-                <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 align-middle"}>
+                <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
                   {item?.warehouse?.name}
                 </div>
-                <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 align-middle"}>
+                <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
                   Cái
                 </div>
-                <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 align-middle"}>
+                <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
                   {formatNumberMoney(item?.quantity)}
                 </div>
-                <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 align-middle"}>
+                <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
                   {formatNumberMoney(item?.unitprice)}
                 </div>
-                <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 align-middle"}>
+                <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
                   {formatNumberMoney(item?.amount)}
                 </div>
-                <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 align-middle"}>
+                <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
                   {item?.contract?.name}
                 </div>
-                <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 align-middle"}>
+                <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
                   {item?.budgetWork?.name}
                 </div>
-                <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 align-middle"}>
+                <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
                   {item?.note}
                 </div>
               </div>
@@ -201,43 +205,43 @@ export const AccountingTicketDetailPage: FC = () => {
           })}
 
           <div className={"flex table-row"}>
-            <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 align-middle bg-gray-200"}>
+            <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
 
             </div>
-            <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 align-middle bg-gray-200"}>
+            <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
 
             </div>
-            <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 align-middle bg-gray-200"}>
+            <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
 
             </div>
-            <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 align-middle bg-gray-200"}>
+            <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
 
             </div>
-            <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 align-middle bg-gray-200"}>
+            <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
 
             </div>
-            <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 align-middle bg-gray-200"}>
+            <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
 
             </div>
-            <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 align-middle bg-gray-200"}>
+            <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
 
             </div>
-            <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 align-middle bg-gray-200"}>
+            <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
 
             </div>
-            <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 align-middle bg-gray-200"}>
+            <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
 
             </div>
-            <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 align-middle bg-gray-200 font-bold"}>
+            <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 font-bold"}>
               {formatNumberMoney(voucherDetail?.amount)}
             </div>
-            <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 align-middle bg-gray-200"}>
+            <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
 
             </div>
-            <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 align-middle bg-gray-200"}>
+            <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
 
             </div>
-            <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 align-middle bg-gray-200"}>
+            <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
 
             </div>
           </div>
