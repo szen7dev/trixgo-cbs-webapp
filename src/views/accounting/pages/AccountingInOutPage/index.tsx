@@ -1,4 +1,4 @@
-import { FC, useCallback, useState } from "react";
+import React, { FC, useCallback, useState } from "react";
 import { NavLink } from "react-router-dom"
 import DotsVerticalIcon from "assets/icons/DotsVertical";
 import Close from "assets/icons/Close";
@@ -9,17 +9,36 @@ import {
 import {
   useJournalByProperty
 } from "services/hooks/accounting/useGeneralJournal";
+import {debounce} from "lodash";
+import { DropdownSearchableV2 } from "shareComponents/common";
+import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
+import { useFunda } from "services/hooks/items/useFunda";
 
 export const AccountingInOutPage: FC = () => {
+  const [pageIndex, setPageIndex] = useState(0)
+  type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+  type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
+  const ref = React.useRef<PaginateHandle>(null);
+  const accountRef = React.useRef<DropdownHandle>(null);
+
+  const [fundaId, setFundaId] = useState<string | null>();
+  const [fundaKeyword, setFundaKeyword] = useState("");
+  
   const [showOption, setShowOption] = useState(false)
   const [inputFilter, setInputFilter] = useState({ keyword: '', fromDate: new Date(new Date().getFullYear(), 0, 1), toDate: new Date(new Date().getFullYear(), 11, 31) });
 
+  const { list: listFunda } = useFunda({
+		params: { keyword: fundaKeyword },
+    isFetchList: true
+	})
+
   const { listJournalByProperty: dataAll } = useJournalByProperty({
     params: {
-        option: 4,
-        optionTerm: 1,
         fromDate: inputFilter.fromDate,
         toDate: inputFilter.toDate,
+        option: 4,
+        optionTerm: 1,
+        fundaID: fundaId,
     },
     isFetchList: true
   })
@@ -34,8 +53,32 @@ const handleOnChangeDate = useCallback((date, input) => {
 
   return (
     <main className="h-full">
-      <header className="h-[50px] w-full border border-primary-border flex items-center justify-between px-2">
-        <p className="text-lg">---Tên cơ sở được lựa chọn---</p>
+      <header className="h-[50px] w-full border border-primary-border flex items-center px-2">
+        <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            placeholder={"Đơn vị cơ sở"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listFunda}
+            formatItem={{
+                id: "_id",
+                text: "name",
+            }}
+            onSearchInputChange={debounce(
+                (valueSearch) => setFundaKeyword(valueSearch),
+                500
+            )}
+            onchangeValue={item => {
+                setFundaId(item._id);
+                setPageIndex(0);
+                ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+        />
 
         <div className="flex items-center">
           <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
