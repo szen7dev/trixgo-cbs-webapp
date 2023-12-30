@@ -1024,7 +1024,82 @@ export const APP_ID = {
         id: "5fe58c9b95db3c6e1534ec78",
     },
     ACCOUNTING: {
-        id: "61e049aefdebf77b072d1b12"
+        id: "61e049aefdebf77b072d1b12",
+        menuAccountingApp: {
+            id: "623f1f49e998e94feda0cd74",
+            dashboard: {
+                id: "623f1f63e998e94feda0cd75",
+                name: "Báo cáo quản trị"
+            },
+            detail: {
+                id: "623f2056e998e94feda0cd7e",
+                name: "Chi tiết tài khoản"
+            },
+            goods_import: {
+                id: "623f1fabe998e94feda0cd79",
+                name: "Phiếu nhập"
+            },
+            goods_export: {
+                id: "623f201de998e94feda0cd7a",
+                name: "Phiếu xuất"
+            },
+            debt_tracking: {
+                id: "623f209ce998e94feda0cd82",
+                name: "Theo dõi công nợ"
+            },
+            vatin: {
+                id: "623f20a8e998e94feda0cd83",
+                name: "Bảng kê mua vào"
+            },
+            vatout: {
+                id: "658ff4fc715d5800120b9da4",
+                name: "Bảng kê bán ra"
+            },
+            payment: {
+                id: "623f1f9be998e94feda0cd78",
+                name: "Phiếu chi"
+            },
+            credit_note: {
+                id: "623f2046e998e94feda0cd7d",
+                name: "Giấy báo có"
+            },
+            tbook: {
+                id: "623f2073e998e94feda0cd7f",
+                name: "Sổ tổng hợp chữ T"
+            },
+            import_export: {
+                id: "623f208fe998e94feda0cd81",
+                name: "Nhập xuất tồn"
+            },
+            accbill: {
+                id: "623f1f80e998e94feda0cd76",
+                name: "Phiếu kế toán"
+            },
+            receipt: {
+                id: "623f1f8ce998e94feda0cd77",
+                name: "Phiếu thu"
+            },
+            invoices: {
+                id: "623f202ae998e94feda0cd7b",
+                name: "Hóa đơn dịch vụ"
+            },
+            debit_note: {
+                id: "623f2038e998e94feda0cd7c",
+                name: "Giấy báo nợ"
+            },
+            diary: {
+                id: "623f2081e998e94feda0cd80",
+                name: "Sổ nhật ký chung"
+            },
+            financial_report: {
+                id: "623f20b5e998e94feda0cd84",
+                name: "Báo cáo tài chính"
+            },
+            support_tools: {
+                id: "623f20c2e998e94feda0cd85",
+                name: "Công cụ hỗ trợ"
+            },
+        },
     },
     FNB: {
         id: "61e04971fdebf77b072d1b0f",
@@ -1082,4 +1157,4 @@ export const APP_ID = {
     TIMESHEET: {
         id: "61e049cffdebf77b072d1b14",
     },
-};
+}

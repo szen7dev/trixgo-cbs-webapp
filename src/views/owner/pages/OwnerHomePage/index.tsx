@@ -1,7 +1,5 @@
 /*=====1.LIBRARY=====*/
 import { FC, useEffect } from "react";
-// import { Link } from "react-router-dom";
-// import { useTranslation } from "react-i18next";
 import SwiperCore, { Pagination } from 'swiper';
 import cn from "classnames";
 
@@ -29,5 +27,5 @@ export const OwnerHomePage: FC = () => {
 		<div className={cn(styles.content)}>
 			{/* <h2>Owner HomePage</h2> */}
 		</div>
-	);
-};
+	)
+}
