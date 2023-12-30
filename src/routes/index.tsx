@@ -91,7 +91,7 @@ const Routes: FC = () => {
                                         <HumanRouterV2 />
                                     </HumanLayoutV2>
                                 </Route>
-                                <Route path="/accounting/:fundaID">
+                                <Route path="/accounting">
                                     <AccountingLayoutV2>
                                         <AccountingRouter />
                                     </AccountingLayoutV2>

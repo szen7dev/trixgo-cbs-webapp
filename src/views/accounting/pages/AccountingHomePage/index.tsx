@@ -15,7 +15,6 @@ import { SearchInput } from "shareComponents/common";
 /*=====5.TYPINGS=====*/
 
 /*=====6.HOOKS/APIS=====*/
-import { useModal } from "services/hooks/useModal";
 import { useFunda } from "services/hooks/items/useFunda";
 
 export const AccountingHomePage: FC = () => {
@@ -30,7 +29,7 @@ export const AccountingHomePage: FC = () => {
     fetchNextPage,
     totalRecord
   } = useFunda({
-    params: { keyword, isListParentOfListChilds: "1", parentID }, // Khi keyword thay đổi giá trị => API thay đổi data => refretch kết quả
+    params: { keyword, isListParentOfListChilds: "1", parentID },
     isFetchList: true
   })
 
@@ -75,7 +74,7 @@ export const AccountingHomePage: FC = () => {
             <tr key={item._id} className="border-b border-primary-border h-10 pl-4">
 
               <td className="py-1 px-2 pl-4">
-                <Link to={`/accounting/${item._id}/accbill`}>
+                <Link to={`/accounting/accbill/${item._id}`}>
                   {<b>{item?.name}</b>}
                 </Link>
               </td>
