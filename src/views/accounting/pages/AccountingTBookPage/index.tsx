@@ -80,41 +80,16 @@ export const AccountingTBookPage: FC = () => {
             </td>
           </tr>
 
-          <tr className="h-9">
-            <td className="pt-2 px-2 border-r border-primary-border">112</td>
+          <tr className="h-9 border-b border-primary-border">
+            <td className="pt-2 px-2 border-r border-primary-border">---</td>
             <td className="pt-2 px-10 border-r border-primary-border text-primary">
-              Tiền gửi Ngân hàng
+              -----
             </td>
             <td className="pt-2 px-2 border-r border-primary-border text-right">
               0.000.000.000
             </td>
             <td className="pt-2 px-2 border-r border-primary-border text-right">
               0.000.000.000
-            </td>
-          </tr>
-
-          <tr className="h-9 border-b border-primary-border">
-            <td className="pt-2 px-2 border-r border-primary-border">...</td>
-            <td className="pt-2 px-10 border-r border-primary-border text-primary">
-              ...
-            </td>
-            <td className="pt-2 px-2 border-r border-primary-border text-right">
-              ...
-            </td>
-            <td className="pt-2 px-2 border-r border-primary-border text-right">
-              ...
-            </td>
-          </tr>
-          <tr className="h-9 border-b border-primary-border">
-            <td className="pt-2 px-2 border-r border-primary-border">...</td>
-            <td className="pt-2 px-10 border-r border-primary-border text-primary">
-              ...
-            </td>
-            <td className="pt-2 px-2 border-r border-primary-border text-right">
-              ...
-            </td>
-            <td className="pt-2 px-2 border-r border-primary-border text-right">
-              ...
             </td>
           </tr>
           <tr className="h-9 border-b border-primary-border">

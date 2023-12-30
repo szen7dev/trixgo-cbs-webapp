@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useState } from "react";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useParams, useHistory, useLocation } from "react-router-dom";
 import DotsVerticalIcon from "assets/icons/DotsVertical";
 import Close from "assets/icons/Close";
 import moment from "moment";
@@ -12,6 +12,10 @@ import useCheckedList from "services/hooks/ppt/useCheckedList";
 import debounce from "lodash/debounce";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import { SearchInput } from "shareComponents/common";
+import { DropdownSearchableV2, Loader } from "shareComponents/common";
+import { useFunda } from "services/hooks/items/useFunda";
+import { useContact } from "services/hooks/items/useContact";
+import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import {
   CreateNewTicket,
   ActionAccountingGroup,
@@ -34,14 +38,25 @@ interface AccountingTicketsPageProps {
 
 export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1 }) => {
   const { openModal } = useModal();
-  const { fundaID } = useParams<any>();
+  // const { fundaID } = useParams<any>();
   const [showOption, setShowOption] = useState(false)
   const [pageIndex, setPageIndex] = useState(0)
+
+  const history = useHistory();
+  const location = useLocation()
+  const searchParams = new URLSearchParams(location.search)
+  const fundaIDParams = searchParams.get("fundaID")
 
   const [pageParam, setPageParam] = useState('');
 
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+  type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
   const ref = React.useRef<PaginateHandle>(null);
+  const accountRef = React.useRef<DropdownHandle>(null);
+
+  const [fundaID, setFundaID] = useState<string | null>(fundaIDParams);
+  const [customerID, setCustomerID] = useState<string | null>();
+  const [userID, setUserID] = useState<string | null>();
 
   const [inputFilter, setInputFilter] = useState({
     keyword: '',
@@ -49,17 +64,39 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
     toDate: new Date(new Date().getFullYear(), 11, 31)
   });
 
+  const [fundaKeyword, setFundaKeyword] = useState("");
+  const [contactKeyword, setContactKeyword] = useState("");
+  const [userKeyword, setUserKeyword] = useState("");
+
+  const { list: listFunda } = useFunda({
+		params: { keyword: fundaKeyword },
+    isFetchList: true
+	})
+
+  const { list: listCustomer } = useContact({
+		params: { keyword: contactKeyword },
+    isFetchList: true
+	})
+
+  const { data: listUser } = useUserSystem({
+    keyword: userKeyword,
+    limit: 5,
+    isFetch: true
+	}, true)
+  // console.log(listUser)
+
+  // console.log({fundaID})
+
   const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch } = useVoucherList({
     params: {
         type,
         fundaID,
+        customerID,
+        userCreateID: userID,
         keyword: inputFilter.keyword,
         fromDate: inputFilter.fromDate,
         toDate: inputFilter.toDate,
         limit: 10,
-        forward: 0,
-        cancel: 0,
-        vat: 1,
     },
     isFetchList: true
   })
@@ -139,9 +176,84 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
 
   return (
     <main className="h-full">
-      <header className="h-[50px] w-full border border-primary-border flex items-center justify-between px-3">
+      <header className="h-[50px] w-full border border-primary-border flex items-center px-3">
         <SearchInput classNameWrapper={""} onChange={onChangeSearch} />
-
+        <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            placeholder={"Đơn vị cơ sở"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listFunda}
+            formatItem={{
+                id: "_id",
+                text: "name",
+            }}
+            onSearchInputChange={debounce(
+                (valueSearch) => setFundaKeyword(valueSearch),
+                500
+            )}
+            onchangeValue={item => {
+                history.push({ search: `/${item._id}` })
+                setFundaID(item._id);
+                setPageIndex(0);
+                ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+        />
+        <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            placeholder={"Mã khách"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listCustomer}
+            formatItem={{
+                id: "_id",
+                text: "name",
+            }}
+            onSearchInputChange={debounce(
+                (valueSearch) => setContactKeyword(valueSearch),
+                500
+            )}
+            onchangeValue={item => {
+                setCustomerID(item._id);
+                setPageIndex(0);
+                ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+        />
+        <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            placeholder={"Người tạo phiếu"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listUser}
+            formatItem={{
+                id: "_id",
+                text: "fullname",
+            }}
+            onSearchInputChange={debounce(
+                (valueSearch) => setUserKeyword(valueSearch),
+                500
+            )}
+            onchangeValue={item => {
+                setUserID(item._id);
+                setPageIndex(0);
+                ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+        />
         <div className="flex items-center">
           <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
           <button
@@ -179,21 +291,23 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                 </div>
             }
           </div>
-          <PaginateV2
-              ref={ref}
-              totalRecord={totalRecord}
-              totalPages={totalPage}
-              limit={10}
-              hasNextPage={hasNextPage}
-              isFetching={isLoading}
-              nextPageAction={() => {
-                fetchNextPage();
-                  setPageIndex(oldState => oldState+1)
-              }}
-              prevPageAction={() => {
-                  setPageIndex(oldState => oldState-1)
-              }}
-          />
+          <div className="absolute right-0">
+            <PaginateV2
+                ref={ref}
+                totalRecord={totalRecord}
+                totalPages={totalPage}
+                limit={10}
+                hasNextPage={hasNextPage}
+                isFetching={isLoading}
+                nextPageAction={() => {
+                  fetchNextPage();
+                    setPageIndex(oldState => oldState+1)
+                }}
+                prevPageAction={() => {
+                    setPageIndex(oldState => oldState-1)
+                }}
+            />
+          </div>
         </div>
       </header>
 
@@ -209,7 +323,12 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
             </th>
             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
               <span className="pl-2 border-l border-cbs-border">
-                Nội dung
+                Loại phiếu
+              </span>
+            </th>
+            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+              <span className="pl-2 border-l border-cbs-border">
+                Số hiệu
               </span>
             </th>
             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
@@ -219,12 +338,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
             </th>
             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
               <span className="pl-2 border-l border-cbs-border">
-                Loại phiếu
-              </span>
-            </th>
-            <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-              <span className="pl-2 border-l border-cbs-border">
-                Số hiệu
+                Nội dung
               </span>
             </th>
             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
@@ -259,18 +373,19 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                   <tr key={item._id} className="text-left hover:bg-cbs-active-comment cursor-pointer" style={{ color: "orange" }}>
                     <td className="pt-2.5 pb-3 px-4 border-b border-cbs-border text-left">
                       <input className="cbs-checkbox" type="checkbox" checked={Boolean(assigned[item._id])} onChange={e => handleChangeCheckbox(e, item)} />
-                    </td>
+                    </td>                    
+                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{VOUCHER_TYPES.find(element => element.value === item.type)?.text}</td>
+                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.sign}</td>
+                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-medium" style={{ maxWidth: '250px' }}>
                       <NavLink to={`/accounting/${VOUCHER_TYPES.find(item => item.value === type)?.slug}/detail/${item._id}`}>
                         <Popover onMouseEnterTooltip={false} tooltip={`${item.name}`} classTooltip="w-[336px] whitespace-normal left-0" >
                           <p className="text-2-line-clamp">{`${item.name}`}</p>
                         </Popover>
                       </NavLink>
-                      <p className={"mt-1 text-gray-500"}>{item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}</p>
+                      <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.funda?.name}</p>
+                      <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}</p>
                     </td>
-                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
-                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{VOUCHER_TYPES.find(element => element.value === item.type)?.text}</td>
-                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.sign}</td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.customer?.name}</td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.contract?.name}</td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{formatNumberMoney(item.amount)}</td>
@@ -286,17 +401,18 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                     <td className="pt-2.5 pb-3 px-4 border-b border-cbs-border text-left">
                       <input className="cbs-checkbox" type="checkbox" checked={Boolean(assigned[item._id])} onChange={e => handleChangeCheckbox(e, item)} />
                     </td>
-                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-cbs-highlight-color text-medium" style={{ maxWidth: '250px' }}>
+                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{VOUCHER_TYPES.find(element => element.value === item.type)?.text}</td>
+                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.sign}</td>
+                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
+                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-medium" style={{ maxWidth: '250px' }}>
                       <NavLink to={`/accounting/${VOUCHER_TYPES.find(item => item.value === type)?.slug}/detail/${item._id}`}>
                         <Popover onMouseEnterTooltip={false} tooltip={`${item.name}`} classTooltip="w-[336px] whitespace-normal left-0" >
                           <p className="text-2-line-clamp">{`${item.name}`}</p>
                         </Popover>
                       </NavLink>
-                      <p className={"mt-1 text-gray-500"}>{item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}</p>
+                      <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.funda?.name}</p>
+                      <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}</p>
                     </td>
-                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
-                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{VOUCHER_TYPES.find(element => element.value === item.type)?.text}</td>
-                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.sign}</td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.customer?.name}</td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.contract?.name}</td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{formatNumberMoney(item.amount)}</td>

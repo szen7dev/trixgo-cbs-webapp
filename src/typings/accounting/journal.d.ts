@@ -11,6 +11,10 @@ export interface DocumentProps extends Omit<DocumentInserPayload, 'parentID' | '
     tax: string;
     forward: number;
     createAt: string;
+    funda?: {
+        _id: string;
+        name: string;
+    }
     userCreate?: {
         _id: string;
         fullname: string;

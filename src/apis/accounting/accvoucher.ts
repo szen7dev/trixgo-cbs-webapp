@@ -27,9 +27,8 @@ export const VoucherRepository: VoucherRepository = {
 async function fetchListVoucher(params : any) {
     const { data } = await API.get(`${ACCOUNTING_VOUCHER}`, {
         params: {
-            // select: 'name sign author project date createAt description note store amount status storeSign publish datahubContact',
             populates: {
-                "path": "userCreate userUpdate customer contract",
+                "path": "userCreate userUpdate customer contract funda",
                 "select": "name sign phone taxid address fullname",
             },
             ...params,
@@ -41,9 +40,8 @@ async function fetchListVoucher(params : any) {
 async function fetchFilterListData(params : any) {
     const { data } = await API.get(`${ACCOUNTING_VOUCHER}/filter-voucher`, {
         params: {
-            // select: 'name sign author project date createAt description note store amount status storeSign publish datahubContact',
             populates: {
-                "path": "userCreate userUpdate customer contract",
+                "path": "userCreate userUpdate customer contract funda",
                 "select": "name sign phone taxid address fullname",
             },
             ...params,

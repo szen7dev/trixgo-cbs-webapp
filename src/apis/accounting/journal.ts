@@ -29,7 +29,7 @@ async function fetchListJournal(params : any) {
         params: {
             // select: 'name sign author project date createAt description note store amount status storeSign publish datahubContact',
             populates: {
-                "path": "voucher debit credit customerCredit customerDebit warehouse goods contract budgetWork",
+                "path": "voucher debit credit customerCredit customerDebit warehouse goods contract budgetWork funda",
                 "select": "type name sign description unit date",
             },
             ...params,
@@ -41,9 +41,9 @@ async function fetchListJournal(params : any) {
 async function fetchFilterListData(params : any) {
     const { data } = await API.get(`${ACCOUNTING_JOURNAL}/filter-document`, {
         params: {
-            select: 'name sign author project date createAt description note store amount status storeSign publish datahubContact',
+            // select: 'name sign author project date createAt description note store amount status storeSign publish datahubContact',
             populates: {
-                "path": "author sender storage project publish datahubContact",
+                "path": "author sender storage project publish datahubContact funda",
                 "select": "fullname bizfullname sign image name date"
             },
             ...params,

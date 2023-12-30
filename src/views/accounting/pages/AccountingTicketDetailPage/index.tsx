@@ -67,7 +67,7 @@ export const AccountingTicketDetailPage: FC = () => {
   return (
     <div className={"relative min-h-full pb-10"}>
       <div className={"content-detail-ticket"}>
-        <div className={"px-6 py-2"}>
+        <div className={"px-2 py-2"}>
           <div className={"title-ticket-detail flex"}>
             <div className={"flex-1 flex items-center"}>
               <button
@@ -95,11 +95,11 @@ export const AccountingTicketDetailPage: FC = () => {
                 {VOUCHER_TYPES.find(item => item.value === voucherDetail?.type)?.text}
               </span>
             </div>
-            <button type="button" className={"rounded-full h-10 w-10 flex items-center justify-center bg-gray-100"}>
+            {/* <button type="button" className={"rounded-full h-10 w-10 flex items-center justify-center bg-gray-100"}>
               <ActionAccountingGroup
                 icon={<DotsVerticalIcon />}
               />
-            </button>
+            </button> */}
           </div>
           <div className={"infor-ticket flex mt-1 items-center"}>
             <p className={"flex-1"}><span className={"text-gray-500"}>Khởi tạo:</span>  {voucherDetail?.userCreate?.fullname} {convertDisplayDate(voucherDetail?.createAt, DATE_FORMAT_TIME)}</p>
