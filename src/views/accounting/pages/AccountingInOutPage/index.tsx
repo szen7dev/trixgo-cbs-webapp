@@ -1,56 +1,20 @@
-import React, { FC, useCallback, useState, useEffect } from "react";
-import { NavLink, useParams } from "react-router-dom"
-import cn from "classnames";
-import styles from 'views/accounting/styles/styles.module.css';
+import { FC, useCallback, useState } from "react";
+import { NavLink } from "react-router-dom"
 import DotsVerticalIcon from "assets/icons/DotsVertical";
 import Close from "assets/icons/Close";
-import {debounce} from "lodash";
-import moment from "moment";
 import { formatNumberMoney } from "utils/cmcs";
 import {
   FilterDateGroup
 } from "views/accounting/shareComponents/common";
-import { DropdownSearchableV2 } from "shareComponents/common";
-import {useDispatch} from "react-redux";
-import {setFilterDropdown} from "redux/reducer/DocumentProjectSlice";
-import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
 import {
-	useAccount,
-} from "services/hooks/items/useAccount";
-import { VOUCHER_TYPES, LIMIT_DROPDOWN } from "apis/localdb/index";
-import API from "apis/repository";
-import {
-  useJournallList,
   useJournalByProperty
 } from "services/hooks/accounting/useGeneralJournal";
-const ITEM_ACCOUNT = "/api/item/accounts";
 
 export const AccountingInOutPage: FC = () => {
   const [showOption, setShowOption] = useState(false)
-  const [pageIndex, setPageIndex] = useState(0)
-  const dispatch = useDispatch();
-
-  type PaginateHandle = React.ElementRef<typeof PaginateV2>;
-  type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
-  const ref = React.useRef<PaginateHandle>(null);
-  const datahubRef = React.useRef<DropdownHandle>(null);
-  const [departmentsID, setDepartmentsID] = useState<string[]>([]);
-  const [accountKeyword, setAccountKeyword] = useState("");
   const [inputFilter, setInputFilter] = useState({ keyword: '', fromDate: new Date(new Date().getFullYear(), 0, 1), toDate: new Date(new Date().getFullYear(), 11, 31) });
-  
-  const [infoAccount, setInfoAccount] = useState({} as any);
 
-	const [searchAccount, setSearchAccount] = useState();
-
-  const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage } = useAccount({
-    params: {
-      limit: 50,
-      keyword: searchAccount,
-    },
-    isFetchList: true
-  })
-
-  const { listJournalByProperty: dataAll, listJournalByPropertyIsLoading, refetchListJournalByProperty } = useJournalByProperty({
+  const { listJournalByProperty: dataAll } = useJournalByProperty({
     params: {
         option: 4,
         optionTerm: 1,
@@ -59,26 +23,6 @@ export const AccountingInOutPage: FC = () => {
     },
     isFetchList: true
   })
-
-  // let arrDebitO = Array<[]>, arrCreditO = Array<[]>, arrDebitOF = Array<[]>, arrCreditOF = Array<[]>, arrDebitFT = Array<[]>, arrCreditFT = Array<[]>
-
-  // dataAll.debitO.forEach((element: any) =>{
-  //     let key = element._id.account;
-  //     if (!Array.isArray(arrDebitO[key])) {
-  //         arrDebitO[key] = [];
-  //     }
-  //     arrDebitO[key].push(element)
-  // })
-
-// console.log(listAccountWithPager)
-// console.log({totalRecord})
-// console.log({totalPages})
-
-// console.log(dataS)
-// console.log(listDataWithPager)
-// console.log({infoAccount})
-// console.log({accountID})
-// console.log({departmentsID})
 
 const handleOnChangeDate = useCallback((date, input) => {
  if (input) {
@@ -119,21 +63,6 @@ const handleOnChangeDate = useCallback((date, input) => {
                 </div>
             }
           </div>
-          <PaginateV2
-              ref={ref}
-              totalRecord={totalRecord}
-              totalPages={totalPage}
-              limit={50}
-              hasNextPage={hasNextPage}
-              isFetching={isLoading}
-              nextPageAction={() => {
-                fetchNextPage();
-                  setPageIndex(oldState => oldState+1)
-              }}
-              prevPageAction={() => {
-                  setPageIndex(oldState => oldState-1)
-              }}
-          />
         </div>
         
       </header>
@@ -163,8 +92,8 @@ const handleOnChangeDate = useCallback((date, input) => {
         </thead>
 
         <tbody className="">
-          {
-            (listDataWithPager[pageIndex] ?? []).map((item: any, index: any) => (
+          { 
+            dataAll?.arrCombine.map((item: any, index: any) => (
               <tr key={index} className="border-b border-primary-border h-10">
                 <td className="py-1 px-2 border-r border-primary-border">
                   {item.name}
@@ -172,19 +101,20 @@ const handleOnChangeDate = useCallback((date, input) => {
                 <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
                   <NavLink to={`/accounting/import-export/${item?._id}`}>
                     {item?.description}
-                    </NavLink>
+                  </NavLink>
+                  {/* <p><i>{item?._id}</i></p> */}
                 </td>
-                <td className="py-1 px-2 border-r border-primary-border">
-                 
+                <td className="py-1 px-2 border-r border-primary-border text-right">
+                  {formatNumberMoney(Number(item.kcNoDauKy + item.noDauKy - item.kcCoDauKy - item.coDauKy))}
                 </td>
-                <td className="py-1 px-2 border-r border-primary-border">
-                 
+                <td className="py-1 px-2 border-r border-primary-border text-right">
+                  {formatNumberMoney(Number(item.noTrongKy))}
                 </td>
-                <td className="py-1 px-2 border-r border-primary-border">
-                 
+                <td className="py-1 px-2 border-r border-primary-border text-right">
+                  {formatNumberMoney(Number(item.coTrongKy))}
                 </td>
-                <td className="py-1 px-2 border-r border-primary-border">
-                 
+                <td className="py-1 px-2 border-r border-primary-border text-right">
+                  {formatNumberMoney(Number(item.kcNoDauKy + item.noDauKy + item.noTrongKy - item.kcCoDauKy - item.coDauKy - item.coTrongKy))}
                 </td>
               </tr>
             ))

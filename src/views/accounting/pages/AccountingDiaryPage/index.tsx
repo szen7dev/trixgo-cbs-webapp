@@ -20,7 +20,7 @@ import {
 import { VOUCHER_TYPES, LIMIT_DROPDOWN } from "apis/localdb/index";
 import API from "apis/repository";
 import {
-  useJournallList,
+  useJournalList,
   useJournalByProperty
 } from "services/hooks/accounting/useGeneralJournal";
 const ITEM_ACCOUNT = "/api/item/accounts";
@@ -39,7 +39,7 @@ export const AccountingDiaryPage: FC = () => {
     toDate: new Date(new Date().getFullYear(), 11, 31)
   });
 
-  const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage } = useJournallList({
+  const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage } = useJournalList({
     params: {
         fromDate: inputFilter.fromDate,
         toDate: inputFilter.toDate,

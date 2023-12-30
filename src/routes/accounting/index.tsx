@@ -20,10 +20,14 @@ import {
   AccountingTBookPage,
   AccountingDiaryPage,
   AccountingInOutPage,
+  AccountingInOutDetailPage1,
+  AccountingInOutDetailPage2,
   AccountingDebtPage,
+  AccountingDebtDetailPage1,
   ReceivablesCustomers,
   ReceivablesCustomersCode,
-  AccountingVatPage,
+  AccountingVatInPage,
+  AccountingVatOutPage,
   AccountingReportFinancePage,
   AccountingSupportToolsPage,
 } from "views/accounting/pages";
@@ -153,12 +157,17 @@ const AccountingRouter: FC = () => {
       <ProtectedRoute
         exact
         path="/accounting/import-export/:accountID"
-        component={AccountingInOutPage}
+        component={AccountingInOutDetailPage1}
       />
       <ProtectedRoute
         exact
         path="/accounting/debt-tracking"
         component={AccountingDebtPage}
+      />
+      <ProtectedRoute
+        exact
+        path="/accounting/debt-tracking/:accountID"
+        component={AccountingDebtDetailPage1}
       />
       <ProtectedRoute
         exact
@@ -172,8 +181,13 @@ const AccountingRouter: FC = () => {
       />
       <ProtectedRoute
         exact
-        path="/accounting/vat"
-        component={AccountingVatPage}
+        path="/accounting/vatin"
+        component={AccountingVatInPage}
+      />
+            <ProtectedRoute
+        exact
+        path="/accounting/vatout"
+        component={AccountingVatOutPage}
       />
       <ProtectedRoute
         exact

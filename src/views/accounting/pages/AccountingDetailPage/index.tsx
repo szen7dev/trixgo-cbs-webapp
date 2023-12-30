@@ -20,7 +20,7 @@ import {
 import { VOUCHER_TYPES, LIMIT_DROPDOWN } from "apis/localdb/index";
 import API from "apis/repository";
 import {
-  useJournallList,
+  useJournalList,
   useJournalByProperty
 } from "services/hooks/accounting/useGeneralJournal";
 import { toast } from "react-toastify";
@@ -58,7 +58,7 @@ export const AccountingDetailPage: FC = () => {
 		keyword: accountKeyword,
 	})
 
-  const { listDataWithPager, isLoading: isLoadingJournallList, totalRecord, totalPage, fetchNextPage, hasNextPage } = useJournallList({
+  const { listDataWithPager, isLoading: isLoadingJournallList, totalRecord, totalPage, fetchNextPage, hasNextPage } = useJournalList({
     params: {
         fromDate: inputFilter.fromDate,
         toDate: inputFilter.toDate,

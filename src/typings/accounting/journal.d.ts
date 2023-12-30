@@ -2,12 +2,30 @@ import type { APIResponse, QueryParam } from './commons';
 
 export interface DocumentProps extends Omit<DocumentInserPayload, 'parentID' | 'departmentID' | 'packageID' |'senderID' | 'receiverID' | 'propertyID' | 'fieldID' |'storageID'> {
     _id: string;
+    date: string;
+    sign: string;
+    signInvoice: string;
+    dateInvoice: string;
+    commodity: string;
+    revenue: string;
+    tax: string;
     voucher?: {
         _id: string;
         name: string;
         sign: string;
+        signInvoice: string;
         type: number;
         date: string;
+        dateInvoice: string;
+        address: string;
+    }
+    customer?: {
+        _id: string;
+        name: string;
+        sign: string;
+        phone: string;
+        taxid: string;
+        address: string;
     }
     debit?: {
         _id: string;
