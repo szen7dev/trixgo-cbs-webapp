@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useState } from "react";
-import { NavLink, useParams, useHistory, useLocation } from "react-router-dom";
+import { NavLink, useHistory, useLocation } from "react-router-dom";
 import DotsVerticalIcon from "assets/icons/DotsVertical";
 import Close from "assets/icons/Close";
 import moment from "moment";
@@ -12,7 +12,7 @@ import useCheckedList from "services/hooks/ppt/useCheckedList";
 import debounce from "lodash/debounce";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import { SearchInput } from "shareComponents/common";
-import { DropdownSearchableV2, Loader } from "shareComponents/common";
+import { DropdownSearchableV2 } from "shareComponents/common";
 import { useFunda } from "services/hooks/items/useFunda";
 import { useContact } from "services/hooks/items/useContact";
 import { useUserSystem } from 'services/hooks/users/useUserSystem';
@@ -32,13 +32,13 @@ import { DATE_FORMAT, DATE_FORMAT_TIME, VOUCHER_TYPES } from "apis/localdb/index
 import {
   useVoucherList
 } from "services/hooks/accounting/useAccVoucher";
+
 interface AccountingTicketsPageProps {
   type?: number
 }
 
 export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1 }) => {
   const { openModal } = useModal();
-  // const { fundaID } = useParams<any>();
   const [showOption, setShowOption] = useState(false)
   const [pageIndex, setPageIndex] = useState(0)
 
@@ -83,8 +83,6 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
     limit: 5,
     isFetch: true
 	}, true)
-  // console.log(listUser)
-  // console.log({fundaID})
 
   const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch } = useVoucherList({
     params: {
@@ -99,7 +97,6 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
     },
     isFetchList: true
   })
-  // console.log(listDataWithPager)
 
   const accountingVoucher = UseAccountingVoucherList(pageParam, type, inputFilter);
   const { assigned, checkboxRef, checked, handleChangeCheckbox, handleCheckAll } = useCheckedList(accountingVoucher?.listAccountingVoucher || []);
@@ -110,11 +107,13 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
 
   const handleFinishForm = useCallback(async (values, isEdit = false) => {
     let res: any
+    console.log({ values })
     if (isEdit) {
       res = await updateAccountingVoucherMutateAsync(values);
     } else {
       res = await createAccountingVoucherMutateAsync(values);
     }
+    console.log({ res })
 
     if (res.code && res.code !== 200) {
       return false;
@@ -130,18 +129,34 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
   const { openDeleteConfirm } = useDeleteConfirm();
 
   const handleAction = async (data: any, action: any) => {
-
     switch (action) { // 1. In, 2. Copy 3. Cập nhật 4. Xóa
       case 1:
         break;
       case 2:
+        openModal(
+          <div className={"bg-white inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"}>
+            <CreateNewTicket
+              onFinish={handleFinishForm}
+              type={type}
+              isEdit={false}
+              idEdit={data._id}
+              contractId={data?.contract?._id}
+              title="Copy phiếu"
+            />
+          </div>
+        )
         break;
       case 3:
         openModal(
-
           <div className={"bg-white inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"}>
-
-            <CreateNewTicket onFinish={handleFinishForm} type={type} isEdit={true} idEdit={data._id} contractId={data?.contract?._id} title="Cập nhật" />
+            <CreateNewTicket
+              onFinish={handleFinishForm}
+              type={type}
+              isEdit={true}
+              idEdit={data._id}
+              contractId={data?.contract?._id}
+              title="Cập nhật"
+            />
           </div>
         )
         break;
