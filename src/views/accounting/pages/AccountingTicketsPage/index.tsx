@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useState } from "react";
-import { NavLink, useParams, useHistory, useLocation } from "react-router-dom";
+import { NavLink, useHistory, useLocation } from "react-router-dom";
 import DotsVerticalIcon from "assets/icons/DotsVertical";
 import Close from "assets/icons/Close";
 import moment from "moment";
@@ -12,7 +12,7 @@ import useCheckedList from "services/hooks/ppt/useCheckedList";
 import debounce from "lodash/debounce";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import { SearchInput } from "shareComponents/common";
-import { DropdownSearchableV2, Loader } from "shareComponents/common";
+import { DropdownSearchableV2 } from "shareComponents/common";
 import { useFunda } from "services/hooks/items/useFunda";
 import { useContact } from "services/hooks/items/useContact";
 import { useUserSystem } from 'services/hooks/users/useUserSystem';
@@ -32,13 +32,13 @@ import { DATE_FORMAT, DATE_FORMAT_TIME, VOUCHER_TYPES } from "apis/localdb/index
 import {
   useVoucherList
 } from "services/hooks/accounting/useAccVoucher";
+
 interface AccountingTicketsPageProps {
   type?: number
 }
 
 export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1 }) => {
   const { openModal } = useModal();
-  // const { fundaID } = useParams<any>();
   const [showOption, setShowOption] = useState(false)
   const [pageIndex, setPageIndex] = useState(0)
 
@@ -83,8 +83,6 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
     limit: 5,
     isFetch: true
 	}, true)
-  // console.log(listUser)
-  // console.log({fundaID})
 
   const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch } = useVoucherList({
     params: {
@@ -99,10 +97,9 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
     },
     isFetchList: true
   })
-  // console.log(listDataWithPager)
 
   const accountingVoucher = UseAccountingVoucherList(pageParam, type, inputFilter);
-  const { assigned, checkboxRef, checked, handleChangeCheckbox, handleCheckAll } = useCheckedList(accountingVoucher?.listAccountingVoucher || []);
+  const { assigned, checkboxRef, handleChangeCheckbox, handleCheckAll } = useCheckedList(accountingVoucher?.listAccountingVoucher || []);
 
   const { createAccountingVoucherMutateAsync } = useCreateAccountingVoucherMutation();
   const { updateAccountingVoucherMutateAsync } = useUpdateAccountingVoucherMutation();
@@ -113,7 +110,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
     if (isEdit) {
       res = await updateAccountingVoucherMutateAsync(values);
     } else {
-      res = await createAccountingVoucherMutateAsync(values);
+      res = await createAccountingVoucherMutateAsync({ ...values, fundaID });
     }
 
     if (res.code && res.code !== 200) {
@@ -130,18 +127,34 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
   const { openDeleteConfirm } = useDeleteConfirm();
 
   const handleAction = async (data: any, action: any) => {
-
     switch (action) { // 1. In, 2. Copy 3. Cập nhật 4. Xóa
       case 1:
         break;
       case 2:
+        openModal(
+          <div className={"bg-white inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"}>
+            <CreateNewTicket
+              onFinish={handleFinishForm}
+              type={type}
+              isEdit={false}
+              idEdit={data._id}
+              contractId={data?.contract?._id}
+              title="Copy phiếu"
+            />
+          </div>
+        )
         break;
       case 3:
         openModal(
-
           <div className={"bg-white inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"}>
-
-            <CreateNewTicket onFinish={handleFinishForm} type={type} isEdit={true} idEdit={data._id} contractId={data?.contract?._id} title="Cập nhật" />
+            <CreateNewTicket
+              onFinish={handleFinishForm}
+              type={type}
+              isEdit={true}
+              idEdit={data._id}
+              contractId={data?.contract?._id}
+              title="Cập nhật"
+            />
           </div>
         )
         break;
@@ -192,11 +205,21 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                 (valueSearch) => setFundaKeyword(valueSearch),
                 500
             )}
+            onClearData={() => {
+              if (searchParams.has('fundaID')) {
+                searchParams.delete('fundaID');
+
+                history.replace({
+                  search: searchParams.toString(),
+                })
+              }
+              setFundaID("");
+            }}
             onchangeValue={item => {
-                history.push({ search: `/${item._id}` })
+                history.push({ search: `?fundaID=${item._id}` })
                 setFundaID(item._id);
                 setPageIndex(0);
-                ref.current&&ref.current.resetPaginate();
+                ref.current && ref.current.resetPaginate();
             }}
             renderItem={(item) => (
                 <p className={"min-w-[300px]"}>{item.text}</p>
@@ -367,40 +390,75 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
         <tbody className="text-small">
           {
             (listDataWithPager[pageIndex] ?? []).map((item, index) => {
-              if(item?.forward == 1){
+              if(item?.cancel == 0){
+                if(item?.forward == 1){
+                  return (
+                    <tr key={item._id} className="text-left hover:bg-cbs-active-comment cursor-pointer" style={{ color: "orange" }}>
+                      <td className="pt-2.5 pb-3 px-4 border-b border-cbs-border text-left">
+                        <input className="cbs-checkbox" type="checkbox" checked={Boolean(assigned[item._id])} onChange={e => handleChangeCheckbox(e, item)} />
+                      </td>                    
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                        {VOUCHER_TYPES.find(element => element.value === item.type)?.text}
+                        <p><i>Kết chuyển cuối kỳ</i></p>
+                      </td>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.sign}</td>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-medium" style={{ maxWidth: '250px' }}>
+                        <NavLink to={`/accounting/${VOUCHER_TYPES.find(item => item.value === type)?.slug}/detail/${item._id}`}>
+                          <Popover onMouseEnterTooltip={false} tooltip={`${item.name}`} classTooltip="w-[336px] whitespace-normal left-0" >
+                            <p className="text-2-line-clamp">{`${item.name}`}</p>
+                          </Popover>
+                        </NavLink>
+                        <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.funda?.name}</p>
+                        <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}</p>
+                      </td>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.customer?.name}</td>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.contract?.name}</td>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{formatNumberMoney(item.amount)}</td>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.note}</td>
+                      <td className="pt-2.5 pb-3 pr-2 border-b border-cbs-border">
+                        <ActionAccountingGroup data={item} handleAction={handleAction} />
+                      </td>
+                    </tr>
+                  )
+                }else{
+                  return (
+                    <tr key={item._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
+                      <td className="pt-2.5 pb-3 px-4 border-b border-cbs-border text-left">
+                        <input className="cbs-checkbox" type="checkbox" checked={Boolean(assigned[item._id])} onChange={e => handleChangeCheckbox(e, item)} />
+                      </td>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{VOUCHER_TYPES.find(element => element.value === item.type)?.text}</td>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.sign}</td>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-medium" style={{ maxWidth: '250px' }}>
+                        <NavLink to={`/accounting/${VOUCHER_TYPES.find(item => item.value === type)?.slug}/detail/${item._id}`}>
+                          <Popover onMouseEnterTooltip={false} tooltip={`${item.name}`} classTooltip="w-[336px] whitespace-normal left-0" >
+                            <p className="text-2-line-clamp">{`${item.name}`}</p>
+                          </Popover>
+                        </NavLink>
+                        <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.funda?.name}</p>
+                        <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}</p>
+                      </td>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.customer?.name}</td>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.contract?.name}</td>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{formatNumberMoney(item.amount)}</td>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.note}</td>
+                      <td className="pt-2.5 pb-3 pr-2 border-b border-cbs-border">
+                        <ActionAccountingGroup data={item} handleAction={handleAction} />
+                      </td>
+                    </tr>
+                  )
+                }
+              }else{
                 return (
-                  <tr key={item._id} className="text-left hover:bg-cbs-active-comment cursor-pointer" style={{ color: "orange" }}>
+                  <tr key={item._id} className="text-left hover:bg-cbs-active-comment cursor-pointer" style={{ color: "red" }}>
                     <td className="pt-2.5 pb-3 px-4 border-b border-cbs-border text-left">
                       <input className="cbs-checkbox" type="checkbox" checked={Boolean(assigned[item._id])} onChange={e => handleChangeCheckbox(e, item)} />
                     </td>                    
-                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{VOUCHER_TYPES.find(element => element.value === item.type)?.text}</td>
-                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.sign}</td>
-                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
-                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-medium" style={{ maxWidth: '250px' }}>
-                      <NavLink to={`/accounting/${VOUCHER_TYPES.find(item => item.value === type)?.slug}/detail/${item._id}`}>
-                        <Popover onMouseEnterTooltip={false} tooltip={`${item.name}`} classTooltip="w-[336px] whitespace-normal left-0" >
-                          <p className="text-2-line-clamp">{`${item.name}`}</p>
-                        </Popover>
-                      </NavLink>
-                      <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.funda?.name}</p>
-                      <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}</p>
+                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                      {VOUCHER_TYPES.find(element => element.value === item.type)?.text}
+                      <p><i>Phiếu hủy</i></p>
                     </td>
-                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.customer?.name}</td>
-                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.contract?.name}</td>
-                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{formatNumberMoney(item.amount)}</td>
-                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.note}</td>
-                    <td className="pt-2.5 pb-3 pr-2 border-b border-cbs-border">
-                      <ActionAccountingGroup data={item} handleAction={handleAction} />
-                    </td>
-                  </tr>
-                )
-              }else{
-                return (
-                  <tr key={item._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
-                    <td className="pt-2.5 pb-3 px-4 border-b border-cbs-border text-left">
-                      <input className="cbs-checkbox" type="checkbox" checked={Boolean(assigned[item._id])} onChange={e => handleChangeCheckbox(e, item)} />
-                    </td>
-                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{VOUCHER_TYPES.find(element => element.value === item.type)?.text}</td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.sign}</td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-medium" style={{ maxWidth: '250px' }}>

@@ -93,7 +93,7 @@ const mappingSelectedJournals = (data = [], isDataPayLoad = false) => {
   })
 }
 
-export const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdit = '', isEdit = false, contractId = '', type = 1 }) => {
+export const CreateNewTicket: FC<any> = ({ onFinish, title, idEdit = '', isEdit = false, contractId = '', type = 1 }) => {
   const { closeModal } = useModal();
 
   const [initialValues, setInitialValues] = useState(mappingData({ contractId, type }));
@@ -139,7 +139,6 @@ export const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdi
   const [totalRecord, setTotalRecord] = useState(0);
 
   const loadMoreSelectedJournals = async () => {
-
     const { data: selectedJournals } = await API.get(
       `${APP_ACCOUNTING_JOURNAL}?voucherID=${idEdit}`, {
       params: {
@@ -150,18 +149,20 @@ export const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdi
         }
       }
     })
+
     const dataDetail = {
       ...initialValues,
       selectedJournals: [...initialValues.selectedJournals, ...mappingSelectedJournals(selectedJournals.data?.listRecords) || []]
     }
+
     setLastestIDJournals(selectedJournals.data?.nextCursor)
     setTotalRecord(selectedJournals.data?.totalRecord)
     !isEmpty(dataDetail) && setInitialValues(mappingData(dataDetail))
-
   }
 
   const handleSubmit = useCallback(
     async (values: any) => {
+      // console.log(values)
       const formatData = {
         ...values,
         selectedJournals: [...mappingSelectedJournals(values.selectedJournals, true) || []]
@@ -180,11 +181,9 @@ export const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdi
 
     date: string().required(MESSAGE_ERROR.required),
     name: string().required(MESSAGE_ERROR.required),
-    // sign: string().required(MESSAGE_ERROR.required),
 
     selectedJournals: array().of(
       object().shape({
-        // customerDebit: string().required(MESSAGE_ERROR.required),
       })
     )
   });
@@ -203,23 +202,18 @@ export const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdi
         </div>
       </div>
       <Formik initialValues={initialValues} validationSchema={formValidation} enableReinitialize={true} onSubmit={handleSubmit}>
-
         {(formik) => {
           const { values } = formik;
 
           return (
             <Form style={{ 'height': 'calc(100% - 110px)' }}>
               <div className={"flex-1 h-full overflow-x-scroll create-ticket-working-space"}>
-
                 <CreateNewTicketForm formik={formik} initialValues={initialValues} />
-
               </div>
               {lastestIDJournals && (
                 <div>
-                  <button type="button" onClick={() => {
-                    loadMoreSelectedJournals();
-                  }}>
-                    <span className="text-primary">{`Xem thêm (${totalRecord - values.selectedJournals.length})`}</span>
+                  <button type="button" onClick={() => loadMoreSelectedJournals()}>
+                    <span className="text-primary">{`Xem thêm (${totalRecord - values.selectedJournals?.length})`}</span>
                   </button>
                 </div>
               )}
@@ -227,6 +221,7 @@ export const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdi
                 <button
                   className="btn btn-primary"
                   disabled={!formik.isValid}
+                  type="submit"
                 >
                   Xác nhận
                 </button>

@@ -3,19 +3,16 @@ import { NavLink } from "react-router-dom"
 import DotsVerticalIcon from "assets/icons/DotsVertical";
 import Close from "assets/icons/Close";
 import { formatNumberMoney } from "utils/cmcs";
-import {
-  FilterDateGroup
-} from "views/accounting/shareComponents/common";
-import {
-  useJournalByProperty
-} from "services/hooks/accounting/useGeneralJournal";
+import cn from "classnames";
+import styles from 'views/accounting/styles/styles.module.css';
+import { FilterDateGroup } from "views/accounting/shareComponents/common";
+import { useJournalByProperty } from "services/hooks/accounting/useGeneralJournal";
 import {debounce} from "lodash";
 import { DropdownSearchableV2 } from "shareComponents/common";
 import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
 import { useFunda } from "services/hooks/items/useFunda";
 
 export const AccountingReportFinancePage: FC = () => {
-  const [pageIndex, setPageIndex] = useState(0)
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
   const ref = React.useRef<PaginateHandle>(null);
@@ -43,6 +40,19 @@ export const AccountingReportFinancePage: FC = () => {
     isFetchList: true
   })
 
+  let noDauKy = 0, coDauKy = 0, noTrongKy = 0, coTrongKy = 0, noCuoiKy = 0, coCuoiKy = 0
+
+  if(dataAll && dataAll?.arrCombine){
+    for(const item of dataAll?.arrCombine){
+      noDauKy = noDauKy + item.kcNoDauKy + item.noDauKy
+      coDauKy = coDauKy + item.kcCoDauKy + item.coDauKy
+      noTrongKy = noTrongKy + item.noTrongKy
+      coTrongKy = coTrongKy + item.coTrongKy
+      noCuoiKy = noCuoiKy + item.kcNoDauKy + item.noDauKy + item.noTrongKy 
+      coCuoiKy = coCuoiKy + item.kcCoDauKy + item.coDauKy + item.coTrongKy
+    }
+  }
+
 const handleOnChangeDate = useCallback((date, input) => {
  if (input) {
    setInputFilter((value) => ({ ...value, toDate: date }))
@@ -54,7 +64,6 @@ const handleOnChangeDate = useCallback((date, input) => {
   return (
     <main className="h-full">
       <header className="h-[50px] w-full border border-primary-border flex items-center px-2">
-        {/* <p className="text-lg">Bảng cân đối tài khoản</p> */}
         <DropdownSearchableV2
             ref={accountRef}
             className={"mr-1 border border-primary-border rounded-lg mb-2"}
@@ -72,7 +81,6 @@ const handleOnChangeDate = useCallback((date, input) => {
             )}
             onchangeValue={item => {
                 setFundaId(item._id);
-                setPageIndex(0);
                 ref.current&&ref.current.resetPaginate();
             }}
             renderItem={(item) => (
@@ -108,7 +116,6 @@ const handleOnChangeDate = useCallback((date, input) => {
             }
           </div>
         </div>
-        
       </header>
 
       <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
@@ -192,6 +199,33 @@ const handleOnChangeDate = useCallback((date, input) => {
               </tr>
             ))
           }
+            <tr
+            className={cn(
+              "border-b border-primary-border h-9 font-bold",
+              styles.bgFooterYellow
+            )}
+          >
+              <td className="py-1 px-2 border-r border-primary-border"></td>
+              <td className="py-1 px-2 border-r border-primary-border">Tổng</td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(noDauKy)}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(coDauKy)}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(noTrongKy)}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(coTrongKy)}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(noCuoiKy)}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(coCuoiKy)}
+              </td>
+          </tr>
         </tbody>
       </table>
     </main>

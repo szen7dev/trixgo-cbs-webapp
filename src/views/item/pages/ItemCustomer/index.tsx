@@ -435,7 +435,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                                 />
                             </td>
                             <td className="py-1 px-2">
-                                {CONTACT_TYPES[Number(item.type)-1].text}
+                                {item.type > 1 ? CONTACT_TYPES[Number(item.type)-1].text : ""}
                                 <p className="text-xs"><i>{item.email}</i></p>
                                 <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
                             </td>
@@ -445,7 +445,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                                 </Link>
                                 <p className="text-primary">Sale: {item?.sale?.fullname || ''}</p>
                             </td>
-                            <td className="py-1 px-2">{GENDER_TYPES[Number(item.gender)-1].text}</td>
+                            <td className="py-1 px-2">{item.gender > 1 ? GENDER_TYPES[Number(item.gender)-1].text : ""}</td>
                             <td className="py-1 px-2">{item.address}</td>
                             <td className="py-1 px-2">{item.taxid}</td>
                             <td className="py-1 px-2">{item.phone}</td>
