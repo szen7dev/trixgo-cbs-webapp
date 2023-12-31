@@ -227,6 +227,7 @@ export const AccountingDebtDetailPage1: FC = () => {
                   <NavLink to={`/accounting/debt-tracking/acc/${params.accountID}/cus/${item?._id}`}>
                     {item.name} - {item?.phone}
                   </NavLink>
+                  {/* <p><i>{item?._id}</i></p> */}
                 </td>
                 <td className="py-1 px-2 border-r border-primary-border text-right">
                   {formatNumberMoney(Number(item.kcNoDauKy + item.noDauKy))}

@@ -6,14 +6,18 @@ import cn from "classnames";
 import styles from 'views/accounting/styles/styles.module.css';
 import { formatNumberMoney } from "utils/cmcs";
 import { FilterDateGroup }  from "views/accounting/shareComponents/common";
+import { VOUCHER_TYPES } from "apis/localdb/index";
 import { useJournalByProperty } from "services/hooks/accounting/useGeneralJournal";
 import {debounce} from "lodash";
+import moment from "moment";
 import { DropdownSearchableV2 } from "shareComponents/common";
 import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
+import { useJournalList } from "services/hooks/accounting/useGeneralJournal";
 import { useFunda } from "services/hooks/items/useFunda";
 import { toast } from "react-toastify";
 import API from "apis/repository";
 const ITEM_ACCOUNT = "/api/item/accounts";
+const ITEM_CONTACT = "/api/item/contacts";
 
 export const AccountingDebtDetailPage2: FC = () => {
   const history = useHistory();
@@ -31,6 +35,7 @@ export const AccountingDebtDetailPage2: FC = () => {
  
   const params: any = useParams();
   const [infoAccount, setInfoAccount] = useState({} as any);
+  const [infoContact, setInfoContact] = useState({} as any);
 
   const { list: listFunda } = useFunda({
 		params: { keyword: fundaKeyword },
@@ -39,15 +44,19 @@ export const AccountingDebtDetailPage2: FC = () => {
 
   const { listJournalByProperty: dataAll } = useJournalByProperty({
     params: {
-        option: 10,
-        optionTerm: 1,
-        fromDate: inputFilter.fromDate,
-        toDate: inputFilter.toDate,
-        fundaID: fundaId,
-        arrAccIDs: [params.accountID]
+      option: 10,
+      optionTerm: 1,
+      fromDate: inputFilter.fromDate,
+      toDate: inputFilter.toDate,
+      fundaID: fundaId,
+      arrAccIDs: [params.accountID],
+      contactID: params.contactID,
     },
     isFetchList: true
   })
+  // console.log(params.accountID)
+  // console.log(params.contactID)
+  // console.log(dataAll?.arrCombine)
 
   const accountId = params.accountID
   useEffect(() => {
@@ -65,55 +74,83 @@ export const AccountingDebtDetailPage2: FC = () => {
     fetchDetailAccount(accountId)
   }, [accountId])
 
-  let noDauKy = 0, coDauKy = 0, noTrongKy = 0, coTrongKy = 0, noCuoiKy = 0, coCuoiKy = 0
+  const contactId = params.contactID
+  useEffect(() => {
+    if(!accountId) return
+    const fetchDetailContact = async (contactId: string) => {
+      const response = await API.get(
+        `${ITEM_CONTACT}?contactID=${contactId}`
+      )
+      const { data, error } = response.data
+      if(!data || error) {
+        return toast.error("Error fetching account detail")
+      }
+      setInfoContact(data)
+    }
+    fetchDetailContact(contactId)
+  }, [contactId])
 
+  let tonDauKy = 0, nhapTrongKy = 0, xuatTrongKy = 0, tonCuoiKy = 0
   if(dataAll && dataAll?.arrCombine){
     for(const item of dataAll?.arrCombine){
-      noDauKy = noDauKy + item.kcNoDauKy + item.noDauKy
-      coDauKy = coDauKy + item.kcCoDauKy + item.coDauKy
-      noTrongKy = noTrongKy + item.noTrongKy
-      coTrongKy = coTrongKy + item.coTrongKy
-      noCuoiKy = noCuoiKy + item.kcNoDauKy + item.noDauKy + item.noTrongKy 
-      coCuoiKy = coCuoiKy + item.kcCoDauKy + item.coDauKy + item.coTrongKy
+      tonDauKy = tonDauKy + item.kcNoDauKy + item.noDauKy - item.kcCoDauKy - item.coDauKy
+      nhapTrongKy = nhapTrongKy + item.noTrongKy
+      xuatTrongKy = xuatTrongKy + item.coTrongKy
+      tonCuoiKy = tonCuoiKy + item.kcNoDauKy + item.noDauKy + item.noTrongKy - item.kcCoDauKy - item.coDauKy - item.coTrongKy
     }
   }
+  let balance = tonDauKy
+
+  const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage } = useJournalList({
+    params: {
+        fromDate: inputFilter.fromDate,
+        toDate: inputFilter.toDate,
+        limit: 50,
+        forward: 0,
+        cancel: 0,
+        fundaID: fundaId,
+        accountID: params.accountID,
+        contactID: params.contactID,
+    },
+    isFetchList: true
+  })
 
   const handleOnChangeDate = useCallback((date, input) => {
-  if (input) {
-    setInputFilter((value) => ({ ...value, toDate: date }))
-  } else {
-    setInputFilter((value) => ({ ...value, fromDate: date }))
-  }
+    if (input) {
+      setInputFilter((value) => ({ ...value, toDate: date }))
+    } else {
+      setInputFilter((value) => ({ ...value, fromDate: date }))
+    }
   }, [])
 
   return (
     <main className="h-full">
       <header className="h-[50px] w-full border border-primary-border flex items-center px-2">
-      <div className={"title-ticket-detail flex"}>
-            <div className={"flex-1 flex items-center"}>
-              <button
-                type="button"
-                className="p-2 rounded-3xl mr-2"
-                onClick={() => history.goBack()}
+        <div className={"title-ticket-detail flex"}>
+          <div className={"flex-1 flex items-center"}>
+            <button
+              type="button"
+              className="p-2 rounded-3xl mr-2"
+              onClick={() => history.goBack()}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                  />
-                </svg>
-              </button>
-              <p className="text-lg mr-3">{infoAccount?.name}-{infoAccount?.description}</p>
-            </div>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                />
+              </svg>
+            </button>
+            <p className="text-lg mr-3">{infoAccount?.name}-{infoAccount?.description}/{infoContact.name}</p>
           </div>
+        </div>
         <DropdownSearchableV2
             ref={accountRef}
             className={"mr-1 border border-primary-border rounded-lg mb-2"}
@@ -139,6 +176,7 @@ export const AccountingDebtDetailPage2: FC = () => {
             )}
             selectOneByOne={true}
         />
+
         <div className="flex items-center">
           <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
           <div className={"relative z-5 inline-block"}>
@@ -165,6 +203,23 @@ export const AccountingDebtDetailPage2: FC = () => {
                 </div>
             }
           </div>
+          <div className="absolute right-0">
+            <PaginateV2
+                ref={ref}
+                totalRecord={totalRecord}
+                totalPages={totalPage}
+                limit={50}
+                hasNextPage={hasNextPage}
+                isFetching={isLoading}
+                nextPageAction={() => {
+                  fetchNextPage();
+                    setPageIndex(oldState => oldState+1)
+                }}
+                prevPageAction={() => {
+                    setPageIndex(oldState => oldState-1)
+                }}
+            />
+          </div>
         </div>
         
       </header>
@@ -172,113 +227,143 @@ export const AccountingDebtDetailPage2: FC = () => {
       <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
         <thead className="bg-cbs-table-header h-10 border-b border-primary-border">
           <tr className="text-left text-sm text-primary-gray">
-            <th className="py-1 px-2 font-normal border-r border-primary-border" style={{width: "5%"}}>
-              Mã khách
+            <th className="py-1 px-2 font-normal border-r border-primary-border" style={{ width: "6%" }}>
+              Ngày
             </th>
             <th className="py-1 px-2 font-normal border-r border-primary-border w-1/6">
-              Tên
+              Diễn giải
             </th>
-            <th colSpan={2} className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
-              Đầu kỳ
+            <th className="py-1 px-2 font-normal border-r border-primary-border" style={{ width: "6%" }}>
+              Số hiệu
             </th>
-            <th colSpan={2} className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
-              Trong kỳ
+            <th className="py-1 px-2 font-normal border-r border-primary-border w-1/12">
+              Hợp đồng
             </th>
-            <th colSpan={2} className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
-              Cuối kỳ
+            <th className="py-1 px-2 font-normal border-r border-primary-border w-1/12">
+              Tài khoản đối ứng	
             </th>
-          </tr>
-          <tr className="text-left text-sm text-primary-gray">
             <th className="py-1 px-2 font-normal border-r border-primary-border">
-              
+              Phát sinh nợ	
             </th>
-            <th className="py-1 px-2 font-normal border-r border-primary-border w-1/6">
-              
+            <th className="py-1 px-2 font-normal border-r border-primary-border">
+              Phát sinh có	
             </th>
-            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
-              Nợ đầu kỳ
-            </th>
-            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
-              Có đầu kỳ
-            </th>
-            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
-              Phát sinh nợ trong kỳ
-            </th>
-            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
-              Phát sinh có trong kỳ
-            </th>
-            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
-              Dư nợ cuối kỳ
-            </th>
-            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
-              Dư có cuối kỳ
+            <th className="py-1 px-2 font-normal border-r border-primary-border">
+              Dư nợ-có
             </th>
           </tr>
         </thead>
 
         <tbody className="">
-          { 
-            dataAll?.arrCombine.map((item: any, index: any) => (
-              <tr key={index} className="border-b border-primary-border h-10">
-                <td className="py-1 px-2 border-r border-primary-border">
-                    {item?.sign}
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
-                  <NavLink to={`/accounting/debt-tracking/${item?._id}`}>
-                    {item.name} - {item?.phone}
-                  </NavLink>
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border text-right">
-                  {formatNumberMoney(Number(item.kcNoDauKy + item.noDauKy))}
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border text-right">
-                  {formatNumberMoney(Number(item.kcCoDauKy + item.coDauKy))}
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border text-right">
-                  {formatNumberMoney(Number(item.noTrongKy))}
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border text-right">
-                  {formatNumberMoney(Number(item.coTrongKy))}
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border text-right">
-                  {formatNumberMoney(Number(item.kcNoDauKy + item.noDauKy + item.noTrongKy))}
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border text-right">
-                  {formatNumberMoney(Number(item.kcCoDauKy + item.coDauKy + item.coTrongKy))}
-                </td>
-              </tr>
-            ))
-          }
-
-            <tr className={cn(
-              "border-b border-primary-border h-10 font-bold",
+          <tr
+            className={cn(
+              "border-b border-primary-border h-9 font-bold",
               styles.bgFooterYellow
-            )}>
-              <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
-                
-              </td>
+            )}
+          >
+              <td className="py-1 px-2 border-r border-primary-border"></td>
+              <td className="py-1 px-2 border-r border-primary-border">Đầu kỳ</td>
+              <td className="py-1 px-2 border-r border-primary-border"></td>
+              <td className="py-1 px-2 border-r border-primary-border"></td>
+              <td className="py-1 px-2 border-r border-primary-border"></td>
+              <td className="py-1 px-2 border-r border-primary-border"></td>
+              <td className="py-1 px-2 border-r border-primary-border"></td>
               <td className="py-1 px-2 border-r border-primary-border">
-                Tổng
+                {formatNumberMoney(tonDauKy)}
               </td>
-              <td className="py-1 px-2 border-r border-primary-border text-right">
-                {formatNumberMoney(noDauKy)}
+          </tr>
+          {
+            (listDataWithPager[pageIndex] ?? []).map((item: any, index: any) => {
+              if(item?.debit && (infoAccount?.nestedChilds?.includes(item?.debit?._id) || accountId.toString() === item?.debit?._id.toString())){
+                balance = Number(balance) + Number(item.amount)
+                
+                return (
+                  <tr key={index} className="border-b border-primary-border h-10">
+                    <td className="py-1 px-2 border-r border-primary-border">
+                      {moment(item?.voucher?.date).format('DD/MM/YYYY')}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
+                      <NavLink className="text-primary" to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/detail/${item?.voucher?._id}`}>
+                        {item?.voucher?.name}
+                      </NavLink>
+                      <p><i>{item?.funda?.name}</i></p>
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border">
+                      {item?.voucher?.sign}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border">
+                      {item?.contract?.name}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border">
+                      {item?.credit?.name}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border">
+                      {formatNumberMoney(item?.amount)}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border">
+                    
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border">
+                      {formatNumberMoney(balance)}
+                    </td>
+                  </tr>
+                )
+
+              }else{
+                balance = Number(balance) - Number(item.amount)
+
+                return (
+                  <tr key={index} className="border-b border-primary-border h-10">
+                    <td className="py-1 px-2 border-r border-primary-border">
+                      {moment(item?.voucher?.date).format('DD/MM/YYYY')}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
+                      <NavLink className="text-primary" to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/detail/${item?.voucher?._id}`}>
+                        {item?.voucher?.name}
+                      </NavLink>
+                      <p><i>{item?.funda?.name}</i></p>
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border">
+                      {item?.voucher?.sign}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border">
+                      {item?.contract?.name}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border">
+                      {item?.debit?.name}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border">
+                    
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border">
+                      {formatNumberMoney(item?.amount)}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border">
+                      {formatNumberMoney(balance)}
+                    </td>
+                  </tr>
+                )
+
+              }
+            })
+          }
+          <tr
+            className={cn(
+              "border-b border-primary-border h-9 font-bold",
+              styles.bgFooterYellow
+            )}
+          >
+              <td className="py-1 px-2 border-r border-primary-border"></td>
+              <td className="py-1 px-2 border-r border-primary-border">Cuối kỳ</td>
+              <td className="py-1 px-2 border-r border-primary-border"></td>
+              <td className="py-1 px-2 border-r border-primary-border"></td>
+              <td className="py-1 px-2 border-r border-primary-border"></td>
+              <td className="py-1 px-2 border-r border-primary-border"></td>
+              <td className="py-1 px-2 border-r border-primary-border"></td>
+              <td className="py-1 px-2 border-r border-primary-border">
+                {formatNumberMoney(tonCuoiKy)}
               </td>
-              <td className="py-1 px-2 border-r border-primary-border text-right">
-                {formatNumberMoney(coDauKy)}
-              </td>
-              <td className="py-1 px-2 border-r border-primary-border text-right">
-                {formatNumberMoney(noTrongKy)}
-              </td>
-              <td className="py-1 px-2 border-r border-primary-border text-right">
-                {formatNumberMoney(coTrongKy)}
-              </td>
-              <td className="py-1 px-2 border-r border-primary-border text-right">
-                {formatNumberMoney(noCuoiKy)}
-              </td>
-              <td className="py-1 px-2 border-r border-primary-border text-right">
-                {formatNumberMoney(coCuoiKy)}
-              </td>
-            </tr>
+          </tr>
         </tbody>
       </table>
     </main>

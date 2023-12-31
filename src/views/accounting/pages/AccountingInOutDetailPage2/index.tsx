@@ -398,7 +398,7 @@ export const AccountingInOutDetailPage2: FC = () => {
                       <p><i>{item?.goods?.name}</i></p>
                     </td>
                     <td className="py-1 px-2 border-r border-primary-border">
-                      {item?.customerDebit?.name}
+                      {item?.customerCredit?.name}
                     </td>
                     <td className="py-1 px-2 border-r border-primary-border">
                     
