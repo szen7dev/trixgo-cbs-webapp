@@ -34,6 +34,8 @@ export const AccountingDebtPage: FC = () => {
 
   const { listJournalByProperty: dataAll } = useJournalByProperty({
     params: {
+        optionAccount: 1,
+        arrAccNames: ['131','141','138','331','341','3388'],
         fromDate: inputFilter.fromDate,
         toDate: inputFilter.toDate,
         option: 4,
@@ -165,7 +167,7 @@ const handleOnChangeDate = useCallback((date, input) => {
                   {item.name}
                 </td>
                 <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
-                  <NavLink to={`/accounting/debt-tracking/${item?._id}`}>
+                  <NavLink to={`/accounting/debt-tracking/acc/${item?._id}`}>
                     {item?.description}
                   </NavLink>
                   {/* <p><i>{item?._id}</i></p> */}

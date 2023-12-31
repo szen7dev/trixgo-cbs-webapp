@@ -40,7 +40,6 @@ export const AccountingInOutPage: FC = () => {
     },
     isFetchList: true
   })
-  // console.log(dataAll)
 
 const handleOnChangeDate = useCallback((date, input) => {
  if (input) {
