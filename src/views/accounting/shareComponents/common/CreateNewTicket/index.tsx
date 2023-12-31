@@ -162,7 +162,7 @@ export const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdi
 
   const handleSubmit = useCallback(
     async (values: any) => {
-      console.log(values)
+      // console.log(values)
       const formatData = {
         ...values,
         selectedJournals: [...mappingSelectedJournals(values.selectedJournals, true) || []]
