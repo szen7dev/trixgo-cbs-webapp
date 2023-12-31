@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useRef, useState } from "react";
+import { FC, ReactNode, useRef, useState } from "react";
 import ThreeDotsHorizontal from "assets/images/three-dots-horizontal.svg";
 import Printer from "assets/images/icons8-print-96.png";
 import Copy from "assets/images/icons8-copy-96.png";
@@ -24,13 +24,13 @@ export const ActionAccountingGroup: FC<Props> = ({ data, handleAction, icon }) =
         {icon ?? <img alt={"Icon"} src={ThreeDotsHorizontal} />}
       </button>
       {showOptions ? <div className={"absolute acc-action-row border rounded-md overflow-hidden bg-white z-100"}>
-        <button className={"flex w-full p-3 hover:bg-gray-100"}>
+        {/* <button className={"flex w-full p-3 hover:bg-gray-100"}>
           <div className={"w-2/12 ml-3"}>
             <img alt={"Icon"} src={Printer} />
           </div>
           <div className={"w-10/12 text-left"}>In ấn</div>
-        </button>
-        <button className={"flex w-full p-3 hover:bg-gray-100"}>
+        </button> */}
+        <button onClick={() => { setShowOptions(false); handleAction && handleAction(data, 2) }} className={"flex w-full p-3 hover:bg-gray-100"}>
           <div className={"w-2/12 ml-3"}>
             <img alt={"Icon"} src={Copy} />
           </div>

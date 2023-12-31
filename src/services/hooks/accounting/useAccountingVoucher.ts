@@ -36,9 +36,7 @@ export const UseAccountingVoucherList = (pageParam: any, type: number, inputFilt
 
 export const useJournalDetailList = (pageParam = '', voucherID = '', limit = 10): any => {
     const {
-        status,
         data,
-        error,
         refetch
     } = useQuery(
         ["JournalDetailList", { pageParam }],

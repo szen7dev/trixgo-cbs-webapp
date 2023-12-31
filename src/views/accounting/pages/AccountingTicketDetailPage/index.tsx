@@ -1,37 +1,45 @@
 import { FC, useEffect, useState } from "react";
-import DotsVerticalIcon from "assets/icons/DotsVertical";
-import { useHistory, useParams } from "react-router-dom"
-import { ActionAccountingGroup } from "views/accounting/shareComponents/common";
+import Pen from "assets/images/icons8-pencil.svg";
 import LogIcon from "assets/icons/Log";
+import { useHistory, useParams } from "react-router-dom";
 import { VOUCHER_TYPES, DATE_FORMAT_TIME } from "apis/localdb/index";
 import { Paginate } from "shareComponents/common";
-import {
-  useJournalDetailList
-} from "services/hooks/accounting/useAccountingVoucher";
+import { useJournalDetailList, useUpdateAccountingVoucherMutation } from "services/hooks/accounting/useAccountingVoucher";
 import { formatNumberMoney, convertDisplayDate } from "utils/cmcs"
+import { CreateNewTicket } from "views/accounting/shareComponents/common";
+import { useModal } from "services/hooks/useModal";
+
 import API from "apis/repository";
 const APP_ACCOUNTING_VOUCHER = "/api/accounting/vouchers";
 
-export const AccountingTicketDetailPage: FC = () => {
+type Props = {
+  type?: number
+};
 
+export const AccountingTicketDetailPage: FC<Props> = ({ type = 1 }) => {
+  const history = useHistory();
   const params: any = useParams();
-  const [voucherDetail, setVoucherDetail] = useState({} as any);
+  const [voucherDetail, setVoucherDetail] = useState<any>({});
 
-  useEffect(() => {
-    const fetchDetailAccountingVoucher = async (id: any) => {
-      const { data } = await API.get(
-        `${APP_ACCOUNTING_VOUCHER}?voucherID=${id}`, {
-        params: {
-          populates: {
-            "path": "customer contract ipc subtype userCreate userUpdate company",
-            "select": "name description fullname",
-          }
+  const { updateAccountingVoucherMutateAsync } = useUpdateAccountingVoucherMutation();
+  const { openModal } = useModal();
+
+  const fetchDetailAccountingVoucher = async (id: any) => {
+    const { data } = await API.get(
+      `${APP_ACCOUNTING_VOUCHER}?voucherID=${id}`, {
+      params: {
+        populates: {
+          "path": "customer contract ipc subtype userCreate userUpdate company",
+          "select": "name description fullname",
         }
       }
-      )
-      setVoucherDetail(data?.data || {})
-      return data
     }
+    )
+    setVoucherDetail(data?.data || {})
+    return data
+  }
+
+  useEffect(() => {
     params.id && fetchDetailAccountingVoucher(params.id)
   }, [params.id]);
 
@@ -48,6 +56,7 @@ export const AccountingTicketDetailPage: FC = () => {
       setPrevCursor([...prevCursor, journalDetailList.nextCursor])
     }
   }, [journalDetailList.nextCursor]);
+
   const prevPageAction = () => {
     if (!journalDetailList.nextCursor) {
       setPageParam(prevCursor[prevCursor.length - 2] || '')
@@ -55,14 +64,36 @@ export const AccountingTicketDetailPage: FC = () => {
       const prev = prevCursor.findIndex(item => item === journalDetailList.nextCursor)
       setPageParam(prevCursor[prev - 2] || '')
     }
-
   };
 
-  const nextPageAction = () => {
-    setPageParam(journalDetailList.nextCursor)
-  }
+  const nextPageAction = () => setPageParam(journalDetailList.nextCursor)
 
-  const history = useHistory();
+  const handleFinishForm = async (values: any) => {
+    const res = await updateAccountingVoucherMutateAsync(values);
+
+    if (res.error || res.code && res.code !== 200) {
+      return false;
+    }
+
+    journalDetailList.refetch();
+    fetchDetailAccountingVoucher(params.id);
+    return true;
+  };
+
+  const openModalUpdate = () => {
+    openModal(
+      <div className={"bg-white inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"}>
+        <CreateNewTicket
+          onFinish={handleFinishForm}
+          type={type}
+          isEdit={true}
+          idEdit={voucherDetail._id}
+          contractId={voucherDetail?.contract?._id}
+          title="Cập nhật"
+        />
+      </div>
+    )
+  }
 
   return (
     <div className={"relative min-h-full pb-10"}>
@@ -94,6 +125,9 @@ export const AccountingTicketDetailPage: FC = () => {
               <span className={"text-sm rounded-full bg-primary text-white h-5 leading-5 ml-2 px-2"}>
                 {VOUCHER_TYPES.find(item => item.value === voucherDetail?.type)?.text}
               </span>
+              <button onClick={openModalUpdate} className={"p-3 ml-3 rounded-full hover:bg-gray-100"}>
+                <img alt={"Icon"} src={Pen} />
+              </button>
             </div>
             {/* <button type="button" className={"rounded-full h-10 w-10 flex items-center justify-center bg-gray-100"}>
               <ActionAccountingGroup
