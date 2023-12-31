@@ -162,6 +162,7 @@ export const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdi
 
   const handleSubmit = useCallback(
     async (values: any) => {
+      console.log(values)
       const formatData = {
         ...values,
         selectedJournals: [...mappingSelectedJournals(values.selectedJournals, true) || []]
@@ -180,11 +181,9 @@ export const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdi
 
     date: string().required(MESSAGE_ERROR.required),
     name: string().required(MESSAGE_ERROR.required),
-    // sign: string().required(MESSAGE_ERROR.required),
 
     selectedJournals: array().of(
       object().shape({
-        // customerDebit: string().required(MESSAGE_ERROR.required),
       })
     )
   });
