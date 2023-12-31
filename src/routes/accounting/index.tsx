@@ -138,37 +138,37 @@ const AccountingRouter: FC = () => {
       <ProtectedRoute
         exact
         path="/accounting/receipt/detail/:id"
-        component={AccountingTicketDetailPage}
+        component={() => <AccountingTicketDetailPage type={2} />}
       />
       <ProtectedRoute
         exact
         path="/accounting/payment/detail/:id"
-        component={AccountingTicketDetailPage}
+        component={() => <AccountingTicketDetailPage type={3} />}
       />
       <ProtectedRoute
         exact
         path="/accounting/goods-import/detail/:id"
-        component={AccountingTicketDetailPage}
+        component={() => <AccountingTicketDetailPage type={4} />}
       />
       <ProtectedRoute
         exact
         path="/accounting/goods-export/detail/:id"
-        component={AccountingTicketDetailPage}
+        component={() => <AccountingTicketDetailPage type={5} />}
       />
       <ProtectedRoute
         exact
         path="/accounting/invoices/detail/:id"
-        component={AccountingTicketDetailPage}
+        component={() => <AccountingTicketDetailPage type={6} />}
       />
       <ProtectedRoute
         exact
         path="/accounting/debit-note/detail/:id"
-        component={AccountingTicketDetailPage}
+        component={() => <AccountingTicketDetailPage type={7} />}
       />
       <ProtectedRoute
         exact
         path="/accounting/credit-note/detail/:id"
-        component={AccountingTicketDetailPage}
+        component={() => <AccountingTicketDetailPage type={8} />}
       />
       <ProtectedRoute
         exact
