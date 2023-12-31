@@ -84,7 +84,6 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
     isFetch: true
 	}, true)
   // console.log(listUser)
-
   // console.log({fundaID})
 
   const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch } = useVoucherList({

@@ -1,22 +1,41 @@
-import { FC, useCallback, useState } from "react";
-import { NavLink, useParams } from "react-router-dom"
+import React, { FC, useCallback, useState, useEffect } from "react";
+import { NavLink, useParams, useHistory } from "react-router-dom"
 import DotsVerticalIcon from "assets/icons/DotsVertical";
 import Close from "assets/icons/Close";
 import cn from "classnames";
 import styles from 'views/accounting/styles/styles.module.css';
 import { formatNumberMoney } from "utils/cmcs";
-import {
-  FilterDateGroup
-} from "views/accounting/shareComponents/common";
-import {
-  useJournalByProperty
-} from "services/hooks/accounting/useGeneralJournal";
+import { FilterDateGroup }  from "views/accounting/shareComponents/common";
+import { useJournalByProperty } from "services/hooks/accounting/useGeneralJournal";
+import {debounce} from "lodash";
+import { DropdownSearchableV2 } from "shareComponents/common";
+import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
+import { useFunda } from "services/hooks/items/useFunda";
+import { toast } from "react-toastify";
+import API from "apis/repository";
+const ITEM_ACCOUNT = "/api/item/accounts";
 
 export const AccountingDebtDetailPage1: FC = () => {
+  const history = useHistory();
+  const [pageIndex, setPageIndex] = useState(0)
+  type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+  type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
+  const ref = React.useRef<PaginateHandle>(null);
+  const accountRef = React.useRef<DropdownHandle>(null);
+
+  const [fundaId, setFundaId] = useState<string | null>();
+  const [fundaKeyword, setFundaKeyword] = useState("");
+
   const [showOption, setShowOption] = useState(false)
   const [inputFilter, setInputFilter] = useState({ keyword: '', fromDate: new Date(new Date().getFullYear(), 0, 1), toDate: new Date(new Date().getFullYear(), 11, 31) });
  
   const params: any = useParams();
+  const [infoAccount, setInfoAccount] = useState({} as any);
+
+  const { list: listFunda } = useFunda({
+		params: { keyword: fundaKeyword },
+    isFetchList: true
+	})
 
   const { listJournalByProperty: dataAll } = useJournalByProperty({
     params: {
@@ -24,12 +43,27 @@ export const AccountingDebtDetailPage1: FC = () => {
         optionTerm: 1,
         fromDate: inputFilter.fromDate,
         toDate: inputFilter.toDate,
+        fundaID: fundaId,
         arrAccIDs: [params.accountID]
     },
     isFetchList: true
   })
 
-  // console.log(dataAll?.arrCombine)
+  const accountId = params.accountID
+  useEffect(() => {
+    if(!accountId) return
+    const fetchDetailAccount = async (accountId: string) => {
+      const response = await API.get(
+        `${ITEM_ACCOUNT}?accountID=${accountId}`
+      )
+      const { data, error } = response.data
+      if(!data || error) {
+        return toast.error("Error fetching account detail")
+      }
+      setInfoAccount(data)
+    }
+    fetchDetailAccount(accountId)
+  }, [accountId])
 
   let noDauKy = 0, coDauKy = 0, noTrongKy = 0, coTrongKy = 0, noCuoiKy = 0, coCuoiKy = 0
 
@@ -54,9 +88,57 @@ export const AccountingDebtDetailPage1: FC = () => {
 
   return (
     <main className="h-full">
-      <header className="h-[50px] w-full border border-primary-border flex items-center justify-between px-2">
-        <p className="text-lg">---Tên mã khách lựa chọn---</p>
-
+      <header className="h-[50px] w-full border border-primary-border flex items-center px-2">
+      <div className={"title-ticket-detail flex"}>
+            <div className={"flex-1 flex items-center"}>
+              <button
+                type="button"
+                className="p-2 rounded-3xl mr-2"
+                onClick={() => history.goBack()}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                  />
+                </svg>
+              </button>
+              <p className="text-lg mr-3">{infoAccount?.name}-{infoAccount?.description}</p>
+            </div>
+          </div>
+        <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            placeholder={"Đơn vị cơ sở"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listFunda}
+            formatItem={{
+                id: "_id",
+                text: "name",
+            }}
+            onSearchInputChange={debounce(
+                (valueSearch) => setFundaKeyword(valueSearch),
+                500
+            )}
+            onchangeValue={item => {
+                setFundaId(item._id);
+                setPageIndex(0);
+                ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+        />
         <div className="flex items-center">
           <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
           <div className={"relative z-5 inline-block"}>
@@ -142,9 +224,10 @@ export const AccountingDebtDetailPage1: FC = () => {
                     {item?.sign}
                 </td>
                 <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
-                  <NavLink to={`/accounting/import-export/${item?._id}`}>
+                  <NavLink to={`/accounting/debt-tracking/acc/${params.accountID}/cus/${item?._id}`}>
                     {item.name} - {item?.phone}
                   </NavLink>
+                  {/* <p><i>{item?._id}</i></p> */}
                 </td>
                 <td className="py-1 px-2 border-r border-primary-border text-right">
                   {formatNumberMoney(Number(item.kcNoDauKy + item.noDauKy))}

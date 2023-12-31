@@ -24,6 +24,7 @@ import {
   AccountingInOutDetailPage2,
   AccountingDebtPage,
   AccountingDebtDetailPage1,
+  AccountingDebtDetailPage2,
   ReceivablesCustomers,
   ReceivablesCustomersCode,
   AccountingVatInPage,
@@ -193,8 +194,13 @@ const AccountingRouter: FC = () => {
       />
       <ProtectedRoute
         exact
-        path="/accounting/import-export/:accountID"
+        path="/accounting/import-export/acc/:accountID"
         component={AccountingInOutDetailPage1}
+      />
+            <ProtectedRoute
+        exact
+        path="/accounting/import-export/acc/:accountID/prod/:goodsID"
+        component={AccountingInOutDetailPage2}
       />
       <ProtectedRoute
         exact
@@ -203,8 +209,13 @@ const AccountingRouter: FC = () => {
       />
       <ProtectedRoute
         exact
-        path="/accounting/debt-tracking/:accountID"
+        path="/accounting/debt-tracking/acc/:accountID"
         component={AccountingDebtDetailPage1}
+      />
+      <ProtectedRoute
+        exact
+        path="/accounting/debt-tracking/acc/:accountID/cus/:contactID"
+        component={AccountingDebtDetailPage2}
       />
       <ProtectedRoute
         exact

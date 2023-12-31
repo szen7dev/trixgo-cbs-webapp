@@ -16,7 +16,6 @@ export const MainHeaderV2:FC<HeaderProps> = ({children, headerTitle}) => {
         <header className="home-header relative top-0 transition-all duration-500 ease-out bg-primary-light z-30">
             <div className="pr-4">
                 <div className="flex items-center justify-between h-14 -mb-px">
-                    {/* Header: Left side */}
                     <div className="flex items-center whitespace-nowrap min-w-[256px] max-w-[256px] w-[256px]">
                         <div className="t-header-company-name flex items-center pl-4 lg-pl-8">
                             <Link to={`/`}>
@@ -30,9 +29,7 @@ export const MainHeaderV2:FC<HeaderProps> = ({children, headerTitle}) => {
                     <div className={"flex-1 flex items-center justify-between"}>
                         {children}
                     </div>
-                    {/* Header: Right side */}
                     <div className="flex items-center">
-                        {/* Search menu */}
                         <Link to={`/workshop/home`} title="User Guide/Hướng dẫn sử dụng">
                             <img src={iconHelp} alt="Help" className="w-6 h-6 filter-secondary-gray" />
                         </Link>

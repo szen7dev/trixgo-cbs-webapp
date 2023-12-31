@@ -3,12 +3,8 @@ import { NavLink } from "react-router-dom"
 import DotsVerticalIcon from "assets/icons/DotsVertical";
 import Close from "assets/icons/Close";
 import { formatNumberMoney } from "utils/cmcs";
-import {
-  FilterDateGroup
-} from "views/accounting/shareComponents/common";
-import {
-  useJournalByProperty
-} from "services/hooks/accounting/useGeneralJournal";
+import { FilterDateGroup } from "views/accounting/shareComponents/common";
+import { useJournalByProperty } from "services/hooks/accounting/useGeneralJournal";
 import {debounce} from "lodash";
 import { DropdownSearchableV2 } from "shareComponents/common";
 import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
@@ -34,6 +30,8 @@ export const AccountingInOutPage: FC = () => {
 
   const { listJournalByProperty: dataAll } = useJournalByProperty({
     params: {
+        optionAccount: 1,
+        arrAccNames: ['152','153','155','156','157'],
         fromDate: inputFilter.fromDate,
         toDate: inputFilter.toDate,
         option: 4,
@@ -142,7 +140,7 @@ const handleOnChangeDate = useCallback((date, input) => {
                   {item.name}
                 </td>
                 <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
-                  <NavLink to={`/accounting/import-export/${item?._id}`}>
+                  <NavLink to={`/accounting/import-export/acc/${item?._id}`}>
                     {item?.description}
                   </NavLink>
                   {/* <p><i>{item?._id}</i></p> */}

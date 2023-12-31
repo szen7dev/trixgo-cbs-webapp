@@ -10,6 +10,7 @@ export * from './AccountingInOutDetailPage1';
 export * from './AccountingInOutDetailPage2';
 export * from './AccountingDebtPage';
 export * from './AccountingDebtDetailPage1';
+export * from './AccountingDebtDetailPage2';
 export * from './ReceivablesCustomers';
 export * from './ReceivablesCustomersCode';
 export * from './AccountingVatInPage';

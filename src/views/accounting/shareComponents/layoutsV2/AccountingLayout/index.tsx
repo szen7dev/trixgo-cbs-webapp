@@ -4,7 +4,7 @@ import cn from "classnames";
 import AccountingLeftSideBar from "./components/AccountingLeftSideBar";
 import { LeftNavigate, MainHeaderV2 } from "shareComponents/common";
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
-import { HomeHeaderContent } from "shareComponents/layouts/HomeLayout/components";
+// import { HomeHeaderContent } from "shareComponents/layouts/HomeLayout/components";
 
 type Props = {
   children: ReactNode
@@ -37,7 +37,7 @@ export const AccountingLayout: FC<Props> = ({ children }) => {
         <section className={"main-content-wrapper flex-1"}>
 
           <MainHeaderV2 headerTitle={"Kế toán"}>
-            <HomeHeaderContent />
+            {/* <HomeHeaderContent /> */}
           </MainHeaderV2>
 
           <AccountingLeftSideBar />
