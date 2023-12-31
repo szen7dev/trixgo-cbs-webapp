@@ -20,6 +20,7 @@ export const AccountingReportFinancePage: FC = () => {
 
   const [fundaId, setFundaId] = useState<string | null>();
   const [fundaKeyword, setFundaKeyword] = useState("");
+  const [optionCal, setOptionCal] = useState("");
 
   const [showOption, setShowOption] = useState(false)
   const [inputFilter, setInputFilter] = useState({ keyword: '', fromDate: new Date(new Date().getFullYear(), 0, 1), toDate: new Date(new Date().getFullYear(), 11, 31) });
@@ -36,7 +37,7 @@ export const AccountingReportFinancePage: FC = () => {
       option: 4,
       optionTerm: 1,
       fundaID: fundaId,
-      optionCal: 1, // 1-Tính tổng chỉ các bút toán phát sinh
+      optionCal: optionCal
     },
     isFetchList: true
   })
@@ -92,6 +93,16 @@ const handleOnChangeDate = useCallback((date, input) => {
 
         <div className="flex items-center">
           <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
+          <div className={"flex items-center"}>
+						<div className={"flex items-center"}>
+							<input type="radio" id="optionCal1" name="optionCal" value={1} className={"form-check-input mt-0 cursor-pointer"} onChange={() => setOptionCal('1')} />
+							<label htmlFor="optionCal1" className={"text-left ml-3 mr-3 cursor-pointer"}>Tổng toàn bộ</label>
+						</div>
+						<div className={"flex items-center"}>
+							<input type="radio" id="optionCal2" name="optionCal" value={2} className={"form-check-input mt-0 cursor-pointer"} onChange={() => setOptionCal('2')} />
+							<label htmlFor="optionCal2" className={"text-left ml-3 mr-3 cursor-pointer"}>Tổng tài khoản trực tiếp</label>
+						</div>
+					</div>
           <div className={"relative z-5 inline-block"}>
             <button onClick={() => setShowOption(!showOption)} 
               className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg"}

@@ -10,7 +10,7 @@ import CreateNewTicketTableAccount from "./CreateNewTicketTableAccount";
 import { DATE_FORMAT, VOUCHER_TYPES, LIMIT_DROPDOWN } from "apis/localdb/index";
 import { ErrorMessage, Field } from "formik";
 
-import TagIcon from "assets/images/icons8-price-tag-96.svg";
+// import TagIcon from "assets/images/icons8-price-tag-96.svg";
 
 import {
 	useQueryListContact,
