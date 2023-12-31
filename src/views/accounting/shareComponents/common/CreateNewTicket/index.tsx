@@ -162,7 +162,6 @@ export const CreateNewTicket: FC<any> = ({ onFinish, title, idEdit = '', isEdit 
 
   const handleSubmit = useCallback(
     async (values: any) => {
-      // console.log(values)
       const formatData = {
         ...values,
         selectedJournals: [...mappingSelectedJournals(values.selectedJournals, true) || []]
@@ -173,7 +172,7 @@ export const CreateNewTicket: FC<any> = ({ onFinish, title, idEdit = '', isEdit 
       }
     },
     [closeModal]
-  );
+  )
 
   const formValidation = object().shape({
     type: object().required(MESSAGE_ERROR.required),
