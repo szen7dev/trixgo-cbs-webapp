@@ -99,7 +99,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
   })
 
   const accountingVoucher = UseAccountingVoucherList(pageParam, type, inputFilter);
-  const { assigned, checkboxRef, checked, handleChangeCheckbox, handleCheckAll } = useCheckedList(accountingVoucher?.listAccountingVoucher || []);
+  const { assigned, checkboxRef, handleChangeCheckbox, handleCheckAll } = useCheckedList(accountingVoucher?.listAccountingVoucher || []);
 
   const { createAccountingVoucherMutateAsync } = useCreateAccountingVoucherMutation();
   const { updateAccountingVoucherMutateAsync } = useUpdateAccountingVoucherMutation();
@@ -107,13 +107,11 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
 
   const handleFinishForm = useCallback(async (values, isEdit = false) => {
     let res: any
-    console.log({ values })
     if (isEdit) {
       res = await updateAccountingVoucherMutateAsync(values);
     } else {
-      res = await createAccountingVoucherMutateAsync(values);
+      res = await createAccountingVoucherMutateAsync({ ...values, fundaID });
     }
-    console.log({ res })
 
     if (res.code && res.code !== 200) {
       return false;
@@ -207,11 +205,21 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                 (valueSearch) => setFundaKeyword(valueSearch),
                 500
             )}
+            onClearData={() => {
+              if (searchParams.has('fundaID')) {
+                searchParams.delete('fundaID');
+
+                history.replace({
+                  search: searchParams.toString(),
+                })
+              }
+              setFundaID("");
+            }}
             onchangeValue={item => {
-                history.push({ search: `/${item._id}` })
+                history.push({ search: `?fundaID=${item._id}` })
                 setFundaID(item._id);
                 setPageIndex(0);
-                ref.current&&ref.current.resetPaginate();
+                ref.current && ref.current.resetPaginate();
             }}
             renderItem={(item) => (
                 <p className={"min-w-[300px]"}>{item.text}</p>
