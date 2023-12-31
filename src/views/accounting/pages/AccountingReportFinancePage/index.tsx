@@ -36,6 +36,7 @@ export const AccountingReportFinancePage: FC = () => {
       option: 4,
       optionTerm: 1,
       fundaID: fundaId,
+      optionCal: 1, // 1-Tính tổng chỉ các bút toán phát sinh
     },
     isFetchList: true
   })

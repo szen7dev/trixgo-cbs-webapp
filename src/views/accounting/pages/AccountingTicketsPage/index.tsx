@@ -241,6 +241,9 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                 (valueSearch) => setContactKeyword(valueSearch),
                 500
             )}
+            onClearData={() => {
+              setCustomerID("");
+            }}
             onchangeValue={item => {
                 setCustomerID(item._id);
                 setPageIndex(0);
@@ -266,6 +269,9 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                 (valueSearch) => setUserKeyword(valueSearch),
                 500
             )}
+            onClearData={() => {
+              setUserID("");
+            }}
             onchangeValue={item => {
                 setUserID(item._id);
                 setPageIndex(0);
