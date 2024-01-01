@@ -69,7 +69,16 @@ export const AccountingDiaryPage: FC = () => {
   const handleExportExcel = async () => {
     try {
           setStateExport({ isExporting: true })
-          const { error, data } = await exportExcelAsync({  })
+          const { error, data } = await exportExcelAsync({ 
+              filterParams: {
+                fromDate: inputFilter.fromDate,
+                toDate: inputFilter.toDate,
+                limit: 10,
+                forward: 0,
+                cancel: 0,
+                fundaID: fundaId,
+              }
+           })
 
           if(error) {
               return toast.warn(data?.message);
