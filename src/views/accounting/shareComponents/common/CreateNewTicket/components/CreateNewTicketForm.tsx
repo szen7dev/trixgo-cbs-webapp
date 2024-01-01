@@ -52,7 +52,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 	);
 	const { listDoctypes: listSubType } = useQueryListDoctype({
 		limit: LIMIT_DROPDOWN,
-		type: 2,
+		type: 23,
 		keyword: searchSubTypeValue,
 	});
 

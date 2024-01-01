@@ -154,6 +154,11 @@ const ItemRouter: FC = () => {
                 />
                 <ProtectedRoute
                     exact
+                    path="/item/home/23"
+                    component={() => <ItemHomePage type={23} />}
+                />
+                <ProtectedRoute
+                    exact
                     path="/item/home/:type/:parentId"
                     component={() => <ItemChildPage />}
                 />

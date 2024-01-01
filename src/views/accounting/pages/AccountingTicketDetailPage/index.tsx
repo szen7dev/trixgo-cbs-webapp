@@ -182,7 +182,7 @@ export const AccountingTicketDetailPage: FC<Props> = ({ type = 1 }) => {
               Thành tiền
             </div>
             <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300"}>
-              Hợp đồng
+              Hợp đồng/Khoản mục phí
             </div>
             <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300"}>
               Ngân sách
@@ -216,17 +216,18 @@ export const AccountingTicketDetailPage: FC<Props> = ({ type = 1 }) => {
                 <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
                   Cái
                 </div>
-                <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
+                <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 text-right"}>
                   {formatNumberMoney(item?.quantity)}
                 </div>
-                <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
+                <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 text-right"}>
                   {formatNumberMoney(item?.unitprice)}
                 </div>
-                <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
+                <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 text-right"}>
                   {formatNumberMoney(item?.amount)}
                 </div>
                 <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
                   {item?.contract?.name}
+                  <p className="text-primary"><i>{item.subtype?.name}</i></p>
                 </div>
                 <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
                   {item?.budgetWork?.name}

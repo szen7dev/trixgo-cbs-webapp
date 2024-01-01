@@ -1,6 +1,6 @@
 import API from "../repository";
 
-const ACCOUNTING_JOURNAL = "/api/accounting/journals";
+const ACCOUNTING_JOURNAL = "/api/accounting/journals"; ///api/accounting/journals/export-excel
 
 interface JournalRepository {
     insert: (data: any) => Promise<any>;
@@ -29,7 +29,7 @@ async function fetchListJournal(params : any) {
         params: {
             // select: 'name sign author project date createAt description note store amount status storeSign publish datahubContact',
             populates: {
-                "path": "voucher debit credit customerCredit customerDebit warehouse goods contract budgetWork funda",
+                "path": "voucher debit credit customerCredit customerDebit warehouse goods contract budgetWork funda subtype",
                 "select": "type name sign description unit date",
             },
             ...params,
@@ -43,7 +43,7 @@ async function fetchFilterListData(params : any) {
         params: {
             // select: 'name sign author project date createAt description note store amount status storeSign publish datahubContact',
             populates: {
-                "path": "author sender storage project publish datahubContact funda",
+                "path": "voucher debit credit customerCredit customerDebit warehouse goods contract budgetWork funda subtype",
                 "select": "fullname bizfullname sign image name date"
             },
             ...params,
@@ -62,12 +62,12 @@ async function fetchListByProperty(params : any) {
 }
 
 async function inserData(data: any) {
-    const { data: result } = await API.post(`${ACCOUNTING_JOURNAL}/insert-document`, data);
+    const { data: result } = await API.post(`${ACCOUNTING_JOURNAL}/insert-excel`, data);
     return result
 }
 
 async function updateData(data: any) {
-    const { data: result } = await API.put(`${ACCOUNTING_JOURNAL}/update-document`, data);
+    const { data: result } = await API.put(`${ACCOUNTING_JOURNAL}/update-excel`, data);
     return result
 }
 
@@ -82,6 +82,6 @@ async function importFromExcel(data: any) {
 }
 
 async function exportExcel(data: any) {
-    const { data: result } = await API.post(`${ACCOUNTING_JOURNAL}/export-document`, data);
+    const { data: result } = await API.post(`${ACCOUNTING_JOURNAL}/export-excel`, data);
     return result
 }

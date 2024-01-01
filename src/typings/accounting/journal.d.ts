@@ -79,6 +79,11 @@ export interface DocumentProps extends Omit<DocumentInserPayload, 'parentID' | '
         _id: string;
         name: string;
     }
+    subtype?: {
+        _id: string;
+        name: string;
+        sign: string;
+    }
 }
 
 interface DocumentInserPayload {

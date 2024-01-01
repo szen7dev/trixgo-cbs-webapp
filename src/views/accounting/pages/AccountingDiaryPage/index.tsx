@@ -11,8 +11,11 @@ import { FilterDateGroup } from "views/accounting/shareComponents/common";
 import { DropdownSearchableV2 } from "shareComponents/common";
 import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
 import { VOUCHER_TYPES } from "apis/localdb/index";
-import { useJournalList } from "services/hooks/accounting/useGeneralJournal";
+import { useJournalList, useJournal } from "services/hooks/accounting/useGeneralJournal";
 import { useFunda } from "services/hooks/items/useFunda";
+import { toast } from "react-toastify";
+import { read, utils } from 'xlsx';
+import { createLinkAndClick } from "utils";
 
 export const AccountingDiaryPage: FC = () => {
   const [showOption, setShowOption] = useState(false)
@@ -56,6 +59,38 @@ export const AccountingDiaryPage: FC = () => {
       setInputFilter((value) => ({ ...value, fromDate: date }))
     }
   }, [])
+
+  //_____Import, export excel
+  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+    isExporting: false,
+  })
+  const { exportExcelAsync } = useJournal({})
+  
+  const handleExportExcel = async () => {
+    try {
+          setStateExport({ isExporting: true })
+          const { error, data } = await exportExcelAsync({ 
+              filterParams: {
+                fromDate: inputFilter.fromDate,
+                toDate: inputFilter.toDate,
+                limit: 10,
+                forward: 0,
+                cancel: 0,
+                fundaID: fundaId,
+              }
+           })
+
+          if(error) {
+              return toast.warn(data?.message);
+          }
+
+          data && createLinkAndClick(data, '_self')
+      } catch (error: any) {
+          toast.error(error.message)
+      } finally {
+          setStateExport({ isExporting: false })
+    }
+}
 
   return (
     <main className="h-full">
@@ -105,7 +140,9 @@ export const AccountingDiaryPage: FC = () => {
                     </div>
 
                     <div className={"mb-4"}>
-                        <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}>
+                        <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
+                          onClick={handleExportExcel}
+                        >
                             Tải excel
                         </button>
                     </div>
@@ -186,7 +223,7 @@ export const AccountingDiaryPage: FC = () => {
                   styles.theadContent
                 )}
               >
-                Hợp đồng
+                Khoản mục phí/Hợp đồng/Ngân sách
               </th>
               <th
                 className={cn(
@@ -219,7 +256,7 @@ export const AccountingDiaryPage: FC = () => {
                         <NavLink className="text-primary" to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/detail/${item?.voucher?._id}`}>
                           {item?.voucher?.name}
                         </NavLink>
-                        <p><i>{item?.funda?.name}</i></p>
+                        <p className="text-gray-500"><i>{item?.funda?.name}</i></p>
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
                         {item?.voucher?.sign}
@@ -233,11 +270,13 @@ export const AccountingDiaryPage: FC = () => {
                       <td className="py-1 px-2 border-r border-primary-border text-right">
                         {formatNumberMoney(item?.amount)}
                       </td>
-                      <td className="py-1 px-2 border-r border-primary-border">
+                      <td className="py-1 px-2 border-r border-primary-border text-right">
 
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
-                        {item?.contract?.name}
+                        <p className="text-[12px] text-primary"><i>{item?.subtype?.name}</i></p>
+                        <p className="text-gray-500 text-[12px]"><i>{item?.contract?.name}</i></p>
+                        <p className="text-gray-500 text-[12px]"><i>{item?.budgetWork?.name}</i></p>
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
                         {item?.goods?.name}
@@ -263,7 +302,7 @@ export const AccountingDiaryPage: FC = () => {
                         <NavLink className="text-primary" to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/detail/${item?.voucher?._id}`}>
                           {item?.voucher?.name}
                         </NavLink>
-                        <p><i>{item?.funda?.name}</i></p>
+                        <p className="text-gray-500"><i>{item?.funda?.name}</i></p>
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
                         {item?.voucher?.sign}
@@ -277,11 +316,13 @@ export const AccountingDiaryPage: FC = () => {
                       <td className="py-1 px-2 border-r border-primary-border text-right">
 
                       </td>
-                      <td className="py-1 px-2 border-r border-primary-border">
+                      <td className="py-1 px-2 border-r border-primary-border text-right">
                         {formatNumberMoney(item?.amount)}
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
-                        {item?.contract?.name}
+                        <p className="text-[12px] text-primary"><i>{item?.subtype?.name}</i></p>
+                        <p className="text-gray-500 text-[12px]"><i>{item?.contract?.name}</i></p>
+                        <p className="text-gray-500 text-[12px]"><i>{item?.budgetWork?.name}</i></p>
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
                         {item?.goods?.name}

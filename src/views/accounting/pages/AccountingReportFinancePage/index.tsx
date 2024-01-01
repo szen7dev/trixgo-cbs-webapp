@@ -37,7 +37,7 @@ export const AccountingReportFinancePage: FC = () => {
       option: 4,
       optionTerm: 1,
       fundaID: fundaId,
-      optionCal: optionCal
+      optionCal: optionCal ? optionCal : 2
     },
     isFetchList: true
   })
@@ -179,37 +179,75 @@ const handleOnChangeDate = useCallback((date, input) => {
 
         <tbody className="">
           { 
-            dataAll?.arrCombine.map((item: any, index: any) => (
-              <tr key={index} className="border-b border-primary-border h-10">
-                <td className="py-1 px-2 border-r border-primary-border">
-                  {item.name}
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
-                  <NavLink to={`/accounting/detail?accountId=${item?._id}`}>
-                    {item?.description}
-                  </NavLink>
-                  {/* <p><i>{item?._id}</i></p> */}
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border text-right">
-                  {formatNumberMoney(Number(item.kcNoDauKy + item.noDauKy))}
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border text-right">
-                  {formatNumberMoney(Number(item.kcCoDauKy + item.coDauKy))}
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border text-right">
-                  {formatNumberMoney(Number(item.noTrongKy))}
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border text-right">
-                  {formatNumberMoney(Number(item.coTrongKy))}
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border text-right">
-                  {formatNumberMoney(Number(item.kcNoDauKy + item.noDauKy + item.noTrongKy))}
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border text-right">
-                  {formatNumberMoney(Number(item.kcCoDauKy + item.coDauKy + item.coTrongKy))}
-                </td>
-              </tr>
-            ))
+            dataAll?.arrCombine.map((item: any, index: any) => {
+              if(item?.amountChilds > 0){
+                return (
+                  <tr key={index} className="border-b border-primary-border h-10">
+                    <td className="py-1 px-2 border-r border-primary-border font-bold">
+                      {item.name}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color font-bold">
+                      <NavLink to={`/accounting/detail?accountId=${item?._id}`}>
+                        {item?.description}
+                      </NavLink>
+                      {/* <p><i>{item?._id}</i></p>
+                      <p><i>{item?.amountChilds}</i></p> */}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(Number(item.kcNoDauKy + item.noDauKy))}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(Number(item.kcCoDauKy + item.coDauKy))}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(Number(item.noTrongKy))}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(Number(item.coTrongKy))}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(Number(item.kcNoDauKy + item.noDauKy + item.noTrongKy))}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(Number(item.kcCoDauKy + item.coDauKy + item.coTrongKy))}
+                    </td>
+                  </tr>
+                )
+              }else{
+                return (
+                  <tr key={index} className="border-b border-primary-border h-10">
+                    <td className="py-1 px-2 border-r border-primary-border">
+                      {item.name}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
+                      <NavLink to={`/accounting/detail?accountId=${item?._id}`}>
+                        {item?.description}
+                      </NavLink>
+                      {/* <p><i>{item?._id}</i></p>
+                      <p><i>{item?.amountChilds}</i></p> */}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(Number(item.kcNoDauKy + item.noDauKy))}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(Number(item.kcCoDauKy + item.coDauKy))}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(Number(item.noTrongKy))}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(Number(item.coTrongKy))}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(Number(item.kcNoDauKy + item.noDauKy + item.noTrongKy))}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(Number(item.kcCoDauKy + item.coDauKy + item.coTrongKy))}
+                    </td>
+                  </tr>
+                )
+              }
+            })
           }
             <tr
             className={cn(

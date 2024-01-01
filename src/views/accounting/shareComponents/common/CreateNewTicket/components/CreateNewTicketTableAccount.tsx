@@ -52,6 +52,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 	const { listAccount: listDebit } = useQueryListAccount({
 		limit: LIMIT_DROPDOWN,
 		keyword: searchDebitValue,
+		option: 1,
 	});
 	const [searchCreditValue, setSearchCreditValue] = useState(
 		initialValues?.credit || ""
@@ -59,6 +60,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 	const { listAccount: listCredit } = useQueryListAccount({
 		limit: LIMIT_DROPDOWN,
 		keyword: searchCreditValue,
+		option: 1,
 	});
 	const [searchGoodValue, setSearchGoodValue] = useState(
 		initialValues?.goods || ""
