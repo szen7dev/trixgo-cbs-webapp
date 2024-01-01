@@ -6,14 +6,10 @@ import cn from "classnames";
 
 /*=====3.ICONS=====*/
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
-import chevronRightIcon from "assets/images/icon-chevron-right.png";
-import chevronUpIcon from "assets/images/icon-chevron-up.png";
-import iconChat from "assets/images/icons8-chat-96.png";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import { LeftNavigate, MainHeader, MainHeaderV2 } from "shareComponents/common";
 import { BudgetLeftSideBar } from './components';
-import { HomeRightSideBar } from "shareComponents/layouts";
 import { HomeHeaderContent } from "shareComponents/layouts/HomeLayout/components";
 
 /*=====5.TYPINGS=====*/
@@ -30,8 +26,7 @@ export const BudgetLayoutV2: FC<Props> = ({ children }) => {
   const [isHeaderCollapse, setIsHeaderCollapse] = useState(false);
   const [isLeftMenuCollapse, setIsLeftMenuCollapse] = useState(false);
   const [isRightSideBarCollapse, setIsRightSideBarCollapse] = useState(false);
-  const [isChatboxVisible, setIsChatboxVisible] = useState(false);
-  const [isNewChatboxVisible, setIsNewChatboxVisible] = useState(false);
+
   const handleMenuEvent = () => {
     setIsLeftMenuCollapse(!isLeftMenuCollapse);
   };
@@ -44,7 +39,6 @@ export const BudgetLayoutV2: FC<Props> = ({ children }) => {
         "collapse-header": isHeaderCollapse,
       })}
     >
-      {/* Collapse menu button */}
       <button title="Toggle left sidebar" onClick={handleMenuEvent} className="home-left-sidebar-collapse-btn transition-all duration-500 ease-out fixed top-3 left-2 z-40 p-2">
         <img className="w-4" src={menuIcon} alt="Menu" />
       </button>
@@ -52,16 +46,13 @@ export const BudgetLayoutV2: FC<Props> = ({ children }) => {
       <div className={"flex"}>
         <LeftNavigate handleMenuEvent={handleMenuEvent} />
         <section className={"main-content-wrapper flex-1"}>
-          {/*  Main header */}
-          <MainHeaderV2 headerTitle={"Ngân sách"}>
-            <HomeHeaderContent />
-          </MainHeaderV2>
 
-          {/* Left navigation */}
+          <MainHeaderV2 headerTitle={"Ngân sách"}>
+            {/* <HomeHeaderContent /> */}
+          </MainHeaderV2>
 
           <BudgetLeftSideBar />
 
-          {/* Content area */}
           <main className="home-main-content home-main-content-v2 transition-all duration-500 ease-out overflow-auto relative">
             {children}
           </main>
@@ -70,5 +61,5 @@ export const BudgetLayoutV2: FC<Props> = ({ children }) => {
       </div>
 
     </section>
-  );
-};
+  )
+}

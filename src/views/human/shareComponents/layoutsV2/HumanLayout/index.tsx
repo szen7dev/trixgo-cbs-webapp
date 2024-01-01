@@ -6,15 +6,11 @@ import cn from "classnames";
 
 /*=====3.ICONS=====*/
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
-import chevronRightIcon from "assets/images/icon-chevron-right.png";
-import chevronUpIcon from "assets/images/icon-chevron-up.png";
 
 /*=====4.PAGES/COMPONENTS=====*/
-import { LeftMenu, LeftNavigate, MainHeader, MainHeaderV2 } from "shareComponents/common";
-import { HomeRightSideBar } from "shareComponents/layouts";
+import { LeftNavigate, MainHeaderV2 } from "shareComponents/common";
 import { HumanLeftSideBar } from './components';
-import { PmProjectLeftMenuContent } from "shareComponents/layouts/PmLayout/components";
-import { HomeHeaderContent } from "shareComponents/layouts/HomeLayout/components";
+// import { HomeHeaderContent } from "shareComponents/layouts/HomeLayout/components";
 
 /*=====5.TYPINGS=====*/
 
@@ -55,23 +51,16 @@ export const HumanLayout: FC<Props> = ({ children }) => {
       <div className={"flex"}>
         <LeftNavigate handleMenuEvent={handleMenuEvent} />
         <section className={"main-content-wrapper flex-1"}>
-          {/*  Main header */}
           <MainHeaderV2 headerTitle={"Nhân sự"}>
-            <HomeHeaderContent />
+            {/* <HomeHeaderContent /> */}
           </MainHeaderV2>
-
-          {/* Left navigation */}
-
           <HumanLeftSideBar />
 
-          {/* Content area */}
           <main className="home-main-content home-main-content-v2 transition-all duration-500 ease-out overflow-auto relative">
             {children}
           </main>
-
         </section>
       </div>
-
     </section>
-  );
-};
+  )
+}

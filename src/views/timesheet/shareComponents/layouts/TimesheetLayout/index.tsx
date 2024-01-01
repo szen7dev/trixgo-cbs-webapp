@@ -1,14 +1,9 @@
 import { FC, ReactNode, useState } from "react";
 import cn from "classnames";
-
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
-// import chevronRightIcon from "assets/images/icon-chevron-right.png";
-// import chevronUpIcon from "assets/images/icon-chevron-up.png";
-// import { HomeRightSideBar } from "shareComponents/layouts/HomeRightSideBar";
-
 import { LeftNavigate, MainHeaderV2 } from "shareComponents/common";
 import { LeftSideBar } from "../LeftSideBar";
-import { HomeHeaderContent } from "shareComponents/layouts/HomeLayout/components";
+// import { HomeHeaderContent } from "shareComponents/layouts/HomeLayout/components";
 
 type Props = {
   children: ReactNode;
@@ -40,16 +35,13 @@ export const TimesheetLayout: FC<Props> = ({ children }) => {
       <div className={"flex"}>
         <LeftNavigate handleMenuEvent={handleMenuEvent} />
         <section className={"main-content-wrapper flex-1"}>
-          {/*  Main header */}
-          <MainHeaderV2 headerTitle={"Chấm công"}>
-            <HomeHeaderContent />
-          </MainHeaderV2>
 
-          {/* Left navigation */}
+          <MainHeaderV2 headerTitle={"Chấm công"}>
+            {/* <HomeHeaderContent /> */}
+          </MainHeaderV2>
 
           <LeftSideBar />
 
-          {/* Content area */}
           <main className="home-main-content home-main-content-v2 transition-all duration-500 ease-out overflow-auto relative">
             {children}
           </main>
@@ -58,5 +50,5 @@ export const TimesheetLayout: FC<Props> = ({ children }) => {
       </div>
 
     </section>
-  );
-};
+  )
+}
