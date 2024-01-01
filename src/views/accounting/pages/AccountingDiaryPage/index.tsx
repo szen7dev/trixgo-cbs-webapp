@@ -11,8 +11,11 @@ import { FilterDateGroup } from "views/accounting/shareComponents/common";
 import { DropdownSearchableV2 } from "shareComponents/common";
 import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
 import { VOUCHER_TYPES } from "apis/localdb/index";
-import { useJournalList } from "services/hooks/accounting/useGeneralJournal";
+import { useJournalList, useJournal } from "services/hooks/accounting/useGeneralJournal";
 import { useFunda } from "services/hooks/items/useFunda";
+import { toast } from "react-toastify";
+import { read, utils } from 'xlsx';
+import { createLinkAndClick } from "utils";
 
 export const AccountingDiaryPage: FC = () => {
   const [showOption, setShowOption] = useState(false)
@@ -56,6 +59,29 @@ export const AccountingDiaryPage: FC = () => {
       setInputFilter((value) => ({ ...value, fromDate: date }))
     }
   }, [])
+
+  //_____Import, export excel
+  const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+    isExporting: false,
+  })
+  const { exportExcelAsync } = useJournal({})
+  
+  const handleExportExcel = async () => {
+    try {
+          setStateExport({ isExporting: true })
+          const { error, data } = await exportExcelAsync({  })
+
+          if(error) {
+              return toast.warn(data?.message);
+          }
+
+          data && createLinkAndClick(data, '_self')
+      } catch (error: any) {
+          toast.error(error.message)
+      } finally {
+          setStateExport({ isExporting: false })
+    }
+}
 
   return (
     <main className="h-full">
@@ -105,7 +131,9 @@ export const AccountingDiaryPage: FC = () => {
                     </div>
 
                     <div className={"mb-4"}>
-                        <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}>
+                        <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
+                          onClick={handleExportExcel}
+                        >
                             Tải excel
                         </button>
                     </div>
@@ -233,7 +261,7 @@ export const AccountingDiaryPage: FC = () => {
                       <td className="py-1 px-2 border-r border-primary-border text-right">
                         {formatNumberMoney(item?.amount)}
                       </td>
-                      <td className="py-1 px-2 border-r border-primary-border">
+                      <td className="py-1 px-2 border-r border-primary-border text-right">
 
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
@@ -279,7 +307,7 @@ export const AccountingDiaryPage: FC = () => {
                       <td className="py-1 px-2 border-r border-primary-border text-right">
 
                       </td>
-                      <td className="py-1 px-2 border-r border-primary-border">
+                      <td className="py-1 px-2 border-r border-primary-border text-right">
                         {formatNumberMoney(item?.amount)}
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">

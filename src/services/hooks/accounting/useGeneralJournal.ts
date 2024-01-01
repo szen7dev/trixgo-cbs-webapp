@@ -1,5 +1,5 @@
 import {useMutation, useInfiniteQuery, useQuery} from 'react-query';
-import { JournalRepository } from 'apis/accounting/journal';
+import { JournalRepository } from 'apis/accounting/journal'; ///api/accounting/journals/export-excel
 import type {
     DocumentProps,
 } from 'typings/accounting/journal';
@@ -10,7 +10,7 @@ type UseDataCustom = {
     exportExcelAsync: (payload: any) => Promise<any>,
 };
 
-export const useDocumentCustom = ({
+export const useJournal = ({
     params = {}
 }: any) : UseDataCustom => {
 

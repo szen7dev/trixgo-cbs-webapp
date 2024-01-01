@@ -1,6 +1,6 @@
 import API from "../repository";
 
-const ACCOUNTING_JOURNAL = "/api/accounting/journals";
+const ACCOUNTING_JOURNAL = "/api/accounting/journals"; ///api/accounting/journals/export-excel
 
 interface JournalRepository {
     insert: (data: any) => Promise<any>;
@@ -62,12 +62,12 @@ async function fetchListByProperty(params : any) {
 }
 
 async function inserData(data: any) {
-    const { data: result } = await API.post(`${ACCOUNTING_JOURNAL}/insert-document`, data);
+    const { data: result } = await API.post(`${ACCOUNTING_JOURNAL}/insert-excel`, data);
     return result
 }
 
 async function updateData(data: any) {
-    const { data: result } = await API.put(`${ACCOUNTING_JOURNAL}/update-document`, data);
+    const { data: result } = await API.put(`${ACCOUNTING_JOURNAL}/update-excel`, data);
     return result
 }
 
@@ -82,6 +82,6 @@ async function importFromExcel(data: any) {
 }
 
 async function exportExcel(data: any) {
-    const { data: result } = await API.post(`${ACCOUNTING_JOURNAL}/export-document`, data);
+    const { data: result } = await API.post(`${ACCOUNTING_JOURNAL}/export-excel`, data);
     return result
 }

@@ -423,7 +423,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                         {item.contract?.name}
                         <p className="text-primary"><i>{item.subtype?.name}</i></p>
                       </td>
-                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{formatNumberMoney(item.amount)}</td>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{formatNumberMoney(item.amount)}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.note}</td>
                       <td className="pt-2.5 pb-3 pr-2 border-b border-cbs-border">
                         <ActionAccountingGroup data={item} handleAction={handleAction} />
@@ -453,7 +453,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                         {item.contract?.name}
                         <p className="text-primary"><i>{item.subtype?.name}</i></p>
                       </td>
-                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{formatNumberMoney(item.amount)}</td>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{formatNumberMoney(item.amount)}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.note}</td>
                       <td className="pt-2.5 pb-3 pr-2 border-b border-cbs-border">
                         <ActionAccountingGroup data={item} handleAction={handleAction} />
@@ -487,7 +487,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                         {item.contract?.name}
                         <p className="text-primary"><i>{item.subtype?.name}</i></p>
                       </td>
-                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{formatNumberMoney(item.amount)}</td>
+                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{formatNumberMoney(item.amount)}</td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.note}</td>
                     <td className="pt-2.5 pb-3 pr-2 border-b border-cbs-border">
                       <ActionAccountingGroup data={item} handleAction={handleAction} />
