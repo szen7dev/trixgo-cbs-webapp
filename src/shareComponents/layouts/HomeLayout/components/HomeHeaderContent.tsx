@@ -1,6 +1,6 @@
-import React, { ChangeEvent, FC, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FC, useRef, useState } from "react";
 import searchIcon from "assets/images/icons8-search-120.png";
-// import { useOnClickOutside } from "services/hooks/useOnclickOutside";
+import { useOnEscape } from "services/hooks/useOnclickOutside";
 import { useSearchTask } from "services/hooks/useMainSearch";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "redux/reducer";
@@ -25,12 +25,15 @@ import { subContentHtml } from "views/homepage/pages";
 import { Oval } from "react-loader-spinner";
 import { Link, useHistory } from "react-router-dom";
 import { useUserSystem } from "services/hooks/users/useUserSystem";
+import debounce from "lodash/debounce";
 import companyDefault from "assets/images/company_default.png";
 
 export const HomeHeaderContent: FC = () => {
-  const wrapperClass = useRef<HTMLDivElement>(null);
-  // useOnClickOutside(wrapperClass, () => dispatch(setShowModalResult(false)));
+  // const wrapperClass = useRef<HTMLDivElement>(null);
   const history = useHistory();
+
+  useOnEscape(() => dispatch(setShowModalResult(false)))
+  // useOnClickOutside(wrapperClass, () => dispatch(setShowModalResult(false)));
 
   const tabIndex = useAppSelector((state) => state.dashboardV2.data.tabIndex);
   const showResult = useAppSelector(
@@ -112,6 +115,7 @@ export const HomeHeaderContent: FC = () => {
     );
 
   const setTypingTimeoutRef: any = useRef(null);
+
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     dispatch(setKeywordForRedux(e.target.value));
     if (setTypingTimeoutRef.current) {
@@ -263,7 +267,7 @@ export const HomeHeaderContent: FC = () => {
 
   return (
     <div className={"flex items-center"}>
-      <div ref={wrapperClass} className={"w-[600px] relative"}>
+      <div className={"w-[600px] relative"}>
         <div
           className={
             "absolute left-0 flex items-center px-4 justify-center h-full"
@@ -272,8 +276,8 @@ export const HomeHeaderContent: FC = () => {
           <img src={searchIcon} alt={"search icon"} />
         </div>
         <input
-          value={keyword}
-          onChange={(e) => handleSearchChange(e)}
+          // value={keyword}
+          onChange={debounce(handleSearchChange, 500)}
           className={
             "pl-12 w-full h-[45px] bg-cbs-bg-input-search rounded-md p-4 text-primary-gray placeholder:text-primary-gray placeholder:text-xl focus:outline-1  focus:outline-cbs-border focus:bg-white focus:shadow-md transition-all home-input-search"
           }
