@@ -39,7 +39,6 @@ export const OwnerLayoutV2: FC<Props> = ({ children }) => {
         "collapse-header": isHeaderCollapse,
       })}
     >
-      {/* Collapse menu button */}
       <button title="Toggle left sidebar" onClick={handleMenuEvent} className="home-left-sidebar-collapse-btn transition-all duration-500 ease-out fixed top-3 left-2 z-40 p-2">
         <img className="w-4" src={menuIcon} alt="Menu" />
       </button>
@@ -47,16 +46,12 @@ export const OwnerLayoutV2: FC<Props> = ({ children }) => {
       <div className={"flex"}>
         <LeftNavigate handleMenuEvent={handleMenuEvent} />
         <section className={"main-content-wrapper flex-1"}>
-          {/*  Main header */}
+
           <MainHeaderV2 headerTitle={"Quản trị ứng dụng"}>
-            <HomeHeaderContent />
+            {/* <HomeHeaderContent /> */}
           </MainHeaderV2>
-
-          {/* Left navigation */}
-
           <OwnerLeftSideBar />
 
-          {/* Content area */}
           <main className="home-main-content home-main-content-v2 transition-all duration-500 ease-out overflow-auto relative">
             {children}
           </main>
@@ -65,5 +60,5 @@ export const OwnerLayoutV2: FC<Props> = ({ children }) => {
       </div>
 
     </section>
-  );
-};
+  )
+}

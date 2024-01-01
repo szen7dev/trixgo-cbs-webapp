@@ -7,9 +7,9 @@ import cn from "classnames";
 /*=====3.ICONS=====*/
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
 /*=====4.PAGES/COMPONENTS=====*/
-import { LeftNavigate, MainHeader, MainHeaderV2 } from "shareComponents/common";
+import { LeftNavigate, MainHeaderV2 } from "shareComponents/common";
 import { FinancialLeftSideBar } from './components';
-import { HomeHeaderContent } from "shareComponents/layouts/HomeLayout/components";
+// import { HomeHeaderContent } from "shareComponents/layouts/HomeLayout/components";
 
 /*=====5.TYPINGS=====*/
 
@@ -49,15 +49,12 @@ export const FinancialLayoutV2: FC<Props> = ({ children }) => {
       <div className={"flex"}>
         <LeftNavigate handleMenuEvent={handleMenuEvent} />
         <section className={"main-content-wrapper flex-1"}>
-          {/*  Main header */}
           <MainHeaderV2 headerTitle={"Tài chính"}>
-            <HomeHeaderContent />
+            {/* <HomeHeaderContent /> */}
           </MainHeaderV2>
 
-          {/* Left navigation */}
           <FinancialLeftSideBar />
 
-          {/* Content area */}
           <main className="home-main-content home-main-content-v2 transition-all duration-500 ease-out overflow-auto relative">
             {children}
           </main>
