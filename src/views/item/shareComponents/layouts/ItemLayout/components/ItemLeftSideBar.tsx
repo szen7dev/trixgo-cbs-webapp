@@ -62,6 +62,18 @@ export const ItemLeftSideBar: FC = () => {
             <span className={"flex-1 ml-2 text-left text-[14px]"}>Đơn vị cơ sở</span>
           </NavLink>
           <NavLink
+            to="/item/home/23"
+            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
+            title="Fundas"
+          >
+            <img
+              width={'20px'}
+              src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
+              alt="Menu item"
+            />
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Khoản mục phí</span>
+          </NavLink>
+          <NavLink
             to="/item/home/1"
             className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
             title="Lĩnh vực hồ sơ"

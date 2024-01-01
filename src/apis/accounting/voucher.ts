@@ -11,8 +11,8 @@ async function fetchList<T>(params: any): Promise<T> {
             params: {
                 select: "name date type createAt sign amount note forward forwardIs",
                 populates: {
-                    "path": "customer userCreate company contract",
-                    "select": "name sign bizfullname"
+                    "path": "customer userCreate company contract subtype",
+                    "select": "name sign fullname"
                 },
                 ...params,
             },
@@ -27,7 +27,7 @@ async function fetchListJournalDetail<T>(params: any): Promise<T> {
         {
             params: {
                 populates: {
-                    "path": "debit credit customerCredit customerDebit warehouse goods contract budgetWork",
+                    "path": "debit credit customerCredit customerDebit warehouse goods contract subtype budgetWork",
                     "select": "name description unit",
                 },
                 ...params,

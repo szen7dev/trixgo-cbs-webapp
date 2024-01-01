@@ -376,7 +376,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
             </th>
             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
               <span className="pl-2 border-l border-cbs-border">
-                Hợp đồng
+                Hợp đồng/Khoản mục phí
               </span>
             </th>
             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
@@ -399,7 +399,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
               if(item?.cancel == 0){
                 if(item?.forward == 1){
                   return (
-                    <tr key={item._id} className="text-left hover:bg-cbs-active-comment cursor-pointer" style={{ color: "orange" }}>
+                    <tr key={item._id} className="text-left hover:bg-cbs-active-comment" style={{ color: "orange" }}>
                       <td className="pt-2.5 pb-3 px-4 border-b border-cbs-border text-left">
                         <input className="cbs-checkbox" type="checkbox" checked={Boolean(assigned[item._id])} onChange={e => handleChangeCheckbox(e, item)} />
                       </td>                    
@@ -419,7 +419,10 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}</p>
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.customer?.name}</td>
-                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.contract?.name}</td>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                        {item.contract?.name}
+                        <p className="text-primary"><i>{item.subtype?.name}</i></p>
+                      </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{formatNumberMoney(item.amount)}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.note}</td>
                       <td className="pt-2.5 pb-3 pr-2 border-b border-cbs-border">
@@ -429,7 +432,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                   )
                 }else{
                   return (
-                    <tr key={item._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
+                    <tr key={item._id} className="text-left hover:bg-cbs-active-comment">
                       <td className="pt-2.5 pb-3 px-4 border-b border-cbs-border text-left">
                         <input className="cbs-checkbox" type="checkbox" checked={Boolean(assigned[item._id])} onChange={e => handleChangeCheckbox(e, item)} />
                       </td>
@@ -439,14 +442,17 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-medium" style={{ maxWidth: '250px' }}>
                         <NavLink to={`/accounting/${VOUCHER_TYPES.find(item => item.value === type)?.slug}/detail/${item._id}`}>
                           <Popover onMouseEnterTooltip={false} tooltip={`${item.name}`} classTooltip="w-[336px] whitespace-normal left-0" >
-                            <p className="text-2-line-clamp">{`${item.name}`}</p>
+                            <p className="text-2-line-clamp text-cbs-highlight-color font-bold">{`${item.name}`}</p>
                           </Popover>
                         </NavLink>
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.funda?.name}</p>
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}</p>
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.customer?.name}</td>
-                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.contract?.name}</td>
+                      <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                        {item.contract?.name}
+                        <p className="text-primary"><i>{item.subtype?.name}</i></p>
+                      </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{formatNumberMoney(item.amount)}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.note}</td>
                       <td className="pt-2.5 pb-3 pr-2 border-b border-cbs-border">
@@ -457,7 +463,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                 }
               }else{
                 return (
-                  <tr key={item._id} className="text-left hover:bg-cbs-active-comment cursor-pointer" style={{ color: "red" }}>
+                  <tr key={item._id} className="text-left hover:bg-cbs-active-comment" style={{ color: "red" }}>
                     <td className="pt-2.5 pb-3 px-4 border-b border-cbs-border text-left">
                       <input className="cbs-checkbox" type="checkbox" checked={Boolean(assigned[item._id])} onChange={e => handleChangeCheckbox(e, item)} />
                     </td>                    
@@ -477,7 +483,10 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                       <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}</p>
                     </td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.customer?.name}</td>
-                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.contract?.name}</td>
+                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
+                        {item.contract?.name}
+                        <p className="text-primary"><i>{item.subtype?.name}</i></p>
+                      </td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{formatNumberMoney(item.amount)}</td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.note}</td>
                     <td className="pt-2.5 pb-3 pr-2 border-b border-cbs-border">

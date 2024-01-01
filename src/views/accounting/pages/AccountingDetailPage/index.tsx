@@ -311,15 +311,7 @@ export const AccountingDetailPage: FC = () => {
                 styles.theadCode
               )}
             >
-              Tên phiếu
-            </th>
-            <th
-              className={cn(
-                "py-1 px-2 font-normal border-r border-primary-border",
-                styles.theadContent
-              )}
-            >
-              Nội dung
+              Phiếu
             </th>
             <th
               className={cn(
@@ -328,6 +320,14 @@ export const AccountingDetailPage: FC = () => {
               )}
             >
               Số hiệu
+            </th>
+            <th
+              className={cn(
+                "py-1 px-2 font-normal border-r border-primary-border",
+                styles.theadContent
+              )}
+            >
+              Nội dung
             </th>
             <th
               className={cn(
@@ -365,7 +365,10 @@ export const AccountingDetailPage: FC = () => {
               Dư Nợ-Có
             </th>
             <th className="w-1/12 py-1 px-2 font-normal border-r border-primary-border">
-              Hợp đồng/Ngân sách/Sản phẩm
+              Khoản mục phí/Hợp đồng/Ngân sách
+            </th>
+            <th className="w-1/12 py-1 px-2 font-normal border-r border-primary-border">
+              Sản phẩm
             </th>
             <th className="w-1/12 py-1 px-2 font-normal">Ghi chú</th>
           </tr>
@@ -393,6 +396,7 @@ export const AccountingDetailPage: FC = () => {
             </td>
             <td className="py-1 px-2 border-r border-primary-border">{""}</td>
             <td className="py-1 px-2 border-r border-primary-border">{""}</td>
+            <td className="py-1 px-2 border-r border-primary-border">{""}</td>
           </tr>
             {
               (listDataWithPager[pageIndex] ?? []).map((item, index) => {
@@ -413,13 +417,13 @@ export const AccountingDetailPage: FC = () => {
                         {(item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].text : ''}
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
+                        {item?.voucher?.sign}
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
                         <NavLink className="text-primary" to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/detail/${item?.voucher?._id}`}>
                           {item?.voucher?.name}
                         </NavLink>
-                        <p><i>{item?.funda?.name}</i></p>
-                      </td>
-                      <td className="py-1 px-2 border-r border-primary-border">
-                        {item?.voucher?.sign}
+                        <p className="text-gray-500"><i>{item?.funda?.name}</i></p>
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
                         {item?.customerDebit?.name}
@@ -437,9 +441,13 @@ export const AccountingDetailPage: FC = () => {
                         {formatNumberMoney(balance)}
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
-                        {item?.contract?.name}
+                        <p className="text-[12px] text-primary"><i>{item?.subtype?.name}</i></p>
+                        <p className="text-gray-500 text-[12px]"><i>{item?.contract?.name}</i></p>
                         <p className="text-gray-500 text-[12px]"><i>{item?.budgetWork?.name}</i></p>
-                        <p className="text-gray-500 text-[12px]"><i>{item?.goods?.name}</i></p>
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {item?.goods?.name}
+                        <p className="text-gray-500 text-[12px]"><i>{item?.warehouse?.name}</i></p>
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
                         {item?.note}
@@ -458,13 +466,13 @@ export const AccountingDetailPage: FC = () => {
                         {(item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].text : ''}
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
+                        {item?.voucher?.sign}
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
                         <NavLink className="text-primary" to={`/accounting/${ (item?.voucher?.type && item?.voucher?.type >= 1) ? VOUCHER_TYPES[Number(item?.voucher?.type - 1)].slug : ''}/detail/${item?.voucher?._id}`}>
                           {item?.voucher?.name}
                         </NavLink>
-                        <p><i>{item?.funda?.name}</i></p>
-                      </td>
-                      <td className="py-1 px-2 border-r border-primary-border">
-                        {item?.voucher?.sign}
+                        <p className="text-gray-500"><i>{item?.funda?.name}</i></p>
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
                         {item?.customerCredit?.name}
@@ -482,9 +490,13 @@ export const AccountingDetailPage: FC = () => {
                         {formatNumberMoney(balance)}
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
-                        {item?.contract?.name}
+                        <p className="text-[12px] text-primary"><i>{item?.subtype?.name}</i></p>
+                        <p className="text-gray-500 text-[12px]"><i>{item?.contract?.name}</i></p>
                         <p className="text-gray-500 text-[12px]"><i>{item?.budgetWork?.name}</i></p>
-                        <p className="text-gray-500 text-[12px]"><i>{item?.goods?.name}</i></p>
+                      </td>
+                      <td className="py-1 px-2 border-r border-primary-border">
+                        {item?.goods?.name}
+                        <p className="text-gray-500 text-[12px]"><i>{item?.warehouse?.name}</i></p>
                       </td>
                       <td className="py-1 px-2 border-r border-primary-border">
                         {item?.note}
@@ -517,6 +529,7 @@ export const AccountingDetailPage: FC = () => {
             <td className="py-1 px-2 font-bold border-r border-primary-border text-right">
               {formatNumberMoney(soDuCuoiKy)}
             </td>
+            <td className="py-1 px-2 border-r border-primary-border">{""}</td>
             <td className="py-1 px-2 border-r border-primary-border">{""}</td>
             <td className="py-1 px-2 border-r border-primary-border">{""}</td>
           </tr>
