@@ -5,6 +5,7 @@ import debounce from "lodash/debounce";
 import moment from "moment";
 import { formatNumberMoney } from "utils/converter";
 import { toast } from "react-toastify";
+import { FilterDateGroup } from "views/accounting/shareComponents/common";
 
 /*=====2.CSS=====*/
 
@@ -39,6 +40,12 @@ export const FnbShiftDetailPage: FC = () => {
 	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
+
+	const [inputFilter, setInputFilter] = useState({
+		keyword: '',
+		fromDate: new Date(new Date().getFullYear(), 0, 1),
+		toDate: new Date(new Date().getFullYear(), 11, 31)
+	  })
 	
     const { info: infoFunda } = useFunda({ params: { fundaID }, isFetchList: false, isFetchInfo: true  });
 
@@ -97,6 +104,8 @@ export const FnbShiftDetailPage: FC = () => {
 		try {
 		  setStateExport({ isExporting: true });
 		  const { error, data } = await exportExcelAsync({
+			fromDate: inputFilter.fromDate,
+			toDate: inputFilter.toDate,
 			fundaID,
 		  });
 	
@@ -131,6 +140,14 @@ export const FnbShiftDetailPage: FC = () => {
 		}
 	}
 
+	const handleOnChangeDate = useCallback((date, input) => {
+	if (input) {
+		setInputFilter((value) => ({ ...value, toDate: date }))
+	} else {
+		setInputFilter((value) => ({ ...value, fromDate: date }))
+	}
+	}, [])
+
 	return (
 		<main className="h-full overflow-auto">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
@@ -141,12 +158,13 @@ export const FnbShiftDetailPage: FC = () => {
 					<p className="text-lg">{infoFunda?.name}</p>
 					<SearchInput
 						classNameWrapper="ml-4"
-						classNameInput="outline-none w-[296px]"
+						classNameInput="outline-none w-[150px]"
 						onChange={debounce(
 							(event: any) => setKeyword(event.target.value),
 							500
 						)}
 					/>
+					<FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
 					{/* <FinancialCashFlowFilterButton /> */}
 					{(idsChecked && idsChecked.length) ? (
 						<div className="flex items-center gap-2 border-l-2 border-primary-border px-4 ml-4">
