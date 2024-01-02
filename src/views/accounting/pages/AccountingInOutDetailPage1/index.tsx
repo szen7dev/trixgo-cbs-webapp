@@ -65,16 +65,24 @@ export const AccountingInOutDetailPage1: FC = () => {
     fetchDetailAccount(accountId)
   }, [accountId])
 
+  // console.log(dataAll?.arrCombine)
+
   let tonDauKy = 0, nhapTrongKy = 0, xuatTrongKy = 0, tonCuoiKy = 0
+  let klTonDauKy = 0, klNhapTrongKy = 0, klXuatTrongKy = 0, klTonCuoiKy = 0
   if(dataAll && dataAll?.arrCombine){
     for(const item of dataAll?.arrCombine){
       tonDauKy = tonDauKy + item.kcNoDauKy + item.noDauKy - item.kcCoDauKy - item.coDauKy
       nhapTrongKy = nhapTrongKy + item.noTrongKy
       xuatTrongKy = xuatTrongKy + item.coTrongKy
       tonCuoiKy = tonCuoiKy + item.kcNoDauKy + item.noDauKy + item.noTrongKy - item.kcCoDauKy - item.coDauKy - item.coTrongKy
+
+      klTonDauKy = klTonDauKy + item.klKcNoDauKy + item.klNoDauKy - item.klKcCoDauKy - item.klCoDauKy
+      klNhapTrongKy = klNhapTrongKy + item.klNoTrongKy
+      klXuatTrongKy = klXuatTrongKy + item.klCoTrongKy
+      klTonCuoiKy = klTonCuoiKy + item.klKcNoDauKy + item.klNoDauKy + item.klNoTrongKy - item.klCoTrongKy- item.klKcCoDauKy - item.klCoDauKy
     }
   }
-
+  
   const handleOnChangeDate = useCallback((date, input) => {
   if (input) {
     setInputFilter((value) => ({ ...value, toDate: date }))
@@ -139,7 +147,7 @@ export const AccountingInOutDetailPage1: FC = () => {
 
         <div className="flex items-center">
           <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
-          <div className={"relative z-5 inline-block"}>
+          {/* <div className={"relative z-5 inline-block"}>
             <button onClick={() => setShowOption(!showOption)} 
               className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg"}
               >
@@ -162,7 +170,7 @@ export const AccountingInOutDetailPage1: FC = () => {
                     </div>
                 </div>
             }
-          </div>
+          </div> */}
         </div>
         
       </header>
@@ -170,55 +178,141 @@ export const AccountingInOutDetailPage1: FC = () => {
       <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
         <thead className="bg-cbs-table-header h-10 border-b border-primary-border">
           <tr className="text-left text-sm text-primary-gray">
-            <th className="py-1 px-2 font-normal border-r border-primary-border">
+            <th className="py-1 px-2 font-normal border-r border-primary-border w-1/6">
               Sản phẩm, nguyên liệu
             </th>
             <th className="py-1 px-2 font-normal border-r border-primary-border">
               Đơn vị
             </th>
-            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
+            <th colSpan={3} className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
               Tồn đầu kỳ
             </th>
-            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
+            <th colSpan={3} className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
               Nhập trong kỳ
             </th>
-            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
+            <th colSpan={3} className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
               Xuất trong kỳ
             </th>
-            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
+            <th colSpan={3} className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
               Tồn cuối kỳ
+            </th>
+          </tr>
+          <tr className="text-left text-sm text-primary-gray">
+            <th className="py-1 px-2 font-normal border-r border-primary-border">
+             
+            </th>
+            <th className="py-1 px-2 font-normal border-r border-primary-border">
+              
+            </th>
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-right">
+              SL
+            </th>
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-right">
+              Đơn giá
+            </th>
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-right">
+             Thành tiền
+            </th>
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-right">
+              SL
+            </th>
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-right">
+              Đơn giá
+            </th>
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-right">
+             Thành tiền
+            </th>
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-right">
+              SL
+            </th>
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-right">
+              Đơn giá
+            </th>
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-right">
+             Thành tiền
+            </th>
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-right">
+              SL
+            </th>
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-right">
+              Đơn giá
+            </th>
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-right">
+             Thành tiền
             </th>
           </tr>
         </thead>
 
         <tbody className="">
           { 
-            dataAll?.arrCombine.map((item: any, index: any) => (
-              <tr key={index} className="border-b border-primary-border h-10">
-                <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
-                  <NavLink to={`/accounting/import-export/acc/${params.accountID}/prod/${item?._id}`}>
-                    {item.name}
-                  </NavLink>
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border">
-                    {item?.unit}
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border text-right">
-                  {formatNumberMoney(Number(item.kcNoDauKy + item.noDauKy - item.kcCoDauKy - item.coDauKy))}
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border text-right">
-                  {formatNumberMoney(Number(item.noTrongKy))}
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border text-right">
-                  {formatNumberMoney(Number(item.coTrongKy))}
-                </td>
-                <td className="py-1 px-2 border-r border-primary-border text-right">
-                  {formatNumberMoney(Number(item.kcNoDauKy + item.noDauKy + item.noTrongKy - item.kcCoDauKy - item.coDauKy - item.coTrongKy))}
-                </td>
-              </tr>
+            (dataAll?.arrCombine.map((item: any, index: any) => {
+                let donGiaTonDauKy = 0, donGiaNhapTrongKy = 0, donGiaXuatTrongKy = 0, donGiaTonCuoiKy = 0
+
+                if(Number(item.klKcNoDauKy + item.klNoDauKy - item.klKcCoDauKy - item.klCoDauKy) != 0){
+                  donGiaTonDauKy = Number(item.kcNoDauKy + item.noDauKy - item.kcCoDauKy - item.coDauKy)/Number(item.klKcNoDauKy + item.klNoDauKy - item.klKcCoDauKy - item.klCoDauKy)
+                }
+                if(Number(item.klNoTrongKy) != 0){
+                  donGiaNhapTrongKy = Number(item.noTrongKy)/Number(item.klNoTrongKy)
+                }
+                if(Number(item.klCoTrongKy) != 0){
+                  donGiaXuatTrongKy = Number(item.coTrongKy)/Number(item.klCoTrongKy)
+                }
+                if(Number(item.klKcNoDauKy + item.klNoDauKy + item.klNoTrongKy - item.klKcCoDauKy - item.klCoDauKy - item.klCoTrongKy) != 0){
+                  donGiaTonCuoiKy = Number(item.kcNoDauKy + item.noDauKy + item.noTrongKy - item.kcCoDauKy - item.coDauKy - item.coTrongKy)/Number(item.klKcNoDauKy + item.klNoDauKy + item.klNoTrongKy - item.klKcCoDauKy - item.klCoDauKy - item.klCoTrongKy)
+                }
+
+                return(
+                  <tr key={index} className="border-b border-primary-border h-10">
+                    <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
+                      <NavLink to={`/accounting/import-export/acc/${params.accountID}/prod/${item?._id}`}>
+                        {item.name}
+                      </NavLink>
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border">
+                        {item?.unit}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(Number(item.klKcNoDauKy + item.klNoDauKy - item.klKcCoDauKy - item.klCoDauKy))}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(donGiaTonDauKy)}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(Number(item.kcNoDauKy + item.noDauKy - item.kcCoDauKy - item.coDauKy))}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(item.klNoTrongKy)}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(donGiaNhapTrongKy)}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(Number(item.noTrongKy))}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(item.klCoTrongKy)}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(donGiaXuatTrongKy)}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(Number(item.coTrongKy))}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(Number(item.klKcNoDauKy + item.klNoDauKy + item.klNoTrongKy - item.klKcCoDauKy - item.klCoDauKy - item.klCoTrongKy))}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(donGiaTonCuoiKy)}
+                    </td>
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
+                      {formatNumberMoney(Number(item.kcNoDauKy + item.noDauKy + item.noTrongKy - item.kcCoDauKy - item.coDauKy - item.coTrongKy))}
+                    </td>
+                  </tr>
+                )
+              }
             ))
           }
-
+          
             <tr className={cn(
               "border-b border-primary-border h-10 font-bold",
               styles.bgFooterYellow
@@ -226,17 +320,41 @@ export const AccountingInOutDetailPage1: FC = () => {
               <td className="py-1 px-2 border-r border-primary-border text-cbs-highlight-color">
                 Tổng
               </td>
-              <td className="py-1 px-2 border-r border-primary-border">
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                  
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(klTonDauKy)}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
                   
               </td>
               <td className="py-1 px-2 border-r border-primary-border text-right">
                 {formatNumberMoney(tonDauKy)}
               </td>
               <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(klNhapTrongKy)}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                  
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
                 {formatNumberMoney(nhapTrongKy)}
               </td>
               <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(klXuatTrongKy)}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                  
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
                 {formatNumberMoney(xuatTrongKy)}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(klTonCuoiKy)}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                  
               </td>
               <td className="py-1 px-2 border-r border-primary-border text-right">
                 {formatNumberMoney(tonCuoiKy)}

@@ -103,7 +103,7 @@ const handleOnChangeDate = useCallback((date, input) => {
 							<label htmlFor="optionCal2" className={"text-left ml-3 mr-3 cursor-pointer"}>Tổng tài khoản trực tiếp</label>
 						</div>
 					</div>
-          <div className={"relative z-5 inline-block"}>
+          {/* <div className={"relative z-5 inline-block"}>
             <button onClick={() => setShowOption(!showOption)} 
               className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg"}
               >
@@ -126,7 +126,7 @@ const handleOnChangeDate = useCallback((date, input) => {
                     </div>
                 </div>
             }
-          </div>
+          </div> */}
         </div>
       </header>
 

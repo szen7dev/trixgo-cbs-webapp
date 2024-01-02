@@ -71,7 +71,7 @@ export const AccountingDetailPage: FC = () => {
 
   const { listDataWithPager, isLoading: isLoadingJournallList, totalRecord, totalPage, fetchNextPage, hasNextPage } = useJournalList({
     params: {
-        limit: 5,
+        limit: 50,
         forward: 0,
         cancel: 0,
         fromDate: inputFilter.fromDate,
@@ -249,7 +249,7 @@ export const AccountingDetailPage: FC = () => {
 
         <div className="flex items-center">
           <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
-          <div className={"relative z-5 inline-block"}>
+          {/* <div className={"relative z-5 inline-block"}>
             <button onClick={() => setShowOption(!showOption)}
               className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg"}
               >
@@ -272,13 +272,13 @@ export const AccountingDetailPage: FC = () => {
                     </div>
                 </div>
             }
-          </div>
+          </div> */}
           <div className="absolute right-0">
             <PaginateV2
                 ref={ref}
                 totalRecord={totalRecord}
                 totalPages={totalPage}
-                limit={5}
+                limit={50}
                 hasNextPage={hasNextPage}
                 isFetching={isLoadingJournallList}
                 nextPageAction={() => {

@@ -93,7 +93,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
         keyword: inputFilter.keyword,
         fromDate: inputFilter.fromDate,
         toDate: inputFilter.toDate,
-        limit: 10,
+        limit: 20,
     },
     isFetchList: true
   })
@@ -295,7 +295,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
             className={"bg-green-success h-[32px] text-white rounded px-3"}>
             Tạo mới
           </button>
-          <div className={"relative z-5 inline-block"}>
+          {/* <div className={"relative z-5 inline-block"}>
             <button onClick={() => setShowOption(!showOption)}
               className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg"}
               >
@@ -318,13 +318,13 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                     </div>
                 </div>
             }
-          </div>
+          </div> */}
           <div className="absolute right-0">
             <PaginateV2
                 ref={ref}
                 totalRecord={totalRecord}
                 totalPages={totalPage}
-                limit={10}
+                limit={20}
                 hasNextPage={hasNextPage}
                 isFetching={isLoading}
                 nextPageAction={() => {
