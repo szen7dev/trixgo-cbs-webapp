@@ -153,7 +153,7 @@ export const AccountingDebtDetailPage2: FC = () => {
         </div>
         <DropdownSearchableV2
             ref={accountRef}
-            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg"}
             placeholder={"Đơn vị cơ sở"}
             isMultiple={false}
             allowClearValueSingleInput={true}
@@ -179,7 +179,7 @@ export const AccountingDebtDetailPage2: FC = () => {
 
         <div className="flex items-center">
           <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
-          <div className={"relative z-5 inline-block"}>
+          {/* <div className={"relative z-5 inline-block"}>
             <button onClick={() => setShowOption(!showOption)} 
               className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg"}
               >
@@ -202,7 +202,7 @@ export const AccountingDebtDetailPage2: FC = () => {
                     </div>
                 </div>
             }
-          </div>
+          </div> */}
           <div className="absolute right-0">
             <PaginateV2
                 ref={ref}
@@ -268,7 +268,7 @@ export const AccountingDebtDetailPage2: FC = () => {
               <td className="py-1 px-2 border-r border-primary-border"></td>
               <td className="py-1 px-2 border-r border-primary-border"></td>
               <td className="py-1 px-2 border-r border-primary-border"></td>
-              <td className="py-1 px-2 border-r border-primary-border">
+              <td className="py-1 px-2 border-r border-primary-border text-right">
                 {formatNumberMoney(tonDauKy)}
               </td>
           </tr>
@@ -297,13 +297,13 @@ export const AccountingDebtDetailPage2: FC = () => {
                     <td className="py-1 px-2 border-r border-primary-border">
                       {item?.credit?.name}
                     </td>
-                    <td className="py-1 px-2 border-r border-primary-border">
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
                       {formatNumberMoney(item?.amount)}
                     </td>
-                    <td className="py-1 px-2 border-r border-primary-border">
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
                     
                     </td>
-                    <td className="py-1 px-2 border-r border-primary-border">
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
                       {formatNumberMoney(balance)}
                     </td>
                   </tr>
@@ -332,13 +332,13 @@ export const AccountingDebtDetailPage2: FC = () => {
                     <td className="py-1 px-2 border-r border-primary-border">
                       {item?.debit?.name}
                     </td>
-                    <td className="py-1 px-2 border-r border-primary-border">
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
                     
                     </td>
-                    <td className="py-1 px-2 border-r border-primary-border">
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
                       {formatNumberMoney(item?.amount)}
                     </td>
-                    <td className="py-1 px-2 border-r border-primary-border">
+                    <td className="py-1 px-2 border-r border-primary-border text-right">
                       {formatNumberMoney(balance)}
                     </td>
                   </tr>
@@ -358,9 +358,13 @@ export const AccountingDebtDetailPage2: FC = () => {
               <td className="py-1 px-2 border-r border-primary-border"></td>
               <td className="py-1 px-2 border-r border-primary-border"></td>
               <td className="py-1 px-2 border-r border-primary-border"></td>
-              <td className="py-1 px-2 border-r border-primary-border"></td>
-              <td className="py-1 px-2 border-r border-primary-border"></td>
-              <td className="py-1 px-2 border-r border-primary-border">
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(nhapTrongKy)}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(xuatTrongKy)}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
                 {formatNumberMoney(tonCuoiKy)}
               </td>
           </tr>

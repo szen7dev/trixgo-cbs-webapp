@@ -44,7 +44,7 @@ export const AccountingDiaryPage: FC = () => {
     params: {
         fromDate: inputFilter.fromDate,
         toDate: inputFilter.toDate,
-        limit: 10,
+        limit: 20,
         forward: 0,
         cancel: 0,
         fundaID: fundaId,
@@ -97,7 +97,7 @@ export const AccountingDiaryPage: FC = () => {
       <header className="h-[50px] w-full border border-primary-border flex items-center px-2">
         <DropdownSearchableV2
             ref={accountRef}
-            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg"}
             placeholder={"Đơn vị cơ sở"}
             isMultiple={false}
             allowClearValueSingleInput={true}
@@ -154,7 +154,7 @@ export const AccountingDiaryPage: FC = () => {
                 ref={ref}
                 totalRecord={totalRecord}
                 totalPages={totalPage}
-                limit={10}
+                limit={20}
                 hasNextPage={hasNextPage}
                 isFetching={isLoading}
                 nextPageAction={() => {

@@ -93,7 +93,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
         keyword: inputFilter.keyword,
         fromDate: inputFilter.fromDate,
         toDate: inputFilter.toDate,
-        limit: 10,
+        limit: 20,
     },
     isFetchList: true
   })
@@ -189,10 +189,10 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
   return (
     <main className="h-full">
       <header className="h-[50px] w-full border border-primary-border flex items-center px-3">
-        <SearchInput classNameWrapper={""} onChange={onChangeSearch} />
+        <SearchInput classNameWrapper={"mr-1 border border-primary-border"} onChange={onChangeSearch} />
         <DropdownSearchableV2
             ref={accountRef}
-            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg"}
             placeholder={"Đơn vị cơ sở"}
             isMultiple={false}
             allowClearValueSingleInput={true}
@@ -228,7 +228,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
         />
         <DropdownSearchableV2
             ref={accountRef}
-            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg"}
             placeholder={"Mã khách"}
             isMultiple={false}
             allowClearValueSingleInput={true}
@@ -256,7 +256,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
         />
         <DropdownSearchableV2
             ref={accountRef}
-            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg"}
             placeholder={"Người tạo phiếu"}
             isMultiple={false}
             allowClearValueSingleInput={true}
@@ -295,7 +295,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
             className={"bg-green-success h-[32px] text-white rounded px-3"}>
             Tạo mới
           </button>
-          <div className={"relative z-5 inline-block"}>
+          {/* <div className={"relative z-5 inline-block"}>
             <button onClick={() => setShowOption(!showOption)}
               className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg"}
               >
@@ -318,13 +318,13 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                     </div>
                 </div>
             }
-          </div>
+          </div> */}
           <div className="absolute right-0">
             <PaginateV2
                 ref={ref}
                 totalRecord={totalRecord}
                 totalPages={totalPage}
-                limit={10}
+                limit={20}
                 hasNextPage={hasNextPage}
                 isFetching={isLoading}
                 nextPageAction={() => {

@@ -30,7 +30,7 @@ async function fetchListJournal(params : any) {
             // select: 'name sign author project date createAt description note store amount status storeSign publish datahubContact',
             populates: {
                 "path": "voucher debit credit customerCredit customerDebit warehouse goods contract budgetWork funda subtype",
-                "select": "type name sign description unit date",
+                "select": "type name sign description unit date taxid address",
             },
             ...params,
         }
@@ -44,7 +44,7 @@ async function fetchFilterListData(params : any) {
             // select: 'name sign author project date createAt description note store amount status storeSign publish datahubContact',
             populates: {
                 "path": "voucher debit credit customerCredit customerDebit warehouse goods contract budgetWork funda subtype",
-                "select": "fullname bizfullname sign image name date"
+                "select": "fullname bizfullname sign image name date taxid address"
             },
             ...params,
         }

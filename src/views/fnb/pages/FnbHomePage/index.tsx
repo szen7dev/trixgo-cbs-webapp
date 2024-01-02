@@ -149,7 +149,9 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
         }
       })
     }, isFetchList: true, isFetchInfo: false
-  });
+  })
+
+  // console.log(queryFnb)
 
   // popover
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
@@ -186,8 +188,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
       const idsAll = listWithPager?.[pageIndex]?.map((e: any) => e._id);
       setIdsChecked(idsAll);
     }
-  };
-  // console.log({pageIndex})
+  }
 
   const handleCancelOrder = async () => {
     try {
@@ -307,8 +308,10 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
     try {
       setStateExport({ isExporting: true });
       const { error, data } = await exportOrderAsync({
-        filterParams: {
-        }
+        queryFnb,
+        // filterParams: {
+
+        // }
       });
 
       if(error) {

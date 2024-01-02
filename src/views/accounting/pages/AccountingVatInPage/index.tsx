@@ -43,7 +43,7 @@ export const AccountingVatInPage: FC = () => {
     params: {
         fromDate: inputFilter.fromDate,
         toDate: inputFilter.toDate,
-        limit: 10,
+        limit: 20,
         forward: 0,
         cancel: 0,
         vat: 1,
@@ -68,7 +68,7 @@ export const AccountingVatInPage: FC = () => {
       <p className="text-lg mr-5">Bảng kê hóa đơn mua vào</p>
         <DropdownSearchableV2
             ref={accountRef}
-            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg"}
             placeholder={"Đơn vị cơ sở"}
             isMultiple={false}
             allowClearValueSingleInput={true}
@@ -94,7 +94,7 @@ export const AccountingVatInPage: FC = () => {
 
         <div className="flex items-center">
           <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
-          <div className={"relative z-5 inline-block"}>
+          {/* <div className={"relative z-5 inline-block"}>
             <button onClick={() => setShowOption(!showOption)}
               className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg"}
               >
@@ -117,12 +117,12 @@ export const AccountingVatInPage: FC = () => {
                     </div>
                 </div>
             }
-          </div>
+          </div> */}
           <PaginateV2
               ref={ref}
               totalRecord={totalRecord}
               totalPages={totalPage}
-              limit={10}
+              limit={20}
               hasNextPage={hasNextPage}
               isFetching={isLoading}
               nextPageAction={() => {
