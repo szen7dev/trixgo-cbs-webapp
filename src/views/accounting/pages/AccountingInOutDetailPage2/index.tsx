@@ -165,7 +165,7 @@ export const AccountingInOutDetailPage2: FC = () => {
         </div>
         <DropdownSearchableV2
             ref={accountRef}
-            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg"}
             placeholder={"Đơn vị cơ sở"}
             isMultiple={false}
             allowClearValueSingleInput={true}
@@ -191,7 +191,7 @@ export const AccountingInOutDetailPage2: FC = () => {
 
         <div className="flex items-center">
           <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
-          <div className={"relative z-5 inline-block"}>
+          {/* <div className={"relative z-5 inline-block"}>
             <button onClick={() => setShowOption(!showOption)} 
               className={"rounded-full flex items-center justify-center w-[40px] h-[40px] max-w-[40px] max-h-[40px] min-w-[40px] min-h-[40px] hover:bg-cbs-form-input-bg"}
               >
@@ -214,7 +214,7 @@ export const AccountingInOutDetailPage2: FC = () => {
                     </div>
                 </div>
             }
-          </div>
+          </div> */}
           <div className="absolute right-0">
             <PaginateV2
                 ref={ref}
@@ -362,7 +362,7 @@ export const AccountingInOutDetailPage2: FC = () => {
                       {item?.customerDebit?.name}
                     </td>
                     <td className="py-1 px-2 border-r border-primary-border">
-                    
+                      {item?.customerDebit?.taxid}
                     </td>
                     <td className="py-1 px-2 border-r border-primary-border text-right">
                       {formatNumberMoney(item?.quantity)}
@@ -421,7 +421,7 @@ export const AccountingInOutDetailPage2: FC = () => {
                       {item?.customerCredit?.name}
                     </td>
                     <td className="py-1 px-2 border-r border-primary-border">
-                    
+                      {item?.customerCredit?.taxid}
                     </td>
                     <td className="py-1 px-2 border-r border-primary-border text-right">
                       

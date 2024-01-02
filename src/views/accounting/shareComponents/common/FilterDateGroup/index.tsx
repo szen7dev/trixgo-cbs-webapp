@@ -12,7 +12,7 @@ type Props = {
 
 export const FilterDateGroup: FC<Props> = ({ fromDate, endDate, onChangeDate }) => {
   return (
-    <div className="mx-3 flex">
+    <div className="flex">
       <div className="relative z-9">
         <span className={cn(
           "text-sm mb-2",
@@ -34,7 +34,7 @@ export const FilterDateGroup: FC<Props> = ({ fromDate, endDate, onChangeDate }) 
         />
       </div>
 
-      <div className="relative ml-3">
+      <div className="relative ml-1 mr-1">
         <span className={cn(
           "text-sm mb-2",
           styles.bgWhiteLight, styles.labelDateSearch

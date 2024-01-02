@@ -168,7 +168,7 @@ export const AccountingDetailPage: FC = () => {
         <p className="text-lg mr-5">{infoAccount?.name}-{infoAccount?.description}</p>
         <DropdownSearchableV2
             ref={accountRef}
-            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg"}
             placeholder={"Tài khoản"}
             isMultiple={false}
             allowClearValueSingleInput={true}
@@ -197,7 +197,7 @@ export const AccountingDetailPage: FC = () => {
 
         <DropdownSearchableV2
             ref={accountRef}
-            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg"}
             placeholder={"Đơn vị cơ sở"}
             isMultiple={false}
             allowClearValueSingleInput={true}
@@ -223,7 +223,7 @@ export const AccountingDetailPage: FC = () => {
 
         <DropdownSearchableV2
             ref={accountRef}
-            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg"}
             placeholder={"Kho bãi"}
             isMultiple={false}
             allowClearValueSingleInput={true}

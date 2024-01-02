@@ -189,10 +189,10 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
   return (
     <main className="h-full">
       <header className="h-[50px] w-full border border-primary-border flex items-center px-3">
-        <SearchInput classNameWrapper={""} onChange={onChangeSearch} />
+        <SearchInput classNameWrapper={"mr-1 border border-primary-border"} onChange={onChangeSearch} />
         <DropdownSearchableV2
             ref={accountRef}
-            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg"}
             placeholder={"Đơn vị cơ sở"}
             isMultiple={false}
             allowClearValueSingleInput={true}
@@ -228,7 +228,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
         />
         <DropdownSearchableV2
             ref={accountRef}
-            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg"}
             placeholder={"Mã khách"}
             isMultiple={false}
             allowClearValueSingleInput={true}
@@ -256,7 +256,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
         />
         <DropdownSearchableV2
             ref={accountRef}
-            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            className={"mr-1 border border-primary-border rounded-lg"}
             placeholder={"Người tạo phiếu"}
             isMultiple={false}
             allowClearValueSingleInput={true}
