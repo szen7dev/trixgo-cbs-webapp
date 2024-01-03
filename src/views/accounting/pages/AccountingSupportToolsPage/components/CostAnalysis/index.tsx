@@ -14,6 +14,7 @@ import { FilterDateGroup } from "views/accounting/shareComponents/common";
 import {debounce} from "lodash";
 import { DropdownSearchableV2 } from "shareComponents/common";
 import { useFunda } from "services/hooks/items/useFunda";
+import { useJournal } from "services/hooks/accounting/useGeneralJournal";
 
 import {
 	useQueryListAccount,
@@ -50,6 +51,34 @@ const CostAnalysis: FC = () => {
     }
    }, [])
   //  console.log({fundaID, accountID, fromDate: inputFilter.fromDate, toDate: inputFilter.toDate})
+
+  const [stateAction, setStateAction] = useState<{ isExporting: boolean }>({
+    isExporting: false,
+  })
+  const { analysePrimeCostAsync } = useJournal({})
+  
+  const handleAnalysePrimeCost = async () => {
+    try {
+        setStateAction({ isExporting: true })
+        const { error, data } = await analysePrimeCostAsync({ 
+              fromDate: inputFilter.fromDate,
+              toDate: inputFilter.toDate,
+              fundaID: fundaID,
+              accountID: accountID,
+           })
+
+          if(error) {
+              return toast.warn(data?.message);
+          }else{
+            return toast.success('Cập nhật thành công');
+          }
+
+      } catch (error: any) {
+          toast.error(error.message)
+      } finally {
+        setStateAction({ isExporting: false })
+    }
+  }
 
   return (
     <main className="h-full bg-cbs-gray p-4">
@@ -111,7 +140,9 @@ const CostAnalysis: FC = () => {
           <div className="flex items-center">
             <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
           </div>
-          <button className="bg-primary text-[15px] rounded w-[90px] h-[32px] text-primary-light hover:opacity-90">
+          <button className="bg-primary text-[15px] rounded w-[90px] h-[32px] text-primary-light hover:opacity-90"
+            onClick={handleAnalysePrimeCost}
+          >
             Cập nhật
           </button>
       </section>

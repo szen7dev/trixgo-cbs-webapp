@@ -8,6 +8,7 @@ type UseDataCustom = {
     downloadTemplateExcelDocumentAsync: (payload: any) => Promise<any>,
     importFromExcelAsync: (payload: any) => Promise<any>,
     exportExcelAsync: (payload: any) => Promise<any>,
+    analysePrimeCostAsync: (payload: any) => Promise<any>,
 };
 
 export const useJournal = ({
@@ -32,10 +33,17 @@ export const useJournal = ({
         JournalRepository.exportExcel(payload)
     );
 
+    // AnalysePrimeCost
+    const { mutateAsync: analysePrimeCostAsync } =
+        useMutation((payload: any) =>
+        JournalRepository.analysePrimeCost(payload)
+    );
+
     return {
         downloadTemplateExcelDocumentAsync,
         importFromExcelAsync,
-        exportExcelAsync
+        exportExcelAsync,
+        analysePrimeCostAsync
     }
 }
 

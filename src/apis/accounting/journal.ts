@@ -11,6 +11,7 @@ interface JournalRepository {
     downloadTemplateExcel: (data: any) => Promise<any>;
     importFromExcel: (data: any) => Promise<any>;
     exportExcel: (data: any) => Promise<any>;
+    analysePrimeCost: (data: any) => Promise<any>;
 }
 
 export const JournalRepository: JournalRepository = {
@@ -22,6 +23,7 @@ export const JournalRepository: JournalRepository = {
     downloadTemplateExcel: params => downloadTemplateExcel(params), 
     importFromExcel: params => importFromExcel(params), 
     exportExcel: params => exportExcel(params), 
+    analysePrimeCost: params => analysePrimeCost(params), 
 }
 
 async function fetchListJournal(params : any) {
@@ -83,5 +85,10 @@ async function importFromExcel(data: any) {
 
 async function exportExcel(data: any) {
     const { data: result } = await API.post(`${ACCOUNTING_JOURNAL}/export-excel`, data);
+    return result
+}
+
+async function analysePrimeCost(data: any) {
+    const { data: result } = await API.post(`${ACCOUNTING_JOURNAL}/analyse-prime-cost`, data);
     return result
 }
