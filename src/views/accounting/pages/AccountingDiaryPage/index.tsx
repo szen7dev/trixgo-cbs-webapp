@@ -90,7 +90,7 @@ export const AccountingDiaryPage: FC = () => {
       } finally {
           setStateExport({ isExporting: false })
     }
-}
+  }
 
   return (
     <main className="h-full">

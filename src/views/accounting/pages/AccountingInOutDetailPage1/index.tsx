@@ -305,7 +305,7 @@ export const AccountingInOutDetailPage1: FC = () => {
                       {formatNumberMoney(donGiaTonCuoiKy)}
                     </td>
                     <td className="py-1 px-2 border-r border-primary-border text-right">
-                      {formatNumberMoney(Number(item.kcNoDauKy + item.noDauKy + item.noTrongKy - item.kcCoDauKy - item.coDauKy - item.coTrongKy))}
+                      {formatNumberMoney(Number(item.kcNoDauKy + item.noDauKy + item.noTrongKy - item.kcCoDauKy - item.coDauKy - item.coTrongKy).toFixed(0))}
                     </td>
                   </tr>
                 )
@@ -357,7 +357,7 @@ export const AccountingInOutDetailPage1: FC = () => {
                   
               </td>
               <td className="py-1 px-2 border-r border-primary-border text-right">
-                {formatNumberMoney(tonCuoiKy)}
+                {formatNumberMoney(tonCuoiKy.toFixed(0))}
               </td>
             </tr>
         </tbody>

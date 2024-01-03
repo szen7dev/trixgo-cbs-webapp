@@ -145,16 +145,16 @@ const handleOnChangeDate = useCallback((date, input) => {
                   {/* <p><i>{item?._id}</i></p> */}
                 </td>
                 <td className="py-1 px-2 border-r border-primary-border text-right">
-                  {formatNumberMoney(Number(item.kcNoDauKy + item.noDauKy - item.kcCoDauKy - item.coDauKy))}
+                  {formatNumberMoney(Number(item.kcNoDauKy + item.noDauKy - item.kcCoDauKy - item.coDauKy).toFixed(0))}
                 </td>
                 <td className="py-1 px-2 border-r border-primary-border text-right">
-                  {formatNumberMoney(Number(item.noTrongKy))}
+                  {formatNumberMoney(Number(item.noTrongKy).toFixed(0))}
                 </td>
                 <td className="py-1 px-2 border-r border-primary-border text-right">
-                  {formatNumberMoney(Number(item.coTrongKy))}
+                  {formatNumberMoney(Number(item.coTrongKy).toFixed(0))}
                 </td>
                 <td className="py-1 px-2 border-r border-primary-border text-right">
-                  {formatNumberMoney(Number(item.kcNoDauKy + item.noDauKy + item.noTrongKy - item.kcCoDauKy - item.coDauKy - item.coTrongKy))}
+                  {formatNumberMoney(Number(item.kcNoDauKy + item.noDauKy + item.noTrongKy - item.kcCoDauKy - item.coDauKy - item.coTrongKy).toFixed(0))}
                 </td>
               </tr>
             ))
