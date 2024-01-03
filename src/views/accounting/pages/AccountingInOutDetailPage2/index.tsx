@@ -389,7 +389,7 @@ export const AccountingInOutDetailPage2: FC = () => {
                       {quantityBalance != 0 ? formatNumberMoney(balance/quantityBalance) : 0}
                     </td>
                     <td className="py-1 px-2 border-r border-primary-border text-right">
-                      {formatNumberMoney(balance)}
+                      {formatNumberMoney(balance.toFixed(0))}
                     </td>
                   </tr>
                 )
@@ -448,7 +448,7 @@ export const AccountingInOutDetailPage2: FC = () => {
                       {quantityBalance != 0 ? formatNumberMoney(balance/quantityBalance) : 0}
                     </td>
                     <td className="py-1 px-2 border-r border-primary-border text-right">
-                      {formatNumberMoney(balance)}
+                      {formatNumberMoney(balance.toFixed(0))}
                     </td>
                   </tr>
                 )
@@ -493,7 +493,7 @@ export const AccountingInOutDetailPage2: FC = () => {
                 {klTonCuoiKy != 0 ? formatNumberMoney(tonCuoiKy/klTonCuoiKy) : 0}
               </td>
               <td className="py-1 px-2 border-r border-primary-border text-right">
-                {formatNumberMoney(tonCuoiKy)}
+                {formatNumberMoney(tonCuoiKy.toFixed(0))}
               </td>
           </tr>
         </tbody>
