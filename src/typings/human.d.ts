@@ -170,6 +170,7 @@ export type Human = {
     createAt?: Date;
     phone?: string;
     sign?: string;
+    note?: string;
     email?: string;
     gender?: number;
     realStatus?: number;

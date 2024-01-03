@@ -3,7 +3,6 @@ import React, {
   FC,
   FormEvent,
   useRef,
-  useState,
   useMemo,
   useCallback,
 } from "react";
@@ -17,7 +16,6 @@ import { useModal } from "services/hooks/useModal";
 import { DropdownSearchable } from "shareComponents/common";
 
 import CloseIcon from "assets/images/icon-small-bold-close.svg";
-// import { CONTACT_POLICY, INSURANCE_STATUS } from "apis/localdb";
 import {
   useQueryListDepartments,
   useQueryListDoctype,
@@ -110,12 +108,6 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
     keyword: searchDepartmentValue,
   });
 
-  // const { listDoctypes: listPositions } = useQueryListDoctype({
-  //   limit: 50,
-  //   type: 13,
-  //   keyword: searchPositionValue,
-  // });
-
   const [searchUserStr, setSearchUserStr] = React.useState(
     initialValues.linkUser?.fullname || ""
   );
@@ -124,12 +116,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
   } = useUserSystem({ keyword: searchUserStr }, true);
 
   const {
-    deletePositionAsync,
     data: listPositions,
-    hasNextPage: hasNextPagePosition,
-    refetch: refetchListPosition,
-    fetchNextPage: fetchNextPagePosition,
-    totalRecord
   } = usePosition({ keyword: searchPositionValue }, true);
 
   const { listDoctypes: listWorkingStatus } = useQueryListDoctype({
@@ -201,11 +188,10 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
       contractValid: "",
       contractExpire: "",
       linkUser: "",
+      note: "",
       ...initialValues,
     };
   }, [initialValues]);
-
-  // useOnClickOutside(ref, () => setOpenOption(!openOption));
 
   const handleSubmit = useCallback(
     async (values: any) => {
@@ -262,7 +248,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
         position: values?.position?.value,
         workingStatus: values?.workingStatus?.value,
         linkUser: values?.linkUser?.value,
-        contractType: values?.contractType?.id,
+        contractType: values?.contractType?.value,
       };
       const isSuccess = await onFinish(formatData);
       if (isSuccess) {
@@ -704,10 +690,13 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                           </div>
                         )}
                         initialValue={defaultValues?.contractType}
-                        data={listContractType}
+                        data={listContractType.map((contractType) => ({
+                          value: contractType._id,
+                          label: contractType.name,
+                        }))}
                         formatItem={{
                           id: "_id",
-                          text: "name",
+                          text: "label",
                         }}
                         inlineSearch={true}
                       />
@@ -1385,7 +1374,22 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                           }}
                           inlineSearch={true}
                         />
-                      </div>
+                    </div>
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-4/12 text-primary-gray">
+                        Ghi chú
+                      </span>
+                      <Field
+                        type="text"
+                        name="note"
+                        placeholder="Ghi chú..."
+                        className="w-full h-6 outline-none pl-3"
+                        onBlur={(e: FormEvent<HTMLInputElement>) => {
+                          handleBlur(e);
+                        }}
+                      />
+                    </div>
+                    
                   </div>
 
                   <div className="absolute flex justify-end items-center bottom-0 -ml-6 px-6 h-12 w-full border-t border-gray-300 text-primary-light">
