@@ -1,90 +1,119 @@
-import { FC, useState } from "react";
+import React, { FC, useState, useCallback, useEffect } from "react";
 
-import DatePicker from "react-datepicker";
-import cn from "classnames";
+// import DatePicker from "react-datepicker";
+// import cn from "classnames";
+// import { DropdownSearchable, } from "shareComponents/common";
+// import ThreeDotsVertical from "assets/images/icon-3dots-vertical-gray.svg";
+// import PolygonIcon from "assets/images/icon-polygon.svg";
+// import styles from 'views/accounting/styles/styles.module.css';
+
 import "react-datepicker/dist/react-datepicker.css";
+import { toast } from "react-toastify";
 
-import { DropdownSearchable, } from "shareComponents/common";
+import { FilterDateGroup } from "views/accounting/shareComponents/common";
+import {debounce} from "lodash";
+import { DropdownSearchableV2 } from "shareComponents/common";
+import { useFunda } from "services/hooks/items/useFunda";
 
-import ThreeDotsVertical from "assets/images/icon-3dots-vertical-gray.svg";
-import PolygonIcon from "assets/images/icon-polygon.svg";
-
-import styles from 'views/accounting/styles/styles.module.css';
+import {
+	useQueryListAccount,
+} from "services/hooks/cmcs/useContractIncome";
 
 const CostAnalysis: FC = () => {
-  const [fromDate, setFromDate] = useState<Date | null>(new Date());
-  const [endDate, setEndDate] = useState<Date | null>(new Date());
+  type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
+  const accountRef = React.useRef<DropdownHandle>(null);
+
+  const [fundaID, setFundaID,] = useState<string | null>();
+  const [fundaKeyword, setFundaKeyword] = useState("");
+
+  const [accountID, setAccountID,] = useState<string | null>();
+  const [searchAccount, setSearchAccount] = useState();
+
+  const [inputFilter, setInputFilter] = useState({ keyword: '', fromDate: new Date(new Date().getFullYear(), 0, 1), toDate: new Date(new Date().getFullYear(), 11, 31) });
+
+  const { list: listFunda } = useFunda({
+		params: { keyword: fundaKeyword },
+    isFetchList: true
+	})
+
+	const { listAccount } = useQueryListAccount({
+		limit: 10,
+		keyword: searchAccount,
+		option: 1,
+	});
+
+  const handleOnChangeDate = useCallback((date, input) => {
+    if (input) {
+      setInputFilter((value) => ({ ...value, toDate: date }))
+    } else {
+      setInputFilter((value) => ({ ...value, fromDate: date }))
+    }
+   }, [])
+  //  console.log({fundaID, accountID, fromDate: inputFilter.fromDate, toDate: inputFilter.toDate})
 
   return (
     <main className="h-full bg-cbs-gray p-4">
-      <section className="px-8 py-6 bg-primary-light">
-        <p className="text-lg font-bold text-primary-gray">Phân tích giá vốn</p>
-
-        <div className="mt-4 flex items-end gap-3">
-          <div>
-            <p className="text-sm mb-2">
-              Chọn loại hàng hóa/thành phẩm/nguyên vật liệu
-            </p>
-            <DropdownSearchable
-              placeholder="Tìm kiếm"
-              className="w-[322px] px-2 border border-primary-border rounded"
-              classNameInput="h-[36px]"
+      <section className="px-8 py-6 bg-primary-light flex items-center">
+        <p className="text-lg font-bold text-primary-gray mr-5">Phân tích giá vốn</p>
+        <DropdownSearchableV2
+              ref={accountRef}
+              className={"mr-1 border border-primary-border rounded-lg"}
+              placeholder={"Đơn vị cơ sở"}
               isMultiple={false}
-              allowClearValueSingleInput={false}
-              showTriangle={true}
-              maxWidthInput="max-w-none"
-              renderSelectedItem={(item: any) => <span>{item.text}</span>}
-              classNameItem="p-0"
-              data={[
-                {
-                  _id: 1,
-                  content: "Demo............",
-                },
-              ]}
+              allowClearValueSingleInput={true}
+              data={listFunda}
               formatItem={{
-                id: "_id",
-                text: "content",
+                  id: "_id",
+                  text: "name",
               }}
-              inlineSearch={true}
-            />
+              onSearchInputChange={debounce(
+                  (valueSearch) => setFundaKeyword(valueSearch),
+                  500
+              )}
+              onClearData={() => {
+                setFundaID("");
+              }}
+              onchangeValue={item => {
+                setFundaID(item._id);
+              }}
+              renderItem={(item) => (
+                  <p className={"min-w-[300px]"}>{item.text}</p>
+              )}
+              selectOneByOne={true}
+          />
+          <DropdownSearchableV2
+              ref={accountRef}
+              className={"mr-1 border border-primary-border rounded-lg"}
+              placeholder={"Tài khoản"}
+              isMultiple={false}
+              allowClearValueSingleInput={true}
+              data={listAccount}
+              formatItem={{
+                  id: "_id",
+                  text: "name",
+                  description: "description",
+              }}
+              onSearchInputChange={debounce(
+                  (valueSearch) => setSearchAccount(valueSearch),
+                  500
+              )}
+              onClearData={() => {
+                setAccountID("");
+              }}
+              onchangeValue={item => {
+                setAccountID(item._id);
+              }}
+              renderItem={(item) => (
+                  <p className={"min-w-[300px]"}>{item.text}-{item.description}</p>
+              )}
+              selectOneByOne={true}
+          />
+          <div className="flex items-center">
+            <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
           </div>
-
-          <div>
-            <p className="text-sm mb-2">Từ ngày</p>
-            <DatePicker
-              selected={fromDate}
-              onChange={(date: Date | null) => setFromDate(date)}
-              dateFormat="dd/MM/yyyy"
-              customInput={
-                <input
-                  type="text"
-                  placeholder="Từ ngày"
-                  className="w-[322px] h-[38px] px-2 border border-primary-border rounded"
-                />
-              }
-            />
-          </div>
-
-          <div>
-            <p className="text-sm mb-2">Đến ngày</p>
-            <DatePicker
-              selected={endDate}
-              onChange={(date: Date | null) => setEndDate(date)}
-              dateFormat="dd/MM/yyyy"
-              customInput={
-                <input
-                  type="text"
-                  placeholder="Đến ngày"
-                  className="w-[322px] h-[38px] px-2 border border-primary-border rounded"
-                />
-              }
-            />
-          </div>
-
-          <button className="bg-primary text-[15px] rounded w-[105px] h-[38px] text-primary-light hover:opacity-90">
+          <button className="bg-primary text-[15px] rounded w-[90px] h-[32px] text-primary-light hover:opacity-90">
             Cập nhật
           </button>
-        </div>
       </section>
 
       <section className="bg-primary-light mt-4 h-screen">
@@ -92,12 +121,12 @@ const CostAnalysis: FC = () => {
           <p className="text-lg">
             Kiểm tra hàng hóa xuất âm kho khi chạy giá vốn
           </p>
-          <div className="h-10 w-10 rounded-full bg-cbs-table-header flex items-center justify-center">
+          {/* <div className="h-10 w-10 rounded-full bg-cbs-table-header flex items-center justify-center">
             <img src={ThreeDotsVertical} alt="Three Dots" />
-          </div>
+          </div> */}
         </div>
 
-        <table className="table-auto w-full text-left">
+        {/* <table className="table-auto w-full text-left">
           <thead className="h-10 bg-cbs-table-header">
             <tr>
               <th className={cn("text-center", styles.theadInput)}>
@@ -143,7 +172,8 @@ const CostAnalysis: FC = () => {
               <td>Demo</td>
             </tr>
           </tbody>
-        </table>
+        </table> */}
+
       </section>
     </main>
   );

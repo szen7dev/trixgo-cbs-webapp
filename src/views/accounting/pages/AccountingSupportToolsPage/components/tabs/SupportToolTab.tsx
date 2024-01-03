@@ -1,5 +1,4 @@
 import { FC } from "react";
-
 import CostAnalysis from "../CostAnalysis";
 
 type Props = {
@@ -27,5 +26,5 @@ export const SupportToolTab: FC<Props> = (props) => {
         <p>Tool 4</p>
       </div>
     </section>
-  );
-};
+  )
+}

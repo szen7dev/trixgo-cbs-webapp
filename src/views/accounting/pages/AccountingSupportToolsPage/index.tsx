@@ -1,5 +1,4 @@
 import { FC, useState } from "react";
-
 import { SupportToolTab } from "./components";
 
 export const AccountingSupportToolsPage: FC = () => {
@@ -58,5 +57,5 @@ export const AccountingSupportToolsPage: FC = () => {
 
       <SupportToolTab toggleTab={toggleTab} />
     </main>
-  );
-};
+  )
+}
