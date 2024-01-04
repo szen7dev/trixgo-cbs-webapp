@@ -109,6 +109,7 @@ export const HumanInfo: FC = () => {
               description: defaultValues.description,
               name: defaultValues.name,
               sign: defaultValues.sign,
+              note: defaultValues.note,
               phone: defaultValues.phone,
               email: defaultValues.email,
               birthday: defaultValues.birthday,

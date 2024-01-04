@@ -29,7 +29,7 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
 import { useContact } from 'services/hooks/items/useContact';
-import { useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/auth/usePermissions";
+import { useGetListAppRoleMenu } from "services/hooks/auth/usePermissions";
 
 /*=====7.OTHER=====*/
 import { IconButton, InputBase, Paper } from "@mui/material";
@@ -40,8 +40,6 @@ import { useDispatch } from "react-redux";
 import { resetQueryFnb } from "redux/reducer/FnbSlice";
 
 export const FnbLeftSideBar: FC = () => {
-    const { user } = useAuth();
-    // console.log(user)
     const { openModal } = useModal();
     const dispath = useDispatch();
     const [menuShowList, setMenuState] = useState(false);
@@ -68,9 +66,9 @@ export const FnbLeftSideBar: FC = () => {
      * List mẩu tin
      */
     const [keyword, setKeyword] = useState("");
-    const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useContact({
+    const { listWithPager, refetch } = useContact({
         params: {
-            select: "name note phone numberOfOrders",
+            select: "name note phone",
             keyword: keyword,
             limit: 5
         },
@@ -90,9 +88,7 @@ export const FnbLeftSideBar: FC = () => {
 
         // Mở modal tạo mới
         if (modalType === 'create') {
-            // clearData();
             initValues = {
-                // parent: parentID,
                 contactID: '',
                 type: '',
                 name: '',
@@ -127,13 +123,9 @@ export const FnbLeftSideBar: FC = () => {
         return false;
     }, [listAppRoleMenu]);
 
-    // console.log(listWithPager)
-
     return (
         <div className="t-leftsidebar-navigation t-leftsidebar-navigation-v2 t-leftsidebar-navigation-type2 fixed left-64px top-14 bottom-0 transition-all duration-500 ease-out border-secondary-light z-10 bg-primary-light">
             <div className="t-leftsidebar-navigation-container-v2  overflow-auto transition-all duration-500 ease-out p-3">
-
-                {/* menu block */}
                 <div>
                     <button
                         className="flex gap-2 items-center justify-center text-primary-gray bg-cbs-blue-button  rounded-md font-bold px-6 py-2 mb-3"
@@ -277,7 +269,7 @@ export const FnbLeftSideBar: FC = () => {
                                                     {/* <div className="text-cbs-subtext">{formatNumberMoney(item?.remainLoyaltyPoints)}đ</div> */}
                                                 </div>
                                                 <div className="text-cbs-subtext">{item?.phone}-{item?.note}</div>
-                                                <div className="text-cbs-subtext"><i>{item?._id}</i></div>
+                                                {/* <div className="text-cbs-subtext"><i>{item?._id}</i></div> */}
                                             </div>
                                         </div>
                                     ))
