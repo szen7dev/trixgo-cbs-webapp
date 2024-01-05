@@ -160,7 +160,7 @@ const handleOnChangeDate = useCallback((date, input) => {
 
         <tbody className="">
           { 
-            dataAll?.arrCombine.map((item: any, index: any) => (
+            dataAll?.arrCombine?.map((item: any, index: any) => (
               <tr key={index} className="border-b border-primary-border h-10">
                 <td className="py-1 px-2 border-r border-primary-border">
                   {item.name}

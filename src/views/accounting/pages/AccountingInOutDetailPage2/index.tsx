@@ -54,9 +54,6 @@ export const AccountingInOutDetailPage2: FC = () => {
     },
     isFetchList: true
   })
-  // console.log(params.accountID)
-  // console.log(params.goodsID)
-  // console.log(dataAll?.arrCombine)
 
   const accountId = params.accountID
   useEffect(() => {
