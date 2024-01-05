@@ -106,11 +106,13 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
   const { deleteAccountingVoucherMutateAsync } = useDeleteAccountingVoucherMutation();
 
   const handleFinishForm = useCallback(async (values, isEdit = false) => {
+    // console.log(values)
     let res: any
     if (isEdit) {
       res = await updateAccountingVoucherMutateAsync(values);
     } else {
-      res = await createAccountingVoucherMutateAsync({ ...values, fundaID });
+      // res = await createAccountingVoucherMutateAsync({ ...values, fundaID }); // truyền fundaID từ URL
+      res = await createAccountingVoucherMutateAsync({ ...values });
     }
 
     if (res.code && res.code !== 200) {

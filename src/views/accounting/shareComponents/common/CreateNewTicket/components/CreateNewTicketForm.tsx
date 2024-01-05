@@ -9,8 +9,7 @@ import moment from "moment";
 import CreateNewTicketTableAccount from "./CreateNewTicketTableAccount";
 import { DATE_FORMAT, VOUCHER_TYPES, LIMIT_DROPDOWN } from "apis/localdb/index";
 import { ErrorMessage, Field } from "formik";
-
-// import TagIcon from "assets/images/icons8-price-tag-96.svg";
+import { useFunda } from "services/hooks/items/useFunda";
 
 import {
 	useQueryListContact,
@@ -22,7 +21,20 @@ import {
 } from "services/hooks/useHuman";
 
 const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
+	console.log(initialValues)
 	const { setFieldValue, values } = formik;
+
+	const [fundaKeyword, setFundaKeyword] = useState(
+		initialValues?.funda || ""
+	);
+
+	const { list: listFunda } = useFunda({
+		params: { 
+			keyword: fundaKeyword,
+			limit: 50
+		},
+    	isFetchList: true
+	})
 
 	const [searchCustomerValue, setSearchCustomerValue] = useState(
 		initialValues?.customer || ""
@@ -78,7 +90,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 						<DropdownSearchable
 							onchangeValue={(value) => setFieldValue("type", value)}
 							className={"flex-1"}
-							placeholder="Phân loại khác..."
+							placeholder="Loại phiếu"
 							isMultiple={false}
 							allowClearValueSingleInput={true}
 							onClearData={() => setFieldValue("type", '')}
@@ -121,6 +133,47 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 						/>
 					</div>
 					<div className={"w-1/4 flex items-center"}>
+						<div className={"text-left text-gray-500 flex items-center mr-2"}>Cơ sở (*)</div>
+						<DropdownSearchable
+							onchangeValue={(value: any) => setFieldValue("funda", value)}
+							className={"flex-1"}
+							placeholder="Cơ sở"
+							isMultiple={false}
+							allowClearValueSingleInput={true}
+							onClearData={() => setFieldValue("funda", '')}
+							showTriangle={false}
+							maxWidthInput="max-w-none"
+							renderSelectedItem={(item) => {
+								return (
+									<div className="flex">
+										<Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 top-0 w-[330px] h-fit whitespace-normal" >
+											<p className="text-1-line-clamp">{`${item.text}`}</p>
+										</Popover>
+									</div>
+								)
+							}}
+							onSearchInputChange={debounce(
+								(value) => setFundaKeyword(value),
+								500
+							)}
+							initialValue={initialValues?.funda}
+							data={listFunda.map((item: any) => ({
+								label: item.name,
+								value: item._id,
+							}))}
+							formatItem={{
+								id: "value",
+								text: "label",
+							}}
+							inlineSearch={true}
+						/>
+						<ErrorMessage
+							name="funda"
+							component="span"
+							className="font-normal leading-7 text-sm text-negative"
+						/>
+					</div>
+					<div className={"w-1/4 flex items-center"}>
 						<div className={"w-1/3 flex items-center"}>
 							<Field type="radio" name="vat" value={1} className={"form-check-input mt-0"} onChange={() => setFieldValue('vat', 1)} />
 							<label htmlFor="vat-type-1" className={"text-left ml-3"}>VAT mua vào</label>
@@ -134,7 +187,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 							<label htmlFor="vat-type-3" className={"text-left ml-3"}>Hủy</label>
 						</div>
 					</div>
-					<div className={"w-1/2 flex items-center"}>
+					<div className={"w-1/4 flex items-center"}>
 						<div className={"w-1/4 flex items-center"}>
 							<Field type="checkbox" id="ticket-type-1" name="advancePayment" className={"form-check-input mt-0"} />
 							<label htmlFor="ticket-type-1" className={"text-left ml-3"}>Tạm ứng</label>
@@ -268,11 +321,11 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 						/>
 					</div>
 					<div className={"w-1/4 flex items-center"}>
-						<div className={"text-left text-gray-500 flex items-center mr-2"}>Phân loại khác</div>
+						<div className={"text-left text-gray-500 flex items-center mr-2"}>Khoản mục phí</div>
 						<DropdownSearchable
 							onchangeValue={(value: any) => setFieldValue("subtype", value)}
 							className={"flex-1"}
-							placeholder="Phân loại khác"
+							placeholder="Khoản mục phí"
 							isMultiple={false}
 							allowClearValueSingleInput={true}
 							onClearData={() => setFieldValue("subtype", '')}
