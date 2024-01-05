@@ -27,6 +27,8 @@ const mappingData = (data: any, isDataPayLoad = false) => {
     returning: data.returning ? true : false,
     cancel: data.cancel ? true : false,
 
+    funda: isDataPayLoad ? data?.funda?.value : convertInitialValueDropdown(data?.funda || ''),
+    fundaID: data?.funda?.value,
     customer: isDataPayLoad ? data?.customer?.value : convertInitialValueDropdown(data?.customer || ''),
     customerID: data?.customer?.value,
     contract: isDataPayLoad ? data?.contract?.value : convertInitialValueDropdown(data?.contract || ''),
@@ -107,7 +109,7 @@ export const CreateNewTicket: FC<any> = ({ onFinish, title, idEdit = '', isEdit 
         `${APP_ACCOUNTING_VOUCHER}?voucherID=${id}`, {
         params: {
           populates: {
-            "path": "customer contract ipc subtype",
+            "path": "funda customer contract ipc subtype",
             "select": "name description",
           }
         }
