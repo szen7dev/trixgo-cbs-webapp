@@ -38,7 +38,6 @@ export const ItemAccountPage: FC = () => {
     });
 
     const {
-        deleteAsync,
         listData: listAccounts,
         hasNextPage,
         refetch,
@@ -110,30 +109,6 @@ export const ItemAccountPage: FC = () => {
         }
     };
 
-    // Xóa 1 hoặc nhiều mẩu tin
-    const handleConfirmDelete = async () => {
-        try {
-            const ids = itemsChecked.map(item => item._id);
-            const { error, data } = await deleteAsync(ids);
-
-            if (error) {
-                return toast.warn(data?.message);
-            }
-
-            toast.success('Xoá dữ liệu thành công', { autoClose: 1500 });
-            closeModal();
-            clearData();
-            refetch();
-            setItemsChecked([]);
-        } catch (error) {
-            if (typeof error === "string") {
-                toast.error(error);
-            } else if (error instanceof Error) {
-                toast.error(error.message);
-            }
-        }
-    }
-
     const handleOpenModalCreateOrUpdate = (modalType: 'create' | 'update') => {
         let initValues: any = {...initialValues};
         setItemsChecked([]);
@@ -184,24 +159,6 @@ export const ItemAccountPage: FC = () => {
                             onClick={() => handleOpenModalCreateOrUpdate('update')}
                         >
                             <img src={iconPencil} alt="icon pencil" />
-                        </button>
-                    ) : ''}
-
-                    {/* Xóa 1 hoặc nhiều */}
-                    {itemsChecked.length ? (
-                        <button
-                            onClick={() =>
-                                openModal(
-                                    <div
-                                        className={
-                                            "inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
-                                        }
-                                    >
-                                        <ModalConfirm onConfirm={handleConfirmDelete} />
-                                    </div>
-                                )
-                            }>
-                            <img src={DeleteIcon} alt="Delete" />
                         </button>
                     ) : ''}
                 </div>

@@ -28,25 +28,25 @@ export const ModalCreateOrUpdateAccount: FC<ModalProps> = ({
       switch (modalType) {
         // Tạo mẩu tin
         case 'create': {
-          const { error, message } = await insertAsync(formData);
+          const { error, data } = await insertAsync(formData);
 
           if (error) {
-            return toast.warning(message);
+            return toast.error(data.message);
           }
 
-          toast.success('Tạo thành công', { autoClose: 1500 });
+          toast.success('Tạo thành công', { autoClose: 500 });
           break;
         }
 
         // Cập nhật mẩu tin
         case 'update': {
-          const { error, message } = await updateAsync(formData);
+          const { error, data } = await updateAsync(formData);
 
           if (error) {
-            return toast.warning(message);
+            return toast.error(data.message);
           }
 
-          toast.success('Cập nhật thành công', { autoClose: 1500 });
+          toast.success('Cập nhật thành công', { autoClose: 500 });
           break;
         }
         
