@@ -111,7 +111,7 @@ export const CreateNewTicket: FC<any> = ({ onFinish, title, idEdit = '', isEdit 
         `${APP_ACCOUNTING_VOUCHER}?voucherID=${id}`, {
         params: {
           populates: {
-            "path": "funda customer contract ipc subtype",
+            "path": "funda linkFunda customer contract ipc subtype",
             "select": "name description",
           }
         }
