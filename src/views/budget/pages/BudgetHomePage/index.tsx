@@ -2,20 +2,16 @@ import { ChangeEvent, FC, useCallback, useState } from "react";
 import debounce from "lodash/debounce";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-
 import { useModal } from "services/hooks/useModal";
 import { SearchInput } from "shareComponents/common";
 import { convertCurrency } from 'utils/converter';
-
-// import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
-// import FolderIcon from "assets/images/icons8-folder.svg";
-// import DownloadIcon from "assets/images/icons8-download-64.svg";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
 import { CreateOrUpdateBudget } from "./components";
 import { ModalConfirm } from 'shareComponents/common';
 import { useBudget } from "services/hooks/budget/useBudget";
 import { Budget } from "typings/budget/budget";
+import { formatNumberMoney } from "utils/cmcs";
 
 type ItemProps = {
 	_id: string;
@@ -221,7 +217,7 @@ export const BudgetHomePage: FC = () => {
 						</th>
 						<th className="w-1/3 pb-1 pt-1 font-normal">
 							<div className="font-normal pl-2">
-								Giá trị dự kiến khi hoàn tất
+								Giá trị còn lại
 							</div>
 						</th>
 						<th className="w-1/3 pb-1 pt-1 font-normal">
@@ -250,13 +246,13 @@ export const BudgetHomePage: FC = () => {
 									</Link>
 								</td>
 								<td className="py-1 px-2 text-right">
-									{convertCurrency(item.budget?.toString())}
+									{formatNumberMoney(item.budget)}
 								</td>
 								<td className="py-1 px-2 text-right">
-									{convertCurrency(item.finalBudget?.toString())}
+									{formatNumberMoney(item.finalBudget)}
 								</td>
 								<td className="py-1 px-2 text-right">
-									{convertCurrency(item.forecastBudget?.toString())}
+									{formatNumberMoney(item.budget - item.finalBudget)}
 								</td>
 								<td className="py-1 px-2 text-left">
 									{item.note}

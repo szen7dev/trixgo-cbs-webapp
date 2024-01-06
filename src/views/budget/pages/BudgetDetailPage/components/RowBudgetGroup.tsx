@@ -27,7 +27,6 @@ type Props = {
 export const RowBudgetGroup: FC<Props> = memo(({ row, index, show, onAdd, onUpdate, onUpdateWork, fetchDataBudgetWork, listBudgetWork }) => {
 	const [groupsIDToggle, setGroupsIDToggle] = useState<string[]>([]);
 	const [groupID, setGroupID] = useState('');
-	// console.log({ listBudgetWork });
 
 	const toggleGroups = (groupID: string) => {
 		const isShow = groupsIDToggle.includes(groupID);
@@ -102,7 +101,7 @@ export const RowBudgetGroup: FC<Props> = memo(({ row, index, show, onAdd, onUpda
 					
 				</th>
 				<th className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
-					{formatNumberMoney(row.forecastAmount)}
+					{formatNumberMoney(row.amount - row.impleAmount)}
 				</th>
 				<th className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-left">
 					{row.note}

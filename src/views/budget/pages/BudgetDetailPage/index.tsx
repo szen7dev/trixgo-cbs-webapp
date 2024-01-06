@@ -343,13 +343,13 @@ export const BudgetDetailPage: FC = () => {
 							Nội dung
 						</th>
 						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2 text-center uppercase" style={{ maxWidth: '122px' }} colSpan={4}>
-							Ngân sách ban đầu
+							Giá trị ngân sách
 						</th>
 						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2 text-center uppercase" style={{ maxWidth: '122px' }} colSpan={3}>
-							Đã thực hiện
+							Giá trị đã thực hiện
 						</th>
 						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2 text-center uppercase" style={{ maxWidth: '122px' }} colSpan={3}>
-							Ngân sách dự kiến khi kết thúc
+							Giá trị còn lại
 						</th>
 						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2 uppercase" style={{ maxWidth: '122px' }}>
 							Ghi chú
@@ -450,7 +450,7 @@ export const BudgetDetailPage: FC = () => {
 									
 								</th>
 								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-right">
-									{formatNumberMoney(budgetItem.forecastAmount)}
+									{formatNumberMoney(budgetItem.amount - budgetItem.impleAmount)}
 								</th>
 								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-left">
 									{budgetItem.note}

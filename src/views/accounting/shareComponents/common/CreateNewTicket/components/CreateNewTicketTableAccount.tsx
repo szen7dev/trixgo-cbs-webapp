@@ -83,56 +83,56 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 					<>
 						<div className={"relative table border-collapse w-full text-center"}>
 							<div className={"sticky header flex table-row"}>
-								<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
+								<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 									TK nợ
 								</div>
-								<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
+								<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 									TK có
 								</div>
-								<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
+								<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 									Mã khách nợ (*)
 								</div>
-								<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
+								<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 									Mã khách có (*)
 								</div>
-								<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
+								<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 									Sản phẩm/Hàng hóa
 								</div>
-								<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
+								<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 									Kho bãi
 								</div>
-								<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
+								<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 									Tồn kho
 								</div>
-								<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
+								<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 									Số lượng (*)
 								</div>
-								<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
+								<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 									Đơn giá (*)
 								</div>
-								<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
+								<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 									Thành tiền (*)
 								</div>
-								<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
+								<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 									Hợp đồng
 								</div>
-								<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
+								<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 									Ngân sách
 								</div>
-								<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
+								<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 									Ghi chú
 								</div>
-								<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
+								<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 									#
 								</div>
-								<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
+								<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 
 								</div>
 							</div>
 							{values.selectedJournals.length > 0 &&
 								values.selectedJournals.map((item: any, index: any) => (
 									<div key={index} className={"flex table-row"}>
-										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
+										<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 											<DropdownSearchable
 												classNameInput={"border-b border-gray-300 rounded-none"}
 												className={"w-[125px]"}
@@ -167,7 +167,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												className="font-normal leading-7 text-sm text-negative"
 											/>
 										</div>
-										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
+										<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 											<DropdownSearchable
 												classNameInput={"border-b border-gray-300 rounded-none"}
 												className={"w-[125px]"}
@@ -200,7 +200,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												className="font-normal leading-7 text-sm text-negative"
 											/>
 										</div>
-										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
+										<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 											<DropdownSearchable
 												classNameInput={"border-b border-gray-300 rounded-none"}
 												className={"w-[125px]"}
@@ -233,7 +233,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												className="font-normal leading-7 text-sm text-negative"
 											/>
 										</div>
-										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
+										<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 											<DropdownSearchable
 												classNameInput={"border-b border-gray-300 rounded-none"}
 												className={"w-[125px]"}
@@ -266,7 +266,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												className="font-normal leading-7 text-sm text-negative"
 											/>
 										</div>
-										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
+										<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 											<DropdownSearchable
 												classNameInput={"border-b border-gray-300 rounded-none"}
 												className={"w-[125px]"}
@@ -294,7 +294,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												inlineSearch={true}
 											/>
 										</div>
-										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
+										<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 											<DropdownSearchable
 												classNameInput={"border-b border-gray-300 rounded-none"}
 												className={"w-[125px]"}
@@ -322,10 +322,10 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												inlineSearch={true}
 											/>
 										</div>
-										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
+										<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 
 										</div>
-										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
+										<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 											<Field
 												name={`selectedJournals.${index}.quantity`}
 												type="number"
@@ -337,7 +337,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 													computeAmount(item, index)
 												}} />
 										</div>
-										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
+										<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 											<Field
 												name={`selectedJournals.${index}.unitprice`}
 												type="number"
@@ -349,10 +349,10 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 													computeAmount(item, index)
 												}} />
 										</div>
-										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
+										<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 											<Field readOnly name={`selectedJournals.${index}.amount`} type="number" min={0} className={"focus:outline-none border-b w-[80px] border-gray-300"} placeholder={"Thành tiền"} />
 										</div>
-										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
+										<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 											<DropdownSearchable
 												classNameInput={"border-b border-gray-300 rounded-none"}
 												className={"w-[125px]"}
@@ -380,7 +380,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												inlineSearch={true}
 											/>
 										</div>
-										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
+										<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 											<DropdownSearchable
 												classNameInput={"border-b border-gray-300 rounded-none"}
 												className={"w-[125px]"}
@@ -408,14 +408,14 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												inlineSearch={true}
 											/>
 										</div>
-										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
+										<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 											<Field name={`selectedJournals.${index}.note`} rows={1} className={"focus:outline-none border-b border-gray-300"} placeholder={"Ghi chú"} />
 										</div>
-										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
+										<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 											<Field name={`selectedJournals.${index}.updown`} className={"focus:outline-none w-100 border-b w-[40px] border-gray-300"} placeholder={"1, -1"} />
 											<Field name={`selectedJournals.${index}.journalID`} hidden className={"focus:outline-none w-100 border-b w-[80px] border-gray-300"} placeholder={"#"} />
 										</div>
-										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle flex items-center"}>
+										<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle flex items-center"}>
 											<div onClick={() => insert(index, { ...item, journalID: '' })} className={"cursor-pointer"}>
 												<img alt={"Icon"} src={Copy} />
 											</div>
