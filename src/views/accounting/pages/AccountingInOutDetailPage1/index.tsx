@@ -65,7 +65,7 @@ export const AccountingInOutDetailPage1: FC = () => {
     fetchDetailAccount(accountId)
   }, [accountId])
 
-  // console.log(dataAll?.arrCombine)
+  // console.log(dataAll?.arrCombine?)
 
   let tonDauKy = 0, nhapTrongKy = 0, xuatTrongKy = 0, tonCuoiKy = 0
   let klTonDauKy = 0, klNhapTrongKy = 0, klXuatTrongKy = 0, klTonCuoiKy = 0
@@ -245,7 +245,7 @@ export const AccountingInOutDetailPage1: FC = () => {
 
         <tbody className="">
           { 
-            (dataAll?.arrCombine.map((item: any, index: any) => {
+            (dataAll?.arrCombine?.map((item: any, index: any) => {
                 let donGiaTonDauKy = 0, donGiaNhapTrongKy = 0, donGiaXuatTrongKy = 0, donGiaTonCuoiKy = 0
 
                 if(Number(item.klKcNoDauKy + item.klNoDauKy - item.klKcCoDauKy - item.klCoDauKy) != 0){

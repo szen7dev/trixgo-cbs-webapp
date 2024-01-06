@@ -5,6 +5,13 @@ export interface Goods {
     name: string;
     modifyAt: string,
     description: string | null;
+    sign: string | null;
+    unit: string | null;
+    note: string | null;
+    convert: number
+    unitprice: string | null;
+    userUpdate: string | null;
+    convertQuantity: number
 }
 
 export type GoodsQueryPayload = QueryParam & {

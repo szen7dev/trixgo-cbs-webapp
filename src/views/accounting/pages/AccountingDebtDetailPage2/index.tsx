@@ -54,10 +54,7 @@ export const AccountingDebtDetailPage2: FC = () => {
     },
     isFetchList: true
   })
-  // console.log(params.accountID)
-  // console.log(params.contactID)
-  // console.log(dataAll?.arrCombine)
-
+  
   const accountId = params.accountID
   useEffect(() => {
     if(!accountId) return

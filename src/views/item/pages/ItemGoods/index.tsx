@@ -6,12 +6,12 @@ import moment from "moment";
 import { toast } from "react-toastify";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { read, utils } from 'xlsx';
+import { formatNumberMoney, convertDisplayDate } from "utils/cmcs";
 
 /*=====2.CSS=====*/
 import styles from "views/support/styles/support.module.css";
 
 /*=====3.ICONS=====*/
-import DeleteIcon from "assets/images/icons8-remove.svg";
 import iconPencil from 'assets/images/icons8-pencil-96 1.png';
 
 /*=====4.PAGES/COMPONENTS=====*/
@@ -23,7 +23,6 @@ import { Storage } from "typings/items";
 
 /*=====6.HOOKS/APIS=====*/
 import { useModal } from "services/hooks/useModal";
-import { useStorage } from "services/hooks/items/useStorage";
 import { useGoods } from "services/hooks/items/useGoods";
 
 /*=====7.OTHER=====*/
@@ -43,20 +42,29 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
         unit: '',
         unitprice: 0,
         description: '',
-        note: ''
-    });
+        note: '',
+        convert: '',
+        convertQuantity: 1,
+    })
 
     const {
-        deleteAsync,
-        list: listStorages,
+        list: listGoods,
         hasNextPage,
         refetch,
         fetchNextPage,
         totalRecord
     } = useGoods({
-        params: { keyword, isListParentOfListChilds: "1", parentID }, // Khi keyword thay đổi giá trị => API thay đổi data => refretch kết quả
+        params: { 
+            keyword, 
+            isListParentOfListChilds: "1", 
+            parentID,
+            // populates: JSON.stringify({
+            //     path: 'contract image parent',
+            //     select: '_id name sign path'
+            // })
+        },
         isFetchList: true
-    });
+    })
 
     // Reset form
     const clearData = () => {
@@ -90,7 +98,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, name, sign, unit, unitprice, description, note } = newListIDChecked[0];
+            const { _id, name, sign, unit, unitprice, description, note, convert, convertQuantity } = newListIDChecked[0];
             setInitialValues({
                 goodsID: _id,
                 name,
@@ -98,7 +106,9 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                 unit,
                 unitprice,
                 description,
-                note
+                note,
+                convert,
+                convertQuantity
             });
         } else {
             clearData();
@@ -112,38 +122,14 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
     }, [itemsChecked]);
 
     const getStateCheckedAll = useCallback(() => {
-        return itemsChecked.length == listStorages.length;
+        return itemsChecked.length == listGoods.length;
     }, [itemsChecked]);
 
     const onClickCheckAll = () => {
-        if (itemsChecked.length == listStorages.length) {
+        if (itemsChecked.length == listGoods.length) {
             setItemsChecked([]);
         } else {
-            setItemsChecked(listStorages);
-        }
-    };
-
-    // Xóa 1 hoặc nhiều mẩu tin
-    const handleConfirmDelete = async () => {
-        try {
-            const ids = itemsChecked.map(item => item._id);
-            const { error, data } = await deleteAsync(ids);
-
-            if (error) {
-                return toast.warn(data?.message);
-            }
-
-            toast.success('Xoá dữ liệu thành công', { autoClose: 1500 });
-            closeModal();
-            clearData();
-            refetch();
-            setItemsChecked([]);
-        } catch (error) {
-            if (typeof error === "string") {
-                toast.error(error);
-            } else if (error instanceof Error) {
-                toast.error(error.message);
-            }
+            setItemsChecked(listGoods);
         }
     }
 
@@ -169,9 +155,9 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
 
         openModal(
             <div
-                className={"inline-block w-[521px] h-[300px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
+                className={"inline-block w-[521px] h-[400px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "500px",
+                    height: "550px",
                 }}
             >
                 <ModalCreateOrUpdateGoods
@@ -293,24 +279,6 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                                 <img src={iconPencil} alt="icon pencil" />
                             </button>
                         ) : ''}
-
-                        {/* Xóa 1 hoặc nhiều */}
-                        {itemsChecked.length ? (
-                            <button
-                                onClick={() =>
-                                    openModal(
-                                        <div
-                                            className={
-                                                "inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
-                                            }
-                                        >
-                                            <ModalConfirm onConfirm={handleConfirmDelete} />
-                                        </div>
-                                    )
-                                }>
-                                <img src={DeleteIcon} alt="Delete" />
-                            </button>
-                        ) : ''}
                     </div>
                     <div className="flex items-center">
                         <button
@@ -344,41 +312,41 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                                 Nội dung
                             </div>
                         </th>
-                        <th className="w-1/6 py-1">
+                        <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Mã hiệu
                             </div>
                         </th>
-                        <th className="w-1/6 py-1">
+                        <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Đơn vị
+                                Đơn vị tính
                             </div>
                         </th>
-                        <th className="w-1/6 py-1">
+                        <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Đơn giá
                             </div>
                         </th>
-                        <th className={cn("py-1 font-normal", styles.theadTwelvePercent)}>
+                        <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Mô tả
+                                Link với danh mục
                             </div>
                         </th>
-                        <th className={cn("py-1 font-normal", styles.theadTwelvePercent)}>
+                        <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                               Ghi chú
+                                Định mức chuyển đổi
                             </div>
                         </th>
-                        <th className="w-1/12 py-1 font-normal">
+                        <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Cập nhật lần cuối
+                                Ghi chú
                             </div>
                         </th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    {listStorages.length ? listStorages.map((item: any) => (
+                    {listGoods.length ? listGoods.map((item: any) => (
                         <tr key={item._id} className="border-b border-primary-border h-10">
                             <td className="py-1 px-2 text-center">
                                 <input
@@ -389,18 +357,26 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                                 />
                             </td>
                             <td className="py-1 px-2">
-                                <Link to={`/item/storage/${item._id}`}>
+                                <Link to={`/item/goods/${item._id}`}>
                                     {item.amountChilds>0? <b>{item?.name}({item.amountChilds})</b>: item.name }
                                 </Link>
                                 <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
+                                <p><i>{item.modifyAt ? moment(item.modifyAt).format('DD/MM/YYYY HH:mm') : ''} - {item?.userUpdate?.fullname}</i></p>
                             </td>
                             <td className="py-1 px-2">{item?.sign}</td>
                             <td className="py-1 px-2">{item?.unit}</td>
-                            <td className="py-1 px-2">{item?.unitprice}</td>
-                            <td className="py-1 px-2">{item?.description}</td>
-                            <td className="py-1 px-2">{item?.note}</td>
+                            <td className="py-1 px-2 text-right">
+                                {formatNumberMoney(item?.unitprice)}
+                            </td>
                             <td className="py-1 px-2">
-                               {item.modifyAt ? moment(item.modifyAt).format(' HH:mm - DD/MM/YYYY') : ''} - {item?.userUpdate?.bizfullname || "Anonymous"}
+                                {item?.convert?.name} -  {item?.convert?.unit}
+                            </td>
+                            <td className="py-1 px-2 text-right">
+                                {formatNumberMoney(item?.convertQuantity)}
+                            </td>
+                            <td className="py-1 px-2">
+                                {item?.description}
+                                <p className="text-primary-gray text-[12px]"><i>{item.note}</i></p>
                             </td>
                         </tr>
                     )) : <></>}
@@ -411,7 +387,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                 <div className="w-full flex justify-center my-5">
                     <button onClick={fetchNextPage}>
                         <span className="text-primary">
-                            {`Xem thêm (${totalRecord - listStorages.length})`}
+                            {`Xem thêm (${totalRecord - listGoods.length})`}
                         </span>
                     </button>
                 </div>

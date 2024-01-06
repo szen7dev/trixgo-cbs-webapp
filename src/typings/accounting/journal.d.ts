@@ -12,6 +12,14 @@ export interface DocumentProps extends Omit<DocumentInserPayload, 'parentID' | '
     forward: number;
     cancel: number;
     createAt: string;
+    linkFunda?: {
+        _id: string;
+        name: string;
+    }
+    linkVoucher?: {
+        _id: string;
+        name: string;
+    }
     funda?: {
         _id: string;
         name: string;

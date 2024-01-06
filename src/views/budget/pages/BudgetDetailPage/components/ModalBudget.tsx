@@ -63,8 +63,8 @@ export const ModalBudget: FC<Props> = ({ initValues, isToggle, toggle, onConfirm
       unit: values.unit,
       quantity: values.quantity,
       unitPrice: values.unitPrice,
-      forecastAmount: values.forecastAmount,
       forecastQuantity: values.forecastQuantity,
+      forecastUnitPrice: values.forecastUnitPrice,
       note: values.note,
     }
 
@@ -261,13 +261,13 @@ export const ModalBudget: FC<Props> = ({ initValues, isToggle, toggle, onConfirm
                   <p className="text-xs mb-2">Dự kiến đơn giá khi hoàn tất</p>
                   <Field
                     type="number"
-                    name="forecastAmount"
+                    name="forecastUnitPrice"
                     className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                     placeholder="Dự kiến đơn giá khi hoàn tất"
                     onBlur={handleBlur}
                   />
                   <ErrorMessage
-                    name="forecastAmount"
+                    name="forecastUnitPrice"
                     component="div"
                     className="font-normal text-xs text-negative mt-2"
                   />
@@ -300,5 +300,5 @@ export const ModalBudget: FC<Props> = ({ initValues, isToggle, toggle, onConfirm
         </main>
       </div>
     </ModalContainer>
-  );
-};
+  )
+}

@@ -419,6 +419,8 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                         </NavLink>
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.funda?.name}</p>
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}</p>
+                        <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkFunda?.name}</p>
+                        {/* <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkVoucher?.name}</p> */}
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.customer?.name}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
@@ -449,6 +451,8 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                         </NavLink>
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.funda?.name}</p>
                         <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}</p>
+                        <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkFunda?.name}</p>
+                        {/* <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkVoucher?.name}</p> */}
                       </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.customer?.name}</td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
@@ -483,6 +487,8 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                       </NavLink>
                       <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.funda?.name}</p>
                       <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.userCreate?.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}</p>
+                      <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkFunda?.name}</p>
+                        {/* <p className={"mt-1 text-gray-500 text-gray-500 text-[12px]"}>{item?.linkVoucher?.name}</p> */}
                     </td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.customer?.name}</td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">

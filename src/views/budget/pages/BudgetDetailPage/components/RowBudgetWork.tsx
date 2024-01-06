@@ -52,13 +52,13 @@ export const RowBudgetWork: FC<Props> = memo(({ row, index, indexGroup, show, on
 				{formatNumberMoney(row.impleAmount)}
 			</td>
 			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
-				{formatNumberMoney(row.forecastQuantity)}
+				{formatNumberMoney(row.quantity - row.impleQuantity)}
 			</td>
 			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
-				{formatNumberMoney(row.forecastUnitPrice)}
+				{Number(row.quantity - row.impleQuantity) != 0 ? formatNumberMoney((row.amount - row.impleAmount/(row.quantity - row.impleQuantity))) : 0}
 			</td>
 			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
-				{formatNumberMoney(row.forecastAmount)}
+				{formatNumberMoney(row.amount - row.impleAmount)}
 			</td>
 			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-left">
 				{row.note}

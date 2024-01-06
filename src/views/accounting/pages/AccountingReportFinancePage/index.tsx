@@ -179,7 +179,7 @@ const handleOnChangeDate = useCallback((date, input) => {
 
         <tbody className="">
           { 
-            dataAll?.arrCombine.map((item: any, index: any) => {
+            dataAll?.arrCombine?.map((item: any, index: any) => {
               if(item?.amountChilds > 0){
                 return (
                   <tr key={index} className="border-b border-primary-border h-10">

@@ -29,6 +29,10 @@ const mappingData = (data: any, isDataPayLoad = false) => {
 
     funda: isDataPayLoad ? data?.funda?.value : convertInitialValueDropdown(data?.funda || ''),
     fundaID: data?.funda?.value,
+    linkFunda: isDataPayLoad ? data?.linkFunda?.value : convertInitialValueDropdown(data?.linkFunda || ''),
+    linkFundaID: data?.linkFunda?.value,
+    warehouse: isDataPayLoad ? data?.warehouse?.value : convertInitialValueDropdown(data?.warehouse || ''),
+    warehouseID: data?.warehouse?.value,
     customer: isDataPayLoad ? data?.customer?.value : convertInitialValueDropdown(data?.customer || ''),
     customerID: data?.customer?.value,
     contract: isDataPayLoad ? data?.contract?.value : convertInitialValueDropdown(data?.contract || ''),
@@ -109,7 +113,7 @@ export const CreateNewTicket: FC<any> = ({ onFinish, title, idEdit = '', isEdit 
         `${APP_ACCOUNTING_VOUCHER}?voucherID=${id}`, {
         params: {
           populates: {
-            "path": "funda customer contract ipc subtype",
+            "path": "funda linkFunda customer contract ipc subtype warehouse",
             "select": "name description",
           }
         }
