@@ -426,28 +426,28 @@ export const BudgetDetailPage: FC = () => {
 									{budgetItem.unit}
 								</th>
 								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-right">
-									{formatNumberMoney(budgetItem.quantity)}
+									
 								</th>
 								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-right">
-									{formatNumberMoney(budgetItem.unitPrice)}
+									
 								</th>
 								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-right">
 									{formatNumberMoney(budgetItem.amount)}
 								</th>
 								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-right">
-									{formatNumberMoney(budgetItem.impleQuantity)}
+									
 								</th>
 								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-right">
-									{formatNumberMoney(budgetItem.impleUnitPrice)}
+									
 								</th>
 								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-right">
 									{formatNumberMoney(budgetItem.impleAmount)}
 								</th>
 								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-right">
-									{formatNumberMoney(budgetItem.forecastQuantity)}
+									
 								</th>
 								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-right">
-									{formatNumberMoney(budgetItem.forecastUnitPrice)}
+									
 								</th>
 								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-right">
 									{formatNumberMoney(budgetItem.forecastAmount)}
@@ -475,33 +475,7 @@ export const BudgetDetailPage: FC = () => {
 						</Fragment>
 					)) : <></>}
 				</tbody>
-
-				{/* <tfoot>
-					<tr className="text-right">
-						<th className="bg-gray-300 px-1.5 z-10">
-						</th>
-						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">
-						</th>
-						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2 text-left">Tổng</th>
-						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">0</th>
-						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">0</th>
-						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">0</th>
-						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">0</th>
-						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">0</th>
-						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">0</th>
-						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">0</th>
-						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2"></th>
-					</tr>
-				</tfoot> */}
 			</table>
-
-			{/* <Paginate
-				totalPages={totalPage}
-				totalRecord={totalRecord}
-				hasNextPage
-				prevPageAction={fetchPreviousPage}
-				nextPageAction={fetchNextPage}
-			/> */}
 
 			{hasNextPage && (
                 <div className="w-full flex justify-center my-5">
@@ -520,5 +494,5 @@ export const BudgetDetailPage: FC = () => {
 				toggle={toggleModal}
 			/>
 		</main>
-	);
-};
+	)
+}

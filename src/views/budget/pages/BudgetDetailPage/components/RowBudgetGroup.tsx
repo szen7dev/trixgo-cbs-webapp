@@ -27,7 +27,7 @@ type Props = {
 export const RowBudgetGroup: FC<Props> = memo(({ row, index, show, onAdd, onUpdate, onUpdateWork, fetchDataBudgetWork, listBudgetWork }) => {
 	const [groupsIDToggle, setGroupsIDToggle] = useState<string[]>([]);
 	const [groupID, setGroupID] = useState('');
-	console.log({ listBudgetWork });
+	// console.log({ listBudgetWork });
 
 	const toggleGroups = (groupID: string) => {
 		const isShow = groupsIDToggle.includes(groupID);
@@ -78,28 +78,28 @@ export const RowBudgetGroup: FC<Props> = memo(({ row, index, show, onAdd, onUpda
 					{row.unit}
 				</th>
 				<th className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
-					{formatNumberMoney(row.quantity)}
+					
 				</th>
 				<th className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
-					{formatNumberMoney(row.unitPrice)}
+					
 				</th>
 				<th className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
 					{formatNumberMoney(row.amount)}
 				</th>
 				<th className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
-					{formatNumberMoney(row.impleQuantity)}
+					
 				</th>
 				<th className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
-					{formatNumberMoney(row.impleUnitPrice)}
+					
 				</th>
 				<th className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
 					{formatNumberMoney(row.impleAmount)}
 				</th>
 				<th className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
-					{formatNumberMoney(row.forecastQuantity)}
+					
 				</th>
 				<th className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
-					{formatNumberMoney(row.forecastUnitPrice)}
+					
 				</th>
 				<th className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
 					{formatNumberMoney(row.forecastAmount)}
