@@ -29,6 +29,8 @@ const mappingData = (data: any, isDataPayLoad = false) => {
 
     funda: isDataPayLoad ? data?.funda?.value : convertInitialValueDropdown(data?.funda || ''),
     fundaID: data?.funda?.value,
+    linkFunda: isDataPayLoad ? data?.linkFunda?.value : convertInitialValueDropdown(data?.linkFunda || ''),
+    linkFundaID: data?.linkFunda?.value,
     customer: isDataPayLoad ? data?.customer?.value : convertInitialValueDropdown(data?.customer || ''),
     customerID: data?.customer?.value,
     contract: isDataPayLoad ? data?.contract?.value : convertInitialValueDropdown(data?.contract || ''),

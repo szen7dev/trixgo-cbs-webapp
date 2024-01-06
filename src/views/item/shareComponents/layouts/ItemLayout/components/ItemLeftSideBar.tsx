@@ -47,7 +47,7 @@ export const ItemLeftSideBar: FC = () => {
               src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
               alt="Menu item"
             />
-            <span className={"flex-1 ml-2 text-left text-[14px]"}>Hoàng hóa nguyên liệu</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Hàng hóa nguyên liệu</span>
           </NavLink>
           <NavLink
             to="/item/fundas"

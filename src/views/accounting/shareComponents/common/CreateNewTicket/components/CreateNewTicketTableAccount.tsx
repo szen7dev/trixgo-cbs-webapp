@@ -135,7 +135,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
 											<DropdownSearchable
 												classNameInput={"border-b border-gray-300 rounded-none"}
-												className={"w-[150px]"}
+												className={"w-[125px]"}
 												id="ticket-type" placeholder="TK nợ"
 												allowClearValueSingleInput={true}
 												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.debit`, value)}
@@ -170,7 +170,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
 											<DropdownSearchable
 												classNameInput={"border-b border-gray-300 rounded-none"}
-												className={"w-[150px]"}
+												className={"w-[125px]"}
 												id="ticket-type" placeholder="TK có"
 												allowClearValueSingleInput={true}
 												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.credit`, value)}
@@ -203,7 +203,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
 											<DropdownSearchable
 												classNameInput={"border-b border-gray-300 rounded-none"}
-												className={"w-[150px]"}
+												className={"w-[125px]"}
 												id="ticket-type" placeholder="Mã khách nợ"
 												showTriangle={false}
 												allowClearValueSingleInput={true}
@@ -236,7 +236,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
 											<DropdownSearchable
 												classNameInput={"border-b border-gray-300 rounded-none"}
-												className={"w-[150px]"}
+												className={"w-[125px]"}
 												id="ticket-type" placeholder="Mã khách có"
 												showTriangle={false}
 												allowClearValueSingleInput={true}
@@ -269,7 +269,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
 											<DropdownSearchable
 												classNameInput={"border-b border-gray-300 rounded-none"}
-												className={"w-[150px]"}
+												className={"w-[125px]"}
 												id="ticket-type" placeholder="Sản phẩm/Hàng hóa"
 												showTriangle={false}
 												allowClearValueSingleInput={true}
@@ -297,7 +297,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
 											<DropdownSearchable
 												classNameInput={"border-b border-gray-300 rounded-none"}
-												className={"w-[130px]"}
+												className={"w-[125px]"}
 												id="ticket-type" placeholder="Kho bãi"
 												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.warehouse`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.warehouse`, '')}
@@ -355,7 +355,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
 											<DropdownSearchable
 												classNameInput={"border-b border-gray-300 rounded-none"}
-												className={"w-[130px]"}
+												className={"w-[125px]"}
 												id="ticket-type" placeholder="Hợp đồng"
 												showTriangle={false}
 												allowClearValueSingleInput={true}
@@ -383,8 +383,8 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
 											<DropdownSearchable
 												classNameInput={"border-b border-gray-300 rounded-none"}
-												className={"w-[130px]"}
-												id="ticket-type" placeholder="Khoản mục ngân sách"
+												className={"w-[125px]"}
+												id="ticket-type" placeholder="Ngân sách"
 												showTriangle={false}
 												allowClearValueSingleInput={true}
 												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.budgetWork`, value)}

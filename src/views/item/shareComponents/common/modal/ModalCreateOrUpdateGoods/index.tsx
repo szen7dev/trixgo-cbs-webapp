@@ -1,10 +1,9 @@
-import React, { FC, useState } from "react";
-
+import React, { UIEvent, FC, useState } from "react";
+import debounce from "lodash/debounce";
 import { useModal } from "services/hooks/useModal";
-import { useStorage } from "services/hooks/items/useStorage";
 import { useGoods } from "services/hooks/items/useGoods";
 import { toast } from "react-toastify";
-import { ModalProps } from 'typings/items/doctype';
+import { DropdownSearchable, Popover } from "shareComponents/common";
 
 export const ModalCreateOrUpdateGoods: FC<any> = ({
   modalType,
@@ -16,18 +15,43 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
     unit: '',
     unitprice: 0,
     description: '',
-    note: ''
+    note: '',
+    convert: '',
+    convertQuantity: 1,
   }
 }) => {
-  const { closeModal } = useModal();
-  const [formData, setFormData] = useState(initialValues);
-  const { insertAsync, updateAsync } = useGoods({});
+  const { closeModal } = useModal()
+  const [formData, setFormData] = useState(initialValues)
+  // const { insertAsync, updateAsync } = useGoods({})
+
+  const handleScroll = (e: UIEvent<HTMLDivElement>) => {
+    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
+    const bottom = scrollHeight - scrollTop >= clientHeight - 10;
+    if (!bottom || !hasNextPage) return;
+
+    fetchNextPage();
+}
+
+  const [keyword, setKeyword] = useState('');
+
+  const {
+    list: listGoods,
+    hasNextPage,
+    refetch,
+    fetchNextPage,
+    totalRecord,
+    insertAsync, 
+    updateAsync
+} = useGoods({
+    params: { keyword },
+    isFetchList: true
+})
 
   const handleSubmit = async () => {
     if(!formData.name) {
       return toast.warn('Vui lòng nhập nội dung');
     }
-    const formDataFormat = { ...formData, unitprice: +formData.unitprice }
+    const formDataFormat = { ...formData, unitprice: +formData.unitprice, convertQuantity: +formData.convertQuantity }
     try {
       // Handle api here!
       switch (modalType) {
@@ -80,7 +104,7 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
 
   return (
     <main className="relative h-full">
-      <header className="px-10 py-5 flex items-center justify-between">
+      <header className="px-5 py-1 flex items-center justify-between">
         <p className="font-bold text-xl">
           {modalType === 'create' ? 'Tạo mới' : 'Cập nhật'}
         </p>
@@ -92,7 +116,7 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
         />
       </header>
 
-      <section className="px-10 py-2">
+      <section className="px-5 py-2">
         <input
           type="text"
           placeholder="Nhập nội dung"
@@ -103,7 +127,7 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
         />
       </section>
 
-      <section className="px-10 mt-2">
+      <section className="px-5 mt-2">
         <input
           type="text"
           placeholder="Nhập mã hiệu"
@@ -114,7 +138,7 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
         />
       </section>
 
-      <section className="px-10 mt-2">
+      <section className="px-5 mt-2">
         <input
           type="text"
           placeholder="Nhập đơn vị"
@@ -125,7 +149,7 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
         />
       </section>
 
-      <section className="px-10 mt-2">
+      <section className="px-5 mt-2">
         <input
           type="number"
           placeholder="Nhập đơn giá"
@@ -136,7 +160,7 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
         />
       </section>
 
-      <section className="px-10 mt-2">
+      <section className="px-5 mt-2">
         <input
           type="text"
           placeholder="Nhập mô tả"
@@ -147,7 +171,7 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
         />
       </section>
 
-      <section className="px-10 mt-2">
+      <section className="px-5 mt-2">
         <input
           type="text"
           placeholder="Nhập ghi chú"
@@ -158,7 +182,61 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
         />
       </section>
 
-      <footer className="absolute right-0 bottom-0 px-10 py-5">
+      <section className="px-5 mt-2">
+        <DropdownSearchable
+            onchangeValue={(value: any) => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    convertID: value?.id
+                }))
+            }}
+            onClearData={() => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    convertID: ""
+                }))
+            }}
+            onSearchInputChange={debounce((value: any) => setKeyword(value), 600)}
+            onScroll={handleScroll}
+            className="w-full mt-2 rounded-md border border-primary-border py-1 placeholder-primary-gray bg-cbs-table-header"
+            placeholder="Tìm kiếm hàng hóa nguyên liệu"
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            showTriangle={false}
+            maxWidthInput="max-w-full"
+            renderSelectedItem={(item: any) => (
+                <div className="max-w-full">
+                    <p className={"truncate"}>{item.text}</p>
+                </div>
+            )}
+            data={listGoods.map((goods) => ({
+                label: `${goods.name}`,
+                value: goods._id,
+            }))}
+            initialValue={{
+              label: `${initialValues?.convert?.name}`,
+              value: initialValues?.convert?._id
+            }}
+            formatItem={{
+                id: "value",
+                text: "label",
+            }}
+            inlineSearch={true}
+        />
+      </section>
+
+      <section className="px-5 mt-2">
+        <input
+          type="number"
+          placeholder="Nhập định mức chuyển đổi"
+          name="convertQuantity"
+          className="h-12 w-full border border-primary-border outline-none px-8"
+          defaultValue={formData?.convertQuantity}
+          onChange={onChange}
+        />
+      </section>
+
+      <footer className="absolute right-0 bottom-0 px-5 py-1">
         <button className="bg-primary text-primary-light text-base w-24 h-8 rounded"
           onClick={handleSubmit}>
           Xác nhận

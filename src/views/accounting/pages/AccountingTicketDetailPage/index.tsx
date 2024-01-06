@@ -5,7 +5,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { VOUCHER_TYPES, DATE_FORMAT_TIME } from "apis/localdb/index";
 import { Paginate } from "shareComponents/common";
 import { useJournalDetailList, useUpdateAccountingVoucherMutation } from "services/hooks/accounting/useAccountingVoucher";
-import { formatNumberMoney, convertDisplayDate } from "utils/cmcs"
+import { formatNumberMoney, convertDisplayDate } from "utils/cmcs";
 import { CreateNewTicket } from "views/accounting/shareComponents/common";
 import { useModal } from "services/hooks/useModal";
 

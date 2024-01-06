@@ -320,4 +320,4 @@ const FunctionalTab: FC = () => {
 	);
 };
 
-export default FunctionalTab;
+export default FunctionalTab

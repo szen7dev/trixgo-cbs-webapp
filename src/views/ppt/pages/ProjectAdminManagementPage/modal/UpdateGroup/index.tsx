@@ -209,54 +209,6 @@ const UpdateGroup: FC<Props> = ({ item, projectID, onConfirm }) => {
                     }}
                     inlineSearch={true}
                 />
-
-                {/* <div className='relative border-cbs-border border-0.5 flex items-center mt-2 hidden'>
-                    <SearchIcon className='absolute left-3 w-4 h-4' />
-                    <input
-                        type="text"
-                        placeholder='Tìm kiếm hợp đồng thuộc dự án'
-                        className='pl-9 py-3 text-medium w-full focus:outline-none bg-cbs-table-header'
-                        onChange={debounce((e: any) => setKeyword(e.target.value), 600)}
-                    />
-                </div>
-
-                <div className='flex items-center mt-4 mb-4 ml-2 hidden'>
-                    <input
-                        type='checkbox'
-                        className='cbs-checkbox inline-block'
-                        checked={getStateCheckedAll()}
-                        onChange={onClickCheckAll}
-                    />
-                    <span className="font-normal ml-2">Chọn tất cả</span>
-                </div>
-
-                <div className='text-small overflow-auto hidden' style={{ height: '470px' }}>
-                    <table>
-                        <tbody className='overflow-y-auto'>
-                            {(listContracts && !!listContracts.length) &&
-                                listContracts.map((item: any) =>
-                                    <tr key={item._id}>
-                                        <td className='px-1.5 align-middle'>
-                                            <input
-                                                type='checkbox'
-                                                className='cbs-checkbox'
-                                                checked={getStateChecked(item._id)}
-                                                onChange={onClickCheckButton.bind(null, item._id)}
-                                            />
-                                        </td>
-                                        <td>
-                                            <div className='flex items-center py-1'>
-                                                <div>
-                                                    {item.name}
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                )
-                            }
-                        </tbody>
-                    </table>
-                </div> */}
             </div>
 
             <footer className="absolute right-0 bottom-0 px-10 py-5">

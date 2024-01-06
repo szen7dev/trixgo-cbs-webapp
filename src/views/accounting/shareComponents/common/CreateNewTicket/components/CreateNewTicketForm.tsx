@@ -21,7 +21,6 @@ import {
 } from "services/hooks/useHuman";
 
 const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
-	console.log(initialValues)
 	const { setFieldValue, values } = formik;
 
 	const [fundaKeyword, setFundaKeyword] = useState(
@@ -78,19 +77,16 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 
 	}, [values.contract.value])
 
-	// console.log({contractId})
-	// console.log(values)
-
 	return (
 		<>
 			<div className={"px-6 pb-2 border-b border-gray-800 income-form-modal"}>
 				<div className={"flex py-1 border-b"}>
-					<div className={"w-1/4 flex items-center"}>
-						<div className={"text-left text-gray-500 flex items-center mr-2"}>Loại phiếu (*)</div>
+					<div className={"w-1/8 flex items-center"}>
+						<div className={"text-left text-gray-500 flex items-center mr-2"}>Phiếu (*)</div>
 						<DropdownSearchable
 							onchangeValue={(value) => setFieldValue("type", value)}
 							className={"flex-1"}
-							placeholder="Loại phiếu"
+							placeholder="Phiếu"
 							isMultiple={false}
 							allowClearValueSingleInput={true}
 							onClearData={() => setFieldValue("type", '')}
@@ -174,13 +170,54 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 						/>
 					</div>
 					<div className={"w-1/4 flex items-center"}>
+						<div className={"text-left text-gray-500 flex items-center mr-2"}>Nội bộ (*)</div>
+						<DropdownSearchable
+							onchangeValue={(value: any) => setFieldValue("linkFunda", value)}
+							className={"flex-1"}
+							placeholder="Cơ sở nội bộ"
+							isMultiple={false}
+							allowClearValueSingleInput={true}
+							onClearData={() => setFieldValue("linkFunda", '')}
+							showTriangle={false}
+							maxWidthInput="max-w-none"
+							renderSelectedItem={(item) => {
+								return (
+									<div className="flex">
+										<Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 top-0 w-[330px] h-fit whitespace-normal" >
+											<p className="text-1-line-clamp">{`${item.text}`}</p>
+										</Popover>
+									</div>
+								)
+							}}
+							onSearchInputChange={debounce(
+								(value) => setFundaKeyword(value),
+								500
+							)}
+							initialValue={initialValues?.linkFunda}
+							data={listFunda.map((item: any) => ({
+								label: item.name,
+								value: item._id,
+							}))}
+							formatItem={{
+								id: "value",
+								text: "label",
+							}}
+							inlineSearch={true}
+						/>
+						<ErrorMessage
+							name="linkFunda"
+							component="span"
+							className="font-normal leading-7 text-sm text-negative"
+						/>
+					</div>
+					<div className={"w-1/8 flex items-center"}>
 						<div className={"w-1/3 flex items-center"}>
 							<Field type="radio" name="vat" value={1} className={"form-check-input mt-0"} onChange={() => setFieldValue('vat', 1)} />
-							<label htmlFor="vat-type-1" className={"text-left ml-3"}>VAT mua vào</label>
+							<label htmlFor="vat-type-1" className={"text-left ml-3"}>VAT vào</label>
 						</div>
 						<div className={"w-1/3 flex items-center"}>
 							<Field type="radio" name="vat" value={2} className={"form-check-input mt-0"} onChange={() => setFieldValue('vat', 2)} />
-							<label htmlFor="vat-type-2" className={"text-left ml-3"}>VAT bán ra</label>
+							<label htmlFor="vat-type-2" className={"text-left ml-3"}>VAT ra</label>
 						</div>
 						<div className={"w-1/3 flex items-center"}>
 							<Field type="radio" name="vat" value={0} className={"form-check-input mt-0"} onChange={() => setFieldValue('vat', 0)} />
