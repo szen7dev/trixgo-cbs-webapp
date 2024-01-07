@@ -192,7 +192,7 @@ async function fetchListContact(params: any) {
     const { data } = await API.get(
         `${ITEM_URL}/contacts`, {
         params: {
-            select: 'name type company',
+            select: 'name type company phone taxid sign',
             populates: {
                 path: 'company',
                 select: 'sign name'
