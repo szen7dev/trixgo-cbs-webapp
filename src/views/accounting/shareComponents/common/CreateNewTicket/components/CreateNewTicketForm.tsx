@@ -282,7 +282,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 							)}
 							initialValue={initialValues?.customer}
 							data={listCustomer.map((item: any) => ({
-								label: item.name,
+								label: `${item.name}-${item.phone}`,
 								value: item._id,
 							}))}
 							formatItem={{
