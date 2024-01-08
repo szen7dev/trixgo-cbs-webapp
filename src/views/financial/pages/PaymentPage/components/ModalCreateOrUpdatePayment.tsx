@@ -1,10 +1,9 @@
-import React, { UIEvent, FC, useState } from "react";
+import React, { FC, useState } from "react";
 import debounce from "lodash/debounce";
 import { useModal } from "services/hooks/useModal";
-import { useGoods } from "services/hooks/items/useGoods";
 import { useCashPayment } from "services/hooks/financial/useCashPayment";
 import { toast } from "react-toastify";
-import { DropdownSearchable, Popover } from "shareComponents/common";
+import { DropdownSearchable } from "shareComponents/common";
 import {
 	useQueryListContact,
 } from "services/hooks/cmcs/useContractIncome";
@@ -19,6 +18,7 @@ export const ModalCreateOrUpdatePayment: FC<any> = ({
     name: '',
     note: '',
     amount: 0,
+    payment: 0,
     active: 1,
   }
 }) => {
@@ -32,14 +32,6 @@ export const ModalCreateOrUpdatePayment: FC<any> = ({
 
   const { closeModal } = useModal()
   const [formData, setFormData] = useState(initialValues)
-
-  // const handleScroll = (e: UIEvent<HTMLDivElement>) => {
-  //   const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
-  //   const bottom = scrollHeight - scrollTop >= clientHeight - 10;
-  //   if (!bottom || !hasNextPage) return;
-
-  //   fetchNextPage();
-  // }
 
   const [keyword, setKeyword] = useState('');
 
@@ -55,7 +47,7 @@ export const ModalCreateOrUpdatePayment: FC<any> = ({
     if(!formData.name) {
       return toast.warn('Vui lòng nội dung');
     }
-    const formDataFormat = { ...formData, amount: +formData.amount, active: +formData.active}
+    const formDataFormat = { ...formData, amount: +formData.amount, payment: +formData.payment, active: +formData.active}
     try {
       // Handle api here!
       switch (modalType) {
@@ -177,7 +169,18 @@ export const ModalCreateOrUpdatePayment: FC<any> = ({
       <section className="px-5 mt-2">
         <input
           type="number"
-          placeholder="Giá trị"
+          placeholder="Giá trị thanh toán"
+          name="payment"
+          className="h-12 w-full border border-primary-border outline-none px-8"
+          defaultValue={formData?.payment}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-5 mt-2">
+        <input
+          type="number"
+          placeholder="Giá trị sử dụng"
           name="amount"
           className="h-12 w-full border border-primary-border outline-none px-8"
           defaultValue={formData?.amount}
@@ -199,7 +202,7 @@ export const ModalCreateOrUpdatePayment: FC<any> = ({
       <section className="px-5 mt-2">
         <input
           type="text"
-          placeholder="Trạng thá: 1-Có hiệu lực | 2-Hủy"
+          placeholder="Trạng thái: 1-Có hiệu lực | 2-Hủy"
           name="active"
           className="h-12 w-full border border-primary-border outline-none px-8"
           defaultValue={formData.active}

@@ -75,6 +75,7 @@ export const PaymentPage: FC = () => {
       name: '',
       note: '',
       amount: 0,
+      payment: 0,
       active: 1,
     })
 
@@ -120,12 +121,13 @@ export const PaymentPage: FC = () => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, name, note, amount, active, customer } = newListIDChecked[0];
+            const { _id, name, note, amount, payment, active, customer } = newListIDChecked[0];
             setInitialValues({
                 cashPaymentID: _id,
                 name,
                 note,
                 amount,
+                payment,
                 active,
                 customer,
             });
@@ -166,6 +168,7 @@ export const PaymentPage: FC = () => {
                 name: '',
                 note: '',
                 amount: 0,
+                payment: 0,
                 active: 1,
             };
         }
@@ -366,6 +369,11 @@ export const PaymentPage: FC = () => {
                       </th>
                       <th className="py-1">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
+                            Giá trị sử dụng
+                          </div>
+                      </th>
+                      <th className="py-1">
+                          <div className="border-r-2 border-gray-300 font-normal pl-2">
                               Ghi chú
                           </div>
                       </th>
@@ -400,6 +408,9 @@ export const PaymentPage: FC = () => {
                                 <p><i>{item.modifyAt ? moment(item.modifyAt).format('DD/MM/YYYY HH:mm') : ''} - {item?.userUpdate?.fullname}</i></p>
                             </td>
                             <td className="py-1 px-2 text-right">
+                                {formatNumberMoney(item?.payment)}
+                            </td>
+                            <td className="py-1 px-2 text-right">
                                 {formatNumberMoney(item?.amount)}
                             </td>
                             <td className="py-1 px-2">
@@ -412,50 +423,8 @@ export const PaymentPage: FC = () => {
                       )
                     })
                   }
-
-                  {/* {listPayment.length ? listPayment.map((item: any) => (
-                      <tr key={item._id} className="border-b border-primary-border h-10">
-                          <td className="py-1 px-2 text-center">
-                              <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  checked={getStateChecked(item._id)}
-                                  onChange={() => onClickCheckButton(item)}
-                              />
-                          </td>
-                          <td className="py-1 px-2">
-                              <p><i>{moment(item.date).format('DD/MM/YYYY')}</i></p>
-                          </td>
-                          <td className="py-1 px-2">
-                              {item?.customer?.name} - {item?.customer?.phone}
-                          </td>
-                          <td className="py-1 px-2">
-                              {item?.name}
-                              <p><i>{item.modifyAt ? moment(item.modifyAt).format('DD/MM/YYYY HH:mm') : ''} - {item?.userUpdate?.fullname}</i></p>
-                          </td>
-                          <td className="py-1 px-2 text-right">
-                              {formatNumberMoney(item?.amount)}
-                          </td>
-                          <td className="py-1 px-2">
-                              {item.note}
-                          </td>
-                          <td className="py-1 px-2">
-                              {(item.active == 1 ? "Hoạt động" : "Hủy")}
-                          </td>
-                      </tr>
-                  )) : <></>} */}
               </tbody>
           </table>
-
-          {/* {hasNextPage && (
-              <div className="w-full flex justify-center my-5">
-                  <button onClick={fetchNextPage}>
-                      <span className="text-primary">
-                          {`Xem thêm (${totalRecord - listPayment.length})`}
-                      </span>
-                  </button>
-              </div>
-          )} */}
       </main>
   )
 }
