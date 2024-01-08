@@ -66,8 +66,9 @@ export const AccountingDiaryPage: FC = () => {
   })
   const { exportExcelAsync } = useJournal({})
   
-  const handleExportExcel = async () => {
+  const handleExportExcel = async (param: any) => {
     try {
+        console.log('Clicked with parameter:', param);
           setStateExport({ isExporting: true })
           const { error, data } = await exportExcelAsync({ 
               filterParams: {
@@ -141,7 +142,7 @@ export const AccountingDiaryPage: FC = () => {
 
                     <div className={"mb-4"}>
                         <button className={"px-4 py-2 w-full text-left hover:bg-cbs-table-header"}
-                          onClick={handleExportExcel}
+                          onClick={() => handleExportExcel({option: 1})}
                         >
                             Tải excel
                         </button>

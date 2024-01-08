@@ -10,7 +10,7 @@ import LayoutSecondary from 'views/ppt/sharedComponents/layouts/LayoutSecondary'
 
 /*=====PAGES=====*/
 import {
-  DashboardPage,
+  PaymentPage,
   HomePage,
   CashFlowPage,
   CashFlowDetailPage,
@@ -28,8 +28,7 @@ const FinancialRouterV2: FC = () => {
       <FinancialLayoutV2>
         <Switch>
           <Route exact path={"/financial/home"} component={HomePage} />
-          <Route exact path={"/financial/dashboard"} component={DashboardPage} />
-
+          <Route exact path={"/financial/payment"} component={PaymentPage} />
           <Route path="/financial/(cashbook|cashbook-report|cashbook-other)">
             <LayoutPrimary
               pages={[
@@ -78,7 +77,7 @@ const FinancialRouterV2: FC = () => {
         </Switch>
       </FinancialLayoutV2>
     </ProtectedRoute>
-  );
-};
+  )
+}
 
 export default FinancialRouterV2;

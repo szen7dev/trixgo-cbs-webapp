@@ -5,7 +5,8 @@ import { NavLink } from "react-router-dom";
 /*=====2.CSS=====*/
 
 /*=====3.ICONS=====*/
-import iconFolder from "assets/images/icons8-application-window-100.png";
+// import iconFolder from "assets/images/icons8-application-window-100.png";
+import iconFolder from "assets/images/bullet.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
 
@@ -39,7 +40,7 @@ export const FinancialLeftSideBar: FC = () => {
             className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
           >
             <img
-              width={'20px'}
+              width={'7px'}
               src={iconFolder}
               alt="Menu item"
             />
@@ -58,7 +59,7 @@ export const FinancialLeftSideBar: FC = () => {
                       className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full text-primary-gray"
                     >
                       <img
-                        width={'20px'}
+                        width={'7px'}
                         src={iconFolder}
                         alt="Menu item"
                       />

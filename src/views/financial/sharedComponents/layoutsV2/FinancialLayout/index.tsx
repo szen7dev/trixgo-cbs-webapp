@@ -6,10 +6,10 @@ import cn from "classnames";
 
 /*=====3.ICONS=====*/
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
+
 /*=====4.PAGES/COMPONENTS=====*/
 import { LeftNavigate, MainHeaderV2 } from "shareComponents/common";
 import { FinancialLeftSideBar } from './components';
-// import { HomeHeaderContent } from "shareComponents/layouts/HomeLayout/components";
 
 /*=====5.TYPINGS=====*/
 
