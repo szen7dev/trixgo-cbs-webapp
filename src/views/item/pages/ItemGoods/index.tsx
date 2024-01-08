@@ -41,6 +41,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
         sign: '',
         unit: '',
         unitprice: 0,
+        sellingUnitprice: 0,
         description: '',
         note: '',
         convert: '',
@@ -98,13 +99,14 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, name, sign, unit, unitprice, description, note, convert, convertQuantity } = newListIDChecked[0];
+            const { _id, name, sign, unit, unitprice, sellingUnitprice, description, note, convert, convertQuantity } = newListIDChecked[0];
             setInitialValues({
                 goodsID: _id,
                 name,
                 sign,
                 unit,
                 unitprice,
+                sellingUnitprice,
                 description,
                 note,
                 convert,
@@ -148,6 +150,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                 sign: '',
                 unit: '',
                 unitprice: 0,
+                sellingUnitprice: 0,
                 description: '',
                 note: ''
             };
@@ -184,8 +187,6 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
             setStateExport({ isExporting: true });
             const { error, data } = await downloadTemplateExcelAsync({
                 filterParams: {  
-                    // ...fromToDate,
-                    // datahubContactsID,
                 }
             });
 
@@ -324,7 +325,12 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                         </th>
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Đơn giá
+                                Đơn giá nhập
+                            </div>
+                        </th>
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Đơn giá xuất bán
                             </div>
                         </th>
                         <th className="py-1">
@@ -367,6 +373,9 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                             <td className="py-1 px-2">{item?.unit}</td>
                             <td className="py-1 px-2 text-right">
                                 {formatNumberMoney(item?.unitprice)}
+                            </td>
+                            <td className="py-1 px-2 text-right">
+                                {formatNumberMoney(item?.sellingUnitprice)}
                             </td>
                             <td className="py-1 px-2">
                                 {item?.convert?.name} -  {item?.convert?.unit}
