@@ -1,4 +1,4 @@
-import React, { FC, FormEvent, useState } from "react";
+import { FC, FormEvent, useEffect, useState } from "react";
 import { DropdownSearchable, Popover } from "shareComponents/common";
 import Copy from 'assets/images/icons8-copy-96.png';
 import { ErrorMessage, Field, FieldArray } from "formik";
@@ -16,7 +16,14 @@ import {
 	useQueryListGood
 } from "services/hooks/cmcs/useContractIncome";
 
-const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
+type Props = {
+	formik: any,
+	initialValues: any,
+}
+
+const CreateNewTicketTableAccount: FC<Props> = ({ formik, initialValues }) => {
+	const { customer, warehouse, contract } = formik.values;
+	const { setFieldValue, values } = formik;
 
 	const [searchWarehouseValue, setSearchWarehouseValue] = useState(
 		initialValues?.warehouse || ""
@@ -69,8 +76,6 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 		limit: LIMIT_DROPDOWN,
 		keyword: searchGoodValue,
 	});
-
-	const { setFieldValue, values } = formik;
 
 	const computeAmount = (item: any, index = 0) => {
 		setFieldValue(`selectedJournals.${index}.amount`, (+item.unitprice || 1) * (+item.quantity || 1))
@@ -125,9 +130,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 								<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
 									#
 								</div>
-								<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}>
-
-								</div>
+								<div className={"px-2 py-2 table-cell box-border border border-gray-300 align-middle"}></div>
 							</div>
 							{values.selectedJournals.length > 0 &&
 								values.selectedJournals.map((item: any, index: any) => (
@@ -216,6 +219,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 													(value) => setSearchCustomerDebitValue(value),
 													500
 												)}
+												valueControlled={customer}
 												initialValue={item.customerDebit}
 												data={listCustomerDebit.map((item: any) => ({
 													label: item.name,
@@ -249,6 +253,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 													(value) => setSearchCustomerDebitValue(value),
 													500
 												)}
+												valueControlled={customer}
 												initialValue={item.customerCredit}
 												data={listCustomerDebit.map((item: any) => ({
 													label: item.name,
@@ -303,13 +308,16 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												onClearData={() => setFieldValue(`selectedJournals.${index}.warehouse`, '')}
 												showTriangle={false}
 												allowClearValueSingleInput={true}
-												renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-[330px] whitespace-normal" >
-													<p className="text-2-line-clamp">{`${item.text}`}</p>
-												</Popover>}
+												renderSelectedItem={(item) => (
+													<Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-[330px] whitespace-normal" >
+														<p className="text-2-line-clamp">{`${item.text}`}</p>
+													</Popover>
+												)}
 												onSearchInputChange={debounce(
 													(value) => setSearchWarehouseValue(value),
 													500
 												)}
+												valueControlled={warehouse}
 												initialValue={item.warehouse}
 												data={listWarehouse.map((item: any) => ({
 													label: item.name,
@@ -368,6 +376,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 													(value) => setSearchContractValue(value),
 													500
 												)}
+												valueControlled={contract}
 												initialValue={item.contract}
 												data={listContract.map((item: any) => ({
 													label: item.name,
@@ -439,22 +448,21 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 
 									</div>
 								))}
-
 						</div>
 
 						<div className={"flex mt-3"}>
 							<button type="button" className={"btn btn-success"} onClick={() => push({
 								debit: '',
 								credit: '',
-								customerDebit: '',
-								customerCredit: '',
+								customerDebit: customer,
+								customerCredit: customer,
 								goods: '',
-								warehouse: '',
+								warehouse: warehouse,
 								inventory: '',
 								quantity: '',
 								unitprice: '',
 								amount: '',
-								contract: '',
+								contract: contract,
 								budgetWork: '',
 								job: '',
 								note: '',
