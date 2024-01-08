@@ -14,6 +14,7 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
     sign: '',
     unit: '',
     unitprice: 0,
+    sellingUnitprice: 0,
     description: '',
     note: '',
     convert: '',
@@ -49,9 +50,9 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
 
   const handleSubmit = async () => {
     if(!formData.name) {
-      return toast.warn('Vui lòng nhập nội dung');
+      return toast.warn('Vui lòng nội dung');
     }
-    const formDataFormat = { ...formData, unitprice: +formData.unitprice, convertQuantity: +formData.convertQuantity }
+    const formDataFormat = { ...formData, unitprice: +formData.unitprice, sellingUnitprice: +formData.sellingUnitprice, convertQuantity: +formData.convertQuantity }
     try {
       // Handle api here!
       switch (modalType) {
@@ -119,7 +120,7 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
       <section className="px-5 py-2">
         <input
           type="text"
-          placeholder="Nhập nội dung"
+          placeholder="Nội dung"
           name="name"
           className="h-12 w-full border border-primary-border outline-none px-8"
           defaultValue={formData.name}
@@ -130,7 +131,7 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
       <section className="px-5 mt-2">
         <input
           type="text"
-          placeholder="Nhập mã hiệu"
+          placeholder="Mã hiệu"
           name="sign"
           className="h-12 w-full border border-primary-border outline-none px-8"
           defaultValue={formData?.sign}
@@ -141,7 +142,7 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
       <section className="px-5 mt-2">
         <input
           type="text"
-          placeholder="Nhập đơn vị"
+          placeholder="Đơn vị"
           name="unit"
           className="h-12 w-full border border-primary-border outline-none px-8"
           defaultValue={formData?.unit}
@@ -152,7 +153,7 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
       <section className="px-5 mt-2">
         <input
           type="number"
-          placeholder="Nhập đơn giá"
+          placeholder="Đơn giá nhập"
           name="unitprice"
           className="h-12 w-full border border-primary-border outline-none px-8"
           defaultValue={formData?.unitprice}
@@ -162,8 +163,19 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
 
       <section className="px-5 mt-2">
         <input
+          type="number"
+          placeholder="Đơn giá xuất"
+          name="sellingUnitprice"
+          className="h-12 w-full border border-primary-border outline-none px-8"
+          defaultValue={formData?.sellingUnitprice}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-5 mt-2">
+        <input
           type="text"
-          placeholder="Nhập mô tả"
+          placeholder="Mô tả"
           name="description"
           className="h-12 w-full border border-primary-border outline-none px-8"
           defaultValue={formData.description}
@@ -174,7 +186,7 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
       <section className="px-5 mt-2">
         <input
           type="text"
-          placeholder="Nhập ghi chú"
+          placeholder="Ghi chú"
           name="note"
           className="h-12 w-full border border-primary-border outline-none px-8"
           defaultValue={formData.note}
@@ -228,7 +240,7 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
       <section className="px-5 mt-2">
         <input
           type="number"
-          placeholder="Nhập định mức chuyển đổi"
+          placeholder="Định mức chuyển đổi"
           name="convertQuantity"
           className="h-12 w-full border border-primary-border outline-none px-8"
           defaultValue={formData?.convertQuantity}
@@ -243,5 +255,5 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
         </button>
       </footer>
     </main>
-  );
-};
+  )
+}
