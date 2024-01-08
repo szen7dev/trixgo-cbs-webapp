@@ -402,5 +402,5 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                 </div>
             )}
         </main>
-    );
-};
+    )
+}

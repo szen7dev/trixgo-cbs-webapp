@@ -80,59 +80,6 @@ export interface UseQueryListHuman {
     isFetching: boolean;
 }
 
-// export const useListHuman = ({ params = {},  isFetchList = false }: HumanQueryPayload): UseQueryListHuman => {
-
-//     const res = useInfiniteQuery(
-//         [`list_Human`, { params }],
-//         async ({ pageParam }: any) =>
-//             documentHumanRepository.fetchList({
-//                 lastestID: pageParam, ...params
-//             }),
-//         {
-//             getNextPageParam: ({ data }: any) => {
-//                 return data?.nextCursor || undefined;
-//             },
-//             refetchOnWindowFocus: false,
-//             enabled: isFetchList ?? true, // https://react-query.tanstack.com/guides/disabling-queries
-//         }
-//     );
-//     const {
-//         isLoading,
-//         data,
-//         refetch,
-//         fetchNextPage,
-//         fetchPreviousPage,
-//         hasNextPage,
-//         isFetching
-//     } = res;
-
-//     const listHuman = []
-//         .concat(
-//             ...(data?.pages || []).map((d: any) => d.data?.listRecords)
-//         )
-//         .filter(Boolean);
-        
-//     const listHumanWithPager = (data?.pages || []).map((d: any) => d.data?.listRecords);
-
-//     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
-//     const totalPage = data?.pages[0]?.data?.totalPage || 0;
-//     const nextCursor = data?.pages && data?.pages[0]?.data?.nextCursor;
-
-//     return {
-//         isLoading,
-//         listHuman,
-//         listHumanWithPager,
-//         totalRecord,
-//         totalPage,
-//         hasNextPage,
-//         nextCursor,
-//         refetchListHuman: refetch,
-//         fetchNextPageHuman: fetchNextPage,
-//         fetchPrevPageHuman: fetchPreviousPage,
-//         isFetching
-//     }
-// }
-
 export const useListFilterHuman = ({ params = {},  isFetchList = false }: HumanQueryPayload): UseQueryListHuman => {
 
     const res = useInfiniteQuery(

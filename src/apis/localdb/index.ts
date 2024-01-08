@@ -992,9 +992,9 @@ export const APP_ID = {
         id: "5dfe4bc751dc622100bb9d8a",
         menuFinancialApp: {
             id: "623f2448e998e94feda0cda9",                   // type = 1
-            dashboard: {
+            payment: {
                 id: "623f2465e998e94feda0cdaa",
-                name: "Báo cáo quản trị"
+                name: "Gói trả trước"
             },
             cashbook: {
                 id: "623f2472e998e94feda0cdab",

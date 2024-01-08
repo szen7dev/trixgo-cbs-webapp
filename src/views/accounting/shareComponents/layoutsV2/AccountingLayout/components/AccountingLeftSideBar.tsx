@@ -3,7 +3,6 @@ import { NavLink } from 'react-router-dom';
 import { useCheckPerAccessApp, useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/auth/usePermissions"
 import { APP_ID } from "apis/localdb"
 import iconFolder from "assets/images/bullet.svg";
-import whiteIcon from "assets/images/icons8-white.svg";
 
 const LinkMenuLeftSideBar: FC = () => {
   useEffect(() => {

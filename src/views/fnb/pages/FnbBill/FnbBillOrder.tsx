@@ -3,8 +3,6 @@ import { FC, useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import moment from "moment";
 import { formatNumberMoney } from "utils/converter";
-import QRCode from "react-qr-code";
-
 import zaloOA from "assets/images/WinggoZaloOA.png";
 
 import API from "apis/repository";
@@ -36,8 +34,7 @@ export const FnbBillOrder: FC = () => {
             isFetchInfo:  true  
         }
     )
-    // console.log(info?.funda)
-    
+
     useEffect(() => {
         const fetchOrderProducts = async () => {
             const response = await API.get(
@@ -52,7 +49,6 @@ export const FnbBillOrder: FC = () => {
                 })}`,
             );
             const { data, status } = response?.data;
-            // console.log(data)
 
             if (status !== 200) return;
 
@@ -71,9 +67,6 @@ export const FnbBillOrder: FC = () => {
         }
     }, [orderProducts]);
 
-    // console.log(orderProducts)
-    // console.log(info)
-
     const value = `https://app.winggo.vn/mobile/activity/${info?.customer._id}/w6g9o22`
 
     return (
@@ -82,7 +75,6 @@ export const FnbBillOrder: FC = () => {
                 <div>
                     <div className="relative mb-6" style={{ height: "110px" }}>
                         <Link to ={`/fnb/home`}>
-                            {/* <img src={`${process.env.REACT_APP_URL_S3}${info?.funda?.bankQrcode?.path}`} alt="Bank" style={{ width: "90px", height: "90px" }} /> */}
                             <div className="mt-3">
                                 <div className="font-bold text-[12px]">{info?.funda?.name}</div>
                                 <div className="text-[12px]">{info?.funda?.address}</div>
@@ -184,7 +176,7 @@ export const FnbBillOrder: FC = () => {
                                     <td className="text-right">{formatNumberMoney(info?.salesoff)}</td>
                                 </tr>
                                 <tr>
-                                    <td className="text-left">Trừ tích điểm (chỉ áp dụng đơn tại quán)</td>
+                                    <td className="text-left">Trừ tích điểm & trả trước (chỉ áp dụng đơn tại quán)</td>
                                     <td className="text-center px-1"></td>
                                     <td className="text-right">{formatNumberMoney(info?.credit)}</td>
                                 </tr>
@@ -212,21 +204,6 @@ export const FnbBillOrder: FC = () => {
                         <div>{info?.paymentMethod >=1 && FNB_PAYMENT[Number(info?.paymentMethod)-1].text}</div>
                     </div>
                     <div className="text-center italic text-[12px] border-cbs-border mx-4 py-1 ">{info?.funda?.bankAccount}</div>
-{/* 
-                    <hr className="border-cbs-border" />
-                        <p className="text-center mt-2"><b>Quét QR truy cập Link WINGGO của bạn</b></p>
-                        <p className="text-center"><i>Lưu lại Link WINGGO này để tra cứu khi cần</i></p>
-                        <p className="text-center"><i>Xem thông tin lịch sử mua hàng, tích điểm, voucher/mã ưu đãi và mã giới thiệu bạn bè để nhận Vocuher ưu đãi <b>15.000đ/01 bạn</b> bè của bạn</i></p>
-                    {
-                        info?.customer._id.toString() != "63ae4832be33df0012ecadbd" ? <div>
-                            <div className="mb-5">
-                                <main className="mb-1 ml-2 mr-2">
-                                    <QRCode id="qrcode" value={JSON.stringify(value)} size={175} className="mx-auto mt-5"/>
-                                </main>
-                            </div>
-                        </div> : <div className="text-center mb-3 mt-3"><b>Bạn cần cung cấp số điện thoại khi mua hàng để có Link Winggo</b></div>
-                    } */}                   
-                    
                     <hr className="border-cbs-border" />
                     <div className="text-[12px] text-center mt-3">
                         <p className=""><b>CẢM ƠN BẠN ĐÃ TIN TƯỞNG VÀ LỰA CHỌN WINGGO</b></p>

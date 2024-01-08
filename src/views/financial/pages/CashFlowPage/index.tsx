@@ -11,10 +11,6 @@ import { SearchInput, GroupActions, ModalContainer, ModalConfirm } from "shareCo
 import ModalCreateCashFlow from "./components/ModalCreateCashFlow";
 import ModalUpdateCashFlow from "./components/ModalUpdateCashFlow";
 import VerifyIcon from "assets/images/icons8-verified-check-circle-for-approved-valid-content-96.svg";
-// import TriangleDown from "assets/icons/TriangleDown";
-// import ThreeDotsVertical from "assets/images/icon-3dots-vertical.svg";
-// import FinancialCashFlowFilterButton from "./components/CashFlowButtonFilter";
-// import CashFlowActionGroup from "./components/CashFlowActionGroup";
 
 /**
  * Utils
@@ -105,27 +101,6 @@ export const CashFlowPage: FC = () => {
   const handleConfirmDelete = async () => {
     toast.info("Tính năng này đang tạm đóng", TOAST_DEFAULT_OPTIONS);
     closeModal();
-    // try {
-    //   const ids = Object.entries(assigned).filter(([_, value]) => value).map(item => item[0]);
-    //   const { error, data } = await deleteManyAsync({ cashFlowsID: ids });
-
-    //   if (error) {
-    //     return toast.warn(data?.message);
-    //   }
-
-    //   if (data.length) {
-    //     return data.map((item: any) => toast.warn(item.message));
-    //   }
-
-    //   refetch();
-    //   toast.success('Xóa dữ liệu thành công', TOAST_DEFAULT_OPTIONS);
-    // } catch (error) {
-    //   if (typeof error === "string") {
-    //     toast.error(error, TOAST_DEFAULT_OPTIONS);
-    //   } else if (error instanceof Error) {
-    //     toast.error(error.message, TOAST_DEFAULT_OPTIONS);
-    //   }
-    // }
   };
 
   return (
