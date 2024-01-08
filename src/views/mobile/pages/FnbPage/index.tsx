@@ -63,7 +63,7 @@ const FnbPage: FC = () => {
         })
             .then(async (response) => {
                 const results = await response.json();
-                if (results.data) {
+                if (results.data && results.data.length) {
                     setTotalPayment(results.data[0].amount)
                 }
             })
@@ -113,7 +113,7 @@ const FnbPage: FC = () => {
                 <p className="absolute top-0 right-0"><b>{formatNumberMoney(Number(info?.purchasedValue))}</b></p>
             </div>
             <div className="relative">
-                <p>Tổng điểm tích lũy</p>
+                <p>Tổng điểm tích lũy + Gói trả trước</p>
                 <p className="absolute top-0 right-0">{formatNumberMoney(Number(info?.totalLoyaltyPoints))}</p>
             </div>
             <div className="relative">
@@ -127,7 +127,7 @@ const FnbPage: FC = () => {
             <hr className="border-zinc-200 border mt-2 mb-2" />
             <div className="flex items-center">
                 <img src={walletIcon} alt="icon" className="w-6 h-6" />
-                <p className="px-1"><b>Gói trả trước của bạn: <span className="text-cbs-primary">{formatNumberMoney(totalPayment)}</span></b></p>
+                <p className="px-1"><b>Tổng gói trả trước đã mua: <span className="text-cbs-primary">{formatNumberMoney(totalPayment)}</span></b></p>
             </div>
             <hr className="border-zinc-200 border mt-2 mb-2" />
             <div className="flex items-center">
