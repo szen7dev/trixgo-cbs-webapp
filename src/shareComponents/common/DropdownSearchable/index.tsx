@@ -46,6 +46,7 @@ type Props = {
   onSearchInputChange?: (valueSearch: string) => void;
   onScroll?: (e: UIEvent<HTMLDivElement>) => void
   bordered?: boolean;
+  valueControlled?: Item | Item[];
 };
 
 type DropdownSearchableHandle = {
@@ -57,6 +58,7 @@ export const DropdownSearchable = forwardRef<DropdownSearchableHandle, Props>(({
   id,
   placeholder = "Lựa chọn",
   initialValue,
+  valueControlled,
   onchangeValue,
   className,
   classNameItem,
@@ -208,7 +210,6 @@ export const DropdownSearchable = forwardRef<DropdownSearchableHandle, Props>(({
   React.useLayoutEffect(() => {
     if (data) {
       setDisplayData(data);
-      //   console.log({initialValue})
       if (firstInit && initialValue) {
         if (isMultiple && Array.isArray(initialValue) && initialValue.every(elm => Object.keys(elm).length > 0)) {
           setValues(initialValue);
@@ -222,6 +223,11 @@ export const DropdownSearchable = forwardRef<DropdownSearchableHandle, Props>(({
       }
     }
   }, [data, firstInit, initialValue, isMultiple, setDefaultValue]);
+
+  React.useLayoutEffect(() => {
+    if(!valueControlled || !Object.keys(valueControlled).length) return;
+    setValue(valueControlled);
+  }, [valueControlled])
 
   const renderOptions = () => {
     if (displayData?.length === 0) {

@@ -52,7 +52,7 @@ const mappingData = (data: any, isDataPayLoad = false) => {
 
     selectedJournals: data.selectedJournals || [
       {
-        journalID: null,
+        journalID: '',
         debit: '',
         credit: '',
         customerDebit: '',
