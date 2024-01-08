@@ -1,23 +1,18 @@
 import { FC, ChangeEvent, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-// import { toast } from "react-toastify";
 import debounce from "lodash/debounce";
 import moment from "moment";
 
 /**
  * Components, Utils
  */
-// import { DropdownFilterButton } from "views/document/sharedComponents/common";
 import {
-  // Paginate,
   SearchInput,
   GroupActions,
   ButtonCreate,
-  // ButtonMore,
 } from "shareComponents/common";
 import { ModalContainer } from "shareComponents/common";
 import { ModalCreateCashBook, ModalUpdateCashBook } from "./components";
-// import { TOAST_DEFAULT_OPTIONS } from 'utils/constants';
 
 /**
  * Hooks
@@ -26,20 +21,8 @@ import useCheckedList from "services/hooks/ppt/useCheckedList";
 import { useCashBook } from 'services/hooks/financial/useCashBook';
 import { CashBook } from "typings/financial/cashBook";
 import { APP_ID, CASHBOOK_STATUS } from 'apis/localdb';
-// import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 
 export const CashBookPage: FC = () => {
-  // //_____Start history traffict
-	// const payloadHistoryTraffic: any = {
-	// 	appID: APP_ID.FINANCIAL.id,
-	// 	menuID: APP_ID.FINANCIAL.menuFinancialApp.cashbook.id,
-	// 	type: "1"
-  // };
-	// const { createHistoryTraffics } = useHistoryTraffics();
-	// useEffect(() => {
-  // 	createHistoryTraffics({...payloadHistoryTraffic, type: 1});
-	// }, []);
-	// //_____End history traffict
 
   const [keyword, setKeyword] = useState('');
   const [cashBookIdSelected, setCashBookIdSelected] = useState('');
