@@ -75,4 +75,5 @@ export type CashPaymentExportManyPayload = {
     sign?: string;
     note?: string;
     amount?: number;
+    filterParams?: any;
 }

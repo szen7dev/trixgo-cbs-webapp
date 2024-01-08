@@ -23,10 +23,9 @@ export const CashPaymentRepository = {
     fetchList: (params: CashPaymentListParams): Promise<CashPaymentListResponse> => fetchList(params),
     fetchInfo: (params: CashPaymentInfoParams): Promise<any> => fetchInfo(params),
     fetchAmountByProperty: (params: any): Promise<any> => fetchAmountByProperty(params),
-
-     downloadTemplateExcel  : (payload: CashPaymentDownloadPayload)            : Promise<any> => downloadTemplateExcel(payload),
-     importExcel            : (payload: CashPaymentImportPayload)              : Promise<any> => importExcel(payload),
-     exportExcel            : (payload: CashPaymentExportManyPayload)          : Promise<any> => exportExcel(payload),
+    downloadTemplateExcel  : (payload: CashPaymentDownloadPayload)            : Promise<any> => downloadTemplateExcel(payload),
+    importExcel            : (payload: CashPaymentImportPayload)              : Promise<any> => importExcel(payload),
+    exportExcel            : (payload: any)          : Promise<any> => exportExcel(payload),
 };
 
 async function insert(payload: CashPaymentInsertPayload): Promise<CashPaymentInfoResponse> {
@@ -94,7 +93,7 @@ async function importExcel(payload: any): Promise<any> {
 }
 
 async function exportExcel(payload: any): Promise<any> {
-    const { data } = await API.get<any>(
+    const { data } = await API.post<any>(
         `${CASH_PAYMENT_URL}/export-excel?${convertObToUrl(payload)}`
     )
     return data

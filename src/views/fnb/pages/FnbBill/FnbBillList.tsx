@@ -1,15 +1,12 @@
 /*=====1.LIBRARY=====*/
-import React, { FC, useCallback, useState, useEffect } from "react";
-import { Link, useHistory, useParams } from "react-router-dom";
-import debounce from "lodash/debounce";
+import { FC, useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 import moment from "moment";
-import { formatNumberMoney, convertCurrency } from "utils/converter";
-import { toast } from "react-toastify";
+import { formatNumberMoney } from "utils/converter";
 
 /*=====2.CSS=====*/
 
 /*=====3.ICONS=====*/
-import QrCodeIcon from "assets/images/icons8-qr-code-100 1.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
 
@@ -23,8 +20,7 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
 
 /*=====7.OTHER=====*/
-import { APP_ID } from "apis/localdb";
-import { FNB_CHANNEL, FNB_SERVICE, FNB_PAYMENT, FNB_ORDER_STATUS, FNB_SIZE, FNB_SUGAR, FNB_ICE } from "apis/localdb";
+import { FNB_SIZE, FNB_SUGAR, FNB_ICE } from "apis/localdb";
 
 export const FnbBillList: FC = () => {
     const { user } = useAuth();
@@ -68,23 +64,11 @@ export const FnbBillList: FC = () => {
         fetchOrderProducts();
     }, [])
 
-    // useEffect(() => {
-    //     if (orderProducts && orderProducts.length) {
-    //         window.print();
-    //     }
-    // }, [orderProducts]);
-
-    // console.log(orderProducts)
-    // console.log(info)
-
     return (
         <main className="h-screen overflow-auto bg-cbs-border">
             <div className="h-full mx-auto bg-cbs-gray my-3 pb-1" style={{ width: "50mm"}}>
-            {/* <div className="h-full mx-auto bg-cbs-gray my-3 pb-1"> */}
-                {/* <div className="mx-auto my-2 bg-white h-full p-2 flex flex-col justify-between"> */}
                 {
                     orderProducts.map((item: any, index: number) => {
-                        // let amount = Number(item.quantity * item.unitPrice)
                         let amount = Number(item.unitPrice)
 
                         let str = ""

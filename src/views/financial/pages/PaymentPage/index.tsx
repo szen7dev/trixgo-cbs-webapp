@@ -34,9 +34,9 @@ import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import { createLinkAndClick } from "utils";
 
 export const PaymentPage: FC = () => {
-  const [showOption, setShowOption] = useState(false)
-  const [pageIndex, setPageIndex] = useState(0)
-  const history = useHistory();
+    const [showOption, setShowOption] = useState(false)
+    const [pageIndex, setPageIndex] = useState(0)
+    const history = useHistory();
     const { closeModal, openModal } = useModal();
     const [keyword, setKeyword] = useState('');
 
@@ -48,11 +48,11 @@ export const PaymentPage: FC = () => {
     const [customerID, setCustomerID] = useState<string | null>();
     const [userID, setUserID] = useState<string | null>();
 
-    // const [inputFilter, setInputFilter] = useState({
-    //   keyword: '',
-    //   fromDate: new Date(new Date().getFullYear(), 0, 1),
-    //   toDate: new Date(new Date().getFullYear(), 11, 31)
-    // });  
+    const [inputFilter, setInputFilter] = useState({
+      keyword: '',
+      fromDate: new Date(new Date().getFullYear(), 0, 1),
+      toDate: new Date(new Date().getFullYear(), 11, 31)
+    });  
 
     const [contactKeyword, setContactKeyword] = useState("");
     const [userKeyword, setUserKeyword] = useState("");  
@@ -186,22 +186,18 @@ export const PaymentPage: FC = () => {
         )
     }
 
-     /**
-     * LÀM VIỆC VỚI EXCEL
-     */
     //_____Import, export excel
-    const [dataImport, setDataImport] = useState([]);
     const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
         isExporting: false,
     });
-    const { downloadTemplateExcelAsync, importExcelAsync, exportExcelAsync } = useGoods({});
+    const { exportExcelAsync } = useCashPayment({});
 
-    const handleDownloadTemplateImportExcel = async () => {
+    const handleExportExcel = async () => {
 		try {
             setStateExport({ isExporting: true });
-            const { error, data } = await downloadTemplateExcelAsync({
-                filterParams: {  
-                }
+            const { error, data } = await exportExcelAsync({
+                customerID,
+                userCreateID: userID,
             });
 
             if(error) {
@@ -215,47 +211,6 @@ export const PaymentPage: FC = () => {
             setStateExport({ isExporting: false });
         }
 	}
-
-	//_____Xử lý import excel (đọc file)
-    const handleImport = ($event: any) => {
-        const files = $event.target.files;
-        if (files.length) {
-            const file = files[0];
-            const reader = new FileReader();
-            reader.onload = (event: any) => {
-                const wb = read(event.target.result);
-                const sheets = wb.SheetNames;
-
-                if (sheets.length) {
-                    const rows: any = utils.sheet_to_json(wb.Sheets[sheets[0]]); // Index=1 (tức Sheet số 2 từ trái sang)
-                    
-                    // Set data để Import
-                    setDataImport(rows)
-                }
-            }
-            
-            reader.readAsArrayBuffer(file);
-        }
-
-        // Đọc xong thì xóa value trong Input đi
-        $event.target.value = null;
-    }
-
-	//_____Gọi tới API để đẩy data lên
-    useEffect(() => {
-        if(dataImport.length){
-            const fetchData = async () => {
-                const data = await importExcelAsync({ dataImport: JSON.stringify(dataImport) });
-                setDataImport([]);
-
-                if(!data.error){
-                    return toast.success("Import thành công");
-                }
-                return toast.error(data.message);
-            }
-            fetchData();
-        }
-    }, [dataImport])
 
     return (
       <main className="relative h-full">
@@ -327,17 +282,11 @@ export const PaymentPage: FC = () => {
                         selectOneByOne={true}
                     />
 
-                      {/* <button className={"flex items-center justify-center mx-3 ml-3"}
-                              onClick={handleDownloadTemplateImportExcel}
+                      <button className={"flex items-center justify-center mx-3 ml-3"}
+                              onClick={handleExportExcel}
                           >
-                              Tải mẫu Import Excel
+                              Tải Excel
                       </button>
-
-                      <button className={"flex items-center justify-center mx-3 ml-3"}>
-                          <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
-                          accept=".xlsx, .xlsm, .xls, .csv"/>
-                          <label className="custom-file-label" htmlFor="inputGroupFile">Import Excel</label>
-                      </button> */}
 
                       {/* Nếu chọn 1 phẩn tử => chỉ cho update */}
                       {itemsChecked.length === 1 ? (

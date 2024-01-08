@@ -33,7 +33,7 @@ interface UseCashPayment {
     fetchPreviousPage: () => void;
     downloadTemplateExcelAsync: (payload: CashPaymentDownloadPayload) => Promise<any>;
     importExcelAsync: (payload: CashPaymentImportPayload) => Promise<any>;
-    exportExcelAsync: (payload: CashPaymentExportManyPayload) => Promise<any>;
+    exportExcelAsync: (payload: any) => Promise<any>;
 }
 
 type UseCashPaymentProps = {
@@ -115,7 +115,7 @@ export const useCashPayment = ({
 
     // Export excel
     const { mutateAsync: exportExcelAsync } =
-        useMutation((payload: CashPaymentExportManyPayload) =>
+        useMutation((payload: any) =>
         CashPaymentRepository.exportExcel(payload)
     );
 
