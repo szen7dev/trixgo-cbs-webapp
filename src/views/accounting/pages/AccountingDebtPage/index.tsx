@@ -35,7 +35,7 @@ export const AccountingDebtPage: FC = () => {
   const { listJournalByProperty: dataAll } = useJournalByProperty({
     params: {
         optionAccount: 1,
-        arrAccNames: ['131','141','138','331','341','3388'],
+        arrAccNames: ['131','136','141','138','331','336','341','3388'],
         fromDate: inputFilter.fromDate,
         toDate: inputFilter.toDate,
         option: 4,
