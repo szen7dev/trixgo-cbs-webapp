@@ -22,8 +22,6 @@ import {
 } from "services/hooks/useHuman";
 
 const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
-	// console.log(initialValues)
-
 	const { setFieldValue, values } = formik;
 
 	const [fundaKeyword, setFundaKeyword] = useState(
@@ -31,7 +29,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 	);
 
 	const { list: listFunda } = useFunda({
-		params: { 
+		params: {
 			keyword: fundaKeyword,
 			limit: 50
 		},
@@ -259,7 +257,14 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 					<div className={"w-1/4 flex items-center"}>
 						<div className={"text-left text-gray-500 flex items-center mr-2"}>Mã khách (*)</div>
 						<DropdownSearchable
-							onchangeValue={(value: any) => setFieldValue("customer", value)}
+							onchangeValue={(value: any) => {
+								setFieldValue("customer", value)
+
+								values.selectedJournals.map((_: any, index: number) => {
+									setFieldValue(`selectedJournals.${index}.customerDebit`, value)
+									setFieldValue(`selectedJournals.${index}.customerCredit`, value)
+								})
+							}}
 							className={"flex-1"}
 							placeholder="Mã khách"
 							isMultiple={false}
@@ -300,7 +305,13 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 					<div className={"w-1/4 flex items-center"}>
 						<div className={"text-left text-gray-500 flex items-center mr-2"}>Kho bãi</div>
 						<DropdownSearchable
-							onchangeValue={(value: any) => setFieldValue("warehouse", value)}
+							onchangeValue={(value: any) => {
+								setFieldValue("warehouse", value)
+
+								values.selectedJournals.map((_: any, index: number) => {
+									setFieldValue(`selectedJournals.${index}.warehouse`, value)
+								})
+							}}
 							className={"flex-1"}
 							placeholder="Kho bãi"
 							isMultiple={false}
@@ -377,7 +388,13 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 					<div className={"w-1/8 flex items-center"}>
 						<div className={"text-left text-gray-500 flex items-center mr-2"}>Hợp đồng</div>
 						<DropdownSearchable
-							onchangeValue={(value: any) => setFieldValue("contract", value)}
+							onchangeValue={(value: any) => {
+								setFieldValue("contract", value)
+
+								values.selectedJournals.map((_: any, index: number) => {
+									setFieldValue(`selectedJournals.${index}.contract`, value)
+								})
+							}}
 							className={"flex-1"}
 							placeholder="Hợp đồng"
 							isMultiple={false}
@@ -540,7 +557,6 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 				</div>
 			</div>
 			<CreateNewTicketTableAccount formik={formik} initialValues={initialValues} />
-
 		</>
 	)
 }

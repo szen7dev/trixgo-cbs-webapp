@@ -404,7 +404,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                     <tr key={item._id} className="text-left hover:bg-cbs-active-comment" style={{ color: "orange" }}>
                       <td className="pt-2.5 pb-3 px-4 border-b border-cbs-border text-left">
                         <input className="cbs-checkbox" type="checkbox" checked={Boolean(assigned[item._id])} onChange={e => handleChangeCheckbox(e, item)} />
-                      </td>                    
+                      </td>
                       <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                         {VOUCHER_TYPES.find(element => element.value === item.type)?.text}
                         <p><i>Kết chuyển cuối kỳ</i></p>
@@ -472,7 +472,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                   <tr key={item._id} className="text-left hover:bg-cbs-active-comment" style={{ color: "red" }}>
                     <td className="pt-2.5 pb-3 px-4 border-b border-cbs-border text-left">
                       <input className="cbs-checkbox" type="checkbox" checked={Boolean(assigned[item._id])} onChange={e => handleChangeCheckbox(e, item)} />
-                    </td>                    
+                    </td>
                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">
                       {VOUCHER_TYPES.find(element => element.value === item.type)?.text}
                       <p><i>Phiếu hủy</i></p>
