@@ -252,7 +252,7 @@ async function fetchListGood(params: any) {
     const { data } = await API.get(
         `${ITEM_URL}/goods`, {
         params: {
-            select: 'name description',
+            select: 'name unit description',
             populates: {
                 path: 'company',
                 select: 'sign name'

@@ -284,7 +284,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												)}
 												initialValue={item.goods}
 												data={listGood.map((item: any) => ({
-													label: item.name,
+													label: `${item.name}-${item.unit}`,
 													value: item._id,
 												}))}
 												formatItem={{
