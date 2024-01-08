@@ -13,6 +13,7 @@ import { FNB_CHANNEL } from "apis/localdb";
  */
 import logo from "assets/images/LogoFnB.jpg";
 import QRCodeIcon from "assets/images/document/qr-code.png";
+import walletIcon from "assets/images/icons8-wallet.png";
 import voucherIcon from "assets/images/icons8-ticket-100.png";
 import orderIcon from "assets/images/icons8-order-history-100.png";
 import orderGift from "assets/images/icons8-gift-100.png";
@@ -35,6 +36,7 @@ const FnbPage: FC = () => {
     const params = useParams<any>();
     const { id: contactID } = useParams<{ id: string }>();
     const [info, setInfoCustomer] = useState<any>({});
+    const [totalPayment, setTotalPayment] = useState(0);
     const [totalVoucher, setTotalVoucher] = useState(0);
     const [listVouchers, setListVouchers] = useState([]);
 
@@ -55,6 +57,16 @@ const FnbPage: FC = () => {
                     setInfoCustomer(results.data);
                 }
             });
+
+        fetch(`${domain}/api/fin/cash_payments/get-amount-by-property?customerID=${contactID}&option=1`, {
+            headers: fixedHeaders,
+        })
+            .then(async (response) => {
+                const results = await response.json();
+                if (results.data) {
+                    setTotalPayment(results.data[0].amount)
+                }
+            })
 
         fetch(`${domain}/api/fnb/vouchers?customerID=${contactID}&limit=50&status=1`, {
             headers: fixedHeaders,
@@ -114,7 +126,12 @@ const FnbPage: FC = () => {
             </div>
             <hr className="border-zinc-200 border mt-2 mb-2" />
             <div className="flex items-center">
-                <img src={voucherIcon} alt="icon" className="w-6 h-6 rounded-full" />
+                <img src={walletIcon} alt="icon" className="w-6 h-6" />
+                <p className="px-1"><b>Gói trả trước của bạn: <span className="text-cbs-primary">{formatNumberMoney(totalPayment)}</span></b></p>
+            </div>
+            <hr className="border-zinc-200 border mt-2 mb-2" />
+            <div className="flex items-center">
+                <img src={voucherIcon} alt="icon" className="w-6 h-6" />
                 <p className="px-1"><b>Danh sách voucher của bạn ({totalVoucher})</b></p>
             </div>
             <p className="text-primary-gray"><i>Voucher và Tích điểm chỉ áp dụng với đơn hàng Mua tại quán hoặc đặt qua Hotline. Vui lòng đọc mã Voucher và số điện thoại cho nhân viên để hưởng ưu đãi. Cảm ơn bạn đã lựa chọn Winggo</i></p>
