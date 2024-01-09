@@ -1,15 +1,14 @@
 /*=====1.LIBRARY=====*/
 import React, { FC, useCallback, useState, useEffect } from "react";
-import { Link, useHistory, useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
-import debounce from "lodash/debounce";
 import moment from "moment";
 import { formatNumberMoney } from "utils/converter";
+import { FilterDateGroup } from "views/accounting/shareComponents/common";
 
 /*=====2.CSS=====*/
 
 /*=====3.ICONS=====*/
-import PencilIcon from "assets/images/icons8-pencil-96.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import PaginateV2 from "shareComponents/common/PaginateV2";
@@ -24,13 +23,8 @@ import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { useFnbMistake } from 'services/hooks/fnb/useFnbMistake';
 
 /*=====7.OTHER=====*/
-import { FNB_INTERNAL } from "apis/localdb";
 import { createLinkAndClick } from "utils";
 
-const TYPE_PRODUCT = [
-	{ value: 1, text: "Thông thường" },
-	{ value: 2, text: "Topping" },
-]
 const TYPE_MISTAKE = [
 	"Hệ thống phát hiện", "Khách hàng phát hiện"
 ]
@@ -44,7 +38,7 @@ export const FnbReportMistake: FC = () => {
 	}, []);
 	
 	const history = useHistory();
-	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
+	const { hasPermission, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
 
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
@@ -57,6 +51,12 @@ export const FnbReportMistake: FC = () => {
 	    index: 0,
 	    createAt: ""
   	});
+
+	const [inputFilter, setInputFilter] = useState({
+	keyword: '',
+	fromDate: new Date(new Date().getFullYear(), 0, 1),
+	toDate: new Date(new Date().getFullYear(), 11, 31)
+	})
 
 	/**
 	 * List mẩu tin
@@ -95,8 +95,8 @@ export const FnbReportMistake: FC = () => {
 	  try {
 		setStateExport({ isExporting: true });
 		const { error, data } = await exportMistakeAsync({
-		  filterParams: {  
-		  }
+			fromDate: inputFilter.fromDate,
+			toDate: inputFilter.toDate,
 		});
   
 		if(error) {
@@ -111,6 +111,14 @@ export const FnbReportMistake: FC = () => {
 	  }
 	}
 
+	const handleOnChangeDate = useCallback((date, input) => {
+	if (input) {
+		setInputFilter((value) => ({ ...value, toDate: date }))
+	} else {
+		setInputFilter((value) => ({ ...value, fromDate: date }))
+	}
+	}, [])
+
 	return (
 		<main className="h-full overflow-auto">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
@@ -120,6 +128,7 @@ export const FnbReportMistake: FC = () => {
                     </button>
 					<p className="text-lg mr-10">Danh sách lỗi nhân viên</p>
 				</div>
+				<FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
 				<button onClick={handleExportExcel} title="Tải dữ liệu Excel">
 					Tải dữ liệu Excel
 				</button>
