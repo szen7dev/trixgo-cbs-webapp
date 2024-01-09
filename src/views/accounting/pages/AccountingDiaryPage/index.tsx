@@ -60,17 +60,17 @@ export const AccountingDiaryPage: FC = () => {
     }
   }, [])
 
-  //_____Import, export excel
+  //_____Excel
   const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
     isExporting: false,
   })
   const { exportExcelAsync } = useJournal({})
-  
   const handleExportExcel = async (param: any) => {
     try {
         console.log('Clicked with parameter:', param);
           setStateExport({ isExporting: true })
           const { error, data } = await exportExcelAsync({ 
+              type: param.option,
               filterParams: {
                 fromDate: inputFilter.fromDate,
                 toDate: inputFilter.toDate,
