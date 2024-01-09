@@ -7,8 +7,11 @@ import { useUpdateAccountingVoucherMutation } from "services/hooks/accounting/us
 import { formatNumberMoney, convertDisplayDate } from "utils/cmcs";
 import { CreateNewTicket } from "views/accounting/shareComponents/common";
 import { useModal } from "services/hooks/useModal";
-import { useJournalList } from "services/hooks/accounting/useGeneralJournal";
+import { useJournalList, useJournal } from "services/hooks/accounting/useGeneralJournal";
 import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
+import { toast } from "react-toastify";
+import { read, utils } from 'xlsx';
+import { createLinkAndClick } from "utils";
 
 import API from "apis/repository";
 const APP_ACCOUNTING_VOUCHER = "/api/accounting/vouchers";
@@ -68,6 +71,35 @@ export const AccountingTicketDetailPage: FC<Props> = ({ type = 1 }) => {
     return true;
   }
 
+    //_____Excel
+    const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+      isExporting: false,
+    })
+    const { exportExcelAsync } = useJournal({})
+    const handleExportExcel = async (param: any) => {
+      try {
+          console.log('Clicked with parameter:', param);
+            setStateExport({ isExporting: true })
+            const { error, data } = await exportExcelAsync({ 
+              type: param.option,
+              voucherID: params.id,
+              filterParams: {
+                voucherID: params.id
+              }
+             })
+  
+            if(error) {
+                return toast.warn(data?.message);
+            }
+  
+            data && createLinkAndClick(data, '_self')
+        } catch (error: any) {
+            toast.error(error.message)
+        } finally {
+            setStateExport({ isExporting: false })
+      }
+    }
+
   const openModalUpdate = () => {
     openModal(
       <div className={"bg-white inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"}>
@@ -124,6 +156,11 @@ export const AccountingTicketDetailPage: FC<Props> = ({ type = 1 }) => {
               <LogIcon />
             </button>
             <p><span className={"text-gray-500"}>Cập nhật:</span> {voucherDetail?.userUpdate?.fullname} {convertDisplayDate(voucherDetail?.updatedAt, DATE_FORMAT_TIME)}</p>
+            <button className={"ml-10 px-4 py-2 text-left hover:bg-cbs-table-header text-cbs-highlight-color"}
+              onClick={() => handleExportExcel({option: 3})}
+            >
+                Tải excel
+            </button>
             <PaginateV2
                 ref={ref}
                 totalRecord={totalRecord}
