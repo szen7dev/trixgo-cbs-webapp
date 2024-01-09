@@ -25,7 +25,7 @@ import { DropdownSearchableV2 } from "shareComponents/common";
 
 /*=====6.HOOKS/APIS=====*/
 import { useModal } from "services/hooks/useModal";
-import { useCashPayment } from "services/hooks/financial/useCashPayment";
+import { useFnbCustomerCare } from "services/hooks/fnb/useFnbCustomerCare";
 import { useContact } from "services/hooks/items/useContact";
 import { useUserSystem } from 'services/hooks/users/useUserSystem';
 
@@ -78,7 +78,7 @@ export const FnbContactPage: FC = () => {
       active: 1,
     })
 
-    const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch } = useCashPayment({
+    const { listWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch } = useFnbCustomerCare({
         params: { 
             keyword, 
             customerID,
@@ -86,7 +86,7 @@ export const FnbContactPage: FC = () => {
         },
         isFetchList: true
     })
-    // console.log(listPayment)
+    // console.log(listWithPager)
 
     // Reset form
     const clearData = () => {
@@ -142,14 +142,14 @@ export const FnbContactPage: FC = () => {
     }, [itemsChecked]);
 
     const getStateCheckedAll = useCallback(() => {
-        return itemsChecked.length == listDataWithPager.length;
+        return itemsChecked.length == listWithPager.length;
     }, [itemsChecked]);
 
     const onClickCheckAll = () => {
-        if (itemsChecked.length == listDataWithPager.length) {
+        if (itemsChecked.length == listWithPager.length) {
             setItemsChecked([]);
         } else {
-            setItemsChecked(listDataWithPager);
+            setItemsChecked(listWithPager);
         }
     }
 
@@ -192,7 +192,7 @@ export const FnbContactPage: FC = () => {
     const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
         isExporting: false,
     });
-    const { exportExcelAsync } = useCashPayment({});
+    const { exportExcelAsync } = useFnbCustomerCare({});
 
     const handleExportExcel = async () => {
 		try {
@@ -230,7 +230,7 @@ export const FnbContactPage: FC = () => {
                       <DropdownSearchableV2
                         ref={accountRef}
                         className={"mr-1 border border-primary-border rounded-lg"}
-                        placeholder={"Mã khách"}
+                        placeholder={"Khách hàng"}
                         isMultiple={false}
                         allowClearValueSingleInput={true}
                         data={listCustomer}
@@ -348,12 +348,7 @@ export const FnbContactPage: FC = () => {
                       </th>
                       <th className="w-1/6 py-1">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
-                              Ngày thanh toán
-                          </div>
-                      </th>
-                      <th className="py-1">
-                          <div className="border-r-2 border-gray-300 font-normal pl-2">
-                              Mã khách
+                              Ngày
                           </div>
                       </th>
                       <th className="py-1">
@@ -363,12 +358,17 @@ export const FnbContactPage: FC = () => {
                       </th>
                       <th className="py-1">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
-                              Giá trị thanh toán
+                              Khách hàng
                           </div>
                       </th>
                       <th className="py-1">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
-                            Giá trị sử dụng
+                              Phân loại lỗi
+                          </div>
+                      </th>
+                      <th className="py-1">
+                          <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Đánh giá
                           </div>
                       </th>
                       <th className="py-1">
@@ -385,7 +385,7 @@ export const FnbContactPage: FC = () => {
               </thead>
               <tbody>
                 {
-                  (listDataWithPager[pageIndex] ?? []).map((item: any, index: any) => {  
+                  (listWithPager[pageIndex] ?? []).map((item: any, index: any) => {  
                       return (
                         <tr key={item._id} className="border-b border-primary-border h-10">
                             <td className="py-1 px-2 text-center">
@@ -397,26 +397,25 @@ export const FnbContactPage: FC = () => {
                                 />
                             </td>
                             <td className="py-1 px-2">
-                                <p><i>{moment(item.date).format('DD/MM/YYYY')}</i></p>
+                                <p><i>{moment(item.createAt).format('DD/MM/YYYY')}</i></p>
+                            </td>
+                            <td className="py-1 px-2">
+                                {item?.name}
                             </td>
                             <td className="py-1 px-2">
                                 {item?.customer?.name} - {item?.customer?.phone}
                             </td>
-                            <td className="py-1 px-2">
-                                {item?.name}
-                                <p><i>{item.modifyAt ? moment(item.modifyAt).format('DD/MM/YYYY HH:mm') : ''} - {item?.userUpdate?.fullname}</i></p>
+                            <td className="py-1 px-2 text-right">
+                                {formatNumberMoney(item?.mistake?.name)}
                             </td>
                             <td className="py-1 px-2 text-right">
-                                {formatNumberMoney(item?.payment)}
-                            </td>
-                            <td className="py-1 px-2 text-right">
-                                {formatNumberMoney(item?.amount)}
+                                {formatNumberMoney(item?.rating)}
                             </td>
                             <td className="py-1 px-2">
                                 {item.note}
                             </td>
                             <td className="py-1 px-2">
-                                {(item.active == 1 ? "Hoạt động" : "Hủy")}
+                                {(item.status == 1 ? "Đang xử lý" : "Hoàn thành")}
                             </td>
                         </tr>
                       )

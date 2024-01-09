@@ -1,13 +1,13 @@
 import React, { FC, useState } from "react";
 import debounce from "lodash/debounce";
 import { useModal } from "services/hooks/useModal";
-import { useCashPayment } from "services/hooks/financial/useCashPayment";
+import { useFnbCustomerCare } from "services/hooks/fnb/useFnbCustomerCare";
 import { toast } from "react-toastify";
 import { DropdownSearchable } from "shareComponents/common";
 import {
 	useQueryListContact,
 } from "services/hooks/cmcs/useContractIncome";
-import { DATE_FORMAT, VOUCHER_TYPES, LIMIT_DROPDOWN } from "apis/localdb/index";
+import { LIMIT_DROPDOWN } from "apis/localdb/index";
 
 export const ModalCreateOrUpdateCC: FC<any> = ({
   modalType,
@@ -38,7 +38,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
   const {
     insertAsync, 
     updateAsync
-} = useCashPayment({
+} = useFnbCustomerCare({
     params: { keyword },
     isFetchList: true
 })
