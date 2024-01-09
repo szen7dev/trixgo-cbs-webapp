@@ -59,7 +59,7 @@ export const FnBProductPage: FC = () => {
     const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbProduct({
 		params: {
 			keyword,
-			limit: 20,
+			limit: 50,
 			populates: JSON.stringify({
 				path: 'images',
 			})
@@ -67,7 +67,6 @@ export const FnBProductPage: FC = () => {
 		isFetchList: true,
 		isFetchInfo: false,
 	});
-	// console.log({listWithPager});
 
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
@@ -197,8 +196,6 @@ export const FnBProductPage: FC = () => {
             const fetchData = async () => {
                 const data = await importExcelAsync({ dataImport: JSON.stringify(dataImport) });
                 setDataImport([]);
-                // refetchTaskInfo?.()
-                console.log(data)
 
                 if(!data.error){
                     return toast.success("Import thành công");
@@ -215,17 +212,6 @@ export const FnBProductPage: FC = () => {
 			history.push("/fnb/home")
 		}
 	}, [hasPermission, permission])
-
-	// useEffect(() => {
-	// 	if (permission.read == 0) {
-	// 		toast.error("Không có quyền truy cập");
-	// 		history.push("/fnb/home")
-	// 	}
-	// }, [hasPermission, permission])
-
-	// console.log({hasPermission})
-	// console.log({permission})
-	// console.log(permission.read)
 
 	return (
 		<main className="h-full overflow-auto">
@@ -287,7 +273,7 @@ export const FnBProductPage: FC = () => {
 					ref={ref}
 					totalRecord={totalRecord}
 					totalPages={totalPage}
-					limit={20}
+					limit={50}
 					hasNextPage={hasNextPage}
 					isFetching={isLoading}
 					nextPageAction={() => {
@@ -378,9 +364,7 @@ export const FnBProductPage: FC = () => {
 								/>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border text-cbs-highlight-color"}>
-								<Link to ={`/fnb/product/${item._id}`}>
-									{item?.name}
-								</Link>
+								{item?.name}
 								<p className="border-gray-300 text-[13px]"><i>{item?.namecv}</i></p>
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
@@ -451,5 +435,5 @@ export const FnBProductPage: FC = () => {
 			</ModalContainer>
 
 		</main>
-	);
-};
+	)
+}

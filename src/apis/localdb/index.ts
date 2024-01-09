@@ -1123,19 +1123,11 @@ export const APP_ID = {
             },
             contacts: {
                 id: "63af825ebe33df0012ecaed8",
-                name: "Danh bạ khách hàng"
+                name: "Chăm sóc khách hàng"
             },
             shift: {
                 id: "63af826987a6c20011972ae0",
                 name: "Ca làm việc"
-            },
-            store: {
-                id: "63af82764faba60012595520",
-                name: "Quản lý kho"
-            },
-            expense: {
-                id: "63af8280be33df0012ecaed9",
-                name: "Quản lý chi phí"
             },
             product: {
                 id: "63af828e87a6c20011972ae1",

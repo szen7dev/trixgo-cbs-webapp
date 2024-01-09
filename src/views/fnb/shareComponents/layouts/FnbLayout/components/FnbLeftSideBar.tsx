@@ -8,8 +8,6 @@ import debounce from "lodash/debounce";
 /*=====3.ICONS=====*/
 import iconPlus from "assets/images/icons8-plus-math-96 3.svg";
 import iconPlusBlue from "assets/images/icons8-plus-math-96 1.svg";
-import iconStore from 'assets/images/icons8-store.svg';
-import iconExpense from 'assets/images/icons8-expense.svg';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import adminIcon from "assets/images/icons8-user-shield-48.svg"
 import homeIcon from 'assets/images/icons-home.svg';
@@ -158,50 +156,30 @@ export const FnbLeftSideBar: FC = () => {
                         <img width={'20px'} src={homeIcon} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Trang chủ</span>
                     </NavLink>
+                    {onCheckPerAccessApp(APP_ID.FNB.menuFnbApp.contacts.id) ?
+                        <NavLink to={`/fnb/contacts`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                            <img width={'20px'} src={contactIcon} alt="Menu item" />
+                            <span className={"flex-1 ml-2 text-left text-[14px]"}>Chăm sóc khách hàng</span>
+                        </NavLink> : <></>
+                    }
                     {onCheckPerAccessApp(APP_ID.FNB.menuFnbApp.revenueReport.id) ?
                         <NavLink to={`/fnb/revenue-report`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                             <img width={'20px'} src={reportIcon} alt="Menu item" />
                             <span className={"flex-1 ml-2 text-left text-[14px]"}>Báo cáo doanh thu</span>
                         </NavLink> : <></>
                     }
-
                     {onCheckPerAccessApp(APP_ID.FNB.menuFnbApp.riskReport.id) ?
                         <NavLink to={`/fnb/risk-report`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                             <img width={'20px'} src={riskIcon} alt="Menu item" />
                             <span className={"flex-1 ml-2 text-left text-[14px]"}>Báo cáo lỗi</span>
                         </NavLink> : <></>
                     }
-
-                    {onCheckPerAccessApp(APP_ID.FNB.menuFnbApp.contacts.id) ?
-                        <NavLink to={`/fnb/contacts`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                            <img width={'20px'} src={contactIcon} alt="Menu item" />
-                            <span className={"flex-1 ml-2 text-left text-[14px]"}>Danh bạ khách hàng</span>
-                        </NavLink> : <></>
-                    }
-
                     {onCheckPerAccessApp(APP_ID.FNB.menuFnbApp.shift.id) ?
                         <NavLink to={`/fnb/shift`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                             <img width={'20px'} src={shiftcon} alt="Menu item" />
                             <span className={"flex-1 ml-2 text-left text-[14px]"}>Ca làm việc</span>
                         </NavLink> : <></>
                     }
-
-                    {onCheckPerAccessApp(APP_ID.FNB.menuFnbApp.store.id) ?
-                        <NavLink to={`/fnb/store`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                            <img width={'20px'} src={iconStore} alt="Menu item" />
-                            <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản lý kho</span>
-                        </NavLink>
-                        : <></>
-                    }
-
-                    {onCheckPerAccessApp(APP_ID.FNB.menuFnbApp.expense.id) ?
-                         <NavLink to={`/fnb/expense`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                            <img width={'20px'} src={iconExpense} alt="Menu item" />
-                            <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản lý chi phí</span>
-                        </NavLink>
-                        : <></>
-                    }
-
                     {onCheckPerAccessApp(APP_ID.FNB.menuFnbApp.product.id) ?
                         <NavLink to={`/fnb/product`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                             <img width={'20px'} src={menuIcon} alt="Menu item" />
@@ -219,7 +197,7 @@ export const FnbLeftSideBar: FC = () => {
                     {onCheckPerAccessApp(APP_ID.FNB.menuFnbApp.reports.id) ?
                         <NavLink to={`/fnb/reports`} onClick={() => dispath(resetQueryFnb())} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
                             <img width={'20px'} src={menuIcon} alt="Menu item" />
-                            <span className={"flex-1 ml-2 text-left text-[14px]"}>Báo cáo khác</span>
+                            <span className={"flex-1 ml-2 text-left text-[14px]"}>Báo cáo</span>
                         </NavLink>
                         : <></>
                     }
@@ -266,10 +244,8 @@ export const FnbLeftSideBar: FC = () => {
                                                     <Link to={`/mobile/activity/${item?._id}/w6g9o22`}>
                                                         <div>{item?.name} ({item?.numberOfOrders | 0})</div>
                                                     </Link>
-                                                    {/* <div className="text-cbs-subtext">{formatNumberMoney(item?.remainLoyaltyPoints)}đ</div> */}
                                                 </div>
                                                 <div className="text-cbs-subtext">{item?.phone}-{item?.note}</div>
-                                                {/* <div className="text-cbs-subtext"><i>{item?._id}</i></div> */}
                                             </div>
                                         </div>
                                     ))
@@ -280,5 +256,5 @@ export const FnbLeftSideBar: FC = () => {
                 </div>
             </div>
         </div>
-    );
-};
+    )
+}
