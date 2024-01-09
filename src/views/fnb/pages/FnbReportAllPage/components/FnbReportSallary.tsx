@@ -1,5 +1,5 @@
 /*=====1.LIBRARY=====*/
-import React, { FC, useCallback, useState, useEffect } from "react";
+import { FC, useCallback, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FilterDateGroup } from "views/accounting/shareComponents/common";
@@ -28,7 +28,7 @@ export const FnbReportSallary: FC = () => {
 	}, []);
 	
 	const history = useHistory();
-	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
+	const { hasPermission, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
 
 	const [inputFilter, setInputFilter] = useState({
 	keyword: '',
@@ -92,63 +92,6 @@ export const FnbReportSallary: FC = () => {
 					Tải dữ liệu Excel
 				</button>
 			</header>
-
-			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
-				{/* <thead className="bg-cbs-table-header h-10 border-b border-primary-border">
-					<tr className="text-left text-sm text-primary-gray text-[14px]">
-						<th className="pb-1 pt-1 w-[50px] font-normal">
-							<div className="pl-2">
-								TT
-							</div>
-						</th>
-						<th className="pb-1 pt-1 font-normal w-1/4">
-							<div className="pl-2">
-								Điểm bán
-							</div>
-						</th>
-						<th className="pb-1 pt-1 font-normal">
-							<div className="pl-2">
-								Doanh số
-							</div>
-						</th>
-						<th className="pb-1 pt-1 font-normal">
-							<div className="pl-2">
-								Số giờ làm việc
-							</div>
-						</th>
-						<th className="pb-1 pt-1 font-normal">
-							<div className="pl-2">
-								Ghi chú
-							</div>
-						</th>
-					</tr>
-				</thead> */}
-				{/* {
-					(listWithPager[pageIndex]??[]).map((item: any, i: any) => (
-						<tr key={item._id} className="text-[14px]">
-							<td className={"p-2 border-0.5 border-primary-border text-cente"}>{i+1}</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								{item?.mistake?.name}
-								<p className=" text-[13px] text-gray-500"><i>Người ghi nhận: {item?.userCreate?.fullname}</i></p>
-								<p className=" text-[13px] text-gray-500"><i>Thời gian: {moment(item.createAt).format('DD/MM/YYYY HH:mm')}</i></p>
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border "}>
-								{item?.executor?.fullname}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border "}>
-								{item?.funda?.name}
-							</td>
-
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								{formatNumberMoney(item?.amount||0)}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								{item?.note}
-							</td>
-						</tr>
-					))
-				} */}
-			</table>
 		</main>
-	);
-};
+	)
+}

@@ -199,7 +199,7 @@ export const AccountingTicketDetailPage: FC<Props> = ({ type = 1 }) => {
               Kho bãi
             </div>
             <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300"}>
-              Tồn kho
+              Đơn vị
             </div>
             <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300"}>
               Số lượng
@@ -243,7 +243,7 @@ export const AccountingTicketDetailPage: FC<Props> = ({ type = 1 }) => {
                     {item?.warehouse?.name}
                   </div>
                   <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300"}>
-                    Cái
+                    {item?.goods?.unit}
                   </div>
                   <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 text-right"}>
                     {formatNumberMoney(item?.quantity)}
