@@ -275,7 +275,7 @@ export const FnbContactPage: FC = () => {
                     <DropdownSearchableV2
                         ref={accountRef}
                         className={"mr-1 border border-primary-border rounded-lg"}
-                        placeholder={"Người tạo"}
+                        placeholder={"Người chăm sóc"}
                         isMultiple={false}
                         allowClearValueSingleInput={true}
                         data={listUser}
