@@ -1,32 +1,68 @@
 /*=====1.LIBRARY=====*/
-import { useInfiniteQuery, useMutation, useQuery } from "react-query";
+import { useInfiniteQuery, useQuery, useMutation } from "react-query";
 
 /*=====2.TYPING/APIS=====*/
-import fnbRepository from 'apis/fnb/customerCare';
+import { CustomerCareRepository } from "apis/fnb/customerCare";
+import type {
+    CashPayment,
+    CashPaymentInsertPayload,
+    CashPaymentUpdatePayload,
+    CashPaymentDeleteManyPayload,
+    CashPaymentListParams,
+    CashPaymentDownloadPayload,
+    CashPaymentImportPayload,
+    CashPaymentExportManyPayload,
+} from 'typings/financial/cashPayment';
+
+/*=====3.INTERFACE DEFINE=====*/
+interface UseCashPayment {
+    isLoading: boolean;
+    isLoadingInfo: boolean;
+    totalRecord: number;
+    totalPage: number;
+    nextCursor: string | undefined;
+    hasNextPage: boolean | undefined;
+    insertAsync: (payload: CashPaymentInsertPayload) => Promise<any>;
+    updateAsync: (payload: CashPaymentUpdatePayload) => Promise<any>;
+    deleteManyAsync: (params: CashPaymentDeleteManyPayload) => Promise<any>;
+    listData: Array<CashPayment>;
+    listDataWithPager: Array<CashPayment>;
+    info: CashPayment | undefined;
+    refetch: () => void;
+    refetchInfo: () => void;
+    fetchNextPage: () => void;
+    fetchPreviousPage: () => void;
+    downloadTemplateExcelAsync: (payload: CashPaymentDownloadPayload) => Promise<any>;
+    importExcelAsync: (payload: CashPaymentImportPayload) => Promise<any>;
+    exportExcelAsync: (payload: any) => Promise<any>;
+}
+
+type UseCashPaymentProps = {
+    params?: CashPaymentListParams,
+    isFetchList?: boolean,
+    isFetchInfo?: boolean,
+}
 
 export const useFnbCustomerCare = ({
     params = {},
     isFetchList = false,
-    isFetchInfo = false
-}: any): any => {
+    isFetchInfo = false,
+}: UseCashPaymentProps): UseCashPayment => {
 
     const { mutateAsync: insertAsync } =
-        useMutation((payload: any) =>
-            fnbRepository.insert(payload)
-        );
+        useMutation((payload: CashPaymentInsertPayload) => CustomerCareRepository.insert(payload)
+    );
 
     const { mutateAsync: updateAsync } =
-        useMutation((payload: any) =>
-            fnbRepository.update(payload)
-        );
+        useMutation((payload: CashPaymentUpdatePayload) => CustomerCareRepository.update(payload)
+    );
 
     const { mutateAsync: deleteManyAsync } =
-        useMutation((payload: any) =>
-            fnbRepository.remove(payload)
-        );
+        useMutation((payload: CashPaymentDeleteManyPayload) => CustomerCareRepository.deleteMany(payload)
+    );
 
     const { data: detailData, isLoading: isLoadingInfo, refetch: refetchInfo } =
-        useQuery("fnb_customer_care_info", () => fnbRepository.getInfoAndGetList(params), {
+        useQuery("CashPayment__info", () => CustomerCareRepository.fetchInfo(params), {
             refetchOnWindowFocus: false,
             enabled: isFetchInfo,
         });
@@ -38,43 +74,61 @@ export const useFnbCustomerCare = ({
         data,
         refetch,
         fetchNextPage,
+        fetchPreviousPage,
         hasNextPage
     } = useInfiniteQuery(
-        ['fnb-customer_care-list', params],
+        ['CashPayment--list', params],
         async ({ pageParam }: any) =>
-            fnbRepository.getInfoAndGetList({
+            CustomerCareRepository.fetchList({
                 lastestID: pageParam ?? "",
                 ...params,
             }),
         {
             getNextPageParam: ({ data }: any) => {
-                return data?.nextCursor ?? undefined;
+                return data?.nextCursor || undefined;
             },
             refetchOnWindowFocus: false,
-            enabled: isFetchList
+            enabled: isFetchList ?? true,
         }
     );
 
-    const list = []
-        .concat(...(data?.pages || [])
-        .map((d: any) => d.data?.listRecords))
-        .filter(Boolean);
-    const listWithPager = (data?.pages || []).map((d: any) => d.data?.listRecords);
+    const listData = []
+        .concat(
+            ...(data?.pages || []).map((d: any) => d.data?.listRecords)
+        )
+        .filter(Boolean)
+
+    const listDataWithPager = (data?.pages || []).map((d: any) => d.data?.listRecords)
 
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPage = data?.pages[0]?.data?.totalPage || 0;
+    const nextCursor = data?.pages && data?.pages[0]?.data?.nextCursor;
+
+    // Tải mẫu import excel
+    const { mutateAsync: downloadTemplateExcelAsync } =
+        useMutation((payload: CashPaymentDownloadPayload ) => CustomerCareRepository.downloadTemplateExcel(payload)
+    );
+
+    // Import excel
+    const { mutateAsync: importExcelAsync } =
+        useMutation((payload: CashPaymentImportPayload) => CustomerCareRepository.importExcel(payload)
+    );
 
     // Export excel
     const { mutateAsync: exportExcelAsync } =
         useMutation((payload: any) =>
-        fnbRepository.exportExcel(payload)
+        CustomerCareRepository.exportExcel(payload)
     );
 
     return {
         isLoading,
         isLoadingInfo,
-        list,
-        listWithPager,
+        insertAsync,
+        updateAsync,
+        deleteManyAsync,
+        listData,
+        listDataWithPager,
+        nextCursor,
         info,
         totalRecord,
         totalPage,
@@ -82,9 +136,9 @@ export const useFnbCustomerCare = ({
         refetch,
         refetchInfo,
         fetchNextPage,
-        insertAsync,
-        updateAsync,
-        deleteManyAsync,
+        fetchPreviousPage,
+        downloadTemplateExcelAsync,
+        importExcelAsync,
         exportExcelAsync
     }
 }

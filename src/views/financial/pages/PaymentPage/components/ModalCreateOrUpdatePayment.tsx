@@ -23,7 +23,7 @@ export const ModalCreateOrUpdatePayment: FC<any> = ({
   }
 }) => {
   const [searchCustomerValue, setSearchCustomerValue] = useState(
-		initialValues?.customer || ""
+		initialValues?.customer?.name || ""
 	);
 	const { listContact: listCustomer } = useQueryListContact({
 		limit: LIMIT_DROPDOWN,

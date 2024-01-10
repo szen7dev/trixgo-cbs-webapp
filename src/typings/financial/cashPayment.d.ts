@@ -29,6 +29,7 @@ export type CashPaymentInsertPayload = {
 
 export type CashPaymentUpdatePayload = {
     CashPaymentID: string;
+    customerCareID: string;
     name: string;
     note?: string;
     amount?: number;

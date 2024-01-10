@@ -33,6 +33,11 @@ import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import { createLinkAndClick } from "utils";
 
 export const FnbContactPage: FC = () => {
+    const STATUS = [
+        { _id: 1, text: 'Đang xử lý' },
+        { _id: 2, text: 'Hoàn thành'}
+    ]
+
     const [showOption, setShowOption] = useState(false)
     const [pageIndex, setPageIndex] = useState(0)
     const history = useHistory();
@@ -46,6 +51,7 @@ export const FnbContactPage: FC = () => {
 
     const [customerID, setCustomerID] = useState<string | null>();
     const [userID, setUserID] = useState<string | null>();
+    const [status, setStatus] = useState<string | null>();
 
     const [inputFilter, setInputFilter] = useState({
       keyword: '',
@@ -69,31 +75,36 @@ export const FnbContactPage: FC = () => {
 
     const [itemsChecked, setItemsChecked] = useState<Array<any>>([]);
     const [initialValues, setInitialValues] = useState({
-      cashPaymentID: '',
-      customer: '',
-      name: '',
-      note: '',
-      amount: 0,
-      payment: 0,
-      active: 1,
+        customerCareID: '',
+        mistake: '',
+        customer: '',
+        order: '',
+        name: '',
+        description: '',
+        note: '',
+        rating: 1,
+        amount: 0,
+        status: 1,
     })
 
-    const { listWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch } = useFnbCustomerCare({
+    const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch } = useFnbCustomerCare({
         params: { 
             keyword, 
+            status,
             customerID,
-            userCreateID: userID,
+            userCreateID: userID
         },
         isFetchList: true
     })
-    // console.log(listWithPager)
+    // console.log(listDataWithPager)
 
     // Reset form
     const clearData = () => {
         setInitialValues(previousValue => ({
             ...previousValue,
-            cashPaymentID: '',
+            customerCareID: '',
             name: '',
+            description: '',
             note: '',
         }))
     }
@@ -120,15 +131,18 @@ export const FnbContactPage: FC = () => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, name, note, amount, payment, active, customer } = newListIDChecked[0];
+            const { _id, mistake, customer, order, name, description, note, amount, rating, status } = newListIDChecked[0];
             setInitialValues({
-                cashPaymentID: _id,
-                name,
-                note,
-                amount,
-                payment,
-                active,
+                customerCareID: _id,
+                mistake,
                 customer,
+                order,
+                name,
+                description,
+                note,
+                rating,
+                amount,
+                status,
             });
         } else {
             clearData();
@@ -142,14 +156,14 @@ export const FnbContactPage: FC = () => {
     }, [itemsChecked]);
 
     const getStateCheckedAll = useCallback(() => {
-        return itemsChecked.length == listWithPager.length;
+        return itemsChecked.length == listDataWithPager.length;
     }, [itemsChecked]);
 
     const onClickCheckAll = () => {
-        if (itemsChecked.length == listWithPager.length) {
+        if (itemsChecked.length == listDataWithPager.length) {
             setItemsChecked([]);
         } else {
-            setItemsChecked(listWithPager);
+            setItemsChecked(listDataWithPager);
         }
     }
 
@@ -162,13 +176,16 @@ export const FnbContactPage: FC = () => {
         if(modalType === 'create') {
             clearData();
             initValues = {
-                cashPaymentID: '',
+                customerCareID: '',
+                mistake: '',
                 customer: '',
+                order: '',
                 name: '',
+                description: '',
                 note: '',
+                rating: 1,
                 amount: 0,
-                payment: 0,
-                active: 1,
+                status: 1,
             };
         }
 
@@ -176,7 +193,7 @@ export const FnbContactPage: FC = () => {
             <div
                 className={"inline-block w-[521px] h-[400px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "550px",
+                    height: "750px",
                 }}
             >
                 <ModalCreateOrUpdateCC
@@ -258,7 +275,7 @@ export const FnbContactPage: FC = () => {
                     <DropdownSearchableV2
                         ref={accountRef}
                         className={"mr-1 border border-primary-border rounded-lg"}
-                        placeholder={"Người tạo"}
+                        placeholder={"Người chăm sóc"}
                         isMultiple={false}
                         allowClearValueSingleInput={true}
                         data={listUser}
@@ -284,11 +301,40 @@ export const FnbContactPage: FC = () => {
                         selectOneByOne={true}
                     />
 
-                      <button className={"flex items-center justify-center mx-3 ml-3"}
+                    <DropdownSearchableV2
+                        ref={accountRef}
+                        className={"mr-1 border border-primary-border rounded-lg"}
+                        placeholder={"Trạng thái"}
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        data={STATUS}
+                        formatItem={{
+                            id: "_id",
+                            text: "text",
+                        }}
+                        onSearchInputChange={debounce(
+                            (valueSearch) => setUserKeyword(valueSearch),
+                            500
+                        )}
+                        onClearData={() => {
+                            setStatus("");
+                        }}
+                        onchangeValue={item => {
+                            setStatus(item._id);
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.text}</p>
+                        )}
+                        selectOneByOne={true}
+                    />
+
+                      {/* <button className={"flex items-center justify-center mx-3 ml-3"}
                               onClick={handleExportExcel}
                           >
                               Tải Excel
-                      </button>
+                      </button> */}
 
                       {/* Nếu chọn 1 phẩn tử => chỉ cho update */}
                       {itemsChecked.length === 1 ? (
@@ -307,9 +353,6 @@ export const FnbContactPage: FC = () => {
                               >
                               Tạo mới
                           </button>
-                          {/* <div className="w-10 h-10 bg-secondary-light rounded-full flex items-center justify-center ml-5 cursor-pointer">
-                              <img src={`${process.env.PUBLIC_URL}/images/common/icon-3dots-vertical-gray.svg`} alt="Three Dot" />
-                          </div> */}
                       </div>
 
                       <div className="absolute right-0">
@@ -346,29 +389,34 @@ export const FnbContactPage: FC = () => {
                               />
                           </div>
                       </th>
-                      <th className="w-1/6 py-1">
+                      <th className="py-1 w-1/12">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
                               Ngày
                           </div>
                       </th>
-                      <th className="py-1">
+                      <th className="py-1 w-1/6">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
                               Nội dung
                           </div>
                       </th>
-                      <th className="py-1">
+                      <th className="py-1 w-1/6">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
                               Khách hàng
                           </div>
                       </th>
-                      <th className="py-1">
+                      <th className="py-1 w-1/6">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
                               Phân loại lỗi
                           </div>
                       </th>
+                      <th className="py-1 w-1/6">
+                          <div className="border-r-2 border-gray-300 font-normal pl-2">
+                              Đơn hàng
+                          </div>
+                      </th>
                       <th className="py-1">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Đánh giá
+                                Đánh giá 1-5*
                           </div>
                       </th>
                       <th className="py-1">
@@ -385,7 +433,11 @@ export const FnbContactPage: FC = () => {
               </thead>
               <tbody>
                 {
-                  (listWithPager[pageIndex] ?? []).map((item: any, index: any) => {  
+                  (listDataWithPager[pageIndex] ?? []).map((item: any, index: any) => {  
+                        let cl = 'red'
+                        if(item.status == 2){
+                            cl = 'green'
+                        }
                       return (
                         <tr key={item._id} className="border-b border-primary-border h-10">
                             <td className="py-1 px-2 text-center">
@@ -405,8 +457,14 @@ export const FnbContactPage: FC = () => {
                             <td className="py-1 px-2">
                                 {item?.customer?.name} - {item?.customer?.phone}
                             </td>
-                            <td className="py-1 px-2 text-right">
-                                {formatNumberMoney(item?.mistake?.name)}
+                            <td className="py-1 px-2 text-cbs-highlight-color">
+                                {item?.mistake?.name}
+                            </td>
+                            <td className="py-1 px-2">
+                                {item?.order?.name}
+                                <p><i>{item?.funda?.name}</i></p>
+                                <p className="text-cbs-highlight-color"><i>{item?.manager ? `Quản lý: ${item?.manager?.fullname}` : ''}</i></p>
+                                <p><i>{item?.order ? moment(item?.order?.createAt).format('DD/MM/YYYY') : ''}</i></p>
                             </td>
                             <td className="py-1 px-2 text-right">
                                 {formatNumberMoney(item?.rating)}
@@ -414,7 +472,7 @@ export const FnbContactPage: FC = () => {
                             <td className="py-1 px-2">
                                 {item.note}
                             </td>
-                            <td className="py-1 px-2">
+                            <td className="py-1 px-2" style={{color: cl}}>
                                 {(item.status == 1 ? "Đang xử lý" : "Hoàn thành")}
                             </td>
                         </tr>
