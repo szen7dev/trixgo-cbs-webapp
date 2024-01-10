@@ -45,6 +45,8 @@ export const AccountingDebtPage: FC = () => {
     isFetchList: true
   })
 
+  console.log(dataAll)
+
 const handleOnChangeDate = useCallback((date, input) => {
  if (input) {
    setInputFilter((value) => ({ ...value, toDate: date }))
@@ -126,7 +128,7 @@ const handleOnChangeDate = useCallback((date, input) => {
             <th colSpan={2} className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
               Trong kỳ
             </th>
-            <th colSpan={2} className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
+            <th colSpan={3} className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
               Cuối kỳ
             </th>
           </tr>
@@ -154,6 +156,9 @@ const handleOnChangeDate = useCallback((date, input) => {
             </th>
             <th className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
               Dư có cuối kỳ
+            </th>
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
+              Nợ-Có
             </th>
           </tr>
         </thead>
@@ -188,6 +193,9 @@ const handleOnChangeDate = useCallback((date, input) => {
                 </td>
                 <td className="py-1 px-2 border-r border-primary-border text-right">
                   {formatNumberMoney(Number(item.kcCoDauKy + item.coDauKy + item.coTrongKy))}
+                </td>
+                <td className="py-1 px-2 border-r border-primary-border text-right">
+                  {formatNumberMoney(Number(item.kcNoDauKy + item.noDauKy + item.noTrongKy - item.kcCoDauKy - item.coDauKy - item.coTrongKy))}
                 </td>
               </tr>
             ))

@@ -183,7 +183,7 @@ export const AccountingDebtDetailPage1: FC = () => {
             <th colSpan={2} className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
               Trong kỳ
             </th>
-            <th colSpan={2} className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
+            <th colSpan={3} className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
               Cuối kỳ
             </th>
           </tr>
@@ -211,6 +211,9 @@ export const AccountingDebtDetailPage1: FC = () => {
             </th>
             <th className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
               Dư có cuối kỳ
+            </th>
+            <th className="px-2 font-normal border-r border-l border-b border-primary-border text-center">
+              Nợ-Có
             </th>
           </tr>
         </thead>
@@ -246,6 +249,9 @@ export const AccountingDebtDetailPage1: FC = () => {
                 <td className="py-1 px-2 border-r border-primary-border text-right">
                   {formatNumberMoney(Number(item.kcCoDauKy + item.coDauKy + item.coTrongKy))}
                 </td>
+                <td className="py-1 px-2 border-r border-primary-border text-right">
+                  {formatNumberMoney(Number(item.kcNoDauKy + item.noDauKy + item.noTrongKy - item.kcCoDauKy - item.coDauKy - item.coTrongKy))}
+                </td>
               </tr>
             ))
           }
@@ -277,6 +283,9 @@ export const AccountingDebtDetailPage1: FC = () => {
               </td>
               <td className="py-1 px-2 border-r border-primary-border text-right">
                 {formatNumberMoney(coCuoiKy)}
+              </td>
+              <td className="py-1 px-2 border-r border-primary-border text-right">
+                {formatNumberMoney(noDauKy + noTrongKy - coDauKy - coTrongKy)}
               </td>
             </tr>
         </tbody>
