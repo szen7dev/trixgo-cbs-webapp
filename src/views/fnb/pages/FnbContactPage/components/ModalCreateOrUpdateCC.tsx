@@ -56,10 +56,6 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
     }, isFetchList: true, 
     isFetchInfo: false
   })
-  // console.log(listSubType)
-  // console.log(list)
-
-  // orderID: formData.order._id
 
   const { closeModal } = useModal()
   const [formData, setFormData] = useState(initialValues)
