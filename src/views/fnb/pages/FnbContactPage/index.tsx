@@ -396,7 +396,7 @@ export const FnbContactPage: FC = () => {
                       </th>
                       <th className="py-1 w-1/6">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
-                              Phân loại lỗi
+                              Nội dung
                           </div>
                       </th>
                       <th className="py-1 w-1/6">
@@ -406,7 +406,7 @@ export const FnbContactPage: FC = () => {
                       </th>
                       <th className="py-1 w-1/6">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
-                              Nội dung
+                              Phân loại lỗi
                           </div>
                       </th>
                       <th className="py-1 w-1/6">
@@ -451,14 +451,14 @@ export const FnbContactPage: FC = () => {
                             <td className="py-1 px-2">
                                 <p><i>{moment(item.createAt).format('DD/MM/YYYY')}</i></p>
                             </td>
-                            <td className="py-1 px-2 text-cbs-highlight-color">
-                                {item?.mistake?.name}
+                            <td className="py-1 px-2">
+                                {item?.name}
                             </td>
                             <td className="py-1 px-2">
                                 {item?.customer?.name} - {item?.customer?.phone}
                             </td>
-                            <td className="py-1 px-2">
-                                {item?.name}
+                            <td className="py-1 px-2 text-cbs-highlight-color">
+                                {item?.mistake?.name}
                             </td>
                             <td className="py-1 px-2">
                                 {item?.order?.name}
