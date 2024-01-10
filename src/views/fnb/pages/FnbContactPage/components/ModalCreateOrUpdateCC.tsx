@@ -8,26 +8,40 @@ import {
 	useQueryListContact,
 } from "services/hooks/cmcs/useContractIncome";
 import { LIMIT_DROPDOWN } from "apis/localdb/index";
+import {
+	useQueryListDoctype,
+} from "services/hooks/useHuman";
 
 export const ModalCreateOrUpdateCC: FC<any> = ({
   modalType,
   onConfirm,
   initialValues = {
-    cashPaymentID: '',
+    customerCareID: '',
+    mistake: '',
     customer: '',
     name: '',
+    description: '',
     note: '',
+    rating: 1,
     amount: 0,
-    payment: 0,
-    active: 1,
+    status: 1,
   }
 }) => {
   const [searchCustomerValue, setSearchCustomerValue] = useState(
-		initialValues?.customer || ""
+		initialValues?.customer?.name || ""
 	);
 	const { listContact: listCustomer } = useQueryListContact({
 		limit: LIMIT_DROPDOWN,
 		keyword: searchCustomerValue,
+	});
+
+  const [searchSubTypeValue, setSearchSubTypeValue] = useState(
+		initialValues?.subType?.name || ""
+	);
+	const { listDoctypes: listSubType } = useQueryListDoctype({
+		limit: LIMIT_DROPDOWN,
+		type: 19,
+		keyword: searchSubTypeValue,
 	});
 
   const { closeModal } = useModal()
@@ -44,10 +58,11 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
 })
 
   const handleSubmit = async () => {
+    // console.log(formData)
     if(!formData.name) {
       return toast.warn('Vui lòng nội dung');
     }
-    const formDataFormat = { ...formData, amount: +formData.amount, payment: +formData.payment, active: +formData.active}
+    const formDataFormat = { ...formData, amount: +formData.amount, rating: +formData.rating, status: +formData.status, customerID: formData.customer._id, mistakeID: formData.mistake._id}
     try {
       // Handle api here!
       switch (modalType) {
@@ -65,6 +80,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
 
         // Cập nhật mẩu tin
         case 'update': {
+          console.log(formDataFormat)
           const { error, message } = await updateAsync(formDataFormat);
 
           if (error) {
@@ -113,6 +129,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
       </header>
 
       <section className="px-5 mt-2">
+        <p>Khách hàng (*)</p>
         <DropdownSearchable
             onchangeValue={(value: any) => {
                 setFormData((previous: any) => ({
@@ -127,9 +144,8 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
                 }))
             }}
             onSearchInputChange={debounce((value: any) => setSearchCustomerValue(value), 600)}
-            // onScroll={handleScroll}
-            className="w-full mt-2 rounded-md border border-primary-border py-1 placeholder-primary-gray bg-cbs-table-header"
-            placeholder="Mã khách"
+            className="w-full rounded-md border border-primary-border py-1 placeholder-primary-gray bg-cbs-table-header"
+            placeholder="Khách hàng (*)"
             isMultiple={false}
             allowClearValueSingleInput={true}
             showTriangle={false}
@@ -140,7 +156,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
                 </div>
             )}
             data={listCustomer.map((item: any) => ({
-                label: `${item.name}-${item.phone}`,
+                label: `${item.name}`,
                 value: item._id,
             }))}
             initialValue={{
@@ -155,57 +171,119 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
         />
       </section>
 
+      <section className="px-5 mt-2">
+        <p>Phân loại vấn đề (*)</p>
+        <DropdownSearchable
+            onchangeValue={(value: any) => {
+              // console.log(value)
+              // console.log(formData)
+                setFormData((previous: any) => ({
+                    ...previous,
+                    mistakeID: value?.id
+                }))
+            }}
+            onClearData={() => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    mistakeID: ""
+                }))
+            }}
+            onSearchInputChange={debounce((value: any) => setSearchSubTypeValue(value), 600)}
+            className="w-full rounded-md border border-primary-border py-1 placeholder-primary-gray bg-cbs-table-header"
+            placeholder="Phân loại vấn đề (*)"
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            showTriangle={false}
+            maxWidthInput="max-w-full"
+            renderSelectedItem={(item: any) => (
+                <div className="max-w-full">
+                    <p className={"truncate"}>{item.text}</p>
+                </div>
+            )}
+            data={listSubType.map((item: any) => ({
+                label: `${item.name}`,
+                value: item._id,
+            }))}
+            initialValue={{
+              label: `${initialValues?.mistake?.name}`,
+              value: initialValues?.mistake?._id
+            }}
+            formatItem={{
+                id: "value",
+                text: "label",
+            }}
+            inlineSearch={true}
+        />
+      </section>
+
       <section className="px-5 py-2">
+        <p>Nội dung sự việc</p>
         <input
           type="text"
           placeholder="Nội dung"
           name="name"
-          className="h-12 w-full border border-primary-border outline-none px-8"
+          className="h-8 w-full border border-primary-border outline-none px-2"
           defaultValue={formData.name}
           onChange={onChange}
         />
       </section>
 
-      <section className="px-5 mt-2">
+      <section className="px-5 py-2">
+        <p>Diễn giải/cách xử lý</p>
         <input
-          type="number"
-          placeholder="Giá trị thanh toán"
-          name="payment"
-          className="h-12 w-full border border-primary-border outline-none px-8"
-          defaultValue={formData?.payment}
+          type="text"
+          placeholder="Diễn giải/cách xử lý"
+          name="description"
+          className="h-8 w-full border border-primary-border outline-none px-2"
+          defaultValue={formData.description}
           onChange={onChange}
         />
       </section>
 
-      <section className="px-5 mt-2">
-        <input
-          type="number"
-          placeholder="Giá trị sử dụng"
-          name="amount"
-          className="h-12 w-full border border-primary-border outline-none px-8"
-          defaultValue={formData?.amount}
-          onChange={onChange}
-        />
-      </section>
-
-      <section className="px-5 mt-2">
+      <section className="px-5 py-2">
+        <p>Ghi chú</p>
         <input
           type="text"
           placeholder="Ghi chú"
           name="note"
-          className="h-12 w-full border border-primary-border outline-none px-8"
+          className="h-8 w-full border border-primary-border outline-none px-2"
           defaultValue={formData.note}
           onChange={onChange}
         />
       </section>
 
       <section className="px-5 mt-2">
+        <p>Đánh giá của khách (1-5*)</p>
         <input
-          type="text"
-          placeholder="Trạng thái: 1-Có hiệu lực | 2-Hủy"
-          name="active"
-          className="h-12 w-full border border-primary-border outline-none px-8"
-          defaultValue={formData.active}
+          type="number"
+          placeholder="Đánh giá của khách (1-5)"
+          name="rating"
+          className="h-8 w-full border border-primary-border outline-none px-2"
+          defaultValue={formData?.rating}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-5 mt-2">
+        <p>Giá trị bồi thường cho khách</p>
+        <input
+          type="number"
+          placeholder="Giá trị bồi thường cho khách"
+          name="amount"
+          className="h-8 w-full border border-primary-border outline-none px-2"
+          defaultValue={formData?.amount}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-5 mt-2">
+        <p>Tình trạng xử lý</p>
+        <input
+          type="number"
+          placeholder="1-Chưa, đang xử lý | 2-Đã xử lý"
+          name="status"
+          className="h-8 w-full border border-primary-border outline-none px-2"
+          defaultValue={formData?.status}
           onChange={onChange}
         />
       </section>

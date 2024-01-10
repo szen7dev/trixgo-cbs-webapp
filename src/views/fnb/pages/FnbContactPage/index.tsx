@@ -69,31 +69,34 @@ export const FnbContactPage: FC = () => {
 
     const [itemsChecked, setItemsChecked] = useState<Array<any>>([]);
     const [initialValues, setInitialValues] = useState({
-      cashPaymentID: '',
-      customer: '',
-      name: '',
-      note: '',
-      amount: 0,
-      payment: 0,
-      active: 1,
+        customerCareID: '',
+        mistake: '',
+        customer: '',
+        name: '',
+        description: '',
+        note: '',
+        rating: 1,
+        amount: 0,
+        status: 1,
     })
 
-    const { listWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch } = useFnbCustomerCare({
+    const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch } = useFnbCustomerCare({
         params: { 
             keyword, 
             customerID,
-            userCreateID: userID,
+            userCreateID: userID
         },
         isFetchList: true
     })
-    // console.log(listWithPager)
+    // console.log(listDataWithPager)
 
     // Reset form
     const clearData = () => {
         setInitialValues(previousValue => ({
             ...previousValue,
-            cashPaymentID: '',
+            customerCareID: '',
             name: '',
+            description: '',
             note: '',
         }))
     }
@@ -120,15 +123,17 @@ export const FnbContactPage: FC = () => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, name, note, amount, payment, active, customer } = newListIDChecked[0];
+            const { _id, mistake, customer, name, description, note, amount, rating, status } = newListIDChecked[0];
             setInitialValues({
-                cashPaymentID: _id,
-                name,
-                note,
-                amount,
-                payment,
-                active,
+                customerCareID: _id,
+                mistake,
                 customer,
+                name,
+                description,
+                note,
+                rating,
+                amount,
+                status,
             });
         } else {
             clearData();
@@ -142,14 +147,14 @@ export const FnbContactPage: FC = () => {
     }, [itemsChecked]);
 
     const getStateCheckedAll = useCallback(() => {
-        return itemsChecked.length == listWithPager.length;
+        return itemsChecked.length == listDataWithPager.length;
     }, [itemsChecked]);
 
     const onClickCheckAll = () => {
-        if (itemsChecked.length == listWithPager.length) {
+        if (itemsChecked.length == listDataWithPager.length) {
             setItemsChecked([]);
         } else {
-            setItemsChecked(listWithPager);
+            setItemsChecked(listDataWithPager);
         }
     }
 
@@ -162,13 +167,15 @@ export const FnbContactPage: FC = () => {
         if(modalType === 'create') {
             clearData();
             initValues = {
-                cashPaymentID: '',
+                customerCareID: '',
+                mistake: '',
                 customer: '',
                 name: '',
+                description: '',
                 note: '',
+                rating: 1,
                 amount: 0,
-                payment: 0,
-                active: 1,
+                status: 1,
             };
         }
 
@@ -176,7 +183,7 @@ export const FnbContactPage: FC = () => {
             <div
                 className={"inline-block w-[521px] h-[400px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "550px",
+                    height: "650px",
                 }}
             >
                 <ModalCreateOrUpdateCC
@@ -307,9 +314,6 @@ export const FnbContactPage: FC = () => {
                               >
                               Tạo mới
                           </button>
-                          {/* <div className="w-10 h-10 bg-secondary-light rounded-full flex items-center justify-center ml-5 cursor-pointer">
-                              <img src={`${process.env.PUBLIC_URL}/images/common/icon-3dots-vertical-gray.svg`} alt="Three Dot" />
-                          </div> */}
                       </div>
 
                       <div className="absolute right-0">
@@ -346,29 +350,29 @@ export const FnbContactPage: FC = () => {
                               />
                           </div>
                       </th>
-                      <th className="w-1/6 py-1">
+                      <th className="py-1 w-1/12">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
                               Ngày
                           </div>
                       </th>
-                      <th className="py-1">
+                      <th className="py-1 w-1/6">
+                          <div className="border-r-2 border-gray-300 font-normal pl-2">
+                              Phân loại lỗi
+                          </div>
+                      </th>
+                      <th className="py-1 w-1/6">
+                          <div className="border-r-2 border-gray-300 font-normal pl-2">
+                              Khách hàng
+                          </div>
+                      </th>
+                      <th className="py-1 w-1/6">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
                               Nội dung
                           </div>
                       </th>
                       <th className="py-1">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
-                              Khách hàng
-                          </div>
-                      </th>
-                      <th className="py-1">
-                          <div className="border-r-2 border-gray-300 font-normal pl-2">
-                              Phân loại lỗi
-                          </div>
-                      </th>
-                      <th className="py-1">
-                          <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Đánh giá
+                                Đánh giá 1-5*
                           </div>
                       </th>
                       <th className="py-1">
@@ -385,7 +389,7 @@ export const FnbContactPage: FC = () => {
               </thead>
               <tbody>
                 {
-                  (listWithPager[pageIndex] ?? []).map((item: any, index: any) => {  
+                  (listDataWithPager[pageIndex] ?? []).map((item: any, index: any) => {  
                       return (
                         <tr key={item._id} className="border-b border-primary-border h-10">
                             <td className="py-1 px-2 text-center">
@@ -399,14 +403,14 @@ export const FnbContactPage: FC = () => {
                             <td className="py-1 px-2">
                                 <p><i>{moment(item.createAt).format('DD/MM/YYYY')}</i></p>
                             </td>
-                            <td className="py-1 px-2">
-                                {item?.name}
+                            <td className="py-1 px-2 text-cbs-highlight-color">
+                                {item?.mistake?.name}
                             </td>
                             <td className="py-1 px-2">
                                 {item?.customer?.name} - {item?.customer?.phone}
                             </td>
-                            <td className="py-1 px-2 text-right">
-                                {formatNumberMoney(item?.mistake?.name)}
+                            <td className="py-1 px-2">
+                                {item?.name}
                             </td>
                             <td className="py-1 px-2 text-right">
                                 {formatNumberMoney(item?.rating)}
