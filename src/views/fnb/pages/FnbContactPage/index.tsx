@@ -561,11 +561,13 @@ export const FnbContactPage: FC = () => {
                                 />
                             </td>
                             <td className="py-1 px-2">
-                                <p><i>{moment(item.createAt).format('DD/MM/YYYY')}</i></p>
+                                {moment(item.createAt).format('DD/MM/YYYY')}
+                                <p><i>{moment(item.createAt).format('HH:mm')}</i></p>
                             </td>
                             <td className="py-1 px-2">
                                 {item?.name}
                                 <p style={{color: cl}}><i>{(item.type == 1 ? "Lỗi của nhân viên" : "Lỗi khách quan")}</i></p>
+                                <p className="text-primary-gray"><i>{item?.manager ? `Người tạo: ${item?.userCreate?.fullname}` : ''}</i></p>
                             </td>
                             <td className="py-1 px-2">
                                 {item?.customer?.name} - {item?.customer?.phone}
