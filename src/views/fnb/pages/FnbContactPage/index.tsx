@@ -43,6 +43,20 @@ export const FnbContactPage: FC = () => {
         { _id: 2, text: 'Lỗi khách quan'}
     ]
 
+    const CHANNEL = [
+        { _id: 1, text: 'Offline' },
+        { _id: 2, text: 'Grab Food'},
+        { _id: 3, text: 'Shopee Food'},
+        { _id: 4, text: 'Gojek'},
+        { _id: 5, text: 'Baemin'},
+        { _id: 6, text: 'Loship'},
+        { _id: 7, text: 'Bee'},
+        { _id: 8, text: '--'},
+        { _id: 9, text: '--'},
+        { _id: 10, text: '--'},
+        { _id: 11, text: '--'},
+    ]
+
     const [pageIndex, setPageIndex] = useState(0)
     const { closeModal, openModal } = useModal();
     const [keyword, setKeyword] = useState('');
@@ -57,6 +71,7 @@ export const FnbContactPage: FC = () => {
     const [managerID, setManagerID] = useState<string | null>();
     const [status, setStatus] = useState<string | null>();
     const [type, setType] = useState<string | null>();
+    const [channel, setChannel] = useState<string | null>();
 
     const [inputFilter, setInputFilter] = useState({
       keyword: '',
@@ -98,6 +113,7 @@ export const FnbContactPage: FC = () => {
             keyword, 
             status,
             type,
+            channel,
             customerID,
             userCreateID: userID,
             managerID,
@@ -283,6 +299,30 @@ export const FnbContactPage: FC = () => {
                         }}
                         onchangeValue={item => {
                             setCustomerID(item._id);
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.text}</p>
+                        )}
+                        selectOneByOne={true}
+                    />
+                    <DropdownSearchableV2
+                        ref={accountRef}
+                        className={"mr-1 border border-primary-border rounded-lg"}
+                        placeholder={"Kênh bán"}
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        data={CHANNEL}
+                        formatItem={{
+                            id: "_id",
+                            text: "text",
+                        }}
+                        onClearData={() => {
+                            setChannel("0");
+                        }}
+                        onchangeValue={item => {
+                            setChannel(item._id);
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
                         }}
@@ -535,6 +575,13 @@ export const FnbContactPage: FC = () => {
                             </td>
                             <td className="py-1 px-2">
                                 {item?.order ? `${item?.order?.name} - Thời gian: ${moment(item?.order?.createAt).format('DD/MM/YYYY HH:mm')}` : ''}
+                                {
+                                    (item?.channel && Number(item?.channel ) >= 1) ?
+                                    <div className="py-1 px-1 text-cbs-primary">
+                                        Kênh bán hàng: {CHANNEL[Number(item?.channel) - 1]?.text}
+                                    </div>
+                                    : <></>
+                                }
                                 <p><i>{item?.funda?.name}</i></p>
                                 <p className="text-cbs-highlight-color"><i>{item?.manager ? `Quản lý: ${item?.manager?.fullname}` : ''}</i></p>
                             </td>
