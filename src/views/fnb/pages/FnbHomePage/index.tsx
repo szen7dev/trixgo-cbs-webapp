@@ -1390,9 +1390,6 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
                       <Link to={`/fnb/home/${item._id}/print/1`}>
                         <span className="mr-5 text-cbs-primary underline">In bill</span>
                       </Link>
-                      {/* <Link to={`/mobile/activity/6416de89564cb80f608e02cd`}>
-                        <span className="mr-5 text-cbs-primary underline">In bill</span>
-                      </Link> */}
                       <Link to={`/fnb/home/${item._id}/print/2`}>
                         <span className="text-cbs-primary underline">In tem</span>
                       </Link>

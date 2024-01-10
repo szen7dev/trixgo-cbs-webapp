@@ -27,6 +27,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
     rating: 1,
     amount: 0,
     status: 1,
+    type: 1,
   }
 }) => {
   const [searchCustomerValue, setSearchCustomerValue] = useState(
@@ -75,7 +76,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
     if(!formData.name) {
       return toast.warn('Vui lòng nội dung');
     }
-    const formDataFormat = { ...formData, amount: +formData.amount, rating: +formData.rating, status: +formData.status}
+    const formDataFormat = { ...formData, amount: +formData.amount, rating: +formData.rating, status: +formData.status, type: +formData.type}
     try {
       // Handle api here!
       switch (modalType) {
@@ -141,7 +142,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
         />
       </header>
 
-      <section className="px-5 mt-2">
+      <section className="px-5">
         <p>Khách hàng (*)</p>
         <DropdownSearchable
             onchangeValue={(value: any) => {
@@ -333,13 +334,25 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
       </section>
 
       <section className="px-5 mt-2">
-        <p>Tình trạng xử lý</p>
+        <p>Tình trạng xử lý (1-Chưa, đang xử lý|2-Đã xử lý)</p>
         <input
           type="number"
-          placeholder="1-Chưa, đang xử lý | 2-Đã xử lý"
+          placeholder="1-Chưa, đang xử lý|2-Đã xử lý"
           name="status"
           className="h-8 w-full border border-primary-border outline-none px-2"
           defaultValue={formData?.status}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-5 mt-2">
+        <p>Phân loại (1-Lỗi của nhân viên|2-Lỗi khách quan)</p>
+        <input
+          type="number"
+          placeholder="1-Lỗi của nhân viên|2-Lỗi khách quan)"
+          name="type"
+          className="h-8 w-full border border-primary-border outline-none px-2"
+          defaultValue={formData?.type}
           onChange={onChange}
         />
       </section>

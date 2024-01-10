@@ -349,7 +349,7 @@ export const DropdownSearchable = forwardRef<DropdownSearchableHandle, Props>(({
           placeholder={placeholder}
           ref={inputSearchRef}
           className={
-            "inline-SearchMessage-dropdown flex-1 ml-1 focus:outline-none bg-transparent"
+            "inline-SearchMessage-dropdown flex-1 focus:outline-none bg-transparent"
           }
           value={searchTerm}
           onChange={(e) => handleSearchingValue(e.target.value)}
@@ -360,7 +360,7 @@ export const DropdownSearchable = forwardRef<DropdownSearchableHandle, Props>(({
     ) : (
       <div
         className={classNames(
-          "flex text-left relative py-0.5 pl-2 pr-8 mb-1 mt-1 max-w-full ",
+          "flex text-left relative py-0.5 pl-2 pr-8 max-w-full ",
           {
             "text-gray-300": !value,
             border: bordered,
