@@ -4,7 +4,6 @@ import cn from "classnames";
 import debounce from "lodash/debounce";
 import moment from "moment";
 import { toast } from "react-toastify";
-import { Link, useParams, useHistory } from "react-router-dom";
 import { read, utils } from 'xlsx';
 import { formatNumberMoney } from "utils/cmcs";
 
@@ -28,19 +27,23 @@ import { useModal } from "services/hooks/useModal";
 import { useFnbCustomerCare } from "services/hooks/fnb/useFnbCustomerCare";
 import { useContact } from "services/hooks/items/useContact";
 import { useUserSystem } from 'services/hooks/users/useUserSystem';
+import { FilterDateGroup }  from "views/accounting/shareComponents/common";
 
 /*=====7.OTHER=====*/
 import { createLinkAndClick } from "utils";
 
 export const FnbContactPage: FC = () => {
     const STATUS = [
-        { _id: 1, text: 'Đang xử lý' },
+        { _id: 1, text: 'Chưa, đang xử lý' },
         { _id: 2, text: 'Hoàn thành'}
     ]
 
-    const [showOption, setShowOption] = useState(false)
+    const TYPE = [
+        { _id: 1, text: 'Lỗi của nhân viên' },
+        { _id: 2, text: 'Lỗi khách quan'}
+    ]
+
     const [pageIndex, setPageIndex] = useState(0)
-    const history = useHistory();
     const { closeModal, openModal } = useModal();
     const [keyword, setKeyword] = useState('');
 
@@ -51,7 +54,9 @@ export const FnbContactPage: FC = () => {
 
     const [customerID, setCustomerID] = useState<string | null>();
     const [userID, setUserID] = useState<string | null>();
+    const [managerID, setManagerID] = useState<string | null>();
     const [status, setStatus] = useState<string | null>();
+    const [type, setType] = useState<string | null>();
 
     const [inputFilter, setInputFilter] = useState({
       keyword: '',
@@ -85,14 +90,19 @@ export const FnbContactPage: FC = () => {
         rating: 1,
         amount: 0,
         status: 1,
+        type: 1,
     })
 
     const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch } = useFnbCustomerCare({
         params: { 
             keyword, 
             status,
+            type,
             customerID,
-            userCreateID: userID
+            userCreateID: userID,
+            managerID,
+            fromDate: inputFilter.fromDate,
+            toDate: inputFilter.toDate,
         },
         isFetchList: true
     })
@@ -131,7 +141,8 @@ export const FnbContactPage: FC = () => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, mistake, customer, order, name, description, note, amount, rating, status } = newListIDChecked[0];
+            const { _id, mistake, customer, order, name, description, note, amount, rating, status, type } = newListIDChecked[0];
+            // console.log({ _id, mistake, customer, order, name, description, note, amount, rating, status, type })
             setInitialValues({
                 customerCareID: _id,
                 mistake,
@@ -143,6 +154,7 @@ export const FnbContactPage: FC = () => {
                 rating,
                 amount,
                 status,
+                type,
             });
         } else {
             clearData();
@@ -186,6 +198,7 @@ export const FnbContactPage: FC = () => {
                 rating: 1,
                 amount: 0,
                 status: 1,
+                type: 1,
             };
         }
 
@@ -231,16 +244,22 @@ export const FnbContactPage: FC = () => {
         }
 	}
 
+    const handleOnChangeDate = useCallback((date, input) => {
+        if (input) {
+          setInputFilter((value) => ({ ...value, toDate: date }))
+        } else {
+          setInputFilter((value) => ({ ...value, fromDate: date }))
+        }
+        }, [])
+      
     return (
       <main className="relative h-full">
           <header className="sticky top-0 bg-primary-light z-10">
               <div className="h-[50px] border border-primary-border flex items-center justify-between px-5">
                   <div className="flex items-center">
-                      <p className="text-lg ml-2">Danh sách</p>
-
                       <SearchInput
-                          classNameWrapper="ml-4 mr-2 border border-primary-border"
-                          classNameInput="outline-none w-[296px]"
+                          classNameWrapper="mr-2 border border-primary-border"
+                          classNameInput="outline-none w-[175px]"
                           onChange={onChangeSearch}
                       />
 
@@ -275,7 +294,31 @@ export const FnbContactPage: FC = () => {
                     <DropdownSearchableV2
                         ref={accountRef}
                         className={"mr-1 border border-primary-border rounded-lg"}
-                        placeholder={"Người chăm sóc"}
+                        placeholder={"Trạng thái"}
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        data={STATUS}
+                        formatItem={{
+                            id: "_id",
+                            text: "text",
+                        }}
+                        onClearData={() => {
+                            setStatus("0");
+                        }}
+                        onchangeValue={item => {
+                            setStatus(item._id);
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.text}</p>
+                        )}
+                        selectOneByOne={true}
+                    />
+                    <DropdownSearchableV2
+                        ref={accountRef}
+                        className={"mr-1 border border-primary-border rounded-lg"}
+                        placeholder={"Người tạo"}
                         isMultiple={false}
                         allowClearValueSingleInput={true}
                         data={listUser}
@@ -300,27 +343,26 @@ export const FnbContactPage: FC = () => {
                         )}
                         selectOneByOne={true}
                     />
-
                     <DropdownSearchableV2
                         ref={accountRef}
                         className={"mr-1 border border-primary-border rounded-lg"}
-                        placeholder={"Trạng thái"}
+                        placeholder={"Quản lý"}
                         isMultiple={false}
                         allowClearValueSingleInput={true}
-                        data={STATUS}
+                        data={listUser}
                         formatItem={{
                             id: "_id",
-                            text: "text",
+                            text: "fullname",
                         }}
                         onSearchInputChange={debounce(
                             (valueSearch) => setUserKeyword(valueSearch),
                             500
                         )}
                         onClearData={() => {
-                            setStatus("");
+                            setManagerID("");
                         }}
                         onchangeValue={item => {
-                            setStatus(item._id);
+                            setManagerID(item._id);
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
                         }}
@@ -329,6 +371,31 @@ export const FnbContactPage: FC = () => {
                         )}
                         selectOneByOne={true}
                     />
+                    <DropdownSearchableV2
+                        ref={accountRef}
+                        className={"mr-1 border border-primary-border rounded-lg"}
+                        placeholder={"Phân loại"}
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        data={TYPE}
+                        formatItem={{
+                            id: "_id",
+                            text: "text",
+                        }}
+                        onClearData={() => {
+                            setType("0");
+                        }}
+                        onchangeValue={item => {
+                            setType(item._id);
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.text}</p>
+                        )}
+                        selectOneByOne={true}
+                    />
+                    <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
 
                       {/* <button className={"flex items-center justify-center mx-3 ml-3"}
                               onClick={handleExportExcel}
@@ -389,7 +456,7 @@ export const FnbContactPage: FC = () => {
                               />
                           </div>
                       </th>
-                      <th className="py-1 w-1/12">
+                      <th className="py-1 w-[90px]">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
                               Ngày
                           </div>
@@ -399,12 +466,12 @@ export const FnbContactPage: FC = () => {
                               Nội dung
                           </div>
                       </th>
-                      <th className="py-1 w-1/6">
+                      <th className="py-1">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
                               Khách hàng
                           </div>
                       </th>
-                      <th className="py-1 w-1/6">
+                      <th className="py-1">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
                               Phân loại lỗi
                           </div>
@@ -417,6 +484,11 @@ export const FnbContactPage: FC = () => {
                       <th className="py-1">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Đánh giá 1-5*
+                          </div>
+                      </th>
+                      <th className="py-1">
+                          <div className="border-r-2 border-gray-300 font-normal pl-2">
+                              Phương án đã xử lý
                           </div>
                       </th>
                       <th className="py-1">
@@ -435,7 +507,7 @@ export const FnbContactPage: FC = () => {
                 {
                   (listDataWithPager[pageIndex] ?? []).map((item: any, index: any) => {  
                         let cl = 'red'
-                        if(item.status == 2){
+                        if(item.type == 2){
                             cl = 'green'
                         }
                       return (
@@ -453,6 +525,7 @@ export const FnbContactPage: FC = () => {
                             </td>
                             <td className="py-1 px-2">
                                 {item?.name}
+                                <p style={{color: cl}}><i>{(item.type == 1 ? "Lỗi của nhân viên" : "Lỗi khách quan")}</i></p>
                             </td>
                             <td className="py-1 px-2">
                                 {item?.customer?.name} - {item?.customer?.phone}
@@ -461,19 +534,31 @@ export const FnbContactPage: FC = () => {
                                 {item?.mistake?.name}
                             </td>
                             <td className="py-1 px-2">
-                                {item?.order?.name}
+                                {item?.order ? `${item?.order?.name} - Thời gian: ${moment(item?.order?.createAt).format('DD/MM/YYYY HH:mm')}` : ''}
                                 <p><i>{item?.funda?.name}</i></p>
                                 <p className="text-cbs-highlight-color"><i>{item?.manager ? `Quản lý: ${item?.manager?.fullname}` : ''}</i></p>
-                                <p><i>{item?.order ? moment(item?.order?.createAt).format('DD/MM/YYYY') : ''}</i></p>
                             </td>
                             <td className="py-1 px-2 text-right">
                                 {formatNumberMoney(item?.rating)}
                             </td>
                             <td className="py-1 px-2">
+                                {item.description}
+                            </td>
+                            <td className="py-1 px-2">
                                 {item.note}
                             </td>
-                            <td className="py-1 px-2" style={{color: cl}}>
-                                {(item.status == 1 ? "Đang xử lý" : "Hoàn thành")}
+                            <td className="py-1 px-2">
+                                {
+                                    item?.status == 1 ?
+                                    <div className="w-[110px] rounded-md py-1 px-2 bg-cbs-schedule-expired text-white" style={{ fontSize: "12px" }}>
+                                        {STATUS[Number(item?.status) - 1]?.text}
+                                    </div>
+                                    :
+                                    <div className="w-[85px] rounded-md py-1 px-2 bg-cbs-schedule-after-7days text-white" style={{ fontSize: "12px" }}>
+                                        {STATUS[Number(item?.status) - 1]?.text}
+                                    </div>
+                                }
+                                
                             </td>
                         </tr>
                       )
