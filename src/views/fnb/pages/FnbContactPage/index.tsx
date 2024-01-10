@@ -72,6 +72,7 @@ export const FnbContactPage: FC = () => {
         customerCareID: '',
         mistake: '',
         customer: '',
+        order: '',
         name: '',
         description: '',
         note: '',
@@ -123,11 +124,12 @@ export const FnbContactPage: FC = () => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, mistake, customer, name, description, note, amount, rating, status } = newListIDChecked[0];
+            const { _id, mistake, customer, order, name, description, note, amount, rating, status } = newListIDChecked[0];
             setInitialValues({
                 customerCareID: _id,
                 mistake,
                 customer,
+                order,
                 name,
                 description,
                 note,
@@ -170,6 +172,7 @@ export const FnbContactPage: FC = () => {
                 customerCareID: '',
                 mistake: '',
                 customer: '',
+                order: '',
                 name: '',
                 description: '',
                 note: '',
@@ -370,6 +373,11 @@ export const FnbContactPage: FC = () => {
                               Nội dung
                           </div>
                       </th>
+                      <th className="py-1 w-1/6">
+                          <div className="border-r-2 border-gray-300 font-normal pl-2">
+                              Đơn hàng
+                          </div>
+                      </th>
                       <th className="py-1">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Đánh giá 1-5*
@@ -411,6 +419,11 @@ export const FnbContactPage: FC = () => {
                             </td>
                             <td className="py-1 px-2">
                                 {item?.name}
+                            </td>
+                            <td className="py-1 px-2">
+                                {item?.order?.name}
+                                <p><i>{item?.funda?.name}</i></p>
+                                <p><i>{item?.order ? moment(item?.order?.createAt).format('DD/MM/YYYY') : ''}</i></p>
                             </td>
                             <td className="py-1 px-2 text-right">
                                 {formatNumberMoney(item?.rating)}

@@ -25,6 +25,7 @@ interface UseCashPayment {
     insertAsync: (payload: CashPaymentInsertPayload) => Promise<any>;
     updateAsync: (payload: CashPaymentUpdatePayload) => Promise<any>;
     deleteManyAsync: (params: CashPaymentDeleteManyPayload) => Promise<any>;
+    listData: Array<CashPayment>;
     listDataWithPager: Array<CashPayment>;
     info: CashPayment | undefined;
     refetch: () => void;
@@ -125,6 +126,7 @@ export const useFnbCustomerCare = ({
         insertAsync,
         updateAsync,
         deleteManyAsync,
+        listData,
         listDataWithPager,
         nextCursor,
         info,

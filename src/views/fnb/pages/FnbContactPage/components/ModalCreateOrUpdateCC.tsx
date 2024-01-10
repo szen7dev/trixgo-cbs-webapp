@@ -11,6 +11,7 @@ import { LIMIT_DROPDOWN } from "apis/localdb/index";
 import {
 	useQueryListDoctype,
 } from "services/hooks/useHuman";
+import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
 
 export const ModalCreateOrUpdateCC: FC<any> = ({
   modalType,
@@ -19,6 +20,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
     customerCareID: '',
     mistake: '',
     customer: '',
+    order: '',
     name: '',
     description: '',
     note: '',
@@ -36,13 +38,28 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
 	});
 
   const [searchSubTypeValue, setSearchSubTypeValue] = useState(
-		initialValues?.subType?.name || ""
+		initialValues?.mistake?.name || ""
 	);
 	const { listDoctypes: listSubType } = useQueryListDoctype({
 		limit: LIMIT_DROPDOWN,
 		type: 19,
 		keyword: searchSubTypeValue,
 	});
+
+  const [searchOrderValue, setSearchOrderValue] = useState(
+		initialValues?.order?.name || ""
+	);
+  const { isLoading, isFetching, fetchNextPage, hasNextPage, totalRecord, list, listWithPager, totalPage, refetch } = useFnbOrder({
+    params: {
+      limit: 10,
+      keyword: searchOrderValue,
+    }, isFetchList: true, 
+    isFetchInfo: false
+  })
+  // console.log(listSubType)
+  // console.log(list)
+
+  // orderID: formData.order._id
 
   const { closeModal } = useModal()
   const [formData, setFormData] = useState(initialValues)
@@ -62,7 +79,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
     if(!formData.name) {
       return toast.warn('Vui lòng nội dung');
     }
-    const formDataFormat = { ...formData, amount: +formData.amount, rating: +formData.rating, status: +formData.status, customerID: formData.customer._id, mistakeID: formData.mistake._id}
+    const formDataFormat = { ...formData, amount: +formData.amount, rating: +formData.rating, status: +formData.status}
     try {
       // Handle api here!
       switch (modalType) {
@@ -80,7 +97,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
 
         // Cập nhật mẩu tin
         case 'update': {
-          console.log(formDataFormat)
+          // console.log(formDataFormat)
           const { error, message } = await updateAsync(formDataFormat);
 
           if (error) {
@@ -207,6 +224,49 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
             initialValue={{
               label: `${initialValues?.mistake?.name}`,
               value: initialValues?.mistake?._id
+            }}
+            formatItem={{
+                id: "value",
+                text: "label",
+            }}
+            inlineSearch={true}
+        />
+      </section>
+
+      <section className="px-5 mt-2">
+        <p>Thuộc đơn hàng</p>
+        <DropdownSearchable
+            onchangeValue={(value: any) => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    orderID: value?.id
+                }))
+            }}
+            onClearData={() => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    orderID: ""
+                }))
+            }}
+            onSearchInputChange={debounce((value: any) => setSearchOrderValue(value), 600)}
+            className="w-full rounded-md border border-primary-border py-1 placeholder-primary-gray bg-cbs-table-header"
+            placeholder="Thuộc đơn hàng"
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            showTriangle={false}
+            maxWidthInput="max-w-full"
+            renderSelectedItem={(item: any) => (
+                <div className="max-w-full">
+                    <p className={"truncate"}>{item.text}</p>
+                </div>
+            )}
+            data={list.map((item: any) => ({
+                label: `${item.name}`,
+                value: item._id,
+            }))}
+            initialValue={{
+              label: `${initialValues?.order?.name}`,
+              value: initialValues?.order?._id
             }}
             formatItem={{
                 id: "value",
