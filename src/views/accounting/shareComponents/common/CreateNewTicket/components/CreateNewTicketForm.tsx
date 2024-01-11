@@ -21,6 +21,10 @@ import {
 	useQueryListDoctype,
 } from "services/hooks/useHuman";
 
+import {
+	useDoctype,
+} from "services/hooks/items/useDoctype";
+
 const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 	const { setFieldValue, values } = formik;
 
@@ -63,10 +67,14 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 	const [searchSubTypeValue, setSearchSubTypeValue] = useState(
 		initialValues?.subType?.name || ""
 	);
-	const { listDoctypes: listSubType } = useQueryListDoctype({
-		limit: LIMIT_DROPDOWN,
-		type: 23,
-		keyword: searchSubTypeValue,
+	const { list: listSubType } = useDoctype({
+		params: { 
+			limit: LIMIT_DROPDOWN,
+			type: 23,
+			keyword: searchSubTypeValue,
+			isShowParentAndChild: 1
+		 },
+		isFetchList: true
 	});
 
 	const [searchWarehouseValue, setSearchWarehouseValue] = useState(
