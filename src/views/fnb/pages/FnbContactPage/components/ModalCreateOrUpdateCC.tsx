@@ -53,6 +53,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
   const { isLoading, isFetching, fetchNextPage, hasNextPage, totalRecord, list, listWithPager, totalPage, refetch } = useFnbOrder({
     params: {
       limit: 10,
+      option: 1,
       keyword: searchOrderValue,
     }, isFetchList: true, 
     isFetchInfo: false
@@ -130,7 +131,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
 
   return (
     <main className="relative h-full">
-      <header className="px-5 py-1 flex items-center justify-between">
+      <header className="px-5 py-1 flex items-center justify-between  mt-2 mb-2">
         <p className="font-bold text-xl">
           {modalType === 'create' ? 'Tạo mới' : 'Cập nhật'}
         </p>
@@ -273,7 +274,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
         />
       </section>
 
-      <section className="px-5 py-2">
+      <section className="px-5 py-1">
         <p>Nội dung sự việc</p>
         <input
           type="text"
@@ -285,7 +286,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
         />
       </section>
 
-      <section className="px-5 py-2">
+      <section className="px-5 py-1">
         <p>Diễn giải/cách xử lý</p>
         <input
           type="text"
@@ -297,7 +298,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
         />
       </section>
 
-      <section className="px-5 py-2">
+      <section className="px-5 py-1">
         <p>Ghi chú</p>
         <input
           type="text"
@@ -309,7 +310,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
         />
       </section>
 
-      <section className="px-5 mt-2">
+      <section className="px-5 py-1">
         <p>Đánh giá của khách (1-5*)</p>
         <input
           type="number"
@@ -321,7 +322,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
         />
       </section>
 
-      <section className="px-5 mt-2">
+      <section className="px-5 py-1">
         <p>Giá trị bồi thường cho khách</p>
         <input
           type="number"
@@ -333,7 +334,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
         />
       </section>
 
-      <section className="px-5 mt-2">
+      <section className="px-5 py-1">
         <p>Tình trạng xử lý (1-Chưa, đang xử lý|2-Đã xử lý)</p>
         <input
           type="number"
@@ -345,7 +346,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
         />
       </section>
 
-      <section className="px-5 mt-2">
+      <section className="px-5 py-1">
         <p>Phân loại (1-Lỗi của nhân viên|2-Lỗi khách quan)</p>
         <input
           type="number"

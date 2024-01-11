@@ -51,10 +51,10 @@ export const FnbContactPage: FC = () => {
         { _id: 5, text: 'Baemin'},
         { _id: 6, text: 'Loship'},
         { _id: 7, text: 'Bee'},
-        { _id: 8, text: '--'},
-        { _id: 9, text: '--'},
-        { _id: 10, text: '--'},
-        { _id: 11, text: '--'},
+        { _id: 8, text: 'TikTok'},
+        { _id: 9, text: 'Shopee'},
+        { _id: 10, text: 'Lazada'},
+        { _id: 11, text: 'Reels'},
     ]
 
     const [pageIndex, setPageIndex] = useState(0)
