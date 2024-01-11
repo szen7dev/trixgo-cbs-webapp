@@ -274,15 +274,15 @@ export const FnbContactPage: FC = () => {
               <div className="h-[50px] border border-primary-border flex items-center justify-between px-5">
                   <div className="flex items-center">
                       <SearchInput
-                          classNameWrapper="mr-2 border border-primary-border"
-                          classNameInput="outline-none w-[175px]"
+                          classNameWrapper="mr-2"
+                          classNameInput="outline-none w-[150px]"
                           onChange={onChangeSearch}
                       />
 
                       <DropdownSearchableV2
                         ref={accountRef}
                         className={"mr-1 border border-primary-border rounded-lg"}
-                        placeholder={"Khách hàng"}
+                        placeholder={"Khách"}
                         isMultiple={false}
                         allowClearValueSingleInput={true}
                         data={listCustomer}
@@ -310,7 +310,7 @@ export const FnbContactPage: FC = () => {
                     <DropdownSearchableV2
                         ref={accountRef}
                         className={"mr-1 border border-primary-border rounded-lg"}
-                        placeholder={"Kênh bán"}
+                        placeholder={"Kênh"}
                         isMultiple={false}
                         allowClearValueSingleInput={true}
                         data={CHANNEL}
@@ -358,7 +358,7 @@ export const FnbContactPage: FC = () => {
                     <DropdownSearchableV2
                         ref={accountRef}
                         className={"mr-1 border border-primary-border rounded-lg"}
-                        placeholder={"Người tạo"}
+                        placeholder={"Tạo"}
                         isMultiple={false}
                         allowClearValueSingleInput={true}
                         data={listUser}
@@ -455,7 +455,7 @@ export const FnbContactPage: FC = () => {
 
                       <div className="flex items-center">
                           <button
-                              className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold"
+                              className="flex items-center justify-center text-primary-light bg-cbs-green w-[70px] h-8 rounded font-bold"
                               onClick={() => handleOpenModalCreateOrUpdate('create')}
                               >
                               Tạo mới
@@ -528,7 +528,7 @@ export const FnbContactPage: FC = () => {
                       </th>
                       <th className="py-1">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
-                              Phương án đã xử lý
+                              Xử lý
                           </div>
                       </th>
                       <th className="py-1">
@@ -567,7 +567,8 @@ export const FnbContactPage: FC = () => {
                             <td className="py-1 px-2">
                                 {item?.name}
                                 <p style={{color: cl}}><i>{(item.type == 1 ? "Lỗi của nhân viên" : "Lỗi khách quan")}</i></p>
-                                <p className="text-primary-gray"><i>{item?.manager ? `Người tạo: ${item?.userCreate?.fullname}` : ''}</i></p>
+                                <p className="text-primary-gray"><i>{item?.userCreate ? `Tạo: ${item?.userCreate?.fullname}` : ''}</i></p>
+                                <p className="text-primary-gray"><i>{item?.userUpdate ? `Cập nhật: ${item?.userUpdate?.fullname}` : ''}</i></p>
                             </td>
                             <td className="py-1 px-2">
                                 {item?.customer?.name} - {item?.customer?.phone}
@@ -580,7 +581,7 @@ export const FnbContactPage: FC = () => {
                                 {
                                     (item?.channel && Number(item?.channel ) >= 1) ?
                                     <div className="py-1 px-1 text-cbs-primary">
-                                        Kênh bán hàng: {CHANNEL[Number(item?.channel) - 1]?.text}
+                                        Kênh: {CHANNEL[Number(item?.channel) - 1]?.text}
                                     </div>
                                     : <></>
                                 }

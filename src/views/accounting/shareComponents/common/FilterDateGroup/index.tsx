@@ -17,9 +17,9 @@ export const FilterDateGroup: FC<Props> = ({ fromDate, endDate, onChangeDate }) 
         <span className={cn(
           "text-sm mb-2",
           styles.bgWhiteLight, styles.labelDateSearch
-        )} >Từ ngày</span>
+        )} >Từ</span>
         <DatePicker
-          className="w-28"
+          className="w-24"
           selected={fromDate}
           onChange={(date: Date | null) => onChangeDate(date, 0)}
           dateFormat="dd/MM/yyyy"
@@ -38,9 +38,9 @@ export const FilterDateGroup: FC<Props> = ({ fromDate, endDate, onChangeDate }) 
         <span className={cn(
           "text-sm mb-2",
           styles.bgWhiteLight, styles.labelDateSearch
-        )} >Đến ngày</span>
+        )} >Đến</span>
         <DatePicker
-          className="w-28"
+          className="w-24"
           selected={endDate}
           onChange={(date: Date | null) => onChangeDate(date, 1)}
           dateFormat="dd/MM/yyyy"
