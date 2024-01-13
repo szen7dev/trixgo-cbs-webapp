@@ -132,6 +132,8 @@ export const HumanInfo: FC = () => {
               contractDate: defaultValues.contractDate,
               contractValid: defaultValues.contractValid,
               contractExpire: defaultValues.contractExpire,
+              bankAccount: defaultValues.bankAccount,
+              insuranceFee: defaultValues.insuranceFee,
             }}
             onFinish={handleFinishForm}
           />
@@ -187,30 +189,6 @@ export const HumanInfo: FC = () => {
                 rounded-br-md
               "
             >
-              {/* <div className="py-2 h-1/4 flex items-center gap-5 pl-8 hover:bg-accent-light">
-                <img src={DownloadIcon} alt="Download" className="w-[22px]" />
-                <span className="text-[13px]">
-                  {i18n("menu-dropdown.download")}
-                </span>
-              </div>
-              <div className="py-2 h-1/4 flex items-center gap-5 pl-8 hover:bg-accent-light">
-                <img src={BookmarkIcon} alt="Bookmark" className="w-[22px]" />
-                <span className="text-[13px]">
-                  {i18n("menu-dropdown.bookmark")}
-                </span>
-              </div>
-              <div className="py-2 h-1/4 flex items-center gap-5 pl-8 hover:bg-accent-light">
-                <img src={PrintIcon} alt="Print" className="w-[22px]" />
-                <span className="text-[13px]">
-                  {i18n("menu-dropdown.print")}
-                </span>
-              </div>
-              <div className="py-2 h-1/4 flex items-center gap-5 pl-8 hover:bg-accent-light">
-                <img src={CopyIcon} alt="Copy" className="w-[22px]" />
-                <span className="text-[13px]">
-                  {i18n("menu-dropdown.copy")}
-                </span>
-              </div> */}
               <div
                 className="py-2 h-1/4 flex items-center gap-5 pl-8 hover:bg-accent-light"
                 onClick={handleClickUpdateButton(detailHuman)}
@@ -224,12 +202,6 @@ export const HumanInfo: FC = () => {
                   {i18n("menu-dropdown.update")}
                 </span>
               </div>
-              {/* <div className="py-2 h-1/4 flex items-center gap-5 pl-8 hover:bg-accent-light">
-                <img src={DeleteIcon} alt="Delete" className="w-[22px]" />
-                <span className="text-[13px]">
-                  {i18n("menu-dropdown.delete")}
-                </span>
-              </div> */}
             </div>
           )}
         </div>
@@ -299,6 +271,8 @@ export const HumanInfo: FC = () => {
             sallaryBasic: detailHuman.sallaryBasic,
             documents: detailHuman.documents,
             modifyAt: detailHuman.modifyAt,
+            bankAccount: detailHuman.bankAccount,
+            insuranceFee: detailHuman.insuranceFee,
           }}
         />
         <WorkHistory humanId={id} companyID={detailHuman?.company?._id}/>

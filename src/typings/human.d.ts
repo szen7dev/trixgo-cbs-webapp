@@ -203,6 +203,8 @@ export type Human = {
     insuanceDate?: string;
     documents?: any;
     modifyAt?: any;
+    bankAccount?: any;
+    insuranceFee?: any;
 }
 
 export interface HumanPayload extends QueryParam {

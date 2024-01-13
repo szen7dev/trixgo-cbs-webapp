@@ -156,6 +156,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
       realStatus: 1,
       insuranceStatus: 1,
       familyPolicy: 1,
+      bankAccount: "",
       contractType: "",
       contractSign: "",
       family: "",
@@ -189,6 +190,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
       contractExpire: "",
       linkUser: "",
       note: "",
+      insuranceFee: "",
       ...initialValues,
     };
   }, [initialValues]);
@@ -1374,6 +1376,34 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                           }}
                           inlineSearch={true}
                         />
+                    </div>
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-4/12 text-primary-gray">
+                        Tài khoản ngân hàng
+                      </span>
+                      <Field
+                        type="text"
+                        name="bankAccount"
+                        placeholder="Tài khoản ngân hàng"
+                        className="w-full h-6 outline-none pl-3"
+                        onBlur={(e: FormEvent<HTMLInputElement>) => {
+                          handleBlur(e);
+                        }}
+                      />
+                    </div>
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-4/12 text-primary-gray">
+                        Tiền đóng bảo hiểm
+                      </span>
+                      <Field
+                        type="number"
+                        name="insuranceFee"
+                        placeholder="Tiền đóng bảo hiểm"
+                        className="w-full h-6 outline-none pl-3"
+                        onBlur={(e: FormEvent<HTMLInputElement>) => {
+                          handleBlur(e);
+                        }}
+                      />
                     </div>
                     <div className="w-1/5 flex items-center">
                       <span className="w-4/12 text-primary-gray">
