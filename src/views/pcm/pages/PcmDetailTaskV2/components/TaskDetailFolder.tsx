@@ -16,7 +16,6 @@ import { PCM_PROPOSAL_TASK } from 'apis/localdb';
 import iconFolder from "assets/images/icons8-folder-48.svg";
 import iconSnooze from "assets/images/icons8-snooze-48.svg";
 import iconCheckmark from "assets/images/icons8-checkmark-yes-64.svg";
-// import PencilIcon from "assets/images/icons8-pencil-96.svg";
 
 type Props = {
     task: Task;

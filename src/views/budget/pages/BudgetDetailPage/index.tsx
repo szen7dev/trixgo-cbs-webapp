@@ -1,4 +1,4 @@
-import { FC, Fragment, useEffect, useState } from "react";
+import { FC, Fragment, useEffect, useState, useCallback } from "react";
 import { useParams, Link } from 'react-router-dom';
 import classNames from 'classnames';
 
@@ -11,6 +11,10 @@ import { formatNumberMoney } from "utils/converter";
 import { createLinkAndClick } from 'utils';
 import { read, utils } from 'xlsx';
 import { toast } from "react-toastify";
+import iconCheckmark from "assets/images/icons8-copy-96.svg";
+import { ModalConfirm } from "shareComponents/common";
+import { useModal } from "services/hooks/useModal";
+import API from "apis/repository";
 
 /**
  * Hooks, Typings
@@ -22,6 +26,8 @@ import { BudgetGroupRepository, BudgetWorkRepository } from "apis/budget";
 import { BudgetItem } from 'typings/budget/budget-item';
 import { BudgetGroup } from 'typings/budget/budget-group';
 import { BudgetWork } from 'typings/budget/budget-work';
+
+const APP_BUGET = "/api/buget";
 
 const executeSetState = (key: string, funcs: Array<Array<any>>, payload: any) => {
 	const keys = [
@@ -81,6 +87,7 @@ const executeSetState = (key: string, funcs: Array<Array<any>>, payload: any) =>
 }
 
 export const BudgetDetailPage: FC = () => {
+	const { openModal, closeModal } = useModal();
 	const { budgetID } = useParams<{ budgetID: string }>();
 
 	const [isToggleModal, setIsToggleModal] = useState(false);
@@ -226,6 +233,38 @@ export const BudgetDetailPage: FC = () => {
 		toggleModal();
 	}
 
+	const toggleModalOpenSign = () => {
+        openModal(
+          <div
+            className={
+              "inline-block w-[521px] h-[240px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+            }
+          >
+            <ModalConfirm
+              title="Bạn có muốn xác nhận không?"
+              description="Ngân sách sẽ được copy sang một bản mới"
+              onConfirm={handleConfirmCopy}
+              defaultText={false}
+              onCancel={closeModal}
+            />
+          </div>
+        );
+    };
+
+	const handleConfirmCopy = useCallback(async () => {
+		const { data, status } = await API.post(
+			`api/budget/budget_works/copy`, {
+				option: 1,
+				budgetID: budgetID,
+			}
+		  )
+		  closeModal();
+		  if (status !== 200 || data.error) {
+			return toast.warn('Copy thất bại')
+		}
+		  return toast.success('Copy thành công')
+    }, [])
+
 	/**
      * Xử lý download template excel
      */
@@ -319,6 +358,10 @@ export const BudgetDetailPage: FC = () => {
 							accept=".xlsx, .xlsm, .xls, .csv"/>
 						<label className="custom-file-label" htmlFor="inputGroupFile">Import excel ngân sách</label>
 					</button>
+					<button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={toggleModalOpenSign}>
+                        <img src={iconCheckmark} alt={"----"} className={"mr-2"} />
+                        <span>Copy ngân sách</span>
+                    </button>
 				</div>
 				<div className="flex items-center">
 					<button
