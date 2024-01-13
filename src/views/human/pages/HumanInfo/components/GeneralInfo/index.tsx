@@ -1,7 +1,7 @@
 import { FC, memo } from "react";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
-
+import { formatNumberMoney, convertDisplayDate } from "utils/cmcs";
 import type { Human } from 'typings/human';
 
 type Props = {
@@ -320,6 +320,20 @@ export const GeneralInfo: FC<Props> = memo((props) => {
               </td>
               <td className="border w-2/6 pl-4">
                 {info?.signerOut}
+              </td>
+            </tr>
+            <tr className="border h-7 leading-7">
+              <td className="border text-primary-gray w-1/6 pl-4">
+                Tài khoản ngân hàng
+              </td>
+              <td className="border w-2/6 pl-4">
+                {info?.bankAccount}
+              </td>
+              <td className="border text-primary-gray w-1/6 pl-4">
+                Mức đóng bảo hiểm
+              </td>
+              <td className="border w-2/6 pl-4">
+                {formatNumberMoney(info?.insuranceFee)}
               </td>
             </tr>
             <tr className="border h-7 leading-7">
