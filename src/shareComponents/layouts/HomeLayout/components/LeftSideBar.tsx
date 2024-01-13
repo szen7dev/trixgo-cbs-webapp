@@ -8,7 +8,6 @@ import { NavLink } from 'react-router-dom';
 import fakeThumbnail from "assets/images/thumbnail1.jpg";
 import dollarIcon from "assets/images/icons8-us-dollar-80.png";
 import chevronRight from "assets/images/icon-expand-arrow-right.png";
-import iconFolder from "assets/images/icons8-application-window-100.png";
 import iconBigFolder from "assets/images/icons8-opened-folder-240.png";
 
 import adminImage from "assets/menu/pcm/admin.png";

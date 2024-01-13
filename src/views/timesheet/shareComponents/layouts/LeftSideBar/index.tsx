@@ -2,8 +2,7 @@ import { FC } from "react";
 import { NavLink } from 'react-router-dom';
 import { APP_ID } from "apis/localdb";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
-
-import iconFolder from "assets/images/icons8-application-window-100.png";
+import iconFolder from "assets/images/bullet.svg";
 
 export const LeftSideBar: FC = () => {
   const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.TIMESHEET.id })
@@ -19,7 +18,7 @@ export const LeftSideBar: FC = () => {
             className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
           >
             <img
-              width={'20px'}
+              width={'7px'}
               src={iconFolder}
               alt="Menu item"
             />
@@ -31,7 +30,7 @@ export const LeftSideBar: FC = () => {
                   className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
                 >
                   <img
-                    width={'20px'}
+                    width={'7x'}
                     src={iconFolder}
                     alt="Menu item"
                   />

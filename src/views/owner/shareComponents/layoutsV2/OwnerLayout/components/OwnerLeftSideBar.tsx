@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 /*=====2.CSS=====*/
 
 /*=====3.ICONS=====*/
-import iconFolder from "assets/images/icons8-application-window-100.png";
+import iconFolder from "assets/images/bullet.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
 
@@ -40,15 +40,15 @@ export const OwnerLeftSideBar: FC = () => {
                 {/* menu block */}
                 <div className="t-link-menu-container">
                     <NavLink to={`/owner/home`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                        <img width={'20px'} src={iconFolder} alt="Menu item" />
+                        <img width={'7px'} src={iconFolder} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Trang chủ</span>
                     </NavLink>
                     <NavLink to={`/owner/members`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                        <img  width={'20px'} src={iconFolder} alt="Menu item" />
+                        <img  width={'7px'} src={iconFolder} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Tài khoản thành viên</span>
                     </NavLink>
                     <NavLink to={`/owner/grant`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                        <img  width={'20px'} src={iconFolder} alt="Menu item" />
+                        <img  width={'7px'} src={iconFolder} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Cấp phép ứng dụng</span>
                     </NavLink>
                 </div>
