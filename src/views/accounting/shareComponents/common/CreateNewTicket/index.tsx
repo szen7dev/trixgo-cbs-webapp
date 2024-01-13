@@ -213,7 +213,7 @@ export const CreateNewTicket: FC<any> = ({ onFinish, title, idEdit = '', isEdit 
           return (
             <Form style={{ 'height': 'calc(100% - 110px)' }}>
               <div className={"flex-1 h-full overflow-x-scroll create-ticket-working-space"}>
-                <CreateNewTicketForm formik={formik} initialValues={initialValues} />
+                <CreateNewTicketForm formik={formik} initialValues={initialValues} isEdit={isEdit} />
               </div>
               {lastestIDJournals && (
                 <div>

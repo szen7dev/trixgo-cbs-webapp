@@ -80,18 +80,18 @@ export const AccountingTicketDetailPage: FC<Props> = ({ type = 1 }) => {
       try {
           console.log('Clicked with parameter:', param);
             setStateExport({ isExporting: true })
-            const { error, data } = await exportExcelAsync({ 
+            const { error, data } = await exportExcelAsync({
               type: param.option,
               voucherID: params.id,
               filterParams: {
                 voucherID: params.id
               }
              })
-  
+
             if(error) {
                 return toast.warn(data?.message);
             }
-  
+
             data && createLinkAndClick(data, '_self')
         } catch (error: any) {
             toast.error(error.message)
