@@ -67,7 +67,7 @@ export const AccountingDiaryPage: FC = () => {
   const { exportExcelAsync } = useJournal({})
   const handleExportExcel = async (param: any) => {
     try {
-        console.log('Clicked with parameter:', param);
+          console.log('Clicked with parameter:', param)
           setStateExport({ isExporting: true })
           const { error, data } = await exportExcelAsync({ 
               type: param.option,

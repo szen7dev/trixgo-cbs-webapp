@@ -214,12 +214,9 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
         )
     }
 
-    /**
-     * 
-     * Xử lý download template excel
-     */
     //_____Import, export excel
     const [dataImport, setDataImport] = useState([]);
+    const [dataImport2, setDataImport2] = useState([]);
     const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
         isExporting: false,
     });
@@ -244,10 +241,9 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
         }
 	}
 
-    /**
-     * Xử lý import excel (đọc file)
-     */
-    const handleImport = ($event: any) => {
+    //_____Import excel
+    const handleImport1 = ($event: any) => {
+        // console.log('11111111111111111111111111111')
         const files = $event.target.files;
         if (files.length) {
             const file = files[0];
@@ -257,35 +253,65 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                 const sheets = wb.SheetNames;
 
                 if (sheets.length) {
-                    const rows: any = utils.sheet_to_json(wb.Sheets[sheets[0]]); // Index=1 (tức Sheet số 2 từ trái sang)
-                    
-                    // Set data để Import
-                    setDataImport(rows)
+                    const rows: any = utils.sheet_to_json(wb.Sheets[sheets[0]]); // Index=0 (Sheet 1 từ trái sang)
+                    setDataImport(rows) // Set data để Import
                 }
             }
-            
-            reader.readAsArrayBuffer(file);
+            reader.readAsArrayBuffer(file)
         }
-
-        // Đọc xong thì xóa value trong Input đi
-        $event.target.value = null;
+        $event.target.value = null; // Đọc xong xóa value trong Input đi
     }
 
-    // Gọi tới API để đẩy data lên
+    const handleImport2 = ($event: any) => {
+        // console.log('2222222222222222222222222222222')
+        const files = $event.target.files;
+        if (files.length) {
+            const file = files[0];
+            const reader = new FileReader();
+            reader.onload = (event: any) => {
+                const wb = read(event.target.result);
+                const sheets = wb.SheetNames;
+
+                if (sheets.length) {
+                    const rows: any = utils.sheet_to_json(wb.Sheets[sheets[1]]); // Index=0 (Sheet 1 từ trái sang)
+                    setDataImport2(rows) // Set data để Import
+                }
+            }
+            reader.readAsArrayBuffer(file)
+        }
+        $event.target.value = null; // Đọc xong xóa value trong Input đi
+    }
+
+    //_____Gọi tới API để đẩy data lên
     useEffect(() => {
         if(dataImport.length){
             const fetchData = async () => {
-                const data = await importCustomerFromExcelAsync({ dataImport: JSON.stringify(dataImport) });
+                const data = await importCustomerFromExcelAsync({ dataImport: JSON.stringify(dataImport), option: 1 })
                 setDataImport([])
 
                 if(!data.error){
-                    return toast.success("Import thành công");
+                    return toast.success("Import thành công")
                 }
-                return toast.error(data.message);
+                return toast.error(data.message)
             }
-            fetchData();
+            fetchData()
         }
     }, [dataImport])
+
+    useEffect(() => {
+        if(dataImport2.length){
+            const fetchData = async () => {
+                const data = await importCustomerFromExcelAsync({ dataImport: JSON.stringify(dataImport2), option: 2 })
+                setDataImport2([])
+
+                if(!data.error){
+                    return toast.success("Import thành công")
+                }
+                return toast.error(data.message)
+            }
+            fetchData()
+        }
+    }, [dataImport2])
     
     return (
         <main className="relative h-full">
@@ -310,9 +336,15 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                         </button>
 
                         <button className={"flex items-center justify-center mx-3 ml-3"}>
-                            <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
+                            <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport1}
                             accept=".xlsx, .xlsm, .xls, .csv"/>
-                            <label className="custom-file-label" htmlFor="inputGroupFile">Import excel tạo danh bạ</label>
+                            <label className="custom-file-label" htmlFor="inputGroupFile">Import excel Tạo danh bạ</label>
+                        </button>
+
+                        <button className={"flex items-center justify-center mx-3 ml-3"}>
+                            <input type="file" name="file" className="custom-file-input" id="inputGroupFile2" required hidden onChange={handleImport2}
+                            accept=".xlsx, .xlsm, .xls, .csv"/>
+                            <label className="custom-file-label" htmlFor="inputGroupFile2">Import excel Tạo hồ sơ</label>
                         </button>
 
                         {/* Nếu chọn 1 phẩn tử => chỉ cho update */}

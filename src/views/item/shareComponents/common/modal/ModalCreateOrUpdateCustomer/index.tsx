@@ -29,7 +29,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
     contactID: '',
     type: 2,
     name: '',
-    // address: '',
+    address: '',
     taxid: '',
     phone: '',
     gender: 1,
@@ -62,10 +62,10 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
       switch (modalType) {
         // Tạo mẩu tin
         case 'create': {
-          const { error, message } = await insertAsync(formData);
+          const { error, data } = await insertAsync(formData);
 
           if (error) {
-            return toast.warning(message);
+            return toast.error(data.message);
           }
           refetchCustomer();
           toast.success('Tạo thành công', { autoClose: 1500 });
@@ -83,9 +83,9 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
 
           if (error) {
             if(data.message){
-              return toast.warning(data.message);
+              return toast.error(data.message);
             }
-            return toast.warning(message);
+            return toast.error(message);
           }
           refetchCustomer();
           toast.success('Cập nhật thành công', { autoClose: 1500 });
@@ -153,7 +153,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
         />
       </header>
 
-      <section className="px-10 mt-2">
+      <section className="px-10">
           <label className="block text-gray-700 text-sm font-bold" htmlFor="txtInitialDay" title="Bắt buộc nhập thông tin">
             Khu vực  (*)
           </label>
@@ -172,7 +172,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
             }}
             onSearchInputChange={debounce((value: any) => setKeywordFunda(value), 600)}
             onScroll={handleScroll}
-            className="w-full mt-2 rounded-md border border-primary-border px-1 py-1 placeholder-primary-gray bg-cbs-table-header"
+            className="w-full rounded-md border border-primary-border px-1 placeholder-primary-gray bg-cbs-table-header"
             placeholder="Tìm kiếm cơ sở"
             isMultiple={false}
             allowClearValueSingleInput={true}
@@ -201,13 +201,13 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
 
       <section className="px-10 py-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription" title="Bắt buộc nhập thông tin">
-          Họ và tên (*)
+          Tên danh bạ (*)
         </label>
         <input
           type="text"
           placeholder="Nhập tên"
           name="name"
-          className="w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
           defaultValue={formData.name}
           onChange={onChange}
         />
@@ -221,7 +221,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
           type="text"
           placeholder="Điện thoại"
           name="phone"
-          className="w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
           defaultValue={formData.phone}
           onChange={onChange}
         />
@@ -235,7 +235,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
           type="text"
           placeholder="Email"
           name="email"
-          className="w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
           defaultValue={formData.email}
           onChange={onChange}
         />
@@ -293,13 +293,13 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
           type="date"
           placeholder="Ngày sinh"
           name="birthday"
-          className="w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
           defaultValue={moment(formData.birthday).format("YYYY-MM-DD")}
           onChange={onChange}
         />
       </section>
 
-      <section className="px-10 mt-2">
+      <section className="px-10">
           <label className="block text-gray-700 text-sm font-bold" htmlFor="txtInitialDay">
             Nhân viên Sale
           </label>
@@ -318,7 +318,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
             }}
             onSearchInputChange={debounce((value: any) => setKeywordUser(value), 600)}
             onScroll={handleScroll}
-            className="w-full mt-2 rounded-md border border-primary-border px-1 py-1 placeholder-primary-gray bg-cbs-table-header"
+            className="w-full rounded-md border border-primary-border px-1 placeholder-primary-gray bg-cbs-table-header"
             placeholder="Tìm kiếm tài khoản"
             isMultiple={false}
             allowClearValueSingleInput={true}
@@ -377,21 +377,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
           </div>
       </section>
 
-      {/* <section className="px-10 mt-2">
-        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtType">
-          Phân loại nhân viên, khách hàng
-        </label>
-        <input
-          type="text"
-          placeholder="1-Nhân viên, 2-Khách hàng"
-          name="type"
-          className="w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"
-          defaultValue={formData.type}
-          onChange={onChange}
-        />
-      </section> */}
-
-      {/* <section className="px-10 py-2">
+      <section className="px-10 py-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription">
           Địa chỉ
         </label>
@@ -399,11 +385,11 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
           type="text"
           placeholder="Nhập địa chỉ"
           name="address"
-          className="w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
           defaultValue={formData.address}
           onChange={onChange}
         />
-      </section> */}
+      </section>
 
       <section className="px-10 py-2">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtTaxid">
@@ -413,13 +399,13 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
           type="text"
           placeholder="Nhập mã số thuế"
           name="taxid"
-          className="w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
           defaultValue={formData.taxid}
           onChange={onChange}
         />
       </section>
 
-      <section className="px-10 mt-2">
+      <section className="px-10">
         <label className="block text-gray-700 text-sm font-bold" htmlFor="txtDescription">
           Ghi chú
         </label>
@@ -427,22 +413,8 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
           type="text"
           placeholder="Nhập ghi chú"
           name="note"
-          className="w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"
+          className="w-full rounded-md border border-primary-border px-2 py-1 pb-2 placeholder-primary-gray bg-cbs-table-header"
           defaultValue={formData.note}
-          onChange={onChange}
-        />
-      </section>
-
-      <section className="px-10 mt-2 hidden">
-        <label className="block text-gray-700 text-sm font-bold" htmlFor="txtNonResident">
-          Khách biết thông tin/vãng lai
-        </label>
-        <input
-          type="text"
-          placeholder="1-Khách biết thông tin, 2-Khách vãng lai/chưa biết thông tin"
-          name="nonResident"
-          className="w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"
-          defaultValue={formData.nonResident}
           onChange={onChange}
         />
       </section>
