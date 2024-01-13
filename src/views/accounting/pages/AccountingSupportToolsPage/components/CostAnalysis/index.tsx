@@ -50,17 +50,16 @@ const CostAnalysis: FC = () => {
       setInputFilter((value) => ({ ...value, fromDate: date }))
     }
    }, [])
-  //  console.log({fundaID, accountID, fromDate: inputFilter.fromDate, toDate: inputFilter.toDate})
 
   const [stateAction, setStateAction] = useState<{ isExporting: boolean }>({
     isExporting: false,
   })
   const { analysePrimeCostAsync } = useJournal({})
-  
+
   const handleAnalysePrimeCost = async () => {
     try {
         setStateAction({ isExporting: true })
-        const { error, data } = await analysePrimeCostAsync({ 
+        const { error, data } = await analysePrimeCostAsync({
               fromDate: inputFilter.fromDate,
               toDate: inputFilter.toDate,
               fundaID: fundaID,

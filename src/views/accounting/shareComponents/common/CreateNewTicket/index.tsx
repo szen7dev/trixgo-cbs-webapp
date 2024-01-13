@@ -77,6 +77,7 @@ const mappingData = (data: any, isDataPayLoad = false) => {
 
 const mappingSelectedJournals = (data = [], isDataPayLoad = false) => {
   return data.map((item: any) => {
+    console.log({ item, isDataPayLoad })
     return {
       journalID: item._id || item.journalID || '',
       debit: isDataPayLoad ? item?.debit?.value : convertInitialValueDropdown(item?.debit || '', '_id', 'name', 'description'),
@@ -172,6 +173,7 @@ export const CreateNewTicket: FC<any> = ({ onFinish, title, idEdit = '', isEdit 
         ...values,
         selectedJournals: [...mappingSelectedJournals(values.selectedJournals, true) || []]
       }
+      console.log({ values, formatData })
       const isSuccess = await onFinish(mappingData(formatData, true), isEdit);
       if (isSuccess) {
         closeModal();
@@ -213,7 +215,7 @@ export const CreateNewTicket: FC<any> = ({ onFinish, title, idEdit = '', isEdit 
           return (
             <Form style={{ 'height': 'calc(100% - 110px)' }}>
               <div className={"flex-1 h-full overflow-x-scroll create-ticket-working-space"}>
-                <CreateNewTicketForm formik={formik} initialValues={initialValues} />
+                <CreateNewTicketForm formik={formik} initialValues={initialValues} isEdit={isEdit} />
               </div>
               {lastestIDJournals && (
                 <div>

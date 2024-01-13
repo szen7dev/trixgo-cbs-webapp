@@ -17,15 +17,12 @@ import {
 	useQueryListContract,
 	useQueryListContractIPC
 } from "services/hooks/cmcs/useContractIncome";
-import {
-	useQueryListDoctype,
-} from "services/hooks/useHuman";
 
 import {
 	useDoctype,
 } from "services/hooks/items/useDoctype";
 
-const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
+const CreateNewTicketForm: FC<any> = ({ formik, initialValues, isEdit }) => {
 	const { setFieldValue, values } = formik;
 
 	const [fundaKeyword, setFundaKeyword] = useState(
@@ -68,7 +65,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 		initialValues?.subType?.name || ""
 	);
 	const { list: listSubType } = useDoctype({
-		params: { 
+		params: {
 			limit: LIMIT_DROPDOWN,
 			type: 23,
 			keyword: searchSubTypeValue,
@@ -564,7 +561,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 					</div>
 				</div>
 			</div>
-			<CreateNewTicketTableAccount formik={formik} initialValues={initialValues} />
+			<CreateNewTicketTableAccount formik={formik} initialValues={initialValues} isEdit={isEdit} />
 		</>
 	)
 }
