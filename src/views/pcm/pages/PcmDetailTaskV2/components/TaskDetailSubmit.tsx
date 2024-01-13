@@ -1,9 +1,11 @@
 import {FC, useState, useEffect} from "react";
 import iconNote from "assets/images/icons8-note-48.svg";
 import { CreateSubmitDetail } from "./CreateSubmitDetail";
-// import { SubmittalItem } from "./SubmittalItem";
 import { useBudgetSubmittal } from 'services/hooks/budget/useBudgetSubmittal';
 import { Task } from "typings/task";
+import { formatNumberMoney } from "utils/cmcs";
+// import cn from "classnames";
+// import styles from 'views/accounting/styles/styles.module.css';
 
 type Props = {
     task: Task;
@@ -14,7 +16,6 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
     const [showCreateSubmittal, setShowCreateSubmittal] = useState(false);
 
     const {
-        // getListByPropertyAsync,
         list: listSubmittals,
         refetch,
         fetchNextPage,
@@ -30,21 +31,6 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
         },
         isFetchList: true,
     })
-
-    // const { getListByPropertyAsync } = useBudgetSubmittal({});
-    // const { error, data } = await getListByPropertyAsync({
-    //     filterParams: {  
-    //     }
-    // });
-
-    // const {
-    //     getListByPropertyAsync
-    // } = useBudgetSubmittal({
-    //     params: {
-    //         taskID: task?._id
-    //     },
-    // })
-    // console.log(getListByPropertyAsync)
 
     return (
         <div className={"subtask mt-5 w-2/3"}>
@@ -77,13 +63,17 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
                                     <th className="w-1 font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-l-0.5 border-r-0.5 border-t-0.5">TT</th>
                                     <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Nội dung</th>
                                     <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Đơn vị</th>
-                                    <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Số lượng</th>
-                                    <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Thành tiền đệ trình (1)</th>
-                                    <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Ngân sách còn lại (2)</th>
-                                    <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Đánh giá (2-1)</th>
+                                    <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">SL trình</th>
+                                    <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Thành tiền trình (1)</th>
+                                    <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Còn lại được chi (2)</th>
+                                    <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Chênh lệch (2-1)</th>
                                     <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Ghi chú</th>
                                 </tr>
-                                <tr className="text-primary-gray whitespace-nowrap align-middle text-left font-bold">
+                                {/* <tr className={cn(
+                                    "whitespace-nowrap align-middle text-left font-bold",
+                                    styles.bgFooterYellow
+                                )}> */}
+                                <tr className="whitespace-nowrap align-middle text-left">
                                     <th className="w-1pt-2.5 pb-3 px-2 border-b border-cbs-border border-l-0.5 border-r-0.5"></th>
                                     <th className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5">Tổng</th>
                                     <th className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5"></th>
@@ -102,17 +92,41 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
                     }
                     <tbody className="text-small">
                         {(listSubmittals && listSubmittals.map((item, index) => {
-                            let amountRetain = 0, amountCheck = 0
+                            let strNotice = '', strColor = 'green'
+
+                            let quantityRetain = 0, amountRetain = 0, amountCheck = 0, quantityCheck = 0
                             if(item?.work){
+                                quantityRetain = Number(item?.work?.quantity) - Number(item?.work?.impleQuantity)
                                 amountRetain = Number(item?.work?.amount) - Number(item?.work?.impleAmount)
+                                
                                 amountCheck = Number(amountRetain) - Number(item.amount)
+                                quantityCheck = Number(quantityRetain) - Number(item.quantity)
                             }
+
+                            if(amountCheck <0){
+                                strNotice = strNotice + 'Vượt giá trị'
+                                
+                                if(quantityCheck <0){
+                                    strNotice = strNotice + '+Vượt khối lượng'
+                                    strColor = 'red'
+                                }else{
+                                    strColor = 'orange'
+                                }
+                            }else{
+                                if(quantityCheck <0){
+                                    strNotice = 'Vượt khối lượng'
+                                    strColor = 'orange'
+                                }
+                            }
+
                             return (
                                 <tr key={item._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
                                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-l-0.5 border-r-0.5">{Number(index + 1)}</td>
                                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5">
                                         {item.name}
                                         <p className="text-cbs-highlight-color"><i>{item?.work?.sign}-{item?.work?.name}</i></p>
+                                        <p>SL ({formatNumberMoney(item?.work?.quantity)})-Thực hiện ({formatNumberMoney(item?.work?.impleQuantity)})-Còn (<b style={{color: "green"}}>{formatNumberMoney(quantityRetain)}</b>)</p>
+                                        <p>Giá trị ({formatNumberMoney(item?.work?.amount)})-Thực hiện ({formatNumberMoney(item?.work?.impleAmount)})-Còn (<b style={{color: "green"}}>{formatNumberMoney(amountRetain)}</b>)</p>
                                     </td>
                                     <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5">
                                         {item?.unit}
@@ -132,22 +146,16 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
                                         {amountRetain.toLocaleString("vi", {
                                             maximumFractionDigits: 0,
                                         })}
-                                        <p>-----------------</p>
-                                        {item?.work?.impleAmount.toLocaleString("vi", {
-                                            maximumFractionDigits: 0,
-                                        })}/
-                                         {item?.work?.amount.toLocaleString("vi", {
-                                            maximumFractionDigits: 0,
-                                        })}
                                     </td>
-                                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5  text-right" style={{color: amountCheck < 0 ? "rgb(255, 0, 0)" : "#000000"}}>
+                                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5  text-right" style={{color: strColor}}>
                                         {Number(amountCheck).toLocaleString("vi", {
                                             maximumFractionDigits: 0,
                                         })}
-                                        <p>-----------------</p>
-                                        {amountCheck < 0 ? "Vượt" : ""}
                                     </td>
-                                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5">{item.note}</td>
+                                    <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5">
+                                        {item.note}
+                                        <p style={{color: strColor}}>{strNotice}</p>
+                                    </td>
                                 </tr>
                             )
                         }))}
