@@ -5,7 +5,6 @@ import { NavLink } from "react-router-dom";
 /*=====2.CSS=====*/
 
 /*=====3.ICONS=====*/
-// import iconFolder from "assets/images/icons8-application-window-100.png";
 import iconFolder from "assets/images/bullet.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/

@@ -7,7 +7,7 @@ import { NavLink } from 'react-router-dom';
 /*=====3.ICONS=====*/
 // import budgetLogo from "assets/logos/budget.png";
 // import fakeThumbnail from "assets/images/avatar.jpg";
-import iconFolder from "assets/images/icons8-application-window-100.png";
+import iconFolder from "assets/images/bullet.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
 
@@ -40,7 +40,7 @@ export const BudgetLeftSideBar: FC = () => {
                         </NavLink> : <></>
                     }
                     <NavLink to={`/budget/home`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
-                        <img width={'20px'} src={iconFolder} alt="Menu item" />
+                        <img width={'7px'} src={iconFolder} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Trang chủ</span>
                     </NavLink>
                 </div>
