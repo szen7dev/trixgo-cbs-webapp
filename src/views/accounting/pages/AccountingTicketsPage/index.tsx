@@ -191,7 +191,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
   return (
     <main className="h-full">
       <header className="h-[50px] w-full border border-primary-border flex items-center px-3">
-        <SearchInput classNameWrapper={"mr-1 border border-primary-border"} onChange={onChangeSearch} />
+        <SearchInput classNameWrapper={"mr-1"} onChange={onChangeSearch} />
         <DropdownSearchableV2
             ref={accountRef}
             className={"mr-1 border border-primary-border rounded-lg"}
