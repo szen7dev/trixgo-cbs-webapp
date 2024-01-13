@@ -220,7 +220,13 @@ const CreateNewTicketTableAccount: FC<Props> = ({ formik, initialValues, isEdit 
 													(value) => setSearchCustomerDebitValue(value),
 													500
 												)}
-												valueControlled={isEdit ? initialValues.selectedJournals?.[index]?.customer : customer}
+												valueControlled={
+													isEdit ? (
+														(initialValues.customer?._id !== customer.value)
+															? customer
+															: initialValues.selectedJournals?.[index]?.customer
+													) : customer
+												}
 												initialValue={item.customerDebit}
 												data={listCustomerDebit.map((item: any) => ({
 													label: item.name,
@@ -254,7 +260,13 @@ const CreateNewTicketTableAccount: FC<Props> = ({ formik, initialValues, isEdit 
 													(value) => setSearchCustomerDebitValue(value),
 													500
 												)}
-												valueControlled={isEdit ? initialValues.selectedJournals?.[index]?.customer : customer}
+												valueControlled={
+													isEdit ? (
+														(initialValues.customer?._id !== customer.value)
+															? customer
+															: initialValues.selectedJournals?.[index]?.customer
+													) : customer
+												}
 												initialValue={item.customerCredit}
 												data={listCustomerDebit.map((item: any) => ({
 													label: item.name,
@@ -318,7 +330,13 @@ const CreateNewTicketTableAccount: FC<Props> = ({ formik, initialValues, isEdit 
 													(value) => setSearchWarehouseValue(value),
 													500
 												)}
-												valueControlled={isEdit ? initialValues.selectedJournals?.[index]?.warehouse : warehouse}
+												valueControlled={
+													isEdit ? (
+														(initialValues.warehouse?._id !== warehouse.value)
+															? warehouse
+															: initialValues.selectedJournals?.[index]?.warehouse
+													) : warehouse
+												}
 												initialValue={item.warehouse}
 												data={listWarehouse.map((item: any) => ({
 													label: item.name,
@@ -377,7 +395,13 @@ const CreateNewTicketTableAccount: FC<Props> = ({ formik, initialValues, isEdit 
 													(value) => setSearchContractValue(value),
 													500
 												)}
-												valueControlled={isEdit ? initialValues.selectedJournals?.[index]?.contract : contract}
+												valueControlled={
+													isEdit ? (
+														(initialValues.contract?._id !== contract.value)
+															? contract
+															: initialValues.selectedJournals?.[index]?.contract
+													) : contract
+												}
 												initialValue={item.contract}
 												data={listContract.map((item: any) => ({
 													label: item.name,
