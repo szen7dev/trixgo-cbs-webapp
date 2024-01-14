@@ -4,8 +4,6 @@ import { CreateSubmitDetail } from "./CreateSubmitDetail";
 import { useBudgetSubmittal } from 'services/hooks/budget/useBudgetSubmittal';
 import { Task } from "typings/task";
 import { formatNumberMoney } from "utils/cmcs";
-// import cn from "classnames";
-// import styles from 'views/accounting/styles/styles.module.css';
 
 type Props = {
     task: Task;

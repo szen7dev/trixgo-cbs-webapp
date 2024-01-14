@@ -17,7 +17,6 @@ import CommentProvider from 'views/pcm/contexts/comment/comment.provider';
 import { toast } from "react-toastify";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { TaskDetailOpenedBidding } from "./components/TaskDetailOpenedBidding";
-// import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { TaskDetailAddCV } from "./components/TaskDetailAddCV";
 
 const PcmDetailTaskV2: FC = () => {
@@ -305,7 +304,7 @@ const PcmDetailTaskV2: FC = () => {
                     <TaskDetailOpenedBidding task={taskInfo} />
                     <TaskDetailSubtask task={taskInfo} userId={user?._id} />
                     {
-                        (taskInfo?.subtype == 2 && ["6046bedeb55525368b11c5c3","5e047dc05e30dce72849a4a4"].includes(user.company?._id.toString())) ?
+                        (taskInfo?.subtype == 2) ?
                         <TaskDetailSubmit task={taskInfo} userId={user?._id} />: <></>
                     }
                     <TaskDetailRelatedTask task={taskInfo} userId={user?._id} refetchInfo={refetchInfo} />
