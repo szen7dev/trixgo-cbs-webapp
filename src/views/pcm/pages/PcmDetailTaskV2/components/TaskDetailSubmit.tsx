@@ -103,13 +103,11 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
 
                             if(amountCheck <0){
                                 strNotice = strNotice + 'Vượt giá trị'
+                                strColor = 'red'
                                 
                                 if(quantityCheck <0){
                                     strNotice = strNotice + '+Vượt khối lượng'
-                                    strColor = 'red'
-                                }else{
-                                    strColor = 'orange'
-                                }
+                                }                                
                             }else{
                                 if(quantityCheck <0){
                                     strNotice = 'Vượt khối lượng'
