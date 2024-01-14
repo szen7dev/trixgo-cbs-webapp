@@ -30,6 +30,12 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
         isFetchList: true,
     })
 
+    let totalQuantitySubmit = 0, totalAmountSubmit = 0
+    for(const item of listSubmittals){
+        totalQuantitySubmit = Number(totalQuantitySubmit) + Number(item.quantity)
+        totalAmountSubmit = Number(totalAmountSubmit) + Number(item.amount)
+    }
+
     return (
         <div className={"subtask mt-5 w-2/3"}>
             <div className={"flex items-center"}>
@@ -54,7 +60,7 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
                     className="text-black text-medium border-separate space-x-0 space-y-0 w-full"
                     style={{ borderSpacing: 0 }}
                     >
-                   {
+                    {
                         listSubmittals.length ? 
                             <thead className="">
                                 <tr className="text-primary-gray whitespace-nowrap align-middle text-left">
@@ -67,17 +73,13 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
                                     <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Chênh lệch (2-1)</th>
                                     <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 border-t-0.5">Ghi chú</th>
                                 </tr>
-                                {/* <tr className={cn(
-                                    "whitespace-nowrap align-middle text-left font-bold",
-                                    styles.bgFooterYellow
-                                )}> */}
                                 <tr className="whitespace-nowrap align-middle text-left">
                                     <th className="w-1pt-2.5 pb-3 px-2 border-b border-cbs-border border-l-0.5 border-r-0.5"></th>
-                                    <th className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5">Tổng</th>
+                                    <th className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5">Tổng trình</th>
                                     <th className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5"></th>
                                     <th className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5"></th>
                                     <th className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 text-right">
-                                        {task?.amount.toLocaleString("vi", {
+                                        {totalAmountSubmit.toLocaleString("vi", {
                                             maximumFractionDigits: 0,
                                         })}
                                     </th>
@@ -155,6 +157,25 @@ export const TaskDetailSubmit:FC<Props> = ({ task, userId }) => {
                                 </tr>
                             )
                         }))}
+
+                        {
+                            listSubmittals.length ? 
+                            <tr className="whitespace-nowrap align-middle text-left">
+                                <th className="w-1pt-2.5 pb-3 px-2 border-b border-cbs-border border-l-0.5 border-r-0.5"></th>
+                                <th className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5">Tổng duyệt</th>
+                                <th className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5"></th>
+                                <th className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5"></th>
+                                <th className="pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5 text-right" style={{color: "green"}}>
+                                    {task?.amount.toLocaleString("vi", {
+                                        maximumFractionDigits: 0,
+                                    })}
+                                </th>
+                                <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5"></th>
+                                <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5"></th>
+                                <th className="font-normal pt-2.5 pb-3 px-2 border-b border-cbs-border border-r-0.5"></th>
+                            </tr>
+                            : <></>
+                        }
                     </tbody>
                 </table>
                 {showCreateSubmittal &&
