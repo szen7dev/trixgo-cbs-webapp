@@ -7,10 +7,9 @@ import cn from "classnames";
 /*=====3.ICONS=====*/
 
 /*=====4.PAGES/COMPONENTS=====*/
-import {LeftMenu, MainHeaderV2, LeftNavigate} from "../../common";
-import {PmTabHeaderContent, PmLeftMenuContent, PmProjectLeftMenuContent} from "./components";
+import {LeftMenu, LeftNavigate} from "../../common";
+import {PmTabHeaderContent, PmProjectLeftMenuContent} from "./components";
 import {MainHeaderPm} from "./components/shared/MainHeaderPm";
-import { PmProjectTabLeftSideBar } from "./components/PmProjectTabLeftSideBar";
 
 /*=====5.TYPINGS=====*/
 
@@ -43,10 +42,9 @@ export const PmProjectLayoutV2: FC<Props> = ({ children, headerSearch }) => {
         <section className={"main-content-wrapper flex-1"}>
           {/*  Main header */}
           <MainHeaderPm>
-            {/* {headerSearch} */}
             <PmTabHeaderContent/>
           </MainHeaderPm>
-          {/* Left navigation */}
+
           <LeftMenu>
             <PmProjectLeftMenuContent/>
           </LeftMenu>
@@ -58,5 +56,5 @@ export const PmProjectLayoutV2: FC<Props> = ({ children, headerSearch }) => {
         </section>
       </div>
     </section>
-  );
-};
+  )
+}

@@ -47,16 +47,12 @@ export const UpdateInfo: FC = () => {
 	const { addFileToUpload } = useUpload({
 		typeUpload: 'user'
 	});
-    // Cập nhật info
+
 	const handleSubmitUpdateUser = async (values: UpdateUser) => {
 		await updateUser(values);
 		i18n.changeLanguage(values.lang)
 		localStorage.setItem("user_language", values.lang);
 	}
-    
-	// const updateAvatar = async (values: UpdateAvatarUser) => {
-	// 	await updateAvatarUser(values);
-	// }
 	  
 	useEffect(() => {
 	refetchDataUserInfo()
@@ -122,7 +118,7 @@ export const UpdateInfo: FC = () => {
 	return (
 		<section 
 			className={cn(
-				"w-[840px] h-[738px] bg-primary-light relative",
+				"w-9/12 h-fit bg-primary-light relative",
 				styles.boxShadowBorderRadius
 			)}
 		>
@@ -130,7 +126,6 @@ export const UpdateInfo: FC = () => {
 		  <Formik
 			enableReinitialize
 			initialValues={ infoUser }
-			// eslint-disable-next-line no-console
 			onSubmit={handleSubmitUpdateUser}
 		  >
 			{(formik) => {
@@ -229,14 +224,6 @@ export const UpdateInfo: FC = () => {
 				  <div className="mb-6">
 					<div className="flex items-center">
 					  <p className="text-sm">Ảnh chữ ký xác nhận</p>
-					  {/* <div className="w-[30px] h-[30px] bg-secondary-gray rounded-full flex items-center justify-center ml-4">
-						<img
-							src={CameraIcon}
-							alt="Camera"
-							className="w-[15px] h-[13px]"
-						/>
-						<input type="file" name="signature" id="signature" className="hidden" accept="image/*" onChange={handleChangeSignature} />
-					  </div> */}
 						<label className="ml-2">
 							<div className="w-[30px] h-[30px] bg-secondary-gray rounded-full flex items-center justify-center">
 								<img
@@ -266,5 +253,5 @@ export const UpdateInfo: FC = () => {
 			}}
 		  </Formik>
 		</section>
-	);
-};
+	)
+}

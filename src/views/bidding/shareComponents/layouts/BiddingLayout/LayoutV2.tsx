@@ -5,8 +5,6 @@ import { FC, ReactNode, useState } from "react";
 /*=====2.CSS=====*/
 
 /*=====3.ICONS=====*/
-// import sendAndReceiveIcon from "assets/images/icons-send-and-receive.svg";
-import fileIcon from "assets/images/icons-file.svg";
 import homeImage from "assets/menu/project/icons-project-home.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
@@ -43,24 +41,6 @@ const listTab: {
     count: 0,
     route: prefix + "/home",
   },
-  // {
-  //   label: "Báo cáo số liệu",
-  //   icon: fileIcon,
-  //   count: 0,
-  //   route: prefix + "/report",
-  // },
-  // {
-  //   label: "Hồ sơ dự thầu",
-  //   icon: fileIcon,
-  //   count: 0,
-  //   route: prefix + "/bids",
-  // },
-  // {
-  //   label: "Hồ sơ mời thầu",
-  //   icon: fileIcon,
-  //   count: 0,
-  //   route: prefix + "/invitation",
-  // },
 ];
 
 const BiddingLayout: FC<Props> = ({ children }) => {

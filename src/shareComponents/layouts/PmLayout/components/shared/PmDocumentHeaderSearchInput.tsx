@@ -1,5 +1,4 @@
 import React, { ChangeEvent, FC, useEffect, useRef, useState } from "react";
-// import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import searchIcon from "assets/images/icons8-search-120.png";
 import { useListFilterDocument } from "services/hooks/document/useDocument";
 import { Oval } from "react-loader-spinner";
@@ -26,10 +25,6 @@ export const PmDocumentHeaderSearchInput: FC = () => {
             }
         }
     }, [keywordInput])
-
-    // useOnClickOutside(wrapperClass, () => {
-    //     setShowResult(false)
-    // })
 
     const setTypingTimeoutRef: any = useRef(null);
     const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {

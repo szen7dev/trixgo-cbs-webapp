@@ -1,12 +1,10 @@
 import { FC, useEffect } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import { useAuth } from "services/hooks/auth/useAuth";
-import fakeThumbnail from "assets/images/avatar.jpg";
 import iconFolder from "assets/images/icons8-application-window-100.png";
 import { useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
 import { useQueryDetailContract } from "services/hooks/items/useContract";
-import contractLogo from "assets/images/contract.png";
 export const CmcsContractLeftSideBar: FC = () => {
   const { user } = useAuth();
   const { id: contractID } = useParams<{ id: string }>();

@@ -5,7 +5,6 @@ export * from './GroupActions';
 export * from './Paginate';
 export * from './SearchInput';
 export * from './DeleteConfirm';
-export * from './HomeNavigation';
 export * from './RightClickMenuV2/components/RightClickMenuWrapper';
 export * from './RightClickMenuV2';
 export * from './Spinner';

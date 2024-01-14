@@ -2,7 +2,7 @@ import { FC, useEffect } from "react";
 import { NavLink } from 'react-router-dom';
 import { useCheckPerAccessApp, useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/auth/usePermissions"
 import { APP_ID } from "apis/localdb"
-import iconFolder from "assets/images/bullet.svg";
+import iconFolder from "assets/images/bullet.svg"
 
 const LinkMenuLeftSideBar: FC = () => {
   useEffect(() => {

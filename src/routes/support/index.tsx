@@ -11,12 +11,9 @@ import { useAuth } from 'services/hooks/auth/useAuth';
 /*=====5.PAGES/COMPONENTS=====*/
 import ErrorPage from "views/authentication/Error";
 import {
-    SupportHomePage,
-    SupportRegisterPage,
     SupportCompanyPage,
     SupportGrantPage,
     SupportDocsManagementPage,
-    SupportItemPage,
     SupportMemberPage
 } from "views/support/pages";
 
@@ -42,16 +39,6 @@ const SupportRouter: FC = () => {
             <Switch>
                 <Route
                     exact
-                    path="/support/home"
-                    component={SupportHomePage}
-                />
-                <Route
-                    exact
-                    path="/support/register"
-                    component={SupportRegisterPage}
-                />
-                <Route
-                    exact
                     path="/support/companies"
                     component={SupportCompanyPage}
                 />
@@ -69,11 +56,6 @@ const SupportRouter: FC = () => {
                     exact
                     path="/support/members"
                     component={SupportMemberPage}
-                />
-                <Route
-                    exact
-                    path="/support/items"
-                    component={SupportItemPage}
                 />
                 <Route path="/support/*" component={ErrorPage} />
             </Switch>

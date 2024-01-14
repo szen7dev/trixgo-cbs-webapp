@@ -1,7 +1,7 @@
 import { FC } from "react";
 
 import fakeThumbnail from "assets/images/avatar.jpg";
-import iconFolder from "assets/images/icons8-application-window-100.png";
+import iconFolder from "assets/images/bullet.svg";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "services/hooks/auth/useAuth";
 
@@ -22,79 +22,46 @@ export const SupportLeftSideBar: FC = () => {
             alt="Thumbnail"
             className="w-10 h-10 rounded-full mr-3"
           />
-          <span>Supporter</span>
+          <span>Support</span>
         </div>
 
         {/* menu block */}
         <div className="t-link-menu-container">
           <NavLink
-            to="/support/home"
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
-          >
-            <img
-              className="w-6 h-6 object-contain mr-3"
-              src={iconFolder}
-              alt="Menu item"
-            />
-            <span className="truncate">Trang chủ</span>
-          </NavLink>
-          <NavLink
-            to="/support/register"
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
-          >
-            <img
-              className="w-6 h-6 object-contain mr-3"
-              src={iconFolder}
-              alt="Menu item"
-            />
-            <span className="truncate">Đăng ký tài khoản</span>
-          </NavLink>
-          <NavLink
             to="/support/companies"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
             <img
-              className="w-6 h-6 object-contain mr-3"
+              className="w-6 h-6 object-contain mr-3" style={{width:"7px"}}
               src={iconFolder}
               alt="Menu item"
             />
             <span className="truncate">Quản lý phân vùng</span>
           </NavLink>
           <NavLink
-            to="/support/grant"
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
-          >
-            <img
-              className="w-6 h-6 object-contain mr-3"
-              src={iconFolder}
-              alt="Menu item"
-            />
-            <span className="truncate">Cấp phép ứng dụng</span>
-          </NavLink>
-          <NavLink
             to="/support/members"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
             <img
-              className="w-6 h-6 object-contain mr-3"
+              className="w-6 h-6 object-contain mr-3" style={{width:"7px"}}
               src={iconFolder}
               alt="Menu item"
             />
             <span className="truncate">Tài khoản thành viên</span>
           </NavLink>
           <NavLink
-            to="/support/projects"
+            to="/support/grant"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
             <img
-              className="w-6 h-6 object-contain mr-3"
+              className="w-6 h-6 object-contain mr-3" style={{width:"7px"}}
               src={iconFolder}
               alt="Menu item"
             />
-            <span className="truncate">Cấp phép dự án</span>
+            <span className="truncate">Cấp phép ứng dụng</span>
           </NavLink>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

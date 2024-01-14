@@ -491,35 +491,6 @@ const CmcHomePageV2:FC = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    {/* <tr>
-                        <td className={"border-0.5 border-primary-border py-3 px-2 text-center"}>
-
-                        </td>
-                        <td className={"border-0.5 border-primary-border py-3 px-2"}>
-                        </td>
-                        <td className={"border-0.5 border-primary-border py-3 px-2"}>
-                        </td>
-                        <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
-                            15.332.000.000
-                        </td>
-                        <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
-                            15.332.000.000
-                        </td>
-                        <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
-                            15.332.000.000
-                        </td>
-                        <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
-                            15.332.000.000
-                        </td>
-                        <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
-                            15.332.000.000
-                        </td>
-                        <td className={"border-0.5 border-primary-border py-3 px-2 text-center text-cbs-highlight-color font-bold"}>
-                            15.332.000.000
-                        </td>
-                        <td className={"border-0.5 border-primary-border py-3 px-2"}>
-                        </td>
-                    </tr> */}
                     {
                         (listCmcsByFilterWithPager[pageIndex]??[]).map((cmcs, i) => (
                             <tr key={cmcs._id}>
