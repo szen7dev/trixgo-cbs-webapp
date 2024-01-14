@@ -30,7 +30,7 @@ import { createLinkAndClick } from "utils";
 export const FnbRiskReportPage: FC = () => {
 	const location = useLocation()
 	useEffect(() => {
-		document.title = "eShop";
+		document.title = "Seller";
 	}, []);
 	
 	const history = useHistory();

@@ -223,7 +223,7 @@ export const UpdateInfo: FC = () => {
   
 				  <div className="mb-6">
 					<div className="flex items-center">
-					  <p className="text-sm">Ảnh chữ ký xác nhận</p>
+					  <p className="text-sm">Ảnh chữ ký</p>
 						<label className="ml-2">
 							<div className="w-[30px] h-[30px] bg-secondary-gray rounded-full flex items-center justify-center">
 								<img

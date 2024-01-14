@@ -20,7 +20,7 @@ import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 
 export const FnbReportAllPage: FC = () => {
 	useEffect(() => {
-		document.title = "eShop";
+		document.title = "Seller";
 	}, []);
 	
 	const history = useHistory();

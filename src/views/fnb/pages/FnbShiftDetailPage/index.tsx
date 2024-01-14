@@ -33,7 +33,7 @@ export const FnbShiftDetailPage: FC = () => {
 	const { user } = useAuth();
 	const companyID = user?.company._id;
 	useEffect(() => {
-		document.title = "eShop";
+		document.title = "Seller";
 	}, []);
 	const history = useHistory();
 	const { fundaID } = useParams<{ fundaID: string }>();

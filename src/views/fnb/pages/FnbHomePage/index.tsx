@@ -99,7 +99,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    document.title = "eShop";
+    document.title = "Seller";
   }, []);
 
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;

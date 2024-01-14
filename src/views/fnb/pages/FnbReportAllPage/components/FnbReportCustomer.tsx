@@ -33,7 +33,7 @@ import { createLinkAndClick } from "utils";
 export const FnbReportCustomer: FC = () => {
 	const [getOrders, setOrders] = useState([])
 	useEffect(() => {
-		document.title = "eShop";
+		document.title = "Seller";
 	}, []);
 	const history = useHistory();
 
