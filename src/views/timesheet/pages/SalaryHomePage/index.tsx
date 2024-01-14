@@ -69,10 +69,10 @@ const SalaryHomePage: FC = () => {
           refreshListSalary();
           closeModal();
           return null;
+        }else{
+          return toast.error(isCreated.data.message)
         }
-        throw new Error("Can not create!");
       } catch (err) {
-        // console.error(err);
         return null;
       }
     },
@@ -143,7 +143,7 @@ const SalaryHomePage: FC = () => {
       closeModal();
       if (status !== 200 || data.error) {
         return toast.warn('Đồng bộ thất bại')
-    }
+      }
 
       refreshListSalary();
       return toast.success('Đồng bộ thành công')
