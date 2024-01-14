@@ -118,7 +118,7 @@ export const UpdateInfo: FC = () => {
 	return (
 		<section 
 			className={cn(
-				"w-9/12 h-fit bg-primary-light relative",
+				"w-6/12 h-fit bg-primary-light relative",
 				styles.boxShadowBorderRadius
 			)}
 		>
