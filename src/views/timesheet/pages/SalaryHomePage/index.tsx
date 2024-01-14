@@ -137,7 +137,7 @@ const SalaryHomePage: FC = () => {
 
   const handleConfirmCopy = useCallback(async (param: any) => {
     const { data, status } = await API.post(
-      `/api/timesheet/expert_salary/update-data`, {
+      `/api/timesheet/expert_salary/sync-data`, {
         option: param.option,
         salaryID: param.salaryID,
       }
