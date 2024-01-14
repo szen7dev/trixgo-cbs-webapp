@@ -72,7 +72,8 @@ export const DetailChildRow: FC<Props> = ({
         }
       >
         {rowData?.human?.fullname}
-        <p className="text-gray-400 text-[10px]"><i>{rowData?.project?.name} ({rowData?.convertFactor})</i></p>
+        <p className="text-gray-400 text-[10px]"><i>{rowData?.project?.name}</i></p>
+        <p className="text-gray-400 text-[10px]"><i>{rowData?.position?.name}</i></p>
       </div>
       <div
         className={
@@ -96,7 +97,7 @@ export const DetailChildRow: FC<Props> = ({
           {`${rowData.salary}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         </p>
       </div>
-      <div
+      {/* <div
         className={
           "table-cell relative box-border border border-gray-300 align-middle bg-white"
         }
@@ -104,7 +105,7 @@ export const DetailChildRow: FC<Props> = ({
         <p className="w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end">
           {rowData.convertFactor}
         </p>
-      </div>
+      </div> */}
       <div
         className={
           "table-cell relative box-border border border-gray-300 bg-white w-1/12"
