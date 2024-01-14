@@ -99,7 +99,7 @@ export const ChangePassword: FC = () => {
 	return (
 		<section
 		  className={cn(
-			"w-3/12 h-fit bg-primary-light relative p-5",
+			"w-6/12 h-fit bg-primary-light relative p-5",
 			styles.boxShadowBorderRadius
 		  )}
 		>
