@@ -29,7 +29,6 @@ import companyDefault from "assets/images/company_default.png";
 
 export const MediaHeaderContent: FC = () => {
   const wrapperClass = useRef<HTMLDivElement>(null);
-  // useOnClickOutside(wrapperClass, () => dispatch(setShowModalResult(false)));
   const history = useHistory();
 
   const tabIndex = useAppSelector((state) => state.dashboardV2.data.tabIndex);

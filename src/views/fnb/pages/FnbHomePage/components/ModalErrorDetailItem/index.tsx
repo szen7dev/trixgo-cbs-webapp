@@ -1,6 +1,3 @@
-/**
- * Libraries
- */
 import { FC, useEffect, useState } from "react";
 import { Formik, Form, ErrorMessage, Field } from "formik";
 import { object, string } from "yup";
@@ -9,6 +6,7 @@ import { toast } from "react-toastify";
 import debounce from "lodash/debounce";
 import Axios from "axios";
 import { useSocket } from "services/hooks/useSocket";
+import { Link, useHistory } from "react-router-dom";
 
 /**
  * Hooks, Typings
@@ -54,6 +52,7 @@ type Props = {
 }
 
 export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
+    const history = useHistory();
     const { closeModal } = useModal();
     const { user } = useAuth();
 
@@ -172,8 +171,11 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
             if (status !== 200 || data.error) {
                 return toast.warning('Gán lỗi thất bại');
             }
-
             // console.log({ socket, isConnected: socket.isConnected })
+
+            if(window.location.pathname.includes('/pcm/home')){
+                history.push('/pcm/kpi-report')
+            }
 
             // Bắn Socket lên Server
             socket?.emit('FNB_CSS_ADD_NEW_MISTAKE', {
@@ -411,24 +413,6 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                                                         />
                                                     </div>
                                                 </div>
-                                                {/*<div className="flex gap-2 mt-2">
-                                                    {employeeSelected?.map?.((item: any) => (
-                                                        <div key={item._id} className="flex justify-between w-1/3 h-[40px] items-center border-0.5 border-cbs-border rounded-md px-2">
-                                                            <div className="flex gap-2 items-center">
-                                                                <span className="text-[13px]">{item.fullname}</span>
-                                                            </div>
-                                                            <button
-                                                                onClick={() => {
-                                                                    setEmployeeSelected((prev: any) => {
-                                                                        return prev.filter((p: any) => p._id !== item._id);
-                                                                    })
-                                                                }}
-                                                            >
-                                                                <img src={IconCancel} alt="" />
-                                                            </button>
-                                                        </div>
-                                                    ))}
-                                                </div> */}
                                             </div>
                                             <div className="my-3">
                                                 <div className={"w-full flex items-start"}>
@@ -474,24 +458,6 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                                                         />
                                                     </div>
                                                 </div>
-                                                {/*<div className="flex gap-2 mt-2">
-                                                    {fundaSelected?.map?.((item: any) => (
-                                                        <div key={item._id} className="flex justify-between w-1/3 h-[40px] items-center border-0.5 border-cbs-border rounded-md px-2">
-                                                            <div className="flex gap-2 items-center">
-                                                                <span className="text-[13px]">{item.name}</span>
-                                                            </div>
-                                                            <button
-                                                                onClick={() => {
-                                                                    setFundaSelected((prev: any) => {
-                                                                        return prev.filter((p: any) => p._id !== item._id);
-                                                                    })
-                                                                }}
-                                                            >
-                                                                <img src={IconCancel} alt="" />
-                                                            </button>
-                                                        </div>
-                                                    ))}
-                                                </div> */}
                                             </div>
                                             <div className={"my-3"}>
                                                 <div className={"flex py-2"}>
@@ -633,24 +599,6 @@ export const ModalErrorDetailItem: FC<Props> = ({ defaultValues = {} }) => {
                                                                     className="post__files-row pt-5 text-black gap-5 flex-wrap"
                                                                 />
                                                             </div>
-                                                            {/* <div className="flex gap-2">
-                                                                
-                                                                <div>
-                                                                    <img src={ImgDemoUpload} alt="" />
-                                                                </div>
-                                                                <div>
-                                                                    <img src={ImgDemoUpload} alt="" />
-                                                                </div>
-                                                                <div>
-                                                                    <img src={ImgDemoUpload} alt="" />
-                                                                </div>
-                                                                <div>
-                                                                    <img src={ImgDemoUpload} alt="" />
-                                                                </div>
-                                                                <button type="button">
-                                                                    <img src={DemoUploadBtn} alt="" />
-                                                                </button>
-                                                            </div> */}
                                                         </div>
                                                     </div>
                                                 </div>
