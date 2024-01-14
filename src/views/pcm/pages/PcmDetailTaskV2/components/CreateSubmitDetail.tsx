@@ -17,13 +17,10 @@ type Props = {
 export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateSubmittal, confirmCreateSubmittal }) => {
     const [keywordBugetWork, setKeywordBugetWork] = useState('');
     const {
-		list: listBudgetWorks,
-		// fetchNextPage,
-		// hasNextPage,
-		// totalRecord,
-		// refetch
+		list: listBudgetWorks
 	} = useBudgetWork({
 		params: {
+            companyID: task?.company?._id,
 			keyword: keywordBugetWork
 		},
 		isFetchList: true
@@ -31,11 +28,6 @@ export const CreateSubmitDetail: FC<Props> = ({ task, userId, cancelCreateSubmit
 
     const {
 		insertAsync: insertBugetWorkAsync,
-		list: listBudgets,
-		// fetchNextPage,
-		hasNextPage,
-		totalRecord,
-		refetch
 	} = useBudgetSubmittal({
 		params: {
 			// isMember: 1,
