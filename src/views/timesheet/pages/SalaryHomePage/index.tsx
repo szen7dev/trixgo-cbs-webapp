@@ -1,13 +1,14 @@
-import React, { FC, useRef, useState, useEffect } from "react";
+import React, { FC, useRef, useState, useEffect, useCallback } from "react";
 import { NavLink, useHistory } from 'react-router-dom';
 import { APP_ID } from "apis/localdb";
 import { toast } from "react-toastify";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
-
 import moment from "moment";
 import debounce from "lodash/debounce";
 import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
-import { TIMESHEET_TYPES } from "apis/localdb";
+import { ModalConfirm } from "shareComponents/common";
+import API from "apis/repository";
+import iconRefresh from "assets/images/icons8-refresh.png";
 
 import {
   SearchInput,
@@ -113,6 +114,40 @@ const SalaryHomePage: FC = () => {
     },
     [onDeleteSalaryParentAsync, refreshListSalary, openDeleteConfirm]
   )
+
+  const toggleModalOpenSign = (param: any) => {
+      openModal(
+        <div
+          className={
+            "inline-block w-[521px] h-[240px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+          }
+        >
+          <ModalConfirm
+            title="Bạn có muốn xác nhận không?"
+            description="Dữ liệu từ Bảng chấm công, KPI sẽ được đồng bộ sang Bảng lương này"
+            onConfirm={() => handleConfirmCopy({option: param.option, salaryID: param.salaryID}) }
+            defaultText={false}
+            onCancel={closeModal}
+          />
+        </div>
+      )
+  }
+
+  const handleConfirmCopy = useCallback(async (param: any) => {
+    const { data, status } = await API.post(
+      `/api/timesheet/expert_salary/sync-data`, {
+        option: param.option,
+        salaryID: param.salaryID,
+      }
+      )
+      closeModal();
+      if (status !== 200 || data.error) {
+        return toast.warn('Đồng bộ thất bại')
+    }
+
+      refreshListSalary();
+      return toast.success('Đồng bộ thành công')
+    }, [])
   
   return (
     <div className={"financial-cashflow-listing paginate-wrapper relative"}>
@@ -157,24 +192,24 @@ const SalaryHomePage: FC = () => {
         >
           Tạo mới
         </button>
+        
+        <PaginateV2
+          ref={ref}
+          totalRecord={totalRecord}
+          totalPages={totalPages}
+          hasNextPage={hasNextPage}
+          limit={limit}
+          isFetching={loading}
+          nextPageAction={() => {
+            setPageIndex((oldState) => oldState + 1);
+            fetchNextPage();
+          }}
+          prevPageAction={() => {
+            setPageIndex((oldState) => oldState - 1);
+            fetchPrevPage();
+          }}
+        />
       </div>
-
-      <PaginateV2
-        ref={ref}
-        totalRecord={totalRecord}
-        totalPages={totalPages}
-        hasNextPage={hasNextPage}
-        limit={limit}
-        isFetching={loading}
-        nextPageAction={() => {
-          setPageIndex((oldState) => oldState + 1);
-          fetchNextPage();
-        }}
-        prevPageAction={() => {
-          setPageIndex((oldState) => oldState - 1);
-          fetchPrevPage();
-        }}
-      />
 
       <div className={"financial-cashflow-table"}>
         <div className={"relative table border-collapse w-full"}>
@@ -198,13 +233,13 @@ const SalaryHomePage: FC = () => {
             >
               Hệ số chuyển đổi KPI sang giá trị
             </div>
-            <div
+            {/* <div
               className={
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
               Dự án/phòng ban
-            </div>
+            </div> */}
             <div
               className={
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
@@ -232,6 +267,13 @@ const SalaryHomePage: FC = () => {
               }
             >
               Ghi chú
+            </div>
+            <div
+              className={
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
+              }
+            >
+              Đồng bộ dữ liệu
             </div>
           </div>
           {dataNotFilter[pageIndex] && dataNotFilter[pageIndex].map((salaryParent) => (
@@ -262,28 +304,27 @@ const SalaryHomePage: FC = () => {
                 }
               >
                 <NavLink to={`/timesheet/salary/${salaryParent._id}`}>
-                  {salaryParent.name}
+                  {salaryParent.name} - {moment(salaryParent.date).format('MM/YYYY')}
                 </NavLink>
                 <p className={"mt-1 text-gray-500"}>
-                  {salaryParent?.userCreate?.fullname} | 
-                  {moment(salaryParent.createAt).isValid() &&
-                    moment(salaryParent.createAt).format(DATE_FORMAT)}
+                  Tạo: {salaryParent?.userCreate?.fullname} {moment(salaryParent.createAt).format(DATE_FORMAT)}
                 </p>
-                <p><i> {moment(salaryParent.date).isValid() &&
-                    moment(salaryParent.date).format(DATE_FORMAT)}</i></p>
+                <p className={"mt-1 text-gray-500"}>
+                  Cập nhật: {salaryParent?.userUpdate?.fullname} {moment(salaryParent.modifyAt).format(DATE_FORMAT)}
+                </p>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {salaryParent.convertFactor}
               </div>
-              <div className={"px-2 py-2 table-cell box-border border-b"}>
+              {/* <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {salaryParent?.project?.name}
-              </div>
+              </div> */}
               <div
                 className={
                   "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
-               {`${Number(salaryParent?.salary + salaryParent?.revenueBonus + salaryParent?.reward * salaryParent?.convertFactor + salaryParent?.mealAllowance - salaryParent?.punishment * salaryParent?.convertFactor - salaryParent?.insurance - salaryParent?.pitax)}`.replace(
+               {`${Number(salaryParent?.salary + salaryParent?.revenueBonus + salaryParent?.reward + salaryParent?.mealAllowance - salaryParent?.punishment - salaryParent?.insurance - salaryParent?.pitax)}`.replace(
                   /\B(?=(\d{3})+(?!\d))/g,
                   ","
                 )}
@@ -303,13 +344,19 @@ const SalaryHomePage: FC = () => {
                   "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
-                {`${Number(salaryParent?.salary + salaryParent?.revenueBonus + salaryParent?.reward * salaryParent?.convertFactor + salaryParent?.mealAllowance - salaryParent?.punishment * salaryParent?.convertFactor - salaryParent?.insurance - salaryParent?.pitax - salaryParent?.advance - salaryParent?.paid)}`.replace(
+                {`${Number(salaryParent?.salary + salaryParent?.revenueBonus + salaryParent?.reward + salaryParent?.mealAllowance - salaryParent?.punishment - salaryParent?.insurance - salaryParent?.pitax - salaryParent?.advance - salaryParent?.paid)}`.replace(
                   /\B(?=(\d{3})+(?!\d))/g,
                   ","
                 )}
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {salaryParent.note}
+              </div>
+              <div className={"px-2 py-2 table-cell box-border border-b"}>
+                  <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({option: 1, salaryID: salaryParent._id})}>
+                    <img src={iconRefresh} title={'Cập nhật dữ liệu'} className={"w-[24px] h-[24px] mr-3"} />
+                    <span>Đồng bộ dữ liệu</span>
+                </button>
               </div>
             </div>
           ))}

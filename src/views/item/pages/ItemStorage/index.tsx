@@ -13,7 +13,7 @@ import iconPencil from 'assets/images/icons8-pencil-96 1.png';
 
 /*=====4.PAGES/COMPONENTS=====*/
 import { SearchInput } from "shareComponents/common";
-import { ModalCreateOrUpdateStorage, ModalConfirm } from '../../shareComponents/common';
+import { ModalCreateOrUpdateStorage } from '../../shareComponents/common';
  
 /*=====5.TYPINGS=====*/
 import { Storage } from "typings/items";
@@ -37,7 +37,6 @@ export const ItemStoragePage: FC<{ type: number }> = ({ type }) => {
     });
 
     const {
-        deleteAsync,
         list: listStorages,
         hasNextPage,
         refetch,
@@ -191,7 +190,7 @@ export const ItemStoragePage: FC<{ type: number }> = ({ type }) => {
                                 />
                             </div>
                         </th>
-                        <th className="w-1/6 py-1">
+                        <th className="py-1" style={{width: "20px"}}>
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Nội dung
                             </div>

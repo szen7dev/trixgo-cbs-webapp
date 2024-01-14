@@ -30,20 +30,10 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
 }) => {
   const [searchhDepartmentStr, setSearchDepartmentSrt] = useState(projectName);
 
-  const [searchAssigneeStr, setSearchAssigneeStr] = useState(assigneeName);
-
   const { closeModal } = useModal();
 
   const { listDepartments } = useQueryListDepartments({
     keyword: searchhDepartmentStr,
-  }, true);
-
-  const {
-    data: listUsersSystem,
-    hasNextPage: hasNextPageUsersSystem,
-    fetchNextPage: fetchNextPageUsersSystem
-  } = useUserSystem({
-    keyword: searchAssigneeStr
   }, true);
 
   const initialValues = {
@@ -55,15 +45,6 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
     note: "",
     ...defaultValues,
   };
-
-  const handleScrollAssginee = (e: UIEvent<HTMLDivElement>) => {
-    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
-    const bottom = scrollHeight - scrollTop === clientHeight;
-
-    if(bottom && hasNextPageUsersSystem) {
-      fetchNextPageUsersSystem();
-    }
-  }
 
   const handleSubmit = React.useCallback(
     (values) => {
@@ -138,34 +119,6 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                     />
                   </div>
                 </div>
-
-                {/* <div>
-                  <p className="text-[13px] text-primary-gray mb-1">
-                    Phân loại
-                  </p>
-                  <DropdownSearchable
-                    showTriangle
-                    inlineSearch
-                    className={
-                      "w-full flex-1 border rounded border-gray-200 py-1 px-3"
-                    }
-                    focusedClass={"border-b border-primary"}
-                    maxWidthInput={"max-w-none"}
-                    renderSelectedItem={(item) => <span>{item.text}</span>}
-                    data={TIMESHEET_TYPES}
-                    initialValue={TIMESHEET_TYPES.filter(
-                      (elm) => elm.value === defaultValues?.type
-                    )}
-                    formatItem={{
-                      id: "value",
-                      text: "text",
-                    }}
-                    onchangeValue={(value) =>
-                      setFieldValue("type", value.value)
-                    }
-                  />
-                </div> */}
-
                 <div>
                   <p className="text-[13px] text-primary-gray mb-1">
                     Dự án, phòng ban
