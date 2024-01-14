@@ -31,7 +31,7 @@ import { createLinkAndClick } from "utils";
 
 export const FnbShiftPage: FC = () => {
 	useEffect(() => {
-		document.title = "eShop";
+		document.title = "Seller";
 	}, []);
 	
 	const history = useHistory();

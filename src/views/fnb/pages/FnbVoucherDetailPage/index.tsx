@@ -27,7 +27,7 @@ import { createLinkAndClick } from "utils";
 
 export const FnbVoucherDetailPage: FC = () => {
 	useEffect(() => {
-		document.title = "eShop";
+		document.title = "Seller";
 	}, []);
 
 	const history = useHistory();

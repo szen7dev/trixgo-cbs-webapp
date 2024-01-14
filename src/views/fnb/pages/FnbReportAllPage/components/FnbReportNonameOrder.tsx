@@ -40,7 +40,7 @@ const STATUS_MISTAKE = [
 
 export const FnbReportNonameOrder: FC = () => {
 	useEffect(() => {
-		document.title = "eShop";
+		document.title = "Seller";
 	}, []);
 	
 	const history = useHistory();

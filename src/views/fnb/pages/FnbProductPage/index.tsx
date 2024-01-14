@@ -39,7 +39,7 @@ const TYPE_PRODUCT = [
 
 export const FnBProductPage: FC = () => {
 	useEffect(() => {
-		document.title = "eShop";
+		document.title = "Seller";
 	}, []);
 
 	const history = useHistory();

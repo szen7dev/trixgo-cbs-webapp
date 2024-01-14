@@ -85,7 +85,7 @@ export const FnbRiskReportDetailPage: FC = () => {
 	}, [hasPermission]);
 
 	useEffect(() => {
-		document.title = "eShop";
+		document.title = "Seller";
 	}, []);
 
 	type PaginateHandle = React.ElementRef<typeof PaginateV2>;

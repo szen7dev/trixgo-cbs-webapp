@@ -29,7 +29,7 @@ import { createLinkAndClick } from "utils";
 
 export const FnbReportRevenue: FC = () => {
 	useEffect(() => {
-		document.title = "eShop";
+		document.title = "Seller";
 	}, []);
 	
 	const history = useHistory();

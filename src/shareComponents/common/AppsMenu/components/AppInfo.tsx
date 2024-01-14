@@ -81,7 +81,7 @@ export const APP_INFO = new Map([
     /* Ứng dụng Payment */
     ['61e04971fdebf77b072d1b0f', {
         key: "61e04971fdebf77b072d1b0f",
-        name: "eShop",
+        name: "Seller",
         icon: fnbLogo,
         route: '/fnb/home'
     }],
