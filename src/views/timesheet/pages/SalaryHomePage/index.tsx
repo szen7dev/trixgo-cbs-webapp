@@ -8,8 +8,6 @@ import debounce from "lodash/debounce";
 import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
 import { ModalConfirm } from "shareComponents/common";
 import API from "apis/repository";
-import { TIMESHEET_TYPES } from "apis/localdb";
-import iconCheckmark from "assets/images/icons8-copy-96.svg";
 import iconRefresh from "assets/images/icons8-refresh.png";
 
 import {
@@ -144,9 +142,10 @@ const SalaryHomePage: FC = () => {
       )
       closeModal();
       if (status !== 200 || data.error) {
-      return toast.warn('Đồng bộ thất bại')
+        return toast.warn('Đồng bộ thất bại')
     }
-    
+
+      refreshListSalary();
       return toast.success('Đồng bộ thành công')
     }, [])
   
@@ -326,7 +325,7 @@ const SalaryHomePage: FC = () => {
                   "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
-               {`${Number(salaryParent?.salary + salaryParent?.revenueBonus + salaryParent?.reward * salaryParent?.convertFactor + salaryParent?.mealAllowance - salaryParent?.punishment * salaryParent?.convertFactor - salaryParent?.insurance - salaryParent?.pitax)}`.replace(
+               {`${Number(salaryParent?.salary + salaryParent?.revenueBonus + salaryParent?.reward + salaryParent?.mealAllowance - salaryParent?.punishment - salaryParent?.insurance - salaryParent?.pitax)}`.replace(
                   /\B(?=(\d{3})+(?!\d))/g,
                   ","
                 )}
@@ -346,7 +345,7 @@ const SalaryHomePage: FC = () => {
                   "px-2 py-2 table-cell box-border border-b text-right"
                 }
               >
-                {`${Number(salaryParent?.salary + salaryParent?.revenueBonus + salaryParent?.reward * salaryParent?.convertFactor + salaryParent?.mealAllowance - salaryParent?.punishment * salaryParent?.convertFactor - salaryParent?.insurance - salaryParent?.pitax - salaryParent?.advance - salaryParent?.paid)}`.replace(
+                {`${Number(salaryParent?.salary + salaryParent?.revenueBonus + salaryParent?.reward + salaryParent?.mealAllowance - salaryParent?.punishment - salaryParent?.insurance - salaryParent?.pitax - salaryParent?.advance - salaryParent?.paid)}`.replace(
                   /\B(?=(\d{3})+(?!\d))/g,
                   ","
                 )}
