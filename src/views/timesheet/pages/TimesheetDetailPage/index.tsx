@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState, useRef } from "react";
+import React, { FC, useEffect, useState, useRef, useCallback } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import moment from "moment";
@@ -13,6 +13,9 @@ import { InputWidthAdjust } from "views/timesheet/shareComponents/common";
 import { createLinkAndClick } from "utils";
 import { DetailMainRow, ModalShare } from "./components";
 import { CreateRow } from "./components/Form";
+import {
+  FilterDateGroup
+} from "views/accounting/shareComponents/common";
 
 /**
  * Hooks, Typings
@@ -33,6 +36,12 @@ const TimeSheetDetailPage: FC = () => {
   const history = useHistory();
   const params = useParams<{ id: string }>();
   const [pageIndex, setPageIndex] = useState(0);
+
+  const [inputFilter, setInputFilter] = useState({
+    keyword: '',
+    fromDate: new Date(new Date().getFullYear(), 0, 1),
+    toDate: new Date(new Date().getFullYear(), 11, 31)
+  });
 
   const ref = useRef<RefPaginateHandle>(null);
 
@@ -187,14 +196,16 @@ const TimeSheetDetailPage: FC = () => {
     isExporting: false,
   });
 
-  const { downloadTemplateExcelAsync } = useCashBook({});
+  const { exportExcelAsync } = useCashBook({});
 
-  const handleDownloadExcel = async () => {
+  const handleDownloadExcel = async (param: any) => {
     try {
       setStateExport({ isExporting: true });
-      const { error, data } = await downloadTemplateExcelAsync({
+      const { error, data } = await exportExcelAsync({
         parentID: timeSheetParentID,
-        option: "1",
+        option: param.option,
+        fromDate: inputFilter.fromDate,
+        toDate: inputFilter.toDate,
       });
 
       if (error) {
@@ -208,6 +219,14 @@ const TimeSheetDetailPage: FC = () => {
       setStateExport({ isExporting: false });
     }
   };
+
+  const handleOnChangeDate = useCallback((date, input) => {
+    if (input) {
+      setInputFilter((value) => ({ ...value, toDate: date }))
+    } else {
+      setInputFilter((value) => ({ ...value, fromDate: date }))
+    }
+  }, [])
 
   if (!timeSheetInfo || loading || !user)
     return <Loader className="border-primary" />;
@@ -229,15 +248,19 @@ const TimeSheetDetailPage: FC = () => {
             <img alt={"star-icon"} src={StarIcon} />
           </div>
           <p className={"text-gray-400"}>
-            Chỉnh sửa lần cuối cách đây{" "}
+            Chỉnh sửa {" "}
               {moment(timeSheetInfo.modifyAt).isValid() &&
               moment(timeSheetInfo.modifyAt).fromNow()}{" "}
-            bởi {timeSheetInfo.userCreate?.fullname}
+            bởi {timeSheetInfo.userUpdate?.fullname}
           </p>
         </div>
+        <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
         <div className={"flex-1 flex items-center justify-end"}>
-          <button className={"mr-2 text-primary"} onClick={handleDownloadExcel}>
-            Tải Excel bảng chấm công
+          <button className={"mr-2 text-primary"} onClick={() => handleDownloadExcel({option: 1})}>
+            Tải chấm công
+          </button>
+          <button className={"mr-2 text-primary"} onClick={() => handleDownloadExcel({option: 2})}>
+            Tải ngân sách
           </button>
           <button
             className="text-gray-400 mr-2"
@@ -258,7 +281,7 @@ const TimeSheetDetailPage: FC = () => {
           </button>
         </div>
       </div>
-
+      
       <PaginateV2
         ref={ref}
         totalRecord={totalRecord}

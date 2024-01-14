@@ -164,10 +164,8 @@ export type CashBookImportPayload = {
 }
 
 export type CashBookExportManyPayload = {
-    name: string;
-    sign?: string;
-    note?: string;
-    openingBalance?: number;
-    arising?: number;
-    closingBalance?: number;
+    parentID?: string;
+    option?: string;
+    fromDate?: any;
+    toDate?: any;
 }

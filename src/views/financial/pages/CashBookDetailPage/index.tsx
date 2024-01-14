@@ -520,7 +520,6 @@ export const CashBookDetailPage: FC = () => {
         </Link>
         <span className="text-x-large mr-2 ml-2">{cashBookInfo?.name}</span>
         <SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={onChangeSearch} />
-        {/* <DropdownFilterButton /> */}
 
         <CustomAutoComplete
           data={listAccountSearch}
@@ -530,26 +529,9 @@ export const CashBookDetailPage: FC = () => {
           onChangeValue={value => setAccountSearchSelected(value._id)}
           renderValue={item => `${item.name}-${item.description}`}
           wrapperClassName="w-[170px] z-40"
-          className="w-full h-full py-2.5 px-3 focus:outline-none"
+          className="w-full h-full py-1.5 px-2 focus:outline-none"
           placeholder="Tài khoản"
         />
-
-        {/* <button className={"bg-gray-50 flex items-center justify-center ml-3 px-3 h-[30px] rounded hover:bg-blue-100"}>
-          <img src={SortingIcon} alt={"icon sorting icon"}/>
-          <span className={"ml-2 text-gray-500"}>Filter</span>
-        </button> */}
-
-        <GroupActions
-          className="flex items-center flex-1"
-          onClickTrash={toggleDeleteModal}
-          disabled={{
-            trash: !itemsChecked.length || !permissions.hasPermissionDelete
-          }}
-          types={permissions.hasPermissionDelete ? ['trash'] : []}
-        />
-
-        {/* <ButtonCreate onClick={toggleModal} /> */}
-        {/* <ButtonMore /> */}
         {hasNextPage && (
           <div className="flex justify-center">
             <button onClick={fetchNextPage}>
@@ -559,15 +541,15 @@ export const CashBookDetailPage: FC = () => {
             </button>
           </div>
         )}
-        <button className={"w-auto h-full p-2 text-sm text-primary"}
+        <button className={"w-auto h-full p-1 text-sm text-primary"}
           onClick={handleDownloadTemplateImportExcel}
         >
-          Tải mẫu Excel
+          Tải Excel
         </button>
-        <button className={"w-auto h-full p-2 text-sm text-primary"}>
+        <button className={"w-auto h-full p-1 text-sm text-primary"}>
             <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
             accept=".xlsx, .xlsm, .xls, .csv"/>
-            <label className="custom-file-label" htmlFor="inputGroupFile">Import dữ liệu sổ quỹ</label>
+            <label className="custom-file-label" htmlFor="inputGroupFile">Import dữ liệu</label>
         </button>
         <button
           className="w-10 h-10 rounded-full flex justify-center items-center"
@@ -583,7 +565,6 @@ export const CashBookDetailPage: FC = () => {
           className="text-gray-400 mr-2"
           onClick={() => toggleModalShare('members', cashBookInfo.members)}
         >Thành viên ({cashBookInfo.members?.length})</button>
-        {/* <AccessingUsers users={permissions.usersShared} /> */}
       </div>
       <div className="flex-1 overflow-y-auto">
         <table
