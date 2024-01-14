@@ -1,7 +1,5 @@
 import { FC } from "react";
-
-import fakeThumbnail from "assets/images/avatar.jpg";
-import iconFolder from "assets/images/icons8-application-window-100.png";
+import iconFolder from "assets/images/bullet.svg"
 import { NavLink } from 'react-router-dom';
 import { useAuth } from "services/hooks/auth/useAuth";
 
@@ -65,7 +63,7 @@ const DatahubLeftSideBar: FC = () => {
 									isActive={route.isActive}
 									className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
 								>
-									<img width={'20px'} src={iconFolder} alt="Menu item" />
+									<img width={'7px'} src={iconFolder} alt="Menu item" />
 									<span className={"flex-1 ml-2 text-left text-[14px]"}>{route.name}</span>
 								</NavLink>
 							)

@@ -56,4 +56,4 @@ const BiddingRouter: FC = () => {
   );
 };
 
-export default BiddingRouter;
+export default BiddingRouter

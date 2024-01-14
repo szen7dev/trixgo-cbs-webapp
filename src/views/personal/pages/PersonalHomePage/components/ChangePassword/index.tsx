@@ -99,12 +99,11 @@ export const ChangePassword: FC = () => {
 	return (
 		<section
 		  className={cn(
-			"w-[404px] h-fit bg-primary-light relative p-5",
+			"w-3/12 h-fit bg-primary-light relative p-5",
 			styles.boxShadowBorderRadius
 		  )}
 		>
 		  <div className="relative flex pt-5 pb-3">
-		  {/* <img src={avatar} alt="Personal" className="w-[110px] h-[110px] rounded-full object-cover" /> */}
 		  	<Image />
 			<div className="bg-primary-light absolute bottom-4 left-24 h-9 w-9 rounded-full flex items-center justify-center">
 			  <label>
@@ -201,5 +200,5 @@ export const ChangePassword: FC = () => {
 			}}
 		  </Formik>
 		</section>
-	);
-};
+	)
+}

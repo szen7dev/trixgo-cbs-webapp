@@ -1,14 +1,7 @@
 import { FC, ReactNode, useState } from "react";
 import cn from "classnames";
-
-// import HomeNavigation from "components/common/HomeNavigation";
 import { CmcsLeftSideBar } from "./components";
-import { HomeRightSideBar } from "shareComponents/layouts";
-import { LeftNavigate, MainHeader, MainHeaderV2 } from "shareComponents/common";
-import menuIcon from "assets/images/icon-mobile-menu-black.png";
-
-import chevronRightIcon from "assets/images/icon-chevron-right.png";
-import chevronUpIcon from "assets/images/icon-chevron-up.png";
+import { LeftNavigate, MainHeaderV2 } from "shareComponents/common";
 import { HomeHeaderContent } from "shareComponents/layouts/HomeLayout/components";
 
 type Props = {
@@ -44,17 +37,13 @@ export const CmcsLayout: FC<Props> = ({ children }) => {
         <section
           className={"main-content-wrapper flex-1"}
         >
-          {/*  Main header */}
           <MainHeaderV2 headerTitle={"Tài chính"}>
             <HomeHeaderContent />
           </MainHeaderV2>
 
-          {/* Left navigation */}
           <CmcsLeftSideBar />
 
-          {/* Content area */}
           <main 
-          // className="home-main-content home-main-content-v2  transition-all duration-500 ease-out overflow-auto relative"
           className="home-main-content home-main-content-v2 transition-all duration-500 ease-out overflow-auto relative h-left-over-content max-h-left-over-content min-h-left-over-content"
           >
             {children}
@@ -63,5 +52,5 @@ export const CmcsLayout: FC<Props> = ({ children }) => {
         </section>
       </div>
     </section>
-  );
-};
+  )
+}

@@ -12,7 +12,7 @@ import { PersonalLayoutV2 } from "views/personal/shareComponents/layoutsV2";
 /*=====5.PAGES/COMPONENTS=====*/
 import ErrorPage from "views/authentication/Error";
 import {
-   PersonalHomePage, PersonalBillPage, PersonalConfigPage, PersonalHistoriesPage
+   PersonalHomePage, PersonalHistoriesPage
 } from "views/personal/pages";
 
 const PersonalRouter: FC = () => {
@@ -24,24 +24,6 @@ const PersonalRouter: FC = () => {
                 component={() =>
                     <PersonalLayoutV2>
                         <PersonalHomePage />
-                    </PersonalLayoutV2>
-                }
-            />
-            <Route
-                exact
-                path="/personal/bills"
-                component={() =>
-                    <PersonalLayoutV2>
-                        <PersonalBillPage />
-                    </PersonalLayoutV2>
-                }
-            />
-            <Route
-                exact
-                path="/personal/config"
-                component={() =>
-                    <PersonalLayoutV2>
-                        <PersonalConfigPage />
                     </PersonalLayoutV2>
                 }
             />

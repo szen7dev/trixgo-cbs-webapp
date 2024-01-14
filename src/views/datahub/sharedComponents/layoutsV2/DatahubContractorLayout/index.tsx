@@ -1,5 +1,4 @@
-import React, { FC, useContext } from 'react'
-import AuthContext from 'services/contexts/Auth'
+import { FC } from 'react'
 import Skeleton from 'react-loading-skeleton';
 import Wallethub from '../../common/Wallethub';
 import iconVideoPlaylist from 'assets/images/icons8-video-playlist-90 1.png'

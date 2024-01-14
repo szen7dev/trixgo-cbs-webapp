@@ -1,5 +1,5 @@
 /*=====1.LIBRARY=====*/
-import { FC, ReactNode, useState } from "react";
+import { FC, ReactNode } from "react";
 
 /*=====2.CSS=====*/
 
