@@ -248,8 +248,8 @@ export const BudgetDetailPage: FC = () => {
               onCancel={closeModal}
             />
           </div>
-        );
-    };
+        )
+    }
 
 	const handleConfirmCopy = useCallback(async () => {
 		const { data, status } = await API.post(

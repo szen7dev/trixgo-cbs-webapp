@@ -245,7 +245,7 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
                                 />
                             </div>
                         </th>
-                        <th className="w-1/6 py-1">
+                        <th className="py-1" style={{width: "20px"}}>
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Nội dung
                             </div>

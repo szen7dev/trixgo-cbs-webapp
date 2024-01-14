@@ -1,13 +1,16 @@
-import React, { FC, useRef, useState, useEffect } from "react";
+import React, { FC, useRef, useState, useEffect, useCallback } from "react";
 import { NavLink, useHistory } from 'react-router-dom';
 import { APP_ID } from "apis/localdb";
 import { toast } from "react-toastify";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
-
 import moment from "moment";
 import debounce from "lodash/debounce";
 import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
+import { ModalConfirm } from "shareComponents/common";
+import API from "apis/repository";
 import { TIMESHEET_TYPES } from "apis/localdb";
+import iconCheckmark from "assets/images/icons8-copy-96.svg";
+import iconRefresh from "assets/images/icons8-refresh.png";
 
 import {
   SearchInput,
@@ -113,6 +116,39 @@ const SalaryHomePage: FC = () => {
     },
     [onDeleteSalaryParentAsync, refreshListSalary, openDeleteConfirm]
   )
+
+  const toggleModalOpenSign = (param: any) => {
+      openModal(
+        <div
+          className={
+            "inline-block w-[521px] h-[240px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+          }
+        >
+          <ModalConfirm
+            title="Bạn có muốn xác nhận không?"
+            description="Dữ liệu từ Bảng chấm công, KPI sẽ được đồng bộ sang Bảng lương này"
+            onConfirm={() => handleConfirmCopy({option: param.option, salaryID: param.salaryID}) }
+            defaultText={false}
+            onCancel={closeModal}
+          />
+        </div>
+      )
+  }
+
+  const handleConfirmCopy = useCallback(async (param: any) => {
+    const { data, status } = await API.post(
+      `/api/timesheet/expert_salary/update-data`, {
+        option: param.option,
+        salaryID: param.salaryID,
+      }
+      )
+      closeModal();
+      if (status !== 200 || data.error) {
+      return toast.warn('Đồng bộ thất bại')
+    }
+    
+      return toast.success('Đồng bộ thành công')
+    }, [])
   
   return (
     <div className={"financial-cashflow-listing paginate-wrapper relative"}>
@@ -233,6 +269,13 @@ const SalaryHomePage: FC = () => {
             >
               Ghi chú
             </div>
+            <div
+              className={
+                "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
+              }
+            >
+              Đồng bộ dữ liệu
+            </div>
           </div>
           {dataNotFilter[pageIndex] && dataNotFilter[pageIndex].map((salaryParent) => (
             <div className={"body-table table-row"} key={salaryParent._id}>
@@ -310,6 +353,12 @@ const SalaryHomePage: FC = () => {
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {salaryParent.note}
+              </div>
+              <div className={"px-2 py-2 table-cell box-border border-b"}>
+                  <button className={"flex text-primary-gray items-center rounded hover:bg-cbs-form-input-bg px-3 h-[30px] ml-2 mr-2"} onClick={() => toggleModalOpenSign({option: 1, salaryID: salaryParent._id})}>
+                    <img src={iconRefresh} title={'Cập nhật dữ liệu'} className={"w-[24px] h-[24px] mr-3"} />
+                    <span>Đồng bộ dữ liệu</span>
+                </button>
               </div>
             </div>
           ))}
