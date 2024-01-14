@@ -116,6 +116,7 @@ export type SalaryChild = {
     pitax: number;
     convertFactor: number;
     project: any;
+    position: any;
 }
 
 export type QueryListSalaryChildPayload = QueryParams & {

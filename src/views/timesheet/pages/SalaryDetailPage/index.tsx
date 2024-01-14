@@ -27,7 +27,8 @@ import {
   useMutationSalaryChild,
 } from "services/hooks/useSalary";
 
-import {useProjectCustom} from "services/hooks/items/useProject";
+import { useProjectCustom } from "services/hooks/items/useProject";
+import { usePosition } from 'services/hooks/items/usePosition';
 import { useCashBook } from "services/hooks/financial/useCashBook";
 
 import { useAuth } from "services/hooks/auth/useAuth";
@@ -40,6 +41,9 @@ const SalaryDetailPage: FC = () => {
   type PaginateHandle = React.ElementRef<typeof PaginateV2>;
   const [projectKeyword, setProjectKeyword] = useState("");
   const [departmentsID, setDepartmentsID] = useState<string[]>([]);
+
+  const [positionKeyword, setpPositionKeyword] = useState("");
+  const [positionsID, setPositionsID] = useState<string[]>([]);
 
   const dispatch = useDispatch();
 
@@ -102,11 +106,13 @@ const SalaryDetailPage: FC = () => {
     fetchPrevPage,
   } = useQueryListSalaryChild(salaryParentID, {
     keyword,
+    positionsID,
     departmentsID,
     limit: 50
   });
 
   const { listProjectsUserIsMember } = useProjectCustom({ paramsProjectsUserIsMember: { keyword: projectKeyword }, isFetchProjectsUserIsMember: true });
+  const { data: listPosition } = usePosition({ keyword: positionKeyword }, true);
 
   const { onUpdateSalaryAsync } = useMutationSalaryChild();
 
@@ -273,7 +279,7 @@ const SalaryDetailPage: FC = () => {
         <DropdownSearchableV2
             ref={datahubRef}
             className={"mr-1 border border-primary-border rounded-lg mb-2"}
-            placeholder={"Phòng ban"}
+            placeholder={"Dự án/Phòng ban"}
             isMultiple={true}
             allowClearValueSingleInput={true}
             data={listProjectsUserIsMember}
@@ -306,6 +312,52 @@ const SalaryDetailPage: FC = () => {
                 const newList = cloneIDs.filter(selectId => selectId !== id);
                 setDepartmentsID(newList);
                 dispatch(setFilterDropdown({keyFilter: "departmentsID", dataFilter: newList}))
+
+                setPageIndex(0);
+                ref.current&&ref.current.resetPaginate();
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+        />
+
+        <DropdownSearchableV2
+            ref={datahubRef}
+            className={"mr-1 border border-primary-border rounded-lg mb-2"}
+            placeholder={"Bộ phận"}
+            isMultiple={true}
+            allowClearValueSingleInput={true}
+            data={listPosition}
+            formatItem={{
+                id: "_id",
+                text: "name"
+            }}
+            onSearchInputChange={debounce(
+                (valueSearch) => setpPositionKeyword(valueSearch),
+                500
+            )}
+            onchangeValue={item => {
+                const cloneIDs = [...positionsID];
+                cloneIDs.push(item._id);
+                setPositionsID(cloneIDs);
+                dispatch(setFilterDropdown({keyFilter: "positionsID", dataFilter: cloneIDs}))
+
+                setPageIndex(0);
+                ref.current&&ref.current.resetPaginate();
+            }}
+            onClearData={() => {
+              setPositionsID([]);
+                dispatch(setFilterDropdown({keyFilter: "positionsID", dataFilter: []}))
+
+                setPageIndex(0);
+                ref.current&&ref.current.resetPaginate();
+            }}
+            onMultipleRemoveValue={id => {
+                const cloneIDs = [...positionsID];
+                const newList = cloneIDs.filter(selectId => selectId !== id);
+                setPositionsID(newList);
+                dispatch(setFilterDropdown({keyFilter: "positionsID", dataFilter: newList}))
 
                 setPageIndex(0);
                 ref.current&&ref.current.resetPaginate();
@@ -358,13 +410,13 @@ const SalaryDetailPage: FC = () => {
             >
               Lương
             </div>
-            <div
+            {/* <div
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
               Hệ số chuyển đổi KPI
-            </div>
+            </div> */}
             <div
               className={
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"

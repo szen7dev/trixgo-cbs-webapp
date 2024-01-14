@@ -39,39 +39,39 @@ export const DetailMainRow: FC<Props> = memo(({
     <>
       <div
         className={
-          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-3"
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-3 font-bold"
         }
       >
-        {"A"}
+        {"#"}
       </div>
       <div
         className={
-          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 font-bold"
         }
       >
         {salaryParentInfo?.name}
       </div>
       <div
         className={
-          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 font-bold"
         }
       >
         <div className="flex justify-end">
           {convertCurrency(salaryParentInfo?.salary)}
         </div>
       </div>
-      <div
+      {/* <div
         className={
-          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 font-bold"
         }
       >
          <div className="flex justify-end">
           {salaryParentInfo?.convertFactor}
         </div>
-      </div>
+      </div> */}
       <div
         className={
-          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 font-bold"
         }
       >
         <div className="flex justify-end">
@@ -80,7 +80,7 @@ export const DetailMainRow: FC<Props> = memo(({
       </div>
       <div
         className={
-          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 font-bold"
         }
       >
         <div className="flex justify-end">
@@ -89,7 +89,7 @@ export const DetailMainRow: FC<Props> = memo(({
       </div>
       <div
         className={
-          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 font-bold"
         }
       >
         <div className="flex justify-end">
@@ -98,7 +98,7 @@ export const DetailMainRow: FC<Props> = memo(({
       </div>
       <div
         className={
-          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 font-bold"
         }
       >
         <div className="flex justify-end">
@@ -110,7 +110,7 @@ export const DetailMainRow: FC<Props> = memo(({
       </div>
       <div
         className={
-          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 font-bold font-bold"
         }
       >
         <div className="flex justify-end">
@@ -119,7 +119,7 @@ export const DetailMainRow: FC<Props> = memo(({
       </div>
       <div
         className={
-          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 font-bold font-bold"
         }
       >
         <div className="flex justify-end">
@@ -128,7 +128,7 @@ export const DetailMainRow: FC<Props> = memo(({
       </div>
       <div
         className={
-          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 font-bold"
         }
       >
         <div className="flex justify-end">
@@ -137,7 +137,7 @@ export const DetailMainRow: FC<Props> = memo(({
       </div>
       <div
         className={
-          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 font-bold"
         }
       >
         <div className="flex justify-end">
@@ -149,7 +149,7 @@ export const DetailMainRow: FC<Props> = memo(({
       </div>
       <div
         className={
-          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 font-bold"
         }
       >
         <div className="flex justify-end">
@@ -158,7 +158,7 @@ export const DetailMainRow: FC<Props> = memo(({
       </div>
       <div
         className={
-          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-4/12"
+          "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-2/12 font-bold"
         }
       ></div>
       {_map(listSalaryChild[pageIndex] ?? [], (childRow, index) => (
