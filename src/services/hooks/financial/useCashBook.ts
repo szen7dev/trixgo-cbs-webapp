@@ -116,8 +116,7 @@ export const useCashBook = ({
 
     // Export excel
     const { mutateAsync: exportExcelAsync } =
-        useMutation((payload: CashBookExportManyPayload) =>
-        CashbookRepository.exportExcel(payload)
+        useMutation((payload: CashBookExportManyPayload) => CashbookRepository.exportExcel(payload)
     );
 
     return {

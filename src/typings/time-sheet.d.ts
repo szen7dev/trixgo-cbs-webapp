@@ -16,6 +16,7 @@ export type TimeSheetParent = {
     admins: User[];
     members: User[];
     userCreate: User;
+    userUpdate: User;
     state: 1;
     name: string;
     assignee: User;
