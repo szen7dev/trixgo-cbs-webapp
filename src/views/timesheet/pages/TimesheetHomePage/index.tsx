@@ -1,7 +1,6 @@
 import React, { FC, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import moment from "moment";
-import TriangleDown from "assets/icons/TriangleDown";
 import debounce from "lodash/debounce";
 import PaginateV2, { RefPaginateHandle } from "shareComponents/common/PaginateV2";
 import { TIMESHEET_TYPES } from "apis/localdb";
@@ -10,7 +9,6 @@ import {
   SearchInput,
   DialogForm,
   ActionGroupButton,
-  FilterButton,
 } from "views/timesheet/shareComponents/common";
 
 import { useModal } from "services/hooks/useModal";
@@ -143,24 +141,23 @@ const TimeSheetHomePage: FC = () => {
         >
           Tạo mới
         </button>
+        <PaginateV2
+          ref={ref}
+          totalRecord={totalRecord}
+          totalPages={totalPages}
+          limit={limit}
+          hasNextPage={hasNextPage}
+          isFetching={loading}
+          nextPageAction={() => {
+            setPageIndex((oldState) => oldState + 1);
+            fetchNextPage();
+          }}
+          prevPageAction={() => {
+            setPageIndex((oldState) => oldState - 1);
+            fetchPrevPage();
+          }}
+        />
       </div>
-
-      <PaginateV2
-        ref={ref}
-        totalRecord={totalRecord}
-        totalPages={totalPages}
-        limit={limit}
-        hasNextPage={hasNextPage}
-        isFetching={loading}
-        nextPageAction={() => {
-          setPageIndex((oldState) => oldState + 1);
-          fetchNextPage();
-        }}
-        prevPageAction={() => {
-          setPageIndex((oldState) => oldState - 1);
-          fetchPrevPage();
-        }}
-      />
 
       <div className={"financial-cashflow-table"}>
         <div className={"relative table border-collapse w-full"}>
@@ -196,14 +193,14 @@ const TimeSheetHomePage: FC = () => {
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
-              Khối lượng
+              Số lượng, khối lượng
             </div>
             <div
               className={
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
-              Chi phí
+              Giá trị
             </div>
             <div
               className={
@@ -241,12 +238,13 @@ const TimeSheetHomePage: FC = () => {
                 }
               >
                 <NavLink to={`/timesheet/home/${timeSheetParent._id}`}>
-                  {timeSheetParent.name}
+                  {timeSheetParent.name} - {moment(timeSheetParent.date).format('MM/YYYY')}
                 </NavLink>
-                <p className={"text-gray-500 text-[12px]"}>
-                  {timeSheetParent?.userCreate?.fullname} | 
-                  {moment(timeSheetParent.createAt).isValid() &&
-                    moment(timeSheetParent.createAt).format(DATE_FORMAT)}
+                <p className={"mt-1 text-gray-500"}>
+                  Tạo: {timeSheetParent?.userCreate?.fullname} {moment(timeSheetParent.createAt).format(DATE_FORMAT)}
+                </p>
+                <p className={"mt-1 text-gray-500"}>
+                  Cập nhật: {timeSheetParent?.userUpdate?.fullname} {moment(timeSheetParent.modifyAt).format(DATE_FORMAT)}
                 </p>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>

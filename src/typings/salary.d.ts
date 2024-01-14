@@ -13,6 +13,7 @@ export type SalaryParent = {
     admins: User[];
     members: User[];
     userCreate: User;
+    userUpdate: User;
     state: 1;
     name: string;
     human: User;

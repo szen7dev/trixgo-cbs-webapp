@@ -192,24 +192,24 @@ const SalaryHomePage: FC = () => {
         >
           Tạo mới
         </button>
+        
+        <PaginateV2
+          ref={ref}
+          totalRecord={totalRecord}
+          totalPages={totalPages}
+          hasNextPage={hasNextPage}
+          limit={limit}
+          isFetching={loading}
+          nextPageAction={() => {
+            setPageIndex((oldState) => oldState + 1);
+            fetchNextPage();
+          }}
+          prevPageAction={() => {
+            setPageIndex((oldState) => oldState - 1);
+            fetchPrevPage();
+          }}
+        />
       </div>
-
-      <PaginateV2
-        ref={ref}
-        totalRecord={totalRecord}
-        totalPages={totalPages}
-        hasNextPage={hasNextPage}
-        limit={limit}
-        isFetching={loading}
-        nextPageAction={() => {
-          setPageIndex((oldState) => oldState + 1);
-          fetchNextPage();
-        }}
-        prevPageAction={() => {
-          setPageIndex((oldState) => oldState - 1);
-          fetchPrevPage();
-        }}
-      />
 
       <div className={"financial-cashflow-table"}>
         <div className={"relative table border-collapse w-full"}>
@@ -233,13 +233,13 @@ const SalaryHomePage: FC = () => {
             >
               Hệ số chuyển đổi KPI sang giá trị
             </div>
-            <div
+            {/* <div
               className={
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
               Dự án/phòng ban
-            </div>
+            </div> */}
             <div
               className={
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
@@ -304,22 +304,21 @@ const SalaryHomePage: FC = () => {
                 }
               >
                 <NavLink to={`/timesheet/salary/${salaryParent._id}`}>
-                  {salaryParent.name}
+                  {salaryParent.name} - {moment(salaryParent.date).format('MM/YYYY')}
                 </NavLink>
                 <p className={"mt-1 text-gray-500"}>
-                  {salaryParent?.userCreate?.fullname} | 
-                  {moment(salaryParent.createAt).isValid() &&
-                    moment(salaryParent.createAt).format(DATE_FORMAT)}
+                  Tạo: {salaryParent?.userCreate?.fullname} {moment(salaryParent.createAt).format(DATE_FORMAT)}
                 </p>
-                <p><i> {moment(salaryParent.date).isValid() &&
-                    moment(salaryParent.date).format(DATE_FORMAT)}</i></p>
+                <p className={"mt-1 text-gray-500"}>
+                  Cập nhật: {salaryParent?.userUpdate?.fullname} {moment(salaryParent.modifyAt).format(DATE_FORMAT)}
+                </p>
               </div>
               <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {salaryParent.convertFactor}
               </div>
-              <div className={"px-2 py-2 table-cell box-border border-b"}>
+              {/* <div className={"px-2 py-2 table-cell box-border border-b"}>
                 {salaryParent?.project?.name}
-              </div>
+              </div> */}
               <div
                 className={
                   "px-2 py-2 table-cell box-border border-b text-right"
