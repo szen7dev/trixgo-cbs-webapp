@@ -107,31 +107,31 @@ export const HomeLeftMenuContent: FC = () => {
             route: '/pcm/bookmark'
         },
         {
+            label: t("menu:givingTask"),
+            icon: uploadIcon,
+            count: 0,
+            route: '/pcm/assign'
+        },
+        {
             label: t("menu:draft"),
             icon: fileIcon,
             count: 0,
             route: '/pcm/draft'
         },
-        {
-            label: t("menu:dynamicReport"),
-            icon: fileIcon,
-            count: 0,
-            route: '/pcm/report'
-        },
+    ]
+
+    const listTabSub: Tab[] = [
         {
             label: t("menu:kpiReport"),
             icon: fileIcon,
             count: 0,
             route: '/pcm/kpi-report'
         },
-    ]
-
-    const listTabSub: Tab[] = [
         {
-            label: t("menu:givingTask"),
-            icon: uploadIcon,
+            label: t("menu:dynamicReport"),
+            icon: fileIcon,
             count: 0,
-            route: '/pcm/assign'
+            route: '/pcm/report'
         },
         {
             label: t("menu:relatingTask"),

@@ -10,27 +10,9 @@ import "views/pcm/styles/pcm.module.css";
 
 import { DropdownSearchableV2, Loader } from "shareComponents/common";
 import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
-// import iconChat from "assets/images/icons8-chat-96 1.svg";
-// import iconTrash from "assets/images/icons8-delete-96 1.svg";
-// import taskUserAvt from "assets/images/task-user.svg";
-
-// import moreIcon from "assets/images/moreIcon.svg";
-// import arrowDown from "assets/images/icon-arrowdown.svg";
-// import defaultAva from "assets/images/image 166.jpg";
-// import iconPdf from "assets/images/icons8-attach.svg";
-// import downloadIcon from "assets/images/icons8-attach.svg";
-// import mailIcon from "assets/images/icons8-email-96 1.svg";
-// import sendMailIcon from "assets/images/icons8-attach.svg";
 import userIcon from "assets/images/icon-user-avatar.svg";
-import maleUserIcon from "assets/images/icons8-male-user-64.svg";
-import categoryIcon from "assets/images/icons8-category-48.svg";
-import timeTableIcon from "assets/images/icons8-timetable-48.svg";
-import projectIcon from "assets/images/icons8-project-50.svg";
 import TriangleDown from "assets/icons/TriangleDown";
-import timelineIcon from "assets/images/icons8-timeline-week-48.svg";
-import businessBuiding from "assets/images/icons8-business-building-48.svg";
 import trashIcon from "assets/images/icons8-trash-96 1.svg";
-
 import iconPhoto from "assets/images/icons8-photo.svg";
 import iconFile from "assets/images/icons8-attach.svg";
 import StarIcon from "@mui/icons-material/Star";
@@ -195,7 +177,6 @@ export const DashboardV2: FC<Props> = () => {
   };
 
   // Danh sách các response
-
   const query: any = {
     ...queryResponse,
     keyword: keywordForResponse,
@@ -233,7 +214,6 @@ export const DashboardV2: FC<Props> = () => {
   const [isParent, setIsParent] = useState<any>(-1);
   const [subtypes, setSubtypes] = useState<string[]>([]);
   const [status, setStatus] = useState<string[]>([]);
-  // const [selectStar, setSelectStar] = React.useState(false);
 
   const querySearchTask: any = {
     keyword: keywordForSubject,
@@ -525,9 +505,6 @@ export const DashboardV2: FC<Props> = () => {
               renderItem={(item) => (
                 <p className={"min-w-[300px]"}>{item.text}</p>
               )}
-              // prefixIcon={
-              //   <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
-              // }
             />
           )}
 
@@ -626,9 +603,6 @@ export const DashboardV2: FC<Props> = () => {
                   </div>
                 </div>
               )}
-              // prefixIcon={
-              //   <img className={"mr-2"} src={maleUserIcon} alt={"icon"} />
-              // }
             />
           )}
 
@@ -639,7 +613,6 @@ export const DashboardV2: FC<Props> = () => {
               }
               placeholder={"Thời hạn"}
               iconBack={<TriangleDown />}
-              // iconFront={<img src={timelineIcon} alt={"----"} />}
               onValueChange={(val) => {
                 setFromExpiredDate(val.fromDate);
                 setToExpiredDate(val.toDate);
@@ -735,9 +708,6 @@ export const DashboardV2: FC<Props> = () => {
               renderItem={(item) => (
                 <p className={"min-w-[300px]"}>{item.text}</p>
               )}
-              // prefixIcon={
-              //   <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
-              // }
             />
           )}
 
@@ -845,9 +815,6 @@ export const DashboardV2: FC<Props> = () => {
                   </div>
                 </div>
               )}
-              // prefixIcon={
-              //   <img className={"mr-2"} src={maleUserIcon} alt={"icon"} />
-              // }
             />
           )}
 
@@ -918,9 +885,6 @@ export const DashboardV2: FC<Props> = () => {
               renderItem={(item) => (
                 <p className={"min-w-[300px]"}>{item.text}</p>
               )}
-              // prefixIcon={
-              //   <img className={"mr-2"} src={businessBuiding} alt={"icon"} />
-              // }
             />
           )}
 
@@ -1019,9 +983,6 @@ export const DashboardV2: FC<Props> = () => {
                   </div>
                 </div>
               )}
-              // prefixIcon={
-              //   <img className={"mr-2"} src={maleUserIcon} alt={"icon"} />
-              // }
             />
           )}
 
@@ -1031,9 +992,6 @@ export const DashboardV2: FC<Props> = () => {
               reset={reset}
               className={"mr-1 border border-primary-border rounded-lg mb-2"}
               placeholder={t("homepage:project")}
-              // prefixIcon={
-              //   <img className={"mr-2"} src={projectIcon} alt={"icon"} />
-              // }
               isMultiple={true}
               onchangeValue={(value) => {
                 if (!project?.includes?.(value.id as string)) {
@@ -1076,7 +1034,6 @@ export const DashboardV2: FC<Props> = () => {
               }
               placeholder={t("homepage:timecCreated")}
               iconBack={<TriangleDown />}
-              // iconFront={<img src={timelineIcon} alt={"----"} />}
               onValueChange={(val) => {
                 setFromCreateDate(val.fromDate);
                 settoCreateDate(val.toDate);
@@ -1118,9 +1075,6 @@ export const DashboardV2: FC<Props> = () => {
               reset={reset}
               className={"mr-1 border border-primary-border rounded-lg mb-2"}
               placeholder={"Quá hạn"}
-              // prefixIcon={
-              //   <img className={"mr-2"} src={timeTableIcon} alt={"icon"} />
-              // }
               onchangeValue={(val) => {
                 setIsExpired(val.id);
                 dispatch(setTabActive(tabIndex));
@@ -1149,9 +1103,6 @@ export const DashboardV2: FC<Props> = () => {
               reset={reset}
               className={"mr-1 border border-primary-border rounded-lg mb-2"}
               placeholder={"Trạng thái"}
-              // prefixIcon={
-              //   <img className={"mr-2"} src={categoryIcon} alt={"icon"} />
-              // }
               isMultiple={true}
               disableSearch={true}
               onchangeValue={(value) => {
@@ -1193,10 +1144,6 @@ export const DashboardV2: FC<Props> = () => {
                   id: 6,
                   text: "Tiếp tục theo dõi",
                 },
-                // {
-                //   id: 7,
-                //   text: "Khóa đóng",
-                // },
               ]}
             />
           )}
@@ -1206,9 +1153,6 @@ export const DashboardV2: FC<Props> = () => {
               reset={reset}
               className={"mr-1 border border-primary-border rounded-lg mb-2"}
               placeholder={t("homepage:category")}
-              // prefixIcon={
-              //   <img className={"mr-2"} src={categoryIcon} alt={"icon"} />
-              // }
               isMultiple={false}
               disableSearch={true}
               data={[
@@ -1244,9 +1188,6 @@ export const DashboardV2: FC<Props> = () => {
               reset={reset}
               className={"mr-1 border border-primary-border rounded-lg mb-2"}
               placeholder={"Loại"}
-              // prefixIcon={
-              //   <img className={"mr-2"} src={categoryIcon} alt={"icon"} />
-              // }
               isMultiple={true}
               disableSearch={true}
               onchangeValue={(value) => {
@@ -1323,9 +1264,6 @@ export const DashboardV2: FC<Props> = () => {
               reset={reset}
               className={"mr-1 border border-primary-border rounded-lg mb-2"}
               placeholder={"Cấp"}
-              // prefixIcon={
-              //   <img className={"mr-2"} src={categoryIcon} alt={"icon"} />
-              // }
               onchangeValue={(val) => {
                 setIsParent(val.id);
                 dispatch(setTabActive(tabIndex));
@@ -1490,12 +1428,6 @@ export const DashboardV2: FC<Props> = () => {
               >
                 Gán thành tích/vi phạm
               </button>
-          {/* <button className={"flex items-center justify-center mx-3"}>
-            <img src={downloadIcon} alt={"-----"} />
-          </button>
-          <button className={"flex items-center justify-center mx-3"}>
-            <img src={sendMailIcon} alt={"-----"} />
-          </button> */}
           <div className={"flex-1 flex items-center justify-end"}>
             <PaginateV2
               ref={ref}
@@ -1708,12 +1640,6 @@ export const DashboardV2: FC<Props> = () => {
                             "flex gap-4 items-center justify-center py-4 px-1"
                           }
                         >
-                          {/* <input
-                            className="form-check-input mt-[5px]"
-                            type="checkbox"
-                            value=""
-                            style={{ width: "13px", height: "13px", marginTop: "5px" }}
-                          /> */}
                           <button onClick={handleMarkTask.bind(null, item)}>
                             {item?.flags?.includes(user?._id) ?? false ? (
                               <StarIcon
@@ -1875,9 +1801,6 @@ export const DashboardV2: FC<Props> = () => {
                               alt="Trash"
                             />
                           </button>
-                          {/* <button className="w-[40px] h-[40px] rounded-full hover:bg-cbs-form-input-bg">
-                            <img src={mailIcon} className="m-auto" />
-                          </button> */}
                         </div>
                         <div
                           className={
@@ -2070,4 +1993,4 @@ export const showTime = (time: any) => {
   } else {
     return moment(time).format("DD/MM/YYYY");
   }
-};
+}

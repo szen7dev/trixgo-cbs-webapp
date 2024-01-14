@@ -40,9 +40,7 @@ export const FnbReportMistake: FC = () => {
 	const history = useHistory();
 	const { hasPermission, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
 
-	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
-
 	const [isShowImageFullScreen, setIsShowImageFullScreen] = useState(false);
 
 	const [defaultState, setDefaultState] = useState({
@@ -58,19 +56,13 @@ export const FnbReportMistake: FC = () => {
 	toDate: new Date(new Date().getFullYear(), 11, 31)
 	})
 
-	/**
-	 * List mẩu tin
-	 */
 	const { isLoading, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbMistake({ 
 		params: { 
 			keyword: keyword, 
-			// fundasID: [fundaID],
 			populates: JSON.stringify({
 				path: 'userCreate mistake executor funda files'
 			}) 
 		}, isFetchList: true, isFetchInfo: false  });
-
-	// console.log(listWithPager)
 
 	useEffect(() => {
 		if (isSuccess && !(hasPermission)) {
@@ -260,5 +252,5 @@ export const FnbReportMistake: FC = () => {
 		        initialData={defaultState}
 		    />
 		</main>
-	);
-};
+	)
+}

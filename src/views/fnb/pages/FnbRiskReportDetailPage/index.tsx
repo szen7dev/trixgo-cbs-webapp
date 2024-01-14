@@ -1,11 +1,10 @@
 /*=====1.LIBRARY=====*/
-import React, { FC, useCallback, useState, useEffect } from "react";
-import { Link, useHistory, useParams } from "react-router-dom";
+import React, { FC, useState, useEffect } from "react";
+import { useHistory, useParams } from "react-router-dom";
 import debounce from "lodash/debounce";
 import moment from "moment";
 import { formatNumberMoney } from "utils/converter";
 import { toast } from "react-toastify";
-import cn from "classnames";
 
 /*=====2.CSS=====*/
 
@@ -13,7 +12,7 @@ import cn from "classnames";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
-import { SearchInput, ModalContainer } from "shareComponents/common";
+import { SearchInput } from "shareComponents/common";
 import PaginateV2 from "shareComponents/common/PaginateV2";
 import { ModalZoomView } from "shareComponents/common";
 
@@ -21,13 +20,9 @@ import { ModalZoomView } from "shareComponents/common";
 import { ImageProps } from "typings/common";
 
 /*=====6.HOOKS/APIS=====*/
-import { useModal } from "services/hooks/useModal";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
-import { useFnbProduct } from 'services/hooks/fnb/useFnbProduct';
-import { useFnbQuota } from 'services/hooks/fnb/useFnbQuota';
 import { useFunda } from 'services/hooks/items/useFunda';
 import { useFnbMistake } from 'services/hooks/fnb/useFnbMistake';
-import { useAuth } from 'services/hooks/auth/useAuth';
 
 /*=====7.OTHER=====*/
 import { APP_ID } from "apis/localdb";
@@ -39,9 +34,6 @@ const STATUS_MISTAKE = [
 	"Đã xử lý", "Chưa xử lý"
 ]
 export const FnbRiskReportDetailPage: FC = () => {
-	const { user } = useAuth();
-	const companyID = user?.company._id;
-	
 	const history = useHistory();
 	const { fundaID } = useParams<{ fundaID: string }>();
 	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
@@ -72,10 +64,6 @@ export const FnbRiskReportDetailPage: FC = () => {
 	const toggleModalCreateShiftDetail = () => setModalCreateShiftDetail(!modalCreateShiftDetail);
 
 	const [initialValues, setInitialValues] = useState(null);
-	const onConfirmCreateShiftDetail = () => {
-		refetch();
-		setIdsChecked([]);
-	}
 
 	useEffect(() => {
 		if (isSuccess && !(hasPermission)) {
