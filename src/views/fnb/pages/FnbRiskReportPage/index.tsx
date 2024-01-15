@@ -1,6 +1,6 @@
 /*=====1.LIBRARY=====*/
 import React, { FC, useState, useEffect } from "react";
-import { Link, useHistory, useParams, useLocation } from "react-router-dom";
+import { Link, useParams, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import debounce from "lodash/debounce";
 import moment from "moment";
@@ -18,8 +18,6 @@ import PaginateV2 from "shareComponents/common/PaginateV2";
 /*=====5.TYPINGS=====*/
 
 /*=====6.HOOKS/APIS=====*/
-import { APP_ID } from "apis/localdb";
-import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { useFnbProduct } from 'services/hooks/fnb/useFnbProduct';
 import { useFunda } from 'services/hooks/items/useFunda';
 import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
@@ -32,10 +30,8 @@ export const FnbRiskReportPage: FC = () => {
 	useEffect(() => {
 		document.title = "Seller";
 	}, []);
-	
-	const history = useHistory();
+
 	const { productID } = useParams<{ productID: string }>();
-	// const { hasPermission, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
 
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
@@ -50,13 +46,6 @@ export const FnbRiskReportPage: FC = () => {
 		isFetchList: true, 
 		isFetchInfo: false
 	});
-
-	// useEffect(() => {
-	// 	if (isSuccess && !(hasPermission)) {
-	// 		toast.error("Bạn không có quyền truy cập chức năng này. Vui lòng liên hệ ban quản trị.");
-	// 		history.push("/")
-	// 	}
-	// }, [hasPermission]);
 
 	type PaginateHandle = React.ElementRef<typeof PaginateV2>;
     const ref = React.useRef<PaginateHandle>(null);
@@ -97,9 +86,6 @@ export const FnbRiskReportPage: FC = () => {
 		<main className="h-full overflow-auto">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
 				<div className="flex items-center">
-					{/* <button onClick={history.goBack}>
-                        <img src="/images/common/button_back.png" alt="Button Back" />
-                    </button> */}
 					<p className="text-lg">{infoProduct?.name}</p>
 					<SearchInput
 						classNameWrapper="mr-3"
@@ -173,11 +159,6 @@ export const FnbRiskReportPage: FC = () => {
 								Ngày bắt đầu
 							</div>
 						</th>
-						{/* <th className="pb-1 pt-1 font-normal">
-							<div className="border-gray-300 font-normal pl-2">
-								Cán bộ quản lý
-							</div>
-						</th> */}
 						<th className="pb-1 pt-1 font-normal">
 							<div className="border-gray-300 font-normal pl-2">
 								Địa chỉ
@@ -212,9 +193,6 @@ export const FnbRiskReportPage: FC = () => {
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{moment(item?.createAt).format('DD/MM/YYYY')}
 							</td>
-							{/* <td className={"p-2 border-0.5 border-primary-border"}>
-								
-							</td> */}
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								{item?.address}
 							</td>

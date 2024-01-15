@@ -4,7 +4,7 @@ import { useHistory, useParams } from "react-router-dom";
 import debounce from "lodash/debounce";
 import moment from "moment";
 import { formatNumberMoney } from "utils/converter";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 
 /*=====2.CSS=====*/
 
@@ -20,12 +20,12 @@ import { ModalZoomView } from "shareComponents/common";
 import { ImageProps } from "typings/common";
 
 /*=====6.HOOKS/APIS=====*/
-import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
+// import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { useFunda } from 'services/hooks/items/useFunda';
 import { useFnbMistake } from 'services/hooks/fnb/useFnbMistake';
 
 /*=====7.OTHER=====*/
-import { APP_ID } from "apis/localdb";
+// import { APP_ID } from "apis/localdb";
 
 const TYPE_MISTAKE = [
 	"Hệ thống phát hiện", "Khách hàng phát hiện"
@@ -36,7 +36,7 @@ const STATUS_MISTAKE = [
 export const FnbRiskReportDetailPage: FC = () => {
 	const history = useHistory();
 	const { fundaID } = useParams<{ fundaID: string }>();
-	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
+	// const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
 
@@ -65,15 +65,15 @@ export const FnbRiskReportDetailPage: FC = () => {
 
 	const [initialValues, setInitialValues] = useState(null);
 
-	useEffect(() => {
-		if (isSuccess && !(hasPermission)) {
-			toast.error("Bạn không có quyền truy cập chức năng này. Vui lòng liên hệ ban quản trị.");
-			history.push("/")
-		}
-	}, [hasPermission]);
+	// useEffect(() => {
+	// 	if (isSuccess && !(hasPermission)) {
+	// 		toast.error("Bạn không có quyền truy cập chức năng này. Vui lòng liên hệ ban quản trị.");
+	// 		history.push("/")
+	// 	}
+	// }, [hasPermission]);
 
 	useEffect(() => {
-		document.title = "Seller";
+		document.title = "Trixgo | Báo cáo KPI";
 	}, []);
 
 	type PaginateHandle = React.ElementRef<typeof PaginateV2>;
