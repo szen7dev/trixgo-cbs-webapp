@@ -50,7 +50,8 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
     } = useDoctype({
         params: {
             type,
-            keyword: keywordDoctype
+            keyword: keywordDoctype,
+            isShowParentAndChild: 1,
         },
         isFetchList: true
     });
