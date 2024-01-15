@@ -3,12 +3,17 @@ import type { QueryParam, Company, APIResponse } from './commons';
 export type Doctype = {
     _id: string;
     name: string;
+    sign: string;
     description: string;
+    unit: string;
     type: number;
+    amount: number;
     company?: Company
     modifyAt?: string;
     createAt?: string;
     salesChannel: number;
+    userCreate: any;
+    userUpdate: any;
 }
 
 export type DoctypeListParams = QueryParam & {
@@ -62,8 +67,11 @@ interface ModalProps {
         doctypeID: string;
         parent?: string;
         name: string;
+        sign: string;
+        unit: string;
         description: string;
         type: number;
+        amount: number;
         salesChannel: number;
     }
     onConfirm?(): void

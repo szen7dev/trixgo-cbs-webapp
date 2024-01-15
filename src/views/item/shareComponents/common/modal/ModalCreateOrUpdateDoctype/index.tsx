@@ -17,9 +17,12 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
     doctypeID: '',
     parent: '',
     name: '',
+    sign: '',
+    unit: '',
     description: '',
     type: 1,
-    salesChannel: 1
+    salesChannel: 1,
+    amount: 0,
   }
 }) => {
   const { closeModal } = useModal();
@@ -79,7 +82,7 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
 
   return (
     <main className="relative h-full">
-      <header className="px-10 py-5 flex items-center justify-between">
+      <header className="px-10 py-2 flex items-center justify-between">
         <p className="font-bold text-xl">
           {modalType === 'create' ? 'Tạo mới' : 'Cập nhật'}
         </p>
@@ -92,7 +95,7 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
       </header>
 
       <section className="px-10 py-2">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtDescription">
+        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtName">
           Tên (*)
         </label>
         <input
@@ -104,10 +107,52 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target)}
         />
       </section>
+      
+      <section className="px-10 mt-2">
+        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtSign">
+          Mã hiệu
+        </label>
+        <input
+          type="text"
+          placeholder="Nhập mã hiệu"
+          name="sign"
+          className="w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.sign}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target)}
+        />
+      </section>
+
+      <section className="px-10 mt-2">
+        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtSign">
+          Đơn vị tính
+        </label>
+        <input
+          type="text"
+          placeholder="Đơn vị tính"
+          name="unit"
+          className="w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.unit}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target)}
+        />
+      </section>
+
+      <section className="px-10 mt-2">
+        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtSign">
+          Giá trị
+        </label>
+        <input
+          type="number"
+          placeholder="Giá trị"
+          name="amount"
+          className="w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"
+          defaultValue={formData.amount}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target)}
+        />
+      </section>
 
       <section className="px-10 mt-2">
         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtDescription">
-          Mô tả
+          Mô tả, ghi chú
         </label>
         <input
           type="text"

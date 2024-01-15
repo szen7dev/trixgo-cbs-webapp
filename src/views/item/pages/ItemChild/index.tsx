@@ -34,12 +34,15 @@ export const ItemChildPage: FC = () => {
         doctypeID: '',
         parent: parentId,
         name: '',
+        sign: '',
+        unit: '',
         description: '',
-        type: +type
+        type: +type,
+        salesChannel: 1,
+        amount: 0,
     });
 
     const {
-        deleteManyAsync,
         list: listDoctypes,
         hasNextPage: hasNextPageDoctype,
         refetch: refetchListDoctype,
@@ -66,8 +69,10 @@ export const ItemChildPage: FC = () => {
             doctypeID: '',
             parent: parentId,
             name: '',
+            sign: '',
+            unit: '',
             description: '',
-            type: +type
+            type: +type,
         }))
     }
 
@@ -84,13 +89,17 @@ export const ItemChildPage: FC = () => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, name, description, type } = newListIDChecked[0];
+            const { _id, name, sign, unit, description, type, salesChannel, amount } = newListIDChecked[0];
             setInitialValues({
                 doctypeID: _id,
                 parent: parentId,
                 name,
+                sign,
+                unit,
                 description,
-                type
+                type,
+                salesChannel,
+                amount,
             });
         } else {
             clearData();
@@ -115,29 +124,6 @@ export const ItemChildPage: FC = () => {
         }
     };
 
-    const handleConfirmDelete = async () => {
-        try {
-            const ids = doctypesChecked.map(item => item._id);
-            const { error, data } = await deleteManyAsync(ids);
-
-            if (error) {
-                return toast.warn(data?.message);
-            }
-
-            toast.success('Xoá dữ liệu thành công', { autoClose: 1500 });
-            closeModal();
-            clearData();
-            refetchListDoctype();
-            setDoctypesChecked([]);
-        } catch (error) {
-            if (typeof error === "string") {
-                toast.error(error);
-            } else if (error instanceof Error) {
-                toast.error(error.message);
-            }
-        }
-    }
-
     const handleOpenModalCreateOrUpdate = (modalType: 'create' | 'update') => {
         let initValues: any = {...initialValues};
         setDoctypesChecked([]);
@@ -148,14 +134,17 @@ export const ItemChildPage: FC = () => {
                 doctypeID: '',
                 parent: parentId,
                 name: '',
+                sign: '',
+                unit: '',
                 description: '',
-                type: +type
+                type: +type,
             };
         }
 
         openModal(
             <div
                 className={"inline-block w-[521px] h-[340px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
+                style={{height: "600px"}}
             >
                 <ModalCreateOrUpdateDoctype
                     modalType={modalType}
@@ -190,23 +179,6 @@ export const ItemChildPage: FC = () => {
                                 <img src={iconPencil} alt="icon pencil" />
                             </button>
                         ) : ''}
-
-                        {doctypesChecked.length ? (
-                            <button
-                                onClick={() =>
-                                    openModal(
-                                        <div
-                                            className={
-                                                "inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
-                                            }
-                                        >
-                                            <ModalConfirm onConfirm={handleConfirmDelete} />
-                                        </div>
-                                    )
-                                }>
-                                <img src={DeleteIcon} alt="Delete" />
-                            </button>
-                        ) : ''}
                     </div>
                     <div className="flex items-center">
                         <button
@@ -235,39 +207,58 @@ export const ItemChildPage: FC = () => {
                                 />
                             </div>
                         </th>
-                        <th className="w-1/6 py-1">
+                        <th className="py-1" style={{width: "20px"}}>
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Nội dung
                             </div>
                         </th>
                         <th className={cn("py-1 font-normal", styles.theadTwelvePercent)}>
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Mô tả
+                                Mã hiệu
                             </div>
                         </th>
-                        <th className="w-1/12 py-1 font-normal">
+                        <th className={cn("py-1 font-normal", styles.theadTwelvePercent)}>
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Cập nhật lần cuối
+                                Đơn vị tính
+                            </div>
+                        </th>
+                        <th className={cn("py-1 font-normal", styles.theadTwelvePercent)}>
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Giá trị
+                            </div>
+                        </th>
+                        <th className={cn("py-1 font-normal", styles.theadTwelvePercent)}>
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Mô tả, ghi chú
+                            </div>
+                        </th>
+                        <th className="w-2/12 py-1 font-normal">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Cập nhật
                             </div>
                         </th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    {listDoctypes.length ? listDoctypes.map(doctype => (
-                        <tr key={doctype._id} className="border-b border-primary-border h-10">
+                    {listDoctypes.length ? listDoctypes.map(item => (
+                        <tr key={item._id} className="border-b border-primary-border h-10">
                             <td className="py-1 px-2 text-center">
                                 <input
                                     className="form-check-input"
                                     type="checkbox"
-                                    checked={getStateChecked(doctype._id)}
-                                    onChange={() => onClickCheckButton(doctype)}
+                                    checked={getStateChecked(item._id)}
+                                    onChange={() => onClickCheckButton(item)}
                                 />
                             </td>
-                            <td className="py-1 px-2">{doctype.name}</td>
-                            <td className="py-1 px-2">{doctype.description}</td>
+                            <td className="py-1 px-2">{item.name}</td>
+                            <td className="py-1 px-2">{item?.sign}</td>
+                            <td className="py-1 px-2">{item?.unit}</td>
+                            <td className="py-1 px-2">{item?.amount}</td>
+                            <td className="py-1 px-2">{item?.description}</td>
                             <td className="py-1 px-2">
-                                {doctype.modifyAt ? moment(doctype.modifyAt).format('DD/MM/YYYY - HH:mm') : ''}
+                                {item?.userUpdate?.fullname}
+                                <p className="text-primary-gray text-[12px]"><i>{item.modifyAt ? moment(item.modifyAt).format('DD/MM/YYYY - HH:mm') : ''}</i></p>
                             </td>
                         </tr>
                     )) : <></>}

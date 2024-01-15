@@ -31,8 +31,8 @@ async function fetchListDoctype(params: any) {
         `${ITEM_URL}/doctypes`, {
         params: {
             populates: {
-                path: 'company',
-                select: 'sign name'
+                path: 'company userCreate userUpdate',
+                select: 'sign name fullname'
             },
             ...params
         }
