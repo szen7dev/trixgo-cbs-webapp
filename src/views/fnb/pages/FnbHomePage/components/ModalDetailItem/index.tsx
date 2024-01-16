@@ -471,6 +471,12 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                           <div className="font-bold text-primary">{formatNumberMoney(order.amount)}</div>
                         </div>
                       </div>
+                      <div className="flex justify-between mt-2 mb-3">
+                        <div className="">Phí ship (nếu có)</div>
+                        <div className="flex">
+                          <div>{formatNumberMoney(order?.shippingFee)}</div>
+                        </div>
+                      </div>
                       {
                         (order?.paid && order?.paid > 0 && order?.paymentMethod == 1) ?
                           <div className="flex justify-between mt-2 mb-3 font-bold"><div>Tiền mặt khách trả:</div><div>{formatNumberMoney(order?.paid)}</div></div>

@@ -200,6 +200,10 @@ export const FnbBillOrder: FC = () => {
                         </table>
                     </div>
                     <div className="flex justify-between border-b-0.5 border-cbs-border mx-2 py-1 text-[12px]">
+                        <div>Phí ship (nếu có)</div>
+                        <div>{formatNumberMoney(info?.shippingFee)}</div>
+                    </div>
+                    <div className="flex justify-between border-b-0.5 border-cbs-border mx-2 py-1 text-[12px]">
                         <div>Hình thức thanh toán</div>
                         <div>{info?.paymentMethod >=1 && FNB_PAYMENT[Number(info?.paymentMethod)-1].text}</div>
                     </div>
