@@ -223,7 +223,7 @@ export const PaymentPage: FC = () => {
                       <p className="text-lg ml-2">Danh sách</p>
 
                       <SearchInput
-                          classNameWrapper="ml-4 mr-2 border border-primary-border"
+                          classNameWrapper="ml-4 mr-2"
                           classNameInput="outline-none w-[296px]"
                           onChange={onChangeSearch}
                       />

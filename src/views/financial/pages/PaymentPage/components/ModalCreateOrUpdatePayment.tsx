@@ -53,10 +53,10 @@ export const ModalCreateOrUpdatePayment: FC<any> = ({
       switch (modalType) {
         // Tạo mẩu tin
         case 'create': {
-          const { error, message } = await insertAsync(formDataFormat);
+          const { error, data } = await insertAsync(formDataFormat);
 
           if (error) {
-            return toast.warning(message);
+            return toast.error(data?.message);
           }
 
           toast.success('Tạo thành công', { autoClose: 1500 });
@@ -65,10 +65,10 @@ export const ModalCreateOrUpdatePayment: FC<any> = ({
 
         // Cập nhật mẩu tin
         case 'update': {
-          const { error, message } = await updateAsync(formDataFormat);
+          const { error, data } = await updateAsync(formDataFormat);
 
           if (error) {
-            return toast.warning(message);
+            return toast.error(data?.message);
           }
 
           toast.success('Cập nhật thành công', { autoClose: 1500 });
