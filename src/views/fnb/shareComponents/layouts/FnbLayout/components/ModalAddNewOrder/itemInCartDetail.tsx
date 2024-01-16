@@ -1,19 +1,13 @@
 import { FC, useState } from "react";
 
-import Close from "assets/icons/Close";
-import { useModal } from "services/hooks/useModal";
 import IconMinus from "assets/images/icons8-reduce-96 1.svg";
-import ItemSample from "assets/images/icons8-beverage-100.svg";
 import IconPlus from "assets/images/icons8-add-new-100 1.svg";
 import CheckBoxEmpty from "assets/images/Frame 3548.svg";
 import CheckedBox from "assets/images/Check-All.svg";
-import RadioEmpty from "assets/images/Ellipse 27.svg";
-import RadioChecked from "assets/images/icons8-checked-40 (2) 2.svg";
-import IconSearch from "assets/images/icons8-search-96 1.svg";
 import beverageIcon from "assets/images/icons8-beverage.png";
 import IconCancel from "assets/images/icons8-cancel-96 1.svg";
 import { Checkbox, FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
-import { formatNumberMoney, convertCurrency } from "utils/converter";
+import { formatNumberMoney } from "utils/converter";
 
 export const ItemInCartMenu : FC<any> = ({item, service, handleChooseVariant, handleChangeQuantity, increaseCount, decreaseCount, handleChangeNote, handleChangeValue, handleRemoveItem}) =>  {
     const [menuShowList, setMenuState] = useState(false);
