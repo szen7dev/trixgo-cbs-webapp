@@ -1769,12 +1769,12 @@ export const ModalAddNewOrder: FC<Props> = () => {
                       </div>
                       <div className="border-b-0.5 px-2 py-1">
                         <div className="flex justify-between">
-                          <div className="font-bold">Phí ship</div>
+                          <div className="font-bold">Phí ship (nếu có)</div>
                           <div>
                             <input
                               type="number"
                               placeholder="Nhập phí ship"
-                              name="amount"
+                              name="shippingFee"
                               className="h-8 w-full border border-primary-border outline-none px-2"
                               onChange={(event) => setFieldValue("shippingFee", event.target.value)}
                             />
@@ -1788,7 +1788,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                             <input
                               type="number"
                               placeholder="Nhập tiền mặt khách trả để tính tiền phải trả lại"
-                              name="amount"
+                              name="paid"
                               className="h-8 w-full border border-primary-border outline-none px-2"
                               onChange={(event) => setFieldValue("paid", event.target.value)}
                             />
