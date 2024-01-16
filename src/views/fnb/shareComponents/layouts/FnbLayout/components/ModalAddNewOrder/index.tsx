@@ -44,6 +44,8 @@ interface InitialValues {
   seasons: number,
   paymentMethod: string,
   salesChannel: number,
+  shippingFee: number,
+  paid: number,
   sources: number,
   name: string,
   note: string,
@@ -715,6 +717,8 @@ export const ModalAddNewOrder: FC<Props> = () => {
     paymentMethod: "1",
     sources: 1,
     salesChannel: 1,
+    shippingFee: 0,
+    paid: 0,
     name: "",
     note: "",
     date: "",
@@ -1547,7 +1551,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                         {values.customerID && service === "1" ?
                           <div className="flex justify-between items-center mb-1 px-2 py-2">
                             <div>
-                              <div>Trừ từ tích điểm-chỉ áp dụng đơn Off {`(${formatNumberMoney(credit || creditTemp)})`}</div>
+                              <div>Trừ từ tích điểm, gói trả trước-chỉ áp dụng đơn Off {`(${formatNumberMoney(credit || creditTemp)})`}</div>
                               <div>
                                 <FormControl sx={{ marginTop: "-5px" }} >
                                   <RadioGroup
@@ -1761,6 +1765,34 @@ export const ModalAddNewOrder: FC<Props> = () => {
                           ) : (
                             <div className={`font-bold ${totalPayTemp > 0 ? 'text-primary' : 'text-red-500'} font-bold`}>{formatNumberMoney(totalPayTemp)}</div>
                           )}
+                        </div>
+                      </div>
+                      <div className="border-b-0.5 px-2 py-1">
+                        <div className="flex justify-between">
+                          <div className="font-bold">Phí ship</div>
+                          <div>
+                            <input
+                              type="number"
+                              placeholder="Nhập phí ship"
+                              name="amount"
+                              className="h-8 w-full border border-primary-border outline-none px-2"
+                              onChange={(event) => setFieldValue("shippingFee", event.target.value)}
+                            />
+                            </div>
+                        </div>
+                      </div>
+                      <div className="border-b-0.5 px-2 py-1">
+                        <div className="flex justify-between">
+                          <div className="font-bold">Tiền mặt khách trả (đơn mua tại quán)</div>
+                          <div>
+                            <input
+                              type="number"
+                              placeholder="Nhập tiền mặt khách trả để tính tiền phải trả lại"
+                              name="amount"
+                              className="h-8 w-full border border-primary-border outline-none px-2"
+                              onChange={(event) => setFieldValue("paid", event.target.value)}
+                            />
+                            </div>
                         </div>
                       </div>
                       <div className="text-right mb-5 mx-2" style={{ marginTop: "100px" }}>

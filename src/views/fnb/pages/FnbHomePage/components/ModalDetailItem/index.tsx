@@ -453,7 +453,7 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                           </div>
                         </div>
                         <div className="flex justify-between mt-2 mb-3">
-                          <div className="">Trừ tích điểm</div>
+                          <div className="">Trừ tích điểm/gói trả trước</div>
                           <div className="flex">
                             <div>{formatNumberMoney(order.credit)}</div>
                           </div>
@@ -471,6 +471,16 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                           <div className="font-bold text-primary">{formatNumberMoney(order.amount)}</div>
                         </div>
                       </div>
+                      {
+                        (order?.paid && order?.paid > 0 && order?.paymentMethod == 1) ?
+                          <div className="flex justify-between mt-2 mb-3 font-bold"><div>Tiền mặt khách trả:</div><div>{formatNumberMoney(order?.paid)}</div></div>
+                          : <></>
+                      }
+                      {
+                          (order?.paid && order?.paid > 0 && order?.paymentMethod == 1) ?
+                          <div className="flex justify-between mt-2 mb-3"><div>Tiền thừa trả lại:</div><div>{formatNumberMoney(order?.paid - order?.amount)}</div></div>
+                          : <></>
+                      }
                       {/* <div className="text-right" style={{ marginTop: "100px" }}>
                         <button type="submit" className="btn btn-primary ml-auto" disabled={isUploading}>Xác nhận</button>
                       </div> */}
@@ -483,5 +493,5 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
         </Formik>
       </div>
     </>
-  );
-};
+  )
+}

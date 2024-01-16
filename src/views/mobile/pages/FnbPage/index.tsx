@@ -199,7 +199,7 @@ const FnbPage: FC = () => {
                         </div>
                         <div className="relative text-primary-gray">
                             <i>
-                                <p>Trừ tích điểm</p>
+                                <p>Trừ tích điểm/gói trả trước</p>
                                 <p className="absolute top-0 right-0">{formatNumberMoney(item?.credit)}</p>
                             </i>
                         </div>

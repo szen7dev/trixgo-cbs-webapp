@@ -176,7 +176,7 @@ export const FnbBillOrder: FC = () => {
                                     <td className="text-right">{formatNumberMoney(info?.salesoff)}</td>
                                 </tr>
                                 <tr>
-                                    <td className="text-left">Trừ tích điểm & trả trước (chỉ áp dụng đơn tại quán)</td>
+                                    <td className="text-left">Trừ tích điểm/gói trả trước (chỉ áp dụng đơn tại quán)</td>
                                     <td className="text-center px-1"></td>
                                     <td className="text-right">{formatNumberMoney(info?.credit)}</td>
                                 </tr>
@@ -194,7 +194,7 @@ export const FnbBillOrder: FC = () => {
                                 <tr className="font-bold">
                                     <th className="w-1/2 text-left">Tiền hàng</th>
                                     <th className="w-[35px] text-center px-1"></th>
-                                    <th className="w-[75px] text-right">{formatNumberMoney(info?.amount)}đ</th>
+                                    <th className="w-[75px] text-right">{formatNumberMoney(info?.amount)}</th>
                                 </tr>
                             </thead>
                         </table>
@@ -203,6 +203,16 @@ export const FnbBillOrder: FC = () => {
                         <div>Hình thức thanh toán</div>
                         <div>{info?.paymentMethod >=1 && FNB_PAYMENT[Number(info?.paymentMethod)-1].text}</div>
                     </div>
+                    {
+                        (info?.paid && info?.paid > 0 && info?.paymentMethod == 1) ?
+                        <div className="flex justify-between border-b-0.5 border-cbs-border mx-2 py-1 text-[12px] font-bold"><div>Tiền mặt khách trả:</div> <div>{formatNumberMoney(info?.paid)}</div></div>
+                        : <></>
+                    }
+                     {
+                        (info?.paid && info?.paid > 0 && info?.paymentMethod == 1) ?
+                        <div className="flex justify-between border-b-0.5 border-cbs-border mx-2 py-1 text-[12px]"><div>Tiền thừa trả lại:</div> <div>{formatNumberMoney(info?.paid - info?.amount)}</div></div>
+                        : <></>
+                    }
                     <div className="text-center italic text-[12px] border-cbs-border mx-4 py-1 ">{info?.funda?.bankAccount}</div>
                     <hr className="border-cbs-border" />
                     <div className="text-[12px] text-center mt-3">
