@@ -69,7 +69,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues, isEdit }) => {
 			limit: LIMIT_DROPDOWN,
 			type: 23,
 			keyword: searchSubTypeValue,
-			isShowParentAndChild: 1
+			// isShowParentAndChild: 1
 		 },
 		isFetchList: true
 	});

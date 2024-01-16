@@ -1158,7 +1158,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                           </div>
                         </div>
 
-                        {/* <div className="flex justify-between pt-1">
+                        <div className="flex justify-between pt-1">
                           <div>
                             <span>Nguồn doanh số</span>
                             <div>
@@ -1339,7 +1339,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
                               />
                             </div>
                           </div>
-                        </div> */}
+                        </div>
 
                       </div>
                       <div className="flex justify-between	gap-2 border-t-0.5 border-b-0.5 px-3">
