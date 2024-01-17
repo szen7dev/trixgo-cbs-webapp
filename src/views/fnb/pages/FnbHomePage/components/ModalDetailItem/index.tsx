@@ -184,7 +184,6 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
 
   const handleUpdateNote = debounce(async (e: any) => {
     const value = e.target.value;
-
     try {
       const { data, status } = await API.put(
         `/api/fnb/orders`,
@@ -192,26 +191,60 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
           orderID: order._id,
           cancelNote: value,
         }
-      );
-
+      )
       if (status !== 200 || data?.error) return toast.warning('Cập nhật ghi chú thất bại');
     } catch(error: any) {
       toast.error(error.message);
     }
   }, 300)
 
-  const handleAddMistake = (item: any) => {
-    const isExists = mistakesSelected.find((m: any) => m._id === item._id);
+  const handleUpdate1 = debounce(async (e: any) => {
+    const value = e.target.value;
+    try {
+      const { data, status } = await API.put(
+        `/api/fnb/orders`,
+        {
+          orderID: order._id,
+          shippingFeeTotal: value,
+        }
+      )
+      if (status !== 200 || data?.error) return toast.warning('Cập nhật Tổng phí ship bại');
+    } catch(error: any) {
+      toast.error(error.message);
+    }
+  }, 300)
 
-    if (isExists) return toast.warning('Lỗi đã được chọn');
+  const handleUpdate2 = debounce(async (e: any) => {
+    const value = e.target.value;
+    try {
+      const { data, status } = await API.put(
+        `/api/fnb/orders`,
+        {
+          orderID: order._id,
+          shippingFee: value,
+        }
+      )
+      if (status !== 200 || data?.error) return toast.warning('Cập nhật Phí ship thất bại');
+    } catch(error: any) {
+      toast.error(error.message);
+    }
+  }, 300)
 
-    setMistakesSelected((prev: any) => ([...prev, item]));
-  }
-
-  const handleRemoveMistake = (item: any) => {
-    const newItems = mistakesSelected.filter((m: any) => m._id !== item._id);
-    setMistakesSelected(newItems);
-  }
+  const handleUpdate3 = debounce(async (e: any) => {
+    const value = e.target.value;
+    try {
+      const { data, status } = await API.put(
+        `/api/fnb/orders`,
+        {
+          orderID: order._id,
+          paid: value,
+        }
+      )
+      if (status !== 200 || data?.error) return toast.warning('Cập nhật giá trị khách trả thất bại');
+    } catch(error: any) {
+      toast.error(error.message);
+    }
+  }, 300)
 
   if (!order) return <></>;
 
@@ -229,7 +262,7 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
           onSubmit={() => Promise.resolve('Done!')}
         >
           {(formik) => {
-            const { setFieldValue, values } = formik;
+            // const { setFieldValue, values } = formik;
             return (
               <Form>
                 <div className={"t-add-new-task-dialog-select px-6 pb-4"}>
@@ -472,24 +505,28 @@ export const ModalDetailItem: FC<Props> = ({ order, onUpdate }) => {
                         </div>
                       </div>
                       <div className="flex justify-between mt-2 mb-3">
-                        <div className="">Phí ship (nếu có)</div>
+                        <div className="">Tổng phí ship (nếu có)</div>
                         <div className="flex">
-                          <div>{formatNumberMoney(order?.shippingFee)}</div>
+                          <textarea onKeyUp={handleUpdate1} className="text-right block text-sm text-gray-900 bg-gray-50 rounded-lg p-2 w-full h-8">{order?.shippingFeeTotal}</textarea>
+                        </div>
+                      </div>
+                      <div className="flex justify-between mt-2 mb-3">
+                        <div className="">Phí ship khách phải trả (nếu có)</div>
+                        <div className="flex">
+                          <textarea onKeyUp={handleUpdate2} className="text-right block text-sm text-gray-900 bg-gray-50 rounded-lg p-2 w-full h-8">{order?.shippingFee}</textarea>
+                        </div>
+                      </div>
+                      <div className="flex justify-between mt-2 mb-3">
+                        <div className="">Tiền mặt khách trả</div>
+                        <div className="flex">
+                          <textarea onKeyUp={handleUpdate3} className="text-right block text-sm text-gray-900 bg-gray-50 rounded-lg p-2 w-full h-8">{order?.paid}</textarea>
                         </div>
                       </div>
                       {
-                        (order?.paid && order?.paid > 0 && order?.paymentMethod == 1) ?
-                          <div className="flex justify-between mt-2 mb-3 font-bold"><div>Tiền mặt khách trả:</div><div>{formatNumberMoney(order?.paid)}</div></div>
-                          : <></>
-                      }
-                      {
                           (order?.paid && order?.paid > 0 && order?.paymentMethod == 1) ?
-                          <div className="flex justify-between mt-2 mb-3"><div>Tiền thừa trả lại:</div><div>{formatNumberMoney(order?.paid - order?.amount)}</div></div>
+                          <div className="flex justify-between mt-2 mb-3 font-bold"><div>Tiền thừa trả lại:</div><div>{formatNumberMoney(order?.paid - order?.amount)}</div></div>
                           : <></>
                       }
-                      {/* <div className="text-right" style={{ marginTop: "100px" }}>
-                        <button type="submit" className="btn btn-primary ml-auto" disabled={isUploading}>Xác nhận</button>
-                      </div> */}
                     </div>
                   </div>
                 </div>
