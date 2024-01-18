@@ -418,6 +418,7 @@ export const ModalAddNewOrder: FC<Props> = () => {
     let newDiscountPercent = inputValue;
     let newSales = discountAndSales.sales;
     newSales = (totalMoney * discountAndSales.salesPercent) / 100;
+
     if (name === 'discount') {
       newDiscountPercent = +((inputValue * 100) / totalMoney).toFixed(2);
     } else if (name === 'discountPercent') {
@@ -440,13 +441,18 @@ export const ModalAddNewOrder: FC<Props> = () => {
 
   const handleChangeSales = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const inputValue = Number(value);
+    // console.log({ name, value })
+
+    let inputValue = Number(value);
     let newSales = inputValue;
     let newSalesPercent = inputValue;
 
     if (name === 'sales') {
       newSalesPercent = +((inputValue * 100) / totalMoney).toFixed(2);
     } else if (name === 'salesPercent') {
+      if(Number(inputValue) > 100){
+        inputValue = 100
+      }
       newSales = (totalMoney * inputValue) / 100;
     }
 
