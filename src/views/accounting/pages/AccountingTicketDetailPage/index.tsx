@@ -12,6 +12,7 @@ import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
 import { toast } from "react-toastify";
 import { read, utils } from 'xlsx';
 import { createLinkAndClick } from "utils";
+import moment from "moment";
 
 import API from "apis/repository";
 const APP_ACCOUNTING_VOUCHER = "/api/accounting/vouchers";
@@ -58,6 +59,7 @@ export const AccountingTicketDetailPage: FC<Props> = ({ type = 1 }) => {
     },
     isFetchList: true
   })
+  // console.log(voucherDetail)
 
   const handleFinishForm = async (values: any) => {
     const res = await updateAccountingVoucherMutateAsync(values);
@@ -141,7 +143,7 @@ export const AccountingTicketDetailPage: FC<Props> = ({ type = 1 }) => {
                   />
                 </svg>
               </button>
-              <p className="text-lg">{voucherDetail?.name}</p>
+              <p className="text-lg mr-5">{voucherDetail?.name}</p> {moment(voucherDetail?.date).format('DD/MM/YYYY HH:mm')}
               <span className={"text-sm rounded-full bg-primary text-white h-5 leading-5 ml-2 px-2"}>
                 {VOUCHER_TYPES.find(item => item.value === voucherDetail?.type)?.text}
               </span>
@@ -151,11 +153,11 @@ export const AccountingTicketDetailPage: FC<Props> = ({ type = 1 }) => {
             </div>
           </div>
           <div className={"infor-ticket flex mt-1 items-center"}>
-            <p className={"flex-1"}><span className={"text-gray-500"}>Khởi tạo:</span>  {voucherDetail?.userCreate?.fullname} {convertDisplayDate(voucherDetail?.createAt, DATE_FORMAT_TIME)}</p>
+            <p className={"flex-1"}><span className={"text-gray-500"}>Khởi tạo:</span>  {voucherDetail?.userCreate?.fullname} {moment(voucherDetail?.createAt).format('DD/MM/YYYY HH:mm')}</p>
             <button type="button" className={"mr-2"}>
               <LogIcon />
             </button>
-            <p><span className={"text-gray-500"}>Cập nhật:</span> {voucherDetail?.userUpdate?.fullname} {convertDisplayDate(voucherDetail?.updatedAt, DATE_FORMAT_TIME)}</p>
+            <p><span className={"text-gray-500"}>Cập nhật:</span> {voucherDetail?.userUpdate?.fullname} {moment(voucherDetail?.updatedAt).format('DD/MM/YYYY HH:mm')}</p>
             <button className={"ml-10 px-4 py-2 text-left hover:bg-cbs-table-header text-cbs-highlight-color"}
               onClick={() => handleExportExcel({option: 3})}
             >
