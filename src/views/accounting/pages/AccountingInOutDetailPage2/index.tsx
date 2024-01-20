@@ -16,6 +16,7 @@ import { useJournalList } from "services/hooks/accounting/useGeneralJournal";
 import { useFunda } from "services/hooks/items/useFunda";
 import { toast } from "react-toastify";
 import API from "apis/repository";
+import { useWarehouse } from "services/hooks/items/useWarehouse";
 const ITEM_ACCOUNT = "/api/item/accounts";
 const ITEM_GOODS = "/api/item/goods";
 
@@ -28,7 +29,10 @@ export const AccountingInOutDetailPage2: FC = () => {
   const accountRef = React.useRef<DropdownHandle>(null);
 
   const [fundaId, setFundaId] = useState<string | null>();
+  const [warehouseId, setWarehouseId] = useState<string | null>();
+
   const [fundaKeyword, setFundaKeyword] = useState("");
+  const [warehouseKeyword, setWarehouseKeyword] = useState("");
 
   const [showOption, setShowOption] = useState(false)
   const [inputFilter, setInputFilter] = useState({ keyword: '', fromDate: new Date(new Date().getFullYear(), 0, 1), toDate: new Date(new Date().getFullYear(), 11, 31) });
@@ -42,6 +46,11 @@ export const AccountingInOutDetailPage2: FC = () => {
     isFetchList: true
 	})
 
+  const { list: listWarehouse } = useWarehouse({
+		params: { keyword: warehouseKeyword },
+    isFetchList: true
+	})
+
   const { listJournalByProperty: dataAll } = useJournalByProperty({
     params: {
         option: 9,
@@ -51,6 +60,7 @@ export const AccountingInOutDetailPage2: FC = () => {
         fundaID: fundaId,
         arrAccIDs: [params.accountID],
         goodsID: params.goodsID,
+        warehouseID: warehouseId,
     },
     isFetchList: true
   })
@@ -120,6 +130,7 @@ export const AccountingInOutDetailPage2: FC = () => {
         fundaID: fundaId,
         accountID: params.accountID,
         goodsID: params.goodsID,
+        warehouseID: warehouseId,
     },
     isFetchList: true
   })
@@ -179,6 +190,38 @@ export const AccountingInOutDetailPage2: FC = () => {
                 setFundaId(item._id);
                 setPageIndex(0);
                 ref.current&&ref.current.resetPaginate();
+            }}
+            onClearData={() => {
+              setFundaId("");
+            }}
+            renderItem={(item) => (
+                <p className={"min-w-[300px]"}>{item.text}</p>
+            )}
+            selectOneByOne={true}
+        />
+
+        <DropdownSearchableV2
+            ref={accountRef}
+            className={"mr-1 border border-primary-border rounded-lg"}
+            placeholder={"Kho bãi"}
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            data={listWarehouse}
+            formatItem={{
+                id: "_id",
+                text: "name",
+            }}
+            onSearchInputChange={debounce(
+                (valueSearch) => setWarehouseKeyword(valueSearch),
+                500
+            )}
+            onchangeValue={item => {
+                setWarehouseId(item._id);
+                setPageIndex(0);
+                ref.current&&ref.current.resetPaginate();
+            }}
+            onClearData={() => {
+              setWarehouseId("");
             }}
             renderItem={(item) => (
                 <p className={"min-w-[300px]"}>{item.text}</p>
@@ -245,7 +288,7 @@ export const AccountingInOutDetailPage2: FC = () => {
             <th className="py-1 px-2 font-normal border-r border-primary-border">
               Số hiệu
             </th>
-            <th className="py-1 px-2 font-normal border-r border-primary-border w-1/12">
+            <th className="py-1 px-2 font-normal border-r border-primary-border w-1/6">
               Kho
             </th>
             <th className="py-1 px-2 font-normal border-r border-primary-border w-1/12">

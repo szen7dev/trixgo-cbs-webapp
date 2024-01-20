@@ -119,6 +119,7 @@ export const FnbContactPage: FC = () => {
             managerID,
             fromDate: inputFilter.fromDate,
             toDate: inputFilter.toDate,
+            limit: 20,
         },
         isFetchList: true
     })
