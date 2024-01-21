@@ -77,7 +77,7 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
             keyword, 
             isListParentOfListChilds: "1", 
             populates: { 
-                "path": "area1 area2 area3 warehouse images",
+                "path": "area1 area2 area3 warehouse contact images",
             }, 
             parentID 
         },
@@ -398,7 +398,8 @@ export const ItemFundasPage: FC<{ type: number }> = ({ type }) => {
                                 <Link to={`/item/fundas/${item._id}`}>
                                     {item.amountChilds>0? <b>{item?.name}({item.amountChilds})</b>: item.name }
                                 </Link>
-                                <p className="text-primary "><i> {item?.warehouse?.name}</i></p>
+                                <p className="text-primary "><i>{item?.warehouse?.name}</i></p>
+                                <p className="text-primary "><i>{item?.contact?.name}</i></p>
                                 <p>TKNH: <b>{item?.bankAccount}</b></p>
                                 <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
                             </td>
