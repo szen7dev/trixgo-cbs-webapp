@@ -10,6 +10,7 @@ import { useModal } from "services/hooks/useModal";
 
 interface WorkHistoryProps {
   defaultValues?: {
+    name: string;
     fromDate: string;
     toDate: string;
     workplace: string;
@@ -30,6 +31,7 @@ export const FormWorkHistory: React.FC<WorkHistoryProps> = ({
   const { t: i18n } = useTranslation(["human"]);
 
   const initialValues = React.useMemo(() => ({
+    name: '',
     fromDate: '',
     toDate: '',
     workplace: '',
@@ -73,6 +75,20 @@ export const FormWorkHistory: React.FC<WorkHistoryProps> = ({
 
               return (
                 <Form className='flex justify-between items-center h-10 border-b border-gray-200'>
+                   <div className="w-2/6 flex items-center">
+                    <span className="w-6/12 text-primary-gray text-left">
+                      {i18n('experience-appointment-name')}
+                    </span>
+                    <Field
+                      type="text"
+                      name="name"
+                      placeholder="Nội dung"
+                      className="w-full h-6 outline-none"
+                      onBlur={(e: React.FormEvent<HTMLInputElement>) => {
+                        handleBlur(e);
+                      }}
+                    />
+                  </div>
                   <div className="w-1/6 flex items-center">
                     <span className="w-4/12 text-primary-gray text-left">
                       {i18n("from-date")}
@@ -92,17 +108,6 @@ export const FormWorkHistory: React.FC<WorkHistoryProps> = ({
                       placeholderText="Từ ngày..."
                       className="w-full h-6 pl-3 outline-none focus:outline-none focus:border-primary"
                     />
-                    {/* <DayPickerInput
-                      value={
-                        initialValues.fromDate &&
-                        moment(initialValues.fromDate).format("DD/MM/YYYY")
-                      }
-                      onDayChange={(day) => setFieldValue("fromDate", day)}
-                      inputProps={{
-                        className: "w-full h-6 outline-none pl-3",
-                        placeholder: "Từ ngày...",
-                      }}
-                    /> */}
                   </div>
                   <div className="w-1/6 flex items-center">
                     <span className="w-4/12 text-primary-gray text-left">
@@ -123,17 +128,6 @@ export const FormWorkHistory: React.FC<WorkHistoryProps> = ({
                       placeholderText="Đến ngày..."
                       className="w-full h-6 pl-3 outline-none focus:outline-none focus:border-primary"
                     />
-                    {/* <DayPickerInput
-                      value={
-                        initialValues.toDate &&
-                        moment(initialValues.toDate).format("DD/MM/YYYY")
-                      }
-                      onDayChange={(day) => setFieldValue("toDate", day)}
-                      inputProps={{
-                        className: "w-full h-6 outline-none pl-3",
-                        placeholder: "Đến ngày...",
-                      }}
-                    /> */}
                   </div>
                   <div className="w-2/6 flex items-center">
                     <span className="w-6/12 text-primary-gray text-left">
@@ -142,7 +136,7 @@ export const FormWorkHistory: React.FC<WorkHistoryProps> = ({
                     <Field
                       type="text"
                       name="workplace"
-                      placeholder="Tên cơ quan đơn vị công tác..."
+                      placeholder="Tên đơn vị làm việc..."
                       className="w-full h-6 outline-none"
                       onBlur={(e: React.FormEvent<HTMLInputElement>) => {
                         handleBlur(e);
@@ -178,5 +172,5 @@ export const FormWorkHistory: React.FC<WorkHistoryProps> = ({
         </div>
       </section>
     </main>
-  );
-};
+  )
+}

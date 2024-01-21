@@ -35,7 +35,6 @@ export const WorkHistory: FC<PropWorkHistory> = memo((props) => {
 	const ref = useRef<HTMLDivElement>(null);
 	const { openModal, closeModal } = useModal();
 	const inputRef = useRef<HTMLInputElement>(null);
-	const { openDeleteConfirm } = useDeleteConfirm();
 	const { humanId, companyID } = props;
 	const { addFileToUpload } = useUpload({ appID: APP_KEY.HUMAN, companyID });
 
@@ -60,7 +59,6 @@ export const WorkHistory: FC<PropWorkHistory> = memo((props) => {
 	const {
 		createContactDocumentAsync,
 		updateContractDocumentAsync,
-		deleteContractDocumentAsync,
 		updateFileContractDocumentAsync,
 		removeFileContractDocument,
 	} = useMutationContactDocument();
@@ -103,7 +101,7 @@ export const WorkHistory: FC<PropWorkHistory> = memo((props) => {
 				}
 			>
 				<FormWorkHistory
-					title="Tạo mới lịch sử làm việc tại các đơn vị"
+					title="Tạo mới lịch sử làm việc"
 					onFinish={handleFinishFormCreate}
 				/>
 			</div>
@@ -139,10 +137,11 @@ export const WorkHistory: FC<PropWorkHistory> = memo((props) => {
 					}
 				>
 					<FormWorkHistory
-						title="Cập nhật lịch sử làm việc tại các đơn vị"
+						title="Cập nhật lịch sử làm việc"
 						onFinish={handleFinishFormUpdate}
 						contactDocumentID={contactDocument._id}
 						defaultValues={{
+							name: contactDocument.name,
 							fromDate: contactDocument.fromDate,
 							toDate: contactDocument.toDate,
 							workplace: contactDocument.workplace,
@@ -153,21 +152,6 @@ export const WorkHistory: FC<PropWorkHistory> = memo((props) => {
 			);
 		},
 		[openModal, handleFinishFormUpdate]
-	);
-
-	const handleClickDeleteContactDocument = useCallback(
-		(contactDocument: ContactDocument) => () => {
-			openDeleteConfirm({
-				deleteAction: async () => {
-					const res = await deleteContractDocumentAsync(contactDocument._id);
-					if (res.status === 200) {
-						refetchListContactDocument();
-						setOpenFileOptionById("");
-					}
-				},
-			});
-		},
-		[deleteContractDocumentAsync, openDeleteConfirm, refetchListContactDocument]
 	);
 
 	const handleClickUpload = useCallback(() => {
@@ -254,6 +238,7 @@ export const WorkHistory: FC<PropWorkHistory> = memo((props) => {
 					<p style={{ width: "12.5%" }}>{i18n("from-date")}</p>
 					<p style={{ width: "12.5%" }}>{i18n("to-date")}</p>
 					<p className="w-1/4">{i18n("history-workplace")}</p>
+					<p className="w-1/4">{i18n("experience-appointment-name")}</p>
 					<p className="w-1/4">{i18n("reference-info")}</p>
 					<p className="w-1/4">{i18n("attactment")}</p>
 				</div>
@@ -272,6 +257,7 @@ export const WorkHistory: FC<PropWorkHistory> = memo((props) => {
 									moment(contactDocument.toDate).format(DATE_FORMAT)}
 							</p>
 							<p className="w-1/4 ">{contactDocument.workplace}</p>
+							<p className="w-1/4 ">{contactDocument.name}</p>
 							<p className="w-1/4 ">{contactDocument.reference}</p>
 							<div className="w-1/4 flex flex-col text-cbs-highlight-color">
 								{contactDocument.files.map((elm) => (
