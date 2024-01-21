@@ -42,7 +42,7 @@ const TimeSheetHomePage: FC<TimesheetHomePageProps> = ({ type = 1 }) => {
     limit,
     loading,
     hasNextPage,
-  } = useQueryListTimeSheetParent({ keyword, type });
+  } = useQueryListTimeSheetParent({ keyword, type, sortOption: 2 });
 
   const {
     onCreateTimeSheetParentAsync,
@@ -196,7 +196,7 @@ const TimeSheetHomePage: FC<TimesheetHomePageProps> = ({ type = 1 }) => {
                 "px-2 py-2 table-cell box-border border-b align-middle text-gray-500"
               }
             >
-              Số lượng, khối lượng
+              Khối lượng
             </div>
             <div
               className={
