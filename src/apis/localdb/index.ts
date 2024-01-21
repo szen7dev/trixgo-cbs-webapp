@@ -991,7 +991,7 @@ export const APP_ID = {
     FINANCIAL: {
         id: "5dfe4bc751dc622100bb9d8a",
         menuFinancialApp: {
-            id: "623f2448e998e94feda0cda9",                   // type = 1
+            id: "623f2448e998e94feda0cda9",
             payment: {
                 id: "623f2465e998e94feda0cdaa",
                 name: "Gói trả trước"
@@ -1026,11 +1026,11 @@ export const APP_ID = {
                 name: "Báo cáo quản trị"
             },
             document: {
-                id: "65ac92e08efc6228b81f70b4",//
+                id: "65ac9cb9966db2001294b676",
                 name: "Tra cứu hồ sơ nhân sự"
             },
             customer: {
-                id: "65ac8e7f8efc6228b81f70b3",//
+                id: "65ac9ccd2061770012774359",
                 name: "Quản lý khách hàng"
             },
         },
@@ -1170,7 +1170,7 @@ export const APP_ID = {
                 name: "Báo cáo quản trị"
             },
             salary: {
-                id: "65ac9af28efc6228b81f70be",//
+                id: "65ac9c8e3ededd0013412715",
                 name: "Bảng lương"
             },
         },
