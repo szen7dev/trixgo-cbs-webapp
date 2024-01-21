@@ -42,7 +42,7 @@ export const TimesheetLeftSideBar: FC = () => {
                         src={iconFolder}
                         alt="Menu item"
                         />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Bảng chấm công của tôi</span>
+                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Chấm công của tôi</span>
                     </NavLink>
                     {listAppMenu && listAppMenu.length ?
                         <>
