@@ -2,7 +2,7 @@ import { FC, ReactNode, useState } from "react";
 import cn from "classnames";
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
 import { LeftNavigate, MainHeaderV2 } from "shareComponents/common";
-import { LeftSideBar } from "../LeftSideBar";
+import { TimesheetLeftSideBar } from "../TimesheetLeftSideBar";
 // import { HomeHeaderContent } from "shareComponents/layouts/HomeLayout/components";
 
 type Props = {
@@ -40,7 +40,7 @@ export const TimesheetLayout: FC<Props> = ({ children }) => {
             {/* <HomeHeaderContent /> */}
           </MainHeaderV2>
 
-          <LeftSideBar />
+          <TimesheetLeftSideBar />
 
           <main className="home-main-content home-main-content-v2 transition-all duration-500 ease-out overflow-auto relative">
             {children}
