@@ -50,57 +50,6 @@ const TimesheetMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
     onDeleteTimeSheetParentAsync,
   } = useMutationTimeSheetParent();
 
-  const handleCreateTimeSheet = React.useCallback(
-    async (values) => {
-      try {
-        const isCreated = await onCreateTimeSheetParentAsync(values);
-        if (!isCreated.error) {
-          refreshListTimeSheet();
-          closeModal();
-          return null;
-        }
-        throw new Error("Can not create!");
-      } catch (err) {
-        return null;
-      }
-    },
-    [closeModal, onCreateTimeSheetParentAsync, refreshListTimeSheet]
-  );
-
-  const handleUpdateTimeSheet = React.useCallback(
-    async (values) => {
-      try {
-        const isUpdated = await onUpdateTimeSheetParentAsync(values);
-        if (!isUpdated.error) {
-          refreshListTimeSheet();
-          closeModal();
-          return null;
-        }
-        throw new Error("Can not create!");
-      } catch (err) {
-        // console.error(err);
-        return null;
-      }
-    },
-    [closeModal, onUpdateTimeSheetParentAsync, refreshListTimeSheet]
-  );
-
-  const handleClickDeleteTimeSheet = React.useCallback(
-    (timeSheetID) => {
-      openDeleteConfirm({
-        deleteAction: async () => {
-          const res = await onDeleteTimeSheetParentAsync({
-            expertTimesheetID: timeSheetID,
-          });
-          if (res.status === 200) {
-            refreshListTimeSheet();
-          }
-        },
-      });
-    },
-    [onDeleteTimeSheetParentAsync, refreshListTimeSheet, openDeleteConfirm]
-  );
-
   return (
     <div className={"financial-cashflow-listing paginate-wrapper relative"}>
       <div
@@ -189,7 +138,7 @@ const TimesheetMineDetailPage: FC<TimesheetHomePageProps> = ({ type = 2 }) => {
                   "px-1 py-2 table-cell box-border border-b align-middle w-2/12"
                 }
               >
-                {item.name} - {moment(item.date).format('MM/YYYY')}-{item._id}
+                {item.name} - {moment(item.date).format('MM/YYYY')}
                 <p className={"mt-1 text-gray-500"}>
                   Tạo: {item?.userCreate?.fullname} {moment(item.createAt).format(DATE_FORMAT)}
                 </p>
