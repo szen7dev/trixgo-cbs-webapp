@@ -1,10 +1,9 @@
 /*=====1.LIBRARY=====*/
 import React, { FC, useRef, useCallback, useState, useEffect, ChangeEvent } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import moment from "moment";
 import debounce from "lodash/debounce";
 import { toast } from "react-toastify";
-import { APP_ID } from "apis/localdb";
 import { formatNumberMoney } from "utils/converter";
 import { validateFiles } from 'validation/file';
 import { read, utils } from 'xlsx';
@@ -20,13 +19,16 @@ import { SearchInput, ModalContainer } from "shareComponents/common";
 import { CreateFnbProduct } from "./modal";
 import { useFnbProduct } from 'services/hooks/fnb/useFnbProduct';
 import PaginateV2 from "shareComponents/common/PaginateV2";
+import { ModalZoomView } from "shareComponents/common";
  
 /*=====5.TYPINGS=====*/
+import { ImageProps } from "typings/common";
 
 /*=====6.HOOKS/APIS=====*/
+import { useAuth } from "services/hooks/auth/useAuth";
 import { useCheckPerAccessOneMenu } from "services/hooks/auth/usePermissions";
 import { useUpload } from "services/hooks/useUpload";
-import { useAuth } from "services/hooks/auth/useAuth";
+import { APP_ID } from "apis/localdb";
 import API from "apis/repository";
 
 /*=====7.OTHER=====*/
@@ -41,6 +43,15 @@ export const FnBProductPage: FC = () => {
 	useEffect(() => {
 		document.title = "Seller";
 	}, []);
+
+	const [isShowImageFullScreen, setIsShowImageFullScreen] = useState(false);
+
+	const [defaultState, setDefaultState] = useState({
+	    mediaID: '',
+	    images: [] as ImageProps[],
+	    index: 0,
+	    createAt: ""
+  	});
 
 	const history = useHistory();
 	const { user } = useAuth();
@@ -62,6 +73,10 @@ export const FnBProductPage: FC = () => {
 			limit: 50,
 			populates: JSON.stringify({
 				path: 'images',
+				populate: {
+					path: 'author',
+					select: 'fullname bizfullname image'
+				}
 			})
 		},
 		isFetchList: true,
@@ -123,7 +138,7 @@ export const FnBProductPage: FC = () => {
 			}
 		);
 		refetch();
-	  }
+	}
 
 	const [modalCreateFnbProduct, setModalCreateFnbProduct] = useState<boolean>(false);
 	const toggleModalCreateFnbProduct = () => setModalCreateFnbProduct(!modalCreateFnbProduct);
@@ -393,13 +408,26 @@ export const FnBProductPage: FC = () => {
 							</td>
 							<td className={"p-2 border-0.5 border-primary-border"}>
 								<div style={{display: "flex"}}>
-									{!!item?.images?.length && (
-										<img
-											className="w-[75px] h-[75px] object-contain"
-											src={`${process.env.REACT_APP_URL_S3}${item?.images[item?.images?.length - 1]?.path}`}
-											alt="Left side bar"
-										/>
-									)}
+									{item?.images?.map((image: any, i: number) => {
+										return (
+											<div
+												key={image._id}
+												className="mt-2 cursor-pointer relative w-[75px] h-[75px]"
+												onClick={() => {
+													setDefaultState({
+														mediaID: image._id,
+														images: item?.images,
+														index: i,
+														createAt: image.createAt
+													});
+													setIsShowImageFullScreen(true);
+												}}
+											>
+												<img src={`${process.env.REACT_APP_URL_S3}${image?.path}`} />
+											</div>
+										)
+									})}
+
 									<label className="ml-2">
 										<div className="w-[30px] h-[30px] bg-secondary-gray rounded-full flex items-center justify-center">
 											<img
@@ -421,6 +449,11 @@ export const FnBProductPage: FC = () => {
 				))}
 
 			</table>
+			<ModalZoomView
+		        isShow={isShowImageFullScreen}
+		        toggle={() => setIsShowImageFullScreen(!isShowImageFullScreen)}
+		        initialData={defaultState}
+		    />
 
 			<ModalContainer isModalOpen={modalCreateFnbProduct} toggle={toggleModalCreateFnbProduct}>
 				<div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light">

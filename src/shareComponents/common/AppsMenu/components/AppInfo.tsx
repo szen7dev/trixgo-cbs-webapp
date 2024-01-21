@@ -53,7 +53,7 @@ export const APP_INFO = new Map([
     /* Ứng dụng Timesheet */
     ['61e049cffdebf77b072d1b14', {
         key: "61e049cffdebf77b072d1b14",
-        name: "Chấm công tính lương",
+        name: "Chấm công",
         icon: timesheetLogo,
         route: '/timesheet/home'
     }],
@@ -81,7 +81,7 @@ export const APP_INFO = new Map([
     /* Ứng dụng Payment */
     ['61e04971fdebf77b072d1b0f', {
         key: "61e04971fdebf77b072d1b0f",
-        name: "Seller",
+        name: "Bán hàng",
         icon: fnbLogo,
         route: '/fnb/home'
     }],

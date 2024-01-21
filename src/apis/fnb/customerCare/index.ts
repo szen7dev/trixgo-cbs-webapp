@@ -54,10 +54,6 @@ async function deleteMany(params: CashPaymentDeleteManyPayload): Promise<any> {
 async function fetchList(params: CashPaymentListParams): Promise<CashPaymentListResponse> {
     const { data } = await API.get(
         `${CUSTOMER_CARE_URL}?${convertObToUrl({
-            populates: JSON.stringify({
-                path: 'userCreate userUpdate customer mistake funda order manager',
-                select: '_id image name sign phone taxid address fullname createAt'
-            }),
             ...params
         })}`
     )

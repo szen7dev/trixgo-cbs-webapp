@@ -4,7 +4,6 @@ import { useHistory, useParams } from "react-router-dom";
 import debounce from "lodash/debounce";
 import moment from "moment";
 import { formatNumberMoney } from "utils/converter";
-// import { toast } from "react-toastify";
 
 /*=====2.CSS=====*/
 
@@ -18,14 +17,13 @@ import { ModalZoomView } from "shareComponents/common";
 
 /*=====5.TYPINGS=====*/
 import { ImageProps } from "typings/common";
+import { User } from "typings/user";
 
 /*=====6.HOOKS/APIS=====*/
-// import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { useFunda } from 'services/hooks/items/useFunda';
 import { useFnbMistake } from 'services/hooks/fnb/useFnbMistake';
 
 /*=====7.OTHER=====*/
-// import { APP_ID } from "apis/localdb";
 
 const TYPE_MISTAKE = [
 	"Hệ thống phát hiện", "Khách hàng phát hiện"
@@ -36,7 +34,6 @@ const STATUS_MISTAKE = [
 export const FnbRiskReportDetailPage: FC = () => {
 	const history = useHistory();
 	const { fundaID } = useParams<{ fundaID: string }>();
-	// const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.FNB.id });
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
 
@@ -56,7 +53,11 @@ export const FnbRiskReportDetailPage: FC = () => {
 			keyword: keyword, 
 			fundasID: [fundaID],
 			populates: JSON.stringify({
-				path: 'userCreate mistake executor funda files'
+				path: 'userCreate mistake executor funda files',
+				populate: {
+					path: 'author',
+					select: 'fullname bizfullname image'
+				}
 			}) 
 		}, isFetchList: true, isFetchInfo: false  });
 
@@ -64,13 +65,6 @@ export const FnbRiskReportDetailPage: FC = () => {
 	const toggleModalCreateShiftDetail = () => setModalCreateShiftDetail(!modalCreateShiftDetail);
 
 	const [initialValues, setInitialValues] = useState(null);
-
-	// useEffect(() => {
-	// 	if (isSuccess && !(hasPermission)) {
-	// 		toast.error("Bạn không có quyền truy cập chức năng này. Vui lòng liên hệ ban quản trị.");
-	// 		history.push("/")
-	// 	}
-	// }, [hasPermission]);
 
 	useEffect(() => {
 		document.title = "Trixgo | Báo cáo KPI";
