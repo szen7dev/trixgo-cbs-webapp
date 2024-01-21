@@ -23,8 +23,11 @@ import {setFilterDropdown} from "redux/reducer/DocumentProjectSlice";
 // ========== Hooks ========== //
 import { useHumanCustom, useListFilterHuman} from "services/hooks/human/useHuman";
 import {useProjectCustom} from "services/hooks/items/useProject";
+interface HumanHomePageProps {
+    type?: number
+  }
 
-export const HumanHomePage: FC = () => {
+export const HumanHomePage: FC<HumanHomePageProps> = ({ type = 1 }) => {
     const [keyword, setKeyword] = useState('');
 
     const dispatch = useDispatch();
@@ -71,7 +74,7 @@ export const HumanHomePage: FC = () => {
     const { listHumanWithPager, isLoading, isFetching, totalRecord, totalPage, fetchNextPageHuman, hasNextPage, lastestIDs } = useListFilterHuman({
         params: {
             ...fromToDate,
-            type: '1',
+            type: `${type}`,
             genders,
             departmentsID,
             keyword
