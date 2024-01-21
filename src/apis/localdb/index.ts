@@ -1019,6 +1019,21 @@ export const APP_ID = {
     },
     HUMAN: {
         id: "61e049c9fdebf77b072d1b13",
+        menuHumanApp: {
+            id: "623f1f0de998e94feda0cd72",
+            dashboard: {
+                id: "623f1f1fe998e94feda0cd73",
+                name: "Báo cáo quản trị"
+            },
+            document: {
+                id: "65ac92e08efc6228b81f70b4",//
+                name: "Tra cứu hồ sơ nhân sự"
+            },
+            customer: {
+                id: "65ac8e7f8efc6228b81f70b3",//
+                name: "Quản lý khách hàng"
+            },
+        },
     },
     BUDGET: {
         id: "5fe58c9b95db3c6e1534ec78",
@@ -1148,5 +1163,16 @@ export const APP_ID = {
     },
     TIMESHEET: {
         id: "61e049cffdebf77b072d1b14",
+        menuTimesheetApp: {
+            id: "623f1ecae998e94feda0cd70",
+            dashboard: {
+                id: "623f1ee2e998e94feda0cd71",
+                name: "Báo cáo quản trị"
+            },
+            salary: {
+                id: "65ac9af28efc6228b81f70be",//
+                name: "Bảng lương"
+            },
+        },
     },
 }

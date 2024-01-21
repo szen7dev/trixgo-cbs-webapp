@@ -1,2 +1,2 @@
-export * from './LeftSideBar';
+export * from './TimesheetLeftSideBar';
 export * from './TimesheetLayout';
