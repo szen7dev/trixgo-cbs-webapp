@@ -147,7 +147,7 @@ export const FnbContactPage: FC = () => {
             limit: 20,
             populates: JSON.stringify({
                 path: 'userCreate userUpdate customer mistake funda order manager images',
-                select: '_id image name sign phone taxid address fullname createAt author',
+                select: '_id image name sign phone taxid address fullname createAt author path',
                 populate: {
 					path: 'author',
 					select: 'fullname bizfullname image'
