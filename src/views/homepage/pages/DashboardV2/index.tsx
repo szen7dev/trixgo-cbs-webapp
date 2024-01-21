@@ -1317,65 +1317,7 @@ export const DashboardV2: FC<Props> = () => {
                 id="checkAll"
                 style={{ width: "14px", height: "14px" }}
               /> */}
-              {/* <div>
-                <button onClick={() => setpopBox1(!popBox1)} className="relative w-[20px] h-[20px]">
-                  <img src={arrowDown} className="m-auto" />
-                </button>
-                <div
-                  className={"w-auto rounded flex flex-col bg-white absolute " + (popBox1 ? "block" : "hidden")}
-                  style={{ boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)" }}
-                >
-                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
-                    Tất cả
-                  </button>
-                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
-                    Bỏ chọn tất cả
-                  </button>
-                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
-                    Chủ đề đã đọc
-                  </button>
-                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
-                    Chủ đề chưa đọc
-                  </button>
-                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
-                    Chủ đề quan tâm
-                  </button>
-                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
-                    Chủ đề không quan tâm
-                  </button>
-                </div>
-              </div> */}
             </div>
-            {/* <div className="flex gap-7 items-center">
-              <button><img src={trashIcon} alt="" /></button>
-              <button><img src={mailIcon} alt="" /></button>
-              <button onClick={() => setpopBox2(!popBox2)} className="relative w-[20px] h-[20px]">
-                <img src={moreIcon} className="m-auto" />
-                <div
-                  className={"w-[250px] rounded flex flex-col bg-white absolute " + (popBox2 ? "block" : "hidden")}
-                  style={{ boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)" }}
-                >
-                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
-                    Đánh dấu là đã đọc
-                  </button>
-                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
-                    Đánh dấu là quan trọng
-                  </button>
-                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
-                    Đánh dấu quan tâm
-                  </button>
-                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
-                    Chủ đề chưa đọc
-                  </button>
-                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
-                    Chủ đề quan tâm
-                  </button>
-                  <button className="w-full px-9 py-2 text-left hover:bg-cbs-gray">
-                    Chủ đề không quan tâm
-                  </button>
-                </div>
-              </button>
-            </div> */}
           </div>
           <button
             onClick={() => setFilter("all")}
@@ -1482,43 +1424,6 @@ export const DashboardV2: FC<Props> = () => {
             />
           </div>
         </div>
-        {/* <div className="flex justify-between mb-4 border-t-0.5 border-b-0.5 border-cbs-border">
-          <div className="flex gap-3 items-center py-1">
-            <a href="#"><img src={defaultAva} alt="" /></a>
-            <div className="flex gap-3 py-1">
-              <button className="flex gap-5 items-center px-4 rounded-md text-white bg-primary">
-                <span>Việc của tôi</span>
-                <span className="font-bold text-[18px]">100</span>
-              </button>
-              <button className="flex gap-5 items-center px-4 rounded-md text-white bg-cbs-secondary">
-                <span>Quan trọng</span>
-                <span className="font-bold text-[18px]">15</span>
-              </button>
-              <button className="flex gap-5 items-center px-4 rounded-md text-white bg-cbs-schedule-expired">
-                <span>Quá hạn</span>
-                <span className="font-bold text-[18px]">15</span>
-              </button>
-              <button className="flex gap-5 items-center px-4 rounded-md text-white bg-cbs-schedule-nextweek">
-                <span>Tuần tới</span>
-                <span className="font-bold text-[18px]">15</span>
-              </button>
-              <button className="flex gap-5 items-center px-4 rounded-md text-white bg-cbs-schedule-after-7days">
-                <span>Sau tuần tới</span>
-                <span className="font-bold text-[18px]">15</span>
-              </button>
-            </div>
-          </div>
-          <div className="flex">
-            <div className="flex flex-col border-l-0.5 border-cbs-border text-center mx-auto" style={{ width: "80px" }}>
-              <span className="text-cbs-subtext">Công ty</span>
-              <span className="font-bold text-[18px]">123</span>
-            </div>
-            <div className="flex flex-col border-l-0.5 border-cbs-border text-center mx-auto" style={{ width: "80px" }}>
-              <span className="text-cbs-subtext">Đối tác</span>
-              <span className="font-bold text-[18px]">123</span>
-            </div>
-          </div>
-        </div> */}
       </div>
       <div className={"flex-1 overflow-y-auto"}>
         <table className={"w-full table-fixed tasks"}>

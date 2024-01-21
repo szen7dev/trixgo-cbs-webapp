@@ -1,5 +1,5 @@
 /*=====1.LIBRARY=====*/
-import React, { FC, useState, useCallback, useEffect } from "react";
+import React, { FC, useState, useCallback, useEffect, ChangeEvent } from "react";
 import cn from "classnames";
 import debounce from "lodash/debounce";
 import moment from "moment";
@@ -12,15 +12,18 @@ import styles from "views/support/styles/support.module.css";
 
 /*=====3.ICONS=====*/
 import iconPencil from 'assets/images/icons8-pencil-96 1.png';
+import CameraIcon from "assets/images/camera-icon.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import { SearchInput } from "shareComponents/common";
-import { ModalCreateOrUpdateCC } from "./components/ModalCreateOrUpdateCC"
+import { ModalCreateOrUpdateCC } from "./components/ModalCreateOrUpdateCC";
+import { ModalZoomView } from "shareComponents/common";
 
 /*=====5.TYPINGS=====*/
 import { Storage } from "typings/items";
 import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
 import { DropdownSearchableV2 } from "shareComponents/common";
+import { ImageProps } from "typings/common";
 
 /*=====6.HOOKS/APIS=====*/
 import { useModal } from "services/hooks/useModal";
@@ -28,11 +31,33 @@ import { useFnbCustomerCare } from "services/hooks/fnb/useFnbCustomerCare";
 import { useContact } from "services/hooks/items/useContact";
 import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import { FilterDateGroup }  from "views/accounting/shareComponents/common";
+import { useAuth } from "services/hooks/auth/useAuth";
+import { useUpload } from "services/hooks/useUpload";
+import { APP_ID } from "apis/localdb";
+import API from "apis/repository";
 
 /*=====7.OTHER=====*/
 import { createLinkAndClick } from "utils";
+import { validateFiles } from 'validation/file';
 
 export const FnbContactPage: FC = () => {
+    const { user } = useAuth();
+
+    const [isShowImageFullScreen, setIsShowImageFullScreen] = useState(false);
+
+	const [defaultState, setDefaultState] = useState({
+	    mediaID: '',
+	    images: [] as ImageProps[],
+	    index: 0,
+	    createAt: ""
+  	});
+
+    const fileInputRef = React.useRef<HTMLInputElement>(null);
+    const { addFileToUpload } = useUpload({
+		appID: APP_ID.FNB.id,
+		companyID: user?.company?._id,
+	})
+
     const STATUS = [
         { _id: 1, text: 'Chưa, đang xử lý' },
         { _id: 2, text: 'Hoàn thành'}
@@ -120,6 +145,14 @@ export const FnbContactPage: FC = () => {
             fromDate: inputFilter.fromDate,
             toDate: inputFilter.toDate,
             limit: 20,
+            populates: JSON.stringify({
+                path: 'userCreate userUpdate customer mistake funda order manager images',
+                select: '_id image name sign phone taxid address fullname createAt author',
+                populate: {
+					path: 'author',
+					select: 'fullname bizfullname image'
+				}
+            }),
         },
         isFetchList: true
     })
@@ -269,6 +302,43 @@ export const FnbContactPage: FC = () => {
         }
         }, [])
       
+    const handleUploadAttach = async (filesSelected: FileList | null, customerCareID: string) => {
+        if (!filesSelected || !filesSelected.length) return;
+
+        const validation = await validateFiles(filesSelected);
+        if (validation.error) return toast.warn(validation.message);
+
+        // Clear input file
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+
+        const imagesID: any = [];
+
+        // Upload images
+        for (const [_, file] of Object.entries(filesSelected)) {
+            const { _id } = await addFileToUpload({
+                files: file as any,
+                fileType: 1,
+                progress: percentCompleted => {
+                    console.info(`${percentCompleted}%`)
+                }
+            })
+            _id && imagesID.push(_id);
+        }
+        // console.log(imagesID)
+
+        // Update image to customer_cares
+        await API.put(
+            `/api/fnb/customer_cares`,
+            {
+                customerCareID,
+                imagesID,
+            }
+        );
+        refetch();
+    }
+
     return (
       <main className="relative h-full">
           <header className="sticky top-0 bg-primary-light z-10">
@@ -609,7 +679,43 @@ export const FnbContactPage: FC = () => {
                                         {STATUS[Number(item?.status) - 1]?.text}
                                     </div>
                                 }
-                                
+                                <div style={{display: "flex"}}>
+									{item?.images?.map((image: any, i: number) => {
+										return (
+											<div
+												key={image._id}
+												className="mt-2 cursor-pointer relative w-[75px] h-[75px]"
+												onClick={() => {
+													setDefaultState({
+														mediaID: image._id,
+														images: item?.images,
+														index: i,
+														createAt: image.createAt
+													});
+													setIsShowImageFullScreen(true);
+												}}
+											>
+												<img src={`${process.env.REACT_APP_URL_S3}${image?.path}`} />
+											</div>
+										)
+									})}
+
+									<label className="ml-2">
+										<div className="w-[30px] h-[30px] bg-secondary-gray rounded-full flex items-center justify-center">
+											<img
+											src={CameraIcon}
+											alt="Camera"
+											className="w-[15px] h-[13px]"
+											/>
+											<input 
+												type="file" 
+												className="hidden" 
+												accept="image/*"
+												onChange={(e: ChangeEvent<HTMLInputElement>) => handleUploadAttach(e.target.files, item._id)}
+											/>
+										</div>
+									</label>
+								</div>
                             </td>
                         </tr>
                       )
@@ -617,6 +723,11 @@ export const FnbContactPage: FC = () => {
                   }
               </tbody>
           </table>
+          <ModalZoomView
+		        isShow={isShowImageFullScreen}
+		        toggle={() => setIsShowImageFullScreen(!isShowImageFullScreen)}
+		        initialData={defaultState}
+		    />
       </main>
   )
 }
