@@ -25,25 +25,26 @@ import {
 const HumanRouterV2: FC = () => {
     return (
         <Switch>
-            <ProtectedRoute exact path="/human/home" component={HumanHomePage} />
+            <ProtectedRoute exact path="/human/home" component={() => < HumanHomePage type = {1}/>} />
             <ProtectedRoute exact path="/human/document" component={HumanDocumentPage} />
             <ProtectedRoute exact path="/human/home/hid=:id" component={HumanInfo} />
+            <ProtectedRoute exact path="/human/customer" component={() => < HumanHomePage type = {2}/>} />
             <Route path="/human/admin">
-            <LayoutSecondary pages={[
-              { id: '1', title: 'Nhóm chức năng', path: '/human/admin', navExact: true },
-              {
-                id: '2', title: 'Phân quyền chức năng', path: '/human/admin/2', location: (location) => {
-                  // Get match params
-                  const match = matchPath<{ id: string }>(location.pathname, { path: '/human/admin/:id/detail' })
-                  // Push to state
-                  return ({ pathname: '/human/admin/2', state: match ? match.params.id : null })
+              <LayoutSecondary pages={[
+                { id: '1', title: 'Nhóm chức năng', path: '/human/admin', navExact: true },
+                {
+                  id: '2', title: 'Phân quyền chức năng', path: '/human/admin/2', location: (location) => {
+                    // Get match params
+                    const match = matchPath<{ id: string }>(location.pathname, { path: '/human/admin/:id/detail' })
+                    // Push to state
+                    return ({ pathname: '/human/admin/2', state: match ? match.params.id : null })
+                  }
                 }
-              }
-            ]}>
-              <Route exact path="/human/admin" component={HumanAdminFunctionalTab} />
-              <Route exact path="/human/admin/:id/detail" component={HumanAdminDetail} />
-              <Route exact path="/human/admin/2" component={HumanAdminAuthorTab} />
-            </LayoutSecondary>
+              ]}>
+                <Route exact path="/human/admin" component={HumanAdminFunctionalTab} />
+                <Route exact path="/human/admin/:id/detail" component={HumanAdminDetail} />
+                <Route exact path="/human/admin/2" component={HumanAdminAuthorTab} />
+              </LayoutSecondary>
           </Route>
           <Route path="/human/*" component={ErrorPage} />
         </Switch>
