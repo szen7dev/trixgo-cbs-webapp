@@ -7,7 +7,7 @@ import { TimesheetLayout } from "views/timesheet/shareComponents/layouts";
 import LayoutSecondary from 'views/ppt/sharedComponents/layouts/LayoutSecondary';
 
 /*=====PAGES=====*/
-import { TimesheetHomePage, TimesheetDetailPage, SalaryHomePage, SalaryDetailPage, TimesheetMineDetailPage } from "views/timesheet/pages";
+import { TimesheetHomePage, TimesheetDetailPage, SalaryHomePage, SalaryDetailPage, TimesheetMineDetailPage, TimesheetDashboardPage } from "views/timesheet/pages";
 import TimesheetAdminFunctionalTab from "views/timesheet/pages/TimesheetAdminPage/pages/TimesheetAdminFunctionalTab";
 import TimesheetAdminDetail from "views/timesheet/pages/TimesheetAdminPage/pages/TimesheetAdminDetail";
 import TimesheetAdminAuthorTab from "views/timesheet/pages/TimesheetAdminPage/pages/TimesheetAdminAuthorTab";
@@ -18,6 +18,11 @@ const TimesheetAppRouter: FC = () => {
     <>
       <TimesheetLayout>
         <Switch>
+        <ProtectedRoute
+            exact
+            path="/timesheet/dashboard"
+            component={TimesheetDashboardPage}
+          />
           <ProtectedRoute
             exact
             path="/timesheet/home"
