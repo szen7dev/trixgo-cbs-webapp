@@ -79,6 +79,9 @@ export type File = {
     userCreate: {
         fullname: string;
     }
+    author: {
+        fullname: string;
+    }
 }
 
 type WorkingStatus = {

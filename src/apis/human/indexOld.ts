@@ -61,9 +61,9 @@ async function fetchListContactDocument<T>(params: ContactDocumentPayload): Prom
         params: {
             populates: {
                 "path": "company contact files contract position2 educationalBackground2 field2 certificateName certificateType",
-                "select": "name sign size url userCreate createAt nameOrg description path image gender",
+                "select": "name sign size url userCreate createAt nameOrg description path image gender author",
                 "populate": {
-                    "path": "userCreate project position",
+                    "path": "userCreate project position author",
                     "select": "name fullname bizfullname projectType buildingGrade"
                 }
             },

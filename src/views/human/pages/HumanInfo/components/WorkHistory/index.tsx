@@ -11,8 +11,7 @@ import { IFile, modifyUploadedFilesV2 } from "views/human/utils";
 import ThreeDotIcon from "assets/images/icon-3dots.png";
 import UploadFileIcon from "assets/images/icons8-upload-document.svg";
 import PencilIcon from "assets/images/icons8-pencil.svg";
-import DeleteIcon from "assets/images/icons8-remove.svg";
-import PDFIcon from "assets/images/icons8-pdf.svg";
+import fileIcon from "assets/images/icons8-attach-48.svg";
 import { useModal } from "services/hooks/useModal";
 import { FormWorkHistory } from "./components";
 import { useQueryContactDocument, useMutationContactDocument } from "services/hooks/useHuman";
@@ -274,7 +273,7 @@ export const WorkHistory: FC<PropWorkHistory> = memo((props) => {
 							</p>
 							<p className="w-1/4 ">{contactDocument.workplace}</p>
 							<p className="w-1/4 ">{contactDocument.reference}</p>
-							<div className="w-1/4 flex flex-col">
+							<div className="w-1/4 flex flex-col text-cbs-highlight-color">
 								{contactDocument.files.map((elm) => (
 									<ContactFile
 										key={elm._id}
@@ -305,7 +304,7 @@ export const WorkHistory: FC<PropWorkHistory> = memo((props) => {
 											>
 												<div className="flex relative">
 													<div>
-														<img src={PDFIcon} alt="PDF" />
+														<img src={fileIcon} alt="PDF" />
 													</div>
 													<div className="ml-2">
 														<p>{name}</p>
@@ -313,34 +312,8 @@ export const WorkHistory: FC<PropWorkHistory> = memo((props) => {
 															className="text-primary-gray"
 															style={{ fontSize: 10, maxWidth: "80%" }}
 														>
-															{`${size}KB`}
+															{`${Number(size / 1048576).toFixed(2)} MB`}
 														</p>
-														<button
-															type="button"
-															className={className(
-																"close-btn absolute top -top-3.5 -right-3.5 bg-white rounded-3xl h-6 w-6 flex justify-center items-center", {
-																hidden: !d._id
-															}
-															)}
-															onClick={() =>
-																handleRemoveFileUpload(d, contactDocument._id)
-															}
-														>
-															<svg
-																xmlns="http://www.w3.org/2000/svg"
-																className="h-4 w-4"
-																fill="none"
-																viewBox="0 0 24 24"
-																stroke="currentColor"
-															>
-																<path
-																	strokeLinecap="round"
-																	strokeLinejoin="round"
-																	strokeWidth={2}
-																	d="M6 18L18 6M6 6l12 12"
-																/>
-															</svg>
-														</button>
 													</div>
 													<div
 														className={className(
@@ -418,19 +391,6 @@ export const WorkHistory: FC<PropWorkHistory> = memo((props) => {
 												className="mr-5 pointer-events-none"
 											/>
 											<span className="pointer-events-none">Cập nhật</span>
-										</div>
-										<div
-											className="flex items-center w-full h-1/3 hover:bg-accent-light px-8 cursor-pointer"
-											onClick={handleClickDeleteContactDocument(
-												contactDocument
-											)}
-										>
-											<img
-												src={DeleteIcon}
-												alt="Delete"
-												className="mr-5 pointer-events-none"
-											/>
-											<span className="pointer-events-none">Xóa</span>
 										</div>
 									</div>
 								)}
