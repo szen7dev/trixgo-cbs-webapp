@@ -18,6 +18,7 @@ import ErrorPage from "views/authentication/Error";
 
 import {
         HumanHomePage,
+        HumanDashboardPage,
         HumanDocumentPage,
         HumanInfo,
     } from "views/human/pages";
@@ -25,11 +26,7 @@ import {
 const HumanRouterV2: FC = () => {
     return (
         <Switch>
-            <ProtectedRoute exact path="/human/home" component={() => < HumanHomePage type = {1}/>} />
-            <ProtectedRoute exact path="/human/document" component={HumanDocumentPage} />
-            <ProtectedRoute exact path="/human/home/hid=:id" component={HumanInfo} />
-            <ProtectedRoute exact path="/human/customer" component={() => < HumanHomePage type = {2}/>} />
-            <Route path="/human/admin">
+          <Route path="/human/admin">
               <LayoutSecondary pages={[
                 { id: '1', title: 'Nhóm chức năng', path: '/human/admin', navExact: true },
                 {
@@ -46,6 +43,11 @@ const HumanRouterV2: FC = () => {
                 <Route exact path="/human/admin/2" component={HumanAdminAuthorTab} />
               </LayoutSecondary>
           </Route>
+          <ProtectedRoute exact path="/human/dashboard" component={HumanDashboardPage} />
+          <ProtectedRoute exact path="/human/home" component={() => < HumanHomePage type = {1}/>} />
+          <ProtectedRoute exact path="/human/document" component={HumanDocumentPage} />
+          <ProtectedRoute exact path="/human/home/hid=:id" component={HumanInfo} />
+          <ProtectedRoute exact path="/human/customer" component={() => < HumanHomePage type = {2}/>} />
           <Route path="/human/*" component={ErrorPage} />
         </Switch>
     )
