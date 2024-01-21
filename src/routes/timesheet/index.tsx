@@ -21,11 +21,21 @@ const TimesheetAppRouter: FC = () => {
           <ProtectedRoute
             exact
             path="/timesheet/home"
-            component={TimesheetHomePage}
+            component={() => <TimesheetHomePage type={1} />}
           />
           <ProtectedRoute
             exact
             path={"/timesheet/home/:id"}
+            component={TimesheetDetailPage}
+          />
+          <ProtectedRoute
+            exact
+            path="/timesheet/mine"
+            component={() => <TimesheetHomePage type={2} />}
+          />
+          <ProtectedRoute
+            exact
+            path={"/timesheet/mine/:id"}
             component={TimesheetDetailPage}
           />
           <ProtectedRoute
@@ -57,7 +67,7 @@ const TimesheetAppRouter: FC = () => {
               <Route exact path="/timesheet/admin/2" component={TimesheetAdminAuthorTab} />
           </LayoutSecondary>
 
-          <Route path="/timesheet/*" component={ErrorPage} />
+          <ProtectedRoute exact path="/timesheet/*" component={ErrorPage} />
         </Switch>
       </TimesheetLayout>
     </>

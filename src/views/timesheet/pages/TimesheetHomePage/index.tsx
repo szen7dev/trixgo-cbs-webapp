@@ -19,8 +19,11 @@ import {
 } from "services/hooks/useTimeSheet";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
+interface TimesheetHomePageProps {
+  type?: number
+}
 
-const TimeSheetHomePage: FC = () => {
+const TimeSheetHomePage: FC<TimesheetHomePageProps> = ({ type = 1 }) => {
   const [recordSelected, toggleRecord] = React.useState<any>({});
   const [keyword, setKeyword] = React.useState("");
   const [pageIndex, setPageIndex] = useState(0);
@@ -39,7 +42,7 @@ const TimeSheetHomePage: FC = () => {
     limit,
     loading,
     hasNextPage,
-  } = useQueryListTimeSheetParent({ keyword });
+  } = useQueryListTimeSheetParent({ keyword, type });
 
   const {
     onCreateTimeSheetParentAsync,
