@@ -695,7 +695,7 @@ export const FnbContactPage: FC = () => {
 													setIsShowImageFullScreen(true);
 												}}
 											>
-												<img src={`${process.env.REACT_APP_URL_S3}${image?.path}`} />
+												<img className="w-[75px] h-[75px]" src={`${process.env.REACT_APP_URL_S3}${image?.path}`} />
 											</div>
 										)
 									})}
