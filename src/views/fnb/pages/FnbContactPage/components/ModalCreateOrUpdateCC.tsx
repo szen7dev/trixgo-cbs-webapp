@@ -80,7 +80,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
       switch (modalType) {
         // Tạo mẩu tin
         case 'create': {
-          delete formDataFormat['customerCareID'];
+          delete formDataFormat['customerCareID']; //
           const { error, message } = await insertAsync(formDataFormat);
 
           if (error) {
