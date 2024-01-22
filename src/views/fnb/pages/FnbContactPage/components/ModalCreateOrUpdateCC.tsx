@@ -4,14 +4,10 @@ import { useModal } from "services/hooks/useModal";
 import { useFnbCustomerCare } from "services/hooks/fnb/useFnbCustomerCare";
 import { toast } from "react-toastify";
 import { DropdownSearchable } from "shareComponents/common";
-import {
-	useQueryListContact,
-} from "services/hooks/cmcs/useContractIncome";
+import { useQueryListContact } from "services/hooks/cmcs/useContractIncome";
 import { LIMIT_DROPDOWN } from "apis/localdb/index";
-import {
-	useQueryListDoctype,
-} from "services/hooks/useHuman";
-import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
+import { useQueryListDoctype } from "services/hooks/useHuman";
+import { useFnbOrder } from "services/hooks/fnb/useFnbOrder";
 
 export const ModalCreateOrUpdateCC: FC<any> = ({
   modalType,
@@ -30,27 +26,22 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
     type: 1,
   }
 }) => {
-  const [searchCustomerValue, setSearchCustomerValue] = useState(
-		initialValues?.customer?.name || ""
-	);
+  const [searchCustomerValue, setSearchCustomerValue] = useState("");
 	const { listContact: listCustomer } = useQueryListContact({
 		limit: LIMIT_DROPDOWN,
 		keyword: searchCustomerValue,
 	});
 
-  const [searchSubTypeValue, setSearchSubTypeValue] = useState(
-		initialValues?.mistake?.name || ""
-	);
+  const [searchSubTypeValue, setSearchSubTypeValue] = useState("");
 	const { listDoctypes: listSubType } = useQueryListDoctype({
 		limit: LIMIT_DROPDOWN,
 		type: 19,
 		keyword: searchSubTypeValue,
 	});
 
-  const [searchOrderValue, setSearchOrderValue] = useState(
-		initialValues?.order?.name || ""
-	);
-  const { isLoading, isFetching, fetchNextPage, hasNextPage, totalRecord, list, listWithPager, totalPage, refetch } = useFnbOrder({
+  const [searchOrderValue, setSearchOrderValue] = useState("");
+
+  const { list: listOrder } = useFnbOrder({
     params: {
       limit: 10,
       option: 1,
@@ -73,16 +64,23 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
 })
 
   const handleSubmit = async () => {
-    // console.log(formData)
     if(!formData.name) {
       return toast.warn('Vui lòng nội dung');
     }
-    const formDataFormat = { ...formData, amount: +formData.amount, rating: +formData.rating, status: +formData.status, type: +formData.type}
+
+    const formDataFormat = {
+      ...formData, amount: +formData.amount, rating: +formData.rating, status: +formData.status, type: +formData.type
+    }
+    delete formDataFormat['customer'];
+    delete formDataFormat['mistake'];
+    delete formDataFormat['order'];
+
     try {
       // Handle api here!
       switch (modalType) {
         // Tạo mẩu tin
         case 'create': {
+          delete formDataFormat['customerCareID'];
           const { error, message } = await insertAsync(formDataFormat);
 
           if (error) {
@@ -95,7 +93,6 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
 
         // Cập nhật mẩu tin
         case 'update': {
-          // console.log(formDataFormat)
           const { error, message } = await updateAsync(formDataFormat);
 
           if (error) {
@@ -115,18 +112,32 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
       } else if (error instanceof Error) {
         toast.error(error.message);
       }
+    } finally {
+      onConfirm && onConfirm();
+      closeModal();
     }
-
-    onConfirm && onConfirm();
-    closeModal();
   };
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
+
     setFormData((previous: any) => ({
       ...previous,
       [name]: value
     }))
+  }
+
+  const onRatingKeyUp = (event: any) => {
+    const name = event.target.name;
+    const value = +event.target.value;
+    
+    if(value < 0 || value > 5) {
+      setFormData((previous: any) => ({
+        ...previous,
+        [name]: ""
+      }))
+      return toast.warn("Đánh giá của khách phải nằm trong khoảng từ 1 đến 5");
+    }
   }
 
   return (
@@ -174,10 +185,10 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
                 label: `${item.name}`,
                 value: item._id,
             }))}
-            initialValue={{
-              label: `${initialValues?.customer?.name}`,
-              value: initialValues?.customer?._id
-            }}
+            initialValue={initialValues.customer ? {
+              label: `${initialValues.customer?.name}`,
+              value: initialValues.customer?._id
+            } : {}}
             formatItem={{
                 id: "value",
                 text: "label",
@@ -190,8 +201,6 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
         <p>Phân loại vấn đề (*)</p>
         <DropdownSearchable
             onchangeValue={(value: any) => {
-              // console.log(value)
-              // console.log(formData)
                 setFormData((previous: any) => ({
                     ...previous,
                     mistakeID: value?.id
@@ -219,10 +228,10 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
                 label: `${item.name}`,
                 value: item._id,
             }))}
-            initialValue={{
-              label: `${initialValues?.mistake?.name}`,
-              value: initialValues?.mistake?._id
-            }}
+            initialValue={initialValues.mistake ? {
+              label: `${initialValues.mistake?.name}`,
+              value: initialValues.mistake?._id
+            } : {}}
             formatItem={{
                 id: "value",
                 text: "label",
@@ -258,14 +267,14 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
                     <p className={"truncate"}>{item.text}</p>
                 </div>
             )}
-            data={list.map((item: any) => ({
+            data={listOrder.map((item: any) => ({
                 label: `${item.name}`,
                 value: item._id,
             }))}
-            initialValue={{
-              label: `${initialValues?.order?.name}`,
-              value: initialValues?.order?._id
-            }}
+            initialValue={initialValues.order ? {
+              label: `${initialValues.order?.name}`,
+              value: initialValues.order?._id
+            } : {}}
             formatItem={{
                 id: "value",
                 text: "label",
@@ -316,9 +325,12 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
           type="number"
           placeholder="Đánh giá của khách (1-5)"
           name="rating"
+          min={1}
+          max={5}
           className="h-8 w-full border border-primary-border outline-none px-2"
-          defaultValue={formData?.rating}
+          value={formData?.rating}
           onChange={onChange}
+          onKeyUp={onRatingKeyUp}
         />
       </section>
 
