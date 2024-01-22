@@ -156,7 +156,6 @@ export const FnbContactPage: FC = () => {
         },
         isFetchList: true
     })
-    // console.log(listDataWithPager)
 
     // Reset form
     const clearData = () => {
@@ -230,7 +229,6 @@ export const FnbContactPage: FC = () => {
     }
 
     const handleOpenModalCreateOrUpdate = (modalType: 'create' | 'update') => {
-
         let initValues: any = {...initialValues};
         setItemsChecked([]);
 
@@ -269,30 +267,30 @@ export const FnbContactPage: FC = () => {
     }
 
     //_____Import, export excel
-    const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
-        isExporting: false,
-    });
-    const { exportExcelAsync } = useFnbCustomerCare({});
+    // const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+    //     isExporting: false,
+    // });
+    // const { exportExcelAsync } = useFnbCustomerCare({});
 
-    const handleExportExcel = async () => {
-		try {
-            setStateExport({ isExporting: true });
-            const { error, data } = await exportExcelAsync({
-                customerID,
-                userCreateID: userID,
-            });
+    // const handleExportExcel = async () => {
+	// 	try {
+    //         setStateExport({ isExporting: true });
+    //         const { error, data } = await exportExcelAsync({
+    //             customerID,
+    //             userCreateID: userID,
+    //         });
 
-            if(error) {
-                return toast.warn(data?.message);
-            }
+    //         if(error) {
+    //             return toast.warn(data?.message);
+    //         }
 
-            data && createLinkAndClick(data, '_self');
-        } catch (error: any) {
-            toast.error(error.message)
-        } finally {
-            setStateExport({ isExporting: false });
-        }
-	}
+    //         data && createLinkAndClick(data, '_self');
+    //     } catch (error: any) {
+    //         toast.error(error.message)
+    //     } finally {
+    //         setStateExport({ isExporting: false });
+    //     }
+	// }
 
     const handleOnChangeDate = useCallback((date, input) => {
         if (input) {
