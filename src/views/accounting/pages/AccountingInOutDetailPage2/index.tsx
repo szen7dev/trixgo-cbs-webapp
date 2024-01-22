@@ -1,6 +1,5 @@
 import React, { FC, useCallback, useState, useEffect } from "react";
 import { NavLink, useParams, useHistory } from "react-router-dom"
-import DotsVerticalIcon from "assets/icons/DotsVertical";
 import Close from "assets/icons/Close";
 import cn from "classnames";
 import styles from 'views/accounting/styles/styles.module.css';
@@ -390,8 +389,13 @@ export const AccountingInOutDetailPage2: FC = () => {
                         {item?.voucher?.name}
                       </NavLink>
                       <p><i>{item?.funda?.name}</i></p>
+                      {
+                          item?.voucher?.modifyAt ?
+                          <p className="text-gray-500 text-[10px]"><i>Updated: { moment(item?.voucher?.modifyAt).format('DD/MM/YYYY HH:mm')}</i></p>
+                          : <></>
+                        }
                     </td>
-                    <td className="py-1 px-2 border-r border-primary-border">
+                    <td className="py-1 px-2 border-r border-primary-border text-[10px]">
                       {item?.voucher?.sign}
                     </td>
                     <td className="py-1 px-2 border-r border-primary-border">
@@ -449,8 +453,13 @@ export const AccountingInOutDetailPage2: FC = () => {
                         {item?.voucher?.name}
                       </NavLink>
                       <p><i>{item?.funda?.name}</i></p>
+                      {
+                          item?.voucher?.modifyAt ?
+                          <p className="text-gray-500 text-[10px]"><i>Updated: { moment(item?.voucher?.modifyAt).format('DD/MM/YYYY HH:mm')}</i></p>
+                          : <></>
+                        }
                     </td>
-                    <td className="py-1 px-2 border-r border-primary-border">
+                    <td className="py-1 px-2 border-r border-primary-border text-[10px]">
                       {item?.voucher?.sign}
                     </td>
                     <td className="py-1 px-2 border-r border-primary-border">

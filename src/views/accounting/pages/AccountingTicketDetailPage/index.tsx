@@ -157,7 +157,7 @@ export const AccountingTicketDetailPage: FC<Props> = ({ type = 1 }) => {
             <button type="button" className={"mr-2"}>
               <LogIcon />
             </button>
-            <p><span className={"text-gray-500"}>Cập nhật:</span> {voucherDetail?.userUpdate?.fullname} {moment(voucherDetail?.updatedAt).format('DD/MM/YYYY HH:mm')}</p>
+            <p><span className={"text-gray-500"}>Cập nhật:</span> {voucherDetail?.userUpdate?.fullname} {moment(voucherDetail?.modifyAt).format('DD/MM/YYYY HH:mm')}</p>
             <button className={"ml-10 px-4 py-2 text-left hover:bg-cbs-table-header text-cbs-highlight-color"}
               onClick={() => handleExportExcel({option: 3})}
             >

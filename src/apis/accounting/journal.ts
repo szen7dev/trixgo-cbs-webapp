@@ -29,10 +29,9 @@ export const JournalRepository: JournalRepository = {
 async function fetchListJournal(params : any) {
     const { data } = await API.get(`${ACCOUNTING_JOURNAL}`, {
         params: {
-            // select: 'name sign author project date createAt description note store amount status storeSign publish datahubContact',
             populates: {
                 "path": "voucher debit credit customerCredit customerDebit warehouse goods contract budgetWork funda subtype",
-                "select": "type name sign description unit date taxid address",
+                "select": "type name sign description unit date taxid address modifyAt",
             },
             ...params,
         }
@@ -43,10 +42,9 @@ async function fetchListJournal(params : any) {
 async function fetchFilterListData(params : any) {
     const { data } = await API.get(`${ACCOUNTING_JOURNAL}/filter-document`, {
         params: {
-            // select: 'name sign author project date createAt description note store amount status storeSign publish datahubContact',
             populates: {
                 "path": "voucher debit credit customerCredit customerDebit warehouse goods contract budgetWork funda subtype",
-                "select": "fullname bizfullname sign image name date taxid address"
+                "select": "fullname bizfullname sign image name date taxid address modifyAt"
             },
             ...params,
         }

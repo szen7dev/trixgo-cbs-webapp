@@ -14,6 +14,7 @@ export interface DocumentProps extends Omit<DocumentInserPayload, 'parentID' | '
     quantity: number;
     unitprice: number;
     createAt: string;
+    modifyAt: string;
     linkFunda?: {
         _id: string;
         name: string;
@@ -43,6 +44,8 @@ export interface DocumentProps extends Omit<DocumentInserPayload, 'parentID' | '
         date: string;
         dateInvoice: string;
         address: string;
+        createAt: string;
+        modifyAt: string;
     }
     customer?: {
         _id: string;
