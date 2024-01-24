@@ -39,6 +39,7 @@ const mappingData = (data: any, isDataPayLoad = false) => {
     contractId: data?.contract?.value,
     ipc: isDataPayLoad ? data?.ipc?.value : convertInitialValueDropdown(data?.ipc || ''),
     subtype: isDataPayLoad ? data?.subtype?.value : convertInitialValueDropdown(data?.subtype || ''),
+    subtypeID: data?.subtype?.value,
 
     date: convertDateToString(data.date) || '',
     signInvoice: data.signInvoice || '',
@@ -58,6 +59,7 @@ const mappingData = (data: any, isDataPayLoad = false) => {
         customerDebit: '',
         customerCredit: '',
         goods: '',
+        subtype: '',
         warehouse: '',
         inventory: '',
         amount: '',
@@ -77,7 +79,6 @@ const mappingData = (data: any, isDataPayLoad = false) => {
 
 const mappingSelectedJournals = (data = [], isDataPayLoad = false) => {
   return data.map((item: any) => {
-    console.log({ item, isDataPayLoad })
     return {
       journalID: item._id || item.journalID || '',
       debit: isDataPayLoad ? item?.debit?.value : convertInitialValueDropdown(item?.debit || '', '_id', 'name', 'description'),
@@ -85,6 +86,7 @@ const mappingSelectedJournals = (data = [], isDataPayLoad = false) => {
       customerDebit: isDataPayLoad ? item?.customerDebit?.value : convertInitialValueDropdown(item?.customerDebit || ''),
       customerCredit: isDataPayLoad ? item?.customerCredit?.value : convertInitialValueDropdown(item?.customerCredit || ''),
       goods: isDataPayLoad ? item?.goods?.value : convertInitialValueDropdown(item?.goods || ''),
+      subtype: isDataPayLoad ? item?.subtype?.value : convertInitialValueDropdown(item?.subtype || ''),
       warehouse: isDataPayLoad ? item?.warehouse?.value : convertInitialValueDropdown(item?.warehouse || ''),
       inventory: item.inventory || '',
       quantity: item.quantity || 0,
@@ -95,7 +97,6 @@ const mappingSelectedJournals = (data = [], isDataPayLoad = false) => {
       job: item.job || '',
       note: item.note || '',
       updown: item.updown || 1,
-
     }
   })
 }
@@ -124,7 +125,7 @@ export const CreateNewTicket: FC<any> = ({ onFinish, title, idEdit = '', isEdit 
         `${APP_ACCOUNTING_JOURNAL}?voucherID=${id}`, {
         params: {
           populates: {
-            "path": "debit credit customerCredit customerDebit warehouse goods contract budgetWork",
+            "path": "debit credit customerCredit customerDebit warehouse goods contract budgetWork subtype",
             "select": "name description",
           }
         }
@@ -173,7 +174,6 @@ export const CreateNewTicket: FC<any> = ({ onFinish, title, idEdit = '', isEdit 
         ...values,
         selectedJournals: [...mappingSelectedJournals(values.selectedJournals, true) || []]
       }
-      console.log({ values, formatData })
       const isSuccess = await onFinish(mappingData(formatData, true), isEdit);
       if (isSuccess) {
         closeModal();

@@ -62,7 +62,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues, isEdit }) => {
 	});
 
 	const [searchSubTypeValue, setSearchSubTypeValue] = useState(
-		initialValues?.subType?.name || ""
+		initialValues?.subType || ""
 	);
 	const { list: listSubType } = useDoctype({
 		params: {
@@ -357,7 +357,13 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues, isEdit }) => {
 					<div className={"w-1/4 flex items-center"}>
 						<div className={"text-left text-gray-500 flex items-center mr-2"}>Khoản mục phí</div>
 						<DropdownSearchable
-							onchangeValue={(value: any) => setFieldValue("subtype", value)}
+							onchangeValue={(value: any) => {
+								setFieldValue("subtype", value)
+
+								values.selectedJournals.map((_: any, index: number) => {
+									setFieldValue(`selectedJournals.${index}.subtype`, value)
+								})
+							}}
 							className={"flex-1"}
 							placeholder="Khoản mục phí"
 							isMultiple={false}
