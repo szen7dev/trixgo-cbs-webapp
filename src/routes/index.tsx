@@ -34,7 +34,10 @@ const MobileRouter = lazy(() => import("./mobile/index"))
 const SupportRouter = lazy(() => import("./support"))
 const TimesheetRouter = lazy(() => import("./timesheet/index"))
 const ItemRouter = lazy(() => import("./item/index"))
-const BudgetRouterV2 = lazy(() => import("./budget/indexV2"))//
+const BudgetRouterV2 = lazy(() => import("./budget/indexV2"))
+const PaymentRouter = lazy(() => import("./payment/index"))
+const CrmRouter = lazy(() => import("./crm/index"))
+const StoreRouter = lazy(() => import("./store/index"))
 
 /*=====5.PAGES=====*/
 const ErrorPage = lazy(() => import("views/authentication/Error"))
@@ -102,14 +105,17 @@ const Routes: FC = () => {
                                 <Route path="/datahub"><DatahubRouterV2 /></Route>
                                 <Route path="/timesheet"><TimesheetRouter /></Route>
                                 <Route path="/workshop"><WorkshopRouterV2 /></Route>
+                                <Route path="/fnb"><FnbRouter /></Route>
+                                <Route path="/payment"><PaymentRouter/></Route>
+                                <Route path="/crm"><CrmRouter/></Route>
+                                <Route path="/store"><StoreRouter/></Route>
+                                <Route path="/mobile"><MobileRouter /></Route>
+                                <Route path="/messages"><MessagesRouter /></Route>
                                 <Route path="/media">
                                     <MediaLayout>
                                         <MediaRouter />
                                     </MediaLayout>
                                 </Route>
-                                <Route path="/messages"><MessagesRouter /></Route>
-                                <Route path="/fnb"><FnbRouter /></Route>
-                                <Route path="/mobile"><MobileRouter /></Route>
                                 <Route
                                     exact
                                     path="/policy"
