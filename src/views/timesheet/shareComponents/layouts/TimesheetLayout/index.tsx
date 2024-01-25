@@ -3,7 +3,6 @@ import cn from "classnames";
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
 import { LeftNavigate, MainHeaderV2 } from "shareComponents/common";
 import { TimesheetLeftSideBar } from "../TimesheetLeftSideBar";
-// import { HomeHeaderContent } from "shareComponents/layouts/HomeLayout/components";
 
 type Props = {
   children: ReactNode;

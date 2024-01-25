@@ -1,0 +1,1 @@
+export {PaymentHomePage} from './PaymentHomePage';

@@ -3,64 +3,57 @@ import { FC } from "react";
 import { Route, Switch, matchPath } from "react-router-dom";
 
 /*=====2.PROVIDERS=====*/
+import { ProtectedRoute } from "routes/components";
 
 /*=====3.LAYOUTS=====*/
-import { BudgetLayoutV2 } from "views/budget/shareComponents/layoutsV2";
+import { StoreLayout } from "views/store/shareComponents/layouts";
+import LayoutSecondary from 'views/ppt/sharedComponents/layouts/LayoutSecondary';
+
+import AdminFunctionalTab from "views/store/pages/StoreAdminPage/pages/AdminFunctionalTab";
+import AdminDetail from "views/store/pages/StoreAdminPage/pages/AdminDetail";
+import AdminAuthorTab from "views/store/pages/StoreAdminPage/pages/AdminAuthorTab";
+
 /*=====4.CONFIG ROUTE=====*/
 
 /*=====5.PAGES/COMPONENTS=====*/
 import ErrorPage from "views/authentication/Error";
 import {
-    BudgetHomePage,
-    BudgetDetailPage
-} from "views/budget/pages";
-import LayoutSecondary from "views/ppt/sharedComponents/layouts/LayoutSecondary";
-import BudgetAdminFunctionalTab from "views/budget/pages/BudgetAdminPage/pages/BudgetAdminFunctionalTab";
-import BudgetAdminDetail from "views/budget/pages/BudgetAdminPage/pages/BudgetAdminDetail";
-import BudgetAdminAuthorTab from "views/budget/pages/BudgetAdminPage/pages/BudgetAdminAuthorTab";
+    StoreHomePage,
+} from "views/store/pages";
 
 const StoreRouter: FC = () => {
     return (
-        <Switch>
-            <Route
-                exact
-                path="/store/home"
-                component={() =>
-                    <BudgetLayoutV2>
-                        <BudgetHomePage />
-                    </BudgetLayoutV2>
-                }
-            />
-            <Route
-                exact
-                path="/budget/home/:budgetID"
-                component={() =>
-                    <BudgetLayoutV2>
-                        <BudgetDetailPage />
-                    </BudgetLayoutV2>
-                }
-            />
-            <Route path="/budget/admin">
-                <BudgetLayoutV2>
+        <>
+            <StoreLayout>
+                <Switch>
+                    <ProtectedRoute
+                    exact
+                    path="/store/home"
+                    component={StoreHomePage}
+                    />
+
                     <LayoutSecondary pages={[
-                        { id: '1', title: 'Nhóm chức năng', path: '/budget/admin', navExact: true },
+                        { id: '1', title: 'Nhóm chức năng', path: '/store/admin', navExact: true },
                         {
-                            id: '2', title: 'Phân quyền chức năng', path: '/budget/admin/2', location: (location) => {
-                                // Get match params
-                                const match = matchPath<{ id: string }>(location.pathname, { path: '/budget/admin/:id/detail' })
-                                // Push to state
-                                return ({ pathname: '/budget/admin/2', state: match ? match.params.id : null })
-                            }
+                        id: '2', title: 'Phân quyền chức năng', path: '/store/admin/2', location: (location) => {
+
+                            // Get match params
+                            const match = matchPath<{ id: string }>(location.pathname, { path: '/store/admin/:id/detail' })
+
+                            // Push to state
+                            return ({ pathname: '/store/admin/2', state: match ? match.params.id : null })
+                        }
                         }
                     ]}>
-                        <Route exact path="/budget/admin" component={BudgetAdminFunctionalTab} />
-                        <Route exact path="/budget/admin/:id/detail" component={BudgetAdminDetail} />
-                        <Route exact path="/budget/admin/2" component={BudgetAdminAuthorTab} />
+                        <Route exact path="/store/admin" component={AdminFunctionalTab} />
+                        <Route exact path="/store/admin/:id/detail" component={AdminDetail} />
+                        <Route exact path="/store/admin/2" component={AdminAuthorTab} />
                     </LayoutSecondary>
-                </BudgetLayoutV2>
-            </Route>
-            <Route path="/budget/*" component={ErrorPage} />
-        </Switch>
+                    
+                    <ProtectedRoute exact path="/store/*" component={ErrorPage} />
+                </Switch>
+            </StoreLayout>
+        </>
     )
 };
 
