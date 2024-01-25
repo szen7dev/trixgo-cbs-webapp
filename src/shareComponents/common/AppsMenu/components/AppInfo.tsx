@@ -5,15 +5,15 @@ import datahubLogo from "assets/logos/datahub.png";
 import documentLogo from "assets/logos/document.png";
 import financialLogo from "assets/logos/financial.png";
 import humanLogo from "assets/logos/human.png";
-import marketLogo from "assets/logos/market.png";
+import crmLogo from "assets/logos/crm.png";
 import mediaLogo from "assets/logos/media.png";
-import operationLogo from "assets/logos/operation.png";
+import paymentLogo from "assets/logos/payment.png";
 import ownerLogo from "assets/logos/owner.png";
 import fnbLogo from "assets/logos/fnb.png";
 import pcmLogo from "assets/logos/pcm.png";
 import projectLogo from "assets/logos/project.png";
 import qrcodeLogo from "assets/logos/qrcode.png";
-import reeLogo from "assets/logos/ree.png";
+import storeLogo from "assets/logos/store.png";
 import timesheetLogo from "assets/logos/timesheet.png";
 import workshopLogo from "assets/logos/workshop.png";
 import messagesLogo from "assets/logos/messages.png";
@@ -22,26 +22,26 @@ import inspectionLogo from "assets/logos/inspection.png";
 import defaultLogo from "assets/logos/default.png";
 
 export const APP_INFO = new Map([
-    /* Ứng dụng Operation */
-    ['61e04a0dfdebf77b072d1b18', {
-        key: "61e04a0dfdebf77b072d1b18",
-        name: "Quản lý vận hành",
-        icon: operationLogo,
-        route: '/operation/home'
+    /* Ứng dụng Payment */
+    ['5e4785eb8b50843d34481d49', {
+        key: "5e4785eb8b50843d34481d49",
+        name: "Quản lý thanh toán",
+        icon: paymentLogo,
+        route: '/payment/home'
     }],
     /* Ứng dụng Real Estate Exchange */
-    ['61e04a05fdebf77b072d1b17', {
-        key: "61e04a05fdebf77b072d1b17",
-        name: "Sàn bất động sản",
-        icon: reeLogo,
-        route: '/ree/home'
+    ['5f52341f880c2f26c8df8c10', {
+        key: "5f52341f880c2f26c8df8c10",
+        name: "Quản lý kho",
+        icon: storeLogo,
+        route: '/store/home'
     }],
     /* Ứng dụng Market */
     ['61e049f6fdebf77b072d1b16', {
         key: "61e049f6fdebf77b072d1b16",
-        name: "Thị trường",
-        icon: marketLogo,
-        route: '/market/home'
+        name: "CRM",
+        icon: crmLogo,
+        route: '/crm/home'
     }],
     /* Ứng dụng Workshop */
     ['61e049e7fdebf77b072d1b15', {
@@ -78,7 +78,7 @@ export const APP_INFO = new Map([
         icon: ownerLogo,
         route: '/owner/home'
     }],
-    /* Ứng dụng Payment */
+    /* Ứng dụng Bán hàng */
     ['61e04971fdebf77b072d1b0f', {
         key: "61e04971fdebf77b072d1b0f",
         name: "Bán hàng",
@@ -155,13 +155,6 @@ export const APP_INFO = new Map([
         icon: qrcodeLogo,
         route: '/qrcode/home'
     }],    
-    /* Ứng dụng Quản lý danh mục */
-    ['5f5234b2880c2f26c8df8c13', {
-        key: "5f5234b2880c2f26c8df8c13",
-        name: "Quản lý danh mục",
-        icon: defaultLogo,
-        route: '/item/home'
-    }],
     /* Ứng dụng Quản lý ngân sách */
     ['5fe58c9b95db3c6e1534ec78', {
         key: "5fe58c9b95db3c6e1534ec78",
@@ -175,5 +168,12 @@ export const APP_INFO = new Map([
         name: "Tư vấn giám sát",
         icon: inspectionLogo,
         route: '/inspection/home'
+    }],
+    /* Ứng dụng Quản lý danh mục */
+    ['5f5234b2880c2f26c8df8c13', {
+        key: "5f5234b2880c2f26c8df8c13",
+        name: "Quản lý danh mục",
+        icon: defaultLogo,
+        route: '/item/home'
     }],
 ])

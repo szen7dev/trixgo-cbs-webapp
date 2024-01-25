@@ -1175,4 +1175,44 @@ export const APP_ID = {
             },
         },
     },
+    WORKSHOP: {
+        id: "61e049e7fdebf77b072d1b15",
+        menuWorkshopApp: {
+            id: "",
+            dashboard: {
+                id: "",
+                name: "Báo cáo quản trị"
+            },
+        },
+    },
+    CRM: {
+        id: "61e049f6fdebf77b072d1b16",
+        menuCrmApp: {
+            id: "",
+            dashboard: {
+                id: "",
+                name: "Báo cáo quản trị"
+            },
+        },
+    },
+    PAYMENT: {
+        id: "5e4785eb8b50843d34481d49",
+        menuPaymentApp: {
+            id: "",
+            dashboard: {
+                id: "",
+                name: "Báo cáo quản trị"
+            },
+        },
+    },
+    STORE: {
+        id: "5f52341f880c2f26c8df8c10",
+        menuStoreApp: {
+            id: "",
+            dashboard: {
+                id: "",
+                name: "Báo cáo quản trị"
+            },
+        },
+    },
 }
