@@ -260,7 +260,7 @@ export const useQueryListBudgetWork = ({ limit, keyword }: any): any => {
     }
 }
 
-export const useQueryListAccount = ({ limit, keyword, option }: any): any => {
+export const useQueryListAccount = ({ limit, keyword, option, arrNames }: any): any => {
     const res = useInfiniteQuery(
         [`list_account,${keyword}`, keyword],
         async ({ pageParam }: any) =>
@@ -268,7 +268,8 @@ export const useQueryListAccount = ({ limit, keyword, option }: any): any => {
                 limit: limit || 10,
                 lastestID: pageParam || "",
                 keyword,
-                option
+                option,
+                arrNames
             }),
         {
             getNextPageParam: ({ data }: any) => {

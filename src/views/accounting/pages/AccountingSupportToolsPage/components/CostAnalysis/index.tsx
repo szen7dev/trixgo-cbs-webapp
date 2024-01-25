@@ -49,6 +49,7 @@ const CostAnalysis: FC = () => {
     limit: 10,
     keyword: searchAccount,
     option: 1,
+    arrNames: ['152','156'],
   });
 
   const handleOnChangeDate = useCallback((date, input) => {
