@@ -1,6 +1,7 @@
 /*=====1.LIBRARY=====*/
 import { FC } from "react";
 import { Route, Switch } from "react-router-dom";
+import { ProtectedRoute } from "routes/components";
 
 /*=====2.PROVIDERS=====*/
 
@@ -17,48 +18,26 @@ import {
 import { OwnerMemberPage } from "views/owner/pages/OwnerMember";
 import { OwnerGrantPage } from "views/owner/pages/OwnerGrant";
 import { OwnerDocsManagementPage } from "views/owner/pages/OwnerDocsManagement";
+import { OwnerConfigPage } from "views/owner/pages/OwnerConfigPage";
+import { OwnerTrafficPage } from "views/owner/pages/OwnerTrafficPage";
+import { OwnerStoragePage } from "views/owner/pages/OwnerStoragePage";
+import { OwnerWorkflowPage } from "views/owner/pages/OwnerWorkflowPage";
 
 const OwnerRouterV2: FC = () => {
     return (
-        <Switch>
-            <Route
-                exact
-                path="/owner/home"
-                component={() =>
-                    <OwnerLayoutV2>
-                        <OwnerHomePage />
-                    </OwnerLayoutV2>
-                }
-            />
-            <Route
-                exact
-                path="/owner/members"
-                component={() =>
-                    <OwnerLayoutV2>
-                        <OwnerMemberPage />
-                    </OwnerLayoutV2>
-                }
-            />
-            <Route
-                exact
-                path="/owner/grant"
-                component={() =>
-                    <OwnerLayoutV2>
-                        <OwnerGrantPage />
-                    </OwnerLayoutV2>
-                }
-            />
-            <Route
-                exact
-                path="/owner/grant/documents-management/:appID/:companyID/:appName"
-                component={() =>
-                    <OwnerLayoutV2>
-                        <OwnerDocsManagementPage />
-                    </OwnerLayoutV2>
-                }
-            />
-            <Route path="/owner/*" component={ErrorPage} />
-        </Switch>
+        <OwnerLayoutV2>
+            <Switch>
+                <ProtectedRoute exact path="/owner/home" component={OwnerHomePage}/>
+                <ProtectedRoute exact path="/owner/members" component={OwnerMemberPage}/>
+                <ProtectedRoute exact path="/owner/grant" component={OwnerGrantPage}/>
+                <ProtectedRoute exact path="/owner/grant/documents-management/:appID/:companyID/:appName" component={OwnerDocsManagementPage}/>
+                <ProtectedRoute exact path="/owner/config" component={OwnerConfigPage}/>
+                <ProtectedRoute exact path="/owner/traffic" component={OwnerTrafficPage}/>
+                <ProtectedRoute exact path="/owner/storage" component={OwnerStoragePage}/>
+                <ProtectedRoute exact path="/owner/workflow" component={OwnerWorkflowPage}/>
+                <ProtectedRoute path="/owner/*" component={ErrorPage}/>
+            </Switch>
+        </OwnerLayoutV2>
     )
 };
 

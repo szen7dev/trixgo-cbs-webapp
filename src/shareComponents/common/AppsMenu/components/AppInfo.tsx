@@ -25,7 +25,7 @@ export const APP_INFO = new Map([
     /* Ứng dụng Payment */
     ['5e4785eb8b50843d34481d49', {
         key: "5e4785eb8b50843d34481d49",
-        name: "Quản lý thanh toán",
+        name: "Thanh toán",
         icon: paymentLogo,
         route: '/payment/home'
     }],

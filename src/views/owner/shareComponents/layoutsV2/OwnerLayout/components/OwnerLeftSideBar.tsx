@@ -51,6 +51,22 @@ export const OwnerLeftSideBar: FC = () => {
                         <img  width={'7px'} src={iconFolder} alt="Menu item" />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Cấp phép ứng dụng</span>
                     </NavLink>
+                    <NavLink to={`/owner/config`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                        <img  width={'7px'} src={iconFolder} alt="Menu item" />
+                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Cấu hình môi trường</span>
+                    </NavLink>
+                    <NavLink to={`/owner/workflow`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                        <img  width={'7px'} src={iconFolder} alt="Menu item" />
+                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Cấu hình workflow</span>
+                    </NavLink>
+                    <NavLink to={`/owner/traffic`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                        <img  width={'7px'} src={iconFolder} alt="Menu item" />
+                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản lý truy cập</span>
+                    </NavLink>
+                    <NavLink to={`/owner/storage`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                        <img  width={'7px'} src={iconFolder} alt="Menu item" />
+                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Quản lý dung lượng</span>
+                    </NavLink>
                 </div>
             </div>
         </div>

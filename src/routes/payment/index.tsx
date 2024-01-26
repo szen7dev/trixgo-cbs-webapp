@@ -19,6 +19,8 @@ import AdminAuthorTab from "views/payment/pages/PaymentAdminPage/pages/AdminAuth
 import ErrorPage from "views/authentication/Error";
 import {
     PaymentHomePage,
+    PaymentPrepaidPage,
+    PaymentActivityPage
 } from "views/payment/pages";
 
 const PaymentRouter: FC = () => {
@@ -27,8 +29,8 @@ const PaymentRouter: FC = () => {
             <PaymentLayout>
                 <Switch>
                     <ProtectedRoute exact path="/payment/dashboard" component={PaymentHomePage}/>
-                    <ProtectedRoute exact path="/payment/prepaid" component={PaymentHomePage}/>
-                    <ProtectedRoute exact path="/payment/activity" component={PaymentHomePage}/>
+                    <ProtectedRoute exact path="/payment/prepaid" component={PaymentPrepaidPage}/>
+                    <ProtectedRoute exact path="/payment/activity" component={PaymentActivityPage}/>
 
                     <LayoutSecondary pages={[
                         { id: '1', title: 'Nhóm chức năng', path: '/payment/admin', navExact: true },

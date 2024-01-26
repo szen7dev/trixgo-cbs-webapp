@@ -10,7 +10,6 @@ import menuIcon from "assets/images/icon-mobile-menu-black.png";
 /*=====4.PAGES/COMPONENTS=====*/
 import { LeftNavigate, MainHeaderV2 } from "shareComponents/common";
 import { OwnerLeftSideBar } from './components';
-import { HomeHeaderContent } from "shareComponents/layouts/HomeLayout/components";
 
 /*=====5.TYPINGS=====*/
 
@@ -47,8 +46,8 @@ export const OwnerLayoutV2: FC<Props> = ({ children }) => {
         <LeftNavigate handleMenuEvent={handleMenuEvent} />
         <section className={"main-content-wrapper flex-1"}>
 
-          <MainHeaderV2 headerTitle={"Quản trị ứng dụng"}>
-            {/* <HomeHeaderContent /> */}
+          <MainHeaderV2 headerTitle={"Quản trị viên"}>
+
           </MainHeaderV2>
           <OwnerLeftSideBar />
 
