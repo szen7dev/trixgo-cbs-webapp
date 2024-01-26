@@ -1215,6 +1215,10 @@ export const APP_ID = {
                 id: "65b308ca53ee0e001213425b",
                 name: "Xuất kho"
             },
+            debt: {
+                id: "65b308ca53ee0e001213425b",
+                name: "Công nợ"
+            },
         },
     },
     PAYMENT: {
