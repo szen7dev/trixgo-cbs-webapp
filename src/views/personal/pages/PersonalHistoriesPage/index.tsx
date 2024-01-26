@@ -24,7 +24,7 @@ export const PersonalHistoriesPage: FC = () => {
     <main className="h-full">
       <header className="sticky top-0 z-10 flex items-center justify-between h-12 px-6 border border-primary-border">
         <div className="flex items-center">
-          <p className="text-lg">Lịch sử truy cập</p>
+          <p className="text-lg">PersonalHistoriesPage</p>
         </div>
       </header>
     </main>

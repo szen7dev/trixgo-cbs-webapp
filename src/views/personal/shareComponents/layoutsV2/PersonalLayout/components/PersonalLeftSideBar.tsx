@@ -32,6 +32,12 @@ export const PersonalLeftSideBar: FC = () => {
                       <span className="flex-1 ml-2 text-left text-[14px]">Lịch sử truy cập</span>
                   </NavLink>
               </div>
+              <div className="t-link-menu-container">
+                  <NavLink to={`/personal/storage`} className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray">
+                        <img width={'7px'} src={iconFolder} alt="Menu item" />
+                      <span className="flex-1 ml-2 text-left text-[14px]">Quản lý dung lượng</span>
+                  </NavLink>
+              </div>
           </div>
       </div>
   )
