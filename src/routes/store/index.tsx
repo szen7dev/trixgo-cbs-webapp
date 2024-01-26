@@ -19,6 +19,10 @@ import AdminAuthorTab from "views/store/pages/StoreAdminPage/pages/AdminAuthorTa
 import ErrorPage from "views/authentication/Error";
 import {
     StoreHomePage,
+    StoreDashboardPage,
+    StoreImportPage,
+    StoreExportPage,
+    StoreDebtPage,
 } from "views/store/pages";
 
 const StoreRouter: FC = () => {
@@ -26,10 +30,11 @@ const StoreRouter: FC = () => {
         <>
             <StoreLayout>
                 <Switch>
-                    <ProtectedRoute exact path="/store/dashboard" component={StoreHomePage}/>
-                    <ProtectedRoute exact path="/store/import" component={StoreHomePage}/>
-                    <ProtectedRoute exact path="/store/export" component={StoreHomePage}/>
-                    <ProtectedRoute exact path="/store/debt" component={StoreHomePage}/>
+                    <ProtectedRoute exact path="/store/home" component={StoreHomePage}/>
+                    <ProtectedRoute exact path="/store/dashboard" component={StoreDashboardPage}/>
+                    <ProtectedRoute exact path="/store/import" component={StoreImportPage}/>
+                    <ProtectedRoute exact path="/store/export" component={StoreExportPage}/>
+                    <ProtectedRoute exact path="/store/debt" component={StoreDebtPage}/>
 
                     <LayoutSecondary pages={[
                         { id: '1', title: 'Nhóm chức năng', path: '/store/admin', navExact: true },

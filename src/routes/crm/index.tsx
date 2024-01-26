@@ -19,6 +19,8 @@ import AdminAuthorTab from "views/crm/pages/CrmAdminPage/pages/AdminAuthorTab";
 import ErrorPage from "views/authentication/Error";
 import {
     CrmHomePage,
+    CrmDashboardPage,
+    CrmCustomerPage,
 } from "views/crm/pages";
 
 const CrmRouter: FC = () => {
@@ -27,8 +29,8 @@ const CrmRouter: FC = () => {
             <CrmLayout>
                 <Switch>
                     <ProtectedRoute exact path="/crm/home" component={CrmHomePage}/>
-                    <ProtectedRoute exact path="/crm/dashboard" component={CrmHomePage}/>
-                    <ProtectedRoute exact path="/crm/customer" component={CrmHomePage}/>
+                    <ProtectedRoute exact path="/crm/dashboard" component={CrmDashboardPage}/>
+                    <ProtectedRoute exact path="/crm/customer" component={CrmCustomerPage}/>
 
                     <LayoutSecondary pages={[
                         { id: '1', title: 'Nhóm chức năng', path: '/crm/admin', navExact: true },

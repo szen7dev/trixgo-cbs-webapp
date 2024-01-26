@@ -107,11 +107,11 @@ export const OwnerDocsManagementPage: FC = () => {
       <header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-12 px-6 border border-primary-border">
         <div className="flex items-center">
           <p className="text-lg">{appName}</p>
-          <SearchInput
+          {/* <SearchInput
             classNameWrapper="ml-4"
             classNameInput="outline-none w-[296px]"
             onChange={onChangeSearch}
-          />
+          /> */}
           {idsChecked.length ? (
             <button
               onClick={() =>
@@ -259,13 +259,6 @@ export const OwnerDocsManagementPage: FC = () => {
 					</button>
 				</div>
 			)}
-
-      {/* <Paginate
-        totalPages={totalPages}
-        totalRecord={totalRecord}
-        hasNextPage={hasNextPage}
-        prevPageAction={fetchPreviousPage}
-        nextPageAction={fetchNextPage} /> */}
     </main>
-  );
-};
+  )
+}

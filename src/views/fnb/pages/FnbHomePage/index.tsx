@@ -1067,15 +1067,8 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
               )
             }
           />
-
-          {/* <button
-            className={"border-primary border-0.5 bg-cbs-secondary rounded text-white px-4 h-[32px] mb-2"}
-          >
-            Lọc
-          </button> */}
         </div>
-
-        {/* Action bar */}
+        
         <div className={"header-table flex px-4 w-full top-0 bg-white mb-1 pb-2"}>
           <div className={"flex gap-7 items-center justify-center mr-2"}>
             <div className="flex gap-2 items-center">
