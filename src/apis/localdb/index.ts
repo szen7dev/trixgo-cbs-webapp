@@ -889,7 +889,7 @@ export const LIMIT_DROPDOWN = 20;
 export const APP_ID = {
     PCM: {
         id: "5dfe4b9051dc622100bb9d89",
-        menuPcmApp: {                                       // type = 1
+        menuPcmApp: {
             id: "623ef213e998e94feda0ccd8",
             projects: {
                 id: "623ef363e998e94feda0ccde",
@@ -908,7 +908,7 @@ export const APP_ID = {
                 name: "Báo cáo quản trị hồ sơ",
             }
         },
-        menuPcmProject: {                                    // type = 2
+        menuPcmProject: {
             id: "623f04cce998e94feda0cd32",
             dashboard: {
                 id: "623f05f9e998e94feda0cd33",
