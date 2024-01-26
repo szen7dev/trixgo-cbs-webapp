@@ -6,14 +6,12 @@ import { Menu } from '@headlessui/react';
 import { toast } from "react-toastify";
 import { debounce } from "lodash";
 import { read, utils } from 'xlsx';
-
 import { useModal } from "services/hooks/useModal";
 import { CONTRACT_COME_IN_STATUS, DATE_FORMAT } from "apis/localdb/index";
 import { SearchInput, Paginate, DropdownOption, Loader } from "shareComponents/common";
 import { IncomeFormModal, ActionMenuTopBar } from "views/cmcs/shareComponents/common";
 import { formatNumberMoney } from "utils/cmcs";
 import { UseContractIncomeList, useCreateContractMutation, useUpdateContractMutation, useDeleteContractMutation, useContractCustom } from "services/hooks/cmcs/useContractIncome";
-import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
 import { createLinkAndClick } from 'utils';
@@ -28,11 +26,6 @@ const CmcIncomePage: FC = () => {
     type: "1"
   };
   const { createPermission, updatePermission, deletePermission } = useCheckPerAccessScreen(payload);
-  // ---------
-  const { createHistoryTraffics } = useHistoryTraffics();
-  useEffect(() => {
-    createHistoryTraffics({...payload, type: 1});
-  }, []);
 
   const [itemChecked, setItemChecked] = useState('');
   const [keyword, setKeyword] = useState("");

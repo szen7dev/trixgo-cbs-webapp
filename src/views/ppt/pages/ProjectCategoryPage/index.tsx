@@ -1,24 +1,12 @@
 import React, { FC, useEffect, useState } from "react";
 import debounce from 'lodash/debounce';
-
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Link, useParams, generatePath } from "react-router-dom";
-
 import { useQueryListDepartmentsIsMember } from "services/hooks/items/useDepartment";
-
 import projectImage from "assets/images/project.jpg";
-
-// ========== Global Components ==========
-// import { SearchInput, ButtonCreate, ButtonMore } from "shareComponents/common";
-
-// ========== App common Components ==========
 import { APP_ID, PROJECT_STAGE } from 'apis/localdb'
-
-// Utils
 import { dateLoadedPercentage, formatDate } from "utils/ppt";
 import 'views/document/styles/document.css'
-// import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
-// import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 
 const { REACT_APP_URL_S3, REACT_APP_URL_S3_PROJECT } = process.env;
 
@@ -48,12 +36,6 @@ const ProjectCategoryPage: FC = () => {
 	const type = getTypeValue(tab)
 	const isBudget = getBudgetValue(tab)
 	const [keyword, setKeyword] = useState('');
-	
-	// const { createPermission, updatePermission, deletePermission } = useCheckPerAccessScreen({
-	// 	appID: APP_ID.PCM.id,
-	// 	menuID: APP_ID.PCM.menuPcmApp.projects.id,
-	// 	type: "1"
-	// });
 
 	const { data: listDepartments, fetchNextPage, hasNextPage, totalRecord } = useQueryListDepartmentsIsMember({
 		limit: 20,
@@ -66,10 +48,6 @@ const ProjectCategoryPage: FC = () => {
 	useEffect(() => {
 		document.title = "Trixgo | Danh sách dự án";
 	}, []);
-
-	const onChangeSearch = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
-		setKeyword(e.target.value);
-	}, 600)
 
 	return (
 		<div className="flex flex-col text-sm text-black overflow-hidden h-full">

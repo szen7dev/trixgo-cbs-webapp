@@ -72,23 +72,9 @@ import { useSocket } from "services/hooks/useSocket";
 import { useTask, useCheckList, useChildTask, useCommentPcm } from "services/hooks/useTask";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
-import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 import { User } from "typings/user";
 
 const PcmDetailTask: FC = () => {
-  //_____Start history traffict
-  const payloadHistoryTraffic: any = {
-    appID: APP_ID.PCM.id,
-    menuID: APP_ID.PCM.menuPcmProject.subject.id,
-    type: "1"
-  };
-  const { createHistoryTraffics } = useHistoryTraffics();
-
-  useEffect(() => {
-    createHistoryTraffics({...payloadHistoryTraffic, type: 1});
-  }, []);
-  //_____End history traffict
-
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
   const { openModal, closeModal } = useModal();

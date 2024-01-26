@@ -12,22 +12,22 @@ import { usePcmProject } from "services/hooks/pcm/usePcmProject";
 import {
 	useQueryListDocument,
   } from "services/hooks/ppt/useDocument";
-import { APP_ID } from 'apis/localdb';
-import { useHistoryTraffics } from "services/hooks/auth/useAuth";
+// import { APP_ID } from 'apis/localdb';
+// import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 import { useQueryListDocumentFile } from "services/hooks/document/useDocumentFile";
 
 const ProjectDrawingPage: FC = () => {
-	//_____Start history traffict
-	const payloadHistoryTraffic: any = {
-		appID: APP_ID.PCM.id,
-		menuID: APP_ID.PCM.menuPcmProject.drawing.id,
-		type: "1"
-	  };
-	const { createHistoryTraffics } = useHistoryTraffics();
-	useEffect(() => {
-		createHistoryTraffics({...payloadHistoryTraffic, type: 1});
-	}, []);
-	//_____End history traffict
+	// //_____Start history traffict
+	// const payloadHistoryTraffic: any = {
+	// 	appID: APP_ID.PCM.id,
+	// 	menuID: APP_ID.PCM.menuPcmProject.drawing.id,
+	// 	type: "1"
+	//   };
+	// const { createHistoryTraffics } = useHistoryTraffics();
+	// useEffect(() => {
+	// 	createHistoryTraffics({...payloadHistoryTraffic, type: 1});
+	// }, []);
+	// //_____End history traffict
 
 	const [keyword, setKeyword] = useState("");
 	// ID của dự án

@@ -13,7 +13,6 @@ import { IncomeFormModal, ActionMenuTopBar } from "views/cmcs/shareComponents/co
 import { formatNumberMoney } from "utils/cmcs";
 import styles from 'views/cmcs/styles/styles.module.css';
 import { UseContractListIsMember, useCreateContractMutation, useUpdateContractMutation, useDeleteContractMutation, useContractCustom } from "services/hooks/cmcs/useContractIncome";
-import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
@@ -27,11 +26,6 @@ const CmcPartnerPage: FC = () => {
     type: "1"
   };
   const { updatePermission, deletePermission } = useCheckPerAccessScreen(payload);
-  // ---------
-  const { createHistoryTraffics } = useHistoryTraffics();
-  useEffect(() => {
-    createHistoryTraffics({...payload, type: 1});
-  }, []);
 
   const [itemChecked, setItemChecked] = useState('');
   const [keyword, setKeyword] = useState("");

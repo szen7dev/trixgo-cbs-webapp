@@ -22,7 +22,6 @@ import { createLinkAndClick } from 'utils';
  */
 import { useModal } from "services/hooks/useModal";
 import { useContractExpense, useContractCustom } from 'services/hooks/cmcs/useContractExpense';
-import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
 
@@ -35,11 +34,6 @@ const CmcExpensePage: FC = () => {
   };
 
   const { createPermission, updatePermission, deletePermission } = useCheckPerAccessScreen(payload);
-  // ---------
-  const { createHistoryTraffics } = useHistoryTraffics();
-  useEffect(() => {
-    createHistoryTraffics({...payload, type: 1});
-  }, []);
 
   const [itemChecked, setItemChecked] = useState('');
   const [keyword, setKeyword] = useState('');
