@@ -1233,6 +1233,10 @@ export const APP_ID = {
                 id: "65b3095bb8fc6b0013b8f37d",
                 name: "Gói trả trước"
             },
+            activity: {
+                id: "65b3095bb8fc6b0013b8f37d",
+                name: "Giao dịch gần đây"
+            },
         },
     },
 }
