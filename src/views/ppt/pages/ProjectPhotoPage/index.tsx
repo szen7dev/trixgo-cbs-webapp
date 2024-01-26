@@ -10,23 +10,9 @@ import ChartReportByTime from "./components/ChartReportByTime";
 import CardImage from "./components/CardImage";
 import { useQueryDetailDepartment } from "services/hooks/items/useDepartment";
 import { usePcmFile } from 'services/hooks/pcm/usePcm';
-import { APP_ID } from 'apis/localdb';
-import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 import { useProject } from 'services/hooks/items/useProject';
 
 const ProjectPhotoPage: FC = () => {
-	//_____Start history traffict
-	 const payloadHistoryTraffic: any = {
-		appID: APP_ID.PCM.id,
-		menuID: APP_ID.PCM.menuPcmProject.photo.id,
-		type: "1"
-	  };
-	const { createHistoryTraffics } = useHistoryTraffics();
-	useEffect(() => {
-		createHistoryTraffics({...payloadHistoryTraffic, type: 1});
-	}, []);
-	//_____End history traffict
-
 	const { id: projectID } = useParams<{ id: string }>();
 	// const [keyword, setKeyword] = useState('');
 	const [isShow, setIsShow] = useState(false);

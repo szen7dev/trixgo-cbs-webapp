@@ -25,24 +25,9 @@ import { useModal } from "services/hooks/useModal";
 import useCheckedList from "services/hooks/ppt/useCheckedList";
 import { useCashFlowPlan } from "services/hooks/financial/useCashFlow";
 import { convertCurrency } from "utils/converter";
-import { APP_ID } from 'apis/localdb';
-import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 
 export const CashFlowPage: FC = () => {
-  //_____Start history traffict
-	const payloadHistoryTraffic: any = {
-		appID: APP_ID.FINANCIAL.id,
-		menuID: APP_ID.FINANCIAL.menuFinancialApp.cashflow.id,
-		type: "1"
-  };
-	const { createHistoryTraffics } = useHistoryTraffics();
-	useEffect(() => {
-  	createHistoryTraffics({...payloadHistoryTraffic, type: 1});
-	}, []);
-	//_____End history traffict
-
   const location = useLocation();
-
   const { closeModal, openModal } = useModal();
   const [cashFlowIdSelected, setCashFlowIdSelected] = useState("");
   const [modalShow, setModalShow] = useState({

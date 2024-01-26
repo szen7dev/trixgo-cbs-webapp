@@ -13,7 +13,6 @@ import { Link } from "react-router-dom";
  * Hooks, Typings
  */
 import { useProject } from 'services/hooks/items/useProject';
-import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 
 import styles from "../../style.module.css";
 import 'swiper/swiper.min.css';
@@ -21,19 +20,11 @@ import 'swiper/swiper.min.css';
 /**
  * Components
  */
-import ReportTimeLine from "./components/ReportTimeLine";
-import ReportTotal from "./components/ReportTotal";
-import ReportActivity from "./components/RreportActivity";
 import ReportChart from "./components/ReportChart";
 import ReportContractor from "./components/ReportContractor";
-import ReportProfile from "./components/ReportProfile";
 import ReportMainWork from "./components/ReportMainWork";
 import ReportImage from "./components/ReportImage";
-import ReportBudget from "./components/ReportBudget";
-import ReportQuickReport from "./components/ReportQuickReport";
 import ReportContractStatus from "./components/ReportContractStatus";
-// import ReportMultipleChart from "./components/ReportMultipleChart";
-
 import { ModalZoomView } from "shareComponents/common";
 import { ContextModalPost } from "views/media/contexts/post";
 import { APP_ID } from 'apis/localdb';
@@ -62,19 +53,6 @@ const yearMin = yearCurrent-5;
 const ProjectDashboardPortfolioPage: FC = () => {
 	const { state, toggleModal } = useContext(ContextModalPost);
 	const [yearSelected, setYearSelected] = useState<number>(2022);
-
-	//_____Start history traffict
-	const payloadHistoryTraffic: any = {
-		appID: APP_ID.PCM.id,
-		menuID: APP_ID.PCM.menuPcmProject.dashboard.id,
-		type: "1"
-	};
-	const { createHistoryTraffics } = useHistoryTraffics();
-	useEffect(() => {
-		createHistoryTraffics({ ...payloadHistoryTraffic, type: 1 });
-	}, []);
-	//_____End history traffict
-
 	const { id: projectID } = useParams<{ id: string }>();
 	const { info: projectInfo } = useProject({
 		params: {

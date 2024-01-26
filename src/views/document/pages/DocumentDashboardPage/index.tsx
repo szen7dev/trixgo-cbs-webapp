@@ -1,82 +1,15 @@
-/**
- * ? Import orders:
- * ? 1. react importation
- * ? 2. third party libraries importation
- * ? 3. libs, services, data, api importation
- * ? 4. components, assets importation
- * ? 5. helpers, util importation
- * ? 6. typings importation
- */
 import { FC, forwardRef, useState, useEffect } from "react";
-import DatePicker from "react-datepicker";
 import moment from "moment";
-import cn from "classnames";
 import StatisticalChart from "./components/StatisticalChart";
-import iconComment from "assets/images/icon-chat-project.png";
 import SliderOver from "./components/SliderOver";
 import { useQueryListDepartments } from "services/hooks/items/useDepartment";
 import { DATE_FORMAT, APP_ID } from "apis/localdb";
 import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
-import { dateLoadedPercentage, convertToInternationalCurrencySystem } from 'utils/ppt';
+import { dateLoadedPercentage } from 'utils/ppt';
 import { formatNumberMoney } from "utils/cmcs"
 import { useQueryListProjectAndAmountDocument } from "services/hooks/document/useStatistical";
 import { Link, generatePath, useLocation } from "react-router-dom";
-import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 
-// interface IData {
-// 	id: number;
-// 	name: string;
-// 	director: string;
-// 	secretary: string;
-// 	actions: {
-// 		type: string;
-// 		updateAt: number;
-// 		name: string;
-// 	};
-// 	comment: {
-// 		user: string;
-// 		message: string;
-// 	};
-// 	mediaId: string;
-// }
-
-// const getType = (key: number) => {
-// 	switch (key) {
-// 		case 1:
-// 			return "đã cập nhật";
-// 		default:
-// 			return "đã tạo mới";
-// 	}
-// };
-
-// const getDate = (time: number): number => {
-// 	return new Date().setDate(new Date().getDate() - 1 * time);
-// };
-
-// const getClass = (date: number) => {
-// 	const time = Date.now() - date;
-// 	let n = 0;
-// 	switch (true) {
-// 		case time < 24 * 60 * 60 * 1000:
-// 			return { class: "bg-cbs-schedule-today", message: "Ngày nay" };
-// 		case time < 2 * 24 * 60 * 60 * 1000:
-// 			return { class: "bg-cbs-schedule-yestoday", message: "Ngày hôm qua" };
-// 		case time < 7 * 24 * 60 * 60 * 1000:
-// 			n = moment(Date.now()).diff(date, "day");
-// 			return { class: "bg-cbs-schedule-oneweek", message: n + " ngày" };
-// 		case time < 2 * 7 * 24 * 60 * 60 * 1000:
-// 			n = moment(Date.now()).diff(date, "weeks");
-// 			return { class: "bg-cbs-schedule-twoweek", message: n + " tuần" };
-// 		case time < 4 * 7 * 24 * 60 * 60 * 1000:
-// 			n = moment(Date.now()).diff(date, "weeks");
-// 			return { class: "bg-cbs-schedule-threeweek", message: n + " tuần" };
-// 		default:
-// 			n = moment(Date.now()).diff(date, "month") + 1;
-// 			return { class: "bg-cbs-schedule-threeweek", message: n + " tháng" };
-// 	}
-// };
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ButtonDatePicker = forwardRef<HTMLButtonElement, any>(
 	({ value, onClick }, ref) => (
 		<button
@@ -106,17 +39,6 @@ export const DocumentDashboardPage: FC = () => {
 		appID = APP_ID.PCM.id
 		menuID = APP_ID.PCM.menuPcmApp.dashboard_document.id
 	}
-	//_____Start history traffict
-	const payloadHistoryTraffic: any = {
-		appID,
-		menuID,
-		type: "1"
-	};
-	const { createHistoryTraffics } = useHistoryTraffics();
-	useEffect(() => {
-		createHistoryTraffics({...payloadHistoryTraffic, type: 1});
-	}, []);
-	//_____End history traffict
 
 	// --------- Check phân quyền
 	useCheckPerAccessScreen({

@@ -22,7 +22,6 @@ import {
 } from "services/hooks/ppt/useDocument";
 import { useQueryDetailDepartment } from "services/hooks/items/useDepartment";
 import { useMutationDocumentChild } from "services/hooks/document/useDocumentChild";
-import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 import { useDocumentCustom, useListFilterDocument } from "services/hooks/document/useDocument";
 
 // ========== Utils ==========
@@ -48,12 +47,6 @@ import {useDispatch} from "react-redux";
 import {useAppSelector} from "redux/reducer";
 import {setFilterDropdown, resetAllFilterAndKeyword} from "redux/reducer/DocumentProjectSlice";
 import { useQueryListCompany } from "services/hooks/useCompanies";
-
-const payloadHistoryTraffic: any = {
-    appID: APP_ID.PCM.id,
-    menuID: APP_ID.PCM.menuPcmProject.document.id,
-    type: "1"
-};
 
 export const DocumentProjectPage: FC = () => {
     const dispatch = useDispatch();
@@ -91,10 +84,7 @@ export const DocumentProjectPage: FC = () => {
 
     useEffect(() => {
         document.title = `${projectInfo.sign} | Hồ sơ văn bản`;
-    }, [projectInfo]);
-
-    //_____Start history traffict
-    const { createHistoryTraffics } = useHistoryTraffics();
+    }, [projectInfo])
 
     //_____End history traffict
     const location = useLocation()
@@ -224,11 +214,7 @@ export const DocumentProjectPage: FC = () => {
 
     const toggleModalConfirm = () => {
         setIsShow(!isShow);
-    };
-
-    useEffect(() => {
-        createHistoryTraffics({...payloadHistoryTraffic, type: 1});
-    }, []);
+    }
 
     /**
      * 
