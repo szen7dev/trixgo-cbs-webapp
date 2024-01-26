@@ -26,11 +26,10 @@ const StoreRouter: FC = () => {
         <>
             <StoreLayout>
                 <Switch>
-                    <ProtectedRoute
-                    exact
-                    path="/store/home"
-                    component={StoreHomePage}
-                    />
+                    <ProtectedRoute exact path="/store/dashboard" component={StoreHomePage}/>
+                    <ProtectedRoute exact path="/store/import" component={StoreHomePage}/>
+                    <ProtectedRoute exact path="/store/export" component={StoreHomePage}/>
+                    <ProtectedRoute exact path="/store/debt" component={StoreHomePage}/>
 
                     <LayoutSecondary pages={[
                         { id: '1', title: 'Nhóm chức năng', path: '/store/admin', navExact: true },

@@ -26,11 +26,9 @@ const CrmRouter: FC = () => {
         <>
             <CrmLayout>
                 <Switch>
-                    <ProtectedRoute
-                    exact
-                    path="/crm/home"
-                    component={CrmHomePage}
-                    />
+                    <ProtectedRoute exact path="/crm/home" component={CrmHomePage}/>
+                    <ProtectedRoute exact path="/crm/dashboard" component={CrmHomePage}/>
+                    <ProtectedRoute exact path="/crm/customer" component={CrmHomePage}/>
 
                     <LayoutSecondary pages={[
                         { id: '1', title: 'Nhóm chức năng', path: '/crm/admin', navExact: true },

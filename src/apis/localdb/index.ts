@@ -1178,7 +1178,7 @@ export const APP_ID = {
     WORKSHOP: {
         id: "61e049e7fdebf77b072d1b15",
         menuWorkshopApp: {
-            id: "",
+            id: "623f1e92e998e94feda0cd68",
             dashboard: {
                 id: "",
                 name: "Báo cáo quản trị"
@@ -1188,30 +1188,54 @@ export const APP_ID = {
     CRM: {
         id: "61e049f6fdebf77b072d1b16",
         menuCrmApp: {
-            id: "",
+            id: "623f1e40e998e94feda0cd66",
             dashboard: {
-                id: "",
+                id: "623f1e6de998e94feda0cd67",
                 name: "Báo cáo quản trị"
             },
-        },
-    },
-    PAYMENT: {
-        id: "5e4785eb8b50843d34481d49",
-        menuPaymentApp: {
-            id: "",
-            dashboard: {
-                id: "",
-                name: "Báo cáo quản trị"
+            customer: {
+                id: "65b307c66ed71b0012c947de",
+                name: "Danh sách khách hàng"
             },
         },
     },
     STORE: {
         id: "5f52341f880c2f26c8df8c10",
         menuStoreApp: {
-            id: "",
+            id: "65b3086853ee0e0012134257",
             dashboard: {
-                id: "",
+                id: "65b308b053ee0e001213425a",
                 name: "Báo cáo quản trị"
+            },
+            import: {
+                id: "65b308bf6ed71b0012c947e2",
+                name: "Nhập kho"
+            },
+            export: {
+                id: "65b308ca53ee0e001213425b",
+                name: "Xuất kho"
+            },
+            debt: {
+                id: "65b308ca53ee0e001213425b",
+                name: "Công nợ"
+            },
+        },
+    },
+    PAYMENT: {
+        id: "5e4785eb8b50843d34481d49",
+        menuPaymentApp: {
+            id: "65b30851b8fc6b0013b8f377",
+            dashboard: {
+                id: "65b3094b6ed71b0012c947e4",
+                name: "Báo cáo quản trị"
+            },
+            prepaid: {
+                id: "65b3095bb8fc6b0013b8f37d",
+                name: "Gói trả trước"
+            },
+            activity: {
+                id: "65b3095bb8fc6b0013b8f37d",
+                name: "Giao dịch gần đây"
             },
         },
     },

@@ -35,7 +35,7 @@ export const CrmLayout: FC<Props> = ({ children }) => {
         <LeftNavigate handleMenuEvent={handleMenuEvent} />
         <section className={"main-content-wrapper flex-1"}>
 
-          <MainHeaderV2 headerTitle={"Quản lý thanh toán"}>
+          <MainHeaderV2 headerTitle={"CRM"}>
             {/* <HomeHeaderContent /> */}
           </MainHeaderV2>
 
