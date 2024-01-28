@@ -1167,194 +1167,11 @@ export const ModalAddNewOrder: FC<Props> = () => {
                             />
                           </div>
                         </div>
-
-                        {/* <div className="flex justify-between pt-1">
-                          <div>
-                            <span>Nguồn doanh số</span>
-                            <div>
-                              <FormControl sx={{ marginTop: "-5px" }} >
-                                <RadioGroup
-                                  row
-                                  aria-labelledby="demo-row-radio-buttons-group-label"
-                                  name="salesChannel"
-                                >
-                                  <FormControlLabel
-                                    sx={{ marginLeft: "0", marginRight: "8px" }}
-                                    value="1"
-                                    control={
-                                      <Radio
-                                        style={{}}
-                                        icon={<img src={RadioEmpty} alt="" />}
-                                        checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => {
-                                          setFieldValue("sources", 1);
-                                        }}
-                                        checked={(values.sources === 1) ? true : false}
-                                      />
-                                    }
-                                    label={<span className="text-[13px]">Thông thường</span>}
-                                  />
-                                  <FormControlLabel
-                                    sx={{ marginLeft: "0", marginRight: "8px" }}
-                                    value="2"
-                                    control={
-                                      <Radio
-                                        style={{}}
-                                        icon={<img src={RadioEmpty} alt="" />}
-                                        checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => {
-                                          setFieldValue("sources", 2);
-                                        }}
-                                        checked={(values.sources === 2) ? true : false}
-                                      />
-                                    }
-                                    label={<span className="text-[13px]" title="Video">Video</span>}
-                                  />
-                                  <FormControlLabel
-                                    sx={{ marginLeft: "0", marginRight: "8px" }}
-                                    value="3"
-                                    control={
-                                      <Radio
-                                        style={{}}
-                                        icon={<img src={RadioEmpty} alt="" />}
-                                        checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => {
-                                          setFieldValue("sources", 3);
-                                        }}
-                                        checked={(values.sources === 3) ? true : false}
-                                      />
-                                    }
-                                    label={<span className="text-[13px]" title="Affiliate">Affiliate</span>}
-                                  />
-                                  <FormControlLabel
-                                    sx={{ marginLeft: "0", marginRight: "8px" }}
-                                    value="4"
-                                    control={
-                                      <Radio
-                                        style={{}}
-                                        icon={<img src={RadioEmpty} alt="" />}
-                                        checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => {
-                                          setFieldValue("sources", 4);
-                                        }}
-                                        checked={(values.sources === 4) ? true : false}
-                                      />
-                                    }
-                                    label={<span className="text-[13px]" title="Live Stream">Live Stream</span>}
-                                  />
-                                  <FormControlLabel
-                                    sx={{ marginLeft: "0", marginRight: "8px" }}
-                                    value="5"
-                                    control={
-                                      <Radio
-                                        style={{}}
-                                        icon={<img src={RadioEmpty} alt="" />}
-                                        checkedIcon={<img src={RadioChecked} alt="" />}
-                                        onChange={() => {
-                                          setFieldValue("sources", 5);
-                                        }}
-                                        checked={(values.sources === 5) ? true : false}
-                                      />
-                                    }
-                                    label={<span className="text-[13px]" title="Quảng cáo">Quảng cáo</span>}
-                                  />
-                                </RadioGroup>
-                              </FormControl>
-                            </div>
-                            <ErrorMessage
-                              name="sources"
-                              component="div"
-                              className="font-normal text-xs text-negative pl-3"
-                            />
-                          </div>
-                          <div className={"w-1/4 flex items-start pl-3"}>
-                            <div className={"h-full text-left flex items-center mr-2 w-1/5 h-full"}>Ngày</div>
-                            <DatePicker
-                              wrapperClassName={"w-auto"}
-                              name="date"
-                              showTimeSelect
-                              selected={(values.date && new Date(values.date)) || new Date()}
-                              timeIntervals={1}
-                              timeFormat="HH:mm"
-                              customInput={
-                                <div className={"relative w-auto ml-2 min-h-fit"}>
-                                  <Field
-                                    readOnly
-                                    placeholder={"Thời gian đơn hàng"}
-                                    type="text"
-                                    name="date"
-                                    className="focus:outline-none placeholder:text-sm"
-                                    value={
-                                      values.date
-                                        ? moment(values.date).format(
-                                          "DD/MM/YYYY HH:mm"
-                                        )
-                                        : ""
-                                    }
-                                  />
-                                </div>
-                              }
-                              onChange={(date: Date | null) => {
-                                setFieldValue("date", date)
-                              }
-                              }
-                            />
-                            <ErrorMessage
-                              name="date"
-                              component="span"
-                              className="font-normal leading-7 text-sm text-negative"
-                            />
-                          </div>
-                          <div className={"w-1/4 flex items-start pl-3"}>
-                            <div className={"h-full text-left flex items-center mr-2 w-1/5 h-full"}>Affiliate</div>
-                            <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
-                              <DropdownSearchable
-                                onchangeValue={(value: any) => {
-                                  setAffiliateID(value.id);
-                                  setFieldValue("affiliateID", value.id);
-                                }}
-                                onClearData={() => {
-                                  setFieldValue("affiliateID", "")
-                                }}
-                                onSearchInputChange={
-                                  debounce(
-                                    (value) => setSearchContact(value),
-                                    200)
-                                }
-                                placeholder={"Mã Affiliate"}
-                                className={"max-w-full h-full flex-1"}
-                                focusedClass={"border-b border-primary"}
-                                allowClearValueSingleInput={true}
-                                showTriangle={false}
-                                maxWidthInput="max-w-full"
-                                renderSelectedItem={(item: any) => (
-                                  <div className="max-w-full">
-                                    <p className={"truncate"}>{item.text}</p>
-                                  </div>
-                                )}
-                                data={contacts.map(contact => ({
-                                  label: `${contact.name}-${contact.phone}`,
-                                  value: contact._id,
-                                }))}
-                                formatItem={{
-                                  id: "value",
-                                  text: "label",
-                                }}
-                                inlineSearch={true}
-                              />
-                              <ErrorMessage
-                                name="affiliateID"
-                                component="div"
-                                className="font-normal text-xs text-negative pl-3"
-                              />
-                            </div>
-                          </div>
-                        </div> */}
-
                       </div>
                       <div className="flex justify-between	gap-2 border-t-0.5 border-b-0.5 px-3">
                         <div className="flex justify-between	gap-2 w-1/2">
-                          <div className={"flex w-3/5 py-4 "}>
+                          
+                          <div className={"flex w-2/10 py-4 "}>
                             <div className={" flex items-start"}>
                               <div className={"h-full text-left text-gray-500 flex items-center mr-2 "}>Tên (*)</div>
                               <div className={"w-full flex-1"}>
@@ -1373,12 +1190,13 @@ export const ModalAddNewOrder: FC<Props> = () => {
                               </div>
                             </div>
                           </div>
-                          <div className={"flex w-2/5 py-4"}>
+
+                          <div className={"flex w-2/10 py-4"}>
                             <div className={" flex items-start"}>
                               <div className={"h-full text-left  text-gray-500 flex items-center mr-2 "}>Đơn app</div>
                               <div className={"w-full flex-1"}>
                                 <input
-                                  placeholder="Nhập nội dung...."
+                                  placeholder="Nhập mã..."
                                   type="text"
                                   className="border-0 flex-grow outline-none px-1 mt-0.5 w-3/4"
                                   onChange={(event) => setFieldValue("appOrderSign", event.target.value)}
@@ -1387,13 +1205,63 @@ export const ModalAddNewOrder: FC<Props> = () => {
                             </div>
                           </div>
                         </div>
-                        <div className=" w-1/2">
+
+                        <div className={"flex w-4/10 py-4"}>
+                            <div className={" flex items-start"}>
+                              <div className={"h-full text-left  text-gray-500 flex items-center mr-2 "}>Affiliate</div>
+                              <div className={"w-full flex-1"}>
+                                  <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
+                                    <DropdownSearchable
+                                      onchangeValue={(value: any) => {
+                                        setAffiliateID(value.id);
+                                        setFieldValue("affiliateID", value.id);
+                                      }}
+                                      onClearData={() => {
+                                        setFieldValue("affiliateID", "")
+                                      }}
+                                      onSearchInputChange={
+                                        debounce(
+                                          (value) => setSearchContact(value),
+                                          200)
+                                      }
+                                      placeholder={"Nhập Affiliate"}
+                                      className={"max-w-full h-full flex-1"}
+                                      focusedClass={"border-b border-primary"}
+                                      allowClearValueSingleInput={true}
+                                      showTriangle={false}
+                                      maxWidthInput="max-w-full"
+                                      renderSelectedItem={(item: any) => (
+                                        <div className="max-w-full">
+                                          <p className={"truncate"}>{item.text}</p>
+                                        </div>
+                                      )}
+                                      data={contacts.map(contact => ({
+                                        label: `${contact.name}-${contact.phone}`,
+                                        value: contact._id,
+                                      }))}
+                                      formatItem={{
+                                        id: "value",
+                                        text: "label",
+                                      }}
+                                      inlineSearch={true}
+                                    />
+                                    <ErrorMessage
+                                      name="affiliateID"
+                                      component="div"
+                                      className="font-normal text-xs text-negative pl-3"
+                                    />
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                        
+                        <div className="">
                           <div className={"flex w-full py-4"}>
                             <div className={" flex items-start"}>
                               <div className={"h-full text-left  text-gray-500 flex items-center mr-2 "}>Ghi chú</div>
                               <div className={"w-full flex-1"}>
                                 <input
-                                  placeholder="Nhập nội dung ...."
+                                  placeholder="Nhập ghi chú..."
                                   type="text"
                                   className="border-0 flex-grow outline-none px-3 mt-0.5 w-3/4"
                                   onChange={(event) => setFieldValue("note", event.target.value)}
