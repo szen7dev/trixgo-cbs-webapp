@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import moment from "moment";
@@ -15,39 +15,45 @@ import TimeRangeDropdown from "shareComponents/common/TimeRangeDropdown";
 import TriangleDown from "assets/icons/TriangleDown";
 import downloadIcon from "assets/images/icons8-download-64.svg";
 import PaginateV2 from "../../../../shareComponents/common/PaginateV2";
-import {debounce} from "lodash";
-import {useDispatch} from "react-redux";
-import {useAppSelector} from "redux/reducer";
-import {setFilterDropdown} from "redux/reducer/DocumentProjectSlice";
+import { debounce } from "lodash";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "redux/reducer";
+import { setFilterDropdown } from "redux/reducer/DocumentProjectSlice";
 
 // ========== Hooks ========== //
-import { useHumanCustom, useListFilterHuman} from "services/hooks/human/useHuman";
-import {useProjectCustom} from "services/hooks/items/useProject";
+import { useHumanCustom, useListFilterHuman } from "services/hooks/human/useHuman";
+import { useProjectCustom } from "services/hooks/items/useProject";
+import { useSocket } from "services/hooks/useSocket";
+import { useAuth } from "services/hooks/auth/useAuth";
+
 interface HumanHomePageProps {
     type?: number
-  }
+}
+
+type PaginateHandle = React.ElementRef<typeof PaginateV2>;
+type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
+type TimeRangeHandle = React.ElementRef<typeof TimeRangeDropdown>;
 
 export const HumanHomePage: FC<HumanHomePageProps> = ({ type = 1 }) => {
     const [keyword, setKeyword] = useState('');
 
     const dispatch = useDispatch();
-    const {keywordInput} = useAppSelector(
+    const { keywordInput } = useAppSelector(
         (state) => state.documentProject.data
     );
+
+    const { current: socket }: any = useSocket();
+    const { user } = useAuth();
 
     useEffect(() => {
         setPageIndex(0);
         ref.current&&ref.current.resetPaginate();
     }, [keywordInput]);
 
-    type PaginateHandle = React.ElementRef<typeof PaginateV2>;
-    type DropdownHandle = React.ElementRef<typeof DropdownSearchableV2>;
-    type TimeRangeHandle = React.ElementRef<typeof TimeRangeDropdown>;
-
-    const ref = React.useRef<PaginateHandle>(null);
-    const datahubRef = React.useRef<DropdownHandle>(null);
-    const typeRef = React.useRef<DropdownHandle>(null);
-    const fromToRef = React.useRef<TimeRangeHandle>(null);
+    const ref = useRef<PaginateHandle>(null);
+    const datahubRef = useRef<DropdownHandle>(null);
+    const typeRef = useRef<DropdownHandle>(null);
+    const fromToRef = useRef<TimeRangeHandle>(null);
 
     const [pageIndex, setPageIndex] = useState(0);
 
@@ -69,7 +75,10 @@ export const HumanHomePage: FC<HumanHomePageProps> = ({ type = 1 }) => {
 
     const [fromToDate, setFromToDate] = useState({fromDate: "", toDate: ""})
 
-    const { listProjectsUserIsMember } = useProjectCustom({ paramsProjectsUserIsMember: { keyword: projectKeyword }, isFetchProjectsUserIsMember: true });
+    const { listProjectsUserIsMember } = useProjectCustom({
+        paramsProjectsUserIsMember: { keyword: projectKeyword },
+        isFetchProjectsUserIsMember: true
+    });
 
     const { listHumanWithPager, isLoading, isFetching, totalRecord, totalPage, fetchNextPageHuman, hasNextPage, lastestIDs } = useListFilterHuman({
         params: {
@@ -105,13 +114,9 @@ export const HumanHomePage: FC<HumanHomePageProps> = ({ type = 1 }) => {
             if(error) {
                 return toast.warn(data?.message);
             }
-
-            data && createLinkAndClick(data, '_self');
         } catch (error: any) {
             toast.error(error.message)
-        } finally {
-            setStateExport({ isExporting: false });
-        }
+        } 
     }
 
     const handleExportByFilter = async () => {
@@ -139,6 +144,25 @@ export const HumanHomePage: FC<HumanHomePageProps> = ({ type = 1 }) => {
             setStateExport({ isExporting: false });
         }
     }
+
+    const handleSocketExportAllContacts = ({ data, error }: any) => {
+        setStateExport({ isExporting: false });
+        if(error) return toast.error("Can't download data");
+
+        const { receiverID, link } = data;
+        if(user?._id !== receiverID) return;
+        link && createLinkAndClick(link, '_self');
+    }
+
+  useEffect(() => {
+    if(!socket) return;
+
+    socket.on("ITEM_SSC_EXPORT_ALL_CONTACTS", handleSocketExportAllContacts);
+
+    return () => {
+      socket.off("ITEM_SSC_EXPORT_ALL_CONTACTS", handleSocketExportAllContacts);
+    }
+  }, [socket])
 
     if(stateExport.isExporting) {
         return <Loader className="border-primary" />

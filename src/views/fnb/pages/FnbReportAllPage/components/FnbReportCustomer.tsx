@@ -1,29 +1,17 @@
 /*=====1.LIBRARY=====*/
-import React, { FC, useCallback, useState, useEffect } from "react";
-import { Link, useHistory, useParams } from "react-router-dom";
+import { FC, useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
-import debounce from "lodash/debounce";
-import moment from "moment";
-import { formatNumberMoney } from "utils/converter";
-import API from "apis/repository";
-import { convertObToUrl } from "utils";
 
 /*=====2.CSS=====*/
 
 /*=====3.ICONS=====*/
-import PencilIcon from "assets/images/icons8-pencil-96.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
-import PaginateV2 from "shareComponents/common/PaginateV2";
-import { ModalZoomView } from "shareComponents/common";
 
 /*=====5.TYPINGS=====*/
-import { ImageProps } from "typings/common";
 
 /*=====6.HOOKS/APIS=====*/
-import { APP_ID } from "apis/localdb";
-import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
-import { useFnbMistake } from 'services/hooks/fnb/useFnbMistake';
 import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
 
 /*=====7.OTHER=====*/
@@ -36,23 +24,6 @@ export const FnbReportCustomer: FC = () => {
 		document.title = "Seller";
 	}, []);
 	const history = useHistory();
-
-	// useEffect(() => {
-    //     const fetchOrders = async () => {
-    //         const response = await API.get(
-    //             `/api/fnb/orders/get-list-by-property?option=8`,
-    //         );
-    //         const { data } = response?.data;
-	// 		// console.log(data)
-
-    //         if (response.status !== 200) return;
-
-    //         setOrders(data)
-    //     }
-
-    //     fetchOrders();
-    // }, [])
-	// console.log(getOrders)
 
 	/**
 	 * LÀM VIỆC VỚI EXCEL
@@ -113,9 +84,9 @@ export const FnbReportCustomer: FC = () => {
 				<button onClick={handleExportExcel2} title="Tải dữ liệu Excel">
 					Tải số liệu khách hàng
 				</button>
-				<button onClick={handleExportExcel} title="Tải dữ liệu Excel">
+				{/* <button onClick={handleExportExcel} title="Tải dữ liệu Excel">
 					Tải dữ liệu Excel
-				</button>
+				</button> */}
 			</header>
 
 			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
@@ -183,46 +154,6 @@ export const FnbReportCustomer: FC = () => {
 						</th>
 					</tr>
 				</thead>
-				{/* {
-					getOrders.map((item: any, i: any) => (
-						<tr key={item._id} className="text-[14px]">
-							<td className={"p-2 border-0.5 border-primary-border text-cente"}>{i+1}</td>
-							<td className={"p-2 border-0.5 border-primary-border "}>
-								{item?._id?.customer?.name}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border "}>
-								{item?._id?.customer?.funda?.name}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border "}>
-								{item?._id?.customer?.phone}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border text-right"}>
-								{formatNumberMoney(item?.total||0)}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border text-right"}>
-								{formatNumberMoney(item?.discount||0)}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border text-right"}>
-								{formatNumberMoney(item?.salesoff||0)}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border text-right"}>
-								{formatNumberMoney(item?.credit||0)}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border text-right"}>
-								{formatNumberMoney(item?.amount||0)}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border text-right"}>
-								{formatNumberMoney(item?.numberOfOrders||0)}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border text-right"}>
-								{formatNumberMoney(item?.numberOfProducts||0)}
-							</td>
-							<td className={"p-2 border-0.5 border-primary-border"}>
-								{item?._id?.customer?.note}
-							</td>
-						</tr>
-					))
-				} */}
 			</table>
 		</main>
 	)
