@@ -110,7 +110,7 @@ const CostAnalysis: FC = () => {
     }
   }
 
-  const handleStatusUpdateAnalyseCost = (data: any) => {
+  const handleSocketsUpdateStatusAnalyseCost = (data: any) => {
     if(user?._id !== data?.receiverID) return;
 
     setVouchers((vouchers: any) => {
@@ -132,10 +132,10 @@ const CostAnalysis: FC = () => {
   useEffect(() => {
     if(!socket) return;
 
-    socket.on("ACCOUNTING_SSC_STATUS_UPDATE_COST_ANALYSIS", handleStatusUpdateAnalyseCost);
+    socket.on("ACCOUNTING_SSC_STATUS_UPDATE_COST_ANALYSIS", handleSocketsUpdateStatusAnalyseCost);
 
     return () => {
-      socket.off("ACCOUNTING_SSC_STATUS_UPDATE_COST_ANALYSIS", handleStatusUpdateAnalyseCost);
+      socket.off("ACCOUNTING_SSC_STATUS_UPDATE_COST_ANALYSIS", handleSocketsUpdateStatusAnalyseCost);
     }
   }, [socket])
 
