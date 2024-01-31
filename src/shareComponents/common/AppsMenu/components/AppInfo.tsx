@@ -25,7 +25,7 @@ export const APP_INFO = new Map([
     /* Ứng dụng Payment */
     ['5e4785eb8b50843d34481d49', {
         key: "5e4785eb8b50843d34481d49",
-        name: "Thanh toán",
+        name: "Payment",
         icon: paymentLogo,
         route: '/payment/home'
     }],
@@ -67,21 +67,21 @@ export const APP_INFO = new Map([
     /* Ứng dụng Accounting */
     ['61e049aefdebf77b072d1b12', {
         key: "61e049aefdebf77b072d1b12",
-        name: "Kế toán quản trị",
+        name: "Kế toán",
         icon: accountingLogo,
         route: '/accounting/home'
     }],
     /* Ứng dụng Owner */
     ['61e04989fdebf77b072d1b10', {
         key: "61e04989fdebf77b072d1b10",
-        name: "Quản trị viên doanh nghiệp",
+        name: "Quản trị viên",
         icon: ownerLogo,
         route: '/owner/home'
     }],
     /* Ứng dụng Bán hàng */
     ['61e04971fdebf77b072d1b0f', {
         key: "61e04971fdebf77b072d1b0f",
-        name: "Bán hàng",
+        name: "SellPose",
         icon: fnbLogo,
         route: '/fnb/home'
     }],
@@ -109,7 +109,7 @@ export const APP_INFO = new Map([
     /* Ứng dụng Quản lý hồ sơ văn bản */
     ['5e47867080019357cce04746', {
         key: "5e47867080019357cce04746",
-        name: "Quản lý hồ sơ văn bản",
+        name: "Quản lý hồ sơ",
         icon: documentLogo,
         route: '/document/home'
     }],
