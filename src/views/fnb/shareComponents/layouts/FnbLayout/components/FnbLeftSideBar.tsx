@@ -34,10 +34,12 @@ import { IconButton, InputBase, Paper } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import { useModal } from "services/hooks/useModal";
 import { ModalAddNewOrder } from "./ModalAddNewOrder";
+import { ModalAddNewOrder2 } from "./ModalAddNewOrder2";
 import { useDispatch } from "react-redux";
 import { resetQueryFnb } from "redux/reducer/FnbSlice";
 
 export const FnbLeftSideBar: FC = () => {
+    const { user } = useAuth();
     const { openModal } = useModal();
     const dispath = useDispatch();
     const [menuShowList, setMenuState] = useState(false);
@@ -133,7 +135,7 @@ export const FnbLeftSideBar: FC = () => {
                                     className="w-full text-left transition-all transform bg-primary-light shadow-xl rounded my-6 align-top inline-block"
                                     style={{ maxWidth: " calc(100vw - 50px)" }}
                                 >
-                                    <ModalAddNewOrder />
+                                   {user?.email == 'kiemthuvien.dcop.trx@gmail.com' ? <ModalAddNewOrder2 /> : <ModalAddNewOrder />}  
                                 </div>
                             )
                         }
