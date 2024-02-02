@@ -373,6 +373,11 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                                 Ghi chú
                             </div>
                         </th>
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Hình ảnh
+                            </div>
+                        </th>
                     </tr>
                 </thead>
 
@@ -424,6 +429,9 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                             <td className="py-1 px-2">
                                 {item?.description}
                                 <p className="text-primary-gray text-[12px]"><i>{item.note}</i></p>
+                            </td>
+                            <td className="py-1 px-2">
+                               
                             </td>
                         </tr>
                     )) : <></>}
