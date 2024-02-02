@@ -308,9 +308,14 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                                 />
                             </div>
                         </th>
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Phân loại
+                            </div>
+                        </th>
                         <th className="w-1/6 py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Nội dung
+                                Danh mục/Danh mục cha
                             </div>
                         </th>
                         <th className="py-1">
@@ -330,7 +335,27 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                         </th>
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Đơn giá xuất bán
+                                Đơn giá bán
+                            </div>
+                        </th>
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Đơn giá bán M-Off
+                            </div>
+                        </th>
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Đơn giá bán M-App
+                            </div>
+                        </th>
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Đơn giá bán L-Off
+                            </div>
+                        </th>
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Đơn giá bán L-App
                             </div>
                         </th>
                         <th className="py-1">
@@ -362,6 +387,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                                     onChange={() => onClickCheckButton(item)}
                                 />
                             </td>
+                            <td className="py-1 px-2"></td>
                             <td className="py-1 px-2">
                                 <Link to={`/item/goods/${item._id}`}>
                                     {item.amountChilds>0? <b>{item?.name}({item.amountChilds})</b>: item.name }
@@ -376,6 +402,18 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                             </td>
                             <td className="py-1 px-2 text-right">
                                 {formatNumberMoney(item?.sellingUnitprice)}
+                            </td>
+                            <td className="py-1 px-2 text-right">
+                                {formatNumberMoney(item?.unitPrice)}
+                            </td>
+                            <td className="py-1 px-2 text-right">
+                                {formatNumberMoney(item?.unitPrice2)}
+                            </td>
+                            <td className="py-1 px-2 text-right">
+                                {formatNumberMoney(item?.unitPrice3)}
+                            </td>
+                            <td className="py-1 px-2 text-right">
+                                {formatNumberMoney(item?.unitPrice4)}
                             </td>
                             <td className="py-1 px-2">
                                 {item?.convert?.name} -  {item?.convert?.unit}

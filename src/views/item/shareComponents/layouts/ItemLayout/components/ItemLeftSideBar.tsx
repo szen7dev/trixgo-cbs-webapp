@@ -34,7 +34,7 @@ export const ItemLeftSideBar: FC = () => {
             title="Goods"
           >
              <img  width={'7px'} src={iconFolder}  alt="Menu item"/>
-            <span className={"flex-1 ml-2 text-left text-[14px]"}>Hàng hóa nguyên liệu</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Sản phẩm, dịch vụ</span>
           </NavLink>
           <NavLink
             to="/item/fundas"
