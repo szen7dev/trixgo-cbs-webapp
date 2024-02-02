@@ -100,9 +100,7 @@ export const ItemInCartMenu : FC<any> = ({item, service, handleChooseVariant, ha
                                 defaultValue={item.note}
                             ></textarea>
                         </div>
-                        {/* <div className="flex gap-2 justify-end"> */}
                         <div className="flex justify-end">
-                            {/* <span>Số lượng: </span> */}
                             <div className="flex gap-2 justify-end items-center">
                                 <button
                                     onClick={() => handleRemoveItem(item)}

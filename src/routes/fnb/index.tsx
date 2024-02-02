@@ -15,6 +15,7 @@ import { FnbReportPage } from "views/fnb/pages/FnbReportPage/index";
 import { FnbReportAllPage, FnbReportMistake, FnbReportCustomer, FnbReportNonameOrder, FnbReportSallary, FnbReportRevenue } from "views/fnb/pages/FnbReportAllPage/index";
 import { FnbLayout } from "views/fnb/shareComponents/layouts/FnbLayout";
 import { FnbBillOrder } from "views/fnb/pages/FnbBill/FnbBillOrder";
+import { FnbBillOrder2 } from "views/fnb/pages/FnbBill/FnbBillOrder2";
 import { FnbBillList } from "views/fnb/pages/FnbBill/FnbBillList";
 import LayoutSecondary from "views/fnb/shareComponents/layouts/LayoutSecondary";
 
@@ -58,6 +59,14 @@ const FnbRouter: FC = () => {
                 path="/fnb/home/:orderID/print/1"
                 component={() =>
                     <FnbBillOrder />
+                }
+            />
+
+            <Route
+                exact
+                path="/fnb/home/:orderID/print/3"
+                component={() =>
+                    <FnbBillOrder2 />
                 }
             />
             <Route

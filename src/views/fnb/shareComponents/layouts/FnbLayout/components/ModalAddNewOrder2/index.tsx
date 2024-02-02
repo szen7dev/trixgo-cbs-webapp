@@ -167,9 +167,11 @@ export const ModalAddNewOrder2: FC<Props> = () => {
      */
     const fetchCateProduct = async () => {
       const response = await API.get(
-        `/api/fnb/products?isParent=1&limit=50&fundaID=${fundaID}`,
+        `/api/item/goods?isParent=1&limit=50&fundaID=${fundaID}`,
       );
       const { data, status } = response?.data;
+
+      console.log(data)
 
       if (status !== 200) return;
       setProductIsParent(data?.listRecords || []);
@@ -205,7 +207,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
    */
   const fetchProducts = async () => {
     const response: any = await API.get(
-      `/api/fnb/products?${convertObToUrl({
+      `/api/item/goods?${convertObToUrl({
         type: 1,
         status: 1,
         limit: 50,
@@ -221,7 +223,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
     if (status !== 200) return;
 
     const response2 = await API.get(
-      `/api/fnb/products?type=2&status=1&limit=50&fundaID=${fundaID}`,
+      `/api/item/goods?type=2&status=1&limit=50&fundaID=${fundaID}`,
     );
 
     const productsAsync = data.listRecords?.map?.(async (product: any) => {
@@ -333,7 +335,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
       // console.log({ dataAddNewOrder })
 
       const { data, status } = await API.post(
-        `/api/fnb/orders`,
+        `/api/fnb/orders?type=2`,
         dataAddNewOrder
       );
       // console.log({ data, status })
@@ -356,7 +358,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
       })
 
       queryClient.refetchQueries('fnb-order-list');
-      history.push(`/fnb/home/${data?.data?._id}/print/1`);
+      history.push(`/fnb/home/${data?.data?._id}/print/3`);
 
       // return toast.success('Tạo đơn thành công',{
       //   position: toast.POSITION.BOTTOM_RIGHT,
