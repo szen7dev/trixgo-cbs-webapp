@@ -1,30 +1,15 @@
 import { FC, useEffect, useRef, useState } from "react";
-import { Link, useParams, useHistory } from "react-router-dom";
-import classNames from "classnames";
+import { Link, useParams } from "react-router-dom";
 import moment from "moment";
-import { toast } from "react-toastify";
-
-/**
- * Assets, Components
- */
-// import styles from "../../styles/fnb_print.module.css";
 import { Loader } from "shareComponents/common";
-
-/**
- * Utils
- */
-
-/**
- * Hooks, Types
- */
 import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
-import { formatNumberMoney, convertCurrency } from "utils/converter";
+import { formatNumberMoney } from "utils/converter";
 import API from "apis/repository";
 import { convertObToUrl } from "utils";
 import usePrintComponent from "services/hooks/ppt/usePrintComponent";
 import { useAuth } from "services/hooks/auth/useAuth";
 
-import { FNB_CHANNEL, FNB_TOPPING, FNB_SIZE, FNB_SUGAR, FNB_ICE } from "apis/localdb";
+import { FNB_CHANNEL, FNB_SIZE, FNB_SUGAR, FNB_ICE } from "apis/localdb";
 
 const FnbPrintBillListPage: FC = () => {
   const { user } = useAuth();
@@ -75,7 +60,6 @@ useEffect(() => {
 }, [info]);
 const componentRef = useRef(null);
 usePrintComponent({ ref: componentRef });
-console.log(orderProducts)
 
 let totalProd = 0
 orderProducts.map((item: any, index: number) => {
@@ -83,7 +67,6 @@ orderProducts.map((item: any, index: number) => {
     totalProd = Number(totalProd) + 1
   }
 })
-// console.log({totalProd})
 
 useEffect(() => {
   if (orderProducts && orderProducts.length) {
@@ -119,7 +102,6 @@ if (isLoadingInfo) return <Loader className="border-primary" />;
                 </style>
                   { 
                     orderProducts.map((item: any, index: number) => {
-                      // console.log(item)
                         let currentIndex = 0 
                         currentIndex = Number(currentIndex) + Number(index)
 
@@ -135,26 +117,17 @@ if (isLoadingInfo) return <Loader className="border-primary" />;
 
                         const quantity = [];
                         for (let i = 1; i <= Number(item.quantity); i++) {
-                            // currentIndex = Number(currentIndex) + Number(i)
-                            // console.log({currentIndex})
-                            // console.log('==================')
                             quantity.push(i);
                         }
-                        // console.log(quantity)
 
                         return (
                             <div
                               key={index}
                               className =""
-                              // style={{ height: "30mm", width: "100%" }}
                             >
                                 {
                                       quantity.map((e, subindex) => {
                                         currentIndex = Number(currentIndex) + Number(1)
-                                        // console.log({subindex})
-                                        // console.log({currentIndex})
-                                        // console.log('==================')
-                                        
                                           return (
                                             <table key={`${e}.${item._id}`} style={{ height: "30mm", width: "50mm" }}>
                                               <tbody>

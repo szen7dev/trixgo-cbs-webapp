@@ -49,6 +49,7 @@ const PcmPrintTaskTypeThreePage = lazy(() => import('views/pcm/pages/PcmPrintTas
 const PcmPrintTaskTypeFourPage = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeFour'))
 const PcmPrintTaskTypeFivePage = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeFive'))
 const FnbPrintBillListPage = lazy(() => import('views/fnb/pages/FnbPrintBillListPage'))
+const FnbPrintBillListPage2 = lazy(() => import('views/fnb/pages/FnbPrintBillListPage2'))
 
 const Routes: FC = () => {
     const { t } = useTranslation()
@@ -75,6 +76,7 @@ const Routes: FC = () => {
                                 <Route exact path="/pcm/detail/:id/print/4" component={PcmPrintTaskTypeFourPage} />
                                 <Route exact path="/pcm/detail/:id/print/5" component={PcmPrintTaskTypeFivePage} />
                                 <Route exact path="/fnb/home/:orderID/print/2" component={FnbPrintBillListPage} />
+                                <Route exact path="/fnb/home/:orderID/print/4" component={FnbPrintBillListPage2} />
 
                                 {/* =====AUTHENTICATION===== */}
                                 <Route path="/(authentication|login)/:path?">

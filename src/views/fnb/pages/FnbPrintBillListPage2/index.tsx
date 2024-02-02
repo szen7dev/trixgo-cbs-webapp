@@ -1,0 +1,168 @@
+import { FC, useEffect, useRef, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import moment from "moment";
+import { Loader } from "shareComponents/common";
+import { useFnbOrder } from 'services/hooks/fnb/useFnbOrder';
+import { formatNumberMoney } from "utils/converter";
+import API from "apis/repository";
+import { convertObToUrl } from "utils";
+import usePrintComponent from "services/hooks/ppt/usePrintComponent";
+import { FNB_CHANNEL, FNB_SIZE, FNB_SUGAR, FNB_ICE } from "apis/localdb";
+
+const FnbPrintBillListPage2: FC = () => {
+  const { orderID } = useParams<{ orderID: string }>()
+  const [orderProducts, setOrderProducts] = useState([]);
+
+  const { info, isLoadingInfo } = useFnbOrder(
+    {
+        params: {
+            limit: 200,
+            orderID,
+            populates: JSON.stringify({
+                path: 'funda shift customer userCreate',
+                select: "name sign address fullname phone bankAccount",
+            })
+        },
+        isFetchList: false,
+        isFetchInfo: true
+    }
+)
+
+useEffect(() => {
+    const fetchOrderProducts = async () => {
+        const response = await API.get(
+            `/api/fnb/order_goods?${convertObToUrl({
+                orderID,
+                populates: JSON.stringify({
+                    path: 'goods subGoods',
+                    populate: {
+                        path: 'images',
+                    }
+                })
+            })}`,
+        );
+        const { data, status } = response?.data;
+
+        if (status !== 200) return;
+
+        setOrderProducts(data.listRecords)
+    }
+
+    fetchOrderProducts();
+}, [])
+
+useEffect(() => {
+  if (isLoadingInfo) return;
+  document.title = `SellPose`;
+}, [info]);
+const componentRef = useRef(null);
+usePrintComponent({ ref: componentRef });
+
+let totalProd = 0
+orderProducts.map((item: any, index: number) => {
+  for (let i = 1; i <= Number(item.quantity); i++) {
+    totalProd = Number(totalProd) + 1
+  }
+})
+
+useEffect(() => {
+  if (orderProducts && orderProducts.length) {
+      setTimeout(function(){
+          window.print();
+      },1000);
+  }
+}, [orderProducts]);
+
+if (isLoadingInfo) return <Loader className="border-primary" />;
+
+  return (
+    <div className="bg-cbs-gray">
+      <div className="">
+        <div className="bg-white mx-auto shadow-cbs-md" style={{ width: "50mm"}}>
+            <div
+                ref={componentRef}
+                className="print_area border-separate"
+                
+            >
+                <style type="text/css" media="print">
+                  {`
+                      @media print { 
+                          table { page-break-inside:auto }
+                          thead { display:table-header-group; }
+                          tfoot { display:table-footer-group; }
+
+                          .print_area{
+                              page-break-after:always;
+                          }
+                      }
+                  `}
+                </style>
+                  { 
+                    orderProducts.map((item: any, index: number) => {
+                        let currentIndex = 0 
+                        currentIndex = Number(currentIndex) + Number(index)
+
+                        const amount = Number(item.unitPrice)
+
+                        let str = ""
+
+                        if (item?.subGoods) {
+                            for (const subProduct of item?.subGoods) {
+                                str = str + subProduct.name + ", "
+                            }
+                        }
+
+                        const quantity = [];
+                        for (let i = 1; i <= Number(item.quantity); i++) {
+                            quantity.push(i);
+                        }
+
+                        return (
+                            <div
+                              key={index}
+                              className =""
+                              // style={{ height: "30mm", width: "100%" }}
+                            >
+                                {
+                                      quantity.map((e, subindex) => {
+                                        currentIndex = Number(currentIndex) + Number(1)
+                                        
+                                          return (
+                                            <table key={`${e}.${item._id}`} style={{ height: "30mm", width: "50mm" }}>
+                                              <tbody>
+                                                <tr>
+                                                  <td className="px-0.5 text-[10px]">
+                                                      <Link to={`/fnb/home`}>
+                                                        <div className="font-bold" title="Bấm vào đây để trở về Trang chủ">
+                                                          {info?.funda?.name}-{info?.sign}/{FNB_CHANNEL[Number(info?.salesChannel)-1]?.sign}{info?.appOrderSign} - {currentIndex}/{Number(totalProd)}
+                                                        </div>
+                                                      </Link>
+                                                      <Link to={`/fnb/home/${info?._id}/print/3`}>
+                                                        <div title="Bấm vào đây để in Bill">
+                                                          <p className=""><b>{item.goods?.name}</b> (Size {item.size >= 1 && FNB_SIZE[Number(item.size) - 1].text} - Đường {FNB_SUGAR[Number(item.sugar)-1].text}, Đá {FNB_ICE[Number(item.ice)-1].text}, {item?.note})</p>
+                                                          { str != "" ? <p>+ {str}</p> : <></>}
+                                                        </div>
+                                                      </Link>
+                                                    <div className="flex justify-between">
+                                                        <div>{moment(info?.createAt).format('HH:mm DD/MM/YY')}</div>
+                                                        <div className="font-bold">{formatNumberMoney(amount)}đ</div>
+                                                    </div>
+                                                  </td>
+                                                </tr>
+                                              </tbody>
+                                            </table>
+                                          )
+                                      })
+                                    }
+                            </div>
+                        )
+                    })
+                  }                            
+              </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default FnbPrintBillListPage2;
