@@ -386,8 +386,8 @@ export const CrmJourneyPage: FC = () => {
                             <div key={index} className={color} style={{background: color2}}>
                                 {/* <img className="w-full" src="/path/to/your/image" alt="Step 1"/> */}
                                 <div className="px-3 py-1">
-                                    <div className="font-bold text-xl mb-1 text-white">{item._id.journey.name} ({item.quantity})</div>
-                                    <p className="text-white text-base">
+                                    <div className="font-bold text-sm mb-1 text-white">{item._id.journey.name} ({item.quantity})</div>
+                                    <p className="text-white text-x-small">
                                     {item._id.journey.name}
                                     </p>
                                 </div>
@@ -655,11 +655,6 @@ export const CrmJourneyPage: FC = () => {
                               Ngày
                           </div>
                       </th>
-                      <th className="py-1 w-1/6">
-                          <div className="border-r-2 border-gray-300 font-normal pl-2">
-                              Nội dung
-                          </div>
-                      </th>
                       <th className="py-1">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
                               Khách hàng
@@ -667,7 +662,12 @@ export const CrmJourneyPage: FC = () => {
                       </th>
                       <th className="py-1">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
-                              Phân loại lỗi
+                              Hành trình trải nghiệm
+                          </div>
+                      </th>
+                      <th className="py-1 w-1/6">
+                          <div className="border-r-2 border-gray-300 font-normal pl-2">
+                              Nội dung
                           </div>
                       </th>
                       <th className="py-1 w-1/6">
@@ -677,33 +677,19 @@ export const CrmJourneyPage: FC = () => {
                       </th>
                       <th className="py-1">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Đánh giá 1-5*
-                          </div>
-                      </th>
-                      <th className="py-1">
-                          <div className="border-r-2 border-gray-300 font-normal pl-2">
-                              Xử lý
-                          </div>
-                      </th>
-                      <th className="py-1">
-                          <div className="border-r-2 border-gray-300 font-normal pl-2">
                               Ghi chú
                           </div>
                       </th>
                       <th className="py-1">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
-                              Trạng thái
+                              Đính kèm
                           </div>
                       </th>
                   </tr>
               </thead>
               <tbody>
                 {
-                  (listDataWithPager[pageIndex] ?? []).map((item: any, index: any) => {  
-                        let cl = 'red'
-                        if(item.type == 2){
-                            cl = 'green'
-                        }
+                  (listDataWithPager[pageIndex] ?? []).map((item: any, index: any) => {
                       return (
                         <tr key={item._id} className="border-b border-primary-border h-10">
                             <td className="py-1 px-2 text-center">
@@ -719,17 +705,15 @@ export const CrmJourneyPage: FC = () => {
                                 <p><i>{moment(item.createAt).format('HH:mm')}</i></p>
                             </td>
                             <td className="py-1 px-2">
-                                {item?.name}
-                                <p style={{color: cl}}><i>{(item.type == 1 ? "Lỗi của nhân viên" : "Lỗi khách quan")}</i></p>
-                                <p className="text-primary-gray"><i>{item?.userCreate ? `Tạo: ${item?.userCreate?.fullname}` : ''}</i></p>
-                                <p className="text-primary-gray"><i>{item?.userUpdate ? `Cập nhật: ${item?.userUpdate?.fullname}` : ''}</i></p>
-                            </td>
-                            <td className="py-1 px-2">
                                 {item?.customer?.name} - {item?.customer?.phone}
                             </td>
                             <td className="py-1 px-2 text-cbs-highlight-color">
-                                {item?.mistake?.name}
-                                <p><i>{item?.journey?.name}</i></p>
+                                <button className="py-1 px-4 mr-1 rounded-md border border-primary-border text-white bg-cbs-secondary border-none">{item?.journey?.name}</button>
+                            </td>
+                            <td className="py-1 px-2">
+                                {item?.name}
+                                <p className="text-primary-gray"><i>{item?.userCreate ? `Tạo: ${item?.userCreate?.fullname}` : ''}</i></p>
+                                <p className="text-primary-gray"><i>{item?.userUpdate ? `Cập nhật: ${item?.userUpdate?.fullname}` : ''}</i></p>
                             </td>
                             <td className="py-1 px-2">
                                 {item?.order ? `${item?.order?.name} - Thời gian: ${moment(item?.order?.createAt).format('DD/MM/YYYY HH:mm')}` : ''}
@@ -743,17 +727,11 @@ export const CrmJourneyPage: FC = () => {
                                 <p><i>{item?.funda?.name}</i></p>
                                 <p className="text-cbs-highlight-color"><i>{item?.manager ? `Quản lý: ${item?.manager?.fullname}` : ''}</i></p>
                             </td>
-                            <td className="py-1 px-2 text-right">
-                                {formatNumberMoney(item?.rating)}
-                            </td>
-                            <td className="py-1 px-2">
-                                {item.description}
-                            </td>
                             <td className="py-1 px-2">
                                 {item.note}
                             </td>
                             <td className="py-1 px-2">
-                                {
+                                {/* {
                                     item?.status == 1 ?
                                     <div className="w-[110px] rounded-md py-1 px-2 bg-cbs-schedule-expired text-white" style={{ fontSize: "12px" }}>
                                         {STATUS[Number(item?.status) - 1]?.text}
@@ -762,7 +740,7 @@ export const CrmJourneyPage: FC = () => {
                                     <div className="w-[85px] rounded-md py-1 px-2 bg-cbs-schedule-after-7days text-white" style={{ fontSize: "12px" }}>
                                         {STATUS[Number(item?.status) - 1]?.text}
                                     </div>
-                                }
+                                } */}
                                 <div style={{display: "flex"}}>
 									{item?.images?.map((image: any, i: number) => {
 										return (
