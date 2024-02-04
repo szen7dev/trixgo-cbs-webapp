@@ -33,39 +33,6 @@ export const CrmLeftSideBar: FC = () => {
                         />
                         <span className={"flex-1 ml-2 text-left text-[14px]"}>Trang chủ</span>
                     </NavLink>
-                    <NavLink
-                        to={`/crm/rourney`}
-                        className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
-                    >
-                        <img
-                        width={'7px'}
-                        src={iconFolder}
-                        alt="Menu item"
-                        />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Hành trình khách hàng</span>
-                    </NavLink>
-                    <NavLink
-                        to={`/crm/cuscare`}
-                        className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
-                    >
-                        <img
-                        width={'7px'}
-                        src={iconFolder}
-                        alt="Menu item"
-                        />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Chăm sóc, khiếu nại</span>
-                    </NavLink>
-                    <NavLink
-                        to={`/crm/affiliate`}
-                        className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
-                    >
-                        <img
-                        width={'7px'}
-                        src={iconFolder}
-                        alt="Menu item"
-                        />
-                        <span className={"flex-1 ml-2 text-left text-[14px]"}>Hoa hồng Affiliate</span>
-                    </NavLink>
                     {listAppMenu && listAppMenu.length ?
                         <>
                         {listAppMenu.map((item: any, index: number) => {
