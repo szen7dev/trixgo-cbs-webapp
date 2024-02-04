@@ -33,6 +33,7 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import { useUpload } from "services/hooks/useUpload";
 import { APP_ID } from "apis/localdb";
 import API from "apis/repository";
+import { useQueryListDoctype } from "services/hooks/useHuman";
 
 /*=====7.OTHER=====*/
 import { createLinkAndClick } from "utils";
@@ -111,6 +112,7 @@ export const CrmJourneyPage: FC = () => {
     const ref = React.useRef<PaginateHandle>(null);
     const accountRef = React.useRef<DropdownHandle>(null);
 
+    const [journeyID, setJourneyID] = useState<string | null>();
     const [customerID, setCustomerID] = useState<string | null>();
     const [userID, setUserID] = useState<string | null>();
     const [managerID, setManagerID] = useState<string | null>();
@@ -131,6 +133,13 @@ export const CrmJourneyPage: FC = () => {
       params: { keyword: contactKeyword, limit: 10 },
       isFetchList: true
     })
+
+    const [searchDoctypeKeyword, setSearchDoctypeKeyword] = useState("");
+	const { listDoctypes } = useQueryListDoctype({
+		limit: 10,
+		type: 11,
+		keyword: searchDoctypeKeyword,
+	});
   
     const { data: listUser } = useUserSystem({
       keyword: userKeyword,
@@ -160,6 +169,7 @@ export const CrmJourneyPage: FC = () => {
             status,
             type,
             channel,
+            journeyID,
             customerID,
             userCreateID: userID,
             managerID,
@@ -364,7 +374,7 @@ export const CrmJourneyPage: FC = () => {
     }
 
     return (
-        <div className="flex flex-1 flex-col overflow-hidden h-full">
+        <main className="relative h-full">
             {/* <div className={"text-lg"}>Hành trình khách hàng</div> */}
             <div className="flex flex-wrap mt-1 mb-1">
                 { 
@@ -375,8 +385,8 @@ export const CrmJourneyPage: FC = () => {
                         return (
                             <div key={index} className={color} style={{background: color2}}>
                                 {/* <img className="w-full" src="/path/to/your/image" alt="Step 1"/> */}
-                                <div className="px-3 py-2">
-                                    <div className="font-bold text-xl mb-2 text-white">{item._id.journey.name} ({item.quantity})</div>
+                                <div className="px-3 py-1">
+                                    <div className="font-bold text-xl mb-1 text-white">{item._id.journey.name} ({item.quantity})</div>
                                     <p className="text-white text-base">
                                     {item._id.journey.name}
                                     </p>
@@ -390,13 +400,40 @@ export const CrmJourneyPage: FC = () => {
             <header className="sticky top-0 bg-primary-light z-10">
               <div className="h-[50px] border border-primary-border flex items-center justify-between px-5">
                   <div className="flex items-center">
-                      <SearchInput
-                          classNameWrapper="mr-2"
-                          classNameInput="outline-none w-[150px]"
-                          onChange={onChangeSearch}
-                      />
-
-                      <DropdownSearchableV2
+                    <SearchInput
+                        classNameWrapper="mr-2"
+                        classNameInput="outline-none w-[150px]"
+                        onChange={onChangeSearch}
+                    />
+                    <DropdownSearchableV2
+                        ref={accountRef}
+                        className={"mr-1 border border-primary-border rounded-lg"}
+                        placeholder={"Hành trình"}
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        data={listDoctypes}
+                        formatItem={{
+                            id: "_id",
+                            text: "name",
+                        }}
+                        onSearchInputChange={debounce(
+                            (valueSearch) => setSearchDoctypeKeyword(valueSearch),
+                            500
+                        )}
+                        onClearData={() => {
+                            setJourneyID("");
+                        }}
+                        onchangeValue={item => {
+                            setJourneyID(item._id);
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.text}</p>
+                        )}
+                        selectOneByOne={true}
+                    />
+                    <DropdownSearchableV2
                         ref={accountRef}
                         className={"mr-1 border border-primary-border rounded-lg"}
                         placeholder={"Khách"}
@@ -412,7 +449,7 @@ export const CrmJourneyPage: FC = () => {
                             500
                         )}
                         onClearData={() => {
-                          setCustomerID("");
+                            setCustomerID("");
                         }}
                         onchangeValue={item => {
                             setCustomerID(item._id);
@@ -775,6 +812,6 @@ export const CrmJourneyPage: FC = () => {
 		        toggle={() => setIsShowImageFullScreen(!isShowImageFullScreen)}
 		        initialData={defaultState}
 		    />
-        </div>
+        </main>
     )
 }
