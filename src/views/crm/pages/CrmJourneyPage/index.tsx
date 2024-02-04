@@ -62,6 +62,8 @@ export const CrmJourneyPage: FC = () => {
         isFetchList: true
       })
 
+    //   console.log(listCustomerCareByProperty)
+
       const { user } = useAuth();
 
     const [isShowImageFullScreen, setIsShowImageFullScreen] = useState(false);
@@ -165,6 +167,7 @@ export const CrmJourneyPage: FC = () => {
 
     const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch } = useFnbCustomerCare({
         params: { 
+            option: 1,
             keyword, 
             status,
             type,
