@@ -22,7 +22,7 @@ export const CustomerCareRepository = {
     deleteMany: (params: CashPaymentDeleteManyPayload): Promise<any> => deleteMany(params),
     fetchList: (params: CashPaymentListParams): Promise<CashPaymentListResponse> => fetchList(params),
     fetchInfo: (params: CashPaymentInfoParams): Promise<any> => fetchInfo(params),
-    fetchAmountByProperty: (params: any): Promise<any> => fetchAmountByProperty(params),
+    fetchListByProperty: (params: any): Promise<any> => fetchListByProperty(params),
     downloadTemplateExcel  : (payload: CashPaymentDownloadPayload)            : Promise<any> => downloadTemplateExcel(payload),
     importExcel            : (payload: CashPaymentImportPayload)              : Promise<any> => importExcel(payload),
     exportExcel            : (payload: any)          : Promise<any> => exportExcel(payload),
@@ -67,10 +67,12 @@ async function fetchInfo(params: CashPaymentInfoParams): Promise<CashPaymentInfo
     return data
 }
 
-async function fetchAmountByProperty(params: any): Promise<any> {
-    const { data } = await API.get(
-        `${CUSTOMER_CARE_URL}/get-amount-by-property?${convertObToUrl(params)}`
-    )
+async function fetchListByProperty(params : any) {
+    const { data } = await API.get(`${CUSTOMER_CARE_URL}/get-list-by-property`, {
+        params: {
+            ...params,
+        }
+    })
     return data
 }
 

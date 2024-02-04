@@ -61,9 +61,7 @@ const AdminFunctionalTab: FC = () => {
 			history.push("/")
 		}
 	}, [hasPermission, dataUserAccess]);
-
-	console.log(listAppRoles)
-
+	
 	return (
 		<main className="h-full overflow-auto">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
