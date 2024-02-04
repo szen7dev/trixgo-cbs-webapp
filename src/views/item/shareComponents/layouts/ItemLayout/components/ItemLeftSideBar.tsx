@@ -21,12 +21,12 @@ export const ItemLeftSideBar: FC = () => {
             <span className={"flex-1 ml-2 text-left text-[14px]"}>Danh bạ</span>
           </NavLink>
           <NavLink
-            to="/item/storage"
+            to="/item/fundas"
             className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
-            title="Danh bạ"
+            title="Fundas"
           >
              <img  width={'7px'} src={iconFolder}  alt="Menu item"/>
-            <span className={"flex-1 ml-2 text-left text-[14px]"}>Dụng cụ lưu trữ</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Đơn vị cơ sở</span>
           </NavLink>
           <NavLink
             to="/item/goods"
@@ -37,12 +37,28 @@ export const ItemLeftSideBar: FC = () => {
             <span className={"flex-1 ml-2 text-left text-[14px]"}>Sản phẩm, dịch vụ</span>
           </NavLink>
           <NavLink
-            to="/item/fundas"
+            to="/item/home/3"
             className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
-            title="Fundas"
+            title="Lĩnh vực kinh doanh"
           >
              <img  width={'7px'} src={iconFolder}  alt="Menu item"/>
-            <span className={"flex-1 ml-2 text-left text-[14px]"}>Đơn vị cơ sở</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Lĩnh vực kinh doanh</span>
+          </NavLink>
+          <NavLink
+            to="/item/home/24"
+            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
+            title="Lĩnh vực kinh doanh"
+          >
+             <img  width={'7px'} src={iconFolder}  alt="Menu item"/>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Kênh bán hàng</span>
+          </NavLink>
+          <NavLink
+            to="/item/home/11"
+            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
+            title="Hành trình khách hàng"
+          >
+             <img  width={'7px'} src={iconFolder}  alt="Menu item"/>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Hành trình khách hàng</span>
           </NavLink>
           <NavLink
             to="/item/home/23"
@@ -52,6 +68,24 @@ export const ItemLeftSideBar: FC = () => {
              <img  width={'7px'} src={iconFolder}  alt="Menu item"/>
             <span className={"flex-1 ml-2 text-left text-[14px]"}>Khoản mục phí</span>
           </NavLink>
+          <NavLink
+            to="/item/home/19"
+            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
+            title="Các lỗi hay gặp"
+          >
+             <img  width={'7px'} src={iconFolder}  alt="Menu item"/>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Các lỗi hay gặp</span>
+          </NavLink>
+
+          <NavLink
+            to="/item/storage"
+            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
+            title="Danh bạ"
+          >
+             <img  width={'7px'} src={iconFolder}  alt="Menu item"/>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Dụng cụ lưu hồ sơ</span>
+          </NavLink>
+
           <NavLink
             to="/item/home/1"
             className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
@@ -67,14 +101,6 @@ export const ItemLeftSideBar: FC = () => {
           >
              <img  width={'7px'} src={iconFolder}  alt="Menu item"/>
             <span className={"flex-1 ml-2 text-left text-[14px]"}>Phân loại hồ sơ</span>
-          </NavLink>
-          <NavLink
-            to="/item/home/3"
-            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
-            title="Lĩnh vực kinh doanh"
-          >
-             <img  width={'7px'} src={iconFolder}  alt="Menu item"/>
-            <span className={"flex-1 ml-2 text-left text-[14px]"}>Lĩnh vực kinh doanh</span>
           </NavLink>
           <NavLink
             to="/item/home/4"
@@ -133,20 +159,12 @@ export const ItemLeftSideBar: FC = () => {
             <span className={"flex-1 ml-2 text-left text-[14px]"}>Thâm niên công tác</span>
           </NavLink>
           <NavLink
-            to="/item/home/11"
-            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
-            title="Phân loại giai đoạn CRM"
-          >
-             <img  width={'7px'} src={iconFolder}  alt="Menu item"/>
-            <span className={"flex-1 ml-2 text-left text-[14px]"}>Phân loại giai đoạn CRM</span>
-          </NavLink>
-          <NavLink
             to="/item/home/12"
             className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
-            title="Hồ sơ chi tiết CRM"
+            title="Hồ sơ hành trình CRM"
           >
              <img  width={'7px'} src={iconFolder}  alt="Menu item"/>
-            <span className={"flex-1 ml-2 text-left text-[14px]"}>Hồ sơ chi tiết CRM</span>
+            <span className={"flex-1 ml-2 text-left text-[14px]"}>Hồ sơ hành trình CRM</span>
           </NavLink>
           <NavLink
             to="/item/home/13"
@@ -195,14 +213,6 @@ export const ItemLeftSideBar: FC = () => {
           >
              <img  width={'7px'} src={iconFolder}  alt="Menu item"/>
             <span className={"flex-1 ml-2 text-left text-[14px]"}>Nguyên nhân thất bại</span>
-          </NavLink>
-          <NavLink
-            to="/item/home/19"
-            className="left-menu-nav flex items-center py-1.5 px-4 rounded-full w-full  text-primary-gray"
-            title="Các lỗi hay gặp"
-          >
-             <img  width={'7px'} src={iconFolder}  alt="Menu item"/>
-            <span className={"flex-1 ml-2 text-left text-[14px]"}>Các lỗi hay gặp</span>
           </NavLink>
           <NavLink
             to="/item/home/20"

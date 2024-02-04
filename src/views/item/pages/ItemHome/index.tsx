@@ -9,7 +9,7 @@ import { read, utils } from 'xlsx';
  * Components
  */
 import { SearchInput } from "shareComponents/common";
-import { ModalCreateOrUpdateDoctype, ModalConfirm } from '../../shareComponents/common';
+import { ModalCreateOrUpdateDoctype } from '../../shareComponents/common';
 
 /**
  * Assets
