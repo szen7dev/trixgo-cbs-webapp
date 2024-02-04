@@ -124,7 +124,6 @@ export const FnbContactPage: FC = () => {
         mistake: '',
         customer: '',
         order: '',
-        journey: '',
         name: '',
         description: '',
         note: '',
@@ -147,7 +146,7 @@ export const FnbContactPage: FC = () => {
             toDate: inputFilter.toDate,
             limit: 20,
             populates: JSON.stringify({
-                path: 'userCreate userUpdate customer mistake journey funda order manager images',
+                path: 'userCreate userUpdate customer mistake funda order manager images',
                 select: '_id image name sign phone taxid address fullname createAt author path',
                 populate: {
 					path: 'author',
@@ -191,14 +190,13 @@ export const FnbContactPage: FC = () => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, mistake, customer, order, journey, name, description, note, amount, rating, status, type } = newListIDChecked[0];
-            // console.log({ _id, mistake, customer, order, journey, name, description, note, amount, rating, status, type })
+            const { _id, mistake, customer, order, name, description, note, amount, rating, status, type } = newListIDChecked[0];
+            // console.log({ _id, mistake, customer, order, name, description, note, amount, rating, status, type })
             setInitialValues({
                 customerCareID: _id,
                 mistake,
                 customer,
                 order,
-                journey,
                 name,
                 description,
                 note,
@@ -242,7 +240,6 @@ export const FnbContactPage: FC = () => {
                 mistake: '',
                 customer: '',
                 order: '',
-                journey: '',
                 name: '',
                 description: '',
                 note: '',
@@ -647,7 +644,6 @@ export const FnbContactPage: FC = () => {
                             </td>
                             <td className="py-1 px-2 text-cbs-highlight-color">
                                 {item?.mistake?.name}
-                                <p><i>{item?.journey?.name}</i></p>
                             </td>
                             <td className="py-1 px-2">
                                 {item?.order ? `${item?.order?.name} - Thời gian: ${moment(item?.order?.createAt).format('DD/MM/YYYY HH:mm')}` : ''}

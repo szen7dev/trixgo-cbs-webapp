@@ -17,7 +17,6 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
     mistake: '',
     customer: '',
     order: '',
-    journey: '',
     name: '',
     description: '',
     note: '',
@@ -38,13 +37,6 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
 		limit: LIMIT_DROPDOWN,
 		type: 19,
 		keyword: searchSubTypeValue,
-	});
-
-  const [searchSubTypeValue2, setSearchSubTypeValue2] = useState("");
-	const { listDoctypes: listSubType2 } = useQueryListDoctype({
-		limit: LIMIT_DROPDOWN,
-		type: 11,
-		keyword: searchSubTypeValue2,
 	});
 
   const [searchOrderValue, setSearchOrderValue] = useState("");
@@ -162,49 +154,6 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
           onClick={closeModal}
         />
       </header>
-
-      <section className="px-5">
-        <p>Phân loại hành trình khách hàng</p>
-        <DropdownSearchable
-            onchangeValue={(value: any) => {
-                setFormData((previous: any) => ({
-                    ...previous,
-                    journeyID: value?.id
-                }))
-            }}
-            onClearData={() => {
-                setFormData((previous: any) => ({
-                    ...previous,
-                    journeyID: ""
-                }))
-            }}
-            onSearchInputChange={debounce((value: any) => setSearchSubTypeValue2(value), 600)}
-            className="w-full rounded-md border border-primary-border py-1 placeholder-primary-gray bg-cbs-table-header"
-            placeholder="Phân loại hành trình khách hàng"
-            isMultiple={false}
-            allowClearValueSingleInput={true}
-            showTriangle={false}
-            maxWidthInput="max-w-full"
-            renderSelectedItem={(item: any) => (
-                <div className="max-w-full">
-                    <p className={"truncate"}>{item.text}</p>
-                </div>
-            )}
-            data={listSubType2.map((item: any) => ({
-                label: `${item.name}`,
-                value: item._id,
-            }))}
-            initialValue={initialValues.journey ? {
-              label: `${initialValues.journey?.name}`,
-              value: initialValues.journey?._id
-            } : {}}
-            formatItem={{
-                id: "value",
-                text: "label",
-            }}
-            inlineSearch={true}
-        />
-      </section>
 
       <section className="px-5">
         <p>Khách hàng (*)</p>
