@@ -1,10 +1,9 @@
 import React, { FC, useState } from "react";
 import { toast } from "react-toastify";
-
 import { useModal } from "services/hooks/useModal";
 import { useDoctype } from "services/hooks/items/useDoctype";
 import { ModalProps } from 'typings/items/doctype';
-import { Checkbox, FormControl, FormControlLabel, IconButton, InputBase, Paper, Radio, RadioGroup } from "@mui/material";
+import { FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { DropdownSearchable } from "shareComponents/common";
 import RadioEmpty from "assets/images/Ellipse 27.svg";
 import RadioChecked from "assets/images/icons8-checked-40 (2) 2.svg";

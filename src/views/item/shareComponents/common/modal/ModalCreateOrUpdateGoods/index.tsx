@@ -3,19 +3,25 @@ import debounce from "lodash/debounce";
 import { useModal } from "services/hooks/useModal";
 import { useGoods } from "services/hooks/items/useGoods";
 import { toast } from "react-toastify";
-import { DropdownSearchable, Popover } from "shareComponents/common";
+import { DropdownSearchable } from "shareComponents/common";
 
 export const ModalCreateOrUpdateGoods: FC<any> = ({
   modalType,
   onConfirm,
   initialValues = {
     goodsID: '',
+    type: 1,
+    status: 1,
+    usage: 1,
     name: '',
     sign: '',
     unit: '',
     unitprice: 0,
     sellingUnitprice: 0,
-    description: '',
+    unitPrice: 0,
+    unitPrice2: 0,
+    unitPrice3: 0,
+    unitPrice4: 0,
     note: '',
     convert: '',
     convertQuantity: 1,
@@ -23,7 +29,6 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
 }) => {
   const { closeModal } = useModal()
   const [formData, setFormData] = useState(initialValues)
-  // const { insertAsync, updateAsync } = useGoods({})
 
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
@@ -52,7 +57,18 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
     if(!formData.name) {
       return toast.warn('Vui lòng nội dung');
     }
-    const formDataFormat = { ...formData, unitprice: +formData.unitprice, sellingUnitprice: +formData.sellingUnitprice, convertQuantity: +formData.convertQuantity }
+    const formDataFormat = { ...formData, 
+      type: +formData.type, 
+      status: +formData.status,
+      usage: +formData.usage,
+      unitprice: +formData.unitprice, 
+      unitPrice: +formData.unitPrice, 
+      unitPrice2: +formData.unitPrice2, 
+      unitPrice3: +formData.unitPrice3, 
+      unitPrice4: +formData.unitPrice4, 
+      sellingUnitprice: +formData.sellingUnitprice, 
+      convertQuantity: +formData.convertQuantity,
+    }
     try {
       // Handle api here!
       switch (modalType) {
@@ -117,84 +133,164 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
         />
       </header>
 
-      <section className="px-5 py-2">
+      <section className="px-5 py-1">
+        <p>Phân loại</p>
+        <input
+          type="number"
+          placeholder="1-Thông thường | 2-Topping"
+          name="type"
+          className="h-8 w-full border border-primary-border outline-none px-4"
+          defaultValue={formData?.type}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-5 py-1">
+        <p>Nội dung</p>
         <input
           type="text"
           placeholder="Nội dung"
           name="name"
-          className="h-12 w-full border border-primary-border outline-none px-8"
+          className="h-8 w-full border border-primary-border outline-none px-4"
           defaultValue={formData.name}
           onChange={onChange}
         />
       </section>
 
-      <section className="px-5 mt-2">
+      <section className="px-5 py-1">
+        <p>Mã hiệu</p>
         <input
           type="text"
           placeholder="Mã hiệu"
           name="sign"
-          className="h-12 w-full border border-primary-border outline-none px-8"
+          className="h-8 w-full border border-primary-border outline-none px-4"
           defaultValue={formData?.sign}
           onChange={onChange}
         />
       </section>
 
-      <section className="px-5 mt-2">
+      <section className="px-5 py-1">
+        <p>Đơn vị tính</p>
         <input
           type="text"
           placeholder="Đơn vị"
           name="unit"
-          className="h-12 w-full border border-primary-border outline-none px-8"
+          className="h-8 w-full border border-primary-border outline-none px-4"
           defaultValue={formData?.unit}
           onChange={onChange}
         />
       </section>
 
-      <section className="px-5 mt-2">
+      <section className="px-5 py-1">
+        <p>Đơn giá nhập</p>
         <input
           type="number"
           placeholder="Đơn giá nhập"
           name="unitprice"
-          className="h-12 w-full border border-primary-border outline-none px-8"
+          className="h-8 w-full border border-primary-border outline-none px-4"
           defaultValue={formData?.unitprice}
           onChange={onChange}
         />
       </section>
 
-      <section className="px-5 mt-2">
+      <section className="px-5 py-1">
+        <p>Đơn giá xuất</p>
         <input
           type="number"
           placeholder="Đơn giá xuất"
           name="sellingUnitprice"
-          className="h-12 w-full border border-primary-border outline-none px-8"
+          className="h-8 w-full border border-primary-border outline-none px-4"
           defaultValue={formData?.sellingUnitprice}
           onChange={onChange}
         />
       </section>
 
-      <section className="px-5 mt-2">
+      <section className="px-5 py-1">
+        <p>Đơn giá bán 1</p>
         <input
-          type="text"
-          placeholder="Mô tả"
-          name="description"
-          className="h-12 w-full border border-primary-border outline-none px-8"
-          defaultValue={formData.description}
+          type="number"
+          placeholder="Đơn giá bán M-Off"
+          name="unitPrice"
+          className="h-8 w-full border border-primary-border outline-none px-4"
+          defaultValue={formData?.unitPrice}
           onChange={onChange}
         />
       </section>
 
-      <section className="px-5 mt-2">
+      <section className="px-5 py-1">
+        <p>Đơn giá bán 2</p>
+        <input
+          type="number"
+          placeholder="Đơn giá bán M-App"
+          name="unitPrice2"
+          className="h-8 w-full border border-primary-border outline-none px-4"
+          defaultValue={formData?.unitPrice2}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-5 py-1">
+        <p>Đơn giá bán 3</p>
+        <input
+          type="number"
+          placeholder="Đơn giá bán L-Off"
+          name="unitPrice3"
+          className="h-8 w-full border border-primary-border outline-none px-4"
+          defaultValue={formData?.unitPrice3}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-5 py-1">
+        <p>Đơn giá bán 4</p>
+        <input
+          type="number"
+          placeholder="Đơn giá bán L-App"
+          name="unitPrice4"
+          className="h-8 w-full border border-primary-border outline-none px-4"
+          defaultValue={formData?.unitPrice4}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-5 py-1">
+        <p>Ghi chú</p>
         <input
           type="text"
           placeholder="Ghi chú"
           name="note"
-          className="h-12 w-full border border-primary-border outline-none px-8"
+          className="h-8 w-full border border-primary-border outline-none px-4"
           defaultValue={formData.note}
           onChange={onChange}
         />
       </section>
+      
+      <section className="px-5 py-1">
+        <p>Trạng thái</p>
+        <input
+          type="number"
+          placeholder="1-Hoạt động | 2-Hủy"
+          name="status"
+          className="h-8 w-full border border-primary-border outline-none px-4"
+          defaultValue={formData?.status}
+          onChange={onChange}
+        />
+      </section>
 
-      <section className="px-5 mt-2">
+      <section className="px-5 py-1">
+        <p>Mục đích sử dụng</p>
+        <input
+          type="number"
+          placeholder="1-Chung | 2-Cho đơn hàng"
+          name="usage"
+          className="h-8 w-full border border-primary-border outline-none px-4"
+          defaultValue={formData?.usage}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-5 py-1">
+        <p>Link danh mục</p>
         <DropdownSearchable
             onchangeValue={(value: any) => {
                 setFormData((previous: any) => ({
@@ -237,18 +333,19 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
         />
       </section>
 
-      <section className="px-5 mt-2">
+      <section className="px-5 py-1">
+        <p>Định mức chuyển đổi</p>
         <input
           type="number"
           placeholder="Định mức chuyển đổi"
           name="convertQuantity"
-          className="h-12 w-full border border-primary-border outline-none px-8"
+          className="h-8 w-full border border-primary-border outline-none px-4"
           defaultValue={formData?.convertQuantity}
           onChange={onChange}
         />
       </section>
 
-      <footer className="absolute right-0 bottom-0 px-5 py-1">
+      <footer className="absolute right-0 bottom-3 px-5 py-1">
         <button className="bg-primary text-primary-light text-base w-24 h-8 rounded"
           onClick={handleSubmit}>
           Xác nhận

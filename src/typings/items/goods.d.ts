@@ -19,6 +19,7 @@ export type GoodsQueryPayload = QueryParam & {
     parentID?: string;
     isListParentOfListChilds?: string;
     goodsID?: string;
+    // populates?: any;
 };
 
 export type GoodsQueryResponse = APIResponse & {

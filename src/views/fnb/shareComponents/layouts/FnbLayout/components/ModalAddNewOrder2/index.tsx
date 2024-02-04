@@ -167,11 +167,9 @@ export const ModalAddNewOrder2: FC<Props> = () => {
      */
     const fetchCateProduct = async () => {
       const response = await API.get(
-        `/api/item/goods?isParent=1&limit=50&fundaID=${fundaID}`,
+        `/api/item/goods?isParent=1&limit=50&status=1&usage=2&fundaID=${fundaID}`,
       );
       const { data, status } = response?.data;
-
-      console.log(data)
 
       if (status !== 200) return;
       setProductIsParent(data?.listRecords || []);
@@ -223,7 +221,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
     if (status !== 200) return;
 
     const response2 = await API.get(
-      `/api/item/goods?type=2&status=1&limit=50&fundaID=${fundaID}`,
+      `/api/item/goods?type=2&status=1&usage=2&limit=50&fundaID=${fundaID}`,
     );
 
     const productsAsync = data.listRecords?.map?.(async (product: any) => {
