@@ -11,7 +11,6 @@ import type {
     CashPaymentListParams,
     CashPaymentDownloadPayload,
     CashPaymentImportPayload,
-    CashPaymentExportManyPayload,
 } from 'typings/financial/cashPayment';
 
 /*=====3.INTERFACE DEFINE=====*/
@@ -32,6 +31,7 @@ interface UseCashPayment {
     refetchInfo: () => void;
     fetchNextPage: () => void;
     fetchPreviousPage: () => void;
+    // listDataByProperty: (data: any) => Promise<any>;
     downloadTemplateExcelAsync: (payload: CashPaymentDownloadPayload) => Promise<any>;
     importExcelAsync: (payload: CashPaymentImportPayload) => Promise<any>;
     exportExcelAsync: (payload: any) => Promise<any>;
@@ -60,6 +60,12 @@ export const useFnbCustomerCare = ({
     const { mutateAsync: deleteManyAsync } =
         useMutation((payload: CashPaymentDeleteManyPayload) => CustomerCareRepository.deleteMany(payload)
     );
+
+    // const { data:listDataByProperty } =
+    // useQuery("cuscare-amount-by-property", () => CustomerCareRepository.fetchAmountByProperty(params), {
+    //     refetchOnWindowFocus: false,
+    //     enabled: isFetchInfo,
+    // });
 
     const { data: detailData, isLoading: isLoadingInfo, refetch: refetchInfo } =
         useQuery("CashPayment__info", () => CustomerCareRepository.fetchInfo(params), {
@@ -137,8 +143,26 @@ export const useFnbCustomerCare = ({
         refetchInfo,
         fetchNextPage,
         fetchPreviousPage,
+        // listDataByProperty,
         downloadTemplateExcelAsync,
         importExcelAsync,
-        exportExcelAsync
+        exportExcelAsync,
+    }
+}
+
+export const useCustomerCareByProperty = ({ params = {},  isFetchList = false }: any): any => {
+
+    const { data: detailData, isLoading: listCustomerCareByPropertyIsLoading, refetch: refetchListCustomerCareByProperty } =
+    useQuery([`CustomerCare_by_property`,{...params, isFetchList }],() => CustomerCareRepository.fetchListByProperty(params), {
+        refetchOnWindowFocus: false,
+        enabled: isFetchList,
+    });
+    
+    const listCustomerCareByProperty = detailData?.data;
+
+    return {
+        listCustomerCareByProperty,
+        listCustomerCareByPropertyIsLoading,
+        refetchListCustomerCareByProperty
     }
 }

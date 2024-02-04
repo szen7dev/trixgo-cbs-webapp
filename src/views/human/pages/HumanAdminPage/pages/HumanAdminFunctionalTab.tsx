@@ -60,9 +60,7 @@ const HumanAdminFunctionalTab: FC = () => {
 			toast.error("Không có quyền truy cập. Bạn không phải là quản trị viên!");
 			history.push("/")
 		}
-	}, [hasPermission, dataUserAccess]);
-
-	console.log(listAppRoles)
+	}, [hasPermission, dataUserAccess]);	
 
 	return (
 		<main className="h-full overflow-auto">

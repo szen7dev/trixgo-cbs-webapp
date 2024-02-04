@@ -45,7 +45,7 @@ export const AccountingDebtPage: FC = () => {
     isFetchList: true
   })
 
-  console.log(dataAll)
+  // console.log(dataAll)
 
 const handleOnChangeDate = useCallback((date, input) => {
  if (input) {
