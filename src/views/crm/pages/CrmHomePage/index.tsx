@@ -7,8 +7,8 @@ export const CrmHomePage: FC = () => {
 
     return (
         <div className="flex flex-1 flex-col overflow-hidden h-full">
-            <p className="text-lg">CrmHomePage</p>
-            <p>Hành trình khách hàng: sử dụng UI chi tiết PCM || Chi tiết hồ sơ khách hàng</p>
+            <p className="text-lg">Trang chủ ứng dụng Chăm sóc khách hàng</p>
+            <p>Hành trình khách hàng sử dụng Chi tiết chủ đề hoặc Chi tiết hồ sơ khách hàng</p>
             <p>1. Theo dịch vụ</p>
             <p>2. Theo dự án</p>
             <p>3. Hành trình tương ứng</p>
