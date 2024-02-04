@@ -290,7 +290,7 @@ export const CrmJourneyPage: FC = () => {
             <div
                 className={"inline-block w-[521px] h-[400px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "800px",
+                    height: "500px",
                 }}
             >
                 <ModalCreateOrUpdateCC
@@ -464,54 +464,6 @@ export const CrmJourneyPage: FC = () => {
                     <DropdownSearchableV2
                         ref={accountRef}
                         className={"mr-1 border border-primary-border rounded-lg"}
-                        placeholder={"Kênh"}
-                        isMultiple={false}
-                        allowClearValueSingleInput={true}
-                        data={CHANNEL}
-                        formatItem={{
-                            id: "_id",
-                            text: "text",
-                        }}
-                        onClearData={() => {
-                            setChannel("0");
-                        }}
-                        onchangeValue={item => {
-                            setChannel(item._id);
-                            setPageIndex(0);
-                            ref.current&&ref.current.resetPaginate();
-                        }}
-                        renderItem={(item) => (
-                            <p className={"min-w-[300px]"}>{item.text}</p>
-                        )}
-                        selectOneByOne={true}
-                    />
-                    <DropdownSearchableV2
-                        ref={accountRef}
-                        className={"mr-1 border border-primary-border rounded-lg"}
-                        placeholder={"Trạng thái"}
-                        isMultiple={false}
-                        allowClearValueSingleInput={true}
-                        data={STATUS}
-                        formatItem={{
-                            id: "_id",
-                            text: "text",
-                        }}
-                        onClearData={() => {
-                            setStatus("0");
-                        }}
-                        onchangeValue={item => {
-                            setStatus(item._id);
-                            setPageIndex(0);
-                            ref.current&&ref.current.resetPaginate();
-                        }}
-                        renderItem={(item) => (
-                            <p className={"min-w-[300px]"}>{item.text}</p>
-                        )}
-                        selectOneByOne={true}
-                    />
-                    <DropdownSearchableV2
-                        ref={accountRef}
-                        className={"mr-1 border border-primary-border rounded-lg"}
                         placeholder={"Tạo"}
                         isMultiple={false}
                         allowClearValueSingleInput={true}
@@ -529,58 +481,6 @@ export const CrmJourneyPage: FC = () => {
                         }}
                         onchangeValue={item => {
                             setUserID(item._id);
-                            setPageIndex(0);
-                            ref.current&&ref.current.resetPaginate();
-                        }}
-                        renderItem={(item) => (
-                            <p className={"min-w-[300px]"}>{item.text}</p>
-                        )}
-                        selectOneByOne={true}
-                    />
-                    <DropdownSearchableV2
-                        ref={accountRef}
-                        className={"mr-1 border border-primary-border rounded-lg"}
-                        placeholder={"Quản lý"}
-                        isMultiple={false}
-                        allowClearValueSingleInput={true}
-                        data={listUser}
-                        formatItem={{
-                            id: "_id",
-                            text: "fullname",
-                        }}
-                        onSearchInputChange={debounce(
-                            (valueSearch) => setUserKeyword(valueSearch),
-                            500
-                        )}
-                        onClearData={() => {
-                            setManagerID("");
-                        }}
-                        onchangeValue={item => {
-                            setManagerID(item._id);
-                            setPageIndex(0);
-                            ref.current&&ref.current.resetPaginate();
-                        }}
-                        renderItem={(item) => (
-                            <p className={"min-w-[300px]"}>{item.text}</p>
-                        )}
-                        selectOneByOne={true}
-                    />
-                    <DropdownSearchableV2
-                        ref={accountRef}
-                        className={"mr-1 border border-primary-border rounded-lg"}
-                        placeholder={"Phân loại"}
-                        isMultiple={false}
-                        allowClearValueSingleInput={true}
-                        data={TYPE}
-                        formatItem={{
-                            id: "_id",
-                            text: "text",
-                        }}
-                        onClearData={() => {
-                            setType("0");
-                        }}
-                        onchangeValue={item => {
-                            setType(item._id);
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
                         }}

@@ -164,49 +164,6 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
       </header>
 
       <section className="px-5">
-        <p>Phân loại hành trình khách hàng</p>
-        <DropdownSearchable
-            onchangeValue={(value: any) => {
-                setFormData((previous: any) => ({
-                    ...previous,
-                    journeyID: value?.id
-                }))
-            }}
-            onClearData={() => {
-                setFormData((previous: any) => ({
-                    ...previous,
-                    journeyID: ""
-                }))
-            }}
-            onSearchInputChange={debounce((value: any) => setSearchSubTypeValue2(value), 600)}
-            className="w-full rounded-md border border-primary-border py-1 placeholder-primary-gray bg-cbs-table-header"
-            placeholder="Phân loại hành trình khách hàng"
-            isMultiple={false}
-            allowClearValueSingleInput={true}
-            showTriangle={false}
-            maxWidthInput="max-w-full"
-            renderSelectedItem={(item: any) => (
-                <div className="max-w-full">
-                    <p className={"truncate"}>{item.text}</p>
-                </div>
-            )}
-            data={listSubType2.map((item: any) => ({
-                label: `${item.name}`,
-                value: item._id,
-            }))}
-            initialValue={initialValues.journey ? {
-              label: `${initialValues.journey?.name}`,
-              value: initialValues.journey?._id
-            } : {}}
-            formatItem={{
-                id: "value",
-                text: "label",
-            }}
-            inlineSearch={true}
-        />
-      </section>
-
-      <section className="px-5">
         <p>Khách hàng (*)</p>
         <DropdownSearchable
             onchangeValue={(value: any) => {
@@ -249,24 +206,24 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
         />
       </section>
 
-      <section className="px-5 mt-2">
-        <p>Phân loại vấn đề (*)</p>
+      <section className="px-5">
+        <p>Hành trình khách hàng (*)</p>
         <DropdownSearchable
             onchangeValue={(value: any) => {
                 setFormData((previous: any) => ({
                     ...previous,
-                    mistakeID: value?.id
+                    journeyID: value?.id
                 }))
             }}
             onClearData={() => {
                 setFormData((previous: any) => ({
                     ...previous,
-                    mistakeID: ""
+                    journeyID: ""
                 }))
             }}
-            onSearchInputChange={debounce((value: any) => setSearchSubTypeValue(value), 600)}
+            onSearchInputChange={debounce((value: any) => setSearchSubTypeValue2(value), 600)}
             className="w-full rounded-md border border-primary-border py-1 placeholder-primary-gray bg-cbs-table-header"
-            placeholder="Phân loại vấn đề (*)"
+            placeholder="Hành trình khách hàng"
             isMultiple={false}
             allowClearValueSingleInput={true}
             showTriangle={false}
@@ -276,13 +233,13 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
                     <p className={"truncate"}>{item.text}</p>
                 </div>
             )}
-            data={listSubType.map((item: any) => ({
+            data={listSubType2.map((item: any) => ({
                 label: `${item.name}`,
                 value: item._id,
             }))}
-            initialValue={initialValues.mistake ? {
-              label: `${initialValues.mistake?.name}`,
-              value: initialValues.mistake?._id
+            initialValue={initialValues.journey ? {
+              label: `${initialValues.journey?.name}`,
+              value: initialValues.journey?._id
             } : {}}
             formatItem={{
                 id: "value",
@@ -293,7 +250,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
       </section>
 
       <section className="px-5 mt-2">
-        <p>Thuộc đơn hàng</p>
+        <p>Đơn hàng</p>
         <DropdownSearchable
             onchangeValue={(value: any) => {
                 setFormData((previous: any) => ({
@@ -309,7 +266,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
             }}
             onSearchInputChange={debounce((value: any) => setSearchOrderValue(value), 600)}
             className="w-full rounded-md border border-primary-border py-1 placeholder-primary-gray bg-cbs-table-header"
-            placeholder="Thuộc đơn hàng"
+            placeholder="Đơn hàng"
             isMultiple={false}
             allowClearValueSingleInput={true}
             showTriangle={false}
@@ -336,25 +293,13 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
       </section>
 
       <section className="px-5 py-1">
-        <p>Nội dung sự việc</p>
+        <p>Nội dung</p>
         <input
           type="text"
           placeholder="Nội dung"
           name="name"
           className="h-8 w-full border border-primary-border outline-none px-2"
           defaultValue={formData.name}
-          onChange={onChange}
-        />
-      </section>
-
-      <section className="px-5 py-1">
-        <p>Diễn giải/cách xử lý</p>
-        <input
-          type="text"
-          placeholder="Diễn giải/cách xử lý"
-          name="description"
-          className="h-8 w-full border border-primary-border outline-none px-2"
-          defaultValue={formData.description}
           onChange={onChange}
         />
       </section>
@@ -367,57 +312,6 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
           name="note"
           className="h-8 w-full border border-primary-border outline-none px-2"
           defaultValue={formData.note}
-          onChange={onChange}
-        />
-      </section>
-
-      <section className="px-5 py-1">
-        <p>Đánh giá của khách (1-5*)</p>
-        <input
-          type="number"
-          placeholder="Đánh giá của khách (1-5)"
-          name="rating"
-          min={1}
-          max={5}
-          className="h-8 w-full border border-primary-border outline-none px-2"
-          value={formData?.rating}
-          onChange={onChange}
-          onKeyUp={onRatingKeyUp}
-        />
-      </section>
-
-      <section className="px-5 py-1">
-        <p>Giá trị bồi thường cho khách</p>
-        <input
-          type="number"
-          placeholder="Giá trị bồi thường cho khách"
-          name="amount"
-          className="h-8 w-full border border-primary-border outline-none px-2"
-          defaultValue={formData?.amount}
-          onChange={onChange}
-        />
-      </section>
-
-      <section className="px-5 py-1">
-        <p>Tình trạng xử lý (1-Chưa, đang xử lý|2-Đã xử lý)</p>
-        <input
-          type="number"
-          placeholder="1-Chưa, đang xử lý|2-Đã xử lý"
-          name="status"
-          className="h-8 w-full border border-primary-border outline-none px-2"
-          defaultValue={formData?.status}
-          onChange={onChange}
-        />
-      </section>
-
-      <section className="px-5 py-1">
-        <p>Phân loại (1-Lỗi của nhân viên|2-Lỗi khách quan)</p>
-        <input
-          type="number"
-          placeholder="1-Lỗi của nhân viên|2-Lỗi khách quan)"
-          name="type"
-          className="h-8 w-full border border-primary-border outline-none px-2"
-          defaultValue={formData?.type}
           onChange={onChange}
         />
       </section>
