@@ -3,7 +3,7 @@ import debounce from "lodash/debounce";
 import { useModal } from "services/hooks/useModal";
 import { useGoods } from "services/hooks/items/useGoods";
 import { toast } from "react-toastify";
-import { DropdownSearchable, Popover } from "shareComponents/common";
+import { DropdownSearchable } from "shareComponents/common";
 
 export const ModalCreateOrUpdateGoods: FC<any> = ({
   modalType,
@@ -11,6 +11,8 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
   initialValues = {
     goodsID: '',
     type: 1,
+    status: 1,
+    usage: 1,
     name: '',
     sign: '',
     unit: '',
@@ -20,8 +22,6 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
     unitPrice2: 0,
     unitPrice3: 0,
     unitPrice4: 0,
-    status: 0,
-    usage: 0,
     note: '',
     convert: '',
     convertQuantity: 1,
@@ -59,6 +59,8 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
     }
     const formDataFormat = { ...formData, 
       type: +formData.type, 
+      status: +formData.status,
+      usage: +formData.usage,
       unitprice: +formData.unitprice, 
       unitPrice: +formData.unitPrice, 
       unitPrice2: +formData.unitPrice2, 
@@ -66,8 +68,6 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
       unitPrice4: +formData.unitPrice4, 
       sellingUnitprice: +formData.sellingUnitprice, 
       convertQuantity: +formData.convertQuantity,
-      status: +formData.status,
-      usage: +formData.usage,
     }
     try {
       // Handle api here!

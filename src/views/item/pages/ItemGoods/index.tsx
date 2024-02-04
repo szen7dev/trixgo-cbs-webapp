@@ -52,6 +52,8 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
     const [initialValues, setInitialValues] = useState({
         goodsID: '',
         type: 1,
+        status: 1,
+        usage: 1,
         name: '',
         sign: '',
         unit: '',
@@ -61,8 +63,6 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
         unitPrice2: 0,
         unitPrice3: 0,
         unitPrice4: 0,
-        status: 0,
-        usage: 0,
         note: '',
         convert: '',
         convertQuantity: 1,
@@ -122,6 +122,8 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
             setInitialValues({
                 goodsID: _id,
                 type,
+                status,
+                usage,
                 name,
                 sign,
                 unit,
@@ -131,8 +133,6 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                 unitPrice2,
                 unitPrice3,
                 unitPrice4,
-                status,
-                usage,
                 note,
                 convert,
                 convertQuantity
@@ -172,6 +172,8 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                 parentID,
                 goodsID: '',
                 tpye: 1,
+                status: 1,
+                usage: 1,
                 name: '',
                 sign: '',
                 unit: '',
@@ -181,8 +183,6 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                 unitPrice2: 0,
                 unitPrice3: 0,
                 unitPrice4: 0,
-                status: 0,
-                usage: 0,
                 note: ''
             };
         }
@@ -431,6 +431,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                             <td className="py-1 px-2">
                                 <Link to={`/item/goods/${item._id}`}>
                                     {item.amountChilds>0? <b>{item?.name} ({item.amountChilds})</b>: item.name }
+                                    <p>{item?.namecv}</p>
                                 </Link>
                                 <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
                                 <p><i>{item.modifyAt ? moment(item.modifyAt).format('DD/MM/YYYY HH:mm') : ''} - {item?.userUpdate?.fullname}</i></p>
