@@ -8,7 +8,6 @@ import { ProtectedRoute } from "routes/components";
 /*=====3.LAYOUTS=====*/
 import { CrmLayout } from "views/crm/shareComponents/layouts";
 import LayoutSecondary from 'views/ppt/sharedComponents/layouts/LayoutSecondary';
-
 import AdminFunctionalTab from "views/crm/pages/CrmAdminPage/pages/AdminFunctionalTab";
 import AdminDetail from "views/crm/pages/CrmAdminPage/pages/AdminDetail";
 import AdminAuthorTab from "views/crm/pages/CrmAdminPage/pages/AdminAuthorTab";

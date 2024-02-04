@@ -8,7 +8,7 @@ export const CrmHomePage: FC = () => {
     return (
         <div className="flex flex-1 flex-col overflow-hidden h-full">
             <p className="text-lg">CrmHomePage</p>
-            <p>Hành trình khách hàng: sử dụng UI chi tiết PCM || Chi tiết hồ sơ nhân sự</p>
+            <p>Hành trình khách hàng: sử dụng UI chi tiết PCM || Chi tiết hồ sơ khách hàng</p>
             <p>1. Theo dịch vụ</p>
             <p>2. Theo dự án</p>
             <p>3. Hành trình tương ứng</p>
@@ -19,6 +19,7 @@ export const CrmHomePage: FC = () => {
                 <button className="py-1 px-4 mr-1 rounded-md border border-primary-border">Hành trình 3</button>
                 <button className="py-1 px-4 mr-1 rounded-md border border-primary-border">Hành trình 4</button>
                 <button className="py-1 px-4 mr-1 rounded-md border border-primary-border">Hành trình 5</button>
+                <button className="py-1 px-4 mr-1 rounded-md border border-primary-border">Hành trình ...</button>
             </div>
         </div>
     )
