@@ -6,7 +6,7 @@ import moment from "moment";
 import { toast } from "react-toastify";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { read, utils } from 'xlsx';
-import { formatNumberMoney, convertDisplayDate } from "utils/cmcs";
+import { formatNumberMoney } from "utils/cmcs";
 
 /*=====2.CSS=====*/
 import styles from "views/support/styles/support.module.css";
@@ -16,7 +16,7 @@ import iconPencil from 'assets/images/icons8-pencil-96 1.png';
 
 /*=====4.PAGES/COMPONENTS=====*/
 import { SearchInput } from "shareComponents/common";
-import { ModalCreateOrUpdateGoods, ModalConfirm } from '../../shareComponents/common';
+import { ModalCreateOrUpdateGoods } from '../../shareComponents/common';
 
 /*=====5.TYPINGS=====*/
 import { Storage } from "typings/items";
@@ -27,6 +27,20 @@ import { useGoods } from "services/hooks/items/useGoods";
 
 /*=====7.OTHER=====*/
 import { createLinkAndClick } from "utils";
+const TYPE = [
+	{ value: 1, text: "Thông thường" },
+	{ value: 2, text: "Topping" },
+]
+
+const STATUS = [
+	{ value: 1, text: "Hoạt động" },
+	{ value: 2, text: "Hủy" },
+]
+
+const USAGE = [
+	{ value: 1, text: "Chung" },
+	{ value: 2, text: "Cho đơn hàng" },
+]
 
 export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
 	const history = useHistory();
@@ -37,12 +51,18 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
     const [itemsChecked, setItemsChecked] = useState<Array<any>>([]);
     const [initialValues, setInitialValues] = useState({
         goodsID: '',
+        type: 1,
         name: '',
         sign: '',
         unit: '',
         unitprice: 0,
         sellingUnitprice: 0,
-        description: '',
+        unitPrice: 0,
+        unitPrice2: 0,
+        unitPrice3: 0,
+        unitPrice4: 0,
+        status: 0,
+        usage: 0,
         note: '',
         convert: '',
         convertQuantity: 1,
@@ -60,7 +80,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
             isListParentOfListChilds: "1", 
             parentID,
             // populates: JSON.stringify({
-            //     path: 'contract image parent',
+            //     path: 'parent',
             //     select: '_id name sign path'
             // })
         },
@@ -73,7 +93,6 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
             ...previousValue,
             goodsID: '',
             name: '',
-            description: '',
         }))
     }
 
@@ -99,15 +118,21 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, name, sign, unit, unitprice, sellingUnitprice, description, note, convert, convertQuantity } = newListIDChecked[0];
+            const { _id, type, name, sign, unit, unitprice, sellingUnitprice, unitPrice, unitPrice2, unitPrice3, unitPrice4, note, convert, convertQuantity, status, usage } = newListIDChecked[0];
             setInitialValues({
                 goodsID: _id,
+                type,
                 name,
                 sign,
                 unit,
                 unitprice,
                 sellingUnitprice,
-                description,
+                unitPrice,
+                unitPrice2,
+                unitPrice3,
+                unitPrice4,
+                status,
+                usage,
                 note,
                 convert,
                 convertQuantity
@@ -146,12 +171,18 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
             initValues = {
                 parentID,
                 goodsID: '',
+                tpye: 1,
                 name: '',
                 sign: '',
                 unit: '',
                 unitprice: 0,
                 sellingUnitprice: 0,
-                description: '',
+                unitPrice: 0,
+                unitPrice2: 0,
+                unitPrice3: 0,
+                unitPrice4: 0,
+                status: 0,
+                usage: 0,
                 note: ''
             };
         }
@@ -160,7 +191,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
             <div
                 className={"inline-block w-[521px] h-[400px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
                 style={{
-                    height: "550px",
+                    height: "1050px",
                 }}
             >
                 <ModalCreateOrUpdateGoods
@@ -392,10 +423,14 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                                     onChange={() => onClickCheckButton(item)}
                                 />
                             </td>
-                            <td className="py-1 px-2"></td>
+                            <td className="py-1 px-2">
+                                <p>{TYPE[item.type-1]?.text}</p>
+                                <p>{STATUS[item.status-1]?.text}</p>
+                                <p>{USAGE[item.usage-1]?.text}</p>
+                            </td>
                             <td className="py-1 px-2">
                                 <Link to={`/item/goods/${item._id}`}>
-                                    {item.amountChilds>0? <b>{item?.name}({item.amountChilds})</b>: item.name }
+                                    {item.amountChilds>0? <b>{item?.name} ({item.amountChilds})</b>: item.name }
                                 </Link>
                                 <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
                                 <p><i>{item.modifyAt ? moment(item.modifyAt).format('DD/MM/YYYY HH:mm') : ''} - {item?.userUpdate?.fullname}</i></p>
@@ -427,8 +462,7 @@ export const ItemGoodsPage: FC<{ type: number }> = ({ type }) => {
                                 {formatNumberMoney(item?.convertQuantity)}
                             </td>
                             <td className="py-1 px-2">
-                                {item?.description}
-                                <p className="text-primary-gray text-[12px]"><i>{item.note}</i></p>
+                                {item.note}
                             </td>
                             <td className="py-1 px-2">
                                
