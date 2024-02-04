@@ -206,7 +206,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
         />
       </section>
 
-      <section className="px-5">
+      <section className="px-5 mt-2">
         <p>Hành trình khách hàng (*)</p>
         <DropdownSearchable
             onchangeValue={(value: any) => {
@@ -293,7 +293,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
       </section>
 
       <section className="px-5 py-1">
-        <p>Nội dung</p>
+        <p>Nội dung (*)</p>
         <input
           type="text"
           placeholder="Nội dung"
