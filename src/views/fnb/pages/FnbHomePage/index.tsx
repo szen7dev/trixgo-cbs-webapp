@@ -137,6 +137,7 @@ export const FnBHomePage: FC<Props> = ({ type = 0 }) => {
 
   const { isLoading, isFetching, fetchNextPage, hasNextPage, totalRecord, listWithPager, totalPage, refetch } = useFnbOrder({
     params: {
+      type: +type,
       limit: 10,
       keyword,
       ...queryFnb,
