@@ -346,7 +346,7 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
                                 TT
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                                Nhân sự
+                                Khách hàng/Affiliate
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
                                 Điện thoại/Email
@@ -361,7 +361,7 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
                                 Phòng ban
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                                Hợp đồng lao động
+                                Hợp đồng
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
                                 Tình trạng
@@ -374,10 +374,10 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
                         <tbody className="">
                         {listHumanWithPager[pageIndex].map((document, index) => {
                             let linkRef;
-                            if(location.pathname.includes("/human/home/")){
-                                linkRef = `/human/home/hid=${document._id}`
+                            if(location.pathname.includes("/crm/customer/")){
+                                linkRef = `/crm/customer/cid=${document._id}`
                             }else{
-                                linkRef = `/human/home/hid=${document._id}`
+                                linkRef = `/crm/customer/cid=${document._id}`
                             }
                             return (
                                 <tr

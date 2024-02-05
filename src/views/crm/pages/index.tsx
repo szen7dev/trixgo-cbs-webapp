@@ -5,3 +5,4 @@ export {CrmOrderPage} from './CrmOrderPage';
 export {CrmJourneyPage} from './CrmJourneyPage';
 export {CrmSupportPage} from './CrmSupportPage';
 export {CrmAffiliatePage} from './CrmAffiliatePage';
+export {CrmCustomerInfoPage} from './CrmCustomerInfoPage';
