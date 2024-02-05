@@ -31,7 +31,6 @@ interface UseCashPayment {
     refetchInfo: () => void;
     fetchNextPage: () => void;
     fetchPreviousPage: () => void;
-    // listDataByProperty: (data: any) => Promise<any>;
     downloadTemplateExcelAsync: (payload: CashPaymentDownloadPayload) => Promise<any>;
     importExcelAsync: (payload: CashPaymentImportPayload) => Promise<any>;
     exportExcelAsync: (payload: any) => Promise<any>;
@@ -60,12 +59,6 @@ export const useFnbCustomerCare = ({
     const { mutateAsync: deleteManyAsync } =
         useMutation((payload: CashPaymentDeleteManyPayload) => CustomerCareRepository.deleteMany(payload)
     );
-
-    // const { data:listDataByProperty } =
-    // useQuery("cuscare-amount-by-property", () => CustomerCareRepository.fetchAmountByProperty(params), {
-    //     refetchOnWindowFocus: false,
-    //     enabled: isFetchInfo,
-    // });
 
     const { data: detailData, isLoading: isLoadingInfo, refetch: refetchInfo } =
         useQuery("CashPayment__info", () => CustomerCareRepository.fetchInfo(params), {
@@ -143,7 +136,6 @@ export const useFnbCustomerCare = ({
         refetchInfo,
         fetchNextPage,
         fetchPreviousPage,
-        // listDataByProperty,
         downloadTemplateExcelAsync,
         importExcelAsync,
         exportExcelAsync,

@@ -3,8 +3,8 @@ import cn from "classnames";
 import debounce from "lodash/debounce";
 import moment from "moment";
 import { toast } from "react-toastify";
-import { read, utils } from 'xlsx';
-import { formatNumberMoney } from "utils/cmcs";
+// import { read, utils } from 'xlsx';
+// import { formatNumberMoney } from "utils/cmcs";
 
 /*=====2.CSS=====*/
 import styles from "views/support/styles/support.module.css";
@@ -49,23 +49,17 @@ const BACKGROUND = [
 	{ value: 6, color: "bg-pink-600", color2: "1F4E78" },
 	{ value: 7, color: "bg-gray-600", color2: "262626" },
 	{ value: 8, color: "bg-teal-400", color2: "262626" },
+	{ value: 9, color: "bg-teal-400", color2: "262626" },
+	{ value: 10, color: "bg-teal-400", color2: "262626" },
+	{ value: 11, color: "bg-teal-400", color2: "262626" },
+	{ value: 12, color: "bg-teal-400", color2: "262626" },
+	{ value: 13, color: "bg-teal-400", color2: "262626" },
+	{ value: 14, color: "bg-teal-400", color2: "262626" },
+	{ value: 15, color: "bg-teal-400", color2: "262626" },
 ]
 
 export const CrmJourneyPage: FC = () => {
-
-    const { listCustomerCareByProperty, refetchListCustomerCareByProperty } = useCustomerCareByProperty({
-        params: {
-            option: 5,
-            // fromDate: inputFilter.fromDate,
-            // toDate: inputFilter.toDate,
-        },
-        isFetchList: true
-      })
-
-    //   console.log(listCustomerCareByProperty)
-
-      const { user } = useAuth();
-
+    const { user } = useAuth();
     const [isShowImageFullScreen, setIsShowImageFullScreen] = useState(false);
 
 	const [defaultState, setDefaultState] = useState({
@@ -81,15 +75,15 @@ export const CrmJourneyPage: FC = () => {
 		companyID: user?.company?._id,
 	})
 
-    const STATUS = [
-        { _id: 1, text: 'Chưa, đang xử lý' },
-        { _id: 2, text: 'Hoàn thành'}
-    ]
+    // const STATUS = [
+    //     { _id: 1, text: 'Chưa, đang xử lý' },
+    //     { _id: 2, text: 'Hoàn thành'}
+    // ]
 
-    const TYPE = [
-        { _id: 1, text: 'Lỗi của nhân viên' },
-        { _id: 2, text: 'Lỗi khách quan'}
-    ]
+    // const TYPE = [
+    //     { _id: 1, text: 'Lỗi của nhân viên' },
+    //     { _id: 2, text: 'Lỗi khách quan'}
+    // ]
 
     const CHANNEL = [
         { _id: 1, text: 'Offline' },
@@ -163,6 +157,15 @@ export const CrmJourneyPage: FC = () => {
         amount: 0,
         status: 1,
         type: 1,
+    })
+
+    const { listCustomerCareByProperty, refetchListCustomerCareByProperty } = useCustomerCareByProperty({
+        params: {
+            option: 5,
+            fromDate: inputFilter.fromDate,
+            toDate: inputFilter.toDate,
+        },
+        isFetchList: true
     })
 
     const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch } = useFnbCustomerCare({
@@ -306,30 +309,30 @@ export const CrmJourneyPage: FC = () => {
     }
 
     //_____Import, export excel
-    // const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
-    //     isExporting: false,
-    // });
-    // const { exportExcelAsync } = useFnbCustomerCare({});
+    const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
+        isExporting: false,
+    });
+    const { exportExcelAsync } = useFnbCustomerCare({});
 
-    // const handleExportExcel = async () => {
-	// 	try {
-    //         setStateExport({ isExporting: true });
-    //         const { error, data } = await exportExcelAsync({
-    //             customerID,
-    //             userCreateID: userID,
-    //         });
+    const handleExportExcel = async () => {
+		try {
+            setStateExport({ isExporting: true });
+            const { error, data } = await exportExcelAsync({
+                customerID,
+                userCreateID: userID,
+            });
 
-    //         if(error) {
-    //             return toast.warn(data?.message);
-    //         }
+            if(error) {
+                return toast.warn(data?.message);
+            }
 
-    //         data && createLinkAndClick(data, '_self');
-    //     } catch (error: any) {
-    //         toast.error(error.message)
-    //     } finally {
-    //         setStateExport({ isExporting: false });
-    //     }
-	// }
+            data && createLinkAndClick(data, '_self');
+        } catch (error: any) {
+            toast.error(error.message)
+        } finally {
+            setStateExport({ isExporting: false });
+        }
+	}
 
     const handleOnChangeDate = useCallback((date, input) => {
         if (input) {
@@ -379,16 +382,16 @@ export const CrmJourneyPage: FC = () => {
     return (
         <main className="relative h-full">
             {/* <div className={"text-lg"}>Hành trình khách hàng</div> */}
-            <div className="flex flex-wrap mt-1 mb-1">
+            <div className="flex flex-wrap mb-1">
                 { 
                     listCustomerCareByProperty?.map((item: any, index: any) => {
-                        const color = `cursor-pointer max-w-sm rounded overflow-hidden shadow-lg m-4 mr-2 mb-2`
+                        const color = `cursor-pointer max-w-sm rounded overflow-hidden shadow-lg mb-2 mr-1`
                         const color2 = `#${BACKGROUND[index].color2}`
 
                         return (
                             <div key={index} className={color} style={{background: color2}}>
                                 {/* <img className="w-full" src="/path/to/your/image" alt="Step 1"/> */}
-                                <div className="px-3 py-1">
+                                <div className="px-2 py-1">
                                     <div className="font-bold text-sm mb-1 text-white">{item._id.journey.name} ({item.quantity})</div>
                                     <p className="text-white text-x-small">
                                     {item._id.journey.name}
@@ -494,11 +497,11 @@ export const CrmJourneyPage: FC = () => {
                     />
                     <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
 
-                      {/* <button className={"flex items-center justify-center mx-3 ml-3"}
+                      <button className={"flex items-center justify-center mx-3 ml-3 mr-10"}
                               onClick={handleExportExcel}
                           >
-                              Tải Excel
-                      </button> */}
+                              Tải báo cáo Excel
+                      </button>
 
                       {/* Nếu chọn 1 phẩn tử => chỉ cho update */}
                       {itemsChecked.length === 1 ? (
