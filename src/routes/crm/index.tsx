@@ -37,7 +37,7 @@ const CrmRouter: FC = () => {
                     <ProtectedRoute exact path="/crm/customer" component={CrmCustomerPage}/>
                     <ProtectedRoute exact path="/crm/support" component={CrmSupportPage}/>
                     <ProtectedRoute exact path="/crm/journey" component={CrmJourneyPage}/>
-                    <ProtectedRoute exact path="/crm/order" component={FnBHomePage}/>
+                    <ProtectedRoute exact path="/crm/order" component={() => FnBHomePage({ type: 1})}/>
                     <ProtectedRoute exact path="/crm/affiliate" component={CrmAffiliatePage}/>
 
                     <LayoutSecondary pages={[
