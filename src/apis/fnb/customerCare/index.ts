@@ -25,7 +25,7 @@ export const CustomerCareRepository = {
     fetchListByProperty: (params: any): Promise<any> => fetchListByProperty(params),
     downloadTemplateExcel  : (payload: CashPaymentDownloadPayload)            : Promise<any> => downloadTemplateExcel(payload),
     importExcel            : (payload: CashPaymentImportPayload)              : Promise<any> => importExcel(payload),
-    exportExcel            : (payload: any)          : Promise<any> => exportExcel(payload),
+    exportExcel            : (payload: any)                                   : Promise<any> => exportExcel(payload),
 };
 
 async function insert(payload: CashPaymentInsertPayload): Promise<CashPaymentInfoResponse> {
