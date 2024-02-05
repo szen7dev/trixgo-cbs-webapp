@@ -23,7 +23,8 @@ import {
     CrmSupportPage,
     CrmJourneyPage,
     CrmOrderPage,
-    CrmAffiliatePage
+    CrmAffiliatePage,
+    CrmCustomerInfoPage
 } from "views/crm/pages";
 import { FnBHomePage } from "views/fnb/pages/FnbHomePage/index";
 
@@ -39,6 +40,7 @@ const CrmRouter: FC = () => {
                     <ProtectedRoute exact path="/crm/journey" component={CrmJourneyPage}/>
                     <ProtectedRoute exact path="/crm/order" component={() => FnBHomePage({ type: 1})}/>
                     <ProtectedRoute exact path="/crm/affiliate" component={CrmAffiliatePage}/>
+                    <ProtectedRoute exact path="/crm/customer/cid=:id" component={CrmCustomerInfoPage} />
 
                     <LayoutSecondary pages={[
                         { id: '1', title: 'Nhóm chức năng', path: '/crm/admin', navExact: true },
