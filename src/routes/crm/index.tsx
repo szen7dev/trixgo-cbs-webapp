@@ -31,40 +31,42 @@ import { FnBHomePage } from "views/fnb/pages/FnbHomePage/index";
 
 const CrmRouter: FC = () => {
     return (
-        <>
-            <Switch>
-                <CrmLayout>
-                    <ProtectedRoute exact path="/crm/home" component={CrmHomePage}/>
-                    <ProtectedRoute exact path="/crm/dashboard" component={CrmDashboardPage}/>
-                    <ProtectedRoute exact path="/crm/customer" component={CrmCustomerPage}/>
-                    <ProtectedRoute exact path="/crm/support" component={CrmSupportPage}/>
-                    <ProtectedRoute exact path="/crm/journey" component={CrmJourneyPage}/>
-                    <ProtectedRoute exact path="/crm/booking" component={CrmBookingPage}/>
-                    <ProtectedRoute exact path="/crm/order" component={() => FnBHomePage({ type: 1})}/>
-                    <ProtectedRoute exact path="/crm/affiliate" component={CrmAffiliatePage}/>
-                    <ProtectedRoute exact path="/crm/customer/cid=:id" component={CrmCustomerInfoPage} />          
-                    <LayoutSecondary pages={[
-                            { id: '1', title: 'Nhóm chức năng', path: '/crm/admin', navExact: true },
-                            {
-                            id: '2', title: 'Phân quyền chức năng', path: '/crm/admin/2', location: (location) => {
+        <ProtectedRoute path="/crm/:path?">
+            <CrmLayout>
+                <Switch>
+                    <Route path="/crm/admin">
+                        <LayoutSecondary pages={[
+                                { id: '1', title: 'Nhóm chức năng', path: '/crm/admin', navExact: true },
+                                {
+                                id: '2', title: 'Phân quyền chức năng', path: '/crm/admin/2', location: (location) => {
 
-                                // Get match params
-                                const match = matchPath<{ id: string }>(location.pathname, { path: '/crm/admin/:id/detail' })
+                                    // Get match params
+                                    const match = matchPath<{ id: string }>(location.pathname, { path: '/crm/admin/:id/detail' })
 
-                                // Push to state
-                                return ({ pathname: '/crm/admin/2', state: match ? match.params.id : null })
-                            }
-                            }
-                        ]}>
-                        <Route exact path="/crm/admin" component={AdminFunctionalTab} />
-                        <Route exact path="/crm/admin/:id/detail" component={AdminDetail} />
-                        <Route exact path="/crm/admin/2" component={AdminAuthorTab} />
-                    </LayoutSecondary>          
-                    <ProtectedRoute exact path="/crm/*" component={ErrorPage} />
-                </CrmLayout>
-            </Switch>
-        </>
+                                    // Push to state
+                                    return ({ pathname: '/crm/admin/2', state: match ? match.params.id : null })
+                                }
+                                }
+                            ]}>
+                            <Route exact path="/crm/admin" component={AdminFunctionalTab} />
+                            <Route exact path="/crm/admin/:id/detail" component={AdminDetail} />
+                            <Route exact path="/crm/admin/2" component={AdminAuthorTab} />
+                        </LayoutSecondary>          
+                    </Route> 
+                    <Route exact path="/crm/home" component={CrmHomePage}/>
+                    <Route exact path="/crm/dashboard" component={CrmDashboardPage}/>
+                    <Route exact path="/crm/customer" component={CrmCustomerPage}/>
+                    <Route exact path="/crm/support" component={CrmSupportPage}/>
+                    <Route exact path="/crm/journey" component={CrmJourneyPage}/>
+                    <Route exact path="/crm/booking" component={CrmBookingPage}/>
+                    <Route exact path="/crm/order" component={() => FnBHomePage({ type: 1})}/>
+                    <Route exact path="/crm/affiliate" component={CrmAffiliatePage}/>
+                    <Route exact path="/crm/customer/cid=:id" component={CrmCustomerInfoPage} />         
+                    <Route exact path="/crm/*" component={ErrorPage} />
+                </Switch>
+            </CrmLayout>
+        </ProtectedRoute>
     )
-};
+}
 
-export default CrmRouter;
+export default CrmRouter

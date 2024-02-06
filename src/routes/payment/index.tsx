@@ -26,37 +26,37 @@ import {
 
 const PaymentRouter: FC = () => {
     return (
-        <>
+        <ProtectedRoute path="/payment/:path?">
             <PaymentLayout>
                 <Switch>
-                    <ProtectedRoute exact path="/payment/home" component={PaymentHomePage}/>
-                    <ProtectedRoute exact path="/payment/dashboard" component={PaymentDashboardPage}/>
-                    <ProtectedRoute exact path="/payment/prepaid" component={PaymentPrepaidPage}/>
-                    <ProtectedRoute exact path="/payment/activity" component={PaymentActivityPage}/>
+                    <Route path="/payment/admin">
+                        <LayoutSecondary pages={[
+                                { id: '1', title: 'Nhóm chức năng', path: '/payment/admin', navExact: true },
+                                {
+                                id: '2', title: 'Phân quyền chức năng', path: '/payment/admin/2', location: (location) => {
 
-                    <LayoutSecondary pages={[
-                            { id: '1', title: 'Nhóm chức năng', path: '/payment/admin', navExact: true },
-                            {
-                            id: '2', title: 'Phân quyền chức năng', path: '/payment/admin/2', location: (location) => {
+                                    // Get match params
+                                    const match = matchPath<{ id: string }>(location.pathname, { path: '/payment/admin/:id/detail' })
 
-                                // Get match params
-                                const match = matchPath<{ id: string }>(location.pathname, { path: '/payment/admin/:id/detail' })
-
-                                // Push to state
-                                return ({ pathname: '/payment/admin/2', state: match ? match.params.id : null })
-                            }
-                            }
-                        ]}>
-                        <Route exact path="/payment/admin" component={AdminFunctionalTab} />
-                        <Route exact path="/payment/admin/:id/detail" component={AdminDetail} />
-                        <Route exact path="/payment/admin/2" component={AdminAuthorTab} />
-                    </LayoutSecondary>
-                    
-                    <ProtectedRoute exact path="/payment/*" component={ErrorPage} />
+                                    // Push to state
+                                    return ({ pathname: '/payment/admin/2', state: match ? match.params.id : null })
+                                }
+                                }
+                            ]}>
+                            <Route exact path="/payment/admin" component={AdminFunctionalTab} />
+                            <Route exact path="/payment/admin/:id/detail" component={AdminDetail} />
+                            <Route exact path="/payment/admin/2" component={AdminAuthorTab} />
+                        </LayoutSecondary>
+                    </Route> 
+                    <Route exact path="/payment/home" component={PaymentHomePage}/>
+                    <Route exact path="/payment/dashboard" component={PaymentDashboardPage}/>
+                    <Route exact path="/payment/prepaid" component={PaymentPrepaidPage}/>
+                    <Route exact path="/payment/activity" component={PaymentActivityPage}/>
+                    <Route exact path="/payment/*" component={ErrorPage} />
                 </Switch>
             </PaymentLayout>
-        </>
+        </ProtectedRoute>
     )
-};
+}
 
-export default PaymentRouter;
+export default PaymentRouter
