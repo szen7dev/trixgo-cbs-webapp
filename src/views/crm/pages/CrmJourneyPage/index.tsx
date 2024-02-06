@@ -167,6 +167,7 @@ export const CrmJourneyPage: FC = () => {
         },
         isFetchList: true
     })
+    // console.log(listCustomerCareByProperty)
 
     const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch } = useFnbCustomerCare({
         params: { 
@@ -381,7 +382,6 @@ export const CrmJourneyPage: FC = () => {
 
     return (
         <main className="relative h-full">
-            {/* <div className={"text-lg"}>Hành trình khách hàng</div> */}
             <div className="flex flex-wrap mb-1">
                 { 
                     listCustomerCareByProperty?.map((item: any, index: any) => {
@@ -394,7 +394,7 @@ export const CrmJourneyPage: FC = () => {
                                 <div className="px-2 py-1">
                                     <div className="font-bold text-sm mb-1 text-white">{item._id.journey.name} ({item.quantity})</div>
                                     <p className="text-white text-x-small">
-                                    {item._id.journey.name}
+                                    {item._id.journey?.description}
                                     </p>
                                 </div>
                             </div>

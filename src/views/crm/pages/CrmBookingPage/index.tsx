@@ -381,7 +381,6 @@ export const CrmBookingPage: FC = () => {
 
     return (
         <main className="relative h-full">
-            {/* <div className={"text-lg"}>Hành trình khách hàng</div> */}
             <div className="flex flex-wrap mb-1">
                 { 
                     listCustomerCareByProperty?.map((item: any, index: any) => {
