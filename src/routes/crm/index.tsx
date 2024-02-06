@@ -24,45 +24,45 @@ import {
     CrmJourneyPage,
     CrmOrderPage,
     CrmAffiliatePage,
-    CrmCustomerInfoPage
+    CrmCustomerInfoPage,
+    CrmBookingPage,
 } from "views/crm/pages";
 import { FnBHomePage } from "views/fnb/pages/FnbHomePage/index";
 
 const CrmRouter: FC = () => {
     return (
         <>
-            <CrmLayout>
-                <Switch>
+            <Switch>
+                <CrmLayout>
                     <ProtectedRoute exact path="/crm/home" component={CrmHomePage}/>
                     <ProtectedRoute exact path="/crm/dashboard" component={CrmDashboardPage}/>
                     <ProtectedRoute exact path="/crm/customer" component={CrmCustomerPage}/>
                     <ProtectedRoute exact path="/crm/support" component={CrmSupportPage}/>
                     <ProtectedRoute exact path="/crm/journey" component={CrmJourneyPage}/>
+                    <ProtectedRoute exact path="/crm/booking" component={CrmBookingPage}/>
                     <ProtectedRoute exact path="/crm/order" component={() => FnBHomePage({ type: 1})}/>
                     <ProtectedRoute exact path="/crm/affiliate" component={CrmAffiliatePage}/>
-                    <ProtectedRoute exact path="/crm/customer/cid=:id" component={CrmCustomerInfoPage} />
-
+                    <ProtectedRoute exact path="/crm/customer/cid=:id" component={CrmCustomerInfoPage} />          
                     <LayoutSecondary pages={[
-                        { id: '1', title: 'Nhóm chức năng', path: '/crm/admin', navExact: true },
-                        {
-                        id: '2', title: 'Phân quyền chức năng', path: '/crm/admin/2', location: (location) => {
+                            { id: '1', title: 'Nhóm chức năng', path: '/crm/admin', navExact: true },
+                            {
+                            id: '2', title: 'Phân quyền chức năng', path: '/crm/admin/2', location: (location) => {
 
-                            // Get match params
-                            const match = matchPath<{ id: string }>(location.pathname, { path: '/crm/admin/:id/detail' })
+                                // Get match params
+                                const match = matchPath<{ id: string }>(location.pathname, { path: '/crm/admin/:id/detail' })
 
-                            // Push to state
-                            return ({ pathname: '/crm/admin/2', state: match ? match.params.id : null })
-                        }
-                        }
-                    ]}>
+                                // Push to state
+                                return ({ pathname: '/crm/admin/2', state: match ? match.params.id : null })
+                            }
+                            }
+                        ]}>
                         <Route exact path="/crm/admin" component={AdminFunctionalTab} />
                         <Route exact path="/crm/admin/:id/detail" component={AdminDetail} />
                         <Route exact path="/crm/admin/2" component={AdminAuthorTab} />
-                    </LayoutSecondary>
-                    
+                    </LayoutSecondary>          
                     <ProtectedRoute exact path="/crm/*" component={ErrorPage} />
-                </Switch>
-            </CrmLayout>
+                </CrmLayout>
+            </Switch>
         </>
     )
 };
