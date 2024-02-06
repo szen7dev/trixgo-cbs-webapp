@@ -38,7 +38,7 @@ import { useQueryListDoctype } from "services/hooks/useHuman";
 /*=====7.OTHER=====*/
 import { createLinkAndClick } from "utils";
 import { validateFiles } from 'validation/file';
-import { useFnbCustomerCare, useCustomerCareByProperty } from "services/hooks/fnb/useFnbCustomerCare";
+import { useFnbCustomerBooking, useCustomerCareByProperty } from "services/hooks/fnb/useFnbCustomerBooking";
 
 const BACKGROUND = [
 	{ value: 1, color: "bg-red-400", color2: "F11F20" },
@@ -168,7 +168,7 @@ export const CrmBookingPage: FC = () => {
         isFetchList: true
     })
 
-    const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch } = useFnbCustomerCare({
+    const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch } = useFnbCustomerBooking({
         params: { 
             option: 1,
             keyword, 
@@ -312,7 +312,7 @@ export const CrmBookingPage: FC = () => {
     const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
         isExporting: false,
     });
-    const { exportExcelAsync } = useFnbCustomerCare({});
+    const { exportExcelAsync } = useFnbCustomerBooking({});
 
     const handleExportExcel = async () => {
 		try {
@@ -370,7 +370,7 @@ export const CrmBookingPage: FC = () => {
 
         // Update image to customer_cares
         await API.put(
-            `/api/fnb/customer_cares`,
+            `/api/fnb/customer_bookings`,
             {
                 customerCareID,
                 imagesID,

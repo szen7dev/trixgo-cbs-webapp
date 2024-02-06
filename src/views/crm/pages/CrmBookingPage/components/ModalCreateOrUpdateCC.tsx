@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
 import debounce from "lodash/debounce";
 import { useModal } from "services/hooks/useModal";
-import { useFnbCustomerCare } from "services/hooks/fnb/useFnbCustomerCare";
+import { useFnbCustomerBooking } from "services/hooks/fnb/useFnbCustomerBooking";
 import { toast } from "react-toastify";
 import { DropdownSearchable } from "shareComponents/common";
 import { useQueryListContact } from "services/hooks/cmcs/useContractIncome";
@@ -66,7 +66,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
   const {
     insertAsync, 
     updateAsync
-} = useFnbCustomerCare({
+} = useFnbCustomerBooking({
     params: { keyword },
     isFetchList: true
 })
