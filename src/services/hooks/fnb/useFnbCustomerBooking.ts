@@ -61,7 +61,7 @@ export const useFnbCustomerBooking = ({
     );
 
     const { data: detailData, isLoading: isLoadingInfo, refetch: refetchInfo } =
-        useQuery("CashPayment__info", () => CustomerBookingRepository.fetchInfo(params), {
+        useQuery("crmBooking__info", () => CustomerBookingRepository.fetchInfo(params), {
             refetchOnWindowFocus: false,
             enabled: isFetchInfo,
         });
@@ -76,7 +76,7 @@ export const useFnbCustomerBooking = ({
         fetchPreviousPage,
         hasNextPage
     } = useInfiniteQuery(
-        ['CashPayment--list', params],
+        ['crmBooking__list', params],
         async ({ pageParam }: any) =>
             CustomerBookingRepository.fetchList({
                 lastestID: pageParam ?? "",

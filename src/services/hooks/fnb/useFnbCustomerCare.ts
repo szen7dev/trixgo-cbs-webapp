@@ -61,7 +61,7 @@ export const useFnbCustomerCare = ({
     );
 
     const { data: detailData, isLoading: isLoadingInfo, refetch: refetchInfo } =
-        useQuery("CashPayment__info", () => CustomerCareRepository.fetchInfo(params), {
+        useQuery("crmCare__info", () => CustomerCareRepository.fetchInfo(params), {
             refetchOnWindowFocus: false,
             enabled: isFetchInfo,
         });
@@ -76,7 +76,7 @@ export const useFnbCustomerCare = ({
         fetchPreviousPage,
         hasNextPage
     } = useInfiniteQuery(
-        ['CashPayment--list', params],
+        ['crmCare__list', params],
         async ({ pageParam }: any) =>
             CustomerCareRepository.fetchList({
                 lastestID: pageParam ?? "",
