@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import moment from "moment";
 import { formatNumberMoney } from "utils/cmcs";
 import type { Human } from 'typings/human';
+import { useFnbCustomerCare, useCustomerJourneyByProperty } from "services/hooks/fnb/useFnbCustomerCare";
 
 type Props = {
   info: Human
@@ -28,6 +29,16 @@ export const JourneyInfo: FC<Props> = memo((props) => {
 
   const { info } = props;
   // console.log(info)
+
+  const { listCustomerJourneyByProperty, refetchListCustomerJourneyByProperty } = useCustomerJourneyByProperty({
+    params: {
+        option: 5,
+        // fromDate: inputFilter.fromDate,
+        // toDate: inputFilter.toDate,
+    },
+    isFetchList: true
+})
+console.log(listCustomerJourneyByProperty)
 
   return (
     <div className="px-4">

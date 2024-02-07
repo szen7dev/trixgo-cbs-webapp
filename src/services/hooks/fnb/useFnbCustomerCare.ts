@@ -142,19 +142,19 @@ export const useFnbCustomerCare = ({
     }
 }
 
-export const useCustomerCareByProperty = ({ params = {},  isFetchList = false }: any): any => {
+export const useCustomerJourneyByProperty = ({ params = {},  isFetchList = false }: any): any => {
 
-    const { data: detailData, isLoading: listCustomerCareByPropertyIsLoading, refetch: refetchListCustomerCareByProperty } =
+    const { data: detailData, isLoading: listCustomerJourneyByPropertyIsLoading, refetch: refetchListCustomerJourneyByProperty } =
     useQuery([`CustomerCare_by_property`,{...params, isFetchList }],() => CustomerCareRepository.fetchListByProperty(params), {
         refetchOnWindowFocus: false,
         enabled: isFetchList,
     });
     
-    const listCustomerCareByProperty = detailData?.data;
+    const listCustomerJourneyByProperty = detailData?.data;
 
     return {
-        listCustomerCareByProperty,
-        listCustomerCareByPropertyIsLoading,
-        refetchListCustomerCareByProperty
+        listCustomerJourneyByProperty,
+        listCustomerJourneyByPropertyIsLoading,
+        refetchListCustomerJourneyByProperty
     }
 }
