@@ -57,7 +57,7 @@ export const PaymentInfo: FC<Props> = memo((props) => {
       </div>
 
       {/* Thanh toán và công nợ */}
-      <p className="text-bold text-primary-gray text-lg mb-2 mt-5">Thanh toán và công nợ - Phân hệ kế toán</p>
+      <p className="text-bold text-primary-gray text-lg mb-2 mt-5">Thanh toán và công nợ - Dữ liệu từ kế toán</p>
       <div className="text-[13px]">
 
       </div>
