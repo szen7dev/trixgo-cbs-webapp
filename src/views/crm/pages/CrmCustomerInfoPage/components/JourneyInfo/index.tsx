@@ -9,21 +9,6 @@ type Props = {
   info: Human
 };
 
-const DATE_FORMAT = 'DD/MM/YYYY';
-
-export enum CONTACT_POLICY {
-  'Không' = 1,
-  'Bộ đội phục viên' = 2,
-  'Con thương bệnh binh' = 3,
-  'Gia đình chính sách' = 4,
-};
-
-export enum INSURANCE_STATUS {
-  'Chưa nộp' = 1,
-  'Đã nộp' = 2,
-  'Thêm mới' = 3,
-}
-
 const BACKGROUND = [
 	{ value: 1, color: "bg-red-400", color2: "F11F20" },
 	{ value: 2, color: "bg-yellow-300", color2: "fa6b07" },

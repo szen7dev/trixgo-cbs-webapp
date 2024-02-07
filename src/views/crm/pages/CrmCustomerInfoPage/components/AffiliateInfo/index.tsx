@@ -8,21 +8,6 @@ type Props = {
   info: Human
 };
 
-const DATE_FORMAT = 'DD/MM/YYYY';
-
-export enum CONTACT_POLICY {
-  'Không' = 1,
-  'Bộ đội phục viên' = 2,
-  'Con thương bệnh binh' = 3,
-  'Gia đình chính sách' = 4,
-};
-
-export enum INSURANCE_STATUS {
-  'Chưa nộp' = 1,
-  'Đã nộp' = 2,
-  'Thêm mới' = 3,
-}
-
 export const AffiliateInfo: FC<Props> = memo((props) => {
   const { t: i18n } = useTranslation(["human"]);
 

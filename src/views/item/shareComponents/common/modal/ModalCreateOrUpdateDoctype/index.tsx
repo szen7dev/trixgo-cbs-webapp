@@ -222,10 +222,10 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
                 label: `${item.name}`,
                 value: item._id,
             }))}
-            initialValue={{
-              label: `${initialValues?.linkItem?.name}`,
-              value: initialValues?.linkItem?._id
-            }}
+            // initialValue={{
+            //   label: `${initialValues?.linkItem?.name}`,
+            //   value: initialValues?.linkItem?._id
+            // }}
             formatItem={{
                 id: "value",
                 text: "label",
