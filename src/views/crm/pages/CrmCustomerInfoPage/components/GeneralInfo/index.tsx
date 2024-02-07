@@ -30,10 +30,9 @@ export const GeneralInfo: FC<Props> = memo((props) => {
   // console.log(info)
 
   return (
-    <div className="border-b-8 border-accent-light px-4 py-6">
-      <p className="text-bold text-primary-gray text-lg mb-4 uppercase">
-        {i18n("general-info")}
-      </p>
+    <div className="px-4 mt-5">
+      {/* Thông tin khách hàng */}
+      <p className="text-bold text-primary-gray text-lg mb-2">Thông tin khách hàng</p>
       <div className="text-[13px]">
         <table className="table-fixed border w-full">
           <tbody>
@@ -99,7 +98,7 @@ export const GeneralInfo: FC<Props> = memo((props) => {
               </td>
             </tr>
 
-            <tr className="border h-7 leading-7">
+            {/* <tr className="border h-7 leading-7">
               <td className="border text-primary-gray w-1/6 pl-4">
                 {i18n("identity")}
               </td>
@@ -349,7 +348,7 @@ export const GeneralInfo: FC<Props> = memo((props) => {
               <td className="border w-2/6 pl-4">
                 {info?.userUpdate?.fullname} - {moment(info?.modifyAt).isValid() && moment(info?.modifyAt).format("DD/MM/YYYY hh:mm")}
               </td>
-            </tr>
+            </tr> */}
           </tbody>
         </table>
       </div>

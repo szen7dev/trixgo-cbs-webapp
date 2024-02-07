@@ -12,7 +12,7 @@ import ThreeDotVerticalIcon from "assets/images/icon-3dots-vertical.svg";
 import PencilIcon from "assets/images/icons8-pencil.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
-import { GeneralInfo } from "./components";
+import { GeneralInfo, AffiliateInfo, BookingInfo, JourneyInfo, OrderInfo, PaymentInfo } from "./components";
 import { Loader } from "shareComponents/common";
 import { NewHumanModal } from "views/human/shareComponents/common";
 
@@ -158,71 +158,20 @@ export const CrmCustomerInfoPage: FC = () => {
 
   return (
     <main className="mb-4">
-      <div className="flex items-center justify-between px-4 h-12 border border-gray-200">
+      <div className="flex items-center px-4 h-12 border border-gray-200">
         <img
           src={BackIcon}
           alt="Back"
           onClick={() => history.goBack()}
-          className="cursor-pointer"
+          className="cursor-pointer mr-5"
         />
-        <div
-          className="w-10 h-10 bg-accent-light rounded-full flex items-center justify-center cursor-pointer"
-          onClick={() => setOpenHumanOption(!openHumanOption)}
-        >
-          <img
-            src={ThreeDotVerticalIcon}
-            alt="Three Dot"
-            className="relative select-none"
-          />
-          {openHumanOption && (
-            <div
-              ref={refMenuDropdown}
-              className="
-                absolute
-                w-64
-                bg-primary-light
-                top-12
-                right-11
-                border
-                border-gray-200
-                rounded-bl-md
-                rounded-br-md
-              "
-            >
-              <div
-                className="py-2 h-1/4 flex items-center gap-5 pl-8 hover:bg-accent-light"
-                onClick={handleClickUpdateButton(detailHuman)}
-              >
-                <img
-                  src={PencilIcon}
-                  alt="Pencil"
-                  className="w-[22px] select-none"
-                />
-                <span className="text-[13px] select-none">
-                  {i18n("menu-dropdown.update")}
-                </span>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div className="flex items-center h-40 border border-gray-200 bg-cbs-secondary pl-20">
         <img
           src={`${process.env.REACT_APP_URL_S3_CONTACT}/${detailHuman.image}`}
           alt="Avartar"
-          className="rounded-full w-24 h-24 mr-8"
+          className="rounded-full w-8 h-8 mr-5"
         />
-        <div>
-          <p className="text-bold text-2xl text-primary-light">
-            {detailHuman.name}
-          </p>
-          <p className="text-primary-light text-lg">
-            {detailHuman?.position?.name}
-          </p>
-        </div>
+        <p className="text-lg">{detailHuman.name}</p>
       </div>
-
       <section>
         <GeneralInfo
           info={{
@@ -273,6 +222,31 @@ export const CrmCustomerInfoPage: FC = () => {
             modifyAt: detailHuman.modifyAt,
             bankAccount: detailHuman.bankAccount,
             insuranceFee: detailHuman.insuranceFee,
+          }}
+        />
+        <JourneyInfo
+          info={{
+            _id: detailHuman?._id,
+          }}
+        />
+        <OrderInfo
+          info={{
+            _id: detailHuman?._id,
+          }}
+        />
+        <BookingInfo
+          info={{
+            _id: detailHuman?._id,
+          }}
+        />
+        <AffiliateInfo
+          info={{
+            _id: detailHuman?._id,
+          }}
+        />
+        <PaymentInfo
+          info={{
+            _id: detailHuman?._id,
           }}
         />
       </section>
