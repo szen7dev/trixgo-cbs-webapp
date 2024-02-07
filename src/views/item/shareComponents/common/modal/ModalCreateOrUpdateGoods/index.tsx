@@ -35,8 +35,8 @@ export const ModalCreateOrUpdateGoods: FC<any> = ({
     const bottom = scrollHeight - scrollTop >= clientHeight - 10;
     if (!bottom || !hasNextPage) return;
 
-    fetchNextPage();
-}
+      fetchNextPage();
+  }
 
   const [keyword, setKeyword] = useState('');
 

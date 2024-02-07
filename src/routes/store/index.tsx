@@ -27,37 +27,37 @@ import {
 
 const StoreRouter: FC = () => {
     return (
-        <>
+        <ProtectedRoute path="/store/:path?">
             <StoreLayout>
                 <Switch>
-                    <ProtectedRoute exact path="/store/home" component={StoreHomePage}/>
-                    <ProtectedRoute exact path="/store/dashboard" component={StoreDashboardPage}/>
-                    <ProtectedRoute exact path="/store/import" component={StoreImportPage}/>
-                    <ProtectedRoute exact path="/store/export" component={StoreExportPage}/>
-                    <ProtectedRoute exact path="/store/debt" component={StoreDebtPage}/>
+                    <Route path="/store/admin">
+                        <LayoutSecondary pages={[
+                            { id: '1', title: 'Nhóm chức năng', path: '/store/admin', navExact: true },
+                            {
+                            id: '2', title: 'Phân quyền chức năng', path: '/store/admin/2', location: (location) => {
 
-                    <LayoutSecondary pages={[
-                        { id: '1', title: 'Nhóm chức năng', path: '/store/admin', navExact: true },
-                        {
-                        id: '2', title: 'Phân quyền chức năng', path: '/store/admin/2', location: (location) => {
+                                // Get match params
+                                const match = matchPath<{ id: string }>(location.pathname, { path: '/store/admin/:id/detail' })
 
-                            // Get match params
-                            const match = matchPath<{ id: string }>(location.pathname, { path: '/store/admin/:id/detail' })
-
-                            // Push to state
-                            return ({ pathname: '/store/admin/2', state: match ? match.params.id : null })
-                        }
-                        }
-                    ]}>
-                        <Route exact path="/store/admin" component={AdminFunctionalTab} />
-                        <Route exact path="/store/admin/:id/detail" component={AdminDetail} />
-                        <Route exact path="/store/admin/2" component={AdminAuthorTab} />
-                    </LayoutSecondary>
-                    
-                    <ProtectedRoute exact path="/store/*" component={ErrorPage} />
+                                // Push to state
+                                return ({ pathname: '/store/admin/2', state: match ? match.params.id : null })
+                            }
+                            }
+                        ]}>
+                            <Route exact path="/store/admin" component={AdminFunctionalTab} />
+                            <Route exact path="/store/admin/:id/detail" component={AdminDetail} />
+                            <Route exact path="/store/admin/2" component={AdminAuthorTab} />
+                        </LayoutSecondary>
+                    </Route>
+                    <Route exact path="/store/home" component={StoreHomePage}/>
+                    <Route exact path="/store/dashboard" component={StoreDashboardPage}/>
+                    <Route exact path="/store/import" component={StoreImportPage}/>
+                    <Route exact path="/store/export" component={StoreExportPage}/>
+                    <Route exact path="/store/debt" component={StoreDebtPage}/>                    
+                    <Route exact path="/store/*" component={ErrorPage} />
                 </Switch>
             </StoreLayout>
-        </>
+        </ProtectedRoute>
     )
 };
 

@@ -5,6 +5,7 @@ import moment from "moment";
 import { toast } from "react-toastify";
 // import { read, utils } from 'xlsx';
 // import { formatNumberMoney } from "utils/cmcs";
+import { NavLink } from 'react-router-dom';
 
 /*=====2.CSS=====*/
 import styles from "views/support/styles/support.module.css";
@@ -38,7 +39,7 @@ import { useQueryListDoctype } from "services/hooks/useHuman";
 /*=====7.OTHER=====*/
 import { createLinkAndClick } from "utils";
 import { validateFiles } from 'validation/file';
-import { useFnbCustomerCare, useCustomerCareByProperty } from "services/hooks/fnb/useFnbCustomerCare";
+import { useFnbCustomerCare, useCustomerJourneyByProperty } from "services/hooks/fnb/useFnbCustomerCare";
 
 const BACKGROUND = [
 	{ value: 1, color: "bg-red-400", color2: "F11F20" },
@@ -159,7 +160,7 @@ export const CrmJourneyPage: FC = () => {
         type: 1,
     })
 
-    const { listCustomerCareByProperty, refetchListCustomerCareByProperty } = useCustomerCareByProperty({
+    const { listCustomerJourneyByProperty, refetchListCustomerJourneyByProperty } = useCustomerJourneyByProperty({
         params: {
             option: 5,
             fromDate: inputFilter.fromDate,
@@ -167,6 +168,7 @@ export const CrmJourneyPage: FC = () => {
         },
         isFetchList: true
     })
+    // console.log(listCustomerJourneyByProperty)
 
     const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch } = useFnbCustomerCare({
         params: { 
@@ -208,7 +210,7 @@ export const CrmJourneyPage: FC = () => {
     // Gọi lại API refetch lại danh sách sau khi tạo/update thành công
     const handleConfirmCreateOrUpdate = () => {
         refetch()
-        refetchListCustomerCareByProperty()
+        refetchListCustomerJourneyByProperty()
     }
 
     // Xử lý sự kiện tìm kiếm
@@ -381,10 +383,9 @@ export const CrmJourneyPage: FC = () => {
 
     return (
         <main className="relative h-full">
-            {/* <div className={"text-lg"}>Hành trình khách hàng</div> */}
             <div className="flex flex-wrap mb-1">
                 { 
-                    listCustomerCareByProperty?.map((item: any, index: any) => {
+                    listCustomerJourneyByProperty?.map((item: any, index: any) => {
                         const color = `cursor-pointer max-w-sm rounded overflow-hidden shadow-lg mb-2 mr-1`
                         const color2 = `#${BACKGROUND[index].color2}`
 
@@ -394,7 +395,7 @@ export const CrmJourneyPage: FC = () => {
                                 <div className="px-2 py-1">
                                     <div className="font-bold text-sm mb-1 text-white">{item._id.journey.name} ({item.quantity})</div>
                                     <p className="text-white text-x-small">
-                                    {item._id.journey.name}
+                                    {item._id.journey?.description}
                                     </p>
                                 </div>
                             </div>
@@ -611,7 +612,9 @@ export const CrmJourneyPage: FC = () => {
                                 <p><i>{moment(item.createAt).format('HH:mm')}</i></p>
                             </td>
                             <td className="py-1 px-2">
-                                {item?.customer?.name} - {item?.customer?.phone}
+                                <NavLink to={`/crm/customer/cid=${item?.customer?._id}`}>
+                                    {item?.customer?.name} - {item?.customer?.phone}
+                                </NavLink>
                             </td>
                             <td className="py-1 px-2 text-cbs-highlight-color">
                                 <button className="py-1 px-4 mr-1 rounded-md border border-primary-border text-white bg-cbs-secondary border-none">{item?.journey?.name}</button>

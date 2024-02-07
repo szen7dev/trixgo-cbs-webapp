@@ -1,5 +1,6 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, UIEvent } from "react";
 import { toast } from "react-toastify";
+import debounce from "lodash/debounce";
 import { useModal } from "services/hooks/useModal";
 import { useDoctype } from "services/hooks/items/useDoctype";
 import { ModalProps } from 'typings/items/doctype';
@@ -18,6 +19,7 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
     name: '',
     sign: '',
     unit: '',
+    linkItem: '',
     description: '',
     type: 1,
     salesChannel: 1,
@@ -26,7 +28,32 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
 }) => {
   const { closeModal } = useModal();
   const [formData, setFormData] = useState(initialValues);
-  const { insertAsync, updateAsync } = useDoctype({});
+  const { 
+    list,
+    hasNextPage,
+    refetch,
+    fetchNextPage,
+    totalRecord,
+    insertAsync,
+    updateAsync,
+   } = useDoctype({
+      params: {
+        type: 3,
+        // keyword: keywordDoctype,
+        // isShowParentAndChild: 1,
+    },
+    isFetchList: true
+   });
+
+  const handleScroll = (e: UIEvent<HTMLDivElement>) => {
+    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
+    const bottom = scrollHeight - scrollTop >= clientHeight - 10;
+    if (!bottom || !hasNextPage) return;
+
+      fetchNextPage();
+  }
+
+  const [keyword, setKeyword] = useState('');
 
   const handleSubmit = async () => {
     if(!formData.name) {
@@ -160,6 +187,50 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
           className="w-full mt-2 rounded-md border border-primary-border px-2 py-1 pb-3 placeholder-primary-gray bg-cbs-table-header"
           defaultValue={formData.description}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target)}
+        />
+      </section>
+
+      <section className="px-5 py-1">
+        <p>Link danh mục</p>
+        <DropdownSearchable
+            onchangeValue={(value: any) => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    linkItemID: value?.id
+                }))
+            }}
+            onClearData={() => {
+                setFormData((previous: any) => ({
+                    ...previous,
+                    linkItemID: ""
+                }))
+            }}
+            onSearchInputChange={debounce((value: any) => setKeyword(value), 600)}
+            onScroll={handleScroll}
+            className="w-full mt-2 rounded-md border border-primary-border py-1 placeholder-primary-gray bg-cbs-table-header"
+            placeholder="Tìm kiếm danh mục"
+            isMultiple={false}
+            allowClearValueSingleInput={true}
+            showTriangle={false}
+            maxWidthInput="max-w-full"
+            renderSelectedItem={(item: any) => (
+                <div className="max-w-full">
+                    <p className={"truncate"}>{item.text}</p>
+                </div>
+            )}
+            data={list.map((item) => ({
+                label: `${item.name}`,
+                value: item._id,
+            }))}
+            // initialValue={{
+            //   label: `${initialValues?.linkItem?.name}`,
+            //   value: initialValues?.linkItem?._id
+            // }}
+            formatItem={{
+                id: "value",
+                text: "label",
+            }}
+            inlineSearch={true}
         />
       </section>
 
