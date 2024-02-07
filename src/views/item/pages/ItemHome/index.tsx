@@ -32,6 +32,7 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
 
     const [initialValues, setInitialValues] = useState({
         doctypeID: '',
+        linkItem: '',
         name: '',
         sign: '',
         unit: '',
@@ -55,7 +56,7 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
         },
         isFetchList: true
     });
-    // console.log(listDoctypes)
+    console.log(listDoctypes)
 
     const handleConfirmCreateOrUpdateDoctype = () => refetchListDoctype();
 
@@ -67,6 +68,7 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
         setInitialValues(previousValue => ({
             ...previousValue,
             doctypeID: '',
+            linkItem: '',
             name: '',
             sign: '',
             unit: '',
@@ -90,9 +92,10 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, name, sign, unit, description, type, salesChannel, amount } = newListIDChecked[0];
+            const { _id, linkItem, name, sign, unit, description, type, salesChannel, amount } = newListIDChecked[0];
             setInitialValues({
                 doctypeID: _id,
+                linkItem,
                 name,
                 sign,
                 unit,
@@ -132,6 +135,7 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
             clearData();
             initValues = {
                 doctypeID: '',
+                linkItem: '',
                 name: '',
                 sign: '',
                 unit: '',
@@ -264,6 +268,11 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
                                 Nội dung
                             </div>
                         </th>
+                        <th className="py-1" style={{width: "20px"}}>
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Link danh mục
+                            </div>
+                        </th>
                         <th className={cn("py-1 font-normal", styles.theadTwelvePercent)}>
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Mã hiệu
@@ -309,6 +318,7 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
                                 </Link>
                                 <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
                             </td>
+                            <td className="py-1 px-2">{item?.linkItem?.name}</td>
                             <td className="py-1 px-2">{item?.sign}</td>
                             <td className="py-1 px-2">{item?.unit}</td>
                             <td className="py-1 px-2">{item?.amount}</td>

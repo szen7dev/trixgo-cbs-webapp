@@ -2,6 +2,7 @@ import type { QueryParam, Company, APIResponse } from './commons';
 
 export type Doctype = {
     _id: string;
+    linkItem: string;
     name: string;
     sign: string;
     description: string;
@@ -65,6 +66,7 @@ interface ModalProps {
     level?: 'parent' | 'child';
     initialValues?: {
         doctypeID: string;
+        linkItem?: string;
         parent?: string;
         name: string;
         sign: string;
