@@ -20,7 +20,7 @@ export const AffiliateInfo: FC<Props> = memo((props) => {
       <p className="text-bold text-primary-gray text-lg mb-2 mt-5">Tiếp thị liên kết - Dữ liệu từ NetPose</p>
       <div className="text-[13px]">
         <p>Các đơn hàng do khách bán hoặc cấp dưới của khách bán</p>
-        <p>Danh sách cấp dưới đăng ký chờ duyệt</p>
+        <p>Danh sách cấp dưới đăng ký giữ chỗ + Thời hạn xử lý</p>
         <p>Tuyến dưới của khách hàng xây dựng</p>
       </div>
     </div>

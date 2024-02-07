@@ -58,9 +58,9 @@ export const JourneyInfo: FC<Props> = memo((props) => {
                       <div key={index} className={color} style={{background: color2}}>
                           {/* <img className="w-full" src="/path/to/your/image" alt="Step 1"/> */}
                           <div className="px-2 py-1">
-                              <div className="font-bold text-sm mb-1 text-white">{item._id.journey.name} ({item.quantity})</div>
+                              <div className="font-bold text-sm mb-1 text-white">{item._id.journey.name}</div>
                               <p className="text-white text-x-small">
-                              {item._id.journey?.description}
+                                {item._id.journey?.description}
                               </p>
                           </div>
                       </div>
