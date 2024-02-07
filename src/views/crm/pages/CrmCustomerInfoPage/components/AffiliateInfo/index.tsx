@@ -19,7 +19,9 @@ export const AffiliateInfo: FC<Props> = memo((props) => {
       {/* Tiếp thị liên kết */}
       <p className="text-bold text-primary-gray text-lg mb-2 mt-5">Tiếp thị liên kết</p>
       <div className="text-[13px]">
-
+        <p>Danh sách đăng ký chờ duyệt</p>
+        <p>Các đơn hàng do khách giới thiệu</p>
+        <p>Tuyến dưới của khách hàng xây dựng</p>
       </div>
     </div>
   );
