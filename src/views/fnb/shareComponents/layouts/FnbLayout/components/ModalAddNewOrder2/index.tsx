@@ -32,12 +32,15 @@ import { useContact } from "services/hooks/items/useContact";
 import { convertObToUrl } from "utils";
 import { FormControl, FormControlLabel, IconButton, InputBase, Paper, Radio, RadioGroup } from "@mui/material";
 import { ItemInCartMenu } from "./itemInCartDetail";
+import { useDoctype } from "services/hooks/items/useDoctype";
 
 interface InitialValues {
   fundaID: string,
   shiftID: string,
   customerID: string,
-  affiliateID: string,
+  affiliateID: string, 
+  businessID: string, 
+  channelID: string, 
   seasons: number,
   paymentMethod: string,
   salesChannel: number,
@@ -101,8 +104,28 @@ export const ModalAddNewOrder2: FC<Props> = () => {
   const [creditInput, setCreditInput] = useState(0);
   const [customerID, setCustomerID] = useState("");
   const [affiliateID, setAffiliateID] = useState("");
+  const [businessID, setBusinessID] = useState("");
+  const [channelID, setChannelID] = useState("");
 
   const setTypingTimeoutVoucherRef: any = useRef(null);
+
+  const {
+      list: listDoctypes,
+  } = useDoctype({
+      params: {
+          type: 3,
+      },
+      isFetchList: true
+  });
+
+  const {
+      list: listDoctypes2,
+  } = useDoctype({
+      params: {
+          type: 24,
+      },
+      isFetchList: true
+  });
 
   useEffect(() => {
     const fetchFundas = async () => {
@@ -714,6 +737,8 @@ export const ModalAddNewOrder2: FC<Props> = () => {
     shiftID,
     customerID: "",
     affiliateID: "",
+    businessID: "",
+    channelID: "",
     seasons: 1,
     paymentMethod: "1",
     sources: 1,
@@ -798,7 +823,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                               />
                             </div>
                           </div>
-                          <div className={"w-1/3 flex items-start pl-3"}>
+                          <div className={"w-1/3 flex items-start"}>
                             <div className={"h-full text-left  text-gray-500 flex items-center mr-2  w-1/5 h-full"}>Ca làm</div>
                             <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                               <DropdownSearchable
@@ -839,7 +864,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                               />
                             </div>
                           </div>
-                          <div className={"w-1/3 flex items-start pl-3"}>
+                          <div className={"w-1/3 flex items-start"}>
                             <div className={"h-full text-left  text-gray-500 flex items-center mr-2 w-1/5 h-full"}>Mã khách</div>
                             <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                               <DropdownSearchable
@@ -887,6 +912,143 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                               />
                             </div>
                           </div>
+                        </div>
+
+                        <div className={"flex"}>
+                          <div className={"w-1/3 flex items-start"}>
+                            <div className={"h-full text-left  text-gray-500 flex items-center mr-2 w-1/5 h-full"}>Lĩnh vực</div>
+                            <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
+                              <DropdownSearchable
+                                onchangeValue={(value: any) => {
+                                  setBusinessID(value.id);
+                                  setFieldValue("businessID", value.id);
+                                }}
+                                onClearData={() => {
+                                  setFieldValue("businessID", "")
+                                }}
+                                onSearchInputChange={
+                                  debounce(
+                                    (value) => setSearchContact(value),
+                                    200)
+                                }
+                                placeholder={"Lĩnh vực"}
+                                className={"max-w-full h-full flex-1"}
+                                focusedClass={"border-b border-primary"}
+                                allowClearValueSingleInput={true}
+                                showTriangle={false}
+                                maxWidthInput="max-w-full"
+                                renderSelectedItem={(item: any) => (
+                                  <div className="max-w-full">
+                                    <p className={"truncate"}>{item.text}</p>
+                                  </div>
+                                )}
+                                data={listDoctypes.map(item => ({
+                                  label: `${item.name}`,
+                                  value: item._id,
+                                }))}
+                                formatItem={{
+                                  id: "value",
+                                  text: "label",
+                                }}
+                                inlineSearch={true}
+                              />
+                              <ErrorMessage
+                                name="businessID"
+                                component="div"
+                                className="font-normal text-xs text-negative pl-3"
+                              />
+                            </div>
+                          </div>
+
+                          <div className={"w-1/3 flex items-start"}>
+                            <div className={"h-full text-left  text-gray-500 flex items-center mr-2 w-1/5 h-full"}>Kênh bán</div>
+                            <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
+                              <DropdownSearchable
+                                onchangeValue={(value: any) => {
+                                  setChannelID(value.id);
+                                  setFieldValue("channelID", value.id);
+                                }}
+                                onClearData={() => {
+                                  setFieldValue("channelID", "")
+                                }}
+                                onSearchInputChange={
+                                  debounce(
+                                    (value) => setSearchContact(value),
+                                    200)
+                                }
+                                placeholder={"Kênh bán"}
+                                className={"max-w-full h-full flex-1"}
+                                focusedClass={"border-b border-primary"}
+                                allowClearValueSingleInput={true}
+                                showTriangle={false}
+                                maxWidthInput="max-w-full"
+                                renderSelectedItem={(item: any) => (
+                                  <div className="max-w-full">
+                                    <p className={"truncate"}>{item.text}</p>
+                                  </div>
+                                )}
+                                data={listDoctypes2.map(item => ({
+                                  label: `${item.name}`,
+                                  value: item._id,
+                                }))}
+                                formatItem={{
+                                  id: "value",
+                                  text: "label",
+                                }}
+                                inlineSearch={true}
+                              />
+                              <ErrorMessage
+                                name="channelID"
+                                component="div"
+                                className="font-normal text-xs text-negative pl-3"
+                              />
+                            </div>
+                          </div>
+
+                          {/* <div className={"w-1/3 flex items-start"}>
+                            <div className={"h-full text-left  text-gray-500 flex items-center mr-2 w-1/5 h-full"}>Thanh toán</div>
+                            <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
+                              <DropdownSearchable
+                                onchangeValue={(value: any) => {
+                                  setChannelID(value.id);
+                                  setFieldValue("channelID", value.id);
+                                }}
+                                onClearData={() => {
+                                  setFieldValue("channelID", "")
+                                }}
+                                onSearchInputChange={
+                                  debounce(
+                                    (value) => setSearchContact(value),
+                                    200)
+                                }
+                                placeholder={"Thanh toán"}
+                                className={"max-w-full h-full flex-1"}
+                                focusedClass={"border-b border-primary"}
+                                allowClearValueSingleInput={true}
+                                showTriangle={false}
+                                maxWidthInput="max-w-full"
+                                renderSelectedItem={(item: any) => (
+                                  <div className="max-w-full">
+                                    <p className={"truncate"}>{item.text}</p>
+                                  </div>
+                                )}
+                                data={contacts.map(item => ({
+                                  label: `${item.name}`,
+                                  value: item._id,
+                                }))}
+                                formatItem={{
+                                  id: "value",
+                                  text: "label",
+                                }}
+                                inlineSearch={true}
+                              />
+                              <ErrorMessage
+                                name="channelID"
+                                component="div"
+                                className="font-normal text-xs text-negative pl-3"
+                              />
+                            </div>
+                          </div> */}
                         </div>
 
                         <div className="flex justify-between pt-1">
