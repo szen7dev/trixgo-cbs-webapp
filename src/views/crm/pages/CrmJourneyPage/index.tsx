@@ -3,8 +3,8 @@ import cn from "classnames";
 import debounce from "lodash/debounce";
 import moment from "moment";
 import { toast } from "react-toastify";
-// import { read, utils } from 'xlsx';
-// import { formatNumberMoney } from "utils/cmcs";
+import { read, utils } from 'xlsx';
+import { formatNumberMoney } from "utils/cmcs";
 import { NavLink, useParams } from 'react-router-dom';
 
 /*=====2.CSS=====*/
@@ -316,10 +316,11 @@ export const CrmJourneyPage: FC = () => {
     }
 
     //_____Import, export excel
+    const [dataImport, setDataImport] = useState([]);
     const [stateExport, setStateExport] = useState<{ isExporting: boolean }>({
         isExporting: false,
     });
-    const { exportExcelAsync } = useFnbCustomerCare({});
+    const { importExcelAsync, exportExcelAsync } = useFnbCustomerCare({});
 
     const handleExportExcel = async () => {
 		try {
@@ -340,6 +341,43 @@ export const CrmJourneyPage: FC = () => {
             setStateExport({ isExporting: false });
         }
 	}
+
+    //_____Import excel
+    const handleImport = ($event: any) => {
+        // console.log('11111111111111111111111111111')
+        const files = $event.target.files;
+        if (files.length) {
+            const file = files[0];
+            const reader = new FileReader();
+            reader.onload = (event: any) => {
+                const wb = read(event.target.result);
+                const sheets = wb.SheetNames;
+
+                if (sheets.length) {
+                    const rows: any = utils.sheet_to_json(wb.Sheets[sheets[0]]); // Index=0 (Sheet 1 từ trái sang)
+                    setDataImport(rows) // Set data để Import
+                }
+            }
+            reader.readAsArrayBuffer(file)
+        }
+        $event.target.value = null; // Đọc xong xóa value trong Input đi
+    }
+
+    //_____Gọi tới API để đẩy data lên
+    useEffect(() => {
+        if(dataImport.length){
+            const fetchData = async () => {
+                const data = await importExcelAsync({ dataImport: JSON.stringify(dataImport) })
+                setDataImport([])
+
+                if(!data.error){
+                    return toast.success("Import thành công")
+                }
+                return toast.error(data.message)
+            }
+            fetchData()
+        }
+    }, [dataImport])
 
     const handleOnChangeDate = useCallback((date, input) => {
         if (input) {
@@ -503,11 +541,17 @@ export const CrmJourneyPage: FC = () => {
                     />
                     <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
 
-                      <button className={"flex items-center justify-center mx-3 ml-3 mr-10"}
+                      <button className={"flex items-center justify-center mr-3"}
                               onClick={handleExportExcel}
                           >
-                              Tải báo cáo Excel
+                              Tải Excel
                       </button>
+
+                      <button className={"flex items-center justify-center mr-3"}>
+                            <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required hidden onChange={handleImport}
+                            accept=".xlsx, .xlsm, .xls, .csv"/>
+                            <label className="custom-file-label" htmlFor="inputGroupFile">Import excel</label>
+                        </button>
 
                       {/* Nếu chọn 1 phẩn tử => chỉ cho update */}
                       {itemsChecked.length === 1 ? (
