@@ -8,6 +8,7 @@ import { useQueryListContact } from "services/hooks/cmcs/useContractIncome";
 import { LIMIT_DROPDOWN } from "apis/localdb/index";
 import { useQueryListDoctype } from "services/hooks/useHuman";
 import { useFnbOrder } from "services/hooks/fnb/useFnbOrder";
+import { NavLink, useParams } from 'react-router-dom';
 
 export const ModalCreateOrUpdateCC: FC<any> = ({
   modalType,
@@ -27,6 +28,9 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
     type: 1,
   }
 }) => {
+  // const {id: businessID} = useParams<{id: string}>();
+  // console.log({businessID})
+
   const [searchCustomerValue, setSearchCustomerValue] = useState("");
 	const { listContact: listCustomer } = useQueryListContact({
 		limit: LIMIT_DROPDOWN,
@@ -36,15 +40,8 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
   const [searchSubTypeValue, setSearchSubTypeValue] = useState("");
 	const { listDoctypes: listSubType } = useQueryListDoctype({
 		limit: LIMIT_DROPDOWN,
-		type: 19,
-		keyword: searchSubTypeValue,
-	});
-
-  const [searchSubTypeValue2, setSearchSubTypeValue2] = useState("");
-	const { listDoctypes: listSubType2 } = useQueryListDoctype({
-		limit: LIMIT_DROPDOWN,
 		type: 11,
-		keyword: searchSubTypeValue2,
+		keyword: searchSubTypeValue,
 	});
 
   const [searchOrderValue, setSearchOrderValue] = useState("");
@@ -221,7 +218,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
                     journeyID: ""
                 }))
             }}
-            onSearchInputChange={debounce((value: any) => setSearchSubTypeValue2(value), 600)}
+            onSearchInputChange={debounce((value: any) => setSearchSubTypeValue(value), 600)}
             className="w-full rounded-md border border-primary-border py-1 placeholder-primary-gray bg-cbs-table-header"
             placeholder="Hành trình khách hàng"
             isMultiple={false}
@@ -233,7 +230,7 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
                     <p className={"truncate"}>{item.text}</p>
                 </div>
             )}
-            data={listSubType2.map((item: any) => ({
+            data={listSubType.map((item: any) => ({
                 label: `${item.name}`,
                 value: item._id,
             }))}

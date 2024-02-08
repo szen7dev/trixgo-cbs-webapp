@@ -42,7 +42,7 @@ export const OrderInfo: FC<Props> = memo((props) => {
     <div className="px-4">
       {/* Đơn hàng */}
       <div className={"flex-1 flex items-center justify-end"}>
-        <p className="text-bold text-primary-gray text-lg mb-2 mt-5">Đơn hàng ({totalRecord})</p>
+        <p className="text-bold text-primary-gray text-lg mb-2 mt-5">Đơn hàng ({totalRecord}) - Khách mua/sử dụng</p>
             <PaginateV2
               ref={ref}
               totalRecord={totalRecord}

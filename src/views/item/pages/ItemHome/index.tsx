@@ -56,7 +56,6 @@ export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
         },
         isFetchList: true
     });
-    console.log(listDoctypes)
 
     const handleConfirmCreateOrUpdateDoctype = () => refetchListDoctype();
 

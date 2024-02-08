@@ -5,7 +5,7 @@ import moment from "moment";
 import { toast } from "react-toastify";
 // import { read, utils } from 'xlsx';
 // import { formatNumberMoney } from "utils/cmcs";
-import { NavLink } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 
 /*=====2.CSS=====*/
 import styles from "views/support/styles/support.module.css";
@@ -60,6 +60,9 @@ const BACKGROUND = [
 ]
 
 export const CrmJourneyPage: FC = () => {
+    const {id: businessID} = useParams<{id: string}>();
+    // console.log(businessID)
+
     const { user } = useAuth();
     const [isShowImageFullScreen, setIsShowImageFullScreen] = useState(false);
 
@@ -162,6 +165,7 @@ export const CrmJourneyPage: FC = () => {
 
     const { listCustomerJourneyByProperty, refetchListCustomerJourneyByProperty } = useCustomerJourneyByProperty({
         params: {
+            businessID,
             option: 5,
             fromDate: inputFilter.fromDate,
             toDate: inputFilter.toDate,
@@ -172,6 +176,7 @@ export const CrmJourneyPage: FC = () => {
 
     const { listDataWithPager, isLoading, totalRecord, totalPage, fetchNextPage, hasNextPage, refetch } = useFnbCustomerCare({
         params: { 
+            businessID,
             option: 1,
             keyword, 
             status,

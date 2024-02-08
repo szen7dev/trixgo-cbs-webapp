@@ -22,6 +22,7 @@ export const AffiliateInfo: FC<Props> = memo((props) => {
         <p>Các đơn hàng do khách bán hoặc cấp dưới của khách bán</p>
         <p>Danh sách cấp dưới đăng ký giữ chỗ + Thời hạn xử lý</p>
         <p>Tuyến dưới của khách hàng xây dựng</p>
+        <p>PS: Quản lý thời gian gần nhất phát sinh bán hàng/phát sinh tuyến dưới</p>
       </div>
     </div>
   );

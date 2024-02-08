@@ -47,7 +47,8 @@ export const JourneyInfo: FC<Props> = memo((props) => {
   return (
     <div className="px-4">
       {/* Hành trình trải nghiệm */}
-      <p className="text-bold text-primary-gray text-lg mb-2 mt-5">Hành trình trải nghiệm</p>
+      <p className="text-bold text-primary-gray text-lg mb-2 mt-5">Hành trình trải nghiệm - Thông tin, hồ sơ/hình ảnh đính kèm</p>
+      <p className="mb-5"><i>Cần phân theo Lĩnh vực kinh doanh/Dịch vụ</i></p>
       <div className="flex flex-wrap mb-1">
           { 
               listCustomerJourneyByProperty?.map((item: any, index: any) => {

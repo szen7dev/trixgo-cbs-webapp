@@ -58,7 +58,8 @@ const CrmRouter: FC = () => {
                     <Route exact path="/crm/customer" component={CrmCustomerPage}/>
                     <Route exact path="/crm/customer/cid=:id" component={CrmCustomerInfoPage} />     
                     <Route exact path="/crm/support" component={CrmSupportPage}/>
-                    <Route exact path="/crm/journey" component={CrmJourneyPage}/>
+                    <Route exact path="/crm/journey/" component={() => CrmJourneyPage({ })}/>
+                    <Route exact path="/crm/business/:id?" component={() => CrmJourneyPage({ })}/>
                     <Route exact path="/crm/booking" component={CrmBookingPage}/>
                     <Route exact path="/crm/order" component={() => FnBHomePage({ type: 1})}/>
                     <Route exact path="/crm/affiliate" component={CrmAffiliatePage}/>

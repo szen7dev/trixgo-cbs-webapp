@@ -887,6 +887,12 @@ export const LIMIT_DROPDOWN = 20;
  */
 
 export const APP_ID = {
+    ITEM: {
+        id: "5f5234b2880c2f26c8df8c13",
+        menuPaymentApp: {
+            id: "623f24cce998e94feda0cdaf",
+        },
+    },
     PCM: {
         id: "5dfe4b9051dc622100bb9d89",
         menuPcmApp: {
