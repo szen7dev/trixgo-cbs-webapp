@@ -106,8 +106,14 @@ export const ModalAddNewOrder2: FC<Props> = () => {
   const [affiliateID, setAffiliateID] = useState("");
   const [businessID, setBusinessID] = useState("");
   const [channelID, setChannelID] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
 
   const setTypingTimeoutVoucherRef: any = useRef(null);
+
+  const listPayment = [
+    {_id: 1, name: 'Tiền mặt'},
+    {_id: 2, name: 'Chuyển khoản'},
+  ]
 
   const {
       list: listDoctypes,
@@ -926,11 +932,11 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                                 onClearData={() => {
                                   setFieldValue("businessID", "")
                                 }}
-                                onSearchInputChange={
-                                  debounce(
-                                    (value) => setSearchContact(value),
-                                    200)
-                                }
+                                // onSearchInputChange={
+                                //   debounce(
+                                //     (value) => setSearchContact(value),
+                                //     200)
+                                // }
                                 placeholder={"Lĩnh vực"}
                                 className={"max-w-full h-full flex-1"}
                                 focusedClass={"border-b border-primary"}
@@ -971,11 +977,11 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                                 onClearData={() => {
                                   setFieldValue("channelID", "")
                                 }}
-                                onSearchInputChange={
-                                  debounce(
-                                    (value) => setSearchContact(value),
-                                    200)
-                                }
+                                // onSearchInputChange={
+                                //   debounce(
+                                //     (value) => setSearchContact(value),
+                                //     200)
+                                // }
                                 placeholder={"Kênh bán"}
                                 className={"max-w-full h-full flex-1"}
                                 focusedClass={"border-b border-primary"}
@@ -1005,22 +1011,22 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                             </div>
                           </div>
 
-                          {/* <div className={"w-1/3 flex items-start"}>
+                          <div className={"w-1/3 flex items-start"}>
                             <div className={"h-full text-left  text-gray-500 flex items-center mr-2 w-1/5 h-full"}>Thanh toán</div>
                             <div className={"flex-1 max-w-4/5 w-4/5 h-full"}>
                               <DropdownSearchable
                                 onchangeValue={(value: any) => {
-                                  setChannelID(value.id);
-                                  setFieldValue("channelID", value.id);
+                                  setPaymentMethod(value.id);
+                                  setFieldValue("paymentMethod", value.id);
                                 }}
                                 onClearData={() => {
-                                  setFieldValue("channelID", "")
+                                  setFieldValue("paymentMethod", "")
                                 }}
-                                onSearchInputChange={
-                                  debounce(
-                                    (value) => setSearchContact(value),
-                                    200)
-                                }
+                                // onSearchInputChange={
+                                //   debounce(
+                                //     (value) => setSearchContact(value),
+                                //     200)
+                                // }
                                 placeholder={"Thanh toán"}
                                 className={"max-w-full h-full flex-1"}
                                 focusedClass={"border-b border-primary"}
@@ -1032,7 +1038,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                                     <p className={"truncate"}>{item.text}</p>
                                   </div>
                                 )}
-                                data={contacts.map(item => ({
+                                data={listPayment.map(item => ({
                                   label: `${item.name}`,
                                   value: item._id,
                                 }))}
@@ -1043,12 +1049,12 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                                 inlineSearch={true}
                               />
                               <ErrorMessage
-                                name="channelID"
+                                name="paymentMethod"
                                 component="div"
                                 className="font-normal text-xs text-negative pl-3"
                               />
                             </div>
-                          </div> */}
+                          </div>
                         </div>
 
                         <div className="flex justify-between pt-1">
@@ -1277,7 +1283,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                               className="font-normal text-xs text-negative pl-3"
                             />
                           </div>
-                          <div>
+                          {/* <div>
                             <span>Phương thức thanh toán</span>
                             <div>
                               <FormControl sx={{ marginTop: "-5px" }} >
@@ -1322,7 +1328,7 @@ export const ModalAddNewOrder2: FC<Props> = () => {
                               component="div"
                               className="font-normal text-xs text-negative pl-3"
                             />
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                       <div className="flex justify-between	gap-2 border-t-0.5 border-b-0.5 px-3">
