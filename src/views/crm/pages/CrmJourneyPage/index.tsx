@@ -61,7 +61,7 @@ const BACKGROUND = [
 
 export const CrmJourneyPage: FC = () => {
     const {id: businessID} = useParams<{id: string}>();
-    // console.log(businessID)
+    console.log(businessID)
 
     const { user } = useAuth();
     const [isShowImageFullScreen, setIsShowImageFullScreen] = useState(false);
@@ -78,16 +78,6 @@ export const CrmJourneyPage: FC = () => {
 		appID: APP_ID.FNB.id,
 		companyID: user?.company?._id,
 	})
-
-    // const STATUS = [
-    //     { _id: 1, text: 'Chưa, đang xử lý' },
-    //     { _id: 2, text: 'Hoàn thành'}
-    // ]
-
-    // const TYPE = [
-    //     { _id: 1, text: 'Lỗi của nhân viên' },
-    //     { _id: 2, text: 'Lỗi khách quan'}
-    // ]
 
     const CHANNEL = [
         { _id: 1, text: 'Offline' },
@@ -666,7 +656,7 @@ export const CrmJourneyPage: FC = () => {
                                 </NavLink>
                             </td>
                             <td className="py-1 px-2 text-cbs-highlight-color">
-                                <button className="py-1 px-4 mr-1 rounded-md border border-primary-border text-white bg-cbs-secondary border-none">{item?.journey?.name}</button>
+                                <button className="py-1 px-2 rounded-md border border-primary-border text-white bg-cbs-secondary text-left">{item?.journey?.name}</button>
                             </td>
                             <td className="py-1 px-2">
                                 {item?.name}
@@ -689,16 +679,6 @@ export const CrmJourneyPage: FC = () => {
                                 {item.note}
                             </td>
                             <td className="py-1 px-2">
-                                {/* {
-                                    item?.status == 1 ?
-                                    <div className="w-[110px] rounded-md py-1 px-2 bg-cbs-schedule-expired text-white" style={{ fontSize: "12px" }}>
-                                        {STATUS[Number(item?.status) - 1]?.text}
-                                    </div>
-                                    :
-                                    <div className="w-[85px] rounded-md py-1 px-2 bg-cbs-schedule-after-7days text-white" style={{ fontSize: "12px" }}>
-                                        {STATUS[Number(item?.status) - 1]?.text}
-                                    </div>
-                                } */}
                                 <div style={{display: "flex"}}>
 									{item?.images?.map((image: any, i: number) => {
 										return (
