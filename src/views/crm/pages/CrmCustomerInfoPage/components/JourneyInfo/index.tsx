@@ -34,46 +34,52 @@ export const JourneyInfo: FC<Props> = memo((props) => {
   // console.log(info)
 
   const { listCustomerJourneyByProperty, refetchListCustomerJourneyByProperty } = useCustomerJourneyByProperty({
-    params: {
-        option: 5,
-        customerID: info._id
-        // fromDate: inputFilter.fromDate,
-        // toDate: inputFilter.toDate,
-    },
-    isFetchList: true
-})
-// console.log(listCustomerJourneyByProperty)
+      params: {
+          option: 6,
+          customerID: info._id
+          // fromDate: inputFilter.fromDate,
+          // toDate: inputFilter.toDate,
+      },
+      isFetchList: true
+  })
 
   return (
     <div className="px-4">
       {/* Hành trình trải nghiệm */}
       <p className="text-bold text-primary-gray text-lg mb-2 mt-5">Hành trình trải nghiệm - Thông tin, hồ sơ/hình ảnh đính kèm</p>
-      <p className="mb-5"><i>Cần phân theo Lĩnh vực kinh doanh/Dịch vụ</i></p>
-      <div className="flex flex-wrap mb-1">
           { 
-              listCustomerJourneyByProperty?.map((item: any, index: any) => {
-                  const color = `cursor-pointer max-w-sm rounded overflow-hidden shadow-lg mb-2 mr-1`
-                  const color2 = `#${BACKGROUND[index].color2}`
-
-                  return (
-                      <div key={index} className={color} style={{background: color2}}>
-                          {/* <img className="w-full" src="/path/to/your/image" alt="Step 1"/> */}
-                          <div className="px-2 py-1">
-                              <div className="font-bold text-sm mb-1 text-white">{item._id.journey.name}</div>
-                              <p className="text-white text-x-small">
-                                {item._id.journey?.description}
-                              </p>
+              listCustomerJourneyByProperty?.listBusiness?.map((item: any, index: any) => {
+                const jsx = [];
+                jsx.push(
+                  <div key={index}>
+                    <p className="mb-5">{item.name}</p>
+                  </div>
+                )
+                
+                let i = 0
+                listCustomerJourneyByProperty?.listData?.map((subitem: any, subindex: any) => {
+                    const color = `inline-block cursor-pointer max-w-sm rounded overflow-hidden shadow-lg mb-2 mr-1`;
+                    
+                    if(subitem._id.business.toString() === item._id.toString()){
+                      const color2 = `#${BACKGROUND[i].color2}`;
+                      jsx.push(
+                          <div key={subindex} className={color} style={{background: color2}}>
+                              <div className="px-2 py-1">
+                                  <div className="font-bold text-sm mb-1 text-white">{subitem._id.journey.name}</div>
+                                  <p className="text-white text-x-small">
+                                    {subitem._id.journey?.description}
+                                  </p>
+                              </div>
                           </div>
-                      </div>
-                  ) 
+                      ) 
+
+                      i++
+                    }
+                })
+
+                return jsx
               })
           }
-      </div>
-
-      <div className="text-[13px]">
-
-      </div>
-
     </div>
   );
 });

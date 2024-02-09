@@ -613,7 +613,7 @@ export const CrmAffiliatePage: FC = () => {
                                 {item?.customer?.name} - {item?.customer?.phone}
                             </td>
                             <td className="py-1 px-2 text-cbs-highlight-color">
-                                <button className="py-1 px-4 mr-1 rounded-md border border-primary-border text-white bg-cbs-secondary border-none">{item?.journey?.name}</button>
+                                <button className="py-1 px-4 mr-1 rounded-md border border-primary-border text-white bg-cbs-secondary text-left">{item?.journey?.name}</button>
                             </td>
                             <td className="py-1 px-2">
                                 {item?.name}
