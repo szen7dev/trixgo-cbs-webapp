@@ -64,23 +64,23 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
       // Handle api here!
       switch (modalType) {
         case 'create': {
-          const { error, message } = await insertAsync({...formData, salesChannel: +formData?.salesChannel});
+          const { error, data } = await insertAsync({...formData, salesChannel: +formData?.salesChannel});
 
           if (error) {
-            return toast.warning(message);
+            return toast.warning(data.message);
           }
 
-          toast.success('Tạo thành công', { autoClose: 1500 });
+          toast.success('Tạo thành công', { autoClose: 500 });
           break;
         }
         case 'update': {
-          const { error, message } = await updateAsync({...formData, salesChannel: +formData?.salesChannel});
+          const { error, data } = await updateAsync({...formData, salesChannel: +formData?.salesChannel});
 
           if (error) {
-            return toast.warning(message);
+            return toast.warning(data.message);
           }
 
-          toast.success('Cập nhật thành công', { autoClose: 1500 });
+          toast.success('Cập nhật thành công', { autoClose: 500 });
           break;
         }
         default:
