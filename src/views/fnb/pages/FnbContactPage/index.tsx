@@ -96,7 +96,7 @@ export const FnbContactPage: FC = () => {
     const [managerID, setManagerID] = useState<string | null>();
     const [status, setStatus] = useState<string | null>();
     const [type, setType] = useState<string | null>();
-    const [channel, setChannel] = useState<string | null>();
+    const [salesChannel, setSalesChannel] = useState<string | null>();
 
     const [inputFilter, setInputFilter] = useState({
       keyword: '',
@@ -138,7 +138,7 @@ export const FnbContactPage: FC = () => {
             keyword, 
             status,
             type,
-            channel,
+            salesChannel,
             customerID,
             userCreateID: userID,
             managerID,
@@ -388,10 +388,10 @@ export const FnbContactPage: FC = () => {
                             text: "text",
                         }}
                         onClearData={() => {
-                            setChannel("0");
+                            setSalesChannel("0");
                         }}
                         onchangeValue={item => {
-                            setChannel(item._id);
+                            setSalesChannel(item._id);
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
                         }}
