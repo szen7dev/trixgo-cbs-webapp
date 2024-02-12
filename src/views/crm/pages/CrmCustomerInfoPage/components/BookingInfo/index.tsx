@@ -37,9 +37,9 @@ export const BookingInfo: FC<Props> = memo((props) => {
               path: 'userCreate userUpdate customer mistake journey funda order manager images',
               select: '_id image name sign phone taxid address fullname createAt author path',
               populate: {
-        path: 'author',
-        select: 'fullname bizfullname image'
-      }
+                path: 'author',
+                select: 'fullname bizfullname image'
+              }
           }),
       },
       isFetchList: true

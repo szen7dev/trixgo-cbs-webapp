@@ -5,6 +5,7 @@ import moment from "moment";
 import { toast } from "react-toastify";
 // import { read, utils } from 'xlsx';
 // import { formatNumberMoney } from "utils/cmcs";
+import { NavLink, useParams } from 'react-router-dom';
 
 /*=====2.CSS=====*/
 import styles from "views/support/styles/support.module.css";
@@ -610,7 +611,9 @@ export const CrmBookingPage: FC = () => {
                                 <p><i>{moment(item.createAt).format('HH:mm')}</i></p>
                             </td>
                             <td className="py-1 px-2">
-                                {item?.customer?.name} - {item?.customer?.phone}
+                                <NavLink to={`/crm/customer/cid=${item?.customer?._id}`}>
+                                    {item?.customer?.name} - {item?.customer?.phone}
+                                </NavLink>
                             </td>
                             <td className="py-1 px-2 text-cbs-highlight-color">
                                 <button className="py-1 px-4 mr-1 rounded-md border border-primary-border text-white bg-cbs-secondary text-left">{item?.journey?.name}</button>
