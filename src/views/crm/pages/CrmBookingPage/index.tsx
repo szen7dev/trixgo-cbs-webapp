@@ -94,6 +94,7 @@ export const CrmBookingPage: FC = () => {
     const [customerID, setCustomerID] = useState<string | null>();
     const [userID, setUserID] = useState<string | null>();
     const [managerID, setManagerID] = useState<string | null>();
+    const [businessID, setBusinessID] = useState<string | null>();
     const [status, setStatus] = useState<string | null>();
     const [type, setType] = useState<string | null>();
     const [channel, setChannel] = useState<string | null>();
@@ -158,6 +159,7 @@ export const CrmBookingPage: FC = () => {
             status,
             type,
             channel,
+            businessID,
             journeyID,
             customerID,
             userCreateID: userID,
@@ -435,10 +437,10 @@ export const CrmBookingPage: FC = () => {
                             500
                         )}
                         onClearData={() => {
-                            setJourneyID("");
+                            setBusinessID("");
                         }}
                         onchangeValue={item => {
-                            setJourneyID(item._id);
+                            setBusinessID(item._id);
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
                         }}
