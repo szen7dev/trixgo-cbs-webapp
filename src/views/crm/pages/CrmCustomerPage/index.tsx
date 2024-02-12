@@ -337,7 +337,7 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
 
                 {!isLoading && listHumanWithPager[pageIndex] && listHumanWithPager[pageIndex].length > 0 && (
                     <table
-                        className="text-black text-medium border-separate space-x-0 space-y-0 w-full"
+                        className="text-black border-separate space-x-0 space-y-0 w-full"
                         style={{ borderSpacing: 0 }}
                     >
                         <thead className="">
@@ -355,7 +355,7 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
                                 Nơi ở hiện tại
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-                                Thuế, bảo hiểm
+                                Mã số thuế
                             </th>
                             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
                                 Phòng ban
@@ -372,12 +372,12 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
                         </tr>
                         </thead>
                         <tbody className="">
-                        {listHumanWithPager[pageIndex].map((document, index) => {
+                        {listHumanWithPager[pageIndex].map((item, index) => {
                             let linkRef;
                             if(location.pathname.includes("/crm/customer/")){
-                                linkRef = `/crm/customer/cid=${document._id}`
+                                linkRef = `/crm/customer/cid=${item._id}`
                             }else{
-                                linkRef = `/crm/customer/cid=${document._id}`
+                                linkRef = `/crm/customer/cid=${item._id}`
                             }
                             return (
                                 <tr
@@ -389,41 +389,41 @@ export const CrmCustomerPage: FC<HumanHomePageProps> = () => {
                                     </td>
                                     <td className="px-2 py-2.5 border-b border-cbs-border">
                                         <Link to={linkRef}>
-                                        <p>
-                                            {`${document.name}`}
-                                            - {(document?.gender && document?.gender >= 1) && GENDER_TYPES[document?.gender -1].text}
-                                        </p>
-                                        <p className="text-primary-gray mt-1">{document?.identity != null && document?.identity }</p>
-                                        <p className="text-primary-gray mt-1">Ngày sinh: { document?.birthday != null && moment(document?.birthday).format("DD/MM/YYYY")}</p>
+                                            <p>
+                                                {`${item.name}`}
+                                                - {(item?.gender && item?.gender >= 1) && GENDER_TYPES[item?.gender -1].text}
+                                            </p>
+                                            <p className="text-primary-gray mt-1">{item?.identity != null && item?.identity }</p>
+                                            <p className="text-primary-gray mt-1">Ngày sinh: { item?.birthday != null && moment(item?.birthday).format("DD/MM/YYYY")}</p>
                                         </Link>
+                                        <p className="text-primary-gray text-[12px]"><i>{item._id}</i></p>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
-                                        <p>{`${document?.phone}`}</p>
-                                        <p className="text-primary-gray">{document?.email != null && document?.email }</p>
+                                        <p>{`${item?.phone}`}</p>
+                                        <p className="text-primary-gray">{item?.email != null && item?.email }</p>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
-                                        {document.address},
-                                        {document?.area?.name}, {document?.area?.parent?.name}, {document?.area?.parent?.parent?.name}
+                                        {item.address},
+                                        {item?.area?.name}, {item?.area?.parent?.name}, {item?.area?.parent?.parent?.name}
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
-                                        <p>MST: {document?.taxid}</p>
-                                        <p>MBH: {document?.insuranceSign} - {moment(document.insuranceDate).isValid() && moment(document.insuranceDate).format("DD/MM/YYYY")}</p>
+                                        <p>{item?.taxid}</p>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2 w-24">
-                                        <p>{document?.department?.name}</p>
-                                        <p>{document?.position?.name}</p>
+                                        <p>{item?.department?.name}</p>
+                                        <p>{item?.position?.name}</p>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
-                                        {document?.contractType?.name}
+                                        {item?.contractType?.name}
                                         <p><i>
-                                            {moment(document.contractDate).isValid() && moment(document.contractDate).format("DD/MM/YYYY")}
+                                            {moment(item.contractDate).isValid() && moment(item.contractDate).format("DD/MM/YYYY")}
                                             </i></p>
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
-                                        {document?.workingStatus?.name}
+                                        {item?.workingStatus?.name}
                                     </td>
                                     <td className="py-2.5 border-b border-cbs-border px-2">
-                                        {document.note}
+                                        {item.note}
                                     </td>
                                 </tr>
                             );
