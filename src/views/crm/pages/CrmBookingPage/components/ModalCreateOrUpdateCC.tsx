@@ -3,6 +3,11 @@ import debounce from "lodash/debounce";
 import { useModal } from "services/hooks/useModal";
 import { useFnbCustomerBooking } from "services/hooks/fnb/useFnbCustomerBooking";
 import { toast } from "react-toastify";
+import DatePicker from "react-datepicker";
+import { ErrorMessage, Field } from "formik";
+import DayPickerInput from "react-day-picker/DayPickerInput";
+import moment from "moment";
+
 import { DropdownSearchable } from "shareComponents/common";
 import { useQueryListContact } from "services/hooks/cmcs/useContractIncome";
 import { LIMIT_DROPDOWN } from "apis/localdb/index";
@@ -10,6 +15,7 @@ import { useQueryListDoctype } from "services/hooks/useHuman";
 import { useFnbOrder } from "services/hooks/fnb/useFnbOrder";
 
 export const ModalCreateOrUpdateCC: FC<any> = ({
+  // formik,
   modalType,
   onConfirm,
   initialValues = {
@@ -21,30 +27,19 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
     name: '',
     description: '',
     note: '',
+    date: '',
     rating: 1,
     amount: 0,
     status: 1,
     type: 1,
   }
 }) => {
+  // const { setFieldValue, values } = formik;
+
   const [searchCustomerValue, setSearchCustomerValue] = useState("");
 	const { listContact: listCustomer } = useQueryListContact({
 		limit: LIMIT_DROPDOWN,
 		keyword: searchCustomerValue,
-	});
-
-  const [searchSubTypeValue, setSearchSubTypeValue] = useState("");
-	const { listDoctypes: listSubType } = useQueryListDoctype({
-		limit: LIMIT_DROPDOWN,
-		type: 19,
-		keyword: searchSubTypeValue,
-	});
-
-  const [searchSubTypeValue2, setSearchSubTypeValue2] = useState("");
-	const { listDoctypes: listSubType2 } = useQueryListDoctype({
-		limit: LIMIT_DROPDOWN,
-		type: 11,
-		keyword: searchSubTypeValue2,
 	});
 
   const [searchOrderValue, setSearchOrderValue] = useState("");
@@ -136,19 +131,6 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
     }))
   }
 
-  const onRatingKeyUp = (event: any) => {
-    const name = event.target.name;
-    const value = +event.target.value;
-    
-    if(value < 0 || value > 5) {
-      setFormData((previous: any) => ({
-        ...previous,
-        [name]: ""
-      }))
-      return toast.warn("Đánh giá của khách phải nằm trong khoảng từ 1 đến 5");
-    }
-  }
-
   return (
     <main className="relative h-full">
       <header className="px-5 py-1 flex items-center justify-between  mt-2 mb-2">
@@ -206,46 +188,90 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
         />
       </section>
 
+      <section className="px-5 py-1">
+        <p>Nội dung (*)</p>
+        <input
+          type="text"
+          placeholder="Nội dung"
+          name="name"
+          className="h-8 w-full border border-primary-border outline-none px-2"
+          defaultValue={formData.name}
+          onChange={onChange}
+        />
+      </section>
+
       <section className="px-5 mt-2">
-        <p>Hành trình khách hàng (*)</p>
-        <DropdownSearchable
-            onchangeValue={(value: any) => {
-                setFormData((previous: any) => ({
-                    ...previous,
-                    journeyID: value?.id
-                }))
-            }}
-            onClearData={() => {
-                setFormData((previous: any) => ({
-                    ...previous,
-                    journeyID: ""
-                }))
-            }}
-            onSearchInputChange={debounce((value: any) => setSearchSubTypeValue2(value), 600)}
-            className="w-full rounded-md border border-primary-border py-1 placeholder-primary-gray bg-cbs-table-header"
-            placeholder="Hành trình khách hàng"
-            isMultiple={false}
-            allowClearValueSingleInput={true}
-            showTriangle={false}
-            maxWidthInput="max-w-full"
-            renderSelectedItem={(item: any) => (
-                <div className="max-w-full">
-                    <p className={"truncate"}>{item.text}</p>
-                </div>
-            )}
-            data={listSubType2.map((item: any) => ({
-                label: `${item.name}`,
-                value: item._id,
-            }))}
-            initialValue={initialValues.journey ? {
-              label: `${initialValues.journey?.name}`,
-              value: initialValues.journey?._id
-            } : {}}
-            formatItem={{
-                id: "value",
-                text: "label",
-            }}
-            inlineSearch={true}
+        <p>Thời gian (*)</p>
+        <input
+          type="text"
+          placeholder="Thời gian"
+          name="date"
+          className="h-8 w-full border border-primary-border outline-none px-2"
+          defaultValue={formData.date}
+          onChange={onChange}
+        />
+        {/* <DayPickerInput
+          value={
+            (moment(formData.date).isValid() &&
+              moment(formData.date).format("DD/MM/YYYY")) ||
+            ""
+          }
+          placeholder="Chọn thời gian"
+          onDayChange={(date: Date | null) => {
+            if (moment(date).isValid())
+              handleClickUpdateTimeSheet({
+                ...rowData,
+                date: moment(date).toJSON(),
+              });
+          }}
+        /> */}
+        
+        {/* <DatePicker
+          wrapperClassName={"w-auto"}
+          name="date"
+          showTimeSelect
+          selected={(formData.date && new Date(formData.date)) || new Date()}
+          timeIntervals={1}
+          timeFormat="HH:mm"
+          customInput={
+            <div className={"relative w-auto ml-2 min-h-fit"}>
+              <Field
+                readOnly
+                placeholder={"Thời hạn"}
+                type="text"
+                name="date"
+                className="focus:outline-none placeholder:text-sm"
+                value={
+                  formData.date
+                    ? moment(formData.date).format(
+                      "DD/MM/YYYY HH:mm"
+                    )
+                    : ""
+                }
+              />
+            </div>
+          }
+          onChange={(date: Date | null) => {
+              setFieldValue("date", date)
+            }
+          }
+        />
+        <ErrorMessage
+          name="date"
+          component="span"
+          className="font-normal leading-7 text-sm text-negative"
+        /> */}
+      </section>
+
+      <section className="px-5 py-1">
+        <p>Ghi chú</p>
+        <input
+          type="text"
+          placeholder="Ghi chú"
+          name="note"
+          className="h-8 w-full border border-primary-border outline-none px-2"
+          defaultValue={formData.note}
+          onChange={onChange}
         />
       </section>
 
@@ -293,25 +319,13 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
       </section>
 
       <section className="px-5 py-1">
-        <p>Nội dung (*)</p>
+        <p>Tình trạng (1-Khởi tạo|2-Hoàn thành)</p>
         <input
-          type="text"
-          placeholder="Nội dung"
-          name="name"
+          type="number"
+          placeholder="1-Khởi tạo | 2-Hoàn thành"
+          name="status"
           className="h-8 w-full border border-primary-border outline-none px-2"
-          defaultValue={formData.name}
-          onChange={onChange}
-        />
-      </section>
-
-      <section className="px-5 py-1">
-        <p>Ghi chú</p>
-        <input
-          type="text"
-          placeholder="Ghi chú"
-          name="note"
-          className="h-8 w-full border border-primary-border outline-none px-2"
-          defaultValue={formData.note}
+          defaultValue={formData?.status}
           onChange={onChange}
         />
       </section>

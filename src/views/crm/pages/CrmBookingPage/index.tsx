@@ -76,28 +76,9 @@ export const CrmBookingPage: FC = () => {
 		companyID: user?.company?._id,
 	})
 
-    // const STATUS = [
-    //     { _id: 1, text: 'Chưa, đang xử lý' },
-    //     { _id: 2, text: 'Hoàn thành'}
-    // ]
-
-    // const TYPE = [
-    //     { _id: 1, text: 'Lỗi của nhân viên' },
-    //     { _id: 2, text: 'Lỗi khách quan'}
-    // ]
-
-    const CHANNEL = [
-        { _id: 1, text: 'Offline' },
-        { _id: 2, text: 'Grab Food'},
-        { _id: 3, text: 'Shopee Food'},
-        { _id: 4, text: 'Gojek'},
-        { _id: 5, text: 'Baemin'},
-        { _id: 6, text: 'Loship'},
-        { _id: 7, text: 'Bee'},
-        { _id: 8, text: 'TikTok'},
-        { _id: 9, text: 'Shopee'},
-        { _id: 10, text: 'Lazada'},
-        { _id: 11, text: 'Reels'},
+    const STATUS = [
+        { _id: 1, text: 'Khởi tạo' },
+        { _id: 2, text: 'Hoàn thành'}
     ]
 
     const [pageIndex, setPageIndex] = useState(0)
@@ -133,8 +114,8 @@ export const CrmBookingPage: FC = () => {
 
     const [searchDoctypeKeyword, setSearchDoctypeKeyword] = useState("");
 	const { listDoctypes } = useQueryListDoctype({
+        type: 3,
 		limit: 10,
-		type: 11,
 		keyword: searchDoctypeKeyword,
 	});
   
@@ -154,6 +135,7 @@ export const CrmBookingPage: FC = () => {
         name: '',
         description: '',
         note: '',
+        date: '',
         rating: 1,
         amount: 0,
         status: 1,
@@ -231,7 +213,7 @@ export const CrmBookingPage: FC = () => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, mistake, customer, order, journey, name, description, note, amount, rating, status, type } = newListIDChecked[0];
+            const { _id, mistake, customer, order, journey, name, description, note, date, amount, rating, status, type } = newListIDChecked[0];
             // console.log({ _id, mistake, customer, order, journey, name, description, note, amount, rating, status, type })
             setInitialValues({
                 customerCareID: _id,
@@ -242,6 +224,7 @@ export const CrmBookingPage: FC = () => {
                 name,
                 description,
                 note,
+                date,
                 rating,
                 amount,
                 status,
@@ -286,6 +269,7 @@ export const CrmBookingPage: FC = () => {
                 name: '',
                 description: '',
                 note: '',
+                date: '',
                 rating: 1,
                 amount: 0,
                 status: 1,
@@ -383,14 +367,13 @@ export const CrmBookingPage: FC = () => {
     return (
         <main className="relative h-full">
             <div className="flex flex-wrap mb-1">
-                { 
+                {/* { 
                     listCustomerCareByProperty?.map((item: any, index: any) => {
                         const color = `cursor-pointer max-w-sm rounded overflow-hidden shadow-lg mb-2 mr-1`
                         const color2 = `#${BACKGROUND[index].color2}`
 
                         return (
                             <div key={index} className={color} style={{background: color2}}>
-                                {/* <img className="w-full" src="/path/to/your/image" alt="Step 1"/> */}
                                 <div className="px-2 py-1">
                                     <div className="font-bold text-sm mb-1 text-white">{item._id.journey.name} ({item.quantity})</div>
                                     <p className="text-white text-x-small">
@@ -400,7 +383,32 @@ export const CrmBookingPage: FC = () => {
                             </div>
                         ) 
                     })
-                }
+                } */}
+                <div className="cursor-pointer max-w-sm rounded overflow-hidden shadow-lg mb-2 mr-1 bg-cbs-schedule-expired">
+                    <div className="px-2 py-1">
+                        <div className="font-bold text-sm mb-1 text-white">Quá hạn</div>
+                        <p className="text-white text-x-small">
+                            Lịch quá hạn
+                        </p>
+                    </div>
+                </div>
+                <div className="cursor-pointer max-w-sm rounded overflow-hidden shadow-lg mb-2 mr-1 bg-cbs-schedule-nextweek">
+                    <div className="px-2 py-1">
+                        <div className="font-bold text-sm mb-1 text-white">Tuần tới</div>
+                        <p className="text-white text-x-small">
+                            Trong vòng 7 ngày tới
+                        </p>
+                    </div>
+                </div>
+                <div className="cursor-pointer max-w-sm rounded overflow-hidden shadow-lg mb-2 mr-1 bg-cbs-schedule-after-7days">
+                    <div className="px-2 py-1">
+                        <div className="font-bold text-sm mb-1 text-white">Sau tuần tới</div>
+                        <p className="text-white text-x-small">
+                            7 ngày tiếp theo
+                        </p>
+                    </div>
+                </div>
+
             </div>
 
             <header className="sticky top-0 bg-primary-light z-10">
@@ -414,7 +422,7 @@ export const CrmBookingPage: FC = () => {
                     <DropdownSearchableV2
                         ref={accountRef}
                         className={"mr-1 border border-primary-border rounded-lg"}
-                        placeholder={"Hành trình"}
+                        placeholder={"Lĩnh vực"}
                         isMultiple={false}
                         allowClearValueSingleInput={true}
                         data={listDoctypes}
@@ -459,6 +467,30 @@ export const CrmBookingPage: FC = () => {
                         }}
                         onchangeValue={item => {
                             setCustomerID(item._id);
+                            setPageIndex(0);
+                            ref.current&&ref.current.resetPaginate();
+                        }}
+                        renderItem={(item) => (
+                            <p className={"min-w-[300px]"}>{item.text}</p>
+                        )}
+                        selectOneByOne={true}
+                    />
+                     <DropdownSearchableV2
+                        ref={accountRef}
+                        className={"mr-1 border border-primary-border rounded-lg"}
+                        placeholder={"Trạng thái"}
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        data={STATUS}
+                        formatItem={{
+                            id: "_id",
+                            text: "text",
+                        }}
+                        onClearData={() => {
+                            setStatus("0");
+                        }}
+                        onchangeValue={item => {
+                            setStatus(item._id);
                             setPageIndex(0);
                             ref.current&&ref.current.resetPaginate();
                         }}
@@ -556,9 +588,9 @@ export const CrmBookingPage: FC = () => {
                               />
                           </div>
                       </th>
-                      <th className="py-1 w-[90px]">
+                      <th className="py-1 w-[120px]">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
-                              Ngày
+                            Thời hạn
                           </div>
                       </th>
                       <th className="py-1">
@@ -566,24 +598,19 @@ export const CrmBookingPage: FC = () => {
                               Khách hàng
                           </div>
                       </th>
-                      <th className="py-1">
-                          <div className="border-r-2 border-gray-300 font-normal pl-2">
-                              Hành trình trải nghiệm
-                          </div>
-                      </th>
-                      <th className="py-1 w-1/6">
+                      <th className="py-1 w-2/6">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
                               Nội dung
-                          </div>
-                      </th>
-                      <th className="py-1 w-1/6">
-                          <div className="border-r-2 border-gray-300 font-normal pl-2">
-                              Đơn hàng
                           </div>
                       </th>
                       <th className="py-1">
                           <div className="border-r-2 border-gray-300 font-normal pl-2">
                               Ghi chú
+                          </div>
+                      </th>
+                      <th className="py-1">
+                          <div className="border-r-2 border-gray-300 font-normal pl-2">
+                              Trạng thái
                           </div>
                       </th>
                       <th className="py-1">
@@ -607,48 +634,40 @@ export const CrmBookingPage: FC = () => {
                                 />
                             </td>
                             <td className="py-1 px-2">
-                                {moment(item.createAt).format('DD/MM/YYYY')}
-                                <p><i>{moment(item.createAt).format('HH:mm')}</i></p>
+                                {moment(item.date).format('DD/MM/YYYY HH:mm')}
+                                <p><i>{moment(item.date).fromNow()}</i></p>
                             </td>
                             <td className="py-1 px-2">
                                 <NavLink to={`/crm/customer/cid=${item?.customer?._id}`}>
                                     {item?.customer?.name} - {item?.customer?.phone}
                                 </NavLink>
                             </td>
-                            <td className="py-1 px-2 text-cbs-highlight-color">
-                                <button className="py-1 px-4 mr-1 rounded-md border border-primary-border text-white bg-cbs-secondary text-left">{item?.journey?.name}</button>
-                            </td>
                             <td className="py-1 px-2">
                                 {item?.name}
-                                <p className="text-primary-gray"><i>{item?.userCreate ? `Tạo: ${item?.userCreate?.fullname}` : ''}</i></p>
-                                <p className="text-primary-gray"><i>{item?.userUpdate ? `Cập nhật: ${item?.userUpdate?.fullname}` : ''}</i></p>
-                            </td>
-                            <td className="py-1 px-2">
-                                {item?.order ? `${item?.order?.name} - Thời gian: ${moment(item?.order?.createAt).format('DD/MM/YYYY HH:mm')}` : ''}
-                                {
-                                    (item?.channel && Number(item?.channel ) >= 1) ?
-                                    <div className="py-1 px-1 text-cbs-primary">
-                                        Kênh: {CHANNEL[Number(item?.channel) - 1]?.text}
-                                    </div>
-                                    : <></>
-                                }
-                                <p><i>{item?.funda?.name}</i></p>
-                                <p className="text-cbs-highlight-color"><i>{item?.manager ? `Quản lý: ${item?.manager?.fullname}` : ''}</i></p>
+                                <p className="text-primary-gray"><i>{item?.order ? `${item?.order?.name} - Thời gian: ${moment(item?.order?.createAt).format('DD/MM/YYYY HH:mm')}` : ''}</i></p>
+                                <p className="text-primary-gray"><i>
+                                    {item?.userCreate ? `Cre: ${item?.userCreate?.fullname}` : ''}  {moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
+                                </i></p>
+                                <p className="text-primary-gray"><i>
+                                    {item?.userUpdate ? `Mod: ${item?.userUpdate?.fullname}` : ''}  {moment(item?.modifyAt).format('DD/MM/YYYY HH:mm')}
+                                </i></p>
                             </td>
                             <td className="py-1 px-2">
                                 {item.note}
                             </td>
                             <td className="py-1 px-2">
-                                {/* {
+                                {
                                     item?.status == 1 ?
-                                    <div className="w-[110px] rounded-md py-1 px-2 bg-cbs-schedule-expired text-white" style={{ fontSize: "12px" }}>
+                                    <div className="w-[85px] rounded-md py-1 px-2 bg-cbs-schedule-expired text-white" style={{ fontSize: "12px" }}>
                                         {STATUS[Number(item?.status) - 1]?.text}
                                     </div>
                                     :
                                     <div className="w-[85px] rounded-md py-1 px-2 bg-cbs-schedule-after-7days text-white" style={{ fontSize: "12px" }}>
                                         {STATUS[Number(item?.status) - 1]?.text}
                                     </div>
-                                } */}
+                                }
+                            </td>
+                            <td className="py-1 px-2">
                                 <div style={{display: "flex"}}>
 									{item?.images?.map((image: any, i: number) => {
 										return (
