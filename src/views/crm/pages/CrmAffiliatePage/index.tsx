@@ -76,7 +76,7 @@ export const CrmAffiliatePage: FC = () => {
 	})
 
     // const STATUS = [
-    //     { _id: 1, text: 'Chưa, đang xử lý' },
+    //     { _id: 1, text: 'Chưa xử lý' },
     //     { _id: 2, text: 'Hoàn thành'}
     // ]
 

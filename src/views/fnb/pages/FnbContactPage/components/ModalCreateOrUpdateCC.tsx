@@ -348,10 +348,10 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
       </section>
 
       <section className="px-5 py-1">
-        <p>Tình trạng xử lý (1-Chưa, đang xử lý|2-Đã xử lý)</p>
+        <p>Tình trạng xử lý (1-Chưa xử lý|2-Hoàn thành)</p>
         <input
           type="number"
-          placeholder="1-Chưa, đang xử lý|2-Đã xử lý"
+          placeholder="1-Chưa xử lý|2-Hoàn thành"
           name="status"
           className="h-8 w-full border border-primary-border outline-none px-2"
           defaultValue={formData?.status}
