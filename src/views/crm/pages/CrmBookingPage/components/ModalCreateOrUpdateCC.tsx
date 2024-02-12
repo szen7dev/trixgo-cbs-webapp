@@ -210,57 +210,6 @@ export const ModalCreateOrUpdateCC: FC<any> = ({
           defaultValue={formData.date}
           onChange={onChange}
         />
-        {/* <DayPickerInput
-          value={
-            (moment(formData.date).isValid() &&
-              moment(formData.date).format("DD/MM/YYYY")) ||
-            ""
-          }
-          placeholder="Chọn thời gian"
-          onDayChange={(date: Date | null) => {
-            if (moment(date).isValid())
-              handleClickUpdateTimeSheet({
-                ...rowData,
-                date: moment(date).toJSON(),
-              });
-          }}
-        /> */}
-        
-        {/* <DatePicker
-          wrapperClassName={"w-auto"}
-          name="date"
-          showTimeSelect
-          selected={(formData.date && new Date(formData.date)) || new Date()}
-          timeIntervals={1}
-          timeFormat="HH:mm"
-          customInput={
-            <div className={"relative w-auto ml-2 min-h-fit"}>
-              <Field
-                readOnly
-                placeholder={"Thời hạn"}
-                type="text"
-                name="date"
-                className="focus:outline-none placeholder:text-sm"
-                value={
-                  formData.date
-                    ? moment(formData.date).format(
-                      "DD/MM/YYYY HH:mm"
-                    )
-                    : ""
-                }
-              />
-            </div>
-          }
-          onChange={(date: Date | null) => {
-              setFieldValue("date", date)
-            }
-          }
-        />
-        <ErrorMessage
-          name="date"
-          component="span"
-          className="font-normal leading-7 text-sm text-negative"
-        /> */}
       </section>
 
       <section className="px-5 py-1">
