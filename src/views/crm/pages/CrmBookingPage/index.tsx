@@ -575,7 +575,7 @@ export const CrmBookingPage: FC = () => {
                       </div>
                   </div>
               </div>
-          </header>
+            </header>
 
             <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
               <thead className="bg-cbs-table-header h-[38px] border-b border-primary-border">
@@ -713,12 +713,12 @@ export const CrmBookingPage: FC = () => {
                     })
                   }
               </tbody>
-          </table>
-          <ModalZoomView
-		        isShow={isShowImageFullScreen}
-		        toggle={() => setIsShowImageFullScreen(!isShowImageFullScreen)}
-		        initialData={defaultState}
-		    />
+            </table>
+            <ModalZoomView
+                isShow={isShowImageFullScreen}
+                toggle={() => setIsShowImageFullScreen(!isShowImageFullScreen)}
+                initialData={defaultState}
+            />
         </main>
     )
 }
